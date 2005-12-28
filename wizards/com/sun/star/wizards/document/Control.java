@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Control.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:26:18 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ public class Control extends Shape{
     public XPropertySet xPropertySet;
     XPropertySet xControlPropertySet;
     XWindowPeer xWindowPeer;
-    XLayoutConstrains xLayoutConstrains;
     Object oDefaultValue;
     GridControl oGridControl;
     String sServiceName;
@@ -116,7 +115,6 @@ public class Control extends Shape{
         xControl = oFormHandler.xControlAccess.getControl(xControlModel);
         xControlPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl);
         xWindowPeer = xControl.getPeer();
-        xLayoutConstrains = (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
@@ -231,8 +229,7 @@ public class Control extends Shape{
         else
             throw new IllegalArgumentException();
 
-        XLayoutConstrains xLayoutConstrains = (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
-        return xLayoutConstrains.getPreferredSize();
+        return getPeer().getPreferredSize();
     } catch (Exception e) {
         e.printStackTrace(System.out);
         return null;
@@ -244,6 +241,15 @@ public class Control extends Shape{
             xPropertySet.setPropertyValue(_sPropertyName, _aPropertyValue);
     }
 
+
+    /** the peer should be retrieved every time before it is used because it
+     * might be disposed otherwise
+     *
+     * @return
+     */
+    public XLayoutConstrains getPeer(){
+         return (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
+    }
 
     public Size getPeerSize(){
     try {
@@ -257,23 +263,23 @@ public class Control extends Shape{
                 // This is relevant for decimal fields
                 xPropertySet.setPropertyValue("EffectiveValue", new Double(99999));
             }
-            else
-                xPropertySet.setPropertyValue("EffectiveValue", xPropertySet.getPropertyValue("EffectiveMax")); //new Double(100000.2)); //
-            aPreferredSize = xLayoutConstrains.getPreferredSize();
+            else{
+                xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2)); //
+            }
+            aPreferredSize = getPeer().getPreferredSize();
             xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);
-
         }
         else if (this.icontroltype == FormHandler.SOCHECKBOX){
-            aPreferredSize = xLayoutConstrains.getPreferredSize();
+            aPreferredSize = getPeer().getPreferredSize();
         }
         else if (this.icontroltype == FormHandler.SODATECONTROL){
             xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
-            aPreferredSize = xLayoutConstrains.getPreferredSize();
+            aPreferredSize = getPeer().getPreferredSize();
             xPropertySet.setPropertyValue("Date",  com.sun.star.uno.Any.VOID);
         }
         else if (this.icontroltype == FormHandler.SOTIMECONTROL){
             xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
-            aPreferredSize = xLayoutConstrains.getPreferredSize();
+            aPreferredSize = getPeer().getPreferredSize();
             xPropertySet.setPropertyValue("Time",  com.sun.star.uno.Any.VOID);
         }
         else{
@@ -284,7 +290,7 @@ public class Control extends Shape{
             else
                 stext = FormHandler.SOSIZETEXT.substring(0, iTextLength);
             xPropertySet.setPropertyValue("Text", stext);
-            aPreferredSize = xLayoutConstrains.getPreferredSize();
+            aPreferredSize = getPeer().getPreferredSize();
             xPropertySet.setPropertyValue("Text", "");
         }
         return aPreferredSize;
