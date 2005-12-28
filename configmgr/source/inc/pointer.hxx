@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pointer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:53:22 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,8 @@
 #ifndef CONFIGMGR_POINTER_HXX
 #define CONFIGMGR_POINTER_HXX
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
-#ifndef INCLUDED_SHARABLE_BASETYPES_HXX
-#include "types.hxx"
+#ifndef CONFIGMGR_MEMORYMODEL_HXX
+#include "memorymodel.hxx"
 #endif
 
 namespace configmgr
@@ -59,7 +55,7 @@ namespace configmgr
             friend class Accessor;
             friend class UpdateAccessor;
 
-            typedef sharable::Address AddressType;
+            typedef memory::Address AddressType;
 
             AddressType m_value;
 
