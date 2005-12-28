@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:43:52 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,12 +80,8 @@ void PPDParser::scanPPDDir( const String& rDir )
     INetURLObject aPPDDir(rDir);
     while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
     {
-        osl::FileStatus aStatus( FileStatusMask_FileName            |
-                                 FileStatusMask_Type
-                                 );
-        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None &&
-            ( aStatus.getFileType() == osl::FileStatus::Regular ||
-              aStatus.getFileType() == osl::FileStatus::Link ) )
+        osl::FileStatus aStatus( FileStatusMask_FileName );
+        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
             INetURLObject aPPDFile = aPPDDir;
             aPPDFile.Append( aStatus.getFileName() );
