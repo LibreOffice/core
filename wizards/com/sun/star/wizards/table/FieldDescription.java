@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescription.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:40:00 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,13 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Properties;
 
 
@@ -63,8 +65,12 @@ public class FieldDescription{
     private Integer Precision;
     private Boolean DefaultValue;
     private String Name;
+    private XMultiServiceFactory xMSF;
+    private Locale aLocale;
 
-    public FieldDescription(ScenarioSelector _curscenarioselector, String _fieldname, String _keyname){
+    public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String _keyname, int _nmaxcharCount){
+        xMSF = _xMSF;
+        aLocale = _aLocale;
         category = _curscenarioselector.getCategory();
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
@@ -73,9 +79,9 @@ public class FieldDescription{
         xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
         XNameAccess xNameAccessFieldNode;
         if (_curscenarioselector.bcolumnnameislimited)
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xNameAccessTableNode, keyname, "ShortName");
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode,keyname, "ShortName", _nmaxcharCount);
         else
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xNameAccessTableNode,keyname, "Name");
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode,keyname, "Name", _nmaxcharCount);
         setFieldProperties(xNameAccessFieldNode);
     }
 
