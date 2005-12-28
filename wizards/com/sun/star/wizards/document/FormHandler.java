@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormHandler.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:26:58 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapeGroup;
+//import com.sun.star.drawing.XShapeGroup;
 import com.sun.star.drawing.XShapeGrouper;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.form.XFormsSupplier;
@@ -128,23 +128,24 @@ public class FormHandler {
         sModelServices[SONUMERICCONTROL] = "com.sun.star.form.component.FormattedField";
         sModelServices[SOGRIDCONTROL] = "com.sun.star.form.component.GridControl";
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
-        oControlData = new ControlData[16];
+        oControlData = new ControlData[17];
         oControlData[0] = createControlData(DataType.BIT, SOCHECKBOX, "CheckBox", "CheckBox", false);
-        oControlData[1] = createControlData(DataType.TINYINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[2] = createControlData(DataType.SMALLINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[3] = createControlData(DataType.INTEGER, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[4] = createControlData(DataType.BIGINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[5] = createControlData(DataType.FLOAT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[6] = createControlData(DataType.REAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[7] = createControlData(DataType.DOUBLE, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[8] = createControlData(DataType.NUMERIC, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[9] = createControlData(DataType.DECIMAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[10] = createControlData(DataType.CHAR, SOTEXTBOX, "TextField", "TextField", false);
-        oControlData[11] = createControlData(DataType.VARCHAR, SOTEXTBOX, "TextField", "TextField", true);
-        oControlData[12] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, "TextField", "TextField", true);
-        oControlData[13] = createControlData(DataType.DATE, SODATECONTROL, "DateField", "DateField", false);
-        oControlData[14] = createControlData(DataType.TIME, SOTIMECONTROL, "TimeField", "TimeField", false);
-        oControlData[15] = createControlData(DataType.TIMESTAMP, SODATECONTROL, "DateField", "TextField", false);
+        oControlData[1] = createControlData(DataType.BOOLEAN, SOCHECKBOX, "CheckBox", "CheckBox", false);
+        oControlData[2] = createControlData(DataType.TINYINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[3] = createControlData(DataType.SMALLINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[4] = createControlData(DataType.INTEGER, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[5] = createControlData(DataType.BIGINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[6] = createControlData(DataType.FLOAT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[7] = createControlData(DataType.REAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[8] = createControlData(DataType.DOUBLE, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[9] = createControlData(DataType.NUMERIC, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[10] = createControlData(DataType.DECIMAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[11] = createControlData(DataType.CHAR, SOTEXTBOX, "TextField", "TextField", false);
+        oControlData[12] = createControlData(DataType.VARCHAR, SOTEXTBOX, "TextField", "TextField", true);
+        oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, "TextField", "TextField", true);
+        oControlData[14] = createControlData(DataType.DATE, SODATECONTROL, "DateField", "DateField", false);
+        oControlData[15] = createControlData(DataType.TIME, SOTIMECONTROL, "TimeField", "TimeField", false);
+        oControlData[16] = createControlData(DataType.TIMESTAMP, SODATECONTROL, "DateField", "TextField", false);
         ControlData[] oImageControlData = new ControlData[4];
         oImageControlData[0] = createControlData(DataType.BINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
         oImageControlData[1] = createControlData(DataType.VARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
@@ -390,6 +391,7 @@ public class FormHandler {
         for (int i = 0; i < ControlList.length; i++){
             if (ControlList[i] != null)
 //              try {
+//                  this.xDrawPage.remove(ControlList[i].xShape);
                     ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
 //                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
 //
@@ -443,7 +445,7 @@ public class FormHandler {
         }
     }
 
-    public XShapeGroup groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape){
+    public XShape groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape){
        try {
            Object oGroupShape = _xMSF.createInstance("com.sun.star.drawing.ShapeCollection");
            XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oGroupShape);
