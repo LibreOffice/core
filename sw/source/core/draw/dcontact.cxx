@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:06:11 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:12:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1392,10 +1392,10 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             // <--
             // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
-            // --> OD 2004-10-19 #i35798# - no adjust of positioning attributes,
-            // if drawing object isn't attached to an anchor frame
+            // --> OD 2005-08-15 #i53320# - no adjust of positioning attributes,
+            // if drawing object isn't positioned.
             if ( !pAnchoredDrawObj->IsPositioningInProgress() &&
-                 !pAnchoredDrawObj->NotYetAttachedToAnchorFrm() )
+                 !pAnchoredDrawObj->NotYetPositioned() )
             // <--
             {
                 // --> OD 2004-09-29 #i34748# - If no last object rectangle is
@@ -1510,6 +1510,16 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // <--
                 }
             }
+            // --> OD 2005-08-15 #i53320# - reset positioning attributes,
+            // if anchored drawing object isn't yet positioned.
+            else if ( pAnchoredDrawObj->NotYetPositioned() &&
+                      static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()).IsPosAttrSet() )
+            {
+                const_cast<SwDrawFrmFmt&>(
+                    static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()))
+                        .ResetPosAttr();
+            }
+            // <--
         }
         break;
         case SDRUSERCALL_CHGATTR:
@@ -2592,3 +2602,4 @@ void SwDrawVirtObj::SetLayer(SdrLayerID nLayer)
     SdrVirtObj::NbcSetLayer( ReferencedObj().GetLayer() );
 }
 // eof
+
