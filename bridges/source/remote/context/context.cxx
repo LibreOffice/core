@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:39:30 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ public:
 
     rtl_uString ** getConnectionList(
         sal_Int32 *pnStringCount ,
-        void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) );
+        void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) );
 
 private:
     ::osl::Mutex          m_mutex;
@@ -286,7 +286,7 @@ uno_Context *ContextAdmin::get( rtl_uString *pHost )
 
 rtl_uString ** ContextAdmin::getConnectionList(
     sal_Int32 *pnStringCount ,
-    void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) )
+    void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) )
 {
     ::osl::MutexGuard guard( m_mutex );
 
@@ -519,7 +519,7 @@ remote_removeContextListener( remote_contextListenerFunc listener , void *pObjec
 extern "C" rtl_uString ** SAL_CALL
 remote_getContextList(
     sal_Int32 *pnStringCount,
-    void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) )
+    void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) )
 {
     return ContextAdmin::getInstance()->getConnectionList( pnStringCount , memAlloc );
 }
