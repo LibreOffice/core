@@ -14,7 +14,8 @@ then
     if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.csh ]
     then
 	rm $HOME/$OO_SDK_NAME/setsdkenv_unix.csh
-    fi	
+    fi
+    shift
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
 then
     echo 
