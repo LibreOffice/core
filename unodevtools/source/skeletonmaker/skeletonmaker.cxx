@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-25 12:25:17 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 18:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@ static const char usageText[] =
 "                           --java5 generate output for Java 1.5 or later (is \n"
 "                                   currently the default)\n"
 "                           --cpp   generate output for C++\n"
+"    -sn, --shortnames      using namespace abbreviation 'css:': for\n"
+"                           '::com::sun::star::', only valid for sub-command\n"
+"                           'dump' and target language 'cpp'.\n"
 "    -o <path>              path specifies an existing directory where the\n"
 "                           output files are generated, only valid for\n"
 "                           sub-command 'component'.\n"
@@ -177,6 +180,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (readOption( &bOption, "cpp", &nPos, arg)) {
             options.java5 = false;
             options.language = 2;
+            continue;
+        }
+        if (readOption( &bOption, "sn", &nPos, arg) ||
+            readOption( &bOption, "shortnames", &nPos, arg)) {
+            options.shortnames = true;
             continue;
         }
         if (readOption( &sOption, "d", &nPos, arg)) {
