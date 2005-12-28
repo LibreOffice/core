@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:32:04 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,9 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.form;
+ ************************************************************************/
+
+package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -40,6 +42,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.DBMetaData;
+import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
 
@@ -106,8 +109,8 @@ public class FormWizard extends WizardDialog{
                 curDBCommandFieldSelection.setModified(false);
                 break;
             case SOSUBFORMPAGE:
-                String[] sreferencedTables = curFormDocument.oMainFormDBMetaData.getReferencedTables(curDBCommandFieldSelection.getSelectedCommandName(), curDBCommandFieldSelection.getSelectedCommandType());
-                curFormConfiguration.initialize(curSubFormFieldSelection, sreferencedTables);
+                RelationController oRelationController = new RelationController(curFormDocument.oMainFormDBMetaData,curDBCommandFieldSelection.getSelectedCommandName());
+                curFormConfiguration.initialize(curSubFormFieldSelection, oRelationController);
                 break;
             case SOSUBFORMFIELDSPAGE:
                 String spreselectedTableName = curFormConfiguration.getreferencedTableName();
@@ -145,7 +148,7 @@ public class FormWizard extends WizardDialog{
                 break;
             case SOSUBFORMFIELDSPAGE:
                 curFormDocument.oSubFormDBMetaData.setFieldNames(curSubFormFieldSelection.getSelectedFieldNames());
-                curFormDocument.oSubFormDBMetaData.setFieldColumns(true);
+                curFormDocument.oSubFormDBMetaData.setFieldColumns(true, curSubFormFieldSelection.getSelectedCommandName());
                 curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oSubFormDBMetaData.FieldNames, 0);
                 break;
             case SOFIELDLINKERPAGE:
@@ -173,8 +176,8 @@ public class FormWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/New Database3.odb"); //MyDocAssign.odb; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/LDAP Directory.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Gemeinde_Test.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
