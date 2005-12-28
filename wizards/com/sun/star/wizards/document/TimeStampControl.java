@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TimeStampControl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:28:12 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ import com.sun.star.drawing.XShapes;
 public class TimeStampControl extends DatabaseControl {
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
-    XShape xGroupShape;
+//  XShape xGroupShape;
     Resource oResource;
     String sDateAppendix; // = GetResText(RID_FORM + 4)
     String sTimeAppendix; // = GetResText(RID_FORM + 5)
@@ -64,14 +64,14 @@ public class TimeStampControl extends DatabaseControl {
     int nTimeWidth;
     int nDBWidth;
     int nDateWidth;
-    XShapeGroup xShapeGroup;
+    XShape xShapeGroup;
 
 
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint){
     super(_oFormHandler, "com.sun.star.drawing.ShapeCollection", _aPoint);
         oResource = _oResource;
-        xGroupShape = xShape;
+//      xGroupShape = xShape;
         oDateControl  = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
         int nDBHeight = oDateControl.getDBHeight();
         nDateWidth = oDateControl.getPreferredWidth();
@@ -84,7 +84,7 @@ public class TimeStampControl extends DatabaseControl {
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
-        xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
+        xShapeGroup = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
         nreldatewidth = 1.0/((double)getSize().Width/(double)nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
@@ -146,15 +146,21 @@ public class TimeStampControl extends DatabaseControl {
 
 
     public Point getPosition(){
-        return oDateControl.xShape.getPosition();
+        return xShapeGroup.getPosition();
     }
 
 
     public void setPosition(Point _aPoint){
+        // --> TESTING
+        Point aBeforePt = xShapeGroup.getPosition();
+        // <--
         xShapeGroup.setPosition(_aPoint);
 //      oDateControl.xShape.setPosition(_aPoint);
 //      Point atimepoint = new Point(oDateControl.xShape.getPosition().X + oDateControl.xShape.getSize().Width, oDateControl.xShape.getPosition().Y );
 //      oTimeControl.xShape.setPosition(atimepoint);
+        // --> TESTING
+        Point aAfterPt = xShapeGroup.getPosition();
+        // <--
     }
 
 
