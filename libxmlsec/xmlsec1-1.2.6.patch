@@ -1458,7 +1458,7 @@
 ! 	 * At present, MS Crypto engine do not provide a way to setup a key store.
 ! 	 */
 ! 	if( keyStore != NULL ) {
-! 		//TODO: binding key store.
+! 		/*TODO: binding key store.*/
 ! 	}
 ! 
 ! 	keyMngr = xmlSecKeysMngrCreate() ;
@@ -1523,7 +1523,7 @@
 ! 	xmlSecKeysMngrPtr	mngr ,
 ! 	HCRYPTKEY			symKey
 ! ) {
-! 	//TODO: import the key into keys manager.
+! 	/*TODO: import the key into keys manager.*/
 ! 	return(0) ;
 ! }
 ! 
@@ -1532,7 +1532,7 @@
 ! 	xmlSecKeysMngrPtr	mngr ,
 ! 	HCRYPTKEY	pubKey
 ! ) {
-! 	//TODO: import the key into keys manager.
+! 	/*TODO: import the key into keys manager.*/
 ! 	return(0) ;
 ! }
 ! 
@@ -1541,7 +1541,7 @@
 ! 	xmlSecKeysMngrPtr	mngr ,
 ! 	HCRYPTKEY	priKey
 ! ) {
-! 	//TODO: import the key into keys manager.
+! 	/*TODO: import the key into keys manager.*/
 ! 	return(0) ;
 ! }
 ! 
@@ -5144,7 +5144,7 @@
 ! 		return -1 ;    
 ! 	}
 ! 
-! //	PK11_Finalize( ctx->cipherCtx ) ;
+! /*	PK11_Finalize( ctx->cipherCtx ) ;*/
 ! 	PK11_DestroyContext( ctx->cipherCtx , PR_TRUE ) ;
 ! 	ctx->cipherCtx = NULL ;
   
@@ -7682,17 +7682,17 @@
 ! 
 ! 	#ifndef XMLSEC_NO_AES
 ! 	if( transform->id == xmlSecNssTransformKWAes128Id ) {
-! 	//	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;
+! 	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
 ! 		context->cipher = CKM_AES_CBC ;
 ! 		context->keyId = xmlSecNssKeyDataAesId ;
 ! 	} else
 ! 	if( transform->id == xmlSecNssTransformKWAes192Id ) {
-! 	//	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;
+! 	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
 ! 		context->cipher = CKM_AES_CBC ;
 ! 		context->keyId = xmlSecNssKeyDataAesId ;
 ! 	} else
 ! 	if( transform->id == xmlSecNssTransformKWAes256Id ) {
-! 	//	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;
+! 	/*	context->cipher = CKM_NETSCAPE_AES_KEY_WRAP ;*/
 ! 		context->cipher = CKM_AES_CBC ;
 ! 		context->keyId = xmlSecNssKeyDataAesId ;
 ! 	} else
@@ -8447,7 +8447,7 @@
 ! 				return(-1);    
 ! 			}
 ! 			break ;
-! 	//	case CKM_NETSCAPE_AES_KEY_WRAP :
+! 	/*	case CKM_NETSCAPE_AES_KEY_WRAP :*/
 ! 		case CKM_AES_CBC :
 ! 			if( xmlSecNssKeyWrapAesOp(ctx, encrypt, result) < 0 ) {
 ! 				xmlSecError( XMLSEC_ERRORS_HERE ,
@@ -9389,7 +9389,7 @@
   
       ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
   
       if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
   	/* we can have only private key or public key */
@@ -9538,7 +9538,7 @@
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), xmlSecKeyDataTypeUnknown);
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
       if (ctx->privkey != NULL) {
 ! 		return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
 !     } else if( ctx->pubkey != NULL ) {
@@ -9559,7 +9559,7 @@
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), 0);
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == dsaKey, -1);*/
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
@@ -9639,7 +9639,7 @@
   
       ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
   
   
       if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
@@ -9690,7 +9690,7 @@
       
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
       if (ctx->privkey != NULL) {
   	return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
       } else {
@@ -9707,7 +9707,7 @@
   
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
-! //    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);
+! /*    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == rsaKey, -1);*/
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
