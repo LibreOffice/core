@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:25 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,17 +188,6 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
                                     const SwRect* _pNewObjRect = 0L );
 
-        /** anchored drawing object not yet attached to a anchor frame
-
-            OD 2004-08-04 #i31698#
-
-            @author OD
-        */
-        inline bool NotYetAttachedToAnchorFrm() const
-        {
-            return mbNotYetAttachedToAnchorFrame;
-        }
-
         /** method to notify background of drawing object
 
             OD 2004-06-30 #i28701#
@@ -208,6 +197,13 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         virtual void NotifyBackground( SwPageFrm* _pPageFrm,
                                        const SwRect& _rRect,
                                        PrepareHint _eHint );
+
+    // --> OD 2005-08-16 #i53320#
+        inline bool NotYetPositioned() const
+        {
+            return mbNotYetPositioned;
+        }
+        // <--
 };
 
 #endif
