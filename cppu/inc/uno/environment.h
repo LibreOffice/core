@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:40:21 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ typedef void (SAL_CALL * uno_freeProxyFunc)( struct _uno_ExtEnvironment * pEnv, 
     @param nBytes amount of memory in bytes
     @return pointer to allocated memory
 */
-typedef void * (SAL_CALL * uno_memAlloc)( sal_uInt32 nBytes );
+typedef void * (SAL_CALL * uno_memAlloc)( sal_Size nBytes );
 
 /** The binary specification of an UNO environment supporting interface registration.
 */
