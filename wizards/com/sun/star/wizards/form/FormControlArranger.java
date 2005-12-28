@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlArranger.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:31:31 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ public class FormControlArranger {
             case DataType.NUMERIC:
             case DataType.DECIMAL:
             case DataType.BIT:
+            case DataType.BOOLEAN:
                 bisreducable = false;
                 break;
             case DataType.VARCHAR:
