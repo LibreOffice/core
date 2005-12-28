@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBMetaData.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:23:50 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,21 +299,22 @@ public class DBMetaData {
     void InitializeWidthList() {
         WidthList = new int[17][2];
         WidthList[0][0] = DataType.BIT; // ==  -7;
-        WidthList[1][0] = DataType.TINYINT; // ==  -6;
-        WidthList[2][0] = DataType.BIGINT; // ==  -5;
-        WidthList[3][0] = DataType.LONGVARCHAR; // ==  -1;
-        WidthList[4][0] = DataType.CHAR; // ==   1;
-        WidthList[5][0] = DataType.NUMERIC; // ==   2;
-        WidthList[6][0] = DataType.DECIMAL; // ==   3;  [mit Nachkommastellen]
-        WidthList[7][0] = DataType.INTEGER; // ==   4;
-        WidthList[8][0] = DataType.SMALLINT; // ==   5;
-        WidthList[9][0] = DataType.FLOAT; // ==   6;
-        WidthList[10][0] = DataType.REAL; // ==   7;
-        WidthList[11][0] = DataType.DOUBLE; // ==   8;
-        WidthList[12][0] = DataType.VARCHAR; // ==  12;
-        WidthList[13][0] = DataType.DATE; // ==  91;
-        WidthList[14][0] = DataType.TIME; // ==  92;
-        WidthList[15][0] = DataType.TIMESTAMP; // ==  93;
+        WidthList[1][0] = DataType.BOOLEAN; // = 16
+        WidthList[2][0] = DataType.TINYINT; // ==  -6;
+        WidthList[3][0] = DataType.BIGINT; // ==  -5;
+        WidthList[4][0] = DataType.LONGVARCHAR; // ==  -1;
+        WidthList[5][0] = DataType.CHAR; // ==   1;
+        WidthList[6][0] = DataType.NUMERIC; // ==   2;
+        WidthList[7][0] = DataType.DECIMAL; // ==   3;  [mit Nachkommastellen]
+        WidthList[8][0] = DataType.INTEGER; // ==   4;
+        WidthList[9][0] = DataType.SMALLINT; // ==   5;
+        WidthList[10][0] = DataType.FLOAT; // ==   6;
+        WidthList[11][0] = DataType.REAL; // ==   7;
+        WidthList[12][0] = DataType.DOUBLE; // ==   8;
+        WidthList[13][0] = DataType.VARCHAR; // ==  12;
+        WidthList[14][0] = DataType.DATE; // ==  91;
+        WidthList[15][0] = DataType.TIME; // ==  92;
+        WidthList[16][0] = DataType.TIMESTAMP; // ==  93;
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
         NumericTypes = new int[9];
