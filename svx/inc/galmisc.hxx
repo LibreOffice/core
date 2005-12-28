@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:49:41 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ BOOL            FileExists( const INetURLObject& rURL );
 BOOL            CreateDir(  const INetURLObject& rURL );
 BOOL            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 BOOL            KillFile( const INetURLObject& rURL );
-BitmapEx        GalleryResGetBitmapEx( ULONG nId );
+BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
 
 
 // ---------------
