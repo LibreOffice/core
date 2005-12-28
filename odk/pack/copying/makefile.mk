@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:58:28 $
+#   last change: $Author: hr $ $Date: 2005-12-28 18:06:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@ EXELIST = \
 
 .IF "$(GUI)"=="WNT"
 EXELIST += \
-    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX)
+    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) \
+    $(DESTDIRBIN)$/climaker$(EXEPOSTFIX)
 .ELSE
 EXELIST += \
     $(DESTDIRBIN)$/regcomp.bin 	\
