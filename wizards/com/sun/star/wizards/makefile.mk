@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:14:45 $
+#   last change: $Author: hr $ $Date: 2005-12-28 17:14:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ JAVAFILES=							\
     db$/RecordParser.java					\
     db$/TypeInspector.java					\
     db$/ColumnPropertySet.java				\
+    db$/RelationController.java				\
     db$/TableDescriptor.java				\
     db$/SQLQueryComposer.java				\
     ui$/event$/AbstractListener.java			\
