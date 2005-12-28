@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 13:54:53 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,13 +251,13 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
 
     // int the same sequence as the enums of MSFltrPg2_CheckBoxEntries
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-        InsertEntry( sChgToFromMath, static_cast< sal_Int32 >( Math ) );
+        InsertEntry( sChgToFromMath, static_cast< sal_IntPtr >( Math ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        InsertEntry( sChgToFromWriter, static_cast< sal_Int32 >( Writer ) );
+        InsertEntry( sChgToFromWriter, static_cast< sal_IntPtr >( Writer ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-        InsertEntry( sChgToFromCalc, static_cast< sal_Int32 >( Calc ) );
+        InsertEntry( sChgToFromCalc, static_cast< sal_IntPtr >( Calc ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-        InsertEntry( sChgToFromImpress, static_cast< sal_Int32 >( Impress ) );
+        InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -279,7 +279,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
         USHORT nCol = bFirst ? 1 : 2;
-        SvLBoxEntry* pEntry = GetEntry4Type( static_cast< sal_Int32 >( pArr->eType ) );
+        SvLBoxEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
@@ -296,7 +296,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
     aCheckLB.SetUpdateMode( TRUE );
 }
 
-void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_Int32 _nType )
+void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
 
@@ -313,12 +313,12 @@ void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_Int32 _nType )
     aCheckLB.GetModel()->Insert( pEntry );
 }
 
-SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_Int32 _nType ) const
+SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
 {
     SvLBoxEntry* pEntry = aCheckLB.First();
     while ( pEntry )
     {
-        if ( _nType == (sal_Int32)pEntry->GetUserData() )
+        if ( _nType == sal_IntPtr( pEntry->GetUserData() ) )
             return pEntry;
         pEntry = aCheckLB.Next( pEntry );
     }
