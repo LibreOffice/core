@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:06:30 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     // --> OD 2004-08-09 #i28749# - anchored drawing object has to be attached
     // to anchor frame
-    if ( NotYetAttachedToAnchorFrm() )
+    if ( mbNotYetAttachedToAnchorFrame )
     {
         ASSERT( false,
                 "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
