@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:19:55 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ public class TextDocument {
 
     public int getCharWidth(String ScaleString) {
         int iScale = 200;
-        xTextDocument.lockControllers();
+//      xTextDocument.lockControllers();
         int iScaleLen = ScaleString.length();
         com.sun.star.text.XTextCursor xTextCursor = createTextCursor(xTextDocument.getText());
         xTextCursor.gotoStart(false);
@@ -287,7 +287,7 @@ public class TextDocument {
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        xTextDocument.unlockControllers();
+        unlockallControllers();
         return iScale;
     }
 
