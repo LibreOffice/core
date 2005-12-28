@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:32 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 18:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ void checkType(TypeManager const & manager,
 
                 // check if constructors are specified, if yes automatically
                 // support of XInitialization
-                if (reader.getMethodCount() > 0) {
+                if (reader.getMethodCount() > 1) {
                     OString s("com.sun.star.lang.XInitialization");
                     if (interfaceTypes.find(s) == interfaceTypes.end())
                         interfaceTypes.insert(s);
