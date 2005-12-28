@@ -124,7 +124,7 @@ public:
 
     struct Hash
     {
-        int operator () ( const PyRef &r) const { return (int) r.get(); }
+        sal_IntPtr operator () ( const PyRef &r) const { return sal_IntPtr( r.get() ); }
     };
 };
 
