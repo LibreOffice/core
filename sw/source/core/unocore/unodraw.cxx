@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:22:07 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1026,8 +1026,17 @@ SwXShape::~SwXShape()
 uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeException )
 {
     uno::Any aRet = SwXShapeBaseClass::queryInterface(aType);
+    // --> OD 2005-08-15 #i53320# - follow-up of #i31698#
+    // interface com::sun::star::drawing::XShape is overloaded. Thus, provide
+    // correct object instance.
     if(!aRet.hasValue() && xShapeAgg.is())
-        aRet = xShapeAgg->queryAggregation(aType);
+    {
+        if(aType == ::getCppuType((uno::Reference<XShape>*)0))
+            aRet <<= uno::Reference<XShape>(this);
+        else
+            aRet = xShapeAgg->queryAggregation(aType);
+    }
+    // <--
     return aRet;
 }
 /* -----------------------------16.06.00 12:21--------------------------------
@@ -2145,36 +2154,39 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
             // consider the layout direction
             const Rectangle aMemberObjRect = GetSvxShape()->GetSdrObject()->GetSnapRect();
             const Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
-            const SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt()
-                                                    ? GetFrmFmt()->GetLayoutDir()
-                                                    : SwFrmFmt::HORI_L2R;
+            // --> OD 2005-08-16 #i53320# - relative position of group member and
+            // top group object is always given in horizontal left-to-right layout.
+//            const SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt()
+//                                                    ? GetFrmFmt()->GetLayoutDir()
+//                                                    : SwFrmFmt::HORI_L2R;
             awt::Point aOffset( 0, 0 );
-            switch ( eLayoutDir )
-            {
-                case SwFrmFmt::HORI_L2R:
+//            switch ( eLayoutDir )
+//            {
+//                case SwFrmFmt::HORI_L2R:
                 {
                     aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
                     aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
                 }
-                break;
-                case SwFrmFmt::HORI_R2L:
-                {
-                    aOffset.X = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
-                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
-                }
-                break;
-                case SwFrmFmt::VERT_R2L:
-                {
-                    aOffset.X = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
-                    aOffset.Y = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
-                }
-                break;
-                default:
-                {
-                    ASSERT( false,
-                            "<SwXShape::getPosition()> - unsupported layout direction" );
-                }
-            }
+//                break;
+//                case SwFrmFmt::HORI_R2L:
+//                {
+//                    aOffset.X = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
+//                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+//                }
+//                break;
+//                case SwFrmFmt::VERT_R2L:
+//                {
+//                    aOffset.X = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+//                    aOffset.Y = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
+//                }
+//                break;
+//                default:
+//                {
+//                    ASSERT( false,
+//                            "<SwXShape::getPosition()> - unsupported layout direction" );
+//                }
+//            }
+            // <--
             aOffset.X = TWIP_TO_MM100(aOffset.X);
             aOffset.Y = TWIP_TO_MM100(aOffset.Y);
             aPos.X += aOffset.X;
@@ -2851,4 +2863,5 @@ sal_Bool SwXGroupShape::hasElements(  ) throw(uno::RuntimeException)
         throw uno::RuntimeException();
     return xAcc->hasElements();
 }
+
 
