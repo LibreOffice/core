@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldLinker.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:30:38 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.db.CommandMetaData;
+import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.UIConsts;
@@ -181,8 +182,8 @@ public class FieldLinker extends DBLimitedFieldSelection{
         }
     }
 
-    public String[][] getLinkFieldNames(CommandMetaData _oCommandMetaData, String _sreferencedtablename){
-        return _oCommandMetaData.getKeyColumns(_sreferencedtablename);
+    public String[][] getLinkFieldNames(RelationController _oRelationController, String _sReferencedTableName){
+        return _oRelationController.getImportedKeyColumns(_sReferencedTableName);
     }
 
     /**
