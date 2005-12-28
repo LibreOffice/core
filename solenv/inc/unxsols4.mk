@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 10:02:42 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:56:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,11 @@ LINKC=$(CC)
 
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
-.IF "$(UPDATER)"!=""
-LD_OPTIONS+=-L $(SYSBASE)$/usr$/lib
+C_RESTRICTIONFLAGS*=-xc99=none
+LD_OPTIONS+=-L$(SYSBASE)$/usr$/lib
+CDEFS+=-DSYSBASE="$(SYSBASEINC)"
+CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 .EXPORT : LD_OPTIONS
-.ENDIF          # "$(UPDATER)"!=""
 .ENDIF          # "$(SYSBASE)"!=""
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
