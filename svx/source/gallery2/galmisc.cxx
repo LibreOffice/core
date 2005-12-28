@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:38 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:38:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -690,7 +690,7 @@ void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceAction
     }
 }
 
-BitmapEx GalleryResGetBitmapEx( ULONG nId )
+BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
     BitmapEx aBmpEx( GAL_RESID( nId ) );
 
