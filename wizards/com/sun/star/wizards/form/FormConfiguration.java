@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormConfiguration.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:31:15 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
+import com.sun.star.wizards.db.RelationController;
 
 /**
  * @author Administrator
@@ -67,6 +68,7 @@ public class FormConfiguration {
     String STOGGLESTEPS = "toggleSteps";
     String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
     boolean bsupportsRelations;
+    RelationController oRelationController = null;
 
 
     public FormConfiguration(WizardDialog _CurUnoDialog){
@@ -100,6 +102,9 @@ public class FormConfiguration {
         CurUnoDialog.insertInfoImage(97, 120, ISubFormStep.intValue());
     }
 
+    public RelationController getRelationController(){
+        return oRelationController;
+    }
 
     public boolean areexistingRelationsdefined(){
         return ((chkcreateSubForm.getState() == 1) && (optOnExistingRelation.getState()));
@@ -112,10 +117,11 @@ public class FormConfiguration {
         toggleSteps();
     }
 
-    public void initialize(CommandFieldSelection _CurSubFormFieldSelection, String[] _sreferencedTables){
-        sreferencedTables = _sreferencedTables;
-        bsupportsRelations = (_sreferencedTables.length > 0);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), "StringItemList", _sreferencedTables);
+    public void initialize(CommandFieldSelection _CurSubFormFieldSelection, RelationController _oRelationController){
+        oRelationController = _oRelationController;
+        sreferencedTables = oRelationController.getExportedKeys();
+        bsupportsRelations = (sreferencedTables.length > 0);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), "StringItemList", sreferencedTables);
         this.CurSubFormFieldSelection = _CurSubFormFieldSelection;
         toggleRelationsListbox();
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), "Enabled", new Boolean(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
