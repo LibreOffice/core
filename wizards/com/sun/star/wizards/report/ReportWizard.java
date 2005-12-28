@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:38:42 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,9 +155,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
          switch (nOldStep){
             case SOMAINPAGE:
-                CurReportDocument.CurDBMetaData.setFieldNames(CurDBCommandFieldSelection.getSelectedFieldNames());
+                CurReportDocument.CurDBMetaData.setFieldNames(CurDBCommandFieldSelection.getSelectedFieldNames()); //, CurDBCommandFieldSelection.getSelectedCommandName());
                 CurReportDocument.CurDBMetaData.setAllIncludedFieldNames(false);
-                CurReportDocument.CurDBMetaData.setFieldColumns(true);
                 if (CurDBCommandFieldSelection.isModified()){
                     CurReportDocument.oTextSectionHandler.removeAllTextSections(false);
                     CurReportDocument.oTextTableHandler.removeAllTextTables();
@@ -225,11 +224,14 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
-            PropertyValue[] curproperties = new PropertyValue[3];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
-            curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.QUERY));
-            curproperties[2] = Properties.createProperty("Command", "Query1");
+            PropertyValue[] curproperties = new PropertyValue[1];
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyveryveryNewHSQLDatabase.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
+        curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+//      curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///X:/bc/NewDatabase6.odb"); //baseLocation ); "DataSourceName", "db1");
+//      curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///X:/bc/Gemeinde_Test.odb"); //baseLocation ); "DataSourceName", "db1");
+
+//      curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.QUERY));
+//      curproperties[2] = Properties.createProperty("Command", "Query1");
             CurReportWizard.startReportWizard(xLocMSF, curproperties);
         }
     }
