@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:33:05 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "mips"
 #elif defined S390
 #define JFW_PLUGIN_ARCH "s390"
+#elif defined X86_64
+#define JFW_PLUGIN_ARCH "amd64"
 #else // SPARC, INTEL, POWERPC, MIPS
 #error unknown plattform
 #endif // SPARC, INTEL, POWERPC, MIPS
