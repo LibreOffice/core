@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:20:03 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,14 +718,14 @@ End
 
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Report, report )
-UNO_JAR_FILE( gid_File_Jar_Table, table )
-UNO_JAR_FILE( gid_File_Jar_Letter, letter )
-UNO_JAR_FILE( gid_File_Jar_Form, form )
-UNO_JAR_FILE( gid_File_Jar_Fax, fax )
-UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
-UNO_JAR_FILE( gid_File_Jar_Query, query )
-UNO_JAR_FILE( gid_File_Jar_Web, web )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Report, report )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Table, table )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Letter, letter )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Form, form )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Fax, fax )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Agenda, agenda )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Query, query )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -738,7 +738,7 @@ File gid_File_Jar_Commonwizards
     TXT_FILE_BODY;
     Name = JARFILENAME(commonwizards);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 #endif
 
@@ -1520,14 +1520,14 @@ End
 
 File gid_File_Oo_Office_FormWizard_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/FormWizard.xcs";
 End
 
 File gid_File_Oo_Office_FormWizard_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/FormWizard.xcu";
 End
