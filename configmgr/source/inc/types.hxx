@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:08 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef INCLUDED_SHARABLE_BASETYPES_HXX
 #define INCLUDED_SHARABLE_BASETYPES_HXX
 
+#ifndef CONFIGMGR_MEMORYMODEL_HXX
+#include "memorymodel.hxx"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -55,7 +59,8 @@ namespace configmgr
     {
     //-----------------------------------------------------------------------------
     // some base types
-        typedef sal_uInt32 Address; // points to absolute location in memory segment
+        typedef memory::Address  Address;  // points to absolute location in memory segment
+        typedef memory::HeapSize HeapSize; // size of memory block within heap
         typedef sal_uInt16 Offset;  // Offset relative to 'this' in array of nodes
         typedef sal_uInt8  Byte;
 
