@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-21 13:52:35 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 18:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ bool printConstructorParameters(std::ostream & o,
             printType(o,
                 options, manager,
                 codemaker::convertString(reader.getFieldTypeName(i)),
-                4);
+                4, options.shortnames);
         } else if (arguments.empty()) {
             o << "java.lang.Object";
         } else {
@@ -168,7 +168,8 @@ bool printConstructorParameters(std::ostream & o,
             }
             // assume std::vector< OString >::size_type is at least as
             // large as sal_uInt16:
-            printType(o, options, manager, arguments[tparam], 4);
+            printType(o, options, manager, arguments[tparam], 4,
+                      options.shortnames);
         }
         o << ' '
           << (codemaker::cpp::translateUnoToCppIdentifier(
@@ -568,7 +569,7 @@ void printServiceMembers(std::ostream & o,
                 codemaker::convertString(reader.getFieldTypeName(i)));
 
             o << "// private ";
-            printType(o, options, manager, fieldType, 1);
+            printType(o, options, manager, fieldType, 1, options.shortnames);
             o << " "
               << codemaker::cpp::translateUnoToCppIdentifier(
                   fieldName, "property").getStr()
@@ -732,7 +733,7 @@ void generateDocumentation(std::ostream & o,
 
                 codemaker::GeneratedTypeSet generated;
                 printMethods(o, options, manager, reader, generated,
-                             delegate, options.implname);
+                             delegate, options.implname, "", options.shortnames);
             }
             break;
 
