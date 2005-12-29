@@ -13178,27 +13178,27 @@
   	if (!CERT_LIST_END(head1, certs)) {
 ! 		continue;
   	}
-!     //JL: OpenOffice.org implements its own certificate verification routine. 
-!     //The goal is to seperate validation of the signature
-!     //and the certificate. For example, OOo could show that the document signature is valid,
-!     //but the certificate could not be verified. If we do not prevent the verification of
-!     //the certificate by libxmlsec and the verification fails, then the XML signature may not be 
-!     //verified. This would happen, for example, if the root certificate is not installed.
-!     //
-!     //In the store schould only be the certificate from the X509Certificate element 
-!     //and the X509IssuerSerial element. The latter is only there
-!     //if the certificate is installed. Both certificates must be the same!
-!     //In case of writing the signature, the store contains only the certificate that
-!     //was created based on the information from the X509IssuerSerial element.
+!     /* JL: OpenOffice.org implements its own certificate verification routine. 
+!       The goal is to seperate validation of the signature
+!       and the certificate. For example, OOo could show that the document signature is valid,
+!       but the certificate could not be verified. If we do not prevent the verification of
+!       the certificate by libxmlsec and the verification fails, then the XML signature may not be 
+!       verified. This would happen, for example, if the root certificate is not installed.
+!       
+!       In the store schould only be the certificate from the X509Certificate element 
+!       and the X509IssuerSerial element. The latter is only there
+!       if the certificate is installed. Both certificates must be the same!
+!       In case of writing the signature, the store contains only the certificate that
+!       was created based on the information from the X509IssuerSerial element. */
 !     status = SECSuccess;
 !     break;
-! //	status = CERT_VerifyCertificate(CERT_GetDefaultCertDB(), 
-! //					cert, PR_FALSE, 
-! //					(SECCertificateUsage)0,
-! //							timeboundary , NULL, NULL, NULL);
-! //	if (status == SECSuccess) {
-! //		break;
-! //	} 
+! /*	status = CERT_VerifyCertificate(CERT_GetDefaultCertDB(), 
+!   					cert, PR_FALSE, 
+!   					(SECCertificateUsage)0,
+!   							timeboundary , NULL, NULL, NULL);
+!   	if (status == SECSuccess) {
+!   		break;
+!   	} /*
   	}
   
 ! 	if (status == SECSuccess) {
