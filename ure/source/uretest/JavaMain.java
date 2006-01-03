@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JavaMain.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:12:37 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.XComponentContext;
-import test.types.CppTest;
-import test.types.JavaTest;
-import test.types.TestException;
-import test.types.XTest;
+import test.java.tester.Tester;
 
 public final class JavaMain implements XMain {
     public JavaMain(XComponentContext context) {
@@ -52,8 +49,7 @@ public final class JavaMain implements XMain {
     }
 
     public int run(String[] arguments) {
-        test(CppTest.create(context), CppTest.class.getName());
-        test(JavaTest.create(context), JavaTest.class.getName());
+        Tester.test(context);
         return 0;
     }
 
@@ -71,18 +67,6 @@ public final class JavaMain implements XMain {
                 JavaMain.class, SERVICE_NAME, factory, key);
         } else {
             return null;
-        }
-    }
-
-    private static final void test(XTest test, String name) {
-        boolean ok = false;
-        try {
-            test.throwException();
-        } catch (TestException e) {
-            ok = true;
-        }
-        if (!ok) {
-            throw new RuntimeException(name + ".throwException failed");
         }
     }
 
