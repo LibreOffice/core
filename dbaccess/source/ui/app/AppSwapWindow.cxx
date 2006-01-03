@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:17:08 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,24 +116,22 @@ void OApplicationSwapWindow::Resize()
 void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
+    if( bFont )
     {
-        Font aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
     }
 
-    if ( bFont || bForeground )
+    if( bForeground || bFont )
     {
-        Color aTextColor = rStyleSettings.GetButtonTextColor();
-        if ( IsControlForeground() )
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
     }
 
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetWindowColor() ) );
+    if( bBackground )
+        SetBackground( rStyleSettings.GetFieldColor() );
 }
 // -----------------------------------------------------------------------
 void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
