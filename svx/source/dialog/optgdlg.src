@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:50:55 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 14:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,6 @@ TabPage OFA_TP_MISC
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT(ROW11) );
         Size = MAP_APPFONT( DIFF( COL1, COL3), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ language_user1 ] = "; Interpretieren als";
         Text [ de ] = "~Interpretieren als Jahre zwischen";
         Text [ en-US ] = "Interpret as years between";
     };
@@ -181,7 +180,6 @@ TabPage OFA_TP_MISC
         Size = MAP_APPFONT( WHOLE_WIDTH - COL6, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "und " ;
         Text [ en-US ] = "and " ;
-        Text[ language_user1 ] = "; nk: im Japanisch muss es an dieser Stelle \"von\" heiﬂen  weil im Japanisch keine Pr‰position gibt, sondern Postposition. (Extras/Optionen/Allgemein/Sonstiges) 20.08.99 - - - - - - - - - -";
     };
 };
 
