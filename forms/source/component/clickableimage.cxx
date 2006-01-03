@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:22:41 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -638,18 +638,21 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
+        ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->addConsumer( _rxConsumer );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
+        ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->removeConsumer( _rxConsumer );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseModel::startProduction(  ) throw (RuntimeException)
     {
+        ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->startProduction();
     }
 
@@ -689,6 +692,7 @@ namespace frm
         }
 
         m_xProducer = NULL;
+        m_pProducer = NULL;
     }
 
     //------------------------------------------------------------------------------
