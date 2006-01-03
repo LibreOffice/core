@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:16:10 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,15 +364,63 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     m_aHelpText.SetHelpId(HID_APP_HELP_TEXT);
     m_aDescription.SetHelpId(HID_APP_DESCRIPTION_TEXT);
     m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
-    Font aFont = m_aDescription.GetControlFont();
-    aFont.SetWeight(WEIGHT_BOLD);
-    m_aDescription.SetControlFont(aFont);
+    ImplInitSettings(sal_True,sal_True,sal_True);
 }
 // -----------------------------------------------------------------------------
 OTasksWindow::~OTasksWindow()
 {
     DBG_DTOR(OTasksWindow,NULL);
     Clear();
+}
+// -----------------------------------------------------------------------
+void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    DBG_CHKTHIS(OTasksWindow,NULL);
+    Window::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        ImplInitSettings( sal_True, sal_True, sal_True );
+        Invalidate();
+    }
+}
+//  -----------------------------------------------------------------------------
+void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+{
+    DBG_CHKTHIS(OTasksWindow,NULL);
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( bFont )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( bForeground || bFont )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+        m_aHelpText.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aHelpText.SetTextFillColor();
+        m_aDescription.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aDescription.SetTextFillColor();
+        //m_aFL.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        //m_aFL.SetTextFillColor();
+    }
+
+    if( bBackground )
+    {
+        SetBackground( rStyleSettings.GetFieldColor() );
+        m_aHelpText.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aDescription.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
+    }
+
+    Font aFont = m_aDescription.GetControlFont();
+    aFont.SetWeight(WEIGHT_BOLD);
+    m_aDescription.SetControlFont(aFont);
 }
 // -----------------------------------------------------------------------------
 void OTasksWindow::setHelpText(USHORT _nId)
@@ -526,10 +574,28 @@ OApplicationDetailView::~OApplicationDetailView()
 void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
-    m_aHorzSplitter.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
-    m_aHorzSplitter.SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
-    m_aHorzSplitter.SetTextFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( bFont )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( bForeground || bFont )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+    }
+
+    if( bBackground )
+        SetBackground( rStyleSettings.GetFieldColor() );
+
+    //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
+    m_aHorzSplitter.SetBackground( rStyleSettings.GetDialogColor() );
+    m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
+    m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
 }
 // -----------------------------------------------------------------------
 void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
