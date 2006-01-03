@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:37:23 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,8 @@ namespace connectivity
             void fillNeededData(SQLRETURN _nRet);
             const ORowSetValue& getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize);
             sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+            TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
+            SQLRETURN unbind(sal_Bool _bUnbindHandle = sal_True);
 
 
             // OPropertyArrayUsageHelper
