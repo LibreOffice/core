@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:41:12 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1761,13 +1761,17 @@ BOOL BrowseBox::GoToColumnId( USHORT nColId, BOOL bMakeVisible, BOOL bRowColMove
 
     if ( nColId != nCurColId || bMakeVisible && !IsFieldVisible(nCurRow, nColId, TRUE))
     {
+        USHORT nNewPos = GetColumnPos(nColId);
+        BrowserColumn* pColumn = pCols->GetObject( nNewPos );
+        DBG_ASSERT( pColumn, "no column object - invalid id?" );
+        if ( !pColumn )
+            return FALSE;
+
         DoHideCursor( "GoToColumnId" );
         nCurColId = nColId;
 
-        USHORT nNewPos = GetColumnPos(nColId);
-        DBG_ASSERT( nNewPos != USHRT_MAX, "unknown column-id" );
         USHORT nFirstPos = nFirstCol;
-        USHORT nWidth = (USHORT)pCols->GetObject( nNewPos )->Width();
+        USHORT nWidth = (USHORT)pColumn->Width();
         USHORT nLastPos = GetColumnAtXPosPixel(
                             pDataWin->GetSizePixel().Width()-nWidth, FALSE );
         USHORT nFrozen = FrozenColCount();
