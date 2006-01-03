@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:43 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,9 @@ void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
     if ( pEditView )
     {
         pEditView->MouseButtonUp( rEvt );
-        BasicIDE::GetBindings().Invalidate( SID_BASICIDE_STAT_POS );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_BASICIDE_STAT_POS );
     }
 }
 
@@ -416,32 +418,6 @@ void __EXPORT EditorWindow::Command( const CommandEvent& rCEvt )
         }
     }
 }
-
-/*
-BOOL __EXPORT EditorWindow::Drop( const DropEvent& rEvt )
-{
-    BOOL bDone = FALSE;
-    if ( pEditView && ImpCanModify() )
-    {
-        bDone = pEditView->Drop( rEvt );
-        if ( bDone )
-        {
-            SfxBindings& rBindings = BasicIDE::GetBindings();
-            rBindings.Invalidate( SID_BASICIDE_STAT_POS );
-            rBindings.Invalidate( SID_SAVEDOC );
-            rBindings.Invalidate( SID_DOC_MODIFIED );
-        }
-    }
-    return bDone;
-}
-
-BOOL __EXPORT EditorWindow::QueryDrop( DropEvent& rEvt )
-{
-    if ( pEditView )
-        return pEditView->QueryDrop( rEvt );
-    return FALSE;
-}
-*/
 
 BOOL EditorWindow::ImpCanModify()
 {
@@ -510,17 +486,20 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
-        SfxBindings& rBindings = BasicIDE::GetBindings();
-        rBindings.Invalidate( SID_BASICIDE_STAT_POS );
-        if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
-            rBindings.Update( SID_BASICIDE_STAT_POS );
-        if ( !bWasModified && pEditEngine->IsModified() )
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
         {
-            rBindings.Invalidate( SID_SAVEDOC );
-            rBindings.Invalidate( SID_DOC_MODIFIED );
+            pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+            if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
+                pBindings->Update( SID_BASICIDE_STAT_POS );
+            if ( !bWasModified && pEditEngine->IsModified() )
+            {
+                pBindings->Invalidate( SID_SAVEDOC );
+                pBindings->Invalidate( SID_DOC_MODIFIED );
+            }
+            if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
+                pBindings->Invalidate( SID_ATTR_INSERT );
         }
-        if( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
-            rBindings.Invalidate( SID_ATTR_INSERT );
         if ( SFX_APP()->GetHelpPI() )
             aHelpAgentTimer.Start();
     }
@@ -661,7 +640,9 @@ void EditorWindow::CreateEditEngine()
 
     InitScrollBars();
 
-    BasicIDE::GetBindings().Invalidate( SID_BASICIDE_STAT_POS );
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_BASICIDE_STAT_POS );
 
     DBG_ASSERT( pModulWindow->GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
 
