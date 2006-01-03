@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:43:17 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 
 #include "vm.hxx"
 
+#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/component_context.hxx"
@@ -57,13 +58,13 @@ typedef ::cppu::WeakComponentImplHelper1<
 
 class SingletonFactory : public MutexHolder, public t_impl
 {
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > m_vm_access;
+    ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > m_vm_access;
 
 protected:
     virtual void SAL_CALL disposing();
 
 public:
-    inline SingletonFactory( ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
+    inline SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
         : t_impl( m_mutex ),
           m_vm_access( vm_access )
         {}
@@ -87,7 +88,12 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     throw (css::uno::Exception)
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
-    css::uno::Any arg( css::uno::makeAny( handle ) );
+    css::uno::Any arg(
+        css::uno::makeAny(
+            css::beans::NamedValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "UnoVirtualMachine" ) ),
+                css::uno::makeAny( handle ) ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -132,7 +138,7 @@ namespace javaunohelper {
 
 css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
     css::uno::Reference< ::css::uno::XComponentContext > const & xContext,
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
+    ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
 {
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
