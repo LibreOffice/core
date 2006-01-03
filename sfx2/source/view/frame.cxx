@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:52:44 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1422,30 +1422,37 @@ void SfxFrame::SetWorkWindow_Impl( SfxWorkWindow* pWorkwin )
 
 void SfxFrame::CreateWorkWindow_Impl()
 {
-    Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
     SfxFrame* pFrame = this;
-    if ( xChild.is() )
+    try
     {
-        Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
-        if ( xParent.is() )
+        Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
+        if ( xChild.is() )
         {
-            Reference< XController > xParentCtrler = xParent->getCurrentController();
-            if ( xParentCtrler.is() )
+            Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
+            if ( xParent.is() )
             {
-                Reference < XFrame > xFrame( xParentCtrler->getFrame() );
-                SfxFrame* pFr = SfxFrame::GetFirst();
-                while ( pFr )
+                Reference< XController > xParentCtrler = xParent->getCurrentController();
+                if ( xParentCtrler.is() )
                 {
-                    if ( pFr->GetFrameInterface() == xFrame )
+                    Reference < XFrame > xFrame( xParentCtrler->getFrame() );
+                    SfxFrame* pFr = SfxFrame::GetFirst();
+                    while ( pFr )
                     {
-                        pFrame = pFr;
-                        break;
-                    }
+                        if ( pFr->GetFrameInterface() == xFrame )
+                        {
+                            pFrame = pFr;
+                            break;
+                        }
 
-                    pFr = SfxFrame::GetNext( *pFr );
+                        pFr = SfxFrame::GetNext( *pFr );
+                    }
                 }
             }
         }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
     }
 
     pImp->pWorkWin = new SfxFrameWorkWin_Impl( &pFrame->GetWindow(), this, pFrame );
