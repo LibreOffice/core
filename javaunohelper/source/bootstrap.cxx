@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:16 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
             ::javaunohelper::create_vm_access( jni_env, loader ) );
         // wrap vm singleton entry
-        xContext = ::javaunohelper::install_vm_singleton(
-            xContext, vm_access->getVirtualMachine() );
+        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
 
         // get uno envs
         OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
