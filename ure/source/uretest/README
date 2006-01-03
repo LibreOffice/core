@@ -4,9 +4,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:13:45 $
+#   last change: $Author: kz $ $Date: 2006-01-03 12:41:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,17 @@ executable.  The component tries to instantiate and to call a C++ UNO component
 completes when these components throw a special exception that is caught by
 javamain.uno.
 
+- test-javanative
+Builds a Java UNO application, javanative.jar, and runs the application with the
+java executable.  The application bootstraps a native UNO environment, and then
+tries to instantiate and to call a C++ UNO component (cpptest.uno) as well as a
+Java UNO component( javatest.uno).  The test completes when these components
+throw a special exception that is caught by javanative.jar.
+
 - test-clientserver
-Builds a server C++ UNO component, cppserver.uno, and a client Java UNO
-component, javaclient.uno.  The uno executable runs the cppserver.uno component
-which listens on a pipe connection.  The java executable runs the javaclient.uno
+Builds a server C++ UNO component, cppserver.uno, and a Java UNO application,
+javaclient.uno.  The uno executable runs the cppserver.uno component which
+listens on a pipe connection.  The java executable runs the javaclient.uno
 component which connects to the server after a five second pause so that the
 server has enough time to start.
 
