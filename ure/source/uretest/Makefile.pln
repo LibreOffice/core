@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Makefile.pln,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:13:30 $
+#   last change: $Author: kz $ $Date: 2006-01-03 12:40:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ GXX_INCLUDE_PATH ?= /usr/include/g++
 
 
 .PHONY: test
-test: test-regview test-cpptest test-javatest test-clientserver
+test: test-regview test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-regview
 test-regview: out.pln/services.rdb
@@ -68,6 +68,14 @@ test-javatest: out.pln/javamain.uno.jar out.pln/types.rdb out.pln/services.rdb
             -c test.java.javamain.Component -l file://$(PWD)/$< \
             -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
             -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
+
+.PHONY: test-javanative
+test-javanative: out.pln/runner.jar out.pln/javanative.jar \
+            out.pln/javanative.rc out.pln/services.rdb out.pln/types.rdb
+	$(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/lib java \
+            -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
+            file://$(PWD)/out.pln/javanative.jar \
+            file://$(PWD)/out.pln/javanative.rc
 
 .PHONY: test-clientserver
 test-clientserver: out.pln/cppserver.uno.so out.pln/runner.jar \
@@ -137,7 +145,7 @@ out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
 out.pln/cpputypes.cppumaker.flag: | out.pln
 	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/cppumaker \
             -O./out.pln/include/cpputypes \
-            '-Tcom.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
+            '-Tcom.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
             -B/UCR $(URE_HOME)/share/misc/types.rdb
 	touch $@
 
@@ -154,15 +162,15 @@ out.pln/javamain.uno.jar: \
 	jar cfm $@ out.pln/javamain.mf -C out.pln/class/javamain test
 
 out.pln/javamain.mf: javamain.mf.template | out.pln
-	sed -e 's~^Class-Path:$$~& types.jar~' \
+	sed -e 's~^Class-Path:$$~& tester.jar~' \
             -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
 
 out.pln/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
-            out.pln/types.jar | out.pln/class
+            out.pln/tester.jar | out.pln/class
 	rm -rf out.pln/class/javamain
 	mkdir out.pln/class/javamain
 	javac -classpath \
-            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javamain $<
 
 
@@ -182,6 +190,22 @@ out.pln/class/runner/test/java/runner/Runner.class: Runner.java | out.pln/class
             -d out.pln/class/runner $<
 
 
+out.pln/tester.jar: out.pln/class/tester/test/java/tester/Tester.class \
+            out.pln/tester.mf | out.pln
+	jar cfm $@ out.pln/tester.mf -C out.pln/class/tester test
+
+out.pln/tester.mf: tester.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& types.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/tester/test/java/tester/Tester.class: Tester.java \
+            out.pln/types.jar | out.pln/class
+	rm -rf out.pln/class/tester
+	mkdir out.pln/class/tester
+	javac -classpath $(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
+            -sourcepath . -d out.pln/class/tester $<
+
+
 out.pln/javatest.uno.jar: \
             out.pln/class/javatest/test/java/javatest/JavaTest.class \
             out.pln/javatest.mf | out.pln
@@ -198,6 +222,30 @@ out.pln/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
 	javac -classpath \
             $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javatest $<
+
+
+out.pln/javanative.jar: \
+            out.pln/class/javanative/test/java/javanative/JavaNative.class \
+            out.pln/javanative.mf | out.pln
+	jar cfm $@ out.pln/javanative.mf -C out.pln/class/javanative test
+
+out.pln/javanative.mf: javanative.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& tester.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/javanative/test/java/javanative/JavaNative.class: \
+            JavaNative.java out.pln/tester.jar | out.pln/class
+	rm -rf out.pln/class/javanative
+	mkdir out.pln/class/javanative
+	javac -classpath \
+            $(URE_HOME)/share/java/juh.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/tester.jar \
+            -sourcepath . -d out.pln/class/javanative $<
+
+out.pln/javanative.rc: | out.pln
+	echo 'URE_INTERNAL_LIB_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_LIB_DIR}' > $@
+	echo 'URE_INTERNAL_JAVA_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_JAVA_DIR}' >> $@
+	echo 'UNO_TYPES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_TYPES} file://$(PWD)/out.pln/types.rdb' >> $@
+	echo 'UNO_SERVICES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_SERVICES} file://$(PWD)/out.pln/services.rdb' >> $@
 
 
 out.pln/javaclient.jar: \
