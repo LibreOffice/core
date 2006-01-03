@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Makefile,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:13:15 $
+#   last change: $Author: kz $ $Date: 2006-01-03 12:40:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,16 +47,20 @@ include $(PRJ)/settings/std.mk
 
 ifeq "$(PLATFORM)" "windows"
 qt = "
+qt2 =
 cwd = $(subst \,/,$(shell cd))
 link_output_switch = -out:
 link_std_libs = kernel32.lib msvcrt.lib
 ure_java_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)))
+ure_unorc_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/uno.ini))
 else
 qt = '
+qt2 = '
 cwd = $(PWD)
 link_output_switch = $(subst .,.,-o )
 link_std_libs =
 ure_java_url = $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)
+ure_unorc_url = $(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/unorc
 endif
 
 
@@ -67,7 +71,7 @@ include $(PRJ)/settings/stdtarget.mk
 
 
 .PHONY: test
-test: test-cpptest test-javatest test-clientserver
+test: test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-cpptest
 test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
@@ -85,6 +89,13 @@ test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
             -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
             -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" \
             -ro out.sdk/services.rdb
+
+.PHONY: test-javanative
+test-javanative: out.sdk/runner.jar out.sdk/javanative.jar \
+            out.sdk/javanative.rc out.sdk/services.rdb out.sdk/types.rdb
+	$(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
+            $(URLPREFIX)$(cwd)/out.sdk/javanative.jar \
+            $(URLPREFIX)$(cwd)/out.sdk/javanative.rc
 
 do_server = $(GCCS_COMPAT) uno -c test.cpp.cppserver.Component \
     -l $(URLPREFIX)$(cwd)/out.sdk/cppserver.uno.$(SHAREDLIB_EXT) \
@@ -152,7 +163,7 @@ out.sdk/cppserver.$(OBJ_EXT): cppserver.cc out.sdk/cpputypes.cppumaker.flag \
 
 out.sdk/cpputypes.cppumaker.flag: | out.sdk
 	$(CPPUMAKER) -O./out.sdk/include/cpputypes \
-            "-Tcom.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak" \
+            "-Tcom.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak" \
             -B/UCR "$(URE_TYPES)"
 	touch $@
 
@@ -167,15 +178,15 @@ out.sdk/javamain.uno.jar: \
 	$(SDK_JAR) cfm $@ out.sdk/javamain.mf -C out.sdk/class/javamain test
 
 out.sdk/javamain.mf: javamain.mf.template | out.sdk
-	sed -e $(qt)s~^Class-Path:$$~& types.jar~$(qt) \
+	sed -e $(qt)s~^Class-Path:$$~& tester.jar~$(qt) \
             -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
 
 out.sdk/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
-            out.sdk/types.jar | out.sdk/class
+            out.sdk/tester.jar | out.sdk/class
 	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/javamain)
 	$(MKDIR) $(subst /,$(PS),out.sdk/class/javamain)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
-            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/tester.jar" \
             -sourcepath . -d out.sdk/class/javamain $<
 
 
@@ -194,6 +205,23 @@ out.sdk/class/runner/test/java/runner/Runner.class: Runner.java | out.sdk/class
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -sourcepath . -d out.sdk/class/runner $<
 
 
+out.sdk/tester.jar: out.sdk/class/tester/test/java/tester/Tester.class \
+            out.sdk/tester.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/tester.mf -C out.sdk/class/tester test
+
+out.sdk/tester.mf: tester.mf.template | out.sdk
+	sed -e $(qt)s~^Class-Path:$$~& types.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
+
+out.sdk/class/tester/test/java/tester/Tester.class: Tester.java \
+            out.sdk/types.jar | out.sdk/class
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/tester)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/tester)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
+            -sourcepath . -d out.sdk/class/tester $<
+
+
 out.sdk/javatest.uno.jar: \
             out.sdk/class/javatest/test/java/javatest/JavaTest.class \
             out.sdk/javatest.mf | out.sdk
@@ -210,6 +238,30 @@ out.sdk/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
             -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
             -sourcepath . -d out.sdk/class/javatest $<
+
+
+out.sdk/javanative.jar: \
+            out.sdk/class/javanative/test/java/javanative/JavaNative.class \
+            out.sdk/javanative.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/javanative.mf -C out.sdk/class/javanative test
+
+out.sdk/javanative.mf: javanative.mf.template | out.sdk
+	sed -e $(qt)s~^Class-Path:$$~& tester.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
+
+out.sdk/class/javanative/test/java/javanative/JavaNative.class: \
+            JavaNative.java out.sdk/tester.jar | out.sdk/class
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/javanative)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/javanative)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/tester.jar" \
+            -sourcepath . -d out.sdk/class/javanative $<
+
+out.sdk/javanative.rc: | out.sdk
+	echo $(qt2)URE_INTERNAL_LIB_DIR=$${$(subst :,\u003A,$(ure_unorc_url)):URE_INTERNAL_LIB_DIR}$(qt2) > $@
+	echo $(qt2)URE_INTERNAL_JAVA_DIR=$${$(subst :,\u003A,$(ure_unorc_url)):URE_INTERNAL_JAVA_DIR}$(qt2) >> $@
+	echo $(qt2)UNO_TYPES=$${$(subst :,\u003A,$(ure_unorc_url)):UNO_TYPES} $(URLPREFIX)$(cwd)/out.sdk/types.rdb$(qt2) >> $@
+	echo $(qt2)UNO_SERVICES=$${$(subst :,\u003A,$(ure_unorc_url)):UNO_SERVICES} $(URLPREFIX)$(cwd)/out.sdk/services.rdb$(qt2) >> $@
 
 
 out.sdk/javaclient.jar: \
