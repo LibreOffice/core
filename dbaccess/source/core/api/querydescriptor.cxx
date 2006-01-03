@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:08:50 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,20 +249,17 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
 {
     MutexGuard aGuard(m_rMutex);
 
-    Reference< XNameAccess > xColumns;
-    if ( m_bEscapeProcessing )
+    if ( isColumnsOutOfDate() )
     {
-        if ( isColumnsOutOfDate() )
-        {
-            // load the columns
+        // load the columns
+        if ( m_bEscapeProcessing )
             refreshColumns();
 
-            setColumnsOutOfDate( sal_False );
-            m_pColumns->setInitialized();
-        }
-        xColumns = m_pColumns;
+        setColumnsOutOfDate( sal_False );
+        m_pColumns->setInitialized();
     }
-    return xColumns;
+
+    return m_pColumns;
 }
 
 //--------------------------------------------------------------------------
