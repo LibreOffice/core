@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:31:13 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,7 +776,10 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed && m_pShell, "FmXFormShell: instance is already disposed!" );
+    if ( !m_pShell )
+        return;
+
     if (evt.PropertyName == FM_PROP_ROWCOUNT)
     {
         // Das gleich folgenden Update erzwingt ein Neu-Painten der entsprechenden Slots. Wenn ich mich aber hier nicht
@@ -2650,6 +2653,9 @@ public:
 void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( FmXFormShell_BASE::rBHelper.bDisposed )
+        return;
+
     DBG_ASSERT(m_pShell && m_pShell->GetFormView(), "FmXFormShell::SetDesignMode : invalid call (have no shell or no view) !");
     m_bChangingDesignMode = sal_True;
 
