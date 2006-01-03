@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:53:01 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,7 +521,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Wallpaper aEmpty;
         if( rPaper == aEmpty )
-            Control::SetBackground( rStyleSettings.GetWindowColor() );
+            Control::SetBackground( rStyleSettings.GetFieldColor() );
         else
         {
             Wallpaper aBackground( rPaper );
@@ -537,7 +537,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
                     aBackground.GetBitmap().IsTransparent() ||
                     (eStyle != WALLPAPER_TILE && eStyle != WALLPAPER_SCALE))))
             {
-                aBackground.SetColor( rStyleSettings.GetWindowColor() );
+                aBackground.SetColor( rStyleSettings.GetFieldColor() );
             }
             if( aBackground.IsScrollable() )
             {
@@ -556,7 +556,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         // bei hart attributierter Textfarbe keine 'Automatik', die eine
         // lesbare Textfarbe einstellt.
         Font aFont( GetFont() );
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        aFont.SetColor( rStyleSettings.GetFieldTextColor() );
         SetFont( aFont );
 
         Invalidate(INVALIDATE_NOCHILDREN);
