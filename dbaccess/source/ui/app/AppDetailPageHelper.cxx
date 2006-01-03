@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:45:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,9 @@ namespace
     class OTablePreviewWindow : public Window
     {
         DECL_LINK(OnDisableInput, void*);
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    protected:
+        virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
         OTablePreviewWindow( Window* pParent, WinBits nStyle = 0 );
         virtual long Notify( NotifyEvent& rNEvt );
@@ -207,6 +210,7 @@ namespace
     // -----------------------------------------------------------------------------
     OTablePreviewWindow::OTablePreviewWindow(Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
+        ImplInitSettings( sal_True, sal_True, sal_True );
     }
     // -----------------------------------------------------------------------------
     long OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
@@ -222,6 +226,40 @@ namespace
         EnableInput(FALSE);
         return 0L;
     }
+    //  -----------------------------------------------------------------------------
+    void OTablePreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        Window::DataChanged( rDCEvt );
+
+        if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+            (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        {
+            ImplInitSettings( sal_True, sal_True, sal_True );
+            Invalidate();
+        }
+    }
+    //  -----------------------------------------------------------------------------
+    void OTablePreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        if( bFont )
+        {
+            Font aFont;
+            aFont = rStyleSettings.GetFieldFont();
+            aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+            SetPointFont( aFont );
+        }
+
+        if( bForeground || bFont )
+        {
+            SetTextColor( rStyleSettings.GetFieldTextColor() );
+            SetTextFillColor();
+        } // if( bForeground || bFont )
+
+        if( bBackground )
+            SetBackground( rStyleSettings.GetFieldColor() );
+    }
+
 }
 //==================================================================
 // class OAppDetailPageHelper
@@ -264,6 +302,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _p
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
     for (int i=0; i < CONTROL_COUNT; ++i)
         m_pLists[i] = NULL;
+    ImplInitSettings( sal_True, sal_True, sal_True );
 }
 // -----------------------------------------------------------------------------
 OAppDetailPageHelper::~OAppDetailPageHelper()
@@ -1195,6 +1234,7 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
        && ( rDCEvt.GetFlags() & SETTINGS_STYLE )
        )
     {
+        ImplInitSettings( sal_True, sal_True, sal_True );
         if ( m_pLists[ E_TABLE ] )
         {
             OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ] );
@@ -1204,7 +1244,45 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
         }
     }
 }
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( true )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+        m_aTBPreview.SetPointFont( aFont );
+    }
 
+    if( true )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+        m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aBorder.SetTextFillColor();
+        m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aTBPreview.SetTextFillColor();
+    } // if( true )
+
+    if( true )
+    {
+        SetBackground( rStyleSettings.GetFieldColor() );
+        m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
+        m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
+    } // if( true )
+}
+// -----------------------------------------------------------------------------
+OPreviewWindow::OPreviewWindow(Window* _pParent)
+: Window(_pParent)
+{
+    ImplInitSettings( sal_True, sal_True, sal_True );
+}
 // -----------------------------------------------------------------------------
 BOOL OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
@@ -1255,5 +1333,38 @@ void OPreviewWindow::Paint( const Rectangle& rRect )
         else
             m_aGraphicObj.Draw( this, aPos, aSize );
     }
+}
+// -----------------------------------------------------------------------------
+void OPreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        ImplInitSettings( sal_True, sal_True, sal_True );
+        Invalidate();
+    }
+}
+//  -----------------------------------------------------------------------------
+void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( bFont )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( bForeground || bFont )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+    } // if( bForeground || bFont )
+
+    if( bBackground )
+        SetBackground( rStyleSettings.GetFieldColor() );
 }
 // -----------------------------------------------------------------------------
