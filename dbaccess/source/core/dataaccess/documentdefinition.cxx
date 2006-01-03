@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:36:04 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -165,6 +168,18 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
+#include <com/sun/star/form/XForm.hpp>
+#endif
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
@@ -227,6 +242,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::drawing;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -969,6 +986,58 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     return aRet;
 }
 // -----------------------------------------------------------------------------
+namespace
+{
+    void lcl_resetChildFormsToEmptyDataSource( const Reference< XIndexAccess>& _rxFormsContainer )
+    {
+        OSL_PRECOND( _rxFormsContainer.is(), "lcl_resetChildFormsToEmptyDataSource: illegal call!" );
+        sal_Int32 count = _rxFormsContainer->getCount();
+        for ( sal_Int32 i = 0; i < count; ++i )
+        {
+            Reference< XForm > xForm( _rxFormsContainer->getByIndex( i ), UNO_QUERY );
+            if ( !xForm.is() )
+                continue;
+
+            // if the element is a form, reset its DataSourceName property to an empty string
+            try
+            {
+                Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
+                xFormProps->setPropertyValue( PROPERTY_DATASOURCENAME, makeAny( ::rtl::OUString() ) );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            // if the element is a container itself, step down the component hierarchy
+            Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
+            if ( xContainer.is() )
+                lcl_resetChildFormsToEmptyDataSource( xContainer );
+        }
+    }
+
+    void lcl_resetFormsToEmptyDataSource( const Reference< XEmbeddedObject>& _rxEmbeddedObject )
+    {
+        try
+        {
+            Reference< XComponentSupplier > xCompProv( _rxEmbeddedObject, UNO_QUERY_THROW );
+            Reference< XDrawPageSupplier > xSuppPage( xCompProv->getComponent(), UNO_QUERY_THROW );
+                // if this interface does not exist, then either getComponent returned NULL,
+                // or the document is a multi-page document. The latter is allowed, but currently
+                // simply not handled by this code, as it would not normally happen.
+
+            Reference< XFormsSupplier > xSuppForms( xSuppPage->getDrawPage(), UNO_QUERY_THROW );
+            Reference< XIndexAccess > xForms( xSuppForms->getForms(), UNO_QUERY_THROW );
+            lcl_resetChildFormsToEmptyDataSource( xForms );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+    }
+}
+// -----------------------------------------------------------------------------
 void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< XCommandEnvironment >& Environment)
     throw( Exception )
 {
@@ -1006,6 +1075,10 @@ void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< 
                                                                                 ,m_pImpl->m_aProps.sPersistentName
                                                                                 ,aMediaDesc
                                                                                 ,aEmpty),UNO_QUERY);
+
+                lcl_resetFormsToEmptyDataSource( m_xEmbeddedObject );
+                // #i57669# / 2005-12-01 / frank.schoenheit@sun.com
+
                 Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
                 if ( xPersist.is() )
                 {
