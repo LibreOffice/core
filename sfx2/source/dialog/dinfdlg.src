@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:24:06 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 14:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,35 +147,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Typ:" ;
         Text [ en-US ] = "Type:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Tipo:";
-        Text[ ko ] = "형식:";
-        Text[ sk ] = "Typ:";
-        Text[ ar ] = "النوع:";
-        Text[ ca ] = "Tipus";
-        Text[ nl ] = "Type:";
-        Text[ cz ] = "Typ:";
-        Text[ fi ] = "Tyyppi:";
-        Text[ es ] = "Tipo:";
-        Text[ et ] = "Type:";
-        Text[ tr ] = "Tip:";
-        Text[ da ] = "Type:";
-        Text[ fr ] = "Type :";
-        Text[ pl ] = "Typ:";
-        Text[ th ] = "ชนิด:";
-        Text[ ja ] = "種類:";
-        Text[ pt ] = "Tipo:";
-        Text[ hu ] = "Típus";
-        Text[ el ] = "Τύπος:";
-        Text[ zh-CN ] = "类型：";
-        Text[ sl ] = "Vrsta:";
-        Text[ sv ] = "Typ:";
-        Text[ hi-IN ] = "वर्ग:";
-        Text[ pt-BR ] = "Tipo:";
-        Text[ ru ] = "Тип:";
-        Text[ he ] = "‮סוג:‬";
-        Text[ cs ] = "Typ:";
-        Text[ zh-TW ] = "類型：";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -188,35 +159,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 91 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~Schreibgeschützt" ;
         Text [ en-US ] = "~Read-only" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "~Sola lettura";
-        Text[ ko ] = "읽기 전용(~R)";
-        Text[ sk ] = "Iba na č~ítanie";
-        Text[ ar ] = "للقراءة فقط";
-        Text[ ca ] = "~Només lectura";
-        Text[ nl ] = "~Alleen-lezen";
-        Text[ cz ] = "Pouze ke čtení";
-        Text[ fi ] = "Vain ~luku";
-        Text[ es ] = "~Solo lectura";
-        Text[ et ] = "~Read-only";
-        Text[ tr ] = "S~alt okunur";
-        Text[ da ] = "Skrive~beskyttet";
-        Text[ fr ] = "~En lecture seule";
-        Text[ pl ] = "Tylko ~do odczytu";
-        Text[ th ] = "~อ่านอย่างเดียว";
-        Text[ ja ] = "読み取り専用(~R)";
-        Text[ pt ] = "~Só leitura";
-        Text[ hu ] = "~Csak olvasható";
-        Text[ el ] = "Μόνο για ανάγνωση";
-        Text[ zh-CN ] = "防改写(~R)";
-        Text[ sl ] = "Samo za ~branje";
-        Text[ sv ] = "~Skrivskyddat";
-        Text[ hi-IN ] = "~केवल-पढ़ने केलिए";
-        Text[ pt-BR ] = "~Somente leitura";
-        Text[ ru ] = "~Только для чтения";
-        Text[ he ] = "‮קריאה בלבד‬";
-        Text[ cs ] = "Pouze ke čtení";
-        Text[ zh-TW ] = "唯讀(~R)";
     };
     FixedText FT_FILE
     {
@@ -224,35 +166,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Ort:" ;
         Text [ en-US ] = "Location:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Posizione file:";
-        Text[ ko ] = "위치:";
-        Text[ sk ] = "Umiestnenie:";
-        Text[ ar ] = "الموقع:";
-        Text[ ca ] = "Ubicació:";
-        Text[ nl ] = "Plaats:";
-        Text[ cz ] = "Umístění:";
-        Text[ fi ] = "Sijainti:";
-        Text[ es ] = "Ubicación:";
-        Text[ et ] = "Location:";
-        Text[ tr ] = "Yer:";
-        Text[ da ] = "Placering:";
-        Text[ fr ] = "Emplacement :";
-        Text[ pl ] = "Lokalizacja:";
-        Text[ th ] = "ที่ตั้ง:";
-        Text[ ja ] = "場所:";
-        Text[ pt ] = "Local:";
-        Text[ hu ] = "Hely:";
-        Text[ el ] = "Τοποθεσία:";
-        Text[ zh-CN ] = "位置：";
-        Text[ sl ] = "Mesto:";
-        Text[ sv ] = "Plats:";
-        Text[ hi-IN ] = "स्थान:";
-        Text[ pt-BR ] = "Local:";
-        Text[ ru ] = "Место:";
-        Text[ he ] = "‮מיקום:‬";
-        Text[ cs ] = "Umístění:";
-        Text[ zh-TW ] = "位置：";
     };
     FixedText FT_FILE_VAL
     {
@@ -265,35 +178,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Größe:" ;
         Text [ en-US ] = "Size:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Dimensione:";
-        Text[ ko ] = "크기:";
-        Text[ sk ] = "Veľkosť:";
-        Text[ ar ] = "الحجم:";
-        Text[ ca ] = "Mida:";
-        Text[ nl ] = "Grootte:";
-        Text[ cz ] = "Velikost:";
-        Text[ fi ] = "Koko:";
-        Text[ es ] = "Tamaño:";
-        Text[ et ] = "Size:";
-        Text[ tr ] = "Büyüklük:";
-        Text[ da ] = "Størrelse:";
-        Text[ fr ] = "Taille :";
-        Text[ pl ] = "Rozmiar:";
-        Text[ th ] = "ขนาด:";
-        Text[ ja ] = "サイズ:";
-        Text[ pt ] = "Tamanho:";
-        Text[ hu ] = "Méret:";
-        Text[ el ] = "Μέγεθος:";
-        Text[ zh-CN ] = "大小：";
-        Text[ sl ] = "Velikost:";
-        Text[ sv ] = "Storlek:";
-        Text[ hi-IN ] = "परिमाण:";
-        Text[ pt-BR ] = "Tamanho:";
-        Text[ ru ] = "Размер:";
-        Text[ he ] = "‮גודל:‬";
-        Text[ cs ] = "Velikost:";
-        Text[ zh-TW ] = "大小：";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -311,35 +195,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Erstellt am:" ;
         Text [ en-US ] = "Created:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Creato il:";
-        Text[ ko ] = "작성일:";
-        Text[ sk ] = "Vytvorený:";
-        Text[ ar ] = "تاريخ الإنشاء:";
-        Text[ ca ] = "Creat el:";
-        Text[ nl ] = "Gemaakt op:";
-        Text[ cz ] = "Vytvořený:";
-        Text[ fi ] = "Luotu:";
-        Text[ es ] = "Creado el:";
-        Text[ et ] = "Created:";
-        Text[ tr ] = "Oluşturma tarihi:";
-        Text[ da ] = "Oprettet:";
-        Text[ fr ] = "Créé le :";
-        Text[ pl ] = "Utworzony:";
-        Text[ th ] = "สร้าง:";
-        Text[ ja ] = "作成日時:";
-        Text[ pt ] = "Criado em:";
-        Text[ hu ] = "Létrehozva:";
-        Text[ el ] = "Δημιουργήθηκε τη:";
-        Text[ zh-CN ] = "建立日期：";
-        Text[ sl ] = "Ustvarjeno:";
-        Text[ sv ] = "Skapat:";
-        Text[ hi-IN ] = "उत्पन्न किया:";
-        Text[ pt-BR ] = "Criado:";
-        Text[ ru ] = "Создан:";
-        Text[ he ] = "‮זמן יצירה:‬";
-        Text[ cs ] = "Vytvořený:";
-        Text[ zh-TW ] = "建立日期：";
     };
     FixedText FT_CREATE_VAL
     {
@@ -352,35 +207,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Geändert am:" ;
         Text [ en-US ] = "Modified:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Cambiato";
-        Text[ ko ] = "변경일:";
-        Text[ sk ] = "Zmenený:";
-        Text[ ar ] = "تاريخ التعديل:";
-        Text[ ca ] = "Modificat el:";
-        Text[ nl ] = "Gewijzigd op:";
-        Text[ cz ] = "Změněný:";
-        Text[ fi ] = "Muokattu:";
-        Text[ es ] = "Modificado el:";
-        Text[ et ] = "Modified:";
-        Text[ tr ] = "Değiştirme tarihi:";
-        Text[ da ] = "Ændret:";
-        Text[ fr ] = "Modifié le :";
-        Text[ pl ] = "Zmodyfikowany:";
-        Text[ th ] = "ดัดแปลงแก้ไข:";
-        Text[ ja ] = "変更日時:";
-        Text[ pt ] = "Alterado em:";
-        Text[ hu ] = "Módosítva:";
-        Text[ el ] = "Τροποποιήθηκε τη:";
-        Text[ zh-CN ] = "更改的日期：";
-        Text[ sl ] = "Spremenjeno:";
-        Text[ sv ] = "Ändrat:";
-        Text[ hi-IN ] = "सुधार किया:";
-        Text[ pt-BR ] = "Modificado:";
-        Text[ ru ] = "Изменен:";
-        Text[ he ] = "‮זמן עידכון:‬";
-        Text[ cs ] = "Změněný:";
-        Text[ zh-TW ] = "變更的日期：";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -393,7 +219,6 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Digital signiert:" ;
         Text [ en-US ] = "Digitally signed:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SIGNED_VAL
     {
@@ -418,36 +243,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Letzter Druck:" ;
         Text [ en-US ] = "Last printed:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Ultima stampa:";
-        Text[ ko ] = "최근 인쇄일:";
-        Text[ sk ] = "Vytlačený:";
-        Text[ ar ] = "تاريخ الطباعة:";
-        Text[ ca ] = "Imprès el:";
-        Text[ nl ] = "Afgedrukt op:";
-        Text[ cz ] = "Vytištěno:";
-        Text[ fi ] = "Tulostettu:";
-        Text[ es ] = "Última impresión:";
-        Text[ et ] = "Last printed:";
-        Text[ tr ] = "Son yazdırılma tarihi:";
-        Text[ da ] = "Sidst udskrevet:";
-        Text[ fr ] = "Dernière impression :";
-        Text[ pl ] = "Wydrukowany:";
-        Text[ th ] = "พิมพ์:";
-        Text[ ja ] = "印刷日時:";
-        Text[ pt ] = "Impresso em:";
-        Text[ hu ] = "Utolsó nyomtatás:";
-        Text[ el ] = "Εκτυπώθηκε τη:";
-        Text[ zh-CN ] = "最后打印日期:";
-        Text[ sl ] = "Zadnjič natisnjeno:";
-        Text[ sv ] = "Senaste utskrift:";
-        Text[ hi-IN ] = "छपाई किया:";
-        Text[ pt-BR ] = "Impresso:";
-        Text[ ru ] = "Напечатан:";
-        Text[ he ] = "‮הדפסה אחרונה: ‬";
-        Text[ cs ] = "Vytištěno:";
-        Text[ zh-TW ] = "上一次列印：";
-    };
+        };
     FixedText FT_PRINT_VAL
     {
         Pos = MAP_APPFONT ( 78 , 116 ) ;
@@ -459,35 +255,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Gesamtbearbeitungszeit:" ;
         Text [ en-US ] = "Total editing time:" ;
-        Text[ it ] = "Durata revisioni:";
-        Text[ ko ] = "편집 시간:";
-        Text[ sk ] = "Editovaný:";
-        Text[ ar ] = "محرر:";
-        Text[ ca ] = "Editat el:";
-        Text[ nl ] = "Bewerkt:";
-        Text[ cz ] = "Editováno:";
-        Text[ fi ] = "Muokattu:";
-        Text[ es ] = "Tiempo de edición:";
-        Text[ et ] = "Editing time:";
-        Text[ tr ] = "Düzenleme zamanı:";
-        Text[ da ] = "Redigeringstid:";
-        Text[ fr ] = "Durée d'édition :";
-        Text[ pl ] = "Edycja:";
-        Text[ th ] = "แก้ไข:";
-        Text[ ja ] = "編集時間:";
-        Text[ pt ] = "Editado:";
-        Text[ hu ] = "Szerkesztési idő:";
-        Text[ el ] = "Επεξεργάστηκε:";
-        Text[ zh-CN ] = "编辑时间:";
-        Text[ sl ] = "Skupni čas urejanja:";
-        Text[ sv ] = "Redigeringstid:";
-        Text[ hi-IN ] = "संपादन किया:";
-        Text[ pt-BR ] = "Editado:";
-        Text[ ru ] = "Отредактирован:";
-        Text[ he ] = "‮זמן עריכה:‬";
-        Text[ cs ] = "Editováno:";
-        Text[ zh-TW ] = "編輯時間：";
-    };
+        };
     FixedText FT_TIMELOG_VAL
     {
         Pos = MAP_APPFONT ( 78 , 128 ) ;
@@ -499,35 +267,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Version:" ;
         Text [ en-US ] = "Revision number:" ;
-        Text[ it ] = "Numero revisioni:";
-        Text[ ko ] = "버전:";
-        Text[ sk ] = "Verzia:";
-        Text[ ar ] = "الإصدار:";
-        Text[ ca ] = "Versió:";
-        Text[ nl ] = "Versie:";
-        Text[ cz ] = "Verze:";
-        Text[ fi ] = "Versio:";
-        Text[ es ] = "Revisión nº:";
-        Text[ et ] = "Document number:";
-        Text[ tr ] = "Belge numarası:";
-        Text[ da ] = "Dokumentnummer:";
-        Text[ fr ] = "Révision n° :";
-        Text[ pl ] = "Wersja:";
-        Text[ th ] = "เวอร์ชั่น:";
-        Text[ ja ] = "バージョン:";
-        Text[ pt ] = "Versão:";
-        Text[ hu ] = "Dokumentum száma:";
-        Text[ el ] = "Έκδοση:";
-        Text[ zh-CN ] = "文件号:";
-        Text[ sl ] = "Številka dokumenta:";
-        Text[ sv ] = "Dokumentnummer:";
-        Text[ hi-IN ] = "आवर्तन:";
-        Text[ pt-BR ] = "Versão:";
-        Text[ ru ] = "Версия:";
-        Text[ he ] = "‮מספר מסמך: ‬";
-        Text[ cs ] = "Verze:";
-        Text[ zh-TW ] = "文件號碼：";
-    };
+        };
     FixedText FT_DOCNO_VAL
     {
         Pos = MAP_APPFONT ( 78 , 140 ) ;
@@ -540,35 +280,7 @@ TabPage TP_DOCINFODOC
         Hide = TRUE;
         Text [ de ] = "~Löschen";
         Text [ en-US ] = "~Delete";
-        Text[ it ] = "~Elimina";
-        Text[ ko ] = "삭제(~D)";
-        Text[ sk ] = "~Zmazať";
-        Text[ ar ] = "حذف";
-        Text[ ca ] = "~Suprimeix";
-        Text[ nl ] = "~Wissen";
-        Text[ cz ] = "Vyčistit";
-        Text[ fi ] = "~Poista";
-        Text[ es ] = "~Borrar";
-        Text[ et ] = "~Delete";
-        Text[ tr ] = "~Sil";
-        Text[ da ] = "~Slet";
-        Text[ fr ] = "Supprimer";
-        Text[ pl ] = "~Usuń";
-        Text[ th ] = "~ลบ";
-        Text[ ja ] = "削除(~D)";
-        Text[ pt ] = "E~liminar";
-        Text[ hu ] = "~Törlés";
-        Text[ el ] = "Διαγραφή";
-        Text[ zh-CN ] = "删除(~D)";
-        Text[ sl ] = "~Izbriši";
-        Text[ sv ] = "~Radera";
-        Text[ hi-IN ] = "~मिटाओ";
-        Text[ pt-BR ] = "Exc~luir";
-        Text[ ru ] = "~Удалить";
-        Text[ he ] = "‮מחיקה‬";
-        Text[ cs ] = "Vyčistit";
-        Text[ zh-TW ] = "刪除(~D)";
-    };
+        };
     CheckBox CB_USE_USERDATA
     {
         Pos = MAP_APPFONT ( 6 , 152 ) ;
@@ -576,36 +288,7 @@ TabPage TP_DOCINFODOC
         Hide = TRUE;
         Text [ de ] = "~Benutzerdaten verwenden" ;
         Text [ en-US ] = "~Apply user data";
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Usa i dati utente";
-        Text[ ko ] = "사용자 정보 사용(~A)";
-        Text[ sk ] = "Použiť informácie o užív~ateľovi";
-        Text[ ar ] = "استخدام بيانات المستخدم";
-        Text[ ca ] = "~Aplica les dades de l'usuari";
-        Text[ nl ] = "~Gebruikersgegevens toepassen";
-        Text[ cz ] = "Použít informace o uživateli";
-        Text[ fi ] = "Käytä ~käyttäjätietoja";
-        Text[ es ] = "Utilizar los ~datos del usuario";
-        Text[ et ] = "~Apply user data";
-        Text[ tr ] = "~Kullanıcı verilerini kullan";
-        Text[ da ] = "~Anvend brugerdata";
-        Text[ fr ] = "~Utiliser les données d'utilisateur";
-        Text[ pl ] = "~Zastosuj dane użytkownika";
-        Text[ th ] = "ใ~ช้ข้อมูลผู้ใช้";
-        Text[ ja ] = "ユーザー データを使用する(~A)";
-        Text[ pt ] = "Usar dados do ~utilizador";
-        Text[ hu ] = "~Felhasználói adatok alkalmazása";
-        Text[ el ] = "Χρήση ~προσωπικών δεδομένων";
-        Text[ zh-CN ] = "采用使用者数据(~A)";
-        Text[ sl ] = "~Uporabi uporabniške podatke";
-        Text[ sv ] = "Använd ~användardata";
-        Text[ hi-IN ] = "उपभोक्ता ड़ॉटा ~लागू करो";
-        Text[ pt-BR ] = "Usar dados do ~usuário";
-        Text[ ru ] = "Применить данные пользователя";
-        Text[ he ] = "‮שמירה עם שם משתמש‬";
-        Text[ cs ] = "Použít informace o uživateli";
-        Text[ zh-TW ] = "採用使用者資料(~A)";
-    };
+        };
     FixedLine FL_FILE_3
     {
         Pos = MAP_APPFONT ( 5 , 167 ) ;
@@ -617,36 +300,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 45 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Vorlage:" ;
         Text [ en-US ] = "Template:" ;
-        Text [ x-comment ] = " ";
-        Text[ it ] = "Modello:";
-        Text[ ko ] = "서식 파일:";
-        Text[ sk ] = "Šablóna:";
-        Text[ ar ] = "القالب:";
-        Text[ ca ] = "Plantilla:";
-        Text[ nl ] = "Sjabloon:";
-        Text[ cz ] = "Šablona:";
-        Text[ fi ] = "Malli:";
-        Text[ es ] = "Plantilla:";
-        Text[ et ] = "Template:";
-        Text[ tr ] = "Şablon:";
-        Text[ da ] = "Skabelon:";
-        Text[ fr ] = "Modèle :";
-        Text[ pl ] = "Szablon:";
-        Text[ th ] = "แม่แบบ:";
-        Text[ ja ] = "テンプレート:";
-        Text[ pt ] = "Modelo:";
-        Text[ hu ] = "Sablon:";
-        Text[ el ] = "Πρότυπο:";
-        Text[ zh-CN ] = "样式：";
-        Text[ sl ] = "Predloga:";
-        Text[ sv ] = "Mall:";
-        Text[ hi-IN ] = "नमूना:";
-        Text[ pt-BR ] = "Modelo:";
-        Text[ ru ] = "Шаблон:";
-        Text[ he ] = "‮תבנית: ‬";
-        Text[ cs ] = "Šablona:";
-        Text[ zh-TW ] = "樣式：";
-    };
+        };
     FixedText FT_TEMPL_VAL
     {
         Pos = MAP_APPFONT ( 78 , 172 ) ;
@@ -657,35 +311,7 @@ TabPage TP_DOCINFODOC
         Text [ de ] = "unbekannt" ;
         Text [ en-US ] = "unknown" ;
         Text [ x-comment ] = " ";
-        Text[ it ] = "sconosciuto";
-        Text[ ko ] = "알 수 없음";
-        Text[ sk ] = "neznámy";
-        Text[ ar ] = "غير معروف";
-        Text[ ca ] = "Desconegut";
-        Text[ nl ] = "onbekend";
-        Text[ cz ] = "neznámá";
-        Text[ fi ] = "tuntematon";
-        Text[ es ] = "desconocido";
-        Text[ et ] = "unknown";
-        Text[ tr ] = "bilinmiyor";
-        Text[ da ] = "ukendt";
-        Text[ fr ] = "inconnu";
-        Text[ pl ] = "nieznany";
-        Text[ th ] = "ไม่รู้จัก";
-        Text[ ja ] = "不明";
-        Text[ pt ] = "desconhecido";
-        Text[ hu ] = "ismeretlen";
-        Text[ el ] = "άγνωστο";
-        Text[ zh-CN ] = "不明的";
-        Text[ sl ] = "neznano";
-        Text[ sv ] = "okänd";
-        Text[ hi-IN ] = "अज्ञात";
-        Text[ pt-BR ] = "desconhecido";
-        Text[ ru ] = "неизвестно";
-        Text[ he ] = "‮לא מוכר‬";
-        Text[ cs ] = "neznámá";
-        Text[ zh-TW ] = "不明的";
-    };
+        };
 };
 
  // TP_DOCINFOUSER --------------------------------------------------------
@@ -753,7 +379,6 @@ TabPage TP_DOCINFOUSER
         Size = MAP_APPFONT ( 60 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ de ] = "~Infofelder..." ;
         Text [ en-US ] = "~Info fields..." ;
-        Text [ x-comment ] = " ";
     };
 };
 
@@ -893,7 +518,6 @@ TabDialog SID_DOCINFO
     Moveable = TRUE ;
     Text [ de ] = "Eigenschaften von " ;
     Text [ en-US ] = "Properties of " ;
-    Text [ x-comment ] = " ";
     TabControl 1
     {
         SVLook = TRUE ;
@@ -904,28 +528,24 @@ TabDialog SID_DOCINFO
                 Identifier = TP_DOCINFODOC ;
                 Text [ de ] = "Allgemein" ;
                 Text [ en-US ] = "General" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_DOCINFODESC ;
                 Text [ de ] = "Beschreibung" ;
                 Text [ en-US ] = "Description" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_DOCINFOUSER ;
                 Text [ de ] = "Benutzer" ;
                 Text [ en-US ] = "User Defined" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_DOCINFORELOAD ;
                 Text [ de ] = "Internet" ;
                 Text [ en-US ] = "Internet" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
