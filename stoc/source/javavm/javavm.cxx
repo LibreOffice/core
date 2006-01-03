@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:00:28 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ int main( int argc, char * argv[])
 #include "interact.hxx"
 #include "jvmargs.hxx"
 
+#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/container/XContainer.hpp"
@@ -719,32 +720,54 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "bad call to initialize")),
             static_cast< cppu::OWeakObject * >(this));
-    OSL_ENSURE(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *),
-               "Pointer cannot be represented as sal_Int64");
-    sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
-        static_cast< jvmaccess::VirtualMachine * >(0));
-    if (rArguments.getLength() == 1)
-        rArguments[0] >>= nPointer;
-    rtl::Reference< jvmaccess::VirtualMachine > vm(
-        reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
-    if (!vm.is())
+    css::beans::NamedValue val;
+    if (rArguments.getLength() == 1 && (rArguments[0] >>= val)
+        && val.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "UnoVirtualMachine")))
+    {
+        OSL_ENSURE(
+            sizeof (sal_Int64) >= sizeof (jvmaccess::UnoVirtualMachine *),
+            "Pointer cannot be represented as sal_Int64");
+        sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
+            static_cast< jvmaccess::UnoVirtualMachine * >(0));
+        val.Value >>= nPointer;
+        m_xUnoVirtualMachine =
+            reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer);
+    } else {
+        OSL_ENSURE(
+            sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *),
+            "Pointer cannot be represented as sal_Int64");
+        sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
+            static_cast< jvmaccess::VirtualMachine * >(0));
+        if (rArguments.getLength() == 1)
+            rArguments[0] >>= nPointer;
+        rtl::Reference< jvmaccess::VirtualMachine > vm(
+            reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
+        if (vm.is()) {
+            try {
+                m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(vm, 0);
+            } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "jvmaccess::UnoVirtualMachine::CreationException")),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+        }
+    }
+    if (!m_xUnoVirtualMachine.is()) {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "sequence of exactly one any containing a hyper"
-                              " representing a non-null pointer to a"
-                              " jvmaccess::VirtualMachine required")),
-            static_cast< cppu::OWeakObject * >(this), 0);
-    try {
-        m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(vm, 0);
-            //TODO: non-null classLoader
-    } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
-        throw css::uno::RuntimeException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "jvmaccess::UnoVirtualMachine::CreationException")),
-            static_cast< cppu::OWeakObject * >(this));
+                    "sequence of exactly one any containing either (a) a"
+                    " com.sun.star.beans.NamedValue with Name"
+                    " \"UnoVirtualMachine\" and Value a hyper representing a"
+                    " non-null pointer to a jvmaccess:UnoVirtualMachine, or (b)"
+                    " a hyper representing a non-null pointer to a"
+                    " jvmaccess::VirtualMachine required")),
+            static_cast< cppu::OWeakObject * >(this), 0);
     }
-    m_xVirtualMachine = vm;
+    m_xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
 }
 
 rtl::OUString SAL_CALL JavaVirtualMachine::getImplementationName()
