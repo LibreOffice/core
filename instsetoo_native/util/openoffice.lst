@@ -136,13 +136,13 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 1.0
-            PACKAGEVERSION 1.0
+            PRODUCTVERSION 1.1
+            PACKAGEVERSION 1.1
             PACKAGEREVISION 1
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
-            DOWNLOADBANNER ooobanner.bmp
-            DOWNLOADBITMAP ooobitmap.bmp
+            DOWNLOADBANNER urebanner.bmp
+            DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
         }
         active 1
