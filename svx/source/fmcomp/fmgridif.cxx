@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:38:32 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,9 @@
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef SVX_FORM_SDBDATACOLUMN_HXX
 #include "sdbdatacolumn.hxx"
@@ -645,8 +648,18 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                                 // cursor position (and restore afterwards)
                                 // OJ: but only when we stand on a valid row
                                 Reference< XResultSet > xResultSet(xForm, UNO_QUERY);
-                                if(!(xResultSet->isBeforeFirst() || xResultSet->isAfterLast()))
-                                    aOldCursorBookmark = Reference< ::com::sun::star::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
+                                if ( !xResultSet->isBeforeFirst() && !xResultSet->isAfterLast() )
+                                {
+                                    try
+                                    {
+                                        aOldCursorBookmark = Reference< ::com::sun::star::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
+                                    }
+                                    catch( const Exception& e )
+                                    {
+                                        DBG_UNHANDLED_EXCEPTION();
+                                        (void)e;
+                                    }
+                                }
                             }
                         }
                     }
@@ -655,11 +668,19 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
             }
             pPeer->setDesignMode(mbDesignMode && !bForceAlivePeer);
 
-            if (aOldCursorBookmark.hasValue())
-            {   // we have a valid bookmark, so we have to restore the cursor's position
-                Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
-                Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
-                xLocate->moveToBookmark(aOldCursorBookmark);
+            try
+            {
+                if (aOldCursorBookmark.hasValue())
+                {   // we have a valid bookmark, so we have to restore the cursor's position
+                    Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
+                    Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
+                    xLocate->moveToBookmark(aOldCursorBookmark);
+                }
+            }
+            catch( const Exception& e )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+                (void)e;
             }
 
             Reference< ::com::sun::star::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
