@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:30:33 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,6 +781,10 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     {
                         // the concrete query
                         Reference< XPropertySet > xQuery;
+                        Reference<XQueryDefinitionsSupplier> xSourceQuerySup(getDataSourceByName_displayError( m_xDatabaseContext, sDataSourceName, getView(), getORB(), true ),UNO_QUERY);
+                        if ( xSourceQuerySup.is() )
+                            xQueries.set(xSourceQuerySup->getQueryDefinitions(),UNO_QUERY);
+
                         if ( xQueries.is() && xQueries->hasByName(sCommand) )
                         {
                             xQuery.set(xQueries->getByName(sCommand),UNO_QUERY);
@@ -796,6 +800,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                                 xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= sUpdateCatalogName;
                                 bSuccess = sal_True;
                             }
+                            xQueries.clear();
                         }
                     }
                     catch(SQLException&) { throw; } // caught and handled by the outer catch
