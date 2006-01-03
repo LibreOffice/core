@@ -9,9 +9,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 10:30:20 $
+#   last change: $Author: kz $ $Date: 2006-01-03 14:45:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@ sub splitfile{
             my $plattform      = defined $10 ? $10 : '';
             my $helpid         = defined $9 ? $9 : '';
 
+            next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
             $currentFile  = $srcpath . '\\' . $prj . '\\' . $file;
             if ( $WIN ) { $currentFile  =~ s/\//\\/g; }
