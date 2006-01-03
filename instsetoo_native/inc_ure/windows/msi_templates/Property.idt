@@ -5,6 +5,7 @@ _IsMaintenance	Change
 _IsSetupTypeMin	Typical
 AgreeToLicense	No
 ApplicationUsers	AllUsers
+ALLUSERS	2
 ARPCOMMENTS	ARPCOMMENTSTEMPLATE
 ARPCONTACT	OOO_ARPCONTACTTEMPLATE
 ARPHELPLINK	OOO_ARPHELPLINKTEMPLATE
@@ -41,6 +42,7 @@ ProgressType2	installed
 ProgressType3	installs
 RebootYesNo	Yes
 ReinstallModeText	omus
+SecureCustomProperties	NEWPRODUCTS;SAMEPRODUCTS;OLDPRODUCTS
 SetupType	Typical
 STR_NEW_DISPLAY_NAME	OOO_STR_NEW_DISPLAY_NAME
 STR_EDIT	OOO_STR_EDIT
