@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:36:10 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,10 +202,10 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             *pLen = sizeof(sal_Int32);
             break;
         case SQL_FLOAT:
-        case SQL_REAL:
             *((float*)_pData) = *(float*)_pValue;
             *pLen = sizeof(float);
             break;
+        case SQL_REAL:
         case SQL_DOUBLE:
             *((double*)_pData) = *(double*)_pValue;
             *pLen = sizeof(double);
@@ -363,10 +363,10 @@ void OTools::bindValue( OConnection* _pConnection,
                     *pLen = sizeof(sal_Int32);
                     break;
                 case SQL_FLOAT:
-                case SQL_REAL:
                     *((float*)_pData) = *(float*)_pValue;
                     *pLen = sizeof(float);
                     break;
+                case SQL_REAL:
                 case SQL_DOUBLE:
                     *((double*)_pData) = *(double*)_pValue;
                     *pLen = sizeof(double);
@@ -892,7 +892,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                                     fSqlType    = SQL_BIGINT; break;
         case SQL_FLOAT:             fCType      = SQL_C_FLOAT;
                                     fSqlType    = SQL_FLOAT; break;
-        case SQL_REAL:              fCType      = SQL_C_FLOAT;
+        case SQL_REAL:              fCType      = SQL_C_DOUBLE;
                                     fSqlType    = SQL_REAL; break;
         case SQL_DOUBLE:            fCType      = SQL_C_DOUBLE;
                                     fSqlType    = SQL_DOUBLE; break;
