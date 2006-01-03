@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:43 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,11 +179,36 @@ namespace frm
         // XServiceInfo
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    public:
+        struct GuardAccess { friend class ImageModelMethodGuard; private: GuardAccess() { } };
+        ::osl::Mutex&   getMutex( GuardAccess ) { return m_aMutex; }
+        ImageProducer*  getImageProducer( GuardAccess ) { return m_pProducer; }
+
     protected:
         void implConstruct();
 
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
+    };
+
+    //==================================================================
+    // ImageModelMethodGuard
+    //==================================================================
+    class ImageModelMethodGuard : public ::osl::MutexGuard
+    {
+    private:
+        typedef ::osl::MutexGuard   GuardBase;
+
+    public:
+        ImageModelMethodGuard( OClickableImageBaseModel& _rModel )
+            :GuardBase( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
+        {
+            if ( NULL == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
+                throw ::com::sun::star::lang::DisposedException(
+                    ::rtl::OUString(),
+                    static_cast< ::com::sun::star::form::XImageProducerSupplier* >( &_rModel )
+                );
+        }
     };
 
     //==================================================================
