@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:58:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 14:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,168 +39,138 @@ Resource RID_SC_ADDIN_DFA
 {
     String DFA_PAR_DATE1_NAME // Name of Date1 Parameter
     {
-        Text [ de ] = "Datum 1" ;
-        Text [ en-US ] = "Date 1";
+        Text = "Date 1";
     };
     String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
     {
-        Text [ de ] = "Datum 2" ;
-        Text [ en-US ] = "Date 2";
+        Text = "Date 2";
     };
     String DFA_PAR_MODE_NAME // Name of Mode Parameter
     {
-        Text [ de ] = "Art" ;
-        Text [ en-US ] = "Mode";
+        Text = "Mode";
     };
 
     String DFA_PAR_DATE_NAME // Name of Date Parameter
     {
-        Text [ de ] = "Datum" ;
-        Text [ en-US ] = "Date";
+        Text = "Date";
     };
 
     String DFA_PAR_DATE_DESC // Description of Date Parameter
     {
-        Text [ de ] = "Interne Zahl des Datums" ;
-        Text [ en-US ] = "Internal number of the date";
+        Text = "Internal number of the date";
     };
 
 /*-=======================================================================*/
     String DFA_WEEK_NAME // Name
     {
-        Text [ de ] = "Wochen" ;
-        Text [ en-US ] = "Weeks";
+        Text = "Weeks";
     };
     String DFA_WEEK_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Wochendifferenz zweier Daten" ;
-        Text [ en-US ] = "Returns the difference in weeks between two dates";
+        Text = "Returns the difference in weeks between two dates";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Wochendifferenz" ;
-        Text [ x-comment ] = "; J?geres Datum ist das Gegenteil von older date";
-        Text [ en-US ] = "The end date for calculating the difference in weeks";
+        Text = "The end date for calculating the difference in weeks";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Wochendifferenz" ;
-        Text [ en-US ] = "The start date for calculating the difference weeks";
+        Text = "The start date for calculating the difference weeks";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderwochen" ;
-        Text [ en-US ] = "Type of difference calculation: mode=0 means the interval, mode=1 means calendar weeks";
+        Text = "Type of difference calculation: mode=0 means the interval, mode=1 means calendar weeks";
     };
 
 /*-=======================================================================*/
 
     String DFA_MONTHS_NAME // Name
     {
-        Text [ de ] = "Monate" ;
-        Text [ en-US ] = "Months";
+        Text = "Months";
     };
     String DFA_MONTHS_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Monatsdifferenz zweier Daten" ;
-        Text [ en-US ] = "Determines the number of months between two dates";
+        Text = "Determines the number of months between two dates";
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Monatsdifferenz" ;
-        Text [ en-US ] = "The end date for calculating the difference in months";
+        Text = "The end date for calculating the difference in months";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Monatsdifferenz" ;
-        Text [ en-US ] = "The start date for calculating the difference in months";
+        Text = "The start date for calculating the difference in months";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalendermonaten" ;
-        Text [ en-US ] = "Type of difference calculation: Mode = 0 means interval, mode = 1 means in calendar months";
+        Text = "Type of difference calculation: Mode = 0 means interval, mode = 1 means in calendar months";
     };
 
 /*-=======================================================================*/
 
     String DFA_YEARS_NAME // Name
     {
-        Text [ de ] = "Jahre" ;
-        Text [ en-US ] = "Years";
+        Text = "Years";
     };
     String DFA_YEARS_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Jahresdifferenz zweier Daten" ;
-        Text [ en-US ] = "Returns the difference in years between two dates";
+        Text = "Returns the difference in years between two dates";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Jahresdifferenz" ;
-        Text [ en-US ] = "The end date for calculating the difference in years";
+        Text = "The end date for calculating the difference in years";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Jahresdifferenz" ;
-        Text [ en-US ] = "The start date for calculating the difference in years";
+        Text = "The start date for calculating the difference in years";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderjahren" ;
-        Text [ en-US ] = "Type of difference calculation: Mode=0 means interval, mode=1 means in calendar years.";
+        Text = "Type of difference calculation: Mode=0 means interval, mode=1 means in calendar years.";
     };
 
 /*-=======================================================================*/
 
     String DFA_ISLEAPYEAR_NAME // Name
     {
-        Text [ de ] = "IstSchaltJahr" ;
-        Text [ en-US ] = "IsLeapYear";
+        Text = "IsLeapYear";
     };
     String DFA_ISLEAPYEAR_DESC // Description
     {
-        Text [ de ] = "Liefert 1(WAHR) wenn das Jahr ein Schaltjahr ist sonst 0(FALSCH)" ;
-        Text [ en-US ] = "Returns 1 (TRUE) if a leap year is used, otherwise 0 (FALSE) is returned";
+        Text = "Returns 1 (TRUE) if a leap year is used, otherwise 0 (FALSE) is returned";
     };
 
 /*-=======================================================================*/
 
     String DFA_DAYSINMONTH_NAME // Name
     {
-        Text [ de ] = "TageImMonat" ;
-        Text [ en-US ] = "DaysInMonth";
+        Text = "DaysInMonth";
     };
     String DFA_DAYSINMONTH_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Anzahl an Tagen im Monat zu einem Datum" ;
-        Text [ en-US ] = "Returns the number of days in the month in relation to the date entered";
+        Text = "Returns the number of days in the month in relation to the date entered";
     };
 
 /*-=======================================================================*/
 
     String DFA_DAYSINYEAR_NAME // Name
     {
-        Text [ de ] = "TageImJahr" ;
-        Text [ en-US ] = "DaysInYear";
+        Text = "DaysInYear";
     };
     String DFA_DAYSINYEAR_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Anzahl an Tagen im Jahr zu einem Datum" ;
-        Text [ en-US ] = "Returns the number of days in a year in relation to the date entered";
+        Text = "Returns the number of days in a year in relation to the date entered";
     };
 
 /*-=======================================================================*/
 
     String DFA_WEEKSINYEAR_NAME // Name
     {
-        Text [ de ] = "WochenImJahr" ;
-        Text [ en-US ] = "WeeksInYear";
+        Text = "WeeksInYear";
     };
     String DFA_WEEKSINYEAR_DESC // Description
     {
-        Text [ de ] = "Bestimmt die Anzahl an Wochen im Jahr zu einem Datum" ;
-        Text [ en-US ] = "Returns the number of weeks in the year in relation to a date";
+        Text = "Returns the number of weeks in the year in relation to a date";
     };
-
 };
 
 
