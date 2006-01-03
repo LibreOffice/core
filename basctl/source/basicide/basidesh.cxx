@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:58:38 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,9 @@ void BasicIDEShell::Init()
 
     SetCurLib( 0, String::CreateFromAscii( "Standard" ), false, false );
 
-    IDE_DLL()->pShell = this;
+    if ( IDE_DLL() && IDE_DLL()->pShell == NULL )
+        IDE_DLL()->pShell = this;
+
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > aTmpRef;
@@ -223,7 +225,8 @@ void BasicIDEShell::Init()
 
 __EXPORT BasicIDEShell::~BasicIDEShell()
 {
-    IDE_DLL()->pShell = NULL;
+    if ( IDE_DLL() && IDE_DLL()->pShell == this )
+        IDE_DLL()->pShell = NULL;
 
     // Damit bei einem Basic-Fehler beim Speichern die Shell nicht sofort
     // wieder hoch kommt:
@@ -277,9 +280,12 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
         SFX_APP()->SaveDialogContainer();
         SetAppBasicModified( FALSE );
 
-        SfxBindings& rBindings = BasicIDE::GetBindings();
-        rBindings.Invalidate( SID_SAVEDOC );
-        rBindings.Update( SID_SAVEDOC );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+        {
+            pBindings->Invalidate( SID_SAVEDOC );
+            pBindings->Update( SID_SAVEDOC );
+        }
     }
 }
 
@@ -598,7 +604,9 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 break;
                 case SFX_HINT_TITLECHANGED:
                 {
-                    BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                    if ( pBindings )
+                        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
                     SetMDITitle();
                 }
                 break;
@@ -618,27 +626,30 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {
-                    SfxBindings& rBindings = BasicIDE::GetBindings();
-                    rBindings.Invalidate( SID_BASICRUN );
-                    rBindings.Update( SID_BASICRUN );
-                    rBindings.Invalidate( SID_BASICCOMPILE );
-                    rBindings.Update( SID_BASICCOMPILE );
-                    rBindings.Invalidate( SID_BASICSTEPOVER );
-                    rBindings.Update( SID_BASICSTEPOVER );
-                    rBindings.Invalidate( SID_BASICSTEPINTO );
-                    rBindings.Update( SID_BASICSTEPINTO );
-                    rBindings.Invalidate( SID_BASICSTEPOUT );
-                    rBindings.Update( SID_BASICSTEPOUT );
-                    rBindings.Invalidate( SID_BASICSTOP );
-                    rBindings.Update( SID_BASICSTOP );
-                    rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-                    rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
-                    rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-                    rBindings.Update( SID_BASICIDE_MANAGEBRKPNTS );
-                    rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
-                    rBindings.Update( SID_BASICIDE_MODULEDLG );
-                    rBindings.Invalidate( SID_BASICLOAD );
-                    rBindings.Update( SID_BASICLOAD );
+                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                    if ( pBindings )
+                    {
+                        pBindings->Invalidate( SID_BASICRUN );
+                        pBindings->Update( SID_BASICRUN );
+                        pBindings->Invalidate( SID_BASICCOMPILE );
+                        pBindings->Update( SID_BASICCOMPILE );
+                        pBindings->Invalidate( SID_BASICSTEPOVER );
+                        pBindings->Update( SID_BASICSTEPOVER );
+                        pBindings->Invalidate( SID_BASICSTEPINTO );
+                        pBindings->Update( SID_BASICSTEPINTO );
+                        pBindings->Invalidate( SID_BASICSTEPOUT );
+                        pBindings->Update( SID_BASICSTEPOUT );
+                        pBindings->Invalidate( SID_BASICSTOP );
+                        pBindings->Update( SID_BASICSTOP );
+                        pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+                        pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
+                        pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+                        pBindings->Update( SID_BASICIDE_MANAGEBRKPNTS );
+                        pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+                        pBindings->Update( SID_BASICIDE_MODULEDLG );
+                        pBindings->Invalidate( SID_BASICLOAD );
+                        pBindings->Update( SID_BASICLOAD );
+                    }
 
                     if ( nHintId == SBX_HINT_BASICSTOP )
                     {
@@ -926,38 +937,41 @@ void BasicIDEShell::InvalidateBasicIDESlots()
 
     if ( IDE_DLL()->GetShell() )
     {
-        SfxBindings& rBindings = BasicIDE::GetBindings();
-        rBindings.Invalidate( SID_UNDO );
-        rBindings.Invalidate( SID_REDO );
-        rBindings.Invalidate( SID_SAVEDOC );
-        rBindings.Invalidate( SID_SIGNATURE );
-        rBindings.Invalidate( SID_BASICIDE_CHOOSEMACRO );
-        rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
-        rBindings.Invalidate( SID_BASICIDE_OBJCAT );
-        rBindings.Invalidate( SID_BASICSTOP );
-        rBindings.Invalidate( SID_BASICRUN );
-        rBindings.Invalidate( SID_BASICCOMPILE );
-        rBindings.Invalidate( SID_BASICLOAD );
-        rBindings.Invalidate( SID_BASICSAVEAS );
-        rBindings.Invalidate( SID_BASICIDE_MATCHGROUP );
-        rBindings.Invalidate( SID_BASICSTEPINTO );
-        rBindings.Invalidate( SID_BASICSTEPOVER );
-        rBindings.Invalidate( SID_BASICSTEPOUT );
-        rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-        rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-        rBindings.Invalidate( SID_BASICIDE_ADDWATCH );
-        rBindings.Invalidate( SID_BASICIDE_REMOVEWATCH );
-        rBindings.Invalidate( SID_CHOOSE_CONTROLS );
-        rBindings.Invalidate( SID_PRINTDOC );
-        rBindings.Invalidate( SID_PRINTDOCDIRECT );
-        rBindings.Invalidate( SID_SETUPPRINTER );
-        rBindings.Invalidate( SID_DIALOG_TESTMODE );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+        {
+            pBindings->Invalidate( SID_UNDO );
+            pBindings->Invalidate( SID_REDO );
+            pBindings->Invalidate( SID_SAVEDOC );
+            pBindings->Invalidate( SID_SIGNATURE );
+            pBindings->Invalidate( SID_BASICIDE_CHOOSEMACRO );
+            pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+            pBindings->Invalidate( SID_BASICIDE_OBJCAT );
+            pBindings->Invalidate( SID_BASICSTOP );
+            pBindings->Invalidate( SID_BASICRUN );
+            pBindings->Invalidate( SID_BASICCOMPILE );
+            pBindings->Invalidate( SID_BASICLOAD );
+            pBindings->Invalidate( SID_BASICSAVEAS );
+            pBindings->Invalidate( SID_BASICIDE_MATCHGROUP );
+            pBindings->Invalidate( SID_BASICSTEPINTO );
+            pBindings->Invalidate( SID_BASICSTEPOVER );
+            pBindings->Invalidate( SID_BASICSTEPOUT );
+            pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+            pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+            pBindings->Invalidate( SID_BASICIDE_ADDWATCH );
+            pBindings->Invalidate( SID_BASICIDE_REMOVEWATCH );
+            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
+            pBindings->Invalidate( SID_PRINTDOC );
+            pBindings->Invalidate( SID_PRINTDOCDIRECT );
+            pBindings->Invalidate( SID_SETUPPRINTER );
+            pBindings->Invalidate( SID_DIALOG_TESTMODE );
 
-        rBindings.Invalidate( SID_DOC_MODIFIED );
-        rBindings.Invalidate( SID_BASICIDE_STAT_TITLE );
-        rBindings.Invalidate( SID_BASICIDE_STAT_POS );
-        rBindings.Invalidate( SID_ATTR_INSERT );
-        rBindings.Invalidate( SID_ATTR_SIZE );
+            pBindings->Invalidate( SID_DOC_MODIFIED );
+            pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
+            pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+            pBindings->Invalidate( SID_ATTR_INSERT );
+            pBindings->Invalidate( SID_ATTR_SIZE );
+        }
     }
 }
 
