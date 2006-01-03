@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:17:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,9 +225,27 @@ void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 // -----------------------------------------------------------------------------
 void OAppBorderWindow::ImplInitSettings()
 {
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( true )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( true )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+    }
+
+    if( true )
+        SetBackground( rStyleSettings.GetDialogColor() );
+
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 // -----------------------------------------------------------------------------
 OApplicationView*       OAppBorderWindow::getView()         const { return m_pView; }
@@ -610,8 +628,25 @@ void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& _r
 // -----------------------------------------------------------------------------
 void OApplicationView::ImplInitSettings()
 {
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( true )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( true )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+    }
+
+    if( true )
+        SetBackground( rStyleSettings.GetFieldColor() );
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 //-----------------------------------------------------------------------------
