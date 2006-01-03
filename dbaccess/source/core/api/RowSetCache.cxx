@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:34:03 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_nPosition(0)
     ,m_nRowCount(0)
     ,m_bBeforeFirst(sal_True)
-    ,m_bAfterLast(sal_False)
+    ,m_bAfterLast( sal_False )
     ,m_bRowCountFinal(sal_False)
     ,m_bInserted(sal_False)
     ,m_bDeleted(sal_False)
