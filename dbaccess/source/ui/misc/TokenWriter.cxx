@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:55 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,10 +514,16 @@ BOOL ORTFImportExport::Write()
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
         sal_Int32 nCount = aNames.getLength();
+        sal_Bool bUseResultMetaData = sal_False;
+        if ( !nCount )
+        {
+            nCount = m_xResultSetMetaData->getColumnCount();
+            bUseResultMetaData = sal_True;
+        }
 
         sal_Int32 i;
         for(i=1;i<=nCount;++i)
@@ -534,12 +540,20 @@ BOOL ORTFImportExport::Write()
 
         ::rtl::OString* pHorzChar = new ::rtl::OString[nCount];
 
-        for(i=1;pBegin != pEnd;++pBegin,++i)
+        for(i=1;i <= nCount;++i)
         {
-            Reference<XPropertySet> xColumn;
-            xColumns->getByName(*pBegin) >>= xColumn;
             sal_Int32 nAlign = 0;
-            xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
+            ::rtl::OUString sColumnName;
+            if ( bUseResultMetaData )
+                sColumnName = m_xResultSetMetaData->getColumnName(i);
+            else
+            {
+                sColumnName = *pIter;
+                Reference<XPropertySet> xColumn;
+                xColumns->getByName(sColumnName) >>= xColumn;
+                xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
+                ++pIter;
+            }
 
             const char* pChar;
             switch( nAlign )
@@ -563,7 +577,7 @@ BOOL ORTFImportExport::Write()
 
             (*m_pStream) << aFS;
             (*m_pStream) << ' ';
-            RTFOutFuncs::Out_String(*m_pStream,*pBegin,eDestEnc);
+            RTFOutFuncs::Out_String(*m_pStream,sColumnName,eDestEnc);
 
             (*m_pStream) << sRTF_CELL;
             (*m_pStream) << '}';
@@ -794,11 +808,21 @@ void OHTMLImportExport::WriteTables()
 
     Sequence< ::rtl::OUString> aNames;
     Reference<XNameAccess> xColumns;
+    sal_Bool bUseResultMetaData = sal_False;
     if(m_xObject.is())
     {
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         xColumns = xColSup->getColumns();
         aNames = xColumns->getElementNames();
+        sal_Bool bUseResultMetaData = sal_False;
+        if ( !aNames.getLength() )
+        {
+            sal_Int32 nCount = m_xResultSetMetaData->getColumnCount();
+            aNames.realloc(nCount);
+            for (sal_Int32 i= 0; i < nCount; ++i)
+                aNames[i] = m_xResultSetMetaData->getColumnName(i+1);
+            bUseResultMetaData = sal_True;
+        }
     }
 
     aStrOut = aStrOut + " ";
@@ -852,18 +876,22 @@ void OHTMLImportExport::WriteTables()
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
 
         // 1. die Spaltenbeschreibung rauspusten
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
-        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+        for(sal_Int32 i=0;pIter != pEnd;++pIter,++i)
         {
-
-            Reference<XPropertySet> xColumn;
-            xColumns->getByName(*pBegin) >>= xColumn;
             sal_Int32 nAlign = 0;
-            xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
-
-            pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
+            pFormat[i] = 0;
+            pColWidth[i] = 100;
+            if ( !bUseResultMetaData )
+            {
+                Reference<XPropertySet> xColumn;
+                xColumns->getByName(*pIter) >>= xColumn;
+                xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
+                pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
+                pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
+            }
 
             switch( nAlign )
             {
@@ -872,11 +900,10 @@ void OHTMLImportExport::WriteTables()
                 default:    pHorJustify[i] = sHTML_AL_left;     break;
             }
 
-            pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
             if(i == aNames.getLength()-1)
                 IncIndent(-1);
 
-            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pBegin,sHTML_tableheader);
+            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,sHTML_tableheader);
         }
 
         IncIndent(-1);
