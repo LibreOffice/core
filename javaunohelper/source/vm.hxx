@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:43:31 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,7 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
-namespace jvmaccess {
-    class UnoVirtualMachine;
-    class VirtualMachine;
-}
+namespace jvmaccess { class UnoVirtualMachine; }
 
 namespace javaunohelper {
 
@@ -66,7 +63,7 @@ namespace javaunohelper {
 install_vm_singleton(
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     const & xContext,
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access );
+    ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access );
 
 }
 
