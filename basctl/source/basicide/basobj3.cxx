@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:59:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -908,35 +908,33 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
 
 //----------------------------------------------------------------------------
 
-SfxBindings& BasicIDE::GetBindings()
+SfxBindings* BasicIDE::GetBindingsPtr()
 {
+    SfxBindings* pBindings = NULL;
+
+    SfxViewFrame* pFrame = NULL;
     BasicIDEDLL* pIDEDLL = IDE_DLL();
     if ( pIDEDLL && pIDEDLL->GetShell() )
     {
-        // #63960# fuer BasicIDE die Bindings der APP
-        // 07/00 Now the APP Dispatcher is 'dead', SFX changes...
-//      return SFX_APP()->GetAppBindings();
-        return pIDEDLL->GetShell()->GetFrame()->GetBindings();
+        pFrame = pIDEDLL->GetShell()->GetViewFrame();
     }
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    return pCurFrame->GetBindings();
-}
-
-//----------------------------------------------------------------------------
-
-SfxBindings* BasicIDE::GetBindingsPtr()
-{
-    SfxViewFrame* pFrame;
-    BasicIDEDLL* pIDEDLL = IDE_DLL();
-    if ( pIDEDLL && pIDEDLL->GetShell() )
-        pFrame = pIDEDLL->GetShell()->GetFrame();
     else
-        pFrame = SfxViewFrame::Current();
-
-    SfxBindings* pBindings = NULL;
-    if( pFrame != NULL )
+    {
+        SfxViewFrame* pView = SfxViewFrame::GetFirst();
+        while ( pView )
+        {
+            SfxObjectShell* pObjShell = pView->GetObjectShell();
+            if ( pObjShell && pObjShell->ISA( BasicDocShell ) )
+            {
+                pFrame = pView;
+                break;
+            }
+            pView = SfxViewFrame::GetNext( *pView );
+        }
+    }
+    if ( pFrame != NULL )
         pBindings = &pFrame->GetBindings();
+
     return pBindings;
 }
 
