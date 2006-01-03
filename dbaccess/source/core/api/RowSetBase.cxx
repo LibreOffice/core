@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:09:45 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,7 +614,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
             // notification order
             // - column values
             // - cursorMoved
-            setCurrentRow(sal_True,aOldValues,aGuard);
+            setCurrentRow(bRet,aOldValues,aGuard);
             OSL_ENSURE(!m_bBeforeFirst,"BeforeFirst is true. I don't know why?");
         }
         else
