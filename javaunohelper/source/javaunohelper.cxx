@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:30 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,8 +283,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
         ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
             ::javaunohelper::create_vm_access( pJEnv, loader ) );
         // wrap vm singleton entry
-        xContext = ::javaunohelper::install_vm_singleton(
-            xContext, vm_access->getVirtualMachine() );
+        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
         rMSFac.set( xContext->getServiceManager(), UNO_QUERY_THROW );
 
         // get uno envs
