@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:57:00 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,9 @@ void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonDown( rMEvt );
 
-    SfxBindings& rBindings = BasicIDE::GetBindings();
-    rBindings.Invalidate( SID_SHOW_PROPERTYBROWSER );
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
 }
 
 
@@ -193,15 +194,19 @@ void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonUp( rMEvt );
-    SfxBindings& rBindings = BasicIDE::GetBindings();
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if( (pEditor->GetMode() == DLGED_INSERT) && !pEditor->IsCreateOK() )
     {
         pEditor->SetMode( DLGED_SELECT );
-        rBindings.Invalidate( SID_CHOOSE_CONTROLS );
+        if ( pBindings )
+            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
     }
-    rBindings.Invalidate( SID_SHOW_PROPERTYBROWSER );
-    rBindings.Invalidate( SID_DOC_MODIFIED );
-    rBindings.Invalidate( SID_SAVEDOC );
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
+        pBindings->Invalidate( SID_DOC_MODIFIED );
+        pBindings->Invalidate( SID_SAVEDOC );
+    }
 }
 
 
@@ -279,7 +284,9 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
     if (pUndoAction)
     {
         pUndoMgr->AddUndoAction( pUndoAction );
-        BasicIDE::GetBindings().Invalidate( SID_UNDO );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_UNDO );
     }
     */
 
@@ -436,7 +443,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditor()->Cut();
-                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_DELETE:
@@ -446,7 +455,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditor()->Delete();
-                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_COPY:
@@ -456,7 +467,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditor()->Paste();
-                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_CHOOSE_CONTROLS:
@@ -606,7 +619,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                     GetEditor()->CreateDefaultObject();
             }
 
-            BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+            if ( pBindings )
+                pBindings->Invalidate( SID_DOC_MODIFIED );
         }
         break;
 
@@ -616,7 +631,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             GetEditor()->SetMode( DLGED_TEST );
             GetEditor()->SetMode( eOldMode );
             rReq.Done();
-            BasicIDE::GetBindings().Invalidate( SID_DIALOG_TESTMODE );
+            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+            if ( pBindings )
+                pBindings->Invalidate( SID_DIALOG_TESTMODE );
             return;
         }
         break;
@@ -637,7 +654,9 @@ BOOL DialogWindow::RenameDialog( const String& rNewName )
     try
     {
         BasicIDE::RenameDialog( GetShell(), GetLibName(), GetName(), rNewName );
-        BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_DOC_MODIFIED );
     }
     catch ( container::ElementExistException& )
     {
