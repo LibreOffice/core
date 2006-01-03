@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:28:23 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 14:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,9 +251,11 @@ extern FILE *GetCfgFile()
             pFile = fopen( sInputFileName.GetBuffer(), "r" );
             sUsedTempFile = String::CreateFromAscii("");
         }
-        if ( !pFile )
+        if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.GetBuffer());
+            exit( 13 );
+        }
         else {
             // this is a valid file which can be opened, so
             // create path to project root
@@ -568,6 +570,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 ByteString sError( "Missplaced close tag: " );
                 sError += sToken;
                 Error( sError );
+                exit ( 13 );
             }
         break;
 
@@ -653,11 +656,12 @@ CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
     pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
 
     if ( !pOutputStream->IsOpen()) {
-        ByteString sError( "Unable to open output file: " );
+        ByteString sError( "ERROR: Unable to open output file: " );
         sError += rOutputFile;
         Error( sError );
         delete pOutputStream;
         pOutputStream = NULL;
+        exit( 13 );
     }
 }
 
