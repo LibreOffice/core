@@ -8,10 +8,24 @@ OApplicationView
   | |
   | +-OApplicationSwapWindow
   |   |
-  |   +- OApplicationIconControl
+  |   +-OApplicationIconControl
   |
   +-OApplicationDetailView
     |
     +-OTitleWindow "Tasks"
+    | |
+    | +-OTasksWindow
+    |   |
+    |	+-OCreationList
     |
-    +-OTitleWindow ""
+    +-OTitleWindow "Forms" "Tables" "Queries" "Reports"
+	   |
+	   +-OAppDetailPageHelper
+	      |
+	      +-SvTreeListBox*
+	      |
+	      +-FixedLine
+	      |
+	      +-Window (Border)
+	         |
+	         +-OPreviewWindow
