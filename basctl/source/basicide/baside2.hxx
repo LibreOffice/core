@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:19 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,8 +178,6 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    Command( const CommandEvent& rCEvt );
-    //virtual BOOL  Drop( const DropEvent& rEvt );
-    //virtual BOOL  QueryDrop( DropEvent& rEvt );
     virtual void    LoseFocus();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
