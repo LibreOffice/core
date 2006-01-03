@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:07:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,16 +226,12 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
 {
     try
     {
-    ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-    ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
+        ::comphelper::SequenceAsHashMap aTemp(Descriptor);
+        ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
 
-    if ( sTemp.getLength() )
-    {
-        INetURLObject aURL(sTemp);
-        if ( aURL.GetExtension().equalsIgnoreAsciiCaseAscii("odb") )
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
-        else
+        if ( sTemp.getLength() )
         {
+            INetURLObject aURL(sTemp);
             Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,m_xServiceFactory),UNO_QUERY);
             if ( xProp.is() )
             {
@@ -245,8 +241,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
                     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
                 ::comphelper::disposeComponent(xProp);
             }
-        }
-    }
+        } // if ( sTemp.getLength() )
     } catch(Exception&){}
     return ::rtl::OUString();
 }
