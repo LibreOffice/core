@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:34:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,7 +468,16 @@ void ODatabaseDocument::store(const ::rtl::OUString& _rURL
     m_pImpl->commitStorages();
     m_bCommitMasterStorage = sal_True;
 
-    writeStorage(_rURL,_rArguments,m_pImpl->getStorage());
+    Reference<XStorage> xMyStorage = m_pImpl->getStorage();
+    OSL_ENSURE( xMyStorage.is(), "ODatabaseDocument::storeToURL: no own storage?" );
+    if ( !xMyStorage.is() )
+    {
+        IOException aError;
+        aError.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Internal error: no source storage available." ) );
+        aError.Context = *this;
+        throw IOException( aError );
+    }
+    writeStorage(_rURL,_rArguments,xMyStorage);
 
     m_pImpl->commitRootStorage();
 
