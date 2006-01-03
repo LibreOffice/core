@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppTitleWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:17:30 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,25 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
     aAllSettings.SetStyleSettings(aStyle);
     SetSettings(aAllSettings);
+
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( bFont )
+    {
+        Font aFont;
+        aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+        SetPointFont( aFont );
+    }
+
+    if( bForeground || bFont )
+    {
+        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextFillColor();
+    }
+
+    if( bBackground )
+        SetBackground( rStyleSettings.GetFieldColor() );
+
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
     for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
