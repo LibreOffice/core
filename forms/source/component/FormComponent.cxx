@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:21:51 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2204,18 +2204,25 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
         "OBoundControlModel::doSetControlValue: please override if you have own value property handling!" );
 
-    // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
-    // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-    // our own mutex locked
-    // #72451# / 2000-01-31 / frank.schoenheit@sun.com
-    MutexRelease aRelease( m_aMutex );
-    if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
+    try
     {
-        m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
+        // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
+        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
+        // our own mutex locked
+        // #72451# / 2000-01-31 / frank.schoenheit@sun.com
+        MutexRelease aRelease( m_aMutex );
+        if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
+        {
+            m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
+        }
+        else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+        {
+            m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
+        }
     }
-    else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+    catch( const Exception& )
     {
-        m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
+        OSL_ENSURE( sal_False, "OBoundControlModel::doSetControlValue: caught an exception!" );
     }
 }
 
