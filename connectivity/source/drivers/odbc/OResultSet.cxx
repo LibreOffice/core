@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:18:41 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
-    OSL_ENSURE(m_aBindVector.empty(),"Bind vector mot released!");
     delete m_pRowStatusArray;
     delete m_pSkipDeletedSet;
 }
@@ -235,6 +234,134 @@ sal_Int32 OResultSet::mapColumn (sal_Int32  column)
     return map;
 }
 // -------------------------------------------------------------------------
+SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
+{
+    SQLRETURN nRet = 0;
+    if ( _bUnbindHandle )
+        nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+
+    if ( m_aBindVector.size() > 1 )
+    {
+        TVoidVector::iterator pValue = m_aBindVector.begin() + 1;
+        TVoidVector::iterator pEnd = m_aBindVector.end();
+        for(; pValue != pEnd; ++pValue)
+        {
+            switch (pValue->second)
+            {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                    delete static_cast< ::rtl::OString* >((void*)(pValue->first));
+                    break;
+                case DataType::BIGINT:
+                    delete static_cast< sal_Int64* >((void*)(pValue->first));
+                    break;
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    delete static_cast< ::rtl::OString* >((void*)(pValue->first));
+                    break;
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                    delete static_cast< double* >((void*)(pValue->first));
+                    break;
+                case DataType::LONGVARCHAR:
+                    delete [] static_cast< char* >((void*)(pValue->first));
+                    break;
+                case DataType::LONGVARBINARY:
+                    delete [] static_cast< char* >((void*)(pValue->first));
+                    break;
+                case DataType::DATE:
+                    delete static_cast< DATE_STRUCT* >((void*)(pValue->first));
+                    break;
+                case DataType::TIME:
+                    delete static_cast< TIME_STRUCT* >((void*)(pValue->first));
+                    break;
+                case DataType::TIMESTAMP:
+                    delete static_cast< TIMESTAMP_STRUCT* >((void*)(pValue->first));
+                    break;
+                case DataType::BIT:
+                case DataType::TINYINT:
+                    delete static_cast< sal_Int8* >((void*)(pValue->first));
+                    break;
+                case DataType::SMALLINT:
+                    delete static_cast< sal_Int16* >((void*)(pValue->first));
+                    break;
+                case DataType::INTEGER:
+                    delete static_cast< sal_Int32* >((void*)(pValue->first));
+                    break;
+                case DataType::FLOAT:
+                    delete static_cast< float* >((void*)(pValue->first));
+                    break;
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                    delete static_cast< sal_Int8* >((void*)(pValue->first));
+                    break;
+            }
+        }
+        m_aBindVector.clear();
+        m_aBindVector.push_back(TVoidPtr(0,0)); // the first is reserved for the bookmark
+    }
+    return nRet;
+}
+// -------------------------------------------------------------------------
+TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
+{
+    TVoidPtr aPair;
+    switch (_nType)
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+            aPair = TVoidPtr((sal_Int64)new ::rtl::OString(),_nType);
+            break;
+        case DataType::BIGINT:
+            aPair = TVoidPtr((sal_Int64)new sal_Int64(0),_nType);
+            break;
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            aPair = TVoidPtr((sal_Int64)new ::rtl::OString(),_nType);
+            break;
+        case DataType::REAL:
+        case DataType::DOUBLE:
+            aPair = TVoidPtr((sal_Int64)new double(0.0),_nType);
+            break;
+        case DataType::LONGVARCHAR:
+            aPair = TVoidPtr((sal_Int64)new char[2],_nType);  // dient nur zum auffinden
+            break;
+        case DataType::LONGVARBINARY:
+            aPair = TVoidPtr((sal_Int64)new char[2],_nType);  // dient nur zum auffinden
+            break;
+        case DataType::DATE:
+            aPair = TVoidPtr((sal_Int64)new DATE_STRUCT,_nType);
+            break;
+        case DataType::TIME:
+            aPair = TVoidPtr((sal_Int64)new TIME_STRUCT,_nType);
+            break;
+        case DataType::TIMESTAMP:
+            aPair = TVoidPtr((sal_Int64)new TIMESTAMP_STRUCT,_nType);
+            break;
+        case DataType::BIT:
+        case DataType::TINYINT:
+            aPair = TVoidPtr((sal_Int64)new sal_Int8(0),_nType);
+            break;
+        case DataType::SMALLINT:
+            aPair = TVoidPtr((sal_Int64)new sal_Int16(0),_nType);
+            break;
+        case DataType::INTEGER:
+            aPair = TVoidPtr((sal_Int64)new sal_Int32(0),_nType);
+            break;
+        case DataType::FLOAT:
+            aPair = TVoidPtr((sal_Int64)new float(0),_nType);
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+            aPair = TVoidPtr((sal_Int64)new sal_Int8[m_aRow[_nColumnIndex].getSequence().getLength()],_nType);
+            break;
+        default:
+            OSL_ENSURE(0,"Unknown type");
+            aPair = TVoidPtr(0,_nType);
+    }
+    return aPair;
+}
+// -------------------------------------------------------------------------
 void OResultSet::allocBuffer()
 {
     Reference< XResultSetMetaData > xMeta = getMetaData();
@@ -248,121 +375,13 @@ void OResultSet::allocBuffer()
     {
         sal_Int32 nType = xMeta->getColumnType(i);
         m_aRow[i].setTypeKind( nType );
-        switch (nType)
-        {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new ::rtl::OString(),nType));
-                break;
-            case DataType::BIGINT:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new sal_Int64(0),nType));
-                break;
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new ::rtl::OString(),nType));
-                break;
-            case DataType::REAL:
-            case DataType::DOUBLE:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new double(0.0),nType));
-                break;
-            case DataType::LONGVARCHAR:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new char[2],nType));  // dient nur zum auffinden
-                break;
-            case DataType::LONGVARBINARY:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new char[2],nType));  // dient nur zum auffinden
-                break;
-            case DataType::DATE:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new DATE_STRUCT,nType));
-                break;
-            case DataType::TIME:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new TIME_STRUCT,nType));
-                break;
-            case DataType::TIMESTAMP:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new TIMESTAMP_STRUCT,nType));
-                break;
-            case DataType::BIT:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new sal_Int8(0),nType));
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new sal_Int16(0),nType));
-                break;
-            case DataType::INTEGER:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new sal_Int32(0),nType));
-                break;
-            case DataType::FLOAT:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new float(0),nType));
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-                m_aBindVector.push_back(TVoidPtr((sal_Int64)new sal_Int8[xMeta->getPrecision(i)],nType));
-                break;
-            default:
-                OSL_ENSURE(0,"Unknown type");
-                m_aBindVector.push_back(TVoidPtr(0,nType));
-        }
     }
     m_aLengthVector.resize(nLen + 1);
 }
 // -------------------------------------------------------------------------
 void OResultSet::releaseBuffer()
 {
-    TVoidVector::iterator pValue = m_aBindVector.begin() + 1;
-    TVoidVector::iterator pEnd = m_aBindVector.end();
-    for(; pValue != pEnd; ++pValue)
-    {
-        switch (pValue->second)
-        {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                delete static_cast< ::rtl::OString* >((void*)(pValue->first));
-                break;
-            case DataType::BIGINT:
-                delete static_cast< sal_Int64* >((void*)(pValue->first));
-                break;
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                delete static_cast< ::rtl::OString* >((void*)(pValue->first));
-                break;
-            case DataType::REAL:
-            case DataType::DOUBLE:
-                delete static_cast< double* >((void*)(pValue->first));
-                break;
-            case DataType::LONGVARCHAR:
-                delete [] static_cast< char* >((void*)(pValue->first));
-                break;
-            case DataType::LONGVARBINARY:
-                delete [] static_cast< char* >((void*)(pValue->first));
-                break;
-            case DataType::DATE:
-                delete static_cast< DATE_STRUCT* >((void*)(pValue->first));
-                break;
-            case DataType::TIME:
-                delete static_cast< TIME_STRUCT* >((void*)(pValue->first));
-                break;
-            case DataType::TIMESTAMP:
-                delete static_cast< TIMESTAMP_STRUCT* >((void*)(pValue->first));
-                break;
-            case DataType::BIT:
-                delete static_cast< sal_Int8* >((void*)(pValue->first));
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-                delete static_cast< sal_Int16* >((void*)(pValue->first));
-                break;
-            case DataType::INTEGER:
-                delete static_cast< sal_Int32* >((void*)(pValue->first));
-                break;
-            case DataType::FLOAT:
-                delete static_cast< float* >((void*)(pValue->first));
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-                delete static_cast< sal_Int8* >((void*)(pValue->first));
-                break;
-        }
-    }
-    m_aBindVector.clear();
+    unbind(sal_False);
     m_aLengthVector.clear();
 }
 // -------------------------------------------------------------------------
@@ -864,7 +883,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     }
     catch(SQLException e)
     {
-         nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+        nRet = unbind();
         throw;
     }
 
@@ -879,7 +898,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         nRet = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0); // OJ 06.03.2004
     // sometimes we got an error but we are not interested in anymore #106047# OJ
     //  OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+    nRet = unbind();
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if(m_pSkipDeletedSet)
@@ -927,7 +946,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
         fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // now unbind all columns so we can fetch all columns again with SQLGetData
-    nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+    nRet = unbind();
     OSL_ENSURE(nRet == SQL_SUCCESS,"Could not unbind the columns!");
 }
 // -------------------------------------------------------------------------
@@ -969,7 +988,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
     m_nLastColumnPos = 0;
     // first unbound all columns
-    SQLRETURN nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+    SQLRETURN nRet = unbind();
     OSL_ENSURE(nRet == SQL_SUCCESS,"Could not unbind columns!");
     //  SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE ,(SQLPOINTER)1,SQL_IS_INTEGER);
     m_bInserting = sal_True;
@@ -987,7 +1006,8 @@ void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pVa
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = reinterpret_cast<void*>(m_aBindVector[columnIndex].first);
+    m_aBindVector.push_back(allocBindColumn(OTools::MapOdbcType2Jdbc(_nType),columnIndex));
+    void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
     OSL_ENSURE(pData != NULL,"Data for update is NULL!");
     OTools::bindValue(  m_pStatement->getOwnConnection(),
                         m_aStatementHandle,
@@ -1010,7 +1030,8 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 
     columnIndex = mapColumn(columnIndex);
-    void* pData = reinterpret_cast<void*>(m_aBindVector[columnIndex].first);
+    m_aBindVector.push_back(allocBindColumn(DataType::CHAR,columnIndex));
+    void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,(sal_Int8*)NULL,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
