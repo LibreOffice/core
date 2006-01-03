@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:55:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1093,7 +1093,9 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditView()->Cut();
-                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
         break;
@@ -1107,7 +1109,9 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditView()->Paste();
-                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
         break;
@@ -1210,7 +1214,9 @@ BOOL ModulWindow::RenameModule( const String& rNewName )
     try
     {
         BasicIDE::RenameModule( GetShell(), GetLibName(), GetName(), rNewName );
-        BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_DOC_MODIFIED );
     }
     catch ( container::ElementExistException& )
     {
