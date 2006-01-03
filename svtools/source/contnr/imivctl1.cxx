@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:28 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1894,12 +1894,13 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
         }
         else
         {
+            Color aOldFontColor = pOut->GetTextColor();
             if ( pView->AutoFontColor() )
             {
                 Color aBkgColor( pOut->GetBackground().GetColor() );
                 Color aFontColor;
                 USHORT nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
-                if ( nColor > 128 )
+                if ( nColor > 127 )
                     aFontColor.SetColor ( COL_BLACK );
                 else
                     aFontColor.SetColor( COL_WHITE );
@@ -1907,6 +1908,9 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
             }
 
             pOut->DrawText( rRect, aText, nCurTextDrawFlags );
+
+            if ( pView->AutoFontColor() )
+                pOut->SetTextColor( aOldFontColor );
 
             if( pEntry->IsFocused() )
             {
@@ -4124,21 +4128,21 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
         // Unit aus den Settings ist Point
         Font aFont( rStyleSettings.GetFieldFont() );
         const Font& rFont = pView->GetFont();
-        if( pView->HasFontTextColor() )
+        //if( pView->HasFontTextColor() )
             aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        if( pView->HasFontFillColor() )
-            aFont.SetFillColor( rFont.GetFillColor() );
+        //if( pView->HasFontFillColor() )
+            //aFont.SetFillColor( rFont.GetFillColor() );
         pView->SetPointFont( aFont );
         SetDefaultTextSize();
     }
 
-    if( !pView->HasFontTextColor() )
-        pView->SetTextColor( rStyleSettings.GetWindowTextColor() );
-    if( !pView->HasFontFillColor() )
+    //if( !pView->HasFontTextColor() )
+        pView->SetTextColor( rStyleSettings.GetFieldTextColor() );
+    //if( !pView->HasFontFillColor() )
         pView->SetTextFillColor();
 
-    if( !pView->HasBackground() )
-        pView->SetBackground( rStyleSettings.GetWindowColor());
+    //if( !pView->HasBackground() )
+        pView->SetBackground( rStyleSettings.GetFieldColor());
 
     long nScrBarSize = rStyleSettings.GetScrollBarSize();
     if( nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth )
