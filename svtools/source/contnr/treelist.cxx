@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,7 +710,10 @@ SvListEntry* SvTreeList::First() const
 *************************************************************************/
 SvListEntry* SvTreeList::Next( SvListEntry* pActEntry, USHORT* pDepth ) const
 {
-    DBG_ASSERT(pActEntry,"Entry?")
+    DBG_ASSERT( pActEntry && pActEntry->pParent, "SvTreeList::Next: invalid entry/parent!" );
+    if ( !pActEntry || !pActEntry->pParent )
+        return NULL;
+
     USHORT nDepth = 0;
     int bWithDepth = FALSE;
     if ( pDepth )
