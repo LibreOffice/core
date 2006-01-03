@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:56:49 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 12:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,10 +359,13 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         pViewFrame->GetBindings().Execute( nSlot, aArgs, 0, SFX_CALLMODE_SYNCHRON );
                 }
 
-                SfxBindings &rBindings = BasicIDE::GetBindings();
-                rBindings.Invalidate( SID_DOC_MODIFIED );
-                rBindings.Invalidate( SID_SAVEDOC );
-                rBindings.Invalidate( SID_SIGNATURE );
+                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                if ( pBindings )
+                {
+                    pBindings->Invalidate( SID_DOC_MODIFIED );
+                    pBindings->Invalidate( SID_SAVEDOC );
+                    pBindings->Invalidate( SID_SIGNATURE );
+                }
             }
         }
         break;
@@ -374,7 +377,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( pShell )
                 {
                     pShell->SignScriptingContent();
-                    BasicIDE::GetBindings().Invalidate( SID_SIGNATURE );
+                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                    if ( pBindings )
+                        pBindings->Invalidate( SID_SIGNATURE );
                 }
             }
         }
@@ -589,7 +594,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 else
                 {
                     // alten Wert einstellen...
-                    BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                    if ( pBindings )
+                        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
                 }
             }
             else if ( nSlot == SID_BASICIDE_LIBREMOVED )
@@ -602,7 +609,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         m_pCurShell = 0;
                         m_aCurLibName = String();
                         // Kein UpdateWindows!
-                        BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
+                        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+                        if ( pBindings )
+                            pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
                     }
                 }
             }
