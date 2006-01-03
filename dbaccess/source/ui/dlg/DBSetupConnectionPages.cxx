@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:26:16 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -871,6 +871,7 @@ DBG_NAME(OFinalDBPageSetup)
         SetControlFontWeight(&m_aFTFinalHeader);
         m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());
+        m_aRBRegisterDataSource.SetState(sal_True);
         FreeResource();
     }
 
@@ -919,7 +920,6 @@ DBG_NAME(OFinalDBPageSetup)
     void OFinalDBPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         m_aCBOpenAfterwards.Check();
-        m_aRBRegisterDataSource.SetState(sal_True);
     }
 
     void OFinalDBPageSetup::enableTableWizardCheckBox( sal_Bool _bSupportsTableCreation)
