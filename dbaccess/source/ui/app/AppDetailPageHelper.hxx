@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:15:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-03 16:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,11 @@ namespace dbaui
                 <TRUE/> when successfull
         */
         BOOL ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    protected:
+        virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
-        OPreviewWindow(Window* _pParent) : Window(_pParent){}
+        OPreviewWindow(Window* _pParent);
 
         // window overloads
         virtual void Paint(const Rectangle& rRect);
@@ -207,7 +210,7 @@ namespace dbaui
         DECL_LINK(OnDropdownClickHdl, ToolBox*);
 
         inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin; }
-
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     public:
         OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
