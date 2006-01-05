@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:51:27 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,6 +435,7 @@ void BibToolBar::Click()
     {
         if(pDatMan)
             pDatMan->CreateMappingDialog(GetParent());
+        CheckItem( nId, FALSE );
     }
     else if(nId == TBC_BT_CHANGESOURCE)
     {
@@ -444,6 +445,7 @@ void BibToolBar::Click()
             if(sNew.getLength())
                 pDatMan->setActiveDataSource(sNew);
         }
+        CheckItem( nId, FALSE );
     }
 }
 
