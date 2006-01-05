@@ -25,10 +25,10 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+      <QuotationStart>‚</QuotationStart>
+      <QuotationEnd>‘</QuotationEnd>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
+      <DoubleQuotationEnd>“</DoubleQuotationEnd>
     </Markers>
     <TimeAM>пре.</TimeAM>
     <TimePM>поп.</TimePM>
@@ -298,12 +298,12 @@
         <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>п. н. е.</DefaultAbbrvName>
-          <DefaultFullName>пред нашим бројевима</DefaultFullName>
+          <DefaultFullName>пре нове ере</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>н. е</DefaultAbbrvName>
-          <DefaultFullName>наши бројеви</DefaultFullName>
+          <DefaultAbbrvName>н. е.</DefaultAbbrvName>
+          <DefaultFullName>нова ера</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -317,7 +317,7 @@
       <CurrencyID>CSD</CurrencyID>
       <CurrencySymbol>ДИН</CurrencySymbol>
       <BankSymbol>CSD</BankSymbol>
-      <CurrencyName>Црногорско Српски Динар</CurrencyName>
+      <CurrencyName>Српски Динар</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
