@@ -198,8 +198,8 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>अाइत</DefaultAbbrvName>
-          <DefaultFullName>अाइतबार</DefaultFullName>
+          <DefaultAbbrvName>आइत</DefaultAbbrvName>
+          <DefaultFullName>आइतबार</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
@@ -347,8 +347,8 @@
     <NumberingLevel NumType="12" Prefix=" " Suffix=")"/>
     <NumberingLevel NumType="4" Prefix=" " Suffix="."/>
     <NumberingLevel NumType="4" Prefix=" " Suffix=")"/>
-    <NumberingLevel NumType="0" Prefix=" " Suffix="."/>
-    <NumberingLevel NumType="0" Prefix=" " Suffix=")"/>
+    <NumberingLevel NumType="34" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="34" Prefix=" " Suffix=")"/>
     <NumberingLevel NumType="2" Prefix=" " Suffix="."/>
     <NumberingLevel NumType="2" Prefix=" " Suffix=")"/>
   </LC_NumberingLevel>
