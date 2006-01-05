@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:55:02 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,8 @@ namespace framework
             void implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle );
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
             sal_Bool implts_isEmbeddedLayoutManager() const;
-            sal_Int16 implts_getCurrentSymbolSet();
+            sal_Int16 implts_getCurrentSymbolsSize();
+            sal_Int16 implts_getCurrentSymbolsStyle();
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rParent );
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
             rtl::OUString implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
@@ -600,7 +601,8 @@ namespace framework
             rtl::OUString                                                               m_aCustomizeCmd;
             AddonsOptions*                                                              m_pAddonOptions;
             SvtMiscOptions*                                                             m_pMiscOptions;
-            sal_Int16                                                                   m_eSymbolSet;
+            sal_Int16                                                                   m_eSymbolsSize;
+            sal_Int16                                                                   m_eSymbolsStyle;
             Timer                                                                       m_aAsyncLayoutTimer;
             ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
     };
