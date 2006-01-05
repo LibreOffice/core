@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgdef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:42:15 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,20 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #define _SVTOOLS_IMGDEF_HXX
 
-enum SfxSymbolSet
+enum SfxSymbolsSize
 {
-    SFX_SYMBOLS_SMALL,
-    SFX_SYMBOLS_LARGE,
-    SFX_SYMBOLS_AUTO
+    SFX_SYMBOLS_SIZE_SMALL,
+    SFX_SYMBOLS_SIZE_LARGE,
+    SFX_SYMBOLS_SIZE_AUTO
+};
+
+enum SfxSymbolsStyle
+{
+    SFX_SYMBOLS_STYLE_AUTO,
+    SFX_SYMBOLS_STYLE_DEFAULT,
+    SFX_SYMBOLS_STYLE_HICONTRAST,
+    SFX_SYMBOLS_STYLE_INDUSTRIAL
+//    SFX_SYMBOLS_STYLE_CRYSTAL
 };
 
 #define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
