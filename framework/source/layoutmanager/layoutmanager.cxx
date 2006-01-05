@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:05:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,8 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
     m_pMiscOptions->AddListener( LINK( this, LayoutManager, OptionsChanged ) );
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
-    m_eSymbolSet = m_pMiscOptions->GetSymbolSet();
+    m_eSymbolsSize = m_pMiscOptions->GetSymbolsSize();
+    m_eSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
 
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetTimeoutHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
@@ -5730,27 +5731,32 @@ void LayoutManager::implts_clearMenuBarCloser()
     }
 }
 
-sal_Int16 LayoutManager::implts_getCurrentSymbolSet()
+sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
 {
-    sal_Int16 eOptSymbolSet( 0 );
-    ReadGuard aReadLock( m_aLock );
-    if ( m_pMiscOptions )
-        eOptSymbolSet = m_pMiscOptions->GetSymbolSet();
-    aReadLock.unlock();
+    sal_Int16 eOptSymbolsSize( 0 );
 
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
     {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
+        ReadGuard aReadLock( m_aLock );
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+        if ( m_pMiscOptions )
+            eOptSymbolsSize = m_pMiscOptions->GetCurrentSymbolsSize();
     }
 
-    return eOptSymbolSet;
+    return eOptSymbolsSize;
+}
+
+sal_Int16 LayoutManager::implts_getCurrentSymbolsStyle()
+{
+    sal_Int16 eOptSymbolsStyle( 0 );
+
+    {
+        ReadGuard aReadLock( m_aLock );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        if ( m_pMiscOptions )
+            eOptSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
+    }
+
+    return eOptSymbolsStyle;
 }
 
 IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, pMenu )
@@ -5773,17 +5779,19 @@ IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, pMenu )
 
 IMPL_LINK( LayoutManager, OptionsChanged, void*, pVoid )
 {
-    sal_Int16 eOldSymbolSet( 0 );
-    sal_Int16 eSymbolSet( implts_getCurrentSymbolSet() );
+    sal_Int16 eSymbolsSize( implts_getCurrentSymbolsSize() );
+    sal_Int16 eSymbolsStyle( implts_getCurrentSymbolsStyle() );
 
     ReadGuard aReadLock( m_aLock );
-    eOldSymbolSet = m_eSymbolSet;
+    sal_Int16 eOldSymbolsSize = m_eSymbolsSize;
+    sal_Int16 eOldSymbolsStyle = m_eSymbolsStyle;
     aReadLock.unlock();
 
-    if ( eSymbolSet != eOldSymbolSet )
+    if ( eSymbolsSize != eOldSymbolsSize || eSymbolsStyle != eOldSymbolsStyle )
     {
         WriteGuard aWriteLock( m_aLock );
-        m_eSymbolSet = eSymbolSet;
+        m_eSymbolsSize = eSymbolsSize;
+        m_eSymbolsStyle = eSymbolsStyle;
         aWriteLock.unlock();
 
         std::vector< Reference< XUpdatable > > aToolBarVector;
