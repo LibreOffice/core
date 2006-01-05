@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-25 17:25:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,7 +718,8 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
                 bOK = SetGDIMetaFile( pClpGraphic->GetGDIMetaFile(), rFlavor );
             break;
         case SOT_FORMAT_BITMAP:
-            if( eBufferType & TRNSFR_GRAPHIC )
+            // #126398#  Neither pClpBitmap nor pClpGraphic are necessarily set
+            if( (eBufferType & TRNSFR_GRAPHIC) && (pClpBitmap != 0 || pClpGraphic != 0))
                 bOK = SetBitmap( (pClpBitmap ? pClpBitmap
                                              : pClpGraphic)->GetBitmap(),
                                  rFlavor );
