@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:51:56 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,6 +777,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_FORMAT_TABLE_DLG:
         {
+            //#127012# get the bindings before the dialog is called
+            // it might happen that this shell is removed after closing the dialog
+            SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
@@ -816,7 +819,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             delete pDlg;
             delete pTblRep;
-            SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             rBindings.Update(SID_RULER_BORDERS);
             rBindings.Update(SID_ATTR_TABSTOP);
             rBindings.Update(SID_RULER_BORDERS_VERTICAL);
