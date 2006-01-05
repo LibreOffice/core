@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:02:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ static const struct {
         { "be_BY",  lcl_DATA_EURO, "be" },
         { "kl_GL",  lcl_DATA_EURO, "kl" },
         { "mk_MK",  lcl_DATA_EURO, "mk" },
+        { "br_FR",  lcl_DATA_EURO, "br" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -179,6 +180,8 @@ static const struct {
         { "mr_IN",  lcl_DATA_OTHERS, "mr" },
         { "pa_IN",  lcl_DATA_OTHERS, "pa" },
         { "bn_IN",  lcl_DATA_OTHERS, NULL },
+        { "or_IN",  lcl_DATA_OTHERS, "or" },
+        { "en_IN",  lcl_DATA_OTHERS, NULL },
         { "bn_BD",  lcl_DATA_OTHERS, "bn" },
         { "th_TH",  lcl_DATA_OTHERS, "th" },
 
@@ -198,12 +201,14 @@ static const struct {
         { "ne_NP",  lcl_DATA_OTHERS, "ne" },
         { "zu_ZA",  lcl_DATA_OTHERS, "zu" },
         { "nso_ZA", lcl_DATA_OTHERS, "nso" },
-        { "or_IN",  lcl_DATA_OTHERS, "or" },
         { "vi_VN",  lcl_DATA_OTHERS, "vi" },
         { "tn_ZA",  lcl_DATA_OTHERS, "tn" },
         { "xh_ZA",  lcl_DATA_OTHERS, "xh" },
         { "st_ZA",  lcl_DATA_OTHERS, "st" },
         { "ss_ZA",  lcl_DATA_OTHERS, "ss" },
+        { "ve_ZA",  lcl_DATA_OTHERS, "ve" },
+        { "nr_ZA",  lcl_DATA_OTHERS, "nr" },
+        { "ts_ZA",  lcl_DATA_OTHERS, "ts" },
 
 //      { "br_AE",  lcl_DATA, "br" },
 
