@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:51:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
+#include <imgdef.hxx>
+#include <vcl/svapp.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -104,8 +107,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_TOOLBOXSTYLE         2
 #define PROPERTYNAME_USESYSTEMFILEDIALOG    ASCII_STR("UseSystemFileDialog")
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG  3
+#define PROPERTYNAME_SYMBOLSSTYLE           ASCII_STR("SymbolsStyle")
+#define PROPERTYHANDLE_SYMBOLSSTYLE         4
 
-#define PROPERTYCOUNT                       4
+#define PROPERTYCOUNT                       5
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -127,8 +132,9 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsUseSystemFileDialogRO;
     sal_Bool    m_bPluginsEnabled;
     sal_Bool    m_bIsPluginsEnabledRO;
-    sal_Int16   m_nSymbolSet;
-    sal_Bool    m_bIsSymbolSetRO;
+    sal_Int16   m_nSymbolsSize;
+    sal_Bool    m_bIsSymbolsSizeRO;
+    sal_Bool    m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     sal_Bool    m_bIsToolboxStyleRO;
 
@@ -207,13 +213,26 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsPluginsEnabledReadOnly() const
         { return m_bIsPluginsEnabledRO; }
 
-        inline sal_Int16 GetSymbolSet()
-        { return m_nSymbolSet; }
+        inline sal_Int16 GetSymbolsSize()
+        { return m_nSymbolsSize; }
 
-        void SetSymbolSet( sal_Int16 nSet );
+        void SetSymbolsSize( sal_Int16 nSet );
 
-        inline sal_Bool IsGetSymbolSetReadOnly()
-        { return m_bIsSymbolSetRO; }
+        inline sal_Bool IsGetSymbolsSizeReadOnly()
+        { return m_bIsSymbolsSizeRO; }
+
+        sal_Int16 GetSymbolsStyle() const;
+        ::rtl::OUString GetSymbolsStyleName() const;
+        sal_Int16 GetCurrentSymbolsStyle() const;
+
+        inline void SetSymbolsStyle( sal_Int16 nSet )
+        { ImplSetSymbolsStyle( true, nSet, ::rtl::OUString() ); }
+
+        inline void SetSymbolsStyleName( ::rtl::OUString &rName )
+        { ImplSetSymbolsStyle( false, 0, rName ); }
+
+        inline sal_Bool IsGetSymbolsStyleReadOnly()
+        { return m_bIsSymbolsStyleRO; }
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         inline sal_Int16 GetToolboxStyle()
@@ -249,11 +268,42 @@ class SvtMiscOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
+
+    protected:
+        void ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName );
 };
 
 //_________________________________________________________________________________________________________________
 //  definitions
 //_________________________________________________________________________________________________________________
+
+static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
+{
+    switch ( nStyle )
+    {
+        case STYLE_SYMBOLS_AUTO:       return SFX_SYMBOLS_STYLE_AUTO;
+        case STYLE_SYMBOLS_DEFAULT:    return SFX_SYMBOLS_STYLE_DEFAULT;
+        case STYLE_SYMBOLS_HICONTRAST: return SFX_SYMBOLS_STYLE_HICONTRAST;
+        case STYLE_SYMBOLS_INDUSTRIAL: return SFX_SYMBOLS_STYLE_INDUSTRIAL;
+//      case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
+    }
+
+    return SFX_SYMBOLS_STYLE_AUTO;
+}
+
+static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
+{
+    switch ( nStyle )
+    {
+        case SFX_SYMBOLS_STYLE_AUTO:       return STYLE_SYMBOLS_AUTO;
+        case SFX_SYMBOLS_STYLE_DEFAULT:    return STYLE_SYMBOLS_DEFAULT;
+        case SFX_SYMBOLS_STYLE_HICONTRAST: return STYLE_SYMBOLS_HICONTRAST;
+        case SFX_SYMBOLS_STYLE_INDUSTRIAL: return STYLE_SYMBOLS_INDUSTRIAL;
+//      case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
+    }
+
+    return STYLE_SYMBOLS_AUTO;
+}
 
 //*****************************************************************************************************************
 //  constructor
@@ -266,8 +316,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsUseSystemFileDialogRO( sal_False )
     , m_bPluginsEnabled( sal_False )
     , m_bIsPluginsEnabledRO( sal_False )
-    , m_nSymbolSet( 0 )
-    , m_bIsSymbolSetRO( sal_False )
+    , m_nSymbolsSize( 0 )
+    , m_bIsSymbolsSizeRO( sal_False )
+    , m_bIsSymbolsStyleRO( sal_False )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( sal_False )
 
@@ -302,9 +353,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
             case PROPERTYHANDLE_SYMBOLSET :
             {
-                if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                     DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
-                m_bIsSymbolSetRO = seqRO[nProperty];
+                m_bIsSymbolsSizeRO = seqRO[nProperty];
                 break;
             }
 
@@ -321,6 +372,17 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                     DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_SYMBOLSSTYLE :
+            {
+                ::rtl::OUString aSymbolsStyle;
+                if( seqValues[nProperty] >>= aSymbolsStyle )
+                    SetSymbolsStyleName( aSymbolsStyle );
+                else
+                    DBG_ERROR("Wrong type of \"Misc\\SymbolsStyle\"!" );
+                m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
             }
         }
@@ -385,7 +447,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSET           :   {
-                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                                                            if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                                                                 DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
                                                         }
                                                     break;
@@ -397,6 +459,14 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
             case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SYMBOLSSTYLE        :   {
+                                                            ::rtl::OUString aSymbolsStyle;
+                                                            if( seqValues[nProperty] >>= aSymbolsStyle )
+                                                                SetSymbolsStyleName( aSymbolsStyle );
+                                                            else
+                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolsStyle\"!" );
                                                         }
                                                     break;
         }
@@ -434,11 +504,48 @@ void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified 
     CallListeners();
 }
 
-void SvtMiscOptions_Impl::SetSymbolSet( sal_Int16 nSet )
+void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
 {
-    m_nSymbolSet = nSet;
+    m_nSymbolsSize = nSet;
     SetModified();
     CallListeners();
+}
+
+sal_Int16 SvtMiscOptions_Impl::GetSymbolsStyle() const
+{
+    return implSymbolsStyleFromVCL( Application::GetSettings().GetStyleSettings().GetSymbolsStyle() );
+}
+
+::rtl::OUString SvtMiscOptions_Impl::GetSymbolsStyleName() const
+{
+    return Application::GetSettings().GetStyleSettings().GetSymbolsStyleName();
+}
+
+sal_Int16 SvtMiscOptions_Impl::GetCurrentSymbolsStyle() const
+{
+    return implSymbolsStyleFromVCL( Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle() );
+}
+
+void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName )
+{
+    if ( ( bValue && ( nSet != GetSymbolsStyle() ) ) ||
+         ( !bValue && ( rName != GetSymbolsStyleName() ) ) )
+    {
+        AllSettings aAllSettings = Application::GetSettings();
+        StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+
+        if ( bValue )
+            aStyleSettings.SetSymbolsStyle( implSymbolsStyleToVCL( nSet ) );
+        else
+            aStyleSettings.SetSymbolsStyleName( rName );
+
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::MergeSystemSettings( aAllSettings );
+        Application::SetSettings(aAllSettings);
+
+        SetModified();
+        CallListeners();
+    }
 }
 
 void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
@@ -479,8 +586,8 @@ void SvtMiscOptions_Impl::Commit()
 
             case PROPERTYHANDLE_SYMBOLSET :
             {
-                if ( !m_bIsSymbolSetRO )
-                   seqValues[nProperty] <<= m_nSymbolSet;
+                if ( !m_bIsSymbolsSizeRO )
+                   seqValues[nProperty] <<= m_nSymbolsSize;
                 break;
             }
 
@@ -495,6 +602,13 @@ void SvtMiscOptions_Impl::Commit()
             {
                 if ( !m_bIsUseSystemFileDialogRO )
                     seqValues[nProperty] <<= m_bUseSystemFileDialog;
+                break;
+            }
+
+            case PROPERTYHANDLE_SYMBOLSSTYLE :
+            {
+                if ( !m_bIsSymbolsStyleRO )
+                    seqValues[nProperty] <<= GetSymbolsStyleName();
                 break;
             }
         }
@@ -514,7 +628,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
-        PROPERTYNAME_USESYSTEMFILEDIALOG
+        PROPERTYNAME_USESYSTEMFILEDIALOG,
+        PROPERTYNAME_SYMBOLSSTYLE
     };
 
     // Initialize return sequence with these list ...
@@ -597,19 +712,67 @@ sal_Bool SvtMiscOptions::IsPluginsEnabledReadOnly() const
     return m_pDataContainer->IsPluginsEnabledReadOnly();
 }
 
-sal_Int16 SvtMiscOptions::GetSymbolSet() const
+sal_Int16 SvtMiscOptions::GetSymbolsSize() const
 {
-    return m_pDataContainer->GetSymbolSet();
+    return m_pDataContainer->GetSymbolsSize();
 }
 
-void SvtMiscOptions::SetSymbolSet( sal_Int16 nSet )
+void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
 {
-    m_pDataContainer->SetSymbolSet( nSet );
+    m_pDataContainer->SetSymbolsSize( nSet );
 }
 
-sal_Bool SvtMiscOptions::IsGetSymbolSetReadOnly() const
+sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
 {
-    return m_pDataContainer->IsGetSymbolSetReadOnly();
+    sal_Int16 eOptSymbolsSize = m_pDataContainer->GetSymbolsSize();
+
+    if ( eOptSymbolsSize == SFX_SYMBOLS_SIZE_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolsSize = SFX_SYMBOLS_SIZE_LARGE;
+        else
+            eOptSymbolsSize = SFX_SYMBOLS_SIZE_SMALL;
+    }
+
+    return eOptSymbolsSize;
+}
+
+bool SvtMiscOptions::AreCurrentSymbolsLarge() const
+{
+    return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE );
+}
+
+sal_Bool SvtMiscOptions::IsGetSymbolsSizeReadOnly() const
+{
+    return m_pDataContainer->IsGetSymbolsSizeReadOnly();
+}
+
+sal_Int16 SvtMiscOptions::GetSymbolsStyle() const
+{
+    return m_pDataContainer->GetSymbolsStyle();
+}
+
+sal_Int16 SvtMiscOptions::GetCurrentSymbolsStyle() const
+{
+    return m_pDataContainer->GetCurrentSymbolsStyle();
+}
+
+OUString SvtMiscOptions::GetCurrentSymbolsStyleName() const
+{
+    return Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+}
+
+void SvtMiscOptions::SetSymbolsStyle( sal_Int16 nSet )
+{
+    m_pDataContainer->SetSymbolsStyle( nSet );
+}
+
+sal_Bool SvtMiscOptions::IsGetSymbolsStyleReadOnly() const
+{
+    return m_pDataContainer->IsGetSymbolsStyleReadOnly();
 }
 
 sal_Int16 SvtMiscOptions::GetToolboxStyle() const
