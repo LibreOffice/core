@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,10 @@
 #include <vcl/pngwrite.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include "svtools/miscopt.hxx"
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -204,7 +208,8 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< XMultiServiceF
 CmdImageList::CmdImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager, const rtl::OUString& aModuleIdentifier ) :
     m_aModuleIdentifier( aModuleIdentifier ),
     m_bVectorInit( sal_False ),
-    m_xServiceManager( rServiceManager )
+    m_xServiceManager( rServiceManager ),
+    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
         m_pImageList[n] = 0;
@@ -284,6 +289,16 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
 ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
 {
+    SvtMiscOptions aMiscOptions;
+
+    sal_Int16 nSymbolsStyle = aMiscOptions.GetCurrentSymbolsStyle();
+    if ( nSymbolsStyle != m_nSymbolsStyle )
+    {
+        m_nSymbolsStyle = nSymbolsStyle;
+        for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
+            delete m_pImageList[n], m_pImageList[n] = NULL;
+    }
+
     if ( !m_pImageList[nImageType] )
     {
         m_pImageList[nImageType] = new ImageList( m_aImageNameVector,
