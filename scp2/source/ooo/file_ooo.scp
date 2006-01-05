@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:38:20 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1901,6 +1901,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
     Patchfiles = ("modules/dbbrowser/menubar/menubar.xml",
+                  "modules/sbibliography/menubar/menubar.xml",
                   "modules/scalc/menubar/menubar.xml",
                   "modules/sglobal/accelerator/de/default.xml",
                   "modules/sglobal/accelerator/en-GB/default.xml",
