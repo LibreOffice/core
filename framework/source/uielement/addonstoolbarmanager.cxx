@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:07:42 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,8 +242,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
 
 void AddonsToolBarManager::RefreshImages()
 {
-    sal_Int16 nSymbolSet = GetCurrentSymbolSize();
-    sal_Bool  bBigImages( nSymbolSet == SFX_SYMBOLS_LARGE );
+    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         USHORT nId( m_pToolBar->GetItemId( nPos ) );
@@ -273,7 +272,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         return;
 
     USHORT    nId( 1 );
-    sal_Int16 nSymbolSet( GetCurrentSymbolSize() );
 
     RemoveControllers();
 
