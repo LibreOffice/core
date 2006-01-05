@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:40:53 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:54:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1484,8 +1484,11 @@ long SvxRuler::GetLogicRightIndent() const
 
 long SvxRuler::GetLeftFrameMargin() const
 {
+    // #126721# for some unknown reason the current column is set to 0xffff
+    DBG_ASSERT(!pColumnItem || pColumnItem->GetActColumn() < pColumnItem->Count(),
+                    "issue #126721# - invalid current column!")
     long nLeft =
-        pColumnItem && pColumnItem->Count()?
+        pColumnItem && pColumnItem->Count() && pColumnItem->GetActColumn() < pColumnItem->Count() ?
         (*pColumnItem)[pColumnItem->GetActColumn()].nStart : 0;
     if(pParaBorderItem && (!pColumnItem || pColumnItem->IsTable()))
         nLeft += pParaBorderItem->GetLeft();
