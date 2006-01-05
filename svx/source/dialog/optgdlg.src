@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 14:48:35 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,17 +227,22 @@ TabPage OFA_TP_VIEW
         Unit = FUNIT_CUSTOM ;
         CustomUnitText = "%" ;
     };
-    FixedText FT_ICONSIZE
+    FixedText FT_ICONSIZESTYLE
     {
-        Pos = MAP_APPFONT ( 12 , ROW_FT_ICONSIZE  ) ;
+        Pos = MAP_APPFONT ( 12 , ROW_FT_ICONSIZESTYLE  ) ;
         Size = MAP_APPFONT ( 114 , 8 ) ;
-        Text [ de ] = "Symbolgröße" ;
+        Text [ de ] = "Symbolgröße und Symbolstil" ;
+        Text [ en-US ] = "Icon size and style" ;
+    };
+    String STR_ICONSIZE
+    {
+        Text [ de ] = "Symbolgröße";
         Text [ en-US ] = "Icon size" ;
     };
     ListBox LB_ICONSIZE
     {
-        Pos = MAP_APPFONT ( 12 , ROW_LB_ICONSIZE ) ;
-        Size = MAP_APPFONT ( 114 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , ROW_LB_ICONSIZESTYLE ) ;
+        Size = MAP_APPFONT ( 55 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -252,6 +257,30 @@ TabPage OFA_TP_VIEW
             < "Automatic" ; > ;
             < "Small" ; > ;
             < "Large" ; > ;
+        };
+    };
+    ListBox LB_ICONSTYLE
+    {
+        Pos = MAP_APPFONT ( 71 , ROW_LB_ICONSIZESTYLE ) ;
+        Size = MAP_APPFONT ( 55 , 60 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        StringList [ de ] =
+        {
+            < "Automatisch" ; > ;
+            < "Standard" ; > ;
+            < "HiContrast" ; > ;
+            < "Industrial" ; > ;
+//            < "Crystal" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Automatic" ; > ;
+            < "Default" ; > ;
+            < "HiContrast" ; > ;
+            < "Industrial" ; > ;
+//            < "Crystal" ; > ;
         };
     };
     CheckBox CB_SYSTEM_FONT
