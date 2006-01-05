@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:50:25 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,9 @@
 //#define OFFS_PUSHBUTTON_FIXEDTEXT(base)   (base+(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
 
 #define ROW_MF_SCALING          (13)
-#define ROW_FT_ICONSIZE         (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW_LB_ICONSIZE         (ROW_FT_ICONSIZE+RSC_CD_FIXEDTEXT_HEIGHT+ROWSPACE)
-#define ROW_CB_SYSTEM_FONT      (ROW_LB_ICONSIZE+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_FT_ICONSIZESTYLE    (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_LB_ICONSIZESTYLE    (ROW_FT_ICONSIZESTYLE+RSC_CD_FIXEDTEXT_HEIGHT+ROWSPACE)
+#define ROW_CB_SYSTEM_FONT      (ROW_LB_ICONSIZESTYLE+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
 #define ROW_CB_FONTANTIALIASING (ROW_CB_SYSTEM_FONT+ (2 * RSC_CD_DROPDOWN_HEIGHT) +ROWSPACE)
 #define ROW_NF_AA_POINTLIMIT    (ROW_CB_FONTANTIALIASING+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
@@ -132,8 +132,10 @@
 #define BTN_DOCVIEW                 51
 #define BTN_OPENWIN                 52
 #define LB_ICONSIZE                 53
-#define FT_ICONSIZE                 54
-#define CB_SYSTEM_FONT              55
+#define FT_ICONSIZESTYLE            54
+#define LB_ICONSTYLE                55
+#define CB_SYSTEM_FONT              56
+#define STR_ICONSIZE                        57
 
 #define CB_FONT_SHOW                60
 #define CB_SHOW_INACTIVE            61
