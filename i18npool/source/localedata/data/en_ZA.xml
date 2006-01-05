@@ -300,7 +300,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>R</CurrencyID>
+      <CurrencyID>ZAR</CurrencyID>
       <CurrencySymbol>R</CurrencySymbol>
       <BankSymbol>ZAR</BankSymbol>
       <CurrencyName>South African Rand</CurrencyName>
