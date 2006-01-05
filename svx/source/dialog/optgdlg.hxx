@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:50:38 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,9 @@ private:
     FixedLine       aUserInterfaceFL;
     FixedText       aWindowSizeFT;
     MetricField     aWindowSizeMF;
-    FixedText       aIconSizeFT;
+    FixedText       aIconSizeStyleFT;
     ListBox         aIconSizeLB;
+    ListBox         aIconStyleLB;
     CheckBox        m_aSystemFont;
 
 #if defined( UNX )
@@ -147,7 +148,8 @@ private:
     FixedText       aMouseMiddleFT;
     ListBox         aMouseMiddleLB;
 
-    UINT16          nBigLB_InitialSelection;
+    UINT16          nSizeLB_InitialSelection;
+    UINT16          nStyleLB_InitialSelection;
     BOOL            bSfxSymbolsAuto;
 
     SvtTabAppearanceCfg* pAppearanceCfg;
