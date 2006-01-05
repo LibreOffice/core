@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.181 $
+#   $Revision: 1.182 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:55:40 $
+#   last change: $Author: kz $ $Date: 2006-01-05 18:16:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1088,6 +1088,9 @@ RSCEXTINC=.
 .IF "$(DEBUG)" != ""
 RSCDEFS+= -DDEBUG
 .ENDIF
+
+# additional image sets
+CUSTOM_IMAGE_SETS=hicontrast industrial
 
 UNOIDL=unoidl
 
