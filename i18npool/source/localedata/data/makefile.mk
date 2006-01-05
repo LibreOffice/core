@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-08 17:00:11 $
+#   last change: $Author: kz $ $Date: 2006-01-05 14:53:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_bg_BG.cxx  \
     $(MISC)$/localedata_bn_IN.cxx  \
     $(MISC)$/localedata_bn_BD.cxx  \
+    $(MISC)$/localedata_br_FR.cxx  \
     $(MISC)$/localedata_bs_BA.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
     $(MISC)$/localedata_cs_CZ.cxx  \
@@ -88,6 +89,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_en_CA.cxx  \
     $(MISC)$/localedata_en_GB.cxx  \
     $(MISC)$/localedata_en_IE.cxx  \
+    $(MISC)$/localedata_en_IN.cxx  \
     $(MISC)$/localedata_en_JM.cxx  \
     $(MISC)$/localedata_en_NZ.cxx  \
     $(MISC)$/localedata_en_PH.cxx  \
@@ -156,6 +158,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_nl_NL.cxx  \
     $(MISC)$/localedata_nn_NO.cxx  \
     $(MISC)$/localedata_no_NO.cxx  \
+    $(MISC)$/localedata_nr_ZA.cxx  \
     $(MISC)$/localedata_nso_ZA.cxx \
     $(MISC)$/localedata_or_IN.cxx  \
     $(MISC)$/localedata_pa_IN.cxx  \
@@ -179,7 +182,9 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_tn_ZA.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
+    $(MISC)$/localedata_ts_ZA.cxx  \
     $(MISC)$/localedata_uk_UA.cxx  \
+    $(MISC)$/localedata_ve_ZA.cxx  \
     $(MISC)$/localedata_vi_VN.cxx  \
     $(MISC)$/localedata_xh_ZA.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
@@ -262,6 +267,7 @@ SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
     $(SLO)$/localedata_be_BY.obj	\
     $(SLO)$/localedata_bg_BG.obj	\
+    $(SLO)$/localedata_br_FR.obj	\
     $(SLO)$/localedata_bs_BA.obj	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
@@ -336,6 +342,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_bn_IN.obj \
     $(SLO)$/localedata_bn_BD.obj \
      $(SLO)$/localedata_dz_BT.obj \
+    $(SLO)$/localedata_en_IN.obj \
     $(SLO)$/localedata_eo.obj    \
     $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_he_IL.obj \
@@ -352,6 +359,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_mr_IN.obj \
     $(SLO)$/localedata_ms_MY.obj \
     $(SLO)$/localedata_ne_NP.obj \
+    $(SLO)$/localedata_nr_ZA.obj \
     $(SLO)$/localedata_nso_ZA.obj \
     $(SLO)$/localedata_or_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
@@ -363,6 +371,8 @@ SHL4OBJS= \
     $(SLO)$/localedata_te_IN.obj \
     $(SLO)$/localedata_th_TH.obj \
     $(SLO)$/localedata_tn_ZA.obj \
+    $(SLO)$/localedata_ts_ZA.obj \
+    $(SLO)$/localedata_ve_ZA.obj \
     $(SLO)$/localedata_vi_VN.obj \
     $(SLO)$/localedata_xh_ZA.obj \
     $(SLO)$/localedata_zh_CN.obj \
