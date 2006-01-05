@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:47 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@
 #include <hash_map>
 
 #define DEFAULT_PROJECTNAME "res"
-#define IMAGES_ZIPFILENAME  "images.zip"
+#define IMAGES_ZIPFILENAME_PREFIX   "images"
+#define IMAGES_ZIPFILENAME_SUFFIX   ".zip"
 #define IMAGES_CACHEDIR     "imagecache"
 
 using namespace ::com::sun::star;
@@ -107,7 +108,8 @@ static BmpExHashMap aBmpExHashMap;
 // -----------------------------------------------------------------------
 
 ImplImageTree::ImplImageTree() :
-    mbInit( false )
+    mbInit( false ),
+    maSymbolsStyle( Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName() )
 {
 }
 
@@ -186,13 +188,20 @@ bool ImplImageTree::implInit()
 
 // -----------------------------------------------------------------------
 
-const ::rtl::OUString& ImplImageTree::implGetZipFileURL() const
+::rtl::OUString ImplImageTree::implGetZipFileURL( bool bWithStyle ) const
 {
-    static ::rtl::OUString aRet;
+    ::rtl::OUString aRet;
 
     if( !aRet.getLength() && mxPathSettings.is() && mxFileAccess.is() )
     {
-        const ::rtl::OUString   aZipFileName( ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME ) );
+        ::rtl::OUString aZipFileName( ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_PREFIX ) );
+        if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
+        {
+            aZipFileName += ::rtl::OUString::createFromAscii( "_" );
+            aZipFileName += maSymbolsStyle;
+        }
+        aZipFileName += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
+
         uno::Any                aAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "UserConfig" ) ) );
         INetURLObject           aZipURL;
 
@@ -212,7 +221,10 @@ const ::rtl::OUString& ImplImageTree::implGetZipFileURL() const
 
                     if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                     {
-                        aRet = ::rtl::OUString();
+                        if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
+                            aRet = implGetZipFileURL( false ); // Try without style
+                        else
+                            aRet = ::rtl::OUString();
                     }
                 }
             }
@@ -369,8 +381,35 @@ bool ImplImageTree::implLoadFromStream( SvStream& rIStm,
 
 // ------------------------------------------------------------------------------
 
-bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, bool bSearchLanguageDependent )
+void ImplImageTree::implUpdateSymbolsStyle( const ::rtl::OUString& rSymbolsStyle )
 {
+    if ( rSymbolsStyle != maSymbolsStyle )
+    {
+        maSymbolsStyle = rSymbolsStyle;
+        if ( mbInit )
+        {
+            mxNameAcc.clear();
+            mxZipAcc.clear();
+            mxFileAccess.clear();
+            mxPathSettings.clear();
+
+            BmpExHashMap aTmp;
+            aBmpExHashMap.swap( aTmp );
+
+            mbInit = false;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+bool ImplImageTree::loadImage( const ::rtl::OUString& rName,
+        const ::rtl::OUString& rSymbolsStyle,
+        BitmapEx& rReturn,
+        bool bSearchLanguageDependent )
+{
+    implUpdateSymbolsStyle( rSymbolsStyle );
+
     const BmpExHashMap::const_iterator  aBmpExFindIter( aBmpExHashMap.find( rName ) );
 
     if( aBmpExFindIter != aBmpExHashMap.end() )
