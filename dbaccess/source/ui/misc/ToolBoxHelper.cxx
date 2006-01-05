@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:38:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@ namespace dbaui
     OToolBoxHelper::OToolBoxHelper()
         : m_bIsHiContrast(sal_False)
         ,m_pToolBox(NULL)
-        ,m_nBitmapSet(-1 )
+        ,m_nSymbolsSize(-1 )
     {
         DBG_CTOR(OToolBoxHelper,NULL);
 
-        OSL_ENSURE(m_nBitmapSet != getCurrentSymbolSet(),"BitmapSet should not be identical");
+        OSL_ENSURE(m_nSymbolsSize != SvtMiscOptions().GetCurrentSymbolsSize(),"SymbolsSize should not be identical");
         SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
@@ -74,26 +74,7 @@ namespace dbaui
     {
         SvtMiscOptions().RemoveListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
-
         DBG_DTOR(OToolBoxHelper,NULL);
-    }
-    // -----------------------------------------------------------------------------
-    sal_Int16 OToolBoxHelper::getCurrentSymbolSet()
-    {
-        sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-        if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-        {
-            // Use system settings, we have to retrieve the toolbar icon size from the
-            // Application class
-            ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-            if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-                eOptSymbolSet = SFX_SYMBOLS_LARGE;
-            else
-                eOptSymbolSet = SFX_SYMBOLS_SMALL;
-        }
-
-        return eOptSymbolSet;
     }
 
     // -----------------------------------------------------------------------------
@@ -101,15 +82,15 @@ namespace dbaui
     {
         if ( m_pToolBox )
         {
-            sal_Int16 nCurBitmapSet = getCurrentSymbolSet();
-            if ( nCurBitmapSet != m_nBitmapSet ||
+            sal_Int16 nCurSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
+            if ( nCurSymbolsSize != m_nSymbolsSize ||
                 m_bIsHiContrast != m_pToolBox->GetBackground().GetColor().IsDark() )
             {
-                m_nBitmapSet    = nCurBitmapSet;
+                m_nSymbolsSize  = nCurSymbolsSize;
                 m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
 
 
-                m_pToolBox->SetImageList( ModuleRes( getImageListId(m_nBitmapSet,m_bIsHiContrast) ) );
+                m_pToolBox->SetImageList( ModuleRes( getImageListId(m_nSymbolsSize,m_bIsHiContrast) ) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
                 Size aTbNewSize = m_pToolBox->GetSizePixel();
