@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:13 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -826,9 +826,28 @@ void SwShellCrsr::Show()
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
-    do {
+    SwCursor* pTmpCrsr;
+
+    do
+    {
         pTmp->SwSelPaintRects::Invalidate( rRect );
-    } while( this != ( pTmp = (SwShellCrsr*)*(SwCursor*)(pTmp->GetNext() )));
+
+        // --> FME 2005-08-18 #125102#
+        // skip any non SwShellCrsr objects in the ring
+        // (see:SwAutoFormat::DeleteSel()
+        // <--
+        Ring* pTmpRing = pTmp;
+        pTmp = 0;
+        do
+        {
+            pTmpRing = pTmpRing->GetNext();
+            pTmpCrsr = dynamic_cast<SwCursor*>(pTmpRing);
+            if ( pTmpCrsr )
+                pTmp = (SwShellCrsr*)*pTmpCrsr;
+        }
+        while ( !pTmp );
+    }
+    while( this != pTmp );
 
     SHOWBOOKMARKS2( 3, &rRect )
     SHOWREDLINES2( 3, &rRect )
