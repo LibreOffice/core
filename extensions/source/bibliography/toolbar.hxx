@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:21:38 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ class BibToolBar:   public ToolBox
         sal_uInt16              nSelMenuItem;
         rtl::OUString           aQueryField;
         Link                    aLayoutManager;
-        sal_Int16               nSymbolSet;
+        sal_Int16               nSymbolsSize;
         sal_Int16               nOutStyle;
 
         BibDataManager*         pDatMan;
@@ -189,7 +189,6 @@ class BibToolBar:   public ToolBox
         virtual void            Select();
         virtual void            Click();
         long                    PreNotify( NotifyEvent& rNEvt );
-        sal_Int16               GetCurrentSymbolSet();
 
 
     public:
