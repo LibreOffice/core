@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:59:58 $
+#   last change: $Author: kz $ $Date: 2006-01-05 18:13:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,7 @@ SHL2IMPLIB= _isvl
 SHL2USE_EXPORTS=ordinal
 
 SHL2STDLIBS= \
+        $(VCLLIB)			\
         $(UNOTOOLSLIB)		\
         $(TOOLSLIB) 		\
         $(UCBHELPERLIB)		\
