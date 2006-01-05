@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:56:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,12 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
+            <prop oor:name="ooOpenSourceContext" oor:type="xs:int">
+                <info>
+                    <desc>Specifies the context of the product. A value greater than 0 is specifying an OpenSource context.</desc>
+                </info>
+                <value>0</value>
+            </prop>
 		</group>
 		<group oor:name="Office">
 			<!--The default must be written by the setup.-->
