@@ -25,10 +25,10 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+      <QuotationStart>‚</QuotationStart>
+      <QuotationEnd>‘</QuotationEnd>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
+      <DoubleQuotationEnd>“</DoubleQuotationEnd>
     </Markers>
     <TimeAM>pre.</TimeAM>
     <TimePM>pop.</TimePM>
@@ -159,12 +159,12 @@
         <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>p. n. e.</DefaultAbbrvName>
-          <DefaultFullName>pred našim brojevima</DefaultFullName>
+          <DefaultFullName>pre nove ere</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
           <DefaultAbbrvName>n. e.</DefaultAbbrvName>
-          <DefaultFullName>naši brojevi</DefaultFullName>
+          <DefaultFullName>nova era</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -178,7 +178,7 @@
       <CurrencyID>CSD</CurrencyID>
       <CurrencySymbol>Din</CurrencySymbol>
       <BankSymbol>CSD</BankSymbol>
-      <CurrencyName>Crnogorsko Srpski Dinar</CurrencyName>
+      <CurrencyName>Srpski Dinar</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
