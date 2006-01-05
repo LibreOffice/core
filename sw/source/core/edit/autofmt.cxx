@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:19:10 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1525,7 +1525,10 @@ void SwAutoFormat::BuildText()
                 pDoc->Insert( aDelPam, ' ' );
             if( bBreak )
                 break;
+            const SwTxtNode* pCurrNode = pNxtNd;
             pNxtNd = GetNextNode();
+            if(!pNxtNd || pCurrNode == pNxtNd)
+                break;
         }
     }
     DeleteAktPara( TRUE, TRUE );
@@ -1818,7 +1821,10 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             pDoc->Insert( aDelPam, ' ' );
         if( bBreak )
             break;
+        const SwTxtNode* pCurrNode = pNxtNd;
         pNxtNd = GetNextNode();
+        if(!pNxtNd || pCurrNode == pNxtNd)
+            break;
     }
     DeleteAktPara( FALSE, TRUE );
     AutoCorrect( nAutoCorrPos );
@@ -2123,7 +2129,9 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                 aDelPam.DeleteMark();
                                 aFInfo.SetFrm( 0 );
                             }
-                            nPos = aDelPam.GetPoint()->nContent.GetIndex() - 1;
+                            //#125102# in case of the mode REDLINE_SHOW_DELETE the ** are still contained in pTxt
+                            if(0 == (pDoc->GetRedlineMode() & REDLINE_SHOW_DELETE))
+                                nPos = aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // wurde vorm Start ein Zeichen entfernt?
                             if( cBlank && cBlank != pTxt->GetChar(nSttPos - 1) )
                                 --nSttPos;
