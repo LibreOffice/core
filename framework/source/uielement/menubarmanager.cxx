@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:07:59 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,10 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include "svtools/miscopt.hxx"
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -292,6 +296,7 @@ MenuBarManager::MenuBarManager(
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
     , m_bAcceleratorCfg( sal_False )
+    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
         getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
@@ -312,6 +317,7 @@ MenuBarManager::MenuBarManager(
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
     , m_bAcceleratorCfg( sal_False )
+    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -399,6 +405,7 @@ MenuBarManager::MenuBarManager(
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
     , m_bAcceleratorCfg( sal_False )
+    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -1077,15 +1084,18 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
+        sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
 
         if ( m_bRetrieveImages ||
              m_bWasHiContrast != bIsHiContrast ||
-             bShowMenuImages != m_bShowMenuImages )
+             bShowMenuImages != m_bShowMenuImages ||
+             nSymbolsStyle != m_nSymbolsStyle )
         {
             // The mode changed so we have to replace all images
             m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
             m_bRetrieveImages   = sal_False;
+            m_nSymbolsStyle     = nSymbolsStyle;
             AddonsOptions       aAddonOptions;
 
             for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
