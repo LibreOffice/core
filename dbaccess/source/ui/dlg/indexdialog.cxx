@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:46:33 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,7 +923,7 @@ DBG_NAME(DbaIndexDialog)
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
         sal_Int16 nH = IMG_INDEX_DLG_SCH;
-        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         {
             nN = IMG_INDEX_DLG_LC;
             nH = IMG_INDEX_DLG_LCH;
