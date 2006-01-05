@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:33:07 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -837,7 +837,13 @@ FASTBOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
 {
     MV_KONTEXT(this);
     SttSelect();
-    return SelTblRowCol( rPt, pEnd );
+    if(SelTblRowCol( rPt, pEnd ))
+    {
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        fnKillSel = &SwWrtShell::ResetSelect;
+        return TRUE;
+    }
+    return FALSE;
 }
 // <--
 
