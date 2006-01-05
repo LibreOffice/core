@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:03:21 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@
 #endif
 
 #include <unotools/localfilehelper.hxx>
+#include <unotools/configmgr.hxx>
 
 #ifndef _SVX_CUIOPTGENRL_HXX
 #include "cuioptgenrl.hxx"
@@ -680,8 +681,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aUserInterfaceFL    ( this, ResId( FL_USERINTERFACE ) ),
     aWindowSizeFT       ( this, ResId( FT_WINDOWSIZE ) ),
     aWindowSizeMF       ( this, ResId( MF_WINDOWSIZE ) ),
-    aIconSizeFT              ( this, ResId( FT_ICONSIZE ) ),
+    aIconSizeStyleFT    ( this, ResId( FT_ICONSIZESTYLE ) ),
     aIconSizeLB              ( this, ResId( LB_ICONSIZE ) ),
+    aIconStyleLB        ( this, ResId( LB_ICONSTYLE ) ),
     m_aSystemFont               (this, ResId( CB_SYSTEM_FONT ) ),
 #if defined( UNX )
     aFontAntiAliasing   ( this, ResId( CB_FONTANTIALIASING )),
@@ -713,12 +715,31 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) ),
     pAppearanceCfg(new SvtTabAppearanceCfg)
 {
+
     a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
 
     if ( !isHardwareAccelerationAvailable() )
     {
         aRenderingFL.Hide();
         aUseHardwareAccell.Hide();
+    }
+
+    sal_Int32 nOpenSourceContext = 0;
+
+    try
+    {
+        ::utl::ConfigManager::GetDirectConfigProperty(
+          ::utl::ConfigManager::OPENSOURCECONTEXT ) >>= nOpenSourceContext;
+    }
+    catch( ... )
+    {
+    }
+
+    if( nOpenSourceContext < 1 )
+    {
+        aIconStyleLB.Disable();
+        aIconStyleLB.Hide();
+        aIconSizeStyleFT.SetText( String( ResId( STR_ICONSIZE ) ) );
     }
 
 #if defined( UNX )
@@ -777,7 +798,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     }
 
 #endif
+
     FreeResource();
+
     if( ! Application::ValidateSystemFont() )
     {
         m_aSystemFont.Check( FALSE );
@@ -827,20 +850,37 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     BOOL bMenuOptModified = FALSE;
 
     SvtMiscOptions aMiscOptions;
-    UINT16 nBigLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
-    if( nBigLB_InitialSelection != nBigLB_NewSelection )
+    UINT16 nSizeLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
+    if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        sal_Int16 eSet = SFX_SYMBOLS_AUTO;
-        switch( nBigLB_NewSelection )
+        sal_Int16 eSet = SFX_SYMBOLS_SIZE_AUTO;
+        switch( nSizeLB_NewSelection )
         {
-            case 0: eSet = SFX_SYMBOLS_AUTO;  break;
-            case 1: eSet = SFX_SYMBOLS_SMALL; break;
-            case 2: eSet = SFX_SYMBOLS_LARGE; break;
+            case 0: eSet = SFX_SYMBOLS_SIZE_AUTO;  break;
+            case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
+            case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
             default:
-                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state should not be possible!" );
+                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
         }
-        aMiscOptions.SetSymbolSet( eSet );
+        aMiscOptions.SetSymbolsSize( eSet );
+    }
+
+    UINT16 nStyleLB_NewSelection = aIconStyleLB.GetSelectEntryPos();
+    if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
+    {
+        sal_Int16 eSet = SFX_SYMBOLS_STYLE_AUTO;
+        switch( nStyleLB_NewSelection )
+        {
+            case 0: eSet = SFX_SYMBOLS_STYLE_AUTO;       break;
+            case 1: eSet = SFX_SYMBOLS_STYLE_DEFAULT;    break;
+            case 2: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
+            case 3: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
+//            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
+            default:
+                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconStyleLB should not be possible!" );
+        }
+        aMiscOptions.SetSymbolsStyle( eSet );
     }
 
     BOOL bAppearanceChanged = FALSE;
@@ -999,24 +1039,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------06.12.96 11.50-------------------
 
 --------------------------------------------------*/
-static sal_Int16 GetCurrentSymbolSet()
-{
-    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-    {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-    }
-
-    return eOptSymbolSet;
-}
-
 void OfaViewTabPage::Reset( const SfxItemSet& rSet )
 {
 
@@ -1029,10 +1051,24 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
 
     SvtMiscOptions aMiscOptions;
 
-    if( aMiscOptions.GetSymbolSet() != SFX_SYMBOLS_AUTO )
-        nBigLB_InitialSelection = ( GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
-    aIconSizeLB.SelectEntryPos( nBigLB_InitialSelection );
+    if( aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO )
+        nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
+    aIconSizeLB.SelectEntryPos( nSizeLB_InitialSelection );
     aIconSizeLB.SaveValue();
+
+    if( aMiscOptions.GetSymbolsStyle() != SFX_SYMBOLS_STYLE_AUTO )
+    {
+        switch ( aMiscOptions.GetCurrentSymbolsStyle() )
+        {
+            case SFX_SYMBOLS_STYLE_DEFAULT:    nStyleLB_InitialSelection = 1; break;
+            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 2; break;
+            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 3; break;
+//            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
+            default:                           nStyleLB_InitialSelection = 0; break;
+        }
+    }
+    aIconStyleLB.SelectEntryPos( nStyleLB_InitialSelection );
+    aIconStyleLB.SaveValue();
 
     if( m_aSystemFont.IsEnabled() )
     {
