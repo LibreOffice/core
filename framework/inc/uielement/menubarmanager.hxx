@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:04:08 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xGlobalAcceleratorManager;
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&        mxServiceFactory;
+        sal_Int16                                                                                      m_nSymbolsStyle;
 };
 
 } // namespace
