@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:59:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,7 +536,10 @@ ImageList::ImageList( const ResId& rResId ) :
         aUserImageName += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rResId.GetId() ) );
         aUserImageName += ::rtl::OUString::valueOf( nCount );
 
-        ImplInitBitmapEx( aUserImageName, aImageNames, aBmpEx, spMaskColor.get() );
+        ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        aUserImageName += aCurrentSymbolsStyle;
+
+        ImplInitBitmapEx( aUserImageName, aImageNames, aCurrentSymbolsStyle, aBmpEx, spMaskColor.get() );
 
         if( nObjMask & RSC_IMAGELIST_IDCOUNT )
             pResMgr->ReadShort();
@@ -569,7 +572,10 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     aUserImageName = ( ( aUserImageName += rLocale.Language ) += rLocale.Country ).replace( '/', '_' );
     aUserImageName += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rNameVector.size() ) );
 
-    ImplInitBitmapEx( aUserImageName, aImageNames, aBmpEx, pMaskColor );
+    ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    aUserImageName += aCurrentSymbolsStyle;
+
+    ImplInitBitmapEx( aUserImageName, aImageNames, aCurrentSymbolsStyle, aBmpEx, pMaskColor );
     ImplInit( aBmpEx, static_cast< USHORT >( rNameVector.size() ), NULL, &rNameVector, 4 );
 }
 
@@ -669,12 +675,13 @@ ImageList::~ImageList()
 
 void ImageList::ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
                                   const ::std::vector< ::rtl::OUString >& rImageNames,
+                                  const ::rtl::OUString& rSymbolsStyle,
                                   BitmapEx& rBmpEx,
                                   const Color* pMaskColor ) const
 {
     static ImplImageTreeSingletonRef aImageTree;
 
-    if( !aImageTree->loadImage( rUserImageName, rBmpEx ) )
+    if( !aImageTree->loadImage( rUserImageName, rSymbolsStyle, rBmpEx ) )
     {
         BitmapEx    aCurBmpEx;
         Size        aItemSizePixel;
@@ -682,7 +689,7 @@ void ImageList::ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
 
         for( sal_Int32 i = 0, nCount = rImageNames.size(); i < nCount; ++i )
         {
-            if( aImageTree->loadImage( rImageNames[ i ], aCurBmpEx, true ) )
+            if( aImageTree->loadImage( rImageNames[ i ], rSymbolsStyle, aCurBmpEx, true ) )
             {
                 const Size aCurSizePixel( aCurBmpEx.GetSizePixel() );
 
