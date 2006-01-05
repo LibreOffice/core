@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:46:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@
 #include "nfsymbol.hxx"
 #endif
 using namespace svt;
+
+const sal_Unicode cNonBreakingSpace = 0xA0;
 
 namespace
 {
@@ -1446,7 +1448,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     // normal space instead so queries on space work correctly.
     // The format string is adjusted to allow both.
     // For output of the format code string the LocaleData characters are used.
-    if ( sOldThousandSep.GetChar(0) == 0xA0 && sOldThousandSep.Len() == 1 )
+    if ( sOldThousandSep.GetChar(0) == cNonBreakingSpace && sOldThousandSep.Len() == 1 )
         sOldThousandSep = ' ';
 
     // change locale data et al
@@ -2617,7 +2619,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                                 pFormatter->GetNumThousandSep(),
                                                 c) || StringEqualsChar(
                                                     pFormatter->GetNumDecimalSep(),
-                                                    c)))
+                                                    c) || (c == ' ' &&
+                                                        StringEqualsChar(
+                                                            pFormatter->GetNumThousandSep(),
+                                                            cNonBreakingSpace))))
                                     rString += sStrArray[i];
                                 else if ((eScannedType & NUMBERFORMAT_DATE) &&
                                         StringEqualsChar(
