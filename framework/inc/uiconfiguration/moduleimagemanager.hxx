@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:40:04 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,7 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
             ::std::vector< rtl::OUString >                                                   m_aImageNameVector;
             ::std::vector< rtl::OUString >                                                   m_aImageCommandNameVector;
+            sal_Int16                                                                        m_nSymbolsStyle;
     };
 
     class GlobalImageList : public CmdImageList, public rtl::IReference
