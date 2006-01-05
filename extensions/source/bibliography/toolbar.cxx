@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:56:17 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,11 +259,12 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     nSelMenuItem(0),
     nMenuId(0),
     aLayoutManager( aLink ),
-    nSymbolSet( SFX_SYMBOLS_SMALL ),
+    nSymbolsSize( SFX_SYMBOLS_SIZE_SMALL ),
     nOutStyle( 0 )
 {
-    nSymbolSet = GetCurrentSymbolSet();
-    nOutStyle  = SvtMiscOptions().GetToolboxStyle();
+    SvtMiscOptions aSvtMiscOptions;
+    nSymbolsSize = aSvtMiscOptions.GetCurrentSymbolsSize();
+    nOutStyle  = aSvtMiscOptions.GetToolboxStyle();
 
     ApplyImageList();
     SetStyle(GetStyle()|nStyle);
@@ -615,9 +616,10 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, pVoid )
 {
     sal_Bool bRebuildToolBar = sal_False;
-    if ( nSymbolSet != GetCurrentSymbolSet() )
+    sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
+    if ( nSymbolsSize != eSymbolsSize )
     {
-        nSymbolSet = GetCurrentSymbolSet();
+        nSymbolsSize = eSymbolsSize;
         bRebuildToolBar = sal_True;
     }
     else if ( nOutStyle != SvtMiscOptions().GetToolboxStyle() )
@@ -638,34 +640,14 @@ IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, pVoid )
 IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, pVoid )
 {
     // Check if toolbar button size have changed and we have to use system settings
-    sal_Int16 eSymbolSet = GetCurrentSymbolSet();
-    if ( eSymbolSet != nSymbolSet )
+    sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
+    if ( eSymbolsSize != nSymbolsSize )
     {
-        nSymbolSet = eSymbolSet;
+        nSymbolsSize = eSymbolsSize;
         RebuildToolbar();
     }
 
     return 0L;
-}
-
-//-----------------------------------------------------------------------------
-
-sal_Int16 BibToolBar::GetCurrentSymbolSet()
-{
-    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-    {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-    }
-
-    return eOptSymbolSet;
 }
 
 //-----------------------------------------------------------------------------
@@ -680,7 +662,7 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    ImageList& rList = ( nSymbolSet == SFX_SYMBOLS_SMALL ) ?
+    ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
                        ( GetDisplayBackground().GetColor().IsDark() ? aImgLstHC : aImgLst ) :
                        ( GetDisplayBackground().GetColor().IsDark() ? aBigImgLstHC : aBigImgLst );
 
