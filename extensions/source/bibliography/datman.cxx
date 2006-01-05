@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:50:58 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,14 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
     if (xNamingContext.is() && xNamingContext->hasByName(_rURL))
     {
         DBG_ASSERT(Reference< XNamingService > (xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
-        xDataSource = Reference< XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
+        try
+        {
+            xDataSource = Reference< XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
+        }
+        catch(Exception eEx)
+        {
+            DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()")
+        }
     }
     // build the connection from the data source
     Reference< XConnection >    xConn;
