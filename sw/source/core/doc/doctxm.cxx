@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:17:00 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,10 +203,12 @@ USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
     // dann mal ueber den Pool und alle Primary oder Secondary heraussuchen
     const SwTxtTOXMark* pMark;
     const SfxPoolItem* pItem;
+    const SwTOXType* pTOXType;
     USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_TOXMARK );
     for( i = 0; i < nMaxItems; ++i )
         if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_TOXMARK, i ) ) &&
-            TOX_INDEX == ((SwTOXMark*)pItem)->GetTOXType()->GetType() &&
+            0!= ( pTOXType = ((SwTOXMark*)pItem)->GetTOXType()) &&
+            TOX_INDEX == pTOXType->GetType() &&
             0 != ( pMark = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
             pMark->GetpTxtNd() &&
             pMark->GetpTxtNd()->GetNodes().IsDocNodes() )
