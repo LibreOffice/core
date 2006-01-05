@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:10 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,18 +289,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                 {
-                    sal_Int16 eOptSymbolSet = aMiscOptions.GetSymbolSet();
-                    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-                    {
-                        // Use system settings, we have to retrieve the toolbar icon size from the
-                        // Application class
-                        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-                        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-                            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-                        else
-                            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-                    }
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), eOptSymbolSet == SFX_SYMBOLS_LARGE)))
+                    if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), aMiscOptions.AreCurrentSymbolsLarge() ) ) )
                         bRet = TRUE;
                     break;
                 }
@@ -750,7 +739,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
-        aMiscOptions.SetSymbolSet( bBigSize ? SFX_SYMBOLS_LARGE : SFX_SYMBOLS_SMALL );
+        aMiscOptions.SetSymbolsSize( bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL );
         SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
         while ( pViewFrame )
         {
