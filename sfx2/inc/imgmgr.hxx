@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:58:13 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ class SFX2_DLLPUBLIC SfxImageManager
     SfxImageManager_Impl* pImp;
 
 public:
-    static sal_Int16         GetCurrentSymbolSet();
     static SfxImageManager*  GetImageManager( SfxModule* );
 
                     SfxImageManager( SfxModule* pModule = 0 );
