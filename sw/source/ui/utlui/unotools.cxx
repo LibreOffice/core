@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:33:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,7 +566,9 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            pExampleFrame->CreatePopup(rCEvt.GetMousePosPixel());
+            //#125881# quickly clicking crashes because the control is not fully initialized
+            if(pExampleFrame->GetController().is())
+                pExampleFrame->CreatePopup(rCEvt.GetMousePosPixel());
         }
         break;
         case COMMAND_WHEEL:
