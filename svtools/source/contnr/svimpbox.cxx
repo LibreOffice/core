@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:54:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2136,7 +2136,8 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
         nCurTabPos = FIRST_ENTRY_TAB;
     nFlags &= (~F_FILLING);
     pView->GrabFocus();
-    if( !pEntry )
+    // #120417# the entry can still be invalid!
+    if( !pEntry || !pView->GetViewData( pEntry ))
         return;
 
     long nY = GetEntryLine( pEntry );
