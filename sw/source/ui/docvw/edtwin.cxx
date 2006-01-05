@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:51:34 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2447,6 +2447,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         // --> FME 2004-07-30 #i32329# Enhanced table selection
         if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
         {
+            rSh.EnterStdMode();
             rSh.SelectTableRowCol( aDocPos );
             if( SW_TABSEL_HORI  != nMouseTabCol && SW_TABSEL_HORI_RTL  != nMouseTabCol)
             {
