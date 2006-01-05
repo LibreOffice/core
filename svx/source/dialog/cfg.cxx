@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:18:26 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,22 +424,7 @@ void InitImageType()
         css::ui::ImageType::COLOR_NORMAL |
         css::ui::ImageType::SIZE_DEFAULT;
 
-    sal_Int16 eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-    {
-        // Use system settings, we have to retrieve the toolbar icon size
-        // from the Application class
-        ULONG nStyleIconSize =
-            Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-    }
-
-    if ( eOptSymbolSet != SFX_SYMBOLS_SMALL )
+    if ( SvtMiscOptions().AreCurrentSymbolsLarge() )
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
     }
