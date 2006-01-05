@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:55:29 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:13:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,21 +669,7 @@ sal_Bool ToolboxController::isBound() const
 
 sal_Bool ToolboxController::hasBigImages() const
 {
-    sal_Bool  bBig( sal_False );
-    sal_Int16 eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-    {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-    }
-
-    return ( eOptSymbolSet == SFX_SYMBOLS_LARGE );
+    return SvtMiscOptions().AreCurrentSymbolsLarge();
 }
 
 sal_Bool ToolboxController::isHighContrast() const
