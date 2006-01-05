@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:43:21 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,17 +142,23 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
                 {
-                    SdrPathObj* pPathObj = (SdrPathObj *)rMarkList.GetMark(0)->GetObj();
-                    const XPolyPolygon& rXPP = pPathObj->GetPathPoly();
-                    if (rXPP.Count() == 1)
+                    SdrObject* pMarkedObject = rMarkList.GetMark(0)->GetObj();
+                    // #127440# - crash report shows that the marked object is not always an SdrPathObj
+                    SdrPathObj* pPathObj = dynamic_cast< SdrPathObj*>(pMarkedObject);
+                    DBG_ASSERT(pPathObj, "issue #127440# SdrPathObj expected")
+                    if( pPathObj )
                     {
-                        USHORT nPntMax = rXPP[0].GetPointCount() - 1;
-                        Point aDiff = rXPP[0][nPntMax] - rXPP[0][0];
-                        long nSqDist = aDiff.X() * aDiff.X() + aDiff.Y() * aDiff.Y();
-                        nCloseDist *= nCloseDist;
+                        const XPolyPolygon& rXPP = pPathObj->GetPathPoly();
+                        if (rXPP.Count() == 1)
+                        {
+                            USHORT nPntMax = rXPP[0].GetPointCount() - 1;
+                            Point aDiff = rXPP[0][nPntMax] - rXPP[0][0];
+                            long nSqDist = aDiff.X() * aDiff.X() + aDiff.Y() * aDiff.Y();
+                            nCloseDist *= nCloseDist;
 
-                        if (nSqDist <= nCloseDist && !pPathObj->IsClosed())
-                            pPathObj->ToggleClosed(0);
+                            if (nSqDist <= nCloseDist && !pPathObj->IsClosed())
+                                pPathObj->ToggleClosed(0);
+                        }
                     }
                 }
             }
