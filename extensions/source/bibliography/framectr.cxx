@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:41:04 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,9 +169,10 @@ static DispatchInfo SupportedCommandsArray[] =
     { ".uno:Bib/InsertRecord"   ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/query"          ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/autoFilter"     ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/source"         ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/sdbsource"      ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/Mapping"        ,   frame::CommandGroup::DATA       , sal_True  },
     { 0                         ,   0                               , sal_False }
 };
 
@@ -831,6 +832,12 @@ void BibFrameController_Impl::addStatusListener(
         uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getDataSources();
         aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
     }
+    else if(aURL.Path == C2U("Bib/sdbsource") ||
+            aURL.Path == C2U("Bib/Mapping") ||
+            aURL.Path.equalsAscii("Bib/standardFilter"))
+    {
+        aEvent.IsEnabled  = sal_True;
+    }
     else if(aURL.Path == C2U("Bib/query"))
     {
         aEvent.IsEnabled  = sal_True;
@@ -893,6 +900,24 @@ void BibFrameController_Impl::addStatusListener(
             }
             uno::Reference< datatransfer::XTransferable > xContents = xClip->getContents(  );
         }
+    }
+    else if(aURL.Path == C2U("Bib/DeleteRecord"))
+    {
+        Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
+        Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
+        Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
+        sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue(C2U("IsNew")));
+        if(!bIsNew)
+        {
+            sal_uInt32 nCount = 0;
+            xSet->getPropertyValue(C2U("RowCount")) >>= nCount;
+            aEvent.IsEnabled  = nCount > 0;
+        }
+    }
+    else if (aURL.Path == C2U("Bib/InsertRecord"))
+    {
+        Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
+        aEvent.IsEnabled = canInsertRecords(xSet);
     }
     aListener->statusChanged( aEvent );
 }
