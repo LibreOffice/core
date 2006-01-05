@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:53:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #ifndef _SV_RC_H
 #include <tools/rc.h>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
+#endif
 
 // ------------
 // - BitmapEx -
@@ -104,8 +107,9 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     pResMgr->ReadLong();
 
     const String aFileName( pResMgr->ReadString() );
+    ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
-    if( !aImageTree->loadImage( aFileName, *this ) )
+    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this ) )
     {
 #ifdef DBG_UTIL
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
