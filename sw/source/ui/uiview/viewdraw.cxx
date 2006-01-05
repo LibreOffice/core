@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:32:16 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,35 +500,47 @@ void SwView::ExitDraw()
 {
     NoRotate();
 
-    if (pShell &&
-        // don't call LeaveSelFrmMode() etc. for the below,
-        // because objects may still be selected:
-        !pShell->ISA(SwDrawBaseShell) &&
-        !pShell->ISA(SwBezierShell) &&
-        !pShell->ISA(svx::ExtrusionBar) &&
-        !pShell->ISA(svx::FontworkBar))
+    if(pShell)
     {
-        SdrView *pSdrView = pWrtShell->GetDrawView();
-
-        if (pSdrView && pSdrView->IsGroupEntered())
+        //#126062 # the shell may be invalid at close/reload/SwitchToViewShell
+        SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
+        USHORT nIdx = 0;
+        SfxShell* pTest = 0;
+        do
         {
-            pSdrView->LeaveOneGroup();
-            pSdrView->UnmarkAll();
-            GetViewFrame()->GetBindings().Invalidate(SID_ENTER_GROUP);
+            pTest = pDispatch->GetShell(nIdx++);
         }
-
-        if (GetDrawFuncPtr())
+        while( pTest && pTest != this && pTest != pShell);
+        if(pTest == pShell &&
+            // don't call LeaveSelFrmMode() etc. for the below,
+            // because objects may still be selected:
+            !pShell->ISA(SwDrawBaseShell) &&
+            !pShell->ISA(SwBezierShell) &&
+            !pShell->ISA(svx::ExtrusionBar) &&
+            !pShell->ISA(svx::FontworkBar))
         {
-            if (pWrtShell->IsSelFrmMode())
-                pWrtShell->LeaveSelFrmMode();
-            GetDrawFuncPtr()->Deactivate();
+            SdrView *pSdrView = pWrtShell->GetDrawView();
 
-            SetDrawFuncPtr(NULL);
-            LeaveDrawCreate();
+            if (pSdrView && pSdrView->IsGroupEntered())
+            {
+                pSdrView->LeaveOneGroup();
+                pSdrView->UnmarkAll();
+                GetViewFrame()->GetBindings().Invalidate(SID_ENTER_GROUP);
+            }
 
-            GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+            if (GetDrawFuncPtr())
+            {
+                if (pWrtShell->IsSelFrmMode())
+                    pWrtShell->LeaveSelFrmMode();
+                GetDrawFuncPtr()->Deactivate();
+
+                SetDrawFuncPtr(NULL);
+                LeaveDrawCreate();
+
+                GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+            }
+            GetEditWin().SetPointer(Pointer(POINTER_TEXT));
         }
-        GetEditWin().SetPointer(Pointer(POINTER_TEXT));
     }
 }
 
