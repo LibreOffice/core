@@ -315,7 +315,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>dollar</CurrencyID>
+      <CurrencyID>USD</CurrencyID>
       <CurrencySymbol>$</CurrencySymbol>
       <BankSymbol>USD</BankSymbol>
       <CurrencyName>US Dollar</CurrencyName>
