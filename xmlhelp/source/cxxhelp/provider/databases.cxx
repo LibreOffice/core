@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:16:51 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
+#endif
 #include "inputstream.hxx"
 #include <algorithm>
 
@@ -77,7 +80,7 @@ using namespace com::sun::star::lang;
 
 Databases::Databases( sal_Bool showBasic,
                       const rtl::OUString& instPath,
-                      const rtl::OUString& imageZip,
+                      const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
                       const rtl::OUString& vendorName,
@@ -92,12 +95,9 @@ Databases::Databases( sal_Bool showBasic,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
-      m_aImagesZipFileURL(rtl::OUStringToOString(
-                              rtl::Uri::encode(
-                                  imageZip,
-                                  rtl_UriCharClassPchar,
-                                  rtl_UriEncodeIgnoreEscapes,
-                                  RTL_TEXTENCODING_UTF8 ),RTL_TEXTENCODING_UTF8)),
+      m_aImagesZipPaths( imagesZipPaths ),
+      m_aImagesZipFileURL(),
+      m_nSymbolsStyle( 0 ),
       newProdName(rtl::OUString::createFromAscii( "$[officename]" ) ),
       newProdVersion(rtl::OUString::createFromAscii( "$[officeversion]" ) ),
       prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
@@ -174,9 +174,66 @@ Databases::~Databases()
 
 }
 
+static bool impl_getZipFile(
+        Sequence< rtl::OUString > & rImagesZipPaths,
+        const rtl::OUString & rZipName,
+        rtl::OUString & rFileName )
+{
+    const rtl::OUString *pPathArray = rImagesZipPaths.getArray();
+    for ( int i = 0; i < rImagesZipPaths.getLength(); ++i )
+    {
+        rFileName = pPathArray[ i ];
+        if ( rFileName.getLength() )
+        {
+            if ( 1 + rFileName.lastIndexOf( '/' ) != rFileName.getLength() )
+            {
+                rFileName += rtl::OUString::createFromAscii( "/" );
+            }
+            rFileName += rZipName;
+
+            // test existence
+            osl::DirectoryItem aDirItem;
+            if ( osl::DirectoryItem::get( rFileName, aDirItem ) == osl::FileBase::E_None )
+                return true;
+        }
+    }
+    return false;
+}
 
 rtl::OString Databases::getImagesZipFileURL()
 {
+    sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
+    if ( !m_aImagesZipFileURL.getLength() || ( m_nSymbolsStyle != nSymbolsStyle ) )
+    {
+        m_nSymbolsStyle = nSymbolsStyle;
+
+        rtl::OUString aImageZip;
+        rtl::OUString aSymbolsStyleName = SvtMiscOptions().GetCurrentSymbolsStyleName();
+        bool bFound = false;
+
+        if ( aSymbolsStyleName.getLength() != 0 )
+        {
+            rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
+            aZipName += aSymbolsStyleName;
+            aZipName += rtl::OUString::createFromAscii( ".zip" );
+
+            bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+        }
+
+        if ( ! bFound )
+            bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+
+        if ( ! bFound )
+            aImageZip = rtl::OUString();
+
+        m_aImagesZipFileURL = rtl::OUStringToOString(
+                    rtl::Uri::encode(
+                        aImageZip,
+                        rtl_UriCharClassPchar,
+                        rtl_UriEncodeIgnoreEscapes,
+                        RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+    }
+
     return m_aImagesZipFileURL;
 }
 
