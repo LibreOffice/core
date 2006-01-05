@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:14:15 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1431,7 +1431,7 @@ void SvtTemplateWindow::InitToolBoxes()
 void SvtTemplateWindow::InitToolBoxImages()
 {
     SvtMiscOptions aMiscOpt;
-    BOOL bLarge = ( aMiscOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    BOOL bLarge = aMiscOpt.AreCurrentSymbolsLarge();
     sal_Bool bHiContrast = aFileViewTB.GetBackground().GetColor().IsDark();
 
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
