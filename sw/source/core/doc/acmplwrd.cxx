@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:44 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 14:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,6 +487,9 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         if(pCurrent->RemoveDocument(rDoc) && bDelete)
         {
             aWordLst.Remove( nPos - 1 );
+            USHORT nLRUPos = aLRULst.GetPos( (void*)pCurrent );
+            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" )
+            aLRULst.Remove( nLRUPos );
             delete pCurrent;
         }
     }
