@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:03:30 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 17:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,21 +1222,14 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 IMPL_LINK( GalleryBrowser2, MiscHdl, void*, p )
 {
     sal_uInt16      nIconResId, nListResId;
-    sal_Int16       eOptSymbolSet = maMiscOptions.GetSymbolSet();
     const sal_Bool  bHC = GALLERY_DLG_COLOR.IsDark();
-
-    if( SFX_SYMBOLS_AUTO == eOptSymbolSet )
-    {
-        eOptSymbolSet = ( Application::GetSettings().GetStyleSettings().GetToolbarIconSize() == STYLE_TOOLBAR_ICONSIZE_LARGE ) ?
-                        SFX_SYMBOLS_LARGE : SFX_SYMBOLS_SMALL;
-    }
 
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
     BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
     BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
 
-    if( SFX_SYMBOLS_SMALL != eOptSymbolSet )
+    if( maMiscOptions.AreCurrentSymbolsLarge() )
     {
         const Size aLargeSize( 24, 24);
 
