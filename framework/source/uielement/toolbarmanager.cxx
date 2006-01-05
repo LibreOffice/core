@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 17:18:44 $
+ *  last change: $Author: kz $ $Date: 2006-01-05 18:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_pToolBar( pToolBar ),
     m_bDisposed( sal_False ),
     m_bIsHiContrast( pToolBar->GetDisplayBackground().GetColor().IsDark() ),
-    m_bSmallSymbols( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL ),
+    m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_aResourceName( rResourceName ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -303,7 +303,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bImageOrientationRegistered( sal_False ),
     m_bImageMirrored( sal_False ),
     m_bCanBeCustomized( sal_True ),
-    m_lImageRotation( 0 )
+    m_lImageRotation( 0 ),
+    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     Window* pWindow = m_pToolBar;
     while ( pWindow && !pWindow->IsSystemWindow() )
@@ -401,10 +402,19 @@ void ToolBarManager::CheckAndUpdateImages()
         m_bIsHiContrast = sal_False;
     }
 
-    if ( m_bSmallSymbols != ( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL ))
+    SvtMiscOptions aMiscOptions;
+    bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
+    if ( m_bSmallSymbols != bCurrentSymbolsSmall )
     {
         bRefreshImages = sal_True;
-        m_bSmallSymbols = ( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL );
+        m_bSmallSymbols = bCurrentSymbolsSmall;
+    }
+
+    sal_Int16 nCurrentSymbolsStyle = aMiscOptions.GetCurrentSymbolsStyle();
+    if ( m_nSymbolsStyle != nCurrentSymbolsStyle )
+    {
+        bRefreshImages = sal_True;
+        m_nSymbolsStyle = nCurrentSymbolsStyle;
     }
 
     // Refresh images if requested
@@ -416,8 +426,7 @@ void ToolBarManager::RefreshImages()
 {
     ResetableGuard aGuard( m_aLock );
 
-    sal_Int16 nSymbolSet = GetCurrentSymbolSize();
-    sal_Bool  bBigImages( nSymbolSet == SFX_SYMBOLS_LARGE );
+    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         USHORT nId( m_pToolBar->GetItemId( nPos ) );
@@ -694,7 +703,7 @@ void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::Confi
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType;
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    ( GetCurrentSymbolSize() == SFX_SYMBOLS_LARGE ),
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
                                                     m_bIsHiContrast );
 
     if (( Event.aInfo >>= nImageType ) &&
@@ -744,7 +753,7 @@ void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::Config
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType;
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    ( GetCurrentSymbolSize() == SFX_SYMBOLS_LARGE ),
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
                                                     m_bIsHiContrast );
 
     if (( Event.aInfo >>= nImageType ) &&
@@ -797,7 +806,7 @@ void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::Confi
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType;
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    ( GetCurrentSymbolSize() == SFX_SYMBOLS_LARGE ),
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
                                                     m_bIsHiContrast );
 
     if (( Event.aInfo >>= nImageType ) &&
@@ -833,24 +842,6 @@ void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::Confi
             }
         }
     }
-}
-
-sal_Int16 ToolBarManager::GetCurrentSymbolSize()
-{
-    sal_Int16 eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
-
-    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
-    {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
-        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
-            eOptSymbolSet = SFX_SYMBOLS_LARGE;
-        else
-            eOptSymbolSet = SFX_SYMBOLS_SMALL;
-    }
-
-    return eOptSymbolSet;
 }
 
 void ToolBarManager::RemoveControllers()
@@ -1366,8 +1357,6 @@ void ToolBarManager::RequestImages()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::RequestImages" );
 
-    sal_Int16 nSymbolSet( ToolBarManager::GetCurrentSymbolSize() );
-
     // Request images from image manager
     Sequence< rtl::OUString > aCmdURLSeq( m_aCommandMap.size() );
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
@@ -1382,7 +1371,7 @@ void ToolBarManager::RequestImages()
     }
 
     m_bIsHiContrast = m_pToolBar->GetDisplayBackground().GetColor().IsDark();
-    sal_Int16 j = getImageTypeFromBools( ( nSymbolSet == SFX_SYMBOLS_LARGE ), m_bIsHiContrast );
+    sal_Int16 j = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
         aDocGraphicSeq = m_xDocImageManager->getImages( j, aCmdURLSeq );
