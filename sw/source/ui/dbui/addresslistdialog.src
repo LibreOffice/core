@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:53:32 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,11 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
     {
         Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
+    };
+    String ST_CONNECTING
+    {
+        Text [ de ] = "Mit Datenquelle verbinden...";
+        Text [ en-US ] = "Connecting to data source...";
     };
 };
 
