@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 16:11:57 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 12:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
     <prop oor:name="NeutralGreetingLines">
       <value xml:lang="en-US" oor:separator=";">To whom it may concern,;Dear Friends,;Dear Sir or Madam,;Hello,</value>
       <value xml:lang="de" oor:separator=";">Sehr geehrte Damen und Herren,;Liebe Freunde,;Liebe Vereinsmitglieder,;Hallo,</value>
+    </prop>
+    <prop oor:name="IsHideEmptyParagraphs" >
+     <value>true</value>
     </prop>
     <prop oor:name="EMailSupported" install:module="javamail">
      <value>true</value>
