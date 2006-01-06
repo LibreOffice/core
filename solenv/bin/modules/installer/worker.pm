@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:48:31 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:17:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1009,7 +1009,7 @@ sub create_inf_file
 
             my $templatefilename = $inffile->{'sourcepath'};
 
-            if ( ! -f $templatefilename ) { installer::exiter::exit_program("ERROR: Could not find file $templatefilename !", "create_inf_file");;  }
+            if ( ! -f $templatefilename ) { installer::exiter::exit_program("ERROR: Could not find file $templatefilename !", "create_inf_file");  }
 
             # iterating over all languages
 
@@ -1263,6 +1263,58 @@ sub prepare_linuxlinkfiles
 }
 
 ###########################################################
+# reorganizing the patchfile content,
+# sorting for directory to decrease the file size
+###########################################################
+
+sub reorg_patchfile
+{
+    my ($patchfiles, $patchfiledirectories) = @_;
+
+    my @patchfilesarray = ();
+    my $line = "";
+    my $directory = "";
+
+    # iterating over all directories, writing content into new patchfiles list
+
+    for ( my $i = 0; $i <= $#{$patchfiledirectories}; $i++ )
+    {
+        $directory = ${$patchfiledirectories}[$i];
+        $line = "[" . $directory . "]" . "\n";
+        push(@patchfilesarray, $line);
+
+        for ( my $j = 0; $j <= $#{$patchfiles}; $j++ )
+        {
+            # "\tXXXXX\t" . $olddestination . "\n";
+            if ( ${$patchfiles}[$j] =~ /^\s*(.*?)\s*\tXXXXX\t\Q$directory\E\s*$/ )
+            {
+                $line = $1 . "\n";
+                push(@patchfilesarray, $line);
+            }
+        }
+    }
+
+    return \@patchfilesarray;
+}
+
+###########################################################
+# Putting hash content into array and sorting it
+###########################################################
+
+sub sort_hash
+{
+    my ( $hashref ) =  @_;
+
+    my $item = "";
+    my @sortedarray = ();
+
+    foreach $item (keys %{$hashref}) { push(@sortedarray, $item); }
+    installer::sorter::sorting_array_of_strings(\@sortedarray);
+
+    return \@sortedarray;
+}
+
+###########################################################
 # Renaming Windows files in Patch and creating file
 # patchfiles.txt
 ###########################################################
@@ -1272,6 +1324,7 @@ sub prepare_windows_patchfiles
     my ( $filesref, $languagestringref, $allvariableshashref ) = @_;
 
     my @patchfiles = ();
+    my %patchfiledirectories = ();
     my $patchfilename = "patchlist.txt";
     my $patchfilename2 = "patchmsi.dll";
 
@@ -1282,18 +1335,8 @@ sub prepare_windows_patchfiles
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $windowspatchlevel = $ENV{'CWS_WORK_STAMP'} . $windowspatchlevel; }
 
-    my $counter = 1;
-    my $header = "";
-
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
-        if ( $i%50 == 0 )
-        {
-            $header = "\[SwapFiles$counter\]\n";
-            push(@patchfiles, $header);
-            $counter++;
-        }
-
         my $onefile = ${$filesref}[$i];
 
         my $filename = $onefile->{'Name'};
@@ -1305,16 +1348,25 @@ sub prepare_windows_patchfiles
 
         my $olddestination = $onefile->{'destination'};
         my $newdestination = $olddestination . "." . $windowspatchlevel;
-        my $line = "\"" . $olddestination . "\"" . "=" . "\"" . "\." . $windowspatchlevel . "\"" . "\n";
+        my $localfilename = $olddestination;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localfilename);  # file name part
+        my $line = "\"" . $localfilename . "\"" . "=" . "\"" . "\." . $windowspatchlevel . "\"";
         $onefile->{'destination'} = $newdestination;
 
         my $newfilename = $onefile->{'Name'} . "." . $windowspatchlevel;
         $onefile->{'Name'} = $newfilename;
 
+        # adding section information (section is the directory)
+        my $origolddestination = $olddestination;
+        installer::pathanalyzer::get_path_from_fullqualifiedname(\$olddestination); # directory part
+        if ( ! $olddestination ) { $olddestination = "_root";  }
+        if ( ! exists($patchfiledirectories{$olddestination}) ) { $patchfiledirectories{$olddestination} = 1; }
+        $line = $line . "\tXXXXX\t" . $olddestination . "\n";
+
         push(@patchfiles, $line);
 
         # also collecting all files from patch in @installer::globals::patchfilecollector
-        my $patchfileline = $olddestination . "\n";
+        my $patchfileline = $origolddestination . "\n";
         push(@installer::globals::patchfilecollector, $patchfileline);
     }
 
@@ -1323,12 +1375,32 @@ sub prepare_windows_patchfiles
 
     my $patchlistfile = installer::existence::get_specified_file_by_name($filesref, $patchfilename);
 
+    # reorganizing the patchfile content, sorting for directory to decrease the file size
+    my $sorteddirectorylist = sort_hash(\%patchfiledirectories);
+    my $patchfilelist = reorg_patchfile(\@patchfiles, $sorteddirectorylist);
+
     # saving the file
     $patchfilename = $winpatchdir . $installer::globals::separator . $patchfilename;
-    installer::files::save_file($patchfilename, \@patchfiles);
+    installer::files::save_file($patchfilename, $patchfilelist);
+
+    my $infoline = "\nCreated list of patch files: $patchfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     # and assigning the new source
     $patchlistfile->{'sourcepath'} = $patchfilename;
+
+    # and finally checking the file size
+    if ( -f $patchfilename )    # test of existence
+    {
+        my $filesize = (stat($patchfilename))[7];   # file size can be "0"
+        $infoline = "Size of patch file list: $filesize\n\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::logger::print_message( "... size of patch list file: $filesize Byte ... \n" );
+
+        # Win 98: Maximum size of ini file is 65 kB
+        if ( $filesize > 64000 ) { installer::exiter::exit_program("ERROR: Maximum size of patch file list is 65 kB (Win98), now reached: $filesize Byte !", "prepare_windows_patchfiles"); }
+    }
+
 }
 
 ###########################################################
