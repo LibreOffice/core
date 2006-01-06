@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:56:57 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,18 +79,34 @@ class SwMailMergeConfigItem;
 class SwMailMergeAddressBlockPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;
+    FixedInfo           m_aFirstFI;
     FixedInfo           m_aAddressListFI;
     PushButton          m_aAddressListPB;
     FixedInfo           m_aCurrentAddressFI;
 
+    FixedLine           m_aFirstFL;
+
+    FixedInfo           m_aSecondFI;
     FixedInfo           m_aSettingsFI;
     CheckBox            m_aAddressCB;
     SwAddressPreview    m_aSettingsWIN;
     PushButton          m_aSettingsPB;
 
-    FixedInfo           m_aPreviewFI;
-    SwAddressPreview    m_aPreviewWIN;
+    CheckBox            m_aHideEmptyParagraphsCB;
+
+    FixedLine           m_aSecondFL;
+
+    FixedInfo           m_aThirdFI;
+    FixedInfo           m_aMatchFieldsFI;
+
     PushButton          m_aAssignPB;
+
+    FixedLine           m_aThirdFL;
+
+    FixedInfo           m_aFourthFI;
+    FixedInfo           m_aPreviewFI;
+
+    SwAddressPreview    m_aPreviewWIN;
     FixedInfo           m_aDocumentIndexFI;
     ImageButton         m_aPrevSetIB;
     ImageButton         m_aNextSetIB;
@@ -107,6 +123,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     DECL_LINK(AddressBlockHdl_Impl, CheckBox*);
     DECL_LINK(InsertDataHdl_Impl, ImageButton*);
     DECL_LINK(AddressBlockSelectHdl_Impl, SwAddressPreview*);
+    DECL_LINK(HideParagraphsHdl_Impl, CheckBox*);
 
     void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
 
