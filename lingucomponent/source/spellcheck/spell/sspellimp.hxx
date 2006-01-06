@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sspellimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:31 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ class SpellChecker :
     >
 {
     Sequence< Locale >                 aSuppLocales;
-        MySpell **                         aDicts;
+        Hunspell **                         aDicts;
         rtl_TextEncoding *                 aDEncs;
         Locale *                           aDLocs;
         OUString *                         aDNames;
