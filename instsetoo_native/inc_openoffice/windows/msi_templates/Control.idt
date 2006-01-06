@@ -153,12 +153,13 @@ FileTypeDialog	BannerLine	Line	0	44	374	0	1
 FileTypeDialog	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
 FileTypeDialog	Branding2	Text	3	228	88	13	65537		[ProductName]		
 FileTypeDialog	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_138	CheckBox1	
-FileTypeDialog	CheckBox1	CheckBox	41	86	200	10	3	SELECT_WORD	 OOO_CONTROL_270	CheckBox2	
-FileTypeDialog	CheckBox2	CheckBox	41	111	200	10	3	SELECT_EXCEL	 OOO_CONTROL_271	CheckBox3	
-FileTypeDialog	CheckBox3	CheckBox	41	136	200	10	3	SELECT_POWERPOINT	 OOO_CONTROL_272	Back	
-FileTypeDialog	DlgDesc	Text	21	23	292	25	65539		OOO_CONTROL_274		
+FileTypeDialog	CheckBox1	CheckBox	41	106	200	10	3	SELECT_WORD	 OOO_CONTROL_270	CheckBox2	
+FileTypeDialog	CheckBox2	CheckBox	41	131	200	10	3	SELECT_EXCEL	 OOO_CONTROL_271	CheckBox3	
+FileTypeDialog	CheckBox3	CheckBox	41	156	200	10	3	SELECT_POWERPOINT	 OOO_CONTROL_272	Back	
+FileTypeDialog	DlgDesc	Text	21	20	292	25	65539		OOO_CONTROL_274		
 FileTypeDialog	DlgLine	Line	90	234	284	0	1				
-FileTypeDialog	DlgText	Text	21	56	326	10	3		 OOO_CONTROL_275		
+FileTypeDialog	DlgText	Text	21	56	326	40	3		OOO_CONTROL_275		
+FileTypeDialog	DlgText2	Text	21	190	326	30	3		OOO_CONTROL_309		
 FileTypeDialog	DlgTitle	Text	13	6	292	25	65539		OOO_CONTROL_278		
 FileTypeDialog	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 InstallChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
