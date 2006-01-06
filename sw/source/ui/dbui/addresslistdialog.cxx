@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:30:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 12:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 #pragma warning (default : 4355)
     m_sName(        ResId( ST_NAME )),
     m_sTable(       ResId( ST_TABLE )),
+    m_sConnecting(  ResId( ST_CONNECTING )),
     m_pCreatedDataSource(0),
     m_pAddressPage(pParent),
     m_bInSelectHdl(false)
@@ -307,6 +308,8 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!")
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
+    m_aListLB.SelectAll( FALSE );
+
     if(m_xDBContext.is())
     {
         SwDBConfig aDb;
@@ -592,10 +595,20 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
     AddressUserData_Impl* pUserData = 0;
     if(pSelect)
     {
+        String sTable = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        if(!sTable.Len())
+        {
+            pThis->m_aListLB.SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
+            // allow painting of the new entry
+            pThis->m_aListLB.Window::Invalidate(INVALIDATE_UPDATE);
+            for (USHORT i = 0; i < 10; i++)
+                Application::Reschedule();
+        }
+
         pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         if(pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
-            pThis->DetectTablesAndQueries(pSelect, false);
+            pThis->DetectTablesAndQueries(pSelect, !sTable.Len());
         }
         else
         {
@@ -604,6 +617,9 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
             pThis->m_aDBData.sCommand = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
         }
+        sTable = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        if(sTable == pThis->m_sConnecting)
+           pThis->m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
     }
     pThis->m_aEditPB.Enable(pUserData && pUserData->sURL.getLength() &&
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
@@ -725,7 +741,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
         String sTable = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
-            DetectTablesAndQueries(pSelect, true);
+            DetectTablesAndQueries(pSelect, (pButton != 0) || (!sTable.Len()));
         }
     }
 
