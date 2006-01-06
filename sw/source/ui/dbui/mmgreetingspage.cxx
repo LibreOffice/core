@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:59:55 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,8 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
         ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB : m_pFemaleLB;
         pToInsert->SelectEntryPos(pToInsert->InsertEntry(pDlg->GetAddress()));
         UpdatePreview();
+        if(m_bIsTabPage)
+            m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
     delete pDlg;
     return 0;
@@ -171,6 +173,8 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
     if(RET_OK == pDlg->Execute())
     {
         UpdatePreview();
+        m_pWizard->UpdateRoadmap();
+        m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
     delete pDlg;
     return 0;
@@ -192,8 +196,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     sPreview += '\n';
     sPreview += m_aMaleLB.GetSelectEntry();
 
-        sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
-        m_aPreviewWIN.SetAddress(sPreview);
+    sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
+    m_aPreviewWIN.SetAddress(sPreview);
 }
 /*-- 17.05.2004 15:44:53---------------------------------------------------
 
@@ -264,6 +268,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_pFemaleFieldCB = & m_aFemaleFieldCB;
     m_pNeutralFT = &     m_aNeutralFT;
     m_pNeutralCB    = &m_aNeutralCB;
+    m_bIsTabPage = true;
 
     m_pPersonalizedCB->SetHelpId(   HID_MM_GREETINGS_CB_PERSONALIZED);
     m_pFemaleLB->SetHelpId(         HID_MM_GREETINGS_LB_FEMALE      );
@@ -336,6 +341,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     m_aFemaleFieldCB.SaveValue();
 
     UpdatePreview();
+    m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
 }
 /*-- 11.05.2004 14:47:10---------------------------------------------------
 
@@ -464,6 +470,7 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_pFemaleFieldCB = & m_aFemaleFieldCB;
     m_pNeutralFT = &     m_aNeutralFT;
     m_pNeutralCB    = &m_aNeutralCB;
+    m_bIsTabPage = false;
 
     m_pPersonalizedCB->SetHelpId(   HID_MM_BODY_CB_PERSONALIZED     );
     m_pFemaleLB->SetHelpId(         HID_MM_BODY_LB_FEMALE           );
