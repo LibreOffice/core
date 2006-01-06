@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:32:01 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 TabPage DLG_MM_PREPAREMERGE_PAGE
 {
     HelpID = HID_MM_PREPAREMERGEPAGE ;
-    Size = MAP_APPFONT ( 260 , 230 ) ;
+    Size = MAP_APPFONT ( 260 , 250 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
