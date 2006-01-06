@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:49:08 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:15:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2018,19 +2018,19 @@ SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Ucptdoc1, ucptdoc1.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
-#ifndef SYSTEM_MYSPELL
+#ifndef SYSTEM_HUNSPELL
 
-File gid_File_Lib_Myspell
+File gid_File_Lib_Hunspell
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = "libmyspell.dylib";
+       Name = "libhunspell.dylib";
     #else
-       Name = "libmyspell.so";
+       Name = "libhunspell.so";
     #endif
   #else
-    Name = "myspell.dll";
+    Name = "hunspell.dll";
   #endif
     Styles = (PACKED);
 End
