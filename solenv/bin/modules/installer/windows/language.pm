@@ -4,9 +4,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:18:01 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:31:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ sub get_windows_encoding
     if ( $windowsencoding eq "0" ) { $windowsencoding = "65001"; }  # languages with "0" have to be available in UTF-8 (65001)
 
     # Asian multilingual installation sets need a code neutral Windows Installer database -> $windowsencoding = 0
-    if (( $language eq "en-US" ) && (( $installer::globals::product =~ /suitemulti/i ) || ( $installer::globals::product =~ /officemulti/i ) || ( $installer::globals::product =~ /c05office/i ))) { $windowsencoding = "0"; }
+    if (( $language eq "en-US" ) && (( $installer::globals::product =~ /suitemulti/i ) || ( $installer::globals::product =~ /officemulti/i ) || ( $installer::globals::product =~ /c05office/i ) || ( $installer::globals::added_english ))) { $windowsencoding = "0"; }
 
     return $windowsencoding;
 }
