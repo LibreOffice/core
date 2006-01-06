@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:31:07 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     ::std::vector<DBAddressDataAssignment>  aAddressDataAssignments;
     ::std::vector< ::rtl::OUString>         aAddressBlocks;
     sal_Bool                                bIsAddressBlock;
+    sal_Bool                                bIsHideEmptyParagraphs;
 
     sal_Bool                                bIsOutputToLetter;
     sal_Bool                                bIncludeCountry;
@@ -260,6 +261,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
           m_AddressHeaderSA( SW_RES( SA_ADDRESS_HEADER )),
         bIsOutputToLetter(sal_True),
         bIsAddressBlock(sal_True),
+        bIsHideEmptyParagraphs(sal_False),
         bIsGreetingLine(sal_True),
         bIncludeCountry(sal_False),
         nResultSetCursorPos(-1),
@@ -354,6 +356,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 35: pValues[nProp] >>= bInServerPOP; break;
                 case 36: pValues[nProp] >>= sInServerUserName; break;
                 case 37: pValues[nProp] >>= sInServerPassword; break;
+                case 38: pValues[nProp] >>= bIsHideEmptyParagraphs; break;
             }
         }
     }
@@ -552,7 +555,8 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
             "InServerPort",                      //34
             "InServerIsPOP",                     //35
             "InServerUserName",                  //36
-            "InServerPassword"                   //37
+            "InServerPassword",                   //37
+            "IsHideEmptyParagraphs"             //38
 
         };
         const int nCount = sizeof(aPropNames)/sizeof(const char*);
@@ -641,6 +645,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 35: pValues[nProp] <<= bInServerPOP; break;
             case 36: pValues[nProp] <<= sInServerUserName; break;
             case 37: pValues[nProp] <<= sInServerPassword; break;
+            case 38: pValues[nProp] <<= bIsHideEmptyParagraphs; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -887,6 +892,25 @@ void     SwMailMergeConfigItem::SetAddressBlock(sal_Bool bSet)
         m_pImpl->SetModified();
     }
 }
+
+/*-- 30.08.2005 15:09:46---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwMailMergeConfigItem::IsHideEmptyParagraphs() const
+{
+    return m_pImpl->bIsHideEmptyParagraphs;
+}
+/*-- 30.08.2005 15:09:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMergeConfigItem::SetHideEmptyParagraphs(sal_Bool bSet)
+{
+    if(m_pImpl->bIsHideEmptyParagraphs != bSet)
+    {
+        m_pImpl->bIsHideEmptyParagraphs = bSet;
+        m_pImpl->SetModified();
+    }
+}
 /*-- 28.04.2004 13:00:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -985,7 +1009,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
 /*-- 29.04.2004 11:34:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet()
+Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
 {
     if(!m_pImpl->xConnection.is() && m_pImpl->aDBData.sDataSource.getLength())
     {
@@ -1441,6 +1465,114 @@ void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
         m_pImpl->aAddressDataAssignments.push_back(aAssignment);
     }
     m_pImpl->SetModified();
+}
+
+/*-- 07.09.2005 11:50:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
+{
+    bool bResult = true;
+    Reference< XResultSet> xResultSet = GetResultSet();
+    uno::Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
+    if(!xColsSupp.is())
+        return false;
+    uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
+
+    const ResStringArray& rHeaders = GetDefaultAddressHeaders();
+    Sequence< ::rtl::OUString> aAssignment =
+                        GetColumnAssignment( GetCurrentDBData() );
+    const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+    const Sequence< ::rtl::OUString> aBlocks = GetAddressBlocks();
+
+    SwAddressIterator aIter(aBlocks[0]);
+    while(aIter.HasMore())
+    {
+        SwMergeAddressItem aItem = aIter.Next();
+        if(aItem.bIsColumn)
+        {
+            String sConvertedColumn = aItem.sText;
+            for(USHORT nColumn = 0;
+                    nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+                                                                                ++nColumn)
+            {
+                if(rHeaders.GetString(nColumn) == aItem.sText &&
+                    pAssignment[nColumn].getLength())
+                {
+                    sConvertedColumn = pAssignment[nColumn];
+                    break;
+                }
+            }
+            //find out if the column exists in the data base
+            if(!xCols->hasByName(sConvertedColumn))
+            {
+                bResult = false;
+                break;
+            }
+        }
+    }
+    return bResult;
+}
+/*-- 07.09.2005 11:50:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
+{
+    bool bResult = true;
+
+    if(!IsIndividualGreeting(sal_False))
+        return true;
+
+    Reference< XResultSet> xResultSet = GetResultSet();
+    uno::Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
+    if(!xColsSupp.is())
+        return false;
+    const ResStringArray& rHeaders = GetDefaultAddressHeaders();
+    uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
+
+    Sequence< ::rtl::OUString> aAssignment =
+                        GetColumnAssignment( GetCurrentDBData() );
+    const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+
+    const Sequence< ::rtl::OUString> rFemaleEntries = GetGreetings(SwMailMergeConfigItem::FEMALE);
+    sal_Int32 nCurrentFemale = GetCurrentGreeting(SwMailMergeConfigItem::FEMALE);
+    const Sequence< ::rtl::OUString> rMaleEntries = GetGreetings(SwMailMergeConfigItem::MALE);
+    sal_Int32 nCurrentMale = GetCurrentGreeting(SwMailMergeConfigItem::MALE);
+    ::rtl::OUString sMale, sFemale;
+    if(rFemaleEntries.getLength() > nCurrentFemale)
+        sFemale = rFemaleEntries[nCurrentFemale];
+    if(rMaleEntries.getLength() > nCurrentMale)
+        sMale = rMaleEntries[nCurrentMale];
+
+    ::rtl::OUString sAddress( sFemale );
+    sAddress += sMale;
+    SwAddressIterator aIter(sAddress);
+    while(aIter.HasMore())
+    {
+        SwMergeAddressItem aItem = aIter.Next();
+        if(aItem.bIsColumn)
+        {
+            String sConvertedColumn = aItem.sText;
+            for(USHORT nColumn = 0;
+                    nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+                                                                                ++nColumn)
+            {
+                if(rHeaders.GetString(nColumn) == aItem.sText &&
+                    pAssignment[nColumn].getLength())
+                {
+                    sConvertedColumn = pAssignment[nColumn];
+                    break;
+                }
+            }
+            //find out if the column exists in the data base
+            if(!xCols->hasByName(sConvertedColumn))
+            {
+                bResult = false;
+                break;
+            }
+        }
+    }
+    return bResult;
 }
 /*-- 05.05.2004 16:10:07---------------------------------------------------
 
