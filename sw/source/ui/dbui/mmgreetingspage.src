@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:49:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@
 TabPage DLG_MM_GREETINGS_PAGE
 {
     HelpID = HID_MM_GREETINGSPAGE ;
-    Size = MAP_APPFONT ( 260 , 230 ) ;
+    Size = MAP_APPFONT ( 260 , 250 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
