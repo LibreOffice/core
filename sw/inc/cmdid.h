@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:28:25 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 12:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UPDATE_CHARTS             (FN_EDIT2 + 34) /* update all charts */
 
 #define FN_EDIT_HYPERLINK            (FN_EDIT2 + 35)    /* edit hyperlink */
-
+#define FN_NUM_CONTINUE              (FN_EDIT2 + 36)    /* continue previous numbering */
 /*--------------------------------------------------------------------
     Bereich: Bearbeiten
  --------------------------------------------------------------------*/
