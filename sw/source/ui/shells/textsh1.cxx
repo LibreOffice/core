@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:53:03 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,6 +1019,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
             delete pDlg;
         }
         break;
+        case FN_NUM_CONTINUE:
+        {
+            const SwNumRule* pRule = rWrtSh.SearchNumRule(FALSE, TRUE, FALSE, -1);
+            if(pRule)
+            {
+                rWrtSh.SetCurNumRule( *pRule );
+            }
+        }
+        break;
         case FN_SELECT_PARA:
         {
             if(!rWrtSh.IsSttOfPara())
@@ -1282,8 +1291,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         switch ( nWhich )
         {
         case FN_NUMBER_NEWSTART :
-            rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
-                rSh.IsNumRuleStart()));
+            if(!rSh.GetCurNumRule())
+                    rSet.DisableItem(nWhich);
+            else
+                rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
+                    rSh.IsNumRuleStart()));
         break;
         case FN_EDIT_FORMULA:
         case FN_INSERT_SYMBOL:
@@ -1482,6 +1494,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, FALSE ))
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case FN_NUM_CONTINUE:
+            {
+                if(rSh.GetCurNumRule())
+                    rSet.DisableItem(nWhich);
+                else
+                {
+                    const SwNumRule* pRule = rSh.SearchNumRule(FALSE, TRUE, FALSE, -1);
+                    if(!pRule)
+                        rSet.DisableItem(nWhich);
+                }
             }
             break;
             case SID_INSERT_RLM :
