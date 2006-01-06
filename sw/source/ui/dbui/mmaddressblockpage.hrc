@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:56:42 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #define FI_HEADER               14
 #define FI_CURRENTADDRESS       15
 #define STR_CHANGEADDRESS       16
+#define FI_SECOND               17
+#define FI_THIRD                18
+#define FI_MATCH_FIELDS         19
 
 #define FT_SELECT               20
 #define PB_NEW                  21
@@ -98,6 +101,12 @@
 #define ST_SALUTATIONPREVIEW    72
 #define ST_SALUTATIONMATCHING   73
 #define ST_SALUTATIONELEMENT   74
+#define CB_HIDE_EMPTY_PARA     75
+#define FI_FIRST                76
+#define FL_FIRST                77
+#define FL_SECOND               78
+#define FL_THIRD                79
+#define FI_FOURTH               80
 
 #define SCR_1                   1
 #define ST_ADDRESSELEMENT       2
