@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:35:05 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:20:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ SHL1STDLIBS=	kernel32.lib\
                 advapi32.lib\
                 shell32.lib\
                 msi.lib\
+                shlwapi.lib\
                 $(LIBSTLPORTST)								
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
