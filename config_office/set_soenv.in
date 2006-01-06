@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.82 $
-# Date:        $Date: 2006-01-05 18:17:04 $
+# Version:     $Revision: 1.83 $
+# Date:        $Date: 2006-01-06 11:17:44 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1415,9 +1415,7 @@ if(defined($outfile_bat))
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" ) if defined($outfile_sh);
 CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
-#
-# Writing the platform independent constant values to file.
-# (c = comment, e = environment variable, a = alias )
+
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
@@ -1439,6 +1437,10 @@ ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "LOCAL_SOLENV",      $LOCAL_SOLENV,      "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
+
+#
+# Writing the platform independent constant values to file.
+# (c = comment, e = environment variable, a = alias )
 ToFile( "Platform independent constant values.", $empty, "c" );
 # dictionaries
 if ('@WITH_DICT@' =~ m/ALL,/s)
@@ -1859,10 +1861,27 @@ if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
   ToFile( "build the dmake executable.", $empty, "c");
   ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include;\%PSDK_HOME\\include \^ set LIB=\%COMPATH\\lib;\%PSDK_HOME\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
   ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe ( mkdir /S \%SOLARENV\\\%OUTPATH\\bin \^ copy dmake\\dmake.exe \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe )", $empty, "x");
-  ToFile( "echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
-  ToFile( "unset INCLUDE LIB", $empty, "x");
+  ToFile( "\@echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
+  ToFile( "\@unset INCLUDE LIB", $empty, "x");
+  ToFile( "check for correct dmake.", $empty, "c");
+  ToFile( '@if "%@SEARCH[dmake]" == "" ( @echo dmake not build or missing! Invalid build environment! ^ unset SOLARENV ^ cancel )', $empty, "x");
+ToFile( '@dmake -V > dmakecheck.out', $empty, "x");
+ToFile( '@ffind /Tcygwin /C /B dmakecheck.out && ( @echo Found cygwin build dmake! Invalid! ^ unset SOLARENV ^ cancel )', $empty, "x");
   ToFile( "  ", $empty, "x");
 }
+
+# Check if the right dmake version is used. (W32-tcsh only)
+if ( $platform =~ m/cygwin/ and '@USE_SHELL@' ne "4nt" ) {
+    ToFile( "Check if the right dmake version is used.", $empty, "c" );
+    # Invalidate build environment.
+    ToFile( "WORK_STAMP", "_invalid_", "e" );
+    # Don't test the dmake version if this file is sourced by bootstrap
+    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "x");
+    # Restore valid environment if test was successful.
+    ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
+    ToFile( "", $empty, "n");
+}
+
 # on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
 if ($platform =~ m/solaris|darwin|freebsd/)
 {
@@ -1969,7 +1988,7 @@ print OUT "#!$SHELL -f\n";
 close( OUT ) || print "Can't close $bootfile: $!";
 open( OUT, ">>$bootfile" ) ||
    die "Cannot open $bootfile: $!\n";
-print OUT "source $SRC_ROOT/$outfile\n"; 
+print OUT "setenv _ISBOOTSTRAP_ TRUE ; source $SRC_ROOT/$outfile\n"; 
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
 system(`cat bootstrap.2 >> bootstrap`);
@@ -2145,7 +2164,8 @@ sub ToFile
    elsif ( $_[ 2 ] eq "x" )
    {
       #Write first argument as is, and nothing else
-      #Only useful for 4nt
+      print OUT "$_[ 0 ] $newline";
+      print OUT_SH "$_[ 0 ] $newline" if defined($outfile_sh);
       print OUT_BAT "$_[ 0 ] $newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "j" )
