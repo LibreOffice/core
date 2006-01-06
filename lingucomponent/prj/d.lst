@@ -16,11 +16,11 @@
 ..\%__SRC%\lib\libspell*.dylib %_DEST%\lib%_EXT%\libspell*.dylib
 ..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
 
-..\%__SRC%\bin\myspell* %_DEST%\bin%_EXT%\myspell*
-..\%__SRC%\lib\ilmyspell* %_DEST%\lib%_EXT%\ilmyspell*
-..\%__SRC%\lib\libmyspell.a %_DEST%\lib%_EXT%\libmyspell.a
-..\%__SRC%\lib\libmyspell*.dylib %_DEST%\lib%_EXT%\libmyspell*.dylib
-..\%__SRC%\lib\libmyspell*.so %_DEST%\lib%_EXT%\libmyspell*.so
+..\%__SRC%\bin\hunspell* %_DEST%\bin%_EXT%\hunspell*
+..\%__SRC%\lib\ilhunspell* %_DEST%\lib%_EXT%\ilhunspell*
+..\%__SRC%\lib\libhunspell.a %_DEST%\lib%_EXT%\libhunspell.a
+..\%__SRC%\lib\libhunspell*.dylib %_DEST%\lib%_EXT%\libhunspell*.dylib
+..\%__SRC%\lib\libhunspell*.so %_DEST%\lib%_EXT%\libhunspell*.so
 
 ..\%__SRC%\bin\hyph* %_DEST%\bin%_EXT%\hyph*
 ..\%__SRC%\lib\ihyph* %_DEST%\lib%_EXT%\ihyph*
