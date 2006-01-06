@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-23 16:22:00 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 11:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,7 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
         while ( *pSectionName )
         {
             std::_tstring   sSectionName = pSectionName;
+            if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
             // mystr = "Section: " + sSectionName;
             // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
@@ -269,7 +270,7 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
                         sFileName1 = strip( sFileName1, '\"' );
                         sExtension = strip( sExtension, '\"' );
 
-                        sFileName1 = sInstDir + sFileName1;
+                        sFileName1 = sInstDir + sSectionName + sFileName1;
                         sFileName2 = sFileName1 + sExtension;
 
                         // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
@@ -335,6 +336,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
         while ( *pSectionName )
         {
             std::_tstring   sSectionName = pSectionName;
+            if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
             // mystr = "Section: " + sSectionName;
             // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
@@ -355,7 +357,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
                         sFileName1 = strip( sFileName1, '\"' );
                         sExtension = strip( sExtension, '\"' );
 
-                        sFileName1 = sInstDir + sFileName1;
+                        sFileName1 = sInstDir + sSectionName + sFileName1;
                         sFileName2 = sFileName1 + sExtension;
 
                         // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
