@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:36:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 11:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "registry.hxx"
 #endif
 
+#include <Shlwapi.h>
 #include <assert.h>
 #include <algorithm>
 
@@ -153,6 +154,20 @@ bool RegistryKeyImpl::HasValue(const std::wstring& Name) const
     return (iter != iter_end);
 }
 
+struct CompareNamesCaseInsensitive
+{
+    CompareNamesCaseInsensitive(const std::wstring& Name) :
+        name_(Name)
+    {}
+
+    bool operator() (const std::wstring& value)
+    {
+        return (0 == StrCmpI(value.c_str(), name_.c_str()));
+    }
+
+    std::wstring name_;
+};
+
 //-----------------------------------------------------
 /** Convenience function to determine if the
     Registry key at hand has the specified
@@ -167,7 +182,7 @@ bool RegistryKeyImpl::HasSubKey(const std::wstring& Name) const
     StringListPtr names = GetSubKeyNames();
 
     StringList::iterator iter_end = names->end();
-    StringList::iterator iter = std::find(names->begin(), iter_end, Name);
+    StringList::iterator iter = std::find_if(names->begin(), iter_end, CompareNamesCaseInsensitive(Name));
 
     return (iter != iter_end);
 }
