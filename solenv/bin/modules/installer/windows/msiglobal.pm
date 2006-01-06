@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:49:12 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:31:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -683,6 +683,8 @@ sub create_transforms
     my $basedbname = get_msidatabasename($allvariableshashref, $defaultlanguage);
     $basedbname = $installdir . $installer::globals::separator . $basedbname;
 
+    my $errorhandling = "f";    # Suppress "change codepage" error
+
     # Iterating over all files
 
     for ( my $i = 0; $i <= $#{$languagesarray}; $i++ )
@@ -696,7 +698,7 @@ sub create_transforms
 
         my $transformfile = $installdir . $installer::globals::separator . "trans_" . $onelanguage . ".mst";
 
-        my $systemcall = $msitran . " " . " -g " . $basedbname . " " . $referencedbname . " " . $transformfile;
+        my $systemcall = $msitran . " " . " -g " . $basedbname . " " . $referencedbname . " " . $transformfile . " " . $errorhandling;
 
         my $returnvalue = system($systemcall);
 
