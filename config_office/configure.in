@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-06 11:17:18 $
+dnl * Date: $Date: 2006-01-06 13:13:53 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.145 $ )
+AC_REVISION( $Revision: 1.146 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -271,6 +271,9 @@ AC_ARG_WITH(system-agg,
 ],,)
 AC_ARG_WITH(system-myspell,
 [  --with-system-myspell   Use myspell already on system
+],,)
+AC_ARG_WITH(system-hunspell,
+[  --with-system-hunspell   Use libhunspell already on system
 ],,)
 AC_ARG_WITH(system-mythes,
 [  --with-system-mythes    Use mythes already on system
@@ -3255,6 +3258,24 @@ fi
 AC_SUBST(SYSTEM_MYSPELL)
 AC_SUBST(MYSPELL_CFLAGS)
 AC_SUBST(MYSPELL_LIBS)
+
+dnl ===================================================================
+dnl Check for system hunspell
+dnl ===================================================================
+AC_MSG_CHECKING([which libhunspell to use])
+if test -n "$with_system_hunspell" && test "$with_system_hunspell" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_HUNSPELL=YES
+    AC_LANG(C++)
+    AC_CHECK_HEADER(hunspell.hxx, [],
+        [AC_MSG_ERROR(hunspell headers not found.)], [])
+    AC_CHECK_LIB(hunspell, main, [],
+           [ AC_MSG_ERROR(hunspell library not found.) ], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_HUNSPELL=NO
+fi
+AC_SUBST(SYSTEM_HUNSPELL)
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
