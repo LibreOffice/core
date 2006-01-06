@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_python.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:40:33 $
+ *  last change: $Author: vg $ $Date: 2006-01-06 13:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,5 +42,9 @@ en-US = "Adds the ability to automate %PRODUCTNAME with the python scripting lan
 de = "ErmÃ¶glicht es, %PRODUCTNAME mit der Skriptsprache Python zu automatisieren. Die komplette Dokumentation finden Sie auf http://udk.openoffice.org/python/python-bridge.html."
 
 [STR_NAME_MODULE_OPTIONAL_PYTHON_MAILMERGE]
-en-US = "Python Email Mailmerge"
-de = "Python Email Mailmerge"
+en-US = E-mail Mailmerge"
+de = "E-Mail-Serienbrief"
+
+[STR_DESC_MODULE_OPTIONAL_PYTHON_MAILMERGE]
+en-US = "Module for %PRODUCTNAME E-mail Mailmerge feature"
+DE = "Modul für %PRODUCTNAME E-Mail-Serienbrief"
