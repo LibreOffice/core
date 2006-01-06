@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-05 18:16:50 $
+dnl * Date: $Date: 2006-01-06 11:17:18 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.144 $ )
+AC_REVISION( $Revision: 1.145 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3327,12 +3327,12 @@ if test \( "$_os" = "WINNT" \) ; then
         if test -n "$PSDK_HOME"; then
           PSDK_HOME=`cygpath -d "$PSDK_HOME"`
           PSDK_HOME=`cygpath -u "$PSDK_HOME"`
-          # The 2005 PSDK has a trailing backslash
-          PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
         fi
 	else
 		PSDK_HOME="$with_psdk_home"
 	fi
+        # Remove a possible trailing backslash
+        PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
     # Problem with current PSDK (iz 49865)
     if test -f "$PSDK_HOME/Lib/libcp.lib"; then
         AC_MSG_ERROR([
@@ -3374,15 +3374,20 @@ dnl =========================================
 if test \( "$_os" = "WINNT" \) ; then
     AC_MSG_CHECKING([for DirectX SDK files])
     if test -z "$with_directx_home"; then
-        dnl Lets hope MS keeps the habit of supplying this key even when doc is not installed
-        DIRECTXSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/DirectX\ SDK/*\ Doc\ Path`
-        DIRECTXSDK_HOME=`echo "$DIRECTXSDK_HOME" | sed "s@\\\\\\\\[[^\\]]*\\\\\\\\[[^\\]]*\\\$@@"`
-        DIRECTXSDK_HOME=`cygpath -d "$DIRECTXSDK_HOME"`
-		DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
+        dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
+        if test -n "$DXSDK_DIR"; then
+            DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
+            DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
+        fi
+        # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
+        # the "DirectX SDK files not found" error later
 	else
 		DIRECTXSDK_HOME="$with_directx_home"
 	fi
-    if test -f "$DIRECTXSDK_HOME/Include/strmif.h" ; then
+    # Remove a possible trailing backslash
+    DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
+
+    if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" ; then
         HAVE_DIRECTXSDK_H="yes"
     else
         HAVE_DIRECTXSDK_H="no"
@@ -3393,7 +3398,7 @@ if test \( "$_os" = "WINNT" \) ; then
     else
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
     fi
-    if test -f "$DIRECTXSDK_LIB/strmiids.lib" ; then
+    if test -f "$DIRECTXSDK_LIB/ddraw.lib" ; then
         HAVE_DIRECTXSDK_LIB="yes"
     else
         HAVE_DIRECTXSDK_LIB="no"
