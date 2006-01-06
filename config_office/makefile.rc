@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: kz $ $Date: 2005-09-16 15:20:13 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:17:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,202 +37,20 @@ TARGET=OpenOffice.org
 MAKEFILERC=true
 
 # 
-# implementation of cvs checkout
+# build targets
 # 
 
-.IF "$(checkout)"==""
-all_target:  build_all ALLTAR
-.ELSE	# "$(checkout)"==""
-.IF "$(checkout)"=="true"
-% : $(NULL)
-	_cvs co $@
-.ELSE	# "$(checkout)"=="true"
-% : $(NULL)
-	_cvs co -r$(checkout) $@
-.ENDIF	# "$(checkout)"=="true"
-all_subdirs : $(BUILD_SUBDIRS)
-.ENDIF	# "$(checkout)"==""
+build_all : build_instsetoo_native
 
-# 
-# macro BUILD_SUBDIRS handles iteration over
-# all mandatory sub directories
-# 
-
-BUILD_SUBDIRS =  \
-	MathMLDTD \
-	UnoControls \
-	XmlSearch \
-	accessibility \
-	animations \
-	autodoc \
-	automation \
-	avmedia \
-	basctl \
-	basegfx \
-	basic \
-	bean \
-	beanshell \
-	berkeleydb \
-	binfilter \
-	bitstream_vera_fonts \
-	boost \
-	bridges \
-	canvas \
-	chart2 \
-	cli_ure \
-	codemaker \
-	comphelper \
-	config_office \
-	configmgr \
-	connectivity \
-	cosv \
-	cppcanvas \
-	cppu \
-	cppuhelper \
-	cpputools \
-	crashrep \
-	curl \
-	dbaccess \
-	default_images \
-	desktop \
-	dictionaries \
-	dmake \
-	dtrans \
-	embeddedobj \
-	embedserv \
-	epm \
-	eventattacher \
-	expat \
-	extensions \
-	external \
-	extras \
-	fileaccess \
-	filter \
-	forms \
-	fpicker \
-	framework \
-	freetype \
-	goodies \
-	helpcontent2 \
-	hsqldb \
-	hwpfilter \
-	i18npool \
-	i18nutil \
-	icu \
-	idl \
-	idlc \
-	instsetoo_native \
-	io \
-	javaunohelper \
-	jpeg \
-	jurt \
-	jut \
-	jvmaccess \
-	jvmfwk \
-	libwpd \
-	libxml2 \
-	libxmlsec \
-	lingucomponent \
-	linguistic \
-	moz \
-	msfontextract \
-	nas \
-	neon \
-	netbeans_integration \
-	np_sdk \
-	odk \
-	offapi \
-	officecfg \
-	offuh \
-	ooo_custom_images \
-	package \
-	padmin \
-	portaudio \
-	postprocess \
-	psprint \
-	psprint_config \
-	python \
-	pyuno \
-	qadevOOo \
-	rdbmaker \
-	readlicense_oo \
-	regexp \
-	registry \
-	remotebridges \
-	rhino \
-	ridljar \
-	rsc \
-	rvpapi \
-	sablot \
-	sal \
-	salhelper \
-	sandbox \
-	sane \
-	sax \
-	sc \
-	scaddins \
-	sch \
-	scp2 \
-	scripting \
-	sd \
-	sdk_oo \
-	setup_native \
-	sfx2 \
-	shell \
-	sj2 \
-	slideshow \
-	smoketestoo_native \
-	sndfile \
-	so3 \
-	solenv \
-	soltools \
-	sot \
-	starmath \
-	stlport \
-	stoc \
-	store \
-	svtools \
-	svx \
-	sw \
-	sysui \
-	testshl \
-	testshl2 \
-	testtools \
-	toolkit \
-	tools \
-	transex3 \
-	twain \
-	ucb \
-	ucbhelper \
-	udkapi \
-	udm \
-	unixODBC \
-	unoil \
-	unotools \
-	unoxml \
-	ure \
-	uui \
-	vcl \
-	vos \
-	wizards \
-	writerperfect \
-	x11_extensions \
-	xalan \
-	xmerge \
-	xml2cmp \
-	xmlhelp \
-	xmloff \
-	xmlscript \
-	xmlsecurity \
-	zlib
-
-build_all .SEQUENTIAL : $(BUILD_SUBDIRS) build_instsetoo_native
+check_modules .PHONY :
 	@+echo Checking module list
+	@+perl $(SOLARENV)$/bin$/build.pl --checkmodules
 
-build_instsetoo_native .SETDIR=instsetoo_native/prj:
+# Only build when all modules available
+build_instsetoo_native .SETDIR=instsetoo_native/prj : check_modules
 	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH)
 
-depend .SETDIR=instsetoo_native/prj:
+depend .SETDIR=instsetoo_native/prj : check_modules
 	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH) depend=t
 
 
@@ -267,43 +85,6 @@ clean .PHONY:
 configure .PHONY SETDIR=config_office :
 	@configure
 
-install .SETDIR=instsetoo/util:
-	dmake $(PROFULLSWITCH)
-
-update: 
-	@echo Updating OpenOffice.org sources
-	@+-echo $(foreach,i,$(BUILD_SUBDIRS) $(shell +cd $i && cvs update))
-
-# experimental composite targets:
-
-udk_modules :	xml2cmp sal vos store registry idlc udkapi codemaker \
-		sandbox ridljar jurt cppu cppuhelper javaunohelper \
-		jut rdbmaker io bridges cpputools io stoc remotebridges
-
-non_vcl :	udk_modules ucbhelper offuh unoil officecfg UnoControls \
-		rsc sot eventattacher idl transex3 inet package xmlscript \
-		sax xmlhelp fileaccess sysui psprint
-
-frmwrk:		dtrans framework chaos i18n uui xmloff setup2 scptools scp \
-		connectivity 
-
-# 
-# single directory targets for
-# dependency handling between directories
-# 
-
-
-.IF "$(checkout)"==""
-.INCLUDE : target.mk
-.ENDIF	#"$(checkout)"==""
-
-
-#
-# print languages configured to build
-#
-
-languages:
-	@+-echo Configured languages: $(alllangiso)
 
 #*************************************************************************
 
