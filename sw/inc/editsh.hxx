@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:20:57 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 12:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,6 +512,11 @@ public:
     void SetNodeNumStart( USHORT nStt = USHRT_MAX );
     USHORT IsNodeNumStart() const;
     BOOL ReplaceNumRule( const String& rOldRule, const String& rNewRule );
+    // Searches for a text node with a numbering rule.
+    const SwNumRule * SearchNumRule(BOOL bForward,
+                                    BOOL bNum,
+                                    BOOL bOutline,
+                                    int nNonEmptyAllowed);
 
     // Undo
     // UndoHistory am Dokument pflegen
