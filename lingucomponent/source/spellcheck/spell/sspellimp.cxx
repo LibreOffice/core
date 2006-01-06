@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:11 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <myspell.hxx>
+#include <hunspell.hxx>
 #include <dictmgr.hxx>
 
 #ifndef _SPELLIMP_HXX
@@ -191,7 +191,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             numdict = numshr + numusr;
 
             if (numdict) {
-            aDicts = new MySpell* [numdict];
+            aDicts = new Hunspell* [numdict];
             aDEncs  = new rtl_TextEncoding [numdict];
                 aDLocs = new Locale [numdict];
                 aDNames = new OUString [numdict];
@@ -295,7 +295,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 
 INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-        MySpell * pMS;
+        Hunspell * pMS;
         rtl_TextEncoding aEnc;
 
     // initialize a myspell object for each dictionary once
@@ -334,13 +334,17 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
                       OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
                       OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
-                      aDicts[i] = new MySpell(aTmpaff.getStr(),aTmpdict.getStr());
+                      aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
                       aDEncs[i] = 0;
                       if (aDicts[i]) {
+                        char * dic_encoding = aDicts[i]->get_dic_encoding();
             aDEncs[i] = rtl_getTextEncodingFromUnixCharset(aDicts[i]->get_dic_encoding());
-                        if ((aDEncs[i] == RTL_TEXTENCODING_DONTKNOW)
-                && (strcmp("ISCII-DEVANAGARI",aDicts[i]->get_dic_encoding()) == 0)) {
-              aDEncs[i] = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                        if (aDEncs[i] == RTL_TEXTENCODING_DONTKNOW) {
+              if (strcmp("ISCII-DEVANAGARI", dic_encoding) == 0) {
+                aDEncs[i] = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                          } else if (strcmp("UTF-8", dic_encoding) == 0) {
+                aDEncs[i] = RTL_TEXTENCODING_UTF8;
+                          }
                         }
                       }
                }
@@ -420,7 +424,7 @@ Reference< XSpellAlternatives >
     Reference< XSpellAlternatives > xRes;
         // note: mutex is held by higher up by spell which covers both
 
-        MySpell* pMS;
+        Hunspell* pMS;
         rtl_TextEncoding aEnc;
     int count;
         int numsug = 0;
@@ -452,7 +456,6 @@ Reference< XSpellAlternatives >
                     pMS = aDicts[i];
                     aEnc = aDEncs[i];
                 }
-
 
             if (pMS)
             {
@@ -567,7 +570,7 @@ OUString SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "OpenOffice.org MySpell SpellChecker" );
+    return A2OU( "OpenOffice.org Hunspell SpellChecker" );
 }
 
 
