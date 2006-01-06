@@ -891,12 +891,12 @@ en-US = "&[ProductName] Writer/Web"
 de = "&[ProductName] Writer/Web"
 
 [OOO_CONTROL_274]
-en-US = "Select the file types that are to be opened with [ProductName]."
-de = "Wählen Sie die Dateiarten, die mit [ProductName] geöffnet werden sollen."
+en-US = "Select the file types for which you want [ProductName] to be the default application."
+de = "Wählen Sie die Dateitypen aus, die mit [ProductName] standardmäßig geöffnet werden sollen."
 
 [OOO_CONTROL_275]
-en-US = "[ProductName] will automatically open the following file types:"
-de = "[ProductName] wird automatisch die folgenden Dateiarten öffnen:"
+en-US = "[ProductName] can be set as the default application to open the following file types. This means, for instance, that if you double click on one of these files, [ProductName] will open it, not the progam that opens it now."
+de = "[ProductName] kann als Standard-Programm für die unten aufgelisteten Dateitypen festgelegt werden. Das bedeutet, dass Dateien dieses Typs von jetzt an mit [ProductName] geöffnet werden."
 
 [OOO_CONTROL_276]
 en-US = "File types"
@@ -945,6 +945,10 @@ de = "Klicken Sie auf "Ändern" und wählen Sie einen anderen Ordner aus."
 [OOO_CONTROL_308]
 de    = "[ProductName] wird installiert nach:"
 en-US  = "Install [ProductName] to:"
+
+[OOO_CONTROL_309]
+en-US = "If you are just trying out [ProductName], you probably don't want this to happen, so leave the boxes unchecked."
+de = "Falls Sie [ProductName] ausprobieren, sollten die vorgeschlagenen Einstellungen nicht verändert werden."
 
 [OOO_CONTROL_LANG_1033]
 en-US = "English"
