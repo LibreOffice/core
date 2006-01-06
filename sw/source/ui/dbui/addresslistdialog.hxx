@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:47:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ class SwAddressListDialog : public SfxModalDialog
 
     String          m_sName;
     String          m_sTable;
+    String          m_sConnecting;
 
     String          m_sCreatedURL;
     SvLBoxEntry*    m_pCreatedDataSource;
