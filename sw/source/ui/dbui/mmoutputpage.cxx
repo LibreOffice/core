@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:31:19 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 13:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,6 +439,11 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 {
     FreeResource();
 
+
+    SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
+    // #i51949# hide e-Mail option if e-Mail is not supported
+    if(!rConfigItem.IsMailAvailable())
+        m_aSendMailRB.Hide();
     Link aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
     m_aSaveStartDocRB.SetClickHdl(aLink);
     m_aSaveMergedDocRB.SetClickHdl(aLink);
@@ -530,8 +535,6 @@ void SwMailMergeOutputPage::ActivatePage()
                     INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ));
         }
     }
-    if(!rConfigItem.IsMailAvailable())
-        m_aSendMailRB.Enable(sal_False);
 }
 /*-- 05.07.2004 13:54:11---------------------------------------------------
 
