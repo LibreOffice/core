@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:41:30 $
+#   last change: $Author: kz $ $Date: 2006-01-06 13:12:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,16 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(MYSPELLLIB)"==""
+.ELSE
+@echo "Build Hunspell instead of system Myspell."
+.ENDIF
+
+.IF "$(HUNSPELLLIB)"==""
 .IF "$(GUI)"=="UNX"
-MYSPELLLIB=-lmyspell
+HUNSPELLLIB=-lhunspell
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
-MYSPELLLIB=myspell.lib
+HUNSPELLLIB=hunspell.lib
 .ENDIF # wnt
 .ENDIF
 
@@ -98,14 +103,14 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-.IF "$(SYSTEM_MYSPELL)" != "YES"
-CXXFLAGS += -I..$/myspell -I..$/..$/lingutil
-CFLAGSCXX += -I..$/myspell -I..$/..$/lingutil
-CFLAGSCC += -I..$/myspell  -I..$/..$/lingutil
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+CXXFLAGS += -I..$/hunspell -I..$/..$/lingutil
+CFLAGSCXX += -I..$/hunspell -I..$/..$/lingutil
+CFLAGSCC += -I..$/hunspell  -I..$/..$/lingutil
 .ELSE
-CXXGLAGS += $(MYSPELL_CFLAGS)
-CFLAGSCXX += $(MYSPELL_CFLAGS)
-CFLAGSCC += $(MYSPELL_CFLAGS)
+CXXGLAGS += $(HUNSPELL_CFLAGS)
+CFLAGSCXX += $(HUNSPELL_CFLAGS)
+CFLAGSCC += $(HUNSPELL_CFLAGS)
 .ENDIF
 
 .IF "$(header)" == ""
@@ -136,9 +141,9 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                $(MYSPELLLIB)
+                $(HUNSPELLLIB)
 
-.IF "$(SYSTEM_MYSPELL)" != "YES"
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
 SHL1STDLIBS+=   $(ULINGULIB)
 .ENDIF
 
