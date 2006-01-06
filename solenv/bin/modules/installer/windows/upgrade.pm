@@ -4,9 +4,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:15:22 $
+#   last change: $Author: kz $ $Date: 2006-01-06 11:18:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,14 @@ sub create_upgrade_table
             push(@upgradetable, $newline);
 
             $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
+            push(@upgradetable, $newline);
+        }
+
+        # also searching for the beta
+
+        if ( $allvariableshashref->{'BETAUPGRADECODE'} )
+        {
+            $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
             push(@upgradetable, $newline);
         }
     }
