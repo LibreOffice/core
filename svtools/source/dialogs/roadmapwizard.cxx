@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:19:12 $
+ *  last change: $Author: kz $ $Date: 2006-01-06 12:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,7 +527,12 @@ namespace svt
         // if the state is currently in the roadmap, reflect it's new status
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
-
+    //--------------------------------------------------------------------
+    bool    RoadmapWizard::isStateEnabled( WizardState _nState )
+    {
+        sal_Bool bEnabled = m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
+        return bEnabled;
+    }
     //--------------------------------------------------------------------
     void RoadmapWizard::Resize()
     {
