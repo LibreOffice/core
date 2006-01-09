@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JNI_proxy.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:39:03 $
+ *  last change: $Author: rt $ $Date: 2006-01-09 09:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package com.sun.star.bridges.jni_uno;
 
+import com.sun.star.lib.util.AsynchronousFinalizer;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -97,7 +98,11 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     //__________________________________________________________________________
     public void finalize()
     {
-        finalize( m_bridge_handle );
+        AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
+                public void run() throws Throwable {
+                    JNI_proxy.this.finalize( m_bridge_handle );
+                }
+            });
     }
 
     //__________________________________________________________________________
