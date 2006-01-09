@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:57:57 $
+ *  last change: $Author: rt $ $Date: 2006-01-09 10:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,9 @@
 #include <vcl/bmpacc.hxx>
 #include <svtools/fltcall.hxx>
 #include <tools/urlobj.hxx>
-
+#include <tools/tempfile.hxx>
+#include <osl/process.h>
+#include <osl/file.hxx>
 
 /*************************************************************************
 |*
@@ -139,6 +141,277 @@ static int ImplGetLen( BYTE* pBuf, int nMax )
     return nLen;
 }
 
+static void MakeAsMeta(Graphic &rGraphic)
+{
+    VirtualDevice   aVDev;
+    GDIMetaFile     aMtf;
+    Bitmap          aBmp( rGraphic.GetBitmap() );
+    Size            aSize = aBmp.GetPrefSize();
+
+    if( !aSize.Width() || !aSize.Height() )
+        aSize = Application::GetDefaultDevice()->PixelToLogic(
+            aBmp.GetSizePixel(), MAP_100TH_MM );
+    else
+        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
+            aBmp.GetPrefMapMode(), MAP_100TH_MM );
+
+    aVDev.EnableOutput( FALSE );
+    aMtf.Record( &aVDev );
+    aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
+    aMtf.Stop();
+    aMtf.WindStart();
+    aMtf.SetPrefMapMode( MAP_100TH_MM );
+    aMtf.SetPrefSize( aSize );
+    rGraphic = aMtf;
+}
+
+static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
+{
+    TempFile aTemp;
+    aTemp.EnableKillingFile();
+    rtl::OUString fileName =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit"));
+    rtl::OUString arg1 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
+    rtl::OUString arg2 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf"));
+    rtl::OUString arg3 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    rtl::OUString output;
+    osl::FileBase::getSystemPathFromFileURL(aTemp.GetName(), output);
+    rtl_uString *args[] =
+    {
+        arg1.pData, arg2.pData, arg3.pData, output.pData
+    };
+    oslProcess aProcess;
+    oslFileHandle pIn = NULL;
+    oslFileHandle pOut = NULL;
+    oslFileHandle pErr = NULL;
+    oslProcessError eErr = osl_executeProcess_WithRedirectedIO(fileName.pData,
+        args, sizeof(args)/sizeof(rtl_uString *), osl_Process_SEARCHPATH,
+        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, 0, &pErr);
+    if (eErr!=osl_Process_E_None)
+        return false;
+
+    bool bRet = false;
+    sal_uInt64 nCount;
+    osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
+    osl_closeFile(pIn);
+    osl_joinProcess(aProcess);
+    if (nCount == nBytesRead)
+    {
+        SvFileStream aFile(output, STREAM_READ);
+        if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
+            bRet = true;
+    }
+    return bRet;
+}
+
+static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+    const Size &rSize, Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString **pArgs, size_t nArgs)
+{
+    oslProcess aProcess;
+    oslFileHandle pIn = NULL;
+    oslFileHandle pOut = NULL;
+    oslFileHandle pErr = NULL;
+    oslProcessError eErr = osl_executeProcess_WithRedirectedIO(rProgName.pData,
+        pArgs, nArgs, osl_Process_SEARCHPATH,
+        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
+    if (eErr!=osl_Process_E_None)
+        return false;
+
+    bool bRet = false;
+    sal_uInt64 nCount;
+    osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
+    osl_closeFile(pIn);
+    if (nCount == nBytesRead)
+    {
+        SvMemoryStream aMemStm;
+        sal_uInt8 aBuf[32000];
+        oslFileError eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
+        while (eFileErr == osl_File_E_None && nCount)
+        {
+            aMemStm.Write(aBuf, nCount);
+            eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
+        }
+
+        aMemStm.Seek(0);
+        if (
+            eFileErr == osl_File_E_None &&
+            GraphicConverter::Import(aMemStm, rGraphic, CVT_PNG) == ERRCODE_NONE
+           )
+        {
+            MakeAsMeta(rGraphic);
+            bRet = true;
+        }
+    }
+    osl_closeFile(pOut);
+    return bRet;
+}
+
+static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+    const Size &rSize, Graphic &rGraphic)
+{
+    rtl::OUString fileName =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"));
+    // density in pixel/inch
+    rtl::OUString arg1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-density"));
+    // since the preview is also used for PDF-Export & printing on non-PS-printers,
+    // use some better quality - 300x300 should allow some resizing as well
+    rtl::OUString arg2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("300x300"));
+    // read eps from STDIN
+    rtl::OUString arg3 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("eps:-"));
+    // write png to STDOUT
+    rtl::OUString arg4 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("png:-"));
+    rtl_uString *args[] =
+    {
+        arg1.pData, arg2.pData, arg3.pData, arg4.pData
+    };
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rSize, rGraphic, fileName, args,
+        sizeof(args)/sizeof(rtl_uString *));
+}
+
+static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+    const Size &rSize, Graphic &rGraphic)
+{
+#ifdef WNT
+    rtl::OUString fileName =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c"));
+#else
+    rtl::OUString fileName =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs"));
+#endif
+    rtl::OUString arg1 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
+    rtl::OUString arg2 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dNOPAUSE"));
+    rtl::OUString arg3 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
+    rtl::OUString arg4 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-g"));
+    arg4 = arg4 + rtl::OUString::valueOf(rSize.Width());
+    arg4 = arg4 + rtl::OUString::valueOf(sal_Unicode('x'));
+    arg4 = arg4 + rtl::OUString::valueOf(rSize.Height());
+    rtl::OUString arg5 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
+    rtl::OUString arg6 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dGraphicsAlphaBits=4"));
+    rtl::OUString arg7 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sDEVICE=png256"));
+    rtl::OUString arg8 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sOutputFile=-"));
+    rtl::OUString arg9 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    rtl_uString *args[] =
+    {
+        arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,
+        arg6.pData, arg7.pData, arg8.pData, arg9.pData
+    };
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rSize, rGraphic, fileName, args,
+        sizeof(args)/sizeof(rtl_uString *));
+}
+
+static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+    const Size &rSize, Graphic &rGraphic)
+{
+    if (RenderAsPNGThroughConvert(pBuf, nBytesRead, rSize, rGraphic))
+        return true;
+    else
+        return RenderAsPNGThroughGS(pBuf, nBytesRead, rSize, rGraphic);
+}
+
+
+//there is no preview -> make a red box
+void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+    long nWidth, long nHeight, Graphic &rGraphic)
+{
+    GDIMetaFile aMtf;
+    VirtualDevice   aVDev;
+    Font            aFont;
+
+    aVDev.EnableOutput( FALSE );
+    aMtf.Record( &aVDev );
+    aVDev.SetLineColor( Color( COL_RED ) );
+    aVDev.SetFillColor();
+
+    aFont.SetColor( COL_LIGHTRED );
+//  aFont.SetSize( Size( 0, 32 ) );
+
+    aVDev.Push( PUSH_FONT );
+    aVDev.SetFont( aFont );
+
+    Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
+    aVDev.DrawRect( aRect );
+
+    String aString;
+    int nLen;
+    BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
+    if ( pDest )
+    {
+        pDest += 8;
+        if ( *pDest == ' ' )
+            pDest++;
+        nLen = ImplGetLen( pDest, 32 );
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        if ( strcmp( (const char*)pDest, "none" ) != 0 )
+        {
+            aString.AppendAscii( " Title:" );
+            aString.AppendAscii( (char*)pDest );
+            aString.AppendAscii( "\n" );
+        }
+        pDest[ nLen ] = aOldValue;
+    }
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
+    if ( pDest )
+    {
+        pDest += 10;
+        if ( *pDest == ' ' )
+            pDest++;
+        nLen = ImplGetLen( pDest, 32 );
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        aString.AppendAscii( " Creator:" );
+        aString.AppendAscii( (char*)pDest );
+        aString.AppendAscii( "\n" );
+        pDest[ nLen ] = aOldValue;
+    }
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
+    if ( pDest )
+    {
+        pDest += 15;
+        if ( *pDest == ' ' )
+            pDest++;
+        nLen = ImplGetLen( pDest, 32 );
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        if ( strcmp( (const char*)pDest, "none" ) != 0 )
+        {
+            aString.AppendAscii( " CreationDate:" );
+            aString.AppendAscii( (char*)pDest );
+            aString.AppendAscii( "\n" );
+        }
+        pDest[ nLen ] = aOldValue;
+    }
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
+    if ( pDest )
+    {
+        pDest += 16;
+        int nCount = 4;
+        long nNumber = ImplGetNumber( &pDest, nCount );
+        if ( nCount && ( (UINT32)nNumber < 10 ) )
+        {
+            aString.AppendAscii( " LanguageLevel:" );
+            aString.Append( UniString::CreateFromInt32( nNumber ) );
+        }
+    }
+    aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
+    aVDev.Pop();
+    aMtf.Stop();
+    aMtf.WindStart();
+    aMtf.SetPrefMapMode( MAP_POINT );
+    aMtf.SetPrefSize( Size( nWidth, nHeight ) );
+    rGraphic = aMtf;
+}
+
+
 //================== GraphicImport - die exportierte Funktion ================
 
 #ifdef WNT
@@ -189,24 +462,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                 rStream.Seek( nOrigPos + nPos );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_TIF ) == ERRCODE_NONE )
                 {
-                    VirtualDevice   aVDev;
-                    GDIMetaFile     aMtf;
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    Size            aSize = aBmp.GetPrefSize();
-
-                    if( !aSize.Width() || !aSize.Height() )
-                        aSize = Application::GetDefaultDevice()->PixelToLogic( aBmp.GetSizePixel(), MAP_100TH_MM );
-                    else
-                        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize, aBmp.GetPrefMapMode(), MAP_100TH_MM );
-
-                    aVDev.EnableOutput( FALSE );
-                    aMtf.Record( &aVDev );
-                    aVDev.DrawBitmap( Point(), aSize, aGraphic.GetBitmap() );
-                    aMtf.Stop();
-                    aMtf.WindStart();
-                    aMtf.SetPrefMapMode( MAP_100TH_MM );
-                    aMtf.SetPrefSize( aSize );
-                    aGraphic = aMtf;
+                    MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPos );
                     bHasPreview = bRetValue = TRUE;
                 }
@@ -355,92 +611,23 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                         long nWidth =  nNumb[2] - nNumb[0] + 1;
                         long nHeight = nNumb[3] - nNumb[1] + 1;
 
-                        if( !bHasPreview )      // if there is no preview -> make a red box
+                        // if there is no preview -> try with gs to make one
+                        if( !bHasPreview )
                         {
-                            VirtualDevice   aVDev;
-                            GDIMetaFile     aMtf2;
-                            Font            aFont;
-
-                            aVDev.EnableOutput( FALSE );
-                            aMtf2.Record( &aVDev );
-                            aVDev.SetLineColor( Color( COL_RED ) );
-                            aVDev.SetFillColor();
-
-                            aFont.SetColor( COL_LIGHTRED );
-//                                  aFont.SetSize( Size( 0, 32 ) );
-
-                            aVDev.Push( PUSH_FONT );
-                            aVDev.SetFont( aFont );
-
-                            Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
-                            aVDev.DrawRect( aRect );
-
-                            String aString;
-                            int nLen;
-                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
-                            if ( pDest )
+                            bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
+                            if (!bHasPreview)
                             {
-                                pDest += 8;
-                                if ( *pDest == ' ' )
-                                    pDest++;
-                                nLen = ImplGetLen( pDest, 32 );
-                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-                                if ( strcmp( (const char*)pDest, "none" ) != 0 )
-                                {
-                                    aString.AppendAscii( " Title:" );
-                                    aString.AppendAscii( (char*)pDest );
-                                    aString.AppendAscii( "\n" );
-                                }
-                                pDest[ nLen ] = aOldValue;
+                                Size aSize(nWidth, nHeight);
+                                aSize = Application::GetDefaultDevice()->LogicToPixel(aSize, MAP_POINT);
+                                bHasPreview = RenderAsPNG(pBuf, nBytesRead, aSize, aGraphic);
                             }
-                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
-                            if ( pDest )
-                            {
-                                pDest += 10;
-                                if ( *pDest == ' ' )
-                                    pDest++;
-                                nLen = ImplGetLen( pDest, 32 );
-                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-                                aString.AppendAscii( " Creator:" );
-                                aString.AppendAscii( (char*)pDest );
-                                aString.AppendAscii( "\n" );
-                                pDest[ nLen ] = aOldValue;
-                            }
-                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
-                            if ( pDest )
-                            {
-                                pDest += 15;
-                                if ( *pDest == ' ' )
-                                    pDest++;
-                                nLen = ImplGetLen( pDest, 32 );
-                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-                                if ( strcmp( (const char*)pDest, "none" ) != 0 )
-                                {
-                                    aString.AppendAscii( " CreationDate:" );
-                                    aString.AppendAscii( (char*)pDest );
-                                    aString.AppendAscii( "\n" );
-                                }
-                                pDest[ nLen ] = aOldValue;
-                            }
-                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
-                            if ( pDest )
-                            {
-                                pDest += 16;
-                                int nCount = 4;
-                                long nNumber = ImplGetNumber( &pDest, nCount );
-                                if ( nCount && ( (UINT32)nNumber < 10 ) )
-                                {
-                                    aString.AppendAscii( " LanguageLevel:" );
-                                    aString.Append( UniString::CreateFromInt32( nNumber ) );
-                                }
-                            }
-                            aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
-                            aVDev.Pop();
-                            aMtf2.Stop();
-                            aMtf2.WindStart();
-                            aMtf2.SetPrefMapMode( MAP_POINT );
-                            aMtf2.SetPrefSize( Size( nWidth, nHeight ) );
-                            aGraphic = aMtf2;
+                        }
+
+                        // if there is no preview -> make a red box
+                        if( !bHasPreview )
+                        {
+                            MakePreview(pBuf, nBytesRead, nWidth, nHeight,
+                                aGraphic);
                         }
 
                         aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
