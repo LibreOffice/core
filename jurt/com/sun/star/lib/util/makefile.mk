@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:05:52 $
+#   last change: $Author: rt $ $Date: 2006-01-09 09:48:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ TARGET  = com_sun_star_lib_util
 # --- Files --------------------------------------------------------
 
 JAVAFILES = \
+    AsynchronousFinalizer.java \
     IInvokable.java \
     IInvokeHook.java \
     NativeLibraryLoader.java \
