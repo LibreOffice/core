@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:38:22 $
+#   last change: $Author: rt $ $Date: 2006-01-09 09:47:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ SLOFILES= \
     $(SLO)$/jni_uno2java.obj	\
     $(SLO)$/jni_java2uno.obj	\
     $(SLO)$/jni_bridge.obj \
-    $(SLO)$/nativethreadpool.obj
+    $(SLO)$/nativethreadpool.obj 
 
 SHL1TARGET=$(TARGET)
 
