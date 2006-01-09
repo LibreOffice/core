@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProxyFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:50:15 $
+ *  last change: $Author: rt $ $Date: 2006-01-09 09:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package com.sun.star.lib.uno.bridges.java_remote;
 
 import com.sun.star.bridge.XBridge;
+import com.sun.star.lib.util.AsynchronousFinalizer;
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -141,12 +142,16 @@ final class ProxyFactory {
             }
         }
 
-        protected void finalize() throws Throwable {
-            try {
-                request("release", null);
-            } finally {
-                decrementDebugCount();
-            }
+        protected void finalize() {
+            AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
+                    public void run() throws Throwable {
+                        try {
+                            request("release", null);
+                        } finally {
+                            decrementDebugCount();
+                        }
+                    }
+                });
         }
 
         private Object request(String operation, Object[] args) throws Throwable
