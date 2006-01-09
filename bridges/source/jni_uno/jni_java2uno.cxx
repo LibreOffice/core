@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:37:53 $
+ *  last change: $Author: rt $ $Date: 2006-01-09 09:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
+//#include "jni_finalizer.h"
 
 #include <rtl/ustrbuf.hxx>
 
