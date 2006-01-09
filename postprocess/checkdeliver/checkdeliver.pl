@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-03 10:12:23 $
+#   last change: $Author: rt $ $Date: 2006-01-09 09:05:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ sub check
         my $sfile = "$solverdir/$delivered{$file}";
         # on CWS modules may exist as link only, named <module>.lnk
         if ( $islinked ) {
-            $ofile =~ s/$srcdir\/$module\//$srcdir\/$module.lnk\//;
+            $ofile =~ s/\/$module\//\/$module.lnk\//;
         }
         if ( $milestoneext ) {
             # deliver log files do not contain milestone extension on solver
