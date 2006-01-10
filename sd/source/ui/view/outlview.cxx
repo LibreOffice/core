@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:46 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "OutlineView.hxx"
-
+#include <memory>
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
 #endif
@@ -105,10 +105,16 @@
 #ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
 #endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
+#endif
 
 // #97766#
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
+#endif
+#ifndef _EDITUND2_HXX
+#include <svx/editund2.hxx>
 #endif
 
 #pragma hdrstop
@@ -132,6 +138,7 @@
 #include "strings.hrc"
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
+#include "undo/undoobjects.hxx"
 
 namespace sd {
 
@@ -508,9 +515,18 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 
 IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
+    InsertSlideForParagraph( pOutliner->GetHdlParagraph() );
+    return 0;
+}
+
+/** creates and inserts an empty slide for the given paragraph */
+SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
+{
+    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphInsertedHdl(), model change without undo?!" );
+
     OutlineViewPageChangesGuard aGuard(this);
 
-    Paragraph* pPara = pOutliner->GetHdlParagraph();
+    SdPage* pPage = 0;
 
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
@@ -543,10 +559,11 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
         if (nTarget > 0)
         {
             nExample = nTarget - 1;
-        }
 
-        // #96090# added string to create no empty UNDO actions (in ListBox)
-        BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+            USHORT nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
+            if( nExample >= nPageCount )
+                nExample = nPageCount - 1;
+        }
 
         /**********************************************************************
         * Es wird stets zuerst eine Standardseite und dann eine
@@ -557,13 +574,14 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
         // diese Seite hat Vorbildfunktion
         SdPage* pExample = (SdPage*)pDoc->GetSdPage((USHORT)nExample, PK_STANDARD);
-        SdPage*    pPage = (SdPage*)pDoc->AllocPage(FALSE);
+        pPage = (SdPage*)pDoc->AllocPage(FALSE);
 
         pPage->SetLayoutName(pExample->GetLayoutName());
 
         // einfuegen (Seite)
         pDoc->InsertPage(pPage, (USHORT)(nTarget) * 2 + 1);
-        AddUndo(new SdrUndoNewPage(*pPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
         // der Standardseite eine Masterpage zuweisen
         pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
@@ -601,7 +619,8 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
         // einfuegen (Notizseite)
         pDoc->InsertPage(pNotesPage, (USHORT)(nTarget) * 2 + 2);
-        AddUndo(new SdrUndoNewPage(*pNotesPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
         // der Notizseite eine Masterpage zuweisen
         pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
@@ -616,16 +635,10 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
         // neue Praesentationsobjekte anlegen
         pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), TRUE);
 
-        EndUndo();
-
-        SfxUndoManager* pDocUndoMgr = pDocSh->GetUndoManager();
-        SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
-        pOutliner->GetUndoManager().AddUndoAction(pLink);
-
         pOutliner->UpdateFields();
     }
 
-    return 0;
+    return pPage;
 }
 
 /*************************************************************************
@@ -636,6 +649,8 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
+    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
+
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
@@ -650,23 +665,17 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
         }
 
         // Seite und Notizseite loeschen
-        BegUndo();
-
         USHORT nAbsPos = (USHORT)nPos * 2 + 1;
         SdrPage* pPage = pDoc->GetPage(nAbsPos);
-        AddUndo(new SdrUndoDelPage(*pPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         pDoc->RemovePage(nAbsPos);
 
         nAbsPos = (USHORT)nPos * 2 + 1;
         pPage = pDoc->GetPage(nAbsPos);
-        AddUndo(new SdrUndoDelPage(*pPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         pDoc->RemovePage(nAbsPos);
-
-        EndUndo();
-
-        SfxUndoManager* pDocUndoMgr = pDocSh->GetUndoManager();
-        SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
-        pOutliner->GetUndoManager().AddUndoAction(pLink);
 
         // ggfs. Fortschrittsanzeige
         if (nPagesToProcess)
@@ -702,6 +711,8 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 {
+    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::DepthChangedHdl(), no undo for model change?!" );
+
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
@@ -782,23 +793,18 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 nPos++;
         }
         // Seite und Notizseite loeschen
-        BegUndo();
 
         USHORT nAbsPos = (USHORT)nPos * 2 + 1;
         SdrPage* pPage = pDoc->GetPage(nAbsPos);
-        AddUndo(new SdrUndoDelPage(*pPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         pDoc->RemovePage(nAbsPos);
 
         nAbsPos = (USHORT)nPos * 2 + 1;
         pPage = pDoc->GetPage(nAbsPos);
-        AddUndo(new SdrUndoDelPage(*pPage));
+        if( isRecordingUndo() )
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         pDoc->RemovePage(nAbsPos);
-
-        EndUndo();
-
-        SfxUndoManager* pDocUndoMgr = pDocSh->GetUndoManager();
-        SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
-        pOutliner->GetUndoManager().AddUndoAction(pLink);
 
         // ggfs. Fortschrittsanzeige
         if (nPagesToProcess)
@@ -948,6 +954,9 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 {
     DBG_ASSERT(!pSelectedParas, "Absatzliste nicht geloescht");
     DBG_ASSERT(!pOldParaOrder, "Absatzliste nicht geloescht");
+
+    OutlineViewPageChangesGuard aGuard(this);
+
     pOldParaOrder = new List;
 
     // Liste der selektierten Titelabsaetze
@@ -999,6 +1008,10 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 {
+    DBG_ASSERT(isRecordingUndo(), "sd::OutlineView::BeginMovingHdl(), model change without undo?!" );
+
+    OutlineViewPageChangesGuard aGuard(this);
+
     DBG_ASSERT(pSelectedParas, "keine Absatzliste");
     DBG_ASSERT(pOldParaOrder, "keine Absatzliste");
 
@@ -1085,7 +1098,7 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 |*
 \************************************************************************/
 
-SdrTextObj* OutlineView::GetLayoutTextObject(SdrPage* pPage)
+SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
 {
     ULONG           nObjectCount = pPage->GetObjCount();
     SdrObject*      pObject      = NULL;
@@ -1104,463 +1117,71 @@ SdrTextObj* OutlineView::GetLayoutTextObject(SdrPage* pPage)
     return pResult;
 }
 
-/*************************************************************************
-|*
-|* PrepareClose(), Daten und Selektion ins Model uebertragen
-|*
-\************************************************************************/
-
-BOOL OutlineView::PrepareClose(BOOL bUI)
+SdrTextObj* OutlineView::CreateTitleTextObject(SdPage* pPage)
 {
-    if( pOutliner->IsModified() )
+    DBG_ASSERT( GetTitleTextObject(pPage) == 0, "sd::OutlineView::CreateTitleTextObject(), there is already a title text object!" );
+
+    if( pPage->GetAutoLayout() == AUTOLAYOUT_NONE )
     {
-        // die Seiten des Models mit den Inhalten des Outliners fuellen
-        USHORT              nPageCount  = pDoc->GetSdPageCount(PK_STANDARD);
-        Paragraph*          pPara       = NULL;
-        SdrTextObj*         pTO         = NULL;
-        OutlinerParaObject* pOPO        = NULL;
-        SfxItemPool* pPool = pDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
-
-        // den Outliner in den OutlinerStyle setzen; dann wird ein von ihm
-        // erzeugter Titeltext bei der Anzeige durch einen Outliner im
-        // EditEngine-Modus mit der Titelvorlage formatiert
-        SdrOutliner* pTempLiner = new SdrOutliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
-        pTempLiner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
-        pTempLiner->SetEditTextObjectPool(pPool);
-        pTempLiner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
-
-        // Referenz-Device setzen
-        pTempLiner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
-        SfxStyleSheetBasePool* pSPool   = pDoc->GetStyleSheetPool();
-        pTempLiner->SetMinDepth(0);
-
-        BOOL bBegUndoDone = FALSE;      // wurde schon BegUndo() gerufen?
-        String aUndoStr;
-        aUndoStr = String(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
-
-
-        /**************************************************************************
-        |* jetzt die Seiten fuellen
-        \*************************************************************************/
-        pPara = pOutliner->GetParagraph( 0 );
-        for (USHORT nPage = 0; nPage < nPageCount; nPage++)
-        {
-            SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
-            SdPage& rMasterPage = (SdPage&)pPage->TRG_GetMasterPage();
-
-            Point aPos;
-            Rectangle aTitleRect ( aPos, pPage->GetSize() );
-            Rectangle aLayoutRect ( aTitleRect );
-
-            SdrObject* pTitleObj = rMasterPage.GetPresObj(PRESOBJ_TITLE);
-            SdrObject* pLayoutObj = rMasterPage.GetPresObj(PRESOBJ_OUTLINE);
-
-            if (pTitleObj)
-            {
-                aTitleRect = pTitleObj->GetLogicRect();
-            }
-
-            if (pLayoutObj)
-            {
-                aLayoutRect = pLayoutObj->GetLogicRect();
-            }
-
-            pDoc->SetSelected(pPage, FALSE);          // deselektieren
-
-            // Liste der Gliederungsvorlagen fuer Anmeldung als Listener
-            String aName = pPage->GetLayoutName();
-
-            // erst fuer die Gliederungsebenen
-            List* pOutlineStyleList = new List; // StyleSheet-Liste zum Anmelden
-            pOutlineStyleList->Insert(NULL, LIST_APPEND);
-            String aFullName;
-            SfxStyleSheetBase* pSheet = NULL;
-            for (USHORT i = 1; i < 10; i++)
-            {
-                aFullName  = aName;
-                aFullName += sal_Unicode(' ');
-                aFullName += String::CreateFromInt32( (sal_Int32)i );;
-                pSheet = pSPool->Find(aFullName, SD_LT_FAMILY);
-                pOutlineStyleList->Insert(pSheet, LIST_APPEND);
-            }
-
-            // Titelvorlage
-            aFullName = aName;
-            String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-            USHORT n = aFullName.Search(aSep);
-            n += aSep.Len();
-            aFullName.Erase(n);
-            aFullName += String (SdResId(STR_LAYOUT_TITLE));
-            SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->
-                Find(aFullName, SD_LT_FAMILY);
-            DBG_ASSERT(pTitleSheet, "Titelvorlage nicht gefunden");
-
-            /*********************************************************************
-            |* Titeltextobjekt
-            \********************************************************************/
-            pTO = GetTitleTextObject(pPage);
-            String aTest(pOutliner->GetText(pPara));
-            BOOL bText = aTest.Len() > 0;
-
-            if (!pTO && bText)
-            {
-                // Kein Seitenobjekt, Text im Outliner:
-                // Entspr. Seitenobjekt erzeugen und einfuegen
-                if (!bBegUndoDone)
-                {
-                    BegUndo(aUndoStr);
-                    bBegUndoDone = TRUE;
-                }
-
-                pTO  = new SdrRectObj(OBJ_TITLETEXT);
-                pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-                pTO->SetEmptyPresObj(FALSE);
-
-                // als Praesentationsobjekt anmelden
-                pTO->SetUserCall(pPage);
-                pPage->InsertPresObj(pTO, PRESOBJ_TITLE);
-
-                pPage->InsertObject(pTO);
-                pTO->SetOutlinerParaObject(pOPO);
-                            // TRUE: DontRemoveHardAttr
-                pTO->SetStyleSheet(pTitleSheet, TRUE);
-                AutoLayout eLayout = pPage->GetAutoLayout();
-                if( eLayout == AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       ||
-                    eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE )
-                    pTO->SetVerticalWriting( TRUE );
-
-                AddUndo(new SdrUndoNewObj(*pTO));
-            }
-            else if (pTO && bText)
-            {
-                // Seitenobjekt, Text im Outliner:
-                // Titeltext uebernehmen
-
-                if (!bBegUndoDone)
-                {
-                    BegUndo(aUndoStr);
-                    bBegUndoDone = TRUE;
-                }
-
-                pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-                pOPO->SetVertical( pTO->IsVerticalWriting() );
-                // loescht altes OutlinerParaObject
-                AddUndo(new SdrUndoObjSetText(*pTO));
-                pTO->SetOutlinerParaObject(pOPO);
-                pTO->SetEmptyPresObj(FALSE);
-            }
-            else if (!pTO && !bText)
-            {
-                // Kein Seitenobjekt, kein Text im Outliner: nix tun
-            }
-            else if(pTO && !bText)
-            {
-                // Seitenobjekt, kein Text im Outliner:
-                // wenn Objekt in Praesentationsliste der Seite ist -> Defaulttext,
-                // sonst Objekt loeschen
-                if (pPage->IsPresObj(pTO))
-                {
-                    if( !pTO->IsEmptyPresObj() )
-                    {
-                        if (!bBegUndoDone)
-                        {
-                            BegUndo(aUndoStr);
-                            bBegUndoDone = TRUE;
-                        }
-
-                        BOOL bVertical = pTO->IsVerticalWriting();
-                        AddUndo(new SdrUndoObjSetText(*pTO));
-
-                        String aString( pPage->GetPresObjText(PRESOBJ_TITLE) );
-                        pPage->SetObjText( pTO, pTempLiner, PRESOBJ_TITLE, aString );
-                        pTO->SetVerticalWriting(bVertical);
-                        pTO->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE), TRUE );
-
-/*                      pTempLiner->Init( OUTLINERMODE_TITLEOBJECT );
-                        pTempLiner->SetMinDepth(0);
-                        String aString (SdResId(STR_PRESOBJ_TITLE));
-                        pTempLiner->Insert(aString, LIST_APPEND, 0);
-                        pOPO = pTempLiner->CreateParaObject( 0, 1 );
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-                        pTO->SetOutlinerParaObject(pOPO);
- * */
-                        pTO->SetEmptyPresObj(TRUE);
-                        pTempLiner->SetMinDepth(0);
-                    }
-                }
-                else
-                {
-                    // Grafik: Seitenobjekt loeschen
-                    if (!bBegUndoDone)
-                    {
-                        BegUndo(aUndoStr);
-                        bBegUndoDone = TRUE;
-                    }
-
-                    AddUndo(new SdrUndoRemoveObj(*pTO));
-                    pPage->RemoveObject(pTO->GetOrdNum());
-                }
-            }
-
-            /*********************************************************************
-            |* Gliederungstextobjekt
-            \********************************************************************/
-            BOOL bSubTitle = FALSE;
-            pTO = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TEXT);
-
-            if (pTO)
-            {
-                bSubTitle = TRUE;
-            }
-            else
-            {
-                pTO = GetLayoutTextObject(pPage);
-            }
-
-            pOPO = NULL;
-
-            // Wenn moeglich, OutlinerParaObject fuer Gliederung erzeugen
-            if ( pPara && pOutliner->HasChilds(pPara) )
-            {
-                // wieviele Absaetze in der Gliederung?
-                ULONG nTitlePara = pOutliner->GetAbsPos(pPara);
-                ULONG nParaPos = nTitlePara;
-                ULONG nParasInLayout = 0L;
-                pPara = pOutliner->GetParagraph( ++nParaPos );
-                while (pPara && pOutliner->GetDepth( (USHORT) nParaPos ) != 0)
-                {
-                    nParasInLayout++;
-                    pPara = pOutliner->GetParagraph( ++nParaPos );
-                }
-
-                // ein OutlinerParaObject erzeugen
-                pPara = pOutliner->GetParagraph(nTitlePara + 1);
-                pOPO  = pOutliner->CreateParaObject( (USHORT) nTitlePara + 1, (USHORT) nParasInLayout );
-                pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-            }
-
-            if (!pTO && pOPO)
-            {
-                // Kein Seitenobjekt, Gliederungstext im Outliner
-                if (!bBegUndoDone)
-                {
-                    BegUndo(aUndoStr);
-                    bBegUndoDone = TRUE;
-                }
-
-                pTO = new SdrRectObj(OBJ_OUTLINETEXT);
-                pTO->SetEmptyPresObj(FALSE);
-
-                // als Praesentationsobjekt anmelden
-                pTO->SetUserCall(pPage);
-                pPage->InsertPresObj(pTO, PRESOBJ_OUTLINE);
-
-                pPage->InsertObject(pTO);
-                pTO->SetOutlinerParaObject(pOPO);
-
-                AutoLayout eLayout = pPage->GetAutoLayout();
-                if( eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE       ||
-                    eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE ||
-                    eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART )
-                    pTO->SetVerticalWriting( TRUE );
-
-                // Linien- und Fuellattribute der Standardvorlage hart
-                // ueberschreiben
-                SfxItemSet aTempAttr(pDoc->GetPool());
-                aTempAttr.Put(XLineStyleItem(XLINE_NONE));
-                aTempAttr.Put(XFillStyleItem(XFILL_NONE));
-
-                pTO->SetMergedItemSetAndBroadcast(aTempAttr);
-
-                // als Listener anmelden
-                for (USHORT i = 1; i < 10; i++)
-                {
-                    SfxStyleSheet* pS = (SfxStyleSheet*)pOutlineStyleList->GetObject(i);
-                    if (pS)
-                    {
-                        pTO->StartListening(*pS);
-
-                        if( i == 1 )
-                            pTO->SetStyleSheet( pS, TRUE );
-                    }
-                }
-                AddUndo(new SdrUndoNewObj(*pTO));
-            }
-            else if (pTO && pOPO)
-            {
-                // Seitenobjekt, Gliederungstext im Outliner:
-                // Text uebernehmen
-                if (!bBegUndoDone)
-                {
-                    BegUndo(aUndoStr);
-                    bBegUndoDone = TRUE;
-                }
-
-                // loescht auch altes OutlinerParaObject
-                AddUndo(new SdrUndoObjSetText(*pTO));
-
-                if (bSubTitle)
-                {
-                    // Fuer alle Absaetze im TextObjekt schauen ob eine Ausrichtung
-                    // gesetzt ist, wenn nicht => zentrieren
-                    Outliner* pOutl = pDoc->GetInternalOutliner();
-                    pOutl->Clear();
-                    pOutl->SetText( *pOPO );
-
-                    ULONG nCount = pOutl->GetParagraphCount();
-                    for( ULONG nPara = 0; nPara < nCount; nPara++ )
-                    {
-                        SfxItemSet aSet( pOutl->GetParaAttribs( nPara ) );
-                        if (aSet.GetItemState(EE_PARA_JUST) != SFX_ITEM_SET)
-                        {
-                            aSet.Put(SvxAdjustItem( SVX_ADJUST_CENTER ));
-                            pOutl->SetParaAttribs(nPara, aSet);
-                        }
-                    }
-
-                    delete pOPO;
-                    pOPO = pOutl->CreateParaObject( 0, (USHORT) nCount );
-                    pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                    pOutl->Clear();
-                }
-
-                pOPO->SetVertical( pTO->IsVerticalWriting() );
-                pTO->SetOutlinerParaObject(pOPO);
-                pTO->SetEmptyPresObj(FALSE);
-
-                if (bSubTitle)
-                {
-                    // Subtitle-Vorlage setzen
-                    SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
-
-                    if( pTO->GetStyleSheet() != pSheet )
-                        pTO->SetStyleSheet(pSheet, TRUE);
-
-                    // Untertitel-Objekt statt Gliederung -> Linken Einzug zuruecksetzen
-                    SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
-
-//-/                    pTO->TakeAttributes(aSet, TRUE, FALSE);
-                    aSet.Put(pTO->GetMergedItemSet());
-
-                    if (aSet.GetItemState(EE_PARA_LRSPACE) != SFX_ITEM_SET)
-                    {
-                        const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
-                        SvxLRSpaceItem aNewLRItem(rLRItem);
-                        aNewLRItem.SetTxtLeft(0);
-                        aSet.Put(aNewLRItem);
-
-//-/                        pTO->NbcSetAttributes(aSet, FALSE);
-                        pTO->SetMergedItemSet(aSet);
-                    }
-                }
-            }
-            else if (!pTO && !pOPO)
-            {
-                // kein Seitenobjekt, kein Gliederungstext: nix tun
-            }
-            else if (pTO && !pOPO)
-            {
-                // Seitenobjekt, aber kein Gliederungstext:
-                // wenn Objekt in Praesentationsliste der Seite ist -> Defaulttext,
-                // sonst Objekt loeschen
-                if( pPage->IsPresObj(pTO) )
-                {
-                    if( !pTO->IsEmptyPresObj() )
-                    {
-                        if (!bBegUndoDone)
-                        {
-                            BegUndo(aUndoStr);
-                            bBegUndoDone = TRUE;
-                        }
-
-                        // loescht auch altes OutlinerParaObject
-                        AddUndo(new SdrUndoObjSetText(*pTO));
-
-                        pTempLiner->Init( OUTLINERMODE_OUTLINEOBJECT );
-                        pTempLiner->SetMinDepth(0);
-
-                        String aEmptyStr;
-                        PresObjKind ePresObjKind = pPage->GetPresObjKind(pTO);
-                        String aString = pPage->GetPresObjText(ePresObjKind);
-                        pPage->SetObjText( pTO, pTempLiner, ePresObjKind, aString );
-                        pTO->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
-                        pTO->GetOutlinerParaObject()->SetVertical( pTO->IsVerticalWriting() );
-
-                        if (ePresObjKind == PRESOBJ_TEXT)
-                        {
-                            pTempLiner->Init( OUTLINERMODE_SUBTITLE );
-
-                            // Vorlage setzen
-                            pTO->SetStyleSheet(pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE);
-
-                            // Linken Einzug zuruecksetzen
-                            SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
-
-//-/                            pTO->TakeAttributes(aSet, TRUE, FALSE);
-                            aSet.Put(pTO->GetMergedItemSet());
-
-                            const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
-                            SvxLRSpaceItem aNewLRItem(rLRItem);
-                            aNewLRItem.SetTxtLeft(0);
-                            aSet.Put(aNewLRItem);
-
-//-/                            pTO->NbcSetAttributes(aSet, FALSE);
-                            pTO->SetMergedItemSet(aSet);
-                        }
-
-                        pTO->SetEmptyPresObj(TRUE);
-                        pTempLiner->SetMinDepth(0);
-                    }
-                }
-                else
-                {
-                    if (!bBegUndoDone)
-                    {
-                        BegUndo(aUndoStr);
-                        bBegUndoDone = TRUE;
-                    }
-
-                    AddUndo(new SdrUndoRemoveObj(*pTO));
-                    pPage->RemoveObject(pTO->GetOrdNum());
-                }
-            }
-
-            delete pOutlineStyleList;
-
-            // das AutoLayout nochmal anwenden, damit neu eingefuegte Textobjekte
-            // die richtige Position/Groesse bekommen
-            pPage->SetAutoLayout(pPage->GetAutoLayout());
-
-            // zum naechsten Absatz der 0-ten Ebene
-            if( pPara )
-                pPara = GetNextTitle(pPara);
-        }
-
-        if (bBegUndoDone)
-        {
-            // Actions im Redo-Anteil des Outliner-UndoManagers loeschen, denn die
-            // referenzieren Actions im Redo-Anteil des Doc-UndoManagers (und die
-            // werden bei EndUndo() geloescht --> Referenzen ins Leere --> Absturz)
-            pOutliner->GetUndoManager().ClearRedo();
-
-            EndUndo();
-            SfxUndoManager* pDocUndoMgr = pDocSh->GetUndoManager();
-            SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
-            pOutliner->GetUndoManager().AddUndoAction(pLink);
-        }
-
-
-        // die Seite selektieren
-        SdPage* pPage = GetActualPage();
-        pDoc->SetSelected(pPage, TRUE);
-
-        // temporaeren Outliner loeschen
-        delete pTempLiner;
+        // simple case
+        pPage->SetAutoLayout( AUTOLAYOUT_ONLY_TITLE, true );
+    }
+    else
+    {
+        // we already have a layout with a title but the title
+        // object was deleted, create a new one
+        pPage->InsertAutoLayoutShape( 0, PRESOBJ_TITLE, false, pPage->GetTitleRect(), true );
     }
 
-    return TRUE;    // einverstanden mit der eigenen Zerstoerung
+    return GetTitleTextObject(pPage);
+}
+
+SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
+{
+    DBG_ASSERT( GetOutlineTextObject(pPage) == 0, "sd::OutlineView::CreateOutlineTextObject(), there is already a layout text object!" );
+
+
+    AutoLayout eNewLayout = pPage->GetAutoLayout();
+    switch( eNewLayout )
+    {
+    case AUTOLAYOUT_NONE:
+    case AUTOLAYOUT_ONLY_TITLE:
+    case AUTOLAYOUT_TITLE:  eNewLayout = AUTOLAYOUT_ENUM; break;
+
+    case AUTOLAYOUT_CHART:  eNewLayout = AUTOLAYOUT_CHARTTEXT; break;
+
+    case AUTOLAYOUT_ORG:
+    case AUTOLAYOUT_TAB:
+    case AUTOLAYOUT_OBJ:    eNewLayout = AUTOLAYOUT_OBJTEXT; break;
+    }
+
+    if( eNewLayout != pPage->GetAutoLayout() )
+    {
+        pPage->SetAutoLayout( eNewLayout, true );
+    }
+    else
+    {
+        // we already have a layout with a text but the text
+        // object was deleted, create a new one
+        pPage->InsertAutoLayoutShape( 0,
+                                      (eNewLayout == AUTOLAYOUT_TITLE) ? PRESOBJ_TEXT : PRESOBJ_OUTLINE,
+                                      false, pPage->GetLayoutRect(), true );
+    }
+
+    return GetOutlineTextObject(pPage);
+}
+
+/** updates draw model with all changes from outliner model */
+BOOL OutlineView::PrepareClose(BOOL bUI)
+{
+    pOutliner->GetUndoManager().Clear();
+
+    const String aUndoStr(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
+    BegUndo(aUndoStr);
+    UpdateDocument();
+    EndUndo();
+    pDoc->SetSelected(GetActualPage(), TRUE);
+    return TRUE;
 }
 
 
@@ -1603,34 +1224,11 @@ BOOL OutlineView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) co
     return TRUE;
 }
 
-/*************************************************************************
-|*
-|* gibt's selektierten Text ?
-|*
-\************************************************************************/
-
-//BOOL OutlineView::HasMarkedObj_unused() const
-//{
-//  BOOL bResult = FALSE;
-//  OutlinerView* pOlView = GetViewByWindow(
-//                              pOutlineViewShell->GetActiveWindow());
-//  DBG_ASSERT(pOlView, "keine OutlinerView gefunden");
-//  List* pSelList = (List*)pOlView->CreateSelectionList();
-//  if (pSelList->Count() > 0)
-//      bResult = TRUE;
-//
-//  delete pSelList;
-//  return bResult;
-//}
-
-/*************************************************************************
-|*
-|* Outliner mit Daten aus dem SdDrawDocument fuellen
-|*
-\************************************************************************/
-
+/** creates outliner model from draw model */
 void OutlineView::FillOutliner()
 {
+    pOutliner->GetUndoManager().Clear();
+    pOutliner->EnableUndo(FALSE);
     ResetLinks();
     pOutliner->SetMinDepth(0);
 
@@ -1707,7 +1305,7 @@ void OutlineView::FillOutliner()
         BOOL   bSubTitle = pTO != NULL;
         if (!pTO)
         {
-            pTO = GetLayoutTextObject(pPage);
+            pTO = GetOutlineTextObject(pPage);
         }
         if (pTO)
         {
@@ -1752,6 +1350,8 @@ void OutlineView::FillOutliner()
     }
 
     SetLinks();
+
+    pOutliner->EnableUndo(TRUE);
 }
 
 /*************************************************************************
@@ -1796,39 +1396,60 @@ IMPL_LINK_INLINE_START( OutlineView, IndentingPagesHdl, OutlinerView *, pOutline
 IMPL_LINK_INLINE_END( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 
 
-/*************************************************************************
-|*
-|* Liefert die aktuellen Seite
-|*
-\************************************************************************/
-
+/** returns the first slide that is selected in the outliner or where
+    the cursor is located */
 SdPage* OutlineView::GetActualPage()
 {
-    /**************************************************************************
-    |* Die Seite, in deren Titel oder Gliederung der Cursor (bzw. der
-    |* Selektionsbeginn) steht, soll selektiert werden.
-    \*************************************************************************/
-    ::sd::Window* pWin  = pOutlineViewShell->GetActiveWindow();
-    OutlinerView*  pActiveView      = GetViewByWindow(pWin);
-    ::Outliner*      pOutl            = pActiveView->GetOutliner();
-    List*          pSelList         = (List*)pActiveView->CreateSelectionList();
-    Paragraph*     pPara            = (Paragraph*)pSelList->First();
-    if ( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
+    ::sd::Window* pWin = pOutlineViewShell->GetActiveWindow();
+    OutlinerView* pActiveView = GetViewByWindow(pWin);
+    ::Outliner* pOutl = pActiveView->GetOutliner();
+    std::auto_ptr<List> pSelList( static_cast< List* >(pActiveView->CreateSelectionList()) );
+    return GetPageForParagraph(pOutl, static_cast<Paragraph*>(pSelList->First()) );
+}
+
+SdPage* OutlineView::GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara )
+{
+    if( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
     {
         pPara = GetPrevTitle(pPara);
     }
-    USHORT nPageToSelect = 0;
+    sal_uInt32 nPageToSelect = 0;
     while(pPara)
     {
         pPara = GetPrevTitle(pPara);
-        if (pPara) nPageToSelect++;
+        if(pPara)
+            nPageToSelect++;
     }
 
-    delete pSelList;                // die wurde extra fuer uns erzeugt
+    return static_cast< SdPage* >( pDoc->GetSdPage( (USHORT)nPageToSelect, PK_STANDARD) );
+}
 
-    SdPage* pPage = (SdPage*)pDoc->GetSdPage(nPageToSelect, PK_STANDARD);
+Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
+{
+    // get the number of paragraphs with ident 0 we need to skip before
+    // we finde the actual page
+    sal_uInt32 nPagesToSkip = (pPage->GetPageNum() - 1) >> 1;
 
-    return(pPage);
+    sal_uInt32 nParaPos = 0;
+    Paragraph* pPara = pOutl->GetParagraph( 0 );
+    while( pPara )
+    {
+        // if this paragraph is a page ...
+        if ( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
+        {
+            // see if we already skiped enough pages
+            if( 0 == nPagesToSkip )
+                break;  // and if so, end the loop
+
+            // we skiped another page
+            nPagesToSkip--;
+        }
+
+        // get next paragraph
+        pPara = pOutliner->GetParagraph( ++nParaPos );
+    }
+
+    return pPara;
 }
 
 /** selects the paragraph for the given page at the outliner view*/
@@ -1836,31 +1457,8 @@ void OutlineView::SetActualPage( SdPage* pActual )
 {
     if( pActual && mnIgnoreCurrentPageChangesLevel==0)
     {
-        // get the number of paragraphs with ident 0 we need to skip before
-        // we finde the actual page
-        USHORT nPagesToSkip = (pActual->GetPageNum() - 1) / 2; // Sdr --> Sd
-
-        ULONG nParaPos = 0;
-        Paragraph* pPara = pOutliner->GetParagraph( 0 );
-
-        while( pPara )
-        {
-            // if this paragraph is a page ...
-            if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )
-            {
-                // see if we already skiped enough pages
-                if( 0 == nPagesToSkip )
-                    break;  // and if so, end the loop
-
-                // we skiped another page
-                nPagesToSkip--;
-            }
-
-            // get next paragraph
-            pPara = pOutliner->GetParagraph( ++nParaPos );
-        }
-
         // if we found a paragraph, select its text at the outliner view
+        Paragraph* pPara = GetParagraphForPage( pOutliner, pActual );
         if( pPara )
             pOutlinerView[0]->Select( pPara, TRUE, FALSE );
     }
@@ -2106,15 +1704,205 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
     return 0;
 }
 
-
-
-
 void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
 {
     if (bIgnoreChanges)
         mnIgnoreCurrentPageChangesLevel++;
     else
         mnIgnoreCurrentPageChangesLevel--;
+}
+
+/** call this method before you do anything that can modify the outliner
+    and or the drawing document model. It will create needed undo actions */
+void OutlineView::BeginModelChange()
+{
+    const String aEmpty;
+    pOutliner->GetUndoManager().EnterListAction(aEmpty,aEmpty);
+    const String aUndoStr(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
+    BegUndo(aUndoStr);
+}
+
+/** call this method after BeginModelChange(), when all possible model
+    changes are done. */
+void OutlineView::EndModelChange()
+{
+    UpdateDocument();
+
+    SfxUndoManager* pDocUndoMgr = pDocSh->GetUndoManager();
+
+    bool bHasUndoActions = pDocUndoMgr->GetUndoActionCount() != 0;
+
+    EndUndo();
+
+    DBG_ASSERT( bHasUndoActions == (pOutliner->GetUndoManager().GetUndoActionCount() != 0), "sd::OutlineView::EndModelChange(), undo actions not in sync!" );
+
+    if( bHasUndoActions )
+    {
+        SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
+        pOutliner->GetUndoManager().AddUndoAction(pLink);
+    }
+
+    pOutliner->GetUndoManager().LeaveListAction();
+
+    if( bHasUndoActions && pOutliner->GetEditEngine().HasTriedMergeOnLastAddUndo() )
+        TryToMergeUndoActions();
+}
+
+/** updates all changes in the outliner model to the draw model */
+void OutlineView::UpdateDocument()
+{
+    const sal_uInt32 nPageCount = pDoc->GetSdPageCount(PK_STANDARD);
+    Paragraph* pPara = pOutliner->GetParagraph( 0 );
+    sal_uInt32 nPage;
+    for (nPage = 0; nPage < nPageCount; nPage++)
+    {
+        SdPage* pPage = pDoc->GetSdPage( (USHORT)nPage, PK_STANDARD);
+        pDoc->SetSelected(pPage, FALSE);
+
+        pOutlineViewShell->UpdateTitleObject( pPage, pPara );
+        pOutlineViewShell->UpdateOutlineObject( pPage, pPara );
+
+        if( pPara )
+            pPara = GetNextTitle(pPara);
+    }
+
+    DBG_ASSERT( pPara == 0, "sd::OutlineView::UpdateDocument(), slides are out of sync, creating missing ones" );
+    while( pPara )
+    {
+        SdPage* pPage = InsertSlideForParagraph( pPara );
+        pDoc->SetSelected(pPage, FALSE);
+
+        pOutlineViewShell->UpdateTitleObject( pPage, pPara );
+        pOutlineViewShell->UpdateOutlineObject( pPage, pPara );
+
+        if( pPara )
+            pPara = GetNextTitle(pPara);
+    }
+}
+
+/** merge edit engine undo actions if possible */
+void OutlineView::TryToMergeUndoActions()
+{
+    SfxUndoManager& rOutlineUndo = pOutliner->GetUndoManager();
+    if( rOutlineUndo.GetUndoActionCount() > 1 )
+    {
+        SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction(0) );
+        SfxListUndoAction* pPrevListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction(1) );
+        if( pListAction && pPrevListAction )
+        {
+            // find the top EditUndo action in the top undo action list
+            USHORT nAction = pListAction->aUndoActions.Count();
+            EditUndo* pEditUndo = 0;
+            while( !pEditUndo && nAction )
+            {
+                pEditUndo = dynamic_cast< EditUndo* >(pListAction->aUndoActions[--nAction]);
+            }
+
+            USHORT nEditPos = nAction; // we need this later to remove the merged undo actions
+
+            // make sure it is the only EditUndo action in the top undo list
+            while( pEditUndo && nAction )
+            {
+                if( dynamic_cast< EditUndo* >(pListAction->aUndoActions[--nAction]) )
+                    pEditUndo = 0;
+            }
+
+            // do we have one and only one EditUndo action in the top undo list?
+            if( pEditUndo )
+            {
+                // yes, see if we can merge it with the prev undo list
+
+                USHORT nAction = pPrevListAction->aUndoActions.Count();
+                EditUndo* pPrevEditUndo = 0;
+                while( !pPrevEditUndo && nAction )
+                    pPrevEditUndo = dynamic_cast< EditUndo* >(pPrevListAction->aUndoActions[--nAction]);
+
+                if( pPrevEditUndo && pPrevEditUndo->Merge( pEditUndo ) )
+                {
+                    // ok we merged the only EditUndo of the top undo list with
+                    // the top EditUndo of the previous undo list
+
+                    // first remove the merged undo action
+                    pListAction->aUndoActions.Remove(nEditPos);
+                    delete pEditUndo;
+
+                    // now check if we also can merge the draw undo actions
+                    SfxUndoManager* pDocUndoManager = pDocSh->GetUndoManager();
+                    if( pDocUndoManager && ( pListAction->aUndoActions.Count() == 1 ))
+                    {
+                        SfxLinkUndoAction* pLinkAction = dynamic_cast< SfxLinkUndoAction* >( pListAction->aUndoActions[0] );
+                        SfxLinkUndoAction* pPrevLinkAction = 0;
+
+                        if( pLinkAction )
+                        {
+                            nAction = pPrevListAction->aUndoActions.Count();
+                            while( !pPrevLinkAction && nAction )
+                                pPrevLinkAction = dynamic_cast< SfxLinkUndoAction* >(pPrevListAction->aUndoActions[--nAction]);
+                        }
+
+                        if( pLinkAction && pPrevLinkAction &&
+                            ( pLinkAction->GetAction() == pDocUndoManager->GetUndoAction(0) ) &&
+                            ( pPrevLinkAction->GetAction() == pDocUndoManager->GetUndoAction(1) ) )
+                        {
+                            SfxListUndoAction* pSourceList = dynamic_cast< SfxListUndoAction* >(pLinkAction->GetAction());
+                            SfxListUndoAction* pDestinationList = dynamic_cast< SfxListUndoAction* >(pPrevLinkAction->GetAction());
+
+                            if( pSourceList && pDestinationList )
+                            {
+                                const USHORT nCount = pSourceList->aUndoActions.Count();
+                                nAction = 0;
+                                USHORT nDestAction = pDestinationList->aUndoActions.Count();
+                                while( nAction < nCount )
+                                {
+                                    const SfxUndoAction* pTemp = pSourceList->aUndoActions.GetObject(nAction++);
+                                    pDestinationList->aUndoActions.Insert( pTemp, nDestAction++ );
+                                }
+                                pSourceList->aUndoActions.Remove( nCount - 1 );
+                                pDestinationList->nCurUndoAction = pDestinationList->aUndoActions.Count();
+
+                                pListAction->aUndoActions.Remove(0);
+                                delete pLinkAction;
+
+                                pDocUndoManager->RemoveLastUndoAction();
+                            }
+                        }
+                    }
+
+                    if( pListAction->aUndoActions.Count() )
+                    {
+                        // now we have to move all remaining doc undo actions from the top undo
+                        // list to the previous undo list and remove the top undo list
+
+                        const USHORT nCount = pListAction->aUndoActions.Count();
+                        nAction = 0;
+                        USHORT nDestAction = pPrevListAction->aUndoActions.Count();
+                        while( nAction < nCount )
+                        {
+                            const SfxUndoAction* pTemp = pListAction->aUndoActions.GetObject(nAction++);
+                            if( pTemp )
+                                pPrevListAction->aUndoActions.Insert( pTemp, nDestAction++ );
+                        }
+
+                        pListAction->aUndoActions.Remove( nCount - 1 );
+                        pPrevListAction->nCurUndoAction = pPrevListAction->aUndoActions.Count();
+                    }
+
+                    rOutlineUndo.RemoveLastUndoAction();
+                }
+            }
+        }
+    }
+}
+
+OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
+: mrView( rView )
+{
+    mrView.BeginModelChange();
+}
+
+OutlineViewModelChangeGuard::~OutlineViewModelChangeGuard()
+{
+    mrView.EndModelChange();
 }
 
 OutlineViewPageChangesGuard::OutlineViewPageChangesGuard( OutlineView* pView )
