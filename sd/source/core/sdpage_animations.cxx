@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:44:15 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,33 +136,13 @@ void SdPage::removeAnimations( const SdrObject* pObj )
         Reference< XShape > xShape( const_cast<SdrObject*>(pObj)->getUnoShape(), UNO_QUERY );
 
         if( mpMainSequence->hasEffect( xShape ) )
-        {
-            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetModel());
-
-            // since this is also called from a redo action, make sure we
-            // are recording undo actions anyway
-            SdrUndoGroup* pGroup = pDoc ? const_cast< SdrUndoGroup*  >( pDoc->GetAktUndoGroup() ) : 0;
-
-            if( pGroup )
-            {
-                bool bAdd = true;
-                if( pGroup->GetActionCount() == 0 )
-                {
-                    bAdd = true;
-                }
-                else
-                {
-                    UndoAnimation* pAnim = dynamic_cast< UndoAnimation* >( pGroup->GetAction( 0 ) );
-                    bAdd = pAnim == 0;
-                }
-
-                if( bAdd )
-                    pGroup->push_front( new UndoAnimation( pDoc, this ) );
-            }
-
             mpMainSequence->disposeShape( xShape );
-        }
     }
+}
+
+bool SdPage::hasAnimationNode() const
+{
+    return mxAnimationNode.is();
 }
 
 void SdPage::SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect)
