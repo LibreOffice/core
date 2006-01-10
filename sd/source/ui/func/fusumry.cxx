@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:04:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
 
                     // Seite hinten einfuegen
                     pDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
-                    pView->AddUndo(new SdrUndoNewPage(*pSummaryPage));
+                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -184,7 +184,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
 
                     // Seite hinten einfuegen
                     pDoc->InsertPage(pNotesPage, nCount * 2 + 2);
-                    pView->AddUndo(new SdrUndoNewPage(*pNotesPage));
+                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
