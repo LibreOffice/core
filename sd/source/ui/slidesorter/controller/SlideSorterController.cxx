@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:20:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -733,8 +733,8 @@ void SlideSorterController::DeleteSelectedNormalPages (const ::std::vector<SdPag
         {
             // Add undo actions and delete the pages.  The order of adding
             // the undo actions is important.
-            GetView().AddUndo (new SdrUndoDelPage (*pNotesPage));
-            GetView().AddUndo (new SdrUndoDelPage (*pPage));
+            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
 
             // The XDrawPagesSupplier deletes both the slide and notes page.
             xPages->remove (Reference<drawing::XDrawPage>(
@@ -780,8 +780,8 @@ void SlideSorterController::DeleteSelectedMasterPages (const ::std::vector<SdPag
         {
             // Add undo actions and delete the pages.  The order of adding
             // the undo actions is important.
-            GetView().AddUndo (new SdrUndoDelPage (*pNotesPage));
-            GetView().AddUndo (new SdrUndoDelPage (*pPage));
+            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
 
             pDocument->RemoveMasterPage (pPage->GetPageNum());
             pDocument->RemoveMasterPage (pNotesPage->GetPageNum());
