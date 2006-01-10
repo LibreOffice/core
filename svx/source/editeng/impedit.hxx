@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:38:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,6 +1042,8 @@ public:
     // #110496#
     void                EnableVerboseTextComments( BOOL bEnable ) { bVerboseTextComments=bEnable; }
     BOOL                IsVerboseTextComments() const { return bVerboseTextComments; }
+
+    BOOL                mbLastTryMerge;
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
