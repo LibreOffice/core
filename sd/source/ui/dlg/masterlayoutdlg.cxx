@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:45:55 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,12 +162,7 @@ void MasterLayoutDialog::applyChanges()
 
 void MasterLayoutDialog::create( PresObjKind eKind )
 {
-    SdrObject* pObject = mpCurrentPage->CreateDefaultPresObj( eKind, true );
-    if( pObject )
-    {
-        mpDoc->AddUndo(new SdrUndoUserCallObj( *pObject, NULL, mpCurrentPage ) );
-        mpDoc->AddUndo(new SdrUndoNewObj(*pObject));
-    }
+    mpCurrentPage->CreateDefaultPresObj( eKind, true );
 }
 
 void MasterLayoutDialog::remove( PresObjKind eKind )
@@ -176,7 +171,7 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
 
     if( pObject )
     {
-        mpDoc->AddUndo(new SdrUndoDelObj(*pObject));
+        mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
         SdrObjList* pOL =pObject->GetObjList();
         UINT32 nOrdNum=pObject->GetOrdNumDirect();
         SdrObject* pChkObj=pOL->RemoveObject(nOrdNum);
