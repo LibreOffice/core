@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:05:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:30:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,6 @@ FuText::FuText (
 FunctionReference FuText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
     FunctionReference xFunc( new FuText( pViewSh, pWin, pView, pDoc, rReq ) );
-    xFunc->DoExecute(rReq);
     return xFunc;
 }
 
@@ -1288,69 +1287,24 @@ BOOL FuText::RestoreDefaultText()
     {
         if( !pTextObj->HasText() )
         {
-            SdPage* pPage = (SdPage*) pTextObj->GetPage();
+            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
 
             if (pPage)
             {
-                PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
-
-                if (ePresObjKind == PRESOBJ_TITLE   ||
-                    ePresObjKind == PRESOBJ_OUTLINE ||
-                    ePresObjKind == PRESOBJ_NOTES   ||
-                    ePresObjKind == PRESOBJ_TEXT)
+                bRestored = pPage->RestoreDefaultText( pTextObj ) ? TRUE : FALSE;
+                if( bRestored )
                 {
-                    String aString = pPage->GetPresObjText(ePresObjKind);
-
-                    if (aString.Len())
-                    {
-                        ::sd::Outliner* pInternalOutl = pDoc->GetInternalOutliner();
-                        pInternalOutl->SetMinDepth(0);
-
-                        BOOL bVertical = FALSE;
-                        OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
-                        if( pOldPara )
-                            bVertical = pOldPara->IsVertical();  // is old para object vertical?
-
-                        pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
-
-                        if( pOldPara )
-                        {
-                            //pTextObj->SetVerticalWriting( bVertical );
-                            //
-                            // #94826# Here, only the vertical flag for the
-                            // OutlinerParaObjects needs to be changed. The
-                            // AutoGrowWidth/Height items still exist in the
-                            // not changed object.
-                            if(pTextObj
-                                && pTextObj->GetOutlinerParaObject()
-                                && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
-                            {
-                                Rectangle aObjectRect = pTextObj->GetSnapRect();
-                                pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);
-                                pTextObj->SetSnapRect(aObjectRect);
-                            }
-                        }
-
-                        SdrOutliner* pOutliner = pView->GetTextEditOutliner();
-                        pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
-                        pTextObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE );
-                        pTextObj->SetTextEditOutliner( pOutliner );
-
-                        pInternalOutl->Clear();
-                        OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-
-                        if (pOutliner)
-                            pOutliner->SetText(*pParaObj);
-
-                        pTextObj->SetEmptyPresObj(TRUE);
-                        bRestored = TRUE;
-                    }
+                    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+                    pTextObj->SetTextEditOutliner( pOutliner );
+                    OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                    if (pOutliner)
+                        pOutliner->SetText(*pParaObj);
                 }
             }
         }
     }
 
-    return(bRestored);
+    return bRestored;
 }
 
 /*************************************************************************
