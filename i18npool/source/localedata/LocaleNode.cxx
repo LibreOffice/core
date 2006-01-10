@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:59:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,7 +633,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         sal_Int16 nHere = ::std::min( ((aIter != aFormatIndex.end() ? *aIter :
                 cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
                 cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
-        ++aIter;
+        if (aIter != aFormatIndex.end()) ++aIter;
         for ( ; nNext < nHere; ++nNext)
         {
             switch (nNext)
