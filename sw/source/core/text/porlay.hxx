@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:19:57 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,7 @@ class SwParaPortion : public SwLineLayout
 
 public:
     SwParaPortion();
+    virtual ~SwParaPortion();
 
     // setzt alle Formatinformationen zurueck (ausser bFlys wg. 9916)
     inline void FormatReset();
