@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oledll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:43:52 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _WIN32_WINNT 0x0400
 #define _WIN32_DCOM
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_STLP_DEBUG)
 #undef _DEBUG
 #endif
 #include <atlbase.h>
