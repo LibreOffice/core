@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:55:03 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ private:
 
     void            ReleaseFocus();
     void            InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void            DeleteEntryData();
 
 protected:
     virtual void    Select();
@@ -94,6 +95,7 @@ public:
     void            FillBox( BOOL bSelect = TRUE );
     void            Update( const SfxStringItem* pItem );
     void            NotifyIDE();
+    void            Clear();
 };
 
 
