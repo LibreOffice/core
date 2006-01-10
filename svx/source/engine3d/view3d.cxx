@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:43:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,7 +727,7 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                     }
 
                     // Undo anlegen
-                    AddUndo(new SdrUndoNewObj(*pNew));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNew));
                 }
             }
         }
@@ -816,7 +816,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
                 pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_BLACK), EE_CHAR_COLOR));
 
                 // add undo now
-                AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
             }
 
             pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
@@ -839,7 +839,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
             && eFillStyle != XFILL_NONE)
         {
             if(pObj->GetPage())
-                AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
             pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
             pObj->SetMergedItem(XLineWidthItem(0L));
         }
