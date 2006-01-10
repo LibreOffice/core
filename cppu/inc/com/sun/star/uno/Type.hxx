@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:35:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #ifndef _COM_SUN_STAR_UNO_TYPE_H_
 #include <com/sun/star/uno/Type.h>
 #endif
-
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
+#endif
 
 namespace com
 {
@@ -117,113 +119,94 @@ typelib_TypeDescriptionReference * Array< T >::s_pType = 0;
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_TYPE ) );
+    return ::cppu::UnoType< ::com::sun::star::uno::Type >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) );
+    return ::cppu::UnoType< ::cppu::UnoVoidType >::get();
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) );
+    return ::cppu::UnoType< ::cppu::UnoVoidType >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
+    return ::cppu::UnoType< bool >::get();
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
+    return ::cppu::UnoType< bool >::get();
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
+    return ::cppu::UnoType< bool >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
     bool const * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
+    return ::cppu::UnoType< bool >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_CHAR ) );
+    return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType() SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_CHAR ) );
+    return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BYTE ) );
+    return ::cppu::UnoType< ::sal_Int8 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_STRING ) );
+    return ::cppu::UnoType< ::rtl::OUString >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_SHORT ) );
+    return ::cppu::UnoType< ::sal_Int16 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_SHORT ) );
+    return ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_LONG ) );
+    return ::cppu::UnoType< ::sal_Int32 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_LONG ) );
+    return ::cppu::UnoType< ::sal_uInt32 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_HYPER ) );
+    return ::cppu::UnoType< ::sal_Int64 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_HYPER ) );
+    return ::cppu::UnoType< ::sal_uInt64 >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_FLOAT ) );
+    return ::cppu::UnoType< float >::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_DOUBLE ) );
+    return ::cppu::UnoType< double >::get();
 }
 
 template< class T >
@@ -231,7 +214,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType1( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( *pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( *pT );
         sal_Int32 size = sizeof( **pT );
         sal_Int32 dim1 = sizeof( *pT ) / size;
         ::typelib_static_array_type_init(
@@ -247,7 +231,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType2( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( **pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( **pT );
         sal_Int32 size = sizeof( ***pT );
         sal_Int32 dim2 = sizeof( **pT ) / size;
         sal_Int32 dim1 = sizeof( *pT ) / dim2 / size;
@@ -264,7 +249,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType3( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( ***pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( ***pT );
         sal_Int32 size = sizeof( ****pT );
         sal_Int32 dim3 = sizeof( ***pT ) / size;
         sal_Int32 dim2 = sizeof( **pT ) / dim3 / size;
@@ -282,7 +268,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType4( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( ****pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( ****pT );
         sal_Int32 size = sizeof( *****pT );
         sal_Int32 dim4 = sizeof( ****pT ) / size;
         sal_Int32 dim3 = sizeof( ***pT ) / dim4 / size;
@@ -301,7 +288,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType5( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( *****pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( *****pT );
         sal_Int32 size = sizeof( ******pT );
         sal_Int32 dim5 = sizeof( *****pT ) / size;
         sal_Int32 dim4 = sizeof( ****pT ) / dim5 / size;
@@ -321,7 +309,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType( ******pT );
+        const ::com::sun::star::uno::Type & rElementType =
+            ::cppu::getTypeFavourUnsigned( ******pT );
         sal_Int32 size = sizeof( *******pT );
         sal_Int32 dim6 = sizeof( ******pT ) / size;
         sal_Int32 dim5 = sizeof( *****pT ) / dim6 / size;
@@ -340,14 +329,14 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
 template< typename T >
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType() SAL_THROW(())
 {
-    return getCppuType(static_cast< T * >(0));
+    return ::cppu::UnoType< T >::get();
 }
 
 template<>
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType< sal_Unicode >()
     SAL_THROW(())
 {
-    return getCharCppuType();
+    return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 
 #endif
