@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:29:11 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_TEXT_FITTOSIZE_VERTICAL:
         {
             SetCurrentFunction( FuText::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
-            // Das Setzen des Permanent-Status erfolgt weiter oben!
+            GetCurrentFunction()->DoExecute(rReq);
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate( SID_ATTR_CHAR );
