@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:14:08 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,8 @@ private:
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
 
-    inline SwScriptInfo() : nInvalidityPos( 0 ), nDefaultDir( 0 ) {};
+    SwScriptInfo();
+    ~SwScriptInfo();
 
     // determines script changes
     void InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL );
