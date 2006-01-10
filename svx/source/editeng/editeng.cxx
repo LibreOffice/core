@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:09:46 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,11 @@ void EditEngine::UndoActionEnd( sal_uInt16 nId )
     DBG_ASSERT( !pImpEditEngine->IsInUndo(), "Aufruf von UndoActionEnd im Undomodus!" );
     if ( !pImpEditEngine->IsInUndo() )
         pImpEditEngine->UndoActionEnd( nId );
+}
+
+BOOL EditEngine::HasTriedMergeOnLastAddUndo() const
+{
+    return pImpEditEngine->mbLastTryMerge;
 }
 
 void EditEngine::SetRefDevice( OutputDevice* pRefDev )
