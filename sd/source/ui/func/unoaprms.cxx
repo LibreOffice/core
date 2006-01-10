@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:56:55 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->bSoundOn     = bOldSoundOn;
             pInfo->aSoundFile   = aOldSoundFile;
             pInfo->bPlayFull    = bOldPlayFull;
-            pInfo->SetPath(pOldPathObj);
+//          pInfo->SetPath(pOldPathObj);
             pInfo->eClickAction = eOldClickAction;
             pInfo->aBookmark    = aOldBookmark;
 //          pInfo->bInvisibleInPresentation = bOldInvisibleInPres;
@@ -150,17 +150,7 @@ void SdAnimationPrmsUndoAction::Redo()
 {
     SdAnimationInfo* pInfo = NULL;
 
-    // nicht durch Aktion erzeugt: neue Daten eintragen
-    if (!bInfoCreated)
-    {
-        pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
-    }
-    // Info durch Aktion erzeugt: jetzt wieder erzeugen
-    else
-    {
-        pInfo = new SdAnimationInfo(pDoc);
-        pObject->InsertUserData(pInfo);
-    }
+    pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
 
     pInfo->bActive      = bNewActive;
     pInfo->eEffect      = eNewEffect;
@@ -172,7 +162,7 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->bSoundOn     = bNewSoundOn;
     pInfo->aSoundFile   = aNewSoundFile;
     pInfo->bPlayFull    = bNewPlayFull;
-    pInfo->SetPath(pNewPathObj);
+//  pInfo->SetPath(pNewPathObj);
     pInfo->eClickAction = eNewClickAction;
     pInfo->aBookmark    = aNewBookmark;
 //  pInfo->bInvisibleInPresentation = bNewInvisibleInPres;
