@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:04 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,65 +41,6 @@
 #pragma hdrstop
 
 #include "undo.hxx"
-#include "svarray.hxx"
-
-//========================================================================
-
-SV_DECL_PTRARR( SfxUndoActions, SfxUndoAction*, 20, 8 )
-
-//====================================================================
-
-struct SfxUndoArray
-{
-    SfxUndoActions          aUndoActions;
-    USHORT                  nMaxUndoActions;
-    USHORT                  nCurUndoAction;
-    SfxUndoArray            *pFatherUndoArray;
-                            SfxUndoArray(USHORT nMax=0) : pFatherUndoArray(0),
-                                nCurUndoAction(0),nMaxUndoActions(nMax){}
-                           ~SfxUndoArray();
-};
-
-//=========================================================================
-
-class SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
-
-/*  [Beschreibung]
-
-    UndoAction zur Klammerung mehrerer Undos in einer UndoAction.
-    Diese Actions werden vom SfxUndoManager verwendet. Dort
-    wird mit < SfxUndoManager::EnterListAction > eine Klammerebene
-    geoeffnet und mit <SfxUndoManager::LeaveListAction > wieder
-    geschlossen. Redo und Undo auf SfxListUndoActions wirken
-    Elementweise.
-
-*/
-
-
-
-
-{
-    public:
-                            TYPEINFO();
-
-                            SfxListUndoAction( const UniString &rComment,
-                                const UniString rRepeatComment, USHORT Id, SfxUndoArray *pFather);
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget&);
-    virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
-
-    virtual UniString           GetComment() const;
-    virtual UniString           GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
-
-
-    private:
-
-    USHORT                  nId;
-    UniString                   aComment, aRepeatComment;
-
-};
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -366,20 +307,74 @@ USHORT SfxUndoManager::GetUndoActionCount() const
 
 XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 {
-    return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoActionComment(), illegal id!" );
+    if( nNo < pActUndoArray->nCurUndoAction )
+    {
+        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
+    }
+    else
+    {
+        XubString aEmpty;
+        return aEmpty;
+    }
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 {
-    return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoActionId(), illegal id!" );
+    if( nNo < pActUndoArray->nCurUndoAction )
+    {
+        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//------------------------------------------------------------------------
+
+SfxUndoAction* SfxUndoManager::GetUndoAction( USHORT nNo ) const
+{
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoAction(), illegal id!" );
+    if( nNo < pActUndoArray->nCurUndoAction )
+    {
+        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]; //!
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//------------------------------------------------------------------------
+
+/** clears the redo stack and removes the top undo action */
+void SfxUndoManager::RemoveLastUndoAction()
+{
+    DBG_ASSERT( pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::RemoveLastUndoAction(), no action to remove?!" );
+    if( pActUndoArray->nCurUndoAction )
+    {
+        pActUndoArray->nCurUndoAction--;
+
+        // delete redo-actions and top action
+        USHORT nPos;
+        for ( nPos = pActUndoArray->aUndoActions.Count(); nPos > pActUndoArray->nCurUndoAction; --nPos )
+            delete pActUndoArray->aUndoActions[nPos-1];
+
+        pActUndoArray->aUndoActions.Remove(
+            pActUndoArray->nCurUndoAction,
+            pActUndoArray->aUndoActions.Count() - pActUndoArray->nCurUndoAction );
+    }
 }
 
 //------------------------------------------------------------------------
 
 BOOL SfxUndoManager::Undo( USHORT nCount )
 {
+    DBG_ASSERT( pActUndoArray == pUndoArray, "svtools::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
     if ( pActUndoArray->nCurUndoAction )
     {
         Undo( *pActUndoArray->aUndoActions[ --pActUndoArray->nCurUndoAction ] );
@@ -525,19 +520,40 @@ void SfxUndoManager::LeaveListAction()
     if ( !pUndoArray->nMaxUndoActions )
         return;
 
-    DBG_ASSERT(pActUndoArray->pFatherUndoArray,"Keine hoehere Undo Ebene existent");
+    if( pActUndoArray == pUndoArray )
+    {
+        DBG_ERROR( "svtools::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
+        return;
+    }
+
+    DBG_ASSERT(pActUndoArray->pFatherUndoArray,"svtools::SfxUndoManager::LeaveListAction(), no father undo array!?");
 
     SfxUndoArray* pTmp=pActUndoArray;
     pActUndoArray=pActUndoArray->pFatherUndoArray;
 
-//Falls keine UndoAction eingefuegt wurde, entferne die UndoListAction
-
+    // If no undo action where added, delete the undo list action
+    SfxUndoAction *pTmpAction= pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1];
     if(!pTmp->nCurUndoAction)
     {
-        SfxUndoAction *pTmpAction=
-            pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1];
         pActUndoArray->aUndoActions.Remove( --pActUndoArray->nCurUndoAction);
         delete pTmpAction;
+    }
+    else
+    {
+        // if the undo array has no comment, try to get it from its children
+        SfxListUndoAction* pList = dynamic_cast< SfxListUndoAction * >( pTmpAction );
+        if( pList && pList->GetComment().Len() == 0 )
+        {
+            USHORT n;
+            for( n = 0; n < pList->aUndoActions.Count(); n++ )
+            {
+                if( pList->aUndoActions[n]->GetComment().Len() )
+                {
+                    pList->SetComment( pList->aUndoActions[n]->GetComment() );
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -553,6 +569,13 @@ USHORT SfxListUndoAction::GetId() const
 XubString SfxListUndoAction::GetComment() const
 {
     return aComment;
+}
+
+//------------------------------------------------------------------------
+
+void SfxListUndoAction::SetComment( const UniString& rComment )
+{
+    aComment = rComment;
 }
 
 //------------------------------------------------------------------------
@@ -612,6 +635,13 @@ BOOL SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
         if(!aUndoActions[i]->CanRepeat(r))
             return FALSE;
     return TRUE;
+}
+
+//------------------------------------------------------------------------
+
+BOOL SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
+{
+    return aUndoActions.Count() && aUndoActions[aUndoActions.Count()-1]->Merge( pNextAction );
 }
 
 //------------------------------------------------------------------------
