@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:23:43 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,9 @@
 #include "glob.hrc"
 #include "glob.hxx"
 #include "helpids.h"
+#include "anminfo.hxx"
+#include "undo/undomanager.hxx"
+#include "undo/undoobjects.hxx"
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -154,7 +157,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #endif
 
-#define MAX_PRESOBJ     5              // Max. Anzahl Praesentationsobjekte
+#include <set>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -176,7 +179,6 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage) :
     bSoundOn(FALSE),
     bExcluded(FALSE),
     eAutoLayout(AUTOLAYOUT_NONE),
-    bOwnArrangement(FALSE),
     ePageKind(PK_STANDARD),
     bScaleObjects(TRUE),
     pPageLink(NULL),
@@ -227,66 +229,31 @@ SdPage::~SdPage()
 }
 
 /** returns the nIndex'th object from the given PresObjKind, index starts with 1 */
-SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex)
+SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex )
 {
     int nObjFound = 0;          // index of the searched object
-    SdrObject* pObj = NULL;
-    SdrObject* pObjFound = NULL;
-
-    PresentationObjectList::iterator aIter( maPresObjList.begin() );
-    const PresentationObjectList::iterator aEnd( maPresObjList.end() );
-
-    while( (aIter != aEnd) && (nObjFound != nIndex) )
+    SdrObject* pObj = 0;
+    while( pObj = maPresentationShapeList.getNextShape(pObj) )
     {
-        if( (*aIter).meKind == eObjKind )
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
+        if( pInfo && (pInfo->mePresObjKind == eObjKind) )
         {
-            pObj = (*aIter).mpObject;
             nObjFound++;    // found one
-        }
-
-        aIter++;
-    }
-
-    if (nObjFound == nIndex)
-    {
-        pObjFound = pObj;
-    }
-    else if(eObjKind==PRESOBJ_TITLE || eObjKind==PRESOBJ_OUTLINE)
-    {
-        // for title and outline shapes we will try to find them on the page
-        nObjFound = 0;
-        int nIdx = 0;
-        int nCnt = GetObjCount();
-
-        while((nIdx < nCnt) && (nObjFound != nIndex))
-        {
-            pObj = GetObj(nIdx);
-            SdrObjKind eSdrObjKind = (SdrObjKind) pObj->GetObjIdentifier();
-
-            if (pObj->GetObjInventor() == SdrInventor &&
-                (eObjKind==PRESOBJ_TITLE   && eSdrObjKind == OBJ_TITLETEXT ||
-                eObjKind==PRESOBJ_OUTLINE && eSdrObjKind == OBJ_OUTLINETEXT))
-            {
-                nObjFound++;    // found one
-            }
-
-            nIdx++;
-        }
-
-        if (nObjFound == nIndex)
-        {
-            // we found the searched object on the page
-            pObjFound = pObj;
+            if( nObjFound == nIndex )
+                return pObj;
         }
     }
 
-    return pObjFound;
+    return 0;
 }
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
 SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert)
 {
+    sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
+
     SdrObject* pSdrObj = NULL;
 
     bool bForceText = false;    // forces the shape text to be set even if its empty
@@ -390,17 +357,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
         break;
 
-#ifdef STARIMAGE_AVAILABLE
-        case PRESOBJ_IMAGE:
-        {
-            pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" )));
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_IMAGE ) );
-            Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-        }
-        break;
-#endif
         case PRESOBJ_BACKGROUND:
         {
             pSdrObj = new SdrRectObj();
@@ -457,24 +413,10 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
     if (pSdrObj)
     {
-        // #107228# We need to put the shape that will be inserted
-        // into the aPresObjList always. This is because the accessibility
-        // api creates a XShape wrapper during the call to InsertObject.
-        // The creation fails if this is not in the aPresObjList at this point.
-        // We will remove it from the aPresObjList after InsertObject since
-        // this is needed for the correct working of SetAutoLayout
-        const bool bIsAlreadyInserted = IsPresObj(pSdrObj);
-
-        if( !bIsAlreadyInserted )
-            InsertPresObj(pSdrObj, eObjKind);
-
         pSdrObj->SetEmptyPresObj(bEmptyPresObj);
         pSdrObj->SetLogicRect(rRect);
 
         InsertObject(pSdrObj);
-
-        if( !bIsAlreadyInserted && !bInsert )
-            RemovePresObj( pSdrObj );
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
@@ -568,9 +510,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pSdrObj->SetMergedItemSet(aTempAttr);
         }
 
-        pSdrObj->SetUserCall(this);
-        pSdrObj->RecalcBoundRect();
-
         if (bMaster)
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
@@ -618,9 +557,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
              eObjKind == PRESOBJ_CHART    ||
              eObjKind == PRESOBJ_ORGCHART ||
              eObjKind == PRESOBJ_TABLE    ||
-#ifdef STARIMAGE_AVAILABLE
-             eObjKind == PRESOBJ_IMAGE    ||
-#endif
              eObjKind == PRESOBJ_GRAPHIC )
         {
             SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
@@ -629,6 +565,22 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
             pSdrObj->SetMergedItemSet(aSet);
         }
+
+        if( bUndo )
+        {
+            pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoNewObject(*pSdrObj));
+        }
+
+        if( bUndo )
+        {
+            pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pSdrObj ) );
+            pUndoManager->AddUndoAction( new UndoObjectUserCall(*pSdrObj) );
+        }
+
+        InsertPresObj(pSdrObj, eObjKind);
+        pSdrObj->SetUserCall(this);
+
+        pSdrObj->RecalcBoundRect();
     }
 
     return(pSdrObj);
@@ -641,7 +593,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 |*
 \************************************************************************/
 
-SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind)
+SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 {
     String aName(GetLayoutName());
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
@@ -748,7 +700,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 
 void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect)
 {
-    if (!bOwnArrangement)
+    if (!maLockAutoLayoutArrangement.isLocked())
     {
         switch (eType)
         {
@@ -764,9 +716,18 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 {
                     if (!bMaster)
                     {
-                        // Objekt wurde vom Benutzer veraendert und hoert damit nicht
-                        // mehr auf die MasterPage-Objekte
-                        pObj->SetUserCall(NULL);
+                        if( pObj->GetUserCall() )
+                        {
+                            sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+                            const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
+                            DBG_ASSERT( bUndo || (pUndoManager && pUndoManager->isInUndo()),
+                                            "SdPage::Changed(), model change without undo!?" );
+                            if( bUndo )
+                                pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
+
+                            // Objekt was resized by user and does not listen to its slide anymore
+                            pObj->SetUserCall(0);
+                        }
                     }
                     else if (pModel)
                     {
@@ -792,49 +753,9 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
             break;
 
             case SDRUSERCALL_DELETE:
-            {
-                // Ignore the delete call.  This formerly was treated
-                // like SDRUSERCALL_REMOVED with the effect that a
-                // deleted object was inserted into the
-                // DeletedPresObjList which lead to a crash.
-                List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
-                if( pList )
-                    pList->Remove((void*) &rObj);
-
-                // this should be redundant, but for safety reasons
-                // check if someone deleted a SdrObject without
-                // removing it from the presentation object list first
-                PresentationObjectList::iterator aIter( FindPresObj( &rObj ) );
-                if( aIter != maPresObjList.end() )
-                    maPresObjList.erase( aIter );
-            }
-            break;
-
             case SDRUSERCALL_REMOVED:
-            {
-                if( IsPresObj( &rObj ) )
-                {
-                    // #107844#
-                    // Handling of non-empty and empty PresObjs was moved to UndoActionHdl
-                    // to allow adding the correct SdrUndoUserCallObj. This may be done here, too,
-                    // but it makes more sense to handle all changes to PresObjs in a central
-                    // place where the Undo is needed to be fetched anyways.
-
-                    // In die Liste fuers Undo eintragen, da dieses Objekt
-                    // durch das Default-Praesentationsobjekt ersetzt werden
-                    // soll.
-                    // Im UndoActionHdl des DrawDocs wird der UserCall
-                    // auf NULL gesetzt und das Obj aus der Liste ausgetragen
-                    ((SdrObject&) rObj).SetUserCall(this);
-                    List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
-                    pList->Insert((void*) &rObj, LIST_APPEND);
-                }
-                removeAnimations( &rObj );
-            }
-            break;
-
             default:
-            break;
+                break;
         }
     }
 }
@@ -847,6 +768,9 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 
 void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
 {
+    sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
+
     SdPage* pMasterPage = this;
 
     if (!bMaster)
@@ -876,21 +800,13 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
             // handout template
 
             // delete all available handout presentation objects
-            PresentationObjectList& rPresObjList = pMasterPage->GetPresObjList();
-            PresentationObjectList::iterator aIter( rPresObjList.begin() );
-            PresentationObjectList::iterator aEnd( rPresObjList.end() );
-            while( aIter != aEnd )
+            SdrObject* pObj;
+            while( pObj = GetPresObj(PRESOBJ_HANDOUT) )
             {
-                if( (*aIter).meKind == PRESOBJ_HANDOUT )
-                {
-                    SdrObject* pObj = (*aIter).mpObject;
-                    aIter = rPresObjList.erase( aIter );
-                    pMasterPage->RemoveObject(pObj->GetOrdNum());
-                }
-                else
-                {
-                    aIter++;
-                }
+                if( bUndo )
+                    pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+
+                pMasterPage->RemoveObject(pObj->GetOrdNum());
             }
 
             Size    aArea = GetSize();
@@ -1280,767 +1196,435 @@ Rectangle SdPage::GetLayoutRect() const
 |*
 \*************************************************************************/
 
-void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
+const int MAX_PRESOBJS = 5; // maximum number of presentation objects per layout
+const int VERTICAL = 0x8000;
+
+struct LayoutDescriptor
 {
-    eAutoLayout = eLayout;
-    bOwnArrangement = TRUE;
+    int mnLayout;
+    PresObjKind meKind[MAX_PRESOBJS];
+    bool mbVertical[MAX_PRESOBJS];
 
-    CreateTitleAndLayout(bInit, bCreate);
+    LayoutDescriptor( int nLayout, int k0 = 0, int k1 = 0, int k2 = 0, int k3 = 0, int k4 = 0 );
+};
 
-    if ((eAutoLayout == AUTOLAYOUT_NONE && maPresObjList.empty()) || bMaster)
+LayoutDescriptor::LayoutDescriptor( int nLayout, int k0, int k1, int k2, int k3, int k4 )
+: mnLayout( nLayout )
+{
+    meKind[0] = static_cast<PresObjKind>(k0 & (~VERTICAL)); mbVertical[0] = (k0 & VERTICAL) == VERTICAL;
+    meKind[1] = static_cast<PresObjKind>(k1 & (~VERTICAL)); mbVertical[1] = (k1 & VERTICAL) == VERTICAL;
+    meKind[2] = static_cast<PresObjKind>(k2 & (~VERTICAL)); mbVertical[2] = (k2 & VERTICAL) == VERTICAL;
+    meKind[3] = static_cast<PresObjKind>(k3 & (~VERTICAL)); mbVertical[3] = (k3 & VERTICAL) == VERTICAL;
+    meKind[4] = static_cast<PresObjKind>(k4 & (~VERTICAL)); mbVertical[4] = (k4 & VERTICAL) == VERTICAL;
+}
+
+static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
+{
+    static LayoutDescriptor aLayouts[AUTOLAYOUT__END-AUTOLAYOUT__START] =
     {
-        // MasterPage oder:
-        // Kein AutoLayout gewuenscht und keine Praesentationsobjekte
-        // vorhanden, also ist nichts zu tun
-        bOwnArrangement = FALSE;
-        return;
-    }
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TEXT ),                                 // AUTOLAYOUT_TITLE
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_ENUM
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_CHART ),                                // AUTOLAYOUT_CHART
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_2TEXT
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_CHART ),               // AUTOLAYOUT_TEXTCHART
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_ORGCHART ),                             // AUTOLAYOUT_ORG
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_GRAPHIC ),             // AUTOLAYOUT_TEXTCLIP
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_CHART, PRESOBJ_OUTLINE ),               // AUTOLAYOUT_CHARTTEXT
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TABLE ),                                // AUTOLAYOUT_TAB
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_CLIPTEXT
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OBJECT ),              // AUTOLAYOUT_TEXTOBJ
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OBJECT ),                               // AUTOLAYOUT_OBJ
+        LayoutDescriptor( 2, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OBJECT, PRESOBJ_OBJECT ),  // AUTOLAYOUT_TEXT2OBJ
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OBJECT, PRESOBJ_OUTLINE ),              // AUTOLAYOUT_TEXTOBJ
+        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OBJECT, PRESOBJ_OUTLINE ),              // AUTOLAYOUT_OBJOVERTEXT
+        LayoutDescriptor( 3, PRESOBJ_TITLE, PRESOBJ_OBJECT, PRESOBJ_OBJECT, PRESOBJ_OUTLINE ),  // AUTOLAYOUT_2OBJTEXT
+        LayoutDescriptor( 5, PRESOBJ_TITLE, PRESOBJ_OBJECT, PRESOBJ_OBJECT, PRESOBJ_OUTLINE ),  // AUTOLAYOUT_2OBJOVERTEXT
+        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OBJECT ),              // AUTOLAYOUT_TEXTOVEROBJ
+        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_OBJECT, PRESOBJ_OBJECT,                 // AUTOLAYOUT_4OBJ
+            PRESOBJ_OBJECT, PRESOBJ_OBJECT ),
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_NONE ),                                 // AUTOLAYOUT_ONLY_TITLE
+        LayoutDescriptor( 0, PRESOBJ_NONE ),                                                // AUTOLAYOUT_NONE
+        LayoutDescriptor( 0, PRESOBJ_PAGE, PRESOBJ_NOTES ),                                 // AUTOLAYOUT_NOTES
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT1
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT2
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT3
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT4
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT6
+        LayoutDescriptor( 7, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_CHART ),// AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
+        LayoutDescriptor( 8, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
+        LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE|VERTICAL )     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
+    };
 
-    SdPage& rMasterPage = (SdPage&)TRG_GetMasterPage();
+    if( (eLayout < AUTOLAYOUT__START) || (eLayout >= AUTOLAYOUT__END) )
+        eLayout = AUTOLAYOUT_NONE;
 
+    return aLayouts[ eLayout - AUTOLAYOUT__START ];
+}
+
+static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRectangle )
+{
     Rectangle aTitleRect;
     Rectangle aLayoutRect;
-    BOOL bFound = FALSE;
 
-    SdrObject* pMasterTitle = rMasterPage.GetPresObj( PRESOBJ_TITLE );
-    SdrObject* pMasterOutline = rMasterPage.GetPresObj( ePageKind==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
-
-    if( pMasterTitle )
-        aTitleRect = pMasterTitle->GetLogicRect();
-
-    if( pMasterOutline )
-        aLayoutRect = pMasterOutline->GetLogicRect();
-
-    if( ePageKind != PK_HANDOUT )
+    if( rPage.GetPageKind() != PK_HANDOUT )
     {
+        SdPage& rMasterPage = static_cast<SdPage&>(rPage.TRG_GetMasterPage());
+        SdrObject* pMasterTitle = rMasterPage.GetPresObj( PRESOBJ_TITLE );
+        SdrObject* pMasterOutline = rMasterPage.GetPresObj( rPage.GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
+
+        if( pMasterTitle )
+            aTitleRect = pMasterTitle->GetLogicRect();
+
         if (aTitleRect.IsEmpty() )
-        {
-            /**********************************************************************
-            * Titelobj. auf MasterPage nicht vorhanden -> Defaultgroesse bestimmen
-            **********************************************************************/
-            aTitleRect = GetTitleRect();
-        }
+            aTitleRect = rPage.GetTitleRect();
+
+        if( pMasterOutline )
+            aLayoutRect = pMasterOutline->GetLogicRect();
 
         if (aLayoutRect.IsEmpty() )
-        {
-            /**********************************************************************
-            * Gliederungsobj. auf MasterPage nicht vorhanden -> Defaultgroesse bestimmen
-            **********************************************************************/
-            aLayoutRect = GetLayoutRect();
-        }
+            aLayoutRect = rPage.GetLayoutRect();
     }
 
-    Rectangle   aRect0( aTitleRect );
-    Rectangle   aRect1( aLayoutRect );
-    Rectangle   aRect2( aLayoutRect );
-    Rectangle   aRect3( aLayoutRect );
-    Rectangle   aRect4( aLayoutRect );
+    rRectangle[0] = aTitleRect;
+
+    int i;
+    for( i = 1; i < MAX_PRESOBJS; i++ )
+        rRectangle[i] = aLayoutRect;
+
     Size        aTitleSize( aTitleRect.GetSize() );
     Point       aTitlePos( aTitleRect.TopLeft() );
     Size        aLayoutSize( aLayoutRect.GetSize() );
     Point       aLayoutPos( aLayoutRect.TopLeft() );
     Size        aTempSize;
     Point       aTempPnt;
-    PresObjKind nObjKind[ MAX_PRESOBJ ];
-    PresentationObjectList aObjList;
-    sal_Bool    bRightToLeft = ( GetModel() && static_cast< SdDrawDocument* >( GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
-    SdrObject*  pObj;
 
-    switch (eAutoLayout)
+    sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
+
+    switch( nLayout )
     {
-        case AUTOLAYOUT_NONE:
+    case 0: // default layout using only the title and layout area
+        break; // do nothing
+    case 1: // title, 2 shapes
+    case 9: // title, 2 vertical shapes
+        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        if( bRightToLeft && (nLayout != 9) )
+            ::std::swap< Rectangle >( rRectangle[1], rRectangle[2] );
+        break;
+    case 2: // title, shape, 2 shapes
+        aTempPnt = aLayoutPos;
+        aTempSize = aLayoutSize;
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos = aTempPnt;
+        aLayoutSize = aTempSize;
+        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        if( bRightToLeft )
         {
-            /******************************************************************
-            * Notwendig fuer Objekte aus dem Gliederungsmodus
-            ******************************************************************/
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-
-            if( pObj && pObj->GetUserCall() )
-            {
-                pObj->SetLogicRect(aRect0);
-                pObj->SetUserCall(this);
-            }
-
-            if(pObj && (!pObj->IsEmptyPresObj() || !bInit))
-                aObjList.push_back(PresentationObjectDescriptor(pObj, nObjKind[0]));
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-
-            if( pObj && pObj->GetUserCall() )
-            {
-                pObj->SetLogicRect(aRect1);
-                pObj->SetUserCall(this);
-            }
-
-            if(pObj && (!pObj->IsEmptyPresObj() || !bInit))
-                aObjList.push_back(PresentationObjectDescriptor(pObj, nObjKind[1]));
+            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
+            rRectangle[3].Left() = rRectangle[2].Left();
         }
         break;
+    case 3: // title, 2 shapes, shape
+        aTempPnt = aLayoutPos;
+        aTempSize = aLayoutSize;
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        case AUTOLAYOUT_NOTES:
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos = aTempPnt;
+        aLayoutSize = aTempSize;
+        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        if( bRightToLeft )
         {
-            nObjKind[0] = PRESOBJ_PAGE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_NOTES;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
+            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
+            rRectangle[3].Left() = rRectangle[2].Left();
         }
         break;
+    case 4: // title, shape above shape
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        case AUTOLAYOUT_TITLE:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_TEXT;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
         break;
 
-        case AUTOLAYOUT_ENUM:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
+    case 5: // title, 2 shapes above shape
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
+        aTempPnt = aLayoutPos;
+        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = aTempPnt.X();
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
+        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
         break;
-
-        case AUTOLAYOUT_CHART:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_CHART;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_2TEXT:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            USHORT nIndex = 1;
-            if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2], nIndex);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TEXTCHART:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_CHART;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_ORG:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_ORGCHART;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TEXTCLIP:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_CHARTTEXT:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_CHART;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TAB:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_TABLE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_CLIPTEXT:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TEXTOBJ:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_OBJ:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TEXT2OBJ:
-        {
-            aTempPnt = aLayoutPos;
-            aTempSize = aLayoutSize;
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aRect3 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos = aTempPnt;
-            aLayoutSize = aTempSize;
-            aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-            {
-                ::std::swap< long >( aRect1.Left(), aRect2.Left() );
-                aRect3.Left() = aRect2.Left();
-            }
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2]);
-            USHORT nIndex = 1;
-            if ( InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[3] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[3], nIndex);
-            InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_OBJTEXT:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-                ::std::swap< Rectangle >( aRect1, aRect2 );
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_OBJOVERTEXT:
-        {
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_2OBJTEXT:
-        {
-            aTempPnt = aLayoutPos;
-            aTempSize = aLayoutSize;
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos = aTempPnt;
-            aLayoutSize = aTempSize;
-            aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect3 = Rectangle (aLayoutPos, aLayoutSize);
-
-            if( bRightToLeft )
-            {
-                ::std::swap< long >( aRect1.Left(), aRect2.Left() );
-                aRect3.Left() = aRect2.Left();
-            }
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            USHORT nIndex = 1;
-            if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2], nIndex);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-
-            nObjKind[3] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[3]);
-            InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_2OBJOVERTEXT:
-        {
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aTempPnt = aLayoutPos;
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = aTempPnt.X();
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
-            aRect3 = Rectangle (aLayoutPos, aLayoutSize);
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            USHORT nIndex = 1;
-            if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2], nIndex);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-
-            nObjKind[3] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[3]);
-            InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_TEXTOVEROBJ:
-        {
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_4OBJ:
-        {
-            ULONG nX = long (aLayoutPos.X());
-            ULONG nY = long (aLayoutPos.Y());
-
-            aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-            aRect3 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = nX;
-            aRect4 = Rectangle (aLayoutPos, aLayoutSize);
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[1]);
-            USHORT nIndex = 1;
-            if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[2], nIndex);
-            if ( InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[3] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[3], nIndex);
-            if ( InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList) )
-                nIndex++;
-
-            nObjKind[4] = PRESOBJ_OBJECT;
-            pObj = GetPresObj(nObjKind[4], nIndex);
-            InsertPresObj(pObj, nObjKind[4], FALSE, aRect4, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_ONLY_TITLE:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART:
-        {
-            Size aSize( aRect0.GetSize().Height(), aRect1.BottomLeft().Y() - aRect0.TopLeft().Y() );
-            aRect0.SetSize( aSize );
-            aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[0]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-                pObj->SetMergedItemSet(aNewSet);
-            }
-            Size aLayoutSize ( GetSize() );
-            aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
-            aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
-            aSize.Width() = long( aLayoutSize.Width() * 0.7 );
-            aRect1.SetPos( aTitleRect.TopLeft() );
-            aRect1.SetSize( aSize );
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[1]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-
-                // #90790#
-                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-
-                pObj->SetMergedItemSet(aNewSet);
-            }
-            aSize.Height() = aRect0.GetSize().Height();
-            Point aPos( aTitleRect.TopLeft() );
-            aPos.Y() += long ( aSize.Height() * 0.53 );
-            aRect2.SetPos( aPos );
-            aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
-            aRect2.SetSize( aSize );
-            nObjKind[2] = PRESOBJ_CHART;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
-        }
-        break;
-
-        case AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE:
-        {
-            Size aSize( aRect0.GetSize().Height(), aRect1.BottomLeft().Y() - aRect0.TopLeft().Y() );
-            aRect0.SetSize( aSize );
-            aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[0]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-                pObj->SetMergedItemSet(aNewSet);
-            }
-            Size aLayoutSize ( GetSize() );
-            aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
-            aSize.Height() = aRect0.GetSize().Height();
-            aSize.Width() = long( aLayoutSize.Width() * 0.7 );
-            aRect1.SetPos( aTitleRect.TopLeft() );
-            aRect1.SetSize( aSize );
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[1]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-
-                // #90790#
-                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-
-                pObj->SetMergedItemSet(aNewSet);
-            }
-        }
-        break;
-
-        case AUTOLAYOUT_TITLE_VERTICAL_OUTLINE:
-        {
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[1]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-
-                // #90790#
-                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-
-                pObj->SetMergedItemSet(aNewSet);
-            }
-        }
-        break;
-
-        case AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART:
-        {
-            aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-            aRect1 = Rectangle (aLayoutPos, aLayoutSize);
-
-            aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-            aRect2 = Rectangle (aLayoutPos, aLayoutSize);
-
-            nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObj(nObjKind[0]);
-            InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
-
-            nObjKind[1] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObj(nObjKind[1]);
-            InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
-
-            nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObj(nObjKind[2]);
-            InsertPresObj(pObj, nObjKind[2], TRUE, aRect2, bInit, aObjList);
-            pObj = GetPresObj(nObjKind[2]);
-            if ( pObj )
-            {
-                SfxItemSet aNewSet(pObj->GetMergedItemSet());
-
-                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-
-                // #90790#
-                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-
-                pObj->SetMergedItemSet(aNewSet);
-            }
-        }
-        break;
-
-        default:
+    case 6: // title, 4 shapes
+    {
+        ULONG nX = long (aLayoutPos.X());
+        ULONG nY = long (aLayoutPos.Y());
+
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = nX;
+        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
         break;
     }
-
-    // now delete all empty presentation objects that are no longer
-    // used by the new layout and then make the generated presentation
-    // object list the one that is used by the page
+    case 7: // vertical title, shape above shape
     {
-        PresentationObjectList::iterator aIter( maPresObjList.begin() );
-        const PresentationObjectList::iterator aEnd( maPresObjList.end() );
+        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
+        rRectangle[0].SetSize( aSize );
+        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
 
-        const PresentationObjectList::iterator aObjListBegin( aObjList.begin() );
-        const PresentationObjectList::iterator aObjListEnd( aObjList.end() );
+        Size aLayoutSize ( rPage.GetSize() );
+        aLayoutSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
+        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
+        aSize.Width() = long( aLayoutSize.Width() * 0.7 );
+        rRectangle[1].SetPos( aTitleRect.TopLeft() );
+        rRectangle[1].SetSize( aSize );
 
-        for(; aIter != aEnd; aIter++)
+        aSize.Height() = rRectangle[0].GetSize().Height();
+        Point aPos( aTitleRect.TopLeft() );
+        aPos.Y() += long ( aSize.Height() * 0.53 );
+        rRectangle[2].SetPos( aPos );
+        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
+        rRectangle[2].SetSize( aSize );
+        break;
+    }
+    case 8: // vertical title, shape
+    {
+        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
+        rRectangle[0].SetSize( aSize );
+        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
+
+        Size aLayoutSize ( rPage.GetSize() );
+        aLayoutSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
+        aSize.Height() = rRectangle[0].GetSize().Height();
+        aSize.Width() = long( aLayoutSize.Width() * 0.7 );
+        rRectangle[1].SetPos( aTitleRect.TopLeft() );
+        rRectangle[1].SetSize( aSize );
+        break;
+    }
+    }
+}
+
+
+void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit )
+{
+    int i;
+
+    // init list of indexes for each presentation shape kind
+    // this is used to find subsequent shapes with the same presentation shape kind
+    int PresObjIndex[PRESOBJ_MAX];
+    for( i = 0; i < PRESOBJ_MAX; i++ ) PresObjIndex[i] = 1;
+
+    bool bMissing = false;
+
+    // for each entry in the layoutdescriptor, arrange a presentation shape
+    for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+    {
+        PresObjKind eKind = rDescriptor.meKind[i];
+        SdrObject* pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind] );
+        if( pObj )
         {
-            if( ::std::find( aObjListBegin, aObjListEnd, (*aIter) ) == aObjListEnd )
+            PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind
+            rShapes[i] = pObj;
+        }
+        else
+        {
+            bMissing = true;
+        }
+    }
+
+    if( bMissing && bInit )
+    {
+        // for each entry in the layoutdescriptor, look for an alternative shape
+        for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+        {
+            if( rShapes[i] )
+                continue;
+
+            PresObjKind eKind = rDescriptor.meKind[i];
+
+            SdrObject* pObj = 0;
+            bool bFound = false;
+
+            const int nShapeCount = rPage.GetObjCount();
+            int nShapeIndex = 0;
+            while((nShapeIndex < nShapeCount) && !bFound )
             {
-                if ( (*aIter).mpObject->IsEmptyPresObj() )
+                pObj = rPage.GetObj(nShapeIndex++);
+
+                if( pObj->IsEmptyPresObj() )
+                    continue;
+
+                if( pObj->GetObjInventor() != SdrInventor )
+                    continue;
+
+                // do not reuse shapes that are already part of the layout
+                if( std::find( rShapes.begin(), rShapes.end(), pObj ) != rShapes.end() )
+                    continue;
+
+                bool bPresStyle = pObj->GetStyleSheet() && (pObj->GetStyleSheet()->GetFamily() == SD_LT_FAMILY);
+                SdrObjKind eSdrObjKind = static_cast< SdrObjKind >( pObj->GetObjIdentifier() );
+
+                switch( eKind )
                 {
-                    delete RemoveObject( (*aIter).mpObject->GetOrdNum() );
+                case PRESOBJ_TITLE:
+                    bFound = eSdrObjKind == OBJ_TITLETEXT;
+                    break;
+                case PRESOBJ_OUTLINE:
+                    bFound = (eSdrObjKind == OBJ_OUTLINETEXT) || ((eSdrObjKind == OBJ_TEXT) && bPresStyle);
+                    break;
+                case PRESOBJ_GRAPHIC:
+                    bFound = eSdrObjKind == OBJ_GRAF;
+                    break;
+                case PRESOBJ_OBJECT:
+                    bFound = eSdrObjKind == OBJ_OLE2;
+                    break;
+                case PRESOBJ_CHART:
+                case PRESOBJ_TABLE:
+                    if( eSdrObjKind == OBJ_OLE2 )
+                    {
+                        SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( pObj );
+                        if( pOle2 )
+                        {
+                            if(
+                                ((eKind == PRESOBJ_CHART) &&
+                                    ( pOle2->GetProgName().EqualsAscii( "StarChart" ) || pOle2->IsChart() ) )
+                                ||
+                                ((eKind == PRESOBJ_TABLE) &&
+                                    ( pOle2->GetProgName().EqualsAscii( "StarCalc" ) || pOle2->IsCalc() ) ) )
+                            {
+                                bFound = true;
+                            }
+                        }
+                        break;
+                    }
+                    break;
+                case PRESOBJ_PAGE:
+                case PRESOBJ_HANDOUT:
+                    bFound = eSdrObjKind == OBJ_PAGE;
+                    break;
+                case PRESOBJ_NOTES:
+                case PRESOBJ_TEXT:
+                    bFound = (bPresStyle && (eSdrObjKind == OBJ_TEXT)) || (eSdrObjKind == OBJ_OUTLINETEXT);
+                    break;
                 }
             }
-        }
 
-        maPresObjList.swap( aObjList );
+            if( bFound )
+                rShapes[i] = pObj;
+        }
+    }
+}
+
+void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
+{
+    sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
+
+    sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
+
+    eAutoLayout = eLayout;
+
+    // if needed, creates and initialises the presentation shapes on this slides master page
+    CreateTitleAndLayout(bInit, bCreate);
+
+    if((eAutoLayout == AUTOLAYOUT_NONE && maPresentationShapeList.isEmpty()) || bMaster)
+    {
+        // MasterPage or no layout and no presentation shapes available, noting to do
+        return;
     }
 
-    bOwnArrangement = FALSE;
+    Rectangle aRectangle[MAX_PRESOBJS];
+    const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( eAutoLayout );
+    CalcAutoLayoutRectangles( *this, aDescriptor.mnLayout, aRectangle );
+
+    std::set< SdrObject* > aUsedPresentationObjects;
+
+
+    std::vector< SdrObject* > aLayoutShapes(PRESOBJ_MAX, 0);
+    findAutoLayoutShapesImpl( *this, aDescriptor, aLayoutShapes, bInit );
+
+    int i;
+
+    // for each entry in the layoutdescriptor, arrange a presentation shape
+    for( i = 0; (i < PRESOBJ_MAX) && (aDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+    {
+        PresObjKind eKind = aDescriptor.meKind[i];
+        SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], bInit );
+        if( pObj )
+            aUsedPresentationObjects.insert(pObj); // remember that we used this empty shape
+    }
+
+    // now delete all empty presentation objects that are no longer used by the new layout
+    if( bInit )
+    {
+        SdrObject* pObj = maPresentationShapeList.getNextShape(0);
+
+        while( pObj )
+        {
+            SdrObject* pNext = maPresentationShapeList.getNextShape(pObj);
+            if( aUsedPresentationObjects.count(pObj) == 0 )
+            {
+
+                if( pObj->IsEmptyPresObj() )
+                {
+                    if( bUndo )
+                        pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+
+                    RemoveObject( pObj->GetOrdNum() );
+
+                    if( !bUndo )
+                        delete pObj;
+                }
+                else
+                {
+                    if( bUndo )
+                    {
+                        pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pObj ) );
+                        if( pObj->GetUserCall() )
+                            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
+                    }
+                    maPresentationShapeList.removeShape( *pObj );
+                    pObj->SetUserCall(0);
+                }
+            }
+            pObj = pNext;
+        }
+    }
 }
 
 /*************************************************************************
@@ -2068,7 +1652,6 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
     }
 }
 
-
 /*************************************************************************
 |*
 |* Objekt loeschen
@@ -2077,20 +1660,8 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
 
 SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 {
-    SdrObject* pObj = FmFormPage::RemoveObject(nObjNum);
-
-    if(pObj && (pObj->GetUserCall()!=this) && IsPresObj(pObj))
-    {
-        // Objekt hat keinen UserCall auf diese Seite, es ist jedoch noch in
-        // der PresObjList eingetragen -> austragen
-        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetLastBoundRect());
-    }
-
-    ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
-
-    removeAnimations( pObj );
-
-    return(pObj);
+    onRemoveObject(GetObj( nObjNum ));
+    return FmFormPage::RemoveObject(nObjNum);
 }
 
 /*************************************************************************
@@ -2101,44 +1672,41 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 
 SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
 {
-    SdrObject* pObj = FmFormPage::NbcRemoveObject(nObjNum);
-
-    if (pObj && (pObj->GetUserCall()!=this) && IsPresObj(pObj) )
-    {
-        // Objekt hat keinen UserCall auf diese Seite, es ist jedoch noch in
-        // der PresObjList eingetragen -> austragen
-        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetLastBoundRect());
-    }
-
-    ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
-
-    return(pObj);
+    onRemoveObject(GetObj( nObjNum ));
+    return FmFormPage::NbcRemoveObject(nObjNum);
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 // #95876# Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
-    SdrObject* pOldObj = FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
-    if(pOldObj && (pOldObj->GetUserCall()!=this) && IsPresObj(pOldObj))
-        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetLastBoundRect());
-    return pOldObj;
+    onRemoveObject(GetObj( nObjNum ));
+    return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
 }
 
 // #95876# Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
-    SdrObject* pOldObj = FmFormPage::ReplaceObject(pNewObj, nObjNum);
-    if(pOldObj && (pOldObj->GetUserCall()!=this) && IsPresObj(pOldObj))
-        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetLastBoundRect());
-    return pOldObj;
+    onRemoveObject(GetObj( nObjNum ));
+    return FmFormPage::ReplaceObject(pNewObj, nObjNum);
+}
+
+// -------------------------------------------------------------------------
+
+// called after a shape is removed or replaced from this slide
+
+void SdPage::onRemoveObject( SdrObject* pObject )
+{
+    if( pObject )
+    {
+        RemovePresObj(pObject);
+
+        if( pModel )
+            static_cast<SdDrawDocument*>(pModel)->RemoveObject(pObject, this);
+
+        removeAnimations( pObject );
+    }
 }
 
 /*************************************************************************
@@ -2281,7 +1849,8 @@ void SdPage::SetBackgroundFullSize( BOOL bIn )
 
 void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, BOOL bScaleAllObj)
 {
-    bOwnArrangement = TRUE;
+    sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
+
     bScaleObjects = bScaleAllObj;
     SdrObject* pObj = NULL;
     Point aRefPnt(0, 0);
@@ -2588,20 +2157,150 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
             }
         }
     }
-
-    bOwnArrangement = FALSE;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
-                            Rectangle aRect, BOOL bInit, PresentationObjectList& rObjList)
+SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect )
 {
-    BOOL bIncrement = FALSE;
+    SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
+    DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
+    if( !pModel || !pSourceObj )
+        return pSourceObj;
+
+    sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    const bool bUndo = pUndoManager && pUndoManager->isInListAction() && rPage.IsInserted();
+
+    SdrObject* pNewObj = pSourceObj;
+    if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    {
+        pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
+
+        // Text des Untertitels in das PRESOBJ_OUTLINE setzen
+        OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
+
+        if(pOutlParaObj)
+        {
+            // Text umsetzen
+            ::sd::Outliner* pOutl = pModel->GetInternalOutliner( TRUE );
+            pOutl->Clear();
+            pOutl->SetText( *pOutlParaObj );
+            pOutl->SetMinDepth(1, TRUE);
+            pOutlParaObj = pOutl->CreateParaObject();
+            pNewObj->SetOutlinerParaObject( pOutlParaObj );
+            pOutl->Clear();
+            pNewObj->SetEmptyPresObj(FALSE);
+
+            for (USHORT nLevel = 1; nLevel < 10; nLevel++)
+            {
+                // Neue Vorlage zuweisen
+                String aName(rPage.GetLayoutName());
+                aName += sal_Unicode( ' ' );
+                aName += String::CreateFromInt32( nLevel );
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_LT_FAMILY) );
+
+                if (pSheet)
+                {
+                    if (nLevel == 1)
+                    {
+                        SfxStyleSheet* pSubtitleSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
+
+                        if (pSubtitleSheet)
+                            pOutlParaObj->ChangeStyleSheetName(SD_LT_FAMILY, pSubtitleSheet->GetName(),
+                                                                            pSheet->GetName());
+                    }
+
+                    pNewObj->StartListening(*pSheet);
+                }
+            }
+
+            // LRSpace-Item loeschen
+            SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+
+            aSet.Put(pNewObj->GetMergedItemSet());
+
+            aSet.ClearItem(EE_PARA_LRSPACE);
+
+            pNewObj->SetMergedItemSet(aSet);
+
+            if( bUndo )
+                pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj) );
+
+            // Remove outline shape from page
+            rPage.RemoveObject( pSourceObj->GetOrdNum() );
+
+            if( !bUndo )
+                delete pSourceObj;
+        }
+    }
+    else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() != OBJ_TEXT) )
+    {
+        // is there an outline shape we can use to replace empty subtitle shape?
+        pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
+
+        // Text des Gliederungsobjekts in das PRESOBJ_TITLE setzen
+        OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
+
+        if(pOutlParaObj)
+        {
+            // Text umsetzen
+            ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
+            pOutl->Clear();
+            pOutl->SetText( *pOutlParaObj );
+            pOutl->SetMinDepth(0, TRUE);
+            pOutlParaObj = pOutl->CreateParaObject();
+            pNewObj->SetOutlinerParaObject( pOutlParaObj );
+            pOutl->Clear();
+            pNewObj->SetEmptyPresObj(FALSE);
+
+            // Linken Einzug zuruecksetzen
+            SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+
+            aSet.Put(pNewObj->GetMergedItemSet());
+
+            const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
+            SvxLRSpaceItem aNewLRItem(rLRItem);
+            aNewLRItem.SetTxtLeft(0);
+            aSet.Put(aNewLRItem);
+
+            pNewObj->SetMergedItemSet(aSet);
+
+            SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
+            if (pSheet)
+                pNewObj->SetStyleSheet(pSheet, TRUE);
+
+            // Remove subtitle shape from page
+            if( bUndo )
+                pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj));
+
+            rPage.RemoveObject( pSourceObj->GetOrdNum() );
+
+            if( !bUndo )
+                delete pSourceObj;
+        }
+    }
+
+    return pNewObj;
+}
+
+/** reuses or creates a presentation shape for an auto layout that fits the given parameter
+
+    @param  eObjKind
+        The kind of presentation shape we like to have
+    @param  nIndex
+        If > 1 we skip the first nIndex-1 shapes with the presentation shape kind eObjKind while
+        looking for an existing presentation shape
+    @param  bVertical
+        If true, the shape is created vertical if bInit is true
+    @param  aRect
+        The rectangle that should be used to transform the shape
+    @param  bInit
+        If true the shape is created if not found
+    @returns
+        A presentation shape that was either found or created with the given parameters
+*/
+SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit )
+{
+    sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
 
     if (!pObj && bInit)
     {
@@ -2609,6 +2308,17 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
     }
     else if ( pObj && (pObj->GetUserCall() || bInit) )
     {
+        // convert object if shape type does not match kind (f.e. converting outline text to subtitle text)
+        if( bInit )
+            pObj = convertPresentationObjectImpl( *this, pObj, eObjKind, bVertical, aRect );
+
+        if( bUndo )
+        {
+            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, TRUE, TRUE ) );
+            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
+        }
+
         if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
             ( (SdrGrafObj*) pObj)->AdjustToMaxRect( aRect, FALSE );
         else
@@ -2616,192 +2326,83 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
 
         pObj->SetUserCall(this);
 
-        if ( pObj->ISA(SdrTextObj) )
+        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj);
+        if( pTextObject )
         {
-            if( ((SdrTextObj*) pObj)->IsVerticalWriting() != bVertical )
+            if( pTextObject->IsVerticalWriting() != (bVertical ? sal_True : sal_False) )
             {
-                ((SdrTextObj*) pObj)->SetVerticalWriting( bVertical );
+                pTextObject->SetVerticalWriting( bVertical );
 
                 // #94826# here make sure the correct anchoring is used when the object
                 // is re-used but orientation is changed
                 if(PRESOBJ_OUTLINE == eObjKind)
-                {
-                    if(bVertical)
-                    {
-                        // vertical activated on once horizontal outline object
-                        ((SdrTextObj*) pObj)->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-                    }
-                    else
-                    {
-                        // horizontal activated on once vertical outline object
-                        ((SdrTextObj*) pObj)->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
-                    }
-                }
+                    pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
             }
 
             if( !bMaster )
             {
-                if ( ((SdrTextObj*) pObj)->IsAutoGrowHeight() )
+                if ( pTextObject->IsAutoGrowHeight() )
                 {
                     // switch off AutoGrowHeight, set new MinHeight
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
                     aTempAttr.Put( aMinHeight );
                     aTempAttr.Put( SdrTextAutoGrowHeightItem(FALSE) );
-                    pObj->SetMergedItemSet(aTempAttr);
-                    pObj->SetLogicRect(aRect);
+                    pTextObject->SetMergedItemSet(aTempAttr);
+                    pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowHeight
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowHeightItem(TRUE) );
 
-                    pObj->SetMergedItemSet(aAttr);
+                    pTextObject->SetMergedItemSet(aAttr);
                 }
 
-                if ( ((SdrTextObj*) pObj)->IsAutoGrowWidth() )
+                if ( pTextObject->IsAutoGrowWidth() )
                 {
                     // switch off AutoGrowWidth , set new MinWidth
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
                     aTempAttr.Put( aMinWidth );
                     aTempAttr.Put( SdrTextAutoGrowWidthItem(FALSE) );
-                    pObj->SetMergedItemSet(aTempAttr);
-                    pObj->SetLogicRect(aRect);
+                    pTextObject->SetMergedItemSet(aTempAttr);
+                    pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowWidth
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                    pObj->SetMergedItemSet(aAttr);
+                    pTextObject->SetMergedItemSet(aAttr);
                 }
             }
         }
     }
 
-    if (pObj)
+    if(pObj && bInit )
     {
-        bIncrement = TRUE;
-        rObjList.push_back(PresentationObjectDescriptor(pObj, eObjKind));
-
-        if (eObjKind == PRESOBJ_OUTLINE && pObj->IsEmptyPresObj())
+        if( !IsPresObj( pObj ) )
         {
-            // Gibt es ev. noch ein Untertitel?
-            SdrObject* pSubtitle = GetPresObj(PRESOBJ_TEXT);
+            if( bUndo )
+                pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pObj ) );
 
-            if (pSubtitle)
-            {
-                // Text des Untertitels in das PRESOBJ_OUTLINE setzen
-                OutlinerParaObject* pOutlParaObj = pSubtitle->GetOutlinerParaObject();
-
-                if (pOutlParaObj)
-                {
-                    if (!pSubtitle->IsEmptyPresObj())
-                    {
-                        // Text umsetzen
-                        ::sd::Outliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner( TRUE );
-                        pOutl->Clear();
-                        pOutl->SetText( *pOutlParaObj );
-                        pOutl->SetMinDepth(1, TRUE);
-                        pOutlParaObj = pOutl->CreateParaObject();
-                        pObj->SetOutlinerParaObject( pOutlParaObj );
-                        pOutl->Clear();
-                        pObj->SetEmptyPresObj(FALSE);
-                    }
-
-                    for (USHORT nLevel = 1; nLevel < 10; nLevel++)
-                    {
-                        // Neue Vorlage zuweisen
-                        String aName(aLayoutName);
-                        aName += sal_Unicode( ' ' );
-                        aName += String::CreateFromInt32( nLevel );
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*) pModel->GetStyleSheetPool()->Find(aName, SD_LT_FAMILY);
-
-                        if (pSheet)
-                        {
-                            if (nLevel == 1)
-                            {
-                                SfxStyleSheet* pSubtitleSheet = GetStyleSheetForPresObj(PRESOBJ_TEXT);
-
-                                if (pSubtitleSheet)
-                                    pOutlParaObj->ChangeStyleSheetName(SD_LT_FAMILY, pSubtitleSheet->GetName(),
-                                                                                     pSheet->GetName());
-                            }
-
-                            pObj->StartListening(*pSheet);
-                        }
-                    }
-
-                    // LRSpace-Item loeschen
-                    SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
-
-                    aSet.Put(pObj->GetMergedItemSet());
-
-                    aSet.ClearItem(EE_PARA_LRSPACE);
-
-                    pObj->SetMergedItemSet(aSet);
-
-                    // Untertitel loeschen
-                    RemovePresObj(pSubtitle);
-                    RemoveObject( pObj->GetOrdNum() );
-                    ReplaceObject( pObj, pSubtitle->GetOrdNum() );
-                    ( (SdDrawDocument*) pModel)->RemoveObject( pSubtitle, this );
-                    delete pSubtitle;
-                }
-            }
+            InsertPresObj( pObj, eObjKind );
         }
-        else if (eObjKind == PRESOBJ_TEXT && pObj->IsEmptyPresObj())
+
+        // make adjustments for vertical title and outline shapes
+        if( bVertical && (( eObjKind == PRESOBJ_TITLE) || (eObjKind == PRESOBJ_OUTLINE)))
         {
-            // Gibt es ev. noch ein Gliederungsobjekt?
-            SdrObject* pOutlineObj = GetPresObj(PRESOBJ_OUTLINE);
-
-            if (pOutlineObj)
+            SfxItemSet aNewSet(pObj->GetMergedItemSet());
+            aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+            aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
+            if( eObjKind == PRESOBJ_OUTLINE )
             {
-                // Text des Gliederungsobjekts in das PRESOBJ_TITLE setzen
-                OutlinerParaObject* pOutlParaObj = pOutlineObj->GetOutlinerParaObject();
-
-                if (pOutlParaObj)
-                {
-                    if (!pOutlineObj->IsEmptyPresObj())
-                    {
-                        // Text umsetzen
-                        ::sd::Outliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner();
-                        pOutl->Clear();
-                        pOutl->SetText( *pOutlParaObj );
-                        pOutl->SetMinDepth(0, TRUE);
-                        pOutlParaObj = pOutl->CreateParaObject();
-                        pObj->SetOutlinerParaObject( pOutlParaObj );
-                        pOutl->Clear();
-                        pObj->SetEmptyPresObj(FALSE);
-                    }
-
-                    // Linken Einzug zuruecksetzen
-                    SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
-
-                    aSet.Put(pObj->GetMergedItemSet());
-
-                    const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
-                    SvxLRSpaceItem aNewLRItem(rLRItem);
-                    aNewLRItem.SetTxtLeft(0);
-                    aSet.Put(aNewLRItem);
-
-                    pObj->SetMergedItemSet(aSet);
-
-                    SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TEXT);
-
-                    if (pSheet)
-                        pObj->SetStyleSheet(pSheet, TRUE);
-
-                    // Gliederungsobjekt loeschen
-                    RemovePresObj(pOutlineObj);
-                    RemoveObject( pObj->GetOrdNum() );
-                    ReplaceObject( pObj, pOutlineObj->GetOrdNum() );
-                    ( (SdDrawDocument*) pModel)->RemoveObject( pOutlineObj, this );
-                    delete pOutlineObj;
-                }
+                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
             }
+            pObj->SetMergedItemSet(aNewSet);
         }
     }
 
-    return(bIncrement);
+    return pObj;
 }
 
 
@@ -2811,131 +2412,46 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
 |*
 \************************************************************************/
 
-PresObjKind SdPage::GetPresObjKind(SdrObject* pObj)
+PresObjKind SdPage::GetPresObjKind(SdrObject* pObj) const
 {
-    PresentationObjectList::iterator aIter( FindPresObj( pObj ) );
-    const PresentationObjectList::iterator aEnd( maPresObjList.end() );
-
-    if( aIter != aEnd )
+    PresObjKind eKind = PRESOBJ_NONE;
+    if( (pObj != 0) && (maPresentationShapeList.hasShape(*pObj)) )
     {
-        return (*aIter).meKind;
-    }
-    else
-    {
-        return PRESOBJ_NONE;
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
+        if( pInfo )
+            eKind = pInfo->mePresObjKind;
     }
 
-/*
-    PresObjKind eObjKind = PRESOBJ_NONE;
-
-    if (pObj && IsPresObj(pObj) && pObj->GetObjInventor() == SdrInventor)
-    {
-        SdrObjKind eSdrObjKind = (SdrObjKind) pObj->GetObjIdentifier();
-
-        if (eSdrObjKind==OBJ_TITLETEXT)
-        {
-            eObjKind = PRESOBJ_TITLE;
-        }
-        else if (eSdrObjKind==OBJ_OUTLINETEXT)
-        {
-            eObjKind = PRESOBJ_OUTLINE;
-        }
-        else if (eSdrObjKind==OBJ_TEXT && ePageKind==PK_NOTES)
-        {
-            eObjKind = PRESOBJ_NOTES;
-        }
-        else if (eSdrObjKind==OBJ_TEXT && ePageKind!=PK_NOTES)
-        {
-            eObjKind = PRESOBJ_TEXT;
-        }
-        else if (eSdrObjKind==OBJ_GRAF)
-        {
-            eObjKind = PRESOBJ_GRAPHIC;
-        }
-        else if (eSdrObjKind==OBJ_RECT)
-        {
-            eObjKind = PRESOBJ_BACKGROUND;
-        }
-        else if (eSdrObjKind==OBJ_PAGE && ePageKind==PK_HANDOUT)
-        {
-            eObjKind = PRESOBJ_HANDOUT;
-        }
-        else if (eSdrObjKind==OBJ_PAGE && ePageKind!=PK_HANDOUT)
-        {
-            eObjKind = PRESOBJ_PAGE;
-        }
-        else if (eSdrObjKind==OBJ_OLE2)
-        {
-            String aName = ( (SdrOle2Obj*) pObj)->GetProgName();
-
-            if (aName.EqualsAscii( "StarChart" ))
-            {
-                eObjKind = PRESOBJ_CHART;
-            }
-            else if (aName.EqualsAscii( "StarOrg" ))
-            {
-                eObjKind = PRESOBJ_ORGCHART;
-            }
-            else if (aName.EqualsAscii( "StarCalc" ))
-            {
-                eObjKind = PRESOBJ_TABLE;
-            }
-#ifdef STARIMAGE_AVAILABLE
-            else if (aName.EqualsAscii( "StarImage" ))
-            {
-                eObjKind = PRESOBJ_IMAGE;
-            }
-#endif
-            else
-            {
-                eObjKind = PRESOBJ_OBJECT;
-            }
-        }
-    }
-
-    return(eObjKind);
-*/
+    return eKind;
 }
 
 bool SdPage::IsPresObj(const SdrObject* pObj)
 {
-    return FindPresObj( pObj ) != maPresObjList.end();
+    return pObj && maPresentationShapeList.hasShape( const_cast<SdrObject&>(*pObj) );
 }
 
 void SdPage::RemovePresObj(const SdrObject* pObj)
 {
-    PresentationObjectList::iterator aIter( FindPresObj( pObj ) );
-    if( aIter != maPresObjList.end() )
+    if( pObj && maPresentationShapeList.hasShape(const_cast<SdrObject&>(*pObj)) )
     {
-        maPresObjList.erase( aIter );
-    }
-    else
-    {
-        DBG_ERROR("presentation object not in list before removal");
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(const_cast<SdrObject&>(*pObj));
+        if( pInfo )
+            pInfo->mePresObjKind = PRESOBJ_NONE;
+        maPresentationShapeList.removeShape(const_cast<SdrObject&>(*pObj));
     }
 }
 
 void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 {
-    DBG_ASSERT( pObj, "invalid presentation object inserted!" );
-    DBG_ASSERT( !IsPresObj(pObj), "presentation object inserted twice!" );
+    DBG_ASSERT( pObj, "sd::SdPage::InsertPresObj(), invalid presentation object inserted!" );
+    DBG_ASSERT( !IsPresObj(pObj), "sd::SdPage::InsertPresObj(), presentation object inserted twice!" );
     if( pObj )
-        maPresObjList.push_back( PresentationObjectDescriptor( pObj, eKind ) );
-}
-
-PresentationObjectList::iterator SdPage::FindPresObj(const SdrObject* pObj)
-{
-    PresentationObjectList::iterator aIter( maPresObjList.begin() );
-    const PresentationObjectList::iterator aEnd( maPresObjList.end() );
-
-    while( aIter != aEnd )
     {
-        if( (*aIter).mpObject == pObj )
-            break;
-        aIter++;
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
+        if( pInfo )
+            pInfo->mePresObjKind = eKind;
+        maPresentationShapeList.addShape(*pObj);
     }
-
-    return aIter;
 }
 
 /*************************************************************************
@@ -3218,20 +2734,22 @@ void SdPage::AdjustBackgroundSize()
         // Hintergrund-Objekt verschieben
         pObj->SetMoveProtect(FALSE);
         pObj->SetResizeProtect(FALSE);
-        bOwnArrangement = TRUE;
 
-        Point aBackgroundPos;
-        Size aBackgroundSize( GetSize() );
-
-        if( !bBackgroundFullSize )
         {
-            aBackgroundPos = Point( GetLftBorder(), GetUppBorder() );
-            aBackgroundSize.Width()  -= GetLftBorder() + GetRgtBorder() - 1;
-            aBackgroundSize.Height() -= GetUppBorder() + GetLwrBorder() - 1;
+            sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
+
+            Point aBackgroundPos;
+            Size aBackgroundSize( GetSize() );
+
+            if( !bBackgroundFullSize )
+            {
+                aBackgroundPos = Point( GetLftBorder(), GetUppBorder() );
+                aBackgroundSize.Width()  -= GetLftBorder() + GetRgtBorder() - 1;
+                aBackgroundSize.Height() -= GetUppBorder() + GetLwrBorder() - 1;
+            }
+            Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
+            pObj->SetLogicRect(aBackgroundRect);
         }
-        Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
-        pObj->SetLogicRect(aBackgroundRect);
-        bOwnArrangement = FALSE;
         pObj->SetMoveProtect(TRUE);
         pObj->SetResizeProtect(TRUE);
     }
@@ -3265,7 +2783,7 @@ Orientation SdPage::GetOrientation() const
 |*
 \************************************************************************/
 
-String SdPage::GetPresObjText(PresObjKind eObjKind)
+String SdPage::GetPresObjText(PresObjKind eObjKind) const
 {
     String aString;
 
@@ -3333,12 +2851,6 @@ String SdPage::GetPresObjText(PresObjKind eObjKind)
     {
         aString = String ( SdResId( STR_PRESOBJ_TABLE ) );
     }
-#ifdef STARIMAGE_AVAILABLE
-    else if (eObjKind == PRESOBJ_IMAGE)
-    {
-        aString = String ( SdResId( STR_PRESOBJ_IMAGE ) );
-    }
-#endif
 
     return(aString);
 }
@@ -3468,6 +2980,60 @@ bool SdPage::checkVisibility(
         }
     }
     return true;
+}
+
+bool SdPage::RestoreDefaultText( SdrObject* pObj )
+{
+    bool bRet = false;
+
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+
+    if( pTextObj )
+    {
+        PresObjKind ePresObjKind = GetPresObjKind(pTextObj);
+
+        if (ePresObjKind == PRESOBJ_TITLE   ||
+            ePresObjKind == PRESOBJ_OUTLINE ||
+            ePresObjKind == PRESOBJ_NOTES   ||
+            ePresObjKind == PRESOBJ_TEXT)
+        {
+            String aString( GetPresObjText(ePresObjKind) );
+
+            if (aString.Len())
+            {
+                BOOL bVertical = FALSE;
+                OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
+                if( pOldPara )
+                    bVertical = pOldPara->IsVertical();  // is old para object vertical?
+
+                SetObjText( pTextObj, 0, ePresObjKind, aString );
+
+                if( pOldPara )
+                {
+                    //pTextObj->SetVerticalWriting( bVertical );
+                    //
+                    // #94826# Here, only the vertical flag for the
+                    // OutlinerParaObjects needs to be changed. The
+                    // AutoGrowWidth/Height items still exist in the
+                    // not changed object.
+                    if(pTextObj
+                        && pTextObj->GetOutlinerParaObject()
+                        && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
+                    {
+                        Rectangle aObjectRect = pTextObj->GetSnapRect();
+                        pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);
+                        pTextObj->SetSnapRect(aObjectRect);
+                    }
+                }
+
+                pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
+                pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), TRUE );
+                pTextObj->SetEmptyPresObj(TRUE);
+                bRet = true;
+            }
+        }
+    }
+    return bRet;
 }
 
 HeaderFooterSettings::HeaderFooterSettings()
