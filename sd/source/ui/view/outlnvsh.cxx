@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:29:51 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 
 #include "OutlineViewShell.hxx"
+
+#include <memory>
 
 #include "app.hrc"
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
@@ -134,6 +136,11 @@
 #ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
 #endif
+
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
+#endif
+
 #ifndef SD_FU_BULLET_HXX
 #include "fubullet.hxx"
 #endif
@@ -646,6 +653,23 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
     BOOL bPreviewState = FALSE;
     ULONG nSlot = rReq.GetSlot();
+
+    std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+    if( pOlView && (
+        (nSlot == SID_TRANSLITERATE_UPPER) ||
+        (nSlot == SID_TRANSLITERATE_LOWER) ||
+        (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
+        (nSlot == SID_TRANSLITERATE_FULLWIDTH) ||
+        (nSlot == SID_TRANSLITERATE_HIRAGANA) ||
+        (nSlot == SID_TRANSLITERATE_KATAGANA) ||
+        (nSlot == SID_CUT) ||
+        (nSlot == SID_COPY) ||
+        (nSlot == SID_PASTE) ||
+        (nSlot == SID_DELETE)))
+    {
+        aGuard.reset( new OutlineViewModelChangeGuard( *pOlView ) );
+    }
+
     switch ( nSlot )
     {
         case SID_CUT:
@@ -853,18 +877,13 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
         {
             // Empty the undo manager of the text object bar.
             SfxUndoManager* pUndoManager = NULL;
-            SfxShell* pTextObjectBar =
-                GetObjectBarManager().GetObjectBar (RID_DRAW_TEXT_TOOLBOX);
-            if (pTextObjectBar != NULL)
-                pUndoManager = pTextObjectBar->GetUndoManager();
-
-            DBG_ASSERT(pUndoManager,
-                "UndoManager of text object bar not found");
-            if (pUndoManager != NULL)
-                pUndoManager->Clear();
 
             ::Outliner* pOutl = pOlView->GetOutliner();
-            pOutl->UpdateFields();
+            if( pOutl )
+            {
+                pOutl->GetUndoManager().Clear();
+                pOutl->UpdateFields();
+            }
 
             SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView,GetDoc(),rReq) );
 
@@ -1534,6 +1553,10 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
             if( pFirstPara )
                 nPos++;
         }
+
+        if( nPos >= GetDoc()->GetSdPageCount( PK_STANDARD ) )
+            nPos = 0;
+
         SdrPage* pPage = GetDoc()->GetSdPage( (USHORT) nPos, PK_STANDARD );
 
         aPageStr = String(SdResId( STR_SD_PAGE ));
@@ -1963,61 +1986,28 @@ String OutlineViewShell::GetPageRangeString()
     return aStrPageRange;
 }
 
-
-
-
 void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
-    BOOL bNewObject = FALSE;
-
+/*
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
     ::Outliner* pOutliner = pOutlinerView->GetOutliner();
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
     delete pList;
 
-    BOOL bNewPage = pPage != pLastPage;
-    BOOL bTitleObject = pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0;
-    if( !bTitleObject )
+    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) != 0 )
         pPara = pOlView->GetPrevTitle( pPara );
 
+    UpdateTitleObject( pPage, pPara );
+    UpdateOutlineObject( pPage, pPara );
+*/
 
-    // #96551# handle both updates when its an OutlineView
-    BOOL bOutlineView(FALSE);
-    if(OUTLINERMODE_OUTLINEVIEW == pOutliner->GetMode())
-        bOutlineView = TRUE;
-
-    if( bTitleObject || bNewPage || bOutlineView )
-    {
-        /*********************************************************************
-            |* Titeltextobjekt
-            \********************************************************************/
-        bNewObject = UpdateTitleObject( pPage, pPara );
-    }
-    if( !bTitleObject || bNewPage || bOutlineView )
-    {
-        /*********************************************************************
-            |* Gliederungstextobjekt
-            \********************************************************************/
-        bNewObject |= UpdateLayoutObject( pPage, pPara );
-    }
-
-    if( bNewObject )
-    {
-        // das AutoLayout nochmal anwenden, damit neu eingefuegte Textobjekte
-        // die richtige Position/Groesse bekommen
-        pPage->SetAutoLayout(pPage->GetAutoLayout());
-    }
-    // In Preview neu darstellen (nur bei neuer Seite):
-    if( bNewPage || bNewObject || bInit )
-    {
-        pLastPage = pPage;
-        ViewShell::UpdatePreview( pPage, TRUE );
-    }
+    const bool bNewPage = pPage != pLastPage;
+    pLastPage = pPage;
     if (bNewPage)
     {
         OutlineViewPageChangesGuard aGuard(pOlView);
-        SetCurrentPage (pPage);
+        SetCurrentPage(pPage);
     }
 }
 
@@ -2030,73 +2020,79 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 |*
 \************************************************************************/
 
-BOOL OutlineViewShell::UpdateTitleObject( SdPage*   pPage, Paragraph* pPara )
+bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 {
     ::Outliner*             pOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
     OutlinerParaObject* pOPO = NULL;
 
     String  aTest( pOutliner->GetText( pPara ) );
-    BOOL    bText = aTest.Len() > 0;
-    BOOL    bNewObject = FALSE;
+    bool    bText = aTest.Len() > 0;
+    bool    bNewObject = false;
 
-    // kein Seitenobjekt, Text im Outliner:
-    // entspr. Seitenobjekt erzeugen und einfuegen
-    if( !pTO && bText )
+    if( bText )
     {
-        SfxStyleSheetBasePool* pSPool = GetDoc()->GetStyleSheetPool();
+        // create a title object if we don't have one but have text
+        if( !pTO )
+        {
+            DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
+            pTO = pOlView->CreateTitleTextObject(pPage);
+            bNewObject = TRUE;
+        }
 
-        // Titelvorlage
-        String aFullName = pPage->GetLayoutName();
-        String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-        USHORT n = aFullName.Search(aSep);
-        n += aSep.Len();
-        aFullName.Erase(n);
-        aFullName += String (SdResId(STR_LAYOUT_TITLE));
-        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->
-                                        Find(aFullName, SD_LT_FAMILY);
-        DBG_ASSERT(pTitleSheet, "Titelvorlage nicht gefunden");
+        // if we have a title object and a text, set the text
+        if( pTO )
+        {
+            pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
+            pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+            pOPO->SetVertical( pTO->IsVerticalWriting() );
+            if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
+            {
+                // do nothing, same text already set
+                delete pOPO;
+            }
+            else
+            {
+                DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
+                if( !bNewObject && pOlView->isRecordingUndo() )
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
 
-
-        pTO  = new SdrRectObj( OBJ_TITLETEXT );
-        pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
-        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-        pTO->SetOutlinerParaObject( pOPO );
-        pTO->SetEmptyPresObj( FALSE );
-
-        AutoLayout eLayout = pPage->GetAutoLayout();
-        if( eLayout == AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       ||
-            eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE )
-            pTO->SetVerticalWriting( TRUE );
-
-        // als Praesentationsobjekt anmelden
-        pTO->SetUserCall( pPage );
-        pPage->InsertPresObj( pTO, PRESOBJ_TITLE );
-
-        pPage->InsertObject( pTO );
-                    // TRUE: DontRemoveHardAttr
-        pTO->SetStyleSheet( pTitleSheet, TRUE );
-
-        // Nur Objekt painten
-        //pTO->SendRepaintBroadcast();
-        bNewObject = TRUE;
+                pTO->SetOutlinerParaObject( pOPO );
+                pTO->SetEmptyPresObj( FALSE );
+                pTO->ActionChanged();
+            }
+        }
     }
-    // Seitenobjekt, Text im Outliner:
-    // Titeltext uebernehmen
-    else if( pTO && bText )
+    else if( pTO )
     {
-        pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
-        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-        pOPO->SetVertical( pTO->IsVerticalWriting() );
-        pTO->SetOutlinerParaObject( pOPO );
-        pTO->SetEmptyPresObj( FALSE );
+        // no text but object available?
+        // outline object available, but we have no text
+        if(pPage->IsPresObj(pTO))
+        {
+            // if it is not already empty
+            if( !pTO->IsEmptyPresObj() )
+            {
+                DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
 
-        // Nur Objekt painten
-        pTO->ActionChanged();
-        // pTO->SendRepaintBroadcast();
+                // make it empty
+                if( pOlView->isRecordingUndo() )
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                pPage->RestoreDefaultText( pTO );
+                pTO->SetEmptyPresObj(TRUE);
+                pTO->ActionChanged();
+            }
+        }
+        else
+        {
+            DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
+            // outline object is not part of the layout, delete it
+            if( pOlView->isRecordingUndo() )
+                pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoRemoveObject(*pTO));
+            pPage->RemoveObject(pTO->GetOrdNum());
+        }
     }
 
-    return( bNewObject );
+    return bNewObject;
 }
 
 /*************************************************************************
@@ -2105,9 +2101,9 @@ BOOL OutlineViewShell::UpdateTitleObject( SdPage*   pPage, Paragraph* pPara )
 |*
 \************************************************************************/
 
-BOOL OutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
+bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 {
-    ::Outliner*             pOutliner = pOlView->GetOutliner();
+    ::Outliner*         pOutliner = pOlView->GetOutliner();
     OutlinerParaObject* pOPO = NULL;
     SdrTextObj*         pTO  = NULL;
 
@@ -2118,7 +2114,7 @@ BOOL OutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
     if( !pTO )
     {
         eOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
-        pTO = pOlView->GetLayoutTextObject( pPage );
+        pTO = pOlView->GetOutlineTextObject( pPage );
     }
 
     // wieviele Absaetze in der Gliederung?
@@ -2131,73 +2127,75 @@ BOOL OutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         nParasInLayout++;
         pPara = pOutliner->GetParagraph( ++nPara );
     }
-    if( nParasInLayout == 0 )
-        return( FALSE );
-
-    // ein OutlinerParaObject erzeugen
-    pPara = pOutliner->GetParagraph( nTitlePara + 1 );
-    pOPO  = pOutliner->CreateParaObject( (USHORT) nTitlePara + 1, (USHORT) nParasInLayout );
-
-    // kein Seitenobjekt, aber Gliederung im Outliner
-    if( !pTO && pOPO )
+    if( nParasInLayout )
     {
-        pTO = new SdrRectObj( OBJ_OUTLINETEXT );
-        pTO->SetEmptyPresObj( FALSE );
+        // ein OutlinerParaObject erzeugen
+        pPara = pOutliner->GetParagraph( nTitlePara + 1 );
+        pOPO  = pOutliner->CreateParaObject( (USHORT) nTitlePara + 1, (USHORT) nParasInLayout );
+    }
 
-        // als Praesentationsobjekt anmelden
-        pTO->SetUserCall( pPage );
-        pPage->InsertPresObj( pTO, PRESOBJ_OUTLINE );
+    if( pOPO )
+    {
+        DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateOutlineObject(), no undo for model change!?" );
 
-        pPage->InsertObject( pTO );
-        pOPO->SetOutlinerMode( eOutlinerMode );
-        pTO->SetOutlinerParaObject( pOPO );
-
-        AutoLayout eLayout = pPage->GetAutoLayout();
-        if( eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE       ||
-            eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE ||
-            eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART )
-            pTO->SetVerticalWriting( TRUE );
-
-        // Linien- und Fuellattribute der Standardvorlage hart
-        // ueberschreiben
-        SfxItemSet aTempAttr( GetDoc()->GetPool() );
-        aTempAttr.Put( XLineStyleItem( XLINE_NONE ) );
-        aTempAttr.Put( XFillStyleItem( XFILL_NONE ) );
-        pTO->SetMergedItemSetAndBroadcast(aTempAttr);
-
-        // Liste der Gliederungsvorlagen fuer Anmeldung als Listener
-        String aName = pPage->GetLayoutName();
-        String aFullName;
-        SfxStyleSheet* pSheet = NULL;
-        SfxStyleSheetBasePool* pStyleSheetPool = GetDoc()->GetStyleSheetPool();
-        for (USHORT i = 1; i < 10; i++)
+        // do we need an outline text object?
+        if( !pTO )
         {
-            aFullName  = aName;
-            aFullName += sal_Unicode(' ');
-            aFullName += String::CreateFromInt32( (sal_Int32)i );
-            pSheet = (SfxStyleSheet*) pStyleSheetPool->Find(aFullName, SD_LT_FAMILY);
-            pTO->StartListening( *pSheet );
-
-            if( i == 1 )
-                pTO->SetStyleSheet( pSheet, TRUE );
+            pTO = pOlView->CreateOutlineTextObject( pPage );
+            bNewObject = TRUE;
         }
 
-        bNewObject = TRUE;
-    }
-    // Seitenobjekt, Gliederungstext im Outliner:
-    // Text uebernehmen
-    else if( pTO && pOPO )
-    {
-        pOPO->SetVertical( pTO->IsVerticalWriting() );
-        pOPO->SetOutlinerMode( eOutlinerMode );
-        pTO->SetOutlinerParaObject( pOPO );
-        pTO->SetEmptyPresObj( FALSE );
+        // Seitenobjekt, Gliederungstext im Outliner:
+        // Text uebernehmen
+        if( pTO )
+        {
+            pOPO->SetVertical( pTO->IsVerticalWriting() );
+            pOPO->SetOutlinerMode( eOutlinerMode );
+            if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
+            {
+                // do nothing, same text already set
+                delete pOPO;
+            }
+            else
+            {
+                if( !bNewObject && pOlView->isRecordingUndo() )
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
 
-        // Nur Objekt painten
-        pTO->ActionChanged();
-        // pTO->SendRepaintBroadcast();
+                pTO->SetOutlinerParaObject( pOPO );
+                pTO->SetEmptyPresObj( FALSE );
+                pTO->ActionChanged();
+            }
+        }
     }
-    return( bNewObject );
+    else if( pTO )
+    {
+        // Seitenobjekt, aber kein Gliederungstext:
+        // wenn Objekt in Praesentationsliste der Seite ist -> Defaulttext,
+        // sonst Objekt loeschen
+        if( pPage->IsPresObj(pTO) )
+        {
+            if( !pTO->IsEmptyPresObj() )
+            {
+                DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateOutlineObject(), no undo for model change!?" );
+
+                // loescht auch altes OutlinerParaObject
+                if( pOlView->isRecordingUndo() )
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                pPage->RestoreDefaultText( pTO );
+                pTO->SetEmptyPresObj(TRUE);
+                pTO->ActionChanged();
+            }
+        }
+        else
+        {
+            DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateOutlineObject(), no undo for model change!?" );
+            if( pOlView->isRecordingUndo() )
+                pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoRemoveObject(*pTO));
+            pPage->RemoveObject(pTO->GetOrdNum());
+        }
+    }
+
+    return bNewObject;
 }
 
 
