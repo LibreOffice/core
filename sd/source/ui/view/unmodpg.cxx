@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:19:33 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ void ModifyPageUndoAction::Undo()
         pView = aIter.NextView();
     }
 
-    pPage->SetAutoLayout(eOldAutoLayout, TRUE);
+    pPage->SetAutoLayout( eOldAutoLayout );
 
     if (!pPage->IsMasterPage())
     {
@@ -153,14 +153,6 @@ void ModifyPageUndoAction::Undo()
     // Redisplay
     SfxViewFrame::Current()->GetDispatcher()->Execute(
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-
-    // #67720# clear undo manager
-    if(mpManager)
-    {
-        // BEWARE: Do this as LAST action here since this will delete
-        // all actions which are added, inclusive to this one (!)
-        mpManager->Clear();
-    }
 }
 
 /*************************************************************************
@@ -183,7 +175,8 @@ void ModifyPageUndoAction::Redo()
         pView = aIter.NextView();
     }
 
-    pPage->SetAutoLayout(eNewAutoLayout, TRUE);
+    // pPage->SetAutoLayout(eNewAutoLayout, TRUE);
+    pPage->eAutoLayout = eNewAutoLayout;
 
     if (!pPage->IsMasterPage())
     {
@@ -210,14 +203,6 @@ void ModifyPageUndoAction::Redo()
     // Redisplay
     SfxViewFrame::Current()->GetDispatcher()->Execute(
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-
-    // #67720# clear undo manager
-    if(mpManager)
-    {
-        // BEWARE: Do this as LAST action here since this will delete
-        // all actions which are added, inclusive to this one (!)
-        mpManager->Clear();
-    }
 }
 
 /*************************************************************************
