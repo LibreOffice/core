@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:03:18 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -857,9 +857,9 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
-                            SdrUndoAttrObj* pUndoAttr = new SdrUndoAttrObj(*pWaterCanCandidate, sal_True, sal_True);
+                            SdrUndoAction* pUndoAttr = pDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
                             pView->BegUndo(pUndoAttr->GetComment());
-                            pView->AddUndo(new SdrUndoGeoObj(*pWaterCanCandidate));
+                            pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
                             pView->AddUndo(pUndoAttr);
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, FALSE);
