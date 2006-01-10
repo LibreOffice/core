@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:35:26 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #include <functional>
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
+#endif
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
 #endif
 
 //=========================================================================
@@ -156,7 +159,8 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
 template <class ENUMTYPE>
 sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
-    if (getCppuType(&_rCurrentValue).getTypeClass() != staruno::TypeClass_ENUM)
+    if (cppu::getTypeFavourUnsigned(&_rCurrentValue).getTypeClass()
+        != staruno::TypeClass_ENUM)
         return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
 
     sal_Bool bModified(sal_False);
