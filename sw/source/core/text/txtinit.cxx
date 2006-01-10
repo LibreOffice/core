@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtinit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:07:09 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,17 +89,15 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion,  200, 100 ) //Attributwechsel
 
 void _TextInit()
 {
-    pFntCache = new SwFntCache;
-    pSwFontCache = new SwFontCache;
-    pWaveCol = new Color( COL_GRAY );
-
-    //Pauschale groesse 250, plus 100 pro Shell
-    SwCache *pTxtCache = new SwCache( 250, 100
+    pFntCache = new SwFntCache;                     // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
+    pSwFontCache = new SwFontCache;                 // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
+    SwCache *pTxtCache = new SwCache( 250, 100      // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
 #ifndef PRODUCT
     , "static SwTxtFrm::pTxtCache"
 #endif
     );
     SwTxtFrm::SetTxtCache( pTxtCache );
+    pWaveCol = new Color( COL_GRAY );
     PROTOCOL_INIT
 }
 
