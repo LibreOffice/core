@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:29:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,56 +281,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
-        case FN_INSERT_SOFT_HYPHEN:
-        case FN_INSERT_HARDHYPHEN:
-        case FN_INSERT_HARD_SPACE:
-        case SID_INSERT_RLM :
-        case SID_INSERT_LRM :
-        case SID_INSERT_ZWNBSP :
-        case SID_INSERT_ZWSP:
-        case SID_BULLET:
-        {
-            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_OUTLINE_BULLET:
-        {
-            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_THESAURUS:
-        {
-            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-            rReq.Ignore ();
-        }
-        break;
-
-        case SID_CHAR_DLG:
-        {
-            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_INSERTFILE:
-        {
-            SetCurrentFunction( FuInsertFile::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
-            Cancel();
-        }
-        break;
-
-        case SID_PRESENTATIONOBJECT:
-        {
-            SetCurrentFunction( FuPresentationObjects::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
-            Cancel();
-        }
-        break;
-
         case SID_SELECTALL:
         {
             ::Outliner* pOutl = pOlView->GetOutliner();
@@ -399,6 +349,142 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
+        case SID_STYLE_EDIT:
+        case SID_STYLE_UPDATE_BY_EXAMPLE:
+        {
+            if( rReq.GetArgs() )
+            {
+                SetCurrentFunction( FuTemplate::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+                Cancel();
+            }
+
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_PRESENTATION_DLG:
+        {
+            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_CUSTOMSHOW_DLG:
+        {
+            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+    }
+
+    if(HasCurrentFunction())
+        GetCurrentFunction()->Activate();
+
+    Invalidate( SID_OUTLINE_COLLAPSE_ALL );
+    Invalidate( SID_OUTLINE_COLLAPSE );
+    Invalidate( SID_OUTLINE_EXPAND_ALL );
+    Invalidate( SID_OUTLINE_EXPAND );
+
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_OUTLINE_LEFT );
+    rBindings.Invalidate( SID_OUTLINE_RIGHT );
+    rBindings.Invalidate( SID_OUTLINE_UP );
+    rBindings.Invalidate( SID_OUTLINE_DOWN );
+
+    Invalidate( SID_OUTLINE_FORMAT );
+    Invalidate( SID_COLORVIEW );
+    Invalidate(SID_CUT);
+    Invalidate(SID_COPY);
+    Invalidate(SID_PASTE);
+}
+
+void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
+{
+    OutlineViewModelChangeGuard aGuard( *pOlView );
+
+    DeactivateCurrentFunction();
+
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+    USHORT nSId = rReq.GetSlot();
+
+    switch( nSId )
+    {
+        case SID_HYPERLINK_SETLINK:
+        {
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+            if (pReqArgs)
+            {
+                SvxHyperlinkItem* pHLItem =
+                (SvxHyperlinkItem*) &pReqArgs->Get(ITEMID_HYPERLINK);
+
+                SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
+                                                  pHLItem->GetName(),
+                                                  SVXURLFORMAT_REPR));
+                ESelection aSel( pOutlinerView->GetSelection() );
+                pOutlinerView->InsertField(aURLItem);
+                if ( aSel.nStartPos <= aSel.nEndPos )
+                    aSel.nEndPos = aSel.nStartPos + 1;
+                else
+                    aSel.nStartPos = aSel.nEndPos + 1;
+                pOutlinerView->SetSelection( aSel );
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case FN_INSERT_SOFT_HYPHEN:
+        case FN_INSERT_HARDHYPHEN:
+        case FN_INSERT_HARD_SPACE:
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
+        case SID_BULLET:
+        {
+            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_OUTLINE_BULLET:
+        {
+            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_THESAURUS:
+        {
+            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_CHAR_DLG:
+        {
+            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_INSERTFILE:
+        {
+            SetCurrentFunction( FuInsertFile::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
+        case SID_PRESENTATIONOBJECT:
+        {
+            SetCurrentFunction( FuPresentationObjects::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
         case SID_SET_DEFAULT:
         {
             // 1. Selektion merken (kriegt die eselige EditEngine nicht selbst
@@ -435,29 +521,25 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
-        case SID_HYPERLINK_SETLINK:
+        case SID_SUMMARY_PAGE:
         {
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-
-            if (pReqArgs)
-            {
-                SvxHyperlinkItem* pHLItem =
-                (SvxHyperlinkItem*) &pReqArgs->Get(ITEMID_HYPERLINK);
-
-                SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
-                                                  pHLItem->GetName(),
-                                                  SVXURLFORMAT_REPR));
-                ESelection aSel( pOutlinerView->GetSelection() );
-                pOutlinerView->InsertField(aURLItem);
-                if ( aSel.nStartPos <= aSel.nEndPos )
-                    aSel.nEndPos = aSel.nStartPos + 1;
-                else
-                    aSel.nStartPos = aSel.nEndPos + 1;
-                pOutlinerView->SetSelection( aSel );
-            }
-
+            pOlView->SetSelectedPages();
+            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            pOlView->GetOutliner()->Clear();
+            pOlView->FillOutliner();
+            pOlView->GetActualPage();
             Cancel();
-            rReq.Ignore ();
+        }
+        break;
+
+        case SID_EXPAND_PAGE:
+        {
+            pOlView->SetSelectedPages();
+            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
+            pOlView->GetOutliner()->Clear();
+            pOlView->FillOutliner();
+            pOlView->GetActualPage();
+            Cancel();
         }
         break;
 
@@ -601,55 +683,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             rReq.Ignore ();
         }
         break;
-
-        case SID_STYLE_EDIT:
-        case SID_STYLE_UPDATE_BY_EXAMPLE:
-        {
-            if( rReq.GetArgs() )
-            {
-                SetCurrentFunction( FuTemplate::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-                Cancel();
-            }
-
-            rReq.Ignore ();
-        }
-        break;
-
-        case SID_PRESENTATION_DLG:
-        {
-            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_CUSTOMSHOW_DLG:
-        {
-            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_SUMMARY_PAGE:
-        {
-            pOlView->SetSelectedPages();
-            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner()->Clear();
-            pOlView->FillOutliner();
-            pOlView->GetActualPage();
-            Cancel();
-        }
-        break;
-
-        case SID_EXPAND_PAGE:
-        {
-            pOlView->SetSelectedPages();
-            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner()->Clear();
-            pOlView->FillOutliner();
-            pOlView->GetActualPage();
-            Cancel();
-        }
-        break;
     }
 
     if(HasCurrentFunction())
@@ -672,5 +705,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate(SID_COPY);
     Invalidate(SID_PASTE);
 }
+
 
 } // end of namespace sd
