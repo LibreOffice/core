@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extract.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:30:55 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
+#endif
 
 namespace cppu
 {
@@ -123,7 +125,7 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
 template< typename E >
 inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
 {
-    return ::com::sun::star::uno::Any( &eEnum, getCppuType((const E*)0) );
+    return ::com::sun::star::uno::Any( &eEnum, ::cppu::UnoType< E >::get() );
 }
 
 /**
