@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:23:18 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
@@ -56,15 +55,6 @@
 #ifndef SD_OUTLINE_HXX
 #include "Outliner.hxx"
 #endif
-#else   // SVX_LIGHT
-#ifndef _OUTLINER_HXX //autogen wg. Outliner
-#include <svx/outliner.hxx>
-#endif
-#ifndef _SVDOUTL_HXX //autogen wg. Outliner
-#include <svx/svdoutl.hxx>
-#endif
-#define SfxPrinter Printer
-#endif // !SVX_LIGHT
 
 #ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
@@ -127,8 +117,8 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "cusshow.hxx"
+#include "undo/undomanager.hxx"
 
-#ifndef SVX_LIGHT
 #ifdef MAC
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "::ui:inc:DrawDocShell.hxx"
@@ -159,8 +149,6 @@
 #include "..\ui\inc\strings.hrc"
 #endif
 #endif
-
-#endif // !SVX_LIGHT
 
 #include "PageListWatcher.hxx"
 
@@ -411,9 +399,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
 {
     FmFormModel::InsertPage(pPage, nPos);
 
-#ifndef SVX_LIGHT
     ((SdPage*)pPage)->ConnectLink();
-#endif
 
     UpdatePageObjectsInNotes(nPos);
 }
@@ -441,9 +427,7 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
 
-#ifndef SVX_LIGHT
     ((SdPage*)pPage)->DisconnectLink();
-#endif
     if (pCustomShowList)
     {
         for (ULONG i = 0; i < pCustomShowList->Count(); i++)
@@ -457,257 +441,6 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
     UpdatePageObjectsInNotes(nPgNum);
 
     return pPage;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// #107844#
-// An undo class which is able to set/unset user calls is needed to handle
-// the undo/redo of PresObjs correctly. It can also add/remove the object
-// from the PresObjList of that page.
-
-SdrUndoUserCallObj::SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pNew)
-:   SdrUndoObj(rNewObj),
-    mpOld((SdPage*)rNewObj.GetUserCall()),
-    mpNew(pNew)
-{
-    if( mpOld )
-    {
-        meKind = mpOld->GetPresObjKind(&rNewObj);
-    }
-    else if( mpNew )
-    {
-        meKind = mpNew->GetPresObjKind(&rNewObj);
-    }
-    else
-    {
-        DBG_ERROR( "SdrUndoUserCallObj::SdrUndoUserCallObj() - no page, how shall I restore the user call?" );
-        meKind = PRESOBJ_NONE;
-    }
-}
-
-SdrUndoUserCallObj::SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pOld, SdPage* pNew)
-:   SdrUndoObj(rNewObj),
-    mpOld(pOld),
-    mpNew(pNew)
-{
-    if( mpOld )
-    {
-        meKind = mpOld->GetPresObjKind(&rNewObj);
-    }
-    else if( mpNew )
-    {
-        meKind = mpNew->GetPresObjKind(&rNewObj);
-    }
-    else
-    {
-        DBG_ERROR( "SdrUndoUserCallObj::SdrUndoUserCallObj() - no page, how shall I restore the user call?" );
-        meKind = PRESOBJ_NONE;
-    }
-}
-
-void SdrUndoUserCallObj::Undo()
-{
-    if(mpNew && (meKind != PRESOBJ_NONE))
-    {
-        mpNew->RemovePresObj(pObj);
-    }
-
-    pObj->SetUserCall(mpOld);
-
-    if(mpOld && (meKind != PRESOBJ_NONE))
-    {
-        mpOld->InsertPresObj( pObj, meKind );
-    }
-}
-
-void SdrUndoUserCallObj::Redo()
-{
-    if(mpOld && (meKind != PRESOBJ_NONE))
-    {
-        mpOld->RemovePresObj(pObj);
-    }
-
-    pObj->SetUserCall(mpNew);
-
-    if(mpNew && (meKind != PRESOBJ_NONE))
-    {
-        mpNew->InsertPresObj( pObj, meKind );
-    }
-}
-
-/*************************************************************************
-|*
-|* anfallenden Undo-Aktionen des SdrModels verwalten
-|*
-\************************************************************************/
-
-// #107844#
-// Inline has no advantages at such big code.
-IMPL_LINK( SdDrawDocument, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
-{
-#ifndef SVX_LIGHT
-    if (pUndoAction)
-    {
-        if ( pDeletedPresObjList )
-        {
-            if( pDeletedPresObjList->Count() )
-            {
-                // Praesentationsobjekte sollen geloescht werden
-                ULONG nCount = pDeletedPresObjList->Count();
-
-                // #107844#
-                // SfxUndoAction::Merge() is empty implemented and does
-                // nothing. To really add the action here without getting
-                // a recursive call to this link the RTTI needs to be used.
-                // So, pUndoGroup is filled and used if this worked well.
-                SdrUndoGroup* pUndoGroup;
-
-                if(pUndoAction->ISA(SdrUndoGroup))
-                {
-                    pUndoGroup = (SdrUndoGroup*)pUndoAction;
-                }
-                else
-                {
-                    DBG_ASSERT(sal_False, "SdDrawDocument::NotifyUndoActionHdl: Could not add undo action (!)");
-                }
-
-                for (ULONG i=0; i < nCount; i++)
-                {
-                    // #107844# Take the other direction here to create the new placeholders
-                    // in the correct order since they were deleted reversely. Else, travelling
-                    // over the text objects using CTRL+RETURN was in wrong order.
-                    SdrObject* pObj = (SdrObject*) pDeletedPresObjList->GetObject((nCount - 1) - i);
-
-                    // #107844#
-                    // Decide between empty and not-empty PresObj later
-                    if (pObj)
-                    {
-                        if (pObj->ISA(SdrTextObj))
-                        {
-                            SdrTextObj* pTextObj = (SdrTextObj*) pObj;
-
-                            if (pTextObj)
-                            {
-                                String aString;
-                                SdPage* pPage = (SdPage*) pTextObj->GetUserCall();
-
-                                if (pPage)
-                                {
-                                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
-                                    PageKind ePageKind = pPage->GetPageKind();
-
-                                    if(pUndoGroup)
-                                    {
-                                        // #107844#
-                                        // Add new Undo-Action here
-                                        pUndoGroup->AddAction(new SdrUndoUserCallObj(*pTextObj, NULL));
-                                    }
-
-                                    pPage->RemovePresObj(pTextObj);
-                                    pTextObj->SetUserCall(NULL);
-
-                                    if(!pObj->IsEmptyPresObj())
-                                    {
-                                        // #107844#
-                                        // create empty new presobj
-                                        if (ePresObjKind == PRESOBJ_TITLE)
-                                        {
-                                            if ( pPage->IsMasterPage() )
-                                            {
-                                                if (ePageKind != PK_NOTES)
-                                                {
-                                                    aString = String ( SdResId( STR_PRESOBJ_MPTITLE ) );
-                                                }
-                                                else
-                                                {
-                                                    aString = String ( SdResId( STR_PRESOBJ_MPNOTESTITLE ) );
-                                                }
-                                            }
-                                            else
-                                            {
-                                                aString = String (SdResId(STR_PRESOBJ_TITLE));
-                                            }
-                                        }
-                                        else if (ePresObjKind == PRESOBJ_OUTLINE)
-                                        {
-                                            ePresObjKind = PRESOBJ_OUTLINE;
-
-                                            if ( pPage->IsMasterPage() )
-                                            {
-                                                aString = String (SdResId(STR_PRESOBJ_MPOUTLINE));
-                                            }
-                                            else
-                                            {
-                                                aString = String (SdResId(STR_PRESOBJ_OUTLINE));
-                                            }
-                                        }
-                                        else if (ePresObjKind == PRESOBJ_NOTES)
-                                        {
-                                            if ( pPage->IsMasterPage() )
-                                            {
-                                                aString = String ( SdResId( STR_PRESOBJ_MPNOTESTEXT ) );
-                                            }
-                                            else
-                                            {
-                                                aString = String ( SdResId( STR_PRESOBJ_NOTESTEXT ) );
-                                            }
-                                        }
-                                        else if (ePresObjKind == PRESOBJ_TEXT)
-                                        {
-                                            aString = String ( SdResId( STR_PRESOBJ_TEXT ) );
-                                        }
-
-                                        if ( aString.Len() )
-                                        {
-                                            GetInternalOutliner(TRUE);
-                                            pInternalOutliner->SetMinDepth(0);
-
-                                            SdrTextObj* pNewTextObj = (SdrTextObj*)pTextObj->Clone();
-                                            pPage->InsertObject(pNewTextObj);
-
-                                            pPage->SetObjText(pNewTextObj, pInternalOutliner, ePresObjKind, aString);
-                                            pNewTextObj->NbcSetStyleSheet(pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE);
-                                            pNewTextObj->SetEmptyPresObj(TRUE);
-
-                                            if(pUndoGroup)
-                                            {
-                                                // #107844#
-                                                // Add new Undo-Action here
-                                                pUndoGroup->AddAction(new SdrUndoUserCallObj(*pNewTextObj, pPage));
-                                            }
-
-                                            pNewTextObj->SetUserCall(pPage);
-                                            pPage->InsertPresObj(pNewTextObj, ePresObjKind);
-
-                                            if(pUndoGroup)
-                                            {
-                                                // #107844#
-                                                // Add new Undo-Action here
-                                                pUndoGroup->AddAction(new SdrUndoNewObj(*pNewTextObj));
-                                            }
-
-                                            pInternalOutliner->Clear();
-                                            pInternalOutliner->SetMinDepth(0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            ClearDeletedPresObjList();
-        }
-
-        if (pDocSh)
-        {
-            pDocSh->GetUndoManager()->AddUndoAction(pUndoAction);
-        }
-    }
-
-#endif // !SVX_LIGHT
-    return 0;
 }
 
 /*************************************************************************
@@ -1072,10 +805,10 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
             if (nPage != 0)
             {
                 SdrPage* pPg = GetPage(nPage);
-                AddUndo(new SdrUndoSetPageNum(*pPg, nPage, 1));
+                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
                 MovePage(nPage, 1);
                 pPg = GetPage(nPage+1);
-                AddUndo(new SdrUndoSetPageNum(*pPg, nPage+1, 2));
+                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
                 MovePage(nPage+1, 2);
                 bSomethingHappened = TRUE;
             }
@@ -1099,10 +832,10 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage);
-                    AddUndo(new SdrUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     pPg = GetPage(nPage+1);
-                    AddUndo(new SdrUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     bSomethingHappened = TRUE;
                 }
@@ -1112,10 +845,10 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage+1);
-                    AddUndo(new SdrUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     pPg = GetPage(nPage);
-                    AddUndo(new SdrUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     bSomethingHappened = TRUE;
                 }
@@ -1205,10 +938,8 @@ LanguageType SdDrawDocument::GetLanguage( const USHORT nId ) const
 
 IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 {
-#ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( TRUE );
-#endif
 
     BOOL bChanged = IsChanged();        // merken
 
@@ -1239,10 +970,8 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 
     SetChanged(bChanged || FALSE);
 
-#ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( FALSE );
-#endif
     return 0;
 }
 
@@ -1281,22 +1010,38 @@ void SdDrawDocument::StopWorkStartupDelay()
 
 SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject) const
 {
-    DBG_ASSERT(pObject, "ohne Objekt keine AnimationsInfo");
+    DBG_ASSERT(pObject, "sd::SdDrawDocument::GetAnimationInfo(), invalid argument!");
+    if( pObject )
+        return GetShapeUserData( *pObject, false );
+    else
+        return 0;
+}
+
+SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCreate /* = false */ )
+{
     USHORT nUD          = 0;
-    USHORT nUDCount     = pObject->GetUserDataCount();
-    SdrObjUserData* pUD = NULL;
+    USHORT nUDCount     = rObject.GetUserDataCount();
+    SdrObjUserData* pUD = 0;
+    SdAnimationInfo* pRet = 0;
 
     // gibt es in den User-Daten eine Animationsinformation?
     for (nUD = 0; nUD < nUDCount; nUD++)
     {
-        pUD = pObject->GetUserData(nUD);
-        if (pUD->GetInventor() == SdUDInventor   &&
-            pUD->GetId() == SD_ANIMATIONINFO_ID)
+        pUD = rObject.GetUserData(nUD);
+        if((pUD->GetInventor() == SdUDInventor) && (pUD->GetId() == SD_ANIMATIONINFO_ID))
         {
-            return (SdAnimationInfo*)pUD;
+            pRet = dynamic_cast<SdAnimationInfo*>(pUD);
+            break;
         }
     }
-    return NULL;
+
+    if( (pRet == 0) && bCreate )
+    {
+        pRet = new SdAnimationInfo;
+        rObject.InsertUserData( pRet );
+    }
+
+    return pRet;
 }
 
 
@@ -1424,7 +1169,6 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 
 Graphic SdDrawDocument::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )
 {
-#ifndef SVX_LIGHT
     Graphic             aGraphic;
 /*
     ::uno::Reference < embed::XVisualObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef(), UNO_QUERY );
@@ -1448,36 +1192,7 @@ Graphic SdDrawDocument::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )
         aGraphic = Graphic( aGDIMtf );
     }*/
     return aGraphic;
-#endif // !SVX_LIGHT
 }
-
-
-/*************************************************************************
-|*
-|* Liste fuer zu loeschende Praesentationobjekte (fuer die Seite herausgeben)
-|*
-\************************************************************************/
-
-List* SdDrawDocument::GetDeletedPresObjList()
-{
-    if (!pDeletedPresObjList)
-    {
-        pDeletedPresObjList = new List();
-    }
-
-    return pDeletedPresObjList;
-}
-
-
-
-
-void SdDrawDocument::ClearDeletedPresObjList (void)
-{
-    delete pDeletedPresObjList;
-    pDeletedPresObjList = NULL;
-}
-
-
 
 
 /** this method enforces that the masterpages are in the currect order,
@@ -1919,6 +1634,11 @@ void SdDrawDocument::SetupNewPage (
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
+}
+
+sd::UndoManager* SdDrawDocument::GetUndoManager() const
+{
+    return pDocSh ? dynamic_cast< sd::UndoManager* >(pDocSh->GetUndoManager()) : 0;
 }
 
 // eof
