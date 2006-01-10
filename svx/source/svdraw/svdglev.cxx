@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:27:45 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
                 pGPL=pObj->ForceGluePointList();
             }
             if (pGPL!=NULL) {
-                if (!bConst) AddUndo(new SdrUndoGeoObj(*pObj));
+                if (!bConst) AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                     USHORT nPtId=pPts->GetObject(nPtNum);
                     USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
@@ -258,7 +258,7 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
         if (nPtAnz!=0) {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
             if (pGPL!=NULL) {
-                AddUndo(new SdrUndoGeoObj(*pObj));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                     USHORT nPtId=pPts->GetObject(nPtNum);
                     USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
@@ -289,7 +289,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0 && pGPL!=NULL) {
-            AddUndo(new SdrUndoGeoObj(*pObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
             for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                 USHORT nPtId=pPts->GetObject(nPtNum);
                 USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
@@ -320,7 +320,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
         if (nPtAnz!=0) {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
             if (pGPL!=NULL) {
-                AddUndo(new SdrUndoGeoObj(*pObj));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                     USHORT nPtId=pPts->GetObject(nPtNum);
                     USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
