@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:35:13 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1620,21 +1620,24 @@ ULONG Outliner::GetViewCount() const
 void Outliner::ParagraphInsertedHdl()
 {
     DBG_CHKTHIS(Outliner,0);
-    aParaInsertedHdl.Call( this );
+    if( !IsInUndo() )
+        aParaInsertedHdl.Call( this );
 }
 
 
 void Outliner::ParagraphRemovingHdl()
 {
     DBG_CHKTHIS(Outliner,0);
-    aParaRemovingHdl.Call( this );
+    if( !IsInUndo() )
+        aParaRemovingHdl.Call( this );
 }
 
 
 void Outliner::DepthChangedHdl()
 {
     DBG_CHKTHIS(Outliner,0);
-    aDepthChangedHdl.Call( this );
+    if( !IsInUndo() )
+        aDepthChangedHdl.Call( this );
 }
 
 
@@ -2069,7 +2072,8 @@ IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
 {
     DBG_CHKTHIS(Outliner,0);
 
-    GetBeginMovingHdl().Call( this );
+    if( !IsInUndo() )
+        GetBeginMovingHdl().Call( this );
 
     return 0;
 }
@@ -2187,7 +2191,8 @@ IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
             ImplSetLevelDependendStyleSheet( 0 );
     }
 
-    aEndMovingHdl.Call( this );
+    if( !IsInUndo() )
+        aEndMovingHdl.Call( this );
 
     return 0;
 }
