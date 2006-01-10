@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:23:36 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,42 +184,6 @@ void OInterfaceContainer::disposing()
 
 // XPersistObject
 //------------------------------------------------------------------------------
-class IntIterator
-{
-private:
-    sal_Int32 m_nPos;
-
-public:
-    IntIterator( sal_Int32 _nPos ) : m_nPos( _nPos ) { }
-
-    bool operator == ( const IntIterator& rhs ) { return m_nPos == rhs.m_nPos ? true : false; }
-    bool operator != ( const IntIterator& rhs ) { return !( *this == rhs ); }
-
-    sal_Int32 operator*() { return m_nPos; }
-
-    IntIterator& operator++()       { ++m_nPos; return *this; }
-    IntIterator  operator++(int)    { IntIterator hold(*this); ++*this; return hold; }
-
-    IntIterator& operator--()       { --m_nPos; return *this; }
-    IntIterator  operator--(int)    { IntIterator hold(*this); --*this; return hold; }
-};
-
-//------------------------------------------------------------------------------
-class ExtractEvents : public ::std::unary_function< sal_Int32, Sequence< ScriptEventDescriptor > >
-{
-private:
-    Reference< XEventAttacherManager > m_xManager;
-
-public:
-    ExtractEvents( const Reference< XEventAttacherManager >& _rxManager ) : m_xManager( _rxManager ) { }
-
-    //..........................................................................
-    Sequence< ScriptEventDescriptor > operator()( sal_Int32 _nPos )
-    {
-        return m_xManager->getScriptEvents( _nPos );
-    }
-};
-//------------------------------------------------------------------------------
 namespace
 {
     //..........................................................................
@@ -234,12 +198,8 @@ namespace
         _rSave.reserve( _nItemCount );
 
         // copy the events
-        ::std::transform(
-            IntIterator( 0 ),
-            IntIterator( _nItemCount ),
-            ::std::back_inserter( _rSave ),
-            ExtractEvents( _rxManager )
-        );
+        for (sal_Int32 i=0; i<_nItemCount; ++i)
+            _rSave.push_back(_rxManager->getScriptEvents( i ));
     }
 
     //..........................................................................
