@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:32:57 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_TYPE_H_
 #include <com/sun/star/uno/Type.h>
+#endif
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
 #endif
 
 #ifndef _RTL_ALLOC_H_
@@ -385,13 +388,15 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 
 /** Gets the meta type of IDL type any.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type any
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) SAL_THROW( () )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_ANY ) );
+    return ::cppu::UnoType< ::com::sun::star::uno::Any >::get();
 }
 
 #endif
