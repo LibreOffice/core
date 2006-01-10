@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:14 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ static const int MAX_OUTLINERVIEWS = 4;
 class OutlineView
     : public ::sd::View
 {
+    friend class OutlineViewModelChangeGuard;
 public:
     OutlineView (DrawDocShell* pDocSh,
         ::Window* pWindow,
@@ -86,7 +87,10 @@ public:
     TYPEINFO();
 
     SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
-    SdrTextObj*     GetLayoutTextObject(SdrPage* pPage);
+    SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
+
+    SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
+    SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
     virtual void AddWin (::sd::Window* pWin);
     virtual void DelWin (::sd::Window* pWin);
@@ -97,6 +101,8 @@ public:
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
     SdPage*         GetActualPage();
+    SdPage*         GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara );
+    Paragraph*      GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
     void            SetActualPage( SdPage* pActual );
@@ -159,6 +165,23 @@ public:
     void IgnoreCurrentPageChanges (bool bIgnore);
 
 private:
+    /** call this method before you do anything that can modify the outliner
+        and or the drawing document model. It will create needed undo actions */
+    void BeginModelChange();
+
+    /** call this method after BeginModelChange(), when all possible model
+        changes are done. */
+    void EndModelChange();
+
+    /** merge edit engine undo actions if possible */
+    void TryToMergeUndoActions();
+
+    /** updates all changes in the outliner model to the draw model */
+    void UpdateDocument();
+
+    /** creates and inserts an empty slide for the given paragraph */
+    SdPage* InsertSlideForParagraph( Paragraph* pPara );
+
     OutlineViewShell* pOutlineViewShell;
     SdrOutliner*        pOutliner;
     OutlinerView*       pOutlinerView[MAX_OUTLINERVIEWS];
@@ -218,6 +241,16 @@ public:
     ~OutlineViewPageChangesGuard();
 private:
     OutlineView* mpView;
+};
+
+// calls BeginModelChange() on c'tor and EndModelChange() on d'tor
+class OutlineViewModelChangeGuard
+{
+public:
+    OutlineViewModelChangeGuard( OutlineView& rView );
+    ~OutlineViewModelChangeGuard();
+private:
+    OutlineView& mrView;
 };
 
 } // end of namespace sd
