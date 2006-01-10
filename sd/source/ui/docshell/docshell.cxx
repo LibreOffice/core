@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:54:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,8 @@
 #endif
 #include "unomodel.hxx"
 #include "formatclipboard.hxx"
+#include "undo/undomanager.hxx"
+#include "undo/undofactory.hxx"
 
 using namespace sd;
 #define DrawDocShell
@@ -210,7 +212,9 @@ void DrawDocShell::Construct()
     pDoc = new SdDrawDocument(eDocType, this);
     SetModel( new SdXImpressDocument( this ) );
     SetPool( &pDoc->GetItemPool() );
-    pUndoManager = new SfxUndoManager;
+    pUndoManager = new sd::UndoManager;
+    pDoc->SetSdrUndoManager( pUndoManager );
+    pDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
     SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
 }
@@ -284,7 +288,11 @@ DrawDocShell::~DrawDocShell()
     SetDocShellFunction(0);
 
     delete pFontList;
+
+    if( pDoc )
+        pDoc->SetSdrUndoManager( 0 );
     delete pUndoManager;
+
     if(pFormatClipboard)
         delete pFormatClipboard;
 
