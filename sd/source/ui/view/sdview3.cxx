@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:28:35 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,7 +468,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             {
                                 // #i11702#
                                 BegUndo(String(SdResId(STR_MODIFYLAYER)));
-                                AddUndo(new SdrUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
                                 EndUndo();
 
                                 pO->SetLayer( (SdrLayerID) nLayer );
@@ -548,7 +548,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                         pPage->InsertObject(pObj);
 
                                         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-                                        AddUndo(new SdrUndoNewObj(*pObj));
+                                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
                                         EndUndo();
 
                                         // #83525#
@@ -811,8 +811,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
                             SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
                             pWorkPage->InsertObject( pNewObj );
-                            AddUndo( new SdrUndoNewObj( *pNewObj ) );
-                            AddUndo( new SdrUndoDelObj( *pPickObj ) );
+                            AddUndo( pDoc->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                            AddUndo( pDoc->GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj ) );
                             pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
                             EndUndo();
                             bChanged = TRUE;
@@ -824,7 +824,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             // set new attributes to object
                             BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                            AddUndo( new SdrUndoAttrObj( *pPickObj ) );
+                            AddUndo( pDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             aSet.Put( pObj->GetMergedItemSet() );
 
                             // Eckenradius soll nicht uebernommen werden.
@@ -1244,7 +1244,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             *xStm >> aFillData;
 
             BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-            AddUndo( new SdrUndoAttrObj( *pPickObj ) );
+            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
             EndUndo();
 
             XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
