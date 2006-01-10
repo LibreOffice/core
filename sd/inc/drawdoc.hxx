@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:22:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@ namespace sd
 SV_DECL_REF(DrawDocShell)
 #endif
 class DrawDocShell;
+class UndoManager;
 }
 
 class ImpDrawPageListWatcher;
@@ -162,27 +163,6 @@ enum DocCreationMode
 {
     NEW_DOC,
     DOC_LOADED
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// #107844#
-// An undo class which is able to set/unset user calls is needed to handle
-// the undo/redo of PresObjs correctly. It can also add/remove the object
-// from the PresObjList of that page.
-
-class SD_DLLPUBLIC SdrUndoUserCallObj : public SdrUndoObj
-{
-protected:
-    SdPage*                         mpOld;
-    SdPage*                         mpNew;
-    PresObjKind                     meKind;
-
-public:
-    SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pNew);
-    SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pOld, SdPage* pNew);
-
-    virtual void Undo();
-    virtual void Redo();
 };
 
 namespace sd
@@ -222,7 +202,6 @@ private:
     Timer*              pWorkStartupTimer;
     Timer*              pOnlineSpellingTimer;
     List*               pOnlineSpellingList;
-    List*               pDeletedPresObjList;
     SvxSearchItem*      pOnlineSearchItem;
     List*               pFrameViewList;
     List*               pCustomShowList;
@@ -244,7 +223,6 @@ private:
     LanguageType        eLanguageCJK;
     LanguageType        eLanguageCTL;
     SvxNumType          ePageNumType;
-    Link                aOldNotifyUndoActionHdl;
     ::sd::DrawDocShellRef   xAllocedDocShRef;   // => AllocModel()
     BOOL                bAllocDocSh;        // => AllocModel()
     DocumentType        eDocType;
@@ -261,7 +239,6 @@ private:
     void                FillOnlineSpellingList(SdPage* pPage);
     void                SpellObject(SdrTextObj* pObj);
 
-                        DECL_LINK(NotifyUndoActionHdl, SfxUndoAction*);
                         DECL_LINK(WorkStartupHdl, Timer*);
                         DECL_LINK(OnlineSpellingHdl, Timer*);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
@@ -481,18 +458,15 @@ public:
         return static_cast< ::sd::FrameView*>(
             pFrameViewList->GetObject(nPos));}
 
+    /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
+
+    static  SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
     IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
 
     Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
-
-    List*               GetDeletedPresObjList();
-    /** Clear the list of deleted presentation objects.  Call this
-        method when the undo stack is also cleared.
-    */
-    void ClearDeletedPresObjList (void);
 
     CharClass*          GetCharClass() const { return mpCharClass; }
     International*      GetInternational() const { return mpInternational; }
@@ -636,6 +610,8 @@ public:
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
     void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
+
+    sd::UndoManager* GetUndoManager() const;
 
 private:
     /** This member stores the printer independent layout mode.  Please
