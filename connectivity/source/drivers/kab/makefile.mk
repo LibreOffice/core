@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-19 16:54:12 $
+#   last change: $Author: rt $ $Date: 2006-01-10 14:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE :  $(PRJ)$/version.mk
 
 .IF "$(GUI)" == "UNX"
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KAB)" == "TRUE"
 # --- Files -------------------------------------
 
 EXCEPTIONSFILES=\
@@ -107,9 +107,9 @@ DEF1NAME=	$(SHL1TARGET)
 
 
 # --- Targets -----------------------------------
-.ELSE		# "$(ENABLE_KDE)" == "TRUE"
+.ELSE		# "$(ENABLE_KAB)" == "TRUE"
 dummy:
-    @echo KDE disabled - nothing to build
+    @echo KDE Addressbook disabled - nothing to build
 .ENDIF
 
 .ELSE		# "$(GUI)" == "UNX"
