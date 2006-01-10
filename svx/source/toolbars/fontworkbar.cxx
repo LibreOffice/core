@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:54:23 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,7 +522,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                     {
                         String aStr( SVX_RES( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
                         pSdrView->BegUndo( aStr );
-                        pSdrView->AddUndo( new SdrUndoAttrObj( *pObj ) );
+                        pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
                         pObj->SetMergedItem( aGeometryItem );
@@ -583,7 +583,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 {
                     String aStr( SVX_RES( nStrResId ) );
                     pSdrView->BegUndo( aStr );
-                    pSdrView->AddUndo( new SdrUndoAttrObj( *pObj ) );
+                    pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                     impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
