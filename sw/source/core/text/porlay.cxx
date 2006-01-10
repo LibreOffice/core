@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:14:37 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,12 +592,27 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 }
 
 /*************************************************************************
- *                      WhichFont()
+ *                      SwScriptInfo::SwScriptInfo()
+ *************************************************************************/
+SwScriptInfo::SwScriptInfo() :
+    nInvalidityPos( 0 ),
+    nDefaultDir( 0 )
+{
+};
+
+/*************************************************************************
+ *                      SwScriptInfo::~SwScriptInfo()
+ *************************************************************************/
+SwScriptInfo::~SwScriptInfo()
+{
+}
+
+/*************************************************************************
+ *                     SwScriptInfo::WhichFont()
  *
  * Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
  * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
  *************************************************************************/
-
 BYTE SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
 {
     ASSERT( pTxt || pSI,"How should I determine the script type?" );
@@ -1765,12 +1780,9 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
     return pScriptInfo;
 }
 
-
-
 /*************************************************************************
- *                      class SwParaPortion
+ *                      SwParaPortion::SwParaPortion()
  *************************************************************************/
-
 SwParaPortion::SwParaPortion()
 {
     FormatReset();
@@ -1779,9 +1791,15 @@ SwParaPortion::SwParaPortion()
 }
 
 /*************************************************************************
+ *                      SwParaPortion::~SwParaPortion()
+ *************************************************************************/
+SwParaPortion::~SwParaPortion()
+{
+}
+
+/*************************************************************************
  *                      SwParaPortion::GetParLen()
  *************************************************************************/
-
 xub_StrLen SwParaPortion::GetParLen() const
 {
     xub_StrLen nLen = 0;
