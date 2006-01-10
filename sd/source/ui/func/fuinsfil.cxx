@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:59:21 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,7 +676,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pTO->SetTextLink(aFile, aFilterName, gsl_getSystemTextEncoding() );
                 }
 
-                pView->AddUndo(new SdrUndoInsertObj(*pTO));
+                pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
                 pView->EndUndo();
             }
         }
