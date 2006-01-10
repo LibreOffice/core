@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.182 $
+#   $Revision: 1.183 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-05 18:16:11 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:51:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -522,6 +522,7 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
+USE_STLP_DEBUG=TRUE
 .ENDIF
 
 .IF "$(debug)"!=""
