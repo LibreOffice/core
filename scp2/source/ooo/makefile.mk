@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 13:15:49 $
+#   last change: $Author: rt $ $Date: 2006-01-10 14:34:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,10 @@ SCPDEFS+=-DUSE_PASF
 
 .IF "$(ENABLE_KDE)" != ""
 SCPDEFS+=-DENABLE_KDE
+.ENDIF
+
+.IF "$(ENABLE_KAB)" != ""
+SCPDEFS+=-DENABLE_KAB
 .ENDIF
 
 .IF "$(ENABLE_EVOAB2)" != ""
