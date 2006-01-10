@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:40:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,9 @@
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
 #endif
-
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
+#endif
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct FontDescriptor;
@@ -110,7 +112,7 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isA(const staruno::Type& _rType, TYPE* pDummy)
     {
-        return  _rType.equals(getCppuType(pDummy));
+        return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
     }
 
     //-------------------------------------------------------------------------
@@ -120,7 +122,8 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isA(const staruno::Any& _rVal, TYPE* pDummy)
     {
-        return  _rVal.getValueType().equals(getCppuType(pDummy));
+        return  _rVal.getValueType().equals(
+            cppu::getTypeFavourUnsigned(pDummy));
     }
 
     //-------------------------------------------------------------------------
@@ -129,7 +132,9 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isAReference(const staruno::Type& _rType, TYPE* pDummy)
     {
-        return  _rType.equals(getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
+        return  _rType.equals(
+            cppu::getTypeFavourUnsigned(
+                static_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
     //-------------------------------------------------------------------------
@@ -138,7 +143,9 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isAReference(const staruno::Any& _rVal, TYPE* pDummy)
     {
-        return  _rVal.getValueType().equals(getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
+        return  _rVal.getValueType().equals(
+            cppu::getTypeFavourUnsigned(
+                static_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
     //-------------------------------------------------------------------------
