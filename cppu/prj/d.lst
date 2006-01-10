@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\typelib
 mkdir: %_DEST%\inc%_EXT%\uno
 
 ..\inc\cppu\macros.hxx %_DEST%\inc%_EXT%\cppu\macros.hxx
+..\inc\cppu\unotype.hxx %_DEST%\inc%_EXT%\cppu\unotype.hxx
 
 ..\inc\com\sun\star\uno\Reference.h %_DEST%\inc%_EXT%\com\sun\star\uno\Reference.h
 ..\inc\com\sun\star\uno\Reference.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\Reference.hxx
