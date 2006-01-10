@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:28:02 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,21 +176,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-//////////////////////////////////////////////////////////////////////////////
-// service routine for Undo/Redo implementation
-namespace {
-SfxUndoManager* ImpGetUndoManagerFromViewShell (::sd::DrawViewShell& rDViewShell)
-{
-    ::sd::ViewShell* pViewShell = rDViewShell.GetDocSh()->GetViewShell();
-    if(pViewShell)
-        return pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
-    DBG_ASSERT(pViewShell, "ViewShell not found");
-    return 0L;
-}
-
-
-
-
 /** Create a list of clipboard formats that are supported both from the
     current clipboard content and the DrawViewShell.
     The list is stored in a new instance of SvxClipboardFmtItem.
@@ -275,8 +260,6 @@ SfxUndoManager* ImpGetUndoManagerFromViewShell (::sd::DrawViewShell& rDViewShell
 
     return pResult;
 }
-
-} // end of anonymous namespace
 
 namespace sd {
 
