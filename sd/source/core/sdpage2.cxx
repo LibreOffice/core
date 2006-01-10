@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:03:58 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,15 +440,10 @@ SdPage::SdPage(const SdPage& rSrcPage) :
 {
     ePageKind           = rSrcPage.ePageKind;
     eAutoLayout         = rSrcPage.eAutoLayout;
-    bOwnArrangement     = FALSE;
 
-    PresentationObjectList::const_iterator aIter( rSrcPage.maPresObjList.begin() );
-    const PresentationObjectList::const_iterator aEnd( rSrcPage.maPresObjList.end() );
-
-    for(; aIter != aEnd; aIter++)
-    {
-        InsertPresObj(GetObj((*aIter).mpObject->GetOrdNum()), (*aIter).meKind);
-    }
+    SdrObject* pObj = 0;
+    while(pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj))
+        InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
     bSelected           = FALSE;
     mnTransitionType    = rSrcPage.mnTransitionType;
@@ -572,7 +567,7 @@ void SdPage::RemoveEmptyPresentationObjects()
     for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
     {
         if( pShape && pShape->IsEmptyPresObj() )
-            RemoveObject( pShape->GetOrdNum() );
+            delete RemoveObject( pShape->GetOrdNum() );
 
     }
 }
