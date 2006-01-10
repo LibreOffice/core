@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:40:33 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -826,7 +826,9 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
         if (pTEObj!=NULL) {
             pTEOutliner->CompleteOnlineSpelling();
             Point aPvOfs(pTEPV->GetOffset());
-            SdrUndoObjSetText* pTxtUndo=bModified ? new SdrUndoObjSetText(*pTEObj) : NULL;
+            SdrUndoObjSetText* pTxtUndo= bModified ?
+                dynamic_cast< SdrUndoObjSetText* >( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTEObj) ) : NULL;
+            DBG_ASSERT( !bModified || pTxtUndo, "svx::SdrObjEditView::EndTextEdit(), could not create undo action!" );
             // Den alten CalcFieldValue-Handler wieder setzen
             // Muss vor Obj::EndTextEdit() geschehen, da dort ein UpdateFields() gemacht wird.
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
@@ -853,7 +855,7 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
                 if (!pTxtUndo->IsDifferent()) { delete pTxtUndo; pTxtUndo=NULL; }
             }
             // Loeschung des gesamten TextObj checken
-            SdrUndoDelObj* pDelUndo=NULL;
+            SdrUndoAction* pDelUndo=NULL;
             BOOL bDelObj=FALSE;
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pTEObj);
             if (pTextObj!=NULL && bTextEditNewObj) {
@@ -865,7 +867,7 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
                 if (pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor && !bDontDeleteReally) {
                     SdrObjKind eIdent=(SdrObjKind)pTextObj->GetObjIdentifier();
                     if (eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT) {
-                        pDelUndo=new SdrUndoDelObj(*pTEObj);
+                        pDelUndo= GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
                 }
             }
@@ -1458,7 +1460,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             String aStr;
             ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
             BegUndo(aStr);
-            AddUndo(new SdrUndoGeoObj(*pTextEditObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
 
             // #i43537#
             // If this is a text object also rescue the OutlinerParaObject since
@@ -1468,7 +1470,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             // implementation itself.
             sal_Bool bRescueText(pTextEditObj->ISA(SdrTextObj));
 
-            AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,!bNoEEItems || bRescueText));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pTextEditObj,false,!bNoEEItems || bRescueText));
             EndUndo();
 
             //pTextEditObj->SetItemSetAndBroadcast(*pSet, bReplaceAll);
@@ -1493,8 +1495,8 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             String aStr;
             ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
             BegUndo(aStr);
-            AddUndo(new SdrUndoGeoObj(*pTextEditObj));
-            AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,FALSE));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pTextEditObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pTextEditObj,false,false));
             EndUndo();
 
             //pTextEditObj->SetItemSetAndBroadcast(aSet, bReplaceAll);
@@ -1557,39 +1559,7 @@ BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveH
         }
     }
 
-/*  #92191# we do not support the 'feature' for different styles in paragraphs
-    any longer
-
-    if (pTextEditOutlinerView!=NULL) {
-        BOOL bAllSelected=ImpIsTextEditAllSelected();
-        if (bAllSelected) {
-            String aStr;
-            if (pStyleSheet!=NULL) ImpTakeDescriptionStr(STR_EditSetStylesheet,aStr);
-            else ImpTakeDescriptionStr(STR_EditDelStylesheet,aStr);
-            BegUndo(aStr);
-            AddUndo(new SdrUndoGeoObj(*pTextEditObj));
-            AddUndo(new SdrUndoAttrObj(*pTextEditObj,TRUE,TRUE));
-            EndUndo();
-            pTextEditObj->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-        }
-        if (pStyleSheet!=NULL) {
-            // Der Outliner entfernt bei der Zuweisung eines StyleSheets immer
-            // dir entsprechenden harten Attribute. Jedoch nur vom Absatz,
-            // keine Zeichenattribute. Und genau so soll das scheinbar auch
-            // sein, auch wenn es nicht ganz meinem Interface entspricht.
-            // (Joe M. 27-11-1995)
-            pTextEditOutlinerView->SetStyleSheet(pStyleSheet);
-        }
-#ifndef SVX_LIGHT
-        if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
-#endif
-        ImpMakeTextCursorAreaVisible();
-        return TRUE;
-    } else
-*/
-    {
-        return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-    }
+    return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
