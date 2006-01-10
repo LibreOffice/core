@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:25:14 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:48:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -635,7 +635,9 @@ BOOL SdrDragView::BegInsObjPoint(BOOL bIdxZwang, USHORT nIdx, const Point& rPnt,
     nMinMov=0;
     if (pMarkedObj!=NULL && pMarkedObj->IsPolyObj()) {
         BrkAction();
-        pInsPointUndo=new SdrUndoGeoObj(*pMarkedObj);
+        pInsPointUndo = dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pMarkedObj) );
+        DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
+
         XubString aStr(ImpGetResStr(STR_DragInsertPoint));
         XubString aName; pMarkedObj->TakeObjNameSingul(aName);
 
@@ -736,7 +738,8 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
         BrkAction();
         UnmarkAllGluePoints();
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        pInsPointUndo=new SdrUndoGeoObj(*pObj);
+        pInsPointUndo= dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj) );
+        DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
         XubString aStr(ImpGetResStr(STR_DragInsertGluePoint));
         XubString aName; pObj->TakeObjNameSingul(aName);
 
