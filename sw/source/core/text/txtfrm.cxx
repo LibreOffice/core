@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:02:54 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,11 +432,22 @@ void SwTxtFrm::InitCtor()
     mbFollowFormatAllowed = sal_True;
 }
 
-
+/*************************************************************************
+ *                      SwTxtFrm::SwTxtFrm()
+ *************************************************************************/
 SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode)
     : SwCntntFrm(pNode)
 {
     InitCtor();
+}
+
+/*************************************************************************
+ *                      SwTxtFrm::~SwTxtFrm()
+ *************************************************************************/
+SwTxtFrm::~SwTxtFrm()
+{
+    // Remove associated SwParaPortion from pTxtCache
+    ClearPara();
 }
 
 const XubString& SwTxtFrm::GetTxt() const
