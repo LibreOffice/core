@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:42:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1284,7 +1284,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
         }
 
-        if( pModel && rObj.GetModel() )
+        if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
         {
             SfxObjectShell* pDestPers = pModel->GetPersist();
             SfxObjectShell* pSrcPers = rObj.GetModel()->GetPersist();
@@ -1673,6 +1673,27 @@ sal_Bool SdrOle2Obj::IsChart() const
     return sal_False;
 }
 
+// -----------------------------------------------------------------------------
+
+sal_Bool SdrOle2Obj::IsCalc() const
+{
+    if ( !xObjRef.is() )
+        return false;
+
+    SvGlobalName aObjClsId( xObjRef->getClassID() );
+    if(    SvGlobalName(SO3_SC_CLASSID_30) == aObjClsId
+        || SvGlobalName(SO3_SC_CLASSID_40) == aObjClsId
+        || SvGlobalName(SO3_SC_CLASSID_50) == aObjClsId
+        || SvGlobalName(SO3_SC_CLASSID_60) == aObjClsId
+        || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_60) == aObjClsId
+        || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_8) == aObjClsId
+        || SvGlobalName(SO3_SC_CLASSID) == aObjClsId )
+    {
+        return sal_True;
+    }
+
+    return sal_False;
+}
 // -----------------------------------------------------------------------------
 
 // eof
