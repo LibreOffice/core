@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:12:25 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,6 @@ CppuType::CppuType(typereg::Reader& typeReader,
     : m_inheritedMemberCount(0)
     , m_cppuTypeLeak(sal_False)
     , m_cppuTypeDynamic(sal_True)
-    , m_cppuTypeStatic(sal_False)
     , m_indentLength(0)
     , m_typeName(typeName)
     , m_name(typeName.copy(typeName.lastIndexOf('/') + 1))
@@ -310,6 +309,7 @@ void CppuType::addGetCppuTypeIncludes(codemaker::cppumaker::Includes & includes)
         || m_typeName.equals("com/sun/star/uno/Exception"))
     {
         includes.addType();
+        includes.addCppuUnotypeHxx();
         includes.addSalTypesH();
         includes.addTypelibTypeclassH();
         includes.addTypelibTypedescriptionH();
@@ -332,6 +332,7 @@ void CppuType::addLightGetCppuTypeIncludes(
 {
     //TODO: Determine what is really needed, instead of relying on
     // addDefaultHxxIncludes
+    includes.addCppuUnotypeHxx();
 }
 
 void CppuType::addNormalGetCppuTypeIncludes(
@@ -339,6 +340,7 @@ void CppuType::addNormalGetCppuTypeIncludes(
 {
     //TODO: Determine what is really needed, instead of relying on
     // addDefaultHxxIncludes
+    includes.addCppuUnotypeHxx();
 }
 
 void CppuType::addComprehensiveGetCppuTypeIncludes(
@@ -346,6 +348,64 @@ void CppuType::addComprehensiveGetCppuTypeIncludes(
 {
     //TODO: Determine what is really needed, instead of relying on
     // addDefaultHxxIncludes
+    includes.addCppuUnotypeHxx();
+}
+
+bool CppuType::isPolymorphic() const { return false; }
+
+void CppuType::dumpTemplateHead(FileStream & out) const {}
+
+void CppuType::dumpTemplateParameters(FileStream &) const {}
+
+void CppuType::dumpGetCppuTypePreamble(FileStream & out) {
+    if (isPolymorphic()) {
+        out << "namespace cppu {\n\n";
+        dumpTemplateHead(out);
+        out << "class UnoType< ";
+        dumpType(out, m_typeName);
+        dumpTemplateParameters(out);
+        out << " > {\npublic:\n";
+        inc();
+        out << indent()
+            << "static inline ::com::sun::star::uno::Type const & get() {\n";
+    } else {
+        if (codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false)) {
+            out << "\n\n";
+        }
+        out << ("inline ::com::sun::star::uno::Type const &"
+                " cppu_detail_getUnoType(");
+        dumpType(out, m_typeName, false, false, true);
+        out << " const *) {\n";
+    }
+    inc();
+}
+
+void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
+    dec();
+    if (isPolymorphic()) {
+        out << indent() << "}\n\nprivate:\n"
+            << indent() << "UnoType(UnoType &); // not defined\n"
+            << indent() << "~UnoType(); // not defined\n"
+            << indent()
+            << "void operator =(UnoType); // not defined\n};\n\n}\n\n";
+    } else {
+        out << "};\n\n";
+        if (codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false)) {
+            out << "\n\n";
+        }
+    }
+    dumpTemplateHead(out);
+    out << "inline ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
+    dumpType(out, m_typeName);
+    dumpTemplateParameters(out);
+    out << " const *) SAL_THROW(()) {\n";
+    inc();
+    out << indent() << "return ::cppu::UnoType< ";
+    dumpType(out, m_typeName);
+    dumpTemplateParameters(out);
+    out << " >::get();\n";
+    dec();
+    out << indent() << "}\n";
 }
 
 sal_Bool CppuType::dump(CppuOptions* pOptions)
@@ -358,15 +418,14 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
 
     sal_Bool ret = sal_False;
 
+    // -CS was used as an undocumented option to generate static getCppuType
+    // functions; since the introduction of cppu::UnoType this no longer is
+    // meaningful (getCppuType is just a forward to cppu::UnoType::get now), and
+    // -CS is handled the same way as -C now:
     if (pOptions->isValid("-L"))
         m_cppuTypeLeak = sal_True;
-    if (pOptions->isValid("-C"))
+    if (pOptions->isValid("-C") || pOptions->isValid("-CS"))
         m_cppuTypeDynamic = sal_False;
-    if (pOptions->isValid("-CS"))
-    {
-        m_cppuTypeDynamic = sal_False;
-        m_cppuTypeStatic = sal_True;
-    }
 
     OString outPath;
     if (pOptions->isValid("-O"))
@@ -575,9 +634,8 @@ void CppuType::dumpGetCppuType(FileStream & out) {
         out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
-            << ("return *reinterpret_cast< const ::com::sun::star::uno::Type *"
-                " >(::typelib_static_type_getByTypeClass("
-                "typelib_TypeClass_INTERFACE));\n");
+            << ("return ::cppu::UnoType< ::com::sun::star::uno::XInterface"
+                " >::get();\n");
         dec();
         out << indent() << "}\n";
     } else if (m_typeName.equals("com/sun/star/uno/Exception")) {
@@ -588,9 +646,8 @@ void CppuType::dumpGetCppuType(FileStream & out) {
         out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
-            << ("return *reinterpret_cast< const ::com::sun::star::uno::Type *"
-                " >(::typelib_static_type_getByTypeClass("
-                "typelib_TypeClass_EXCEPTION));\n");
+            << ("return ::cppu::UnoType< ::com::sun::star::uno::Exception"
+                " >::get();\n");
         dec();
         out << indent() << "}\n";
     } else if (m_cppuTypeLeak) {
@@ -604,18 +661,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
 
 void CppuType::dumpLightGetCppuType(FileStream& o)
 {
-    if (m_reader.getTypeClass() == RT_TYPE_TYPEDEF)
-    {
-        o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_"
-          << m_typeName.replace('/', '_') << "_Type( ) SAL_THROW( () )\n{\n";
-    } else
-    {
-        o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-        dumpType(o, m_typeName, sal_True, sal_False);
-        o << "* ) SAL_THROW( () )\n{\n";
-    }
-    inc();
-
+    dumpGetCppuTypePreamble(o);
     o << indent()
       << "static typelib_TypeDescriptionReference * the_type = 0;\n";
 
@@ -628,18 +674,12 @@ void CppuType::dumpLightGetCppuType(FileStream& o)
     o << indent()
       << ("return * reinterpret_cast< ::com::sun::star::uno::Type * >("
           " &the_type );\n");
-    dec();
-    o << indent() << "}\n";
-
-    return;
+    dumpGetCppuTypePostamble(o);
 }
 
 void CppuType::dumpNormalGetCppuType(FileStream& o)
 {
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent()
       << "static typelib_TypeDescriptionReference * the_type = 0;\n";
@@ -742,22 +782,12 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
       << ("return * reinterpret_cast< const ::com::sun::star::uno::Type * >("
           " &the_type );\n");
 
-    dec();
-    o << indent() << "}\n";
-
-    return;
+    dumpGetCppuTypePostamble(o);
 }
 
 void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
 
@@ -861,8 +891,7 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     dec();
     o << indent() << "}\n\n";
     o << indent() << "return *the_pType;\n";
-    dec();
-    o << "}\n";
+    dumpGetCppuTypePostamble(o);
 }
 
 void CppuType::dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag)
@@ -1443,12 +1472,7 @@ sal_Bool InterfaceType::dumpHFile(
         o << "\n";
     }
 
-    o << "\n";
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+    o << "\ninline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
@@ -1635,10 +1659,7 @@ void InterfaceType::dumpMethods(FileStream& o)
 
 void InterfaceType::dumpNormalGetCppuType(FileStream& o)
 {
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent()
       << "static typelib_TypeDescriptionReference * the_type = 0;\n";
@@ -1684,22 +1705,12 @@ void InterfaceType::dumpNormalGetCppuType(FileStream& o)
       << ("return * reinterpret_cast< ::com::sun::star::uno::Type * >("
           " &the_type );\n");
 
-    dec();
-    o << indent() << "}\n";
-
-    return;
+    dumpGetCppuTypePostamble(o);
 }
 
 void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
 
@@ -1807,8 +1818,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "}\n\n"
       << indent() << "return *the_pType;\n";
 
-    dec();
-    o << "}\n";
+    dumpGetCppuTypePostamble(o);
 }
 
 void InterfaceType::dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index)
@@ -1964,6 +1974,7 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
 {
     // The comprehensive getCppuType method always includes a line
     // "getCppuType( (const ::com::sun::star::uno::RuntimeException*)0 );":
+    includes.addCppuUnotypeHxx();
     includes.add("com/sun/star/uno/RuntimeException");
 }
 
@@ -2540,11 +2551,7 @@ sal_Bool StructureType::dumpHFile(
       << "class Type;\n} } } }\n\n";
 
     dumpTemplateHead(o);
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     dumpTemplateParameters(o);
     o << "* );\n\n";
@@ -3123,6 +3130,7 @@ void StructureType::addLightGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
 {
     includes.addType();
+    includes.addCppuUnotypeHxx();
     includes.addSalTypesH();
     includes.addTypelibTypeclassH();
     includes.addTypelibTypedescriptionH();
@@ -3137,6 +3145,7 @@ void StructureType::addNormalGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
 {
     includes.addType();
+    includes.addCppuUnotypeHxx();
     includes.addSalTypesH();
     includes.addTypelibTypeclassH();
     includes.addTypelibTypedescriptionH();
@@ -3151,6 +3160,7 @@ void StructureType::addComprehensiveGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
 {
     includes.addType();
+    includes.addCppuUnotypeHxx();
     includes.addOslDoublecheckedlockingH();
     includes.addOslMutexHxx();
     includes.addRtlUstringH();
@@ -3207,22 +3217,6 @@ void StructureType::dumpTemplateParameters(FileStream & out) const {
     }
 }
 
-void StructureType::dumpGetCppuTypePreamble(FileStream & out) {
-    out << indent();
-    dumpTemplateHead(out);
-    out << (m_cppuTypeStatic ? "static" : "inline")
-        << " ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
-    dumpType(out, m_typeName);
-    dumpTemplateParameters(out);
-    out << " const *) {\n";
-    inc();
-}
-
-void StructureType::dumpGetCppuTypePostamble(FileStream & out) {
-    dec();
-    out << indent() << "}\n";
-}
-
 //*************************************************************************
 // ExceptionType
 //*************************************************************************
@@ -3262,11 +3256,7 @@ sal_Bool ExceptionType::dumpHFile(
     o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
       << "class Type;\n} } } }\n\n";
 
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
@@ -3648,11 +3638,7 @@ sal_Bool EnumType::dumpHFile(
     o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
       << "class Type;\n} } } }\n\n";
 
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
@@ -3718,10 +3704,7 @@ sal_Bool EnumType::dumpHxxFile(
 
 void EnumType::dumpNormalGetCppuType(FileStream& o)
 {
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent()
       << "static typelib_TypeDescriptionReference * the_type = 0;\n";
@@ -3741,22 +3724,12 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     o << indent()
       << ("return * reinterpret_cast< ::com::sun::star::uno::Type * >("
           " &the_type );\n");
-    dec();
-    o << indent() << "}\n";
-
-    return;
+    dumpGetCppuTypePostamble(o);
 }
 
 void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (m_cppuTypeStatic)
-        o << "static";
-    else
-        o << "inline";
-    o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () )\n{\n";
-    inc();
+    dumpGetCppuTypePreamble(o);
 
     o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
 
@@ -3826,8 +3799,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "}\n\n"
       << indent() << "return *the_pType;\n";
 
-    dec();
-    o << "}\n";
+    dumpGetCppuTypePostamble(o);
 }
 
 //*************************************************************************
