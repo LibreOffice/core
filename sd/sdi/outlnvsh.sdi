@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:20:24 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ interface OutlineView : Object
     ]
     SID_HYPERLINK_SETLINK // ole : no, status : no
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
     ]
     SID_HYPERLINK_GETLINK // ole : no, status : no
     [
@@ -143,22 +143,22 @@ interface OutlineView : Object
     ]
     SID_BULLET // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     FN_INSERT_SOFT_HYPHEN // status(final|play)
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     FN_INSERT_HARDHYPHEN // status()
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     FN_INSERT_HARD_SPACE // status(final|play)
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_RLM
@@ -168,29 +168,29 @@ interface OutlineView : Object
     ]
     SID_INSERT_LRM
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_ZWSP
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_ZWNBSP
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
 
     SID_OUTLINE_BULLET // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
         Cachable , HasDialog , Export ;
     ]
     SID_CHAR_DLG // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
          //        Cachable , HasDialog , Export ;
     ]
@@ -203,7 +203,7 @@ interface OutlineView : Object
     ]
     SID_INSERTFILE // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_PRESENTATION // ole : no, status : ?
@@ -252,7 +252,7 @@ interface OutlineView : Object
     ]
     SID_THESAURUS // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_COLORVIEW // ole : no, status : ?
@@ -262,12 +262,12 @@ interface OutlineView : Object
     ]
     SID_SET_DEFAULT // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_PRESENTATIONOBJECT
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_STYLE_CATALOG // ole : no, status : ?
@@ -359,52 +359,52 @@ interface OutlineView : Object
     ]
     SID_EXPAND_PAGE // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_SUMMARY_PAGE // ole : no, status : ?
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_DATE_FIX // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_DATE_VAR // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_TIME_FIX // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_TIME_VAR // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_PAGE // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_FILE // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_AUTHOR // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     SID_MODIFY_FIELD // ole : no, status : play rec
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
     /*
