@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:31:43 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,11 +182,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bUseAutoColor       = TRUE;
     bForceAutoColor     = FALSE;
     bAddExtLeading      = FALSE;
-#ifndef SVX_LIGHT
     bUndoEnabled        = TRUE;
-#else
-    bUndoEnabled        = FALSE;
-#endif
     bCallParaInsertedOrDeleted = FALSE;
     bVerboseTextComments= FALSE;
     bImpConvertFirstCall= FALSE;
@@ -225,6 +221,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted = TRUE;
 
     aEditDoc.SetModifyHdl( LINK( this, ImpEditEngine, DocModified ) );
+
+    mbLastTryMerge = FALSE;
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -2429,14 +2427,12 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel, xub_Unicode c, 
 
     if ( aPaM.GetNode()->Len() < MAXCHARSINPARA )
     {
-#ifndef SVX_LIGHT
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-                EditUndoInsertChars* pNewUndo = new EditUndoInsertChars( this, CreateEPaM( aPaM ), c );
-                BOOL bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? TRUE : FALSE;
-                InsertUndo( pNewUndo, bTryMerge );
+            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars( this, CreateEPaM( aPaM ), c );
+            BOOL bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? TRUE : FALSE;
+            InsertUndo( pNewUndo, bTryMerge );
         }
-#endif
 
         aEditDoc.InsertText( (const EditPaM&)aPaM, c );
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
