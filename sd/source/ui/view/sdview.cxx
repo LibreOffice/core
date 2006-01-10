@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:30:21 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@
 #include "FrameView.hxx"
 #endif
 #include "ViewClipboard.hxx"
+#include "undo/undomanager.hxx"
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -690,25 +691,17 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 
     if (bReturn)
     {
-        // UndoManager an der obersten Shell (SdDrawTextObjectBar) setzen
         ::Outliner* pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
             pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor(pPV) );
 
-        SfxUndoManager& rUndoMgr = pOL->GetUndoManager();
-        rUndoMgr.Clear();
-        ViewShell* pViewShell = pDocSh->GetViewShell();
-        DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
-        if (pViewShell)
-        {
-            pViewShell->GetViewFrame()->GetDispatcher()->
-                GetShell(0)->SetUndoManager(&rUndoMgr);
-        }
-
         pOL->SetParaInsertedHdl(LINK(this, View, ParagraphInsertedHdl));
         pOL->SetParaRemovingHdl(LINK(this, View, ParagraphRemovingHdl));
     }
+
+    if( GetTextEditObject() )
+        GetTextEditObject()->AddObjectUser( *this );
 
     return(bReturn);
 }
@@ -746,38 +739,30 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference x
         }
     }
 
-    // Replace the currently used undo manager by the one of the doc shell.
-    // This is necessary because, in case of an active text editing, the
-    // current undo manager belongs to the edit engine and will be destroyed
-    // together with it when the text editing is stopped.
-    if (bIsTextEdit)
-    {
-        // Get the undo manager from the doc shell and set it at the top
-        // most shell on the shell stack (this makes it the active undo
-        // manager.)
-        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        ViewShell* pViewShell = pDocSh->GetViewShell();
-        DBG_ASSERT(pViewShell, "ViewShell not found");
-        if (pViewShell != NULL)
-        {
-            pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->SetUndoManager(pUndoMgr);
-        }
-    }
+    if( GetTextEditObject() )
+        GetTextEditObject()->RemoveObjectUser( *this );
 
     FuText* pFuText = dynamic_cast<FuText*>(xFunc.get());
     if ( pFuText )
     {
-        SdrTextObj* pTextObj = pFuText->GetTextObj();
         BOOL bDefaultTextRestored = pFuText->RestoreDefaultText();
+
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
 
-        pTextObj = pFuText->GetTextObj();
+        SdrTextObj* pTextObj = pFuText->GetTextObj();
 
         if( pTextObj )
         {
             if( bDefaultTextRestored )
             {
-                pTextObj->SetEmptyPresObj( TRUE );
+                if( !pTextObj->IsEmptyPresObj() )
+                {
+                    pTextObj->SetEmptyPresObj( TRUE );
+                }
+                else
+                {
+                    eKind = SDRENDTEXTEDIT_UNCHANGED;
+                }
             }
             else if( pTextObj->IsEmptyPresObj() && (pTextObj->GetEditOutlinerParaObject() == 0) )
             {
@@ -793,7 +778,9 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference x
         pFuText->TextEditingHasEnded(pTextObj);
     }
     else
+    {
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+    }
 
     if( eKind != SDRENDTEXTEDIT_CHANGED )
         pObj = 0;
@@ -842,7 +829,7 @@ void View::SetMarkedOriginalSize()
                         Size        aOleSize( OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM) );
                         Rectangle   aDrawRect( pObj->GetLogicRect() );
 
-                        pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+                        pUndoGroup->AddAction( pDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
                         bOK = TRUE;
@@ -865,7 +852,7 @@ void View::SetMarkedOriginalSize()
                                                         aMap100 );
                 }
 
-                pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+                pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
                 Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
@@ -1166,5 +1153,18 @@ IMPL_LINK( View, ParagraphRemovingHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
+void View::ObjectInDestruction(const SdrObject& rObject)
+{
+    if( GetTextEditObject() == &rObject )
+    {
+        pTextEditObj = 0;
+    }
+}
+
+bool View::isRecordingUndo() const
+{
+    sd::UndoManager* pUndoManager = pDoc ? pDoc->GetUndoManager() : 0;
+    return pUndoManager && pUndoManager->isInListAction();
+}
 
 } // end of namespace sd
