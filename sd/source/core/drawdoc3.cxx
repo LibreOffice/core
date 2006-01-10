@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:23:31 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,7 +838,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                             pPage->SetName( pStandardPage->GetName() );
                         }
 
-                        AddUndo(new SdrUndoDelPage(*pStandardPage));
+                        AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
                         RemovePage(nDestPageNum);
                     }
 
@@ -858,7 +858,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                             pNotesPage->SetName( pStandardPage->GetName() );
                         }
 
-                        AddUndo(new SdrUndoDelPage(*pNotesPage));
+                        AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
                         RemovePage(nDestPageNum);
                     }
 
@@ -896,7 +896,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
             {
-                AddUndo(new SdrUndoDelPage(*pPage));
+                AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
                 RemoveMasterPage(nPage);
                 nNewMPageCount--;
                 break;
@@ -978,7 +978,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
-            AddUndo( new SdrUndoPageChangeMasterPage( *pPage ) );
+            AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pPage ) );
 
             if (bScaleObjects)
             {
@@ -996,7 +996,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
-            AddUndo( new SdrUndoPageChangeMasterPage( *pPage ) );
+            AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pPage ) );
 
             if (bScaleObjects)
             {
@@ -1534,13 +1534,13 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
                 if( bUndo )
                 {
                     BegUndo();
-                    AddUndo( new SdrUndoDelPage( *pNotesMaster ) );
+                    AddUndo( GetSdrUndoFactory().CreateUndoDeletePage( *pNotesMaster ) );
                 }
 
                 RemoveMasterPage( pNotesMaster->GetPageNum() );
 
                 if( bUndo )
-                    AddUndo(new SdrUndoDelPage(*pMaster));
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster));
 
                 RemoveMasterPage( pMaster->GetPageNum() );
 
@@ -1853,13 +1853,13 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
             InsertMasterPage(pMaster, nInsertPos);
-            AddUndo(new SdrUndoNewPage(*pMaster));
+            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
 
             nInsertPos++;
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
             InsertMasterPage(pNotesMaster, nInsertPos);
-            AddUndo(new SdrUndoNewPage(*pNotesMaster));
+            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
 
             EndUndo(); // schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
         }
@@ -2019,7 +2019,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pMaster->SetName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pMaster);
-        AddUndo(new SdrUndoNewPage(*pMaster));
+        AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
         pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
         pNotesMaster = (SdPage*) AllocPage(TRUE);
@@ -2032,7 +2032,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pNotesMaster);
-        AddUndo(new SdrUndoNewPage(*pNotesMaster));
+        AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
         pNotesMaster->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         EndUndo();
 
@@ -2116,62 +2116,4 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
                FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
 {
     SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
-
-    if( &rSourceModel == this )
-        return;
-
-    // #55912# fix animation at path
-    if( nLastPageNum >= rSourceModel.GetPageCount() )
-        nLastPageNum = rSourceModel.GetPageCount()-1;
-
-    USHORT nSrcPage;
-    USHORT nDstPage;
-    for( nSrcPage = nFirstPageNum, nDstPage = nDestPos; (nSrcPage < nLastPageNum) && (nDstPage < GetPageCount()); nSrcPage++, nDstPage++ )
-    {
-        const SdrPage* pSrcPage = rSourceModel.GetPage( nSrcPage );
-        const SdrPage* pDstPage = GetPage( nDstPage );
-
-        if( pSrcPage && pDstPage )
-        {
-            SdrObjListIter  aSrcIter( *pSrcPage, IM_DEEPWITHGROUPS );
-            SdrObjListIter  aDstIter( *pDstPage, IM_DEEPWITHGROUPS );
-
-            SdrObject* pSrcObj;
-            SdrObject* pDstObj;
-            for( pSrcObj = aSrcIter.Next(), pDstObj = aDstIter.Next();
-                 pSrcObj && pDstObj;
-                 pSrcObj = aSrcIter.Next(), pDstObj = aDstIter.Next() )
-            {
-                SdAnimationInfo* pInfo = static_cast< SdDrawDocument* >(&rSourceModel)->GetAnimationInfo(const_cast<SdrObject*>(pSrcObj));
-                if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
-                {
-                    SdrObjListIter  aSrcPathIter( *pSrcPage, IM_DEEPWITHGROUPS );
-                    SdrObjListIter  aDstPathIter( *pDstPage, IM_DEEPWITHGROUPS );
-                    SdrObject* pSrcPathObj;
-                    SdrObject* pDstPathObj;
-                    for( pSrcPathObj = aSrcPathIter.Next(), pDstPathObj = aDstPathIter.Next();
-                         pSrcPathObj && pDstPathObj;
-                         pSrcPathObj = aSrcPathIter.Next(), pDstPathObj = aDstPathIter.Next() )
-                    {
-                        if( pSrcPathObj == pInfo->pPathObj )
-                        {
-                            if( PTR_CAST( SdrPathObj, pDstPathObj ) )
-                            {
-                                SdAnimationInfo* pInfo = GetAnimationInfo(pDstObj);
-                                if( pInfo == NULL )
-                                {
-                                    pInfo = new SdAnimationInfo(this);
-                                    pDstObj->InsertUserData( pInfo );
-                                }
-
-                                pInfo->eEffect = presentation::AnimationEffect_PATH;
-                                pInfo->pPathObj = PTR_CAST(SdrPathObj, pDstPathObj );
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
