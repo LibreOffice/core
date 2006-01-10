@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anminfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #endif
 
+#ifndef _PRESENTATION_HXX
+#include "pres.hxx"
+#endif
 #ifndef _SD_ANMDEF_HXX
 #include "anmdef.hxx"
 #endif
@@ -65,17 +68,12 @@ class SdrPathObj;
 class SdDrawDocument;
 
 
-class SdAnimationInfo : public SdrObjUserData, public SfxListener
+class SdAnimationInfo : public SdrObjUserData
 {
-private:
-
-    SdDrawDocument*         pDoc;
-
 public:
+    PresObjKind             mePresObjKind;
 
-//BFS02 Polygon*                pPolygon;       // fuer nichtlinearen Pfad (unbenutzt)
-//  Point                   aStart;         // Startpunkt eines linearen Pfades (unbenutzt)
-//  Point                   aEnd;           // Endpunkt eines linearen Pfades (unbenutzt)
+    /* deprecated animation infos */
     ::com::sun::star::presentation::AnimationEffect         eEffect;        // Animationseffekt
     ::com::sun::star::presentation::AnimationEffect         eTextEffect;    // Animationseffekt fuer Textinhalt
     ::com::sun::star::presentation::AnimationSpeed          eSpeed;         // Geschwindigkeit der Animation
@@ -88,7 +86,6 @@ public:
     String                  aSoundFile;     // Pfad zum Soundfile in MSDOS-Notation
     BOOL                    bSoundOn;       // Sound ein/aus
     BOOL                    bPlayFull;      // Sound ganz abspielen
-//BFS02 SdrObjSurrogate*        pPathSuro;      // Surrogat fuer pPathObj
     SdrPathObj*             pPathObj;       // das Pfadobjekt
     ::com::sun::star::presentation::ClickAction             eClickAction;   // Aktion bei Mausklick
     ::com::sun::star::presentation::AnimationEffect         eSecondEffect;  // fuer Objekt ausblenden
@@ -98,30 +95,14 @@ public:
     BOOL                    bSecondPlayFull;// fuer Objekt ausblenden
     String                  aBookmark;      // Sprung zu Objekt/Seite
     USHORT                  nVerb;          // fuer OLE-Objekt
-//  BOOL                    bInvisibleInPresentation;
-//  BOOL                    bIsShown;       // in der Show gerade sichtbar, NICHT PERSISTENT!
-//  BOOL                    bShow;          // Befehl: mit 1. Effekt zeigen (TRUE)
-                                            // oder mit 2. Effekt entfernen (FALSE)
-                                            // NICHT PERSISTENT!
-//  BOOL                    bDimmed;        // in der Show abgeblendet (TRUE) oder
-                                            // nicht (TRUE)
-                                            // NICHT PERSISTENT!
     ULONG                   nPresOrder;
 
 public:
-                            SdAnimationInfo(SdDrawDocument* pTheDoc);
+                            SdAnimationInfo();
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo);
     virtual                 ~SdAnimationInfo();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj) const;
-
-//BFS02 virtual void            WriteData(SvStream& rOut);
-//BFS02 virtual void            ReadData(SvStream& rIn);
-
-            // NULL loest die Verbindung zum Pfadobjekt
-            void            SetPath(SdrPathObj* pPath = NULL);
-    virtual void            SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
-//BFS02 virtual void            AfterRead();
 };
 
 #endif // _SD_ANMINFO_HXX
