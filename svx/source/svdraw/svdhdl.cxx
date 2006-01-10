@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,7 +1222,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
         if(bUndo)
         {
             pModel->BegUndo(SVX_RESSTR(IsGradient() ? SIP_XA_FILLGRADIENT : SIP_XA_FILLTRANSPARENCE));
-            pModel->AddUndo(new SdrUndoAttrObj(*pObj));
+            pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
             pModel->EndUndo();
         }
 
