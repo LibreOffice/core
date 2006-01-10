@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Eis.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-13 16:44:48 $
+#   last change: $Author: rt $ $Date: 2006-01-10 13:10:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -182,9 +182,25 @@ sub create_eis_connector
     my $uri   = shift;
     my $proxy = shift;
 
-    my $sl = SOAP::Lite
-        -> uri($uri)
-        -> proxy($proxy);
+    my $sl;
+
+    # With version 0.66 of SOAP::Lite the uri() method
+    # has been deprecated in favour of ns(). There
+    # seems to be no way to switch of the deprecation warning
+    # (which may be a bug in this version of SOAP::Lite).
+    # Since older versions do not support the ns() method we
+    # either force everyone to upgrade now, or make the following
+    # dependent on the SOAP::Lite version.
+    if ( $SOAP::Lite::VERSION >= 0.66 ) {
+        $sl = SOAP::Lite
+            -> ns($uri)
+            -> proxy($proxy);
+    }
+    else {
+        $sl = SOAP::Lite
+            -> uri($uri)
+            -> proxy($proxy);
+    }
 
     return $sl;
 }
