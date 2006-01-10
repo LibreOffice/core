@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:43:19 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:58:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SLOFILES= \
         $(SLO)$/jscriptclasses.obj	\
         $(SLO)$/ole2uno.obj		\
         $(SLO)$/windata.obj		\
-        $(SLO)$/unotypewrapper.obj		
+        $(SLO)$/unotypewrapper.obj
 
 
 SHL1TARGET=$(TARGET)
@@ -79,7 +79,11 @@ SHL1STDLIBS=\
     oleaut32.lib
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(USE_STLP_DEBUG)" != ""
+    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
+.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
+.ENDIF
 .ENDIF
 
 SHL1LIBS=
