@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:51:37 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     mpLocale(NULL),
     mpCharClass(NULL),
     bAllocDocSh(FALSE),
-    pDeletedPresObjList(NULL),
     nFileFormatVersion(SDIOCOMPAT_VERSIONDONTKNOW),
     pCustomShowList(NULL),
     eLanguage( LANGUAGE_SYSTEM ),
@@ -384,9 +383,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
 
     rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-
-    aOldNotifyUndoActionHdl = GetNotifyUndoActionHdl();
-    SetNotifyUndoActionHdl(LINK(this, SdDrawDocument, NotifyUndoActionHdl));
 
     if (pDocSh)
     {
@@ -517,8 +513,6 @@ SdDrawDocument::~SdDrawDocument()
     CloseBookmarkDoc();
     SetAllocDocSh(FALSE);
 
-    SetNotifyUndoActionHdl(aOldNotifyUndoActionHdl);
-
     // #116168#
     ClearModel(sal_True);
 
@@ -567,9 +561,6 @@ SdDrawDocument::~SdDrawDocument()
 
     delete pInternalOutliner;
     pInternalOutliner = NULL;
-
-    delete pDeletedPresObjList;
-    pDeletedPresObjList = NULL;
 
     delete mpInternational;
     mpInternational = NULL;
@@ -934,9 +925,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         }
     }
 
-    PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
-    const PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
-    if(aIter != aEnd)
+    const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
+    if(!rPresentationShapes.isEmpty())
     {
         // Listen mit Titel- und Gliederungsvorlagen erstellen
         String aName = pPage->GetLayoutName();
@@ -946,12 +936,12 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
                                         pSPool->GetTitleSheet(aName);
 
+        SdrObject* pObj = rPresentationShapes.getNextShape(0);
+
         // jetzt nach Titel- und Gliederungstextobjekten suchen und
         // Objekte zu Listenern machen
-        while (aIter != aEnd)
+        while(pObj)
         {
-            SdrObject* pObj = (*aIter).mpObject;
-
             if (pObj->GetObjInventor() == SdrInventor)
             {
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
@@ -987,7 +977,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                 if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
                 {
-                    PresObjKind ePresObjKind = (*aIter).meKind;
+                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
                     String aString( pPage->GetPresObjText(ePresObjKind) );
 
                     if (aString.Len())
@@ -1000,7 +990,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     }
                 }
             }
-            aIter++;
+
+            pObj = rPresentationShapes.getNextShape(pObj);
         }
 
         delete pOutlineList;
