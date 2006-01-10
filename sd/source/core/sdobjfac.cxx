@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdobjfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:42 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,16 +63,7 @@ IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
         switch( pObjFactory->nIdentifier )
         {
             case( SD_ANIMATIONINFO_ID ):
-            {
-                SdDrawDocument* pDoc = NULL;
-
-                if ( pObj )
-                    pDoc = (SdDrawDocument*) pObj->GetModel();
-
-                DBG_ASSERT(pDoc, "kein Model gefunden");
-
-                pObjFactory->pNewData = new SdAnimationInfo(pDoc);
-            }
+                pObjFactory->pNewData = new SdAnimationInfo;
             break;
 
             case( SD_IMAPINFO_ID ):
