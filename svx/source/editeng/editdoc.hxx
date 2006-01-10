@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:23:29 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,30 +287,14 @@ public:
 
     void            CreateDefFont();
 
-    WrongList*      GetWrongList()                  { return pWrongList; }
-    void            SetWrongList( WrongList* p )    { pWrongList = p; }
+    WrongList*      GetWrongList()          { return pWrongList; }
+    void            SetWrongList( WrongList* p );
 
     void            CreateWrongList();
     void            DestroyWrongList();
 
     BOOL            IsFeature( USHORT nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
 };
-
-inline void ContentNode::DestroyWrongList()
-{
-#ifndef SVX_LIGHT
-    delete pWrongList;
-#endif
-    pWrongList = NULL;
-}
-
-inline void ContentNode::CreateWrongList()
-{
-    DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
-#ifndef SVX_LIGHT
-    pWrongList = new WrongList;
-#endif
-}
 
 typedef ContentNode* ContentNodePtr;
 SV_DECL_PTRARR( ContentList, ContentNodePtr, 0, 4 );
