@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:32:08 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,8 @@
 #include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_VIEW_HXX
-#include "View.hxx"
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
 #endif
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
@@ -132,6 +132,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/svdoutl.hxx>
 
 // #96090#
 #ifndef _SFXSLSTITM_HXX
@@ -1097,32 +1098,39 @@ void ViewShell::UpdatePreview (SdPage* pPage, BOOL bInit)
     // usefull is still done.
 }
 
-
-
-
 SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
-    // Return the undo manager of the currently active object bar.
-    SfxShell* pObjectBar = GetObjectBarManager().GetTopObjectBar();
-    // The object bar may be temporarily missing, i.e. when one is
-    // replaced by another.  Return a NULL pointer in this case.
-    if (pObjectBar != NULL)
-        return pObjectBar->GetUndoManager();
-    else
+    const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell();
+
+    if( pMainViewShell == 0 )
+        pMainViewShell = this;
+
+    ::sd::View* pView = pMainViewShell->GetView();
+
+    // check for text edit our outline view
+    if( pView )
     {
-        //#i39635# this state occurs e.g. initially with the left slide sorter pane
-        SfxViewFrame* pViewFrame = GetViewFrame();
-        if(pViewFrame)
+        if( pMainViewShell->GetShellType() == ViewShell::ST_OUTLINE )
         {
-            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-            if(pDispatcher)
+            OutlineView* pOlView = dynamic_cast< OutlineView* >( pView );
+            if( pOlView )
             {
-                SfxShell* pShell = pDispatcher->GetShell(0);
-                if(pShell)
-                    return pShell->GetUndoManager();
+                ::Outliner* pOutl = pOlView->GetOutliner();
+                if( pOutl )
+                    return &pOutl->GetUndoManager();
             }
         }
+        else if( pView->IsTextEdit() )
+        {
+            SdrOutliner* pOL = pView->GetTextEditOutliner();
+            if( pOL )
+                return &pOL->GetUndoManager();
+        }
     }
+
+    if( GetDocSh() )
+        return GetDocSh()->GetUndoManager();
+
     return NULL;
 }
 
@@ -1213,13 +1221,6 @@ void ViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
-        if(bDrawViewShell)
-        {
-            List* pList = GetDoc()->GetDeletedPresObjList();
-            if( pList )
-                pList->Clear();
-        }
-
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
