@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:25:42 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, BOOL bCopy)
     for (ULONG nm=0; nm<nAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Rectangle aR1(pO->GetSnapRect());
         if (!aR1.IsEmpty()) {
             if (aR1==aR0) aR1=rRect;
@@ -180,7 +180,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, BOOL bCopy)
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoMoveObj(*pO,rSiz));
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,rSiz));
         pO->Move(rSiz);
     }
     EndUndo();
@@ -197,7 +197,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Point aRef(rRef-pM->GetPageView()->GetOffset());
         pO->Resize(aRef,xFact,yFact);
     }
@@ -235,7 +235,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, BOOL bCopy)
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Point aRef(rRef-pM->GetPageView()->GetOffset());
         pO->Rotate(aRef,nWink,nSin,nCos);
     }
@@ -257,7 +257,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, BOOL b
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Point aRef1(rRef1-pM->GetPageView()->GetOffset());
         Point aRef2(rRef2-pM->GetPageView()->GetOffset());
         pO->Mirror(aRef1,aRef2);
@@ -313,7 +313,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, BOOL bVShear, BO
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Point aRef(rRef);
         Point aOfs(pM->GetPageView()->GetOffset());
         aRef-=aOfs;
@@ -399,7 +399,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Point aRef(rRef);
         Point aOfs(pM->GetPageView()->GetOffset());
         aRef-=aOfs;
@@ -453,7 +453,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
-        AddUndo(new SdrUndoGeoObj(*pO));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         Rectangle aRefRect(rRef);
         XPolygon  aRefPoly(rDistortedRect);
         Point aOfs(pM->GetPageView()->GetOffset());
@@ -553,7 +553,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, BOOL bRepla
         const SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetObj();
         const SdrPageView* pPV=pM->GetPageView();
-        AddUndo(new SdrUndoGeoObj(*pObj));
+        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
         pObj->ApplyNotPersistAttr(rAttr);
     }
 }
@@ -811,7 +811,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             if(bPossibleGeomChange)
             {
                 // save position and size of obect, too
-                AddUndo(new SdrUndoGeoObj(*pObj));
+                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
             }
 
             // #i8508#
@@ -823,7 +823,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             sal_Bool bRescueText(pObj->ISA(SdrTextObj));
 
             // add attribute undo
-            AddUndo(new SdrUndoAttrObj(*pObj,FALSE,bHasEEItems || bPossibleGeomChange || bRescueText));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,FALSE,bHasEEItems || bPossibleGeomChange || bRescueText));
 
             //pObj->SetItemSetAndBroadcast(aAttr, bReplaceAll);
             pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
@@ -895,8 +895,8 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, BOOL bDontRe
         ULONG nMarkAnz=GetMarkedObjectCount();
         for (ULONG nm=0; nm<nMarkAnz; nm++) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
-            AddUndo(new SdrUndoGeoObj(*pM->GetObj()));
-            AddUndo(new SdrUndoAttrObj(*pM->GetObj(),TRUE,TRUE));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pM->GetObj()));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pM->GetObj(),true,true));
             pM->GetObj()->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
         }
         EndUndo();
@@ -1416,10 +1416,10 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
                 // connections may need to be saved
                 if(pObj && pObj->ISA(SdrEdgeObj))
                 {
-                    AddUndo(new SdrUndoGeoObj(*pObj));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 }
 
-                AddUndo(new SdrUndoMoveObj(*pObj,Size(nXMov,nYMov)));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pObj,Size(nXMov,nYMov)));
 
                 pObj->Move(Size(nXMov,nYMov));
             }
