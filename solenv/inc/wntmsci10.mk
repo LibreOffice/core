@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-07 12:44:03 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:49:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,9 @@ CXX+= /NMttNoLines
 .ENDIF
 
 # Flags for COMEX == 10
-CFLAGS+=-Zm500 -wd4251 -wd4275 -wd4290 -wd4786 -wd4800 -Zc:forScope -GR
+# disable "warning C4675: resolved overload was found by argument-dependent
+# lookup":
+CFLAGS+=-Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
 
 .IF "$(product)" != ""
 CDEFS+= -D_X86_=1
