@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:05:55 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@
 #endif
 
 #include <svx/svdoutl.hxx>
+#include <svx/svdstr.hrc>
+#include <svx/dialmgr.hxx>
 
 #include "glob.hrc"
 #include "strings.hrc"
@@ -146,6 +148,7 @@
 #endif
 
 #include "ShowWindow.hxx"
+#include "undo/undomanager.hxx"
 
 using namespace ::com::sun::star;
 
@@ -1015,6 +1018,49 @@ SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
             return pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
     }
     return NULL;
+}
+
+void DrawView::DeleteMarked()
+{
+    sd::UndoManager* pUndoManager = pDoc->GetUndoManager();
+    DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
+
+    if( pUndoManager )
+    {
+        String aUndo( SVX_RES(STR_EditDelete) );
+        String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%O"));
+        aUndo.SearchAndReplace(aSearchString, GetDescriptionOfMarkedObjects());
+        pUndoManager->EnterListAction(aUndo, aUndo);
+    }
+
+    SdPage* pPage = 0;
+
+    const SdrMarkList& rList = GetMarkedObjectList();
+    ULONG nMarkCount         = rList.GetMarkCount();
+    for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
+    {
+        SdrObject* pObj = rList.GetMark(nMark)->GetObj();
+        if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
+        {
+            pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+            PresObjKind ePresObjKind;
+            if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+            {
+                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
+                Rectangle aRect( pObj->GetLogicRect() );
+                pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+            }
+        }
+    }
+
+    ::sd::View::DeleteMarked();
+
+    if( pPage )
+        pPage->SetAutoLayout( pPage->GetAutoLayout() );
+
+    if( pUndoManager )
+        pUndoManager->LeaveListAction();
 }
 
 } // end of namespace sd
