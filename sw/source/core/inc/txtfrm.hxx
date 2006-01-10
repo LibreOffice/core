@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:09:52 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 13:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ public:
         { return (SwTxtNode*)SwCntntFrm::GetNode(); }
 
     SwTxtFrm(SwTxtNode * const);
-    inline ~SwTxtFrm() { if( HasAnimation() ) ClearPara(); }
+    virtual ~SwTxtFrm();
 
     // SwCntntFrm: der "kurze Dienstweg" fuer die Frames.
     // Wer den void* falsch casted ist selbst Schuld!
