@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:27:20 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -899,20 +899,9 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const throw()
 {
     SdAnimationInfo* pInfo = NULL;
 
-    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-    if(pDoc)
-    {
-        SdrObject* pObj = mpShape->GetSdrObject();
-        if(pObj)
-        {
-            pInfo = pDoc->GetAnimationInfo(pObj);
-            if( pInfo == NULL && bCreate )
-            {
-                pInfo = new SdAnimationInfo(pDoc);
-                pObj->InsertUserData( pInfo );
-            }
-        }
-    }
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if(pObj)
+        pInfo = SdDrawDocument::GetShapeUserData(*pObj, bCreate ? true : false);
 
     return pInfo;
 }
