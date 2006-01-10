@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:29 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@ public:
     void GetStatusBarState(SfxItemSet& rSet);
 
     void FuTemporary(SfxRequest &rReq);
+    void FuTemporaryModify(SfxRequest &rReq);
     void FuPermanent(SfxRequest &rReq);
     void FuSupport(SfxRequest &rReq);
 
@@ -177,12 +178,11 @@ public:
     */
     void SetCurrentPage (SdPage* pPage);
 
+    bool UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
+    bool UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
+
 protected:
     virtual Size GetOptimalSizePixel() const;
-
-    // Methoden, die fuer die Preview gebraucht werden
-    BOOL          UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
-    BOOL          UpdateLayoutObject( SdPage* pPage, Paragraph* pPara );
 
 private:
     OutlineView* pOlView;
