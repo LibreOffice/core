@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:58:28 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ void FuExpandPage::DoExecute( SfxRequest& rReq )
                     // Seite hinter aktueller Seite einfuegen
                     pDoc->InsertPage(pPage, nActualPageNum + nPos);
                     nPos++;
-                    pView->AddUndo(new SdrUndoNewPage(*pPage));
+                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -212,7 +212,7 @@ void FuExpandPage::DoExecute( SfxRequest& rReq )
                     // Seite hinter aktueller Seite einfuegen
                     pDoc->InsertPage(pNotesPage, nActualPageNum + nPos);
                     nPos++;
-                    pView->AddUndo(new SdrUndoNewPage(*pNotesPage));
+                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
