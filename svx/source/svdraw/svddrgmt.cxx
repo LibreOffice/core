@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:58 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,12 +515,12 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL bCopy)
     if (pObj!=NULL) {
         if (!rView.IsInsObjPoint()) {
             if (DragStat().IsEndDragChangesAttributes()) {
-                pUndo=new SdrUndoAttrObj(*pObj);
+                pUndo=rView.GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
                 if (DragStat().IsEndDragChangesGeoAndAttributes()) {
-                    pUndo2=new SdrUndoGeoObj(*pObj);
+                    pUndo2 = rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
             } else {
-                pUndo=new SdrUndoGeoObj(*pObj);
+                pUndo= rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
             }
         }
         bRet=pObj->EndDrag(DragStat());
@@ -1928,7 +1928,7 @@ FASTBOOL SdrDragCrook::End(FASTBOOL bCopy)
                     if (bVertical) ResizePoint(aCtr1,aCenter-pM->GetPageView()->GetOffset(),aFact1,aFact);
                     else ResizePoint(aCtr1,aCenter-pM->GetPageView()->GetOffset(),aFact,aFact1);
                     Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
-                    AddUndo(new SdrUndoMoveObj(*pO,aSiz));
+                    AddUndo(rView.GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
                     pO->Move(aSiz);
                 }
             }
