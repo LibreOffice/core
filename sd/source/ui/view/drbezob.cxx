@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:26:03 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                         pView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
                         pView->UnmarkAllPoints();
                         Size aDist(pViewSh->GetActiveWindow()->PixelToLogic(Size(8,8)));
-                        pView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+                        pView->AddUndo(pView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
                         pPathObj->ToggleClosed(aDist.Width());
                         pView->EndUndo();
                         break;
