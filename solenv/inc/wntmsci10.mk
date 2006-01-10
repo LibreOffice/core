@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:49:11 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:51:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
 #
 #*************************************************************************
 
-# mk file for $(OS)$(COM)$(CPU)$(COMEX) == WNTMSCI10 
+# mk file for $(OS)$(COM)$(CPU)$(COMEX) == WNTMSCI10
 
 SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
@@ -214,7 +214,11 @@ LINKFLAGSDEBUG=/DEBUG:full /DEBUGTYPE:cv
 LINKFLAGSOPT=
 
 .IF "$(DYNAMIC_CRT)"!=""
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT=msvcrtd.lib
+.ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
+.ENDIF
 OLDNAMES=oldnames.lib
 UWINAPILIB*=uwinapi.lib
 .ELSE
@@ -249,11 +253,17 @@ STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
+.IF "$(USE_STLP_DEBUG)" != ""
+CFLAGS+=-MTd
+LIBSTLPORT=stlport_vc71_stldebug.lib
+LIBSTLPORTST=stlport_vc71_stldebug_static.lib
+.ELSE
 LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
+.ENDIF
 
-ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include 
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib 
+ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
+ATL_LIB*=$(COMPATH)$/atlmfc$/lib
 
 LIBMGR=$(WRAPCMD) lib $(NOLOGO)
 IMPLIB=$(WRAPCMD) lib
