@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:22 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,14 +62,9 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
-|*
-|* Konstruktor   (String aSecondSoundFile unbenutzt --> default ctor)
-|*
-\************************************************************************/
-
-SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
+SdAnimationInfo::SdAnimationInfo()
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
+                 mePresObjKind              (PRESOBJ_NONE),
                  eEffect                    (presentation::AnimationEffect_NONE),
                  eTextEffect                (presentation::AnimationEffect_NONE),
                  eSpeed                     (presentation::AnimationSpeed_SLOW),
@@ -85,30 +80,16 @@ SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
                  eSecondSpeed               (presentation::AnimationSpeed_SLOW),
                  bSecondSoundOn             (FALSE),
                  bSecondPlayFull            (FALSE),
-//               bInvisibleInPresentation   (FALSE),
                  nVerb                      (0),
-                 pDoc                       (pTheDoc),
-//               bShow                      (TRUE),
-//               bIsShown                   (TRUE),
-//               bDimmed                    (FALSE),
                  nPresOrder                 (LIST_APPEND)
 {
     aBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
     aDimColor = RGB_Color(COL_LIGHTGRAY);
 }
 
-/*************************************************************************
-|*
-|* Copy Konstruktor
-|* einige Anteile koennen nicht kopiert werden, da sie Referenzen in ein
-|* bestimmtes Model bilden
-|*
-\************************************************************************/
-
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                : SdrObjUserData             (rAnmInfo),
-//               aStart                     (rAnmInfo.aStart),
-//               aEnd                       (rAnmInfo.aEnd),
+                    mePresObjKind               (PRESOBJ_NONE),
                  eEffect                    (rAnmInfo.eEffect),
                  eTextEffect                (rAnmInfo.eTextEffect),
                  eSpeed                     (rAnmInfo.eSpeed),
@@ -127,99 +108,24 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                  eSecondSpeed               (rAnmInfo.eSecondSpeed),
                  bSecondSoundOn             (rAnmInfo.bSecondSoundOn),
                  bSecondPlayFull            (rAnmInfo.bSecondPlayFull),
-//               bInvisibleInPresentation   (rAnmInfo.bInvisibleInPresentation),
                  nVerb                      (rAnmInfo.nVerb),
                  aBookmark                  (rAnmInfo.aBookmark),
                  aSecondSoundFile           (rAnmInfo.aSecondSoundFile),
-                 pDoc                       (NULL),
-//               bShow                      (rAnmInfo.bShow),
-//               bIsShown                   (rAnmInfo.bIsShown),
-//               bDimmed                    (rAnmInfo.bDimmed)
                  nPresOrder                 (LIST_APPEND)
 {
-    // kann nicht uebertragen werden
+    // can not be copied
     if (eEffect == presentation::AnimationEffect_PATH)
         eEffect =  presentation::AnimationEffect_NONE;
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 SdAnimationInfo::~SdAnimationInfo()
 {
 }
 
-/*************************************************************************
-|*
-|* Clone
-|*
-\************************************************************************/
-
 SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObj) const
 {
     return new SdAnimationInfo(*this);
-}
-
-
-/*************************************************************************
-|*
-|* SetPath, Verbindung zum Pfadobjekt herstellen bzw. loesen
-|*
-\************************************************************************/
-
-void SdAnimationInfo::SetPath(SdrPathObj* pPath)
-{
-    // alte Verbindung loesen, wenn eine besteht und die neue eine andere ist
-    if (pPathObj != NULL && pPathObj != pPath)
-    {
-        // alte Verbindung loesen
-        if (pDoc)
-            EndListening(*pDoc);
-        pPathObj->RemoveListener(*this);
-        pPathObj = NULL;
-    }
-
-    // ggfs. neue Verbindung herstellen, wenn es nicht die alte ist
-    if (pPathObj != pPath && pPath != NULL)
-    {
-        if (pDoc == NULL)               // durch copy ctor entstanden
-            pDoc = (SdDrawDocument*)pPath->GetModel();
-        pPathObj = pPath;
-        pPathObj->AddListener(*this);   // DYING
-        StartListening(*pDoc);          // OBJ_INSERTED, OBJ_REMOVED
-    }
-}
-
-/*************************************************************************
-|*
-|* Notify, Aenderungen am Pfadobjekt
-|*
-\************************************************************************/
-
-void SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
-{
-    SdrHint* pSdrHint = PTR_CAST(SdrHint,&rHint);
-    if (pSdrHint)
-    {
-        SdrHintKind eKind = pSdrHint->GetKind();
-        if (eKind == HINT_OBJREMOVED && pSdrHint->GetObject() == pPathObj)
-            eEffect = presentation::AnimationEffect_NONE;
-        else if (eKind == HINT_OBJINSERTED && pSdrHint->GetObject() == pPathObj)
-            eEffect = presentation::AnimationEffect_PATH;
-    }
-
-    SfxSimpleHint* pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-    if (pSimpleHint)
-    {
-        ULONG nId = pSimpleHint->GetId();
-        if (nId == SFX_HINT_DYING)
-        {
-            eEffect = presentation::AnimationEffect_NONE;
-        }
-    }
 }
 
 
