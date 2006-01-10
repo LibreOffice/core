@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:06:53 $
+#   last change: $Author: hjs $ $Date: 2006-01-10 17:00:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.16 $ ';
+my $id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -109,6 +109,7 @@ my %obligatory_modules = ();
 $obligatory_modules{'solenv'}++;
 $obligatory_modules{'default_images'}++;
 $obligatory_modules{'custom_images'}++;
+$obligatory_modules{'ooo_custom_images'}++;
 $obligatory_modules{'postprocess'}++;
 $obligatory_modules{'instset_native'}++;
 $obligatory_modules{'instsetoo_native'}++;
