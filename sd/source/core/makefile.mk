@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:12:41 $
+#   last change: $Author: rt $ $Date: 2006-01-10 14:26:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/TransitionPreset.obj\
            $(SLO)$/undoanim.obj\
            $(SLO)$/EffectMigration.obj\
-           $(SLO)$/CustomAnimationCloner.obj
+           $(SLO)$/CustomAnimationCloner.obj\
+           $(SLO)$/shapelist.obj
 
 # --- Tagets -------------------------------------------------------
 
