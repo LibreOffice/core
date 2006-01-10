@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:34:21 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,9 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 
 /** Gets the meta type of IDL sequence.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @tplparam E element type of sequence
     @param dummy typed pointer for function signature

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:33:21 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@
 #ifndef _COM_SUN_STAR_UNO_GENFUNC_HXX_
 #include <com/sun/star/uno/genfunc.hxx>
 #endif
-
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
+#endif
 
 namespace com
 {
@@ -72,7 +74,8 @@ template <typename T>
 inline Any::Any( T const & value )
 {
     ::uno_type_any_construct(
-        this, const_cast<T *>(&value), getCppuType(&value).getTypeLibType(),
+        this, const_cast<T *>(&value),
+        ::cppu::getTypeFavourUnsigned(&value).getTypeLibType(),
         (uno_AcquireFunc) cpp_acquire );
 }
 //______________________________________________________________________________
@@ -169,7 +172,7 @@ inline sal_Bool Any::isExtractableTo( const Type & rType ) const SAL_THROW( () )
 template <typename T>
 inline bool Any::has() const
 {
-    Type const & rType = getCppuType( static_cast<T const *>(0) );
+    Type const & rType = ::cppu::getTypeFavourUnsigned(static_cast< T * >(0));
     return ::uno_type_isAssignableFromData(
         rType.getTypeLibType(), pData, pType,
         (uno_QueryInterfaceFunc) cpp_queryInterface,
@@ -200,7 +203,7 @@ inline sal_Bool Any::operator != ( const Any & rAny ) const SAL_THROW( () )
 template< class C >
 inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () )
 {
-    return Any( &value, getCppuType( &value ) );
+    return Any( &value, ::cppu::getTypeFavourUnsigned(&value) );
 }
 
 // additionally specialized for C++ bool
@@ -216,7 +219,7 @@ inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () )
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () )
 {
-    const Type & rType = getCppuType( &value );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     ::uno_type_any_assign(
         &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
@@ -237,7 +240,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 template< class C >
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW( () )
 {
-    const Type & rType = getCppuType( &value );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_assignData(
         &value, rType.getTypeLibType(),
         rAny.pData, rAny.pType,
@@ -558,7 +561,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 template< class C >
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW( () )
 {
-    const Type & rType = getCppuType( &value );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_equalData(
         rAny.pData, rAny.pType,
         const_cast< C * >( &value ), rType.getTypeLibType(),
@@ -584,9 +587,11 @@ T Any::get() const
     T value;
     if (! (*this >>= value)) {
         throw RuntimeException(
-            ::rtl::OUString( cppu_Any_extraction_failure_msg(
-                                 this, getCppuType(&value).getTypeLibType() ),
-                             SAL_NO_ACQUIRE ),
+            ::rtl::OUString(
+                cppu_Any_extraction_failure_msg(
+                    this,
+                    ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
+                SAL_NO_ACQUIRE ),
             Reference<XInterface>() );
     }
     return value;
