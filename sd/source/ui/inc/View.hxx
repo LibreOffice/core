@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:06:52 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ struct SdViewRedrawRec
 };
 
 
-class View : public FmFormView
+class View : public FmFormView, public sdr::ObjectUser
 {
 public:
     TYPEINFO();
@@ -194,7 +194,12 @@ public:
     virtual SdrModel*   GetMarkedObjModel() const;
     virtual BOOL        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
 
+    /** returns true if we have an undo manager and there is an open list undo action */
+    bool isRecordingUndo() const;
+
 protected:
+    virtual void ObjectInDestruction(const SdrObject& rObject);
+
     DECL_LINK( ParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( ParagraphRemovingHdl, ::Outliner * );
 
