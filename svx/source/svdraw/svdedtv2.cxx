@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:25:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ void SdrEditView::MovMarkedToTop()
                 // <--
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                 ObjOrderChanged(pObj,nNowPos,nNewPos);
             }
             nNewPos--;
@@ -277,7 +277,7 @@ void SdrEditView::MovMarkedToBtm()
                 // <--
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                 ObjOrderChanged(pObj,nNowPos,nNewPos);
             }
             nNewPos++;
@@ -361,7 +361,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                     // <--
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                     ObjOrderChanged(pObj,nNowPos,nNewPos);
                 }
                 nNewPos--;
@@ -444,7 +444,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                     // <--
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                     ObjOrderChanged(pObj,nNowPos,nNewPos);
                 }
                 nNewPos++;
@@ -482,8 +482,8 @@ void SdrEditView::ReverseOrderOfMarked()
                 SdrObject* pObj2=GetMarkedObjectByIndex(c);
                 ULONG nOrd1=pObj1->GetOrdNumDirect();
                 ULONG nOrd2=pObj2->GetOrdNumDirect();
-                AddUndo(new SdrUndoObjOrdNum(*pObj1,nOrd1,nOrd2));
-                AddUndo(new SdrUndoObjOrdNum(*pObj2,nOrd2-1,nOrd1));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj1,nOrd1,nOrd2));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj2,nOrd2-1,nOrd1));
                 pOL->SetObjectOrdNum(nOrd1,nOrd2);
                 // Obj 2 ist um eine Position nach vorn gerutscht, deshalb nun nOrd2-1
                 pOL->SetObjectOrdNum(nOrd2-1,nOrd1);
@@ -849,7 +849,7 @@ void SdrEditView::DistributeMarkedObjects()
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(new SdrUndoGeoObj(*pCurr->mpObj));
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
                             fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
                         }
@@ -867,7 +867,7 @@ void SdrEditView::DistributeMarkedObjects()
                         {
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(new SdrUndoGeoObj(*pCurr->mpObj));
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
                             fStepStart += fStepWidth;
                         }
@@ -937,7 +937,7 @@ void SdrEditView::DistributeMarkedObjects()
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(new SdrUndoGeoObj(*pCurr->mpObj));
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));
                             fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
                         }
@@ -955,7 +955,7 @@ void SdrEditView::DistributeMarkedObjects()
                         {
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(new SdrUndoGeoObj(*pCurr->mpObj));
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));
                             fStepStart += fStepWidth;
                         }
@@ -1174,7 +1174,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     ImpCopyAttributes(pAttrObj, pPath);
     SdrInsertReason aReason(SDRREASON_VIEWCALL, pAttrObj);
     pInsOL->InsertObject(pPath, nInsPos, &aReason);
-    AddUndo(new SdrUndoNewObj(*pPath));
+    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
     MarkObj(pPath, pInsPV, FALSE, TRUE);
 
     aRemove.ForceSort();
@@ -1347,7 +1347,7 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
 
         SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
         pInsOL->InsertObject(pPath,nInsPos,&aReason);
-        AddUndo(new SdrUndoNewObj(*pPath)); // Insert durch New ersetzt - Joe, 31-08-1995
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
 
         // #111111#
         // Here was a severe error: Without UnmarkAllObj, the new object was marked
@@ -1495,7 +1495,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 pLast=pPath;
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pSrcPath);
                 rOL.InsertObject(pPath,rPos,&aReason);
-                AddUndo(new SdrUndoNewObj(*pPath,TRUE)); // Insert durch New ersetzt - Joe, 31-08-1995
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath,TRUE));
                 MarkObj(pPath,pPV,FALSE,TRUE);
                 rPos++;
             }
@@ -1526,7 +1526,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pCustomShape);
                 rOL.InsertObject(pCandidate, rPos, &aReason);
-                AddUndo(new SdrUndoNewObj(*pCandidate, TRUE));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pCandidate, true));
                 MarkObj(pCandidate, pPV, FALSE, TRUE);
 
                 if(pCustomShape->HasText() && !pCustomShape->IsTextPath())
@@ -1570,7 +1570,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                     // insert object
                     rOL.InsertObject(pTextObj, rPos + 1, &aReason);
-                    AddUndo(new SdrUndoNewObj(*pTextObj, TRUE));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pTextObj, true));
                     MarkObj(pTextObj, pPV, FALSE, TRUE);
                 }
             }
@@ -1613,7 +1613,7 @@ void SdrEditView::DismantleMarkedObjects(BOOL bMakeLines)
             } else {
                 ImpDismantleOneObject(pObj,*pOL,nPos,pPV,bMakeLines);
             }
-            AddUndo(new SdrUndoDelObj(*pObj,TRUE));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj,TRUE));
             pOL->RemoveObject(nPos0);
         }
     }
@@ -1642,7 +1642,7 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
         for (ULONG nm=nAnz; nm>0;) { // UndoActions fuer alle betroffenen Objekte anlegen
             nm--;
             SdrMark* pM=GetSdrMarkByIndex(nm);
-            AddUndo(new SdrUndoRemoveObj(*pM->GetObj()));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pM->GetObj()));
         }
 
         SdrMarkList aNewMark;
@@ -1702,9 +1702,9 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
                 ULONG nAnz=pDstLst->GetObjCount();
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pRefObj);
                 pAktLst->InsertObject(pGrp,nInsPos,&aReason);
-                AddUndo(new SdrUndoNewObj(*pGrp,TRUE)); // Kein Recalc!
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // Kein Recalc!
                 for (ULONG no=0; no<nAnz; no++) {
-                    AddUndo(new SdrUndoInsertObj(*pDstLst->GetObj(no)));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pDstLst->GetObj(no)));
                 }
             }
         }
@@ -1765,13 +1765,13 @@ void SdrEditView::UnGroupMarked()
             for (no=nAnz; no>0;) {
                 no--;
                 SdrObject* pObj=pSrcLst->GetObj(no);
-                AddUndo(new SdrUndoRemoveObj(*pObj));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pObj));
             }
             for (no=0; no<nAnz; no++) {
                 SdrObject* pObj=pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pGrp);
                 pDstLst->InsertObject(pObj,nDstCnt,&aReason);
-                AddUndo(new SdrUndoInsertObj(*pObj,TRUE)); // Kein RecalcOrdNum
+                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pObj,true));
                 nDstCnt++;
                 // Kein SortCheck beim einfuegen in die MarkList, denn das
                 // wuerde wg. pObj->GetOrdNum() jedesmal ein RecalcOrdNums()
@@ -1783,7 +1783,7 @@ void SdrEditView::UnGroupMarked()
             // MigrateItemPool now only for itself, not for the subobjects.
             // nDstCnt is right, because previous inserts move group
             // object deeper and increase nDstCnt.
-            AddUndo(new SdrUndoDelObj(*pGrp));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pGrp));
             pDstLst->RemoveObject(nDstCnt);
 
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
@@ -1819,7 +1819,7 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, BOOL bPath, BOOL bLine
         SdrObjList* pOL=pObj->GetObjList();
         DBG_ASSERT(pOL!=NULL,"ConvertTo: Obj liefert keine ObjList");
         if (pOL!=NULL) {
-            AddUndo(new SdrUndoReplaceObj(*pObj,*pNewObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
             pOL->ReplaceObject(pNewObj,pObj->GetOrdNum());
         }
     }
@@ -1946,7 +1946,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         if (nInsAnz!=0) {
             ULONG nObj=nInsPos;
             for (ULONG i=0; i<nInsAnz; i++) {
-                AddUndo(new SdrUndoNewObj(*pOL->GetObj(nObj)));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
 
                 // Neue MarkList pflegen
                 SdrMark aNewMark(pOL->GetObj(nObj), pPV);
@@ -1955,7 +1955,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 nObj++;
             }
             aForTheDescription.InsertEntry(*pM);
-            AddUndo(new SdrUndoDelObj(*pObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
             // Objekt aus selektion loesen und loeschen
             GetMarkedObjectListWriteAccess().DeleteMark(TryToFindMarkedObject(pObj));
