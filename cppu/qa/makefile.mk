@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:42:56 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:55:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,21 @@ DLLPRE = # no leading "lib" on .so files
 
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
-SHL1TARGET = $(TARGET)
+SHL1TARGET = $(TARGET)_any
 SHL1OBJS = $(SLO)$/test_any.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
-SLOFILES = $(SHL1OBJS)
+SHL2TARGET = $(TARGET)_unotype
+SHL2OBJS = $(SLO)$/test_unotype.obj
+SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL2VERSIONMAP = version.map
+SHL2IMPLIB = i$(SHL2TARGET)
+DEF2NAME = $(SHL2TARGET)
+
+SLOFILES = $(SHL1OBJS) $(SHL2OBJS)
 
 .INCLUDE: target.mk
 
@@ -74,5 +81,6 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN)
+test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN)
     testshl2 $(SHL1TARGETN)
+    testshl2 $(SHL2TARGETN)
