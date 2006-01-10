@@ -4,9 +4,9 @@
  *
  *  $RCSfile: includes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:13:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@ public:
 
     void addCppuMacrosHxx() { m_includeCppuMacrosHxx = true; }
 
+    void addCppuUnotypeHxx() { m_includeCppuUnotypeHxx = true; }
+
     void addOslDoublecheckedlockingH()
     { m_includeOslDoublecheckedlockingH = true; }
 
@@ -109,6 +111,7 @@ private:
     bool m_includeSequence;
     bool m_includeType;
     bool m_includeCppuMacrosHxx;
+    bool m_includeCppuUnotypeHxx;
     bool m_includeOslDoublecheckedlockingH;
     bool m_includeOslMutexHxx;
     bool m_includeRtlStrbufHxx;

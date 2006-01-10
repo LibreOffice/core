@@ -4,9 +4,9 @@
  *
  *  $RCSfile: includes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:13:24 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,11 @@ Includes::Includes(
     m_includeAny(dependencies.hasAnyDependency()), m_includeReference(false),
     m_includeSequence(dependencies.hasSequenceDependency()),
     m_includeType(dependencies.hasTypeDependency()),
-    m_includeCppuMacrosHxx(false), m_includeOslDoublecheckedlockingH(false),
-    m_includeOslMutexHxx(false), m_includeRtlStrbufHxx(false),
-    m_includeRtlStringH(false), m_includeRtlTextencH(false),
-    m_includeRtlUstrbufHxx(false), m_includeRtlUstringH(false),
+    m_includeCppuMacrosHxx(false), m_includeCppuUnotypeHxx(false),
+    m_includeOslDoublecheckedlockingH(false), m_includeOslMutexHxx(false),
+    m_includeRtlStrbufHxx(false), m_includeRtlStringH(false),
+    m_includeRtlTextencH(false), m_includeRtlUstrbufHxx(false),
+    m_includeRtlUstringH(false),
     m_includeRtlUstringHxx(dependencies.hasStringDependency()),
     m_includeSalTypesH(
         dependencies.hasBooleanDependency() || dependencies.hasByteDependency()
@@ -227,6 +228,11 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
         dumpEmptyLineBeforeFirst(out, &first);
         out << ("#ifndef _CPPU_MACROS_HXX_\n"
                 "#include \"cppu/macros.hxx\"\n#endif\n");
+    }
+    if (m_includeCppuUnotypeHxx) {
+        dumpEmptyLineBeforeFirst(out, &first);
+        out << ("#ifndef INCLUDED_CPPU_UNOTYPE_HXX\n"
+                "#include \"cppu/unotype.hxx\"\n#endif\n");
     }
     if (m_includeOslDoublecheckedlockingH) {
         dumpEmptyLineBeforeFirst(out, &first);
