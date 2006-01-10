@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:15:35 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@ File gid_File_Lib_Evoab_1
     Name = STRING(CONCAT2(libevoab1,UNXSUFFIX));
 End
 
-#ifdef ENABLE_KDE
+#ifdef ENABLE_KAB
 
 File gid_File_Lib_Kab_1
     TXT_FILE_BODY;
