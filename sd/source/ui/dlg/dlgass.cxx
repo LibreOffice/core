@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:53:33 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,47 +1498,44 @@ void AssistentDlgImpl::UpdateUserData()
         if( pPage->GetAutoLayout() == AUTOLAYOUT_NONE )
             pPage->SetAutoLayout(AUTOLAYOUT_TITLE, TRUE);
 
-        SdrObject* pObj;
+        SdrTextObj* pObj;
         SdrObjKind eSdrObjKind;
         String aEmptyString;
 
-        sd::PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
-        const sd::PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
-
-        while(aIter != aEnd)
+        if( aTopic.Len() )
         {
-            pObj=(*aIter++).mpObject;
-            if (pObj && pObj->GetObjInventor() == SdrInventor)
+            pObj  = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_TITLE ) );
+            if( pObj )
             {
-                eSdrObjKind=(SdrObjKind)pObj->GetObjIdentifier();
-                if(eSdrObjKind==OBJ_TITLETEXT)
-                {
-                    if ( aTopic.Len() )
-                    {
-                        pPage->SetObjText( (SdrTextObj*)pObj, NULL, PRESOBJ_TITLE, aTopic );
-                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), TRUE );
-                        pObj->SetEmptyPresObj(FALSE);
-                    }
-                }
+                pPage->SetObjText( pObj, NULL, PRESOBJ_TITLE, aTopic );
+                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), TRUE );
+                pObj->SetEmptyPresObj(FALSE);
+            }
 
-                if ( aName.Len() || aInfo.Len() )
-                {
-                    String aStrTmp( aName );
-                    aStrTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n\n" ) );
-                    aStrTmp.Append( aInfo );
+        }
 
-                    if (eSdrObjKind == OBJ_OUTLINETEXT)
-                    {
-                        pPage->SetObjText( (SdrTextObj*) pObj, NULL, PRESOBJ_OUTLINE, aStrTmp );
-                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), TRUE );
-                        pObj->SetEmptyPresObj(FALSE);
-                    }
-                    else if (eSdrObjKind == OBJ_TEXT)
-                    {
-                        pPage->SetObjText( (SdrTextObj*) pObj, NULL, PRESOBJ_TEXT, aStrTmp );
-                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), TRUE );
-                        pObj->SetEmptyPresObj(FALSE);
-                    }
+        if ( aName.Len() || aInfo.Len() )
+        {
+            String aStrTmp( aName );
+            if( aName.Len() )
+                aStrTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n\n" ) );
+            aStrTmp.Append( aInfo );
+
+            pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_OUTLINE ) );
+            if( pObj )
+            {
+                pPage->SetObjText( pObj, NULL, PRESOBJ_OUTLINE, aStrTmp );
+                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), TRUE );
+                pObj->SetEmptyPresObj(FALSE);
+            }
+            else
+            {
+                pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_TEXT ) );
+                if( pObj )
+                {
+                    pPage->SetObjText( pObj, NULL, PRESOBJ_TEXT, aStrTmp );
+                    pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), TRUE );
+                    pObj->SetEmptyPresObj(FALSE);
                 }
             }
         }
