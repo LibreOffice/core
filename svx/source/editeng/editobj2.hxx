@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:28:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,16 @@ public:
     USHORT              GetLen() const              { return nEnd-nStart; }
 
     inline BOOL         IsFeature();
+
+    inline bool         operator==( const XEditAttribute& rCompare );
 };
+
+inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
+{
+    return  (nStart == rCompare.nStart) &&
+            (nEnd == rCompare.nEnd) &&
+            ( (pItem == rCompare.pItem) || (*pItem == *rCompare.pItem));
+}
 
 inline BOOL XEditAttribute::IsFeature()
 {
@@ -176,7 +185,7 @@ public:
     void                CreateLoadStoreTempInfos();
     void                DestroyLoadStoreTempInfos();
 
-
+    bool                operator==( const ContentInfo& rCompare ) const;
 };
 
 typedef ContentInfo* ContentInfoPtr;
@@ -287,6 +296,9 @@ public:
     void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
     void                    FinishStore();
     void                    FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
+
+    bool                    operator==( const BinTextObject& rCompare ) const;
+
 };
 
 #endif  // _EDITOBJ2_HXX
