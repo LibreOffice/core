@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pres.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:56:49 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,30 @@
  ************************************************************************/
 #ifndef _PRESENTATION_HXX
 #define _PRESENTATION_HXX
+
+enum PresObjKind
+{
+    PRESOBJ_NONE = 0,
+    PRESOBJ_TITLE,
+    PRESOBJ_OUTLINE,
+    PRESOBJ_TEXT,
+    PRESOBJ_GRAPHIC,
+    PRESOBJ_OBJECT,
+    PRESOBJ_CHART,
+    PRESOBJ_ORGCHART,
+    PRESOBJ_TABLE,
+    PRESOBJ_IMAGE,
+    PRESOBJ_BACKGROUND,
+    PRESOBJ_PAGE,
+    PRESOBJ_HANDOUT,
+    PRESOBJ_NOTES,
+    PRESOBJ_HEADER,
+    PRESOBJ_FOOTER,
+    PRESOBJ_DATETIME,
+    PRESOBJ_SLIDENUMBER,
+
+    PRESOBJ_MAX
+};
 
 enum AutoLayout
 {
