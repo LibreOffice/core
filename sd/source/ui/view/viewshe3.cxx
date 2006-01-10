@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:31:54 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,6 @@ void ViewShell::PrintHandout (
     USHORT nProgressOffset,
     USHORT nTotal )
 {
-    SdrObject* pObj;
     SdPage* pPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
     SdPage& rMaster = (SdPage&)pPage->TRG_GetMasterPage();
 
@@ -462,8 +461,7 @@ void ViewShell::PrintHandout (
         else
             pPrintView = new DrawView (GetDocSh(), &rPrinter, NULL);
 
-        sd::PresentationObjectList::iterator aIter;
-        const sd::PresentationObjectList::iterator aEnd( rMaster.GetPresObjList().end() );
+        sd::ShapeList& rShapeList = rMaster.GetPresentationShapeList();
         USHORT  nPageCount = nProgressOffset;
 
         WriteFrameViewData();
@@ -475,17 +473,15 @@ void ViewShell::PrintHandout (
 
         while ( nPage < nPageMax )
         {
-            aIter = rMaster.GetPresObjList().begin();
-
             // Anzahl ALLER Seiten im Dokument:
             USHORT nAbsPageCnt = GetDoc()->GetPageCount();
 
-            while( (aIter != aEnd) && (nPage < nPageMax) )
+            SdrObject* pIter = rShapeList.getNextShape(0);
+            while( pIter && (nPage < nPageMax) )
             {
-                if( (*aIter).meKind == PRESOBJ_HANDOUT )
+                SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
+                if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
                 {
-                    pObj = (*aIter).mpObject;
-
                     if ( rSelPages.IsSelected(nPage+1) )
                     {
                         //rProgress.SetState( nPageCount, nTotal );
@@ -501,36 +497,25 @@ void ViewShell::PrintHandout (
 
                         if ( !pPg->IsExcluded() || bPrintExcluded )
                         {
-                            if ( pObj->ISA(SdrPageObj) )
-                            {
-                                ((SdrPageObj*) pObj)->SetReferencedPage(pPg);
-                            }
-                            else
-                            {
-                                DBG_ERROR("SdViewShell::PrintHandout() - PRESOBJ_HANDOUT is no SdrPageObj?" );
-                            }
-                            aIter++;
+                            (pPageObj)->SetReferencedPage(pPg);
+                            pIter = rShapeList.getNextShape(pIter);
                         }
                     }
                     nPage++;
                 }
                 else
                 {
-                    aIter++;
+                    pIter = rShapeList.getNextShape(pIter);
                 }
             }
 
-            while ( aIter != aEnd )
+            while( pIter )
             {
-                if( (*aIter).meKind == PRESOBJ_HANDOUT )
-                {
-                    pObj = (*aIter).mpObject;
-                    // invalidate remaining SdrPageObjs with
-                    // an invalid page number
-                    if ( pObj->ISA(SdrPageObj) )
-                        ((SdrPageObj*) pObj)->SetReferencedPage(0L);
-                }
-                aIter++;
+                SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
+                if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
+                    pPageObj->SetReferencedPage(0L);
+
+                pIter = rShapeList.getNextShape(pIter);
             }
 
             nPrintedHandoutPageNum++;
@@ -556,25 +541,18 @@ void ViewShell::PrintHandout (
             pPrintView->HidePage(pPrintView->GetPageView(pPage));
         }
 
-        USHORT nRealPage = GetDoc()->GetSdPage(0, PK_STANDARD)->GetPageNum();
-
-        aIter = rMaster.GetPresObjList().begin();
-
-        pObj = (aIter != aEnd) ? (*aIter++).mpObject : NULL;
-
-        while( aIter != aEnd )
+        USHORT nRealPage = 0;
+        SdrObject* pIter = 0;
+        while( pIter = rShapeList.getNextShape(pIter) )
         {
-            if( (*aIter).meKind == PRESOBJ_HANDOUT )
+            SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
+            if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
             {
-                pObj = (*aIter).mpObject;
-                // Seitenobjekte wieder auf erste Seite setzen
-                if ( pObj->ISA(SdrPageObj) )
-                {
-                    ((SdrPageObj*) pObj)->SetReferencedPage(GetDoc()->GetPage(nRealPage));
-                    nRealPage += 2;
-                }
+                SdPage* pRealPage = 0;
+                if( nRealPage < GetDoc()->GetSdPageCount( PK_STANDARD ) )
+                    pRealPage = GetDoc()->GetSdPage(nRealPage++,PK_STANDARD);
+                pPageObj->SetReferencedPage(pRealPage);
             }
-            aIter++;
         }
 
         nPrintedHandoutPageNum = 1;
@@ -1340,13 +1318,14 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             // Try to handle another slot id gracefully.
             nNewPageIndex = 0xffff;
     }
-    SdPage* pNewPage = NULL;
-    if (nNewPageIndex != 0xffff)
+    SdPage* pNewPage = 0;
+    if(nNewPageIndex != 0xffff)
     {
-        pNewPage = pDocument->GetSdPage (nNewPageIndex, PK_STANDARD);
-        pDrView->AddUndo (new SdrUndoNewPage (*pNewPage));
-        pDrView->AddUndo (new SdrUndoNewPage (*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+        pNewPage = pDocument->GetSdPage(nNewPageIndex, PK_STANDARD);
+        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
+        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
     }
+
     pDrView->EndUndo();
 
     return pNewPage;
