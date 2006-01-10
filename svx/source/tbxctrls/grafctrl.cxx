@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:03:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,7 +1097,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                 else
                                 {
                                     rView.BegUndo( aUndoStr );
-                                    rView.AddUndo( new SdrUndoGeoObj( *pObj ) );
+                                    rView.AddUndo( rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                                     pObj->SetSnapRect( aNewRect );
                                     rView.SetAttributes( aSet );
                                     rView.EndUndo();
