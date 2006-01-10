@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-06 13:13:53 $
+dnl * Date: $Date: 2006-01-10 14:33:04 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.146 $ )
+AC_REVISION( $Revision: 1.147 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -172,6 +172,9 @@ AC_ARG_ENABLE(kde,
 [  --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
                           where Qt and KDE are available.
 ],,)
+AC_ARG_ENABLE(kdeab,
+[  --disable-kdeab         Disable the KDE Addressbook support
+],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 AC_ARG_ENABLE(binfilter,
 [  --disable-binfilter:    Disable legacy binary file formats filters
 ],,if ! test -d ../binfilter; then enable_binfilter=no; fi)
@@ -507,14 +510,14 @@ echo "********************************************************************"
 echo "*                                                                  *"
 echo "*   OpenOffice.org build configuration.                            *"
 echo "*                                                                  *"
-echo "*   The configure proces checks your platform to see whether       *"
+echo "*   The configure process checks your platform to see whether      *"
 echo "*   you can build OpenOffice.org on it.                            *"
-echo "*   This proces checks all pre-requisites and generates a file     *"
+echo "*   This process checks all pre-requisites and generates a file    *"
 echo "*   containing the necessary environment variables.                *"
 echo "*   Source this file after configure has ended successfully.       *"
 echo "*                                                                  *"
 echo "*   Any warning that is generated during the configure process     *"
-echo "*   must be taken into account, since it can be a reason for       *"
+echo "*   must be taken into account since it can be a reason for        *"
 echo "*   an unsuccessful build of OpenOffice.org                        *"
 echo "*                                                                  *"
 echo "********************************************************************"
@@ -2533,6 +2536,9 @@ AC_SUBST(LIBXML_LIBS)
 dnl ===================================================================
 dnl Check for system python
 dnl ===================================================================
+if test "$_os" = "Darwin" && test -z "$with_system_python"; then
+   with_system_python=yes
+fi
 AC_MSG_CHECKING([which python to use])
 if test -n "$with_system_python"; then
    SYSTEM_PYTHON=YES
@@ -2835,7 +2841,15 @@ Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
     MOZ_LIB=`$PKG_CONFIG --variable=libdir $moz_flavour-xpcom`
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
     if test "$WITH_OPENLDAP" != "YES"; then
-      MOZ_LDAP_CFLAGS="-I$MOZ_INC"
+      AC_MSG_CHECKING([whether $tmp was compiled with --enable-ldap])
+      if test -d "$MOZ_INC/ldap"; then
+         AC_MSG_RESULT([yes])
+         MOZ_LDAP_CFLAGS="-I$MOZ_INC"
+      else
+        AC_MSG_ERROR([no.
+Could not find LDAP header include files in $MOZ_INC/ldap.
+Please recompile $tmp with --enable-ldap.])
+      fi
     fi
 elif test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([none])
@@ -3173,7 +3187,6 @@ if test "$_os" != "WINNT" && \
 	   AC_CHECK_LIB(portaudio, Pa_Initialize, [],
 		[AC_MSG_ERROR(portaudio library not found or functional)], [])
 	   AC_MSG_CHECKING(portaudio version)
-	   AC_LANG(C)
 	   AC_TRY_LINK([#include <portaudio.h>], [
 void main(int argc, char **argv) {
 	 /* Pa_GetVersion() only exists in v19, so this fails to build with v18 */
@@ -3244,7 +3257,6 @@ if test -n "$with_system_myspell" && test "$with_system_myspell" != "no"; then
          AC_CHECK_HEADER(myspell/myspell.hxx, [],
             [AC_MSG_ERROR(myspell headers not found.)], [])
          MYSPELL_CFLAGS=-I/usr/include/myspell
-         AC_LANG(C++)
          AC_CHECK_LIB(myspell, main, [],
            [ AC_MSG_ERROR(myspell library not found.) ], [])
          MYSPELL_LIBS=-lmyspell
@@ -3604,17 +3616,19 @@ dnl ===================================================================
 dnl Zip will be found where you tell me to find it
 dnl ===================================================================
 if test -n "$with_zip_home" ; then
-	ZIP="$with_zip_home/zip"
+	 ZIP="$with_zip_home/zip"
+    UNZIP="$with_unzip_home/unzip"
     ZIP_HOME="$with_zip_home"
 else
     AC_PATH_PROG(ZIP, zip)
+    AC_PATH_PROG(UNZIP, unzip)
     ZIP_HOME=`dirname "$ZIP"`
 fi
 dnl ===================================================================
 dnl Zip must be available or else it is an error, all platforms
 dnl ===================================================================
-if test -z "$ZIP"; then
-    AC_MSG_ERROR([Zip is required to build, please install or use --with-zip-home],,)
+if test -z "$ZIP" -o -z "$UNZIP"; then
+    AC_MSG_ERROR([Zip/Unzip are required to build, please install or use --with-zip-home],,)
 fi
 
 dnl ===================================================================
@@ -3979,6 +3993,31 @@ fi
 AC_SUBST(ENABLE_EVOAB2)
 AC_SUBST(GOBJECT_CFLAGS)
 AC_SUBST(GOBJECT_LIBS) 
+
+dnl ===================================================================
+dnl Test whether to include KDE AB support
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable KDE Addressbook support])
+if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
+   AC_MSG_RESULT([yes])
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
+   AC_MSG_CHECKING([whether KDE is >= 3.2])
+       AC_TRY_RUN([
+#include <kdeversion.h>
+
+int main(int argc, char **argv) {
+       if((KDE_VERSION_MAJOR == 3 && KDE_VERSION_MINOR >= 2) || KDE_VERSION_MAJOR > 3) return 0;
+       else return 1;
+}
+       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old, you need at least 3.2 for the KDE AB support])])
+   CXXFLAGS=$save_CXXFLAGS
+   ENABLE_KAB=TRUE
+else
+   AC_MSG_RESULT([no])
+   ENABLE_KAB=
+fi
+AC_SUBST(ENABLE_KAB)
 
 dnl ===================================================================
 dnl Test whether to include FontOOo
