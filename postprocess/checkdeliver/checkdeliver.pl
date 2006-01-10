@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-09 09:05:53 $
+#   last change: $Author: rt $ $Date: 2006-01-10 16:41:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ sub get_globals
 
     # set global variables according to environnment
     $platform      = $ENV{INPATH};
-    $srcdir        = $ENV{SRC_ROOT};
+    $srcdir        = $ENV{SOLARSRC};
     $solverdir     = $ENV{SOLARVERSION};
     $milestoneext  = $ENV{UPDMINOREXT};
 
