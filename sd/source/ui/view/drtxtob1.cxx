@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:26:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,11 +164,15 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     BOOL bOutlineMode = FALSE;
     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
+    std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+
     if (pView->ISA(OutlineView))
     {
         bOutlineMode = TRUE;
         pOLV = static_cast<OutlineView*>(pView)
             ->GetViewByWindow(pViewShell->GetActiveWindow());
+
+        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*pView) ) );
     }
 
     switch (nSlot)
