@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:51:54 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef SVX_LIGHT
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -59,7 +58,6 @@
 #endif
 #endif
 #endif
-#endif // !SVX_LIGHT
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -414,11 +412,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     aArrow[1]=Point(0,30);                      //    \    /
     aArrow[2]=Point(20,30);                        //     \  /
     aArrow[3]=Point(10,0);                        //      \/1,0
-#ifdef SVX_LIGHT
-    pISet->Put(XLineStartItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
-#else
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
-#endif
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));
@@ -636,18 +630,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(423));         // 12 pt
 
-#ifdef SVX_LIGHT
-    // avoid SVX resources
-    pISet->Put(XLineStartItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
-#else
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
-#endif
     pISet->Put(XLineStartWidthItem(200));
-#ifdef SVX_LIGHT
-    pISet->Put(XLineEndItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
-#else
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
-#endif
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
 
@@ -705,7 +690,6 @@ USHORT SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::StopOnlineSpelling()
 {
     if (pOnlineSpellingTimer && pOnlineSpellingTimer->IsActive())
@@ -719,8 +703,6 @@ void SdDrawDocument::StopOnlineSpelling()
     delete pOnlineSpellingList;
     pOnlineSpellingList = NULL;
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -728,7 +710,6 @@ void SdDrawDocument::StopOnlineSpelling()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 {
     if (bOnlineSpell && (bForceSpelling || bInitialOnlineSpellingEnabled) &&
@@ -776,8 +757,6 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
         pOnlineSpellingTimer->Start();
     }
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -785,7 +764,6 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 {
     SdrObject* pObj = NULL;
@@ -824,8 +802,6 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
         }
     }
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -833,7 +809,6 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
 {
     if (pOnlineSpellingList!=NULL
@@ -890,8 +865,6 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
 
     return(0);
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -899,7 +872,6 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 {
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
@@ -945,16 +917,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         bHasOnlineSpellErrors = FALSE;
     }
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
 |* Objekt wurde ins Model eingefuegt
 |*
 \************************************************************************/
-
-#ifndef SVX_LIGHT
 void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
 {
     if (pOnlineSpellingList)
@@ -966,17 +934,12 @@ void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
         }
     }
 }
-#endif // !SVX_LIGHT
-
-
 
 /*************************************************************************
 |*
 |* Objekt wurde aus dem Model entfernt
 |*
 \************************************************************************/
-
-#ifndef SVX_LIGHT
 void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* pPage)
 {
     if (pOnlineSpellingList)
@@ -988,17 +951,12 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* pPage)
         }
     }
 }
-#endif // !SVX_LIGHT
-
-
 
 /*************************************************************************
 |*
 |* Callback fuer ExecuteSpellPopup()
 |*
 \************************************************************************/
-
-#ifndef SVX_LIGHT
 IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 {
     ULONG nStat = pEditStat->GetStatusWord();
@@ -1006,8 +964,6 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 
     return(0);
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1016,7 +972,6 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 \************************************************************************/
 
 // #91457# removed link and replaced with Imp method
-#ifndef SVX_LIGHT
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete pOnlineSearchItem;
@@ -1046,7 +1001,6 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
             SFX_CALLMODE_ASYNCHRON );
     }
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -1054,7 +1008,6 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::MakeUniqueLayerNames()
 {
     String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
@@ -1099,17 +1052,12 @@ void SdDrawDocument::MakeUniqueLayerNames()
         }
     }
 }
-#endif // !SVX_LIGHT
-
-
 
 /*************************************************************************
 |*
 |* Eindeutige Namen der StandardLayer durch sprachabhaengige Namen ersetzen
 |*
 \************************************************************************/
-
-#ifndef SVX_LIGHT
 void SdDrawDocument::RestoreLayerNames()
 {
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
@@ -1190,8 +1138,6 @@ void SdDrawDocument::RestoreLayerNames()
         }
     }
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
