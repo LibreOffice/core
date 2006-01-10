@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:28:06 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,27 @@ void ContentInfo::DestroyLoadStoreTempInfos()
 {
     delete pTempLoadStoreInfos;
     pTempLoadStoreInfos = NULL;
+}
+
+bool ContentInfo::operator==( const ContentInfo& rCompare ) const
+{
+    if( (aText == rCompare.aText) &&
+            (aStyle == rCompare.aStyle ) &&
+            (aAttribs.Count() == rCompare.aAttribs.Count() ) &&
+            (eFamily == rCompare.eFamily ) &&
+            (aParaAttribs == rCompare.aParaAttribs ) )
+    {
+        USHORT n;
+        for( n = 0; n < aAttribs.Count(); n++ )
+        {
+            if( !(*aAttribs.GetObject(n) == *rCompare.aAttribs.GetObject(n)) )
+                return false;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 EditTextObject::EditTextObject( USHORT n)
@@ -563,6 +584,11 @@ void EditTextObject::FinishStore()
 void EditTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+}
+
+bool EditTextObject::operator==( const EditTextObject& rCompare ) const
+{
+    return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
 }
 
 BinTextObject::BinTextObject( SfxItemPool* pP ) :
@@ -1754,6 +1780,29 @@ void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
         // MT 07/00: EE_PARA_BULLET no longer needed
         pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
     }
+}
+
+bool BinTextObject::operator==( const BinTextObject& rCompare ) const
+{
+    if( this == &rCompare )
+        return true;
+
+    if( ( aContents.Count() != rCompare.aContents.Count() ) ||
+            ( pPool != rCompare.pPool ) ||
+            ( nMetric != rCompare.nMetric ) ||
+            ( nUserType!= rCompare.nUserType ) ||
+            ( nScriptType != rCompare.nScriptType ) ||
+            ( bVertical != rCompare.bVertical ) )
+        return false;
+
+    USHORT n;
+    for( n = 0; n < aContents.Count(); n++ )
+    {
+        if( !( *aContents.GetObject( n ) == *rCompare.aContents.GetObject( n ) ) )
+            return false;
+    }
+
+    return true;
 }
 
 void BinTextObject::AdjustImportedLRSpaceItems( BOOL bTurnOfBullets )
