@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editund2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:41 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #ifndef _EDITUND2_HXX
 #define _EDITUND2_HXX
 
-//#include <tools.hxx>
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 #ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
@@ -44,7 +46,7 @@
 
 class ImpEditEngine;
 
-class EditUndoManager : public SfxUndoManager
+class SVX_DLLPUBLIC EditUndoManager : public SfxUndoManager
 {
 private:
     ImpEditEngine*  pImpEE;
@@ -58,7 +60,7 @@ public:
 // -----------------------------------------------------------------------
 // EditUndo
 // ------------------------------------------------------------------------
-class EditUndo : public SfxUndoAction
+class SVX_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
     USHORT          nId;
