@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:39:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,8 +946,8 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 nWhich ) :
 
     for (sal_uInt16 i = 0; i < nTabs; ++i)
     {
-        SvxTabStop * pTab = new SvxTabStop( (i + 1) * nDist, eAdjst );
-        SvxTabStopArr::Insert( pTab, 1 );
+        SvxTabStop aTab( (i + 1) * nDist, eAdjst );
+        SvxTabStopArr::Insert( aTab );
     }
 }
 
@@ -962,8 +962,8 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
     {
-        SvxTabStop * pTab = new SvxTabStop( (i + 1) * nDist, eAdjst );
-        SvxTabStopArr::Insert( pTab, 1 );
+        SvxTabStop aTab( (i + 1) * nDist, eAdjst );
+        SvxTabStopArr::Insert( aTab );
     }
 }
 
