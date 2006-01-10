@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:30:49 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@
 #ifndef SD_SLIDE_VIEW_HXX
 #include "SlideView.hxx"
 #endif
+#include "undo/undoobjects.hxx"
 
 #include <comphelper/processfactory.hxx>
 
@@ -184,12 +185,16 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 pNewGrafObj->SetEmptyPresObj(FALSE);
             }
 
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+
             SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
             if (pPage && pPage->GetPresObjKind(pPickObj) == PRESOBJ_GRAPHIC)
             {
                 // Neues PresObj in die Liste eintragen
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
+                AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
+                AddUndo( new sd::UndoObjectPresentationKind( *pNewGrafObj ) );
                 pPage->RemovePresObj(pPickObj);
                 pPage->InsertPresObj(pNewGrafObj, PRESOBJ_GRAPHIC);
             }
@@ -197,7 +202,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
             ReplaceObject(pPickObj, *pPV, pNewGrafObj);
             EndUndo();
         }
@@ -207,7 +211,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             * Das Objekt wird mit der Graphik gefuellt
             ******************************************************************/
             BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-            AddUndo(new SdrUndoAttrObj(*pPickObj));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
             EndUndo();
 
             XOBitmap aXOBitmap( rGraphic.GetBitmap() );
@@ -278,8 +282,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
             SdrPage* pPage = pPV->GetPage();
             pPage->InsertObject(pNewGrafObj);
-            AddUndo(new SdrUndoNewObj(*pNewGrafObj));
-            AddUndo(new SdrUndoDelObj(*pPickObj));
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
             pPage->RemoveObject(pPickObj->GetOrdNum());
             EndUndo();
             nAction = DND_ACTION_COPY;
