@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:26:49 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     pUndoMgr->EnterListAction( String(), String() );
                                     pDrView->BegUndo();
                                 }
-                                pDrView->AddUndo(new SdrUndoAttrObj(*pObj));
+                                pDrView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
                                 aAttr.Put(XFillStyleItem(XFILL_SOLID));
                                 aAttr.Put(XFillColorItem(String(), COL_WHITE));
