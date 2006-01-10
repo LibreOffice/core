@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:41:15 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,12 @@
 #ifndef _PRESENTATION
 #include "pres.hxx"
 #endif
+#ifndef _SHAPELIST_HXX
+#include "shapelist.hxx"
+#endif
+#ifndef _SD_SCOPELOCK_HXX
+#include "misc/scopelock.hxx"
+#endif
 
 #ifndef INCLUDED_SDDLLAPI_H
 #include "sddllapi.h"
@@ -109,52 +115,7 @@ namespace boost
     template<class X> class shared_ptr;
 }
 
-enum PresObjKind
-{
-    PRESOBJ_NONE,
-    PRESOBJ_TITLE,
-    PRESOBJ_OUTLINE,
-    PRESOBJ_TEXT,
-    PRESOBJ_GRAPHIC,
-    PRESOBJ_OBJECT,
-    PRESOBJ_CHART,
-    PRESOBJ_ORGCHART,
-    PRESOBJ_TABLE,
-    PRESOBJ_IMAGE,
-    PRESOBJ_BACKGROUND,
-    PRESOBJ_PAGE,
-    PRESOBJ_HANDOUT,
-    PRESOBJ_NOTES,
-    PRESOBJ_HEADER,
-    PRESOBJ_FOOTER,
-    PRESOBJ_DATETIME,
-    PRESOBJ_SLIDENUMBER
-};
-
 namespace sd {
-
-    struct PresentationObjectDescriptor
-    {
-        SdrObject*  mpObject;
-        PresObjKind meKind;
-
-        PresentationObjectDescriptor( SdrObject* pObject, PresObjKind eKind ) : mpObject( pObject ), meKind( eKind ) {}
-
-        bool operator==( const PresentationObjectDescriptor& r )
-        {
-            return (mpObject == r.mpObject) && (meKind == r.meKind);
-        }
-    };
-
-    typedef std::list< PresentationObjectDescriptor > PresentationObjectList;
-
-    /** this unary_function can be used with stl algorithms to find presentation objects of the same kind */
-    struct isPresObjKind_func : public std::unary_function<PresentationObjectDescriptor, bool>
-    {
-        isPresObjKind_func( PresObjKind eKind ) : meKind( eKind ) {}
-        bool operator() (PresentationObjectDescriptor x) { return x.meKind == meKind; }
-        PresObjKind meKind;
-    };
 
     struct SD_DLLPUBLIC HeaderFooterSettings
     {
@@ -180,6 +141,8 @@ namespace sd {
 namespace sd {
     class UndoAnimation;
     class UndoTransition;
+    class UndoGeoObject;
+    class UndoAttrObject;
 }
 
 class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
@@ -188,13 +151,15 @@ friend class SdGenericDrawPage;
 friend class SdDrawPage;
 friend class sd::UndoAnimation;
 friend class sd::UndoTransition;
+friend class ModifyPageUndoAction;
+friend class sd::UndoGeoObject;
+friend class sd::UndoAttrObject;
 
 protected:
     PageKind    ePageKind;                // Seitentyp
     AutoLayout  eAutoLayout;              // AutoLayout
-    sd::PresentationObjectList maPresObjList;             // Praesentationsobjekte
-    BOOL        bOwnArrangement;          // Objekte werden intern angeordnet
-
+    sd::ShapeList maPresentationShapeList;            // Praesentationsobjekte
+    sd::ScopeLock maLockAutoLayoutArrangement;
     BOOL        bSelected;                // Selektionskennung
     PresChange  ePresChange;              // manuell/automatisch/halbautomatisch
     UINT32      nTime;                    // Anzeigedauer in Sekunden
@@ -219,12 +184,7 @@ protected:
     /** a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > mpMainSequence;
 
-    BOOL        InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
-                              Rectangle rRect, BOOL bInit, sd::PresentationObjectList& rObjList);
-
     void        AdjustBackgroundSize();
-    Rectangle   GetTitleRect() const;
-    Rectangle   GetLayoutRect() const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
@@ -258,13 +218,15 @@ public:
     virtual void    SetModel(SdrModel* pNewModel);
     virtual FASTBOOL IsReadOnly() const;
 
-    sd::PresentationObjectList& GetPresObjList() { return maPresObjList; }
+    sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
+
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
-    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1);
-    PresObjKind     GetPresObjKind(SdrObject* pObj);
-    String          GetPresObjText(PresObjKind eObjKind);
-    SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind);
+    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1 );
+    PresObjKind     GetPresObjKind(SdrObject* pObj) const;
+    String          GetPresObjText(PresObjKind eObjKind) const;
+    SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
+    bool            RestoreDefaultText( SdrObject* pObj );
 
     /** returns true if the given SdrObject is inside the presentation object list */
     bool            IsPresObj(const SdrObject* pObj);
@@ -275,11 +237,10 @@ public:
     /** inserts the given SdrObject into the presentation object list */
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
-    sd::PresentationObjectList::iterator FindPresObj(const SdrObject* pObj);
-
     void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bCreate=FALSE);
     AutoLayout      GetAutoLayout() const { return eAutoLayout; }
     void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bCreate=FALSE);
+    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
 
     virtual void       NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND,
                                        const SdrInsertReason* pReason=NULL);
@@ -391,6 +352,12 @@ public:
     /** returns a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > getMainSequence();
 
+    /** quick check if this slide has an animation node.
+        This can be used to have a cost free check if there are no animations ad this slide.
+        If it returns true this does not mean that there are animations available.
+    */
+    bool hasAnimationNode() const;
+
     /** returns the SdPage implementation for the given XDrawPage or 0 if not available */
     static SdPage* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage );
 
@@ -430,10 +397,16 @@ public:
     /** removes all empty presentation objects from this slide */
     void RemoveEmptyPresentationObjects();
 
+    Rectangle   GetTitleRect() const;
+    Rectangle   GetLayoutRect() const;
+
 private:
     /** clone the animations from this and set them to rTargetPage
     */
     void cloneAnimations( SdPage& rTargetPage ) const;
+
+    /** called before a shape is removed or replaced from this slide */
+    void onRemoveObject( SdrObject* pObject );
 };
 
 #endif     // _SDPAGE_HXX
