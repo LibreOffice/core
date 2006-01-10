@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:53:04 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,47 +60,7 @@
 #include <svtools/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbstar.hxx>
-
-
-namespace {
-class ImpUndoDeleteWarning : public ModalDialog
-{
-private:
-    FixedImage      maImage;
-    FixedText       maWarningFT;
-    CheckBox        maDisableCB;
-    OKButton        maYesBtn;
-    CancelButton    maNoBtn;
-
-public:
-    ImpUndoDeleteWarning(Window* pParent);
-    BOOL IsWarningDisabled() const { return maDisableCB.IsChecked(); }
-};
-
-ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
-:   ModalDialog(pParent, SdResId(RID_UNDO_DELETE_WARNING)),
-    maImage(this, SdResId(IMG_UNDO_DELETE_WARNING)),
-    maWarningFT(this, SdResId(FT_UNDO_DELETE_WARNING)),
-    maDisableCB(this, SdResId(CB_UNDO_DELETE_DISABLE)),
-    maYesBtn(this, SdResId(BTN_UNDO_DELETE_YES)),
-    maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
-{
-    FreeResource();
-
-    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
-    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
-
-    maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
-    maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
-    maImage.SetImage(WarningBox::GetStandardImage());
-
-    // #93721# Set focus to YES-Button
-    maYesBtn.GrabFocus();
-}
-
-} // end of anonymous namespace
-
-
+#include "undo/undoobjects.hxx"
 
 
 namespace sd {
@@ -233,56 +193,13 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         SdPage* pUndoPage =
             bHandoutMode ? pHandoutMPage : pCurrentPage;
 
-        // #67720#
         SfxUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
         DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
-        // #90356#
-        sal_uInt16 nActionCount(pUndoManager->GetUndoActionCount());
-        sal_Bool bContinue(sal_True);
-
-        if(nActionCount)
+        if( pUndoManager )
         {
-            // #90356# get SdOptions
-            SdOptions* pOptions = SD_MOD()->GetSdOptions(pDocument->GetDocumentType());
-            //            sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
-            sal_Bool bShowDialog(sal_False);
-
-            // #95981# If only name is changed do not show
-            // ImpUndoDeleteWarning dialog
-            if(bShowDialog)
-            {
-                sal_Bool bNameChanged(aNewName != aOldName);
-                sal_Bool bLayoutChanged(aNewAutoLayout != aOldAutoLayout);
-
-                if(bNameChanged && !bLayoutChanged)
-                    bShowDialog = sal_False;
-            }
-
-            if(bShowDialog)
-            {
-                // ask user if he wants to loose UNDO stack
-                ImpUndoDeleteWarning aUndoDeleteDlg(mrViewShell.GetActiveWindow());
-
-                if(BUTTONID_OK == aUndoDeleteDlg.Execute())
-                {
-                    pUndoManager->Clear();
-                }
-                else
-                {
-                    bContinue = sal_False;
-                }
-
-                // #90356# write option flag back if change was done
-                if(aUndoDeleteDlg.IsWarningDisabled())
-                {
-                    pOptions->SetShowUndoDeleteWarning(FALSE);
-                }
-            }
-        }
-
-        if(bContinue)
-        {
+            String aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
+            pUndoManager->EnterListAction(aComment, aComment);
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
                 pUndoManager, pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);
@@ -318,12 +235,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             {
                 pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
             }
-            // The list of presentation objects at the page
-            // has been cleared by SetAutolayout().  We still
-            // have to clear the list of removed presentation
-            // objects held by the model which references the
-            // former list.
-            pDocument->ClearDeletedPresObjList();
 
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -334,6 +245,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             {
                 bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }
+
+            pUndoManager->AddUndoAction( new UndoAutoLayoutPosAndSize( *pUndoPage ) );
+            pUndoManager->LeaveListAction();
 
             pDocument->SetChanged(bSetModified);
         }
