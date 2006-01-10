@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:26:33 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1260,29 +1260,27 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             if( ePageKind == PK_HANDOUT )
             {
                 // set pages for all available handout presentation objects
-                sd::PresentationObjectList::iterator aIter( pMaster->GetPresObjList().begin() );
-                const sd::PresentationObjectList::iterator aEnd( pMaster->GetPresObjList().end() );
+                sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
 
                 sal_uInt16 nPgNum = 0;
-                while( aIter != aEnd )
+                SdrObject* pObj = 0;
+                while( pObj = rShapeList.getNextShape(pObj) )
                 {
-                    if( (*aIter).meKind == PRESOBJ_HANDOUT )
+                    if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
                         const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
 
                         if(nDestinationPageNum < GetDoc()->GetPageCount())
                         {
-                            static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
+                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
                         }
                         else
                         {
-                            static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(0L);
+                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0L);
                         }
 
                         nPgNum++;
                     }
-
-                    aIter++;
                 }
             }
         }
