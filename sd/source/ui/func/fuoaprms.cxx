@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:00:44 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,9 +738,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                            aNewCenter.Y() - aCurCenter.Y());
             pRunningObj->Move(aDistance);
 
-            SdrUndoMoveObj* pUndoAction = new SdrUndoMoveObj(*pRunningObj,
-                                                             aDistance);
-            pUndoMgr->AddUndoAction(pUndoAction);
+            pUndoMgr->AddUndoAction(pDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
         }
 
         for (nObject = 0; nObject < nCount; nObject++)
@@ -752,8 +750,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             BOOL bCreated = FALSE;
             if( !pInfo )
             {
-                pInfo = new SdAnimationInfo(pDoc);
-                pObject->InsertUserData( pInfo );
+                pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
                 bCreated = TRUE;
             }
 
@@ -772,7 +769,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
                 pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
                 pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
-                pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
+//              pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
                 pAction->SetClickAction(pInfo->eClickAction, pInfo->eClickAction);
                 pAction->SetBookmark(pInfo->aBookmark, pInfo->aBookmark);
 //              pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
@@ -863,8 +860,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                     pInfo->bSecondPlayFull = bSecondPlayFull;
 
                 // noch ein paar Spezialitaeten
-                if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
-                    pInfo->SetPath(pPath);
+//              if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
+//                  pInfo->SetPath(pPath);
 
                 if (eClickAction == presentation::ClickAction_VERB)
                     pInfo->nVerb = (USHORT)aBookmark.ToInt32();
