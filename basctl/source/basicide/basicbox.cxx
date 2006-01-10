@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:48 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,7 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
 
 __EXPORT BasicLibBox::~BasicLibBox()
 {
+    DeleteEntryData();
 }
 
 void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
@@ -245,6 +246,16 @@ void BasicLibBox::InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocati
     }
 }
 
+void BasicLibBox::DeleteEntryData()
+{
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( i );
+        delete pEntry;
+    }
+}
+
 long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
@@ -321,4 +332,10 @@ void BasicLibBox::NotifyIDE()
         }
     }
     ReleaseFocus();
+}
+
+void BasicLibBox::Clear()
+{
+    DeleteEntryData();
+    ListBox::Clear();
 }
