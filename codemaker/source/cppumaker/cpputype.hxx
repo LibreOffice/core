@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:12:40 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:46:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,16 @@ protected:
     virtual void addComprehensiveGetCppuTypeIncludes(
         codemaker::cppumaker::Includes & includes) const;
 
+    virtual bool isPolymorphic() const;
+
+    virtual void dumpTemplateHead(FileStream & out) const;
+
+    virtual void dumpTemplateParameters(FileStream & out) const;
+
+    void dumpGetCppuTypePreamble(FileStream & out);
+
+    void dumpGetCppuTypePostamble(FileStream & out);
+
     void addDefaultHIncludes(codemaker::cppumaker::Includes & includes) const;
     void addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes) const;
 
@@ -141,7 +151,6 @@ protected:
 
     sal_Bool            m_cppuTypeLeak;
     sal_Bool            m_cppuTypeDynamic;
-    sal_Bool            m_cppuTypeStatic;
     sal_uInt32          m_indentLength;
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
@@ -275,16 +284,11 @@ protected:
     virtual void addComprehensiveGetCppuTypeIncludes(
         codemaker::cppumaker::Includes & includes) const;
 
-private:
-    bool isPolymorphic() const;
+    virtual bool isPolymorphic() const;
 
-    void dumpTemplateHead(FileStream & out) const;
+    virtual void dumpTemplateHead(FileStream & out) const;
 
-    void dumpTemplateParameters(FileStream & out) const;
-
-    void dumpGetCppuTypePreamble(FileStream & out);
-
-    void dumpGetCppuTypePostamble(FileStream & out);
+    virtual void dumpTemplateParameters(FileStream & out) const;
 };
 
 class ExceptionType : public CppuType
