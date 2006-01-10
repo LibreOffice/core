@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:12:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1142,7 +1142,9 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
-        return makeAny(java_sql_SQLWarning(warn_base,*this));
+        return makeAny(
+            static_cast< starsdbc::SQLException >(
+                java_sql_SQLWarning(warn_base,*this)));
     }
 
     return ::com::sun::star::uno::Any();
