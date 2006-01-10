@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:27:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,11 +157,11 @@ void DrawViewShell::DeleteActualPage()
 
     pDrView->BegUndo();
 
-    pDrView->AddUndo(new SdrUndoDelPage(*pPage));
+    pDrView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
     GetDoc()->RemovePage(pPage->GetPageNum());
 
     pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-    pDrView->AddUndo(new SdrUndoDelPage(*pPage));
+    pDrView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
     GetDoc()->RemovePage(pPage->GetPageNum());
 
     pDrView->EndUndo();
