@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:44:03 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2756,12 +2756,8 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 rSt >> aInteractiveInfoAtom;
 
                                 // interactive object
-                                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-                                if( !pInfo )
-                                {
-                                    pInfo = new SdAnimationInfo( pDoc );
-                                    pObj->InsertUserData( pInfo );
-                                }
+                                SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
+
                                 ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
                                 if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
                                 {
