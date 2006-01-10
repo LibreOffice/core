@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:54:15 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1425,7 +1425,10 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
 
 #ifndef SVX_LIGHT
         if ( bNewContent && GetStatus().DoOnlineSpelling() && pC->GetWrongList() )
+        {
+            aPaM.GetNode()->DestroyWrongList(); // otherwise MLK, if list exists...
             aPaM.GetNode()->SetWrongList( pC->GetWrongList()->Clone() );
+        }
 #endif // !SVX_LIGHT
 
         // Zeilenumbruch, wenn weitere folgen...
