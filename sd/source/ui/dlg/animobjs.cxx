@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:50:49 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1266,15 +1266,12 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         pGroup->NbcMove(aTemp);
 
         // Animationsinformation erzeugen
-        SdDrawDocument* pDoc = (SdDrawDocument*)rView.GetModel();
-        SdAnimationInfo* pInfo = new SdAnimationInfo(pDoc);
-        // pInfo->aStart = Point();
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
         pInfo->eEffect = presentation::AnimationEffect_NONE;
         pInfo->eSpeed = presentation::AnimationSpeed_MEDIUM;
         pInfo->bActive = TRUE;
         pInfo->bIsMovie = TRUE;
         pInfo->aBlueScreen = COL_WHITE;
-        pGroup->InsertUserData( pInfo );
 
         rView.InsertObject( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
     }
