@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:11:16 $
+#   last change: $Author: rt $ $Date: 2006-01-10 15:58:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ RC+=-DPRODUCT
 .ENDIF
 
 RCFILES=\
-        $(TARGET).rc 
+        $(TARGET).rc
 RCDEPN=$(MISC)$/envsettings.h
 
 SLOFILES=\
@@ -81,7 +81,11 @@ SHL1STDLIBS=\
     Shlwapi.lib
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(USE_STLP_DEBUG)" != ""
+    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
+.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
+.ENDIF
 .ENDIF
 
 
@@ -90,7 +94,7 @@ SHL1STDLIBS=\
 #    rpcns4.lib \
 #    rpcrt4.lib
 
-#kernel32.lib rpcndr.lib rpcns4.lib rpcrt4.lib 
+#kernel32.lib rpcndr.lib rpcns4.lib rpcrt4.lib
 
 SHL1OBJS=$(SLOFILES)
 
