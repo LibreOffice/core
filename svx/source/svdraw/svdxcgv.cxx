@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:43:02 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,7 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pDstLst->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
 
-                AddUndo(new SdrUndoNewObj(*pNeuObj));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
                 if (bMark) {
                     // Markhandles noch nicht sofort setzen!
                     // Das erledigt das ModelHasChanged der MarkView.
@@ -520,7 +520,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     pObj->SetLogicRect(aR);
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
     rLst.InsertObject(pObj,CONTAINER_APPEND,&aReason);
-    AddUndo(new SdrUndoNewObj(*pObj));
+    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     SdrPageView* pMarkPV=NULL;
     for (USHORT nv=0; nv<GetPageViewCount() && pMarkPV==NULL; nv++) {
         SdrPageView* pPV=GetPageViewPvNum(nv);
