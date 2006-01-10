@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:05:45 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,21 +90,12 @@ FunctionReference FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
     if( pView->AreObjectsMarked() )
-    /*  ( pView->IsResizeAllowed() ||
-          pView->IsMoveAllowed() ||
-          pView->IsRotateAllowed() ) ) */
     {
-        // Undo
-        String aString( pView->GetDescriptionOfMarkedObjects() );
-        aString.Append( sal_Unicode(' ') );
-        aString.Append( String( SdResId( STR_TRANSFORM ) ) );
-        pView->BegUndo( aString );
-
         const SfxItemSet* pArgs = rReq.GetArgs();
 
         if( !pArgs )
         {
-            // --------- Itemset fuer Groesse und Position --------
+            // --------- itemset for size and position --------
             SfxItemSet aSet( pView->GetGeoAttrFromMarked() );
 
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -113,16 +104,14 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() == OBJ_CAPTION )
             {
-                // --------- Itemset fuer Caption --------
+                // --------- itemset for caption --------
                 SfxItemSet aNewAttr( pDoc->GetPool() );
                 pView->GetAttributes( aNewAttr );
 
-                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog( NULL, pView);
-                //change for cui CHINA001
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( NULL, pView, ResId( RID_SVXDLG_CAPTION ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, pView, ResId( RID_SVXDLG_CAPTION ) ) );
 
                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -130,66 +119,59 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                     aCombSet.Put( aSet );
                     pDlg->SetInputSet( &aCombSet );
 
-                    if( pDlg->Execute() == RET_OK )
+                    if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
                         pArgs = rReq.GetArgs();
                     }
-                    else
-                    {
-                        delete pDlg;
-                        pView->EndUndo();
-                        return; // Abbruch
-                    }
-                    delete( pDlg );
-                } //change for cui
+                }
             }
             else
             {
-                //CHINA001 SvxTransformTabDialog* pDlg = new SvxTransformTabDialog( NULL, &aSet, pView );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( NULL, &aSet,pView, ResId(RID_SVXDLG_TRANSFORM) );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                    if( pDlg->Execute() == RET_OK )
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,pView, ResId(RID_SVXDLG_TRANSFORM) ) );
+                    if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
                         pArgs = rReq.GetArgs();
                     }
-                    else
-                    {
-                        delete pDlg;
-                        pView->EndUndo();
-                        return; // Abbruch
-                    }
-                    delete( pDlg );
                 }
             }
         }
-        pView->SetGeoAttrToMarked( *pArgs );
-        pView->SetAttributes( *pArgs );
 
-        /**********************************************************************
-        * An der E3dView muss demnaechst SetGeoAttrToMarked() mit folgendem
-        * Code ueberladen werden:
-        **********************************************************************/
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        ULONG nCount = rMarkList.GetMarkCount();
-
-        for (ULONG nMark = 0; nMark < nCount; nMark++)
+        if( pArgs )
         {
-            SdrObject* pObj = rMarkList.GetMark(nMark)->GetObj();
+            // Undo
+            String aString( pView->GetDescriptionOfMarkedObjects() );
+            aString.Append( sal_Unicode(' ') );
+            aString.Append( String( SdResId( STR_TRANSFORM ) ) );
+            pView->BegUndo( aString );
 
-            if (pObj->ISA(E3dPolyScene))
+            pView->SetGeoAttrToMarked( *pArgs );
+            pView->SetAttributes( *pArgs );
+
+            /**********************************************************************
+            * An der E3dView muss demnaechst SetGeoAttrToMarked() mit folgendem
+            * Code ueberladen werden:
+            **********************************************************************/
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            ULONG nCount = rMarkList.GetMarkCount();
+
+            for (ULONG nMark = 0; nMark < nCount; nMark++)
             {
-                ((E3dPolyScene*) pObj)->FitSnapRectToBoundVol();
+                SdrObject* pObj = rMarkList.GetMark(nMark)->GetObj();
+
+                if (pObj->ISA(E3dPolyScene))
+                {
+                    ((E3dPolyScene*) pObj)->FitSnapRectToBoundVol();
+                }
             }
+            //********************************************************************
+
+            pView->EndUndo();
         }
-        //********************************************************************
-
-
-        pView->EndUndo();
     }
 }
 
