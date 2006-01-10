@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:13:57 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:00:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1095,6 +1095,27 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, BOOL bRecalcFont )
         CreateDefFont();
 }
 
+void ContentNode::DestroyWrongList()
+{
+#ifndef SVX_LIGHT
+    delete pWrongList;
+#endif
+    pWrongList = NULL;
+}
+
+void ContentNode::CreateWrongList()
+{
+    DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
+#ifndef SVX_LIGHT
+    pWrongList = new WrongList;
+#endif
+}
+
+void ContentNode::SetWrongList( WrongList* p )
+{
+    DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
+    pWrongList = p;
+}
 
 // -------------------------------------------------------------------------
 // class ContentAttribs
