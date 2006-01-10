@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:34:43 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,9 @@
 #ifndef _COM_SUN_STAR_UNO_GENFUNC_HXX_
 #include "com/sun/star/uno/genfunc.hxx"
 #endif
-
+#ifndef INCLUDED_CPPU_UNOTYPE_HXX
+#include "cppu/unotype.hxx"
+#endif
 
 namespace com
 {
@@ -72,7 +74,7 @@ typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
 template< class E >
 inline Sequence< E >::Sequence() SAL_THROW( () )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, 0, (uno_AcquireFunc)cpp_acquire );
@@ -99,7 +101,7 @@ inline Sequence< E >::Sequence(
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
     sal_Bool success =
 #endif
@@ -116,7 +118,7 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
     sal_Bool success =
 #endif
@@ -133,7 +135,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 template< class E >
 inline Sequence< E >::~Sequence() SAL_THROW( () )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_destructData(
         this, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
 }
@@ -142,7 +144,7 @@ inline Sequence< E >::~Sequence() SAL_THROW( () )
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) SAL_THROW( () )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_assign(
         &_pSequence, rSeq._pSequence, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
     return *this;
@@ -155,7 +157,7 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
 {
     if (_pSequence == rSeq._pSequence)
         return sal_True;
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     return ::uno_type_equalData(
         const_cast< Sequence< E > * >( this ), rType.getTypeLibType(),
         const_cast< Sequence< E > * >( &rSeq ), rType.getTypeLibType(),
@@ -175,7 +177,7 @@ inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
 template< class E >
 inline E * Sequence< E >::getArray()
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
     sal_Bool success =
 #endif
@@ -214,7 +216,7 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
-    const Type & rType = getCppuType( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if !defined EXCEPTIONS_OFF
     sal_Bool success =
 #endif
@@ -240,22 +242,33 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 }
 
+namespace cppu {
+
+template< typename T > inline ::com::sun::star::uno::Type const &
+getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *) {
+    if (::com::sun::star::uno::Sequence< T >::s_pType == 0) {
+        ::typelib_static_sequence_type_init(
+            &::com::sun::star::uno::Sequence< T >::s_pType,
+            (::cppu::getTypeFavourUnsigned(
+                static_cast<
+                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
+                    0)).
+             getTypeLibType()));
+    }
+    return detail::getTypeFromTypeDescriptionReference(
+        &::com::sun::star::uno::Sequence< T >::s_pType);
+}
+
+}
+
 // generic sequence template
 template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * )
     SAL_THROW( () )
 {
-    if (! ::com::sun::star::uno::Sequence< E >::s_pType)
-    {
-        const ::com::sun::star::uno::Type & rElementType = getCppuType(
-            (typename ::com::sun::star::uno::Sequence< E >::ElementType const *)0 );
-        ::typelib_static_sequence_type_init(
-            & ::com::sun::star::uno::Sequence< E >::s_pType,
-            rElementType.getTypeLibType() );
-    }
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & ::com::sun::star::uno::Sequence< E >::s_pType );
+    return ::cppu::getTypeFavourUnsigned(
+        static_cast< ::com::sun::star::uno::Sequence< E > * >(0));
 }
 
 // generic sequence template for given element type (e.g. C++ arrays)
