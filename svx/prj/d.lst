@@ -650,6 +650,7 @@ hedabu: ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 hedabu: ..\inc\xmlexchg.hxx %_DEST%\inc%_EXT%\svx\xmlexchg.hxx
 hedabu: ..\inc\tbxcolor.hxx %_DEST%\inc%_EXT%\svx\tbxcolor.hxx
 hedabu: ..\inc\svx\svxdllapi.h %_DEST%\inc%_EXT%\svx\svxdllapi.h
+hedabu: ..\inc\svdstr.hrc %_DEST%\inc%_EXT%\svx\svdstr.hrc
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
