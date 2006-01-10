@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:35:01 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 15:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,9 @@ public:
 
 /** Gets the meta type of IDL type "type".
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type "type"
 */
@@ -262,11 +265,17 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType() SAL_THR
 inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() SAL_THROW( () );
 /** Gets the meta type of IDL type boolean.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type boolean
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) SAL_THROW( () );
 /** Gets the meta type of IDL type boolean.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type boolean
@@ -287,12 +296,18 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType() SAL_THROW(
 
 /** Gets the meta type of IDL type byte.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type byte
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type string.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type string
@@ -301,12 +316,18 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OU
 
 /** Gets the meta type of IDL type short.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type short
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type unsigned short.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type unsigned short
@@ -315,12 +336,18 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt1
 
 /** Gets the meta type of IDL type long.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type long
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type unsigned long.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type unsigned long
@@ -329,12 +356,18 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt3
 
 /** Gets the meta type of IDL type hyper.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type hyper
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type unsigned hyper.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type unsigned hyper
@@ -343,12 +376,18 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt6
 
 /** Gets the meta type of IDL type float.
 
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
+
     @param dummy typed pointer for function signature
     @return type of IDL type float
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type double.
+
+    There are cases (involving templates) where uses of getCppuType are known to
+    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
     @param dummy typed pointer for function signature
     @return type of IDL type double
