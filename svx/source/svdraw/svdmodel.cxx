@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:30:51 $
+ *  last change: $Author: rt $ $Date: 2006-01-10 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,10 +110,8 @@
 
 #include <eeitemid.hxx>
 
-#ifndef SVX_LIGHT
 #ifndef _SVX_ASIANCFG_HXX
 #include "asiancfg.hxx"
-#endif
 #endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
@@ -180,134 +178,14 @@
 
 using namespace ::com::sun::star;
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//BFS01SdrModelInfo::SdrModelInfo(FASTBOOL bInit):
-//BFS01 aCreationDate(Date(0),Time(0)),
-//BFS01 aLastWriteDate(Date(0),Time(0)),
-//BFS01 aLastReadDate(Date(0),Time(0)),
-//BFS01 aLastPrintDate(Date(0),Time(0)),
-//BFS01 eCreationCharSet(RTL_TEXTENCODING_DONTKNOW),
-//BFS01 eLastWriteCharSet(RTL_TEXTENCODING_DONTKNOW),
-//BFS01 eLastReadCharSet(RTL_TEXTENCODING_DONTKNOW)
-//BFS01{
-//BFS01 if (bInit)
-//BFS01 {
-//BFS01     aCreationDate = DateTime();
-//BFS01     eCreationCharSet = gsl_getSystemTextEncoding();
-//BFS01 }
-//BFS01}
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
-//BFS01{
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrModelInfo");
-//BFS01#endif
-//BFS01 rOut<<UINT32(rModInfo.aCreationDate.GetDate());
-//BFS01 rOut<<UINT32(rModInfo.aCreationDate.GetTime());
-//BFS01
-//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eCreationCharSet ) );
-//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eCreationCharSet, (sal_uInt16)rOut.GetVersion()));
-//BFS01
-//BFS01 /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
-//BFS01    We just have to write anythink in the file for compatibility:
-//BFS01         eCreationGUI    eLastWriteGUI   eLastReadGUI
-//BFS01         eCreationCPU    eLastWriteCPU   eLastReadCPU
-//BFS01         eCreationSys    eLastWriteSys   eLastReadSys
-//BFS01
-//BFS01
-//BFS01 */
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationGUI);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationCPU);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationSys);
-//BFS01
-//BFS01 rOut<<UINT32(rModInfo.aLastWriteDate.GetDate());
-//BFS01 rOut<<UINT32(rModInfo.aLastWriteDate.GetTime());
-//BFS01
-//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastWriteCharSet ) );
-//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastWriteCharSet, (sal_uInt16)rOut.GetVersion()));
-//BFS01
-//BFS01 // see comment above
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteGUI);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteCPU);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteSys);
-//BFS01
-//BFS01 rOut<<UINT32(rModInfo.aLastReadDate.GetDate());
-//BFS01 rOut<<UINT32(rModInfo.aLastReadDate.GetTime());
-//BFS01
-//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastReadCharSet ) );
-//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastReadCharSet, (sal_uInt16)rOut.GetVersion()));
-//BFS01
-//BFS01 // see comment above
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadGUI);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadCPU);
-//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadSys);
-//BFS01
-//BFS01 rOut<<UINT32(rModInfo.aLastPrintDate.GetDate());
-//BFS01 rOut<<UINT32(rModInfo.aLastPrintDate.GetTime());
-//BFS01 return rOut;
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return rIn;
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrModelInfo");
-//BFS01#endif
-//BFS01 UINT8  n8;
-//BFS01 UINT32 n32;
-//BFS01 rIn>>n32; rModInfo.aCreationDate.SetDate(n32);
-//BFS01 rIn>>n32; rModInfo.aCreationDate.SetTime(n32);
-//BFS01
-//BFS01 // #90477# rIn>>n8;  rModInfo.eCreationCharSet=rtl_TextEncoding(n8);
-//BFS01 rIn >> n8;
-//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-//BFS01 rModInfo.eCreationCharSet = rtl_TextEncoding(n8);
-//BFS01
-//BFS01 /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
-//BFS01    We just have to write anythink in the file for compatibility:
-//BFS01         eCreationGUI    eLastWriteGUI   eLastReadGUI
-//BFS01         eCreationCPU    eLastWriteCPU   eLastReadCPU
-//BFS01         eCreationSys    eLastWriteSys   eLastReadSys
-//BFS01
-//BFS01
-//BFS01 */
-//BFS01 rIn>>n8;  //    rModInfo.eCreationGUI=GUIType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eCreationCPU=CPUType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eCreationSys=SystemType(n8);
-//BFS01 rIn>>n32; rModInfo.aLastWriteDate.SetDate(n32);
-//BFS01 rIn>>n32; rModInfo.aLastWriteDate.SetTime(n32);
-//BFS01
-//BFS01 // #90477# rIn>>n8;  rModInfo.eLastWriteCharSet=rtl_TextEncoding(n8);
-//BFS01 rIn >> n8;
-//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-//BFS01 rModInfo.eLastWriteCharSet = rtl_TextEncoding(n8);
-//BFS01
-//BFS01 // see comment above
-//BFS01 rIn>>n8;  //    rModInfo.eLastWriteGUI=GUIType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eLastWriteCPU=CPUType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eLastWriteSys=SystemType(n8);
-//BFS01
-//BFS01 rIn>>n32; rModInfo.aLastReadDate.SetDate(n32);
-//BFS01 rIn>>n32; rModInfo.aLastReadDate.SetTime(n32);
-//BFS01
-//BFS01 // #90477# rIn>>n8;  rModInfo.eLastReadCharSet=rtl_TextEncoding(n8);
-//BFS01 rIn >> n8;
-//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-//BFS01 rModInfo.eLastReadCharSet = rtl_TextEncoding(n8);
-//BFS01
-//BFS01 // see comment above
-//BFS01 rIn>>n8;  //    rModInfo.eLastReadGUI=GUIType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eLastReadCPU=CPUType(n8);
-//BFS01 rIn>>n8;  //    rModInfo.eLastReadSys=SystemType(n8);
-//BFS01
-//BFS01 rIn>>n32; rModInfo.aLastPrintDate.SetDate(n32);
-//BFS01 rIn>>n32; rModInfo.aLastPrintDate.SetTime(n32);
-//BFS01
-//BFS01 return rIn;
-//BFS01}
+struct SdrModelImpl
+{
+    SfxUndoManager* mpUndoManager;
+    SdrUndoFactory* mpUndoFactory;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -316,6 +194,9 @@ TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     FASTBOOL bUseExtColorTable, FASTBOOL bLoadRefCounts)
 {
+    mpImpl = new SdrModelImpl;
+    mpImpl->mpUndoManager=0;
+    mpImpl->mpUndoFactory=0;
     mbInDestruction=false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -336,7 +217,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     pStyleSheetPool=NULL;
     pDefaultStyleSheet=NULL;
     pLinkManager=NULL;
-    //BFS01pLoadedModel=NULL;
     pUndoStack=NULL;
     pRedoStack=NULL;
     pAktPaintPV=NULL;
@@ -359,8 +239,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     bSaveOLEPreview=FALSE;
     bPasteResize=FALSE;
     bNoBitmapCaching=FALSE;
-    //BFS01bLoading=FALSE;
-//BFS04 bStreamingSdrModel=FALSE;
     bReadOnly=FALSE;
     nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
@@ -382,12 +260,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     mbKernAsianPunctuation = sal_False;
     mbAddExtLeading = sal_False;
 
-#ifndef SVX_LIGHT
     SvxAsianConfig aAsian;
     mnCharCompressType = aAsian.GetCharDistanceCompression();
-#else
-    mnCharCompressType = 0;
-#endif
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
@@ -397,7 +271,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     if ( pPool == NULL )
     {
         pItemPool=new SdrItemPool(0L, bLoadRefCounts);
-        //BFS01pItemPool=new SdrItemPool(SDRATTR_START, SDRATTR_END, bLoadRefCounts);
         // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
         SfxItemPool* pOutlPool=EditEngine::CreatePool( bLoadRefCounts );
         // OutlinerPool als SecondaryPool des SdrPool
@@ -431,7 +304,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
-//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -444,7 +316,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCoun
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
-//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
@@ -458,7 +329,6 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
-//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -471,7 +341,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtCo
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
-//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
@@ -553,9 +422,6 @@ SdrModel::~SdrModel()
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    //BFS01delete pLoadedModel;
-
-#ifndef SVX_LIGHT
     // Tabellen, Listen und Paletten loeschen
     if (!bExtColorTable) delete pColorTable;
     delete pDashList;
@@ -563,10 +429,12 @@ SdrModel::~SdrModel()
     delete pHatchList;
     delete pGradientList;
     delete pBitmapList;
-#endif
 
     if(mpNumberFormatter)
         delete mpNumberFormatter;
+
+    delete mpImpl->mpUndoFactory;
+    delete mpImpl;
 }
 
 bool SdrModel::IsInDestruction() const
@@ -615,41 +483,6 @@ void SdrModel::SetReadOnly(FASTBOOL bYes)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//BFS01void SdrModel::DoProgress(ULONG nVal)
-//BFS01{
-//BFS01 if (aIOProgressLink.IsSet()) {
-//BFS01     if (nVal==0) { // Anfang
-//BFS01         USHORT nVal=0;
-//BFS01         aIOProgressLink.Call(&nVal);
-//BFS01         nProgressPercent=0;
-//BFS01         nProgressAkt=0;
-//BFS01     } else if (nVal==0xFFFFFFFF) { // Ende
-//BFS01         USHORT nVal=100;
-//BFS01         aIOProgressLink.Call(&nVal);
-//BFS01         nProgressPercent=100;
-//BFS01         nProgressAkt=nProgressMax;
-//BFS01     } else if (nVal!=nProgressAkt && nProgressMax!=0) { // dazwischen
-//BFS01         USHORT nPercent;
-//BFS01         if (nVal>nProgressOfs) nVal-=nProgressOfs; else nVal=0;
-//BFS01         if (nVal>nProgressMax) nVal=nProgressMax;
-//BFS01         if (nVal<=0x00FFFFFF) nPercent=USHORT(nVal*100/nProgressMax);
-//BFS01         else {
-//BFS01             ULONG nBla=nProgressMax/100; // Weil sonst Ueberlauf!
-//BFS01             nPercent=USHORT(nVal/=nBla);
-//BFS01         }
-//BFS01         if (nPercent==0) nPercent=1;
-//BFS01         if (nPercent>99) nPercent=99;
-//BFS01         if (nPercent>nProgressPercent) {
-//BFS01             aIOProgressLink.Call(&nPercent);
-//BFS01             nProgressPercent=nPercent;
-//BFS01         }
-//BFS01         if (nVal>nProgressAkt) {
-//BFS01             nProgressAkt=nVal;
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
 void SdrModel::SetMaxUndoActionCount(ULONG nAnz)
 {
     if (nAnz<1) nAnz=1;
@@ -682,11 +515,20 @@ void SdrModel::ClearUndoBuffer()
 FASTBOOL SdrModel::Undo()
 {
     FASTBOOL bRet=FALSE;
-    SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
-    if (pDo!=NULL) {
-        pDo->Undo();
-        if (pRedoStack==NULL) pRedoStack=new Container(1024,16,16);
-        pRedoStack->Insert(pUndoStack->Remove((ULONG)0),(ULONG)0);
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::Undo(), method not supported with application undo manager!");
+    }
+    else
+    {
+        SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
+        if(pDo!=NULL)
+        {
+            pDo->Undo();
+            if(pRedoStack==NULL)
+                pRedoStack=new Container(1024,16,16);
+            pRedoStack->Insert(pUndoStack->Remove((ULONG)0),(ULONG)0);
+        }
     }
     return bRet;
 }
@@ -694,11 +536,20 @@ FASTBOOL SdrModel::Undo()
 FASTBOOL SdrModel::Redo()
 {
     FASTBOOL bRet=FALSE;
-    SfxUndoAction* pDo=(SfxUndoAction*)GetRedoAction(0);
-    if (pDo!=NULL) {
-        pDo->Redo();
-        if (pUndoStack==NULL) pUndoStack=new Container(1024,16,16);
-        pUndoStack->Insert(pRedoStack->Remove((ULONG)0),(ULONG)0);
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+    }
+    else
+    {
+        SfxUndoAction* pDo=(SfxUndoAction*)GetRedoAction(0);
+        if(pDo!=NULL)
+        {
+            pDo->Redo();
+            if(pUndoStack==NULL)
+                pUndoStack=new Container(1024,16,16);
+            pUndoStack->Insert(pRedoStack->Remove((ULONG)0),(ULONG)0);
+        }
     }
     return bRet;
 }
@@ -706,11 +557,20 @@ FASTBOOL SdrModel::Redo()
 FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
 {
     FASTBOOL bRet=FALSE;
-    SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
-    if (pDo!=NULL) {
-        if (pDo->CanRepeat(rView)) {
-            pDo->Repeat(rView);
-            bRet=TRUE;
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+    }
+    else
+    {
+        SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
+        if(pDo!=NULL)
+        {
+            if(pDo->CanRepeat(rView))
+            {
+                pDo->Repeat(rView);
+                bRet=TRUE;
+            }
         }
     }
     return bRet;
@@ -718,6 +578,7 @@ FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
 
 void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
 {
+    DBG_ASSERT( mpImpl->mpUndoManager == 0, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
     if (aUndoLink.IsSet()) {
         aUndoLink.Call(pUndo);
     } else {
@@ -732,56 +593,122 @@ void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
 
 void SdrModel::BegUndo()
 {
-    if (pAktUndoGroup==NULL) {
-        pAktUndoGroup=new SdrUndoGroup(*this);
-        nUndoLevel=1;
-    } else {
+    if( mpImpl->mpUndoManager )
+    {
+        const String aEmpty;
+        mpImpl->mpUndoManager->EnterListAction(aEmpty,aEmpty);
         nUndoLevel++;
+    }
+    else
+    {
+        if(pAktUndoGroup==NULL)
+        {
+            pAktUndoGroup = new SdrUndoGroup(*this);
+            nUndoLevel=1;
+        }
+        else
+        {
+            nUndoLevel++;
+        }
     }
 }
 
 void SdrModel::BegUndo(const XubString& rComment)
 {
-    BegUndo();
-    if (nUndoLevel==1) {
-        pAktUndoGroup->SetComment(rComment);
+    if( mpImpl->mpUndoManager )
+    {
+        const String aEmpty;
+        mpImpl->mpUndoManager->EnterListAction( rComment, aEmpty );
+        nUndoLevel++;
+    }
+    else
+    {
+        BegUndo();
+        if (nUndoLevel==1)
+        {
+            pAktUndoGroup->SetComment(rComment);
+        }
     }
 }
 
 void SdrModel::BegUndo(const XubString& rComment, const XubString& rObjDescr, SdrRepeatFunc eFunc)
 {
-    BegUndo();
-    if (nUndoLevel==1) {
-        pAktUndoGroup->SetComment(rComment);
-        pAktUndoGroup->SetObjDescription(rObjDescr);
-        pAktUndoGroup->SetRepeatFunction(eFunc);
+    if( mpImpl->mpUndoManager )
+    {
+        String aComment(rComment);
+        if( aComment.Len() && rObjDescr.Len() )
+        {
+            String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%O"));
+            aComment.SearchAndReplace(aSearchString, rObjDescr);
+        }
+        const String aEmpty;
+        mpImpl->mpUndoManager->EnterListAction( aComment,aEmpty );
+        nUndoLevel++;
+    }
+    else
+    {
+        BegUndo();
+        if (nUndoLevel==1)
+        {
+            pAktUndoGroup->SetComment(rComment);
+            pAktUndoGroup->SetObjDescription(rObjDescr);
+            pAktUndoGroup->SetRepeatFunction(eFunc);
+        }
     }
 }
 
 void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
 {
-    if (pAktUndoGroup==NULL) {
-        pAktUndoGroup=pUndoGrp;
-        nUndoLevel=1;
-    } else {
-        delete pUndoGrp;
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
         nUndoLevel++;
+    }
+    else
+    {
+        if (pAktUndoGroup==NULL)
+        {
+            pAktUndoGroup=pUndoGrp;
+            nUndoLevel=1;
+        }
+        else
+        {
+            delete pUndoGrp;
+            nUndoLevel++;
+        }
     }
 }
 
 void SdrModel::EndUndo()
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::EndUndo(): UndoLevel ist bereits auf 0!");
-    if (pAktUndoGroup!=NULL) {
-        nUndoLevel--;
-        if (nUndoLevel==0) {
-            if (pAktUndoGroup->GetActionCount()!=0) {
-                SdrUndoAction* pUndo=pAktUndoGroup;
-                pAktUndoGroup=NULL;
-                ImpPostUndoAction(pUndo);
-            } else { // war nix drin
-                delete pAktUndoGroup;
-                pAktUndoGroup=NULL;
+    DBG_ASSERT(nUndoLevel!=0,"SdrModel::EndUndo(): UndoLevel is already 0!");
+    if( mpImpl->mpUndoManager )
+    {
+        if( nUndoLevel )
+        {
+            nUndoLevel--;
+            mpImpl->mpUndoManager->LeaveListAction();
+        }
+    }
+    else
+    {
+        if(pAktUndoGroup!=NULL)
+        {
+            nUndoLevel--;
+            if(nUndoLevel==0)
+            {
+                if(pAktUndoGroup->GetActionCount()!=0)
+                {
+                    SdrUndoAction* pUndo=pAktUndoGroup;
+                    pAktUndoGroup=NULL;
+                    ImpPostUndoAction(pUndo);
+                }
+                else
+                {
+                    // was empty
+                    delete pAktUndoGroup;
+                    pAktUndoGroup=NULL;
+                }
             }
         }
     }
@@ -789,27 +716,54 @@ void SdrModel::EndUndo()
 
 void SdrModel::SetUndoComment(const XubString& rComment)
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel ist auf 0!");
-    if (nUndoLevel==1) {
-        pAktUndoGroup->SetComment(rComment);
+    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is on level 0!");
+
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+    }
+    else
+    {
+        if(nUndoLevel==1)
+        {
+            pAktUndoGroup->SetComment(rComment);
+        }
     }
 }
 
 void SdrModel::SetUndoComment(const XubString& rComment, const XubString& rObjDescr)
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel ist auf 0!");
-    if (nUndoLevel==1) {
-        pAktUndoGroup->SetComment(rComment);
-        pAktUndoGroup->SetObjDescription(rObjDescr);
+    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is 0!");
+    if( mpImpl->mpUndoManager )
+    {
+        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+    }
+    else
+    {
+        if (nUndoLevel==1)
+        {
+            pAktUndoGroup->SetComment(rComment);
+            pAktUndoGroup->SetObjDescription(rObjDescr);
+        }
     }
 }
 
 void SdrModel::AddUndo(SdrUndoAction* pUndo)
 {
-    if (pAktUndoGroup!=NULL) {
-        pAktUndoGroup->AddAction(pUndo);
-    } else {
-        ImpPostUndoAction(pUndo);
+    if( mpImpl->mpUndoManager )
+    {
+        mpImpl->mpUndoManager->AddUndoAction( pUndo );
+    }
+    else
+    {
+        if (pAktUndoGroup!=NULL)
+        {
+            pAktUndoGroup->AddAction(pUndo);
+        }
+        else
+        {
+            ImpPostUndoAction(pUndo);
+        }
     }
 }
 
@@ -817,7 +771,6 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
 
 void SdrModel::ImpCreateTables()
 {
-#ifndef SVX_LIGHT
     // der Writer hat seinen eigenen ColorTable
     if (!bExtColorTable) pColorTable=new XColorTable(aTablePath,(XOutdevItemPool*)pItemPool);
     pDashList    =new XDashList    (aTablePath,(XOutdevItemPool*)pItemPool);
@@ -825,7 +778,6 @@ void SdrModel::ImpCreateTables()
     pHatchList   =new XHatchList   (aTablePath,(XOutdevItemPool*)pItemPool);
     pGradientList=new XGradientList(aTablePath,(XOutdevItemPool*)pItemPool);
     pBitmapList  =new XBitmapList  (aTablePath,(XOutdevItemPool*)pItemPool);
-#endif
 }
 
 // #116168#
@@ -876,54 +828,6 @@ SdrPage* SdrModel::AllocPage(FASTBOOL bMasterPage)
 {
     return new SdrPage(*this,bMasterPage);
 }
-
-//BFS01const SdrModel* SdrModel::LoadModel(const String& rFileName)
-//BFS01{
-//BFS01 if(pLoadedModel && aLoadedModelFN.Equals(rFileName))
-//BFS01 {
-//BFS01     return pLoadedModel;
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     delete pLoadedModel;
-//BFS01     pLoadedModel = NULL;
-//BFS01     aLoadedModelFN = String();
-//BFS01
-//BFS01     SdrModel*           pModel = new SdrModel;
-//BFS01     const INetURLObject aFileURL( rFileName );
-//BFS01
-//BFS01     DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-//BFS01
-//BFS01     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-//BFS01
-//BFS01     if( pIStm )
-//BFS01     {
-//BFS01         pModel->GetItemPool().Load( *pIStm );
-//BFS01         (*pIStm) >> *pModel;
-//BFS01
-//BFS01         if( pIStm->GetError() )
-//BFS01             delete pModel, pModel = NULL;
-//BFS01         else
-//BFS01         {
-//BFS01             pLoadedModel = pModel;
-//BFS01             aLoadedModelFN = rFileName;
-//BFS01         }
-//BFS01
-//BFS01         delete pIStm;
-//BFS01     }
-//BFS01     else
-//BFS01         delete pModel, pModel = NULL;
-//BFS01
-//BFS01     return pModel;
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrModel::DisposeLoadedModels()
-//BFS01{
-//BFS01 delete pLoadedModel;
-//BFS01 pLoadedModel = NULL;
-//BFS01 aLoadedModelFN = String();
-//BFS01}
 
 void SdrModel::SetTextDefaults() const
 {
@@ -1105,19 +1009,6 @@ void SdrModel::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
         GetPage(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
     }
 }
-
-//BFS01void SdrModel::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
-//BFS01{
-//BFS01 USHORT nAnz=GetMasterPageCount();
-//BFS01 USHORT nNum;
-//BFS01 for (nNum=0; nNum<nAnz; nNum++) {
-//BFS01     GetMasterPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
-//BFS01 }
-//BFS01 nAnz=GetPageCount();
-//BFS01 for (nNum=0; nNum<nAnz; nNum++) {
-//BFS01     GetPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
-//BFS01 }
-//BFS01}
 
 void SdrModel::RefDeviceChanged()
 {
@@ -1698,745 +1589,6 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
     Broadcast(aHint);
 }
 
-//BFS01void SdrModel::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 DBG_ERROR("SdrModel::WriteData(): binfilter still used, but should not (!)");
-//  const ULONG nOldCompressMode = nStreamCompressMode;
-//  ULONG       nNewCompressMode = nStreamCompressMode;
-//
-//  if( SOFFICE_FILEFORMAT_40 <= rOut.GetVersion() )
-//  {
-//      if( IsSaveCompressed() )
-//          nNewCompressMode |= COMPRESSMODE_ZBITMAP;
-//
-//      if( IsSaveNative() )
-//          nNewCompressMode |= COMPRESSMODE_NATIVE;
-//  }
-//
-//  // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//  SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//
-//#ifdef DBG_UTIL
-//  aCompat.SetID("SdrModel");
-//#endif
-//
-//  // damit ich meine eigenen SubRecords erkenne (ab V11)
-//  rOut.Write(SdrIOJoeMagic, 4);
-//
-//  {
-//      // Focus fuer aModelMiscCompat
-//      // ab V11 eingepackt
-//      SdrDownCompat aModelMiscCompat(rOut, STREAM_WRITE);
-//
-//#ifdef DBG_UTIL
-//      aModelMiscCompat.SetID("SdrModel(Miscellaneous)");
-//#endif
-//
-//      // ModelInfo muss hier ganz am Anfang stehen!
-//      ((SdrModel*)this)->aInfo.aLastWriteDate = DateTime();
-//      rtl_TextEncoding eOutCharSet = rOut.GetStreamCharSet();
-//      if(eOutCharSet == ((rtl_TextEncoding)9) /* == RTL_TEXTENCODING_SYSTEM */ )
-//          eOutCharSet = gsl_getSystemTextEncoding();
-//
-//      // #90477# ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetStoreCharSet(eOutCharSet);
-//      ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
-//
-//      // UNICODE: set the target charset on the stream to access it as parameter
-//      // in all streaming operations for UniString->ByteString conversions
-//      rOut.SetStreamCharSet(aInfo.eLastWriteCharSet);
-//
-//      /* old SV-stuff, there is no possibility to determine this informations in another way
-//      ((SdrModel*)this)->aInfo.eLastWriteGUI=System::GetGUIType();
-//      ((SdrModel*)this)->aInfo.eLastWriteCPU=System::GetCPUType();
-//      ((SdrModel*)this)->aInfo.eLastWriteSys=System::GetSystemType();
-//      */
-//
-//      if(aReadDate.IsValid())
-//      {
-//          ((SdrModel*)this)->aInfo.aLastReadDate = aReadDate;
-//
-//          // ((SdrModel*)this)->aInfo.eLastReadCharSet = GetStoreCharSet(gsl_getSystemTextEncoding());
-//          ((SdrModel*)this)->aInfo.eLastReadCharSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
-//
-//          /* old SV-stuff, there is no possibility to determine this informations in another way
-//          ((SdrModel*)this)->aInfo.eLastReadGUI=System::GetGUIType();
-//          ((SdrModel*)this)->aInfo.eLastReadCPU=System::GetCPUType();
-//          ((SdrModel*)this)->aInfo.eLastReadSys=System::GetSystemType();
-//          */
-//      }
-//      rOut << aInfo; // DateiInfo rausschreiben (ab V11)
-//
-//      { // ein Bereich fuer Statistik reservieren (V11) (kommt spaeter vielleicht mal dazu)
-//          SdrDownCompat aModelStatisticCompat(rOut, STREAM_WRITE);
-//
-//#ifdef DBG_UTIL
-//          aModelStatisticCompat.SetID("SdrModel(Statistic)");
-//#endif
-//      }
-//
-//      {
-//          // ab V11
-//          SdrDownCompat aModelFormatCompat(rOut, STREAM_WRITE);
-//
-//#ifdef DBG_UTIL
-//          aModelFormatCompat.SetID("SdrModel(Format)");
-//#endif
-//
-//          // ab V11
-//          rOut << nNewCompressMode;
-//
-//          // ab V11
-//          rOut << UINT16(rOut.GetNumberFormatInt());
-//
-//          rOut.SetCompressMode( (sal_uInt16)nNewCompressMode);
-//          // CompressMode erst an dieser Stelle setzen, damit konform zu ReadData()
-//      }
-//
-//      rOut << INT32(aObjUnit.GetNumerator());
-//      rOut << INT32(aObjUnit.GetDenominator());
-//      rOut << UINT16(eObjUnit);
-//      // Komprimiert ?
-//      rOut << UINT16(0);
-//      // Nur eine DummyPage, jedoch mit relevanten Objekten?
-//      rOut << UINT8(bPageNotValid);
-//      // Reserve DummyByte
-//      rOut << UINT8(0);
-//
-//      // Tabellen-, Listen- und Palettennamen schreiben
-//      // rOut<<INT16(::GetSystemCharSet()); seit V11 hier kein CharSet mehr
-//      XubString aEmptyStr;
-//
-//      if(bExtColorTable)
-//      {
-//          // der Writer hat seinen eigenen ColorTable
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//      else
-//      {
-//          if(pColorTable && !pColorTable->GetName().Equals(pszStandard))
-//          {
-//              // UNICODE: rOut << pColorTable->GetName();
-//              rOut.WriteByteString(pColorTable->GetName());
-//          }
-//          else
-//          {
-//              // UNICODE: rOut << aEmptyStr;
-//              rOut.WriteByteString(aEmptyStr);
-//          }
-//      }
-//
-//      if(pDashList && !pDashList->GetName().Equals(pszStandard))
-//      {
-//          // UNICODE: rOut<<pDashList->GetName();
-//          rOut.WriteByteString(pDashList->GetName());
-//      }
-//      else
-//      {
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//
-//      if(pLineEndList && !pLineEndList->GetName().Equals(pszStandard))
-//      {
-//          // UNICODE: rOut<<pLineEndList->GetName();
-//          rOut.WriteByteString(pLineEndList->GetName());
-//      }
-//      else
-//      {
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//
-//      if(pHatchList && !pHatchList->GetName().Equals(pszStandard))
-//      {
-//          // UNICODE: rOut<<pHatchList->GetName();
-//          rOut.WriteByteString(pHatchList->GetName());
-//      }
-//      else
-//      {
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//
-//      if(pGradientList && !pGradientList->GetName().Equals(pszStandard))
-//      {
-//          // UNICODE: rOut<<pGradientList->GetName();
-//          rOut.WriteByteString(pGradientList->GetName());
-//      }
-//      else
-//      {
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//
-//      if(pBitmapList && !pBitmapList->GetName().Equals(pszStandard))
-//      {
-//          // UNICODE: rOut<<pBitmapList->GetName();
-//          rOut.WriteByteString(pBitmapList->GetName());
-//      }
-//      else
-//      {
-//          // UNICODE: rOut << aEmptyStr;
-//          rOut.WriteByteString(aEmptyStr);
-//      }
-//
-//      // ab 09-02-1996
-//      rOut << INT32(aUIScale.GetNumerator());
-//      rOut << INT32(aUIScale.GetDenominator());
-//      rOut << UINT16(eUIUnit);
-//
-//      // ab 09-04-1997 fuer #37710#
-//      rOut << INT32(nDefTextHgt);
-//      rOut << INT32(nDefaultTabulator);
-//
-//      // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
-//      if(GetPageCount() >= 3 && GetPage(1)->TRF_GetMasterPageCount())
-//      {
-//          ((SdrModel*)this)->nStarDrawPreviewMasterPageNum =
-//              GetPage(1)->TRF_GetMasterPageNum(0);
-//      }
-//      rOut << nStarDrawPreviewMasterPageNum;
-//  }
-//
-//  UINT16 i;
-//
-//  for(i=0; i < GetLayerAdmin().GetLayerCount(); i++)
-//  {
-//      rOut << *GetLayerAdmin().GetLayer(i);
-//  }
-//
-//  //#110094#-10
-//  //for(i=0; i < GetLayerAdmin().GetLayerSetCount(); i++)
-//  //{
-//  //  rOut << *GetLayerAdmin().GetLayerSet(i);
-//  //}
-//
-//  for(i=0; i < GetMasterPageCount(); i++)
-//  {
-//      const SdrPage* pPg = GetMasterPage(i);
-//      rOut << *pPg;
-//  }
-//
-//  for(i=0; i < GetPageCount(); i++)
-//  {
-//      const SdrPage* pPg = GetPage(i);
-//      rOut << *pPg;
-//  }
-//
-//  // Endemarke
-//  SdrIOHeader(rOut, STREAM_WRITE, SdrIOEndeID);
-//BFS01}
-
-//BFS01void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 DBG_ERROR("SdrModel::ReadData(): binfilter still used, but should not (!)");
-//  if(rIn.GetError())
-//      return;
-//
-//  // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//  SdrDownCompat aCompat(rIn, STREAM_READ);
-//
-//#ifdef DBG_UTIL
-//  aCompat.SetID("SdrModel");
-//#endif
-//
-//  if(rHead.GetVersion() >= 11)
-//  {
-//      // damit ich meine eigenen SubRecords erkenne (ab V11)
-//      char cMagic[4];
-//      if(rIn.Read(cMagic, 4) != 4 || memcmp(cMagic, SdrIOJoeMagic, 4))
-//      {
-//          rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-//          return;
-//      }
-//  }
-//
-//  DoProgress(rIn.Tell());
-//
-//  {
-//      // Focus fuer aModelMiscCompat
-//      SdrDownCompat* pModelMiscCompat = NULL;
-//
-//      if(rHead.GetVersion() >= 11)
-//      {
-//          // MiscellaneousData ab V11 eingepackt
-//          // MiscellaneousData ist alles von Recordbeginn bis
-//          // zum Anfang der Pages, Layer, ...
-//          pModelMiscCompat = new SdrDownCompat(rIn, STREAM_READ);
-//
-//#ifdef DBG_UTIL
-//          pModelMiscCompat->SetID("SdrModel(Miscellaneous)");
-//#endif
-//      }
-//
-//      if(rHead.GetVersion() >= 11)
-//      {
-//          // ModelInfo ab V11
-//          // DateiInfo lesen
-//          rIn >> aInfo;
-//
-//          // StreamCharSet setzen, damit Strings beim
-//          // Lesen automatisch konvertiert werden
-//          rIn.SetStreamCharSet(aInfo.eLastWriteCharSet);
-//      }
-//
-//      if(rHead.GetVersion() >= 11)
-//      {
-//          // reserviert fuer Statistik
-//          SdrDownCompat aModelStatisticCompat(rIn, STREAM_READ);
-//
-//#ifdef DBG_UTIL
-//          aModelStatisticCompat.SetID("SdrModel(Statistik)");
-//#endif
-//      }
-//
-//      if(rHead.GetVersion() >= 11)
-//      {
-//          // Info ueber Dateiformat
-//          SdrDownCompat aModelFormatCompat(rIn,STREAM_READ);
-//
-//#ifdef DBG_UTIL
-//          aModelFormatCompat.SetID("SdrModel(Format)");
-//#endif
-//
-//          if(aModelFormatCompat.GetBytesLeft() >= 4)
-//          {
-//              rIn >> nStreamCompressMode;
-//              rIn >> nStreamNumberFormat;
-//              rIn.SetCompressMode(nStreamCompressMode);
-//          }
-//      }
-//
-//      INT32 nNum,nDen;
-//      UINT16 nTmp;
-//      UINT8  nTmp8;
-//
-//      rIn >> nNum;
-//      rIn >> nDen;
-//
-//      aObjUnit = Fraction(nNum,nDen);
-//
-//      rIn >> nTmp;
-//
-//      eObjUnit = MapUnit(nTmp);
-//
-//      // Komprimiert ?
-//      rIn >> nTmp;
-//
-//      //rIn.nJoeDummy=(nTmp==1);
-//      rIn >> nTmp8;
-//
-//      bPageNotValid = (nTmp == 1);
-//
-//      rIn >> nTmp8; // Reserve DummyByte
-//
-//      BOOL bExtFiles(rHead.GetVersion() >= 1);
-//
-//      if(bExtFiles)
-//      {
-//          // Tabellen-, Listen- und Palettennamen lesen
-//          XubString aName;
-//
-//          if(rHead.GetVersion() < 11)
-//          {
-//              // vor V11 gab's noch keine ModelInfo, deshalb CharSet von hier
-//              // und rein zufaellig gab's genau bis inkl. zur V10
-//              // an dieser Stelle einen CharSet
-//              INT16 nCharSet;
-//
-//              // #90477# rIn >> nCharSet;
-//              rIn >> nCharSet;
-//              nCharSet = (INT16)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
-//
-//              // StreamCharSet setzen, damit Strings beim
-//              // Lesen automatisch konvertiert werden
-//              // #90477# rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
-//              rIn.SetStreamCharSet(GetSOLoadTextEncoding(rtl_TextEncoding(nCharSet), (sal_uInt16)rIn.GetVersion()));
-//          }
-//
-//          // Tabellen- und Listennamen lesen (Tabellen/Listen existieren schon) // SOH!!!
-//          // UNICODE: rIn >> aName;
-//          rIn.ReadByteString(aName);
-//
-//          if(!bExtColorTable)
-//          {
-//              // der Writer hat seinen eigenen ColorTable
-//              if(!aName.Len())
-//                  aName = pszStandard;
-//
-//              if(pColorTable)
-//                  pColorTable->SetName(aName);
-//          }
-//
-//          rIn.ReadByteString(aName);
-//          if(!aName.Len())
-//              aName = pszStandard;
-//          if(pDashList)
-//              pDashList->SetName(aName);
-//
-//          rIn.ReadByteString(aName);
-//          if(!aName.Len())
-//              aName = pszStandard;
-//          if(pLineEndList)
-//              pLineEndList->SetName(aName);
-//
-//          rIn.ReadByteString(aName);
-//          if(!aName.Len())
-//              aName = pszStandard;
-//          if(pHatchList)
-//              pHatchList->SetName(aName);
-//
-//          rIn.ReadByteString(aName);
-//          if(!aName.Len())
-//              aName = pszStandard;
-//          if(pGradientList)
-//              pGradientList->SetName(aName);
-//
-//          rIn.ReadByteString(aName);
-//          if(!aName.Len())
-//              aName = pszStandard;
-//          if(pBitmapList)
-//              pBitmapList->SetName(aName);
-//
-//          // Wenn gewuenscht kann hier SetDirty() an den Tabellen gesetzt werden, ist m.M. nach aber ueberfluessig ! SOH.
-//      }
-//      else
-//      {
-//          // Ansonsten altes Format: Listen und Tables sind embedded
-//
-//#ifdef DBG_UTIL
-//          ByteString aMsg("Das Format dieser Datei ist noch von April '95 (Version ");
-//          aMsg += ByteString::CreateFromInt32( rHead.GetVersion() );
-//          aMsg += "). Mit dieser Programmversion kann das nicht mehr gelesen werden";
-//
-//          DBG_ERROR(aMsg.GetBuffer());
-//#endif
-//
-//          // Version zu alt
-//          rIn.SetError(SVSTREAM_WRONGVERSION);
-//
-//          return;
-//      }
-//
-//      // UIUnit wird ab V12 gestreamt
-//      if(rHead.GetVersion() >= 12 && pModelMiscCompat->GetBytesLeft() > 0)
-//      {
-//          rIn >> nNum;
-//          rIn >> nDen;
-//
-//          aUIScale = Fraction(nNum, nDen);
-//
-//          rIn >> nTmp;
-//
-//          eUIUnit = FieldUnit(nTmp);
-//      }
-//
-//      // ab 09-04-1997 fuer #37710#: Text in Dafaultgroesse vom Writer ins Draw und umgekehrt
-//      if(rHead.GetVersion() >= 13 && pModelMiscCompat->GetBytesLeft() > 0)
-//      {
-//          rIn >> nNum;
-//          nDefTextHgt = nNum;
-//
-//          rIn >> nNum;
-//          nDefaultTabulator = (UINT16)nNum;
-//
-//          Outliner& rOutliner = GetDrawOutliner();
-//          rOutliner.SetDefTab(nDefaultTabulator);
-//      }
-//
-//      if(rHead.GetVersion() >= 14 && pModelMiscCompat->GetBytesLeft() > 0)
-//      {
-//          // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
-//          rIn >> nStarDrawPreviewMasterPageNum;
-//      }
-//
-//      if(pModelMiscCompat)
-//      {
-//          delete pModelMiscCompat;
-//      }
-//  }
-//
-//  DoProgress(rIn.Tell());
-//  //SdrIOHeader aHead;
-//
-//  // Seiten, Layer und LayerSets einlesen
-//  BOOL bEnde(FALSE);
-//  UINT16 nMasterPageNum(0);
-//  BOOL bAllPagesLoaded(TRUE);
-//
-//  while(!rIn.GetError() && !rIn.IsEof() && !bEnde)
-//  {
-//      SdrIOHeaderLookAhead aHead(rIn);
-//      //ULONG nPos0=rIn.Tell();
-//      //rIn>>aHead;
-//
-//      if(!aHead.IsMagic())
-//      {
-//          // Format-Fehler
-//          rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-//          return;
-//      }
-//      else
-//      {
-//          if(!aHead.IsEnde())
-//          {
-//              //rIn.Seek(nPos0); // Die Headers wollen alle selbst lesen
-//              if(aHead.IsID(SdrIOPageID))
-//              {
-//                  if(!bStarDrawPreviewMode || GetPageCount() < 3)
-//                  {
-//                      // Page lesen
-//                      SdrPage* pPg = AllocPage(FALSE);
-//
-//                      rIn >> *pPg;
-//                      InsertPage(pPg);
-//                  }
-//                  else
-//                  {
-//                      bAllPagesLoaded = FALSE;
-//                      aHead.SkipRecord();
-//                  }
-//              }
-//              else if(aHead.IsID(SdrIOMaPgID))
-//              {
-//                  if(!bStarDrawPreviewMode
-//                      || nStarDrawPreviewMasterPageNum == SDRPAGE_NOTFOUND
-//                      || nMasterPageNum == 0
-//                      || nMasterPageNum <= nStarDrawPreviewMasterPageNum
-//                      || nMasterPageNum <= nStarDrawPreviewMasterPageNum + 1)
-//                  {
-//                      // Im StarDrawPreviewMode Standard und Notizseite lesen!
-//                      // MasterPage lesen
-//                      SdrPage* pPg = AllocPage(TRUE);
-//
-//                      rIn >> *pPg;
-//                      InsertMasterPage(pPg);
-//                  }
-//                  else
-//                  {
-//                      bAllPagesLoaded = FALSE;
-//                      aHead.SkipRecord();
-//                  }
-//
-//                  nMasterPageNum++;
-//              }
-//              else if(aHead.IsID(SdrIOLayrID))
-//              {
-//                  //SdrLayer* pLay=GetLayer().NewLayer("");
-//                  // Layerdefinition lesen
-//                  SdrLayer* pLay = new SdrLayer;
-//
-//                  rIn >> *pLay;
-//                  GetLayerAdmin().InsertLayer(pLay);
-//              }
-//              //#110094#-10
-//              //else if(aHead.IsID(SdrIOLSetID))
-//              //{
-//              //  //SdrLayerSet* pSet=GetLayer().NewLayerSet("");
-//              //  SdrLayerSet* pSet = new SdrLayerSet; // Layersetdefinition lesen
-//              //  rIn >> *pSet;
-//              //  GetLayerAdmin().InsertLayerSet(pSet);
-//              //}
-//              else
-//              {
-//                  // aha, das wil keiner. Also ueberlesen.
-//                  aHead.SkipRecord();
-//                  //rIn.Seek(nPos0+aHead.nBlkSize);
-//              }
-//          }
-//          else
-//          {
-//              bEnde = TRUE;
-//
-//              // Endemarke weglesen
-//              aHead.SkipRecord();
-//          }
-//      }
-//      DoProgress(rIn.Tell());
-//  }
-//
-//  if(bStarDrawPreviewMode && bAllPagesLoaded)
-//  {
-//      // Obwohl StarDrawPreviewMode wurden doch alle Seiten geladen,
-//      // um dieses kenntlich zu machen, wird das Flag zurueckgesetzt
-//      bStarDrawPreviewMode = FALSE;
-//  }
-//BFS01}
-
-//BFS01void SdrModel::AfterRead()
-//BFS01{
-//BFS01 // alle MasterPages und alle Pages durchlaufen
-//BFS01 UINT16 nCnt(GetMasterPageCount());
-//BFS01 UINT16 i;
-//BFS01
-//BFS01 for(i=0; i < nCnt; i++)
-//BFS01 {
-//BFS01     GetMasterPage(i)->AfterRead();
-//BFS01 }
-//BFS01
-//BFS01 nCnt = GetPageCount();
-//BFS01
-//BFS01 for(i=0; i < nCnt; i++)
-//BFS01 {
-//BFS01     GetPage(i)->AfterRead();
-//BFS01 }
-//BFS01
-//BFS01#ifndef SVX_LIGHT
-//BFS01 // Investigation of bMyPool to check if it's allowed to delete the OLE objects.
-//BFS01 // If bMyPool == FALSE it's not allowed (Writer)
-//BFS01 if( pPersist && bMyPool )
-//BFS01 {
-//BFS01     SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
-//BFS01
-//BFS01     if( pList )
-//BFS01     {
-//BFS01         SvInfoObjectRef pInfo = pList->First();
-//BFS01         while( pInfo.Is() )
-//BFS01         {
-//BFS01             BOOL bFound = FALSE;
-//BFS01             String aName = pInfo->GetObjName();
-//BFS01             UINT16 a;
-//BFS01
-//BFS01             nCnt = GetPageCount();
-//BFS01             for( a = 0; a < nCnt && !bFound; a++ )
-//BFS01             {
-//BFS01                 // Pages
-//BFS01                 SdrObjListIter aIter( *GetPage(a) );
-//BFS01                 while( !bFound && aIter.IsMore() )
-//BFS01                 {
-//BFS01                     SdrObject* pObj = aIter.Next();
-//BFS01                     if( pObj->ISA(SdrOle2Obj) )
-//BFS01                     {
-//BFS01                         if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-//BFS01                             bFound = TRUE;
-//BFS01                     }
-//BFS01                 }
-//BFS01             }
-//BFS01
-//BFS01             nCnt = GetMasterPageCount();
-//BFS01             for( a = 0; a < nCnt && !bFound; a++ )
-//BFS01             {
-//BFS01                 // MasterPages
-//BFS01                 SdrObjListIter aIter( *GetMasterPage(a) );
-//BFS01                 while( !bFound && aIter.IsMore() )
-//BFS01                 {
-//BFS01                     SdrObject* pObj = aIter.Next();
-//BFS01                     if( pObj->ISA(SdrOle2Obj) )
-//BFS01                     {
-//BFS01                         if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-//BFS01                             bFound = TRUE;
-//BFS01                     }
-//BFS01                 }
-//BFS01             }
-//BFS01
-//BFS01             if( !bFound )
-//BFS01                 pInfo->SetDeleted(TRUE);
-//BFS01
-//BFS01             pInfo = pList->Next();
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01#endif
-//BFS01}
-
-//BFS01ULONG SdrModel::ImpCountAllSteamComponents() const
-//BFS01{
-//BFS01 UINT32 nCnt(0);
-//BFS01 UINT16 nAnz(GetMasterPageCount());
-//BFS01 UINT16 nNum;
-//BFS01
-//BFS01 for(nNum = 0; nNum < nAnz; nNum++)
-//BFS01 {
-//BFS01     nCnt += GetMasterPage(nNum)->CountAllObjects();
-//BFS01 }
-//BFS01
-//BFS01 nAnz = GetPageCount();
-//BFS01
-//BFS01 for(nNum = 0; nNum < nAnz; nNum++)
-//BFS01 {
-//BFS01     nCnt += GetPage(nNum)->CountAllObjects();
-//BFS01 }
-//BFS01
-//BFS01 return nCnt;
-//BFS01}
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrModel& rMod)
-//BFS01{
-//BFS01 ((SdrModel*)&rMod)->nProgressOfs=0;
-//BFS01 ((SdrModel*)&rMod)->nProgressMax=rMod.ImpCountAllSteamComponents(); // Hier passenden Wert einsetzen
-//BFS01 ((SdrModel*)&rMod)->DoProgress(0);
-//BFS01 ULONG nPos0=rOut.Tell();
-//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOModlID);
-//BFS01 USHORT nCompressMerk=rOut.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
-//BFS01 rMod.WriteData(rOut);
-//BFS01 rOut.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
-//BFS01 ((SdrModel*)&rMod)->DoProgress(0xFFFFFFFF);
-//BFS01 ((SdrModel*)&rMod)->Broadcast(SdrHint(HINT_MODELSAVED)); // #43095#
-//BFS01 return rOut;
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrModel& rMod)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return rIn;
-//BFS01 rMod.aReadDate=DateTime(); // Zeitpunkt des Lesens merken
-//BFS01 rMod.nProgressOfs=rIn.Tell();
-//BFS01 rMod.nProgressMax=0xFFFFFFFF; // Vorlaeufiger Wert
-//BFS01 rMod.DoProgress(0);
-//BFS01
-//BFS01 // #116168#
-//BFS01 rMod.ClearModel(sal_False);
-//BFS01
-//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
-//BFS01 rMod.nLoadVersion=aHead.GetVersion();
-//BFS01 if (!aHead.IsMagic()) {
-//BFS01     rIn.SetError(SVSTREAM_FILEFORMAT_ERROR); // Format-Fehler
-//BFS01     return rIn;
-//BFS01 }
-//BFS01 if (aHead.GetMajorVersion()>nAktSdrFileMajorVersion) {
-//BFS01     rIn.SetError(SVSTREAM_WRONGVERSION); // Datei zu neu / Programm zu alt
-//BFS01     return rIn;
-//BFS01 }
-//BFS01 rMod.nProgressMax=aHead.GetBlockSize();
-//BFS01 rMod.DoProgress(rIn.Tell());
-//BFS01 rMod.bLoading=TRUE;
-//BFS01 rtl_TextEncoding eStreamCharSetMerker=rIn.GetStreamCharSet(); // Der StreamCharSet wird von SdrModel::ReadData() gesetzt
-//BFS01 USHORT nCompressMerk=rIn.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
-//BFS01 rMod.ReadData(aHead,rIn);
-//BFS01 rIn.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
-//BFS01
-//BFS01 rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
-//BFS01
-//BFS01 rMod.bLoading=FALSE;
-//BFS01 rMod.DoProgress(rIn.Tell());
-//BFS01 rMod.AfterRead();
-//BFS01 rMod.DisposeLoadedModels();
-//BFS01
-//BFS01 rMod.ImpSetUIUnit(); // weil ggf. neues Scaling eingelesen
-//BFS01 rMod.DoProgress(0xFFFFFFFF);
-//BFS01 return rIn;
-//BFS01}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01FASTBOOL SdrModel::WriteModelInfo(SvStream& rOut) const
-//BFS01{
-//BFS01 FASTBOOL bRet=FALSE;
-//BFS01 if (rOut.GetError()!=0) return bRet;
-//BFS01 SdrIOHeaderLookAhead aLookAhead(rOut);
-//BFS01 ULONG nCompat;
-//BFS01 rOut>>nCompat;
-//BFS01 char cMagic[4];
-//BFS01 FASTBOOL bJoeMagicOk=(rOut.Read(cMagic,4)==4) && memcmp(cMagic,SdrIOJoeMagic,4)==0;
-//BFS01 if (aLookAhead.GetVersion()>=11 && aLookAhead.IsMagic() &&
-//BFS01     bJoeMagicOk && aLookAhead.IsID(SdrIOModlID) && rOut.GetError()==0)
-//BFS01 {
-//BFS01     rOut<<aInfo;
-//BFS01     bRet=rOut.GetError()==0;
-//BFS01 }
-//BFS01 return bRet;
-//BFS01}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrModel::CheckConsistence() const
@@ -2485,12 +1637,12 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
             const SdrPage* pPg1=GetPage(nPageNum);
             pPg=pPg1->Clone();
             InsertPage(pPg,nDestNum);
-            if (bUndo) AddUndo(new SdrUndoCopyPage(*pPg));
+            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
             nDestNum++;
         } else {
             // Move ist nicht getestet!
             if (nDestNum>nPageNum) nDestNum--;
-            if (bUndo) AddUndo(new SdrUndoSetPageNum(*GetPage(nPageNum),nPageNum,nDestNum));
+            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum),nPageNum,nDestNum));
             pPg=RemovePage(nPageNum);
             InsertPage(pPg,nDestNum);
             nDestNum++;
@@ -2587,7 +1739,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     pPg->SetInserted(TRUE);
                     pPg->SetModel(this);
                     bMPgNumsDirty=TRUE;
-                    if (bUndo) AddUndo(new SdrUndoNewPage(*pPg));
+                    if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
                     DBG_ERROR("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
                 }
@@ -2610,7 +1762,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             }
             if (pPg!=NULL) {
                 InsertPage(pPg,nDestPos);
-                if (bUndo) AddUndo(new SdrUndoNewPage(*pPg));
+                if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 // und nun zu den MasterPageDescriptoren
 
                 if(pPg->TRG_HasMasterPage())
@@ -2631,7 +1783,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                         {
                             if(bUndo)
                             {
-                                AddUndo(new SdrUndoPageChangeMasterPage(*pPg));
+                                AddUndo(GetSdrUndoFactory().CreateUndoPageChangeMasterPage(*pPg));
                             }
 
                             pPg->TRG_SetMasterPage(*GetMasterPage(nNeuNum));
@@ -2679,91 +1831,6 @@ void SdrModel::SetStarDrawPreviewMode(BOOL bPreview)
         bStarDrawPreviewMode = bPreview;
     }
 }
-
-
-//BFS01void SdrModel::PrepareStore()
-//BFS01{
-//BFS01 // is done by PreSave now
-//BFS01 DBG_ERROR("Please call PreSave now. It'll do the desired job.");
-//BFS01}
-
-//BFS01void SdrModel::PreSave()
-//BFS01{
-//BFS01 sal_uInt16 nCnt(GetMasterPageCount());
-//BFS01 sal_uInt16 a;
-//BFS01
-//BFS01 for( a = 0; a < nCnt; a++)
-//BFS01 {
-//BFS01     // MasterPages
-//BFS01     const SdrPage& rPage = *GetMasterPage(a);
-//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
-//BFS01     if( pObj )
-//BFS01     {
-//BFS01//BFS01          pObj->GetProperties().PreProcessSave();
-//BFS01     }
-//BFS01
-//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-//BFS01     {
-//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PreProcessSave();
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 nCnt = GetPageCount();
-//BFS01 for(a = 0; a < nCnt; a++)
-//BFS01 {
-//BFS01     // Pages
-//BFS01     const SdrPage& rPage = *GetPage(a);
-//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
-//BFS01     if( pObj )
-//BFS01     {
-//BFS01//BFS01          pObj->GetProperties().PreProcessSave();
-//BFS01     }
-//BFS01
-//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-//BFS01     {
-//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PreProcessSave();
-//BFS01     }
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrModel::PostSave()
-//BFS01{
-//BFS01 sal_uInt16 nCnt(GetMasterPageCount());
-//BFS01 sal_uInt16 a;
-//BFS01
-//BFS01 for( a = 0; a < nCnt; a++)
-//BFS01 {
-//BFS01     // MasterPages
-//BFS01     const SdrPage& rPage = *GetMasterPage(a);
-//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
-//BFS01     if( pObj )
-//BFS01     {
-//BFS01//BFS01          pObj->GetProperties().PostProcessSave();
-//BFS01     }
-//BFS01
-//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-//BFS01     {
-//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PostProcessSave();
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 nCnt = GetPageCount();
-//BFS01 for(a = 0; a < nCnt; a++)
-//BFS01 {
-//BFS01     // Pages
-//BFS01     const SdrPage& rPage = *GetPage(a);
-//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
-//BFS01     if( pObj )
-//BFS01     {
-//BFS01//BFS01          pObj->GetProperties().PostProcessSave();
-//BFS01     }
-//BFS01
-//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-//BFS01     {
-//BFS01         rPage.GetObj(b)->GetProperties().PostProcessSave();
-//BFS01     }
-//BFS01 }
-//BFS01}
 
 uno::Reference< uno::XInterface > SdrModel::getUnoModel()
 {
@@ -2994,6 +2061,27 @@ sal_uInt16 SdrModel::GetMasterPageCount() const
 
 void SdrModel::MasterPageListChanged()
 {
+}
+
+void SdrModel::SetSdrUndoManager( SfxUndoManager* pUndoManager )
+{
+    mpImpl->mpUndoManager = pUndoManager;
+}
+
+SdrUndoFactory& SdrModel::GetSdrUndoFactory() const
+{
+    if( !mpImpl->mpUndoFactory )
+        mpImpl->mpUndoFactory = new SdrUndoFactory;
+    return *mpImpl->mpUndoFactory;
+}
+
+void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
+{
+    if( pUndoFactory && (pUndoFactory != mpImpl->mpUndoFactory) )
+    {
+        delete mpImpl->mpUndoFactory;
+        mpImpl->mpUndoFactory = pUndoFactory;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
