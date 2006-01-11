@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obr $ $Date: 2006-01-08 22:02:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-11 13:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,6 @@ ProfileItem gid_Profileitem_Bootstrap_Userinstall
     Key = "UserInstallation";
   #ifdef WNT
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
-  #elif defined MACOSX
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%20%PRODUCTVERSION";
   #else
     Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
   #endif
