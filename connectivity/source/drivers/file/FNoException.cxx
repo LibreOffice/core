@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:55:54 $
+ *  last change: $Author: rt $ $Date: 2006-01-12 16:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,8 @@ void OPredicateCompiler::Clean()
     for(OCodeList::reverse_iterator aIter = m_aCodeList.rbegin(); aIter != m_aCodeList.rend();++aIter)
     {
         delete *aIter;
-        m_aCodeList.pop_back();
     }
-    //  m_aCodeList.clear();
+    m_aCodeList.clear();
 }
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::clean()
