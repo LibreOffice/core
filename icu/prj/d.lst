@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\misc\build\icu\source\i18n\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.dylib.* %_DEST%\lib%_EXT%\*.dylib.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 
@@ -20,10 +21,10 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\bin\gencmn.exe   %_DEST%\bin%_EXT%\gencmn.exe
 
 ..\%__SRC%\lib\libicudata.so.*.*     %_DEST%\lib%_EXT%\
-..\%__SRC%\lib\libicui18n.so.*.*     %_DEST%\lib%_EXT%\libicui18n.*
-..\%__SRC%\lib\libicule.so.*.*       %_DEST%\lib%_EXT%\libicule.*
-..\%__SRC%\lib\libicuuc.so.*.*       %_DEST%\lib%_EXT%\libicuuc.*
-..\%__SRC%\lib\libicutoolutil.so.*.* %_DEST%\lib%_EXT%\libicutoolutil.*
+..\%__SRC%\lib\libicui18n.so.*.*     %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicule.so.*.*       %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicuuc.so.*.*       %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicutoolutil.so.*.* %_DEST%\lib%_EXT%\
 ..\icuversion.mk %_DEST%\inc%_EXT%\icuversion.mk
 
 linklib: libicudata.so.*.*
