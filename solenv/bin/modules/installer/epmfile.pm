@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 15:36:55 $
+#   last change: $Author: rt $ $Date: 2006-01-13 15:01:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2099,131 +2099,11 @@ sub put_systemintegration_into_installset
 {
     my ($newdir, $includepatharrayref, $variables) = @_;
 
-    # The system integration packages have to be found in the solver in the bin directory.
-    # Linux: "staroffice-redhat-menus-8-1.noarch.rpm", "staroffice-suse-menus-8-1.noarch.rpm"
-    # Solaris: "SUNWsogm.tar.gz"
-    # scp Todo: This files have to be included into scp after removal of old setup.
+    my $tarball = $variables->{'UNIXPRODUCTNAME'} . "-desktop-integration.tar.gz";
 
-    my @systemfiles = ();
-    my $destdir = $newdir;
-    my $infoline = "";
-
-    # Attention: OOO has other names !
-
-    if ( $installer::globals::issolarispkgbuild )
-    {
-        if ($installer::globals::product =~ /OpenOffice/i )
-        {
-            push(@systemfiles, "openofficeorg-desktop-integratn.tar.gz");
-        }
-        else
-        {
-            my $productname = $variables->{'UNIXPRODUCTNAME'};
-            push(@systemfiles, "SUNW$productname-desktop-integratn.tar.gz");
-            push(@systemfiles, "SUNW$productname-desktop-int-root.tar.gz");
-            push(@systemfiles, "SUNW$productname-shared-mime-info.tar.gz");
-        }
-    }
-
-    if ( $installer::globals::islinuxrpmbuild )
-    {
-        my $productversion = $variables->{'PRODUCTVERSION'};
-
-        if ($installer::globals::product =~ /OpenOffice/i)
-        {
-            push(@systemfiles, "openoffice.org-redhat-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-            push(@systemfiles, "openoffice.org-suse-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-            push(@systemfiles, "openoffice.org-mandriva-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-            push(@systemfiles, "openoffice.org-freedesktop-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-
-            # i46530 create desktop-integration subdirectory
-            $destdir = "$destdir/desktop-integration";
-            mkdir $destdir,0777;
-        }
-        else
-        {
-            my $productname = $variables->{'UNIXPRODUCTNAME'};
-            push(@systemfiles, "$productname-desktop-integration-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-            push(@systemfiles, "$productname-suse-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
-        }
-    }
-
-    if ($installer::globals::product =~ /OpenOffice/i)
-    {
-        my $deb = 'openoffice.org-debian-menus_' . $installer::globals::packageversion . '-' . $installer::globals::packagerevision . '_all.deb';
-        my $debref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$deb, $includepatharrayref, 0);
-
-        if ( $$debref ne "" )
-        {
-             push(@systemfiles, $deb);
-        }
-    }
-    elsif ($installer::globals::debian)
-    {
-        my $productname = $variables->{'UNIXPRODUCTNAME'};
-        push(@systemfiles, $productname . "-desktop-integration_" . $installer::globals::packageversion . "-" . $installer::globals::packagerevision . "_all.deb");
-    }
-
-    for ( my $i = 0; $i <= $#systemfiles; $i++ )
-    {
-        my $onefilename = $systemfiles[$i];
-        my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
-
-        if ( $$sourcepathref eq "" )
-        {
-            $infoline = "ERROR: Did not find file for system integration: $onefilename\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            next;
-        }
-
-        my $destfile = $destdir . $installer::globals::separator . $systemfiles[$i];
-        installer::systemactions::copy_one_file($$sourcepathref, $destfile);
-
-        # unpacking and deleting the tar.gz files for Solaris
-
-        if ( $installer::globals::issolarispkgbuild )
-        {
-            # unpacking
-
-            my $systemcall = "cd $destdir; cat $systemfiles[$i] | gunzip | tar -xf -";
-
-            make_systemcall($systemcall);
-
-            # compressing packages
-
-            my $faspac = "faspac-so.sh";
-
-            my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
-            if ($$compressorref ne "")
-            {
-                $faspac = $$compressorref;
-                $infoline = "Found compressor: $faspac\n";
-                push( @installer::globals::logfileinfo, $infoline);
-
-                installer::logger::print_message( "... $faspac ...\n" );
-                installer::logger::include_timestamp_into_logfile("Starting $faspac");
-
-                my $package = $systemfiles[$i];
-                $package =~ s/\.tar\.gz$//;
-
-                 $systemcall = "/bin/sh $faspac -a -q -d $destdir $package";     # $faspac has to be the absolute path!
-                 make_systemcall($systemcall);
-
-                installer::logger::include_timestamp_into_logfile("End of $faspac");
-            }
-            else
-            {
-                $infoline = "Not found: $faspac\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
-
-            # deleting the tar.gz files
-
-            $systemcall = "cd $destdir; rm -f $systemfiles[$i]";
-
-            make_systemcall($systemcall);
-        }
-    }
+    my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$tarball, $includepatharrayref, 1);
+    my $systemcall = "cd $newdir; cat $$sourcepathref | gunzip | tar -xf -";
+    make_systemcall($systemcall);
 }
 
 ######################################################
