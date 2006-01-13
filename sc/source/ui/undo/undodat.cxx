@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:33 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1043,8 +1043,7 @@ void __EXPORT ScUndoQuery::Undo()
     if (!bCopy)
         pDoc->UpdatePageBreaks( nTab );
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );
+    DoSdrUndoAction( pDrawUndo, pDoc );
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
