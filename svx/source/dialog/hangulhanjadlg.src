@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:39:21 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     {
         Pos = MAP_APPFONT( 51, 46 );
         Size = MAP_APPFONT( 171, 30 );
+        TabStop = TRUE ;
     };
 
     FixedText FT_FORMAT
