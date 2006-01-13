@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:37:31 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -230,6 +231,20 @@ ScUnoAddInCollection::~ScUnoAddInCollection()
     }
 }
 
+
+uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF)
+{
+    uno::Reference<uno::XComponentContext> xCtx;
+    try {
+        uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
+        xPropset->getPropertyValue(
+            ::rtl::OUString::createFromAscii("DefaultContext")) >>= xCtx;
+    }
+    catch ( uno::Exception & ) {
+    }
+    return xCtx;
+}
+
 void ScUnoAddInCollection::Initialize()
 {
     DBG_ASSERT( !bInitialized, "Initialize twice?" )
@@ -253,11 +268,28 @@ void ScUnoAddInCollection::Initialize()
                     aAddInAny >>= xIntFac;
                     if ( xIntFac.is() )
                     {
-                        uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
-                        if ( xFac.is() )
+                        // #i59984# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
+                        // passing the context to the component
+
+                        uno::Reference<uno::XInterface> xInterface;
+                        uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+                        uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
+                        if (xCtx.is() && xCFac.is())
                         {
-                            uno::Reference<uno::XInterface> xInterface = xFac->createInstance();
-                            ReadFromAddIn( xInterface );
+                            xInterface = xCFac->createInstanceWithContext(xCtx);
+                            if (xInterface.is())
+                                ReadFromAddIn( xInterface );
+                        }
+
+                        if (!xInterface.is())
+                        {
+                            uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
+                            if ( xFac.is() )
+                            {
+                                xInterface = xFac->createInstance();
+                                if (xInterface.is())
+                                    ReadFromAddIn( xInterface );
+                            }
                         }
                     }
                 }
