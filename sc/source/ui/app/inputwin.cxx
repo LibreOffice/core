@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:13:20 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,10 @@ __EXPORT ScInputWindow::~ScInputWindow()
         {
             ScInputHandler* pHdl = ((ScTabViewShell*)pSh)->GetInputHandler();
             if ( pHdl && pHdl->GetInputWindow() == this )
+            {
                 pHdl->SetInputWindow( NULL );
+                pHdl->StopInputWinEngine( FALSE );  // #125841# reset pTopView pointer
+            }
             pSh = SfxViewShell::GetNext( *pSh, &aScType );
         }
     }
