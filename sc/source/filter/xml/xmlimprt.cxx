@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:06:42 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2165,8 +2165,8 @@ void ScXMLImport::SetStyleToRanges()
         if (xProperties.is())
         {
             XMLTableStylesContext *pStyles((XMLTableStylesContext *)GetAutoStyles());
-            XMLTableStyleContext* pStyle((XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, sal_True));
+            XMLTableStyleContext* pStyle( pStyles ? (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, sal_True) : NULL );
             if (pStyle)
             {
                 pStyle->FillPropertySet(xProperties);
