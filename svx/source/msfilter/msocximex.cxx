@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:47:06 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3157,6 +3157,7 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     {
         ReadAlign(pS, pS->Tell() - nStart, 4); // NEW
         *pS >> nSpecialEffect;
+        pS->SeekRel( 3 );       // special effect is 32bit, not 8bit
     }
     if (pBlockFlags[3] & 0x08)
     {
@@ -3394,20 +3395,19 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
     *pS >> nWidth;
     *pS >> nHeight;
 
-    if (nIcon)
-    {
-        pS->Read(pIconHeader,20);
-        *pS >> nIconLen;
-        pIcon = new sal_uInt8[nIconLen];
-        pS->Read(pIcon,nIconLen);
-    }
-
     if (nPicture)
     {
         pS->Read(pPictureHeader,20);
         *pS >> nPictureLen;
         pPicture = new sal_uInt8[nPictureLen];
         pS->Read(pPicture,nPictureLen);
+    }
+    if (nIcon)
+    {
+        pS->Read(pIconHeader,20);
+        *pS >> nIconLen;
+        pIcon = new sal_uInt8[nIconLen];
+        pS->Read(pIcon,nIconLen);
     }
 
     return sal_True;
