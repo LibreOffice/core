@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:09:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2224,6 +2224,10 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     bSelIsRef = FALSE;
     eMode     = SC_INPUT_NONE;
     StopInputWinEngine( TRUE );
+
+    // #123344# Text input (through number formats) or ApplySelectionPattern modify
+    // the cell's attributes, so pLastPattern is no longer valid
+    pLastPattern = NULL;
 
     if (bOldMod && !bProtected && !bForget)
     {
