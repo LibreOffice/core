@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:15:01 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1459,28 +1459,32 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         {
                             long nAvailable = aAlignRect.GetWidth() - nTotalMargin;
                             long nScaleSize = aVars.GetTextSize().Width();         // without margin
-                            long nScale = ( nAvailable * 100 ) / nScaleSize;
 
-                            aVars.SetShrinkScale( nScale, nOldScript );
-                            long nNewSize = aVars.GetTextSize().Width();
-
-                            USHORT nShrinkAgain = 0;
-                            while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                            if ( nScaleSize > 0 )       // 0 if the text is empty (formulas, number formats)
                             {
-                                // If the text is still too large, reduce the scale again by 10%, until it fits,
-                                // at most 7 times (it's less than 50% of the calculated scale then).
+                                long nScale = ( nAvailable * 100 ) / nScaleSize;
 
-                                nScale = ( nScale * 9 ) / 10;
                                 aVars.SetShrinkScale( nScale, nOldScript );
-                                nNewSize = aVars.GetTextSize().Width();
-                                ++nShrinkAgain;
-                            }
-                            // If even at half the size the font still isn't rendered smaller,
-                            // fall back to normal clipping (showing ### for numbers).
-                            if ( nNewSize <= nAvailable )
-                                bLeftClip = bRightClip = FALSE;
+                                long nNewSize = aVars.GetTextSize().Width();
 
-                            pOldPattern = NULL;
+                                USHORT nShrinkAgain = 0;
+                                while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                                {
+                                    // If the text is still too large, reduce the scale again by 10%, until it fits,
+                                    // at most 7 times (it's less than 50% of the calculated scale then).
+
+                                    nScale = ( nScale * 9 ) / 10;
+                                    aVars.SetShrinkScale( nScale, nOldScript );
+                                    nNewSize = aVars.GetTextSize().Width();
+                                    ++nShrinkAgain;
+                                }
+                                // If even at half the size the font still isn't rendered smaller,
+                                // fall back to normal clipping (showing ### for numbers).
+                                if ( nNewSize <= nAvailable )
+                                    bLeftClip = bRightClip = FALSE;
+
+                                pOldPattern = NULL;
+                            }
                         }
                     }
 
