@@ -7,12 +7,14 @@ svx.SvxUnoTextRange::com::sun::star::text::XTextRange
 ### 112813 ###
 svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
 
-### 114898 ###
+### i35965 ###
 svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### 115136 ###
 svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
-svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### 115136 ### i53708  ###
+svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
 
 ### 97139 ###
 svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
@@ -24,10 +26,16 @@ svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
 svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
 
 ### i38575 ###
-svx.GraphicExporter::com::sun::star::document::XFilter
+#svx.GraphicExporter::com::sun::star::document::XFilter
 
-### i38579 ###
+### i58108 ###
 svx.SvxUnoText::com::sun::star::text::XTextRangeCompare
 
 ### i38623 ###
 svx.SvxUnoTextCursor::com::sun::star::text::XTextRange
+
+### i58062 ###
+svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleComponent
+
+### i57892 ###
+svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleExtendedComponent
