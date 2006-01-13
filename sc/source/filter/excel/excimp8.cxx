@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:42:07 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,29 +313,19 @@ void ImportExcel8::Msodrawingselection( void )
 
 void ImportExcel8::Labelsst( void )
 {
-    UINT16                      nRow, nCol, nXF;
-    UINT32                      nSst;
+    XclAddress aXclPos;
+    UINT16 nXF;
+    UINT32  nSst;
 
+    aIn >> aXclPos >> nXF >> nSst;
 
-    aIn >> nRow >> nCol >> nXF >> nSst;
-
-    SCCOL nScCol = static_cast< SCCOL >( nCol );
-    SCROW nScRow = static_cast< SCROW >( nRow );
-
-    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
-
-        ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF );
-        if( pCell )
-            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
-
-        pColRowBuff->Used( nScCol, nScRow );
-    }
-    else
-    {
-        bTabTruncated = TRUE;
-        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+        GetXFRangeBuffer().SetXF( aScPos, nXF );
+        pColRowBuff->Used( aScPos );
+        if( ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF ) )
+            GetDoc().PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell );
     }
 
     pLastFormCell = NULL;
@@ -421,9 +411,10 @@ void ImportExcel8::PostDocLoad( void )
 
     GetWebQueryBuffer().Apply();    //! test if extant
 
-    ApplyEscherObjects();
-
     ImportExcel::PostDocLoad();
+
+    // process all drawing objects (including OLE, charts, controls)
+    GetObjectManager().ConvertObjects();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
     if( !pD->IsClipboard() && aScenList.Count() )
@@ -451,13 +442,6 @@ void ImportExcel8::PostDocLoad( void )
     // building pivot tables
     GetPivotTableManager().Apply();
 }
-
-
-void ImportExcel8::ApplyEscherObjects()
-{
-    GetObjectManager().ConvertObjects();
-}
-
 
 
 void ImportExcel8::EndAllChartObjects( void )
