@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:19:51 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,7 @@ namespace accessibility
     {
 
     public:
+        typedef ::std::vector< sal_Int16 > VectorOfStates;
 
         // receive pointer to our frontend class and view window
         AccessibleTextHelper_Impl();
@@ -233,6 +234,9 @@ namespace accessibility
             // atomic
             return mnStartIndex;
         }
+
+        void SetAdditionalChildStates( const VectorOfStates& rChildStates );
+        const VectorOfStates& GetAdditionalChildStates() const;
 
         sal_Bool IsSelected() const;
 
@@ -334,7 +338,6 @@ namespace accessibility
 
         /// client Id from AccessibleEventNotifier
         int mnNotifierClientId;
-
     };
 
     //------------------------------------------------------------------------
@@ -503,6 +506,16 @@ namespace accessibility
             ::std::for_each( maParaManager.begin(), maParaManager.end(),
                              AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_OffsetChildIndex > (aFunctor) );
         }
+    }
+
+    void AccessibleTextHelper_Impl::SetAdditionalChildStates( const VectorOfStates& rChildStates )
+    {
+        maParaManager.SetAdditionalChildStates( rChildStates );
+    }
+
+    const AccessibleTextHelper_Impl::VectorOfStates& AccessibleTextHelper_Impl::GetAdditionalChildStates() const
+    {
+        return maParaManager.GetAdditionalChildStates();
     }
 
     void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -1720,7 +1733,7 @@ namespace accessibility
     //------------------------------------------------------------------------
 
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
-        mpImpl( new AccessibleTextHelper_Impl() )
+        mpImpl( new AccessibleTextHelper_Impl )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1907,6 +1920,16 @@ namespace accessibility
 #else
         return mpImpl->GetStartIndex();
 #endif
+    }
+
+    void AccessibleTextHelper::SetAdditionalChildStates( const VectorOfStates& rChildStates )
+    {
+        mpImpl->SetAdditionalChildStates( rChildStates );
+    }
+
+    const AccessibleTextHelper::VectorOfStates& AccessibleTextHelper::GetAdditionalChildStates() const
+    {
+        return mpImpl->GetAdditionalChildStates();
     }
 
     void AccessibleTextHelper::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))
