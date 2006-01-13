@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:59 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,7 +740,7 @@ namespace accessibility
         AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue);
 
         // #102261# Call global queue for focus events
-        if( nEventId == AccessibleStateType::FOCUSED )
+        if( nEventId == AccessibleEventId::STATE_CHANGED )
             vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
 
         // #106234# Delegate to EventNotifier
