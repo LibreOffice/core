@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:05:24 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1189,7 +1189,8 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
                 // keine Note-/Leerzellen zaehlen, sind ans Ende sortiert
-                while ( nValidCount > 0 && ppInfo[nValidCount-1]->pCell == NULL )
+                while ( nValidCount > 0 && ( ppInfo[nValidCount-1]->pCell == NULL ||
+                                             ppInfo[nValidCount-1]->pCell->GetCellType() == CELLTYPE_NOTE ) )
                     nValidCount--;
                 // keine Strings zaehlen, sind zwischen Value und Leer
                 while ( nValidCount > 0
@@ -1513,6 +1514,17 @@ BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
 BOOL ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
+    // A valid StarQuery must be at least 4 columns wide. To be precise it
+    // should be exactly 4 columns ...
+    // Additionally, if this wasn't checked, a formula pointing to a valid 1-3
+    // column Excel style query range immediately left to itself would result
+    // in a circular reference when the field name or operator or value (first
+    // to third query range column) is obtained (#i58354#). Furthermore, if the
+    // range wasn't sufficiently specified data changes wouldn't flag formula
+    // cells for recalculation.
+    if (nCol2 - nCol1 < 3)
+        return FALSE;
+
     BOOL bValid;
     BOOL bFound;
     String aCellStr;
