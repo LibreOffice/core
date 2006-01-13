@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:14:14 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,7 @@ void __EXPORT ScUndoInsertTab::Undo()
     bDrawIsInUndo = FALSE;
     pDocShell->SetInUndo( FALSE );              //! EndUndo
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
@@ -169,8 +168,7 @@ void __EXPORT ScUndoInsertTab::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pDrawUndo)
-        RedoSdrUndoAction( pDrawUndo );         // Draw Redo vorneweg
+    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( TRUE );               //! BeginRedo
     bDrawIsInUndo = TRUE;
@@ -279,8 +277,7 @@ void __EXPORT ScUndoInsertTables::Undo()
     bDrawIsInUndo = FALSE;
     pDocShell->SetInUndo( FALSE );              //! EndUndo
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
@@ -294,8 +291,7 @@ void __EXPORT ScUndoInsertTables::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pDrawUndo)
-        RedoSdrUndoAction( pDrawUndo );         // Draw Redo vorneweg
+    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( TRUE );               //! BeginRedo
     bDrawIsInUndo = TRUE;
@@ -463,8 +459,7 @@ void __EXPORT ScUndoDeleteTab::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDocShell->GetDocument(), theTabs[0] ) );
 
-    if (pDrawUndo)
-        RedoSdrUndoAction( pDrawUndo );         // Draw Redo vorneweg
+    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( TRUE );               //! BeginRedo
     bDrawIsInUndo = TRUE;
@@ -698,8 +693,7 @@ void __EXPORT ScUndoCopyTab::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );                   // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo, pDoc );                 // before the sheets are deleted
 
     int i;
     for(i=theNewTabs.Count()-1;i>=0;i--)
@@ -770,8 +764,7 @@ void __EXPORT ScUndoCopyTab::Redo()
             pDoc->SetTabProtection( nNewTab, TRUE, pDoc->GetTabPassword( nAdjSource ) );
     }
 
-    if (pDrawUndo)
-        RedoSdrUndoAction( pDrawUndo );         // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo );             // after the sheets are inserted
 
     pViewShell->SetTabNo( nDestTab, TRUE );     // after draw-undo
 
@@ -959,8 +952,7 @@ void __EXPORT ScUndoImportTab::Undo()
 
     }
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );                   // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo, pDoc );             // before the sheets are deleted
 
     bDrawIsInUndo = TRUE;
     for (i=0; i<nCount; i++)
@@ -1012,8 +1004,7 @@ void __EXPORT ScUndoImportTab::Redo()
             pDoc->SetTabProtection( nTabPos, TRUE, pRedoDoc->GetTabPassword( nTabPos ) );
     }
 
-    if (pDrawUndo)
-        RedoSdrUndoAction( pDrawUndo );     // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo );     // after the sheets are inserted
 
     DoChange();
 }
