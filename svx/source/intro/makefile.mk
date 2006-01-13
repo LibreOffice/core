@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:16:15 $
+#   last change: $Author: rt $ $Date: 2006-01-13 16:22:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@ TARGET=intro
 RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 
 # setting the compiled by $user$ string in the About box
-OOO_VENDOR*="$(USER)$(USERNAME)"
-RSCDEFS+=-DOOO_VENDOR=$(OOO_VENDOR)
+OOO_VENDOR*=$(USER)$(USERNAME)
+RSCDEFS+=-DOOO_VENDOR="$(OOO_VENDOR)"
 
 # --- Allgemein -----------------------------------------------------------
 
