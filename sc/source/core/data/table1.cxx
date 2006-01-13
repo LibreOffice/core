@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:32:48 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,11 +189,13 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if (pDrawLayer)
     {
-        pDrawLayer->ScAddPage( nTab );
-        pDrawLayer->ScRenamePage( nTab, aName );
-        ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-        ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
-        pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ) );
+        if ( pDrawLayer->ScAddPage( nTab ) )    // FALSE (not inserted) during Undo
+        {
+            pDrawLayer->ScRenamePage( nTab, aName );
+            ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
+            ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
+            pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ) );
+        }
     }
 
     for (SCCOL k=0; k<=MAXCOL; k++)
