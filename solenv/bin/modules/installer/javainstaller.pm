@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:03:59 $
+#   last change: $Author: rt $ $Date: 2006-01-13 15:01:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1415,6 +1415,169 @@ sub set_filesize_in_xmlfile
     }
 }
 
+############################################################
+# Collecting all rpmUniqueName in xml file.
+############################################################
+
+sub collect_uniquenames_in_xmlfile
+{
+    my ($xmlfile) = @_;
+
+    my @rpmuniquenames = ();
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        my $oneline = ${$xmlfile}[$i];
+
+        if ( $oneline =~ /^\s*rpmUniqueName\s*\=\s*\"(.*)\"\s*$/ )
+        {
+            my $rpmuniquename = $1;
+            push(@rpmuniquenames, $rpmuniquename)
+        }
+    }
+
+    return \@rpmuniquenames;
+}
+
+############################################################
+# Searching for the corresponding rpm, that fits to
+# the unique rpm name.
+# Simple mechanism: The name of the rpm starts with the
+# unique rpm name followed by a "-".
+############################################################
+
+sub find_rpmname_to_uniquename
+{
+    my ($uniquename, $listofpackages) = @_;
+
+    my @all_correct_rpms = ();
+    my $infoline = "";
+
+    # special handling for java RPMs, which have a very strange naming schema
+    my $localuniquename = $uniquename;
+    if ( $uniquename =~ /^\s*jre\-/ ) { $localuniquename = "jre"; }
+
+    for ( my $i = 0; $i <= $#{$listofpackages}; $i++ )
+    {
+        my $completerpmname = ${$listofpackages}[$i];
+        my $rpmname = $completerpmname;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
+
+        if ( $rpmname =~ /^\s*\Q$localuniquename\E\-\d/ ) { push(@all_correct_rpms, $rpmname); }
+    }
+
+    # @all_correct_rpms has to contain exactly one value
+
+    if ( $#all_correct_rpms > 0 )
+    {
+        my $number = $#all_correct_rpms + 1;
+        $infoline = "There are $number RPMs for the unique name \"$uniquename\" :\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        my $allrpmstring = "";
+        for ( my $i = 0; $i <= $#all_correct_rpms; $i++ ) { $allrpmstring = $allrpmstring . $all_correct_rpms[$i] . "\n"; }
+        push( @installer::globals::logfileinfo, $allrpmstring);
+        installer::exiter::exit_program("ERROR: Found $number RPMs that start with unique name \"$uniquename\". Only one allowed!", "find_rpmname_to_uniquename");
+    }
+
+    if ( $#all_correct_rpms < 0 )
+    {
+        $infoline = "There is no rpm for the unique name \"$uniquename\"\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program("ERROR: There is no RPM that start with unique name \"$uniquename\"!", "find_rpmname_to_uniquename");
+    }
+
+    if ( $#all_correct_rpms == 0 )
+    {
+        $infoline = "Found one rpm for the unique name \"$uniquename\" : $all_correct_rpms[0]\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $all_correct_rpms[0];
+}
+
+#######################################################
+# Including the complete RPM name into the xml file
+#######################################################
+
+sub set_rpmname_into_xmlfile
+{
+    my ($rpmname, $uniquename, $xmlfile) = @_;
+
+    my $foundrpm = 0;
+    my $rpmnameset = 0;
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        my $oneline = ${$xmlfile}[$i];
+
+        if ( $oneline =~ /^\s*rpmUniqueName\s*\=\s*\"\Q$uniquename\E\"\s*$/ )
+        {
+            $foundrpm = 1;
+
+            my $number = $i;
+            $number++;
+
+            while ( ! ( ${$xmlfile}[$number] =~ /\/\>\s*$/ ))
+            {
+                if ( ${$xmlfile}[$number] =~ /RPMFILENAMEPLACEHOLDER/ )
+                {
+                    ${$xmlfile}[$number] =~ s/RPMFILENAMEPLACEHOLDER/$rpmname/;
+                    $rpmnameset = 1;
+                    $infoline = "Setting RPM name for $uniquename : $rpmname\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    last;
+                }
+
+                $number++;
+            }
+
+            last;
+        }
+    }
+
+    if ( ! $foundrpm )
+    {
+        $infoline = "ERROR: Did not find $rpmname in xml file !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    if ( ! $rpmnameset )
+    {
+        $infoline = "ERROR: Did not set rpm name for $uniquename in xml file !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+}
+
+############################################################
+# Including the rpm path dynamically into the xml file.
+# This is introduced, because system integration has
+# variable PackageVersion and PackageRevision in xml file.
+############################################################
+
+sub put_rpmpath_into_xmlfile
+{
+    my ($xmlfile, $listofpackages) = @_;
+
+    my $infoline = "";
+
+    my $alluniquenames = collect_uniquenames_in_xmlfile($xmlfile);
+
+    $infoline = "Number of packages in installation set: $#{$listofpackages}\n";
+    push( @installer::globals::logfileinfo, $infoline);
+    $infoline = "Number of unique RPM names in xml file: $#{$alluniquenames}\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $#{$alluniquenames} != $#{$listofpackages} ) { installer::exiter::exit_program("ERROR: xml file contains $#{$alluniquenames} unique names, but there are $#{$listofpackages} packages in installation set!", "put_rpmpath_into_xmlfile"); }
+
+    for ( my $i = 0; $i <= $#{$alluniquenames}; $i++ )
+    {
+        my $uniquename = ${$alluniquenames}[$i];
+        my $rpmname = find_rpmname_to_uniquename($uniquename, $listofpackages);
+        set_rpmname_into_xmlfile($rpmname, $uniquename, $xmlfile);
+    }
+}
+
 #######################################################
 # Including the file size of the rpms into the
 # xml file
@@ -1616,6 +1779,7 @@ sub create_java_installer
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
+    if ( $installer::globals::islinuxrpmbuild ) { put_rpmpath_into_xmlfile($xmlfile, $listofpackages); }
     if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
     installer::files::save_file($xmlfilename, $xmlfile);
     $infoline = "Saving xml file: $xmlfilename\n";
