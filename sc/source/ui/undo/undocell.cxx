@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -872,10 +872,9 @@ void __EXPORT ScUndoNote::Undo()
 {
     BeginUndo();
 
-    if (pDrawUndo)
-        DoSdrUndoAction(pDrawUndo);
-
     ScDocument* pDoc = pDocShell->GetDocument();
+    DoSdrUndoAction(pDrawUndo, pDoc);
+
     ScPostIt aNote(pDoc);
     pDoc->GetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
     aNote.SetShown( !bIsShow );
@@ -888,8 +887,7 @@ void __EXPORT ScUndoNote::Redo()
 {
     BeginRedo();
 
-    if (pDrawUndo)
-        RedoSdrUndoAction(pDrawUndo);
+    RedoSdrUndoAction(pDrawUndo);
 
     ScDocument* pDoc = pDocShell->GetDocument();
     ScPostIt aNote(pDoc);
@@ -1026,10 +1024,8 @@ void __EXPORT ScUndoDetective::Undo()
 {
     BeginUndo();
 
-    if (pDrawUndo)
-        DoSdrUndoAction(pDrawUndo);
-
     ScDocument* pDoc = pDocShell->GetDocument();
+    DoSdrUndoAction(pDrawUndo, pDoc);
 
     if (bIsDelete)
     {
@@ -1063,8 +1059,7 @@ void __EXPORT ScUndoDetective::Redo()
 {
     BeginRedo();
 
-    if (pDrawUndo)
-        RedoSdrUndoAction(pDrawUndo);
+    RedoSdrUndoAction(pDrawUndo);
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
