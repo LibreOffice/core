@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ void ScXMLBodyContext::EndElement()
                         {
                             rtl::OUString sTableStyleName(aTableStyleNames[i]);
                             XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                            if (sTableStyleName.getLength())
+                            if ( pStyles && sTableStyleName.getLength() )
                             {
                                 XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                     XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
