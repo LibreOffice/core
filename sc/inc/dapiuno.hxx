@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapiuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:30:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,6 +468,21 @@ struct ScFieldGroup
 
 typedef ::std::vector < ScFieldGroup > ScFieldGroups;
 
+
+struct ScFieldIdentifier
+{
+    String      sFieldName;             // source field name
+    sal_Bool    bDataLayoutField;
+    sal_Int32   nRepeat;                // to allow using one source column for several data fields
+                                        // nRepeat always counts in all fields, not just of one orientation
+
+    ScFieldIdentifier() :
+        bDataLayoutField( sal_False ), nRepeat( 0 ) {}
+
+    ScFieldIdentifier( const String& rName, sal_Bool bDataLayout, sal_Int32 nRep ) :
+        sFieldName( rName ), bDataLayoutField( bDataLayout ), nRepeat( nRep ) {}
+};
+
 class ScDataPilotFieldObj : public cppu::WeakImplHelper5<
                                         com::sun::star::container::XNamed,
                                         com::sun::star::beans::XPropertySet,
@@ -480,13 +495,13 @@ private:
     SfxItemPropertySet          aPropSet;
     ScDataPilotDescriptorBase*  pParent;
     USHORT                      nSourceType;
-    SCSIZE                      nSourcePos;
+    ScFieldIdentifier           aSourceIdent;
     USHORT                      nLastFunc;      // valid while type is HIDDEN (or PAGE)
 
 
 public:
                             ScDataPilotFieldObj(ScDataPilotDescriptorBase* pPar,
-                                                    USHORT nST, SCSIZE nSP);
+                                                    USHORT nST, const ScFieldIdentifier& rIdent);
     virtual                 ~ScDataPilotFieldObj();
 
                             // XNamed
@@ -762,12 +777,12 @@ class ScDataPilotItemsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDataPilotDescriptorBase*  pParent;
-    SCSIZE                      nSourcePos; // of the field
+    ScFieldIdentifier           aSourceIdent;   // of the field
 
     ScDataPilotItemObj* GetObjectByIndex_Impl(SCSIZE nIndex) const;
 
 public:
-                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP);
+                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, const ScFieldIdentifier& rIdent);
     virtual                 ~ScDataPilotItemsObj();
 
                             // XNameAccess
@@ -813,12 +828,12 @@ class ScDataPilotItemObj : public cppu::WeakImplHelper3<
 private:
     SfxItemPropertySet          aPropSet;
     ScDataPilotDescriptorBase*  pParent;
-    SCSIZE                      nSourcePos;
+    ScFieldIdentifier           aSourceIdent;
     SCSIZE                      nIndex;
 
 
 public:
-                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP, SCSIZE nI);
+                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, const ScFieldIdentifier& rIdent, SCSIZE nI);
     virtual                 ~ScDataPilotItemObj();
 
                             // XNamed
