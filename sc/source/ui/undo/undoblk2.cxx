@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
             }
         }
 
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );
+    DoSdrUndoAction( pDrawUndo, pDoc );
 
     if (pViewShell)
     {
