@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 11:17:58 $
+#   last change: $Author: rt $ $Date: 2006-01-13 15:01:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1706,7 +1706,7 @@ sub copy_additional_packages
 
         if ( $onepackage =~ /\.tar\.gz\s*$/ )
         {
-            my $systemcall = "cd $destdir; gzcat $$packagesourceref | tar -xf -";
+            my $systemcall = "cd $destdir; cat $$packagesourceref | gunzip | tar -xf -";
             make_systemcall($systemcall);
         }
         else
