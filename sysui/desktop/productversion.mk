@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 11:17:26 $
+#   last change: $Author: rt $ $Date: 2006-01-13 14:56:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,3 +39,16 @@ LONGPRODUCTNAME = OpenOffice.org 2.0
 UNIXFILENAME = openoffice.org-2.0
 PKGVERSION = 2.0.2
 PKGREV = $(LAST_MINOR:s/m//:s/s/./)
+
+ABSLOCALOUT:=$(shell +cd $(PRJ) && pwd)$/$(ROUT)
+
+# create desktop-integration subfolder on linux
+.IF "$(OS)"=="LINUX"
+# rpm seems to require absolute paths here :(
+PKGDIR:=$(ABSLOCALOUT)$/bin$/desktop-integration
+RPMMACROS= \
+    --define "_rpmdir $(PKGDIR)" \
+    --define "_rpmfilename %%{{NAME}}-%%{{VERSION}}-%%{{RELEASE}}.%%{{ARCH}}.rpm"
+.ELSE
+PKGDIR=$(BIN)
+.ENDIF
