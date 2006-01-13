@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:17:08 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,9 +171,22 @@ namespace accessibility
         typedef ::std::pair< ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible > , ::com::sun::star::awt::Rectangle > Child;
         typedef ::std::vector< WeakChild > VectorOfChildren;
+        typedef ::std::vector< sal_Int16 > VectorOfStates;
 
         AccessibleParaManager();
         ~AccessibleParaManager();
+
+        /** Sets a vector of additional accessible states.
+
+            The states are passed to every created child object
+            (text paragraph). The state values are defined in
+            com::sun::star::accessibility::AccessibleStateType.
+         */
+        void SetAdditionalChildStates( const VectorOfStates& rChildStates );
+
+        /** Returns the additional accessible states for children.
+         */
+        const VectorOfStates& GetAdditionalChildStates() const;
 
         /** Set the number of paragraphs
 
@@ -335,6 +348,9 @@ namespace accessibility
 
         // vector the size of the paragraph number of the underlying EditEngine
         VectorOfChildren maChildren;
+
+        /// Additional states that will be set at every created child object.
+        VectorOfStates maChildStates;
 
         // cache EE offset for child creation
         Point maEEOffset;
