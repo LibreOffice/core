@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoolk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:40:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,15 +60,39 @@ SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
         return NULL;
 }
 
-void DoSdrUndoAction( SdrUndoAction* pUndoAction )
+void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
 {
-    pUndoAction->Undo();
+    if ( pUndoAction )
+        pUndoAction->Undo();
+    else
+    {
+        // #125875# if no drawing layer existed when the action was created,
+        // but it was created after that, there is no draw undo action,
+        // and after undo there might be a drawing layer with a wrong page count.
+        // The drawing layer must have been empty in that case, so any missing
+        // pages can just be created now.
+
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        if ( pDrawLayer )
+        {
+            SCTAB nTabCount = pDoc->GetTableCount();
+            SCTAB nPages = static_cast<SCTAB>(pDrawLayer->GetPageCount());
+            while ( nPages < nTabCount )
+            {
+                pDrawLayer->ScAddPage( nPages );
+                ++nPages;
+            }
+        }
+    }
 }
 
 
 void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
 {
-    pUndoAction->Redo();
+    // #125875# DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
+
+    if ( pUndoAction )
+        pUndoAction->Redo();
 }
 
 void DeleteSdrUndoAction( SdrUndoAction* pUndoAction )
