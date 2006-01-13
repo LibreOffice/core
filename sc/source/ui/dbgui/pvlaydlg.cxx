@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:03:15 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,6 +917,12 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 
     if ( pArr )
     {
+        if ( nFieldIndex >= pArr->size() )
+        {
+            DBG_ERROR("invalid selection");
+            return;
+        }
+
         size_t nArrPos = 0;
         if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->mnCol, &nArrPos ) )
         {
@@ -986,6 +992,12 @@ void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, BOOL bGotFocus )
         The !IsActive() condition handles the case that a LoseFocus event of a
         field window would follow the Deactivate event of this dialog. */
     BOOL bEnable = (bGotFocus || !IsActive()) && (eType != TYPE_SELECT);
+
+    // #128113# The TestTool may set the focus into an empty field.
+    // Then the Remove/Options buttons must be disabled.
+    if ( bEnable && bGotFocus && GetFieldWindow( eType ).IsEmpty() )
+        bEnable = FALSE;
+
     aBtnRemove.Enable( bEnable );
     aBtnOptions.Enable( bEnable );
     if( bGotFocus )
