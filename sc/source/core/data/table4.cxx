@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:33:40 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,9 +345,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     for (USHORT i=1; i<nCount && bVal; i++)
                     {
                         ScBaseCell* pCell = GetCell(nCol,nRow);
-                        CellType eType = pCell->GetCellType();
-                        if (pCell && (eType == CELLTYPE_STRING
-                                || eType == CELLTYPE_EDIT) )
+                        CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+                        if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
                             if ( eType == CELLTYPE_STRING )
                                 ((ScStringCell*)pCell)->GetString( aStr );
