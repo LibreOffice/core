@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:14:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ public:
     inline void         SetDefWidth( const UINT16 nNew, const BOOL bStandardWidth = FALSE );
     inline void         SetDefHeight( const UINT16 nNew );
 
-    inline void         Used( const SCCOL nCol, const SCROW nRow );
+    inline void         Used( const ScAddress& rScPos );
 
     inline void         HideCol( const SCCOL nCol );
     void                HideColRange( SCCOL nColFirst, SCCOL nColLast );
@@ -172,15 +172,11 @@ inline void XclImpColRowSettings::HideRow( const SCROW nRow )
 }
 
 
-inline void XclImpColRowSettings::Used( const SCCOL nCol, const SCROW nRow )
+inline void XclImpColRowSettings::Used( const ScAddress& rScPos )
 {
-    if( ValidCol(nCol) && ValidRow(nRow) )
-    {
-        pRowFlags[ nRow ] |= ROWFLAG_USED;
-
-        if( nRow > nMaxRow )
-            nMaxRow = nRow;
-    }
+    pRowFlags[ rScPos.Row() ] |= ROWFLAG_USED;
+    if( rScPos.Row() > nMaxRow )
+        nMaxRow = rScPos.Row();
 }
 
 
