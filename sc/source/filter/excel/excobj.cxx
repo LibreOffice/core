@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:19 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,6 +487,7 @@ void ImportExcel::EndAllChartObjects( void )
         delete pDelete;
     }
 
+    GetDoc().UpdateAllCharts();
 }
 
 
