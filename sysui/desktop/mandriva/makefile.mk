@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 09:41:55 $
+#   last change: $Author: rt $ $Date: 2006-01-13 14:57:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
 LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = $(foreach,i,$(LAUNCHERLIST) $(UNIXFILENAME)-$i.desktop)
-LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
+LAUNCHERDIR  = $(ABSLOCALOUT)$/misc$/$(TARGET)
 
 MIMELIST = \
     text \
@@ -124,7 +124,7 @@ KDEICONLIST = \
 .IF "$(RPM)"!=""
 
 PKGNAME=$(shell sed -n -e 's/^Name: //p' $(TARGET)-menus.spec)
-RPMFILE=$(BIN)/noarch/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
+RPMFILE=$(PKGDIR)$/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/soffice \
@@ -138,7 +138,6 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
     $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} 
 
-RPMDIR  = $(shell cd $(BIN); pwd)
 ULFDIR = $(COMMONMISC)$/desktopshare
     
 .ENDIF
@@ -221,10 +220,10 @@ $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
 
 # --- packaging ---------------------------------------------------
     
-.PHONY $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
-    -$(RM) $(@:d)/$(PKGNAME)-*
-    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) \
-        --define "_rpmdir $(RPMDIR)" \
+$(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
+    -$(RM) $(@:d)$/$(PKGNAME)-*.noarch.rpm $(BIN)$/noarch$/$(PKGNAME)-*.noarch.rpm
+    @$(RPM) $(RPMMACROS) -bb $(MISC)/$(TARGET)-menus.spec \
+        --buildroot $(LAUNCHERDIR) \
         --define "unixfilename $(UNIXFILENAME)" \
         --define "iconprefix $(ICONPREFIX)" \
         --define "version $(PKGVERSION)" --define "release $(PKGREV)"
