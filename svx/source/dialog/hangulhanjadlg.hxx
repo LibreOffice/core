@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:12:14 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,12 +114,21 @@ namespace svx
 
         virtual void StateChanged( StateChangedType nStateChange );
 
+        virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual void KeyUp( const KeyEvent& rKEvt );
+        virtual void Activate();
+        virtual void Deactivate();
+        virtual void GetFocus();
+        virtual void LoseFocus();
+        virtual void Command( const CommandEvent& rCEvt );
+
         DECL_LINK( SelectSuggestionHdl, Control* );
 
         void SetHelpIds();
 
     private:
         void implUpdateDisplay();
+        Control& implGetCurrentControl();
 
     private:
         bool          m_bDisplayListBox;//otherwise ValueSet
