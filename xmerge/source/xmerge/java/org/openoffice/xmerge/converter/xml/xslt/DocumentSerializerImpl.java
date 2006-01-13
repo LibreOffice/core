@@ -89,11 +89,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.Source;
 
-//
-import org.apache.xalan.serialize.Serializer;
-import org.apache.xalan.serialize.SerializerFactory;
-import org.apache.xalan.templates.OutputProperties;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
