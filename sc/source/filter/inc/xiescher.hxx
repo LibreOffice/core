@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:00:09 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,16 +310,16 @@ public:
     virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
 
     /** Returns true, if this object is a form control, and false, if it is a common OLE object. */
-    inline bool         IsControl() const { return mbControl; }
+    inline bool         IsControl() const { return mbControl && mbUseCtlsStrm; }
     /** Sets the internal name for a form control. */
     inline void         SetControlName( const String& rName ) { maCtrlName = rName; }
 
     /** Returns the OLE storage name used in the Excel document. */
     inline const String& GetStorageName() const { return maStorageName; }
-    /** Returns the position in Ctrl stream for additional form control data. */
-    inline sal_uInt32   GetCtrlStreamPos() const { return mnCtrlStrmPos; }
     /** Returns the internal name for a form control. */
     inline const String& GetControlName() const { return maCtrlName; }
+    /** Returns the position in Ctrl stream for additional form control data. */
+    inline ULONG        GetCtlsStreamPos() const { return mnCtlsStrmPos; }
 
     /** Sets form control specific properties. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
@@ -337,10 +337,11 @@ private:
 private:
     String              maStorageName;  /// Name of the OLE storage for this object.
     String              maCtrlName;     /// Internal name of a form control.
-    sal_uInt32          mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
+    ULONG               mnCtlsStrmPos;  /// Position in 'Ctls' stream for controls.
     bool                mbAsSymbol;     /// true = Show as symbol.
     bool                mbLinked;       /// true = Linked; false = Embedded.
     bool                mbControl;      /// true = Form control, false = OLE object.
+    bool                mbUseCtlsStrm;  /// true = Form control data in 'Ctls' stream, false = Own storage.
 };
 
 // ----------------------------------------------------------------------------
