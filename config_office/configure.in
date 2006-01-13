@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-10 14:33:04 $
+dnl * Date: $Date: 2006-01-13 16:37:01 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.147 $ )
+AC_REVISION( $Revision: 1.148 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1863,10 +1863,7 @@ if test "$SOLAR_JAVA" != ""; then
       elif test `$JAVAINTERPRETER --version 2>&1 | grep -c "GNU libgcj"` -gt 0; then
         JDK=gcj
         AC_MSG_RESULT([checked (gcj)]) 
-        AC_MSG_WARN([EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile])
-        echo "EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile" >>warn
         JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
-
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "BEA"` -gt 0; then
         JDK=bea
 
@@ -2046,31 +2043,35 @@ if test "$JDK" = "gcj"; then
    LDFLAGS=$save_LDFLAGS
 fi
 
+dnl ===================================================================
+dnl Check for optional gcj-dbtool, use if compiler is gcj
+dnl ===================================================================
+if test `$JAVACOMPILER --version 2>&1 | grep -c "gcj"` -gt 0; then
+   if test `echo $WITH_JAVA | grep -c "gij"` -eq 0; then
+      javacache="gcj-dbtool"
+   else
+      javacache=`echo $WITH_JAVA | $SED -e "s/gij/gcj-dbtool/g"`
+   fi
+   if test -z "$with_jdk_home"; then
+      AC_PATH_PROG(JAVACACHE, $javacache)
+   else
+      _javac_path="$with_jdk_home/bin/$javacache"
+      dnl Check if there is a gcj-dbtool at all.
+      if test -x "$_javac_path"; then
+         JAVACACHE=$_javac_path
+      fi
+   fi
+   if test -z "$JAVACACHE"; then
+      AC_MSG_WARN([$javacache not found set with_jdk_home])
+   fi
+fi
+
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVACOMPILER)
-AC_SUBST(JAVADOC)
-
-dnl ===================================================================
-dnl Check for optional gcj-dbtool
-dnl ===================================================================
-if test "$JDK" = "gcj"; then 
-    javacache=`echo $WITH_JAVA | $SED -e "s/gij/gcj-dbtool/g"`
-    if test -z "$with_jdk_home"; then
-        AC_PATH_PROG(JAVACACHE, $javacache)
-    else
-        _javac_path="$with_jdk_home/bin/$javacache"
-        dnl Check if there is a gcj-dbtool at all.
-        if test -x "$_javac_path"; then
-            JAVACACHE=$_javac_path
-        fi
-    fi
-    if test -z "$JAVACACHE"; then
-      AC_MSG_WARN([$javacache not found set with_jdk_home])
-    fi
-fi
 AC_SUBST(JAVACACHE)
+AC_SUBST(JAVADOC)
 
 if test "$NEEDXSLTPROC" = "no" && test -z "$enable_xsltproc"; then
    XSLTPROC=NO_XSLTPROC
