@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:18:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,7 +1081,7 @@ double SAL_CALL AnalysisAddIn::getErf( constREFXPS& xOpt, double fLL, const ANY&
 
 double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE_IAE
 {
-    double fRet = 1.0 - Erf( f );
+    double fRet = Erfc( f );
     RETURN_FINITE( fRet );
 }
 
