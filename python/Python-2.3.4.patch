@@ -61,12 +61,12 @@
     # several APIs are not declared. Since this is also needed in some
     # cases for HP-UX, we define it globally.
   
-+ define_xopen_source_extended = no
++ define_xopen_source_extended=no
 + case $ac_sys_system/$ac_sys_release in
 + 	SunOS/5.1*)
 + 		;;
 + 	*)
-+ 		$define_xopen_source_extended = yes
++ 		define_xopen_source_extended=yes
 + 		;;
 + esac
   
