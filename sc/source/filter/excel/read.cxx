@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:44:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,24 @@ FltError ImportExcel::Read( void )
 
         if( !aIn.IsValid() )
         {
+            // #124240# finalize table if EOF is missing
+            switch( eAkt )
+            {
+                case Z_Biff2:
+                case Z_Biff2C:
+                case Z_Biff3:
+                case Z_Biff3C:
+                case Z_Biff4:
+                case Z_Biff4I:
+                case Z_Biff4T:
+                case Z_Biff4C:
+                case Z_Biff5I:
+                case Z_Biff5T:
+                case Z_Biff5Pre:
+                case Z_Biff5C:
+                    EndSheet();
+                break;
+            };
             eAkt = Z_Ende;
             break;
         }
@@ -599,17 +617,13 @@ FltError ImportExcel::Read( void )
                     case 0x18:  rNameMgr.ReadName( maStrm );            break;
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
-                    case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
                     case 0x31:  rFontBfr.ReadFont( maStrm );            break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
-                    case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  rXFBfr.ReadXF( maStrm );                break;
                     case 0x0293: rXFBfr.ReadStyle( maStrm );            break;
-                    case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x041E: rNumFmtBfr.ReadFormat( maStrm );       break;
                 }
 
@@ -1000,6 +1014,15 @@ FltError ImportExcel8::Read( void )
         sal_uInt16 nRecId = aIn.GetRecId();
         if( !aIn.IsValid() )
         {
+            // #124240# finalize table if EOF is missing
+            switch( eAkt )
+            {
+                case EXC_STATE_SHEET_PRE:
+                case EXC_STATE_SHEET_INIT:
+                case EXC_STATE_SHEET:
+                    EndSheet();
+                break;
+            };
             eAkt = EXC_STATE_END;
             break;
         }
@@ -1085,24 +1108,31 @@ FltError ImportExcel8::Read( void )
             {
                 switch( nRecId )
                 {
-                    case 0x0A:                          // EOF          [ 2345   ]
-                        rNumFmtBfr.CreateScFormats();
-                        rXFBfr.CreateUserStyles();
-                        eAkt = EXC_STATE_BEFORE_SHEET;
-                        break;
+                    case EXC_ID_EOF:
+                    case EXC_ID_EXTSST:
+                        /*  #i56376# evil hack: if EOF for globals is missing,
+                            simulate it. This hack works only for the bugdoc
+                            given in the issue, where the sheet substreams
+                            start directly after the EXTSST record. A future
+                            implementation should be more robust against
+                            missing EOFs. */
+                        if( (nRecId == EXC_ID_EOF) ||
+                            ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
+                        {
+                            rNumFmtBfr.CreateScFormats();
+                            rXFBfr.CreateUserStyles();
+                            eAkt = EXC_STATE_BEFORE_SHEET;
+                        }
+                    break;
                     case 0x0E:  Precision(); break;     // PRECISION
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
-                    case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
-                    case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0xD3:  ReadBasic(); break;
                     case 0xDE:  Olesize(); break;
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0x01BA: Codename( TRUE ); break;
-                    case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
 
                     case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
 
