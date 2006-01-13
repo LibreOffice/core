@@ -338,6 +338,22 @@ public class DOMDocument
                 // Now call serialize to write the document
                 meth.invoke(serializer, new Object [] { doc } );
             }
+            else if (domImpl.equals("gnu.xml.dom.DomDocument")) {
+                System.out.println("Using GNU");
+
+                Class gnuSer = Class.forName("gnu.xml.dom.ls.DomLSSerializer");
+
+                // Get the serialize method
+                meth = gnuSer.getMethod("serialize",
+                            new Class [] { Class.forName("org.w3c.dom.Node"),
+                            Class.forName("java.io.OutputStream") } );
+
+                // Get an instance
+                Object serializer = gnuSer.newInstance();
+
+                // Now call serialize to write the document
+                meth.invoke(serializer, new Object [] { doc, baos } );
+            }
             else {
                 // We dont have another parser
                 throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
