@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:31 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,11 +589,11 @@ public:
     void                Initialize();
 
     /** Inserts a new XF index. */
-    void                SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex );
+    void                SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for blank cells. */
-    void                SetBlankXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex );
+    void                SetBlankXF( const ScAddress& rScPos, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for boolean cells. */
-    void                SetBoolXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex );
+    void                SetBoolXF( const ScAddress& rScPos, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a row. */
     void                SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a column. */
@@ -622,8 +622,7 @@ private:
 
 private:
     /** Inserts a new XF index for the specified cell type. */
-    void                SetXF( SCCOL nScCol, SCROW nScRow,
-                            sal_uInt16 nXFIndex, XclImpXFInsertMode eMode );
+    void                SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode );
 
     /** Copies border of the last cell of the range to the first cell to keep it visible
         when the range is merged.
