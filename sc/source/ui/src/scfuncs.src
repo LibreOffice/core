@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:08:35 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4959,9 +4959,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die n‰chste gerade ganze Zahl auf. : Rundet eine Zahl auf die nıchste gerade ganze Zahl auf. */
-            Text [ de ] = "Rundet eine Zahl auf die n√§chste gerade ganze Zahl auf." ;
-            Text [ en-US ] = "Rounds a number up to the nearest even integer." ;
+            Text [ de ] = "Rundet eine positive Zahl auf die n√§chste gerade Ganzzahl auf und eine negative Zahl auf die n√§chste gerade Ganzzahl ab.";
+            Text [ en-US ] = "Rounds a positive number up and negative number down to the nearest even integer.";
             Text [ x-comment ] = " ";
         };
         ExtraData =
@@ -4988,9 +4987,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die n‰chste ungerade ganze Zahl auf. : Rundet eine Zahl auf die nıchste ungerade ganze Zahl auf. */
-            Text [ de ] = "Rundet eine Zahl auf die n√§chste ungerade ganze Zahl auf." ;
-            Text [ en-US ] = "Rounds a number up to the nearest odd integer." ;
+            Text [ de ] = "Rundet eine positive Zahl auf die n√§chste ungerade Ganzzahl auf und eine negative Zahl auf die n√§chste ungerade Ganzzahl ab.";
+            Text [ en-US ] = "Rounds a positive number up and negative number down to the nearest odd integer.";
             Text [ x-comment ] = " ";
         };
         ExtraData =
@@ -6721,8 +6719,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Die Anordnung der Rangfolge: 0 bedeutet aufsteigend, 1 bedeutet absteigend." ;
-            Text [ en-US ] = "Sequence order: 0 means ascending, 1 means descending." ;
+            Text [ de ] = "Die Anordnung der Rangfolge: 0 oder nicht angegeben bedeutet absteigend, ein Wert ungleich 0 bedeutet aufsteigend." ;
+            Text [ en-US ] = "Sequence order: 0 or omitted means descending, any other value than 0 means ascending." ;
             Text [ x-comment ] = " ";
         };
     };
