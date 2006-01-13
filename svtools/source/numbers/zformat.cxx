@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:01:57 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,12 +394,15 @@ void ImpSvNumFor::Enlarge(USHORT nAnz)
     }
 }
 
-void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor )
+void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
 {
     Enlarge( rNumFor.nAnzStrings );
     aI.Copy( rNumFor.aI, nAnzStrings );
-    pColor = rNumFor.pColor;
     sColorName = rNumFor.sColorName;
+    if ( pSc )
+        pColor = pSc->GetColor( sColorName );   // #121103# don't copy pointer between documents
+    else
+        pColor = rNumFor.pColor;
     aNatNum = rNumFor.aNatNum;
 }
 
@@ -560,8 +563,12 @@ void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
     bIsUsed       = rFormat.bIsUsed;
     sComment      = rFormat.sComment;
     nNewStandardDefined = rFormat.nNewStandardDefined;
+
+    // #121103# when copying between documents, get color pointers from own scanner
+    ImpSvNumberformatScan* pColorSc = ( &rScan != &rFormat.rScan ) ? &rScan : NULL;
+
     for (USHORT i = 0; i < 4; i++)
-        NumFor[i].Copy(rFormat.NumFor[i]);
+        NumFor[i].Copy(rFormat.NumFor[i], pColorSc);
 }
 
 SvNumberformat::SvNumberformat( SvNumberformat& rFormat )
