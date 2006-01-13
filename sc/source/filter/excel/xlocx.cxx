@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:52:37 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,8 +217,7 @@ SdrObject* XclImpOcxConverter::CreateSdrObject( const XclImpOleObj& rOcxCtrlObj,
         SetScTab( rOcxCtrlObj.GetScTab() );
 
         // stream position of the extra data for this control
-        sal_uInt32 nStrmPos = rOcxCtrlObj.GetCtrlStreamPos();
-        mxStrm->Seek( static_cast< ULONG >( nStrmPos ) );
+        mxStrm->Seek( rOcxCtrlObj.GetCtlsStreamPos() );
 
         // the shape to fill
         Reference< XShape > xShape;
