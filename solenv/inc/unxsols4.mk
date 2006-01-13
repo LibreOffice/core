@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:56:09 $
+#   last change: $Author: rt $ $Date: 2006-01-13 16:19:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ LINKC=$(CC)
 .IF "$(SYSBASE)"!=""
 C_RESTRICTIONFLAGS*=-xc99=none
 LD_OPTIONS+=-L$(SYSBASE)$/usr$/lib
-CDEFS+=-DSYSBASE="$(SYSBASEINC)"
+CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 .EXPORT : LD_OPTIONS
 .ENDIF          # "$(SYSBASE)"!=""
