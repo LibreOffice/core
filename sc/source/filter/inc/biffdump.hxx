@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:55:25 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_BIFFDUMP_HXX
 #define SC_BIFFDUMP_HXX
 
@@ -45,6 +46,9 @@
 // ============================================================================
 
 #if EXC_INCL_DUMPER
+
+#include <vector>
+#include <map>
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -147,8 +151,9 @@ public:
 class Biff8RecDumper : public XclImpRoot
 {
 protected:
-    typedef ScfRef< ByteString >            ByteStringRef;
-    typedef ::std::vector< ByteStringRef >  ByteStringVec;
+    typedef ScfRef< ByteString >                    ByteStringRef;
+    typedef ::std::vector< ByteStringRef >          ByteStringVec;
+    typedef ::std::map< sal_uInt32, sal_uInt32 >    StrmPortionMap;
 
 
     static const sal_Char*      pLevelPreString;
@@ -162,6 +167,7 @@ protected:
     SvFileStream*               pDumpStream;
     XclImpStream*               pIn;
 
+    StrmPortionMap              maCtlsPosMap;       /// Control data in 'Ctls' stream.
     ByteStringVec               maNames;            /// Defined names.
 
     UINT32                      nMaxBodyLines;
