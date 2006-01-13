@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:36:58 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,15 +453,17 @@ Window* __EXPORT ScDrawLayer::GetCurDocViewWin()
     return NULL;
 }
 
-void ScDrawLayer::ScAddPage( SCTAB nTab )
+BOOL ScDrawLayer::ScAddPage( SCTAB nTab )
 {
     if (bDrawIsInUndo)
-        return;
+        return FALSE;   // not inserted
 
     ScDrawPage* pPage = (ScDrawPage*)AllocPage( FALSE );
     InsertPage(pPage, static_cast<sal_uInt16>(nTab));
     if (bRecording)
         AddCalcUndo(new SdrUndoNewPage(*pPage));
+
+    return TRUE;        // inserted
 }
 
 void ScDrawLayer::ScRemovePage( SCTAB nTab )
