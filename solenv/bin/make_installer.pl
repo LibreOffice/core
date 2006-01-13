@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 13:02:45 $
+#   last change: $Author: rt $ $Date: 2006-01-13 15:00:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 
 installer::ziplist::replace_minor_in_pathes($includepatharrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3.log" ,$includepatharrayref); }
+
+installer::ziplist::replace_packagetype_in_pathes($includepatharrayref);
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3a.log" ,$includepatharrayref); }
 
 installer::ziplist::resolve_relative_pathes($includepatharrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3b.log" ,$includepatharrayref); }
