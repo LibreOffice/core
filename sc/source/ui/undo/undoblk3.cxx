@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:04 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,8 +183,7 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
 
         pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, bMulti, pDoc, &aMarkData );
 
-        if (pDrawUndo)
-            DoSdrUndoAction( pDrawUndo );
+        DoSdrUndoAction( pDrawUndo, pDoc );
 
         ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
         if ( pChangeTrack )
