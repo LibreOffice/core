@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:55:38 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,13 @@ const UINT16 ExcelToSc::nLastInd = 399;
 
 void ImportExcel::Formula25()
 {
-    UINT16  nRow, nCol, nXF, nFormLen;
+    XclAddress aXclPos;
+    UINT16  nXF, nFormLen;
     double  fCurVal;
     BYTE    nAttr0, nFlag0;
     BOOL    bShrFmla;
 
-    aIn >> nRow >> nCol;
+    aIn >> aXclPos;
 
     if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
@@ -97,7 +98,7 @@ void ImportExcel::Formula25()
 
     nLastXF = nXF;
 
-    Formula( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
+    Formula( aXclPos, nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
 }
 
 
@@ -109,32 +110,34 @@ void ImportExcel::Formula3()
 
 void ImportExcel::Formula4()
 {
-    UINT16  nRow, nCol, nXF, nFormLen;
+    XclAddress aXclPos;
+    UINT16  nXF, nFormLen;
     double  fCurVal;
     BYTE    nFlag0;
 
-    aIn >> nRow >> nCol >> nXF >> fCurVal >> nFlag0;
+    aIn >> aXclPos >> nXF >> fCurVal >> nFlag0;
     aIn.Ignore( 1 );
     aIn >> nFormLen;
 
     nLastXF = nXF;
 
-    Formula( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
+    Formula( aXclPos, nXF, nFormLen, fCurVal, nFlag0, FALSE );
 }
 
 
-void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
+void ImportExcel::Formula( const XclAddress& rXclPos,
     UINT16 nXF, UINT16 nFormLen, double& rCurVal, BYTE nFlag, BOOL bShrFmla )
 {
     ConvErr eErr = ConvOK;
 
-    if( ValidRow(nRow) && ValidCol(nCol) )
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, rXclPos, GetCurrScTab(), true ) )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
         BOOL                bConvert;
 
-        pFormConv->Reset( ScAddress( nCol, nRow, nTab ) );
+        pFormConv->Reset( aScPos );
 
         if( bShrFmla )
             bConvert = !pFormConv->GetShrFmla( pErgebnis, nFormLen );
@@ -148,20 +151,20 @@ void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         if( pErgebnis )
         {
-            pZelle = new ScFormulaCell( pD, ScAddress( nCol, nRow, nTab ), pErgebnis );
+            pZelle = new ScFormulaCell( pD, aScPos, pErgebnis );
 
-            pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pZelle, (BOOL)TRUE );
 
-            pColRowBuff->Used( nCol, nRow );
+            pColRowBuff->Used( aScPos );
         }
         else
         {
             CellType        eCellType;
             ScBaseCell*     pBaseCell;
-            pD->GetCellType( nCol, nRow, nTab, eCellType );
+            pD->GetCellType( aScPos.Col(), aScPos.Row(), aScPos.Tab(), eCellType );
             if( eCellType == CELLTYPE_FORMULA )
             {
-                pD->GetCell( nCol, nRow, nTab, pBaseCell );
+                pD->GetCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pBaseCell );
                 pZelle = ( ScFormulaCell* ) pBaseCell;
                 if( pZelle )
                     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
@@ -180,10 +183,8 @@ void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
         else
             pLastFormCell = NULL;
 
-        GetXFRangeBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( aScPos, nXF );
     }
-    else
-        bTabTruncated = TRUE;
 }
 
 
@@ -1324,8 +1325,8 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
     TokenId                 eParam[ 256 ];
     INT32                   nLauf;
 
-    if( eId == ocLog10 && nAnz > 1 )
-        eId = ocLog;
+    if( eId == ocLog && nAnz == 1 )
+        eId = ocLog10;
     else if( eId == ocCeil || eId == ocFloor )
     {
         aStack << aPool.Store( 1.0 );   // default, da in Excel nicht vorhanden
