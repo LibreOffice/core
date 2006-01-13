@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:16:49 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,16 @@ namespace accessibility
     AccessibleParaManager::~AccessibleParaManager()
     {
         // owner is responsible for possible child defuncs
+    }
+
+    void AccessibleParaManager::SetAdditionalChildStates( const VectorOfStates& rChildStates )
+    {
+        maChildStates = rChildStates;
+    }
+
+    const AccessibleParaManager::VectorOfStates& AccessibleParaManager::GetAdditionalChildStates() const
+    {
+        return maChildStates;
     }
 
     void AccessibleParaManager::SetNum( sal_uInt32 nNumParas )
@@ -282,6 +292,10 @@ namespace accessibility
 
         if( mnFocusedChild == static_cast<sal_Int32>(nParagraphIndex) )
             rChild.SetState( AccessibleStateType::FOCUSED );
+
+        // add states passed from outside
+        for( VectorOfStates::const_iterator aIt = maChildStates.begin(), aEnd = maChildStates.end(); aIt != aEnd; ++aIt )
+            rChild.SetState( *aIt );
     }
 
     void AccessibleParaManager::SetState( sal_Int32 nChild, const sal_Int16 nStateId )
