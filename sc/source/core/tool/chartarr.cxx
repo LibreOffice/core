@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:05:52 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1379,7 +1379,7 @@ ScChartPositionMap::~ScChartPositionMap()
     }
     delete [] ppData;
 
-    USHORT j;
+    SCSIZE j;
     for ( j=0; j < nColCount; j++ )
     {
         delete ppColHeader[j];
