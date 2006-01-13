@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:36:42 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ public:
 
     BOOL            HasObjects() const;
 
-    void            ScAddPage( SCTAB nTab );
+    BOOL            ScAddPage( SCTAB nTab );
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const String& rNewName );
     void            ScMovePage( USHORT nOldPos, USHORT nNewPos );
