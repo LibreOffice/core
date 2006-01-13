@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:00:07 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,7 +570,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const String& r )
         GrowElement();
 
     if( nP_ExtAkt >= nP_Ext )
-        GrowString();
+        GrowExt();
 
     pElement[ nElementAkt ] = nP_ExtAkt;
     pType[ nElementAkt ] = T_Ext;           // Typinfo String eintragen
