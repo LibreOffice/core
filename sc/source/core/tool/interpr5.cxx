@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:38:41 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1056,7 +1056,7 @@ void ScInterpreter::ScMatDet()
                 ::std::vector< SCSIZE> P(nR);
                 int nDetSign = lcl_LUP_decompose( xLU, nR, P);
                 if (!nDetSign)
-                    PushError();
+                    PushInt(0);     // singular matrix
                 else
                 {
                     // In an LU matrix the determinant is simply the product of
