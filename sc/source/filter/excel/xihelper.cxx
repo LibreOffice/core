@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:48:59 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,6 +776,21 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
 
 // URL conversion =============================================================
 
+namespace {
+
+void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
+{
+    // #126855# encode special characters
+    switch( cChar )
+    {
+        case '#':   rUrl.AppendAscii( "%23" );  break;
+        case '%':   rUrl.AppendAscii( "%25" );  break;
+        default:    rUrl.Append( cChar );
+    }
+}
+
+} // namespace
+
 void XclImpUrlHelper::DecodeUrl(
         String& rUrl, String& rTabName, bool& rbSameWb,
         const XclImpRoot& rRoot, const String& rEncodedUrl )
@@ -819,7 +834,7 @@ void XclImpUrlHelper::DecodeUrl(
                     break;
                     default:
                         bEncoded = false;
-                        rUrl.Append( *pChar );
+                        lclAppendUrlChar( rUrl, *pChar );
                         eState = xlUrlPath;
                 }
             }
@@ -839,7 +854,10 @@ void XclImpUrlHelper::DecodeUrl(
                             if( *pChar == '@' )
                                 rUrl.AppendAscii( "\\\\" );
                             else
-                                rUrl.Append( *pChar ).AppendAscii( ":\\" );
+                            {
+                                lclAppendUrlChar( rUrl, *pChar );
+                                rUrl.AppendAscii( ":\\" );
+                            }
                         }
                         else
                             rUrl.AppendAscii( "<NULL-DRIVE!>" );
@@ -847,7 +865,10 @@ void XclImpUrlHelper::DecodeUrl(
                     break;
                     case EXC_URL_DRIVEROOT:
                         if( cCurrDrive )
-                            rUrl.Append( cCurrDrive ).Append( ':' );
+                        {
+                            lclAppendUrlChar( rUrl, cCurrDrive );
+                            rUrl.Append( ':' );
+                        }
                         // run through
                     case EXC_URL_SUBDIR:
                         if( bEncoded )
@@ -867,7 +888,7 @@ void XclImpUrlHelper::DecodeUrl(
                         {
                             xub_StrLen nLen = *++pChar;
                             for( xub_StrLen nChar = 0; (nChar < nLen) && *(pChar + 1); ++nChar )
-                                rUrl.Append( *++pChar );
+                                lclAppendUrlChar( rUrl, *++pChar );
 //                            rUrl.Append( ':' );
                         }
                     }
@@ -876,7 +897,7 @@ void XclImpUrlHelper::DecodeUrl(
                         eState = xlUrlFileName;
                     break;
                     default:
-                        rUrl.Append( *pChar );
+                        lclAppendUrlChar( rUrl, *pChar );
                 }
             }
             break;
@@ -888,7 +909,7 @@ void XclImpUrlHelper::DecodeUrl(
                 switch( *pChar )
                 {
                     case ']':   eState = xlUrlSheetName;    break;
-                    default:    rUrl.Append( *pChar );
+                    default:    lclAppendUrlChar( rUrl, *pChar );
                 }
             }
             break;
@@ -902,7 +923,7 @@ void XclImpUrlHelper::DecodeUrl(
 // --- raw read mode ---
 
             case xlUrlRaw:
-                rUrl.Append( *pChar );
+                lclAppendUrlChar( rUrl, *pChar );
             break;
         }
 
