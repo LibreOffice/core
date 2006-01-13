@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:11:41 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,11 +443,57 @@ namespace svx
             implUpdateDisplay();
     }
 
+    Control& SuggestionDisplay::implGetCurrentControl()
+    {
+        if( m_bDisplayListBox )
+            return m_aListBox;
+        return m_aValueSet;
+    }
+
+    void SuggestionDisplay::KeyInput( const KeyEvent& rKEvt )
+    {
+        implGetCurrentControl().KeyInput( rKEvt );
+    }
+    void SuggestionDisplay::KeyUp( const KeyEvent& rKEvt )
+    {
+        implGetCurrentControl().KeyUp( rKEvt );
+    }
+    void SuggestionDisplay::Activate()
+    {
+        implGetCurrentControl().Activate();
+    }
+    void SuggestionDisplay::Deactivate()
+    {
+        implGetCurrentControl().Deactivate();
+    }
+    void SuggestionDisplay::GetFocus()
+    {
+        implGetCurrentControl().GetFocus();
+    }
+    void SuggestionDisplay::LoseFocus()
+    {
+        implGetCurrentControl().LoseFocus();
+    }
+    void SuggestionDisplay::Command( const CommandEvent& rCEvt )
+    {
+        implGetCurrentControl().Command( rCEvt );
+    }
+
     void SuggestionDisplay::DisplayListBox( bool bDisplayListBox )
     {
         if( m_bDisplayListBox != bDisplayListBox )
         {
+            Control& rOldControl = implGetCurrentControl();
+            BOOL bHasFocus = rOldControl.HasFocus();
+
             m_bDisplayListBox = bDisplayListBox;
+
+            if( bHasFocus )
+            {
+                Control& rNewControl = implGetCurrentControl();
+                rNewControl.GrabFocus();
+            }
+
             implUpdateDisplay();
         }
     }
