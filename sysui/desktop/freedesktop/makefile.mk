@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 12:57:58 $
+#   last change: $Author: rt $ $Date: 2006-01-13 14:57:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,9 @@ TARGET=freedesktop
 # --- Files --------------------------------------------------------
 
 .IF "$(RPM)"!=""
-        
-RPMDIR  = $(shell cd $(BIN); pwd)
-    
+
+PACKAGE_RPM = $(MISC)$/$(TARGET).rpmflag
+
 .ENDIF
 
 # --- Targets -------------------------------------------------------
@@ -61,18 +61,22 @@ RPMDIR  = $(shell cd $(BIN); pwd)
 
 .IF "$(RPM)"!=""
 
-ALLTAR : PACKAGE_RPM 
+ALLTAR : $(PACKAGE_RPM)
 
 # --- packaging ---------------------------------------------------
     
-.PHONY PACKAGE_RPM : $(MISC)/$(TARGET)-menus.spec
+$(PACKAGE_RPM) : $(MISC)$/redhat.rpmflag
+
+$(PACKAGE_RPM) : $(MISC)/$(TARGET)-menus.spec
+    -@$(RM) $(PKGDIR)$/openoffice.org-$(TARGET)-*.noarch.rpm $(BIN)/noarch/openoffice.org-$(TARGET)-*.noarch.rpm
     @$(MKDIRHIER) $(MISC)$/$(TARGET)
     @$(MKDIRHIER) $(MISC)$/$(TARGET)$/BUILD
-    @$(RPM) --define "basedir $(shell pwd)" --define "unixfilename $(UNIXFILENAME)" \
+    @$(RPM) $(RPMMACROS) -bb $< \
+        --define "basedir $(PWD)" --define "unixfilename $(UNIXFILENAME)" \
         --define "version $(PKGVERSION)" --define "release $(PKGREV)" \
-        --define "_rpmdir $(RPMDIR)" -bb $< \
-        --define "source $(shell cd $(MISC)$/redhat; pwd)" \
+        --define "source $(ABSLOCALOUT)$/misc$/redhat" \
         --define "unique $(shell echo $$$$)" \
-        --define "_builddir $(shell cd $(MISC)$/$(TARGET)/BUILD; pwd)" 
+        --define "_builddir $(ABSLOCALOUT)$/misc$/$(TARGET)/BUILD" 
+    @touch $@
     
 .ENDIF
