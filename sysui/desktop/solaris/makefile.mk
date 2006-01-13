@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:50:07 $
+#   last change: $Author: rt $ $Date: 2006-01-13 14:57:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,13 +94,15 @@ PKGDEPN = \
 PKGDIR  = $(shell cd $(BIN); pwd)
 
 PKGNAME = $(shell sed -n -e s/PKG=//p pkginfo)
-PKGFILE = $(BIN)/$(PKGNAME).tar.gz
+PKGFILE = $(BIN)$/pkg$/openoffice.org-desktop-integration.tar.gz
    
 PKGDATESTRING = $(shell date -u +%Y.%m.%d)
 PKGARCH=sparc,i386
 
 ULFDIR = $(COMMONMISC)$/desktopshare
-    
+
+FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
+
 .ENDIF
     
 # --- Targets -------------------------------------------------------
@@ -172,8 +174,11 @@ $(MISC)/$(TARGET)/{openoffice.sh printeradmin.sh} : ../share/$$(@:f)
 # --- packaging ---------------------------------------------------
 
 $(PKGFILE) : $(PKGDEPN) makefile.mk
-    pkgmk -r . -f $(MISC)/$(TARGET)/prototype -o ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
-    @tar -cf - -C /var/spool/pkg $(PKGNAME) | gzip > $@
-    @rm -rf /var/spool/pkg/$(PKGNAME)
+    @-$(RM) $(BIN)$/$(PKGNAME).tar.gz
+    @$(MKDIRHIER) $(@:d)
+    @pkgmk -r . -f $(MISC)/$(TARGET)/prototype -o -d $(BIN) ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
+    @$(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(BIN) $(PKGNAME) 
+    @tar -cf - -C $(BIN) $(PKGNAME) | gzip > $@
+    @rm -rf $(BIN)/$(PKGNAME)
 
 .ENDIF
