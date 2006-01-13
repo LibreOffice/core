@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 09:41:40 $
+#   last change: $Author: rt $ $Date: 2006-01-13 14:56:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ KDEICONLIST = \
 .IF "$(DPKG)"!=""
 
 PKGNAME=openoffice.org-$(TARGET)-menus
-DEBFILE=$(BIN)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
+DEBFILE=$(PKGDIR)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
 DEBDEPN = \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice \
@@ -248,8 +248,10 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
 # --- packaging ---------------------------------------------------
 
 # getuid.so fakes the user/group for us	
-.PHONY $(DEBFILE) : $(DEBDEPN)
-    @$(MKDIRHIER) $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
+$(DEBFILE) : $(DEBDEPN) control postinst postrm prerm
+    -@$(RM) $(@:d)/$(PKGNAME)_*_all.deb $(BIN)$/$(PKGNAME)_*_all.deb
+    @$(MKDIRHIER) $(@:d)
+    @$(MKDIRHIER) $(MISC)/$(TARGET)/$(@:f)/DEBIAN
     @cat control | tr -d "\015" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @echo "Version: $(PKGVERSION)-$(PKGREV)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @du -k -s $(MISC)/$(TARGET)/$(DEBFILE:f) | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
@@ -259,6 +261,6 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
     @chmod -R g-w $(MISC)/$(TARGET)/$(DEBFILE:f)
     @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
     /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@"
-    @$(RM) -r $(MISC)/$(TARGET)/$(@:f)
+    @$(RM) -r $(MISC)/$(TARGET)/$(@:f)/DEBIAN
 
 .ENDIF
