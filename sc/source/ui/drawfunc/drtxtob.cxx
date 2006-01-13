@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:13:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,11 @@ __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
+
+        //  #122057# The listener may just now be waiting for the SolarMutex and call the link
+        //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
+        pClipEvtLstnr->ClearCallbackLink();
+
         pClipEvtLstnr->release();
     }
 }
