@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:38:55 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,6 +358,8 @@ void ScXMLContentValidationContext::GetAlertStyle(const rtl::OUString& sMessageT
         aAlertStyle = sheet::ValidationAlertStyle_WARNING;
     else if (IsXMLToken(sMessageType, XML_INFORMATION))
         aAlertStyle = sheet::ValidationAlertStyle_INFO;
+    else    // don't leave uninitialized
+        aAlertStyle = sheet::ValidationAlertStyle_STOP;
 }
 
 void ScXMLContentValidationContext::SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const
@@ -386,6 +388,9 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         com::sun::star::sheet::ValidationType& aValidationType,
         com::sun::star::sheet::ConditionOperator& aOperator)
 {
+    aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
+    aOperator = sheet::ConditionOperator_NONE;
+
     rtl::OUString sCondition(sTempCondition);
     if (sCondition.getLength())
     {
@@ -522,6 +527,10 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
             }
         }
     }
+
+    // a validation type (date, integer) without a condition isn't possible
+    if ( aOperator == sheet::ConditionOperator_NONE )
+        aValidationType = sheet::ValidationType_ANY;
 }
 
 void ScXMLContentValidationContext::EndElement()
