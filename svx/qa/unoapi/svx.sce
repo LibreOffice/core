@@ -2,11 +2,11 @@
 -o svx.SvxShapeControl
 -o svx.SvxGraphicObject
 -o svx.AccessibleGraphicShape
-#i37641#-o svx.AccessibleOLEShape
-#i37641#-o svx.AccessiblePageShape
+-o svx.AccessibleOLEShape
+-o svx.AccessiblePageShape
 -o svx.AccessiblePresentationGraphicShape
-#i37641#-o svx.AccessiblePresentationOLEShape
-#i37641#-o svx.AccessibleShape
+-o svx.AccessiblePresentationOLEShape
+-o svx.AccessibleShape
 -o svx.GraphicExporter
 -o svx.SvxDrawPage
 -o svx.SvxShape
@@ -24,7 +24,11 @@
 -o svx.SvxUnoTextField
 -o svx.SvxUnoTextRange
 -o svx.SvxUnoTextRangeEnumeration
-#i37641#-o svx.AccessibleControlShape
+-o svx.AccessibleShape
 -o svx.SvxGraphCtrlAccessibleContext
-#i37641#-o svx.AccessiblePresentationShape
--o svx.AccessibleEditableTextPara
+-o svx.AccessibleControlShape
+### i58062 ###
+#-o svx.AccessibleEditableTextPara
+### i57892 ###
+#-o svx.AccessiblePresentationShape
+
