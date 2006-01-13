@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: vg $ $Date: 2005-12-22 11:06:11 $
+#   last change: $Author: rt $ $Date: 2006-01-13 16:18:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.96 $ ';
+$id_str = ' $Revision: 1.97 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -117,17 +117,6 @@ if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the e
   $maybedot     = '.';
 }
 
-if ( $ENV{GUI} eq 'WNT' ) {
-    if ($ENV{COM} eq 'GCC') {
-        warn("Warning: do we need stripping for windows gcc? Nothing defined yet.");
-    }
-} else {
-    if (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS})) {
-        $strip = 'strip';
-        $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
-    }
-}
-
 $upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
 $tempcounter        = 0;
@@ -148,6 +137,20 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 #### main ####
 
 parse_options();
+
+if ( ! $opt_delete ) {
+    if ( $ENV{GUI} eq 'WNT' ) {
+        if ($ENV{COM} eq 'GCC') {
+            warn("Warning: do we need stripping for windows gcc? Nothing defined yet.");
+        }
+    } else {
+        if (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS})) {
+            $strip = 'strip';
+            $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
+        }
+    }
+}
+
 init_globals();
 push_default_actions();
 parse_dlst();
