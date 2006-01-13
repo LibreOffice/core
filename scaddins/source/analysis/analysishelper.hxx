@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:51:59 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,7 @@ STRING              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
                         sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE;
 double              Erf( double fX );
+double              Erfc( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
 STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
