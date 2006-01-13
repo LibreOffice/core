@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:33:37 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,6 @@ private:
     void            AutoParAdded();
     BOOL            CursorAtClosingPar();
     void            SkipClosingPar();
-    void            StopInputWinEngine( BOOL bAll );
     DECL_LINK( ModifyHdl, void* );
 #endif
 
@@ -243,6 +242,7 @@ public:
     BOOL            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
     void            SetInputWindow( ScInputWindow* pNew )   { pInputWin = pNew; }
+    void            StopInputWinEngine( BOOL bAll );
 
     BOOL            IsInEnterHandler() const                { return bInEnterHandler; }
     BOOL            IsInOwnChange() const                   { return bInOwnChange; }
