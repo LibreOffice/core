@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:06:58 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1434,7 +1434,8 @@ void ScInterpreter::ScMod()
     {
         double nVal2 = GetDouble();
         double nVal1 = GetDouble();
-        PushDouble(nVal1 - (::rtl::math::approxFloor(nVal1 / nVal2) * nVal2));
+        PushDouble( ::rtl::math::approxSub( nVal1,
+                    ::rtl::math::approxFloor(nVal1 / nVal2) * nVal2));
     }
 }
 
@@ -2324,20 +2325,20 @@ void ScInterpreter::ScHyperLink()
 
 #define UTF8_STRINGPARAM( ascii )   ascii, static_cast< xub_StrLen >( sizeof( ascii ) - 1 )
 #define UTF8_CREATE( ascii )        ByteString( UTF8_STRINGPARAM( ascii ) )
-#define UTF8_ASSIGN( ascii )        Assign( UTF8_STRINGPARAM( ascii ) )
 #define UTF8_APPEND( ascii )        Append( UTF8_STRINGPARAM( ascii ) )
+#define UTF8_PREPEND( ascii )       Insert( UTF8_CREATE( ascii ), 0 )
 
 // local functions ------------------------------------------------------------
 
 namespace {
 
-inline void lclSplitDouble( double& rfInt, double& rfFrac, double fValue )
+inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
 {
-    rfFrac = modf( fValue, &rfInt );
+    rnBlock = static_cast< sal_Int32 >( modf( (fValue + 0.1) / fSize, &rfInt ) * fSize + 0.1 );
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit( ByteString& rText, int nDigit )
+void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
@@ -2359,7 +2360,7 @@ void lclAppendDigit( ByteString& rText, int nDigit )
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10( ByteString& rText, int nDigit, int nPow10 )
+void lclAppendPow10( ByteString& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 {
     DBG_ASSERT( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
     lclAppendDigit( rText, nDigit );
@@ -2374,7 +2375,7 @@ void lclAppendPow10( ByteString& rText, int nDigit, int nPow10 )
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock( ByteString& rText, int nValue )
+void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
 {
     DBG_ASSERT( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
     if( nValue >= 100000 )
@@ -2399,8 +2400,8 @@ void lclAppendBlock( ByteString& rText, int nValue )
     }
     if( nValue > 0 )
     {
-        int nTen = nValue / 10;
-        int nOne = nValue % 10;
+        sal_Int32 nTen = nValue / 10;
+        sal_Int32 nOne = nValue % 10;
         if( nTen >= 1 )
         {
             if( nTen >= 3 )
@@ -2436,38 +2437,38 @@ void ScInterpreter::ScBahtText()
         bool bMinus = fValue < 0.0;
         fValue = fabs( fValue );
 
-        // round to 2 digits after decimal point
-        (fValue *= 100.0) += 0.5;
-        fValue = ::rtl::math::approxFloor( fValue ) / 100.0 + 0.001;
+        // round to 2 digits after decimal point, fValue contains Satang as integer
+        fValue = ::rtl::math::approxFloor( fValue * 100.0 + 0.5 );
 
         // split Baht and Satang
         double fBaht = 0.0;
-        double fSatang = 0.0;
-        lclSplitDouble( fBaht, fSatang, fValue );
+        sal_Int32 nSatang = 0;
+        lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
 
         ByteString aText;
 
         // generate text for Baht value
         if( fBaht == 0.0 )
         {
-            aText.UTF8_APPEND( UTF8_TH_0 );
+            if( nSatang == 0 )
+                aText.UTF8_APPEND( UTF8_TH_0 );
         }
         else while( fBaht > 0.0 )
         {
-            double fBlock = 0.0;
-            lclSplitDouble( fBaht, fBlock, fBaht / 1.0e6 );
             ByteString aBlock;
-            int nBlock = static_cast< int >( ::rtl::math::approxFloor( fBlock * 1.0e6 ) );
+            sal_Int32 nBlock = 0;
+            lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
             if( nBlock > 0 )
                 lclAppendBlock( aBlock, nBlock );
+            // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
-                aBlock.UTF8_APPEND( UTF8_TH_1E6 );
+                aBlock.UTF8_PREPEND( UTF8_TH_1E6 );
             aText.Insert( aBlock, 0 );
         }
-        aText.UTF8_APPEND( UTF8_TH_BAHT );
+        if( aText.Len() > 0 )
+            aText.UTF8_APPEND( UTF8_TH_BAHT );
 
         // generate text for Satang value
-        int nSatang = static_cast< int >( fSatang * 100.0 );
         if( nSatang == 0 )
         {
             aText.UTF8_APPEND( UTF8_TH_DOT0 );
@@ -2480,7 +2481,7 @@ void ScInterpreter::ScBahtText()
 
         // add the minus sign
         if( bMinus )
-            aText.Insert( UTF8_CREATE( UTF8_TH_MINUS ), 0 );
+            aText.UTF8_PREPEND( UTF8_TH_MINUS );
 
         PushString( String( aText, RTL_TEXTENCODING_UTF8 ) );
     }
