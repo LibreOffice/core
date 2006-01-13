@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:08:58 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,7 +749,7 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
 
-    if ( pDrawUndo && !bUndo )                  //  draw redo after updating row heights
+    if ( !bUndo )                               //  draw redo after updating row heights
         RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
 
     pDocShell->PostDataChanged();
@@ -989,7 +989,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         pDocShell->UpdatePaintExt( nExtFlags, aDrawRange );
     }
 
-    if ( pDrawUndo && !bUndo )                  //  draw redo after updating row heights
+    if ( !bUndo )                               //  draw redo after updating row heights
         RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
 
     pDocShell->PostPaint( aDrawRange, nPaint, nExtFlags );
@@ -1245,8 +1245,7 @@ void __EXPORT ScUndoDragDrop::Redo()
     delete pClipDoc;
     ShowTable( aDestRange.aStart.Tab() );
 
-    if ( pDrawUndo )
-        RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
+    RedoSdrUndoAction( pDrawUndo );             //! include in ScBlockUndo?
     EnableDrawAdjust( pDoc, TRUE );             //! include in ScBlockUndo?
 
     EndRedo();
