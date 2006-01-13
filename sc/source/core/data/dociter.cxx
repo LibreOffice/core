@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:03:46 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1136,7 +1136,10 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
             ++i;
         if (i > nHi)
         {
-            nHi = nMid - 1;
+            if (nMid > 0)
+                nHi = nMid - 1;
+            else
+                bDone = true;
             continue;   // while
         }
         BOOL bStr = pItems[i].pCell->HasStringData();
