@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:09:18 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,6 +319,13 @@ void ScTabViewShell::SetActive()
 
 USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
 {
+    // Call EnterHandler even in formula mode here,
+    // so a formula change in an embedded object isn't lost
+    // (ScDocShell::PrepareClose isn't called then).
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( this );
+    if ( pHdl && pHdl->IsInputMode() )
+        pHdl->EnterHandler();
+
     // #110797#
     if ( GetDrawView() )
         GetDrawView()->EndTextEdit();
