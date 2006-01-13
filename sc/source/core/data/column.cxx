@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:28:40 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1732,8 +1732,10 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
             ScAddress& rAddress = aHint.GetAddress();
             ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
-            for (EntryPosPairs::const_iterator it( aEntries.begin());
-                    it != aEntries.end(); ++it)
+
+            // #121990# must iterate backwards, because indexes of following cells become invalid
+            for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
+                    it != aEntries.rend(); ++it)
             {
                 nStartPos = (*it).first;
                 nStopPos = (*it).second;
