@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:20 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,7 @@ void ScBlockUndo::EndUndo()
         AdjustHeight();
 
     EnableDrawAdjust( pDocShell->GetDocument(), TRUE );
-    if (pDrawUndo)
-        DoSdrUndoAction( pDrawUndo );
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
     ShowBlock();
     ScSimpleUndo::EndUndo();
@@ -325,8 +324,8 @@ void ScMoveUndo::BeginUndo()
 
 void ScMoveUndo::EndUndo()
 {
-    if (pDrawUndo)                   //@17.12.97 Reihenfolge der Fkt.s geaendert
-        DoSdrUndoAction( pDrawUndo );
+    //@17.12.97 Reihenfolge der Fkt.s geaendert
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // #125875# must also be called when pointer is null
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
         UndoRef();
