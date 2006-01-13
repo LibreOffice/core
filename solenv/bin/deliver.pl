@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:18:40 $
+#   last change: $Author: rt $ $Date: 2006-01-13 16:36:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.97 $ ';
+$id_str = ' $Revision: 1.98 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -745,13 +745,16 @@ sub strip_target {
 };
 
 sub cachejar {
-    my $file = shift;
-    my $to = $file.".so";
-    print "CACHEJAR: $file -> $to with $ENV{GCJ_DATABASE}\n";
-    print "Caching 1/2: $ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o $to $file\n";
-    system("$ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o $to $file");
-    print "Caching 2/2: $ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to\n";
-    system("$ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to");
+    if (defined($ENV{JAVACACHE}) && $ENV{JAVACACHE} ne '') {
+        my $file = shift;
+        my $to = $file.".so";
+        my $JAVALINKER = "$ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o";
+        print "CACHEJAR: $file -> $to with $ENV{GCJ_DATABASE}\n";
+        print "Caching 1/2: $JAVALINKER $to $file\n";
+        system("$JAVALINKER $to $file");
+        print "Caching 2/2: $ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to\n";
+        system("$ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to");
+    }
 };
 
 sub copy_if_newer
