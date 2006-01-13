@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 10:58:16 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,118 +838,153 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
 
     return aRet;
 }
-/** Calculates erf(x) by using Maclaurin expansion.  Accurate up to
-    x = 4.
- */
-void ErfMaclaurin( double x, double& fErf )
+
+/** Approximation algorithm for erf for 0 < x < 0.65. */
+void Erf0065( double x, double& fVal )
 {
-    if( x == 0.0 )
+    static const double pn[] = {
+        1.12837916709551256,
+        1.35894887627277916E-1,
+        4.03259488531795274E-2,
+        1.20339380863079457E-3,
+        6.49254556481904354E-5
+    };
+    static const double qn[] = {
+        1.00000000000000000,
+        4.53767041780002545E-1,
+        8.69936222615385890E-2,
+        8.49717371168693357E-3,
+        3.64915280629351082E-4
+    };
+
+    double fPSum = 0.0;
+    double fQSum = 0.0;
+    double fXPow = 1.0;
+    for ( unsigned int i = 0; i <= 4; ++i )
     {
-        fErf = 0.0;
-        return;
+        fPSum += pn[i]*fXPow;
+        fQSum += qn[i]*fXPow;
+        fXPow *= x*x;
     }
-
-    double      fZm, fN2, fn1, fOld, fT;
-    sal_Bool    bAdd = sal_True;
-    sal_Int32   nMaxIter = 1000;
-
-    fZm = x;
-    fZm *= x;   // x^2
-
-    fn1 = 2.0;
-    fN2 = 3.0;
-
-    fT = x * fZm;
-
-    fErf = x - fT / fN2;
-
-    fOld = fErf * 0.9;
-
-    while( fErf != fOld && nMaxIter-- )
-    {
-        fOld = fErf;
-
-        fN2 += 2.0;
-
-        fT /= fn1;
-        fT *= fZm;
-
-        fn1++;
-
-        if( bAdd )
-            fErf += fT / fN2;
-        else
-            fErf -= fT / fN2;
-
-        bAdd = !bAdd;
-    }
-
-    fErf *= 1.1283791670955125738961589031215452;
+    fVal = x * fPSum / fQSum;
 }
 
-/** Calculates erf(x) by using Asymptotic expansion.  Accurate for x > 4
-    but converges more quickly than octave/gnumeric.  Calculated values
-    are almost identical to Excel's.
+/** Approximation algorithm for erfc for 0.65 < x < 6.0. */
+void Erfc0600( double x, double& fVal )
+{
+    double fPSum = 0.0;
+    double fQSum = 0.0;
+    double fXPow = 1.0;
+    const double *pn;
+    const double *qn;
+
+    if ( x < 2.2 )
+    {
+        static const double pn22[] = {
+            9.99999992049799098E-1,
+            1.33154163936765307,
+            8.78115804155881782E-1,
+            3.31899559578213215E-1,
+            7.14193832506776067E-2,
+            7.06940843763253131E-3
+        };
+        static const double qn22[] = {
+            1.00000000000000000,
+            2.45992070144245533,
+            2.65383972869775752,
+            1.61876655543871376,
+            5.94651311286481502E-1,
+            1.26579413030177940E-1,
+            1.25304936549413393E-2
+        };
+        pn = pn22;
+        qn = qn22;
+    }
+    else /* if ( x < 6.0 )  this is true, but the compiler does not know */
+    {
+        static const double pn60[] = {
+            9.99921140009714409E-1,
+            1.62356584489366647,
+            1.26739901455873222,
+            5.81528574177741135E-1,
+            1.57289620742838702E-1,
+            2.25716982919217555E-2
+        };
+        static const double qn60[] = {
+            1.00000000000000000,
+            2.75143870676376208,
+            3.37367334657284535,
+            2.38574194785344389,
+            1.05074004614827206,
+            2.78788439273628983E-1,
+            4.00072964526861362E-2
+        };
+        pn = pn60;
+        qn = qn60;
+    }
+
+    for ( unsigned int i = 0; i < 6; ++i )
+    {
+        fPSum += pn[i]*fXPow;
+        fQSum += qn[i]*fXPow;
+        fXPow *= x;
+    }
+    fQSum += qn[6]*fXPow;
+    fVal = exp( -1.0*x*x )* fPSum / fQSum;
+}
+
+/** Approximation algorithm for erfc for 6.0 < x < 26.54 (but used for all
+    x > 6.0). */
+void Erfc2654( double x, double& fVal )
+{
+    static const double pn[] = {
+        5.64189583547756078E-1,
+        8.80253746105525775,
+        3.84683103716117320E1,
+        4.77209965874436377E1,
+        8.08040729052301677
+    };
+    static const double qn[] = {
+        1.00000000000000000,
+        1.61020914205869003E1,
+        7.54843505665954743E1,
+        1.12123870801026015E2,
+        3.73997570145040850E1
+    };
+
+    double fPSum = 0.0;
+    double fQSum = 0.0;
+    double fXPow = 1.0;
+
+    for ( unsigned int i = 0; i <= 4; ++i )
+    {
+        fPSum += pn[i]*fXPow;
+        fQSum += qn[i]*fXPow;
+        fXPow /= x*x;
+    }
+    fVal = exp(-1.0*x*x)*fPSum / (x*fQSum);
+}
+
+double Erfc( double );
+
+/** Parent error function (erf) that calls different algorithms based on the
+    value of x.  It takes care of cases where x is negative as erf is an odd
+    function i.e. erf(-x) = -erf(x).
+
+    Kramer, W., and Blomquist, F., 2000, Algorithms with Guaranteed Error Bounds
+    for the Error Function and the Complementary Error Function
+
+    http://www.math.uni-wuppertal.de/wrswt/literatur_en.html
 
     @author Kohei Yoshida <kohei@openoffice.org>
 
-    @see #i19991#
- */
-void ErfAsymptotic( double x, double& fErf )
-{
-    if( x == 0.0 )
-    {
-        fErf = 0.0;
-        return;
-    }
-
-    long nMaxIter = 1000;
-
-    double fFct2 = 1.0, fDenom = 1.0, fX = x, fn = 0.0;
-    double fXCnt = 1.0;
-    double f = 1.0 / fX;
-    double fOld = f * 0.9;
-
-    bool bAdd = false;
-    double fDiff = 0.0, fDiffOld = 1000.0;
-    while( f != fOld && nMaxIter-- )
-    {
-        fOld = f;
-
-        fFct2 *= 2.0*++fn - 1.0;
-        fDenom *= 2.0;
-        fX *= x*x;
-        fXCnt += 2.0;
-
-        if ( bAdd )
-            f += fFct2 / ( fDenom * fX );
-        else
-            f -= fFct2 / ( fDenom * fX );
-
-        bAdd = !bAdd;
-
-        fDiff = fabs( f - fOld );
-        if ( fDiffOld < fDiff )
-        {
-            f = fOld;
-            break;
-        }
-        fDiffOld = fDiff;
-    }
-
-    fErf = 1.0 - f*exp( -1.0*x*x )*0.5641895835477562869480794515607726;
-}
-
-/** Parent erf function that calls two different algorithms based on value
-    of x.  It takes care of cases where x is negative ( erf is an odd function
-    i.e. f(-x) = -f(x) ).
-
-    @author Kohei Yoshida <kohei@openoffice.org>
-
-    @see #i19991#
+    @see #i55735#
  */
 double Erf( double x )
 {
+    if( x == 0.0 )
+        return 0.0;
+
     bool bNegative = false;
     if ( x < 0.0 )
     {
@@ -957,15 +992,56 @@ double Erf( double x )
         bNegative = true;
     }
 
-    double fErf;
-    if ( x > 4.0 )
-        ErfAsymptotic( x, fErf );
+    double fErf = 1.0;
+    if ( x < 1.0e-10 )
+        fErf = x*1.1283791670955125738961589031215452L;
+    else if ( x < 0.65 )
+        Erf0065( x, fErf );
     else
-        ErfMaclaurin( x, fErf );
+        fErf = 1.0 - Erfc( x );
 
     if ( bNegative )
         fErf *= -1.0;
+
     return fErf;
+}
+
+/** Parent complementary error function (erfc) that calls different algorithms
+    based on the value of x.  It takes care of cases where x is negative as erfc
+    satisfies relationship erfc(-x) = 2 - erfc(x).  See the comment for Erf(x)
+    for the source publication.
+
+    @author Kohei Yoshida <kohei@openoffice.org>
+
+    @see #i55735#
+ */
+double Erfc( double x )
+{
+    if ( x == 0.0 )
+        return 1.0;
+
+    bool bNegative = false;
+    if ( x < 0.0 )
+    {
+        x = fabs( x );
+        bNegative = true;
+    }
+
+    double fErfc = 0.0;
+    if ( x > 0.65 )
+    {
+        if ( x < 6.0 )
+            Erfc0600( x, fErfc );
+        else
+            Erfc2654( x, fErfc );
+    }
+    else
+        fErfc = 1.0 - Erf( x );
+
+    if ( bNegative )
+        fErfc = 2.0 - fErfc;
+
+    return fErfc;
 }
 
 inline sal_Bool IsNum( sal_Unicode c )
