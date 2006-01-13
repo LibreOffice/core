@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:13:33 $
+#   last change: $Author: rt $ $Date: 2006-01-13 15:01:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -519,6 +519,27 @@ sub replace_minor_in_pathes
         {
             $line =~ s/\.\{minor\}//g;
             $line =~ s/\.\{minornonpre\}//g;
+        }
+
+        ${$patharrayref}[$i] = $line;
+    }
+}
+
+####################################################
+# Replacing packagetype in include path
+####################################################
+
+sub replace_packagetype_in_pathes
+{
+    my ( $patharrayref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    {
+        my $line = ${$patharrayref}[$i];
+
+        if (( $installer::globals::installertypedir ) && ( $line =~ /\{pkgtype\}/ ))
+        {
+            $line =~ s/\{pkgtype\}/$installer::globals::installertypedir/g;
         }
 
         ${$patharrayref}[$i] = $line;
