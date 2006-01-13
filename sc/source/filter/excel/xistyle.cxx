@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:08:50 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1544,9 +1544,10 @@ void XclImpXFRangeBuffer::Initialize()
     maMergeList.RemoveAll();
 }
 
-void XclImpXFRangeBuffer::SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
+void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
 {
-    DBG_ASSERT( (nScCol <= MAXCOL) && (nScRow <= MAXROW), "XclImpXFRangeBuffer::SetXF - out of range" );
+    SCCOL nScCol = rScPos.Col();
+    SCROW nScRow = rScPos.Row();
 
     // set cell XF's
     size_t nIndex = static_cast< size_t >( nScCol );
@@ -1575,25 +1576,25 @@ void XclImpXFRangeBuffer::SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex
     }
 }
 
-void XclImpXFRangeBuffer::SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex )
+void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex )
 {
-    SetXF( nScCol, nScRow, nXFIndex, xlXFModeCell );
+    SetXF( rScPos, nXFIndex, xlXFModeCell );
 }
 
-void XclImpXFRangeBuffer::SetBlankXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex )
+void XclImpXFRangeBuffer::SetBlankXF( const ScAddress& rScPos, sal_uInt16 nXFIndex )
 {
-    SetXF( nScCol, nScRow, nXFIndex, xlXFModeBlank );
+    SetXF( rScPos, nXFIndex, xlXFModeBlank );
 }
 
-void XclImpXFRangeBuffer::SetBoolXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex )
+void XclImpXFRangeBuffer::SetBoolXF( const ScAddress& rScPos, sal_uInt16 nXFIndex )
 {
-    SetXF( nScCol, nScRow, nXFIndex, xlXFModeBoolCell );
+    SetXF( rScPos, nXFIndex, xlXFModeBoolCell );
 }
 
 void XclImpXFRangeBuffer::SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex )
 {
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
-        SetXF( nScCol, nScRow, nXFIndex, xlXFModeRow );
+        SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
 }
 
 void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
