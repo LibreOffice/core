@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:32:07 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,11 @@ void ScDPObject::SetAllowMove(BOOL bSet)
 
 void ScDPObject::SetSaveData(const ScDPSaveData& rData)
 {
-    delete pSaveData;
-    pSaveData = new ScDPSaveData( rData );
+    if ( pSaveData != &rData )      // API implementation modifies the original SaveData object
+    {
+        delete pSaveData;
+        pSaveData = new ScDPSaveData( rData );
+    }
 
     InvalidateData();       // re-init source from SaveData
 }
