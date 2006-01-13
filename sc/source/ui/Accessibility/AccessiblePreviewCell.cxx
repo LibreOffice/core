@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:18:59 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
         if (isVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
+        // #111635# MANAGES_DESCENDANTS (for paragraphs)
+        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
     return pStateSet;
 }
@@ -331,8 +333,13 @@ void ScAccessiblePreviewCell::CreateTextHelper()
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
 
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
-        mpTextHelper->SetEventSource(this);
+        mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
+        mpTextHelper->SetEventSource( this );
+
+        // #111635# paragraphs in preview are transient
+        ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
+        aChildStates.push_back( AccessibleStateType::TRANSIENT );
+        mpTextHelper->SetAdditionalChildStates( aChildStates );
     }
 }
 
