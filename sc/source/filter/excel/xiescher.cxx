@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:48:05 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 16:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -961,10 +961,11 @@ void XclImpTbxControlObj::ReadMacro( XclImpStream& rStrm )
 XclImpOleObj::XclImpOleObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
     XclImpCtrlLinkHelper( xlBindContent ),
-    mnCtrlStrmPos( 0 ),
+    mnCtlsStrmPos( 0 ),
     mbAsSymbol( false ),
     mbLinked( false ),
-    mbControl( false )
+    mbControl( false ),
+    mbUseCtlsStrm( false )
 {
     SetAreaObj( true );
 }
@@ -1036,17 +1037,15 @@ void XclImpOleObj::ReadPioGrbit( XclImpStream& rStrm )
     rStrm >> nFlags;
     mbAsSymbol = ::get_flag( nFlags, EXC_OBJ_PIO_SYMBOL );
     mbLinked = ::get_flag( nFlags, EXC_OBJ_PIO_LINKED );
+    mbControl = ::get_flag( nFlags, EXC_OBJ_PIO_CONTROL );
+    mbUseCtlsStrm = ::get_flag( nFlags, EXC_OBJ_PIO_CTLSSTREAM );
 }
 
 void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 {
-    sal_uInt32 nStorageId;
+    sal_uInt32 nStorageId = 0;
     sal_uInt16 nFmlaLen;
     rStrm >> nFmlaLen;
-
-    String aUserName;
-    sal_uInt32 nPos0 = rStrm.GetRecPos();        // fmla start
-    bool bOk = true;
 
     // --- linked ---
 
@@ -1057,7 +1056,7 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
         sal_uInt16 nXti, nExtName;
         rStrm >> nXti >> nExtName;
         const XclImpExtName* pExtName = GetLinkManager().GetExternName( nXti, nExtName );
-        bOk = (pExtName && (pExtName->GetType() == xlExtOLE));
+        bool bOk = pExtName && (pExtName->GetType() == xlExtOLE);
         DBG_ASSERT( bOk, "XclImpOleObj::ReadPictFmla - EXTERNNAME not found or not OLE" );
         if( bOk )
             nStorageId = pExtName->GetStorageId();
@@ -1067,6 +1066,9 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
     else if( nFmlaLen + 2 < nRecSize )  // #107158# ignore picture links (are embedded OLE obj's too)
     {
+        String aUserName;
+        sal_uInt32 nPos0 = rStrm.GetRecPos();        // fmla start
+
         sal_uInt16 n16;
         rStrm >> n16;     // should be 5 but who knows ...
         DBG_ASSERT( n16 + 4 <= nFmlaLen, "XclImpOleObj::ReadPictFmla - embedded length mismatch" );
@@ -1087,18 +1089,16 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                     sal_Int32 nLeft = sal_Int32(nFmlaLen) - (rStrm.GetRecPos() - nPos0);
                     DBG_ASSERT( nLeft == 0 || nLeft == 1, "XclImpOleObj::ReadPictFmla - unknown left over" );
 #endif
-
-                    // is it a form control?
-                    mbControl = aUserName.EqualsAscii( "Forms.", 0, 6 );
                 }
             }
         }
         rStrm.Seek( nPos0 + nFmlaLen );
         rStrm >> nStorageId;
+
         if( IsControl() )
         {
-            mnCtrlStrmPos = nStorageId;
-            bOk = false;    // do not create the storage name for controls
+            mnCtlsStrmPos = static_cast< ULONG >( nStorageId );
+            nStorageId = 0;
 
             if( aUserName.EqualsAscii( "Forms.HTML:Hidden.1" ) )
             {
@@ -1131,15 +1131,9 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                 }
             }
         }
-        else if( nStorageId > 0 )
-        {
-            DBG_ASSERT( nFmlaLen + 6 == nRecSize, "XclImpOleObj::ReadPictFmla - bad embedded size" );
-        }
-        else
-            bOk = false;    // no storage, internal
     }
 
-    if( bOk )
+    if( nStorageId != 0 )
     {
         if( mbLinked )
             maStorageName = EXC_STORAGE_OLE_LINKED;
@@ -1771,6 +1765,7 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
             case EXC_ID_OBJ_FTCMO:
                 DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj - multiple FTCMO subrecords" );
                 xDrawObj = XclImpDrawObjBase::ReadObjCmo( rStrm );
+                bLoop = xDrawObj.is();
             break;
             default:
                 DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj - missing leading FTCMO subrecord" );
