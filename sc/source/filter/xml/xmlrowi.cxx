@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:10:56 $
+ *  last change: $Author: rt $ $Date: 2006-01-13 17:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,10 +211,13 @@ void ScXMLTableRowContext::EndElement()
                     if (sStyleName.getLength())
                     {
                         XMLTableStylesContext *pStyles((XMLTableStylesContext *)rXMLImport.GetAutoStyles());
-                        XMLTableStyleContext* pStyle((XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True));
-                        if (pStyle)
-                            pStyle->FillPropertySet(xRowProperties);
+                        if ( pStyles )
+                        {
+                            XMLTableStyleContext* pStyle((XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True));
+                            if (pStyle)
+                                pStyle->FillPropertySet(xRowProperties);
+                        }
                     }
                     sal_Bool bVisible (sal_True);
                     sal_Bool bFiltered (sal_False);
