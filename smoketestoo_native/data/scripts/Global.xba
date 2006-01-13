@@ -512,7 +512,7 @@ Sub SetDefaultOptions
 	bMakeMathTest = true
 	bMakeChartTest = true
 	bMakeJavaTest = true
-	bMakeDBTest = true
+	bMakeDBTest = false
 	bMakeSaveOpenXMLTest = true
 	bMakeSaveOpen50Test = true
 	bMakeSaveOpen8Test = true
