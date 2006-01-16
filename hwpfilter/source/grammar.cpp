@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grammar.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:31:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ static const short yycheck[] = {    11,
 #else /* not GNU C.  */
 #if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386))
 #define YYSTACK_USE_ALLOCA
-#include <alloca.h>
+#include <sal/alloca.h>
 #else /* not sparc */
 /* We think this test detects Watcom and Microsoft C.  */
 /* This used to test MSDOS, but that is a bad idea
