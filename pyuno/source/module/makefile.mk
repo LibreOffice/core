@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:50:54 $
+#   last change: $Author: obo $ $Date: 2006-01-16 15:54:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ DIRECT = $(LINKFLAGSDEFS)
 
 .IF "$(GUI)" == "UNX"
 # python expects modules without the lib prefix 
-PYUNO_MODULE=$(DLLDEST)$/pyuno$(DLLPOST)
+# pyuno.so even on Mac OS X, because it is a python module
+PYUNO_MODULE=$(DLLDEST)$/pyuno.so
 PYUNORC=pyunorc
 .ELSE
 .INCLUDE :  pyversion.mk
