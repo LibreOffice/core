@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLShapePropertySetContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:42:07 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ void XMLShapePropertySetContext::EndElement()
     {
         SvxXMLListStyleContext* pBulletStyle = (SvxXMLListStyleContext*)&mxBulletStyle;
         xNumRule = pBulletStyle->CreateNumRule( GetImport().GetModel() );
-        pBulletStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
+        if( xNumRule.is() )
+            pBulletStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
     }
 
     Any aAny;
