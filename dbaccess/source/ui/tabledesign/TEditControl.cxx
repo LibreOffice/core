@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:37:17 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
             break;
         case FIELD_TYPE:
             {
-                if( pActFieldDescr )
+                if ( pActFieldDescr && pActFieldDescr->getTypeInfo() )
                     aInitString = pActFieldDescr->getTypeInfo()->aUIName;
 
                 //////////////////////////////////////////////////////////////
@@ -890,7 +890,7 @@ void OTableEditorCtrl::CopyRows()
     {
         pRow = (*m_pRowList)[nIndex];
         OSL_ENSURE(pRow,"OTableEditorCtrl::CopyRows: Row is NULL!");
-        if ( pRow )
+        if ( pRow && pRow->GetActFieldDescr() )
         {
             pClipboardRow = new OTableRow( *pRow );
             vClipboardList.push_back( pClipboardRow);
@@ -964,12 +964,13 @@ void OTableEditorCtrl::InsertRows( long nRow )
                 (*aStreamRef) >> *pRow;
                 pRow->SetReadOnly( sal_False );
                 sal_Int32 nType = pRow->GetActFieldDescr()->GetType();
-                pRow->GetActFieldDescr()->SetType(GetView()->getController()->getTypeInfoByType(nType));
+                if ( pRow->GetActFieldDescr() )
+                    pRow->GetActFieldDescr()->SetType(GetView()->getController()->getTypeInfoByType(nType));
                 //////////////////////////////////////////////////////////////////////
                 // Anpassen des Feldnamens
                 aFieldName = GenerateName( pRow->GetActFieldDescr()->GetName() );
                 pRow->GetActFieldDescr()->SetName( aFieldName );
-
+                pRow->SetPos(nInsertRow);
                 m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
                 vInsertedUndoRedoRows.push_back(new OTableRow(*pRow));
                 nInsertRow++;
