@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:04:52 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,8 @@
  *
  ************************************************************************/
 #include <stdlib.h>
+#include <sal/alloca.h>
 #include <vector>
-
-#ifdef WIN32
-#include <malloc.h>
-#else
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
-#include <alloca.h>
-#endif
-#endif
 
 #include <osl/diagnose.h>
 
