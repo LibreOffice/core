@@ -1,16 +1,36 @@
 #*************************************************************************
-#*
-#*    $Workfile:$
-#*
-#*    Creation date     KR 28.06.99
-#*    last change       $Author: hr $ $Date: 2005-04-11 09:31:48 $
-#*
-#*    $Revision: 1.20 $
-#*
-#*    $Logfile:$
-#*
-#*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
-#*
+#
+#   OpenOffice.org - a multi-platform office productivity suite
+#
+#   $RCSfile: makefile.mk,v $
+#
+#   $Revision: 1.21 $
+#
+#   last change: $Author: obo $ $Date: 2006-01-16 12:42:15 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
+#
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
 #*************************************************************************
 
 PRJ		= ..$/..$/..$/..$/..
@@ -35,9 +55,6 @@ CLASSGENDIR		= $(OUT)$/classgen
 RDB		 		= $(SOLARBINDIR)$/types.rdb
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
-UNIXTEXT= \
-    $(MISC)$/helpserver.sh
-
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES = \
@@ -61,18 +78,17 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetForRoot.class         \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpKeyword.class                  \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpTransformer.class              \
     $(CLASSDIR)$/$(PACKAGE)$/HelpPackager.class                 \
-    $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
+    $(CLASSDIR)$/$(PACKAGE)$/MemoryURLConnection.class          \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class 
 
 .IF "$(JDK)"=="gcj"
 JAVACLASSFILES += \
-    $(CLASSDIR)$/$(PACKAGE)$/GCJFileURLStreamHandlerWithNotify.class
+    $(CLASSDIR)$/$(PACKAGE)$/GCJFileURLStreamHandler.class
 .ELSE
 JAVACLASSFILES += \
-    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandlerWithNotify.class
+    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandler.class
 .ENDIF
 
 JARCLASSDIRS	= com
