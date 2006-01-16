@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:53:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,7 +1014,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
 {
     try
     {
-        if( pLevelStyles )
+        if( pLevelStyles && rNumRule.is() )
         {
             sal_uInt16 nCount = pLevelStyles->Count();
             sal_Int32 nLevels = rNumRule->getCount();
@@ -1230,46 +1230,4 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     aAny <<= aPropSeq;
     rNumRule->replaceByIndex( nLevel, aAny );
 }
-
-#if SUPD < 627
-sal_Int16 SvxXMLListStyleContext::GetNumType( const OUString& rNumFmt,
-                                                   const OUString& rLetterSync,
-                                                  sal_Int16 eDflt,
-                                                  sal_Bool bNumberNone )
-{
-    sal_Int16 eValue = eDflt;
-    sal_Int32 nLen = rNumFmt.getLength();
-
-    if( 1 == nLen )
-    {
-        switch( rNumFmt[0] )
-        {
-        case sal_Unicode('1'):  eValue = NumberingType::ARABIC;         break;
-        case sal_Unicode('a'):  eValue = NumberingType::CHARS_LOWER_LETTER; break;
-        case sal_Unicode('A'):  eValue = NumberingType::CHARS_UPPER_LETTER; break;
-        case sal_Unicode('i'):  eValue = NumberingType::ROMAN_LOWER;    break;
-        case sal_Unicode('I'):  eValue = NumberingType::ROMAN_UPPER;    break;
-        }
-        if( IsXMLToken( rLetterSync, XML_TRUE ) )
-        {
-            switch(eValue )
-            {
-            case NumberingType::CHARS_LOWER_LETTER:
-                eValue = NumberingType::CHARS_LOWER_LETTER_N;
-                break;
-            case NumberingType::CHARS_UPPER_LETTER:
-                eValue = NumberingType::CHARS_UPPER_LETTER_N;
-                break;
-            }
-        }
-    }
-    else if( 0 == nLen )
-    {
-        if( bNumberNone )
-            eValue = NumberingType::NUMBER_NONE;
-    }
-
-    return eValue;
-}
-#endif
 
