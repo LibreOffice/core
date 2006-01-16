@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:11:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2158,7 +2158,14 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         return 0;       // was soll ich da machen ?
 
     // zum Datensatz
-    xCursor->moveToBookmark(pfriWhere->aPosition);
+    try
+    {
+        xCursor->moveToBookmark(pfriWhere->aPosition);
+    }
+    catch(const SQLException&)
+    {
+        OSL_ENSURE(0,"Can position on bookmark!");
+    }
 
     LoopGrids(GA_FORCE_SYNC);
 
@@ -2231,7 +2238,15 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
         return 0;       // was soll ich da machen ?
 
     // zum Datensatz
-    xCursor->moveToBookmark(pfriWhere->aPosition);
+    try
+    {
+        xCursor->moveToBookmark(pfriWhere->aPosition);
+    }
+    catch(const SQLException&)
+    {
+        OSL_ENSURE(0,"Can position on bookmark!");
+    }
+
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetPageViewPvNum(0));
     return 0L;
