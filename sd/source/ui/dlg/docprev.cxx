@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:00:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,66 +288,69 @@ void SdDocPreviewWin::updateViewSettings()
 
     if(pDoc)
     {
-        SdrOutliner& rOutl = pDoc->GetDrawOutliner();
-        Color aOldBackgroundColor = rOutl.GetBackgroundColor();
-        rOutl.SetBackgroundColor( maDocumentColor );
-
-        pMtf = new GDIMetaFile;
         SdPage * pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
-
-        VirtualDevice       aVDev;
-
-        const Fraction      aFrac( pDoc->GetScaleFraction() );
-        const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
-
-        aVDev.SetMapMode( aMap );
-
-        // #109058# Disable output, as we only want to record a metafile
-        aVDev.EnableOutput( FALSE );
-
-        pMtf->Record( &aVDev );
-
-        ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
-
-
-        const Size aSize( pPage->GetSize() );
-
-        pView->SetBordVisible( FALSE );
-        pView->SetPageVisible( FALSE );
-        pView->ShowPage( pPage, Point() );
-
-        const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-        const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                              aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
-        const Rectangle aClipRect( aNewOrg, aNewSize );
-        MapMode         aVMap( aMap );
-
-        SdrPageView* pPageView  = pView->GetPageView( pPage );
-
-        aVDev.Push();
-        aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-        aVDev.SetRelativeMapMode( aVMap );
-        aVDev.IntersectClipRegion( aClipRect );
-
-        // Use new StandardCheckVisisbilityRedirector
-        StandardCheckVisisbilityRedirector aRedirector;
-
-        for (USHORT i=0; i<pView->GetPageViewCount(); i++)
+        if( pPage )
         {
-            SdrPageView* pPV=pView->GetPageViewPvNum(i);
-            pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
+            SdrOutliner& rOutl = pDoc->GetDrawOutliner();
+            Color aOldBackgroundColor = rOutl.GetBackgroundColor();
+            rOutl.SetBackgroundColor( maDocumentColor );
+
+            pMtf = new GDIMetaFile;
+
+            VirtualDevice       aVDev;
+
+            const Fraction      aFrac( pDoc->GetScaleFraction() );
+            const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+
+            aVDev.SetMapMode( aMap );
+
+            // #109058# Disable output, as we only want to record a metafile
+            aVDev.EnableOutput( FALSE );
+
+            pMtf->Record( &aVDev );
+
+            ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
+
+
+            const Size aSize( pPage->GetSize() );
+
+            pView->SetBordVisible( FALSE );
+            pView->SetPageVisible( FALSE );
+            pView->ShowPage( pPage, Point() );
+
+            const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+            const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+            const Rectangle aClipRect( aNewOrg, aNewSize );
+            MapMode         aVMap( aMap );
+
+            SdrPageView* pPageView  = pView->GetPageView( pPage );
+
+            aVDev.Push();
+            aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+            aVDev.SetRelativeMapMode( aVMap );
+            aVDev.IntersectClipRegion( aClipRect );
+
+            // Use new StandardCheckVisisbilityRedirector
+            StandardCheckVisisbilityRedirector aRedirector;
+
+            for (USHORT i=0; i<pView->GetPageViewCount(); i++)
+            {
+                SdrPageView* pPV=pView->GetPageViewPvNum(i);
+                pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
+            }
+
+            aVDev.Pop();
+
+            pMtf->Stop();
+            pMtf->WindStart();
+            pMtf->SetPrefMapMode( aMap );
+            pMtf->SetPrefSize( aNewSize );
+
+            rOutl.SetBackgroundColor( aOldBackgroundColor );
+
+            delete pView;
         }
-
-        aVDev.Pop();
-
-        pMtf->Stop();
-        pMtf->WindStart();
-        pMtf->SetPrefMapMode( aMap );
-        pMtf->SetPrefSize( aNewSize );
-
-        rOutl.SetBackgroundColor( aOldBackgroundColor );
-
-        delete pView;
     }
 
     delete pMetaFile;
