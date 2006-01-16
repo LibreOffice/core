@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:38:02 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,7 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
-// [ed] 6/15/02 We don't have alloca.h on OS X either.
-#if !(defined FREEBSD || defined NETBSD || defined MACOSX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <prex.h>
 #include <X11/Xlib.h>
