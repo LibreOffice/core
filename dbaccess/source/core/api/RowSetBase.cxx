@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:13:39 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,8 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     }
     else
     {   // currentrow is null when the clone move the window
+        if ( m_pCache->m_bDeleted )
+            return m_aEmptyValue;
         if ( m_aCurrentRow.isNull() )
         {
             positionCache();
