@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 13:09:58 $
+#   last change: $Author: obo $ $Date: 2006-01-16 12:32:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@ use CwsConfig;
 my $config = CwsConfig::get_config();
 
 my %CvsModuleClassData = (
-    CVS_BINARY              => $config->cvs_binary(),                # name of cvs binary
+    CVS_BINARY              => $config->cvs_binary() . " -f",        # name of cvs binary
+                                                                     # "-f" for overriding .cvsrc
     CVS_REMOTE              => $config->get_cvs_server(),            # name of remote server
     CVS_REMOTE_REPOSITORY   => $config->get_cvs_server_repository(), # remote repository
     CVS_MIRROR              => $config->get_cvs_mirror(),            # local cvsup mirror
@@ -594,7 +595,7 @@ sub do_update
         autoflush STDOUT 1;
         print "update module '$module' from '$server'\n";
     }
-    open(UPDATE, "$cvs_binary -z6 update $tag $options 2>&1 |");
+    open(UPDATE, "$cvs_binary update $tag $options 2>&1 |");
     while(<UPDATE>) {
         $self->append_to_log($_);
         if ( /\[.* aborted\]: connect to/ ) {
