@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:09:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,7 @@
 #else
 #include <poll.h>
 #endif
-#if !(defined FREEBSD || defined NETBSD || defined MACOSX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <X11_selection.hxx>
 #include <X11_clipboard.hxx>
