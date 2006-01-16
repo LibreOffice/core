@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:41:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,11 +494,13 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         {
             OSL_ENSURE(0,"OSQLParseNode::likeNodeToStr Exception occured!");
         }
-
-        const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
-        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
-            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName) )
-            bAddName = sal_False;
+        if ( !m_aChilds[0]->isLeaf() )
+        {
+            const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
+            if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
+                pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName) )
+                bAddName = sal_False;
+        }
     }
 
     if (bAddName)
