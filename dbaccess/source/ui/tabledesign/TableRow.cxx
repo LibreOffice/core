@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:42:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ namespace dbaui
         OFieldDescription* pFieldDesc = _rRow.GetActFieldDescr();
         if(pFieldDesc)
         {
+            _rStr << (sal_Int32)1;
             _rStr.WriteByteString(pFieldDesc->GetName());
             _rStr.WriteByteString(pFieldDesc->GetDescription());
             double nValue = 0.0;
@@ -164,18 +165,21 @@ namespace dbaui
             _rStr << sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0);
-        }
+        } // if(pFieldDesc)
+        else
+            _rStr << (sal_Int32)0;
         return _rStr;
     }
     // -----------------------------------------------------------------------------
     SvStream& operator>>( SvStream& _rStr, OTableRow& _rRow )
     {
         _rStr >> _rRow.m_nPos;
-
-        OFieldDescription* pFieldDesc = new OFieldDescription();
-        _rRow.m_pActFieldDescr = pFieldDesc;
-        if(pFieldDesc)
+        sal_Int32 nValue = 0;
+        _rStr >> nValue;
+        if ( nValue )
         {
+            OFieldDescription* pFieldDesc = new OFieldDescription();
+            _rRow.m_pActFieldDescr = pFieldDesc;
             String sValue;
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetName(sValue);
@@ -224,8 +228,6 @@ namespace dbaui
             pFieldDesc->SetPrimaryKey(nValue != 0);
             _rStr >> nValue;
             pFieldDesc->SetCurrency(nValue != 0);
-
-
         }
         return _rStr;
     }
