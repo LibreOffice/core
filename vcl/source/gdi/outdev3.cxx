@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.209 $
+ *  $Revision: 1.210 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:41:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,14 +157,7 @@
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-#if defined(SOLARIS) || defined(IRIX)
-  #include <alloca.h>
-#else
-#if !(defined(MACOSX) || defined(FREEBSD))
-  #include <malloc.h>
-#endif
-#endif
-
+#include <sal/alloca.h>
 #include <memory>
 #include <algorithm>
 
