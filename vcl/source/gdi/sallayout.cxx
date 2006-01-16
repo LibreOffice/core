@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:06:23 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-
-#if defined(SOLARIS) || defined(IRIX)
-  #include <alloca.h>
-#elif !(defined(MACOSX) || defined(FREEBSD))
-  #include <malloc.h>
-#endif
+#include <sal/alloca.h>
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
