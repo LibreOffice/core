@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:34:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#if !( defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) )
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <gcach_xpeer.hxx>
 
