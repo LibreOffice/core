@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ namespace dbaui
                 the current position in the table
         */
         inline long GetPos() const { return m_nPos; }
+        inline void SetPos(sal_Int32 _nPos) { m_nPos = _nPos; }
 
         /** set the row readonly
             @param  _bRead
