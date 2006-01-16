@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:15:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@ bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
         SetCurEntry( _pEntry );
         if ( GetCurEntry() )
             InvalidateEntry( GetCurEntry() );
+        updateHelpText();
         return true;
     }
     return false;
