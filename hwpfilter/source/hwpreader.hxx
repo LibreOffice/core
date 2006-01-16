@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpreader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:42:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef WIN32
-#include <malloc.h>
-#else
- #ifndef INCLUDED_SAL_ALLOCA_H
- #include <sal/alloca.h>
- #else
- #include <alloca.h>
- #endif
-#endif
+#include <sal/alloca.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
