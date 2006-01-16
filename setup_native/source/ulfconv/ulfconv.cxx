@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ulfconv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:30:31 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
-
-#if !(defined NETBSD || defined FREEBSD || defined MACOSX || WNT)
-#include <alloca.h>
-#endif
-
-#ifdef WNT
-#include <malloc.h>
-#define alloca _alloca
-#endif
+#include <sal/alloca.h>
 
 #include <rtl/ustring.hxx>
 
