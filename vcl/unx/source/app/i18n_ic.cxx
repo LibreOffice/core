@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:37:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,7 @@
  ************************************************************************/
 
 #include <stdio.h>
-#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
-# include <stdlib.h>
-#else
-# include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <prex.h>
 #include <X11/Xlocale.h>
