@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:38:39 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #ifndef _VCL_WMADAPTOR_HXX_
 #include <wmadaptor.hxx>
