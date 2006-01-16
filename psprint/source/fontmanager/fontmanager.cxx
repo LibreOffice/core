@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:08:16 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,7 @@
 #include <stdio.h>
 #endif
 
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <set>
 
