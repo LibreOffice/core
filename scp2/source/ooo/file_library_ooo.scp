@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 14:54:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,7 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
@@ -539,7 +539,7 @@ File gid_File_Lib_Dbodbcbase
     Name = "odbcbase2.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Dbpool
