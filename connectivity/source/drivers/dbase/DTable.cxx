@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:20:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     sal_Int32 nByteOffset = 1;
     // Felder:
     OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
+    for (sal_Int32 i = 1; aIter != _rCols.end() && nByteOffset <= m_nBufferSize && i < _rRow->size();++aIter, i++)
     {
         // Laengen je nach Datentyp:
         sal_Int32 nLen;
@@ -682,10 +682,11 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
         }
 
         // Ist die Variable ueberhaupt gebunden?
-        if (!(*_rRow)[i]->isBound())
+        if ( !(*_rRow)[i]->isBound() )
         {
             // Nein - naechstes Feld.
             nByteOffset += nLen;
+            OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
         }
 
@@ -782,6 +783,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
 //          break;
         // Und weiter ...
         nByteOffset += nLen;
+        OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
     return sal_True;
 }
@@ -1392,6 +1394,9 @@ double toDouble(const ByteString& rString)
 //------------------------------------------------------------------
 BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
+    OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
+    if ( !m_pBuffer )
+        return FALSE;
     sal_Int32 nByteOffset  = 1;
 
     // Felder aktualisieren:
@@ -1464,7 +1469,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
     // when we are here there is no double key in the table
 
-    for (i = 0; i < nColumnCount; ++i)
+    for (i = 0; i < nColumnCount && nByteOffset <= m_nBufferSize ; ++i)
     {
         // Laengen je nach Datentyp:
         OSL_ENSURE(i < m_aPrecisions.size(),"Illegal index!");
@@ -1550,6 +1555,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         {
             memset(pData,' ',nLen); // Zuruecksetzen auf NULL
             nByteOffset += nLen;
+            OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
         }
 
@@ -1675,6 +1681,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         }
         // Und weiter ...
         nByteOffset += nLen;
+        OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
     return sal_True;
 }
