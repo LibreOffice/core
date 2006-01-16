@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:38:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -871,77 +871,84 @@ void View::SetMarkedOriginalSize()
         delete pUndoGroup;
 }
 
-/*************************************************************************
-|*
-|* virt. Device mit Seiteninhalt erzeugen, Device gehoert dem Caller
-|*
-\************************************************************************/
-
-VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
-                                      ULONG nWidthPixel)
+/** create a virtual device and paints the slide contents into it.
+    The caller must delete the returned device */
+VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel)
 {
     ViewShell*  pViewShell = pDocSh->GetViewShell();
-    ::sd::Window* pWin = pViewShell->GetActiveWindow();
-    VirtualDevice*  pVDev = new VirtualDevice( *pWin );
+    OutputDevice* pRefDevice = 0;
+    if( pViewShell )
+        pRefDevice = pViewShell->GetActiveWindow();
+
+    if( !pRefDevice )
+        pRefDevice = Application::GetDefaultDevice();
+
+    DBG_ASSERT( pRefDevice, "sd::View::CreatePageVDev(), I need a reference device to work properly!" );
+
+    VirtualDevice* pVDev;
+    if( pRefDevice )
+        pVDev = new VirtualDevice( *pRefDevice );
+    else
+        pVDev = new VirtualDevice();
+
     MapMode         aMM( MAP_100TH_MM );
 
     SdPage* pPage = pDoc->GetSdPage(nSdPage, ePageKind);
-    DBG_ASSERT(pPage, "Seite nicht gefunden");
+    DBG_ASSERT(pPage, "sd::View::CreatePageVDev(), slide not found!");
 
-    Size aPageSize(pPage->GetSize());
-    aPageSize.Width()  -= pPage->GetLftBorder();
-    aPageSize.Width()  -= pPage->GetRgtBorder();
-    aPageSize.Height() -= pPage->GetUppBorder();
-    aPageSize.Height() -= pPage->GetLwrBorder();
-
-    // use scaling?
-    if( nWidthPixel )
+    if( pPage )
     {
-        const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        Size aPageSize(pPage->GetSize());
+        aPageSize.Width()  -= pPage->GetLftBorder();
+        aPageSize.Width()  -= pPage->GetRgtBorder();
+        aPageSize.Height() -= pPage->GetUppBorder();
+        aPageSize.Height() -= pPage->GetLwrBorder();
 
-        aMM.SetScaleX( aFrac );
-        aMM.SetScaleY( aFrac );
+        // use scaling?
+        if( nWidthPixel )
+        {
+            const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+
+            aMM.SetScaleX( aFrac );
+            aMM.SetScaleY( aFrac );
+        }
+
+        pVDev->SetMapMode( aMM );
+        if( pVDev->SetOutputSize(aPageSize) )
+        {
+            std::auto_ptr< SdrView > pView( new SdrView(pDoc, pVDev) );
+            pView->SetPageVisible( FALSE );
+            pView->SetBordVisible( FALSE );
+            pView->SetGridVisible( FALSE );
+            pView->SetHlplVisible( FALSE );
+            pView->SetGlueVisible( FALSE );
+            pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
+            SdrPageView* pPageView  = pView->GetPageView(pPage);
+            if( pViewShell )
+            {
+                FrameView* pFrameView   = pViewShell->GetFrameView();
+                if( pFrameView )
+                {
+                    pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
+                    pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
+                    pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
+                }
+            }
+
+            // SJ: i40609, the vdev mapmode seems to be dangled after CompleteRedraw,
+            // so we are pushing here, because the mapmode is used afterwards
+            pVDev->Push();
+
+            Point aPoint( 0, 0 );
+            Region aRegion (Rectangle( aPoint, aPageSize ) );
+            pView->CompleteRedraw(pVDev, aRegion);
+            pVDev->Pop();
+        }
+        else
+        {
+            DBG_ERROR("sd::View::CreatePageVDev(), virt. device creation failed!");
+        }
     }
-
-    pVDev->SetMapMode( aMM );
-    BOOL bAbort = !pVDev->SetOutputSize(aPageSize);
-    DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
-
-    SdrView* pView = new SdrView(pDoc, pVDev);
-    pView->SetPageVisible( FALSE );
-    pView->SetBordVisible( FALSE );
-    pView->SetGridVisible( FALSE );
-    pView->SetHlplVisible( FALSE );
-    pView->SetGlueVisible( FALSE );
-    pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
-    SdrPageView* pPageView  = pView->GetPageView(pPage);
-    DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
-    FrameView* pFrameView   = pViewShell->GetFrameView();
-    pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
-    pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
-    pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
-
-    /* #103186# following change undone:
-
-      revision 1.168 (old cvs)
-      date: 1996/02/27 17:57:10;  author: SB;  state: Exp;  lines: +14 -5
-      CreatePageVDev(): Einschraenkung auf Seitengrenzen
-
-      reason:
-
-      > SdrPageView:
-      > // rReg bezieht sich auf's OutDev, nicht auf die Page
-      > void CompleteRedraw( ... );
-    */
-
-    pVDev->Push();  //SJ: i40609, the vdev mapmode seems to be dangled after CompleteRedraw,
-                    //so we are pushing here, because the mapmode is used afterwards
-    // temporary for gcc
-    Point aPoint( 0, 0 );
-    Region aRegion (Rectangle( aPoint, aPageSize ) );
-    pView->CompleteRedraw(pVDev, aRegion);
-    pVDev->Pop();
-    delete pView;
     return pVDev;
 }
 
