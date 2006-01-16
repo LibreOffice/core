@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:37:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -812,6 +812,10 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             // 1.) Change the view shell to the edit view, the notes view,
             // or the handout view.
             PageKind eNewPageKind = pPage->GetPageKind();
+
+            if( (eNewPageKind != PK_STANDARD) && (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
+                return FALSE;
+
             if (eNewPageKind != pDrViewSh->GetPageKind())
             {
                 // Arbeitsbereich wechseln
