@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:37:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,19 +359,22 @@ void OSelectionBrowseBox::ColumnMoved( USHORT nColId,BOOL _bCreateUndo )
         for (; aIter != aEnd && ( (*aIter)->GetColumnId() != nColId ); ++aIter,++nOldPos)
             ;
 
-        OSL_ENSURE( (nNewPos-1) != nOldPos,"Old and new position are equal!");
-        OTableFieldDescRef pOldEntry = rFields[nOldPos];
-        rFields.erase(rFields.begin() + nOldPos);
-        rFields.insert(rFields.begin() + nNewPos - 1,pOldEntry);
-
-        // create the undo action
-        if ( !m_bInUndoMode && _bCreateUndo )
+        OSL_ENSURE( (nNewPos-1) != nOldPos && nOldPos < rFields.size(),"Old and new position are equal!");
+        if ( aIter != aEnd )
         {
-            OTabFieldMovedUndoAct* pUndoAct = new OTabFieldMovedUndoAct(this);
-            pUndoAct->SetColumnPosition( nOldPos + 1);
-            pUndoAct->SetTabFieldDescr(pOldEntry);
+            OTableFieldDescRef pOldEntry = rFields[nOldPos];
+            rFields.erase(rFields.begin() + nOldPos);
+            rFields.insert(rFields.begin() + nNewPos - 1,pOldEntry);
 
-            getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAct);
+            // create the undo action
+            if ( !m_bInUndoMode && _bCreateUndo )
+            {
+                OTabFieldMovedUndoAct* pUndoAct = new OTabFieldMovedUndoAct(this);
+                pUndoAct->SetColumnPosition( nOldPos + 1);
+                pUndoAct->SetTabFieldDescr(pOldEntry);
+
+                getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAct);
+            } // if ( !m_bInUndoMode && _bCreateUndo )
         }
     }
     else
