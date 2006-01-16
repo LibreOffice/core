@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,11 @@
 #ifndef _PSPRINT_FONTMANAGER_HXX_
 #include <psprint/fontmanager.hxx>
 #endif
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
 #ifndef __SGI_STL_SET
 #include <set>
 #endif
 #include <map>
+#include <sal/alloca.h>
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
