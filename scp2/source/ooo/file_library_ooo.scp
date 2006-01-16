@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: fme $ $Date: 2006-01-11 10:47:37 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 14:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1301,7 +1301,11 @@ File gid_File_Lib_Msvcr71
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
     Name = "msvcr71.dll";
+#else
+    Name = "msvcr71d.dll";
+#endif
 End
 
 #endif
@@ -1316,7 +1320,11 @@ File gid_File_Lib_Msvcp71
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
     Name = "msvcp71.dll";
+#else
+    Name = "msvcp71d.dll";
+#endif
 End
 
 #endif
