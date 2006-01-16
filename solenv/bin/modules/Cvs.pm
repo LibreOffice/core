@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:48:51 $
+#   last change: $Author: obo $ $Date: 2006-01-16 12:32:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,8 @@ sub execute
             carp("WARNING: OOo CVS server authorization time out, count: $authtimeout, sleeping for 5 seconds ...");
             sleep(5);
         }
-        open(CVS, "$self->{CVS_BINARY} $command 2>&1 |");
+        # cvs option "-f" for disabling the reading of $HOME/.cvsrc, if any
+        open(CVS, "$self->{CVS_BINARY} -f $command 2>&1 |");
         @response = <CVS>;
         close(CVS);
 
