@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:33:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #endif
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
+#endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -537,29 +540,82 @@ void OConnection::buildTypeInfo() throw( SQLException)
         Reference< XRow> xRow(xRs,UNO_QUERY);
         // Information for a single SQL type
 
+        ::connectivity::ORowSetValue aValue;
+        ::std::vector<sal_Int32> aTypes;
+        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         // Loop on the result set until we reach end of file
-
         while (xRs->next ())
         {
             OTypeInfo aInfo;
-            aInfo.aTypeName         = xRow->getString   (1);
-            aInfo.nType             = xRow->getShort    (2);
-            aInfo.nPrecision        = xRow->getInt      (3);
-            aInfo.aLiteralPrefix    = xRow->getString   (4);
-            aInfo.aLiteralSuffix    = xRow->getString   (5);
-            aInfo.aCreateParams     = xRow->getString   (6);
-            aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
-            aInfo.bCaseSensitive    = xRow->getBoolean  (8);
-            aInfo.nSearchType       = xRow->getShort    (9);
-            aInfo.bUnsigned         = xRow->getBoolean  (10);
-            aInfo.bCurrency         = xRow->getBoolean  (11);
-            aInfo.bAutoIncrement    = xRow->getBoolean  (12);
-            aInfo.aLocalTypeName    = xRow->getString   (13);
-            aInfo.nMinimumScale     = xRow->getShort    (14);
-            aInfo.nMaximumScale     = xRow->getShort    (15);
-            aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
+            sal_Int32 nPos = 1;
+            if ( aTypes.empty() )
+            {
+                sal_Int32 nCount = xResultSetMetaData->getColumnCount();
+                if ( nCount < 1 )
+                    nCount = 18;
+                aTypes.reserve(nCount+1);
+                aTypes.push_back(-1);
+                for (sal_Int32 j = 1; j <= nCount ; ++j)
+                    aTypes.push_back(xResultSetMetaData->getColumnType(j));
+            }
 
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.aTypeName     = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nType         = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nPrecision        = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.aLiteralPrefix    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.aLiteralSuffix    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.aCreateParams = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.bNullable     = (sal_Int32)aValue == ColumnValue::NULLABLE;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.bCaseSensitive    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nSearchType       = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.bUnsigned     = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.bCurrency     = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.bAutoIncrement    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.aLocalTypeName    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nMinimumScale = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nMaximumScale = aValue;
+            nPos = 18;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            aInfo.nNumPrecRadix = aValue;
 
+            // check if values are less than zero like it happens in a oracle jdbc driver
+            if( aInfo.nPrecision < 0)
+                aInfo.nPrecision = 0;
+            if( aInfo.nMinimumScale < 0)
+                aInfo.nMinimumScale = 0;
+            if( aInfo.nMaximumScale < 0)
+                aInfo.nMaximumScale = 0;
+            if( aInfo.nNumPrecRadix < 0)
+                aInfo.nNumPrecRadix = 10;
 
             // Now that we have the type info, save it
             // in the Hashtable if we don't already have an
