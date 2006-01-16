@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:36:23 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -263,30 +266,89 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     Reference<XResultSet> xSet = xMeta.is() ? xMeta->getTypeInfo() : Reference<XResultSet>();
     if(xSet.is())
     {
+        ::connectivity::ORowSetValue aValue;
+        ::std::vector<sal_Int32> aTypes;
+        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xSet,UNO_QUERY)->getMetaData();
         Reference<XRow> xRow(xSet,UNO_QUERY);
         while(xSet->next())
         {
-            ::rtl::OUString sTypeName = xRow->getString (1);
-            sal_Int16 nType = xRow->getShort(2);
+            if ( aTypes.empty() )
+            {
+                sal_Int32 nCount = xResultSetMetaData->getColumnCount();
+                if ( nCount < 1 )
+                    nCount = 18;
+                aTypes.reserve(nCount+1);
+                aTypes.push_back(-1);
+                for (sal_Int32 j = 1; j <= nCount ; ++j)
+                    aTypes.push_back(xResultSetMetaData->getColumnType(j));
+            }
+
+            sal_Int32 nPos = 1;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            ::rtl::OUString sTypeName = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            sal_Int32 nType = aValue;
+            ++nPos;
+
             if( nType == DataType::VARCHAR)
             {
                 m_pTypeInfo                 = TOTypeInfoSP(new OTypeInfo());
+
                 m_pTypeInfo->aTypeName      = sTypeName;
                 m_pTypeInfo->nType          = nType;
-                m_pTypeInfo->nPrecision     = xRow->getInt (3);
-                m_pTypeInfo->aLiteralPrefix = xRow->getString (4);
-                m_pTypeInfo->aLiteralSuffix = xRow->getString (5);
-                m_pTypeInfo->aCreateParams  = xRow->getString (6);
-                m_pTypeInfo->bNullable      = xRow->getInt (7) == ColumnValue::NULLABLE;
-                m_pTypeInfo->bCaseSensitive = xRow->getBoolean (8);
-                m_pTypeInfo->nSearchType    = xRow->getShort (9);
-                m_pTypeInfo->bUnsigned      = xRow->getBoolean (10);
-                m_pTypeInfo->bCurrency      = xRow->getBoolean (11);
-                m_pTypeInfo->bAutoIncrement = xRow->getBoolean (12);
-                m_pTypeInfo->aLocalTypeName = xRow->getString (13);
-                m_pTypeInfo->nMinimumScale  = xRow->getShort (14);
-                m_pTypeInfo->nMaximumScale  = xRow->getShort (15);
-                m_pTypeInfo->nNumPrecRadix  = xRow->getInt (18);
+
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nPrecision     = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->aLiteralPrefix = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->aLiteralSuffix = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->aCreateParams  = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->bCaseSensitive = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nSearchType        = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->bUnsigned      = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->bCurrency      = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->bAutoIncrement = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->aLocalTypeName = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nMinimumScale  = aValue;
+                ++nPos;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nMaximumScale  = aValue;
+                nPos = 18;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nNumPrecRadix  = aValue;
+
+                // check if values are less than zero like it happens in a oracle jdbc driver
+                if( m_pTypeInfo->nPrecision < 0)
+                    m_pTypeInfo->nPrecision = 0;
+                if( m_pTypeInfo->nMinimumScale < 0)
+                    m_pTypeInfo->nMinimumScale = 0;
+                if( m_pTypeInfo->nMaximumScale < 0)
+                    m_pTypeInfo->nMaximumScale = 0;
+                if( m_pTypeInfo->nNumPrecRadix < 0)
+                    m_pTypeInfo->nNumPrecRadix = 10;
                 break;
             }
         }
