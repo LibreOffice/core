@@ -53,6 +53,18 @@
   libpython$(VERSION).sl: $(LIBRARY_OBJS)
   	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(LIBC) $(LIBM)
   
+***************
+*** 615,620 ****
+--- 618,626 ----
+  		fi; \
+  	else	true; \
+  	fi
++ 	if test -f libpython$(VERSION).dylib; then \
++ 		$(INSTALL_SHARED) libpython$(VERSION).dylib $(DESTDIR)$(LIBDIR)/$(INSTSONAME); \
++ 	fi
+  
+  # Install the manual page
+  maninstall:
 *** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
 --- misc/build/Python-2.3.4/configure	Thu Sep  1 19:40:57 2005
 ***************
@@ -129,16 +141,6 @@
   	    ;;
       esac
       ;;
-***************
-*** 10031,10036 ****
---- 10047,10053 ----
-  	case $ac_sys_system in
-  	hp*|HP*)   SO=.sl;;
-  	CYGWIN*)   SO=.dll;;
-+ 	Darwin*)   SO=.dylib;;
-  	*)	   SO=.so;;
-  	esac
-  else
 ***************
 *** 10082,10088 ****
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
@@ -13824,23 +13826,3 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/Python/dynload_shlib.c	Sat May  3 11:14:53 2003
---- misc/build/Python-2.3.4/Python/dynload_shlib.c	Thu Sep  1 19:40:58 2005
-***************
-*** 46,55 ****
---- 46,60 ----
-          {"module.exe", "rb", C_EXTENSION},
-          {"MODULE.EXE", "rb", C_EXTENSION},
-  #else
-+ #ifdef __APPLE__
-+ 	{".dylib", "rb", C_EXTENSION},
-+ 	{"module.dylib", "rb", C_EXTENSION},
-+ #else
-  	{".so", "rb", C_EXTENSION},
-  	{"module.so", "rb", C_EXTENSION},
-  #endif
-  #endif
-+ #endif
-  #endif
-  	{0, 0}
-  };
