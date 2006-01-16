@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:29:46 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1920,6 +1920,9 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
         }
         if( mxShow.is() && ( fUpdate >= 0.0 ) )
         {
+            const float MAX_UPDATE = 60.0; // do not wait longer than 60 seconds for next refresh
+            if( fUpdate > MAX_UPDATE )
+                fUpdate = MAX_UPDATE;
             maUpdateTimer.SetTimeout(
                 ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
             maUpdateTimer.Start();
