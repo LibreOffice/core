@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:43:22 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,9 +164,10 @@ End
 
 #ifdef UNX
 
+// pyuno.so even on Mac OS X, because it is a python module
 File gid_File_Pyuno
     TXT_FILE_BODY;
-    Name = STRING(CONCAT2(pyuno,UNXSUFFIX));
+    Name = "pyuno.so";
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
