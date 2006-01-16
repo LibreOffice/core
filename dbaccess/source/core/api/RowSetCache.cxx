@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:13:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,18 +303,18 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             sal_Bool bNoInsert = sal_False;
 
             Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
+            const ::rtl::OUString* pIter    = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+            for(;pIter != pEnd;++pIter)
             {
                 Reference<XPropertySet> xColumn;
-                ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
+                ::cppu::extractInterface(xColumn,xColumns->getByName(*pIter));
                 OSL_ENSURE(xColumn.is(),"Column in table is null!");
                 if(xColumn.is())
                 {
                     sal_Int32 nNullable = 0;
                     xColumn->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullable;
-                    if(nNullable == ColumnValue::NO_NULLS && aColumnNames.find(*pBegin) == aColumnNames.end())
+                    if(nNullable == ColumnValue::NO_NULLS && aColumnNames.find(*pIter) == aColumnNames.end())
                     { // we found a column where null is not allowed so we can't insert new values
                         bNoInsert = sal_True;
                         break; // one column is enough
@@ -1542,20 +1542,17 @@ Sequence< sal_Int32 > ORowSetCache::deleteRows( const Sequence< Any >& rows )
     Sequence< sal_Int32 > aRet(rows.getLength());
     sal_Int32 *pRet = aRet.getArray();
 
-    const Any *pBegin   = rows.getConstArray();
-    const Any *pEnd     = pBegin + rows.getLength();
+    const Any *pIter    = rows.getConstArray();
+    const Any *pEnd     = pIter + rows.getLength();
 
-    sal_Int32 nOldPosition;
-    for(;pBegin != pEnd;++pBegin,++pRet)
+    for(;pIter != pEnd;++pIter,++pRet)
     {
         // first we have to position our own and then we have to position our CacheSet again,
         // it could be repositioned in the moveToBookmark call
-        if ( moveToBookmark(*pBegin) && m_pCacheSet->moveToBookmark(*pBegin) )
+        if ( moveToBookmark(*pIter) && m_pCacheSet->moveToBookmark(*pIter) )
         {
-            nOldPosition = m_nPosition;
             deleteRow();
-            *pRet = (nOldPosition != m_nPosition) ? 1 : 0;
-            nOldPosition = m_nPosition;
+            *pRet = (m_bDeleted) ? 1 : 0;
         }
     }
     return aRet;
