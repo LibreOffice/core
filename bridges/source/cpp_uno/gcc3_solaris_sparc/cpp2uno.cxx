@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:31:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "bridges/cpp_uno/shared/types.hxx"
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 #include "share.hxx"
-#include <alloca.h>
+#include <sal/alloca.h>
 
 using namespace com::sun::star::uno;
 
