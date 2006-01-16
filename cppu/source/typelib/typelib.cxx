@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:49:47 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,15 +41,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#if defined(MACOSX) || defined(FREEBSD)
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 #include <new>
 
 #ifndef _OSL_INTERLCK_H_
