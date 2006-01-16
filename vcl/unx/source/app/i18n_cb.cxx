@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:37:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 #include <prex.h>
 #include <X11/Xlocale.h>
 #include <X11/Xlib.h>
