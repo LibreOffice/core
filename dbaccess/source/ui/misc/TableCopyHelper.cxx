@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,10 +311,10 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
                         case DataType::CHAR:
                         case DataType::VARCHAR:
                         case DataType::LONGVARCHAR:
-                            FILL_PARAM( ::rtl::OUString, etString)
-                            break;
                         case DataType::DECIMAL:
                         case DataType::NUMERIC:
+                            FILL_PARAM( ::rtl::OUString, etString)
+                            break;
                         case DataType::DOUBLE:
                         case DataType::REAL:
                             FILL_PARAM( double, etDouble)
