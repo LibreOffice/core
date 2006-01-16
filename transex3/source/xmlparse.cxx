@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:00:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:24:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,7 @@
 
 
 #include <stdio.h>
-#ifdef WIN32
-#include <malloc.h>
-#else
-#if !(defined(MACOSX) || defined(FREEBSD))
-#include <alloca.h>
-#endif
-#endif
+#include <sal/alloca.h>
 
 #include "xmlparse.hxx"
 #include <fstream>
