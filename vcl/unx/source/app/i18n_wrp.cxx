@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:56:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:08:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,8 @@ struct XIMArg
 #else
 #include <stdarg.h>
 #endif
-#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
-# include <stdlib.h>
-#else
-# include <alloca.h>
-#endif
+#include <sal/alloca.h>
+
 #include <string.h>
 #if !defined(MACOSX)
 /* MacOS X doesn't yet support XIM... FIXME */
