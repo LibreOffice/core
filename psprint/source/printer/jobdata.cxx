@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:44:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,7 @@
 #include <psprint/jobdata.hxx>
 #include <psprint/printerinfomanager.hxx>
 #include <tools/stream.hxx>
-
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#else
-#include <stdlib.h>
-#endif
+#include <sal/alloca.h>
 
 using namespace psp;
 using namespace rtl;
