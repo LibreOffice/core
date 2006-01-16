@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_extra_ooo.scp,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 11:20:56 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 16:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,11 @@ End
 
 File gid_File_Extra_Gallsystem
     Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     Name = "gallsystem.zip";
+    Patchfiles = ("sg24.sdg",
+                  "sg24.sdv",
+                  "sg24.thm");
 End
 
 File gid_File_Extra_Gallwwwback
