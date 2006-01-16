@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:09:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if !( defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) )
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
