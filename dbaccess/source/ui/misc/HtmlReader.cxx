@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:36:45 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,7 +313,29 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TABLEROW_ON:
                 if ( m_xResultSetUpdate.is() )
-                    m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                {
+                    try
+                    {
+                        m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                    }
+                    catch(SQLException& e)
+                    // UpdateFehlerbehandlung
+                    {
+                        if(!m_bDontAskAgain)
+                        {
+                            String aMsg(e.Message);
+                            aMsg += '\n';
+                            aMsg += String(ModuleRes(STR_QRY_CONTINUE));
+                            OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
+                                aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
+
+                            if (aBox.Execute() == RET_YES)
+                                m_bDontAskAgain = TRUE;
+                            else
+                                m_bError = TRUE;
+                        }
+                    }
+                }
                 else
                     m_bError = sal_True;
                 break;
