@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,20 +83,22 @@ namespace
         OTableWindowListBox* pListBox = _pWin ? _pWin->GetListBox() : NULL;
         DBG_ASSERT(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
 
-        long nRowHeight = pListBox->GetEntryHeight();
-
         Rectangle aReturn;
-        aReturn.Top() = _aConnPos.Y() - nRowHeight;
-        aReturn.Bottom() = aReturn.Top() + nRowHeight;
-        if (_aDescrLinePos.X() < _aConnPos.X())
+        if ( pListBox )
         {
-            aReturn.Left() = _aDescrLinePos.X();
-            aReturn.Right() = aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X();
-        }
-        else
-        {
-            aReturn.Left() = _aConnPos.X();
-            aReturn.Right() = aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X();
+            long nRowHeight = pListBox->GetEntryHeight();
+            aReturn.Top() = _aConnPos.Y() - nRowHeight;
+            aReturn.Bottom() = aReturn.Top() + nRowHeight;
+            if (_aDescrLinePos.X() < _aConnPos.X())
+            {
+                aReturn.Left() = _aDescrLinePos.X();
+                aReturn.Right() = aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X();
+            }
+            else
+            {
+                aReturn.Left() = _aConnPos.X();
+                aReturn.Right() = aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X();
+            }
         }
 
         return aReturn;
