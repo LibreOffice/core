@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:32:02 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2848,22 +2848,42 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         return aSeq;
     }
 
-    const sal_uInt16 nMaxPages = pDoc->GetPageCount();
-    const sal_uInt16 nMaxMasterPages = pDoc->GetMasterPageCount();
+    if( pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+    {
+        const sal_uInt16 nMaxPages = pDoc->GetSdPageCount( PK_STANDARD );
+        const sal_uInt16 nMaxMasterPages = pDoc->GetMasterSdPageCount( PK_STANDARD );
 
-    uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
-    OUString* pStr = aSeq.getArray();
+        uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
+        OUString* pStr = aSeq.getArray();
 
-    sal_uInt16 nPage;
-    // standard pages
-    for( nPage = 0; nPage < nMaxPages; nPage++ )
-        *pStr++ = ((SdPage*)pDoc->GetPage( nPage ))->GetName();
+        sal_uInt16 nPage;
+        // standard pages
+        for( nPage = 0; nPage < nMaxPages; nPage++ )
+            *pStr++ = pDoc->GetSdPage( nPage, PK_STANDARD )->GetName();
 
-    // master pages
-    for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
-        *pStr++ = ((SdPage*)pDoc->GetMasterPage( nPage ))->GetName();
+        // master pages
+        for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
+            *pStr++ = pDoc->GetMasterSdPage( nPage, PK_STANDARD )->GetName();
+        return aSeq;
+    }
+    else
+    {
+        const sal_uInt16 nMaxPages = pDoc->GetPageCount();
+        const sal_uInt16 nMaxMasterPages = pDoc->GetMasterPageCount();
 
-    return aSeq;
+        uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
+        OUString* pStr = aSeq.getArray();
+
+        sal_uInt16 nPage;
+        // standard pages
+        for( nPage = 0; nPage < nMaxPages; nPage++ )
+            *pStr++ = ((SdPage*)pDoc->GetPage( nPage ))->GetName();
+
+        // master pages
+        for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
+            *pStr++ = ((SdPage*)pDoc->GetMasterPage( nPage ))->GetName();
+        return aSeq;
+    }
 }
 
 sal_Bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
@@ -2909,11 +2929,13 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
 
     const String aName( rName );
 
+    const bool bDraw = pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
+
     // standard pages
     for( nPage = 0; nPage < nMaxPages; nPage++ )
     {
         pPage = (SdPage*)pDoc->GetPage( nPage );
-        if( pPage->GetName() == aName )
+        if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
 
@@ -2921,7 +2943,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
     for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
     {
         pPage = (SdPage*)pDoc->GetMasterPage( nPage );
-        if( pPage->GetName() == aName )
+        if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
 
