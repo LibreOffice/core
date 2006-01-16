@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:04:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,9 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
     if( pSourceDoc )
         StartListening( *pSourceDoc );
 
+    if( pWorkView )
+        StartListening( *pWorkView );
+
     if( !bLateInit )
         CreateData();
 }
@@ -200,6 +203,9 @@ SdTransferable::~SdTransferable()
 {
     if( pSourceDoc )
         EndListening( *pSourceDoc );
+
+    if( pSdView )
+        EndListening( *const_cast< sd::View *>( pSdView) );
 
     Application::GetSolarMutex().acquire();
 
@@ -534,33 +540,38 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
             aDocShellRef.Clear();
 
-            SdDrawDocument* pInternDoc = pSdViewIntern->GetDoc();
-            if( pInternDoc )
-                pInternDoc->CreatingDataObj(this);
-            SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( pSdViewIntern->GetAllMarkedModel() );
-            if( pInternDoc )
-                pInternDoc->CreatingDataObj(0);
-
-            bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
-
-            if( aDocShellRef.Is() )
+            if( pSdViewIntern )
             {
-                aDocShellRef->DoClose();
-            }
-            else
-            {
-                delete pDoc;
+                SdDrawDocument* pInternDoc = pSdViewIntern->GetDoc();
+                if( pInternDoc )
+                    pInternDoc->CreatingDataObj(this);
+                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( pSdViewIntern->GetAllMarkedModel() );
+                if( pInternDoc )
+                    pInternDoc->CreatingDataObj(0);
+
+                bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
+
+                if( aDocShellRef.Is() )
+                {
+                    aDocShellRef->DoClose();
+                }
+                else
+                {
+                    delete pDoc;
+                }
             }
 
             aDocShellRef = aOldRef;
         }
         else if( nFormat == FORMAT_GDIMETAFILE )
         {
-            bOK = SetGDIMetaFile( pSdViewIntern->GetAllMarkedMetaFile( TRUE ), rFlavor );
+            if( pSdViewIntern )
+                bOK = SetGDIMetaFile( pSdViewIntern->GetAllMarkedMetaFile( TRUE ), rFlavor );
         }
         else if( nFormat == FORMAT_BITMAP )
         {
-            bOK = SetBitmap( pSdViewIntern->GetAllMarkedBitmap( TRUE ), rFlavor );
+            if( pSdViewIntern )
+                bOK = SetBitmap( pSdViewIntern->GetAllMarkedBitmap( TRUE ), rFlavor );
         }
         else if( ( nFormat == FORMAT_STRING ) && pBookmark )
         {
@@ -850,13 +861,26 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
 // SfxListener
 void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-
+    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
     if( pSdrHint )
     {
         if( HINT_MODELCLEARED == pSdrHint->GetKind() )
         {
+            EndListening(*pSourceDoc);
             pSourceDoc = 0;
+        }
+    }
+    else
+    {
+        const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint * >(&rHint);
+        if(pSimpleHint && (pSimpleHint->GetId() == SFX_HINT_DYING) )
+        {
+            if( &rBC == pSourceDoc )
+                pSourceDoc = 0;
+            if( &rBC == pSdViewIntern )
+                pSdViewIntern = 0;
+            if( &rBC == pSdView )
+                pSdView = 0;
         }
     }
 }
