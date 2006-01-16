@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,6 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
 #ifdef MACOSX
 #include <unxmacxp_protos.h>
 #endif
@@ -76,6 +73,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <sal/alloca.h>
 
 #include <algorithm>
 
