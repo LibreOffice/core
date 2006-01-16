@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:39:22 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,15 +61,8 @@
 #ifdef _USE_UNO
 
 // <-- encoding
-#ifdef UNX
-#if !defined MACOSX && !defined FREEBSD && !defined NETBSD
-#include <alloca.h>
-#endif
-#endif
-#ifdef WNT
-#include <malloc.h>
-#define alloca _alloca
-#endif
+#include <sal/alloca.h>
+
 #include <ctype.h>
 #include <rtl/byteseq.hxx>
 #ifndef _RTL_TEXTENC_H
