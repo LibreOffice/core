@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text_gfx.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:48:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 12:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,7 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-#if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 #include <math.h>
 
 using namespace psp ;
