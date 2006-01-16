@@ -4,9 +4,9 @@
  *
  *  $RCSfile: networkdomain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:24:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 //_________________________________________________________________________________________________________________
 
 #include <sys/systeminfo.h>
-#include <alloca.h>
+#include <sal/alloca.h>
 
 static rtl_uString *getDomainName()
 {
