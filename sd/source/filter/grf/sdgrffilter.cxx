@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:21:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,12 +386,14 @@ sal_Bool SdGRFFilter::Export()
                 const Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 
-                SdrPageView* pPageView  = pView->GetPageView( pPage );
+                SdrPageView* pPageView = pView->GetPageView( pPage );
                 ::sd::FrameView* pFrameView = mrDocShell.GetFrameView();
-
-                pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
-                pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
-                pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
+                if( pPageView && pFrameView )
+                {
+                    pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
+                    pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
+                    pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
+                }
 
                 aVDev.Push();
                 aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
