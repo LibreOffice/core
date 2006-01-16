@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:39:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 15:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ void ODbaseTable::AllocBuffer()
 
     if (m_nBufferSize != nSize)
     {
-        delete m_pBuffer;
+        delete[] m_pBuffer;
         m_pBuffer = NULL;
     }
 
