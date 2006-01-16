@@ -4,9 +4,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:17 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 
 #include <sal/config.h>
 #ifdef SAL_UNX
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 #endif
 #if !(defined(MACOSX) || defined(FREEBSD))
 #include <malloc.h>
