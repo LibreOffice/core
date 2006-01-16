@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:57:23 $
+ *  last change: $Author: obo $ $Date: 2006-01-16 13:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <string.h>
 
 #if defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
+#include <sal/alloca.h>
 #include <osl/module.h>
 #endif
 
