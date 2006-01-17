@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-16 12:32:37 $
+#   last change: $Author: vg $ $Date: 2006-01-17 13:13:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -880,6 +880,14 @@ sub view {
     my $verbose = $self->verbose();
     my ($info, $seen,  @field);
     my $line = "$cvs_binary status -R";
+    # provide info in hash
+    my @view_info = ();
+    open(REPOSITORY, 'CVS/Repository');
+    my $repository = <REPOSITORY>;
+    close REPOSITORY;
+    $repository =~ s/[\s\r\n]//g;
+    $repository =~ s/$module$//g;
+
     open (CVSVIEW , "$line 2>&1 |") or croak("ERROR: CvsModule::view(): can't run command '$line'");
 
     $seen = 0;
@@ -937,7 +945,11 @@ sub view {
 
         if ($info && $line =~ /Repository/o ) {
             @field = split /\s+/, $line;
-            print "$field[4]: $info\n";
+            my $info_line = "$field[4]: $info\n";
+            print $info_line;
+            $info_line =~ s/,\S+:/:/;
+            $info_line =~ s/^$repository//;
+            push (@view_info, $info_line);
             $info = 0;
             next;
         }
@@ -955,7 +967,7 @@ sub view {
         print STDERR "potential \"cvs view\" failure, please use \"cvs status\"\n";
         print STDERR "to examine error condition\n";
     }
-
+    return \@view_info;
 }
 
 # Simple minded ring buffer for keeping the last lines of the CVS output
