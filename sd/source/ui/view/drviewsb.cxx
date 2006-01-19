@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:11:08 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,8 @@
 #include "sdabstdlg.hxx" //CHINA001
 #include "dlgfield.hrc" //CHINA001
 #include "ins_page.hrc" //CHINA001
+#include "SlideSorterViewShell.hxx"
+#include "controller/SlideSorterController.hxx"
 
 #define RET_DELETE  100 //CHINA001
 
@@ -826,6 +828,15 @@ bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
         GetViewFrame()->GetDispatcher()->Execute(
             SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+
+        // Tell the slide sorter about the name change (necessary for
+        // accessibility.)
+        slidesorter::SlideSorterViewShell* pSlideSorter
+            = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+        if (pSlideSorter != NULL)
+        {
+            pSlideSorter->GetSlideSorterController().PageNameHasChanged(nPageId-1, rName);
+        }
     }
 
     return bSuccess;
