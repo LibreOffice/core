@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:32:45 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,8 @@ namespace dbaui
 
         String              m_sTextToken;       // Zellen Inhalt
         TOTypeInfoSP        m_pTypeInfo;    // contains the default type
+        const TColumnVector* m_pColumnList;
+        const OTypeInfoMap* m_pInfoMap;
         sal_Int32           m_nColumnPos;       // aktuelle Spaltenposition
         sal_Int32           m_nRows;        // Anzahl der Zeilen die durchsucht werden sollen
         sal_Int32           m_nRowCount;    // current count of rows
@@ -142,6 +144,7 @@ namespace dbaui
         sal_Int32               CheckString(const String& aToken, sal_Int32 _nOldFormat);
         void                    insertValueIntoColumn();
         sal_Bool                createRowSet();
+        void                    showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
 
         /** executeWizard calls a wizard to create/append data
             @param  _sTableName the tablename
