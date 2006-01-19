@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:53:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,8 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    return AccessibleRole::SHAPE;
+    static sal_Int16 nRole = AccessibleRole::LIST_ITEM;
+    return nRole;
 }
 
 
@@ -278,6 +279,11 @@ Reference<XAccessibleStateSet> SAL_CALL
         if (mrSlideSorterController.GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
             if (mrSlideSorterController.GetFocusManager().IsFocusShowing())
                 pStateSet->AddState(AccessibleStateType::FOCUSED);
+
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::VISIBLE);
+        pStateSet->AddState(AccessibleStateType::SHOWING);
+        pStateSet->AddState(AccessibleStateType::ACTIVE);
     }
 
     return pStateSet;
