@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusindicator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:20:56 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,7 +546,7 @@ protected:
             @onerror    -
         */
 
-        virtual UNO3_WINDOWDESCRIPTOR* StatusIndicator::impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
+        virtual UNO3_WINDOWDESCRIPTOR* impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
 
         /**_______________________________________________________________________________________________________
             @short      -
