@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:22:01 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,6 +918,8 @@ void FmXFormShell::disposing()
         m_aMarkTimer.Stop();
     }
 
+    DisableNotification();
+
     // we are disposed from within the destructor of our shell, so now the shell pointer is invalid ....
     m_pShell                    = NULL;
     m_xActiveController         = NULL;
@@ -962,6 +964,9 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( FmXFormShell_BASE::rBHelper.bDisposed )
+        return /*throw DisposedException()*/ ;
+
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
@@ -3829,6 +3834,10 @@ void FmXFormShell::implAdjustConfigCache()
 //------------------------------------------------------------------------
 void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames)
 {
+    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( FmXFormShell_BASE::rBHelper.bDisposed )
+        return /*throw DisposedException()*/ ;
+
     const ::rtl::OUString* pSearch = _rPropertyNames.getConstArray();
     const ::rtl::OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
     for (;pSearch < pSearchTil; ++pSearch)
