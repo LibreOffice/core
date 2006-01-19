@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LISTOutputter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2005-11-03 14:23:04 $
+ *  last change: $Date: 2006-01-19 14:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ public class LISTOutputter
             catch (java.io.IOException e)
             {
                 e.printStackTrace();
-                System.out.println("ERROR: Can't create LIST Outputter");
+                GlobalLogWriter.get().println("ERROR: Can't create LIST Outputter");
                 return null;
             }
             a.m_sFilename = sFilename;
