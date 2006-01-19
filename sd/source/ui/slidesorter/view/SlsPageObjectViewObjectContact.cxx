@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:45:00 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,11 @@ PageObjectViewObjectContact::PageObjectViewObjectContact (
 
 PageObjectViewObjectContact::~PageObjectViewObjectContact (void)
 {
+    if (mpCache.get() != NULL)
+    {
+        mpCache->ReleasePreviewBitmap(*this);
+    }
+
     if (mpNotifier.get() != NULL)
     {
         mbInPrepareDelete = true;
@@ -545,8 +550,7 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
     {
         PageObjectViewContact& rViewContact (
             static_cast<PageObjectViewContact&>(GetViewContact()));
-        Rectangle aPagePixelBBox (
-            rDevice.LogicToPixel(rViewContact.GetPageRectangle ()));
+        Rectangle aPagePixelBBox (GetPreviewPixelBox(rDevice));
 
         aPagePixelBBox.Left() -= mnFocusIndicatorOffset;
         aPagePixelBBox.Top() -= mnFocusIndicatorOffset;
