@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:00:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,12 @@ public:
         const ::com::sun::star::uno::Any& rNewValue);
 
     virtual void SAL_CALL disposing (void);
+
+    /** Return the implementation object of the specified child.
+        @param nIndex
+            Index of the child for which to return the implementation object.
+    */
+    AccessibleSlideSorterObject* GetAccessibleChildImplementation (sal_Int32 nIndex);
 
     //===== XAccessible =======================================================
 
