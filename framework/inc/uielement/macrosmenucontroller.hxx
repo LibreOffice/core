@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosmenucontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:44:45 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ namespace framework
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             String RetrieveLabelFromCommand( const String& aCmdURL );
-            void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId );
+            void addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId );
     };
 }
 
