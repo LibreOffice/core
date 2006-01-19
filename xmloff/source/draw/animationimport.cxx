@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:21:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1359,7 +1359,7 @@ public:
     AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr );
     ~AnimationsImport() throw ();
 
-    SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
@@ -1367,7 +1367,7 @@ public:
     virtual void SAL_CALL release() throw ();
 
     // XAnimationNodeSupplier
-    Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException);
+    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
