@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
-    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
@@ -294,7 +294,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
-    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
