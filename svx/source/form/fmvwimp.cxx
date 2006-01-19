@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:37:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:40:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,8 @@ using namespace ::comphelper;
 using namespace ::svxform;
 using namespace ::svx;
 using com::sun::star::style::VerticalAlignment_MIDDLE;
+using ::com::sun::star::form::binding::XValueBinding;
+using ::com::sun::star::form::binding::XBindableValue;
 
 namespace svxform
 {
@@ -1599,7 +1601,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         Reference< XSubmission_t > xSubmission(_rDesc.xPropSet, UNO_QUERY);
 
         // xform control or submission button?
-        if(!(xSubmission.is())) {
+        if ( !xSubmission.is() )
+        {
 
             FmFormObj* pLabel;
             FmFormObj* pControl;
@@ -1612,14 +1615,12 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
             //////////////////////////////////////////////////////////////////////
             // Now build the connection between the control and the data item.
-            using namespace ::com::sun::star::uno;
-            typedef ::com::sun::star::awt::XControlModel XControlModel_t;
-            typedef ::com::sun::star::form::binding::XBindableValue XBindableValue_t;
-            typedef com::sun::star::form::binding::XValueBinding XValueBinding_t;
-            typedef com::sun::star::beans::XPropertySet XPropertySet_t;
-            Reference< XValueBinding_t > xValueBinding(_rDesc.xPropSet,UNO_QUERY);
-            Reference< XBindableValue_t > xBindableValue(pControl->GetUnoControlModel(),UNO_QUERY);
-            xBindableValue->setValueBinding(xValueBinding);
+            Reference< XValueBinding > xValueBinding(_rDesc.xPropSet,UNO_QUERY);
+            Reference< XBindableValue > xBindableValue(pControl->GetUnoControlModel(),UNO_QUERY);
+
+            DBG_ASSERT( xBindableValue.is(), "FmXFormView::implCreateXFormsControl: control's not bindable!" );
+            if ( xBindableValue.is() )
+                xBindableValue->setValueBinding(xValueBinding);
 
             //////////////////////////////////////////////////////////////////////
             // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
