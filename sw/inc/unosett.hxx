@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:28:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ public:
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
 
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId();
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
