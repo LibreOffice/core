@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:53:21 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ class LinguOptions
 
     //! uses default assignment-operator
 
-    BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage,
+    BOOL SetLocale_Impl( INT16 &rLanguage,
             ::com::sun::star::uno::Any &rOld,
             const ::com::sun::star::uno::Any &rVal);
 
