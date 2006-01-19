@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:18:56 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN
 {
-    Text [ de ] = "Die Spalten \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Primärschlüssel gelöscht.Wollen Sie sie fortfahren?";
+    Text [ de ] = "Die Spalte \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Primärschlüssel gelöscht.Wollen Sie sie fortfahren?";
     Text [ en-US ] = "The column \"$column$\" belongs to the primary key. If the column is deleted, the primary key will also be deleted. Do you really want to continue?";
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
