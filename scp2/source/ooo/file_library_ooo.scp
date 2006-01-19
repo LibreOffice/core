@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:32:35 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -655,6 +655,13 @@ File gid_File_Lib_Kab_1
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
+End
+
+File gid_File_Lib_Kab_Drv_1
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
 End
 
 #endif
