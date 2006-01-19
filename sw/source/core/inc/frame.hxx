@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:35:01 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,7 +834,7 @@ public:
     void MakeUpperPos( const SwFrm*, const SwFrm*, BOOL );
     void MakeLeftPos( const SwFrm*, const SwFrm*, BOOL );
     void MakeRightPos( const SwFrm*, const SwFrm*, BOOL );
-    inline BOOL SwFrm::IsNeighbourFrm() const
+    inline BOOL IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 
 #ifndef PRODUCT
