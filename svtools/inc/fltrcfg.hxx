@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltrcfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:30:38 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ public:
     sal_Bool IsImpress2PowerPoint() const;
     void SetImpress2PowerPoint( sal_Bool bFlag );
 
-    static SvtFilterOptions* SvtFilterOptions::Get();
+    static SvtFilterOptions* Get();
 };
 
 #endif
