@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtertracer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:40:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ class FilterTracer : public cppu::WeakImplHelper4
     REF( NMSP_UTIL::XTextSearch )       mxTextSearch;
     NMSP_UTIL::SearchOptions            maSearchOptions;
 
-    sal_Bool                FilterTracer::ImplFilter( const rtl::OUString& rFilter, const rtl::OUString& rString );
+    sal_Bool                ImplFilter( const rtl::OUString& rFilter, const rtl::OUString& rString );
 
 public:
                             FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
