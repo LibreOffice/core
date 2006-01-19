@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 15:37:10 $
+#   last change: $Author: obo $ $Date: 2006-01-19 16:28:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,8 @@ sub getparameter
         {
             $installer::globals::simple = 1;
             $installer::globals::call_epm = 0;
+            $installer::globals::makedownload = 0;
+            $installer::globals::makejds = 0;
             $installer::globals::strip = 0;
             my $path = shift(@ARGV);
             $path =~ s/^$installer::globals::destdir//;
