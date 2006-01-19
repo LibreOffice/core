@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:04:24 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
+#endif
+#ifndef SD_ASYNCHRONOUS_CALL_HXX
+#include "tools/AsynchronousCall.hxx"
 #endif
 
 #ifndef _VIEWFAC_HXX //autogen
@@ -460,6 +463,11 @@ private:
         DrawViewShell.
     */
     ::std::auto_ptr<SvxClipboardFmtItem> mpCurrentClipboardFormats;
+
+    /** On some occasions it is necessary to make SwitchPage calls
+        asynchronously.
+    */
+    tools::AsynchronousCall maAsynchronousSwitchPageCall;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
