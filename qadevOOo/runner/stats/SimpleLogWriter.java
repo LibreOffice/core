@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SimpleLogWriter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:29:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ import java.util.GregorianCalendar;
 
 public class SimpleLogWriter extends PrintWriter implements LogWriter {
 
-    boolean logging = false;
+    boolean m_bLogging = false;
     share.DescEntry entry = null;
     share.Watcher ow = null;
 
@@ -63,24 +63,32 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
         super.flush();
     }
 
-    public boolean initialize(share.DescEntry entry, boolean logging) {
-         this.logging = logging;
-         this.entry = entry;
+    public boolean initialize(share.DescEntry _entry, boolean _bLogging) {
+        m_bLogging = _bLogging;
+        entry = _entry;
 
-         return true;
+        return true;
     }
 
     public void println(String msg) {
+        if (entry != null)
+        {
+            this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
 
-        this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
-
-        if (this.ow != null) {
-            this.ow.ping();
+            if (this.ow != null) {
+                this.ow.ping();
+            }
         }
-        if (logging) {
+        if (m_bLogging)
+        {
             super.println("LOG> "+msg);
             super.flush();
         }
+        // else
+        // {
+        //     super.println(" ++ " + msg);
+        //     super.flush();
+        // }
     }
 
     public boolean summary(share.DescEntry entry) {
