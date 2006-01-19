@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:29:07 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -169,6 +166,7 @@ SvParserState ORTFReader::CallParser()
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = SvRTFParser::CallParser();
+    SetColumnTypes(m_pColumnList,m_pInfoMap);
     return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
 // ---------------------------------------------------------------------------
@@ -219,28 +217,17 @@ void ORTFReader::NextToken( int nToken )
                 if(!m_xTable.is()) // erste Zeile als Header verwenden
                     m_bError = !CreateTable(nToken);
                 else
+                {
                     try
                     {
                         m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
                     }
                     catch(SQLException& e)
-                    //////////////////////////////////////////////////////////////////////
                     // UpdateFehlerbehandlung
                     {
-                        if(!m_bDontAskAgain)
-                        {
-                            String aMsg(e.Message);
-                            aMsg += '\n';
-                            aMsg += String(ModuleRes(STR_QRY_CONTINUE));
-                            OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
-                                aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
-
-                            if (aBox.Execute() == RET_YES)
-                                m_bDontAskAgain = TRUE;
-                            else
-                                m_bError = TRUE;
-                        }
+                        showErrorDialog(e);
                     }
+                }
                 break;
             case RTF_INTBL:
                 if(m_bInTbl)
@@ -254,7 +241,15 @@ void ORTFReader::NextToken( int nToken )
                 break;
             case RTF_CELL:
                 {
-                    insertValueIntoColumn();
+                    try
+                    {
+                        insertValueIntoColumn();
+                    }
+                    catch(SQLException& e)
+                    // UpdateFehlerbehandlung
+                    {
+                        showErrorDialog(e);
+                    }
                     m_nColumnPos++;
                     m_sTextToken.Erase();
                 }
@@ -273,19 +268,7 @@ void ORTFReader::NextToken( int nToken )
                 //////////////////////////////////////////////////////////////////////
                 // UpdateFehlerbehandlung
                 {
-                    if(!m_bDontAskAgain)
-                    {
-                        String aMsg(e.Message);
-                        aMsg += '\n';
-                        aMsg += String(ModuleRes(STR_QRY_CONTINUE));
-                        OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
-                            aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
-
-                        if (aBox.Execute() == RET_YES)
-                            m_bDontAskAgain = TRUE;
-                        else
-                            m_bError = TRUE;
-                    }
+                    showErrorDialog(e);
                 }
                 m_nColumnPos = 0;
                 break;
