@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:08:00 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,11 +189,11 @@ namespace sdr
 
             // method to get the ObjectAnimator. It will
             // return a existing one or create a new one using CreateObjectAnimator().
-            sdr::animation::ObjectAnimator& ObjectContact::GetObjectAnimator() const;
+            sdr::animation::ObjectAnimator& GetObjectAnimator() const;
 
             // method to get the EventHandler. It will
             // return a existing one or create a new one using CreateEventHandler().
-            sdr::event::TimerEventHandler& ObjectContact::GetEventHandler() const;
+            sdr::event::TimerEventHandler& GetEventHandler() const;
 
             // delete the ObjectAnimator
             void DeleteObjectAnimator();
