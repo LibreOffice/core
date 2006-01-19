@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:20:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 13:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,18 +112,24 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
-            if(xFunc.is())
-                xFunc->DoCut();
-            else
-                DoCut();
+            if (mrController.GetModel().GetEditMode() != EM_MASTERPAGE)
+            {
+                if(xFunc.is())
+                    xFunc->DoCut();
+                else
+                    DoCut();
+            }
             rRequest.Done();
             break;
 
         case SID_COPY:
-            if(xFunc.is())
-                xFunc->DoCopy();
-            else
-                DoCopy();
+            if (mrController.GetModel().GetEditMode() != EM_MASTERPAGE)
+            {
+                if(xFunc.is())
+                    xFunc->DoCopy();
+                else
+                    DoCopy();
+            }
             rRequest.Done();
             break;
 
