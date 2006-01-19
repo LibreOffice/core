@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:21:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,8 @@ public:
     */
     void UnlockModelChange (void);
 
+    bool IsLocked (void) const;
+
     /** Create an object of this inner class to prevent updates due to model
         changes.
     */
@@ -202,9 +204,9 @@ public:
     {public:
         ModelChangeLock (SlideSorterController& rController);
         ~ModelChangeLock (void);
-        void ModelHasChanged (void);
+        void Release (void);
     private:
-        SlideSorterController& mrController;
+        SlideSorterController* mpController;
     };
 
     /** Prepare for a model change.  This method does all the things that
@@ -323,6 +325,16 @@ public:
         restore a previously saved selection.
     */
     void FinishEditModeChange (void);
+
+    /** Call this method when the name of one of the pages has changed.
+        This is then notified to the accessibility object, when that exists.
+        @param nPageIndex
+            The index of the page whose name has been changed.
+        @param rsOldName
+            The old name of the page.  The new name can be taken from the
+            page object.
+    */
+    void PageNameHasChanged (int nPageIndex, const String& rsOldName);
 
 private:
     SlideSorterViewShell& mrViewShell;
