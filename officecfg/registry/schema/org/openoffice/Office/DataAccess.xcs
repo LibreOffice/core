@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:08:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,6 +749,19 @@
 					</prop>
 				</group>
 			</group>
+            <group oor:name="com.sun.star.comp.sdbc.kab.Driver">
+                <info>
+                    <desc>Specifies the driver settings for the mozilla database driver.</desc>
+                </info>
+                <prop oor:name="DisableKDEMaximumVersionCheck" oor:type="xs:boolean">
+                    <info>
+                        <desc>At runtime, the driver checks if the installed KDE version is too new to be supported.
+                              In this case, it refuses creating connections. With the setting here, this check can
+                              be disabled (which might do anything from simply work to crash).</desc>
+                    </info>
+                    <value>false</value>
+                </prop>
+            </group>
         </group>
 		<group oor:name="FormSearchOptions">
 			<info>
