@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:24:38 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 13:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1915,39 +1915,35 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
         sal_Bool bPresPage = mbIsImpressDocument && ePageKind != PK_HANDOUT;
 
-        std::list< uno::Type > aTypes;
-
-        aTypes.push_back( ITYPE(drawing::XDrawPage) );
-        aTypes.push_back( ITYPE(beans::XPropertySet) );
-        aTypes.push_back( ITYPE(container::XNamed) );
-        aTypes.push_back( ITYPE(drawing::XMasterPageTarget) );
-        aTypes.push_back( ITYPE(lang::XServiceInfo) );
-        aTypes.push_back( ITYPE(util::XReplaceable) );
-        aTypes.push_back( ITYPE(document::XLinkTargetSupplier) );
-        aTypes.push_back( ITYPE( drawing::XShapeCombiner ) );
-        aTypes.push_back( ITYPE( drawing::XShapeBinder ) );
-
+        // Collect the types of this class.
+        ::std::vector<uno::Type> aTypes;
+        aTypes.reserve(11);
+        aTypes.push_back(ITYPE(drawing::XDrawPage));
+        aTypes.push_back(ITYPE(beans::XPropertySet));
+        aTypes.push_back(ITYPE(container::XNamed));
+        aTypes.push_back(ITYPE(drawing::XMasterPageTarget));
+        aTypes.push_back(ITYPE(lang::XServiceInfo));
+        aTypes.push_back(ITYPE(util::XReplaceable));
+        aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
+        aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
+        aTypes.push_back(ITYPE( drawing::XShapeBinder ));
         if( bPresPage )
-        {
-            aTypes.push_back( ITYPE(presentation::XPresentationPage) );
+            aTypes.push_back(ITYPE(presentation::XPresentationPage));
+        if( bPresPage && ePageKind == PK_STANDARD )
+            aTypes.push_back(ITYPE(XAnimationNodeSupplier));
 
-            if( ePageKind == PK_STANDARD )
-                aTypes.push_back(  ITYPE(XAnimationNodeSupplier) );
-        }
-
+        // Get types of base class.
         const uno::Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
-        maTypeSequence.realloc( aBaseTypes.getLength() + aTypes.size() );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        std::list< uno::Type >::iterator aIter( aTypes.begin() );
-        unsigned int n;
-        for( n = 0; (n < aTypes.size()) && (aIter != aTypes.end()); n++ )
-            *pTypes++ = (*aIter++);
-
-        DBG_ASSERT( (n == aTypes.size()) && (aIter == aTypes.end()), "sd::SdDrawPage::getTypes(), array size invalid!" );
-
+        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        for( n = 0; n < aBaseTypes.getLength(); n++ )
+
+        // Join those types in a sequence.
+        maTypeSequence.realloc(aTypes.size() + nBaseTypes);
+        uno::Type* pTypes = maTypeSequence.getArray();
+        ::std::vector<uno::Type>::const_iterator iType;
+        for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
+            *pTypes++ = *iType;
+        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
     }
 
@@ -2491,40 +2487,33 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
         sal_Bool bPresPage = mbIsImpressDocument && pPage && ePageKind != PK_HANDOUT;
 
+        // Collect the types of this class.
+        ::std::vector<uno::Type> aTypes;
+        aTypes.reserve(10);
+        aTypes.push_back(ITYPE(drawing::XDrawPage));
+        aTypes.push_back(ITYPE(beans::XPropertySet));
+        aTypes.push_back(ITYPE(container::XNamed));
+        aTypes.push_back(ITYPE(lang::XServiceInfo));
+        aTypes.push_back(ITYPE(util::XReplaceable));
+        aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
+        aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
+        aTypes.push_back(ITYPE( drawing::XShapeBinder ));
+        if( bPresPage )
+            aTypes.push_back(ITYPE(presentation::XPresentationPage));
+        if( bPresPage && ePageKind == PK_STANDARD )
+            aTypes.push_back(ITYPE(XAnimationNodeSupplier));
+
+        // Get types of base class.
         const uno::Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        sal_Int32 nOwnTypes = 8;        // !DANGER! Keep this updated!
-
-        if( bPresPage )
-        {
-            nOwnTypes++;                    // presentation::XPresentationPage
-
-            if( ePageKind == PK_STANDARD )
-            {
-                nOwnTypes++;                // XAnimationNodeSupplier
-            }
-        }
-
-        maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
+        // Join those types in a sequence.
+        maTypeSequence.realloc(aTypes.size() + nBaseTypes);
         uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ITYPE(drawing::XDrawPage);
-        *pTypes++ = ITYPE(beans::XPropertySet);
-        *pTypes++ = ITYPE(container::XNamed);
-        *pTypes++ = ITYPE(lang::XServiceInfo);
-        *pTypes++ = ITYPE(util::XReplaceable);
-        *pTypes++ = ITYPE(document::XLinkTargetSupplier);
-        *pTypes++ = ITYPE( drawing::XShapeCombiner );
-        *pTypes++ = ITYPE( drawing::XShapeBinder );
-
-        if( bPresPage )
-            *pTypes++ = ITYPE(presentation::XPresentationPage);
-
-        if( bPresPage && ePageKind == PK_STANDARD )
-            *pTypes++ = ITYPE(XAnimationNodeSupplier);
-
+        ::std::vector<uno::Type>::const_iterator iType;
+        for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
+            *pTypes++ = *iType;
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
     }
