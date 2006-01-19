@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-20 08:39:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,21 @@ void SAL_CALL AccessibleSlideSorterView::disposing (void)
 
 
 
+AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplementation (
+    sal_Int32 nIndex)
+{
+    AccessibleSlideSorterObject* pResult = NULL;
+    ::osl::MutexGuard aGuard (maMutex);
+
+    if (nIndex>=0 && nIndex<mpImpl->GetVisibleChildCount())
+        pResult = mpImpl->GetVisibleChild(nIndex);
+
+    return pResult;
+}
+
+
+
+
 void AccessibleSlideSorterView::Destroyed (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -283,7 +298,9 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getAccessibleIndexInParent (void)
 sal_Int16 SAL_CALL AccessibleSlideSorterView::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
-    return AccessibleRole::DOCUMENT;
+    ThrowIfDisposed();
+    static sal_Int16 nRole = AccessibleRole::PANEL;
+    return nRole;
 }
 
 
@@ -334,6 +351,7 @@ Reference<XAccessibleStateSet > SAL_CALL
     pStateSet->AddState(AccessibleStateType::FOCUSABLE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
     pStateSet->AddState(AccessibleStateType::ENABLED);
+    pStateSet->AddState(AccessibleStateType::ACTIVE);
     pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
     pStateSet->AddState(AccessibleStateType::OPAQUE);
     if (mpContentWindow!=NULL)
