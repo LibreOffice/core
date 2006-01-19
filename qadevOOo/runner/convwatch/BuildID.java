@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BuildID.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:40:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ public class BuildID
                     sOfficePath = _sApp.substring(0, nIdx);
                 }
             }
-            System.out.println("Office path: " + sOfficePath);
+            GlobalLogWriter.get().println("Office path: " + sOfficePath);
 
             String fs = System.getProperty("file.separator");
             String sBuildID = "";
@@ -80,29 +80,70 @@ public class BuildID
                 int nIdx = sOfficePath.lastIndexOf(fs);
                 sOfficePath = sOfficePath.substring(0, nIdx);
                 // ok. System.out.println("directory: " + sOfficePath);
-                if (OSHelper.isWindows())
+                sBuildID = getBuildIDFromBootstrap(sOfficePath);
+                if (sBuildID.length() == 0)
                 {
-                    sOfficePath += fs + "bootstrap.ini";
-                }
-                else
-                {
-                    sOfficePath += fs + "bootstraprc";
-                }
-                IniFile aIniFile = new IniFile(sOfficePath);
-                if (aIniFile.is())
-                {
-                    sBuildID = aIniFile.getKey("Bootstrap", "buildid");
+                    sBuildID = getBuildIDFromVersion(sOfficePath);
                 }
             }
             else
             {
-                System.out.println("soffice executable not found.");
+                GlobalLogWriter.get().println("soffice executable not found.");
             }
 
             int dummy = 0;
             return sBuildID;
         }
 
+    private static String getBuildIDFromBootstrap(String _sOfficePath)
+        {
+            String fs = System.getProperty("file.separator");
+            String sBuildID = "";
+            String sOfficePath = _sOfficePath;
+            if (OSHelper.isWindows())
+            {
+                sOfficePath += fs + "bootstrap.ini";
+            }
+            else
+            {
+                sOfficePath += fs + "bootstraprc";
+            }
+            IniFile aIniFile = new IniFile(sOfficePath);
+            if (aIniFile.is())
+            {
+                sBuildID = aIniFile.getValue("Bootstrap", "buildid");
+            }
+            else
+            {
+                GlobalLogWriter.get().println("Property Build, can't open file '" + sOfficePath + "', please check.");
+            }
+            return sBuildID;
+        }
+
+    private static String getBuildIDFromVersion(String _sOfficePath)
+        {
+            String fs = System.getProperty("file.separator");
+            String sBuildID = "";
+            String sOfficePath = _sOfficePath;
+            if (OSHelper.isWindows())
+            {
+                sOfficePath += fs + "version.ini";
+            }
+            else
+            {
+                sOfficePath += fs + "versionrc";
+            }
+            IniFile aIniFile = new IniFile(sOfficePath);
+            if (aIniFile.is())
+            {
+                sBuildID = aIniFile.getValue("Version", "buildid");
+            }
+            else
+            {
+                GlobalLogWriter.get().println("Property Build, can't open file '" + sOfficePath + "', please check.");
+            }
+            return sBuildID;
+        }
     public static void main(String[] args)
         {
             String sApp;
