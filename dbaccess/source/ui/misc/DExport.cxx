@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:28:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,12 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
@@ -168,7 +174,9 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap)
-    :m_nColumnPos(0)
+    :m_pColumnList(pList)
+    ,m_pInfoMap(_pInfoMap)
+    ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
     ,m_bError(FALSE)
@@ -208,11 +216,6 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     {
         SvtSysLocale aSysLocale;
         m_nLocale = aSysLocale.GetLocaleData().getLocale();
-//      Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-//      m_nLocale.Language = ::comphelper::getString(aValue);
-//      String sLanguage, sCountry;
-//      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
-//      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
     }
     catch(Exception&)
     {
@@ -227,6 +230,8 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap)
     :m_xConnection(_rxConnection)
+    ,m_pColumnList(NULL)
+    ,m_pInfoMap(NULL)
     ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
@@ -236,7 +241,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bHead(TRUE)
     ,m_bDontAskAgain(sal_False)
     ,m_bIsAutoIncrement(sal_False)
-    ,m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() == sal_True)
+    ,m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xFactory(_rM)
     ,m_pTypeInfo()
     ,m_bFoundTable(sal_False)
@@ -247,11 +252,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     {
         SvtSysLocale aSysLocale;
         m_nLocale = aSysLocale.GetLocaleData().getLocale();
-//      Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-//      m_nLocale.Language = ::comphelper::getString(aValue);
-//      String sLanguage, sCountry;
-//      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
-//      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
     }
     catch(Exception&)
     {
@@ -461,6 +461,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
 
         {
             OSL_ENSURE((m_nColumnPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
+            OSL_ENSURE(m_vColumns[m_nColumnPos].first < static_cast<sal_Int32>(m_vFormatKey.size()),"Illegal index for vector");
             m_vFormatKey[m_vColumns[m_nColumnPos].first] = nFormat; // wird sp"ater f"ur die Column gebraucht
             switch(nType)
             {
@@ -784,6 +785,23 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const
     }
 
     return bError;
+}
+//---------------------------------------------------------------------------------
+void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
+{
+    if(!m_bDontAskAgain)
+    {
+        String aMsg(e.Message);
+        aMsg += '\n';
+        aMsg += String(ModuleRes(STR_QRY_CONTINUE));
+        OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
+            aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
+
+        if (aBox.Execute() == RET_YES)
+            m_bDontAskAgain = TRUE;
+        else
+            m_bError = TRUE;
+    } // if(!m_bDontAskAgain)
 }
 // -----------------------------------------------------------------------------
 
