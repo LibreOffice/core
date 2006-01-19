@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:38:55 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xSourceObject(_xSourceObject)
     ,m_bCreatePrimaryColumn(sal_False)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
-    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xFormatter(_xFormatter)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_xFactory(_rM)
@@ -204,7 +204,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xConnection(_xConnection)
     ,m_bCreatePrimaryColumn(sal_False)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
-    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_vSourceColumns(_rSourceColumns)
     ,m_xFormatter(_xFormatter)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
@@ -249,6 +249,7 @@ void OCopyTableWizard::construct()
 
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
+    m_bAddPKFirstTime = sal_True;
 }
 //------------------------------------------------------------------------
 OCopyTableWizard::~OCopyTableWizard()
@@ -335,13 +336,17 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             TOTypeInfoSP pTypeInfo = queryPrimaryKeyType(m_aDestTypeInfo);
             if ( pTypeInfo.get() )
             {
-                OFieldDescription* pField = new OFieldDescription();
-                pField->SetName(m_aKeyName);
-                pField->FillFromTypeInfo(pTypeInfo,sal_True,sal_True);
-                pField->SetPrimaryKey(sal_True);
-                insertColumn(0,pField);
+                if ( m_bAddPKFirstTime )
+                {
+                    OFieldDescription* pField = new OFieldDescription();
+                    pField->SetName(m_aKeyName);
+                    pField->FillFromTypeInfo(pTypeInfo,sal_True,sal_True);
+                    pField->SetPrimaryKey(sal_True);
+                    m_bAddPKFirstTime = sal_False;
+                    insertColumn(0,pField);
+                }
                 m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(1,1));
-                m_vColumnTypes.push_back(pField->GetType());
+                m_vColumnTypes.push_back(pTypeInfo->nType);
             }
         }
 
