@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:46:17 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ protected:
     SlideBitmapSharedPtr getLeavingBitmap() const;
     SlideBitmapSharedPtr getEnteringBitmap() const;
 
-    SlideBitmapSharedPtr SlideChangeBase::createBitmap(
+    SlideBitmapSharedPtr createBitmap(
         ::boost::optional<SlideSharedPtr> const & rSlide_ ) const;
 
     /// Query the size of the bitmaps in device pixel
