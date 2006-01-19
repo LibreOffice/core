@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeWatcher.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:23:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XComponent;
 import com.sun.star.beans.PropertyValue;
+import java.util.StringTokenizer;
 
 public class OfficeWatcher extends Thread implements share.Watcher {
 
@@ -99,13 +100,24 @@ public class OfficeWatcher extends Thread implements share.Watcher {
             System.out.println("OfficeWatcher: the Office is idle for " + timeOut/1000
                         + " seconds, it probably hangs and is killed NOW.");
             String AppKillCommand = (String) params.get ("AppKillCommand");
-            if (AppKillCommand != null) {
-                System.out.println("User defined an application to destroy the started process.");
-                System.out.println("Trying to execute: "+AppKillCommand);
-                try {
-                    Runtime.getRuntime ().exec (AppKillCommand);
-                } catch (java.io.IOException e) {
-                    e.printStackTrace ();
+            if (AppKillCommand != null)
+            {
+                StringTokenizer aKillCommandToken = new StringTokenizer( AppKillCommand,";" );
+                while (aKillCommandToken.hasMoreTokens())
+                {
+                    String sKillCommand = aKillCommandToken.nextToken();
+
+                    System.out.println("User defined an application to destroy the started process.");
+                    System.out.println("Trying to execute: "+sKillCommand);
+                    try
+                    {
+                        Runtime.getRuntime().exec(sKillCommand);
+                        shortWait(2000);
+                    }
+                    catch (java.io.IOException e)
+                    {
+                        e.printStackTrace ();
+                    }
                 }
             }
             ph.kill();
