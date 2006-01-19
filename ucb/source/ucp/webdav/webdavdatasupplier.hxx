@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:16:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ class DataSupplier : public ucb::ResultSetDataSupplier
     DataSupplier_Impl* m_pImpl;
 
 private:
-    sal_Bool DataSupplier::getData();
+    sal_Bool getData();
 
 public:
     DataSupplier( const com::sun::star::uno::Reference<
