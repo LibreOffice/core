@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:41:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,10 @@ OFormattedFieldWrapper::OFormattedFieldWrapper( const OFormattedFieldWrapper* _p
             query_interface( Reference< XInterface >( xClone.get() ), m_xFormattedPart );
 
             if ( _pCloneSource->m_pEditPart )
+            {
                 m_pEditPart = new OEditModel( _pCloneSource->m_pEditPart, _pCloneSource->m_xServiceFactory );
+                m_pEditPart->acquire();
+            }
         }
         if ( m_xAggregate.is() )
         {   // has to be in it's own block because of the temporary variable created by *this
@@ -271,6 +274,8 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 
     // else we have to write an edit part first
     DBG_ASSERT(m_pEditPart, "OFormattedFieldWrapper::write : formatted part without edit part ?");
+    if ( !m_pEditPart )
+        throw RuntimeException( ::rtl::OUString(), *this );
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
@@ -333,6 +338,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
 
     // let an OEditModel do the reading
     OEditModel* pBasicReader = new OEditModel(m_xServiceFactory);
+    Reference< XInterface > xHoldBasicReaderAlive( *pBasicReader );
     pBasicReader->read(_rxInStream);
 
     // was it really an edit model ?
@@ -344,6 +350,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
 
         // let the formmatted model do the reading
         OFormattedModel* pFormattedReader = new OFormattedModel(m_xServiceFactory);
+        Reference< XInterface > xHoldAliveWhileRead( *pFormattedReader );
         pFormattedReader->read(_rxInStream);
 
         // for the next write (if any) : the FormattedModel and the EditModel parts
@@ -401,7 +408,7 @@ void OFormattedFieldWrapper::ensureAggregate()
             Reference< XServiceInfo > xSI(m_xAggregate, UNO_QUERY);
             if (!xSI.is())
             {
-                DBG_ERROR("OFormattedFieldWrapper::ensureAggregate: the aggregate has nbo XServiceInfo!");
+                DBG_ERROR("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
                 m_xAggregate.clear();
             }
         }
