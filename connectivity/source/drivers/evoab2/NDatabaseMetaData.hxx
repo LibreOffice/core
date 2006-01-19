@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 09:41:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace connectivity
 
         public:
             inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
-            void OEvoabDatabaseMetaData::construct();
+            void construct();
 
             OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
             virtual ~OEvoabDatabaseMetaData();
