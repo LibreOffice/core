@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalDifferenceCheck.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:12:35 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
+import share.LogWriter;
 
 public class GraphicalDifferenceCheck
 {
@@ -56,12 +57,12 @@ public class GraphicalDifferenceCheck
             // DEBUG only
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println();
-                System.out.println("+##############################+");
-                System.out.println("##### THIS IS CONVWATCH    #####");
-                System.out.println("##### Debug Version 1.0013 #####");
-                System.out.println("+##############################+");
-                System.out.println();
+                GlobalLogWriter.get().println("");
+                GlobalLogWriter.get().println("+##############################+");
+                GlobalLogWriter.get().println("##### THIS IS CONVWATCH    #####");
+                GlobalLogWriter.get().println("##### Debug Version 1.0014 #####");
+                GlobalLogWriter.get().println("+##############################+");
+                GlobalLogWriter.get().println("");
             }
         }
 
@@ -93,7 +94,6 @@ public class GraphicalDifferenceCheck
 //                 System.out.println("Inputpath doesn't exists");
 //                 return;
 //             }
-
 
             if (aInputPath.isDirectory())
             {
@@ -130,6 +130,10 @@ public class GraphicalDifferenceCheck
     public static boolean createOneReferenceFile(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA) throws ConvWatchException
         {
             showVersion();
+            if (_aGTA != null)
+            {
+                _aGTA.setInputFile(_sInputFile);
+            }
             return OfficePrint.buildReference(_aGTA, _sReferencePath, _sInputFile);
         }
 
@@ -220,7 +224,7 @@ public class GraphicalDifferenceCheck
             }
             else
             {
-                bOk = GraphicalDifferenceCheck.checkOneFile(_sInputPath, _sOutputPath, _sReferencePath, _sDiffPath, _aGTA);
+                bOk = /* GraphicalDifferenceCheck.*/ checkOneFile(_sInputPath, _sOutputPath, _sReferencePath, _sDiffPath, _aGTA);
             }
             return bOk;
         }
@@ -250,6 +254,10 @@ public class GraphicalDifferenceCheck
     public static boolean checkOneFile(String _sInputFile, String _sOutputPath, String _sReferencePath, String _sDiffPath, GraphicalTestArguments _aGTA ) throws ConvWatchException
         {
             showVersion();
+            if (_aGTA != null)
+            {
+                _aGTA.setInputFile(_sInputFile);
+            }
 
             boolean bOk = false;
             if (_sDiffPath != null)
@@ -355,7 +363,7 @@ public class GraphicalDifferenceCheck
             throw new ConvWatchCancelException("Wrap IOException caught, " + e.getMessage());
         }
 
-        System.out.println("Saving XComponent as " + resultURL);
+        GlobalLogWriter.get().println("Saving XComponent as " + resultURL);
 
         return resultURL;
     }
