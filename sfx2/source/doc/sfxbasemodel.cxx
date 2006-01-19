@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:06:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ struct IMPL_SfxBaseModel_DataContainer
     OStorageModifyListen_Impl*                          m_pStorageModifyListen;
     ::rtl::OUString                                 m_aPreusedFilterName;
 
-    IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
+    IMPL_SfxBaseModel_DataContainer(    MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
             :   m_pObjectShell          ( pObjectShell  )
 //          ,   m_pObjectShellLock      ( pObjectShell  )
