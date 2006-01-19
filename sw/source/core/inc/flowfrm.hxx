@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:46:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@ class SwNodeIndex;
 // --> OD 2005-03-04 #i44049#
 class SwObjectFormatterTxtFrm;
 // <--
+
+void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
 class SwFlowFrm
 {
