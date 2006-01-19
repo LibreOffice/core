@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:40:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,11 @@ namespace svxform
             // no drag without an entry
             return;
 
+        if ( m_eGroup == DGTBinding )
+            // for the moment, bindings cannot be dragged.
+            // #i59395# / 2005-12-15 / frank.schoenheit@sun.com
+            return;
+
         // GetServiceNameForNode() requires a datatype repository which
         // will be automatically build if requested???
         Reference< css::xforms::XModel > xModel( m_pXFormsPage->GetXFormsHelper(), UNO_QUERY );
@@ -272,6 +277,21 @@ namespace svxform
         typedef com::sun::star::form::binding::XValueBinding XValueBinding_t;
 
         ItemNode *pItemNode = static_cast<ItemNode*>(pSelected->GetUserData());
+
+        if ( !pItemNode )
+        {
+            // the only known (and allowed?) case where this happens are sub-entries of a submission
+            // entry
+            DBG_ASSERT( DGTSubmission == m_eGroup, "DataTreeListBox::StartDrag: how this?" );
+            pSelected = GetParent( pSelected );
+            DBG_ASSERT( pSelected && !GetParent( pSelected ), "DataTreeListBox::StartDrag: what kind of entry *is* this?" );
+                // on the submission page, we have only top-level entries (the submission themself)
+                // plus direct children of those (facets of a submission)
+            pItemNode = pSelected ? static_cast< ItemNode* >( pSelected->GetUserData() ) : NULL;
+            if ( !pItemNode )
+                return;
+        }
+
         OXFormsDescriptor desc;
         desc.szName = GetEntryText(pSelected);
         if(pItemNode->m_xNode.is()) {
