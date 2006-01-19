@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewContact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:27:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,13 @@ PageObjectViewContact::PageObjectViewContact (
     : ViewContactOfPageObj (rPageObj),
       mbIsValid(true),
       mrDescriptor(rDescriptor)
+{
+}
+
+
+
+
+PageObjectViewContact::~PageObjectViewContact (void)
 {
 }
 
