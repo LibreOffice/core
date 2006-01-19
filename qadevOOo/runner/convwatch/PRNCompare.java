@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PRNCompare.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:32 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ public class PRNCompare
 
             String sText = aHandler.getOutputText();
 
-            System.out.println("Exitcode: " + String.valueOf(aHandler.getExitCode()));
+            GlobalLogWriter.get().println("Exitcode: " + String.valueOf(aHandler.getExitCode()));
             return sText;
         }
 
@@ -383,7 +383,7 @@ public class PRNCompare
                                 }
                                 catch(java.io.IOException e)
                                 {
-                                    System.out.println("Exception caught. At border moveing" + e.getMessage());
+                                    GlobalLogWriter.get().println("Exception caught. At border moveing" + e.getMessage());
                                 }
                             }
 
@@ -391,7 +391,7 @@ public class PRNCompare
                         }
                         catch (java.io.IOException e)
                         {
-                            System.out.println(e.getMessage());
+                            GlobalLogWriter.get().println(e.getMessage());
                         }
                     }
 
@@ -499,13 +499,13 @@ public class PRNCompare
                                 }
                                 catch(java.io.IOException e)
                                 {
-                                    System.out.println("Exception caught. At border moveing" + e.getMessage());
+                                    GlobalLogWriter.get().println("Exception caught. At border moveing" + e.getMessage());
                                 }
                             }
                         }
                         catch (java.io.IOException e)
                         {
-                            System.out.println(e.getMessage());
+                            GlobalLogWriter.get().println(e.getMessage());
                         }
                     }
 
@@ -562,7 +562,7 @@ public class PRNCompare
             boolean bBackValue = aHandler.executeSynchronously();
 
             String sBack = aHandler.getOutputText();
-            System.out.println("'" + sBack + "'");
+            GlobalLogWriter.get().println("'" + sBack + "'");
 
             // return aHandler.getExitCode();
             if (FileHelper.exists(_sDiffGfx))
@@ -605,7 +605,7 @@ public class PRNCompare
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
             String sBack = aHandler.getOutputText();
-            System.out.println("'" + sBack + "'");
+            GlobalLogWriter.get().println("'" + sBack + "'");
 
             // try to interpret the result, which we get as a String
             try
@@ -620,7 +620,7 @@ public class PRNCompare
             }
             catch(java.lang.NumberFormatException e)
             {
-                System.out.println("Number format exception");
+                GlobalLogWriter.get().println("Number format exception");
                 nResult = 0;
             }
             return nResult;
@@ -678,7 +678,7 @@ public class PRNCompare
                     }
                     catch (java.io.IOException e)
                     {
-                        System.out.println(e.getMessage());
+                        GlobalLogWriter.get().println(e.getMessage());
                         aCurrentStatus.nPercent = -1;
                     }
                 }
@@ -688,7 +688,7 @@ public class PRNCompare
             }
             else
             {
-                System.out.println("composite can't create the diffdiff file.");
+                GlobalLogWriter.get().println("composite can't create the diffdiff file.");
             }
 
             return aCurrentStatus;
@@ -736,7 +736,7 @@ public class PRNCompare
             }
 
             int nPercent = Math.abs(nNotBlackCount_DiffGraphic * 100 / nMinNotWhiteCount);
-            System.out.println( "Graphics check, pixel based:" + String.valueOf(nPercent) + "% pixel differ ");
+            GlobalLogWriter.get().println( "Graphics check, pixel based:" + String.valueOf(nPercent) + "% pixel differ ");
             return nPercent;
         }
 
