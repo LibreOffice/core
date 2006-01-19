@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ip_type.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:19:36 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class TypePilot
 {
   public:
     // LIFECYCLE
-    virtual             TypePilot::~TypePilot() {}
+    virtual             ~TypePilot() {}
 
     // OPERATIONS
     const Type &        CheckIn_Type(
