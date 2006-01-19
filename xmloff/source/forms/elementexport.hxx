@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:46 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ namespace xmloff
 
         /** retrieves the string specifying the ListSource of a list or combo box
         */
-        ::rtl::OUString OControlExport::getScalarListSourceValue() const;
+        ::rtl::OUString getScalarListSourceValue() const;
 
         /** determines whether the list entries (of a combo or list box) are supplied by the user
 
