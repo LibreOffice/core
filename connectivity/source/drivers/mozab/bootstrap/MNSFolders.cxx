@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSFolders.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:22:59 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,9 @@ static char * DefaultProductDir[] =
     "Mozilla\\Firefox\\",
     "Thunderbird\\"
 #else
-    ".mozilla\/",
-    ".mozilla\/firefox\/",
-    ".thunderbird\/"
+    ".mozilla/",
+    ".mozilla/firefox/",
+    ".thunderbird/"
 #endif
 };
 #if defined(XP_MAC) || defined(XP_MACOSX)
@@ -77,7 +77,7 @@ static char * DefaultProductDir[] =
     return ::rtl::OString(szPath) + ::rtl::OString("\\");
 #elif defined(UNIX)
     const char* homeDir = getenv("HOME");
-    return ::rtl::OString(homeDir) + ::rtl::OString("\/");
+    return ::rtl::OString(homeDir) + ::rtl::OString("/");
 #endif
 }
 
