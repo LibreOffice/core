@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:00:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
 
 //Nicht gleich die math.lib anziehen.
 ULONG MA_FASTCALL SqRt( BigInt nX );
+
+SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart );
+void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
 //CntntNodes besorgen, CntntFrms erzeugen und in den LayFrm haengen.
 void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, ULONG nIndex,
