@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_gate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:09:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class Gate : public ::ary::CommonGate
 {
   public:
     // LIFECYCLE
-    virtual             Gate::~Gate() {}
+    virtual             ~Gate() {}
 
     // OPERATIONS
 
