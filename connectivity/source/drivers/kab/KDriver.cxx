@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:49:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,48 +34,319 @@
  ************************************************************************/
 
 #include "KDriver.hxx"
+
+#ifndef CONNECTIVITY_KAB_KDEINIT_H
+#include "KDEInit.h"
+#endif
 #ifndef _CONNECTIVITY_KAB_CONNECTION_HXX_
 #include "KConnection.hxx"
 #endif
 
-#include <kcmdlineargs.h>
-#include <kglobal.h>
-#include <klocale.h>
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
+#include <com/sun/star/lang/NullPointerException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+/** === end UNO includes === **/
 
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdb;
+using namespace com::sun::star::frame;
 using namespace connectivity::kab;
 
+// =======================================================================
+// = KabImplModule
+// =======================================================================
+// --------------------------------------------------------------------------------
+KabImplModule::KabImplModule( const Reference< XMultiServiceFactory >& _rxFactory )
+    :m_xORB(_rxFactory)
+    ,m_hConnectorModule(NULL)
+    ,m_bAttemptedLoadModule(false)
+    ,m_bAttemptedInitialize(false)
+    ,m_pConnectionFactoryFunc(NULL)
+    ,m_pApplicationInitFunc(NULL)
+    ,m_pApplicationShutdownFunc(NULL)
+    ,m_pKDEVersionCheckFunc(NULL)
+{
+    if ( !m_xORB.is() )
+        throw NullPointerException();
+}
+
+// --------------------------------------------------------------------------------
+bool KabImplModule::isKDEPresent()
+{
+    if ( !impl_loadModule() )
+        return false;
+
+    return true;
+}
+
+// --------------------------------------------------------------------------------
+KabImplModule::KDEVersionType KabImplModule::matchKDEVersion()
+{
+    OSL_PRECOND( m_pKDEVersionCheckFunc, "KabImplModule::matchKDEVersion: module not loaded!" );
+
+    int nVersionInfo = (*m_pKDEVersionCheckFunc)();
+    if ( nVersionInfo < 0 )
+        return eTooOld;
+    if ( nVersionInfo > 0 )
+        return eToNew;
+    return eSupported;
+}
+
+// --------------------------------------------------------------------------------
+namespace
+{
+    template< typename FUNCTION >
+    void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const sal_Char* _pAsciiSymbolName, FUNCTION& _rFunction )
+    {
+        _rFunction = NULL;
+        if ( _rModule )
+        {
+            //
+            const ::rtl::OUString sSymbolName = ::rtl::OUString::createFromAscii( _pAsciiSymbolName );
+            _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
+
+            if ( !_rFunction )
+            {   // did not find the symbol
+                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                osl_unloadModule( _rModule );
+                _rModule = NULL;
+            }
+        }
+    }
+}
+
+// --------------------------------------------------------------------------------
+bool KabImplModule::impl_loadModule()
+{
+    if ( m_bAttemptedLoadModule )
+        return ( m_hConnectorModule != NULL );
+    m_bAttemptedLoadModule = true;
+
+    OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
+        "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
+
+    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "kabdrv1" ) );
+    m_hConnectorModule = osl_loadModule( sModuleName.pData, 0 );
+    OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
+    if ( !m_hConnectorModule )
+        return false;
+
+    lcl_getFunctionFromModuleOrUnload( m_hConnectorModule, "createKabConnection",   m_pConnectionFactoryFunc );
+    lcl_getFunctionFromModuleOrUnload( m_hConnectorModule, "initKApplication",      m_pApplicationInitFunc );
+    lcl_getFunctionFromModuleOrUnload( m_hConnectorModule, "shutdownKApplication",  m_pApplicationShutdownFunc );
+    lcl_getFunctionFromModuleOrUnload( m_hConnectorModule, "matchKDEVersion",       m_pKDEVersionCheckFunc );
+
+    if ( !m_hConnectorModule )
+        // one of the symbols did not exist
+        throw RuntimeException();
+
+    return true;
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::impl_unloadModule()
+{
+    OSL_PRECOND( m_hConnectorModule != NULL, "KabImplModule::impl_unloadModule: no module!" );
+
+    osl_unloadModule( m_hConnectorModule );
+    m_hConnectorModule = NULL;
+
+    m_pConnectionFactoryFunc = NULL;
+    m_pApplicationInitFunc = NULL;
+    m_pApplicationShutdownFunc = NULL;
+    m_pKDEVersionCheckFunc = NULL;
+
+    m_bAttemptedLoadModule = false;
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::init()
+{
+    if ( !impl_loadModule() )
+        impl_throwNoKdeException();
+
+    // if we're not running on a supported version, throw
+    KabImplModule::KDEVersionType eKDEVersion = matchKDEVersion();
+
+    if ( eKDEVersion == eTooOld )
+        impl_throwKdeTooOldException();
+
+    if ( ( eKDEVersion == eToNew ) && !impl_doAllowNewKDEVersion() )
+        impl_throwKdeTooNewException();
+
+    if ( !m_bAttemptedInitialize )
+    {
+        m_bAttemptedInitialize = true;
+        (*m_pApplicationInitFunc)();
+    }
+}
+
+// --------------------------------------------------------------------------------
+bool KabImplModule::impl_doAllowNewKDEVersion()
+{
+    try
+    {
+        Reference< XMultiServiceFactory > xConfigProvider(
+            m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+            UNO_QUERY_THROW );
+        Sequence< Any > aCreationArgs(1);
+        aCreationArgs[0] <<= PropertyValue(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ),
+                                0,
+                                makeAny( KabDriver::impl_getConfigurationSettingsPath() ),
+                                PropertyState_DIRECT_VALUE );
+        Reference< XPropertySet > xSettings( xConfigProvider->createInstanceWithArguments(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                aCreationArgs ),
+            UNO_QUERY_THROW );
+
+        sal_Bool bDisableCheck = sal_False;
+        xSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableKDEMaximumVersionCheck" ) ) ) >>= bDisableCheck;
+
+        fprintf( stderr, "---- disable: %i", (int)bDisableCheck );
+        fflush( stderr );
+        return bDisableCheck != sal_False;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return false;
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::impl_throwNoKdeException()
+{
+    impl_throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No suitable KDE installation was found." ) ) );
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::impl_throwKdeTooOldException()
+{
+    ::rtl::OUStringBuffer aMessage;
+    aMessage.appendAscii( "KDE version " );
+    aMessage.append( (sal_Int32)MIN_KDE_VERSION_MAJOR );
+    aMessage.append( (sal_Unicode)'.' );
+    aMessage.append( (sal_Int32)MIN_KDE_VERSION_MINOR );
+    aMessage.appendAscii( " or higher is required to access the KDE Address Book." );
+
+    impl_throwGenericSQLException( aMessage.makeStringAndClear() );
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMessage )
+{
+    SQLException aError;
+    aError.Message = _rMessage;
+    aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+    aError.ErrorCode = 0;
+    throw aError;
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::impl_throwKdeTooNewException()
+{
+    ::rtl::OUStringBuffer aMessage;
+    aMessage.appendAscii( "The found KDE version is too new. Only KDE up to version " );
+    aMessage.append( (sal_Int32)MAX_KDE_VERSION_MAJOR );
+    aMessage.append( (sal_Unicode)'.' );
+    aMessage.append( (sal_Int32)MAX_KDE_VERSION_MINOR );
+    aMessage.appendAscii( " is known to work with this product.\n" );
+
+    SQLException aError;
+    aError.Message = aMessage.makeStringAndClear();
+    aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+    aError.ErrorCode = 0;
+
+    SQLContext aDetails;
+    aMessage.appendAscii( "If you are sure that your KDE version works, " );
+    aMessage.appendAscii( "you might execute the following Basic macro to disable this version check:\n\n" );
+
+    aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
+    aMessage.appendAscii( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );
+
+    aMessage.appendAscii( "  Dim configNode as Object\n" );
+    aMessage.appendAscii( "  configNode = GetRegistryKeyContent( \"" );
+    aMessage.append( KabDriver::impl_getConfigurationSettingsPath() );
+    aMessage.appendAscii( "\", true )\n" );
+
+    aMessage.appendAscii( "  configNode.DisableKDEMaximumVersionCheck = TRUE\n" );
+    aMessage.appendAscii( "  configNode.commitChanges\n" );
+    aMessage.appendAscii( "End Sub\n" );
+
+    aDetails.Message = aMessage.makeStringAndClear();
+
+    aError.NextException <<= aDetails;
+
+    throw aError;
+}
+
+// --------------------------------------------------------------------------------
+KabConnection* KabImplModule::createConnection( KabDriver* _pDriver ) const
+{
+    OSL_PRECOND( m_hConnectorModule, "KabImplModule::createConnection: not initialized!" );
+
+    void* pUntypedConnection = (*m_pConnectionFactoryFunc)( _pDriver );
+    if ( !pUntypedConnection )
+        throw RuntimeException();
+
+    return static_cast< KabConnection* >( pUntypedConnection );
+}
+
+// --------------------------------------------------------------------------------
+void KabImplModule::shutdown()
+{
+    if ( !m_hConnectorModule )
+        return;
+
+    (*m_pApplicationShutdownFunc)();
+    m_bAttemptedInitialize = false;
+
+    impl_unloadModule();
+}
+
+// =======================================================================
+// = KabDriver
+// =======================================================================
 KabDriver::KabDriver(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : KDriver_BASE(m_aMutex),
       m_xMSFactory(_rxFactory),
-      m_pKApplication(NULL)
+      m_aImplModule(_rxFactory)
 {
-    // we create a KDE application only if it is not already done
-    if (KApplication::kApplication() == NULL)
+    if ( !m_xMSFactory.is() )
+        throw NullPointerException();
+
+    osl_incrementInterlockedCount( &m_refCount );
+    try
     {
-        // version 0.1
-        char *kabargs[1] = {"libkab1"};
-        KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", "0.1");
-
-        m_pKApplication = new KApplication(false, false);
+        Reference< XDesktop > xDesktop(
+            m_xMSFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+            UNO_QUERY_THROW );
+        xDesktop->addTerminateListener( this );
     }
-
-    // set language
-    rtl_Locale *pProcessLocale;
-    osl_getProcessLocale(&pProcessLocale);
-    // sal_Unicode and QChar are (currently) both 16 bits characters
-    QString aLanguage(
-        (const QChar *) pProcessLocale->Language->buffer,
-        (int) pProcessLocale->Language->length);
-    KGlobal::locale()->setLanguage(aLanguage);
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 // --------------------------------------------------------------------------------
 void KabDriver::disposing()
@@ -91,21 +362,13 @@ void KabDriver::disposing()
     }
     m_xConnections.clear();
 
-    if (m_pKApplication != NULL)
-    {
-        delete m_pKApplication;
-        m_pKApplication = NULL;
-    }
-
-    KDriver_BASE::disposing();
+    WeakComponentImplHelperBase::disposing();
 }
 // static ServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.kab.Driver");
-        // this name is referenced in the configuration and in the kab.xml
-        // Please be careful when changing it.
+    return rtl::OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -141,18 +404,35 @@ Sequence< ::rtl::OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) thr
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL KabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    // create a new connection with the given properties and append it to our vector
-    KabConnection* pCon = new KabConnection(this);
-    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    ::osl::MutexGuard aGuard(m_aMutex);
 
-    return xCon;
+    m_aImplModule.init();
+
+    // create a new connection with the given properties and append it to our vector
+    KabConnection* pConnection = m_aImplModule.createConnection( this );
+    OSL_POSTCOND( pConnection, "KabDriver::connect: no connection has been created by the factory!" );
+
+    // by definition, the factory function returned an object which was acquired once
+    Reference< XConnection > xConnection = pConnection;
+    pConnection->release();
+
+    // late constructor call which can throw exception and allows a correct dtor call when so
+    pConnection->construct( url, info );
+
+    // remember it
+    m_xConnections.push_back( WeakReferenceHelper( *pConnection ) );
+
+    return xConnection;
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( !m_aImplModule.isKDEPresent() )
+        return sal_False;
+
     // here we have to look whether we support this URL format
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:kab:"), 16));
 }
@@ -175,28 +455,38 @@ sal_Int32 SAL_CALL KabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 1;
 }
 // --------------------------------------------------------------------------------
-
-//.........................................................................
-namespace connectivity
+void SAL_CALL KabDriver::queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException)
 {
-    namespace kab
-    {
-//.........................................................................
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL KabDriver_CreateInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
-        ) throw( ::com::sun::star::uno::Exception )
+    // nothing to do, nothing to veto
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL KabDriver::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+{
+    m_aImplModule.shutdown();
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL KabDriver::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    // not interested in (this is the disposing of the desktop, if any)
+}
+// --------------------------------------------------------------------------------
+const sal_Char* KabDriver::impl_getAsciiImplementationName()
+{
+    return "com.sun.star.comp.sdbc.kab.Driver";
+        // this name is referenced in the configuration and in the kab.xml
+        // Please be careful when changing it.
+}
+// --------------------------------------------------------------------------------
+::rtl::OUString KabDriver::impl_getConfigurationSettingsPath()
+{
+    ::rtl::OUStringBuffer aPath;
+    aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+    aPath.appendAscii( "com.sun.star.comp.sdbc.kab.Driver" );
+    return aPath.makeStringAndClear();
+}
+// --------------------------------------------------------------------------------
+Reference< XInterface >  SAL_CALL KabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
 {
     return *(new KabDriver(_rxFactory));
 }
 
-void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
-{
-    if (_bThrow)
-        throw DisposedException();
-}
-
-//.........................................................................
-    }
-}
-//.........................................................................
