@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:41:35 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ public class GraphicalTestArguments
                 if (sImportFilterName.toLowerCase().equals("help"))
                 {
                     showInternalFilterName(sImportFilterName, getMultiServiceFactory() );
-                    System.out.println("Must quit.");
+                    GlobalLogWriter.get().println("Must quit.");
                 }
             }
             // ----------------------------------------
@@ -201,7 +201,7 @@ public class GraphicalTestArguments
                 if (sExportFilterName.toLowerCase().equals("help"))
                 {
                     showInternalFilterName(sExportFilterName, getMultiServiceFactory() );
-                    System.out.println("Must quit.");
+                    GlobalLogWriter.get().println("Must quit.");
                 }
             }
 
@@ -258,6 +258,13 @@ public class GraphicalTestArguments
             {
                 m_sLeaveOutNames = sLeaveOutNames;
             }
+
+            String sDBInfoString = (String)param.get(PropertyName.DOC_COMPARATOR_DB_INFO_STRING);
+            if (sDBInfoString != null)
+            {
+                m_sDBInfoString = sDBInfoString;
+            }
+
         }
 
     public boolean checkIfUsable(String _sName)
@@ -287,7 +294,7 @@ public class GraphicalTestArguments
 
             if (_xMSF == null)
             {
-                System.out.println("MultiServiceFactory not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return;
             }
             // XFilterFactory aFilterFactory = null;
@@ -298,7 +305,7 @@ public class GraphicalTestArguments
             }
             catch(com.sun.star.uno.Exception e)
             {
-                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                GlobalLogWriter.get().println("Can't get com.sun.star.document.FilterFactory.");
                 return;
             }
             if (aObj != null)
@@ -309,11 +316,11 @@ public class GraphicalTestArguments
 
                     if (_sFilterName.toLowerCase().equals("help"))
                     {
-                        System.out.println("Show all possible ElementNames from current version." );
+                        GlobalLogWriter.get().println("Show all possible ElementNames from current version." );
                         String[] aElementNames = aNameAccess.getElementNames();
                         for (int i = 0; i<aElementNames.length; i++)
                         {
-                            System.out.println(aElementNames[i]);
+                            GlobalLogWriter.get().println(aElementNames[i]);
                         }
                     }
                 }
@@ -358,7 +365,7 @@ public class GraphicalTestArguments
             {
                 if (xMSF == null)
                 {
-                    System.out.println("ERROR! MultiServiceFactory not given.");
+                    GlobalLogWriter.get().println("ERROR! MultiServiceFactory not given.");
                 }
             }
             return xMSF;
@@ -382,6 +389,12 @@ public class GraphicalTestArguments
                 {
                     public boolean accept( File pathname )
                         {
+                            // leave out files which started by '~$' these are Microsoft Office temp files
+                            if (pathname.getName().startsWith("~$"))
+                            {
+                                return false;
+                            }
+
                             if (pathname.getName().endsWith(".prn"))
                             {
                                 return false;
@@ -450,7 +463,7 @@ public class GraphicalTestArguments
                 {
                     if (_sPath.charAt(2) != '\\')
                     {
-                        System.out.println("This is not a Microsoft Windows conform path: '" + _sPath + "' please fix.");
+                        GlobalLogWriter.get().println("This is not a Microsoft Windows conform path: '" + _sPath + "' please fix.");
                         System.exit(1);
                     }
                 }
@@ -629,6 +642,30 @@ public class GraphicalTestArguments
                 m_aPerformanceContainer = new PerformanceContainer();
             }
             return m_aPerformanceContainer;
+        }
+
+    private String m_aInputFile;
+    public void setInputFile(String _sInputFile)
+        {
+            m_aInputFile = _sInputFile;
+        }
+    public String getInputFile()
+        {
+            return m_aInputFile;
+        }
+
+    private String m_sDBInfoString;
+    public String getDBInfoString()
+        {
+            if (m_sDBInfoString != null)
+            {
+                if (m_sDBInfoString.length() == 0)
+                {
+                    return null;
+                }
+            }
+
+            return m_sDBInfoString;
         }
 
 }
