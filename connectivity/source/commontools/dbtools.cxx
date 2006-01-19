@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:36:41 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -939,6 +939,10 @@ void TransferFormComponentProperties(
 {
 try
 {
+    OSL_ENSURE( xOldProps.is() && xNewProps.is(), "TransferFormComponentProperties: invalid source/dest!" );
+    if ( !xOldProps.is() || !xNewProps.is() )
+        return;
+
     // kopieren wir erst mal alle Props, die in Quelle und Ziel vorhanden sind und identische Beschreibungen haben
     Reference< XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
     Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
