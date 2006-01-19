@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 17:42:54 $
+#   last change: $Author: obo $ $Date: 2006-01-19 14:23:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,12 @@ JAVAFILES = \
  GraphicalTestArguments.java \
  StringHelper.java \
  GraphicalDifferenceCheck.java \
- DocumentConverter.java
+ DocumentConverter.java\
+ DBHelper.java\
+ DB.java\
+ ValueNotFoundException.java\
+ GlobalLogWriter.java
+
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
