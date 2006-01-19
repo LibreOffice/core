@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:42:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ public class OfficePrint {
      */
     static void waitInSeconds(int _nSeconds, String _sReason)
         {
-            System.out.println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
+            GlobalLogWriter.get().println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
             try {
                 java.lang.Thread.sleep(_nSeconds * 1000);
             } catch (java.lang.InterruptedException e2) {}
@@ -130,7 +130,7 @@ public class OfficePrint {
                 if (aValue.Name.equals("FilterName") ||
                     aValue.Name.equals("MediaType"))
                 {
-                    System.out.println("  Property: '" + aValue.Name + "' := '" + aValue.Value + "'");
+                    GlobalLogWriter.get().println("  Property: '" + aValue.Name + "' := '" + aValue.Value + "'");
                 }
             }
         }
@@ -148,7 +148,7 @@ public class OfficePrint {
             {
                 if (_aGTA.getMultiServiceFactory() == null)
                 {
-                    System.out.println("MultiServiceFactory in GraphicalTestArgument not set.");
+                    GlobalLogWriter.get().println("MultiServiceFactory in GraphicalTestArgument not set.");
                     return null;
                 }
                 Object oDsk = _aGTA.getMultiServiceFactory().createInstance("com.sun.star.frame.Desktop");
@@ -156,7 +156,7 @@ public class OfficePrint {
 
                 if (aDesktop != null)
                 {
-                    System.out.println("com.sun.star.frame.Desktop created.");
+                    GlobalLogWriter.get().println("com.sun.star.frame.Desktop created.");
                     // String sInputURL = aCurrentParameter.sInputURL;
                     // String sOutputURL = aCurrentParameter.sOutputURL;
                     // String sPrintFileURL = aCurrentParameter.sPrintToFileURL;
@@ -198,8 +198,8 @@ public class OfficePrint {
                         aProps[ nPropertyIndex ++ ] = Arg;
                     }
 
-                    System.out.print("Load document");
-                    System.out.flush();
+                    GlobalLogWriter.get().println("Load document");
+                    // GlobalLogWriter.get().flush();
 
                     XComponentLoader aCompLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
 
@@ -210,22 +210,22 @@ public class OfficePrint {
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Load);
                     if (aDoc != null)
                     {
-                        System.out.println(" done.");
+                        GlobalLogWriter.get().println(" done.");
                         showDocumentType(aDoc);
                     }
                     else
                     {
-                        System.out.print(" failed.");
+                        GlobalLogWriter.get().println(" failed.");
                         if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
                         {
-                            System.out.print(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
+                            GlobalLogWriter.get().println(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
                         }
-                        System.out.println();
+                        GlobalLogWriter.get().println("");
                     }
                 }
                 else
                 {
-                    System.out.println("com.sun.star.frame.Desktop failed.");
+                    GlobalLogWriter.get().println("com.sun.star.frame.Desktop failed.");
                 }
             }
             catch ( com.sun.star.uno.Exception e )
@@ -321,13 +321,13 @@ public class OfficePrint {
 
             if (aDoc == null)
             {
-                System.out.println("Can't load document.");
+                GlobalLogWriter.get().println("Can't load document.");
                 return bBack;
             }
             bBack = storeAsPDF(_aGTA, aDoc, _sOutputURL);
             createInfoFile(_sOutputURL, _aGTA, "as pdf");
 
-            System.out.println("close document.");
+            GlobalLogWriter.get().println("close document.");
             aDoc.dispose();
             return bBack;
         }
@@ -344,7 +344,7 @@ public class OfficePrint {
 
             if (!bBack)
             {
-                System.out.println("Can't store document as PDF.");
+                GlobalLogWriter.get().println("Can't store document as PDF.");
                 bBack = false;
             }
             return bBack;
@@ -377,17 +377,17 @@ public class OfficePrint {
                 {
                     // don't store document
                     // input and output are equal OR
-                    System.out.println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
+                    GlobalLogWriter.get().println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
                     _aGTA.disallowStore();
                 }
                     bBack = printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
 
-                System.out.println("close document.");
+                GlobalLogWriter.get().println("close document.");
                 aDoc.dispose();
             }
             else
             {
-                System.out.println("loadDocumentFromURL() failed with document: " + _sInputURL);
+                GlobalLogWriter.get().println("loadDocumentFromURL() failed with document: " + _sInputURL);
             }
             return bBack;
         }
@@ -400,11 +400,11 @@ public class OfficePrint {
 
     public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA, String _sSpecial)
         {
-            String sFilename = _sFile;
+            String sFilename;
             if (_sFile.startsWith("file:///"))
             {
                 sFilename = FileHelper.getSystemPathFromFileURL(_sFile);
-                System.out.println("CreateInfoFile: '" + sFilename + "'" );
+                GlobalLogWriter.get().println("CreateInfoFile: '" + sFilename + "'" );
             }
             else
             {
@@ -418,6 +418,9 @@ public class OfficePrint {
             String ls = System.getProperty("line.separator");
             String sInfoFilename = sFileDir + fs + sNameNoSuffix + ".info";
             File aInfoFile = new File(sInfoFilename);
+
+            String sBuildID = "";
+
             try
             {
                 FileWriter out = new FileWriter(aInfoFile.toString());
@@ -427,12 +430,14 @@ public class OfficePrint {
                     if (_sSpecial != null && _sSpecial.equals("msoffice"))
                     {
                         out.write("# buildid from wordloadfile" + ls);
-                        out.write("buildid=" + _aGTA.getPerformance().getMSOfficeVersion() + ls);
+                        sBuildID = _aGTA.getPerformance().getMSOfficeVersion();
+                        out.write("buildid=" + sBuildID + ls);
                     }
                     else
                     {
                         out.write("# buildid is read out of the bootstrap file" + ls);
-                        out.write("buildid=" + _aGTA.getBuildID() + ls);
+                        sBuildID = _aGTA.getBuildID();
+                        out.write("buildid=" + sBuildID + ls);
                     }
                     // if (_sSpecial != null && _sSpecial.length() > 0)
                     // {
@@ -471,10 +476,28 @@ public class OfficePrint {
             }
             catch (java.io.IOException e)
             {
-                System.out.println("can't create Info file.");
+                GlobalLogWriter.get().println("can't create Info file.");
                 e.printStackTrace();
             }
+
+            String sExtension = FileHelper.getSuffix(_aGTA.getInputFile());
+            if (sExtension.startsWith("."))
+            {
+                sExtension = sExtension.substring(1);
+            }
+
+            DB.writeToDB(_aGTA.getDBInfoString(),
+                         _aGTA.getInputFile(),
+                         sNameNoSuffix,
+                         sExtension,
+                         sBuildID,
+                         _aGTA.getReferenceType(),
+                         _aGTA.getResolutionInDPI()
+                         );
         }
+
+
+
     // -----------------------------------------------------------------------------
     public static boolean printToFileWithOOo(GraphicalTestArguments _aGTA,
                                              XComponent _aDoc,
@@ -485,7 +508,7 @@ public class OfficePrint {
             boolean bFailed = true;              // always be a pessimist,
             if (_aDoc == null)
             {
-                System.out.println("No document is given.");
+                GlobalLogWriter.get().println("No document is given.");
                 return bBack;
             }
 
@@ -494,7 +517,7 @@ public class OfficePrint {
                 // System.out.println("Document loaded.");
                 // Change Pagesettings to DIN A4
 
-                System.out.println("Document print.");
+                GlobalLogWriter.get().println("Document print.");
                 XPrintable aPrintable = (XPrintable) UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
@@ -525,7 +548,7 @@ public class OfficePrint {
                             Arg.Value = _aGTA.getPrinterName();
                             aPrintProps[0] = Arg;
 
-                            System.out.println("Printername is not null, so set to " + _aGTA.getPrinterName());
+                            GlobalLogWriter.get().println("Printername is not null, so set to " + _aGTA.getPrinterName());
                             aPrintable.setPrinter(aPrintProps);
                         }
                     }
@@ -579,7 +602,7 @@ public class OfficePrint {
                             {
                                 PropertyValue [] szEmptyArgs = new PropertyValue [0];
 
-                                System.out.println("Document stored.");
+                                GlobalLogWriter.get().println("Document stored.");
                                 _aGTA.getPerformance().startTime(PerformanceContainer.Store);
                                 aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
                                 _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
@@ -588,13 +611,13 @@ public class OfficePrint {
                     }
 
 
-                    System.out.println("start printing.");
+                    GlobalLogWriter.get().println("start printing.");
 
                     _aGTA.getPerformance().startTime(PerformanceContainer.Print);
                     aPrintable.print(aPrintProps);
                     waitInSeconds(1, "unknown.");
 
-                    System.out.println("Wait until document is printed.");
+                    GlobalLogWriter.get().println("Wait until document is printed.");
                     boolean isBusy = true;
                     while (isBusy)
                     {
@@ -615,7 +638,7 @@ public class OfficePrint {
                 }
                 else
                 {
-                    System.out.println("Can't get XPrintable.");
+                    GlobalLogWriter.get().println("Can't get XPrintable.");
                 }
                 bFailed = false;
                 bBack = true;
@@ -629,11 +652,11 @@ public class OfficePrint {
 
             if (bFailed == true)
             {
-                System.out.println("convwatch.OfficePrint: FAILED");
+                GlobalLogWriter.get().println("convwatch.OfficePrint: FAILED");
             }
             else
             {
-                System.out.println("convwatch.OfficePrint: OK");
+                GlobalLogWriter.get().println("convwatch.OfficePrint: OK");
             }
             return bBack;
         }
@@ -679,7 +702,7 @@ public class OfficePrint {
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
             {
-                System.out.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
             }
             return false;
@@ -730,7 +753,7 @@ public class OfficePrint {
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
             {
-                System.out.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
             }
 
@@ -749,7 +772,7 @@ public class OfficePrint {
             }
             else
             {
-                System.out.println("OfficePrint.buildreference(): Unknown print type.");
+                GlobalLogWriter.get().println("OfficePrint.buildreference(): Unknown print type.");
                 return false;
             }
             return printToFile(_aGTA, sInputFileURL, sOutputFileURL, sPrintFileURL);
@@ -783,14 +806,14 @@ public class OfficePrint {
             }
             else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
             {
-                System.out.println("USE PDF AS EXPORT FORMAT.");
+                GlobalLogWriter.get().println("USE PDF AS EXPORT FORMAT.");
                 bBack = storeAsPDF(_aGTA, _sInputFileURL, _sPrintFileURL);
             }
             else if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
             {
                 if (MSOfficePrint.isMSOfficeDocumentFormat(_sInputFileURL))
                 {
-                    System.out.println("USE MSOFFICE AS EXPORT FORMAT.");
+                    GlobalLogWriter.get().println("USE MSOFFICE AS EXPORT FORMAT.");
                     MSOfficePrint a = new MSOfficePrint();
                     try
                     {
@@ -800,19 +823,19 @@ public class OfficePrint {
                     catch(ConvWatchCancelException e)
                     {
                         e.printStackTrace();
-                        System.out.println(e.getMessage());
+                        GlobalLogWriter.get().println(e.getMessage());
                         throw new ConvWatchCancelException("Exception caught. Problem with MSOffice printer methods.");
                     }
                     catch(java.io.IOException e)
                     {
-                        System.out.println(e.getMessage());
+                        GlobalLogWriter.get().println(e.getMessage());
                         throw new ConvWatchCancelException("IOException caught. Problem with MSOffice printer methods.");
                     }
                     bBack = true;
                 }
                 else
                 {
-                    System.out.println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
+                    GlobalLogWriter.get().println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
                     bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
                 }
             }
@@ -836,7 +859,7 @@ public class OfficePrint {
 
             if (_xMSF == null)
             {
-                System.out.println("MultiServiceFactory not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return;
             }
             XTypeDetection aTypeDetection = null;
@@ -847,13 +870,13 @@ public class OfficePrint {
             }
             catch(com.sun.star.uno.Exception e)
             {
-                System.out.println("Can't get com.sun.star.document.TypeDetection.");
+                GlobalLogWriter.get().println("Can't get com.sun.star.document.TypeDetection.");
                 return;
             }
             if (aTypeDetection != null)
             {
                 String sType = aTypeDetection.queryTypeByURL(_sInputURL);
-                System.out.println("Type is: " + sType);
+                GlobalLogWriter.get().println("Type is: " + sType);
             }
         }
 
@@ -869,7 +892,7 @@ public class OfficePrint {
 
             if (_xMSF == null)
             {
-                System.out.println("MultiServiceFactory not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return null;
             }
             // XFilterFactory aFilterFactory = null;
@@ -880,7 +903,7 @@ public class OfficePrint {
             }
             catch(com.sun.star.uno.Exception e)
             {
-                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                GlobalLogWriter.get().println("Can't get com.sun.star.document.FilterFactory.");
                 return null;
             }
             if (aObj != null)
@@ -903,7 +926,7 @@ public class OfficePrint {
 
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
-                        System.out.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        GlobalLogWriter.get().println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
                         return null;
                     }
 
@@ -931,17 +954,17 @@ public class OfficePrint {
                         }
                         else
                         {
-                            System.out.println("There are no elements for FilterName '" + _sFilterName + "'");
+                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
                     }
                 }
             }
@@ -960,7 +983,7 @@ public class OfficePrint {
 
             if (_xMSF == null)
             {
-                System.out.println("MultiServiceFactory not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return null;
             }
             // XFilterFactory aFilterFactory = null;
@@ -971,7 +994,7 @@ public class OfficePrint {
             }
             catch(com.sun.star.uno.Exception e)
             {
-                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                GlobalLogWriter.get().println("Can't get com.sun.star.document.FilterFactory.");
                 return null;
             }
             if (aObj != null)
@@ -981,7 +1004,7 @@ public class OfficePrint {
                 {
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
-                        System.out.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        GlobalLogWriter.get().println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
                         return null;
                     }
 
@@ -1009,17 +1032,17 @@ public class OfficePrint {
                         }
                         else
                         {
-                            System.out.println("There are no elements for FilterName '" + _sFilterName + "'");
+                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
                     }
                 }
             }
@@ -1037,7 +1060,7 @@ public class OfficePrint {
 
             if (_xMSF == null)
             {
-                System.out.println("MultiServiceFactory not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return null;
             }
             XTypeDetection aTypeDetection = null;
@@ -1048,7 +1071,7 @@ public class OfficePrint {
             }
             catch(com.sun.star.uno.Exception e)
             {
-                System.out.println("Can't get com.sun.star.document.TypeDetection.");
+                GlobalLogWriter.get().println("Can't get com.sun.star.document.TypeDetection.");
                 return null;
             }
             if (aTypeDetection != null)
@@ -1066,7 +1089,7 @@ public class OfficePrint {
 
                     if (! aNameAccess.hasByName(_sInternalFilterName))
                     {
-                        System.out.println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
+                        GlobalLogWriter.get().println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
                         return null;
                     }
 
@@ -1086,15 +1109,15 @@ public class OfficePrint {
                                 if (aPropertyValue.Name.equals("Extensions"))
                                 {
                                     aExtensions = (String[])aPropertyValue.Value;
-                                    System.out.print("   Possible extensions are: " + String.valueOf(aExtensions.length));
+                                    GlobalLogWriter.get().println("   Possible extensions are: " + String.valueOf(aExtensions.length));
                                     if (aExtensions.length > 0)
                                     {
                                         for (int j=0;j<aExtensions.length;j++)
                                         {
-                                            System.out.print(" " + aExtensions[j]);
+                                            GlobalLogWriter.get().println(" " + aExtensions[j]);
                                         }
                                         sExtension = aExtensions[0];
-                                        System.out.println();
+                                        GlobalLogWriter.get().println("");
                                     }
                                 }
                             }
@@ -1102,17 +1125,17 @@ public class OfficePrint {
                         }
                         else
                         {
-                            System.out.println("There are no elements for FilterName '" + _sInternalFilterName + "'");
+                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sInternalFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
                     }
 }
             }
@@ -1125,7 +1148,7 @@ public class OfficePrint {
             XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
             if (xMSF == null)
             {
-                System.out.println("MultiServiceFactory in GraphicalTestArgument not set.");
+                GlobalLogWriter.get().println("MultiServiceFactory in GraphicalTestArgument not set.");
                 return;
             }
 
@@ -1134,19 +1157,19 @@ public class OfficePrint {
             XComponent aDoc = loadFromURL( _aGTA, sInputURL);
             if (aDoc == null)
             {
-                System.out.println("Can't load document '"+ sInputURL + "'");
+                GlobalLogWriter.get().println("Can't load document '"+ sInputURL + "'");
                 return;
             }
 
             if (_sOutputPath == null)
             {
-                System.out.println("Outputpath not set.");
+                GlobalLogWriter.get().println("Outputpath not set.");
                 return;
             }
 
             if (! _aGTA.isStoreAllowed())
             {
-                System.out.println("It's not allowed to store, check Input/Output path.");
+                GlobalLogWriter.get().println("It's not allowed to store, check Input/Output path.");
                 return;
             }
 //  TODO: Do we need to wait?
@@ -1160,7 +1183,7 @@ public class OfficePrint {
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, aDoc);
             if (xStorable == null)
             {
-                System.out.println("com.sun.star.frame.XStorable is null");
+                GlobalLogWriter.get().println("com.sun.star.frame.XStorable is null");
                 return;
             }
 
@@ -1184,22 +1207,22 @@ public class OfficePrint {
                 String sInternalFilterName = getInternalFilterName(sFilterName, xMSF);
                 String sServiceName = getServiceNameFromFilterName(sFilterName, xMSF);
 
-                System.out.println("Filter detection:");
+                GlobalLogWriter.get().println("Filter detection:");
                 // check if service name from file filter is the same as from the loaded document
                 boolean bServiceFailed = false;
                 if (sServiceName == null || sInternalFilterName == null)
                 {
-                    System.out.println("Given FilterName '" + sFilterName + "' seems to be unknown.");
+                    GlobalLogWriter.get().println("Given FilterName '" + sFilterName + "' seems to be unknown.");
                     bServiceFailed = true;
                 }
                 if (! xServiceInfo.supportsService(sServiceName))
                 {
-                    System.out.println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
+                    GlobalLogWriter.get().println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
                     bServiceFailed = true;
                 }
                 if (bServiceFailed == true)
                 {
-                    System.out.println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
+                    GlobalLogWriter.get().println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
                     return;
                 }
 
@@ -1210,7 +1233,7 @@ public class OfficePrint {
                     sExtension = getFileExtension(sInternalFilterName, xMSF);
                     if (sExtension == null)
                     {
-                        System.out.println("Can't found an extension for filtername, take it from the source.");
+                        GlobalLogWriter.get().println("Can't found an extension for filtername, take it from the source.");
                     }
                 }
 
@@ -1218,7 +1241,7 @@ public class OfficePrint {
                 Arg.Name = "FilterName";
                 Arg.Value = sFilterName;
                 aStoreProps[nPropertyIndex ++] = Arg;
-                System.out.println("FilterName is set to: " + sFilterName);
+                GlobalLogWriter.get().println("FilterName is set to: " + sFilterName);
             }
 
             String sOutputURL = "";
@@ -1246,19 +1269,19 @@ public class OfficePrint {
 
                 if (FileHelper.exists(sOutputFile) && _aGTA.getOverwrite() == false)
                 {
-                    System.out.println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                    GlobalLogWriter.get().println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                     return;
                 }
 
                 sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputFile);
 
-                System.out.println("Store document as '" + sOutputURL + "'");
+                GlobalLogWriter.get().println("Store document as '" + sOutputURL + "'");
                 xStorable.storeAsURL(sOutputURL, aStoreProps);
-                System.out.println("Document stored.");
+                GlobalLogWriter.get().println("Document stored.");
             }
             catch (com.sun.star.io.IOException e)
             {
-                System.out.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
+                GlobalLogWriter.get().println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
             }
 //  TODO: Do we need to wait?
             waitInSeconds(1, "unknown.");
