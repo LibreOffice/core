@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpathapi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:08:46 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,10 @@ namespace XPath
 
         // --- XXPathAPI ---
 
-        virtual void SAL_CALL CXPathAPI::registerNS(const OUString& aPrefix, const OUString& aURI)
+        virtual void SAL_CALL registerNS(const OUString& aPrefix, const OUString& aURI)
             throw (RuntimeException);
 
-        virtual void SAL_CALL CXPathAPI::unregisterNS(const OUString& aPrefix, const OUString& aURI)
+        virtual void SAL_CALL unregisterNS(const OUString& aPrefix, const OUString& aURI)
             throw (RuntimeException);
 
         /**
