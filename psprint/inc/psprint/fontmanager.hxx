@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:06:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,10 +480,10 @@ public:
     const rtl::OUString& getPSName( fontID nFontID ) const;
 
     // get a specific fonts style family
-    family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const;
+    family::type getFontFamilyType( fontID nFontID ) const;
 
     // get a specific fonts family name aliases
-    void PrintFontManager::getFontFamilyAliases( fontID nFontID ) const;
+    void getFontFamilyAliases( fontID nFontID ) const;
 
     // get a specific fonts type
     fonttype::type getFontType( fontID nFontID ) const
