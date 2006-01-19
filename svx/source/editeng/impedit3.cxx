@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:03:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ struct TabInfo
     long        nStartPosX;
     long        nTabPos;
 
-    TabInfo::TabInfo() { bValid = FALSE; }
+    TabInfo() { bValid = FALSE; }
 };
 
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
