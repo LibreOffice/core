@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KServices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:51:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CREATE_PROVIDER(
             KabDriver::getImplementationName_Static(),
             KabDriver::getSupportedServiceNames_Static(),
-            KabDriver_CreateInstance,
+            &KabDriver::Create,
             ::cppu::createSingleFactory)
         ;
 
