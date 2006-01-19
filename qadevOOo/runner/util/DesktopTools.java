@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:44:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,11 +195,16 @@ public class DesktopTools {
     public static XComponent loadDoc(XMultiServiceFactory xMSF, String url,
                                      PropertyValue[] Args) {
         XComponent oDoc = null;
-
-        try {
-            oDoc = getCLoader(xMSF)
-                       .loadComponentFromURL(url, "_blank", 0, Args);
-        } catch (com.sun.star.uno.Exception e) {
+        if (Args == null)
+        {
+            Args = new PropertyValue[0];
+        }
+        try
+        {
+            oDoc = getCLoader(xMSF).loadComponentFromURL(url, "_blank", 0, Args);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             throw new IllegalArgumentException("Document could not be loaded");
         }
 
