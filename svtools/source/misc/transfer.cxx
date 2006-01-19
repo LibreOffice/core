@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:40:00 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1088,11 +1088,11 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboardListener >
 {
 private:
-
-    TransferableDataHelper*     mpListener;
+    ::osl::Mutex                    maMutex;
+    Reference< XClipboardNotifier > mxNotifier;
+    TransferableDataHelper*         mpListener;
 
 protected:
-
     // XClipboardListener
     virtual void SAL_CALL changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException);
 
@@ -1100,62 +1100,108 @@ protected:
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
 public:
+    TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener );
 
-                                TransferableClipboardNotifier( TransferableDataHelper* _pListener );
+    /// determines whether we're currently listening
+    inline bool isListening() const { return !isDisposed(); }
+
+    /// determines whether the instance is disposed
+    inline bool isDisposed() const { return mpListener == NULL; }
+
+    /// makes the instance non-functional
+    void    dispose();
 };
 
 // -----------------------------------------------------------------------------
 
-TransferableClipboardNotifier::TransferableClipboardNotifier( TransferableDataHelper* _pListener ) :
-    mpListener( _pListener )
+TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener )
+    :mxNotifier( _rxClipboard, UNO_QUERY )
+    ,mpListener( &_rListener )
 {
-    DBG_ASSERT( mpListener, "TransferableClipboardNotifier::TransferableClipboardNotifier: invalid master listener!" );
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        if ( mxNotifier.is() )
+            mxNotifier->addClipboardListener( this );
+        else
+            // born dead
+            mpListener = NULL;
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard( maMutex );
     if( mpListener )
-        mpListener->ClipboardContentChanged( event.Contents );
+        mpListener->Rebind( event.Contents );
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& Source ) throw (RuntimeException)
 {
-    mpListener = NULL;
-
+    // clipboard is being disposed. Hmm. Okay, become disfunctional myself.
+    dispose();
 }
+
+// -----------------------------------------------------------------------------
+
+void TransferableClipboardNotifier::dispose()
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    Reference< XClipboardListener > xKeepMeAlive( this );
+
+    if ( mxNotifier.is() )
+        mxNotifier->removeClipboardListener( this );
+
+    mpListener = NULL;
+}
+
+// -------------------------------
+// - TransferableDataHelper_Impl -
+// -------------------------------
+
+struct TransferableDataHelper_Impl
+{
+    ::osl::Mutex                    maMutex;
+    TransferableClipboardNotifier*  mpClipboardListener;
+
+    TransferableDataHelper_Impl()
+        :mpClipboardListener( NULL )
+    {
+    }
+};
 
 // --------------------------
 // - TransferableDataHelper -
 // --------------------------
 
-TransferableDataHelper::TransferableDataHelper() :
-    mpFormats( new DataFlavorExVector ),
-    mpClipboardListener( NULL )
+TransferableDataHelper::TransferableDataHelper()
+    :mpFormats( new DataFlavorExVector )
+    ,mpImpl( new TransferableDataHelper_Impl )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
-    mxTransfer( rxTransferable ),
-    mpFormats( new DataFlavorExVector ),
-
-    mpClipboardListener( NULL )
+TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
+    :mxTransfer( rxTransferable )
+    ,mpFormats( new DataFlavorExVector )
+    ,mpImpl( new TransferableDataHelper_Impl )
 {
     InitFormats();
 }
 
 // -----------------------------------------------------------------------------
 
-TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
-    mxTransfer( rDataHelper.mxTransfer ),
-    mxClipboard( rDataHelper.mxClipboard ),
-    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) ),
-    mpClipboardListener( NULL )
+TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper )
+    :mxTransfer( rDataHelper.mxTransfer )
+    ,mxClipboard( rDataHelper.mxClipboard )
+    ,mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) )
+    ,mpImpl( new TransferableDataHelper_Impl )
 {
 }
 
@@ -1165,12 +1211,19 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 {
     if ( this != &rDataHelper )
     {
+        ::osl::MutexGuard aGuard( mpImpl->maMutex );
+
+        bool bWasClipboardListening = ( NULL != mpImpl->mpClipboardListener );
+        if ( bWasClipboardListening )
+            StopClipboardListening();
+
         mxTransfer = rDataHelper.mxTransfer;
         delete mpFormats, mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
 
         mxClipboard = rDataHelper.mxClipboard;
-        if( mpClipboardListener )
-            StopClipboardListening();
+
+        if ( bWasClipboardListening )
+            StartClipboardListening();
     }
 
     return *this;
@@ -1180,8 +1233,11 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 
 TransferableDataHelper::~TransferableDataHelper()
 {
-    delete mpFormats;
     StopClipboardListening( );
+    {
+        ::osl::MutexGuard aGuard( mpImpl->maMutex );
+        delete mpFormats, mpFormats = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1285,8 +1341,9 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 
 void TransferableDataHelper::InitFormats()
 {
-    mpFormats->clear();
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
+    mpFormats->clear();
     if( mxTransfer.is() )
         TransferableDataHelper::FillDataFlavorExVector( mxTransfer->getTransferDataFlavors(), *mpFormats );
 }
@@ -1295,6 +1352,8 @@ void TransferableDataHelper::InitFormats()
 
 sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
+
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
     sal_Bool                        bRet = sal_False;
 
@@ -1314,6 +1373,8 @@ sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 
 sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
+
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
     sal_Bool                        bRet = sal_False;
 
@@ -1333,6 +1394,7 @@ sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
     return mpFormats->size();
 }
 
@@ -1341,6 +1403,7 @@ sal_uInt32 TransferableDataHelper::GetFormatCount() const
 
 SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
     DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
     return( ( nFormat < mpFormats->size() ) ? (*mpFormats)[ nFormat ].mnSotId : 0 );
 }
@@ -1349,6 +1412,7 @@ SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 
 DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
     DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
 
     DataFlavor aRet;
@@ -1402,6 +1466,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 
 Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 {
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
     Any aRet;
 
     try
@@ -1998,7 +2063,7 @@ sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Refere
 }
 
 // -----------------------------------------------------------------------------
-void TransferableDataHelper::ClipboardContentChanged( const Reference< XTransferable >& _rxNewContent )
+void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewContent )
 {
     mxTransfer = _rxNewContent;
     InitFormats();
@@ -2008,32 +2073,28 @@ void TransferableDataHelper::ClipboardContentChanged( const Reference< XTransfer
 
 sal_Bool TransferableDataHelper::StartClipboardListening( )
 {
-    if( mpClipboardListener )
-        StopClipboardListening( );
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
-    Reference< XClipboardNotifier > xNotifier( mxClipboard, UNO_QUERY );
+    StopClipboardListening( );
 
-    if( xNotifier.is() )
-    {
-        mpClipboardListener = new TransferableClipboardNotifier( this );
-        xNotifier->addClipboardListener( mpClipboardListener );
+    mpImpl->mpClipboardListener = new TransferableClipboardNotifier( mxClipboard, *this );
+    mpImpl->mpClipboardListener->acquire();
 
-        return sal_True;
-    }
-
-    return sal_False;
+    return mpImpl->mpClipboardListener->isListening();
 }
 
 // -----------------------------------------------------------------------------
 
 void TransferableDataHelper::StopClipboardListening( )
 {
-    Reference< XClipboardNotifier > xNotifier( mxClipboard, UNO_QUERY );
+    ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
-    if( mpClipboardListener && xNotifier.is() )
-          xNotifier->removeClipboardListener( mpClipboardListener );
-
-    mpClipboardListener = NULL;
+    if ( mpImpl->mpClipboardListener )
+    {
+        mpImpl->mpClipboardListener->dispose();
+        mpImpl->mpClipboardListener->release();
+        mpImpl->mpClipboardListener = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------------
