@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:40:59 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
     /* protected */
     public void compareGraphicalDiffs()
         {
+            GlobalLogWriter.set(log);
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
 
@@ -309,26 +310,31 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String sStatusMessage = "";
             try
             {
+                DB.startFile(aGTA.getDBInfoString(), _sInputFile);
                 GraphicalDifferenceCheck.checkOneFile(_sInputFile, _sOutputPath, _sReferencePath, _sDiffPath, aGTA);
                 sStatusRunThrough = "PASSED, OK";
+                DB.finishedFile(aGTA.getDBInfoString(), _sInputFile);
             }
             catch(ConvWatchCancelException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusRunThrough = "CANCELED, FAILED";
                 sStatusMessage = e.getMessage();
+                DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
             }
             catch(ConvWatchException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusMessage = e.getMessage();
                 sStatusRunThrough = "PASSED, FAILED";
+                DB.failedFile(aGTA.getDBInfoString(), _sInputFile);
             }
             catch(com.sun.star.lang.DisposedException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusMessage = e.getMessage();
                 sStatusRunThrough = "FAILED, FAILED";
+                DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
             }
 
             // -------------------- Status --------------------
@@ -355,10 +361,10 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String sLinkDDName;
             String sHTMLPrefix = aGTA.getHTMLOutputPrefix();
 
-            System.out.println("----------------------------------------------------------------------");
-            System.out.println(" OutputPath: " + _sOutputPath);
-            System.out.println("    NewPath: " + _sNewSubDir);
-            System.out.println("----------------------------------------------------------------------");
+            GlobalLogWriter.get().println("----------------------------------------------------------------------");
+            GlobalLogWriter.get().println(" OutputPath: " + _sOutputPath);
+            GlobalLogWriter.get().println("    NewPath: " + _sNewSubDir);
+            GlobalLogWriter.get().println("----------------------------------------------------------------------");
 
 //             if (_sNewSubDir.length() > 0)
 //             {
