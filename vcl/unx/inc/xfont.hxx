@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:50:21 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ struct VerticalTextItem
     int                 mnFixedAdvance;
     int*                mpAdvanceAry;
 
-    VerticalTextItem::VerticalTextItem( XFontStruct* pXFontStruct,
+    VerticalTextItem( XFontStruct* pXFontStruct,
                         const sal_Unicode* pString,
                         int nLength,
                         int nTransX,
@@ -84,7 +84,7 @@ struct VerticalTextItem
         mnFixedAdvance( nFixedAdvance )
     {}
 
-    VerticalTextItem::VerticalTextItem( XFontStruct* pXFontStruct,
+    VerticalTextItem( XFontStruct* pXFontStruct,
                         const sal_Unicode* pString,
                         int nLength,
                         int nTransX,
@@ -99,7 +99,7 @@ struct VerticalTextItem
         mpAdvanceAry( pAdvanceAry )
     {}
 
-    VerticalTextItem::~VerticalTextItem()
+    ~VerticalTextItem()
     {
         if (!mbFixed)
         {
