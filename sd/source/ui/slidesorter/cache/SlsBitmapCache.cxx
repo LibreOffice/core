@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsBitmapCache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:39:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ public:
         sal_Int32 nLastAccessTime, bool bIsPrecious);
     CacheEntry(sal_Int32 nLastAccessTime, bool bIsPrecious);
     ~CacheEntry (void) {};
-    inline void CacheEntry::Recycle (const CacheEntry& rEntry);
+    inline void Recycle (const CacheEntry& rEntry);
     inline sal_Int32 GetMemorySize (void) const;
     void Compress (const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
     inline void Decompress (void);
