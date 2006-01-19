@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:34:02 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,9 @@
 #include "ViewShellManager.hxx"
 #include "UpdateLockManager.hxx"
 #include "ViewShellHint.hxx"
+
+#include <sfx2/request.hxx>
+#include <boost/bind.hpp>
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -774,11 +777,11 @@ SdPage* DrawViewShell::getCurrentPage() const
 
     if (eEditMode == EM_PAGE)
     {
-        return GetDoc()->GetSdPage(nCurrentPage, ePageKind);
+        return GetDoc()->GetSdPage((USHORT)nCurrentPage, ePageKind);
     }
     else // EM_MASTERPAGE
     {
-        return GetDoc()->GetMasterSdPage(nCurrentPage, ePageKind);
+        return GetDoc()->GetMasterSdPage((USHORT)nCurrentPage, ePageKind);
     }
 }
 
@@ -979,6 +982,17 @@ BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
 BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 {
+    if (GetActiveWindow()->IsInPaint())
+    {
+        // Switching the current page while a Paint is being executed is
+        // dangerous.  So, post it for alter execution and return.
+        maAsynchronousSwitchPageCall.Post(::boost::bind(
+            ::std::mem_fun(&DrawViewShell::SwitchPage),
+            this,
+            nSelectedPage));
+        return FALSE;
+    }
+
     BOOL bOK = FALSE;
 
     // With the current implementation of FuSlideShow there is a problem
