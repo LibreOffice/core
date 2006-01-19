@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:03:03 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ void FuSearch::DoExecute( SfxRequest& rReq )
 
 FuSearch::~FuSearch()
 {
-    if ( ! pDocSh->IsInDestruction())
+    if ( ! pDocSh->IsInDestruction() && pDocSh->GetViewShell()!=NULL)
         pDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
