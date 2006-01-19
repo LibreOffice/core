@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:41:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ public class MSOfficePrint
             }
             else
             {
-                System.out.println("No MSOfficeDocument format found.");
+                GlobalLogWriter.get().println("No MSOfficeDocument format found.");
 // TODO: use a better Exception!!!
                 throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
             }
@@ -210,7 +210,7 @@ public class MSOfficePrint
             }
             else
             {
-                System.out.println("No MSOfficeDocument format found.");
+                GlobalLogWriter.get().println("No MSOfficeDocument format found.");
 // TODO: use a better Exception!!!
                 throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
             }
@@ -398,14 +398,14 @@ public class MSOfficePrint
             File aPerlScript = new File(userdir + fs + _sScriptName);
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println("Search for local existance of " + aPerlScript.getAbsolutePath());
+                GlobalLogWriter.get().println("Search for local existance of " + aPerlScript.getAbsolutePath());
             }
 
             if (aPerlScript.exists())
             {
                 if (FileHelper.isDebugEnabled())
                 {
-                    System.out.println("OK, found it, use this instead the internal one.");
+                    GlobalLogWriter.get().println("OK, found it, use this instead the internal one.");
                 }
 
                 String sName = aPerlScript.getAbsolutePath();
@@ -437,7 +437,7 @@ public class MSOfficePrint
             String sName = sTmpPath + fs + sSaveViaWord;
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println("No local found, create a perl script: " + sName);
+                GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -518,7 +518,7 @@ public class MSOfficePrint
             String sName = sTmpPath + fs + sPrintViaExcel;
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println("No local found, create a perl script: " + sName);
+                GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -605,7 +605,7 @@ public class MSOfficePrint
             String sName = sTmpPath + fs + sSaveViaExcel;
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println("No local found, create a script: " + sName);
+                GlobalLogWriter.get().println("No local found, create a script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -695,7 +695,7 @@ public class MSOfficePrint
             String sName = sTmpPath + fs + sPrintViaPowerPoint;
             if (FileHelper.isDebugEnabled())
             {
-                System.out.println("No local found, create a script: " + sName);
+                GlobalLogWriter.get().println("No local found, create a script: " + sName);
             }
 
             File aFile = new File(sName);
