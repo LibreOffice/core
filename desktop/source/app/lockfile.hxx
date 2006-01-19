@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:10:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 class ByteString;
 
 namespace desktop {
+
+    class Lockfile;
+    bool Lockfile_execWarning( Lockfile * that );
 
     class Lockfile
     {
