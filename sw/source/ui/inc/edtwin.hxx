@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:12:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ public:
     void StopQuickHelp();
 
     // --> OD 2005-02-18 #i42921# - add parameter <bVerticalMode>
-    BOOL SwEditWin::RulerMarginDrag( SwView& rView,
+    BOOL RulerMarginDrag( SwView& rView,
                                      const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
     // <--
