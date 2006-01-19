@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:06:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ struct METChrSet
 {
     struct METChrSet * pSucc;
     BYTE nSet;
-    ByteString aName;
+    String aName;
     FontWeight eWeight;
 };
 
@@ -423,7 +423,7 @@ void METWriter::CreateChrSet(const Font & rFont)
         pCS = new METChrSet;
         pCS->pSucc = pChrSetList; pChrSetList=pCS;
         pCS->nSet = nNextChrSetId++;
-        pCS->aName = ByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
+        pCS->aName = rFont.GetName();
         pCS->eWeight = rFont.GetWeight();
     }
 }
@@ -488,10 +488,11 @@ void METWriter::WriteChrSets()
         *pMET << (BYTE)0x03 << (BYTE)0x52;
 
         *pMET << (BYTE)0x24 << (BYTE)0x02 << (BYTE)0x08 << (BYTE)0x00;
+        ByteString n(pCS->aName, gsl_getSystemTextEncoding());
         for (i=0; i<32; i++)
         {
             if ( i == 0 || c != 0 )
-                c = pCS->aName.GetChar( i );
+                c = n.GetChar( i );
             *pMET << c;
         }
     }
