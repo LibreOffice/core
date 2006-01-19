@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:42:32 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,4 +60,6 @@ public interface PropertyName
     final public static String DOC_CONVERTER_REUSE_OFFICE =                "DOC_CONVERTER_REUSE_OFFICE";
 
     final public static String DOC_COMPARATOR_LEAVE_OUT_FILES =            "DOC_COMPARATOR_LEAVE_OUT_FILES";
+
+    final public static String DOC_COMPARATOR_DB_INFO_STRING =             "DOC_COMPARATOR_DB_INFO_STRING";
 }
