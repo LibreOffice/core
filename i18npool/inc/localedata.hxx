@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:54:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,10 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
+    return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
+};
+
 class LocaleData : public cppu::WeakImplHelper2
 <
     XLocaleData,
@@ -131,13 +135,7 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
 private :
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-    inline friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
-#else
-    inline friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
-        return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
-    };
-#endif
+    friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
 
     struct lookupTableItem {
         lookupTableItem(const sal_Char *name, osl::Module* m) : dllName(name), module(m) {}
@@ -163,11 +161,6 @@ private :
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
         sal_Int16 len, sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 };
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-    inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
-        return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
-    };
-#endif
 
 } } } }
 
