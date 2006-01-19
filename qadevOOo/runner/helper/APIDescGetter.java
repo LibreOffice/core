@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:17:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:23:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,32 @@ import share.DescEntry;
 import share.DescGetter;
 
 
-/*
- * This is the Office-API specific DescGetter
- *
+/**
+ * This is the Office-API specific DescGetter<br>
+ * <br>
+ * Examples:<br><br>
+ * -o sw.SwXBodyText<br>
+ * runs the module test of <B>Sw.SwXBodyText</B><br>
+ * <br>
+ * -o sw.SwXBodyText::com::sun::star::text::Text<br>
+ * runs only the interface test <B>com.sun.star.textText</B> of the module <B>Sw.SwXBodyText</B><br>
+ * <br>
+ * -o sw.SwXBodyText::com::sun::star::text::Text,com::sun::star::text::XSimpleText<br>
+ * runs only the interfaces test <B>com.sun.star.textText</B> and <B>com.sun.star.text.XSimpleText</B> of the module <B>Sw.SwXBodyText</B><br>
+ * <br>
+ * -p sw<br>
+ * runs all modules of the project <B>sw</B><br>
+ * <br>
+ * -p listall<br>
+ * lists all known module tests<br>
+ * <br>
+ * -sce SCENARIO_FILE<br>
+ * A scenario file is a property file which could cotain <B>-o</B> and <B>-p</B> properties<br>
+ * <br>
+ * -sce sw.SwXBodyText,sw.SwXBookmark<br>
+ * runs the module test of <B>Sw.SwXBodyText</B> and <B>sw.SwXBookmark</B><br>
  */
+
 public class APIDescGetter extends DescGetter {
     private static String fullJob = null;
 
@@ -129,7 +151,21 @@ public class APIDescGetter extends DescGetter {
         if (job.startsWith("-sce")) {
             job = job.substring(5, job.length()).trim();
 
-            return getScenario(job, descPath, debug);
+            File sceFile = new File(job);
+            if (sceFile.exists())
+                return getScenario(job, descPath, debug);
+            else {
+                //look the scenarion like this? :
+                // sw.SwXBodyText,sw.SwXTextCursor
+                ArrayList subs = getSubObjects(job);
+                DescEntry[] entries = new DescEntry[subs.size()];
+
+                for (int i=0; i<subs.size(); i++){
+                    entries[i] = getDescriptionForSingleJob(
+                                          (String)subs.get(i), descPath, debug);
+                }
+                return entries;
+            }
         } else {
             return null;
         }
@@ -569,6 +605,17 @@ public class APIDescGetter extends DescGetter {
             if (token.indexOf(".") < 0) {
                 namesList.add(token);
             }
+        }
+
+        return namesList;
+    }
+
+    protected ArrayList getSubObjects(String job) {
+        ArrayList namesList = new ArrayList();
+        StringTokenizer st = new StringTokenizer(job, ",");
+
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            namesList.add(st.nextToken());
         }
 
         return namesList;
