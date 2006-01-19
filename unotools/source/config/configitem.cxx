@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:41:35 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -764,6 +764,14 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
     }
 
     return bRet;
+}
+/* -----------------------------08.12.05 15:27--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ConfigItem::DisableNotification()
+{
+    OSL_ENSURE( xChangeLstnr.is(), "ConfigItem::DisableNotification: notifications not enabled currently!" );
+    RemoveListener();
 }
 /* -----------------------------29.08.00 16:19--------------------------------
 
