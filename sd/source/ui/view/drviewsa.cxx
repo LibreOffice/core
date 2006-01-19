@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:28:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,8 @@ DrawViewShell::DrawViewShell (
       pClipEvtLstnr(NULL),
       mbIsLayerModeActive(false),
       bPastePossible(FALSE),
-      mpCurrentClipboardFormats(NULL)
+      mpCurrentClipboardFormats(NULL),
+      maAsynchronousSwitchPageCall()
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -259,7 +260,8 @@ DrawViewShell::DrawViewShell (
       pClipEvtLstnr(NULL),
       mbIsLayerModeActive(false),
       bPastePossible(FALSE),
-      mpCurrentClipboardFormats(NULL)
+      mpCurrentClipboardFormats(NULL),
+      maAsynchronousSwitchPageCall()
 {
     pFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
