@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:01 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,18 @@
 #ifndef _INIT_HXX
 #define _INIT_HXX
 
+class ViewShell;
+
 void _InitCore();   // bastyp/init.cxx
 void _FinitCore();
 
 void _InitFilter(); // basflt/fltini.cxx
 void _FinitFilter();
 
-// layout/frame.cxx
+// layout/newfrm.cxx
 void _FrmInit();
+void _FrmFinit();
+void SetShell( ViewShell *pSh );
 
 // text/txtfrm.cxx
 void _TextInit();
