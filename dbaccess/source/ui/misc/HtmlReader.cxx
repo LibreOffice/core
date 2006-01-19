@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:28:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,12 +97,6 @@
 #endif
 #ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
 #endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
@@ -246,6 +240,7 @@ SvParserState OHTMLReader::CallParser()
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = HTMLParser::CallParser();
+    SetColumnTypes(m_pColumnList,m_pInfoMap);
     return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
 // -----------------------------------------------------------------------------
@@ -321,19 +316,7 @@ void OHTMLReader::NextToken( int nToken )
                     catch(SQLException& e)
                     // UpdateFehlerbehandlung
                     {
-                        if(!m_bDontAskAgain)
-                        {
-                            String aMsg(e.Message);
-                            aMsg += '\n';
-                            aMsg += String(ModuleRes(STR_QRY_CONTINUE));
-                            OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
-                                aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
-
-                            if (aBox.Execute() == RET_YES)
-                                m_bDontAskAgain = TRUE;
-                            else
-                                m_bError = TRUE;
-                        }
+                        showErrorDialog(e);
                     }
                 }
                 else
@@ -372,7 +355,15 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TABLEDATA_OFF:
                 {
-                    insertValueIntoColumn();
+                    try
+                    {
+                        insertValueIntoColumn();
+                    }
+                    catch(SQLException& e)
+                    // UpdateFehlerbehandlung
+                    {
+                        showErrorDialog(e);
+                    }
                     m_nColumnPos++;
                     m_sTextToken.Erase();
                     m_bSDNum = m_bInTbl = sal_False;
@@ -395,19 +386,7 @@ void OHTMLReader::NextToken( int nToken )
                 //////////////////////////////////////////////////////////////////////
                 // UpdateFehlerbehandlung
                 {
-                    if(!m_bDontAskAgain)
-                    {
-                        String aMsg(e.Message);
-                        aMsg += '\n';
-                        aMsg += String(ModuleRes(STR_QRY_CONTINUE));
-                        OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
-                            aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
-
-                        if (aBox.Execute() == RET_YES)
-                            m_bDontAskAgain = TRUE;
-                        else
-                            m_bError = TRUE;
-                    }
+                    showErrorDialog(e);
                 }
                 m_nColumnPos = 0;
                 break;
