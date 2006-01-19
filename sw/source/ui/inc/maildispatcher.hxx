@@ -4,9 +4,9 @@
  *
  *  $RCSfile: maildispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:39:38 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ public:
         Dequeues a mail message.
         This enables the caller to remove attachments when sending mails is to be cancelled.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> MailDispatcher::dequeueMailMessage();
+    ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> dequeueMailMessage();
 
     /**
         Start sending mail messages asynchronously. A client may register
