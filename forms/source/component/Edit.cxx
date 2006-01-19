@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:20:51 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,10 @@
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
+#endif
+
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
@@ -546,7 +550,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_transferProperties: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
