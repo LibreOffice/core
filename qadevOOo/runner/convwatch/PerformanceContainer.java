@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PerformanceContainer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:42:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ public class PerformanceContainer /* extends *//* implements */ {
         {
             if (_nCurrentTimer == 0)
             {
-                System.out.println("Forgotten to initialise a start timer.");
+                GlobalLogWriter.get().println("Forgotten to initialise a start timer.");
                 return 0;
             }
             long nMeanTime = System.currentTimeMillis();
@@ -145,7 +145,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Can't convert string to double " + _sStr);
+                GlobalLogWriter.get().println("Can't convert string to double " + _sStr);
             }
             return nValue;
         }
@@ -170,7 +170,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             File aFile = new File(sFilename);
             if (! aFile.exists())
             {
-                System.out.println("couldn't find file " + sFilename);
+                GlobalLogWriter.get().println("couldn't find file " + sFilename);
                 return;
             }
 
@@ -216,13 +216,13 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (java.io.FileNotFoundException fne)
             {
-                System.out.println("couldn't open file " + sFilename);
-                System.out.println("Message: " + fne.getMessage());
+                GlobalLogWriter.get().println("couldn't open file " + sFilename);
+                GlobalLogWriter.get().println("Message: " + fne.getMessage());
             }
             catch (java.io.IOException ie)
             {
-                System.out.println("Exception while reading file " + sFilename);
-                System.out.println("Message: " + ie.getMessage());
+                GlobalLogWriter.get().println("Exception while reading file " + sFilename);
+                GlobalLogWriter.get().println("Message: " + ie.getMessage());
             }
             try
             {
@@ -230,8 +230,8 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (java.io.IOException ie)
             {
-                System.out.println("Couldn't close file " + sFilename);
-                System.out.println("Message: " + ie.getMessage());
+                GlobalLogWriter.get().println("Couldn't close file " + sFilename);
+                GlobalLogWriter.get().println("Message: " + ie.getMessage());
             }
         }
 
