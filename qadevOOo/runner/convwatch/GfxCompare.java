@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GfxCompare.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:12:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ public class GfxCompare extends EnhancedComplexTestCase
     /* protected */
     public void gfxcompare()
         {
+            GlobalLogWriter.set(log);
+
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
 
@@ -123,7 +125,7 @@ public class GfxCompare extends EnhancedComplexTestCase
             }
             else
             {
-                System.out.println("File: '" + _sFile + "' doesn't exist.");
+                GlobalLogWriter.get().println("File: '" + _sFile + "' doesn't exist.");
                 return "";
             }
             String sFileDir = FileHelper.getPath(_sFile);
@@ -175,7 +177,7 @@ public class GfxCompare extends EnhancedComplexTestCase
                 }
                 catch (ConvWatchCancelException e)
                 {
-                    System.out.println("Exception caught, can't create:" + sPrintFileURL);
+                    GlobalLogWriter.get().println("Exception caught, can't create:" + sPrintFileURL);
                 }
             }
             return sJPEGFile;
@@ -193,7 +195,7 @@ public class GfxCompare extends EnhancedComplexTestCase
 
                 if (sDiffFile.length() > 0)
                 {
-                    System.out.println("Difference created: " + sDiffFile);
+                    GlobalLogWriter.get().println("Difference created: " + sDiffFile);
                 }
                 return sDiffFile;
             }
