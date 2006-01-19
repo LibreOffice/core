@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywritehandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:22 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,16 +128,16 @@ namespace configmgr
             void writeAttributes(node::Attributes const& _aAttributes)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryWriteHandler::writeNodeType(binary::NodeType::Type _eType)
+            void writeNodeType(binary::NodeType::Type _eType)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryWriteHandler::writeStop()
+            void writeStop()
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeType(uno::Type const& _aType)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryWriteHandler::writeValue( uno::Any const& _aValue)
+            void writeValue( uno::Any const& _aValue)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
         };
