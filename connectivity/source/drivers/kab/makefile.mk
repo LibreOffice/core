@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 14:31:04 $
+#   last change: $Author: obo $ $Date: 2006-01-19 15:31:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@ PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=kab
+TARGET2=$(TARGET)drv
+
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
@@ -50,61 +50,79 @@ ENVCFLAGS+=/FR$(SLO)$/
 .IF "$(ENABLE_KAB)" == "TRUE"
 # --- Files -------------------------------------
 
-EXCEPTIONSFILES=\
-    $(SLO)$/KColumns.obj			\
-    $(SLO)$/KTable.obj				\
-    $(SLO)$/KTables.obj				\
-    $(SLO)$/KCatalog.obj			\
-    $(SLO)$/KResultSet.obj			\
-    $(SLO)$/KStatement.obj			\
-    $(SLO)$/KPreparedStatement.obj	\
-    $(SLO)$/KDatabaseMetaData.obj	\
-    $(SLO)$/KConnection.obj			\
-    $(SLO)$/KServices.obj			\
-    $(SLO)$/KResultSetMetaData.obj	\
-    $(SLO)$/KDriver.obj				\
-    $(SLO)$/kcondition.obj			\
-    $(SLO)$/korder.obj				\
-    $(SLO)$/kfields.obj				\
- 
 CFLAGS+=$(KDE_CFLAGS)
 
-SLOFILES=\
-    $(EXCEPTIONSFILES)
+# === KAB base library ==========================
 
-KAB_LIB=$(KDE_LIBS) -lkabc
+# --- Files -------------------------------------
 
-SHL1VERSIONMAP=$(TARGET).map
-
+SLOFILES= \
+    $(SLO)$/KDriver.obj     \
+    $(SLO)$/KServices.obj
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(KAB_TARGET)$(KAB_MAJOR)
+SHL1VERSIONMAP=$(TARGET).map
+
+SHL1TARGET= $(TARGET)$(KAB_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SVLLIB)					\
-    $(SVLIB)					\
-    $(TOOLSLIB)					\
-    $(SVTOOLLIB)				\
-    $(SVTLIB)					\
-    $(UNOTOOLSLIB)				\
-    $(UCBHELPERLIB)				\
-    $(SALLIB)					\
-    $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)			\
-    $(KAB_LIB)
+    $(CPPULIB)                  \
+    $(CPPUHELPERLIB)            \
+    $(OSLLIB)                   \
+    $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
+SHL1IMPLIB= i$(TARGET)
 
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=	$(SHL1TARGET)
+DEF1NAME=   $(SHL1TARGET)
 
+# === KAB impl library ==========================
+
+# --- Files -------------------------------------
+
+SLO2FILES=\
+    $(SLO)$/KColumns.obj            \
+    $(SLO)$/KTable.obj              \
+    $(SLO)$/KTables.obj             \
+    $(SLO)$/KCatalog.obj            \
+    $(SLO)$/KResultSet.obj          \
+    $(SLO)$/KStatement.obj          \
+    $(SLO)$/KPreparedStatement.obj  \
+    $(SLO)$/KDatabaseMetaData.obj   \
+    $(SLO)$/KConnection.obj         \
+    $(SLO)$/KResultSetMetaData.obj  \
+    $(SLO)$/kcondition.obj          \
+    $(SLO)$/korder.obj              \
+    $(SLO)$/kfields.obj             \
+    $(SLO)$/KDEInit.obj
+ 
+KAB_LIB=$(KDE_LIBS) -lkabc
+
+# --- Library -----------------------------------
+
+SHL2VERSIONMAP=$(TARGET2).map
+
+SHL2TARGET= $(TARGET2)$(KAB_MAJOR)
+SHL2OBJS=$(SLO2FILES)
+SHL2STDLIBS=\
+    $(CPPULIB)                  \
+    $(CPPUHELPERLIB)            \
+    $(VOSLIB)                   \
+    $(OSLLIB)                   \
+    $(SALLIB)                   \
+    $(DBTOOLSLIB)               \
+    $(COMPHELPERLIB)            \
+    $(KAB_LIB)
+
+SHL2DEPN=
+SHL2IMPLIB= i$(TARGET2)
+
+SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=   $(SHL2TARGET)
 
 # --- Targets -----------------------------------
 .ELSE		# "$(ENABLE_KAB)" == "TRUE"
