@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:02:18 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,7 +632,7 @@ public:
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     // get print options (SwPrtOptions)
-    static void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
+    static void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
             BOOL* pPrtProspect, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
