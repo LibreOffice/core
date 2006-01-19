@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XTableColumns.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:46 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,13 +189,17 @@ public class _XTableColumns extends MultiMethodTest {
             result &= true;
         }
 
-        try {
-            oObj.insertByIndex(0,0);
-            log.println("No Exception occurred while inserting 0 columns");
-            result &= false;
-        } catch (Exception e) {
-            log.println("Inserting 0 columns ... OK");
-            result &= true;
+        if (tEnv.getTestCase().getObjectName().equals("ScTableColumnsObj")) {
+
+            try {
+                oObj.insertByIndex(0,0);
+                log.println("No Exception occurred while inserting 0 columns");
+                result &= false;
+            } catch (Exception e) {
+                log.println("Inserting 0 columns ... OK");
+                result &= true;
+            }
+
         }
 
         tRes.tested( "insertByIndex()", result );
@@ -251,7 +255,7 @@ public class _XTableColumns extends MultiMethodTest {
             result &= checkColumnEmpty(4);
             if (lastColumn < 200) {
                 result &= checkColumn(lastColumn + 1, lastColumn);
-                result &= oObj.getCount() == origCnt - 1;
+                result &= oObj.getCount() == origCnt - 3;
             }
 
             log.println("Removing 1 column at position 1 ...");
@@ -303,13 +307,15 @@ public class _XTableColumns extends MultiMethodTest {
             result &= true;
         }
 
-        try {
-            oObj.removeByIndex(0,0);
-            log.println("No Exception occurred while removing 0 columns");
-            result &= false;
-        } catch (Exception e) {
-            log.println("removing 0 columns ... OK");
-            result &= true;
+        if (tEnv.getTestCase().getObjectName().equals("ScTableColumnsObj")) {
+            try {
+                oObj.removeByIndex(0,0);
+                log.println("No Exception occurred while removing 0 columns");
+                result &= false;
+            } catch (Exception e) {
+                log.println("removing 0 columns ... OK");
+                result &= true;
+            }
         }
 
         tRes.tested( "removeByIndex()", result );
