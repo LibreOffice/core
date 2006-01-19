@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:49:11 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #define _CONNECTIVITY_KAB_CONNECTION_HXX_
 
 #include <map>
-#include <kabc/stdaddressbook.h>
 
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
@@ -66,6 +65,12 @@
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif
+
+namespace KABC
+{
+    class StdAddressBook;
+    class AddressBook;
+}
 
 namespace connectivity
 {
@@ -153,7 +158,7 @@ namespace connectivity
 
             // accessors
             inline KabDriver*           getDriver()         const { return m_pDriver;}
-            inline ::KABC::AddressBook* getAddressBook()    const { return m_pAddressBook; }
+                   ::KABC::AddressBook* getAddressBook()    const;
         };
     }
 }
