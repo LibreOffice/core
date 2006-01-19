@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:27:41 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ private:
     BOOL WriteExportList( ResData *pResData, ExportList *pExportList,
                         const ByteString &rTyp, BOOL bCreateNew = FALSE );
 
-    ByteString Export::MergePairedList( ByteString& sLine , ByteString& sText );
+    ByteString MergePairedList( ByteString& sLine , ByteString& sText );
 
     ByteString FullId();                    // creates cur. GID
 
@@ -355,7 +355,7 @@ private:
 
     ByteString GetPairedListID      ( const ByteString& sText );
     ByteString GetPairedListString  ( const ByteString& sText );
-    ByteString Export::StripList    ( const ByteString& sText );
+    ByteString StripList    ( const ByteString& sText );
 
     void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
