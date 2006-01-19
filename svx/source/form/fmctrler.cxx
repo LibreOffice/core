@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:26:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1580,6 +1580,10 @@ Reference< XTabControllerModel >  FmXFormController::getModel() throw( RuntimeEx
 void FmXFormController::addToEventAttacher(const Reference< XControl > & xControl)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( xControl.is(), "FmXFormController::addToEventAttacher: invalid control - how did you reach this?" );
+    if ( !xControl.is() )
+        return; /* throw IllegalArgumentException(); */
+
     // anmelden beim Eventattacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
     if (xComp.is() && m_xModelAsIndex.is())
@@ -1604,6 +1608,10 @@ void FmXFormController::addToEventAttacher(const Reference< XControl > & xContro
 void FmXFormController::removeFromEventAttacher(const Reference< XControl > & xControl)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( xControl.is(), "FmXFormController::removeFromEventAttacher: invalid control - how did you reach this?" );
+    if ( !xControl.is() )
+        return; /* throw IllegalArgumentException(); */
+
     // abmelden beim Eventattacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
     if ( xComp.is() && m_xModelAsIndex.is() )
