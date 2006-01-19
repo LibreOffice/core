@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:53:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ public:
     ~SwRootFrm();
 
     ViewShell *GetCurrShell() const { return pCurrShell; }
-    void SwRootFrm::DeRegisterShell( ViewShell *pSh );
+    void DeRegisterShell( ViewShell *pSh );
 
     //Start-/EndAction fuer alle Shells auf moeglichst hoeher
     //(Shell-Ableitungs-)Ebene aufsetzen. Fuer die StarONE Anbindung, die
