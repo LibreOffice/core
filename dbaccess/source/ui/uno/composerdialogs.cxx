@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composerdialogs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:47:12 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,12 +213,13 @@ DBG_NAME(ComposerDialog)
     {
         ComposerDialog::executedDialog( _nExecutionResult );
 
-        if ( _nExecutionResult && m_pDialog )
+        if ( !m_pDialog )
+            return;
+
+        if ( _nExecutionResult )
             static_cast< DlgOrderCrit* >( m_pDialog )->BuildOrderPart();
         else if ( m_xComposer.is() )
-        {
             m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog )->GetOrignalOrder() );
-        }
     }
 
 //.........................................................................
