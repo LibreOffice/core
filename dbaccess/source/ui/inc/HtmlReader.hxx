@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:23 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ namespace dbaui
     //===============================================================================================
     class OHTMLReader : public HTMLParser, public ODatabaseExport
     {
-
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
@@ -98,7 +97,7 @@ namespace dbaui
 
         virtual     SvParserState CallParser();// Basisklasse
         virtual     void          release();
-        // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde
+        // birgt nur korrekte Daten, wenn der 1. CTOR benutzt wurde
     };
 
     SV_DECL_IMPL_REF( OHTMLReader );
