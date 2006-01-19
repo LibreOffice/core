@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:58:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,24 @@ void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _
 }
 
 //--------------------------------------------------------------------------
+namespace
+{
+    void lcl_throwIllegalPropertyValueTypeException( const OPropertyContainerHelper::PropertyDescription& _rProperty, const Any& _rValue )
+    {
+        ::rtl::OUStringBuffer aErrorMessage;
+        aErrorMessage.appendAscii( "The given value cannot be converted to the required property type." );
+        aErrorMessage.appendAscii( "\n(property name \"" );
+        aErrorMessage.append( _rProperty.sName );
+        aErrorMessage.appendAscii( "\", found value type \"" );
+        aErrorMessage.append( _rValue.getValueType().getTypeName() );
+        aErrorMessage.appendAscii( "\", required property type \"" );
+        aErrorMessage.append( _rProperty.aType.getTypeName() );
+        aErrorMessage.appendAscii( "\")" );
+        throw IllegalArgumentException( aErrorMessage.makeStringAndClear(), NULL, 4 );
+    }
+}
+
+//--------------------------------------------------------------------------
 sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) SAL_THROW( (IllegalArgumentException) )
 {
@@ -275,21 +293,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                         )
                 )
             {
-                ::rtl::OUStringBuffer sMessage;
-                sMessage.appendAscii( "invalid value type for property \"" );
-                sMessage.append( aPos->sName );
-                sMessage.appendAscii( "\"\n" );
-                sMessage.appendAscii( "expected: " );
-                sMessage.append( aPos->aType.getTypeName() );
-                sMessage.appendAscii( "\nfound   : " );
-                sMessage.append( _rValue.getValueType().getTypeName() );
-                sMessage.appendAscii( "\n" );
-
-                throw IllegalArgumentException(
-                    sMessage.makeStringAndClear(),
-                    NULL,
-                    4
-                );
+                lcl_throwIllegalPropertyValueTypeException( *aPos, _rValue );
             }
 
             Any* pPropContainer = NULL;
@@ -353,8 +357,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                 }
 
                 if ( !bConverted )
-                    // TODO: error message
-                    throw IllegalArgumentException();
+                    lcl_throwIllegalPropertyValueTypeException( *aPos, _rValue );
             }
 
             // from here on, we should have the proper type
