@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentConverter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:41:11 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
     // the test ======================================================================
     public void convert()
         {
+            GlobalLogWriter.set(log);
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
 
@@ -226,7 +227,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
             if (aGTA.getOfficeProgram().toLowerCase().equals("msoffice"))
             {
                 // ReferenceType is MSOffice
-                System.out.println("USE MSOFFICE AS EXPORT FORMAT.");
+                GlobalLogWriter.get().println("USE MSOFFICE AS EXPORT FORMAT.");
                 MSOfficePrint a = new MSOfficePrint();
                 try
                 {
@@ -247,11 +248,11 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 }
                 catch(ConvWatchCancelException e)
                 {
-                    System.out.println(e.getMessage());
+                    GlobalLogWriter.get().println(e.getMessage());
                 }
                 catch(java.io.IOException e)
                 {
-                    System.out.println(e.getMessage());
+                    GlobalLogWriter.get().println(e.getMessage());
                 }
             }
             else
