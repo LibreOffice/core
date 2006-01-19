@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:50:45 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,7 @@ public:
     /// set configuration at document; calls ProcessSettings
     // --> OD 2005-01-31 #i40579# - move code from <CreateAndInsertLate(..)>
     // to <Finish(..)>, because at this time all styles it references have been set.
-    virtual void XMLFootnoteConfigurationImportContext::Finish(
-        sal_Bool bOverwrite );
+    virtual void Finish( sal_Bool bOverwrite);
     // <--
 
     /// set configuration at document
