@@ -613,13 +613,13 @@ public:
 
         @author FME
     */
-    sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const;
+    sal_uInt16 ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const;
 
     /** Convert absolute to relative page numbers (see PrintEmptyPages)
 
         @author FME
     */
-    sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
+    sal_uInt16 ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
 
     /** get the number of preview pages
 
