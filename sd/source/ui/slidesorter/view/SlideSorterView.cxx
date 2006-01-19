@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:44:36 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,9 @@ SlideSorterView::SlideSorterView (
     mnLastVisiblePageIndex(-1),
     mbModelChangedWhileModifyEnabled(true),
     maPreviewSize(0,0),
-    mbPreciousFlagUpdatePending(true)
+    mbPreciousFlagUpdatePending(true),
+    maPageNumberAreaModelSize(0,0),
+    maModelBorder()
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
@@ -127,6 +129,9 @@ SlideSorterView::~SlideSorterView (void)
             pContact->SetCache(pEmptyCache);
     }
     mpPreviewCache.reset();
+
+    // Remove all page objects from the page.
+    mpPage->Clear();
 }
 
 
@@ -678,33 +683,19 @@ void SlideSorterView::UpdatePageBorders (void)
     if (mrModel.GetPageCount()>0 && GetWindow()!=NULL)
     {
         // Calculate the border in model coordinates.
-        Size aPageNumberAreaModelSize (
-            PageObjectViewObjectContact::CalculatePageNumberAreaModelSize (
-                GetWindow(),
-                mrModel.GetPageCount()));
-        SvBorder aModelBorder (
-            PageObjectViewObjectContact::CalculatePageModelBorder (
-                GetWindow(),
-                mrModel.GetPageCount()));
-
-        // Set the border at all page descriptors so that the contact
-        // objects have access to them.
-        model::SlideSorterModel::Enumeration aPageEnumeration (
-            mrModel.GetAllPagesEnumeration());
-        while (aPageEnumeration.HasMoreElements())
-        {
-            model::PageDescriptor& rDescriptor (
-                aPageEnumeration.GetNextElement());
-            rDescriptor.SetModelBorder (aModelBorder);
-            rDescriptor.SetPageNumberAreaModelSize (aPageNumberAreaModelSize);
-        }
+        maPageNumberAreaModelSize = PageObjectViewObjectContact::CalculatePageNumberAreaModelSize (
+            GetWindow(),
+            mrModel.GetPageCount());
+        maModelBorder = PageObjectViewObjectContact::CalculatePageModelBorder (
+            GetWindow(),
+            mrModel.GetPageCount());
 
         // Convert the borders to pixel coordinates and store them for later
         // use.
         Size aTopLeftBorders(GetWindow()->LogicToPixel(
-            Size (aModelBorder.Left(), aModelBorder.Top())));
+            Size (maModelBorder.Left(), maModelBorder.Top())));
         Size aBottomRightBorders(GetWindow()->LogicToPixel(
-            Size (aModelBorder.Right(), aModelBorder.Bottom())));
+            Size (maModelBorder.Right(), maModelBorder.Bottom())));
         maPagePixelBorder = SvBorder (
             aTopLeftBorders.Width(),
             aTopLeftBorders.Height(),
@@ -723,5 +714,19 @@ void SlideSorterView::UpdatePageBorders (void)
 }
 
 
+
+
+Size SlideSorterView::GetPageNumberAreaModelSize (void) const
+{
+    return maPageNumberAreaModelSize;
+}
+
+
+
+
+SvBorder SlideSorterView::GetModelBorder (void) const
+{
+    return maModelBorder;
+}
 
 } } } // end of namespace ::sd::slidesorter::view
