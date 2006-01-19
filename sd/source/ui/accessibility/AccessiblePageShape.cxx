@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:26:55 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,61 +142,64 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
 
     awt::Rectangle aBoundingBox;
 
-    uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
-    if (xSet.is())
+    if (maShapeTreeInfo.GetViewForwarder() != NULL)
     {
-        uno::Any aValue;
-        awt::Point aPosition;
-        awt::Size aSize;
+        uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
+        if (xSet.is())
+        {
+            uno::Any aValue;
+            awt::Point aPosition;
+            awt::Size aSize;
 
-        aValue = xSet->getPropertyValue (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
-        aValue >>= aBoundingBox.X;
-        aValue = xSet->getPropertyValue (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
-        aValue >>= aBoundingBox.Y;
+            aValue = xSet->getPropertyValue (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+            aValue >>= aBoundingBox.X;
+            aValue = xSet->getPropertyValue (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+            aValue >>= aBoundingBox.Y;
 
-        aValue = xSet->getPropertyValue (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
-        aValue >>= aBoundingBox.Width;
-        aValue = xSet->getPropertyValue (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
-        aValue >>= aBoundingBox.Height;
+            aValue = xSet->getPropertyValue (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
+            aValue >>= aBoundingBox.Width;
+            aValue = xSet->getPropertyValue (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
+            aValue >>= aBoundingBox.Height;
+        }
+
+        // Transform coordinates from internal to pixel.
+        ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            ::Size (aBoundingBox.Width, aBoundingBox.Height));
+        ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            ::Point (aBoundingBox.X, aBoundingBox.Y));
+
+        // Clip the shape's bounding box with the bounding box of its parent.
+        Reference<XAccessibleComponent> xParentComponent (
+            getAccessibleParent(), uno::UNO_QUERY);
+        if (xParentComponent.is())
+        {
+            // Make the coordinates relative to the parent.
+            awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+            int x = aPixelPosition.getX() - aParentLocation.X;
+            int y = aPixelPosition.getY() - aParentLocation.Y;
+
+
+            // Clip with parent (with coordinates relative to itself).
+            ::Rectangle aBBox (
+                x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
+            awt::Size aParentSize (xParentComponent->getSize());
+            ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
+            aBBox = aBBox.GetIntersection (aParentBBox);
+            aBoundingBox = awt::Rectangle (
+                aBBox.getX(),
+                aBBox.getY(),
+                aBBox.getWidth(),
+                aBBox.getHeight());
+        }
+        else
+            aBoundingBox = awt::Rectangle (
+                aPixelPosition.getX(), aPixelPosition.getY(),
+                aPixelSize.getWidth(), aPixelSize.getHeight());
     }
-
-    // Transform coordinates from internal to pixel.
-    ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-        ::Size (aBoundingBox.Width, aBoundingBox.Height));
-    ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-        ::Point (aBoundingBox.X, aBoundingBox.Y));
-
-    // Clip the shape's bounding box with the bounding box of its parent.
-    Reference<XAccessibleComponent> xParentComponent (
-        getAccessibleParent(), uno::UNO_QUERY);
-    if (xParentComponent.is())
-    {
-        // Make the coordinates relative to the parent.
-        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
-        int x = aPixelPosition.getX() - aParentLocation.X;
-        int y = aPixelPosition.getY() - aParentLocation.Y;
-
-
-        // Clip with parent (with coordinates relative to itself).
-        ::Rectangle aBBox (
-            x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
-        awt::Size aParentSize (xParentComponent->getSize());
-        ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
-        aBBox = aBBox.GetIntersection (aParentBBox);
-        aBoundingBox = awt::Rectangle (
-            aBBox.getX(),
-            aBBox.getY(),
-            aBBox.getWidth(),
-            aBBox.getHeight());
-    }
-    else
-        aBoundingBox = awt::Rectangle (
-            aPixelPosition.getX(), aPixelPosition.getY(),
-            aPixelSize.getWidth(), aPixelSize.getHeight());
 
     return aBoundingBox;
 }
