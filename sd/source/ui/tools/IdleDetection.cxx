@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:26:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "slideshow.hxx"
 #include "ViewShellBase.hxx"
 
+#include <vcl/window.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/frame/XFrame.hdl>
@@ -48,9 +49,12 @@ using namespace ::com::sun::star;
 namespace sd { namespace tools {
 
 
-sal_Int32 IdleDetection::GetIdleState (void)
+sal_Int32 IdleDetection::GetIdleState (const ::Window* pWindow)
 {
-    return CheckInputPending() | CheckSlideShowRunning();
+    sal_Int32 nResult (CheckInputPending() | CheckSlideShowRunning());
+    if (pWindow != NULL)
+        nResult |= CheckWindowPainting(*pWindow);
+    return nResult;
 }
 
 
@@ -108,5 +112,15 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
     return eResult;
 }
 
+
+
+
+sal_Int32 IdleDetection::CheckWindowPainting (const ::Window& rWindow)
+{
+    if (rWindow.IsInPaint())
+        return IDET_WINDOW_PAINTING;
+    else
+        return IDET_IDLE;
+}
 
 } } // end of namespace ::sd::tools
