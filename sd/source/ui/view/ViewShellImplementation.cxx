@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:33:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,13 +109,16 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     BOOL bBObjsVisible;
     const SfxItemSet* pArgs = rRequest.GetArgs();
 
-    if (pCurrentPage->TRG_HasMasterPage())
+    if (pCurrentPage != NULL && pCurrentPage->TRG_HasMasterPage())
         aVisibleLayers = pCurrentPage->TRG_GetMasterPageVisibleLayers();
     else
         aVisibleLayers.SetAll();
 
     do
     {
+        if (pCurrentPage == NULL)
+            break;
+
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
             if (pArgs && pArgs->Count() == 2)
