@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:48:35 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #endif
+
+#include <kabc/stdaddressbook.h>
 
 using namespace connectivity::kab;
 using namespace com::sun::star::uno;
@@ -331,4 +333,17 @@ Reference< XTablesSupplier > SAL_CALL KabConnection::createCatalog()
         m_xCatalog = xTab;
     }
     return xTab;
+}
+// -----------------------------------------------------------------------------
+::KABC::AddressBook* KabConnection::getAddressBook() const
+{
+    return m_pAddressBook;
+}
+// -----------------------------------------------------------------------------
+extern "C" void*  SAL_CALL createKabConnection( void* _pDriver )
+{
+    KabConnection* pConnection = new KabConnection( static_cast< KabDriver* >( _pDriver ) );
+    // by definition, the pointer crossing library boundaries as void ptr is acquired once
+    pConnection->acquire();
+    return pConnection;
 }
