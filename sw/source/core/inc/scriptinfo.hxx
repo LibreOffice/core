@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:39:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ public:
 
     inline USHORT CountHiddenChg() const;
     inline xub_StrLen GetHiddenChg( const USHORT nCnt ) const;
-    static void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode,
+    static void CalcHiddenRanges( const SwTxtNode& rNode,
                                                 MultiSelection& rHiddenMulti );
 
     // "high" level operations, nPos refers to string position
