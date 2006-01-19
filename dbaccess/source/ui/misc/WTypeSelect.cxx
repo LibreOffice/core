@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:39:11 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
         case tpFormat:
         case tpDefault:
         case tpAutoIncrement:
+        case tpAutoIncrementValue:
             break;
         default:
             OFieldDescControl::ActivateAggregate( eType );
@@ -127,6 +128,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
         case tpFormat:
         case tpDefault:
         case tpAutoIncrement:
+        case tpAutoIncrementValue:
             break;
         default:
             OFieldDescControl::DeactivateAggregate( eType );
@@ -159,7 +161,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 // first we have to check if this name already exists
                 sal_Bool bDoubleName = sal_False;
                 sal_Bool bCase = sal_True;
-                if ( getMetaData().is() && !getMetaData()->storesMixedCaseQuotedIdentifiers() )
+                if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
                     bCase = sal_False;
                     USHORT nCount = aListBox.GetEntryCount();
@@ -346,6 +348,8 @@ void OWizTypeSelect::Reset()
     while(m_lbColumnNames.GetEntryCount())
         m_lbColumnNames.RemoveEntry(0);
     m_lbColumnNames.Clear();
+    sal_Int32 nBreakPos;
+    m_pParent->CheckColumns(nBreakPos);
 
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
