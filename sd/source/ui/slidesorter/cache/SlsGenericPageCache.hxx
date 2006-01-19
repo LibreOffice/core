@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:40:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,8 +332,8 @@ void GenericPageCache<
         bIsUpToDate = mpBitmapCache->BitmapIsUpToDate (pPage);
     if (bIsUpToDate)
     {
-        BitmapEx aPreview (*mpBitmapCache->GetBitmap (pPage));
-        if (aPreview.GetSizePixel() != rSize)
+        ::boost::shared_ptr<BitmapEx> pPreview (mpBitmapCache->GetBitmap(pPage));
+        if (pPreview.get()==NULL || pPreview->GetSizePixel()!=rSize)
             bIsUpToDate = false;
     }
 
@@ -379,8 +379,8 @@ void GenericPageCache<
 {
     if (mpBitmapCache.get() != NULL)
     {
-        mpQueueProcessor->RemoveRequest (rRequestData);
-        maRequestQueue.RemoveRequest (rRequestData);
+        maRequestQueue.RemoveRequest(rRequestData);
+        mpQueueProcessor->RemoveRequest(rRequestData);
     }
 
     // We do not relase the preview bitmap that is associated with the page
