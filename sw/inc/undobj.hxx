@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:21:13 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,7 +378,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwDoc * pDoc;
 
     void Init(const SwNodeIndex & rNode);
-    String * SwUndoInsert::GetTxtFromDoc() const;
+    String * GetTxtFromDoc() const;
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
