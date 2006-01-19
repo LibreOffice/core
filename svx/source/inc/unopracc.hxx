@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopracc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:29:13 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceName
-    ::rtl::OUString SAL_CALL SvxAccessibleTextPropertySet::getServiceName() throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getServiceName() throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif
