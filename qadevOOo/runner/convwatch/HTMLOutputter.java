@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTMLOutputter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:13:16 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ public class HTMLOutputter
             catch (java.io.IOException e)
             {
                 e.printStackTrace();
-                System.out.println("ERROR: Can't create HTML Outputter");
+                GlobalLogWriter.get().println("ERROR: Can't create HTML Outputter");
                 return null;
             }
             a.m_sFilename = sFilename;
