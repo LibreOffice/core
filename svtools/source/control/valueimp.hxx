@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ private:
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
     */
-    void ValueSetAcc::ThrowIfDisposed (void)
+    void ThrowIfDisposed (void)
         throw (::com::sun::star::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
