@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:55:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ public:
     bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO );
 
 private:
-    ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
+    ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
     void Process( LangHashMap* aLangHM , ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void ProcessHelp( LangHashMap* aLangHM , ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
-    void HelpParser::MakeDir( const ByteString& sPath );
+    void MakeDir( const ByteString& sPath );
 };
