@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:43:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,16 @@ public:
     */
     PageRange GetVisiblePageRange (void);
 
+    /** Return the size of the area where the page numbers are displayed.
+        @return
+            The returned size is given in model coordinates.
+    */
+    Size GetPageNumberAreaModelSize (void) const;
+
+    /** Return the size of the border around the original SdrPageObj.
+    */
+    SvBorder GetModelBorder (void) const;
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
@@ -251,6 +261,9 @@ private:
     Size maPreviewSize;
 
     bool mbPreciousFlagUpdatePending;
+
+    Size maPageNumberAreaModelSize;
+    SvBorder maModelBorder;
 
     /** Adapt the coordinates of the given bounding box according to the
         other parameters.
