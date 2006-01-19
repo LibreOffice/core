@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:38:32 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:18:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #include <svx/svdobj.hxx>
 #endif
 
+#ifndef _INIT_HXX
+#include <init.hxx>
+#endif
 #ifndef _FESH_HXX
 #include <fesh.hxx>
 #endif
