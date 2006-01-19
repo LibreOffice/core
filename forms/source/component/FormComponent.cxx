@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:09:01 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
@@ -1000,7 +1003,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlModel::read: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         xMark->jumpToMark(nMark);
