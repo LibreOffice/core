@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:21:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,13 +659,16 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         }
     }
 
-    // Copy and paste of master pages is not yet implemented properly
+    // Cut, copy and paste of master pages is not yet implemented properly
     if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE)
+        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_CUT)  == SFX_ITEM_AVAILABLE)
     {
         if (mrController.GetModel().GetEditMode() == EM_MASTERPAGE)
         {
+            if (rSet.GetItemState(SID_CUT) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_CUT);
             if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE)
                 rSet.DisableItem(SID_COPY);
             if (rSet.GetItemState(SID_PASTE) == SFX_ITEM_AVAILABLE)
@@ -890,6 +893,10 @@ void SlotManager::RenameSlide (void)
                 }
             }
             delete aNameDlg;
+
+            // Tell the slide sorter about the name change (necessary for
+            // accessibility.)
+            mrController.PageNameHasChanged((pSelectedPage->GetPageNum()-1)/2, aPageName);
         }
     }
 }
