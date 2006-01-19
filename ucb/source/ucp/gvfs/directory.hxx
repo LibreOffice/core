@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:43:21 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ class DataSupplier : public ucb::ResultSetDataSupplier
 {
 private:
     gvfs::DataSupplier_Impl *m_pImpl;
-    sal_Bool DataSupplier::getData();
+    sal_Bool getData();
 
 public:
     DataSupplier( const com::sun::star::uno::Reference<
