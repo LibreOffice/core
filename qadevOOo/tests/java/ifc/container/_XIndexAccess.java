@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XIndexAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:21:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package ifc.container;
 
+import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 
 import com.sun.star.container.XIndexAccess;
@@ -105,51 +106,15 @@ public class _XIndexAccess extends MultiMethodTest {
         if (count > 0) {
             // Check the first element
             log.println("Check the first element");
-            try {
-                log.println("getByIndex(0)");
-                o = oObj.getByIndex(0);
-                loc_result = (o != null);
-                if (loc_result) log.println("OK"); else log.println("FAILED");
-                result &= loc_result;
-            } catch (WrappedTargetException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            } catch (IndexOutOfBoundsException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            }
+            result &= checkGetByIndex(0);
 
             // Check the middle element
             log.println("Check the middle element");
-            try {
-                log.println("getByIndex(" + count / 2 + ")");
-                o = oObj.getByIndex(count / 2);
-                loc_result = (o != null);
-                if (loc_result) log.println("OK"); else log.println("FAILED");
-                result &= loc_result;
-            } catch (WrappedTargetException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            } catch (IndexOutOfBoundsException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            }
+            result &= checkGetByIndex(count /2);
 
             // Check the last element
             log.println("Check the last element");
-            try {
-                log.println("getByIndex(" + (count - 1) + ")");
-                o = oObj.getByIndex(count - 1);
-                loc_result = (o != null);
-                if (loc_result) log.println("OK"); else log.println("FAILED");
-                result &= loc_result;
-            } catch (WrappedTargetException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            } catch (IndexOutOfBoundsException e) {
-                    log.println("Exception! " + e);
-                    result = false;
-            }
+            result &= checkGetByIndex(count -1);
 
             // Testing getByIndex with wrong params.
             log.println("Testing getByIndex with wrong params.");
@@ -169,6 +134,32 @@ public class _XIndexAccess extends MultiMethodTest {
         tRes.tested("getByIndex()", result);
 
     } // end getByIndex
+
+    private boolean checkGetByIndex(int index){
+        Object o = null;
+        boolean result = true;
+        try {
+            log.println("getByIndex(" + index + ")");
+            o = oObj.getByIndex(index);
+
+            if ( tEnv.getObjRelation("XIndexAccess.getByIndex.mustBeNull") != null){
+                result = (o == null);
+                if (result) log.println("OK"); else log.println("FAILED ->  not null");
+            } else {
+                result = (o != null);
+                if (result) log.println("OK"); else log.println("FAILED -> null");
+            }
+
+        } catch (WrappedTargetException e) {
+                log.println("Exception! " + e);
+                result = false;
+        } catch (IndexOutOfBoundsException e) {
+                log.println("Exception! " + e);
+                result = false;
+        }
+
+        return result;
+    }
 
 } // end XIndexAccess
 
