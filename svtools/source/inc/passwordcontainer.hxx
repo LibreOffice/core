@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:54:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ private:
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > PasswordContainer::findUsr(
+    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > findUsr(
                                         const ::std::vector< NamePassRecord >& userlist,
                                         const ::rtl::OUString& name,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
@@ -206,11 +206,11 @@ private:
                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::std::vector< ::rtl::OUString > PasswordContainer::decodePasswords( ::rtl::OUString aLine,
+    ::std::vector< ::rtl::OUString > decodePasswords( ::rtl::OUString aLine,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString PasswordContainer::encodePasswords( ::std::vector< ::rtl::OUString > lines,
+    ::rtl::OUString encodePasswords( ::std::vector< ::rtl::OUString > lines,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
@@ -262,7 +262,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
                     impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                    PasswordContainer::impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
+                    impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
