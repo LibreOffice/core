@@ -4,9 +4,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:52:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,11 +196,7 @@ namespace configmgr
             TreeRef getContextTree() const;
             /// gets the parent node of this tree ('s root node), if available
             NodeRef getContextNode() const;
-            #if defined(_MSC_VER) && (_MSC_VER > 1300 )
             friend bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs);
-            #else
-            friend bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
-            #endif
     private:
             friend class Tree;
             friend class TreeImplHelper;
@@ -210,9 +206,7 @@ namespace configmgr
 
             TreeImpl* m_pImpl;
         };
-        #if defined(_MSC_VER) && (_MSC_VER > 1300 )
         inline bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
-        #endif
 
         /** represents a hierarchy of config entries (identified by <type>NodeRef</type>s and <type>ValueRef</type>s)
 
