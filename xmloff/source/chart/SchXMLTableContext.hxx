@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:26:59 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ private:
 
 public:
     /// The data for the ChartDocument is applied linearly
-    static void SchXMLTableHelper::applyTableSimple(
+    static void applyTableSimple(
         const SchXMLTable& rTable,
         com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > xChartDoc );
 
