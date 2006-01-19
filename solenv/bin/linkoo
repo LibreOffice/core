@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 14:58:24 $
+#   last change: $Author: obo $ $Date: 2006-01-19 16:16:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,13 @@ ulimit -c unlimited
 export PATH=".:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
 export STAR_RESOURCEPATH=`pwd`/resource
+# debugging assistance
+export OOO_FORCE_SYSALLOC=1
+export MALLOC_CHECK_=2
+export OOO_DISABLE_RECOVERY=1
 ';
 
-my @exceptions = ( 'cppuhelper', 'configmgr', 'cfgmgr', 'sunjavaplugin' );
+my @exceptions = ( 'cppuhelper', 'cfgmgr', 'sunjavaplugin' );
 
 %replaceable = (
     'program' => '\.so$',
@@ -139,12 +143,13 @@ sub check_create_linked($)
     }
 }
 
-sub do_link($$$$)
+sub do_link($$$$@)
 {
     my $src = shift;
     my $dest = shift;
     my $src_name = shift;
     my $dest_name = shift;
+    my $dont_check_link = shift;
 
     if (-l "$dest/$dest_name") {
 	my $link = readlink ("$dest/$dest_name");
@@ -164,7 +169,8 @@ sub do_link($$$$)
 	check_create_linked ($dest);
 	if (!$dry_run) {
 	    # move / write the link
-	    rename ("$dest/$dest_name", "$dest/linked/$dest_name") || die "Failed rename of $dest/$dest_name: $!";
+	    rename ("$dest/$dest_name", "$dest/linked/$dest_name") ||
+		defined $dont_check_link || die "Failed rename of $dest/$dest_name: $!";
 	    symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink: $!";
 	    print " $dest_name";
 	} else {
@@ -279,6 +285,25 @@ sub link_types_rdb()
     print "\n";
 }
 
+# link installed files back into src tree:
+sub link_soffice_bin_files()
+{
+    my $dest;
+    my $src = "$OOO_INSTALL/program";
+
+    print "soffice files";
+    $dest = "$OOO_BUILD/desktop/$TARGET/bin";
+    do_link ($src, $dest, 'soffice', 'soffice.bin', 1);
+    do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
+    do_link ($src, $dest, 'intro.bmp', 'intro.bmp', 1);
+    do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
+
+    $dest = "$OOO_BUILD/configmgr/$TARGET/lib";
+    do_link ($src, $dest, 'configmgrrc', 'configmgrrc', 1);
+
+    print "\n";
+}
+
 my $a;
 my $usage = 0;
 for $a (@ARGV) {
@@ -328,6 +353,7 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
 link_types_rdb();
+link_soffice_bin_files();
 
 if (!-f "$OOO_INSTALL/program/ooenv") {
     print "Creating '$OOO_INSTALL/program/ooenv'\n";
