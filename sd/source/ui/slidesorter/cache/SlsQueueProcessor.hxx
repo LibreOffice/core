@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:41:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ template <class Queue, class RequestData, class BitmapFactory>
     while ( ! mrQueue.IsEmpty())
     {
         // Determine whether the system is idle.
-        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
+        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrView.GetWindow()));
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
             if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)
@@ -201,6 +201,14 @@ template <class Queue, class RequestData, class BitmapFactory>
                 ::osl::MutexGuard aGuard (maMutex);
                 // Create a new preview bitmap and store it in the cache.
 
+                Rectangle aDirtyRectangle;
+                if (ePriorityClass != NOT_VISIBLE)
+                {
+                    SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
+                    aDirtyRectangle
+                        = pRequest->GetViewContact().GetPaintRectangle() - pPageView->GetOffset();
+                }
+
                 mrCache.SetBitmap (
                     pRequest->GetPage(),
                     maBitmapFactory.CreateBitmap(*pRequest),
@@ -208,22 +216,18 @@ template <class Queue, class RequestData, class BitmapFactory>
 
                 // Initiate a repaint of the new preview.
                 if (ePriorityClass != NOT_VISIBLE)
-                {
-                    SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
-                    Rectangle aDirtyRectangle (
-                        pRequest->GetViewContact().GetPaintRectangle()
-                        - pPageView->GetOffset());
                     mrView.InvalidateAllWin (aDirtyRectangle);
-                }
 
                 SSCD_SET_STATUS(pRequest->GetPage(),NONE);
             }
             catch (::com::sun::star::uno::RuntimeException aException)
             {
+                OSL_ASSERT("RuntimeException caught in QueueProcessor");
                 (void) aException;
             }
             catch (::com::sun::star::uno::Exception aException)
             {
+                OSL_ASSERT("Exception caught in QueueProcessor");
                 (void) aException;
             }
 
