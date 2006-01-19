@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:17:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ public:
     void SetDrawBroadcaster();
 
     sal_Int32 GetCount() const;
-    uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData* pData) const;
+    uno::Reference< XAccessible > Get(const ScAccessibleShapeData* pData) const;
     uno::Reference< XAccessible > Get(sal_Int32 nIndex) const;
     uno::Reference< XAccessible > GetAt(const awt::Point& rPoint) const;
 
@@ -363,7 +363,7 @@ private:
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
     void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape) const;
-    void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
+    void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
     void AddShape(const uno::Reference<drawing::XShape>& xShape, sal_Bool bCommitChange) const;
     void RemoveShape(const uno::Reference<drawing::XShape>& xShape) const;
 
