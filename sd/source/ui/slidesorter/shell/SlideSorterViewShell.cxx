@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:22:37 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,13 +518,17 @@ void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_MODIFYPAGE:
-            mpImpl->ProcessModifyPageSlot (
-                rRequest,
-                GetActualPage(),
-                mpSlideSorterModel->GetPageType());
+        {
+            SdPage* pCurrentPage = GetActualPage();
+            if (pCurrentPage != NULL)
+                mpImpl->ProcessModifyPageSlot (
+                    rRequest,
+                    pCurrentPage,
+                    mpSlideSorterModel->GetPageType());
             Cancel();
             rRequest.Done ();
-            break;
+        }
+        break;
 
         default:
             mpSlideSorterController->FuTemporary(rRequest);
