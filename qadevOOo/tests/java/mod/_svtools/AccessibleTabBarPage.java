@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTabBarPage.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:31:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,21 @@
 
 package mod._svtools;
 
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.Point;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNamed;
+import com.sun.star.frame.XModel;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheetView;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -87,7 +102,7 @@ public class AccessibleTabBarPage extends TestCase {
 
         log.println("disposing xCalcDoc");
         if (xDoc != null) {
-            //util.DesktopTools.closeDoc(xDoc);
+            util.DesktopTools.closeDoc(xDoc);
         }
     }
 
@@ -120,8 +135,8 @@ public class AccessibleTabBarPage extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
-            log.println( "creating a draw document" );
-            xDoc = SOF.createDrawDoc(null);
+            log.println( "creating a calc document" );
+            xDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class, SOF.createCalcDoc(null));// SOF.createDrawDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -155,16 +170,26 @@ public class AccessibleTabBarPage extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, (short) 30);
-            //AccessibleRole.PAGETAB), "Sheet1");
-
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet1");
+        XAccessibleContext acc = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet2");
+        XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                               XAccessibleComponent.class,
+                                               acc);
+        final Point point = accComp.getLocationOnScreen();
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        tEnv.addObjRelation("Destroy","yes");
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
+                try {
+                    Robot rob = new Robot();
+                    rob.mouseMove(point.X + 25, point.Y + 5);
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
+                } catch (java.awt.AWTException e) {
+                    System.out.println("couldn't fire event");
+                }
                 }
             });
 
