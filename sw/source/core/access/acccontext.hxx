@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:46:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,12 +182,12 @@ protected:
 
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.
-    void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
+    void DisposeChildren( const SwFrm *pFrm,
                                        sal_Bool bRecursive );
 
-    void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
+    void DisposeShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
-    void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
+    void ScrolledInShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
