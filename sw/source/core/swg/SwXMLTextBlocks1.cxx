@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:43:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,7 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
     }
     else
     {
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
         String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
-#else
-        String aStreamName = aFolderName + String::CreateFromAscii(".xml");
-#endif
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
@@ -357,11 +353,7 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     sal_Bool bTextOnly = sal_True;
     String aFolderName;
     GeneratePackageName ( rShort, aFolderName );
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
     String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
-#else
-    String aStreamName = aFolderName + String::CreateFromAscii(".xml");
-#endif
     rText.Erase();
 
     try
@@ -446,11 +438,7 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
     }
     */
     String aFolderName( rPackageName );
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
     String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
-#else
-    String aStreamName = aFolderName + String::CreateFromAscii(".xml");
-#endif
 
     Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
