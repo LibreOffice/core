@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:28:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,14 +148,22 @@ namespace utl
                                         const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
-#if SUPD<637
-            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
-            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
-                                        sal_Bool bEnableInternalNotification);
-#else
+            /** enables notifications about changes on selected sub nodes/values
+
+                Before calling this method a second time for a possibly changed node/value set,
+                you must disable the current notifications by calling DisableNotification.
+
+                @see Notify
+                @see DisableNotification
+            */
             sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                                         sal_Bool bEnableInternalNotification = sal_False);
-#endif
+            /** disables notifications about changes on sub nodes/values, which previosly had
+                been enabled with EnableNotification
+                @see Notify
+                @see EnableNotification
+            */
+            void                    DisableNotification();
             sal_Bool                IsInternalNotification()const {return IsInValueChange();}
 
             //returns all members of a node in a specific format
