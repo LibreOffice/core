@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:20:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,17 @@ public:
     */
     void Resync (void);
 
+    /** Resize the descriptor container according to current values of
+        page kind and edit mode.
+    */
+    void AdaptSize (void);
+
+    /** Delete all descriptors that currently are in the container.  The size
+        of the container, however, is not altered.  Use the AdaptSize
+        method for that.
+    */
+    void ClearDescriptorList (void);
+
     /** Set the selection of the document to exactly that of the called model.
     */
     void SynchronizeDocumentSelection (void);
@@ -167,16 +178,6 @@ private:
     mutable DescriptorContainer maPageDescriptors;
     mutable ::std::auto_ptr<controller::PageObjectFactory> mpPageObjectFactory;
 
-    /** Resize the descriptor container according to current values of
-        page kind and edit mode.
-    */
-    void AdaptSize (void);
-
-    /** Delete all descriptors that currently are in the container.  The size
-        of the container, however, is not altered.  Use the AdaptSize
-        method for that.
-    */
-    void ClearDescriptorList (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::model
