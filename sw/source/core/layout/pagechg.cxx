@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:14:56 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,6 +903,11 @@ void MA_FASTCALL lcl_AdjustRoot( SwFrm *pPage, long nOld )
                                           pPage->GetUpper()->Frm().Height() ) );
 }
 
+inline void SetLastPage( SwPageFrm *pPage )
+{
+    ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
+}
+
 void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
 {
     if ( !GetUpper() )
@@ -995,11 +1000,6 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
 |*  Letzte Aenderung    MA 22. Jun. 95
 |*
 |*************************************************************************/
-inline void SetLastPage( SwPageFrm *pPage )
-{
-    ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
-}
-
 void SwPageFrm::Cut()
 {
     AdjustRootSize( CHG_CUTPAGE, 0 );
