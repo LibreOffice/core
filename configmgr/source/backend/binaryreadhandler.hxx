@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binaryreadhandler.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:26:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,26 +132,26 @@ namespace configmgr
             void readChildNodes(ISubtree & rSubTree)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            binary::NodeType::Type BinaryReadHandler::readNodeType()
+            binary::NodeType::Type readNodeType()
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            binary::ValueFlags::Type BinaryReadHandler::readValueFlags(bool& bSeq, bool& hasValue, bool& hasDefault )
+            binary::ValueFlags::Type readValueFlags(bool& bSeq, bool& hasValue, bool& hasDefault )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryReadHandler::readString(rtl::OUString &_aString)
+            void readString(rtl::OUString &_aString)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryReadHandler::readAttributes(node::Attributes  &_aAttributes)
+            void readAttributes(node::Attributes  &_aAttributes)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryReadHandler::readGroup(rtl::OUString &_aName, node::Attributes &_aAttributes)
+            void readGroup(rtl::OUString &_aName, node::Attributes &_aAttributes)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryReadHandler::readSet(rtl::OUString &_aName, node::Attributes &_aAttributes,
+            void readSet(rtl::OUString &_aName, node::Attributes &_aAttributes,
                                             rtl::OUString &_sInstanceName, rtl::OUString &_sInstanceModule)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void BinaryReadHandler::readValue(rtl::OUString &_aName, node::Attributes &_aAttributes,
+            void readValue(rtl::OUString &_aName, node::Attributes &_aAttributes,
                                               uno::Any& _aValue, uno::Any& _aDefaultValue,uno::Type& _aType)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
