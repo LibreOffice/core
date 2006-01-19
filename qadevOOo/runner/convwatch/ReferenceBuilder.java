@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:42:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,8 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     // the test ======================================================================
     public void buildreference()
         {
+            GlobalLogWriter.set(log);
+
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
 
@@ -183,6 +185,15 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 FileFilter aFileFilter = aGTA.getFileFilter();
 
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aGTA.getFileFilter(), aGTA.includeSubDirectories());
+                // fill into DB
+                DB.filesRemove(aGTA.getDBInfoString());
+                for (int j=0;j<aList.length;j++)
+                {
+                    String sEntry = (String)aList[j];
+                    DB.fileInsert(aGTA.getDBInfoString(), sEntry, sRemovePath);
+                }
+
+                // normal run.
                 for (int i=0;i<aList.length;i++)
                 {
                     String sEntry = (String)aList[i];
@@ -190,6 +201,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     String sNewReferencePath = m_sReferencePath + fs + FileHelper.removeFirstDirectorysAndBasenameFrom(sEntry, m_sInputPath);
                     log.println("- next file is: ------------------------------");
                     log.println(sEntry);
+                    log.println(sNewReferencePath);
 
                     if (aGTA.checkIfUsable(sEntry))
                     {
@@ -230,16 +242,20 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
                 try
                 {
-                    System.out.println("Reference type is " + aGTA.getReferenceType());
+                    log.println("Reference type is " + aGTA.getReferenceType());
+                    DB.startFile(aGTA.getDBInfoString(), _sInputPath);
                     GraphicalDifferenceCheck.createOneReferenceFile(_sInputPath, _sReferencePath, aGTA);
+                    DB.ref_finishedFile(aGTA.getDBInfoString(), _sInputPath);
                 }
                 catch(ConvWatchCancelException e)
                 {
                     assure(e.getMessage(), false);
+                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
                 }
                 catch(ConvWatchException e)
                 {
                     assure(e.getMessage(), false);
+                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
                 }
 
                 // Office shutdown
@@ -247,6 +263,10 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 {
                     aProvider.closeExistingOffice(param, true);
                 }
+            }
+            else
+            {
+                DB.ref_finishedFile(aGTA.getDBInfoString(), _sInputPath);
             }
         }
 }
