@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:11:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,9 @@ public class FileHelper
             String sOSArch = System.getProperty("os.arch");
             String sOSVersion = System.getProperty("os.version");
 
-            System.out.println(sOSName);
-            System.out.println(sOSArch);
-            System.out.println(sOSVersion);
+            GlobalLogWriter.get().println(sOSName);
+            GlobalLogWriter.get().println(sOSArch);
+            GlobalLogWriter.get().println(sOSVersion);
 
         }
 
@@ -107,7 +107,7 @@ public class FileHelper
             }
             catch (NullPointerException e)
             {
-                System.out.println("Exception caught. FileHelper.isDir('" + _sDir + "')");
+                GlobalLogWriter.get().println("Exception caught. FileHelper.isDir('" + _sDir + "')");
                 e.printStackTrace();
             }
             return false;
@@ -305,9 +305,9 @@ public class FileHelper
             {
                 if (m_bDebugTextShown == false)
                 {
-                    System.out.println("Found file: " + sName);
-                    System.out.println("Activate debug mode.");
-                    System.out.println("If debug mode is no longer necessary, remove the above file.");
+                    GlobalLogWriter.get().println("Found file: " + sName);
+                    GlobalLogWriter.get().println("Activate debug mode.");
+                    GlobalLogWriter.get().println("If debug mode is no longer necessary, remove the above file.");
                     m_bDebugTextShown = true;
                 }
                 bDebug = true;
