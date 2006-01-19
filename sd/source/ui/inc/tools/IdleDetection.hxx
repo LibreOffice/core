@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:03:52 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 
 #include <sal/types.h>
 
+class Window;
+
 namespace sd { namespace tools {
 
 /** Detect whether the system is idle and some time consuming operation may
@@ -65,13 +67,20 @@ public:
     */
     static const sal_Int32 IDET_WINDOW_SHOW_ACTIVE = 0x0004;
 
+    /** A window is being painted.
+    */
+    static const sal_Int32 IDET_WINDOW_PAINTING = 0x0008;
+
     /** Determine whether the system is idle.
+        @param pWindow
+            When a valid Window pointer is given then it is checked
+            whether the window is currently being painting.
         @return
             This method either returns IDET_IDLE or a combination of
             IdleStates values or-ed together that describe what the system
             is currently doing so that the caller can decide what to do.
     */
-    static sal_Int32 GetIdleState (void);
+    static sal_Int32 GetIdleState (const ::Window* pWindow = NULL);
 
 private:
     /** Check whether there are input events pending.
@@ -81,6 +90,8 @@ private:
     /** Check whether a slide show is running full screen or in a window.
     */
     static sal_Int32 CheckSlideShowRunning (void);
+
+    static sal_Int32 CheckWindowPainting (const ::Window& rWindow);
 };
 
 } } // end of namespace ::sd::tools
