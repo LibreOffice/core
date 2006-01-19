@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatusHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:16:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,32 +77,32 @@ public class StatusHelper
 
     public void printStatus()
         {
-            System.out.println("  Original file: " + m_sOldGfx);
-            System.out.println("       New file: " + m_sNewGfx);
-            System.out.println("Difference file: " + m_sDiffGfx);
+            GlobalLogWriter.get().println("  Original file: " + m_sOldGfx);
+            GlobalLogWriter.get().println("       New file: " + m_sNewGfx);
+            GlobalLogWriter.get().println("Difference file: " + m_sDiffGfx);
             if (nDiffStatus == DIFF_NOT_REALLY_INITIALISED)
             {
-                System.out.println("Early problem, may be the files doesn't exist.");
+                GlobalLogWriter.get().println("Early problem, may be the files doesn't exist.");
             }
             else if (nDiffStatus == DIFF_NO_DIFFERENCES)
             {
-                System.out.println("No differences found, ok.");
+                GlobalLogWriter.get().println("No differences found, ok.");
             }
             else if (nDiffStatus == DIFF_DIFFERENCES_FOUND)
             {
-                System.out.println("Files differ by " + String.valueOf(nPercent) + "%");
+                GlobalLogWriter.get().println("Files differ by " + String.valueOf(nPercent) + "%");
             }
             else if (nDiffStatus == DIFF_AFTER_MOVE_DONE_NO_PROBLEMS)
             {
-                System.out.println("No differences found, after move picture.");
+                GlobalLogWriter.get().println("No differences found, after move picture.");
             }
             else if (nDiffStatus == DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND)
             {
-                System.out.println("A picture move is done, the files differ by " + String.valueOf(nPercent2) + " old was " + String.valueOf(nPercent) + "%");
+                GlobalLogWriter.get().println("A picture move is done, the files differ by " + String.valueOf(nPercent2) + " old was " + String.valueOf(nPercent) + "%");
             }
             else
             {
-                System.out.println("Unknown DIFF_ values used, not handles yet.");
+                GlobalLogWriter.get().println("Unknown DIFF_ values used, not handles yet.");
             }
         }
 
