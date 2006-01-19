@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XCharacterClassification.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:07:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,25 +42,27 @@ import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;
 import com.sun.star.i18n.XCharacterClassification;
 import com.sun.star.lang.Locale;
+import com.sun.star.lang.*;
+import lib.*;
 
 /**
-* Testing <code>com.sun.star.i18n.XCharacterClassification</code>
-* interface methods:
-* <ul>
-*  <li><code> toUpper() </code></li>
-*  <li><code> toLower() </code></li>
-*  <li><code> toTitle() </code></li>
-*  <li><code> getType() </code></li>
-*  <li><code> getCharacterType() </code></li>
-*  <li><code> getStringType() </code></li>
-*  <li><code> getCharacterDirection() </code></li>
-*  <li><code> getScript() </code></li>
-*  <li><code> parseAnyToken() </code></li>
-*  <li><code> parsePredefinedToken() </code></li>
-* </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
-* @see com.sun.star.i18n.XCharacterClassification
-*/
+ * Testing <code>com.sun.star.i18n.XCharacterClassification</code>
+ * interface methods:
+ * <ul>
+ *  <li><code> toUpper() </code></li>
+ *  <li><code> toLower() </code></li>
+ *  <li><code> toTitle() </code></li>
+ *  <li><code> getType() </code></li>
+ *  <li><code> getCharacterType() </code></li>
+ *  <li><code> getStringType() </code></li>
+ *  <li><code> getCharacterDirection() </code></li>
+ *  <li><code> getScript() </code></li>
+ *  <li><code> parseAnyToken() </code></li>
+ *  <li><code> parsePredefinedToken() </code></li>
+ * </ul><p>
+ * Test is <b> NOT </b> multithread compilant. <p>
+ * @see com.sun.star.i18n.XCharacterClassification
+ */
 public class _XCharacterClassification extends MultiMethodTest {
     public XCharacterClassification oObj = null;
     public String[] languages = new String[]{"de","en","es","fr","ja","ko","zh"};
@@ -80,7 +82,7 @@ public class _XCharacterClassification extends MultiMethodTest {
         "NON_SPACING_MARK","ENCLOSING_MARK","COMBINING_SPACING_MARK",
         "DECIMAL_DIGIT_NUMBER","LETTER_NUMBER","OTHER_NUMBER","SPACE_SEPARATOR",
         "LINE_SEPARATOR","PARAGRAPH_SEPARATOR","CONTROL","FORMAT","PRIVATE_USE",
-        "SURROGATE","DASH_PUNCTUATION","START_PUNCTUATION","END_PUNCTUATION",
+        "OTHER_PUNCTUATION","DASH_PUNCTUATION","START_PUNCTUATION","END_PUNCTUATION",
         "CONNECTOR_PUNCTUATION",
         "OTHER_PUNCTUATION","MATH_SYMBOL","CURRENCY_SYMBOL","MODIFIER_SYMBOL",
         "OTHER_SYMBOL","INITIAL_PUNCTUATION","FINAL_PUNCTUATION","GENERAL_TYPES_COUNT"};
@@ -118,7 +120,8 @@ public class _XCharacterClassification extends MultiMethodTest {
     */
     public void _toUpper() {
         boolean res = true;
-        String toCheck = "abcD²³\\@~ð)??";
+        char[] characters = new char[]{586,65,97,498,721,4588,772,8413,3404};
+        String toCheck = new String(characters);
         String get = "";
         String exp = "";
 
@@ -146,7 +149,8 @@ public class _XCharacterClassification extends MultiMethodTest {
     */
     public void _toLower() {
         boolean res = true;
-        String toCheck = "QWER²³\\@~ð)??TZ";
+        char[] characters = new char[]{586,65,97,498,721,4588,772,8413,3404};
+        String toCheck = new String(characters);
         String get = "";
         String exp = "";
 
@@ -214,7 +218,7 @@ public class _XCharacterClassification extends MultiMethodTest {
 
         for (int i=0;i<characters.length;i++) {
             int get = oObj.getType(toCheck, i);
-            res &= (get == i);
+            res &= (charstyles_office[get] == charstyles_office[i]);
             if (!res) {
                 log.println("Code :" + Integer.toHexString(charsInt[i]));
                 log.println("Gained: " + charstyles_office[get]);
@@ -413,7 +417,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     * Method returns locale for a given language and country.
     * @param localeIndex index of needed locale.
     */
-    public Locale getLocale(int k) {
+    private Locale getLocale(int k) {
         return new Locale(languages[k],countries[k],"");
     }
 
