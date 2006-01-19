@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatch.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:09:41 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ public class ConvWatch
         IniFile aIniFile = new IniFile(_sInfoFile);
         if (aIniFile.is())
         {
-            sBuildID = aIniFile.getKey("", "buildid");
+            sBuildID = aIniFile.getValue("", "buildid");
         }
         return sBuildID;
     }
@@ -363,7 +363,7 @@ public class ConvWatch
                 String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
                 if (! FileHelper.exists(sNewDiffName))
                 {
-                    System.out.println("checkDiffDiff: Old diff file: '" + sNewDiffName + "' does not exist." );
+                    GlobalLogWriter.get().println("checkDiffDiff: Old diff file: '" + sNewDiffName + "' does not exist." );
                     continue;
                 }
                 // String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
