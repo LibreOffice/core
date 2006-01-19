@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NameHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:14:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,10 +87,10 @@ class NameHelper
 
     public void print()
         {
-            System.out.println("         Outputpath: " + m_sOutputPath);
-            System.out.println("relative Outputpath: " + m_sRelativeOutputPath);
-            System.out.println("               Name: " + m_sNameNoSuffix);
-            System.out.println("             Suffix: " + m_sSuffix);
+            GlobalLogWriter.get().println("         Outputpath: " + m_sOutputPath);
+            GlobalLogWriter.get().println("relative Outputpath: " + m_sRelativeOutputPath);
+            GlobalLogWriter.get().println("               Name: " + m_sNameNoSuffix);
+            GlobalLogWriter.get().println("             Suffix: " + m_sSuffix);
 
         }
 
