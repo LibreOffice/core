@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:34:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 13:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,10 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 {
     if(mpShownPage && mpShownPage == &rPage)
     {
-        ActionChanged();
+        // #i58769# Do not call ActionChanged() here, because that would
+        // lead to the construction of a view contact object for a page that
+        // is being destroyed.
+
         mpShownPage = 0L;
     }
 }
