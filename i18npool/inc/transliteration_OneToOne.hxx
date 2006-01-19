@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_OneToOne.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:58:30 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 18:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ public:
         throw(com::sun::star::uno::RuntimeException);
 
         sal_Unicode SAL_CALL
-        transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar)
+        transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException,
         com::sun::star::i18n::MultipleCharsOutputException);
 
