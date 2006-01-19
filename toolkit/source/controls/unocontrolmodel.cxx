@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:20:51 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #include <rtl/uuid.h>
 #endif
 
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -756,7 +759,16 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else
             {
-                DBG_ERROR( "write: unknown Property!" );
+#if OSL_DEBUG_LEVEL > 0
+                ::rtl::OString sMessage( "UnoControlModel::write: don't know how to handle a property of type '" );
+                ::rtl::OUString sTypeName( rType.getTypeName() );
+                sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                sMessage += "'.\n(Currently handling property '";
+                ::rtl::OUString sPropertyName( GetPropertyName( pProp->GetId() ) );
+                sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
+                sMessage += "'.)";
+                DBG_ERROR( sMessage );
+#endif
             }
         }
 
@@ -1044,7 +1056,14 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
         }
     }
 
-    setPropertyValues( aProps, aValues );
+    try
+    {
+        setPropertyValues( aProps, aValues );
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     if ( pFD )
     {
