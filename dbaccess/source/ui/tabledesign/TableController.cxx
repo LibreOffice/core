@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:45:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1104,7 +1104,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
     sal_Bool bFoundPKey = sal_False;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
+    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
     for(;aIter != m_vRowList.end();++aIter)
     {
@@ -1192,7 +1192,7 @@ void OTableController::alterColumns()
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
 
-    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->storesMixedCaseQuotedIdentifiers() ? true : false): sal_True);
+    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->supportsMixedCaseQuotedIdentifiers() ? true : false): sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
     ::std::vector<OTableRow*>::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
@@ -1345,6 +1345,19 @@ void OTableController::alterColumns()
             catch(const SQLException&)
             { // we couldn't alter the column so we have to add new columns
                 bReload = sal_True;
+                if(xDrop.is() && xAppend.is())
+                {
+                    String aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
+                    aMessage.SearchAndReplaceAscii("$column$",pField->GetName());
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(getView(),sTitle,aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+                    if ( aMsg.Execute() != RET_YES )
+                    {
+                        continue;
+                    }
+                }
+                else
+                    throw;
             }
         }
         else
@@ -1485,8 +1498,27 @@ void OTableController::dropPrimaryKey()
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
             {
+                Reference<XNameAccess> xKeyColumns  = getKeyColumns();
+                Sequence< ::rtl::OUString> aColumnNames = xKeyColumns->getElementNames();
+                xKeyColumns = NULL;
                 Reference<XDrop> xDrop(xKeys,UNO_QUERY);
                 xDrop->dropByIndex(i); // delete the key
+                ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
+                ::std::vector<OTableRow*>::iterator aEnd = m_vRowList.end();
+                for(;aIter != aEnd;++aIter)
+                {
+                    OSL_ENSURE(*aIter,"OTableRow is null!");
+                    OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+                    if ( !pField )
+                        continue;
+                    ::rtl::OUString sName = pField->GetName();
+                    const ::rtl::OUString* pIter = aColumnNames.getConstArray();
+                    const ::rtl::OUString* pEnd = pIter + aColumnNames.getLength();
+                    for(;pIter != pEnd && *pIter != sName;++pIter)
+                        ;
+                    if ( pIter != pEnd )
+                        pField->SetPrimaryKey(sal_False);
+                }
                 break;
             }
         }
@@ -1591,7 +1623,7 @@ void OTableController::reSyncRows()
     ::rtl::OUString sName = _rName;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
+    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
 
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
     for(sal_Int32 i=0;aIter != m_vRowList.end();++aIter)
