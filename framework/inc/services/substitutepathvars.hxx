@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:34:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 17:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ struct ReSubstFixedVarOrder
     sal_Int32       nVarValueLength;
     PreDefVariable  eVariable;
 
-    bool ReSubstFixedVarOrder::operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
+    bool operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
     {
         // Reverse operator< to have high to low ordering
         return ( nVarValueLength > aFixedVarOrder.nVarValueLength );
@@ -274,7 +274,7 @@ struct ReSubstUserVarOrder
     sal_Int32       nVarValueLength;
     rtl::OUString   aVarName;
 
-    bool ReSubstUserVarOrder::operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
+    bool operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
     {
         // Reverse operator< to have high to low ordering
         return ( nVarValueLength > aUserVarOrder.nVarValueLength );
