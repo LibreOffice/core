@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTableColumns.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:52:32 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 14:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,8 @@ public class SwXTableColumns extends TestCase {
         // adding relation for XTableColumns
         tEnv.addObjRelation("XTableColumns.XCellRange",
             UnoRuntime.queryInterface(XCellRange.class, oTable));
+
+        tEnv.addObjRelation("XIndexAccess.getByIndex.mustBeNull", new Boolean(true));
 
         return tEnv;
     } // finish method getTestEnvironment
