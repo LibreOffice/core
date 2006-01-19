@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolling.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:59:44 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 15:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1101,6 +1101,8 @@ namespace svx
     void FormControllerHelper::execute( sal_Int32 _nFeatureId, const ::rtl::OUString& _rParamName,
             const Any& _rParamValue ) const
     {
+        Reference< XInterface > xKeepMeAlive( *const_cast< FormControllerHelper* >( this ) );
+
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         OSL_ENSURE( hasCursor(), "FormControllerHelper::execute: no cursor!" );
         if ( !hasCursor() )
@@ -1298,6 +1300,7 @@ namespace svx
                     }
                 }
             }
+            break;
 
             case SID_FM_RECORD_SAVE:
             case SID_FM_RECORD_UNDO:
