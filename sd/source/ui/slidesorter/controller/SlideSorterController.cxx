@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:32:25 $
+ *  last change: $Author: obo $ $Date: 2006-01-19 12:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 #include "FrameView.hxx"
 #endif
 #include "ViewShellHint.hxx"
+#include "AccessibleSlideSorterView.hxx"
+#include "AccessibleSlideSorterObject.hxx"
 
 #include <vcl/window.hxx>
 #include <svx/svdopage.hxx>
@@ -98,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -656,7 +661,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 
 void SlideSorterController::DeleteSelectedPages (void)
 {
-    LockModelChange();
+    ModelChangeLock aLock (*this);
 
     // Hide focus.
     bool bIsFocusShowing = GetFocusManager().IsFocusShowing();
@@ -682,8 +687,7 @@ void SlideSorterController::DeleteSelectedPages (void)
     GetView().EndUndo ();
 
     HandleModelChange();
-
-    UnlockModelChange();
+    aLock.Release();
 
     // Show focus and move it to next valid location.
     if (bIsFocusShowing)
@@ -1308,13 +1312,66 @@ void SlideSorterController::FinishEditModeChange (void)
 
 
 
+void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rsOldName)
+{
+    // Request a repaint for the page object whose name has changed.
+    model::PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
+    if (pDescriptor != NULL)
+        mrView.RequestRepaint(*pDescriptor);
+
+    // Get a pointer to the corresponding accessible object and notify
+    // that of the name change.
+    do
+    {
+        ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
+        if (pWindow == NULL)
+            break;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+            xAccessible (pWindow->GetAccessible(FALSE));
+        if ( ! xAccessible.is())
+            break;
+
+        // Now comes a small hack.  We assume that the accessible object is
+        // an instantiation of AccessibleSlideSorterView and cast it to that
+        // class.  The cleaner alternative to this cast would be a new member
+        // in which we would store the last AccessibleSlideSorterView object
+        // created by SlideSorterViewShell::CreateAccessibleDocumentView().
+        // But then there is no guaranty that the accessible object obtained
+        // from the window really is that instance last created by
+        // CreateAccessibleDocumentView().
+        // However, the dynamic cast together with the check of the result
+        // being NULL should be safe enough.
+        ::accessibility::AccessibleSlideSorterView* pAccessibleView
+              = dynamic_cast< ::accessibility::AccessibleSlideSorterView*>(xAccessible.get());
+        if (pAccessibleView == NULL)
+            break;
+
+        ::accessibility::AccessibleSlideSorterObject* pChild
+              = pAccessibleView->GetAccessibleChildImplementation(nPageIndex);
+        if (pChild == NULL || pChild->GetPage() == NULL)
+            break;
+
+        ::rtl::OUString sOldName (rsOldName);
+        ::rtl::OUString sNewName (pChild->GetPage()->GetName());
+        pChild->FireAccessibleEvent(
+            ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
+            makeAny(sOldName),
+            makeAny(sNewName));
+    }
+    while (false);
+}
+
+
+
+
 //===== SlideSorterController::ModelChangeLock ================================
 
 SlideSorterController::ModelChangeLock::ModelChangeLock (
     SlideSorterController& rController)
-    : mrController (rController)
+    : mpController(&rController)
 {
-    mrController.LockModelChange();
+    mpController->LockModelChange();
 }
 
 
@@ -1322,15 +1379,19 @@ SlideSorterController::ModelChangeLock::ModelChangeLock (
 
 SlideSorterController::ModelChangeLock::~ModelChangeLock (void)
 {
-    mrController.UnlockModelChange();
+    Release();
 }
 
 
 
 
-void SlideSorterController::ModelChangeLock::ModelHasChanged (void)
+void SlideSorterController::ModelChangeLock::Release (void)
 {
-    mrController.HandleModelChange ();
+    if (mpController != NULL)
+    {
+        mpController->UnlockModelChange();
+        mpController = NULL;
+    }
 }
 
 } } } // end of namespace ::sd::slidesorter
