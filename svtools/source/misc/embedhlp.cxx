@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:02:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,10 @@
 
 #ifndef _SV_SVAPP_HXX
 #include "vcl/svapp.hxx"
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -467,10 +471,12 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
 
 SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "svtools (mv76033) svt::EmbeddedObjectRef::GetGraphicStream" );
     DBG_ASSERT( bUpdate || mpImp->pContainer, "Can't retrieve current graphic!" );
     uno::Reference < io::XInputStream > xStream;
     if ( mpImp->pContainer && !bUpdate )
     {
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from container" );
         // try to get graphic stream from container storage
         xStream = mpImp->pContainer->GetGraphicStream( mxObj, &mpImp->aMediaType );
         if ( xStream.is() )
@@ -492,6 +498,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
 
     if ( !xStream.is() )
     {
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from object" );
         // update wanted or no stream in container storage available
         xStream = GetGraphicReplacementStream( mpImp->nViewAspect, mxObj, &mpImp->aMediaType );
 
