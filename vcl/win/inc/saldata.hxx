@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:49:50 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #endif
 
 #include <set>  // for hMenu validation
+#include <map>
 
 class AutoTimer;
 class WinSalInstance;
@@ -94,6 +95,9 @@ public:
     // native widget framework
     void    initNWF();
     void    deInitNWF();
+
+    // fill maVKMap;
+    void initKeyCodeMap();
 
     // checks if the menuhandle was created by VCL
     BOOL    IsKnownMenuHandle( HMENU hMenu );
@@ -143,6 +147,7 @@ public:
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
 
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
+    std::map< UINT,USHORT > maVKMap;      // map some dynamic VK_* entries
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
@@ -156,15 +161,6 @@ inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 struct SalShlData
 {
     HINSTANCE               mhInst;                 // Instance of SAL-DLL
-    UINT                    mnVKAdd;                // VK-Code von KEY_ADD
-    UINT                    mnVKSubtract;           // VK-Code von KEY_SUBTRACT
-    UINT                    mnVKMultiply;           // VK-Code von KEY_MULTIPLY
-    UINT                    mnVKDivide;             // VK-Code von KEY_DIVIDE
-    UINT                    mnVKPoint;              // VK-Code von KEY_POINT
-    UINT                    mnVKComma;              // VK-Code von KEY_KOMMA
-    UINT                    mnVKLess;               // VK-Code von KEY_LESS
-    UINT                    mnVKGreater;            // VK-Code von KEY_GREATER
-    UINT                    mnVKEqual;              // VK-Code von KEY_EQUAL
     UINT                    mnWheelScrollLines;     // WheelScrollLines
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
