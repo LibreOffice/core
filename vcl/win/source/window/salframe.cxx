@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:08:31 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3353,26 +3353,15 @@ static USHORT ImplSalGetKeyCode( WPARAM wParam )
     // convert KeyCode
     if ( wParam < KEY_TAB_SIZE )
         nKeyCode = aImplTranslateKeyTab[wParam];
-    else if ( wParam == aSalShlData.mnVKAdd )
-        nKeyCode = KEY_ADD;
-    else if ( wParam == aSalShlData.mnVKSubtract )
-        nKeyCode = KEY_SUBTRACT;
-    else if ( wParam == aSalShlData.mnVKMultiply )
-        nKeyCode = KEY_MULTIPLY;
-    else if ( wParam == aSalShlData.mnVKDivide )
-        nKeyCode = KEY_DIVIDE;
-    else if ( wParam == aSalShlData.mnVKPoint )
-        nKeyCode = KEY_POINT;
-    else if ( wParam == aSalShlData.mnVKComma )
-        nKeyCode = KEY_COMMA;
-    else if ( wParam == aSalShlData.mnVKLess )
-        nKeyCode = KEY_LESS;
-    else if ( wParam == aSalShlData.mnVKGreater )
-        nKeyCode = KEY_GREATER;
-    else if ( wParam == aSalShlData.mnVKEqual )
-        nKeyCode = KEY_EQUAL;
     else
-        nKeyCode = 0;
+    {
+        SalData* pSalData = GetSalData();
+        std::map< UINT, USHORT >::const_iterator it = pSalData->maVKMap.find( (UINT)wParam );
+        if( it != pSalData->maVKMap.end() )
+            nKeyCode = it->second;
+        else
+            nKeyCode = 0;
+    }
 
     return nKeyCode;
 }
