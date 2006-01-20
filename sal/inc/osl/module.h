@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:28:38 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,22 +68,17 @@ extern "C" {
 
 #endif
 
+#if defined (MACOSX)
+  #define SAL_LOADMODULE_GLOBAL 0x8
+#else
+  #define SAL_LOADMODULE_GLOBAL 0x100
+#endif
 
 #define SAL_LOADMODULE_DEFAULT    0x00000
 #define SAL_LOADMODULE_LAZY       0x00001
 #define SAL_LOADMODULE_NOW        0x00002
-#define SAL_LOADMODULE_GLOBAL     0x00100
 
-#ifdef MACOSX
-struct _oslModule
-{
-    void*       pModule;
-    sal_Char*   pModuleName;
-};
-typedef struct _oslModule * oslModule;
-#else
 typedef void* oslModule;
-#endif
 
 /** Generic Function pointer type that will be used as symbol address.
     @see osl_getFunctionSymbol.
