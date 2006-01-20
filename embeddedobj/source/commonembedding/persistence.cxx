@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:28:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
@@ -101,6 +105,8 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
+
+#include <rtl/logfile.hxx>
 
 #include <confighelper.hxx>
 #include <convert.hxx>
@@ -874,6 +880,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::setPersistentEntry" );
+
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
 
@@ -1021,7 +1029,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // TODO: use lObjArgs
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::storeToEntry" );
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1074,14 +1082,41 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         OSL_ENSURE( sal_False, "Can not retrieve own storage media type!\n" );
     }
 
+    sal_Bool bTryOptimization = sal_False;
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    {
+        // StoreVisualReplacement and VisualReplacement args have no sence here
+        if ( lObjArgs[nInd].Name.equalsAscii( "CanTryOptimization" ) )
+            lObjArgs[nInd].Value >>= bTryOptimization;
+    }
+
     sal_Bool bSwitchBackToLoaded = sal_False;
 
     // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        // TODO/LATER: copiing is not legal for documents with relative links.
+        // TODO/LATER: copying is not legal for documents with relative links.
         if ( nTargetStorageFormat == nOriginalStorageFormat )
-            m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        {
+            sal_Bool bOptimizationWorks = sal_False;
+            if ( bTryOptimization )
+            {
+                try
+                {
+                    // try to use optimized copying
+                    uno::Reference< embed::XOptimizedStorage > xSource( m_xParentStorage, uno::UNO_QUERY_THROW );
+                    uno::Reference< embed::XOptimizedStorage > xTarget( xStorage, uno::UNO_QUERY_THROW );
+                    xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
+                    bOptimizationWorks = sal_True;
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+
+            if ( !bOptimizationWorks )
+                m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        }
         else
         {
             changeState( embed::EmbedStates::RUNNING );
@@ -1120,6 +1155,8 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::storeAsEntry" );
+
     // TODO: use lObjArgs
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -1178,14 +1215,41 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     PostEvent_Impl( ::rtl::OUString::createFromAscii( "OnSaveAs" ) );
 
+    sal_Bool bTryOptimization = sal_False;
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    {
+        // StoreVisualReplacement and VisualReplacement args have no sence here
+        if ( lObjArgs[nInd].Name.equalsAscii( "CanTryOptimization" ) )
+            lObjArgs[nInd].Value >>= bTryOptimization;
+    }
+
     sal_Bool bSwitchBackToLoaded = sal_False;
 
     // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        // TODO/LATER: copiing is not legal for documents with relative links.
+        // TODO/LATER: copying is not legal for documents with relative links.
         if ( nTargetStorageFormat == nOriginalStorageFormat )
-            m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        {
+            sal_Bool bOptimizationWorks = sal_False;
+            if ( bTryOptimization )
+            {
+                try
+                {
+                    // try to use optimized copying
+                    uno::Reference< embed::XOptimizedStorage > xSource( m_xParentStorage, uno::UNO_QUERY_THROW );
+                    uno::Reference< embed::XOptimizedStorage > xTarget( xStorage, uno::UNO_QUERY_THROW );
+                    xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
+                    bOptimizationWorks = sal_True;
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+
+            if ( !bOptimizationWorks )
+                m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        }
         else
         {
             changeState( embed::EmbedStates::RUNNING );
@@ -1228,6 +1292,8 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::saveCompleted" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1354,6 +1420,8 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::storeOwn" );
+
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
     // to do so or not
