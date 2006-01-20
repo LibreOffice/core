@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 11:13:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,7 @@ extern "C" {
         return NPERR_NO_ERROR;
     }
 
+    #ifdef OJI
     const JRIEnvInterface** SAL_CALL NP_LOADDS  NPN_GetJavaEnv()
     {
         TRACE( "NPN_GetJavaEnv" );
@@ -236,6 +237,7 @@ extern "C" {
         TRACE( "NPN_GetJavaPeer" );
         return NULL;
     }
+    #endif
 
     NPError SAL_CALL NP_LOADDS  NPN_GetURL( NPP instance, const char* url, const char* window )
     {
