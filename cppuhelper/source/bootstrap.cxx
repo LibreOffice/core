@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:24:48 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,12 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // arguments
         OUString args [] = {
-            OUSTR( "-nologo" ), OUSTR( "-nodefault" ), buf.makeStringAndClear()
+            OUSTR( "-nologo" ),
+            OUSTR( "-nodefault" ),
+            OUSTR( "-norestore" ),
+            OUSTR( "-nocrashreport" ),
+            OUSTR( "-nolockcheck" ),
+            buf.makeStringAndClear()
         };
         rtl_uString * ar_args [] = {
             args[ 0 ].pData, args[ 1 ].pData, args[ 2 ].pData
