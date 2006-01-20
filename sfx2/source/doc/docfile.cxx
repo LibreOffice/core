@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:20:03 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,8 @@
 #include <svtools/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>
+
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1683,6 +1685,8 @@ void SfxMedium::Transfer_Impl()
 
     if ( aNameURL.Len() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
     {
+        RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
+
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
 
@@ -1948,6 +1952,8 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
                                        const String& aExtension,
                                        const String& aDestDir )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
+
     if ( pImp->m_aBackupURL.getLength() )
         return; // the backup was done already
 
@@ -2016,6 +2022,8 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
 //------------------------------------------------------------------
 void SfxMedium::DoBackup_Impl()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::DoBackup_Impl" );
+
        // source file name is the logical name of this medium
     INetURLObject aSource( GetURLObject() );
 
