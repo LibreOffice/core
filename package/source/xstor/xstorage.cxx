@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:49:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,10 @@
 
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #include "xstorage.hxx"
@@ -583,7 +587,7 @@ void OStorage_Impl::ReadContents()
 }
 
 //-----------------------------------------------
-void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDest )
+void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDest, sal_Bool bDirect )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -606,7 +610,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
           pElementIter != m_aChildrenList.end(); pElementIter++ )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
-            CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, sal_False );
+            CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, bDirect );
     }
 
     // move storage properties to the destination one ( means changeable properties )
@@ -656,13 +660,6 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
     if ( pElement->m_bIsStorage )
     {
-        if ( bDirect )
-        {
-            // TODO/LATER: Might need implementation if not replaced
-            // Not implemented for now
-            throw io::IOException();
-        }
-
         uno::Reference< embed::XStorage > xSubDest =
                                     xDest->openStorageElement(  aName,
                                                                 embed::ElementModes::WRITE );
@@ -676,7 +673,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 throw io::IOException(); // TODO
         }
 
-        pElement->m_pStorage->CopyToStorage( xSubDest );
+        pElement->m_pStorage->CopyToStorage( xSubDest, bDirect );
     }
     else
     {
@@ -799,7 +796,8 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
                                 m_xPackage,
                                 m_xFactory );
 
-    aTempRepresent.CopyToStorage( xNewStor );
+    // TODO/LATER: could use direct copying
+    aTempRepresent.CopyToStorage( xNewStor, sal_False );
 }
 
 //-----------------------------------------------
@@ -1376,9 +1374,10 @@ void OStorage_Impl::ClearElement( SotElement_Impl* pElement )
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OStorage_Impl::CloneStreamElement( const ::rtl::OUString& aStreamName,
-                                                                sal_Bool bPassProvided,
-                                                                const ::rtl::OUString& aPass )
+void OStorage_Impl::CloneStreamElement( const ::rtl::OUString& aStreamName,
+                                        sal_Bool bPassProvided,
+                                        const ::rtl::OUString& aPass,
+                                        uno::Reference< io::XStream >& xTargetStream )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::WrongPasswordException,
@@ -1398,7 +1397,6 @@ uno::Reference< io::XStream > OStorage_Impl::CloneStreamElement( const ::rtl::OU
     if ( !pElement->m_pStream )
         OpenSubStream( pElement );
 
-    uno::Reference< io::XStream > xResult;
     if ( pElement->m_pStream && pElement->m_pStream->m_xPackageStream.is() )
     {
         // the existence of m_pAntiImpl of the child is not interesting,
@@ -1411,14 +1409,12 @@ uno::Reference< io::XStream > OStorage_Impl::CloneStreamElement( const ::rtl::OU
         // at the same time ( now solwed by wrappers that remember own position ).
 
         if ( bPassProvided )
-            xResult = pElement->m_pStream->GetCopyOfLastCommit( aPass );
+            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream, aPass );
         else
-            xResult = pElement->m_pStream->GetCopyOfLastCommit();
+            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream );
     }
     else
         throw io::IOException(); // TODO: general_error
-
-    return xResult;
 }
 
 
@@ -1496,6 +1492,8 @@ OStorage::~OStorage()
 //-----------------------------------------------
 void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::InternalDispose" );
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1848,6 +1846,8 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyToStorage" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -1857,7 +1857,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
         throw lang::IllegalArgumentException(); // TODO:
 
     try {
-        m_pImpl->CopyToStorage( xDest );
+        m_pImpl->CopyToStorage( xDest, sal_False );
     }
     catch( embed::InvalidStorageException& )
     {
@@ -1898,6 +1898,8 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openStreamElement" );
+
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -1980,6 +1982,8 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openEncryptedStreamElement" );
+
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2067,6 +2071,8 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openStorageElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2197,6 +2203,8 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const ::rtl
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneStreamElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2204,7 +2212,11 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const ::rtl
 
     try
     {
-        return m_pImpl->CloneStreamElement( aStreamName, sal_False, ::rtl::OUString() );
+        uno::Reference< io::XStream > xResult;
+        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::rtl::OUString(), xResult );
+        if ( !xResult.is() )
+            throw uno::RuntimeException();
+        return xResult;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2251,6 +2263,8 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneEncryptedStreamElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2261,7 +2275,11 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
 
     try
     {
-        return m_pImpl->CloneStreamElement( aStreamName, sal_True, aPass );
+        uno::Reference< io::XStream > xResult;
+        m_pImpl->CloneStreamElement( aStreamName, sal_True, aPass, xResult );
+        if ( !xResult.is() )
+            throw uno::RuntimeException();
+        return xResult;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2309,6 +2327,8 @@ void SAL_CALL OStorage::copyLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyLastCommitTo" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2358,6 +2378,8 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyStorageElementLastCommitTo" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2533,6 +2555,8 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::removeElement" );
+
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2604,6 +2628,8 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::renameElement" );
+
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2684,6 +2710,8 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyElementTo" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2758,6 +2786,8 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::moveElementTo" );
+
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2846,6 +2876,8 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getPlainRawStreamElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2933,6 +2965,8 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getRawEncrStreamElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3028,6 +3062,8 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const ::rtl::OUString& aStre
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::insertRawEncrStreamElement" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3094,6 +3130,8 @@ void SAL_CALL OStorage::commit()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::commit" );
+
     uno::Reference< util::XModifiable > xParentModif;
 
     try {
@@ -3146,6 +3184,8 @@ void SAL_CALL OStorage::revert()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::revert" );
+
     // the method removes all the changes done after last commit
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
@@ -3308,6 +3348,8 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getByName" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3357,6 +3399,8 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
 uno::Sequence< ::rtl::OUString > SAL_CALL OStorage::getElementNames()
         throw ( uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getElementNames" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3385,6 +3429,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OStorage::getElementNames()
 sal_Bool SAL_CALL OStorage::hasByName( const ::rtl::OUString& aName )
         throw ( uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::hasByName" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3433,6 +3479,8 @@ uno::Type SAL_CALL OStorage::getElementType()
 sal_Bool SAL_CALL OStorage::hasElements()
         throw ( uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::hasElements" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3524,6 +3572,8 @@ void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
     throw ( uno::RuntimeException,
             io::IOException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionPassword" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3574,6 +3624,8 @@ void SAL_CALL OStorage::removeEncryption()
     throw ( uno::RuntimeException,
             io::IOException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::removeEncryption" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3648,6 +3700,8 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setPropertyValue" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3687,6 +3741,8 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getPropertyValue" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3872,6 +3928,8 @@ void SAL_CALL OStorage::insertStreamElementDirect(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::insertStreamElementDirect" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3938,6 +3996,8 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyElementDirectlyTo" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4009,6 +4069,8 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::writeAndAttachToStream" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4063,6 +4125,8 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::attachToURL" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4132,6 +4196,8 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getElementPropertyValue" );
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4194,5 +4260,66 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::copyStreamElementData( const ::rtl::OUString& aStreamName, const uno::Reference< io::XStream >& xTargetStream )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                packages::WrongPasswordException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( !xTargetStream.is() )
+        throw lang::IllegalArgumentException();
+
+    try
+    {
+        uno::Reference< io::XStream > xNonconstRef = xTargetStream;
+        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::rtl::OUString(), xNonconstRef );
+
+        OSL_ENSURE( xNonconstRef == xTargetStream, "The provided stream reference seems not be filled in correctly!\n" );
+        if ( xNonconstRef != xTargetStream )
+            throw uno::RuntimeException(); // if the stream reference is set it must not be changed!
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( packages::WrongPasswordException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+
+
 }
 
