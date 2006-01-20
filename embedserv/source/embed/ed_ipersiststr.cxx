@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:52:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,9 +171,13 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
     if ( !xTempSeek.is() )
         return E_FAIL;
 
+    // Seek to zero and truncate the stream
     ULARGE_INTEGER nNewPos;
     LARGE_INTEGER aZero = { 0L, 0L };
     HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+    if ( FAILED( hr ) ) return E_FAIL;
+    ULARGE_INTEGER aUZero = { 0L, 0L };
+    hr = pStream->SetSize( aUZero );
     if ( FAILED( hr ) ) return E_FAIL;
 
     uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
@@ -374,13 +378,13 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
-    m_refCount--;
-    if ( m_refCount == 0 )
+    sal_Int32 nCount = --m_refCount;
+    if ( nCount == 0 )
     {
         delete this;
     }
 
-    return m_refCount;
+    return nCount;
 }
 
 //-------------------------------------------------------------------------------
@@ -652,6 +656,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                 hr = copyXTempOutToIStream( xTempOut, pTargetStream );
                 if ( SUCCEEDED( hr ) )
                 {
+                    // no need to truncate the stream, the size of the stream is always the same
                     ULARGE_INTEGER nNewPos;
                     LARGE_INTEGER aZero = { 0L, 0L };
                     hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
@@ -823,6 +828,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
 
             if ( SUCCEEDED( hr ) )
             {
+                // no need to truncate the stream, the size of the stream is always the same
                 ULARGE_INTEGER nNewPos;
                 LARGE_INTEGER aZero = { 0L, 0L };
                 hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
