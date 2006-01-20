@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-25 10:02:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,8 +365,8 @@ void doTestCode()
 #endif
 static const sal_Int32 nLog10Divisor = 1;
 static const double fDivisor = 10.0;
-static const sal_Int32 nFineFactor = 1;
-static const sal_Int32 nFineLog10Divisor = nLog10Divisor;
+static const sal_Int32 nFineFactor = 100;
+static const sal_Int32 nFineLog10Divisor = nLog10Divisor+2;
 
 static inline double pixelToPoint( sal_Int32 px ) { return double(px)/fDivisor; }
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
@@ -947,6 +947,16 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 
 void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg, Point* pOutPoint ) const
 {
+    /* FIXME: this takes advantage of the fact that appendMappedLength is only
+    *  called with backprojection from drawLayout. To make issue 49748 work without
+    *  provoking issue 58366 again text operations work without the finer granularity
+    *  that is with m_pWriter->m_aMapMode instead of m_pWriter->m_aFineMapMode
+    *  the correct solution will be to let PDF itself do the coordinate transformation
+    *  (this will be issue 52411)
+    */
+    const MapMode& rMap = pOutPoint ? m_pWriter->m_aMapMode : m_pWriter->m_aFineMapMode;
+    sal_Int32 nDiv = pOutPoint ? 1 : nFineLog10Divisor;
+    sal_Int32 nFact = pOutPoint ? 1 : nFineFactor;
     if( pOutPoint )
     {
         Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
@@ -957,7 +967,7 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     }
 
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                               m_pWriter->m_aFineMapMode,
+                               rMap,
                                m_pWriter->getReferenceDevice(),
                                rPoint ) );
 
@@ -965,15 +975,15 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
+    appendFixedInt( nValue, rBuffer, nDiv );
 
     rBuffer.append( ' ' );
 
-    nValue      = pointToPixel(getHeight())*nFineFactor - aPoint.Y();
+    nValue      = pointToPixel(getHeight())*nFact - aPoint.Y();
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
+    appendFixedInt( nValue, rBuffer, nDiv );
 }
 
 void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
@@ -1065,15 +1075,24 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
         nValue = -nLength;
     }
 
+    /* FIXME: this takes advantage of the fact that appendMappedLength is only
+    *  called with backprojection from drawLayout. To make issue 49748 work without
+    *  provoking issue 58366 again text operations work without the finer granularity
+    *  that is with m_pWriter->m_aMapMode instead of m_pWriter->m_aFineMapMode
+    *  the correct solution will be to let PDF itself do the coordinate transformation
+    *  (this will be issue 52411)
+    */
+    const MapMode& rMap = pOutLength ? m_pWriter->m_aMapMode : m_pWriter->m_aFineMapMode;
+
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                             m_pWriter->m_aFineMapMode,
+                             rMap,
                              m_pWriter->getReferenceDevice(),
                              Size( nValue, nValue ) ) );
     nValue = bVertical ? aSize.Height() : aSize.Width();
     if( pOutLength )
-        *pOutLength = ((nLength < 0 ) ? -nValue : nValue)/nFineFactor;
+        *pOutLength = ((nLength < 0 ) ? -nValue : nValue);
 
-    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
+    appendFixedInt( nValue, rBuffer, pOutLength ? 1 : nFineLog10Divisor );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
@@ -5214,7 +5233,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     Point aBackPos = lcl_convert( m_aMapMode,
                                                   m_aGraphicsStack.front().m_aMapMode,
                                                   getReferenceDevice(),
-                                                  aCumulativePos );
+                                                  aCumulativePos
+                                                  );
                     // catch rounding error in back projection on Y axis;
                     // else the back projection can produce a sinuous text baseline
                     if( ! bWasYChange )
