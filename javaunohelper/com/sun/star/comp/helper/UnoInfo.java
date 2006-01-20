@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoInfo.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:36:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,21 +50,16 @@ public final class UnoInfo {
     private UnoInfo() {}
 
     /**
-     * Gets the UNO jar files.
+     * Gets the URL base.
      *
-     * @return the UNO jar files
+     * @return the URL base
      */
-    public static URL[] getJars() {
+    private static String getBase() {
 
         final String JUHJAR = "/juh.jar";
 
-        String[] jarFileNames = new String[] {
-            "jurt.jar",
-            "unoil.jar",
-            "ridl.jar",
-            "juh.jar" };
+        String base = null;
 
-        URL[] jars = new URL[jarFileNames.length];
         URLClassLoader cl = (URLClassLoader) UnoInfo.class.getClassLoader();
         URL[] urls = cl.getURLs();
         for ( int i = 0; i < urls.length; i++ ) {
@@ -73,19 +68,61 @@ public final class UnoInfo {
             {
                 int index = url.lastIndexOf( JUHJAR );
                 if ( index >= 0 ) {
-                    String base = url.substring( 0, index + 1 );
-                    for ( int j = 0; j < jarFileNames.length; j++ ) {
-                        try {
-                            jars[j] = new URL( base + jarFileNames[j] );
-                        } catch ( MalformedURLException e ) {
-                            return null;
-                        }
-                    }
+                    base = url.substring( 0, index + 1 );
                     break;
                 }
             }
         }
 
+        return base;
+    }
+
+    /**
+     * Gets a list of URLs for the given jar files.
+     *
+     * @return the list of URLs
+     */
+    private static URL[] getURLs( String[] jarFileNames ) {
+
+        URL[] jars = new URL[jarFileNames.length];
+        String base = getBase();
+        for ( int i = 0; i < jarFileNames.length; i++ ) {
+            try {
+                jars[i] = new URL( base + jarFileNames[i] );
+            } catch ( MalformedURLException e ) {
+                return null;
+            }
+        }
+
         return jars;
+    }
+
+    /**
+     * Gets the UNO jar files.
+     *
+     * @return the UNO jar files
+     */
+    public static URL[] getJars() {
+
+        String[] jarFileNames = new String[] {
+            "jurt.jar",
+            "unoil.jar",
+            "ridl.jar",
+            "juh.jar" };
+
+        return getURLs( jarFileNames );
+    }
+
+    /**
+     * Gets the extra UNO types.
+     *
+     * @return the extra UNO types
+     */
+    public static URL[] getExtraTypes() {
+
+        String[] jarFileNames = new String[] {
+            "unoil.jar" };
+
+        return getURLs( jarFileNames );
     }
 }
