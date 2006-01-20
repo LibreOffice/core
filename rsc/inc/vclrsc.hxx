@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:35:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,10 @@ enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, Time
 #define KEY_CONTEXTMENU ((sal_uInt16)(KEYGROUP_MISC+25))
 #define KEY_MENU        ((sal_uInt16)(KEYGROUP_MISC+26))
 #define KEY_HELP        ((sal_uInt16)(KEYGROUP_MISC+27))
+#define KEY_HANGUL_HANJA ((USHORT)(KEYGROUP_MISC+28))
+#define KEY_DECIMAL     ((USHORT)(KEYGROUP_MISC+29))
+#define KEY_TILDE       ((USHORT)(KEYGROUP_MISC+30))
+#define KEY_QUOTELEFT   ((USHORT)(KEYGROUP_MISC+31))
 
 #define KEY_CODE        ((sal_uInt16)0x0FFF)
 
