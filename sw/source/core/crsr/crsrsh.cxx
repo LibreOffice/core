@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:15:18 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1307,21 +1307,43 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
-                                                GetFrm( &aTmpPt, pPos ),
-                   *pMarkTblFrm;
+                                                GetFrm( &aTmpPt, pPos );
+
         ASSERT( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
-        SwTabFrm *pTab = pTblFrm->FindTabFrm(), *pMarkTab;
+        // --> FME 2005-12-02 #126107# Make code robust. The table
+        // cursor may point to a table in a currently inactive header.
+        SwTabFrm *pTab = pTblFrm ? pTblFrm->FindTabFrm() : 0;
+        // <--
 
-       if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
+        if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
         {
-            if (  ( pTab->IsFollow() && pTab->IsInHeadline( *pTblFrm ) ) ||
-                  ( (pMarkTab = (pMarkTblFrm = pITmpCrsr->GetCntntNode( FALSE )->
-                    GetFrm( &aTmpMk, pITmpCrsr->GetMark() ))->FindTabFrm())->IsFollow() &&
-                     pMarkTab->IsInHeadline( *pMarkTblFrm ) ) )
+            // First check if point is in repeated headline:
+            bool bInRepeatedHeadline = pTab->IsFollow() && pTab->IsInHeadline( *pTblFrm );
+
+            // Second check if mark is in repeated headline:
+            if ( !bInRepeatedHeadline )
             {
-                // in wiederholten Tabellen-Kopfzeilen wollen wir keine
-                // Tabellen-Selektion !!
+                SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( FALSE )->GetFrm( &aTmpMk, pITmpCrsr->GetMark() );
+                ASSERT( pMarkTblFrm, "Tabelle Crsr nicht im Content ??" );
+
+                if ( pMarkTblFrm )
+                {
+                    SwTabFrm* pMarkTab = pMarkTblFrm->FindTabFrm();
+                    ASSERT( pMarkTab, "Tabelle Crsr nicht im Content ??" );
+
+                    // --> FME 2005-11-28 #120360# Make code robust:
+                    if ( pMarkTab )
+                    {
+                        bInRepeatedHeadline = pMarkTab->IsFollow() && pMarkTab->IsInHeadline( *pMarkTblFrm );
+                    }
+                    // <--
+                }
+            }
+
+            // No table cursor in repeaded headlines:
+            if ( bInRepeatedHeadline )
+            {
                 pTblFrm = 0;
 
                 SwPosSection fnPosSect = *pPos <  *pITmpCrsr->GetMark()
@@ -3080,17 +3102,10 @@ SwMoveFnCollection* SwCrsrShell::MakeFindRange(
 
    @param aPos the position to check.
 */
-static bool lcl_PosOk(SwPosition & aPos)
+bool lcl_PosOk(const SwPosition & aPos)
 {
-    bool bResult = true;
-    SwPosition aTmpPos(aPos);
-    aTmpPos.nContent.Assign(0, 0);
-
-    if (aPos.nNode.GetNode().GetCntntNode() == NULL ||
-        aPos.nContent.GetIdxReg() == aTmpPos.nContent.GetIdxReg())
-        bResult = false;
-
-    return bResult;
+    return NULL != aPos.nNode.GetNode().GetCntntNode() &&
+           SwIndexReg::pEmptyIndexArray != aPos.nContent.GetIdxReg();
 }
 
 /**
