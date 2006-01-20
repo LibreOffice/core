@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:40:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,10 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
@@ -123,8 +127,6 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
     OleWrapperClientSite* m_pOleWrapClientSite;
     OleWrapperAdviseSink* m_pImplAdviseSink;
 
-    ::rtl::OUString m_aTempURL;
-
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
 
@@ -137,8 +139,6 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
 
     sal_Bool InitializeObject_Impl();
 
-    void CreateIStorageOnXInputStream_Impl(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
     void CreateNewIStorage_Impl();
 
     void RetrieveObjectDataFlavors_Impl();
@@ -156,7 +156,7 @@ public:
     void disconnectEmbeddedObject();
 
     // ==== Initialization ==================================================
-    void LoadEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
+    void LoadEmbeddedObject( const ::rtl::OUString& aTempURL );
 
     void CreateObjectFromClipboard();
 
@@ -195,7 +195,6 @@ public:
     sal_Bool IsDirty();
 
     void StoreOwnTmpIfNecessary();
-    void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream );
 
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
