@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:47:47 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <hash_map>
+
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star;
 
@@ -317,6 +319,8 @@ sal_Bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embe
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedObject( const ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetEmbeddedObject" );
+
     OSL_ENSURE( rName.getLength(), "Empty object name!");
 
     uno::Reference < embed::XEmbeddedObject > xObj;
@@ -367,6 +371,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId, ::rtl::OUString& rNewName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CreateEmbeddedObject" );
+
     if ( !rNewName.getLength() )
         rNewName = CreateUniqueObjectName();
 
@@ -398,6 +404,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
 void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, const ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::AddEmbeddedObject" );
+
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( rName.getLength(), "Added object doesn't have a name!");
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
@@ -459,6 +467,8 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
 
 sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName, sal_Bool bCopy )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::StoreEmbeddedObject" );
+
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     if ( !rName.getLength() )
         rName = CreateUniqueObjectName();
@@ -497,6 +507,7 @@ sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < em
 
 sal_Bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( Object )" );
     // store it into the container storage
     if ( StoreEmbeddedObject( xObj, rName, sal_False ) )
     {
@@ -510,6 +521,8 @@ sal_Bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < e
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < io::XInputStream >& xStm, ::rtl::OUString& rNewName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( InputStream )" );
+
     if ( !rNewName.getLength() )
         rNewName = CreateUniqueObjectName();
 
@@ -573,6 +586,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, ::rtl::OUString& rNewName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( MediaDescriptor )" );
+
     if ( !rNewName.getLength() )
         rNewName = CreateUniqueObjectName();
 
@@ -603,6 +618,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, ::rtl::OUString& rNewName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedLink" );
+
     if ( !rNewName.getLength() )
         rNewName = CreateUniqueObjectName();
 
@@ -639,6 +656,8 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
                                                             const ::rtl::OUString& aOrigName,
                                                             const ::rtl::OUString& aTargetName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::TryToCopyGraphReplacement" );
+
     sal_Bool bResult = sal_False;
 
     if ( &rSrc != this && aOrigName.getLength() && aTargetName.getLength() )
@@ -654,6 +673,8 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
 
 sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyEmbeddedObject" );
+
     // get the object name before(!) it is assigned to a new storage
     ::rtl::OUString aOrigName;
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
@@ -674,6 +695,8 @@ sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& r
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyAndGetEmbeddedObject" );
+
     uno::Reference< embed::XEmbeddedObject > xResult;
 
     // TODO/LATER: For now only objects that implement XEmbedPersist have a replacement image, it might change in future
@@ -807,6 +830,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
 
 sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::MoveEmbeddedObject( Object )" );
+
     // get the object name before(!) it is assigned to a new storage
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     ::rtl::OUString aName;
@@ -870,6 +895,8 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
 
 sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool bClose )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Name )" );
+
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
         return RemoveEmbeddedObject( xObj, bClose );
@@ -879,6 +906,8 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const ::rtl::OUString& r
 
 sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rName, EmbeddedObjectContainer& rCnt )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::MoveEmbeddedObject( Name )" );
+
     // find object entry
     EmbeddedObjectContainerNameMap::iterator aIt2 = rCnt.pImpl->maObjectContainer.find( rName );
     OSL_ENSURE( aIt2 == rCnt.pImpl->maObjectContainer.end(), "Object does already exist in target container!" );
@@ -930,6 +959,8 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rNa
 
 sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Object )" );
+
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     ::rtl::OUString aName;
     if ( xPersist.is() )
@@ -1068,6 +1099,8 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
 
 sal_Bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CloseEmbeddedObject" );
+
     // disconnect the object from the container and close it if possible
 
     sal_Bool bFound = sal_False;
@@ -1103,6 +1136,8 @@ sal_Bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < em
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::rtl::OUString& aName, rtl::OUString* pMediaType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Name )" );
+
     uno::Reference < io::XInputStream > xStream;
 
     OSL_ENSURE( aName.getLength(), "Retrieving graphic for unknown object!" );
@@ -1133,6 +1168,8 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, rtl::OUString* pMediaType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Object )" );
+
     // get the object name
     ::rtl::OUString aName;
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
@@ -1153,6 +1190,8 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
 
 sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertGraphicStream" );
+
     try
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
@@ -1188,6 +1227,8 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
 
 sal_Bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertGraphicStreamDirectly" );
+
     try
     {
         uno::Reference < embed::XStorage > xReplacement = pImpl->GetReplacements();
@@ -1218,6 +1259,8 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::s
 
 sal_Bool EmbeddedObjectContainer::RemoveGraphicStream( const ::rtl::OUString& rObjectName )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveGraphicStream" );
+
     try
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
