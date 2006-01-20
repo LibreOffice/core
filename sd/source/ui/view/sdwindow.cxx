@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:17:51 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,8 +278,15 @@ long Window::GetMaxZoom (void) const
 
 long Window::GetZoom (void) const
 {
-    return GetMapMode().GetScaleX().GetNumerator() * 100L
-        / GetMapMode().GetScaleX().GetDenominator();
+    if( GetMapMode().GetScaleX().GetDenominator() )
+    {
+        return GetMapMode().GetScaleX().GetNumerator() * 100L
+            / GetMapMode().GetScaleX().GetDenominator();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 
@@ -574,10 +581,22 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        ULONG nX = (ULONG) ((double) aWinSize.Width()
-            * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
-        ULONG nY = (ULONG) ((double) aWinSize.Height()
-            * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+        ULONG nX;
+        ULONG nY;
+
+        if( (nX != 0) && (nY != 0) )
+        {
+            nX = (ULONG) ((double) aWinSize.Height()
+               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+            nY = (ULONG) ((double) aWinSize.Width()
+                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+        }
+        else
+        {
+            nX = 0;
+            nY = 0;
+        }
+
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
         ULONG nFact = Min(nX, nY);
