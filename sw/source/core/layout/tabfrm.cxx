@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:02:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5055,11 +5055,18 @@ USHORT SwTabFrm::GetBottomLineSize() const
     ASSERT( IsCollapsingBorders(),
             "BottomLineSize only required for collapsing borders" )
 
+    ASSERT( Lower(), "Warning! Trying to prevent a crash, please inform FME" )
+
     const SwFrm* pTmp = Lower();
+
+    // --> FME 2005-12-07 #124755# Try to make code robust:
+    if ( !pTmp ) return 0;
+    // <--
+
     while ( pTmp->GetNext() )
         pTmp = pTmp->GetNext();
 
-    return ((SwRowFrm*)pTmp)->GetBottomLineSize();
+    return static_cast<const SwRowFrm*>(pTmp)->GetBottomLineSize();
 }
 
 bool SwTabFrm::IsCollapsingBorders() const
