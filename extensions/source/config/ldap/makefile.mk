@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:25:01 $
+#   last change: $Author: obo $ $Date: 2006-01-20 10:58:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ LDAPSDKINCLUDES = -I$(SOLARINCDIR)$/mozilla
 .ENDIF
 
 .IF "$(WITH_OPENLDAP)" == "YES"
-CFLAGS += -DWITH_OPENLDAP
+CFLAGS += -DWITH_OPENLDAP -DLDAP_DEPRECATED
 .ENDIF
 
 SOLARINC+= $(LDAPSDKINCLUDES)
