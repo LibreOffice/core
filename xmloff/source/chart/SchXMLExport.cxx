@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:58 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 11:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,6 @@ SchXMLExportHelper::SchXMLExportHelper(
     {
         // create property set mapper
         mxPropertySetMapper = new XMLChartPropertySetMapper;
-
     }
 
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
@@ -861,11 +860,11 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 SvXMLElementExport aHeaderColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
             }
             // non-header columns
-            if( mnSeriesCount )
+            if( nSeriesCount )
             {
                 SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, sal_True, sal_True );
                 mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                                       rtl::OUString::valueOf( (sal_Int64) mnSeriesCount ));
+                                       rtl::OUString::valueOf( (sal_Int64) nSeriesCount ));
                 SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
             }
 
