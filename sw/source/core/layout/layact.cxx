@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:35:29 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2291,7 +2291,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             }
             //Wenn der Frame die Seite vorwaerts gewechselt hat, so lassen wir
             //den Vorgaenger nocheinmal durchlaufen.
-            //So werden einerseits Vorgaenger erwischt, die jetzt fr Retouche
+            //So werden einerseits Vorgaenger erwischt, die jetzt f?r Retouche
             //verantwortlich sind, andererseits werden die Fusszeilen
             //auch angefasst.
             FASTBOOL bSetCntnt = TRUE;
@@ -2526,6 +2526,9 @@ BOOL SwLayAction::IsStopPrt() const
 BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
 {
     ASSERT( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
+    // robust against misuse by e.g. #i52542#
+    if( !pCnt->IsTxtFrm() )
+        return FALSE;
     if( pCnt->GetNode()->IsWrongDirty() )
     {
         if( STRING_LEN == nTxtPos )
@@ -2636,6 +2639,9 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
                                         BOOL bVisAreaOnly )
 {
     ASSERT( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
+    // robust against misuse by e.g. #i52542#
+    if( !pCnt->IsTxtFrm() )
+        return FALSE;
     if( pCnt->GetNode()->IsAutoCompleteWordDirty() )
     {
         if( STRING_LEN == nTxtPos )
