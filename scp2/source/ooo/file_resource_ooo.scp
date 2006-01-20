@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:54:52 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ STD_RES_FILE( gid_File_Res_Wzi, wzi )
 
 //STD_RES_FILE( gid_File_Res_Wwz, wwz )
 
-STD_RES_FILE( gid_File_Res_Xsltdlg, xsltdlg )
+STD_RES_FILE_PATCH( gid_File_Res_Xsltdlg, xsltdlg )
 
 STD_RES_FILE( gid_File_Res_AVMedia, avmedia )
 
