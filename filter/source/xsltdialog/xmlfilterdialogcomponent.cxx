@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterdialogcomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:17:37 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
+    DECL_LINK( DialogDeletedHdl, XMLFilterSettingsDialog* );
     static ResMgr* mpResMgr;
     XMLFilterSettingsDialog* mpDialog;
     com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
@@ -192,6 +193,16 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
 
 XMLFilterDialogComponent::~XMLFilterDialogComponent()
 {
+}
+
+//-------------------------------------------------------------------------
+IMPL_LINK( XMLFilterDialogComponent, DialogDeletedHdl, XMLFilterSettingsDialog*, pDialog )
+{
+    // the dialog can be distroyed through awt methods
+    // we must not access it after that
+    if( pDialog == mpDialog )
+        mpDialog = NULL;
+    return 0;
 }
 
 //-------------------------------------------------------------------------
@@ -416,7 +427,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
         }
 
         Reference< XComponent > xComp( this );
-        mpDialog = new XMLFilterSettingsDialog( pParent, *mpResMgr, mxMSF );
+        mpDialog = new XMLFilterSettingsDialog( pParent, *mpResMgr, mxMSF, LINK( this, XMLFilterDialogComponent, DialogDeletedHdl ) );
         mpDialog->Show();
     }
     else if( !mpDialog->IsVisible() )
