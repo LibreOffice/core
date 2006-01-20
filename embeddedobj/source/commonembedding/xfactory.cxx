@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:36:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#include <rtl/logfile.hxx>
+
 
 #include "xfactory.hxx"
 #include "commonembobj.hxx"
@@ -99,6 +101,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromEntry" );
+
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
@@ -205,6 +209,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
+
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
@@ -268,6 +274,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitNew" );
+
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -319,6 +327,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceUserInit" );
+
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
@@ -377,6 +387,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceLink" );
+
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -431,6 +443,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceLinkUserInit" );
+
     uno::Reference< uno::XInterface > xResult;
 
     // the initialization is completelly controlled by user
