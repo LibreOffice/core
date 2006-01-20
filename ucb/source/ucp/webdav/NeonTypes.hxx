@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,32 @@
 #define _NEONTYPES_HXX_
 
 #ifndef NE_SESSION_H
+#ifdef SYSTEM_NEON
+#include <ne_session.h>
+#else
 #include <neon/ne_session.h> // for ne_session
 #endif
+#endif
 #ifndef NE_UTILS_H
+#ifdef SYSTEM_NEON
+#include <ne_utils.h>
+#else
 #include <neon/ne_utils.h> // for ne_status
 #endif
+#endif
 #ifndef NE_BASIC_H
+#ifdef SYSTEM_NEON
+#include <ne_basic.h>
+#else
 #include <neon/ne_basic.h> // for ne_server_capabilities
 #endif
+#endif
 #ifndef NE_PROPS_H
+#ifdef SYSTEM_NEON
+#include <ne_props.h>
+#else
 #include <neon/ne_props.h> // for ne_propname, ne_prop_result_set
+#endif
 #endif
 
 typedef ne_session                  HttpSession;
