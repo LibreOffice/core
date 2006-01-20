@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:48:32 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,13 +239,15 @@ public:
 
     void InputStreamDisposed( OInputCompStream* pStream );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > CreateReadonlyCopyBasedOnData(
+    void CreateReadonlyCopyBasedOnData(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                    sal_Bool bUseCommonPass );
+                    sal_Bool bUseCommonPass,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit();
+    void GetCopyOfLastCommit( ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
                             const ::rtl::OUString& aPass );
 };
 
