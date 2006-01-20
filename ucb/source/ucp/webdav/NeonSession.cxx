@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 08:47:02 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,32 @@
 #include <string.h>
 
 #ifndef NE_SOCKET_H
+#ifdef SYSTEM_NEON
+#include <ne_socket.h>
+#else
 #include <neon/ne_socket.h>
 #endif
+#endif
 #ifndef NE_AUTH_H
+#ifdef SYSTEM_NEON
+#include <ne_auth.h>
+#else
 #include <neon/ne_auth.h>
 #endif
+#endif
 #ifndef NE_REDIRECT_H
+#ifdef SYSTEM_NEON
+#include <ne_redirect.h>
+#else
 #include <neon/ne_redirect.h>
 #endif
+#endif
 #ifndef NE_LOCKS_H
+#ifdef SYSTEM_NEON
+#include <ne_locks.h>
+#else
 #include <neon/ne_locks.h>
+#endif
 #endif
 
 #ifndef __XML_PARSER_H__
