@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.4 2004-03-17 10:15:46 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.5 2006-01-20 12:59:44 obo Exp $
 
 *************************************************************************/
 
@@ -342,7 +342,7 @@ NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
     return aRet;
 }
 
-jref UnxPluginComm::NPP_GetJavaClass()
+void* UnxPluginComm::NPP_GetJavaClass()
 {
     return NULL;
 }
