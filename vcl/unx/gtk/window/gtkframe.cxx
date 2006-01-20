@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:07:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,9 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_Redo:          nCode = KEY_REPEAT;     break;
             case GDK_KP_Decimal:
             case GDK_KP_Separator:  nCode = KEY_DECIMAL;    break;
+            case GDK_asciitilde:    nCode = KEY_TILDE;      break;
+            case GDK_leftsinglequotemark:
+            case GDK_quoteleft: nCode = KEY_QUOTELEFT;      break;
         }
     }
     return nCode;
