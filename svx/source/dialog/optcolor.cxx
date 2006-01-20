@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 15:05:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -850,6 +850,7 @@ class ColorConfigCtrl_Impl : public Control
 
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        Command( const CommandEvent& rCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 public:
     ColorConfigCtrl_Impl(Window* pParent, const ResId& rResId );
     ~ColorConfigCtrl_Impl();
@@ -888,7 +889,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     FreeResource();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    aScrollWindow.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
+    aScrollWindow.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
     aScrollWindow.SetHelpId( HID_OPTIONS_COLORCONFIG_COLORLIST_WIN );
     aVScroll.EnableDrag();
     aVScroll.Show();
@@ -1130,6 +1131,22 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
             Control::Command(rCEvt);
     }
 }
+
+/* -----------------------------14.12.2005 12:37------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
+    }
+}
+
+
 /* -----------------------------27.03.2002 11:43------------------------------
 
  ---------------------------------------------------------------------------*/
