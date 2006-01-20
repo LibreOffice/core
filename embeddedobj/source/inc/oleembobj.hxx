@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:40:28 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
                         , ::com::sun::star::embed::XEmbedPersist
                         , ::com::sun::star::embed::XLinkageSupport >
 {
+    friend class OleComponent;
+
     ::osl::Mutex    m_aMutex;
 
     OleComponent*   m_pOleComponent;
@@ -159,6 +161,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     // whether the object should be initialized from clipboard in case of default initialization
     sal_Bool m_bFromClipboard;
 
+    ::rtl::OUString m_aTempURL;
+
 protected:
 
     void SwitchComponentToRunningState_Impl();
@@ -195,6 +199,9 @@ protected:
                             sal_Bool bSaveAs )
         throw ( ::com::sun::star::uno::Exception );
 
+    void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream )
+        throw ( ::com::sun::star::uno::Exception );
+
     void InsertVisualCache_Impl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xCachedVisualRepresentation )
@@ -214,6 +221,21 @@ protected:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream )
         throw ();
 
+    sal_Bool SaveObject_Impl();
+    sal_Bool OnShowWindow_Impl( sal_Bool bShow );
+    void OnViewChanged_Impl();
+
+    void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
+    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
+    void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
+
+    void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
+
+    ::rtl::OUString CreateTempURLEmpty_Impl();
+    ::rtl::OUString GetTempURL_Impl();
+
+    ::rtl::OUString GetContainerName_Impl() { return m_aContainerName; }
+
 public:
     // in case a new object must be created the class ID must be specified
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
@@ -229,18 +251,6 @@ public:
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     virtual ~OleEmbeddedObject();
-
-    sal_Bool SaveObject_Impl();
-    sal_Bool OnShowWindow_Impl( sal_Bool bShow );
-    void OnViewChanged_Impl();
-
-    void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
-    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
-    void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
-
-    void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
-
-    ::rtl::OUString GetContainerName_Impl() { return m_aContainerName; }
 
 // XEmbeddedObject
 
