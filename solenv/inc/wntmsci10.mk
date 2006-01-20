@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:51:49 $
+#   last change: $Author: obo $ $Date: 2006-01-20 12:09:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ JAVAFLAGSDEBUG=-g
 
 ASM=ml
 AFLAGS=/c /Cp /coff
-OLE2ANSI=TRUE
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
@@ -76,27 +75,23 @@ CXX+= /NMttNoLines
 .ENDIF
 
 # Flags for COMEX == 10
+
 # disable "warning C4675: resolved overload was found by argument-dependent
 # lookup":
 CFLAGS+=-Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
+CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
+
+CDEFS+= -D_X86_=1
 
 .IF "$(product)" != ""
-CDEFS+= -D_X86_=1
-CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
-.IF "$(bndchk)" == ""
-.IF "$(VC_STANDARD)"==""
-CFLAGS+= -Ob1
-.ENDIF	# "$(VC_STANDARD)"==""
-.ENDIF
-.ELSE	# "$(product)" != ""
-CDEFS+= -D_X86_=1
-CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
-.IF "$(bndchk)" == ""
-.IF "$(VC_STANDARD)"==""
-CFLAGS+= -Ob1
-.ENDIF	# "$(VC_STANDARD)"==""
-.ENDIF
+CFLAGS+= -Gy
 .ENDIF # "$(product)" != ""
+
+.IF "$(bndchk)" == ""
+.IF "$(VC_STANDARD)"==""
+CFLAGS+= -Ob1
+.ENDIF	# "$(VC_STANDARD)"==""
+.ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
 CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
@@ -213,19 +208,20 @@ LINKFLAGSWST=/DEBUG:mapped,partial /DEBUGTYPE:coff wst.lib /NODEFAULTLIB
 LINKFLAGSDEBUG=/DEBUG:full /DEBUGTYPE:cv
 LINKFLAGSOPT=
 
+UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
+LIBCST=msvcrt.lib
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrtd.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
-.ENDIF
-OLDNAMES=oldnames.lib
-UWINAPILIB*=uwinapi.lib
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
+# See iz57443 for details about LIBCIMT
+#LIBCIMT=
 .ELSE
+LIBCST=libc.lib
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
-OLDNAMES=oldnames.lib
-UWINAPILIB*=uwinapi.lib
 .ENDIF
 
 STDOBJVCL=$(L)$/salmain.obj
@@ -233,25 +229,15 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-.IF "$(DYNAMIC_CRT)"!=""
-STDLIBGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-.ELSE
-STDLIBGUIST=libc.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=libc.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
-.ENDIF
+
+STDLIBGUIST=$(LIBCST) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=$(LIBCST) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
 .IF "$(USE_STLP_DEBUG)" != ""
 CFLAGS+=-MTd
