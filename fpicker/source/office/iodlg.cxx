@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:10:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2777,8 +2777,6 @@ void SvtFileDialog::Resize()
         // Dieses Resize wurde nur zum Ein - oder Ausblenden des Indicators aufgerufen
         return;
 
-    long nMaxYPos = 0;
-
     // -------------
     // move controls
 
@@ -2794,7 +2792,7 @@ void SvtFileDialog::Resize()
         Control** ppMoveControls = aMoveControlsVert;
         Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsVert ) / sizeof( aMoveControlsVert[0] );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, 0, nDeltaY, &nMaxYPos );
+            lcl_MoveControl( *ppMoveControls, 0, nDeltaY );
     }
 
     // controls to move vertically and horizontally
@@ -2806,7 +2804,7 @@ void SvtFileDialog::Resize()
         Control** ppMoveControls = aMoveControlsBoth;
         Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsBoth ) / sizeof( aMoveControlsBoth[0] );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, nDeltaX, nDeltaY, &nMaxYPos );
+            lcl_MoveControl( *ppMoveControls, nDeltaX, nDeltaY );
     }
 
     // controls to move horizontally
@@ -2818,7 +2816,7 @@ void SvtFileDialog::Resize()
         Control** ppMoveControls = aMoveControlsHor;
         Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsHor ) / sizeof( aMoveControlsHor[0] );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, nDeltaX, 0, &nMaxYPos );
+            lcl_MoveControl( *ppMoveControls, nDeltaX, 0 );
     }
 
     // ---------------
