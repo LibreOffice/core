@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,8 @@ using namespace com::sun::star::util;
 
 ResMgr* XMLFilterSettingsDialog::mpResMgr = NULL;
 
-XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
-    WorkWindow( pParent, ResId( DLG_XML_FILTER_SETTINGS_DIALOG, &rResMgr ) ),
+XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF, const Link& rDeleteLink ) :
+    ModalDialog( pParent, ResId( DLG_XML_FILTER_SETTINGS_DIALOG, &rResMgr ) ),
     mxMSF( rxMSF ),
     maCtrlFilterList( this, ResId( CTRL_XML_FILTER_LIST, &rResMgr ) ),
     maPBNew( this, ResId( PB_XML_FILTER_NEW, &rResMgr ) ),
@@ -111,7 +111,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     maPBClose( this, ResId( PB_XML_FILTER_CLOSE, &rResMgr ) ),
     mbIsClosable(true),
     sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
-    sDocTypePrefix( RTL_CONSTASCII_USTRINGPARAM( "doctype:") )
+    sDocTypePrefix( RTL_CONSTASCII_USTRINGPARAM( "doctype:") ),
+    maDeleteLink( rDeleteLink )
 {
     FreeResource();
 
@@ -153,6 +154,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
 
 XMLFilterSettingsDialog::~XMLFilterSettingsDialog()
 {
+    maDeleteLink.Call( this );
     delete mpFilterListBox;
 }
 
@@ -226,8 +228,7 @@ void XMLFilterSettingsDialog::Show()
     initFilterList();
     updateStates();
     mpFilterListBox->Reset();
-
-    WorkWindow::Show( TRUE );
+    Dialog::Show( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -1070,7 +1071,7 @@ void XMLFilterSettingsDialog::onClose()
 long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
-    long nRet = WorkWindow::Notify( rNEvt );
+    long nRet = ModalDialog::Notify( rNEvt );
     if ( !nRet )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
