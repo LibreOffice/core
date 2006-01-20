@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:35:19 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,11 +257,14 @@ public class Bootstrap {
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
 
             // create call with arguments
-            String[] cmdArray = new String[4];
+            String[] cmdArray = new String[7];
             cmdArray[0] = fOffice.getPath();
             cmdArray[1] = "-nologo";
             cmdArray[2] = "-nodefault";
-            cmdArray[3] = "-accept=pipe,name=" + sPipeName + ";urp;";
+            cmdArray[3] = "-norestore";
+            cmdArray[4] = "-nocrashreport";
+            cmdArray[5] = "-nolockcheck";
+            cmdArray[6] = "-accept=pipe,name=" + sPipeName + ";urp;";
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );
