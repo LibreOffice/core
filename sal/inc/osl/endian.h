@@ -4,9 +4,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:27:08 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,11 +154,17 @@ extern "C" {
 #ifdef MACOSX
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
 #       define _PDP_ENDIAN
+#       endif
 #   endif
 #endif
 
