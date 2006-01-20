@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-20 10:52:29 $
+dnl * Date: $Date: 2006-01-20 13:28:25 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.149 $ )
+AC_REVISION( $Revision: 1.150 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2228,7 +2228,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
         	      _pm=`strings $EPM | grep PackageMaker | cut -d" " -f1`
         	      if test "$_pm" = "/Developer/Applications/PackageMaker.app/Contents/MacOS/PackageMaker"; then
           		      AC_MSG_ERROR([$_pm; PackageMaker expected in wrong path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
-        	      elif test "$_pm" = "Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker"; then
+        	      elif test "$_pm" = "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker"; then
           		    AC_MSG_RESULT([$_pm, ok])
         	      else # we never should get here, but go safe
 			          AC_MSG_ERROR([$_pm; PackageMaker expected in unknown path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
