@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:10:07 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1448,7 +1448,7 @@ sal_Int32 OStreamSocket::read(void* pBuffer, sal_uInt32 n) const
         Ptr += RetVal;
 
         /* wait for next available data or timeout */
-        if (m_pRecvTimeout && ! isRecvReady(m_pRecvTimeout))
+        if ( BytesToRead > 0 && m_pRecvTimeout && ! isRecvReady(m_pRecvTimeout))
             break;
 
     }
@@ -1496,7 +1496,7 @@ sal_Int32 OStreamSocket::write(const void* pBuffer, sal_uInt32 n)
         Ptr += RetVal;
 
         /* wait till new data is available or timeout occures */
-        if (m_pSendTimeout && ! isSendReady(m_pSendTimeout))
+        if ( BytesToSend > 0 && m_pSendTimeout && ! isSendReady(m_pSendTimeout))
             break;
     }
 
