@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-07 15:14:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,8 @@
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
+
+#include <rtl/logfile.hxx>
 
 
 #include <olecomponent.hxx>
@@ -202,7 +204,8 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
 //-----------------------------------------------
 ::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-        throw( io::IOException )
+        throw ( io::IOException,
+                uno::RuntimeException )
 {
     OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
 
@@ -251,6 +254,39 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
             aResult = ::rtl::OUString();
         }
     }
+
+    return aResult;
+}
+
+//----------------------------------------------
+::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const ::rtl::OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    throw( io::IOException, uno::RuntimeException )
+{
+    ::rtl::OUString aResult;
+
+    try
+    {
+        uno::Reference < beans::XPropertySet > xTempFile(
+                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                uno::UNO_QUERY );
+        uno::Reference < io::XStream > xTempStream( xTempFile, uno::UNO_QUERY_THROW );
+
+        xParentStorage->copyStreamElementData( aEntryName, xTempStream );
+
+        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ), uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        aUrl >>= aResult;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    if ( !aResult.getLength() )
+        throw io::IOException();
 
     return aResult;
 }
@@ -378,8 +414,10 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs( 1 );
+    uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xTargetStream;
+    aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
@@ -526,8 +564,9 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs( 1 );
+    uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xTargetStream;
+    aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
@@ -568,12 +607,40 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
             SetVisReplInStream( sal_True );
         else
         {
-            if ( m_xObjectStream.is() )
+            RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
+
+            uno::Reference< io::XInputStream > xStream;
+
+            OSL_ENSURE( !m_pOleComponent || m_aTempURL.getLength(), "The temporary file must exist if there is a component!\n" );
+            if ( m_aTempURL.getLength() )
+            {
+                try
+                {
+                    // open temporary file for reading
+                    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                                    m_xFactory->createInstance (
+                                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                                    uno::UNO_QUERY );
+
+                    if ( !xTempAccess.is() )
+                        throw uno::RuntimeException(); // TODO:
+
+                    xStream = xTempAccess->openFileRead( m_aTempURL );
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !xStream.is() )
+                xStream = m_xObjectStream->getInputStream();
+
+            if ( xStream.is() )
             {
                 sal_Bool bExists = sal_False;
 
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= m_xObjectStream;
+                uno::Sequence< uno::Any > aArgs( 2 );
+                aArgs[0] <<= xStream;
+                aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xFactory->createInstanceWithArguments(
                                 ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
@@ -612,8 +679,11 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 
     if ( xStream.is() )
     {
-        uno::Sequence< uno::Any > aArgs( 1 );
+        RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
+
+        uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xStream;
+        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
                 m_xFactory->createInstanceWithArguments(
                         ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
@@ -766,6 +836,7 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     return bResult;
 }
 
+//------------------------------------------------------
 void OleEmbeddedObject::OnViewChanged_Impl()
 {
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
@@ -773,6 +844,42 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
     }
+}
+
+//------------------------------------------------------
+::rtl::OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
+{
+    OSL_ENSURE( !m_aTempURL.getLength(), "The object has already the temporary file!" );
+    m_aTempURL = GetNewTempFileURL_Impl( m_xFactory );
+
+    return m_aTempURL;
+}
+
+//------------------------------------------------------
+::rtl::OUString OleEmbeddedObject::GetTempURL_Impl()
+{
+    if ( !m_aTempURL.getLength() )
+    {
+        RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::GetTempURL_Impl, tempfile creation" );
+
+        // if there is no temporary file, it will be created from the own entry
+        uno::Reference< embed::XOptimizedStorage > xOptParStorage( m_xParentStorage, uno::UNO_QUERY );
+        if ( xOptParStorage.is() )
+        {
+            m_aTempURL = GetNewFilledTempFile_Impl( xOptParStorage, m_aEntryName, m_xFactory );
+        }
+        else if ( m_xObjectStream.is() )
+        {
+            // load object from the stream
+            uno::Reference< io::XInputStream > xInStream = m_xObjectStream->getInputStream();
+            if ( !xInStream.is() )
+                throw io::IOException(); // TODO: access denied
+
+            m_aTempURL = GetNewFilledTempFile_Impl( xInStream, m_xFactory );
+        }
+    }
+
+    return m_aTempURL;
 }
 
 //------------------------------------------------------
@@ -791,8 +898,6 @@ void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 
         m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
-    else
-        OSL_ENSURE( sal_False, "Trying to recreate OLE component!\n" );
 #endif
 }
 
@@ -806,15 +911,17 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
             throw uno::RuntimeException();
 
         CreateOleComponent_Impl( pOleComponent );
-        // load object from the stream
-        uno::Reference< io::XInputStream > xInStream = m_xObjectStream->getInputStream();
-        if ( !xInStream.is() )
-            throw io::IOException(); // TODO: access denied
 
         // after the loading the object can appear as a link
         // will be detected later by olecomponent
-        m_pOleComponent->LoadEmbeddedObject( xInStream );
+
+        GetTempURL_Impl();
+        if ( !m_aTempURL.getLength() )
+            throw uno::RuntimeException(); // TODO
+
+        m_pOleComponent->LoadEmbeddedObject( m_aTempURL );
     }
+
 #endif
 }
 
@@ -853,6 +960,54 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
     xTruncate->truncate();
 
     return xOutStream;
+}
+
+//----------------------------------------------
+void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
+    throw ( uno::Exception )
+{
+    // this method should be used only on windows
+#ifdef WNT
+    if ( m_pOleComponent )
+        m_pOleComponent->StoreOwnTmpIfNecessary();
+
+    // now all the changes should be in temporary location
+    if ( !m_aTempURL )
+        throw uno::RuntimeException();
+
+    // open temporary file for reading
+    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                    m_xFactory->createInstance (
+                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                    uno::UNO_QUERY );
+
+    if ( !xTempAccess.is() )
+        throw uno::RuntimeException(); // TODO:
+
+    uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );
+    OSL_ENSURE( xTempInStream.is(), "The object's temporary file can not be reopened for reading!\n" );
+
+    // TODO: use bStoreVisReplace
+
+    if ( xTempInStream.is() )
+    {
+        // write all the contents to XOutStream
+        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY );
+        if ( !xTrunc.is() )
+            throw uno::RuntimeException(); //TODO:
+
+        xTrunc->truncate();
+
+        copyInputToOutput_Impl( xTempInStream, xOutStream );
+    }
+    else
+        throw io::IOException(); // TODO:
+
+    // TODO: should the view replacement be in the stream ???
+    //       probably it must be specified on storing
+#else
+    throw io::IOException();
+#endif
 }
 
 //------------------------------------------------------
@@ -963,7 +1118,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        m_pOleComponent->StoreObjectToStream( xOutStream );
+        StoreObjectToStream( xOutStream );
         bVisReplIsStored = sal_True;
 
         if ( bSaveAs )
@@ -1081,6 +1236,8 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
+
     // TODO: use lObjArgs
 
     // the type of the object must be already set
@@ -1276,6 +1433,8 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1296,6 +1455,8 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1311,6 +1472,8 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1430,6 +1593,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
+
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
     // to do so or not
@@ -1481,12 +1646,12 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
             uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
 
             // should the component detect that it is a link???
-            m_pOleComponent->StoreObjectToStream( xOutStream );
+            StoreObjectToStream( xOutStream );
         }
         else
         {
             uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-            m_pOleComponent->StoreObjectToStream( xOutStream );
+            StoreObjectToStream( xOutStream );
         }
 
         // the replacement is changed probably, and it must be in the object stream
@@ -1630,6 +1795,11 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     if ( m_pOleComponent )
     {
         // TODO: create an object based on the link
+
+        // disconnect the old temporary URL
+        ::rtl::OUString aOldTempURL = m_aTempURL;
+        m_aTempURL = ::rtl::OUString();
+
         OleComponent* pNewOleComponent = new OleComponent( m_xFactory, this );
         try {
             pNewOleComponent->InitEmbeddedCopyOfLink( m_pOleComponent );
@@ -1637,6 +1807,9 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         catch ( uno::Exception& )
         {
             delete pNewOleComponent;
+            if ( m_aTempURL )
+                   KillFile_Impl( m_aTempURL, m_xFactory );
+            m_aTempURL = aOldTempURL;
             throw;
         }
 
@@ -1646,8 +1819,13 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         catch( uno::Exception& )
         {
             delete pNewOleComponent;
+            if ( m_aTempURL )
+                   KillFile_Impl( m_aTempURL, m_xFactory );
+            m_aTempURL = aOldTempURL;
             throw;
         }
+
+           KillFile_Impl( aOldTempURL, m_xFactory );
 
         CreateOleComponent_Impl( pNewOleComponent );
 
