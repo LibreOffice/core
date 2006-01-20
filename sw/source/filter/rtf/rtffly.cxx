@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:30:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,7 +387,7 @@ void SwRTFParser::SetFlysInDoc()
         // und erzeuge dadurch den richtigen SwG-Rahmen
         SwNodeRange aRg(pFlySave->nSttNd, 0, pFlySave->nEndNd, 0);
         //Make a new section, unless there is no content at all
-        bool bMakeEmptySection = aRg.aStart < aRg.aEnd || ((aRg.aStart == aRg.aEnd) && pFlySave->nEndCnt);
+        const bool bMakeEmptySection = aRg.aStart < aRg.aEnd || ((aRg.aStart == aRg.aEnd) && pFlySave->nEndCnt);
 
         {
             // Nur TextNodes koennen in Tabellen stehen !!
@@ -447,14 +447,6 @@ void SwRTFParser::SetFlysInDoc()
                 : rNds.MakeTextSection( aTmpIdx, SwFlyStartNode,
                         (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
 
-        // patch from cmc for #i52542#
-        if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
-        {
-            ASSERT(!this, "nothing in this frame, not legal");
-            delete pFlySave;
-            continue;
-        }
-
         // das ist die Verankerungs-Position (fuers Layout!)
         pFlySave->nSttNd = aRg.aStart.GetIndex()-1;
         if( bMakeEmptySection )
@@ -474,6 +466,14 @@ void SwRTFParser::SetFlysInDoc()
             }
             aTmpIdx = *pSttNd->EndOfSectionNode();
             pDoc->Move( aRg, aTmpIdx );
+        }
+
+        // patch from cmc for #i52542#
+        if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
+        {
+            ASSERT(!this, "nothing in this frame, not legal");
+            delete pFlySave;
+            continue;
         }
 
         pFlySave->aFlySet.Put( SwFmtCntnt( pSttNd ));
