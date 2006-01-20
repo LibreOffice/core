@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,9 +741,19 @@ void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
 // Return: ist es eine Gliederung ?
 bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
-    BYTE nSwLevel = pNd->GetLevel();
+    int nLevel = pNd->GetLevel();
+
+    if (nLevel < 0 || nLevel >= MAXLEVEL)
+    {
+        ASSERT(FALSE, "Invalid level");
+
+        return false;
+    }
+
+    BYTE nSwLevel = nLevel;
+
     const SwNumRule* pRul = pNd->GetNumRule();
-    if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
+    if( !pRul || nSwLevel == WW8ListManager::nMaxLevel)
         return false;
 
     bool bNoNum = false;
@@ -754,8 +764,8 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
         bNoNum = true;
     }
 
+
     bool bRet = true;
-    const SwNumFmt* pFmt = &pRul->Get( nSwLevel );// interessierendes Format
 
     SwNumFmt aFmt(pRul->Get(nSwLevel));
     const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
