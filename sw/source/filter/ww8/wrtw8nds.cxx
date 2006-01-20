@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2142,7 +2142,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;
     // rCols are the array of all cols of the table
     const SwWriteTableCols& rCols = pTableWrt->GetCols();
-    USHORT nColCnt = rCols.Count();
+    USHORT nColCnt = nMaxCols; // #125415# rCols.Count();
     SwWriteTableCellPtr* pBoxArr = new SwWriteTableCellPtr[ nColCnt ];
     USHORT* pRowSpans = new USHORT[ nColCnt ];
     memset( pBoxArr, 0, sizeof( pBoxArr[0] ) * nColCnt );
