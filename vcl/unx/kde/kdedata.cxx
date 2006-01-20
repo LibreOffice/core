@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:34:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,21 @@
 #include <vos/mutex.hxx>
 #endif
 
+/* #i59042# override KApplications method for session management
+ * since it will interfere badly with our own.
+ */
+class VCLKDEApplication : public KApplication
+{
+    public:
+    VCLKDEApplication() : KApplication() {}
+
+    virtual void commitData(QSessionManager &sm);
+};
+
+void VCLKDEApplication::commitData(QSessionManager&)
+{
+}
+
 /***************************************************************************
  * class SalKDEDisplay                                                     *
  ***************************************************************************/
@@ -111,7 +126,7 @@ SalKDEDisplay::~SalKDEDisplay()
 KDEXLib::~KDEXLib()
 {
     // properly deinitialize KApplication
-    delete (KApplication*)m_pApplication;
+    delete (VCLKDEApplication*)m_pApplication;
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
         free( m_pFreeCmdLineArgs[i] );
@@ -178,7 +193,7 @@ void KDEXLib::Init()
     KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
 
     KApplication::disableAutoDcopRegistration();
-    m_pApplication = new KApplication();
+    m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
 
     Display* pDisp = QPaintDevice::x11AppDisplay();
