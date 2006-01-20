@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:35:31 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3262,6 +3262,11 @@ static void NWEnsureGTKCombo( void )
     if ( !gComboWidget )
     {
         gComboWidget = gtk_combo_new();
+
+        // #i59129# Setting non-editable means it doesn't blink, so
+        // there are no timeouts running around to nobble us
+        gtk_editable_set_editable(GTK_EDITABLE(GTK_COMBO(gComboWidget)->entry), false);
+
         NWAddWidgetToCacheWindow( gComboWidget );
         // Must realize the ComboBox's children, since GTK
         // does not do this for us in GtkCombo::gtk_widget_realize()
