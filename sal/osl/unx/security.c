@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:23 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,11 +1019,35 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     return bRet;
 }
 
+#ifndef MACOSX
 
 sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
 }
+
+#else
+
+/*
+ * FIXME: rewrite to use more flexible
+ * NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)
+ * as soon as we can bumb the baseline to Tiger (for NSApplicationSupportDirectory) and have
+ * support for Objective-C in the build environment
+ */
+
+#define MACOSX_CONFIG_DIR "/Library/Application Support"
+sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+{
+    if( osl_psz_getHomeDir(Security, pszDirectory, nMax - sizeof(MACOSX_CONFIG_DIR) + 1) )
+    {
+        strcat( pszDirectory, MACOSX_CONFIG_DIR );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+#endif
 
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
