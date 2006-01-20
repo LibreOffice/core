@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:35:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,17 +380,25 @@ void ImplDbgTestSolarMutex()
 
 // =======================================================================
 
-static void InitSalShlData()
+void SalData::initKeyCodeMap()
 {
-    aSalShlData.mnVKAdd         = LOWORD( VkKeyScan( '+' ) );
-    aSalShlData.mnVKSubtract    = LOWORD( VkKeyScan( '-' ) );
-    aSalShlData.mnVKMultiply    = LOWORD( VkKeyScan( '*' ) );
-    aSalShlData.mnVKDivide      = LOWORD( VkKeyScan( '/' ) );
-    aSalShlData.mnVKPoint       = LOWORD( VkKeyScan( '.' ) );
-    aSalShlData.mnVKComma       = LOWORD( VkKeyScan( ',' ) );
-    aSalShlData.mnVKLess        = LOWORD( VkKeyScan( '<' ) );
-    aSalShlData.mnVKGreater     = LOWORD( VkKeyScan( '>' ) );
-    aSalShlData.mnVKEqual       = LOWORD( VkKeyScan( '=' ) );
+    UINT nKey = 0xffffffff;
+    #define initKey( a, b )\
+        nKey = LOWORD( VkKeyScan( a ) );\
+        if( nKey < 0xffff )\
+            maVKMap[ nKey ] = b;
+
+    initKey( '+', KEY_ADD );
+    initKey( '-', KEY_SUBTRACT );
+    initKey( '*', KEY_MULTIPLY );
+    initKey( '/', KEY_DIVIDE );
+    initKey( '.', KEY_POINT );
+    initKey( ',', KEY_COMMA );
+    initKey( '<', KEY_LESS );
+    initKey( '>', KEY_GREATER );
+    initKey( '=', KEY_EQUAL );
+    initKey( '~', KEY_TILDE );
+    initKey( '`', KEY_QUOTELEFT );
 }
 
 // =======================================================================
@@ -449,6 +457,8 @@ SalData::SalData()
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+
+    initKeyCodeMap();
 
     SetSalData( this );
     initNWF();
@@ -615,9 +625,6 @@ SalInstance* CreateSalInstance()
         return NULL;
 
     WinSalInstance* pInst = new WinSalInstance;
-
-    // init shl data
-    InitSalShlData();
 
     // init instance (only one instance in this version !!!)
     pSalData->mpFirstInstance   = pInst;
