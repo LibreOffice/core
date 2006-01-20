@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:57:01 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,7 +580,7 @@ static void ChildStatusProc(void *pData)
         close(channel[0]);
 
 
-        if (i == 0)
+        if ((pid > 0) && (i == 0))
         {
             osl_acquireMutex(ChildListMutex);
 
