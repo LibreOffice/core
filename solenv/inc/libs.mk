@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 14:41:29 $
+#   last change: $Author: obo $ $Date: 2006-01-20 14:22:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.95 $$"
+LIBSMKREV!:="$$Revision: 1.96 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -186,6 +186,8 @@ ZLIB3RDLIB=-lzlib
 #i34482# Blackdown jdk is in the libsearch patch and has a libjpeg
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so
+.ELIF "$(OS)" == "MACOSX"
+JPEG3RDLIB=-ljpeg
 .ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
 .ENDIF
