@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:02 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,7 @@ static void ChildStatusProc(void *pData)
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
                  putenv(data.m_pszEnv[i]);
 
-#if defined(LINUX)
+#if defined(LINUX) && !defined(NPTL)
             /* mfe: linux likes to have just one thread when the exec family is called */
             /*      this np function has this purpose ...                              */
             pthread_kill_other_threads_np();
