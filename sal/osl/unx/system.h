@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:26:13 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,6 +335,7 @@ extern char *strdup(const char *);
 
 #ifdef MACOSX
 #   define  ETIME ETIMEDOUT
+#   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
