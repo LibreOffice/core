@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:41:30 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
+
+#include <rtl/logfile.hxx>
 
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
@@ -114,6 +116,8 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setVisualAreaSize" );
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -171,6 +175,8 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getVisualAreaSize" );
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -290,6 +296,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getPreferredVisualRepresentation" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
