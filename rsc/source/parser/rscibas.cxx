@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:46:39 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -549,6 +549,12 @@ RscEnum * RscTypCont::InitKey(){
     SETCONST( pKey, "KEY_FIND",                 KEY_FIND );
     SETCONST( pKey, "KEY_PROPERTIES",           KEY_PROPERTIES );
     SETCONST( pKey, "KEY_FRONT",                KEY_FRONT );
+    SETCONST( pKey, "KEY_CONTEXTMENU",          KEY_CONTEXTMENU );
+    SETCONST( pKey, "KEY_HELP",                 KEY_HELP );
+    SETCONST( pKey, "KEY_HANGUL_HANJA",         KEY_HANGUL_HANJA );
+    SETCONST( pKey, "KEY_DECIMAL",              KEY_DECIMAL );
+    SETCONST( pKey, "KEY_TILDE",                KEY_TILDE );
+    SETCONST( pKey, "KEY_QUOTELEFT",            KEY_QUOTELEFT );
 
     return( pKey );
 }
