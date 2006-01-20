@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:35:54 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
+#include <rtl/logfile.hxx>
+
 
 #include <commonembobj.hxx>
 
@@ -64,6 +66,8 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::setVisualAreaSize" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -85,6 +89,8 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::getVisualAreaSize" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -131,6 +137,8 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::getPrefferedVisualRepresentation" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
