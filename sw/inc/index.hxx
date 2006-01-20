@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:58:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 // Maximale Anzahl von Indizies im IndexArray (zum Abtesten auf Ueberlaeufe)
 class SwIndex;
 class SwIndexReg;
+class SwPosition;
 
 #ifdef PRODUCT
 #define INLINE inline
@@ -131,6 +132,8 @@ public:
 class SwIndexReg
 {
     friend class SwIndex;
+    friend bool lcl_PosOk(const SwPosition & aPos);
+
     const SwIndex *pFirst, *pLast, *pMiddle;
 
     // ein globales Array, in das Indizies verschoben werden, die mal
