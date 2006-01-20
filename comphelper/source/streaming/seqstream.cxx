@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seqstream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:01:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ void SAL_CALL SequenceInputStream::closeInput(  )
 
 void SAL_CALL SequenceInputStream::seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
-    if ( location > m_aData.getLength()-1 || location < 0 || location > SAL_MAX_INT32 )
+    if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException();
     m_nPos = (sal_Int32) location;
 }
