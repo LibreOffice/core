@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:38:43 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,10 +95,10 @@
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
 
-#define SYS_WINMETAFILE             0x00000003UL
-#define SYS_WNTMETAFILE             0x00000004UL
-#define SYS_OS2METAFILE             0x00000005UL
-#define SYS_MACMETAFILE             0x00000006UL
+#define SYS_WINMETAFILE             0x00000003
+#define SYS_WNTMETAFILE             0x00000004
+#define SYS_OS2METAFILE             0x00000005
+#define SYS_MACMETAFILE             0x00000006
 
 #define GRAPHIC_FORMAT_50           COMPAT_FORMAT( 'G', 'R', 'F', '5' )
 #define NATIVE_FORMAT_50            COMPAT_FORMAT( 'N', 'A', 'T', '5' )
@@ -1084,7 +1084,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
             Graphic aSysGraphic;
             ULONG   nCvtType;
 
-            switch( (ULONG) meType )
+            switch( meType )
             {
                 case( SYS_WINMETAFILE ):
                 case( SYS_WNTMETAFILE ): nCvtType = CVT_WMF; break;
