@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:12:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+
+#include <rtl/logfile.hxx>
+
 
 #include <targetstatecontrol.hxx>
 
@@ -147,6 +150,8 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::changeState" );
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -290,6 +295,8 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getReachableStates" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -343,6 +350,8 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::doVerb" );
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -421,6 +430,8 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getSupportedVerb" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
