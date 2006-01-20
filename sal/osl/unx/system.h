@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:31:39 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,11 +350,17 @@ extern char *strdup(const char *);
 #   include <mach-o/dyld.h>
 #   include <postmac.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
 #       define _PDP_ENDIAN
+#       endif
 #   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
