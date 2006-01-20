@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:38:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,12 @@
 #ifndef _AVMEDIA_MEDIAWINDOW_HXX //autogen
 #include <avmedia/mediawindow.hxx>
 #endif
+#ifndef _EHDL_HXX
+#include <svtools/ehdl.hxx>
+#endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
 
 #include "app.hrc"
 #ifndef SD_WINDOW_HXX
@@ -128,6 +134,9 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
+#ifndef _SOERR_HXX
+#include <svtools/soerr.hxx>
+#endif
 
 #include <sfx2/ipclient.hxx>
 
@@ -227,7 +236,17 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         Size aSize;
 
         if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-            aSize = pViewSh->GetActiveWindow()->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+        {
+            ::OutputDevice* pOutDev = 0;
+            if( pViewSh )
+                pOutDev = pViewSh->GetActiveWindow();
+
+            if( !pOutDev )
+                pOutDev = Application::GetDefaultDevice();
+
+            if( pOutDev )
+                aSize = pOutDev->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+        }
         else
         {
             aSize = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(),
@@ -353,9 +372,16 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 
 IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 {
+    DBG_ASSERT( pViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
+    if( !pViewSh )
+        return 0;
+
+    SfxErrorContext aEc( ERRCTX_ERROR, pViewSh->GetActiveWindow(), RID_SO_ERRCTX );
+    ErrCode nError = 0;
+
     ::std::vector< String >::const_iterator aIter( aDropFileVector.begin() );
 
-    while( aIter != aDropFileVector.end() )
+    while( (aIter != aDropFileVector.end()) && !nError )
     {
         String          aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
@@ -460,60 +486,69 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
             {
                 if( pViewSh )
                 {
-                    //TODO/MBA: testing
-                    ::rtl::OUString aName;
-                    uno::Sequence < beans::PropertyValue > aMedium(1);
-                    aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                    aMedium[0].Value <<= ::rtl::OUString( aCurrentDropFile );
-
-                    uno::Reference < embed::XEmbeddedObject > xObj = pDocSh->GetEmbeddedObjectContainer().
-                            InsertEmbeddedObject( aMedium, aName );
-
-                    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-                    if ( xPersist.is())
+                    try
                     {
-                        // TODO/LEAN: VisualArea access can switch the object to running state
-                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                        xPersist->storeOwn();
+                        //TODO/MBA: testing
+                        ::rtl::OUString aName;
+                        uno::Sequence < beans::PropertyValue > aMedium(1);
+                        aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                        aMedium[0].Value <<= ::rtl::OUString( aCurrentDropFile );
 
-                        awt::Size aSz;
-                        try
+                        uno::Reference < embed::XEmbeddedObject > xObj = pDocSh->GetEmbeddedObjectContainer().
+                                InsertEmbeddedObject( aMedium, aName );
+
+                        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                        if ( xPersist.is())
                         {
-                            aSz = xObj->getVisualAreaSize( nAspect );
+                            // TODO/LEAN: VisualArea access can switch the object to running state
+                            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+                            xPersist->storeOwn();
+
+                            awt::Size aSz;
+                            try
+                            {
+                                aSz = xObj->getVisualAreaSize( nAspect );
+                            }
+                            catch( embed::NoVisualAreaSizeException& )
+                            {
+                                // the default size will be set later
+                            }
+
+                            Size        aSize( aSz.Width, aSz.Height );
+                            Rectangle   aRect;
+
+                            if (!aSize.Width() || !aSize.Height())
+                            {
+                                aSize.Width()   = 1410;
+                                aSize.Height()  = 1000;
+                            }
+
+                            aRect = Rectangle( aDropPos, aSize );
+
+                            SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
+                            ULONG       nOptions = SDRINSERT_SETDEFLAYER;
+
+                            if (pViewSh != NULL)
+                            {
+                                OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                                SfxInPlaceClient* pIpClient =
+                                    pViewSh->GetViewShell()->GetIPClient();
+                                if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                                    nOptions |= SDRINSERT_DONTMARK;
+                            }
+
+                            InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
+                            pOleObj->SetLogicRect( aRect );
+                            aSz.Width = aRect.GetWidth();
+                            aSz.Height = aRect.GetHeight();
+                            xObj->setVisualAreaSize( nAspect,aSz );
                         }
-                        catch( embed::NoVisualAreaSizeException& )
-                        {
-                            // the default size will be set later
-                        }
-
-                        Size        aSize( aSz.Width, aSz.Height );
-                        Rectangle   aRect;
-
-                        if (!aSize.Width() || !aSize.Height())
-                        {
-                            aSize.Width()   = 1410;
-                            aSize.Height()  = 1000;
-                        }
-
-                        aRect = Rectangle( aDropPos, aSize );
-
-                        SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
-                        ULONG       nOptions = SDRINSERT_SETDEFLAYER;
-
-                        if (pViewSh != NULL)
-                        {
-                            OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
-                            SfxInPlaceClient* pIpClient =
-                                pViewSh->GetViewShell()->GetIPClient();
-                            if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                                nOptions |= SDRINSERT_DONTMARK;
-                        }
-
-                        InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
-                        pOleObj->SetLogicRect( aRect );
-                        aSz.Width = aRect.GetWidth();
-                        aSz.Height = aRect.GetHeight();
-                        xObj->setVisualAreaSize( nAspect,aSz );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        nError = ERRCODE_IO_GENERAL;
+                        // TODO/LATER: better error handling
                     }
                 }
             }
@@ -522,7 +557,10 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
         ++aIter;
     }
 
-    return 0;
+    if( nError )
+        ErrorHandler::HandleError( nError );
+
+    return nError;
 }
 
 /*************************************************************************
@@ -533,7 +571,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
 IMPL_LINK( View, DropErrorHdl, Timer*, pTimer )
 {
-    InfoBox( pViewSh->GetActiveWindow(), String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+    InfoBox( pViewSh ? pViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
 }
 
