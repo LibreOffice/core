@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:02:12 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,8 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
 // !!! UNICODE - NT Optimierung !!!
     // Drucker aus WIN.INI lesen
+    // TODO: MSDN: GetProfileString() should not be called from server
+    // code because it is just there for WIN16 compatibility
     UINT    nSize = 4096;
     char*   pBuf = new char[nSize];
     UINT    nRead = GetProfileStringA( aImplDevices, NULL, "", pBuf, nSize );
@@ -858,17 +860,28 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
     ByteString aDriver ( ImplSalGetWinAnsiString( pPrinter->maDriverName, TRUE ) );
     ByteString aDevice ( ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ) );
     int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
+        // #125813# under some circumstances many printer drivers really
+    // seem to have a problem with the names and their conversions.
+    // We need to get on to of this, but haven't been able to reproduce
+    // the problem yet. Put the names on the stack so we get them
+    // with an eventual crash report.
+    if( n >= 2048 )
+        return 0;
     n += 2048;
-    char *lpszDriverName = new char[n];
-    char *lpszDeviceName = new char[n];
+    char lpszDriverName[ 4096 ];
+    char lpszDeviceName[ 4096 ];
     strncpy( lpszDriverName, aDriver.GetBuffer(), n );
     strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
+    // HDU: the crashes usually happen in a MBCS to unicode conversion,
+    // so I suspect the MBCS string's end is not properly recogbnized.
+    // The longest MBCS encoding I'm aware of has six bytes per code
+    // => add a couple of zeroes...
+    memset( lpszDriverName+aDriver.Len(), 0, 16 );
+    memset( lpszDeviceName+aDevice.Len(), 0, 16 );
     HDC hDC = CreateICA( lpszDriverName,
                          lpszDeviceName,
                          0,
                          (LPDEVMODE)pDevMode );
-    delete [] lpszDriverName;
-    delete [] lpszDeviceName;
     return hDC;
 }
 
