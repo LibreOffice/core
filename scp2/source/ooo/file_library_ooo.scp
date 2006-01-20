@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:01:49 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1441,7 +1441,7 @@ File gid_File_Lib_DeploymentGui
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pl , pl)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Preload, preload)
 
@@ -2204,7 +2204,7 @@ End
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Xstor,xstor)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Xsltdlg, xsltdlg )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Xsltfilter, xsltfilter )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
