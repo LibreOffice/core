@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:16 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1297,11 +1297,14 @@ USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
     {
         const SwTwips nAdd = (pFrm->Frm().*fnRect->fnGetWidth)() -
                              (pFrm->Prt().*fnRect->fnGetWidth)();
-        #ifdef HPUX
-        nRet = Max( nRet, ((long)((SwTxtFrm*)pFrm)->CalcFitToContent() + nAdd) );
-        #else
-        nRet = Max( nRet, (((SwTxtFrm*)pFrm)->CalcFitToContent() + nAdd) );
-        #endif
+
+        // --> FME 2005-12-02 #127801# pFrm does not necessarily have to be a SwTxtFrm!
+        const SwTwips nCalcFitToContent = pFrm->IsTxtFrm() ?
+                                          ((SwTxtFrm*)pFrm)->CalcFitToContent() :
+                                          (pFrm->Prt().*fnRect->fnGetWidth)();
+        // <--
+
+        nRet = Max( nRet, nCalcFitToContent + nAdd );
         pFrm = pFrm->GetNext();
     }
     //Umrandung und linker/rechter Rand wollen mit kalkuliert werden.
@@ -1407,7 +1410,8 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
 
         const SwLayoutFrm *pCell = pTab->FirstCell();
         do
-        {   if ( ::IsFrmInTblSel( rUnion, pCell ) )
+        {
+            if ( pCell->IsCellFrm() && ::IsFrmInTblSel( rUnion, pCell ) )
             {
                 const long nCLeft  = (pCell->Frm().*fnRect->fnGetLeft)();
                 const long nCRight = (pCell->Frm().*fnRect->fnGetRight)();
@@ -1466,7 +1470,7 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
             }
             pCell = pCell->GetNextLayoutLeaf();
 
-        } while ( pCell && ((SwCellFrm*)pCell)->ImplFindTabFrm() == pTab );
+        } while ( pCell && const_cast<SwLayoutFrm*>(pCell)->ImplFindTabFrm() == pTab );
     }
 }
 
