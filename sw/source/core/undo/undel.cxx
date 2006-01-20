@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:23:15 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,16 +805,20 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             SwTxtNode * pTxtNd = aPos.nNode.GetNode().GetTxtNode();
             // wenn mehr als ein Node geloescht wurde, dann wurden auch
             // alle "Node"-Attribute gespeichert
-            if( pTxtNd->GetpSwAttrSet() && bNodeMove && !pEndStr )
-                pTxtNd->ResetAllAttr();
 
-            if( pTxtNd->GetpSwpHints() )
-                pTxtNd->ClearSwpHintsArr( FALSE );
+            if (pTxtNd != NULL)
+            {
+                if( pTxtNd->GetpSwAttrSet() && bNodeMove && !pEndStr )
+                    pTxtNd->ResetAllAttr();
 
-            // SectionNode-Modus und von oben nach unten selektiert:
-            //  -> im StartNode steht noch der Rest vom Join => loeschen
-            aPos.nContent.Assign( pTxtNd, nSttCntnt );
-            pTxtNd->Insert( *pSttStr, aPos.nContent, INS_NOHINTEXPAND );
+                if( pTxtNd->GetpSwpHints() )
+                    pTxtNd->ClearSwpHintsArr( FALSE );
+
+                // SectionNode-Modus und von oben nach unten selektiert:
+                //  -> im StartNode steht noch der Rest vom Join => loeschen
+                aPos.nContent.Assign( pTxtNd, nSttCntnt );
+                pTxtNd->Insert( *pSttStr, aPos.nContent, INS_NOHINTEXPAND );
+            }
         }
 
         if( pHistory )
