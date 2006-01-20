@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:55:18 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 #include <algorithm>
 
 #pragma pack( push, 8 )
-#include <npsdk/npapi.h>
-#include <npsdk/npupp.h>
+#include <npapi.h>
+#include <npupp.h>
 #pragma pack( pop, 8 )
 
 #include <plugin/plcom.hxx>
