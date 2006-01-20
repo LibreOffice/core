@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:23:51 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1209,9 +1209,18 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
+
     rParent.GetTabLines().C40_INSERT( SwTableLine, pNew, rParent.GetTabLines().Count() );
 
-    pBox->CreateNew( rTbl, *pNew, rSTbl );
+    // HB, #127868# robustness: in some cases - which I
+    // cannot reproduce nor see from the code - pNew seems
+    // to be set to NULL in C40_INSERT.
+    ASSERT(pNew, "Table line just created set to NULL in C40_INSERT");
+
+    if (pNew)
+    {
+        pBox->CreateNew( rTbl, *pNew, rSTbl );
+    }
 
     if( pNext )
         pNext->CreateNew( rTbl, rParent, rSTbl );
