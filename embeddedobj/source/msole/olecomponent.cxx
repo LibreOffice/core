@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:40:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                                 const ::rtl::OUString& aFormatShortName,
                                 uno::Any& aResult );
 
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                             const uno::Reference< io::XOutputStream >& aOut );
 ::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
-::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
-sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 typedef ::std::vector< FORMATETC* > FormatEtcList;
 
@@ -211,6 +207,23 @@ uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_
     aResult[15] = b15;
 
     return aResult;
+}
+
+//----------------------------------------------
+HRESULT OpenIStorageFromURL_Impl( const ::rtl::OUString& aURL, IStorage** ppIStorage )
+{
+    OSL_ENSURE( ppIStorage, "The pointer must not be empty!" );
+
+    ::rtl::OUString aFilePath;
+    if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
+        throw uno::RuntimeException(); // TODO: something dangerous happend
+
+    return StgOpenStorage( aFilePath,
+                             NULL,
+                             STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
+                             NULL,
+                             0,
+                             ppIStorage );
 }
 
 //----------------------------------------------
@@ -483,49 +496,25 @@ void OleComponent::disconnectEmbeddedObject()
 }
 
 //----------------------------------------------
-void OleComponent::CreateIStorageOnXInputStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
-{
-    // TODO: in future a global memory should be used instead of file.
-
-    OSL_ENSURE( !m_aTempURL.getLength(), "The object already has temporary representation!\n" );
-
-    // write the stream to the temporary file
-    m_aTempURL = GetNewFilledTempFile_Impl( xInStream, m_xFactory );
-    if ( !m_aTempURL.getLength() )
-        throw uno::RuntimeException(); // TODO
-
-    // open an IStorage based on the temporary file
-    ::rtl::OUString aTempFilePath;
-    if ( ::osl::FileBase::getSystemPathFromFileURL( m_aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happend
-
-    // TODO: remove temporary file when not needed any more
-    HRESULT hr = StgOpenStorage( aTempFilePath,
-                                 NULL,
-                                 STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
-                                 NULL,
-                                 0,
-                                 &m_pNativeImpl->m_pIStorage );
-
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO: transport error code?
-}
-
-//----------------------------------------------
 void OleComponent::CreateNewIStorage_Impl()
 {
-    // TODO: in future a global memory should be used instead of file.
-
-    OSL_ENSURE( !m_aTempURL.getLength(), "The object already has temporary representation!\n" );
+    // TODO: in future a global memory could be used instead of file.
 
     // write the stream to the temporary file
-    m_aTempURL = GetNewTempFileURL_Impl( m_xFactory );
-    if ( !m_aTempURL.getLength() )
+    ::rtl::OUString aTempURL;
+
+    OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
+    if ( m_pUnoOleObject )
+        aTempURL = m_pUnoOleObject->CreateTempURLEmpty_Impl();
+    else
+        aTempURL = GetNewTempFileURL_Impl( m_xFactory );
+
+    if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO
 
     // open an IStorage based on the temporary file
     ::rtl::OUString aTempFilePath;
-    if ( ::osl::FileBase::getSystemPathFromFileURL( m_aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
+    if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
     HRESULT hr = StgCreateDocfile( aTempFilePath, STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
@@ -619,7 +608,9 @@ sal_Bool OleComponent::InitializeObject_Impl()
     // the linked object will be detected here
     CComPtr< IOleLink > pOleLink;
     HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IOleLink, (void**)&pOleLink );
-    m_pUnoOleObject->SetObjectIsLink_Impl( pOleLink != NULL );
+    OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
+    if ( m_pUnoOleObject )
+        m_pUnoOleObject->SetObjectIsLink_Impl( pOleLink != NULL );
 
 
     hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IViewObject2, (void**)&m_pNativeImpl->m_pViewObject2 );
@@ -674,19 +665,21 @@ sal_Bool OleComponent::InitializeObject_Impl()
 }
 
 //----------------------------------------------
-void OleComponent::LoadEmbeddedObject( const uno::Reference< io::XInputStream >& xInStream )
+void OleComponent::LoadEmbeddedObject( const ::rtl::OUString& aTempURL )
 {
-    if ( !xInStream.is() )
+    if ( !aTempURL.getLength() )
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
-        throw io::IOException(); // TODO the object is already initialized
+    if ( m_pNativeImpl->m_pIStorage )
+        throw io::IOException(); // TODO the object is already initialized or wrong initialization is done
 
-    CreateIStorageOnXInputStream_Impl( xInStream );
-    if ( !m_pNativeImpl->m_pIStorage )
-        throw uno::RuntimeException(); // TODO:
+    // open an IStorage based on the temporary file
+    HRESULT hr = OpenIStorageFromURL_Impl( aTempURL, &m_pNativeImpl->m_pIStorage );
 
-    HRESULT hr = OleLoad( m_pNativeImpl->m_pIStorage, IID_IUnknown, NULL, (void**)&m_pNativeImpl->m_pObj );
+    if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
+        throw io::IOException(); // TODO: transport error code?
+
+    hr = OleLoad( m_pNativeImpl->m_pIStorage, IID_IUnknown, NULL, (void**)&m_pNativeImpl->m_pObj );
     if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
     {
         // STATSTG aStat;
@@ -701,7 +694,7 @@ void OleComponent::LoadEmbeddedObject( const uno::Reference< io::XInputStream >&
 //----------------------------------------------
 void OleComponent::CreateObjectFromClipboard()
 {
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+    if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
     CreateNewIStorage_Impl();
@@ -745,7 +738,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
     if ( !GetClassIDFromSequence_Impl( aSeqCLSID, aClsID ) )
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+    if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
     CreateNewIStorage_Impl();
@@ -785,7 +778,7 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 //----------------------------------------------
 void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
 {
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+    if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
     CreateNewIStorage_Impl();
@@ -815,7 +808,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
 //----------------------------------------------
 void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL )
 {
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+    if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
     CreateNewIStorage_Impl();
@@ -847,13 +840,14 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
     if ( !pOleLinkComponent || !pOleLinkComponent->m_pNativeImpl->m_pObj )
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+    if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
     CComPtr< IDataObject > pDataObject;
     HRESULT hr = pOleLinkComponent->m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
     if ( SUCCEEDED( hr ) && pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
     {
+        // the object must be already disconnected from the temporary URL
         CreateNewIStorage_Impl();
         if ( !m_pNativeImpl->m_pIStorage )
             throw uno::RuntimeException(); // TODO:
@@ -1185,45 +1179,6 @@ void OleComponent::StoreOwnTmpIfNecessary()
 }
 
 //----------------------------------------------
-void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
-{
-    StoreOwnTmpIfNecessary();
-
-    // now all the changes should be in temporary location
-
-    // open temporary file for reading
-    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                    m_xFactory->createInstance (
-                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                    uno::UNO_QUERY );
-
-    if ( !xTempAccess.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );
-    OSL_ENSURE( xTempInStream.is(), "The object's temporary file can not be reopened for reading!\n" );
-
-    // TODO: use bStoreVisReplace
-
-    if ( xTempInStream.is() )
-    {
-        // write all the contents to XOutStream
-        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY );
-        if ( !xTrunc.is() )
-            throw uno::RuntimeException(); //TODO:
-
-        xTrunc->truncate();
-
-        copyInputToOutput_Impl( xTempInStream, xOutStream );
-    }
-    else
-        throw io::IOException(); // TODO:
-
-    // TODO: should the view replacement be in the stream ???
-    //       probably it must be specified on storing
-}
-
-//----------------------------------------------
 sal_Bool OleComponent::SaveObject_Impl()
 {
     sal_Bool bResult = sal_False;
@@ -1264,7 +1219,7 @@ sal_Bool OleComponent::OnShowWindow_Impl( sal_Bool bShow )
 
     if ( pLockObject )
     {
-        bResult = m_pUnoOleObject->OnShowWindow_Impl( bShow );
+        bResult = pLockObject->OnShowWindow_Impl( bShow );
         pLockObject->release();
     }
 
@@ -1289,7 +1244,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
     if ( pLockObject )
     {
-        m_pUnoOleObject->OnViewChanged_Impl();
+        pLockObject->OnViewChanged_Impl();
         pLockObject->release();
     }
 
@@ -1502,7 +1457,12 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         uno::Reference< io::XInputStream > xTempInStream = xTempFileStream->getInputStream();
         if ( xTempOutStream.is() && xTempInStream.is() )
         {
-            StoreObjectToStream( xTempOutStream );
+            OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
+            if ( !m_pUnoOleObject )
+                throw uno::RuntimeException();
+
+            m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
+
             xTempOutStream->closeOutput();
             xTempOutStream = uno::Reference< io::XOutputStream >();
         }
