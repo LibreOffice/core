@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:26:10 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ import java.net.URL;
  *
  * <p><em>This class is not yet stable.</em></p>
  *
- * @since UDK 3.2.1
+ * @since UDK 3.2.0
  */
 public final class UnoLoader {
     /**
