@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:08:16 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2434,9 +2434,13 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
     if( mpKerningPairs )
     {
         const KERNINGPAIR aRefPair = { cLeft, cRight, 0 };
-        const KERNINGPAIR* pPair = std::lower_bound( mpKerningPairs,
-            mpKerningPairs + mnKerningPairs, aRefPair, ImplCmpKernData );
-        if( pPair->wFirst==aRefPair.wFirst && pPair->wSecond==aRefPair.wSecond )
+        const KERNINGPAIR* pFirstPair = mpKerningPairs;
+        const KERNINGPAIR* pEndPair = mpKerningPairs + mnKerningPairs;
+        const KERNINGPAIR* pPair = std::lower_bound( pFirstPair,
+            pEndPair, aRefPair, ImplCmpKernData );
+        if( (pPair != pEndPair)
+        &&  (pPair->wFirst == aRefPair.wFirst)
+        &&  (pPair->wSecond == aRefPair.wSecond) )
             nKernAmount = pPair->iKernAmount;
     }
 
