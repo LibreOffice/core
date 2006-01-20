@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:17:38 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
+#include <rtl/logfile.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -1234,6 +1235,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 */
 
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveTo_Impl" );
+
     ModifyBlocker_Impl aMod(this);
 
     const SfxFilter *pFilter = rMedium.GetFilter();
@@ -1667,6 +1670,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 //------------------------------------------------------------------------
 sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::DisconnectStorage_Impl" );
+
     // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
 
     uno::Reference< embed::XStorage > xStorage = rSrcMedium.GetStorage();
@@ -1713,6 +1718,8 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
      */
 
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::ConnectTmpStorage_Impl" );
+
     sal_Bool bResult = sal_False;
 
     if ( xStorage.is() )
@@ -1839,6 +1846,8 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
 
 sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::DoSaveCompleted" );
+
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
 /*  sal_Bool bCreatedTempStor = pNewMed && pMedium &&
@@ -3008,6 +3017,8 @@ void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage
 
 sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveChildren" );
+
     sal_Bool bResult = sal_True;
     if ( pImp->mpObjectContainer )
     {
@@ -3111,6 +3122,8 @@ sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
 
 sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveAsChildren" );
+
     sal_Bool bResult = sal_True;
 
     uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
@@ -3245,6 +3258,8 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveCompletedChildren" );
+
     sal_Bool bResult = sal_True;
 
     if ( pImp->mpObjectContainer )
@@ -3280,6 +3295,8 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Bool bForceNonModified )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SwitchChildrenPersistence" );
+
     if ( !xStorage.is() )
     {
         // TODO/LATER: error handling
@@ -3340,6 +3357,8 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
 // Never call this method directly, always use the DoSaveCompleted call
 sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveCompleted" );
+
     sal_Bool bResult = sal_False;
     sal_Bool bSendNotification = sal_False;
     uno::Reference< embed::XStorage > xOldStorageHolder;
@@ -3490,6 +3509,8 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SwitchPersistance" );
+
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
     // check for wrong creation of object container
@@ -3523,6 +3544,8 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
 sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed::XStorage >& xSource,
                                                          const uno::Reference< embed::XStorage >& xTarget )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::CopyStoragesOfUnknownMediaType" );
+
     // This method does not commit the target storage and should not do it
     sal_Bool bResult = sal_True;
 
@@ -3638,6 +3661,8 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
                                                     sal_Bool bIsTemplate,
                                                     const uno::Reference< embed::XStorage >& xStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::GenerateAndStoreThumbnail" );
+
     sal_Bool bResult = sal_False;
 
     try {
