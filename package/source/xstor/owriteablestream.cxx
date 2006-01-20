@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:48:20 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@
 #include "xstorage.hxx"
 
 #include <rtl/digest.h>
+#include <rtl/logfile.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1177,11 +1178,15 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, sal_Bool bUseCommonKey )
+void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, sal_Bool bUseCommonKey, uno::Reference< io::XStream >& xTargetStream )
 {
-    uno::Reference < io::XStream > xTempFile(
-        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-        uno::UNO_QUERY );
+    uno::Reference < io::XStream > xTempFile;
+    if ( !xTargetStream.is() )
+        xTempFile = uno::Reference < io::XStream >(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            uno::UNO_QUERY );
+    else
+        xTempFile = xTargetStream;
 
     uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY );
     if ( !xTempSeek.is() )
@@ -1202,19 +1207,15 @@ uno::Reference< io::XStream > OWriteStream_Impl::CreateReadonlyCopyBasedOnData( 
         throw io::IOException();
 
     // TODO: remember last state of m_bUseCommonPass
-    uno::Reference< io::XStream > xResult(
-        static_cast< ::cppu::OWeakObject* >(
+    if ( !xTargetStream.is() )
+        xTargetStream = uno::Reference< io::XStream > (
+            static_cast< ::cppu::OWeakObject* >(
                 new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonPass ) ) ),
-        uno::UNO_QUERY );
-
-    if ( !xResult.is() )
-        throw uno::RuntimeException();
-
-    return xResult;
+            uno::UNO_QUERY_THROW );
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit()
+void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -1236,18 +1237,21 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit()
             throw packages::WrongPasswordException();
         }
 
-        return GetCopyOfLastCommit( aGlobalPass );
+        GetCopyOfLastCommit( xTargetStream, aGlobalPass );
     }
     else
+    {
         xDataToCopy = m_xPackageStream->getDataStream();
 
-    // in case of new inserted package stream it is possible that input stream still was not set
-    GetStreamProperties();
-    return CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass );
+        // in case of new inserted package stream it is possible that input stream still was not set
+        GetStreamProperties();
+
+        CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass, xTargetStream );
+    }
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const ::rtl::OUString& aPass )
+uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream, const ::rtl::OUString& aPass )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -1329,7 +1333,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const ::rt
 
     // in case of new inserted package stream it is possible that input stream still was not set
     GetStreamProperties();
-    return CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, sal_False );
+
+    CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass, xTargetStream );
 }
 
 //===============================================
@@ -1402,6 +1407,7 @@ void OWriteStream::CheckInitOnDemand()
 
     if ( m_bInitOnDemand )
     {
+        RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
         uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
         if ( xStream.is() )
         {
