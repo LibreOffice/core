@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:37:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 \************************************************************************/
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode ):
 Outliner( pItemPool, nMode ),
-pTextObj( NULL ),
 mpPaintInfoRec( NULL )
 {
 }
@@ -88,7 +87,7 @@ SdrOutliner::~SdrOutliner()
 \************************************************************************/
 void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
-    if( pObj && pObj != pTextObj )
+    if( pObj && pObj != mpTextObj.get() )
     {
         SetUpdateMode(FALSE);
         USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
@@ -110,7 +109,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         ClearPolygon();
     }
 
-    pTextObj = pObj;
+    mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
 /*************************************************************************
@@ -120,7 +119,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 \************************************************************************/
 void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 {
-    pTextObj = pObj;
+    mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
 /*************************************************************************
@@ -134,13 +133,18 @@ XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, 
     FASTBOOL bOk = FALSE;
     XubString aRet;
 
-    if (pTextObj)
-        bOk = pTextObj->CalcFieldValue(rField, nPara, nPos, FALSE, rpTxtColor, rpFldColor, aRet);
+    if(mpTextObj.is())
+        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, FALSE, rpTxtColor, rpFldColor, aRet);
 
     if (!bOk)
         aRet = Outliner::CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor);
 
     return aRet;
+}
+
+const SdrTextObj* SdrOutliner::GetTextObj() const
+{
+    return static_cast< SdrTextObj* >( mpTextObj.get() );
 }
 
 
