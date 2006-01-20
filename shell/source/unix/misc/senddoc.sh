@@ -273,6 +273,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
          ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
         ;;
 
+    Mail | Thunderbird | *.app )
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --attach)
+                    ATTACH="${ATTACH:-}${ATTACH:+ } $2"
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+        /usr/bin/open -a "${MAILER}" ${ATTACH}
+        ;;
+
     "")
 
         # DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
