@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:47:24 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,7 +504,7 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbacfg, dbacfg)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
 
@@ -1242,7 +1242,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Wpft,wpft)
 
 #if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
 
@@ -1409,7 +1409,7 @@ End
 
 #ifdef WNT
 
-STD_UNO_LIB_FILE( gid_File_Lib_Opc , opc)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Opc , opc)
 
 #endif
 
@@ -1443,7 +1443,7 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Preload, preload)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
 
@@ -1633,7 +1633,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sch , sch)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Schd , schd)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Schd , schd)
 
 //
 // start binfilter #110743#
@@ -1703,7 +1703,7 @@ File gid_File_Lib_Sdbc_2
   #endif
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sdd , sdd)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sdd , sdd)
 
 File gid_File_Lib_Sec
     TXT_FILE_BODY;
