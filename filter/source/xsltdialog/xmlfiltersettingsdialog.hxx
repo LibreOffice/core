@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
 #endif
 
 #ifndef _SV_BUTTON_HXX
@@ -122,10 +126,10 @@ public:
 
 class XMLFilterTestDialog;
 
-class XMLFilterSettingsDialog : public WorkWindow
+class XMLFilterSettingsDialog : public ModalDialog
 {
 public:
-    XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  );
+    XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF, const Link& rDeleteLink  );
     virtual ~XMLFilterSettingsDialog();
 
     DECL_LINK(ClickHdl_Impl, PushButton * );
@@ -185,6 +189,8 @@ private:
     ::rtl::OUString sDocTypePrefix;
 
     SvtModuleOptions maModuleOpt;
+
+    Link        maDeleteLink;
 };
 
 #endif
