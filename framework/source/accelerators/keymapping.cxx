@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keymapping.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:04:09 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,11 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::FRONT         , "KEY_FRONT"      },
     {css::awt::Key::CONTEXTMENU   , "KEY_CONTEXTMENU"},
     {css::awt::Key::HELP          , "KEY_HELP"       },
+    {css::awt::Key::MENU          , "KEY_MENU"       },
+    {css::awt::Key::HANGUL_HANJA  , "KEY_HANGUL_HANJA"},
+    {css::awt::Key::DECIMAL       , "KEY_DECIMAL"    },
+    {css::awt::Key::TILDE         , "KEY_TILDE"      },
+    {css::awt::Key::QUOTELEFT     , "KEY_QUOTELEFT"  },
     {0                            , ""               } // mark the end of this array!
 };
 
