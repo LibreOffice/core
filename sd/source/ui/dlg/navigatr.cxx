@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:09:31 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,9 +225,9 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     }
 
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-
-    ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-        GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
+    SfxViewFrame* pViewFrame = ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() );
+    if( pViewFrame )
+        pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
 }
 
 /*************************************************************************
