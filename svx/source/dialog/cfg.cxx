@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:58:26 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2596,7 +2596,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
             String aNewName( stripHotKey( pMenuData->GetName() ) );
-            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
+            String aDesc = SVX_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -2657,7 +2657,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         case ID_ADD_SUBMENU:
         {
             String aNewName;
-            String aDesc( SVX_RESSTR( RID_SVXSTR_SUBMENU_NAME ) );
+            String aDesc = SVX_RESSSTR( RID_SVXSTR_SUBMENU_NAME );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -2709,7 +2709,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             String aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
+            String aDesc = SVX_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -3533,7 +3533,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         case ID_RENAME:
         {
             String aNewName( stripHotKey( pToolbar->GetName() ) );
-            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
+            String aDesc = SVX_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -3630,7 +3630,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             String aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
+            String aDesc = SVX_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
