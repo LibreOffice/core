@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:01:21 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,7 @@ struct OStorage_Impl
 
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
     sal_Bool                    m_bIsModified;  // only modified elements will be sent to the original content
+    sal_Bool                    m_bBroadcastModified;  // will be set if notification is required
     sal_Bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
 
     sal_Bool                    m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
@@ -332,7 +333,7 @@ protected:
 
     SotElement_Impl* OpenStreamElement_Impl( const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, sal_Bool bEncr );
 
-    void BroadcastModified();
+    void BroadcastModifiedIfNecessary();
 
     void BroadcastTransaction( sal_Int8 nMessage );
 
