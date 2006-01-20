@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.8 2005-12-21 11:14:16 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.9 2006-01-20 12:59:31 obo Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -66,6 +66,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     return aRet;
 }
 
+#ifdef OJI
 static JRIEnv* l_NPN_GetJavaEnv()
 {
     // no java in this program
@@ -78,6 +79,7 @@ static jref l_NPN_GetJavaPeer( NPP instance )
     medDebug( 1, "SNI: NPN_GetJavaPeer\n" );
     return NULL;
 }
+#endif
 
 static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
 {
@@ -417,8 +419,13 @@ static NPNetscapeFuncs aNetscapeFuncs =
     l_NPN_MemFree,
     l_NPN_MemFlush,
     l_NPN_ReloadPlugins,
+    #ifdef OJI
     l_NPN_GetJavaEnv,
     l_NPN_GetJavaPeer,
+    #else
+    NULL,
+    NULL,
+    #endif
     l_NPN_GetURLNotify,
     l_NPN_PostURLNotify,
     l_NPN_GetValue,
