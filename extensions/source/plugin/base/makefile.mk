@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:50:31 $
+#   last change: $Author: obo $ $Date: 2006-01-20 12:58:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,13 @@ TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  ..$/util$/makefile.pmk
+
+INCPRE+=-I$(SOLARINCDIR)$/mozilla$/plugin
+.IF "$(SOLAR_JAVA)" != ""
+INCPRE+=-I$(SOLARINCDIR)$/mozilla$/java
+INCPRE+=-I$(SOLARINCDIR)$/mozilla$/nspr
+CDEFS+=-DOJI
+.ENDIF
 
 SLOFILES=		\
                 $(SLO)$/plctrl.obj		\
