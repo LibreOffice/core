@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:41 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1074,7 +1074,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     // <--
 
     pNumFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
-    pNumFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
+    pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
     SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pNumFnt );
     pNewPor->SetLeft( !pFrm->IsRightToLeft() );
     return pNewPor;
