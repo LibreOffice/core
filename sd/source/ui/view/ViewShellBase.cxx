@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:21:03 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "ViewShellBase.hxx"
-
+#include <algorithm>
 #include "EventMultiplexer.hxx"
 #include "../toolpanel/controls/MasterPageContainer.hxx"
 #include "cache/SlsPageCacheManager.hxx"
@@ -551,8 +551,8 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
         aSize.Width() -= (aBorder.Left() + aBorder.Right());
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
         Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
-        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), aObjSizePixel.Width() ),
-            Fraction( aSize.Height(), aObjSizePixel.Height() ) );
+        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), (long int)1 ) ),
+            Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
     }
 
     ResizePixel (rOrigin, rSize, false);
