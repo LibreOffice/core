@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:49:14 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,8 @@ struct OStorage_Impl
 
     ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
 
-    void CopyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest );
+    void CopyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
+                        sal_Bool bDirect );
     void CopyStorageElement( SotElement_Impl* pElement,
                             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xDest,
                             ::rtl::OUString aName,
@@ -295,10 +296,11 @@ struct OStorage_Impl
     void ClearElement( SotElement_Impl* pElement );
     void DisposeChildren();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > CloneStreamElement(
+    void CloneStreamElement(
                     const ::rtl::OUString& aStreamName,
                     sal_Bool bPassProvided,
-                    const ::rtl::OUString& aPass )
+                    const ::rtl::OUString& aPass,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::packages::WrongPasswordException,
@@ -728,6 +730,14 @@ public:
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL copyStreamElementData( const ::rtl::OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
 };
 
 #endif
