@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:38:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#include <rtl/logfile.hxx>
+
 
 #include "xcreator.hxx"
 #include "convert.hxx"
@@ -107,6 +109,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitNew" );
+
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -150,6 +154,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
+
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
@@ -261,6 +267,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor" );
+
     // TODO: use lObjArgs
 
     if ( !xStorage.is() )
@@ -332,6 +340,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceUserInit" );
+
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -371,6 +381,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLink" );
+
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -452,6 +464,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLinkUserInit" );
+
     uno::Reference< uno::XInterface > xResult;
 
     ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
