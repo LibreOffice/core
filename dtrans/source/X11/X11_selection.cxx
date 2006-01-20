@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:30:30 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -545,6 +545,10 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 {
     MutexGuard aGuard( m_aMutex );
     XTextProperty aProp;
+    aProp.value = NULL;
+    aProp.encoding = XA_STRING;
+    aProp.format = 8;
+    aProp.nitems = 0;
 
     OString aRet( rText.getStr(), rText.getLength(), osl_getThreadTextEncoding() );
     char* pT = const_cast<char*>(aRet.getStr());
