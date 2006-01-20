@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:51:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
     OStringBuffer aBuffer;
+    aBuffer.append("\"");
 
     OUString aProgramURL;
     if ( osl_Process_E_None != osl_getExecutableFile(&aProgramURL.pData) )
@@ -216,7 +217,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     if (nIndex > 0)
         aBuffer.append(aTmp.copy(0, nIndex+1));
 
-    aBuffer.append("senddoc ");
+    aBuffer.append("senddoc\" ");
 
     try
     {
@@ -257,6 +258,10 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
                 aBuffer.append(OUStringToOString( aMailer, osl_getThreadTextEncoding() ));
                 aBuffer.append(" ");
             }
+#ifdef MACOSX
+            else
+                aBuffer.append("--mailclient Mail ");
+#endif
         }
 
     }
@@ -322,7 +327,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(aStringList[n], aSystemPath) )
         {
             aBuffer.append("--attach \"");
-            aBuffer.append(OUStringToOString(aSystemPath, RTL_TEXTENCODING_UTF8));
+            aBuffer.append(OUStringToOString(aSystemPath, osl_getThreadTextEncoding()));
             aBuffer.append("\" ");
         }
     }
