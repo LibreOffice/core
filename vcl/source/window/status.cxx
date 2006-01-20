@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:14:53 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,9 +860,10 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
         mbFormat = TRUE;
         ImplInitSettings( TRUE, TRUE, TRUE );
         ImplStatusItem* pItem = mpItemList->First();
+        long nFudge = GetTextHeight() / 4;
         while ( pItem )
         {
-            long nWidth = GetTextWidth( pItem->maText );
+            long nWidth = GetTextWidth( pItem->maText ) + nFudge;
             if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
             pItem = mpItemList->Next();
@@ -915,10 +916,11 @@ void StatusBar::InsertItem( USHORT nItemId, ULONG nWidth,
         nBits |= SIB_CENTER;
 
     // Item anlegen
+    long nFudge = GetTextHeight()/4;
     ImplStatusItem* pItem   = new ImplStatusItem;
     pItem->mnId             = nItemId;
     pItem->mnBits           = nBits;
-    pItem->mnWidth          = (long)nWidth+2;
+    pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
     pItem->mnHelpId         = 0;
     pItem->mpUserData       = 0;
@@ -1244,7 +1246,8 @@ void StatusBar::SetItemText( USHORT nItemId, const XubString& rText )
             pItem->maText = rText;
 
             // adjust item width - see also DataChanged()
-            long nWidth = GetTextWidth( pItem->maText );
+            long nFudge = GetTextHeight()/4;
+            long nWidth = GetTextWidth( pItem->maText ) + nFudge;
             if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
 
