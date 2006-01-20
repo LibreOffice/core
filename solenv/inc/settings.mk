@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.184 $
+#   $Revision: 1.185 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:36:21 $
+#   last change: $Author: obo $ $Date: 2006-01-20 12:09:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1136,7 +1136,10 @@ JAVA*=java
 .ELSE
 JAVA*=$(JAVAINTERPRETER)
 .ENDIF
-SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/par2script.pl
+# Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
+# pathes. (See iz57443)
+SCPCOMP=$(PERL) $(SOLARENV)$/bin$/pre2par.pl
+SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin$/par2script.pl
 LZIP*=lzip
 CPPLCC*=$(WRAPCMD) cpplcc
 
