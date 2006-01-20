@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:41:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #include "ownview.hxx"
 
 using namespace ::com::sun::star;
+
+sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
+
 
 //------------------------------------------------------
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
@@ -161,6 +164,9 @@ OleEmbeddedObject::~OleEmbeddedObject()
             Dispose();
         } catch( uno::Exception& ) {}
     }
+
+    if ( m_aTempURL.getLength() )
+           KillFile_Impl( m_aTempURL, m_xFactory );
 }
 
 //------------------------------------------------------
