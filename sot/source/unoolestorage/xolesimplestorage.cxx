@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:45:42 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ OLESimpleStorage::OLESimpleStorage( uno::Reference< lang::XMultiServiceFactory >
 , m_pStream( NULL )
 , m_pStorage( NULL )
 , m_pListenersContainer( NULL )
+, m_bNoTemporaryCopy( sal_False )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided on creation!\n" );
     if ( !m_xFactory.is() )
@@ -118,24 +119,27 @@ uno::Reference< uno::XInterface > SAL_CALL OLESimpleStorage::impl_staticCreateSe
 //-------------------------------------------------------------------------
 void OLESimpleStorage::UpdateOriginal_Impl()
 {
-    uno::Reference< io::XSeekable > xSeek( m_xStream, uno::UNO_QUERY_THROW );
-    xSeek->seek( 0 );
+    if ( !m_bNoTemporaryCopy )
+    {
+        uno::Reference< io::XSeekable > xSeek( m_xStream, uno::UNO_QUERY_THROW );
+        xSeek->seek( 0 );
 
-    uno::Reference< io::XSeekable > xTempSeek( m_xTempStream, uno::UNO_QUERY_THROW );
-    sal_Int64 nPos = xTempSeek->getPosition();
-    xTempSeek->seek( 0 );
+        uno::Reference< io::XSeekable > xTempSeek( m_xTempStream, uno::UNO_QUERY_THROW );
+        sal_Int64 nPos = xTempSeek->getPosition();
+        xTempSeek->seek( 0 );
 
-    uno::Reference< io::XInputStream > xTempInp = m_xTempStream->getInputStream();
-    uno::Reference< io::XOutputStream > xOutputStream = m_xStream->getOutputStream();
-    if ( !xTempInp.is() || !xOutputStream.is() )
-        throw uno::RuntimeException();
+        uno::Reference< io::XInputStream > xTempInp = m_xTempStream->getInputStream();
+        uno::Reference< io::XOutputStream > xOutputStream = m_xStream->getOutputStream();
+        if ( !xTempInp.is() || !xOutputStream.is() )
+            throw uno::RuntimeException();
 
-    uno::Reference< io::XTruncate > xTrunc( xOutputStream, uno::UNO_QUERY_THROW );
-    xTrunc->truncate();
+        uno::Reference< io::XTruncate > xTrunc( xOutputStream, uno::UNO_QUERY_THROW );
+        xTrunc->truncate();
 
-    ::comphelper::OStorageHelper::CopyInputToOutput( xTempInp, xOutputStream );
-    xOutputStream->flush();
-    xTempSeek->seek( nPos );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInp, xOutputStream );
+        xOutputStream->flush();
+        xTempSeek->seek( nPos );
+    }
 }
 
 //____________________________________________________________________________________________________
@@ -150,9 +154,9 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
         throw io::IOException(); // TODO: already initilized
 
     sal_Int32 nArgNum = aArguments.getLength();
-    OSL_ENSURE( nArgNum == 1, "Wrong parameter number" );
+    OSL_ENSURE( nArgNum >= 1 && nArgNum <= 2, "Wrong parameter number" );
 
-    if ( nArgNum != 1 )
+    if ( nArgNum < 1 || nArgNum > 2 )
         throw lang::IllegalArgumentException(); // TODO:
 
     uno::Reference< io::XStream > xStream;
@@ -160,51 +164,81 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
     if ( !( aArguments[0] >>= xStream ) && !( aArguments[0] >>= xInputStream ) )
         throw lang::IllegalArgumentException(); // TODO:
 
-    // The temporary stream has to be created since SvStream wrapper closes the stream is owns
-    uno::Reference < io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-            uno::UNO_QUERY_THROW );
-    uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
-    uno::Reference< io::XOutputStream > xTempOut = xTempFile->getOutputStream();
-    if ( !xTempOut.is() )
-        throw uno::RuntimeException();
-
-    if ( xInputStream.is() )
+    if ( nArgNum == 2 )
     {
-        try
-        {
-            uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
-            xSeek->seek( 0 );
-        }
-        catch( uno::Exception& )
-        {}
-
-        ::comphelper::OStorageHelper::CopyInputToOutput( xInputStream, xTempOut );
-        xTempOut->closeOutput();
-        xTempSeek->seek( 0 );
-        uno::Reference< io::XInputStream > xTempInput = xTempFile->getInputStream();
-        m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempInput );
+        if ( !( aArguments[1] >>= m_bNoTemporaryCopy ) )
+            throw lang::IllegalArgumentException(); // TODO:
     }
-    else if ( xStream.is() )
+
+    if ( m_bNoTemporaryCopy )
     {
-        // not sure that the storage flashes the stream on commit
-        m_xStream = xStream;
-        m_xTempStream = xTempFile;
-
-        uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
-        xSeek->seek( 0 );
-        uno::Reference< io::XInputStream > xInpStream = xStream->getInputStream();
-        if ( !xInpStream.is() || !xStream->getOutputStream().is() )
-            throw uno::RuntimeException();
-
-        ::comphelper::OStorageHelper::CopyInputToOutput( xInpStream, xTempOut );
-        xTempOut->flush();
-        xTempSeek->seek( 0 );
-
-        m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile );
+        // TODO: ???
+        // If the temporary stream is not created, the original stream must be wrapped
+        // since SvStream wrapper closes the stream is owns
+        if ( xInputStream.is() )
+        {
+            // the stream must be seekable for direct access
+            uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xInputStream );
+            // m_pStream = ::utl::UcbStreamHelper::CreateStream( ( io::XInputStream* )new NoCloseWrapper( xInputStream ) );
+        }
+        else if ( xStream.is() )
+        {
+            // the stream must be seekable for direct access
+            uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
+            // m_pStream = ::utl::UcbStreamHelper::CreateStream( ( io::XStream* )new NoCloseWrapper( xStream ) );
+        }
+        else
+            throw lang::IllegalArgumentException(); // TODO:
     }
     else
-        throw lang::IllegalArgumentException(); // TODO:
+    {
+        uno::Reference < io::XStream > xTempFile(
+                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                uno::UNO_QUERY_THROW );
+        uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
+        uno::Reference< io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+        if ( !xTempOut.is() )
+            throw uno::RuntimeException();
+
+        if ( xInputStream.is() )
+        {
+            try
+            {
+                uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
+                xSeek->seek( 0 );
+            }
+            catch( uno::Exception& )
+            {}
+
+            ::comphelper::OStorageHelper::CopyInputToOutput( xInputStream, xTempOut );
+            xTempOut->closeOutput();
+            xTempSeek->seek( 0 );
+            uno::Reference< io::XInputStream > xTempInput = xTempFile->getInputStream();
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempInput );
+        }
+        else if ( xStream.is() )
+        {
+            // not sure that the storage flashes the stream on commit
+            m_xStream = xStream;
+            m_xTempStream = xTempFile;
+
+            uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
+            xSeek->seek( 0 );
+            uno::Reference< io::XInputStream > xInpStream = xStream->getInputStream();
+            if ( !xInpStream.is() || !xStream->getOutputStream().is() )
+                throw uno::RuntimeException();
+
+            ::comphelper::OStorageHelper::CopyInputToOutput( xInpStream, xTempOut );
+            xTempOut->flush();
+            xTempSeek->seek( 0 );
+
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile );
+        }
+        else
+            throw lang::IllegalArgumentException(); // TODO:
+    }
 
     if ( !m_pStream || m_pStream->GetError() )
         throw io::IOException(); // TODO
@@ -238,7 +272,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, cons
     BaseStorageStream* pNewStream = NULL;
     try
     {
-        if ( !m_xStream.is() )
+        if ( !m_bNoTemporaryCopy && !m_xStream.is() )
             throw io::IOException(); // TODO
 
         if ( aElement >>= xStream )
@@ -315,7 +349,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const ::rtl::OUString& aName )
       if ( !m_pStorage )
         throw uno::RuntimeException();
 
-    if ( !m_xStream.is() )
+    if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw lang::WrappedTargetException(); // io::IOException(); // TODO
 
     if ( !m_pStorage->IsContained( aName ) )
@@ -587,7 +621,7 @@ void SAL_CALL OLESimpleStorage::commit()
      if ( !m_pStorage )
         throw uno::RuntimeException();
 
-    if ( !m_xStream.is() )
+    if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw io::IOException(); // TODO
 
     if ( !m_pStorage->Commit() || m_pStorage->GetError() )
@@ -613,7 +647,7 @@ void SAL_CALL OLESimpleStorage::revert()
      if ( !m_pStorage )
         throw uno::RuntimeException();
 
-    if ( !m_xStream.is() )
+    if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw io::IOException(); // TODO
 
     if ( !m_pStorage->Revert() || m_pStorage->GetError() )
