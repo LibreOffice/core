@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:33:57 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1360,11 +1360,8 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
                             sal_Bool bReplaceExisting )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( !rStream.is() )
-        return;
-
     InsertCommandArgument aArg;
-    aArg.Data            = rStream;
+    aArg.Data            = rStream.is() ? rStream : new EmptyInputStream;
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
@@ -1440,7 +1437,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
                                 makeAny(
                                     InsertCommandArgument(
-                                        rData,
+                                        rData.is() ? rData : new EmptyInputStream,
                                         sal_False /* ReplaceExisting */ ) ) );
     aNewContent.m_xImpl->inserted();
 
@@ -1481,7 +1478,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
                                 makeAny(
                                     InsertCommandArgument(
-                                        rData,
+                                        rData.is() ? rData : new EmptyInputStream,
                                         sal_False /* ReplaceExisting */ ) ) );
     aNewContent.m_xImpl->inserted();
 
