@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:06:27 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2689,6 +2689,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // find the best matching logical font family and update font selector accordingly
         pFontFamily = pFontList->ImplFindByFont( aFontSelData, mbPrinter, pDevSpecific );
         DBG_ASSERT( (pFontFamily != NULL), "ImplFontCache::Get() No logical font found!" );
+    if( pFontFamily )
         aFontSelData.maSearchName = pFontFamily->GetSearchName();
 
         // check if an indirectly matching logical font instance is already cached
