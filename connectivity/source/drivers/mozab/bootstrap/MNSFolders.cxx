@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSFolders.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:18:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 static char * DefaultProductDir[] =
 {
-#if defined(XP_WIN) || defined(XP_MAC) || defined(XP_MACOSX)
+#if defined(XP_WIN)
     "Mozilla\\",
     "Mozilla\\Firefox\\",
     "Thunderbird\\"
