@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:54:40 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 12:41:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,11 @@ KeyIdentifierInfo AWTKeyIdentifierMap[] =
     {css::awt::Key::FRONT         , "KEY_FRONT"      },
     {css::awt::Key::CONTEXTMENU   , "KEY_CONTEXTMENU"},
     {css::awt::Key::HELP          , "KEY_HELP"       },
+    {css::awt::Key::MENU          , "KEY_MENU"       },
+    {css::awt::Key::HANGUL_HANJA  , "KEY_HANGUL_HANJA"},
+    {css::awt::Key::DECIMAL       , "KEY_DECIMAL"    },
+    {css::awt::Key::TILDE         , "KEY_TILDE"      },
+    {css::awt::Key::QUOTELEFT     , "KEY_QUOTELEFT"  },
     {0                            , ""               } // mark the end of this array!
 };
 
@@ -828,6 +833,11 @@ KeyCode impl_KeyCodeAWT2VCL(const css::awt::KeyEvent& aAWTKey)
     BOOL   bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
     BOOL   bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
     USHORT nKey   = (USHORT)aAWTKey.KeyCode;
+    // unfortunately MENU and CONTEXTMENU are twisted between vcl and awt
+    if( aAWTKey.KeyCode == css::awt::Key::MENU )
+        nKey = KEY_CONTEXTMENU;
+    else if( aAWTKey.KeyCode == css::awt::Key::CONTEXTMENU )
+        nKey = KEY_MENU;
     return KeyCode(nKey, bShift, bMod1, bMod2);
 }
 
@@ -836,6 +846,11 @@ css::awt::KeyEvent impl_KeyCodeVCL2AWT(const KeyCode& aVCLKey)
     css::awt::KeyEvent aAWTKey;
     aAWTKey.Modifiers = 0;
     aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
+    // unfortunately MENU and CONTEXTMENU are twisted between vcl and awt
+    if( aAWTKey.KeyCode == css::awt::Key::MENU )
+        aAWTKey.KeyCode = css::awt::Key::CONTEXTMENU;
+    else if( aAWTKey.KeyCode == css::awt::Key::CONTEXTMENU )
+        aAWTKey.KeyCode = css::awt::Key::MENU;
 
     if (aVCLKey.IsShift())
         aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
