@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:14:05 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 14:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,11 @@
 #define _NEONURI_HXX_
 
 #ifndef NE_URI_H
+#ifdef SYSTEM_NEON
+#include <ne_uri.h>
+#else
 #include <neon/ne_uri.h>
+#endif
 #endif
 
 #ifndef _RTL_USTRING_HXX_
