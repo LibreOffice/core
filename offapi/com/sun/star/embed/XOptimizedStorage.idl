@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOptimizedStorage.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 14:15:24 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 09:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,10 @@
 
 #ifndef __com_sun_star_packages_NoRawFormatException_idl__
 #include <com/sun/star/packages/NoRawFormatException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_WrongPasswordException_idl__
+#include <com/sun/star/packages/WrongPasswordException.idl>
 #endif
 
 #ifndef __com_sun_star_beans_PropertyValue_idl__
@@ -185,6 +189,40 @@ interface XOptimizedStorage
                 ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** fills the provided stream with the last flushed version of data from
+        the child stream of the storage.
+
+        @param sStreamName
+            the name of the substream that should be copied
+
+        @param xTargetStream
+            the target stream where the data must be copied to
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    void copyStreamElementData( [in] string sStreamName,
+                                [in] ::com::sun::star::io::XStream xTargetStream )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
 };
 
 //============================================================================
