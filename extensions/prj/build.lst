@@ -1,4 +1,4 @@
-ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain offuh NP_SDK:np_sdk stoc uui NULL
+ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain offuh stoc uui NULL
 ex	extensions					usr1	-	all	ex_mkout NULL
 ex	extensions\inc					get		-	all	ex_inc NULL
 ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh NULL
