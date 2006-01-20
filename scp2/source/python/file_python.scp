@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:57:11 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ File gid_File_Py_Python_Bin
     Styles = (PACKED);
 End
 #endif
+#endif
 
 File gid_File_Pymailmerge
     TXT_FILE_BODY;
@@ -110,7 +111,6 @@ File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
     Name = "/registry/spool/org/openoffice/Office/Writer-javamail.xcu";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
-#endif
 
 // substitute for the python Windows basic scripts
 
