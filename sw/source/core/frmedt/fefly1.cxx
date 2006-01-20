@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:33 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 13:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,7 +706,6 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    const SwPosition& rPos = *pCrsr->Start();
     const Point aPt( GetCrsrDocPos() );
 
     SwSelBoxes aBoxes;
@@ -721,6 +720,13 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             // Dokument-Position werden sie dann immer an die alte
             // Position gesetzt.
             ParkCrsr( SwNodeIndex( *aBoxes[0]->GetSttNd() ));
+
+            // --> FME 2005-12-01 #i127787# pCurCrsr will be deleted in ParkCrsr,
+            // we better get the current pCurCrsr instead of working with the
+            // deleted one:
+            pCrsr = GetCrsr();
+            // <--
+
 //          KillPams();
         }
         else
@@ -728,6 +734,8 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     }
     else if( !pCrsr->HasMark() && pCrsr->GetNext() == pCrsr )
         bMoveCntnt = sal_False;
+
+    const SwPosition& rPos = *pCrsr->Start();
 
     SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
     RndStdIds eRndId = rAnch.GetAnchorId();
