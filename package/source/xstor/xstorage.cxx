@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:01:06 $
+ *  last change: $Author: obo $ $Date: 2006-01-20 10:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,6 +236,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( sal_False )
+, m_bBroadcastModified( sal_False )
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
@@ -270,6 +271,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( sal_False )
+, m_bBroadcastModified( sal_False )
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
@@ -307,6 +309,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( sal_False )
+, m_bBroadcastModified( sal_False )
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_False )
 , m_bListCreated( sal_False )
@@ -1146,6 +1149,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = sal_True;
+    m_bBroadcastModified = sal_True;
 
     return pNewElement;
 }
@@ -1185,6 +1189,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = sal_True;
+    m_bBroadcastModified = sal_True;
 
     return pNewElement;
 }
@@ -1581,11 +1586,16 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
 }
 
 //-----------------------------------------------
-void OStorage::BroadcastModified()
+void OStorage::BroadcastModifiedIfNecessary()
 {
     // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
     if ( !m_pImpl )
         throw lang::DisposedException();
+
+    if ( !m_pImpl->m_bBroadcastModified )
+        return;
+
+    m_pImpl->m_bBroadcastModified = sal_False;
 
     OSL_ENSURE( !m_pData->m_bReadOnlyWrap, "The storage can not be modified at all!\n" );
 
@@ -1908,8 +1918,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
         throw io::IOException(); // TODO: access denied
 
-    sal_Bool bOldModified = m_pImpl->m_bIsModified;
-
     uno::Reference< io::XStream > xResult;
     try
     {
@@ -1961,12 +1969,9 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                                                  aCaught );
     }
 
-    sal_Bool bToBroadcastModif = ( m_pImpl->m_bIsModified && m_pImpl->m_bIsModified != bOldModified );
-
     aGuard.clear();
 
-    if ( bToBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 
     return xResult;
 }
@@ -1994,8 +1999,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 
     if ( !aPass.getLength() )
         throw lang::IllegalArgumentException();
-
-    sal_Bool bOldModified = m_pImpl->m_bIsModified;
 
     uno::Reference< io::XStream > xResult;
     try
@@ -2052,12 +2055,9 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                                                  aCaught );
     }
 
-    sal_Bool bToBroadcastModif = ( m_pImpl->m_bIsModified && m_pImpl->m_bIsModified != bOldModified );
-
     aGuard.clear();
 
-    if ( bToBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 
     return xResult;
 }
@@ -2568,7 +2568,6 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
-    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
@@ -2579,6 +2578,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
         m_pImpl->RemoveElement( pElement );
 
         m_pImpl->m_bIsModified = sal_True;
+        m_pImpl->m_bBroadcastModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2614,8 +2614,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
 
     aGuard.clear();
 
-    if ( bBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 }
 
 //-----------------------------------------------
@@ -2641,7 +2640,6 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
-    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pRefElement = m_pImpl->FindElement( aNewName );
@@ -2655,6 +2653,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
         pElement->m_aName = aNewName;
 
         m_pImpl->m_bIsModified = sal_True;
+        m_pImpl->m_bBroadcastModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2694,8 +2693,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
 
     aGuard.clear();
 
-    if ( bBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 }
 
 //-----------------------------------------------
@@ -2800,7 +2798,6 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
-    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
@@ -2819,6 +2816,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
         m_pImpl->RemoveElement( pElement );
 
         m_pImpl->m_bIsModified = sal_True;
+        m_pImpl->m_bBroadcastModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2858,8 +2856,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
 
     aGuard.clear();
 
-    if ( bBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 }
 
 //____________________________________________________________________________________________________
@@ -3209,6 +3206,7 @@ void SAL_CALL OStorage::revert()
     try {
         m_pImpl->Revert();
         m_pImpl->m_bIsModified = sal_False;
+        m_pImpl->m_bBroadcastModified = sal_True;
     }
     catch( io::IOException& )
     {
@@ -3300,12 +3298,13 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
         throw beans::PropertyVetoException(); // TODO: access denied
 
     if ( m_pImpl->m_bIsModified != bModified )
-    {
         m_pImpl->m_bIsModified = bModified;
 
-        aGuard.clear();
-        if ( bModified )
-            BroadcastModified();
+    aGuard.clear();
+    if ( bModified )
+    {
+        m_pImpl->m_bBroadcastModified = sal_True;
+        BroadcastModifiedIfNecessary();
     }
 }
 
@@ -3712,13 +3711,12 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     if ( m_pData->m_bReadOnlyWrap )
         throw io::IOException(); // TODO: Access denied
 
-    sal_Bool bBroadcastModif = sal_False;
     if ( aPropertyName.equalsAscii( "MediaType" ) )
     {
         aValue >>= m_pImpl->m_aMediaType;
         m_pImpl->m_bControlMediaType = sal_True;
 
-        bBroadcastModif = !m_pImpl->m_bIsModified;
+        m_pImpl->m_bBroadcastModified = sal_True;
         m_pImpl->m_bIsModified = sal_True;
     }
     else if ( m_pImpl->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
@@ -3730,8 +3728,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     else
         throw beans::UnknownPropertyException(); // TODO
 
-    if ( bBroadcastModif )
-        BroadcastModified();
+    BroadcastModifiedIfNecessary();
 }
 
 
