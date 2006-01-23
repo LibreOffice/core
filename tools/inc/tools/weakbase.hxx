@@ -69,14 +69,13 @@ inline void WeakReference< reference_type >::reset( reference_type* pReference )
 template< class reference_type >
 inline reference_type * WeakReference< reference_type >::operator->() const
 {
-    OSL_PRECOND(m_pBody, "tools::WeakReference::operator->() : null body");
+    OSL_PRECOND(mpWeakConnection, "tools::WeakReference::operator->() : null body");
     return mpWeakConnection->mpReference;
 }
 
 template< class reference_type >
 inline sal_Bool WeakReference< reference_type >::operator==(const reference_type * pReferenceObject) const
 {
-    OSL_PRECOND(m_pBody, "tools::WeakReference::operator==() : null body");
     return mpWeakConnection->mpReference == pReferenceObject;
 }
 
