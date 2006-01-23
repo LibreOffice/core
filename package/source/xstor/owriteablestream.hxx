@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:00:52 $
+ *  last change: $Author: obo $ $Date: 2006-01-23 11:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,8 +246,8 @@ public:
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
 
     void GetCopyOfLastCommit( ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
+    void GetCopyOfLastCommit(
+                  ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
                             const ::rtl::OUString& aPass );
 };
 

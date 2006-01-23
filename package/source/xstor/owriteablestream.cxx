@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:00:34 $
+ *  last change: $Author: obo $ $Date: 2006-01-23 11:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1251,7 +1251,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream, const ::rtl::OUString& aPass )
+void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream, const ::rtl::OUString& aPass )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
