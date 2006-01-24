@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:20:40 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:20:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,20 @@ TARGETOBJS=	\
 
 .IF "$(GUI)" == "WNT"
 RCFILES=verinfo.rc
+.ENDIF
+
+# --- Linking of static libs ---------------------------------------
+
+.IF "$(GUI)" == "WNT"
+
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1FILES=$(TARGETOBJS)
+LIB1FILES += $(OBJ)$/copyright_ascii_sun.obj
+
+#LIB2TARGET=$(SLB)$/officeloader.lib
+#LIB2FILES=$(OBJ)$/officeloader.obj
+
+
 .ENDIF
 
 # --- Linken der Applikation ---------------------------------------
@@ -210,7 +224,6 @@ APP7OBJS = \
         $(OBJ)$/officeloader.obj
 STDLIB7=advapi32.lib
 .ENDIF # WNT
-
 
 all: $(BIN)$/so ALLTAR
 
