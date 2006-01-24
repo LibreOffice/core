@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:23:00 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif // _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include "com/sun/star/task/XInteractionHandler.hpp"
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -507,6 +508,48 @@ static void discardLayer(uno::Sequence<uno::Reference<backenduno::XLayer> >& lay
 }
 //------------------------------------------------------------------------------
 
+namespace {
+
+class RecursiveHandler:
+    public cppu::WeakImplHelper1< task::XInteractionHandler >
+{
+public:
+    explicit RecursiveHandler(
+        uno::Reference< task::XInteractionHandler > const & outer):
+        m_outer(outer) {}
+
+    virtual void SAL_CALL handle(
+        uno::Reference< task::XInteractionRequest > const & request)
+        throw (uno::RuntimeException)
+    {
+        backenduno::MergeRecoveryRequest req;
+        if (request->getRequest() >>= req) {
+            uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+                cs(request->getContinuations());
+            for (sal_Int32 i = 0; i < cs.getLength(); ++i) {
+                uno::Reference< task::XInteractionDisapprove > dis(
+                    cs[i], uno::UNO_QUERY);
+                if (dis.is()) {
+                    dis->select();
+                    break;
+                }
+            }
+        } else if (m_outer.is()) {
+            m_outer->handle(request);
+        }
+    }
+
+private:
+    RecursiveHandler(RecursiveHandler &); // not defined
+    void operator =(RecursiveHandler &); // not defined
+
+    virtual ~RecursiveHandler() {}
+
+    uno::Reference< task::XInteractionHandler > m_outer;
+};
+
+}
+
 bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
                                     const uno::Reference<backenduno::XLayer> & aBrokenLayer,
                                     bool bUserLayerData)
@@ -518,28 +561,30 @@ bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
 
     Choice chosen = CONTINUATION_UNKNOWN;
 
-    ConfigurationInteractionHandler aHandler;
-    if (aHandler.is())
-    try
-    {
-        const char * const message = "Recover from configuration merge failure";
-        const OUString aLayerId = getLayerIdentifier(aBrokenLayer);
-        const bool bRemoveLayerData = bUserLayerData &&
-                                        (LayerDataRemover::query(aBrokenLayer).is() ||
-                                         FileHelper::fileExists(getLayerURL(aBrokenLayer)) );
-
-        rtl::Reference< SimpleInteractionRequest > xRequest(
-            new SimpleInteractionRequest(
-                uno::makeAny(
-                    backenduno::MergeRecoveryRequest(OUString::createFromAscii(message), aBrokenLayer,
-                                                        aMergeException, aLayerId, bRemoveLayerData) ),
-                k_supported_choices
-            ) );
-        aHandler.handle(xRequest.get());
-        chosen = xRequest->getResponse();
-    }
-    catch (uno::Exception & e)
-    {
+    ConfigurationInteractionHandler handler;
+    try {
+        uno::Reference< task::XInteractionHandler > h(handler.get());
+        if (h.is()) {
+            handler.setRecursive(new RecursiveHandler(h));
+            rtl::Reference< SimpleInteractionRequest > req(
+                new SimpleInteractionRequest(
+                    uno::makeAny(
+                        backenduno::MergeRecoveryRequest(
+                            rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "Recover from configuration merge"
+                                    " failure")),
+                            aBrokenLayer, aMergeException,
+                            getLayerIdentifier(aBrokenLayer),
+                            (bUserLayerData
+                             && (LayerDataRemover::query(aBrokenLayer).is()
+                                 || FileHelper::fileExists(
+                                     getLayerURL(aBrokenLayer)))))),
+                    k_supported_choices));
+            h->handle(req.get());
+            chosen = req->getResponse();
+        }
+    } catch (uno::Exception & e) {
         OSL_TRACE("Warning - Configuration: Interaction handler failed: [%s]\n", OU2A(e.Message));
     }
 
