@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configinteractionhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:45:54 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,38 +36,63 @@
 #ifndef CONFIGMGR_CONFIGINTERACTIONHANDLER_HXX
 #define CONFIGMGR_CONFIGINTERACTIONHANDLER_HXX
 
-#ifndef CONFIGMGR_UTILITY_HXX_
-#include "utility.hxx"
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
 #endif
 
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
-#include <com/sun/star/task/XInteractionRequest.hpp>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
+#ifndef _RTL_REF_HXX_
+#include "rtl/ref.hxx"
+#endif
+#ifndef _UNO_CURRENT_CONTEXT_HXX_
+#include "uno/current_context.hxx"
 #endif
 
-namespace configmgr {
-namespace apihelper {
-    namespace uno  = com::sun::star::uno;
-    namespace task = com::sun::star::task;
+namespace com { namespace sun { namespace star {
+    namespace task { class XInteractionHandler; }
+    namespace uno { class Any; }
+} } }
+namespace rtl { class OUString; }
+
+namespace configmgr { namespace apihelper {
 
 /**
-    represents the InteractionHandler for configuration errors from the current context.
+   represents the InteractionHandler for configuration errors from the current
+   context.
 
-    <p>Should only be kept in scope while the error is being handled.</p>
-  */
-    class ConfigurationInteractionHandler : Noncopyable
-    {
-        class Context;
-        Context * m_pContext;
-    public:
-        ConfigurationInteractionHandler();
-        ~ConfigurationInteractionHandler();
+   <p>Should only be kept in scope while the error is being handled.</p>
+*/
+class ConfigurationInteractionHandler {
+public:
+    ConfigurationInteractionHandler();
 
-        bool is() const { return m_pContext != 0; }
-        void handle( const uno::Reference< task::XInteractionRequest > & xRequest );
-    };
+    ~ConfigurationInteractionHandler();
 
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
+    get() const; // throw (com::sun::star::uno::RuntimeException)
 
-} // namespace apihelper
-} // namespace configmgr
+    void setRecursive(
+        com::sun::star::uno::Reference<
+        com::sun::star::task::XInteractionHandler > const & handler);
+
+private:
+    ConfigurationInteractionHandler(ConfigurationInteractionHandler &);
+        // not defined
+    void operator =(ConfigurationInteractionHandler &); // not defined
+
+    com::sun::star::uno::Any getPreviousContextValue(
+        rtl::OUString const & name) const;
+        // throw (com::sun::star::uno::RuntimeException)
+
+    class Context;
+    friend class Context;
+
+    rtl::Reference< Context > m_context;
+    com::sun::star::uno::ContextLayer m_layer;
+};
+
+} }
 
 #endif
