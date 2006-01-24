@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:31:03 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,10 +211,8 @@ static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt3
             >> nCount
             >> nRgnSize;
 
-        rSt.SeekRel( nHdSize - 16 );
-        if ( nCount &&
-            ( nType == RDH_RECTANGLES ) &&
-                ( nLen >= ( ( nCount << 4 ) + nHdSize ) ) )
+        if ( nCount && ( nType == RDH_RECTANGLES ) &&
+                ( nLen >= ( ( nCount << 4 ) + ( nHdSize - 16 ) ) ) )
         {
             sal_Int32 nx1, ny1, nx2, ny2;
 
@@ -770,21 +768,20 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             {
                 sal_Int32 nClippingMode;
                 *pWMF >> nClippingMode;
-                pOut->SetClipPath( pOut->GetPathObj(), nClippingMode );
+                pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, sal_True );
             }
             break;
 
             case EMR_EXTSELECTCLIPRGN :
             {
-                sal_Int32 nClippingMode;
-                *pWMF >> nIndex
-                      >> nClippingMode;
+                sal_Int32 iMode, cbRgnData;
+                *pWMF >> cbRgnData
+                      >> iMode;
 
-                if ( ( nIndex == 0 ) && ( nClippingMode == RGN_COPY ) )
-                {
-                    PolyPolygon aEmptyPolyPoly;
-                    pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY );
-                }
+                PolyPolygon aPolyPoly;
+                if ( cbRgnData )
+                    ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
+                pOut->SetClipPath( aPolyPoly, iMode, sal_False );
             }
             break;
 
