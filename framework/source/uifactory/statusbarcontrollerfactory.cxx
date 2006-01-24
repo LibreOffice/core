@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontrollerfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:00:51 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 15:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ class ConfigurationAccess_StatusbarControllerFactory : // interfaces
         void          readConfigurationData();
 
         rtl::OUString getServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const;
+        rtl::OUString getValueFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const;
         void          addServiceToCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule, const rtl::OUString& rServiceSpecifier );
         void          removeServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule );
 
@@ -148,8 +149,14 @@ class ConfigurationAccess_StatusbarControllerFactory : // interfaces
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     private:
+        struct StatusbarControllerInfo
+        {
+            rtl::OUString m_aImplementationName;
+            rtl::OUString m_aValue;
+        };
+
         class StatusbarControllerMap : public std::hash_map< rtl::OUString,
-                                                             rtl::OUString,
+                                                             StatusbarControllerInfo,
                                                              OUStringHashCode,
                                                              ::std::equal_to< ::rtl::OUString > >
         {
@@ -159,11 +166,16 @@ class ConfigurationAccess_StatusbarControllerFactory : // interfaces
             }
         };
 
-        sal_Bool impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString aModule, rtl::OUString& aServiceSpecifier ) const;
+        sal_Bool impl_getElementProps( const Any& aElement,
+                                       rtl::OUString& aCommand,
+                                       rtl::OUString& aModule,
+                                       rtl::OUString& aServiceSpecifier,
+                                       rtl::OUString& aValue ) const;
 
         rtl::OUString                     m_aPropCommand;
         rtl::OUString                     m_aPropModule;
         rtl::OUString                     m_aPropController;
+        rtl::OUString                     m_aPropValue;
         StatusbarControllerMap            m_aStatusbarControllerMap;
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
@@ -193,6 +205,7 @@ ConfigurationAccess_StatusbarControllerFactory::ConfigurationAccess_StatusbarCon
     m_aPropCommand( RTL_CONSTASCII_USTRINGPARAM( "Command" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
+    m_aPropValue( RTL_CONSTASCII_USTRINGPARAM( "Value" )),
     m_bConfigAccessInitialized( sal_False )
 {
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(
@@ -220,14 +233,36 @@ rtl::OUString ConfigurationAccess_StatusbarControllerFactory::getServiceFromComm
         m_aStatusbarControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
     if ( pIter != m_aStatusbarControllerMap.end() )
-        return pIter->second;
+        return pIter->second.m_aImplementationName;
+    else
+    {
+        // Try to detect if we have a generic controller
+        pIter = m_aStatusbarControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
+
+        if ( pIter != m_aStatusbarControllerMap.end() )
+            return pIter->second.m_aImplementationName;
+    }
+
+    return rtl::OUString();
+}
+
+rtl::OUString ConfigurationAccess_StatusbarControllerFactory::getValueFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const
+{
+    // SAFE
+    ResetableGuard aLock( m_aLock );
+
+    StatusbarControllerMap::const_iterator pIter =
+        m_aStatusbarControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
+
+    if ( pIter != m_aStatusbarControllerMap.end() )
+        return pIter->second.m_aValue;
     else
     {
         // Try to detect if we have a generic popup menu controller
         pIter = m_aStatusbarControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
 
         if ( pIter != m_aStatusbarControllerMap.end() )
-            return pIter->second;
+            return pIter->second.m_aValue;
     }
 
     return rtl::OUString();
@@ -242,7 +277,10 @@ void ConfigurationAccess_StatusbarControllerFactory::addServiceToCommandModule(
     ResetableGuard aLock( m_aLock );
 
     rtl::OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
-    m_aStatusbarControllerMap.insert( StatusbarControllerMap::value_type( aHashKey, rServiceSpecifier ));
+
+    StatusbarControllerInfo& rControllerInfo = m_aStatusbarControllerMap[ aHashKey ];
+    rControllerInfo.m_aImplementationName = rServiceSpecifier;
+    rControllerInfo.m_aValue = rtl::OUString();
 }
 
 void ConfigurationAccess_StatusbarControllerFactory::removeServiceFromCommandModule(
@@ -262,16 +300,19 @@ void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::elementInserted( c
     rtl::OUString   aCommand;
     rtl::OUString   aModule;
     rtl::OUString   aService;
+    rtl::OUString   aValue;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
+    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
         // Create hash key from command and module as they are together a primary key to
         // the UNO service that implements the popup menu controller.
         rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
-        m_aStatusbarControllerMap.insert( StatusbarControllerMap::value_type( aHashKey, aService ));
+        StatusbarControllerInfo& rControllerInfo = m_aStatusbarControllerMap[ aHashKey ];
+        rControllerInfo.m_aImplementationName = aService;
+        rControllerInfo.m_aValue = aValue;
     }
 }
 
@@ -280,11 +321,12 @@ void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::elementRemoved ( c
     rtl::OUString   aCommand;
     rtl::OUString   aModule;
     rtl::OUString   aService;
+    rtl::OUString   aValue;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
+    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
         // Create hash key from command and module as they are together a primary key to
         // the UNO service that implements the popup menu controller.
@@ -298,17 +340,19 @@ void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::elementReplaced( c
     rtl::OUString   aCommand;
     rtl::OUString   aModule;
     rtl::OUString   aService;
+    rtl::OUString   aValue;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
+    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
         // Create hash key from command and module as they are together a primary key to
         // the UNO service that implements the popup menu controller.
         rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
-        m_aStatusbarControllerMap.erase( aHashKey );
-        m_aStatusbarControllerMap.insert( StatusbarControllerMap::value_type( aHashKey, aService ));
+        StatusbarControllerInfo& rControllerInfo = m_aStatusbarControllerMap[ aHashKey ];
+        rControllerInfo.m_aImplementationName = aService;
+        rControllerInfo.m_aValue = aValue;
     }
 }
 
@@ -358,16 +402,19 @@ void ConfigurationAccess_StatusbarControllerFactory::readConfigurationData()
         rtl::OUString             aCommand;
         rtl::OUString             aModule;
         rtl::OUString             aService;
+        rtl::OUString             aValue;
         rtl::OUString             aHashKey;
         Reference< XPropertySet > xPropertySet;
         for ( sal_Int32 i = 0; i < aStatusbarControllers.getLength(); i++ )
         {
-            if ( impl_getElementProps( m_xConfigAccess->getByName( aStatusbarControllers[i] ), aCommand, aModule, aService ))
+            if ( impl_getElementProps( m_xConfigAccess->getByName( aStatusbarControllers[i] ), aCommand, aModule, aService, aValue ))
             {
                 // Create hash key from command and module as they are together a primary key to
                 // the UNO service that implements the popup menu controller.
                 aHashKey = getHashKeyFromStrings( aCommand, aModule );
-                m_aStatusbarControllerMap.insert( StatusbarControllerMap::value_type( aHashKey, aService ));
+                StatusbarControllerInfo& rControllerInfo = m_aStatusbarControllerMap[ aHashKey ];
+                rControllerInfo.m_aImplementationName = aService;
+                rControllerInfo.m_aValue = aValue;
             }
         }
 
@@ -380,7 +427,12 @@ void ConfigurationAccess_StatusbarControllerFactory::readConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_StatusbarControllerFactory::impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString aModule, rtl::OUString& aServiceSpecifier ) const
+sal_Bool ConfigurationAccess_StatusbarControllerFactory::impl_getElementProps(
+    const Any& aElement,
+    rtl::OUString& aCommand,
+    rtl::OUString& aModule,
+    rtl::OUString& aServiceSpecifier,
+    rtl::OUString& aValue ) const
 {
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
@@ -392,6 +444,7 @@ sal_Bool ConfigurationAccess_StatusbarControllerFactory::impl_getElementProps( c
             xPropertySet->getPropertyValue( m_aPropCommand ) >>= aCommand;
             xPropertySet->getPropertyValue( m_aPropModule ) >>= aModule;
             xPropertySet->getPropertyValue( m_aPropController ) >>= aServiceSpecifier;
+            xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
         }
         catch ( com::sun::star::beans::UnknownPropertyException& )
         {
@@ -479,6 +532,7 @@ Reference< XInterface > SAL_CALL StatusbarControllerFactory::createInstanceWithA
 throw (Exception, RuntimeException)
 {
     const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+    const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
 
     rtl::OUString   aPropName;
     PropertyValue   aPropValue;
@@ -495,18 +549,26 @@ throw (Exception, RuntimeException)
         }
     }
 
-    // Append the command URL to the Arguments sequence so that one controller can be
-    // used for more than one command URL.
     Sequence< Any > aNewArgs( Arguments );
 
     sal_Int32 nAppendIndex = aNewArgs.getLength();
-    aNewArgs.realloc( aNewArgs.getLength()+1 );
+    aNewArgs.realloc( aNewArgs.getLength()+2 );
+
+    // Append the command URL to the Arguments sequence so that one controller can be
+    // used for more than one command URL.
     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
     aPropValue.Value  <<= ServiceSpecifier;
     aNewArgs[nAppendIndex] <<= aPropValue;
 
-    // SAFE
+    // Append the optional value argument. It's an empty string if no additional info
+    // is provided to the controller.
+    rtl::OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
+    aPropValue.Name = aPropValueName;
+    aPropValue.Value <<= aValue;
+    aNewArgs[nAppendIndex+1] <<= aPropValue;
+
     {
+        // SAFE
         ResetableGuard aLock( m_aLock );
 
         if ( !m_bConfigRead )
@@ -516,12 +578,17 @@ throw (Exception, RuntimeException)
         }
 
         rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
+        Reference< XMultiServiceFactory > xServiceManager( m_xServiceManager );
+
+        aLock.unlock();
+        // SAFE
+
+
         if ( aServiceName.getLength() > 0 )
-            return m_xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
+            return xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
         else
             return Reference< XInterface >();
     }
-    // SAFE
 }
 
 Sequence< ::rtl::OUString > SAL_CALL StatusbarControllerFactory::getAvailableServiceNames()
