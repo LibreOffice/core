@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configinteractionhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:09:15 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,146 +33,85 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include "configinteractionhandler.hxx"
 
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
+#include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XCurrentContext.hpp"
+#include "cppuhelper/implbase1.hxx"
+#include "rtl/string.h"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "uno/current_context.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
+namespace {
 
-#include <uno/current_context.hxx>
-#include <map>
+namespace css = com::sun::star;
 
-namespace configmgr {
-namespace apihelper {
-//=========================================================================
-    namespace uno  = com::sun::star::uno;
-    namespace task = com::sun::star::task;
-    using rtl::OUString;
-//=========================================================================
-#define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
-#define OUSTR(txt)  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(txt) )
-
-//========================================================================
-#define CONFIG_ERROR_HANDLER "configuration.interaction-handler"
-//========================================================================
-
-namespace
-{
-    typedef uno::Reference< uno::XCurrentContext > CurrentContext;
-    class SimpleCurrentContext : public cppu::WeakImplHelper1< uno::XCurrentContext >
-    {
-        CurrentContext m_xChainedContext;
-        typedef std::map< OUString, uno::Any > Settings;
-        Settings m_settings;
-    public:
-        explicit
-        SimpleCurrentContext(const CurrentContext & xChainedContext)
-        : m_xChainedContext(xChainedContext)
-        {}
-
-        void addSetting(const OUString & aName, const uno::Any & aValue)
-        { m_settings[aName] = aValue; }
-
-        void install()      { uno::setCurrentContext(this); }
-        void deinstall()    { uno::setCurrentContext(m_xChainedContext); }
-
-        uno::Any getChainedValueByName( OUString const & aName) const
-        {
-            return m_xChainedContext.is()
-                            ? m_xChainedContext->getValueByName(aName)
-                            : uno::Any();
-        }
-
-        // XCurrentContext
-        uno::Any SAL_CALL
-            getValueByName( OUString const & aName)
-                throw (uno::RuntimeException);
-    };
-
-    uno::Any SAL_CALL
-        SimpleCurrentContext::getValueByName( OUString const & aName)
-            throw (uno::RuntimeException)
-    {
-        Settings::iterator it = m_settings.find(aName);
-        if (it != m_settings.end())
-            return it->second;
-        else
-            return getChainedValueByName(aName);
-    }
+static char const INTERACTION_HANDLER[] = "configuration.interaction-handler";
 
 }
-//========================================================================
-class ConfigurationInteractionHandler::Context : public SimpleCurrentContext
+
+namespace configmgr { namespace apihelper {
+
+class ConfigurationInteractionHandler::Context:
+    public cppu::WeakImplHelper1< css::uno::XCurrentContext >
 {
 public:
-    explicit
-    Context()
-    : SimpleCurrentContext( uno::getCurrentContext() )
+    explicit Context(ConfigurationInteractionHandler * parent):
+        m_parent(parent) {}
+
+    virtual css::uno::Any SAL_CALL getValueByName(rtl::OUString const & name)
+        throw (css::uno::RuntimeException)
     {
-        addSetting( OUSTR(CONFIG_ERROR_HANDLER), uno::Any() );
+        return
+            name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(INTERACTION_HANDLER))
+            ? m_handler : m_parent->getPreviousContextValue(name);
     }
 
-    ~Context()
-    {
-    }
+    void setInteractionHandler(
+        css::uno::Reference< css::task::XInteractionHandler > const & handler)
+    { m_handler <<= handler; }
 
-    bool hasInteractionHandler() const
-    {
-        return getInteractionHandler().is();
-    }
+private:
+    Context(Context &); // not defined
+    void operator =(Context &); // not defined
 
-    uno::Reference< task::XInteractionHandler > getInteractionHandler() const
-    {
-        uno::Reference< task::XInteractionHandler > xHandler;
-        getChainedValueByName( OUSTR(CONFIG_ERROR_HANDLER) ) >>= xHandler;
-        return xHandler;
-    }
+    virtual ~Context() {}
+
+    ConfigurationInteractionHandler * m_parent;
+    css::uno::Any m_handler;
 };
-//========================================================================
-ConfigurationInteractionHandler::ConfigurationInteractionHandler()
-: m_pContext( 0 )
-{
-    try
-    {
-        Context * pContext = new Context();
-        CurrentContext xContext(pContext);
 
-        if (pContext->hasInteractionHandler())
-        {
-            m_pContext = pContext;
-            m_pContext->acquire();
-            m_pContext->install();
-        }
-    }
-    catch (uno::Exception & e)
-    {
-        OSL_TRACE("Warning - Configuration: Retrieving error (interaction) handler failed: [%s]\n", OU2A(e.Message));
-    }
-}
-//------------------------------------------------------------------------------
-ConfigurationInteractionHandler::~ConfigurationInteractionHandler()
-{
-    if (m_pContext)
-    {
-        m_pContext->deinstall();
-        m_pContext->release();
-    }
+ConfigurationInteractionHandler::ConfigurationInteractionHandler():
+    m_context(new Context(this)), m_layer(m_context.get()) {}
+
+ConfigurationInteractionHandler::~ConfigurationInteractionHandler() {}
+
+css::uno::Reference< css::task::XInteractionHandler >
+ConfigurationInteractionHandler::get() const {
+    return css::uno::Reference< css::task::XInteractionHandler >(
+        getPreviousContextValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(INTERACTION_HANDLER))),
+        css::uno::UNO_QUERY);
 }
 
-//------------------------------------------------------------------------------
-void ConfigurationInteractionHandler::handle( const uno::Reference< task::XInteractionRequest > & xRequest )
+void ConfigurationInteractionHandler::setRecursive(
+    css::uno::Reference< css::task::XInteractionHandler > const & handler)
 {
-    if (m_pContext)
-    {
-        uno::Reference< task::XInteractionHandler > xHandler = m_pContext->getInteractionHandler();
-        if (xHandler.is()) xHandler->handle(xRequest);
-    }
+    m_context->setInteractionHandler(handler);
 }
-//=========================================================================
 
-} // namespace apihelper
-} // namespace configmgr
+css::uno::Any ConfigurationInteractionHandler::getPreviousContextValue(
+    rtl::OUString const & name) const
+{
+    css::uno::Reference< css::uno::XCurrentContext > c(
+        m_layer.getPreviousContext());
+    return c.is() ? c->getValueByName(name) : css::uno::Any();
+}
+
+} }
