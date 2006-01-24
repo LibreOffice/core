@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:40:35 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,21 +427,33 @@ BOOL StgCache::Read( INT32 nPage, void* pBuf, INT32 nPg )
 {
     if( Good() )
     {
-        ULONG nPos = Page2Pos( nPage );
-        ULONG nBytes = nPg * nPageSize;
-        // fixed address and size for the header
-        if( nPage == -1 )
-            nPos = 0L, nBytes = 512;
-        if( pStrm->Tell() != nPos )
+        if ( nPage >= nPages )
+            SetError( SVSTREAM_READ_ERROR );
+        else
         {
-            ULONG nPhysPos = pStrm->Seek( nPos );
-#ifdef CHECK_DIRTY
-            if( nPhysPos != nPos )
-                ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
-#endif
+            ULONG nPos = Page2Pos( nPage );
+            INT32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
+            ULONG nBytes = nPg2 * nPageSize;
+            // fixed address and size for the header
+            if( nPage == -1 )
+            {
+                nPos = 0L, nBytes = 512;
+                nPg2 = nPg;
+            }
+            if( pStrm->Tell() != nPos )
+            {
+                ULONG nPhysPos = pStrm->Seek( nPos );
+    #ifdef CHECK_DIRTY
+                if( nPhysPos != nPos )
+                    ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
+    #endif
+            }
+            pStrm->Read( pBuf, nBytes );
+            if ( nPg != nPg2 )
+                SetError( SVSTREAM_READ_ERROR );
+            else
+                SetError( pStrm->GetError() );
         }
-        pStrm->Read( pBuf, nBytes );
-        SetError( pStrm->GetError() );
     }
     return Good();
 }
