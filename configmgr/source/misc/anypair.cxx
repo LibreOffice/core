@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:08:10 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,14 +110,6 @@ namespace configmgr
     {
         cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         *_pState &= ~nSelectMask;
-    }
-
-// -----------------------------------------------------------------------------
-    static
-    inline void impl_state_setPtr(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
-    {
-        *_pState &= ~(_nSelect<<SHIFT_DATA_FLAG);
-        *_pState |=   _nSelect;
     }
 
 // -----------------------------------------------------------------------------
@@ -362,7 +354,9 @@ namespace configmgr
             cfgmgr_SelectorType nNewState = anypair_any_set_Data(_pAnyPairData,_nSelect,&aTmpAny);
             impl_state_setState(&_pAnyPairDesc->nState, nNewState, _nSelect);
 
-            typelib_typedescriptionreference_release(aTmpAny.pType);
+            uno_any_destruct(
+                &aTmpAny,
+                reinterpret_cast< uno_ReleaseFunc >(uno::cpp_release));
 
             if (pNewType != pOldType)
             {
