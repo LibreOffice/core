@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 15:01:10 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:43:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2102,8 +2102,12 @@ sub put_systemintegration_into_installset
     my $tarball = $variables->{'UNIXPRODUCTNAME'} . "-desktop-integration.tar.gz";
 
     my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$tarball, $includepatharrayref, 1);
-    my $systemcall = "cd $newdir; cat $$sourcepathref | gunzip | tar -xf -";
-    make_systemcall($systemcall);
+    if ( $$sourcepathref ) {
+        my $systemcall = "cd $newdir; cat $$sourcepathref | gunzip | tar -xf -";
+        make_systemcall($systemcall);
+    } else {
+        installer::exiter::exit_program("ERROR: Source path not found for '$tarball'!", "put_systemintegration_into_installset");
+    }
 }
 
 ######################################################
