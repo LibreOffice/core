@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:59:36 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,18 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pXMLErrors;
     delete pNamespaceMap;
     delete pUnitConv;
-    delete pContexts;
+    if( pContexts )
+    {
+        while( pContexts->Count() )
+        {
+            sal_uInt16 n = pContexts->Count() - 1;
+            SvXMLImportContext *pContext = (*pContexts)[n];
+            pContexts->Remove( n, 1 );
+            if( pContext )
+                pContext->ReleaseRef();
+        }
+        delete pContexts;
+    }
     delete pEventImportHelper;
 //  delete pImageMapImportHelper;
 
