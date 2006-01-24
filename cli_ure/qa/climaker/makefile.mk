@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 11:53:11 $
+#   last change: $Author: hr $ $Date: 2006-01-24 16:43:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,10 @@ PRJNAME := cli_ure
 TARGET := test_climaker
 PACKAGE = climaker
 
+#we use the climaker which is build by this project
+CLIMAKER*=$(WRAPCMD) $(BIN)$/climaker
 .INCLUDE: settings.mk
+
 
 #----- compile .java files -----------------------------------------
 
@@ -105,7 +108,7 @@ $(OUTDIR)$/types.rdb: $(OUTDIR)$/types.urd
     $(REGMERGE) $@ /UCR $<
 
 $(OUTDIR)$/cli_test_types.dll: $(OUTDIR)$/types.rdb $(BIN)$/climaker.exe $(BIN)$/cli_types.dll
-    $(BIN)$/$(CLIMAKER) $(CLIMAKERFLAGS) --out $@  \
+    $(CLIMAKER) $(CLIMAKERFLAGS) --out $@  \
         -r $(BIN)$/cli_types.dll \
         -X $(SOLARBINDIR)$/types.rdb \
         $(OUTDIR)$/types.rdb
