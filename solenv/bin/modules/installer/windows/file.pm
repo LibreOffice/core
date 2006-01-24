@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:32:57 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:35:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,8 @@ sub get_sequence_for_file
 {
     my ($number) = @_;
 
-    my $sequence = $number + 1;
+    my $sequence = $number;
+    # my $sequence = $number + 1;
 
     # Idea: Each component is packed into a cab file.
     # This requires that all files in one cab file have sequences directly follwing each other,
@@ -347,8 +348,10 @@ sub create_files_table
 
     my $infoline;
 
+    my @allfiles = ();
     my @filetable = ();
     my %allfilecomponents = ();
+    my $counter = 0;
 
     # The filenames must be collected because of uniqueness
     # 01-44-~1.DAT, 01-44-~2.DAT, ...
@@ -362,6 +365,11 @@ sub create_files_table
         my %file = ();
 
         my $onefile = ${$filesref}[$i];
+
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
+        if (( $styles =~ /\bADAFILE\b/ ) && ( ! ($allvariables->{'ADAPRODUCT'} ))) { next; }
 
         $file{'File'} = generate_unique_filename_for_filetable($onefile);
 
@@ -384,16 +392,14 @@ sub create_files_table
 
         $file{'Language'} = get_language_for_file($onefile);
 
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-
         if ( $styles =~ /\bDONT_PACK\b/ ) { $file{'Attributes'} = "8192"; }
         else { $file{'Attributes'} = "16384"; }
 
         # $file{'Attributes'} = "16384";    # Sourcefile is packed
         # $file{'Attributes'} = "8192";     # Sourcefile is unpacked
 
-        $file{'Sequence'} = get_sequence_for_file($i);
+        $counter++;
+        $file{'Sequence'} = get_sequence_for_file($counter);
 
         $onefile->{'sequencenumber'} = $file{'Sequence'};
 
@@ -402,6 +408,8 @@ sub create_files_table
                 . $file{'Attributes'} . "\t" . $file{'Sequence'} . "\n";
 
         push(@filetable, $oneline);
+
+        push(@allfiles, $onefile);
 
         # Saving the sequence number in a hash with uniquefilename as key.
         # This is used for better performance in "save_packorder"
@@ -418,6 +426,7 @@ sub create_files_table
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table end");
 
+    return \@allfiles;
 }
 
 1;
