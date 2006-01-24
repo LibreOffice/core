@@ -5,9 +5,9 @@
 #
 #   $RCSfile: unopkg.sh,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 12:29:10 $
+#   last change: $Author: hr $ $Date: 2006-01-24 16:46:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,27 +70,27 @@ fi
 sd_platform=`uname -s`
 case $sd_platform in
   AIX)
-    LIBPATH="$sd_prog":$LIBPATH
+    LIBPATH=${sd_prog}${LIBPATH+:${LIBPATH}}
     export LIBPATH
     ;;
 
   Darwin)
-    DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=${sd_prog}${DYLD_LIBRARY_PATH+:${DYLD_LIBRARY_PATH}}
     export DYLD_LIBRARY_PATH
     ;;
 
   HP-UX)
-    SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+    SHLIB_PATH=${sd_prog}:/usr/openwin/lib${SHLIB_PATH+:${SHLIB_PATH}}
     export SHLIB_PATH
     ;;
 
   IRIX*)
-    LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
+    LD_LIBRARYN32_PATH=${sd_prog}${LD_LIBRARYN32_PATH+:${LD_LIBRARYN32_PATH}}
     export LD_LIBRARYN32_PATH
     ;;
 
   *)
-    LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
     ;;
 esac
