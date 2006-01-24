@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:42 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 15:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,10 @@
 #include <uielement/newmenucontroller.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_SIMPLETEXTSTATUSBARCONTROLLER_HXX_
+#include <uielement/simpletextstatusbarcontroller.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -311,6 +315,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::LogoImageStatusbarController            )
                         COMPONENTINFO( ::framework::LogoTextStatusbarController             )
                         COMPONENTINFO( ::framework::NewMenuController                       )
+                        COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -361,6 +366,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::LogoImageStatusbarController            )   else
                         IFFACTORY( ::framework::LogoTextStatusbarController             )   else
-                        IFFACTORY( ::framework::NewMenuController                       )
+                        IFFACTORY( ::framework::NewMenuController                       )   else
+                        IFFACTORY( ::framework::SimpleTextStatusbarController           )
             )
 
