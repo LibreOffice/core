@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:01:18 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2479,14 +2479,15 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                                 aClipRec.SetPos( pView->pImpEditView->GetWindowPos( aClipRec.TopLeft() ) );
                                 // Wenn Selektion, dann VDev...
                                 Paint( pView->pImpEditView, aClipRec, pView->HasSelection() );
-                                aInvalidRec = Rectangle();
                             }
                         }
                     }
                     else
+                    {
                         UpdateViews( pActiveView );
+                    }
+                    aInvalidRec = Rectangle();
                 }
-
             }
             // Nach zwei korrigierten Nodes die Kontrolle abgeben...
             nInvalids++;
