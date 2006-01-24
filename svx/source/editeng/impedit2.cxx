@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:47:40 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3355,14 +3355,20 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
             SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aFlavor );
             if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                uno::Sequence< sal_Int8 > aSeq;
-                aData >>= aSeq;
+                try
                 {
-                    SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                    aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                        aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                    }
+                    bDone = TRUE;
                 }
-                bDone = TRUE;
+                catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
             }
 
             if ( !bDone )
@@ -3389,14 +3395,20 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
                 if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
                 {
-                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    uno::Sequence< sal_Int8 > aSeq;
-                    aData >>= aSeq;
+                    try
                     {
-                        SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                        aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
+                        uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                        uno::Sequence< sal_Int8 > aSeq;
+                        aData >>= aSeq;
+                        {
+                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                            aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
+                        }
+                        bDone = TRUE;
                     }
-                    bDone = TRUE;
+                    catch( const ::com::sun::star::uno::Exception& )
+                    {
+                    }
                 }
             }
             if ( !bDone )
@@ -3416,7 +3428,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     ::rtl::OUString aText;
                     aData >>= aText;
                     aNewSelection = ImpInsertText( rPaM, aText );
-                    bDone = TRUE;
+                       bDone = TRUE;
                 }
                 catch( ... )
                 {
