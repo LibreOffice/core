@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 11:31:59 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:15:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1497,6 +1497,8 @@ sub set_msiproductversion
     my ( $allvariables ) = @_;
 
     my $productversion = $allvariables->{'PRODUCTVERSION'};
+
+    if (( $productversion =~ /^\s*\d+\s*$/ ) && ( $productversion > 255 )) { $productversion = $productversion%256; }
 
     if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
     {
