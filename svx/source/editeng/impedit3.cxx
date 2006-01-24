@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:44:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1293,7 +1293,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         }
 
 
-        if ( !aStatus.IsOutliner() )
+        if ( !bSameLineAgain && !aStatus.IsOutliner() )
         {
             if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
             {
