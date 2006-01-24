@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:54:23 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,6 +907,9 @@ main()
                                                    "file://some.host/abcdef/de"))));
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file://some.host/abcdef/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "http://foo/aa/bb//cc/d/eee////ff/ggggggg/hhhhhh/iii/j/"
+            "kkkkkkkkkkkkk/ll/mm/nn/oo/p"))));
     }
 
     if (true)
