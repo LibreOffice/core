@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:17:37 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,11 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const Reference< ::com::
 
 Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDigitalSignatures::ImplVerifySignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (RuntimeException)
 {
+    if (!rxStorage.is())
+    {
+        DBG_ASSERT(0, "Error, no XStorage provided");
+        return Sequence<css::security::DocumentSignatureInformation>();
+    }
     // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
     SignatureStreamHelper aStreamHelper;
     Reference< io::XInputStream > xInputStream = xSignStream;
