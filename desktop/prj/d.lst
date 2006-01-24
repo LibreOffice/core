@@ -24,6 +24,8 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\wrp*.dll %_DEST%\bin%_EXT%\wrp*.dll
 ..\%__SRC%\bin\spl*.dll %_DEST%\bin%_EXT%\spl*.dll
 ..\%__SRC%\bin\socomp.dll %_DEST%\bin%_EXT%\socomp.dll
+..\%__SRC%\slb\soffice.lib %_DEST%\lib%_EXT%\soffice.lib
+..\%__SRC%\obj\officeloader.obj %_DEST%\lib%_EXT%\officeloader.obj
 ..\%__SRC%\lib\libwrp*.so %_DEST%\lib%_EXT%\libwrp*.so
 ..\%__SRC%\lib\libwrp*.dylib %_DEST%\lib%_EXT%\libwrp*.dylib
 ..\%__SRC%\lib\libspl*.so %_DEST%\lib%_EXT%\libspl*.so
