@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:20:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,6 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* _pDoc, sal_Bool bClipBoa
 ***********************************************************************/
 SdXImpressDocument::~SdXImpressDocument() throw()
 {
-    dispose();
 }
 
 // uno helper
@@ -424,7 +423,26 @@ void SAL_CALL SdXImpressDocument::acquire() throw ( )
 
 void SAL_CALL SdXImpressDocument::release() throw ( )
 {
-    SfxBaseModel::release();
+    if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+    {
+        // restore reference count:
+        osl_incrementInterlockedCount( &m_refCount );
+        if(!mbDisposed)
+        {
+            try
+            {
+                dispose();
+            }
+            catch (uno::RuntimeException const& exc)
+            { // don't break throw ()
+                OSL_ENSURE(
+                    false, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                static_cast<void>(exc);
+            }
+        }
+        SfxBaseModel::release();
+    }
 }
 
 // XTypeProvider
