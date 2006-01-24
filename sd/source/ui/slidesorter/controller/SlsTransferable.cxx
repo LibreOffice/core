@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsTransferable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:17:25 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,16 @@ Transferable::Transferable (
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
       mpViewShell(pViewShell)
 {
+    if (mpViewShell != NULL)
+        StartListening(*mpViewShell);
 }
 
 
 
 Transferable::~Transferable (void)
 {
+    if (mpViewShell != NULL)
+        EndListening(*mpViewShell);
 }
 
 
@@ -62,8 +66,32 @@ Transferable::~Transferable (void)
 void Transferable::DragFinished (sal_Int8 nDropAction)
 {
     if (mpViewShell != NULL)
-        mpViewShell->DragFinished (nDropAction);
+        mpViewShell->DragFinished(nDropAction);
 }
+
+
+
+
+void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+{
+    if (rHint.ISA(SfxSimpleHint) && mpViewShell!=NULL)
+    {
+        SfxSimpleHint& rSimpleHint (*PTR_CAST(SfxSimpleHint, &rHint));
+        if (rSimpleHint.GetId() == SFX_HINT_DYING)
+        {
+            // This hint may come either from the ViewShell or from the
+            // document (registered by SdTransferable).  We do not know
+            // which but both are sufficient to disconnect from the
+            // ViewShell.
+            EndListening(*mpViewShell);
+            mpViewShell = NULL;
+        }
+    }
+
+    SdTransferable::Notify(rBroadcaster, rHint);
+}
+
+
 
 
 } } } // end of namespace ::sd::slidesorter::controller
