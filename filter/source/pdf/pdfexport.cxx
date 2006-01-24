@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:20:43 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -813,6 +813,21 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     }
                                     aInfo.m_aDashArray = aDashArray;
                                     rWriter.DrawPolyLine( aPath, aInfo );
+                                }
+                            }
+                            else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                            {
+                                sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
+                                SvtGraphicFill aFill;
+                                aMemStm >> aFill;
+
+                                if ( ( aFill.getFillType() == SvtGraphicFill::fillSolid ) && ( aFill.getFillRule() == SvtGraphicFill::fillEvenOdd ) )
+                                {
+                                    PolyPolygon aPath;
+                                    aFill.getPath( aPath );
+
+                                    bSkipSequence = sal_True;
+                                    rWriter.DrawPolyPolygon( aPath );
                                 }
                             }
                             if ( bSkipSequence )
