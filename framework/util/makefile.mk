@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:14:45 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:13:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,8 @@ SHL4OBJS=       \
                 $(SLO)$/newmenucontroller.obj          \
                 $(SLO)$/logoimagestatusbarcontroller.obj \
                 $(SLO)$/logotextstatusbarcontroller.obj \
-                $(SLO)$/globalsettings.obj
+                $(SLO)$/globalsettings.obj          \
+                $(SLO)$/simpletextstatusbarcontroller.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
