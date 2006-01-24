@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:29:59 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,7 +810,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             if ( !nObjIndex )
             {
                 PolyPolygon aEmptyPolyPoly;
-                pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY );
+                pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY, sal_True );
             }
         }
         break;
