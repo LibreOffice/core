@@ -4,9 +4,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:39:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,8 @@ public:
 
         @return the previously set context
     */
-    inline Reference< XCurrentContext > SAL_CALL getPreviousContext() SAL_THROW( () )
+    inline Reference< XCurrentContext > SAL_CALL getPreviousContext() const
+        SAL_THROW( () )
         { return m_xPreviousContext; }
 };
 //__________________________________________________________________________________________________
