@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:39:43 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:44:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,13 @@ void ViewShell::Init (void)
 
 void ViewShell::Exit (void)
 {
+    sd::View* pView = GetView();
+    if (pView!=NULL && pView->IsTextEdit())
+    {
+        pView->EndTextEdit();
+        pView->UnmarkAll();
+    }
+
     Deactivate (TRUE);
 
     SetIsMainViewShell (false);
