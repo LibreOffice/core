@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:17:49 $
+#   last change: $Author: hr $ $Date: 2006-01-24 15:15:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -410,6 +410,12 @@ sub create_feature_table
         for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
         {
             my $onefeature = ${$modulesref}[$i];
+
+            # Java and Ada only, if the correct settings are set
+            my $styles = "";
+            if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+            if (( $styles =~ /\bJAVAMODULE\b/ ) && ( ! ($allvariableshashref->{'JAVAPRODUCT'} ))) { next; }
+            if (( $styles =~ /\bADAMODULE\b/ ) && ( ! ($allvariableshashref->{'ADAPRODUCT'} ))) { next; }
 
             # Controlling the language!
             # Only language independent feature or feature with the correct language will be included into the table
