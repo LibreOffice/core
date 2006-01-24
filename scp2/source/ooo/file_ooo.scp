@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 15:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ End
 File gid_File_Script_Setofficelang
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "setofficelang";
 End
 
@@ -256,7 +256,7 @@ End
 File gid_File_Script_Configimport
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "configimport";
 End
 
