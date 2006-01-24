@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:48:19 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,8 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
     if ( ( nStartPara + nCount ) > pParaList->GetParagraphCount() )
         nCount = pParaList->GetParagraphCount() - nStartPara;
 
+    // When a new OutlinerParaObject is created because a paragraph is just beeing deleted,
+    // it can happen that the ParaList is not updated yet...
     if ( ( nStartPara + nCount ) > pEditEngine->GetParagraphCount() )
         nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
