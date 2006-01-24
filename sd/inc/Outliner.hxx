@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:51:40 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "OutlinerIterator.hxx"
 #endif
 #include <svx/SpellPortions.hxx>
+#include <memory>
 
 class Dialog;
 class SdPage;
@@ -195,6 +196,9 @@ public:
     void HandleOutsideChange (ChangeHint eHint);
 
 private:
+    class Implementation;
+    ::std::auto_ptr<Implementation> mpImpl;
+
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.
     enum mode {SEARCH, SPELL, TEXT_CONVERSION} meMode;
@@ -212,19 +216,6 @@ private:
         Only valid if meMode is TEXT_CONVERSION.
     */
     INT16 mnConversionLanguage;
-
-    /** Flag that specifies whether we own the outline view pointed to by
-        <member>mpOutlineView</member> and thus have to
-        delete it in <member>EndSpelling()</member>.
-    */
-    bool mbOwnOutlineView;
-
-    /** The outline view used for searching and spelling.  If searching or
-        spell checking an outline view this data member points to that view.
-        For all other views an instance is created.  The
-        <member>mbOwnOutlineView</member> distinguishes between both cases.
-    */
-    OutlinerView* mpOutlineView;
 
     /// Specifies whether the search string has been found so far.
     bool mbStringFound;
@@ -317,12 +308,6 @@ private:
 
     /// The position of the caret when searching /spell checking was started.
     ESelection maStartSelection;
-
-    /** The original edit mode directly after switching to a different view
-        mode.  Used for restoring the edit mode when leaving that view mode
-        again.
-    */
-    EditMode meOriginalEditMode;
 
     /** The search item contains various attributes that define the type of
         search.  It is set every time the
@@ -579,11 +564,6 @@ private:
     */
     USHORT ShowModalMessageBox (Dialog& rMessageBox);
 
-    /** Provide in the member mpOutlineView an instance of OutlinerView that
-        is either taken from the ViewShell, when it is an OutlineViewShell,
-        or is created.  When an OutlinerView already exists it is initialied.
-    */
-    void ProvideOutlinerView (void);
 };
 
 } // end of namespace sd
