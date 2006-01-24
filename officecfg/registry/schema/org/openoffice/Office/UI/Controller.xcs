@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Controller.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:20 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 15:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,12 @@
 			    <info>
 			        <desc>Specifies the UNO service to use for the specified tuple Command and Module</desc>
                 </info>
+            </prop>
+            <prop oor:name="Value" oor:type="xs:string">
+                <info>
+                    <desc>Specifies a controller specific value which is provided to every controller instance during initialization.</desc>
+                </info>
+                <value/>
             </prop>
 		</group>
 	</templates>
