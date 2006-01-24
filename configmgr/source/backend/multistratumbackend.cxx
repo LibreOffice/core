@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:33:24 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,12 @@
 //==============================================================================
 #define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 //==============================================================================
+
+namespace {
+
+namespace css = com::sun::star;
+
+}
 
 namespace configmgr { namespace backend {
 
@@ -289,20 +295,17 @@ bool approveRecovery(const backenduno::StratumCreationException & aError)
 
     Choice chosen = CONTINUATION_UNKNOWN;
 
-    ConfigurationInteractionHandler aHandler;
-    if (aHandler.is())
-    try
-    {
-        rtl::Reference< SimpleInteractionRequest > xRequest(
-            new SimpleInteractionRequest(
-                uno::makeAny(aError),
-                k_supported_choices
-            ) );
-        aHandler.handle(xRequest.get());
-        chosen = xRequest->getResponse();
-    }
-    catch (uno::Exception & e)
-    {
+    ConfigurationInteractionHandler handler;
+    try {
+        uno::Reference< css::task::XInteractionHandler > h(handler.get());
+        if (h.is()) {
+            rtl::Reference< SimpleInteractionRequest > req(
+                new SimpleInteractionRequest(
+                    uno::makeAny(aError), k_supported_choices));
+            h->handle(req.get());
+            chosen = req->getResponse();
+        }
+    } catch (uno::Exception & e) {
         OSL_TRACE("Warning - Configuration: Interaction handler failed: [%s]\n", OU2A(e.Message));
     }
 
