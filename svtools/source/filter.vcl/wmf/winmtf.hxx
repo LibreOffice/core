@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:46:37 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,10 +486,12 @@ struct SaveStruct
     RasterOp            eRasterOp;
 
     Point               aActPos;
-    sal_Bool            bRecordPath;
     WinMtfPathObj       aPathObj;
     WinMtfClipPath      aClipPath;
     XForm               aXForm;
+
+    sal_Bool            bRecordPath;
+    sal_Bool            bFillStyleSelected;
 };
 
 DECLARE_STACK( SaveStack, SaveStruct* );
@@ -585,6 +587,7 @@ class WinMtfOutput
 
         sal_uInt32          mnRop;
         sal_Bool            mbNopMode;
+        sal_Bool            mbFillStyleSelected;
 
         SaveStack           maSaveStack;            // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
 
@@ -686,7 +689,7 @@ class WinMtfOutput
         void                IntersectClipRect( const Rectangle& rRect );
         void                ExcludeClipRect( const Rectangle& rRect );
         void                MoveClipRegion( const Size& rSize );
-        void                SetClipPath( const PolyPolygon& rPolyPoly, sal_Int32 nClippingMode );
+        void                SetClipPath( const PolyPolygon& rPolyPoly, sal_Int32 nClippingMode, sal_Bool bIsMapped );
         void                UpdateClipRegion();
 
                             WinMtfOutput( GDIMetaFile& rGDIMetaFile );
