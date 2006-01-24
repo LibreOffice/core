@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:32:37 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,14 @@ IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, pValueSet)
     // have the option to call the assignment method directly.)
     if (GetShellManager() != NULL)
         GetShellManager()->MoveToTop (this);
-    GetDispatcher()->Execute(mnDefaultClickAction);
+
+    SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
+    if (pViewFrame != NULL)
+    {
+        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+        if (pDispatcher != NULL)
+            pDispatcher->Execute(mnDefaultClickAction);
+    }
 
     return 0;
 }
@@ -354,30 +361,22 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
         if (pMasterPage == NULL)
             break;
 
-        // Find a slide sorter to get the selection from.  When one is
-        // displayed in the center pane use that.  Otherwise use the one in
-        // the left pane.
-        ViewShell* pSlideSorter = mrBase.GetPaneManager().GetViewShell (
-            PaneManager::PT_CENTER);
-        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-            pSlideSorter = mrBase.GetPaneManager().GetViewShell (
-                PaneManager::PT_LEFT);
-        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+        // Find a visible slide sorter.
+        SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+        if (pSlideSorter == NULL)
             break;
 
-        SlideSorterViewShell* pShell = static_cast<SlideSorterViewShell*>(
-            pSlideSorter);
         PageSelector& rSelector (
-            pShell->GetSlideSorterController().GetPageSelector());
+            pSlideSorter->GetSlideSorterController().GetPageSelector());
         auto_ptr<PageSelector::PageSelection> pSelection (
             rSelector.GetPageSelection());
         {
             SlideSorterController::ModelChangeLock aLock (
-                pShell->GetSlideSorterController());
+                pSlideSorter->GetSlideSorterController());
 
             // Get a list of selected pages.
             vector<SdPage*> aSelectedPages;
-            pShell->GetSelectedPages(aSelectedPages);
+            pSlideSorter->GetSelectedPages(aSelectedPages);
             if (aSelectedPages.size() == 0)
                 break;
 
