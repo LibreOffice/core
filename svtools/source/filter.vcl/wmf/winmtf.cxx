@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:50:58 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,14 +284,6 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         aFont.SetOrientation( (short)rFont.lfEscapement );
 
     Size  aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
-    if ( !rFont.lfWidth )
-    {
-        VirtualDevice aVDev;
-        aFont.SetSize( aFontSize );
-        aVDev.SetFont( aFont );
-        FontMetric aMetric( aVDev.GetFontMetric() );
-        aFontSize.Width() = aMetric.GetWidth();
-    }
     if ( rFont.lfHeight > 0 )
     {
         // converting the cell height into a font height
@@ -308,6 +300,15 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     }
     else if ( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
+
+    if ( !rFont.lfWidth )
+    {
+        VirtualDevice aVDev;
+        aFont.SetSize( aFontSize );
+        aVDev.SetFont( aFont );
+        FontMetric aMetric( aVDev.GetFontMetric() );
+        aFontSize.Width() = aMetric.GetWidth();
+    }
 
     aFont.SetSize( aFontSize );
 };
@@ -655,7 +656,10 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
                 maLineStyle = (WinMtfLineStyle*)pGDIObj->pStyle;
             break;
             case GDI_BRUSH :
+            {
                 maFillStyle = (WinMtfFillStyle*)pGDIObj->pStyle;
+                mbFillStyleSelected = sal_True;
+            }
             break;
             case GDI_FONT :
                 maFont = ((WinMtfFontStyle*)pGDIObj->pStyle)->aFont;
@@ -878,9 +882,15 @@ void WinMtfOutput::MoveClipRegion( const Size& rSize )
     aClipPath.MoveClipRegion( ImplMap( rSize ) );
 }
 
-void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, sal_Bool bIsMapped )
 {
-    aClipPath.SetClipPath( rPolyPolygon, nClippingMode );
+    if ( bIsMapped )
+        aClipPath.SetClipPath( rPolyPolygon, nClippingMode );
+    else
+    {
+        PolyPolygon aPP( rPolyPolygon );
+        aClipPath.SetClipPath( ImplMap( aPP ), nClippingMode );
+    }
 }
 
 //-----------------------------------------------------------------------------------
@@ -901,6 +911,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnEntrys            ( 16 ),
     maActPos            ( Point() ),
     mbNopMode           ( sal_False ),
+    mbFillStyleSelected ( sal_False ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
     mnDevOrgX           ( 0 ),
@@ -917,13 +928,17 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnMillY             ( 1 ),
     mpGDIMetaFile       ( &rGDIMetaFile )
 {
-    mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
-    maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
-    mpGDIObj = new GDIObj*[ mnEntrys ];                                 // this is necessary to be able to support
-    for ( UINT32 i = 0; i < mnEntrys; i++ )                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
-    {
+    mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );      // The original clipregion has to be on top
+    mpGDIObj = new GDIObj*[ mnEntrys ];                                     // of the stack so it can always be restored
+    for ( UINT32 i = 0; i < mnEntrys; i++ )                                 // this is necessary to be able to support
+    {                                                                       // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
         mpGDIObj[ i ] = NULL;
     }
+
+    maFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial" )) );  // sj: #i57205#, we do have some scaling problems if using
+    maFont.SetCharSet( gsl_getSystemTextEncoding() );                       // the default font then most times a x11 font is used, we
+    maFont.SetHeight( 423 );                                                // will prevent this defining a font
+
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );
 
@@ -1013,6 +1028,8 @@ void WinMtfOutput::UpdateLineStyle()
 
 void WinMtfOutput::UpdateFillStyle()
 {
+    if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
+        maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == TRANSPARENT );
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
@@ -1429,7 +1446,6 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     VirtualDevice* pVDev = NULL;
 
-//  rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
     rPosition = ImplMap( rPosition );
 
     sal_Int32 nOldGfxMode = GetGfxMode();
@@ -2091,6 +2107,7 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
     pSave->nGfxMode = mnGfxMode;
     pSave->nBkMode = mnBkMode;
     pSave->aBkColor = maBkColor;
+    pSave->bFillStyleSelected = mbFillStyleSelected;
 
     pSave->aActPos = maActPos;
     pSave->aXForm = maXForm;
@@ -2131,6 +2148,7 @@ void WinMtfOutput::Pop()
         mnGfxMode = pSave->nGfxMode;
         mnMapMode = pSave->nMapMode;
         maBkColor = pSave->aBkColor;
+        mbFillStyleSelected = pSave->bFillStyleSelected;
 
         maActPos = pSave->aActPos;
         maXForm = pSave->aXForm;
