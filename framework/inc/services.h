@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:12:53 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 15:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_LOGOIMAGESTATUSBARCONTROLLER         DECLARE_ASCII("com.sun.star.comp.framework.LogoImageStatusbarController" )
 #define IMPLEMENTATIONNAME_LOGOTEXTSTATUSBARCONTROLLER          DECLARE_ASCII("com.sun.star.comp.framework.LogoTextStatusbarController" )
 #define IMPLEMENTATIONNAME_SYSTEMEXEC                           DECLARE_ASCII("com.sun.star.comp.framework.SystemExecute"           )
+#define IMPLEMENTATIONNAME_SIMPLETEXTSTATUSBARCONTROLLER        DECLARE_ASCII("com.sun.star.comp.framework.SimpleTextStatusbarController" )
 
 }       //  namespace framework
 
