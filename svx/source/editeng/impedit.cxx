@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 16:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1655,84 +1655,90 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    if ( !bReadOnly && rDSDE.DropSuccess && !pDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    DBG_ASSERT( pDragAndDropInfo, "ImpEditView::dragDropEnd: pDragAndDropInfo is NULL!" );
+
+    // #123688# Shouldn't happen, but seems to happen...
+    if ( pDragAndDropInfo )
     {
-        if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
+        if ( !bReadOnly && rDSDE.DropSuccess && !pDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
         {
-            // DropPos: Wohin wurde gedroppt, unabhaengig von laenge.
-            ESelection aDropPos( pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos, pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos );
-            ESelection aToBeDelSel = pDragAndDropInfo->aBeginDragSel;
-            ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
-                                pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos );
-            sal_Bool bBeforeSelection = aDropPos.IsLess( pDragAndDropInfo->aBeginDragSel );
-            sal_uInt16 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
-            if ( bBeforeSelection )
+            if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
             {
-                // aToBeDelSel anpassen.
-                DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
-                aToBeDelSel.nStartPara += nParaDiff;
-                aToBeDelSel.nEndPara += nParaDiff;
-                // Zeichen korrigieren?
-                if ( aToBeDelSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
+                // DropPos: Wohin wurde gedroppt, unabhaengig von laenge.
+                ESelection aDropPos( pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos, pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos );
+                ESelection aToBeDelSel = pDragAndDropInfo->aBeginDragSel;
+                ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
+                                    pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos );
+                sal_Bool bBeforeSelection = aDropPos.IsLess( pDragAndDropInfo->aBeginDragSel );
+                sal_uInt16 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
+                if ( bBeforeSelection )
                 {
-                    sal_uInt16 nMoreChars;
-                    if ( pDragAndDropInfo->aDropSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
-                        nMoreChars = pDragAndDropInfo->aDropSel.nEndPos - pDragAndDropInfo->aDropSel.nStartPos;
-                    else
-                        nMoreChars = pDragAndDropInfo->aDropSel.nEndPos;
-                    aToBeDelSel.nStartPos += nMoreChars;
-                    if ( aToBeDelSel.nStartPara == aToBeDelSel.nEndPara )
-                        aToBeDelSel.nEndPos += nMoreChars;
+                    // aToBeDelSel anpassen.
+                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
+                    aToBeDelSel.nStartPara += nParaDiff;
+                    aToBeDelSel.nEndPara += nParaDiff;
+                    // Zeichen korrigieren?
+                    if ( aToBeDelSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
+                    {
+                        sal_uInt16 nMoreChars;
+                        if ( pDragAndDropInfo->aDropSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
+                            nMoreChars = pDragAndDropInfo->aDropSel.nEndPos - pDragAndDropInfo->aDropSel.nStartPos;
+                        else
+                            nMoreChars = pDragAndDropInfo->aDropSel.nEndPos;
+                        aToBeDelSel.nStartPos += nMoreChars;
+                        if ( aToBeDelSel.nStartPara == aToBeDelSel.nEndPara )
+                            aToBeDelSel.nEndPos += nMoreChars;
+                    }
                 }
+                else
+                {
+                    // aToBeDelSel ist ok, aber Selektion der View
+                    // muss angepasst werden, wenn davor geloescht wird!
+                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
+                    aNewSel.nStartPara -= nParaDiff;
+                    aNewSel.nEndPara -= nParaDiff;
+                    // Zeichen korrigieren?
+                    if ( pDragAndDropInfo->aBeginDragSel.nEndPara == pDragAndDropInfo->aDropSel.nStartPara )
+                    {
+                        sal_uInt16 nLessChars;
+                        if ( pDragAndDropInfo->aBeginDragSel.nStartPara == pDragAndDropInfo->aBeginDragSel.nEndPara )
+                            nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos - pDragAndDropInfo->aBeginDragSel.nStartPos;
+                        else
+                            nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos;
+                        aNewSel.nStartPos -= nLessChars;
+                        if ( aNewSel.nStartPara == aNewSel.nEndPara )
+                            aNewSel.nEndPos -= nLessChars;
+                    }
+                }
+
+                DrawSelection();
+                EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
+                DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel ist buggy!" );
+                pEditEngine->pImpEditEngine->ImpDeleteSelection( aDelSel );
+                if ( !bBeforeSelection )
+                {
+                    DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->pImpEditEngine->aEditDoc), "Bad" );
+                    SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
+                }
+                pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+                DrawSelection();
             }
             else
             {
-                // aToBeDelSel ist ok, aber Selektion der View
-                // muss angepasst werden, wenn davor geloescht wird!
-                DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
-                aNewSel.nStartPara -= nParaDiff;
-                aNewSel.nEndPara -= nParaDiff;
-                // Zeichen korrigieren?
-                if ( pDragAndDropInfo->aBeginDragSel.nEndPara == pDragAndDropInfo->aDropSel.nStartPara )
-                {
-                    sal_uInt16 nLessChars;
-                    if ( pDragAndDropInfo->aBeginDragSel.nStartPara == pDragAndDropInfo->aBeginDragSel.nEndPara )
-                        nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos - pDragAndDropInfo->aBeginDragSel.nStartPos;
-                    else
-                        nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos;
-                    aNewSel.nStartPos -= nLessChars;
-                    if ( aNewSel.nStartPara == aNewSel.nEndPara )
-                        aNewSel.nEndPos -= nLessChars;
-                }
+                // andere EditEngine...
+                if ( pEditEngine->pImpEditEngine->ImplHasText() )   // #88630# SC ist removing the content when switching the task
+                    DeleteSelected();
             }
+        }
 
-            DrawSelection();
-            EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
-            DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel ist buggy!" );
-            pEditEngine->pImpEditEngine->ImpDeleteSelection( aDelSel );
-            if ( !bBeforeSelection )
-            {
-                DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->pImpEditEngine->aEditDoc), "Bad" );
-                SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
-            }
-            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
-            DrawSelection();
-        }
-        else
-        {
-            // andere EditEngine...
-            if ( pEditEngine->pImpEditEngine->ImplHasText() )   // #88630# SC ist removing the content when switching the task
-                DeleteSelected();
-        }
+        if ( pDragAndDropInfo->bUndoAction )
+            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
+
+        HideDDCursor();
+        ShowCursor( DoAutoScroll(), TRUE );
+        delete pDragAndDropInfo;
+        pDragAndDropInfo = NULL;
     }
-
-    if ( pDragAndDropInfo && pDragAndDropInfo->bUndoAction )
-        pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
-
-    HideDDCursor();
-    ShowCursor( DoAutoScroll(), TRUE );
-    delete pDragAndDropInfo;
-    pDragAndDropInfo = NULL;
 }
 
 void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
