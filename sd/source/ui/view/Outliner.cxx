@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:25:30 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,54 @@ class SfxStyleSheetPool;
 
 namespace sd {
 
+class Outliner::Implementation
+{
+public:
+    /** The original edit mode directly after switching to a different view
+        mode.  Used for restoring the edit mode when leaving that view mode
+        again.
+    */
+    EditMode meOriginalEditMode;
+
+    Implementation (void);
+    ~Implementation (void);
+
+    /** Return the OutlinerView that was provided by the last call to
+        ProvideOutlinerView() (or NULL when there was no such call.)
+    */
+    OutlinerView* GetOutlinerView (void);
+
+    /** Provide in the member mpOutlineView an instance of OutlinerView that
+        is either taken from the ViewShell, when it is an OutlineViewShell,
+        or is created.  When an OutlinerView already exists it is initialied.
+    */
+    void ProvideOutlinerView (
+        Outliner& rOutliner,
+        ViewShell* pViewShell,
+        ::Window* pWindow);
+
+    /** This method is called when the OutlinerView is no longer used.
+    */
+    void ReleaseOutlinerView (void);
+
+private:
+    /** Flag that specifies whether we own the outline view pointed to by
+        <member>mpOutlineView</member> and thus have to
+        delete it in <member>EndSpelling()</member>.
+    */
+    bool mbOwnOutlineView;
+
+    /** The outline view used for searching and spelling.  If searching or
+        spell checking an outline view this data member points to that view.
+        For all other views an instance is created.  The
+        <member>mbOwnOutlineView</member> distinguishes between both cases.
+    */
+    OutlinerView* mpOutlineView;
+};
+
+
+
+
 /*************************************************************************
 |*
 |* Ctor
@@ -173,9 +221,8 @@ namespace sd {
 
 Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
+      mpImpl(new Implementation()),
       mpDrawDocument(pDoc),
-      mbOwnOutlineView(false),
-      mpOutlineView(NULL),
       mpViewShell(NULL),
       mpView(NULL),
       mbStringFound(FALSE),
@@ -265,7 +312,9 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
 
 /// Nothing spectecular in the destructor.
 Outliner::~Outliner (void)
-{}
+{
+    mpImpl.reset();
+}
 
 
 
@@ -303,8 +352,6 @@ void Outliner::PrepareSpelling (void)
             SetViewShell (pBase->GetMainViewShell());
         SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
-        SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
-
         if (mpViewShell != NULL)
         {
             mbStringFound = FALSE;
@@ -319,7 +366,7 @@ void Outliner::PrepareSpelling (void)
             maSearchStartPosition = ::sd::outliner::Iterator();
             RememberStartPosition();
 
-            ProvideOutlinerView ();
+            mpImpl->ProvideOutlinerView(*this, mpViewShell, mpWindow);
 
             HandleChangedSelection ();
         }
@@ -372,12 +419,11 @@ void Outliner::EndSpelling (void)
 
             // Remove and, if previously created by us, delete the outline
             // view.
-            RemoveView (mpOutlineView);
-            if (mbOwnOutlineView)
+            OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+            if (pOutlinerView != NULL)
             {
-                delete mpOutlineView;
-                mpOutlineView = NULL;
-                mbOwnOutlineView = false;
+                RemoveView(pOutlinerView);
+                mpImpl->ReleaseOutlinerView();
             }
 
             SetUpdateMode(TRUE);
@@ -426,7 +472,9 @@ BOOL Outliner::SpellNextDocument (void)
         Initialize (true);
 
         mpWindow = mpViewShell->GetActiveWindow();
-        mpOutlineView->SetWindow(mpWindow);
+        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        if (pOutlinerView != NULL)
+            pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
 
         mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
@@ -591,7 +639,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
         // current selection and place cursor at its start or end.
         if (mpViewShell->ISA(OutlineViewShell))
         {
-            ESelection aSelection = mpOutlineView->GetSelection ();
+            ESelection aSelection = mpImpl->GetOutlinerView()->GetSelection ();
             if (mbDirectionIsForward)
             {
                 aSelection.nEndPara = aSelection.nStartPara;
@@ -602,7 +650,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
                 aSelection.nStartPara = aSelection.nEndPara;
                 aSelection.nStartPos = aSelection.nEndPos;
             }
-            mpOutlineView->SetSelection (aSelection);
+            mpImpl->GetOutlinerView()->SetSelection (aSelection);
         }
 
         // When not beginning the search at the beginning of the search area
@@ -638,7 +686,7 @@ bool Outliner::SearchAndReplaceAll (void)
     if (mpViewShell->ISA(OutlineViewShell))
     {
         // Put the cursor to the beginning/end of the outliner.
-        mpOutlineView->SetSelection (GetSearchStartPosition ());
+        mpImpl->GetOutlinerView()->SetSelection (GetSearchStartPosition ());
 
         // The outliner does all the work for us when we are in this mode.
         SearchAndReplaceOnce();
@@ -676,17 +724,18 @@ bool Outliner::SearchAndReplaceOnce (void)
 {
     DetectChange ();
 
-    DBG_ASSERT( mpOutlineView && GetEditEngine().HasView( &mpOutlineView->GetEditView() ), "SearchAndReplace without valid view!" );
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    DBG_ASSERT(pOutlinerView!=NULL && GetEditEngine().HasView( &pOutlinerView->GetEditView() ),
+        "SearchAndReplace without valid view!" );
 
-    if( NULL == mpOutlineView || !GetEditEngine().HasView( &mpOutlineView->GetEditView() ) )
+    if( NULL == pOutlinerView || !GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
         return true;
 
     if (mpViewShell != NULL)
     {
         mpView = mpViewShell->GetView();
         mpWindow = mpViewShell->GetActiveWindow();
-        DBG_ASSERT (mpOutlineView!=NULL, "Outliner::SearchAndReplaceOnce(): mpOutlineView!=NULL");
-        mpOutlineView->SetWindow(mpWindow);
+        pOutlinerView->SetWindow(mpWindow);
 
         if (mpViewShell->ISA(DrawViewShell) )
         {
@@ -696,14 +745,13 @@ bool Outliner::SearchAndReplaceOnce (void)
             // the next match.
             if (meMode == SEARCH
                 && mpSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
-                if (mpOutlineView != NULL)
-                    if (mpOutlineView->GetSelection().HasRange())
-                        mpOutlineView->StartSearchAndReplace(*mpSearchItem);
+                if (pOutlinerView->GetSelection().HasRange())
+                    pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
             // Search for the next match.
             ULONG nMatchCount = 0;
             if (mpSearchItem->GetCommand() != SVX_SEARCHCMD_REPLACE_ALL)
-                nMatchCount = mpOutlineView->StartSearchAndReplace(*mpSearchItem);
+                nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
             // Go to the next text object when there have been no matches in
             // the current object or the whole object has already been
@@ -721,17 +769,16 @@ bool Outliner::SearchAndReplaceOnce (void)
                     // Now that the mbEndOfSearch flag guards this block the
                     // following assertion and return should not be
                     // necessary anymore.
-                    DBG_ASSERT( mpOutlineView && GetEditEngine().HasView(
-                        &mpOutlineView->GetEditView() ), "SearchAndReplace without valid view!" );
-                    if( NULL == mpOutlineView
-                        || !GetEditEngine().HasView( &mpOutlineView->GetEditView() ) )
+                    DBG_ASSERT(GetEditEngine().HasView(&pOutlinerView->GetEditView() ),
+                        "SearchAndReplace without valid view!" );
+                    if ( ! GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
                     {
                         mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
                         return true;
                     }
 
                     if (meMode == SEARCH)
-                        nMatchCount = mpOutlineView->StartSearchAndReplace(*mpSearchItem);
+                        nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
                 }
             }
         }
@@ -742,15 +789,14 @@ bool Outliner::SearchAndReplaceOnce (void)
             // wrap arround search is done.
             while (true)
             {
-                int nResult = mpOutlineView->StartSearchAndReplace(*mpSearchItem);
+                int nResult = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
                 if (nResult == 0)
                 {
                     if (HandleFailedSearch ())
-                        if (mpOutlineView != NULL)
-                        {
-                            mpOutlineView->SetSelection (GetSearchStartPosition ());
-                            continue;
-                        }
+                    {
+                        pOutlinerView->SetSelection (GetSearchStartPosition ());
+                        continue;
+                    }
                 }
                 else
                     mbStringFound = true;
@@ -791,7 +837,9 @@ void Outliner::DetectChange (void)
             mpView->UnmarkAllObj (pPageView);
         mpView->EndTextEdit();
         SetUpdateMode(FALSE);
-        mpOutlineView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        if (pOutlinerView != NULL)
+            pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
             SetPaperSize( Size(1, 1) );
         SetText( String(), GetParagraph( 0 ) );
@@ -901,7 +949,9 @@ void Outliner::RememberStartPosition (void)
     else if (mpViewShell->ISA(OutlineViewShell))
     {
         // Remember the current cursor position.
-        maStartSelection = GetView(0)->GetSelection();
+        OutlinerView* pView = GetView(0);
+        if (pView != NULL)
+            pView->GetSelection();
     }
     else
     {
@@ -984,10 +1034,12 @@ void Outliner::ProvideNextTextObject (void)
     }
     catch (::com::sun::star::uno::Exception e)
     {
-        OSL_TRACE ("caught exception while ending text edit mode");
+        OSL_TRACE ("Outliner %p: caught exception while ending text edit mode", this);
     }
     SetUpdateMode(FALSE);
-    mpOutlineView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    if (pOutlinerView != NULL)
+        pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
         SetPaperSize( Size(1, 1) );
     SetText( String(), GetParagraph( 0 ) );
@@ -1067,8 +1119,12 @@ void Outliner::EndOfSearch (void)
             // Everything back to beginning (or end?) of the document.
             maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
             if (mpViewShell->ISA(OutlineViewShell))
+            {
                 // Set cursor to first character of the document.
-                mpOutlineView->SetSelection (GetSearchStartPosition ());
+                OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+                if (pOutlinerView != NULL)
+                    pOutlinerView->SetSelection (GetSearchStartPosition ());
+            }
 
             mbEndOfSearch = false;
         }
@@ -1261,7 +1317,9 @@ void Outliner::PrepareSearchAndReplace (void)
         mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
-        mpOutlineView->SetSelection (GetSearchStartPosition ());
+        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        if (pOutlinerView != NULL)
+            pOutlinerView->SetSelection (GetSearchStartPosition ());
     }
 }
 
@@ -1275,7 +1333,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
         // Restore old edit mode.
         DrawViewShell* pDrawViewShell =
             static_cast<DrawViewShell*>(mpViewShell);
-        pDrawViewShell->ChangeEditMode(meOriginalEditMode, FALSE);
+        pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, FALSE);
 
         SetStatusEventHdl(Link());
         ViewShell::ShellType eType;
@@ -1316,7 +1374,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
         // Save edit mode so that it can be restored when switching the view
         // shell again.
         pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
-        meOriginalEditMode = pDrawViewShell->GetEditMode();
+        mpImpl->meOriginalEditMode = pDrawViewShell->GetEditMode();
     }
 }
 
@@ -1338,9 +1396,10 @@ void Outliner::SetPage (EditMode eEditMode, USHORT nPageIndex)
 
 void Outliner::EnterEditMode (BOOL bGrabFocus)
 {
-    if (mbViewShellValid && mpOutlineView != NULL)
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    if (mbViewShellValid && pOutlinerView != NULL)
     {
-        mpOutlineView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
+        pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
         SdrPageView* pPV = mpView->GetPageViewPvNum(0);
         FASTBOOL bIsNewObj = TRUE;
@@ -1361,7 +1420,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
 
         // Turn on the edit mode for the text object.
         mpView->BegTextEdit(mpTextObj, pPV, mpWindow, bIsNewObj, this,
-            mpOutlineView, TRUE, TRUE, bGrabFocus);
+            pOutlinerView, TRUE, TRUE, bGrabFocus);
 
 
         SetUpdateMode(TRUE);
@@ -1422,12 +1481,13 @@ ESelection Outliner::GetSearchStartPosition (void)
 
 bool Outliner::HasNoPreviousMatch (void)
 {
-    DBG_ASSERT (mpOutlineView!=NULL, "outline view in Outliner::HasNoPreviousMatch is NULL");
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+
+    DBG_ASSERT (pOutlinerView!=NULL, "outline view in Outliner::HasNoPreviousMatch is NULL");
 
     // Detect whether the cursor stands at the beginning
     // resp. at the end of the text.
-    return mpOutlineView->GetSelection().IsEqual (
-        GetSearchStartPosition ()) == TRUE;
+    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ()) == TRUE;
 }
 
 
@@ -1437,7 +1497,8 @@ bool Outliner::HandleFailedSearch (void)
 {
     bool bContinueSearch = false;
 
-    if (mpOutlineView != NULL && mpSearchItem != NULL)
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    if (pOutlinerView != NULL && mpSearchItem != NULL)
     {
         // Detect whether there is/may be a prior match.  If there is then
         // ask the user whether to wrap arround.  Otherwise tell the user
@@ -1501,17 +1562,27 @@ SdrObject* Outliner::SetObject (
 
 void Outliner::SetViewShell (ViewShell* pViewShell)
 {
+    OSL_TRACE("Outliner %p: SetViewShell to %p with outline view at %p",
+        this, pViewShell, mpImpl->GetOutlinerView());
     if (mpViewShell != pViewShell)
     {
         // Set the new view shell.
         mpViewShell = pViewShell;
+        // When the outline view is not owned by us then we have to clear
+        // that pointer so that the current one for the new view shell will
+        // be used (in ProvideOutlinerView).
+        //        if ( ! mbOwnOutlineView)
+        //            mpOutlineView = NULL;
         if (mpViewShell != NULL)
         {
             mpView = mpViewShell->GetView();
 
             mpWindow = mpViewShell->GetActiveWindow();
-            if (mpOutlineView != NULL)
-                mpOutlineView->SetWindow(mpWindow);
+
+            mpImpl->ProvideOutlinerView(*this, mpViewShell, mpWindow);
+            OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+            if (pOutlinerView != NULL)
+                pOutlinerView->SetWindow(mpWindow);
         }
         else
         {
@@ -1562,9 +1633,16 @@ void Outliner::StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
 
     BeginConversion();
 
-    if (mpOutlineView != NULL)
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    if (pOutlinerView != NULL)
     {
-        mpOutlineView->StartTextConversion( nSourceLanguage, nTargetLanguage, pTargetFont, nOptions, bIsInteractive, bMultiDoc );
+        pOutlinerView->StartTextConversion(
+            nSourceLanguage,
+            nTargetLanguage,
+            pTargetFont,
+            nOptions,
+            bIsInteractive,
+            bMultiDoc);
     }
 
     EndConversion();
@@ -1622,7 +1700,7 @@ void Outliner::BeginConversion (void)
         maSearchStartPosition = ::sd::outliner::Iterator();
         RememberStartPosition();
 
-        ProvideOutlinerView();
+        mpImpl->ProvideOutlinerView(*this, mpViewShell, mpWindow);
 
         HandleChangedSelection ();
     }
@@ -1649,8 +1727,12 @@ sal_Bool Outliner::ConvertNextDocument()
 
     Initialize ( true );
 
-    mpWindow = mpViewShell->GetActiveWindow();
-    mpOutlineView->SetWindow(mpWindow);
+    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    if (pOutlinerView != NULL)
+    {
+        mpWindow = mpViewShell->GetActiveWindow();
+        pOutlinerView->SetWindow(mpWindow);
+    }
     ProvideNextTextObject ();
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
@@ -1719,63 +1801,127 @@ USHORT Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 
 
 
+//===== Outliner::Implementation ==============================================
+
+Outliner::Implementation::Implementation (void)
+    : meOriginalEditMode(EM_PAGE),
+      mbOwnOutlineView(false),
+      mpOutlineView(NULL)
+{
+}
+
+
+
+
+Outliner::Implementation::~Implementation (void)
+{
+    if (mbOwnOutlineView && mpOutlineView!=NULL)
+    {
+        mpOutlineView->SetWindow(NULL);
+        delete mpOutlineView;
+        mpOutlineView = NULL;
+    }
+}
+
+
+
+
+OutlinerView* Outliner::Implementation::GetOutlinerView ()
+{
+    return mpOutlineView;
+}
+
+
+
+
 /** We try to create a new OutlinerView only when there is none available,
     either from an OutlinerViewShell or a previous call to
     ProvideOutlinerView().  This is necessary to support the spell checker
     which can not cope with exchanging the OutlinerView.
 */
-void Outliner::ProvideOutlinerView (void)
+void Outliner::Implementation::ProvideOutlinerView (
+    Outliner& rOutliner,
+    ViewShell* pViewShell,
+    ::Window* pWindow)
 {
-    switch (mpViewShell->GetShellType())
+    if (pViewShell != NULL)
     {
-        case ViewShell::ST_DRAW:
-        case ViewShell::ST_IMPRESS:
-        case ViewShell::ST_NOTES:
-        case ViewShell::ST_HANDOUT:
+        switch (pViewShell->GetShellType())
         {
-            // Create a new outline view to do the search on.
-            bool bInsert = false;
-            if (mpOutlineView!=NULL && !mbOwnOutlineView)
-                mpOutlineView = NULL;
-            if (mpOutlineView == NULL)
+            case ViewShell::ST_DRAW:
+            case ViewShell::ST_IMPRESS:
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_HANDOUT:
             {
-                mpOutlineView = new OutlinerView( this, mpWindow );
-                mbOwnOutlineView = true;
-                bInsert = true;
+                // Create a new outline view to do the search on.
+                bool bInsert = false;
+                if (mpOutlineView!=NULL && !mbOwnOutlineView)
+                    mpOutlineView = NULL;
+                if (mpOutlineView == NULL)
+                {
+                    mpOutlineView = new OutlinerView(&rOutliner, pWindow);
+                    mbOwnOutlineView = true;
+                    bInsert = true;
+                }
+                else
+                    mpOutlineView->SetWindow(pWindow);
+                ULONG nStat = mpOutlineView->GetControlWord();
+                nStat &= ~EV_CNTRL_AUTOSCROLL;
+                mpOutlineView->SetControlWord(nStat);
+                if (bInsert)
+                    rOutliner.InsertView( mpOutlineView );
+                rOutliner.SetUpdateMode(FALSE);
+                mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
+                rOutliner.SetPaperSize( Size(1, 1) );
+                rOutliner.SetText( String(), rOutliner.GetParagraph( 0 ) );
+
+                meOriginalEditMode =
+                    static_cast<DrawViewShell*>(pViewShell)->GetEditMode();
             }
-            else
-                mpOutlineView->SetWindow(mpWindow);
-            ULONG nStat = mpOutlineView->GetControlWord();
-            nStat &= ~EV_CNTRL_AUTOSCROLL;
-            mpOutlineView->SetControlWord(nStat);
-            if (bInsert)
-                InsertView( mpOutlineView );
-            SetUpdateMode(FALSE);
-            mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
-            SetPaperSize( Size(1, 1) );
-            SetText( String(), GetParagraph( 0 ) );
-
-            meOriginalEditMode =
-                static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
-        }
-        break;
-
-        case ViewShell::ST_OUTLINE:
-        {
-            if (mpOutlineView!=NULL && mbOwnOutlineView)
-                delete mpOutlineView;
-            mpOutlineView = GetView(0);
-            mbOwnOutlineView = false;
-        }
-        break;
-
-        default:
-        case ViewShell::ST_NONE:
-        case ViewShell::ST_SLIDE:
-        case ViewShell::ST_PRESENTATION:
-            // Ignored
             break;
+
+            case ViewShell::ST_OUTLINE:
+            {
+                if (mpOutlineView!=NULL && mbOwnOutlineView)
+                    delete mpOutlineView;
+                mpOutlineView = rOutliner.GetView(0);
+                mbOwnOutlineView = false;
+            }
+            break;
+
+            default:
+            case ViewShell::ST_NONE:
+            case ViewShell::ST_SLIDE:
+            case ViewShell::ST_PRESENTATION:
+                // Ignored
+                break;
+        }
     }
 }
+
+
+
+
+void Outliner::Implementation::ReleaseOutlinerView (void)
+{
+    if (mbOwnOutlineView)
+    {
+        OutlinerView* pView = mpOutlineView;
+        mpOutlineView = NULL;
+        mbOwnOutlineView = false;
+        if (pView != NULL)
+        {
+            pView->SetWindow(NULL);
+            delete pView;
+        }
+    }
+    else
+    {
+        mpOutlineView = NULL;
+    }
+}
+
+
+
 
 } // end of namespace sd
