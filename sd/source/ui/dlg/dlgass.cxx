@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:29:04 $
+ *  last change: $Author: hr $ $Date: 2006-01-24 14:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,9 +912,12 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 
         //  If the entry is an impress file then insert it into the
         //  history list and the list box.
-        uno::Any aFilterPropSet = xFilterFactory->getByName( sFilter );
         uno::Sequence< beans::PropertyValue > lProps;
-        aFilterPropSet >>= lProps;
+        if (xFilterFactory->hasByName(sFilter))
+        {
+            uno::Any aFilterPropSet = xFilterFactory->getByName( sFilter );
+            aFilterPropSet >>= lProps;
+        }
 
         sal_Int32 nCount = lProps.getLength();
         rtl::OUString sFactoryName;
