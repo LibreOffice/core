@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:09:54 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,12 @@ using namespace ::com::sun::star::ucb;
 // ------------
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) :
-        pParent     ( pGallery ),
-        pThm        ( pThemeEntry ),
-        mnLockCount ( 0 ),
-        nDragPos    ( 0 ),
-        bDragging   ( FALSE )
+        pParent               ( pGallery ),
+        pThm                  ( pThemeEntry ),
+        mnBroadcasterLockCount( 0 ),
+        mnThemeLockCount      ( 0 ),
+        nDragPos              ( 0 ),
+        bDragging             ( FALSE )
 {
     ImplCreateSvDrawStorage();
 
@@ -404,11 +405,28 @@ void GalleryTheme::ImplBroadcast( ULONG nUpdatePos )
 
 // ------------------------------------------------------------------------
 
+BOOL GalleryTheme::UnlockTheme()
+{
+    DBG_ASSERT( mnThemeLockCount, "Theme is not locked" );
+
+    BOOL bRet = FALSE;
+
+    if( mnThemeLockCount )
+    {
+        --mnThemeLockCount;
+        bRet = TRUE;
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------------
+
 void GalleryTheme::UnlockBroadcaster( ULONG nUpdatePos )
 {
-    DBG_ASSERT( mnLockCount, "Broadcaster is not locked" );
+    DBG_ASSERT( mnBroadcasterLockCount, "Broadcaster is not locked" );
 
-    if( mnLockCount && !--mnLockCount )
+    if( mnBroadcasterLockCount && !--mnBroadcasterLockCount )
         ImplBroadcast( nUpdatePos );
 }
 
@@ -1055,32 +1073,20 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
 
                 if( GalleryCodec::IsCoded( *xIStm, nVersion ) )
                 {
-                    if( 1 == nVersion )
+                    FmFormModel aModel;
+
+                    aModel.GetItemPool().FreezeIdRanges();
+
+                    if( GallerySvDrawImport( *xIStm, aModel ) )
                     {
-                        FmFormModel aModel;
+                        aModel.BurnInStyleSheetAttributes();
 
-                        aModel.GetItemPool().FreezeIdRanges();
-
-                        if( GallerySvDrawImport( *xIStm, aModel ) )
                         {
-                            aModel.BurnInStyleSheetAttributes();
-//BFS04                         aModel.SetStreamingSdrModel( TRUE );
-//BFS01                         aModel.RemoveNotPersistentObjects( TRUE );
+                            com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
 
-                            {
-                                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
-
-                                if( SvxDrawingLayerExport( &aModel, xDocOut ) )
-                                    rxModelStream->Commit();
-                            }
-
-//BFS04                         aModel.SetStreamingSdrModel( FALSE );
+                            if( SvxDrawingLayerExport( &aModel, xDocOut ) )
+                                rxModelStream->Commit();
                         }
-                    }
-                    else if( 2 == nVersion )
-                    {
-                        GalleryCodec aCodec( *xIStm );
-                        aCodec.Read( *rxModelStream );
                     }
 
                     bRet = ( rxModelStream->GetError() == ERRCODE_NONE );
@@ -1342,7 +1348,7 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
 void GalleryTheme::CopyToClipboard( Window* pWindow, ULONG nPos )
 {
-    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
+    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard( pWindow );
 }
 
@@ -1350,7 +1356,7 @@ void GalleryTheme::CopyToClipboard( Window* pWindow, ULONG nPos )
 
 void GalleryTheme::StartDrag( Window* pWindow, ULONG nPos )
 {
-    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
+    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, true );
     pTransferable->StartDrag( pWindow, DND_ACTION_COPY | DND_ACTION_LINK );
 }
 
