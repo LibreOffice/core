@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:01:59 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,6 @@ namespace dbaccess
 
         void rotateCacheIterator(sal_Int16 _nDist);
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
-        connectivity::ORowSetValue getValue(sal_Int32 columnIndex);
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
@@ -203,38 +202,17 @@ namespace dbaccess
 
         // called from the rowset when a updateXXX was called for the first time
         void setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow);
-        ORowSetCacheIterator createIterator();
+        ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
         // sets the size of the matrix
         void setMaxRowSize(sal_Int32 _nSize);
 
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
+        void clearModified();
 
     // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  );
-
-    // ::com::sun::star::sdbc::XRow
-        sal_Bool wasNull(  );
-        ::rtl::OUString getString( sal_Int32 columnIndex );
-        sal_Bool getBoolean( sal_Int32 columnIndex );
-        sal_Int8 getByte( sal_Int32 columnIndex );
-        sal_Int16 getShort( sal_Int32 columnIndex );
-        sal_Int32 getInt( sal_Int32 columnIndex );
-        sal_Int64 getLong( sal_Int32 columnIndex );
-        float getFloat( sal_Int32 columnIndex );
-        double getDouble( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Sequence< sal_Int8 > getBytes( sal_Int32 columnIndex );
-        ::com::sun::star::util::Date getDate( sal_Int32 columnIndex );
-        ::com::sun::star::util::Time getTime( sal_Int32 columnIndex );
-        ::com::sun::star::util::DateTime getTimestamp( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getBinaryStream( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getCharacterStream( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Any getObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef > getRef( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob > getBlob( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob > getClob( sal_Int32 columnIndex );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray > getArray( sal_Int32 columnIndex );
 
     // ::com::sun::star::sdbcx::XRowLocate
         ::com::sun::star::uno::Any getBookmark(  );
@@ -245,7 +223,6 @@ namespace dbaccess
         sal_Int32 hashBookmark( const ::com::sun::star::uno::Any& bookmark );
 
     // ::com::sun::star::sdbc::XRowUpdate
-        void updateNull( sal_Int32 columnIndex );
         void updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
         void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
         void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x );
@@ -269,7 +246,6 @@ namespace dbaccess
         sal_Bool rowUpdated(  );
         sal_Bool rowInserted(  );
         sal_Bool rowDeleted(  );
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getStatement(  );
 
     // ::com::sun::star::sdbc::XResultSetUpdate
         sal_Bool insertRow();
