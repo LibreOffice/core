@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:49:49 $
+#   last change: $Author: hr $ $Date: 2006-01-25 15:09:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,3 +45,6 @@ ALLTAR:
     +@echo =======================================================================
     +@echo In case of problems with TableWindowAccessibility or JoinViewAccessibility this might be because of connection problems, just re-run the testcases 
     +@echo =======================================================================		
+
+run_%:
+    +$(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
