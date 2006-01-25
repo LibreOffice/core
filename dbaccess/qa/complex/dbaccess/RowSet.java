@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:01:12 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@ package complex.dbaccess;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.*;
-// import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
@@ -63,135 +62,165 @@ public class RowSet extends ComplexTestCase {
     static final int MAX_TABLE_ROWS = 100;
     static final int MAX_FETCH_ROWS = 10;
 
-    XConnection con;
-    String tempFileName;
-    XDataSource xDoc;
+    HsqlDatabase        m_database;
+    XRowSet             m_rowSet;
+    XResultSet          m_resultSet;
+    XResultSetUpdate    m_resultSetUpdate;
+    XRow                m_row;
+    XRowLocate          m_rowLocate;
+    XPropertySet        m_rowSetProperties;
 
-    class CloneThread implements Runnable
+    // --------------------------------------------------------------------------------------------------------
+    class ResultSetMovementStress implements Runnable
     {
-        XResultSet clone;
-        XRow row;
-        int id;
-        public CloneThread(XResultSet _clone,int _id) throws java.lang.Exception {
-            clone = _clone;
-            row = (XRow)UnoRuntime.queryInterface(XRow.class,clone);
-            id = _id;
+        XResultSet  m_resultSet;
+        XRow        m_row;
+        int         m_id;
+        public ResultSetMovementStress(XResultSet _resultSet,int _id) throws java.lang.Exception {
+            m_resultSet = _resultSet;
+            m_row = (XRow)UnoRuntime.queryInterface(XRow.class,m_resultSet);
+            m_id = _id;
         }
         public void run()
         {
-            try{
-                clone.beforeFirst();
-                for ( int i = 0; i < MAX_TABLE_ROWS && !clone.isAfterLast(); ++i ){
-                    boolean move = clone.next();
-                    if ( move ){
-                        int pos = clone.getRow();
-                        int val = row.getInt(1);
-                        log.println("Clone Move(" + id +") Pos: " + pos + " Val: " + val);
-                        testPosition(clone,row,"Clone Move(" + id +")");
-                        int pos2 = clone.getRow();
-                        log.println("Clone GetR(" + id +") Pos: " + pos2 + " Val: " + val);
-                        assure("CloneThread wrong position: " + i + " Pos1: " + pos + " Pos2: " + pos2,pos == pos2);
-                    }
+            try
+            {
+                m_resultSet.beforeFirst();
+                for ( int i = 0; m_resultSet.next(); ++i )
+                {
+                    int pos = m_resultSet.getRow();
+                    int val = m_row.getInt(1);
+                    testPosition( m_resultSet, m_row, i + 1, "clone move(" + m_id +")" );
+                    int pos2 = m_resultSet.getRow();
+                    assure("ResultSetMovementStress wrong position: " + i + " Pos1: " + pos + " Pos2: " + pos2,pos == pos2);
                 }
             }catch(AssureException e){
             }catch(Exception e){
-                assure("CloneThread(" + id + ") failed: " + e,false);
+                assure("ResultSetMovementStress(" + m_id + ") failed: " + e,false);
             }
         }
     }
 
-    private void createTestCase(){
-        if ( xDoc != null )
-            return;
-
-        tempFileName = new String();
-        try{
-            String str = File.createTempFile("testdb",".odb").getCanonicalPath();
-            str = str.replaceAll(" ","%20");
-            str = "file:///" +str;
-            tempFileName = str.replace('\\','/');
-           //tempFileName = java.net.URI.create(str).getPath();
-        }catch(java.io.IOException e){
-
-        }
-        try{
-
-                XOfficeDatabaseDocument xDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class,
-                                                ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-
-            /*    xDoc = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,
-                                                ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-            */
-                XDataSource xDs = xDoc.getDataSource();
-                //XDataSource xDs = xDoc;
-                XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,xDs);
-                xProp.setPropertyValue("URL", "sdbc:embedded:hsqldb");
-                XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xDoc);
-
-                xStore.storeAsURL(tempFileName,new PropertyValue[]{});
-
-                con = xDs.getConnection(new String(),new String());
-                createStruture(con);
-        }catch(AssureException e){
-        }catch(Exception e){
-            assure("Exception catched: " + e.getMessage(),false);
-        }
-    }
-
-
+    // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames() {
-        return new String[] { "testRowSet" ,"testRowSetEvents" };
+        return new String[]
+        {
+            "testRowSet",
+            "testRowSetEvents",
+            "testDeleteBehavior",
+            "testCloneMovesPlusDeletions",
+            "testCloneMovesPlusInsertions"
+        };
     }
 
+    // --------------------------------------------------------------------------------------------------------
     public String getTestObjectName() {
         return "RowSet";
     }
 
-    private XRowSet createRowSet() throws java.lang.Exception {
-        XRowSet rowset = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-                                                            ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.RowSet"));
-        XPropertySet rowProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,rowset);
-        rowProp.setPropertyValue("Command","TEST1");
-        rowProp.setPropertyValue("CommandType",new Integer(CommandType.TABLE));
-        rowProp.setPropertyValue("ActiveConnection",con);
-        //rowProp.setPropertyValue("FetchSize",new Integer(MAX_TABLE_ROWS));
+    // --------------------------------------------------------------------------------------------------------
+    private void createTestCase()
+    {
+        if ( m_database == null )
+        {
+            try
+            {
+                m_database = new HsqlDatabase( getFactory() );
+            }
+            catch(Exception e)
+            {
+                assure( "could not create the embedded HSQL database: " + e.getMessage(), false );
+            }
+        }
 
-        rowset.execute();
-        return rowset;
+        try
+        {
+            createStruture();
+        }
+        catch( SQLException e )
+        {
+            assure( "could not connect to the database/table structure, error message:\n" + e.getMessage(), false );
+        }
+
+        try
+        {
+            m_rowSet = createRowSet( true );
+            m_resultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+            m_resultSetUpdate = (XResultSetUpdate)UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
+            m_row = (XRow)UnoRuntime.queryInterface( XRow.class, m_rowSet );
+            m_rowLocate = (XRowLocate)UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
+            m_rowSetProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+        }
+        catch ( java.lang.Exception e )
+        {
+            assure( "caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage(), false );
+        }
     }
+
+
+    // --------------------------------------------------------------------------------------------------------
+    private XMultiServiceFactory getFactory()
+    {
+        return (XMultiServiceFactory)param.getMSF();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** creates a com.sun.star.sdb.RowSet to use during the test
+     *  @param limitFetchSize
+     *      determines whether the fetch size of the RowSet should be limited to MAX_FETCH_ROWS
+     */
+    private XRowSet createRowSet( boolean limitFetchSize ) throws java.lang.Exception
+    {
+        XRowSet rowSet = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
+            getFactory().createInstance("com.sun.star.sdb.RowSet"));
+        XPropertySet rowSetProperties = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, rowSet );
+        rowSetProperties.setPropertyValue("Command","TEST1");
+        rowSetProperties.setPropertyValue("CommandType",new Integer(CommandType.TABLE));
+        rowSetProperties.setPropertyValue("ActiveConnection",m_database.defaultConnection());
+        if ( limitFetchSize )
+            rowSetProperties.setPropertyValue("FetchSize",new Integer(MAX_FETCH_ROWS));
+
+        rowSet.execute();
+        return rowSet;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     public void testRowSet()  throws java.lang.Exception {
 
         log.println("testing testRowSet");
         createTestCase();
 
-        XRowSet rowset = createRowSet();
-        XResultSet rowSet = (XResultSet)UnoRuntime.queryInterface(XResultSet.class,rowset);
-        XRow rowRow = (XRow)UnoRuntime.queryInterface(XRow.class,rowset);
+        // sequential postioning
+        m_resultSet.beforeFirst();
+        testSequentialPositining(m_resultSet,m_row);
 
-        // 1st test
-        rowSet.beforeFirst();
-        test1(rowSet,rowRow);
-
-        // 2nd test
-        test2(rowSet,rowRow);
+        // absolute positioning
+        testAbsolutePositioning(m_resultSet,m_row);
 
         // 3rd test
-        {
-            XResultSetAccess rowAcc = (XResultSetAccess)UnoRuntime.queryInterface(XResultSetAccess.class,rowset);
-            XResultSet clone = rowAcc.createResultSet();
-            test3(clone,rowSet);
-        }
+        test3(createClone(),m_resultSet);
         // 4th test
-        test4(rowSet);
+        test4(m_resultSet);
 
-        // test5(rowSet);
+        // concurrent (multi threaded) access to the row set and its clones
+        testConcurrentAccess(m_resultSet);
     }
-    void createStruture(XConnection con) throws java.lang.Exception {
-        {
-            XStatement stmt = con.createStatement();
-            stmt.execute("CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )");
-        }
-        XPreparedStatement prep = con.prepareStatement("INSERT INTO \"TEST1\" values (?,?)");
+
+    // --------------------------------------------------------------------------------------------------------
+    XResultSet createClone() throws SQLException
+    {
+        XResultSetAccess rowAcc = (XResultSetAccess)UnoRuntime.queryInterface( XResultSetAccess.class, m_rowSet );
+        return rowAcc.createResultSet();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    void createStruture() throws SQLException
+    {
+        m_database.executeStatement( "DROP TABLE \"TEST1\" IF EXISTS" );
+        m_database.executeStatement( "CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )" );
+
+        XConnection connection = m_database.defaultConnection();
+        XPreparedStatement prep = connection.prepareStatement("INSERT INTO \"TEST1\" values (?,?)");
         XParameters para = (XParameters)UnoRuntime.queryInterface(XParameters.class,prep);
         for(int i=1 ; i <= MAX_TABLE_ROWS ; ++i){
             para.setInt(1, i );
@@ -200,52 +229,63 @@ public class RowSet extends ComplexTestCase {
         }
     }
 
-    void testPosition(XResultSet rowSet,XRow rowRow,String errorMsg) throws java.lang.Exception {
-        int val = rowRow.getInt(1);
-        int pos = rowSet.getRow();
-        assure(errorMsg + " Value is not identical: " + pos + " (Pos) != " + val + " (Val)",val == pos);
+    // --------------------------------------------------------------------------------------------------------
+    void testPosition(XResultSet m_resultSet,XRow m_row,int expectedValue,String location) throws SQLException
+    {
+        int val = m_row.getInt(1);
+        int pos = m_resultSet.getRow();
+        assure( location + ": value/position do not match: " + pos + " (pos) != " + val + " (val)", val == pos );
+        assure( location + ": value/position are not as expected: " + pos + " (pos) != " + expectedValue + " (expected)", val == expectedValue );
     }
-    void test1(XResultSet rowSet,XRow rowRow){
-        try{
+
+    // --------------------------------------------------------------------------------------------------------
+    void testSequentialPositining(XResultSet _resultSet,XRow _row)
+    {
+        try
+        {
             // 1st test
             int i=1;
-            while(rowSet.next()){
-                int val = rowRow.getInt(1);
-                int pos = rowSet.getRow();
-                assure("Value is not identical: " + i + " != " + val,val == i);
-                assure("Row is not identical: " + i + " != " + pos,pos == i);
+            while(_resultSet.next())
+            {
+                testPosition( _resultSet, _row, i, "testSequentialPositining" );
                 ++i;
             }
-        }catch(AssureException e){
-        }catch(Exception e){
-            assure("test1 failed: " + e,false);
+        }
+        catch(AssureException e)
+        {
+        }
+        catch(Exception e)
+        {
+            assure("testSequentialPositining failed: " + e,false);
         }
     }
-    void test2(XResultSet rowSet,XRow rowRow){
+
+    // --------------------------------------------------------------------------------------------------------
+    void testAbsolutePositioning(XResultSet _resultSet,XRow _row){
         try{
             for(int i = 1 ; i <= MAX_FETCH_ROWS ; ++i){
                 int calcPos = (MAX_TABLE_ROWS % i) + 1;
-                if ( calcPos != 0 && rowSet.absolute(calcPos) ){
-                    testPosition(rowSet,rowRow,"test2");
-                }
+                assure( "testAbsolutePositioning failed", _resultSet.absolute(calcPos) );
+                testPosition( _resultSet, _row, calcPos, "testAbsolutePositioning" );
             }
         }catch(AssureException e){
         }catch(Exception e){
-            assure("test2 failed: " + e,false);
+            assure("testAbsolutePositioning failed: " + e,false);
     }
     }
-    void test3(XResultSet clone,XResultSet rowSet){
+
+    // --------------------------------------------------------------------------------------------------------
+    void test3(XResultSet clone,XResultSet _resultSet){
         try{
-            XRow rowRow = (XRow)UnoRuntime.queryInterface(XRow.class,rowSet);
+            XRow _row = (XRow)UnoRuntime.queryInterface(XRow.class,_resultSet);
             XRow cloneRow = (XRow)UnoRuntime.queryInterface(XRow.class,clone);
             for(int i = 1 ; i <= MAX_FETCH_ROWS ; ++i){
                 int calcPos = (MAX_TABLE_ROWS % i) + 1;
-                if ( calcPos != 0 && clone.absolute(calcPos) ){
-                    int val = cloneRow.getInt(1);
-                    int pos = clone.getRow();
-                    assure("Value is not identical: " + pos + " != " + val,val == pos);
-                    test2(rowSet,rowRow);
-                    test2(clone,cloneRow);
+                if ( clone.absolute(calcPos) )
+                {
+                    testPosition( clone, cloneRow, calcPos, "test3" );
+                    testAbsolutePositioning(_resultSet,_row);
+                    testAbsolutePositioning(clone,cloneRow);
                 }
             }
         }catch(AssureException e){
@@ -253,25 +293,22 @@ public class RowSet extends ComplexTestCase {
             assure("test3 failed: " + e,false);
     }
     }
-    void test4(XResultSet rowSet){
-        try{
-            XResultSetAccess rowAcc = (XResultSetAccess)UnoRuntime.queryInterface(XResultSetAccess.class,rowSet);
 
-            XRow rowRow = (XRow)UnoRuntime.queryInterface(XRow.class,rowSet);
-            rowSet.beforeFirst();
+    // --------------------------------------------------------------------------------------------------------
+    void test4(XResultSet _resultSet){
+        try{
+            XRow _row = (XRow)UnoRuntime.queryInterface(XRow.class,_resultSet);
+            _resultSet.beforeFirst();
 
             for(int i = 1 ; i <= MAX_TABLE_ROWS ; ++i){
-                rowSet.next();
-                XResultSet clone = rowAcc.createResultSet();
+                _resultSet.next();
+                XResultSet clone = createClone();
                 XRow cloneRow = (XRow)UnoRuntime.queryInterface(XRow.class,clone);
                 int calcPos = MAX_TABLE_ROWS - 1;
-                if ( calcPos != 0 && clone.absolute(calcPos) ){
-                    int val = cloneRow.getInt(1);
-                    int pos = clone.getRow();
-                    assure("Value is not identical: " + pos + " != " + val,val == pos);
-                    val = rowRow.getInt(1);
-                    pos = rowSet.getRow();
-                    assure("Value is not identical: " + pos + " != " + val,val == pos && val == i);
+                if ( calcPos != 0 && clone.absolute(calcPos) )
+                {
+                    testPosition( clone, cloneRow, calcPos, "test4: clone" );
+                    testPosition( _resultSet, _row, i, "test4: rowset" );
                 }
             }
         }catch(AssureException e){
@@ -280,57 +317,58 @@ public class RowSet extends ComplexTestCase {
     }
     }
 
-     void test5(XResultSet rowSet){
-         log.println("testing Thread");
-        try{
-            XResultSetAccess rowAcc = (XResultSetAccess)UnoRuntime.queryInterface(XResultSetAccess.class,rowSet);
+    // --------------------------------------------------------------------------------------------------------
+     void testConcurrentAccess(XResultSet _resultSet)
+     {
+        log.println("testing Thread");
+        try
+        {
+            XRow _row = (XRow)UnoRuntime.queryInterface(XRow.class,_resultSet);
+            _resultSet.beforeFirst();
 
-            XRow rowRow = (XRow)UnoRuntime.queryInterface(XRow.class,rowSet);
-            rowSet.beforeFirst();
-            Thread t1 = new Thread(new CloneThread( rowAcc.createResultSet(),1));
-            t1.start();
-            System.out.println("Start Thread 1");
-/*
-            Thread t2 = new Thread(new CloneThread( rowAcc.createResultSet(),2));
-            t2.start();
-            System.out.println("Start Thread 2");
- */
-            Thread t3 = new Thread(new CloneThread( rowSet,3));
-            t3.start();
-            System.out.println("Start Thread 3");
-            t1.join();
-//            t2.join();
-            t3.join();
-        }catch(AssureException e){
-        }catch(Exception e){
+            final int numberOfThreads = 2;
+
+            Thread threads[] = new Thread[numberOfThreads];
+            for ( int i=0; i<numberOfThreads; ++i )
+            {
+                threads[i] = new Thread( new ResultSetMovementStress( createClone(), i ) );
+                System.out.println( "starting thread " + String.valueOf(i+1) + " of " + String.valueOf( numberOfThreads ) );
+                threads[i].start();
+            }
+
+            for ( int i=0; i<numberOfThreads; ++i )
+                threads[i].join();
+        }
+        catch(AssureException e)
+        {
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
-            assure("test5 failed: " + e,false);
+            assure("testConcurrentAccess failed: " + e,false);
         }
     }
+    // --------------------------------------------------------------------------------------------------------
     public void testRowSetEvents() throws java.lang.Exception {
         log.println("testing RowSet Events");
         createTestCase();
+
         // first we create our RowSet object
         RowSetEventListener pRow = new RowSetEventListener(this);
 
-        XRowSet rowset = createRowSet();
-        XResultSet resSet = (XResultSet)UnoRuntime.queryInterface(XResultSet.class,rowset);
-        XRow rowRow = (XRow)UnoRuntime.queryInterface(XRow.class,rowset);
-        XColumnsSupplier colSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class,rowset);
+        XColumnsSupplier colSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class,m_rowSet);
         XPropertySet col = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,colSup.getColumns().getByName("ID"));
         col.addPropertyChangeListener("Value", pRow);
-        XPropertySet set = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,resSet);
-        set.addPropertyChangeListener("IsModified", pRow);
-        set.addPropertyChangeListener("IsNew", pRow);
-        set.addPropertyChangeListener("IsRowCountFinal", pRow);
-        set.addPropertyChangeListener("RowCount", pRow);
+        m_rowSetProperties.addPropertyChangeListener("IsModified", pRow);
+        m_rowSetProperties.addPropertyChangeListener("IsNew", pRow);
+        m_rowSetProperties.addPropertyChangeListener("IsRowCountFinal", pRow);
+        m_rowSetProperties.addPropertyChangeListener("RowCount", pRow);
 
-        XRowSetApproveBroadcaster xApBroad = (XRowSetApproveBroadcaster)UnoRuntime.queryInterface(XRowSetApproveBroadcaster.class,resSet);
+        XRowSetApproveBroadcaster xApBroad = (XRowSetApproveBroadcaster)UnoRuntime.queryInterface(XRowSetApproveBroadcaster.class,m_resultSet);
         xApBroad.addRowSetApproveListener(pRow);
-        rowset.addRowSetListener(pRow);
+        m_rowSet.addRowSetListener(pRow);
 
         // do some movements to check if we got all notifications
-
         Class cResSet = java.lang.Class.forName("com.sun.star.sdbc.XResultSet");
         boolean moves[] = new boolean[9];
         for( int i = 0; i < moves.length; ++i)
@@ -341,27 +379,27 @@ public class RowSet extends ComplexTestCase {
         moves[RowSetEventListener.IS_ROW_COUNT_FINAL] = true;
         moves[RowSetEventListener.ROW_COUNT] = true;
 
-        testCursorMove(resSet,cResSet.getMethod("afterLast",null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("afterLast",(Class[])null),pRow,moves,null);
 
         moves[RowSetEventListener.IS_ROW_COUNT_FINAL] = false;
         moves[RowSetEventListener.ROW_COUNT] = false;
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("last",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("first",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("previous",null),pRow,moves,null);
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("last",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("first",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("previous",(Class[])null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
         moves[RowSetEventListener.IS_MODIFIED] = true;
-        XRowUpdate updRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,resSet);
+        XRowUpdate updRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,m_resultSet);
         updRow.updateString(2,"Test21");
-        testCursorMove(resSet,cResSet.getMethod("next",null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("next",(Class[])null),pRow,moves,null);
 
         moves[RowSetEventListener.IS_MODIFIED] = false;
         Class cupd = java.lang.Class.forName("com.sun.star.sdbc.XResultSetUpdate");
-        XResultSetUpdate upd = (XResultSetUpdate)UnoRuntime.queryInterface(XResultSetUpdate.class,resSet);
-        testCursorMove(upd,cupd.getMethod("moveToInsertRow",null),pRow,moves,null);
+        XResultSetUpdate upd = (XResultSetUpdate)UnoRuntime.queryInterface(XResultSetUpdate.class,m_resultSet);
+        testCursorMove(upd,cupd.getMethod("moveToInsertRow",(Class[])null),pRow,moves,null);
 
         updRow.updateInt(1, MAX_TABLE_ROWS + 2);
         updRow.updateString(2, "HHHH");
@@ -373,30 +411,30 @@ public class RowSet extends ComplexTestCase {
         moves[RowSetEventListener.APPROVE_ROW_CHANGE] = true;
         moves[RowSetEventListener.ROW_CHANGED] = true;
 
-        testCursorMove(upd,cupd.getMethod("insertRow",null),pRow,moves,null);
+        testCursorMove(upd,cupd.getMethod("insertRow",(Class[])null),pRow,moves,null);
 
         moves[RowSetEventListener.IS_NEW] = false;
         moves[RowSetEventListener.ROW_COUNT] = false;
-        resSet.first();
+        m_resultSet.first();
         updRow.updateInt(1, MAX_TABLE_ROWS + 3);
         updRow.updateString(2, "__");
-        testCursorMove(upd,cupd.getMethod("updateRow",null),pRow,moves,null);
+        testCursorMove(upd,cupd.getMethod("updateRow",(Class[])null),pRow,moves,null);
 
         moves[RowSetEventListener.IS_NEW] = true;
         moves[RowSetEventListener.ROW_COUNT] = true;
-        resSet.first();
-        testCursorMove(upd,cupd.getMethod("deleteRow",null),pRow,moves,null);
+        m_resultSet.first();
+        testCursorMove(upd,cupd.getMethod("deleteRow",(Class[])null),pRow,moves,null);
 
         moves[RowSetEventListener.IS_NEW] = false;
         moves[RowSetEventListener.COLUMN_VALUE] = true;
         moves[RowSetEventListener.ROW_COUNT] = false;
-        resSet.first();
+        m_resultSet.first();
         updRow.updateString(2,"Test21");
-        testCursorMove(resSet,cResSet.getMethod("refreshRow",null),pRow,moves,null);
+        testCursorMove(m_resultSet,cResSet.getMethod("refreshRow",(Class[])null),pRow,moves,null);
 
-        resSet.first();
+        m_resultSet.first();
         updRow.updateString(2,"Test21");
-        testCursorMove(upd,cupd.getMethod("cancelRowUpdates",null),pRow,moves,null);
+        testCursorMove(upd,cupd.getMethod("cancelRowUpdates",(Class[])null),pRow,moves,null);
 
         for( int i = 0; i < moves.length; ++i)
             moves[i] = false;
@@ -405,15 +443,14 @@ public class RowSet extends ComplexTestCase {
         moves[RowSetEventListener.CURSOR_MOVED] = true;
 
         Class cloc = java.lang.Class.forName("com.sun.star.sdbcx.XRowLocate");
-        XRowLocate loc = (XRowLocate)UnoRuntime.queryInterface(XRowLocate.class,resSet);
-        resSet.first();
-        Object bookmark = loc.getBookmark();
-        resSet.next();
+        m_resultSet.first();
+        Object bookmark = m_rowLocate.getBookmark();
+        m_resultSet.next();
         Object temp[] = new Object[1];
         temp[0] = bookmark;
         Class ctemp[] = new Class[1];
         ctemp[0] = Object.class;
-        testCursorMove(loc,cloc.getMethod("moveToBookmark",ctemp),pRow,moves,temp);
+        testCursorMove(m_rowLocate,cloc.getMethod("moveToBookmark",ctemp),pRow,moves,temp);
 
         Object temp2[] = new Object[2];
         temp2[0] = bookmark;
@@ -421,7 +458,7 @@ public class RowSet extends ComplexTestCase {
         Class ctemp2[] = new Class[2];
         ctemp2[0] = Object.class;
         ctemp2[1] = int.class;
-        testCursorMove(loc,cloc.getMethod("moveRelativeToBookmark",ctemp2),pRow,moves,temp2);
+        testCursorMove(m_rowLocate,cloc.getMethod("moveRelativeToBookmark",ctemp2),pRow,moves,temp2);
 
         for( int i = 0; i < moves.length; ++i)
             moves[i] = false;
@@ -430,21 +467,23 @@ public class RowSet extends ComplexTestCase {
         moves[RowSetEventListener.ROW_COUNT] = true;
         Class cdelRows = java.lang.Class.forName("com.sun.star.sdbcx.XDeleteRows");
         ctemp[0] = Object[].class;
-        XDeleteRows delRows = (XDeleteRows)UnoRuntime.queryInterface(XDeleteRows.class,resSet);
+        XDeleteRows delRows = (XDeleteRows)UnoRuntime.queryInterface(XDeleteRows.class,m_resultSet);
         Object bookmarks[] = new Object[5];
-        resSet.first();
+        m_resultSet.first();
         for ( int i = 0; i < bookmarks.length ; ++i ){
-            resSet.next();
-            bookmarks[i] = loc.getBookmark();
+            m_resultSet.next();
+            bookmarks[i] = m_rowLocate.getBookmark();
         }
 
         temp[0] = bookmarks;
         testCursorMove(delRows,cdelRows.getMethod("deleteRows",ctemp),pRow,moves,temp);
 
         // now destroy the RowSet
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(XComponent.class,resSet);
+        XComponent xComp = (XComponent)UnoRuntime.queryInterface(XComponent.class,m_resultSet);
         xComp.dispose();
     }
+
+    // --------------------------------------------------------------------------------------------------------
     private void testCursorMove(Object res
                                 ,java.lang.reflect.Method _method
                                 , RowSetEventListener _evt
@@ -478,16 +517,263 @@ public class RowSet extends ComplexTestCase {
         _evt.clearCalling();
     }
 
-    protected void finalize() throws Throwable {
-        ((XComponent)UnoRuntime.queryInterface(XComponent.class,con)).dispose();
-        ((XComponent)UnoRuntime.queryInterface(XComponent.class,xDoc)).dispose();
+    // --------------------------------------------------------------------------------------------------------
+    /** returns the current row count of the RowSet
+     */
+    private int currentRowCount() throws UnknownPropertyException, WrappedTargetException
+    {
+        Integer rowCount = (Integer)m_rowSetProperties.getPropertyValue( "RowCount" );
+        return rowCount.intValue();
+    }
 
-        try{
-            File file = new File(tempFileName);
-            file.delete();
-        } catch(Exception e){
-            assure("Exception catched: " + e.getMessage(),false);
-        }
-        super.finalize();
+    // --------------------------------------------------------------------------------------------------------
+    /** positions the row set at an arbitrary position between 2 and (current row count - 1)
+     */
+    private int positionRandom() throws SQLException, UnknownPropertyException, WrappedTargetException
+    {
+        int position = (new java.util.Random()).nextInt( currentRowCount() - 2 ) + 2;
+        assure( "sub task failed: could not position to row no. " + (new Integer( position )).toString(),
+            m_resultSet.absolute( position ) );
+        return m_resultSet.getRow();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** moves the result set to a random record between 2 and (current row count - 1), and deletes this record
+     *
+     *  After returning from this method, the row set is still positioned at the deleted record
+     *  @return
+     *      the number/position of the record which has been deleted
+     */
+    private int deleteRandom() throws SQLException, UnknownPropertyException, WrappedTargetException
+    {
+        // check if the current position and the row count in the result set is changed by a deletion (it should not)
+        int positionBefore = positionRandom();
+        int rowCountBefore = currentRowCount();
+
+        m_resultSetUpdate.deleteRow();
+
+        int positionAfter = m_resultSet.getRow();
+        int rowCountAfter = currentRowCount();
+
+        assure( "position changed during |deleteRow| (it should not)", positionAfter == positionBefore );
+        assure( "row count changed with a |deleteRow| (it should not)", rowCountBefore == rowCountAfter );
+        assure( "RowSet does not report the current row as deleted after |deleteRow|", m_resultSet.rowDeleted() );
+
+        return positionBefore;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public void testDeleteBehavior() throws Exception
+    {
+        createTestCase();
+
+        // ensure that all records are known
+        m_resultSet.last();
+        int initialRowCount = currentRowCount();
+
+        // delete a random row
+        int deletedRow = deleteRandom();
+
+        // .....................................................................................................
+        // asking for the bookmark of a deleted row should fail
+        boolean caughtException = false;
+        try { m_rowLocate.getBookmark(); }
+        catch ( SQLException e ) { caughtException = true; }
+        assure( "asking for the bookmark of a deleted row should throw an exception", caughtException );
+
+        // .....................................................................................................
+        // isXXX methods should return |false| on a deleted row
+        assure( "one of the isFoo failed after |deleteRow|", !m_resultSet.isBeforeFirst() && !m_resultSet.isAfterLast() && !m_resultSet.isFirst() && !m_resultSet.isLast() );
+            // note that we can assume that isFirst / isLast also return |false|, since deleteRandom did
+            // not position on the first or last record, but inbetween
+
+        // .....................................................................................................
+        // check if moving away from this row in either direction yields the expected results
+        assure( "|previous| after |deleteRow| failed", m_resultSet.previous() );
+        int positionPrevious = m_resultSet.getRow();
+        assure( "position after |previous| after |deleteRow| is not as expected", positionPrevious == deletedRow - 1 );
+
+        deletedRow = deleteRandom();
+        assure( "|next| after |deleteRow| failed", m_resultSet.next() );
+        int positionAfter = m_resultSet.getRow();
+        assure( "position after |next| after |deleteRow| is not as expected", positionAfter == deletedRow );
+            // since the deleted record "vanishs" as soon as the cursor is moved away from it, the absolute position does
+            // not change with a |next| call here
+
+        // .....................................................................................................
+        // check if the deleted rows really vanished after moving away from them
+        assure( "row count did not change as expected after two deletions", initialRowCount - 2 == currentRowCount() );
+
+        // .....................................................................................................
+        // check if the deleted row vanishes after moving to the insertion row
+        int rowCountBefore = currentRowCount();
+        int deletedPos = deleteRandom();
+        m_resultSetUpdate.moveToInsertRow();
+        assure( "moving to the insertion row immediately after |deleteRow| does not adjust the row count", rowCountBefore == currentRowCount() + 1 );
+
+        m_resultSetUpdate.moveToCurrentRow();
+        assure( "|moveToCurrentRow| after |deleteRow| + |moveToInsertRow| results in unexpected position",
+                ( m_resultSet.getRow() == deletedPos ) && !m_resultSet.rowDeleted() );
+
+        // the same, but this time with deleting the first row (which is not covered by deleteRandom)
+        m_resultSet.last();
+        m_resultSetUpdate.deleteRow();
+        m_resultSetUpdate.moveToInsertRow();
+        m_resultSetUpdate.moveToCurrentRow();
+        assure( "|last| + |deleteRow| + |moveToInsertRow| + |moveToCurrentRow| results in wrong state", m_resultSet.isAfterLast() );
+
+        // .....................................................................................................
+        // check if deleting a deleted row fails as expected
+        deleteRandom();
+        caughtException = false;
+        try { m_resultSetUpdate.deleteRow(); }
+        catch( SQLException e ) { caughtException = true; }
+        assure( "deleting a deleted row succeeded - it shouldn't", caughtException );
+
+        // .....................................................................................................
+        // check if deleteRows fails if it contains the bookmark of a previously-deleted row
+        m_resultSet.first();
+        Object firstBookmark = m_rowLocate.getBookmark();
+        positionRandom();
+        Object deleteBookmark = m_rowLocate.getBookmark();
+        m_resultSetUpdate.deleteRow();
+        XDeleteRows multiDelete = (XDeleteRows)UnoRuntime.queryInterface( XDeleteRows.class, m_resultSet );
+        int[] deleteSuccess = multiDelete.deleteRows(new Object[]{firstBookmark, deleteBookmark});
+        assure( "XDeleteRows::deleteRows with the bookmark of an already-deleted row failed",
+            ( deleteSuccess.length == 2 ) && ( deleteSuccess[0] != 0 ) && ( deleteSuccess[1] == 0 ) );
+
+        // .....................................................................................................
+        // check if refreshing a deleted row fails as expected
+        deleteRandom();
+        caughtException = false;
+        try { m_resultSet.refreshRow(); }
+        catch( SQLException e ) { caughtException = true; }
+        assure( "refreshing a deleted row succeeded - it shouldn't", caughtException );
+
+        // .....................................................................................................
+        // rowUpdated/rowDeleted
+        deleteRandom();
+        assure( "rowDeleted and/or rowUpdated are wrong on a deleted row", !m_resultSet.rowUpdated() && !m_resultSet.rowInserted() );
+
+        // .....................................................................................................
+        // updating values in a deleted row should fail
+        deleteRandom();
+        XRowUpdate rowUpdated = (XRowUpdate)UnoRuntime.queryInterface( XRowUpdate.class, m_resultSet );
+        caughtException = false;
+        try { rowUpdated.updateString( 2, "Test21" ); }
+        catch( SQLException e ) { caughtException = true; }
+        assure( "updating values in a deleted row should not succeed", caughtException );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** checks whether deletions on the main RowSet properly interfere (or don't interfere) with the movement
+     *  on a clone of the RowSet
+     */
+    public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
+    {
+        createTestCase();
+        // ensure that all records are known
+        m_resultSet.last();
+
+        XResultSet clone = createClone();
+        XRowLocate cloneRowLocate = (XRowLocate)UnoRuntime.queryInterface( XRowLocate.class, clone );
+
+        positionRandom();
+
+        // .....................................................................................................
+        // move the clone to the same record as the RowSet, and delete this record
+        cloneRowLocate.moveToBookmark( m_rowLocate.getBookmark() );
+        int clonePosition = clone.getRow();
+        m_resultSetUpdate.deleteRow();
+
+        assure( "clone doesn't know that its current row has been deleted via the RowSet", clone.rowDeleted() );
+        assure( "clone's position changed somehow during deletion", clonePosition == clone.getRow() );
+
+        // .....................................................................................................
+        // move the row set away from the deleted record. This should still not touch the state of the clone
+        m_resultSet.previous();
+
+        assure( "clone doesn't know (anymore) that its current row has been deleted via the RowSet", clone.rowDeleted() );
+        assure( "clone's position changed somehow during deletion and RowSet-movement", clonePosition == clone.getRow() );
+
+        // .....................................................................................................
+        // move the clone away from the deleted record
+        clone.next();
+        assure( "clone still assumes that its row is deleted - but we already moved it", !clone.rowDeleted() );
+
+        // .....................................................................................................
+        // check whether deleting the extremes (first / last) work
+        m_resultSet.first();
+        cloneRowLocate.moveToBookmark( m_rowLocate.getBookmark() );
+        m_resultSetUpdate.deleteRow();
+        clone.previous();
+        assure( "deleting the first record left the clone in a strange state (after |previous|)", clone.isBeforeFirst() );
+        clone.next();
+        assure( "deleting the first record left the clone in a strange state (after |previous| + |next|)", clone.isFirst() );
+
+        m_resultSet.last();
+        cloneRowLocate.moveToBookmark( m_rowLocate.getBookmark() );
+        m_resultSetUpdate.deleteRow();
+        clone.next();
+        assure( "deleting the last record left the clone in a strange state (after |next|)", clone.isAfterLast() );
+        clone.previous();
+        assure( "deleting the first record left the clone in a strange state (after |next| + |previous|)", clone.isLast() );
+
+        // .....................................................................................................
+        // check whether movements of the clone interfere with movements of the RowSet, if the latter is on a deleted row
+        int positionBefore = positionRandom();
+        m_resultSetUpdate.deleteRow();
+        assure( "|deleteRow|, but no |rowDeleted| (this should have been found much earlier!)", m_resultSet.rowDeleted() );
+        clone.beforeFirst();
+        while ( clone.next() )
+            ;
+        assure( "row set forgot that the current row is deleted", m_resultSet.rowDeleted() );
+
+        assure( "moving to the next record after |deleteRow| and clone moves failed", m_resultSet.next() );
+        assure( "wrong position after |deleteRow| and clone movement", !m_resultSet.isAfterLast() && !m_resultSet.isBeforeFirst() );
+        assure( "wrong absolute position after |deleteRow| and clone movement", m_resultSet.getRow() == positionBefore );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** checks whether insertions on the main RowSet properly interfere (or don't interfere) with the movement
+     *  on a clone of the RowSet
+     */
+    public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
+    {
+        createTestCase();
+        // ensure that all records are known
+        m_rowSetProperties.setPropertyValue( "FetchSize", new Integer( 10 ) );
+
+        XResultSet clone = createClone();
+        XRow cloneRow = (XRow)UnoRuntime.queryInterface( XRow.class, clone );
+
+        // .....................................................................................................
+        // first check the basic scenario without the |moveToInsertRow| |moveToCurrentRow|, to ensure that
+        // really those are broken, if at all
+        m_resultSet.last();
+        clone.first();
+        clone.absolute( 11 );
+        clone.first();
+
+        int rowValue1 = m_row.getInt(1);
+        int rowPos = m_resultSet.getRow();
+        int rowValue2 = m_row.getInt(1);
+        assure( "repeated query for the same column value delivers different values (" + rowValue1 + " and " + rowValue2 + ")",
+            rowValue1 == rowValue2 );
+
+        testPosition( clone, cloneRow, 1, "mixed clone/rowset move: clone check" );
+        testPosition( m_resultSet, m_row, MAX_TABLE_ROWS, "mixed clone/rowset move: rowset check" );
+
+        // .....................................................................................................
+        // now the complete scenario
+        m_resultSet.last();
+        m_resultSetUpdate.moveToInsertRow();
+        clone.first();
+        clone.absolute( 11 );
+        clone.first();
+        m_resultSetUpdate.moveToCurrentRow();
+
+        testPosition( clone, cloneRow, 1, "mixed clone/rowset move/insertion: clone check" );
+        testPosition( m_resultSet, m_row, 1, "mixed clone/rowset move/insertion: rowset check" );
     }
 }
