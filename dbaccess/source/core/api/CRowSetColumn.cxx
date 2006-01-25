@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:13:03 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ void SAL_CALL ORowSetColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandl
             OColumnSettings::getFastPropertyValue( rValue, nHandle );
             break;
         case PROPERTY_ID_VALUE:
-            if(!m_aColumnValue.isNull() && m_aColumnValue != m_rEnd && (*m_aColumnValue).isValid())
+            if ( !m_aColumnValue.isNull() && (*m_aColumnValue).isValid() )
                 rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
             break;
         default:
