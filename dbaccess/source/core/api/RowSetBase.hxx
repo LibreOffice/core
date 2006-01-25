@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:43:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,13 +149,11 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         OEmptyCollection*                                                               m_pEmptyCollection;
 
-        sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
-        sal_Int32                               m_nPosition;        // is set only when a row was deleted
+        sal_Int32                               m_nDeletedPosition; // is set only when a row was deleted
         sal_Int32                               m_nResultSetType;   // fetch property
         sal_Int32                               m_nResultSetConcurrency;
         sal_Bool                                m_bClone;           // I'm clone or not
-        sal_Bool                                m_bRowCountFinal;
         sal_Bool                                m_bIgnoreResult ;
         sal_Bool                                m_bBeforeFirst  : 1;
         sal_Bool                                m_bAfterLast    : 1;
@@ -166,10 +164,6 @@ namespace dbaccess
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetRow& _rOldRow);
         virtual void fireRowcount() { }                             // fire if rowcount changed
-        virtual sal_Bool notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-            {return sal_True; }                                                     // fire if rowcount changed
-        virtual void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-            {}                                                      // notify row changed
         virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) {return sal_True; }       // notify row changed
 
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) { }            // notify cursor moved
@@ -190,12 +184,38 @@ namespace dbaccess
     // OPropertyStateContainer
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
-        // postions the cache which the currently bookmark m_aBookmark
-        void positionCache();
+
+        enum CursorMoveDirection
+        {
+            /// denotes a cursor move forward
+            MOVE_FORWARD,
+            /// denotes a cursor  move backwards
+            MOVE_BACKWARD,
+            /// denotes no cursor move at all, used when the current row is to be refreshed only
+            MOVE_NONE_REFRESH_ONLY
+        };
+        /** positions the cache in preparation of a cursor move
+
+            Normally, the cache is simply moved to our bookmark (m_aBookmark). If however the current
+            row is deleted, then the cache is properly positioned for a following cursor movement in the
+            given direction.
+
+            @param _ePrepareForDirection
+                the direction into which the cursor should be moved after the call. If we're currently not on
+                a deleted row, this parameter is ignored, since in this case the cache is simply moved to
+                m_aBookmark.</br>
+                If, however, we're currently on a deleted row, this is used to properly position the cache
+                using <member>m_nDeletedPosition</member>.<br/>
+                In this case, MOVE_NONE_REFRESH_ONLY is not supported. This is because the deleted row
+                (to which the RowSet currently points to) is not present in the cache. So, you cannot move the
+                cache to this row.
+        */
+        void positionCache( CursorMoveDirection _ePrepareForDirection );
+
         // returns a value of a column of the current row
         const connectivity::ORowSetValue& getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
-        void setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,::osl::ResettableMutexGuard& _rGuard);
+        void setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();
@@ -226,6 +246,17 @@ namespace dbaccess
                 <TRUE/> if so.
         */
         sal_Bool isOnLast();
+
+        /** returns the current row count
+
+            This function takes into account that we might actually be positioned on a
+            deleted row, so that m_pCache->m_nRowCount does not really reflect the actual
+            count.
+
+            @precond
+                Our mutext is locked.
+        */
+        sal_Int32   impl_getRowCount() const;
 
     public:
         virtual ~ORowSetBase();
@@ -315,29 +346,25 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbc::XRowSet
-        virtual void SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {   // when not implemented by derived classes then throw
-            throw ::com::sun::star::sdbc::SQLException();
-        }
-        virtual void SAL_CALL addRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException)
-        {   // when not implemented by derived classes then throw
-            throw ::com::sun::star::sdbc::SQLException();
-        }
-        virtual void SAL_CALL removeRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException)
-        {   // when not implemented by derived classes then throw
-            throw ::com::sun::star::sdbc::SQLException();
-        }
+        virtual void SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
+        virtual void SAL_CALL addRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException) = 0;
+        virtual void SAL_CALL removeRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException) = 0;
+
+        // is called when the rowset is going to delete this bookmark _rBookmark
+        void onDeleteRow( const ::com::sun::star::uno::Any& _rBookmark );
+        // is called when the rowset has deleted this bookmark _rBookmark
+        void onDeletedRow( const ::com::sun::star::uno::Any& _rBookmark, sal_Int32 _nPos );
 
         // ==========================================================
         // granular access control
-        struct GrantNotifierAccess { friend class ORowSetNotifier; friend class ORowSetCacheIterator; friend class ORowSetCache; private: GrantNotifierAccess () { } };
+        struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
 
         // cancel the insertion, if necessary (means if we're on the insert row)
         inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
         inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
         inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
         inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
-        inline  sal_Bool    isInsertRow( const GrantNotifierAccess& ) { return isNew() || isModified(); }
+        inline  sal_Bool    isInsertRow() { return isNew() || isModified(); }
         inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );
