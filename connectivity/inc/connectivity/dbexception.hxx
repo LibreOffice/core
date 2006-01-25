@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:13:41 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,6 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-//#include <com/sun/star/sdbc/SQLWarning.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-//#include <com/sun/star/sdb/SQLContext.hpp>
-//#endif
 
 namespace com
 {
@@ -156,11 +150,60 @@ public:
 //= StandardExceptions
 //==================================================================================
 //----------------------------------------------------------------------------------
+/** standard SQLStates to be used with an SQLException
+
+    Extend this list whenever you need a new state ...
+
+    @see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/odbc/htm/odbcodbc_error_codes.asp
+*/
+enum StandardSQLState
+{
+    SQL_WRONG_PARAMETER_NUMBER,     // 07001
+    SQL_INVALID_DESCRIPTOR_INDEX,   // 07009
+    SQL_UNABLE_TO_CONNECT,          // 08001
+    SQL_NUMERIC_OUT_OF_RANGE,       // 22003
+    SQL_INVALID_DATE_TIME,          // 22007
+    SQL_INVALID_CURSOR_STATE,       // 24000
+    SQL_TABLE_OR_VIEW_EXISTS,       // 42S01
+    SQL_TABLE_OR_VIEW_NOT_FOUND,    // 42S02
+    SQL_INDEX_ESISTS,               // 42S11
+    SQL_INDEX_NOT_FOUND,            // 42S12
+    SQL_COLUMN_EXISTS,              // 42S21
+    SQL_COLUMN_NOT_FOUND,           // 42S22
+    SQL_GENERAL_ERROR,              // HY000
+    SQL_OPERATION_CANCELED,         // HY008
+    SQL_FUNCTION_SEQUENCE_ERROR,    // HY010
+    SQL_INVALID_CURSOR_POSITION,    // HY109
+    SQL_INVALID_BOOKMARK_VALUE,     // HY111
+    SQL_FEATURE_NOT_IMPLEMENTED,    // HYC00
+    SQL_FUNCTION_NOT_SUPPORTED      // IM001
+};
+
+//----------------------------------------------------------------------------------
+/** returns a standard error string for a given SQLState
+
+    @raises RuntimeException
+        in case of an internal error
+*/
+::rtl::OUString getStandardSQLState( StandardSQLState _eState );
+
+//----------------------------------------------------------------------------------
+/** returns a standard ASCII string for a given SQLState
+
+    @return
+        a non-<NULL/> pointer to an ASCII character string denoting the requested SQLState
+    @raises RuntimeException
+        in case of an internal error
+*/
+const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState );
+
+//----------------------------------------------------------------------------------
 void throwFunctionNotSupportedException(
         const ::rtl::OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
-    )   throw ( ::com::sun::star::sdbc::SQLException );
+    )
+    throw ( ::com::sun::star::sdbc::SQLException );
 
 //----------------------------------------------------------------------------------
 /** throws an exception with SQL state IM001, saying that a certain function is not supported
@@ -169,32 +212,44 @@ void throwFunctionNotSupportedException(
         const sal_Char* _pAsciiFunctionName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException = NULL
-    )   throw ( ::com::sun::star::sdbc::SQLException );
+    )
+    throw ( ::com::sun::star::sdbc::SQLException );
+
 //----------------------------------------------------------------------------------
-/** throw a function sequence exception
+/** throws a function sequence (HY010) exception
 */
-void throwFunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()) throw ( ::com::sun::star::sdbc::SQLException );
+void throwFunctionSequenceException(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
+    )
+    throw ( ::com::sun::star::sdbc::SQLException );
+
 //----------------------------------------------------------------------------------
 /** throw a invalid index sqlexception
 */
-void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()) throw ( ::com::sun::star::sdbc::SQLException );
+void throwInvalidIndexException(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
+    )
+    throw ( ::com::sun::star::sdbc::SQLException );
 
 //----------------------------------------------------------------------------------
 /** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
 */
-void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
+void throwGenericSQLException(
+        const ::rtl::OUString& _rMsg,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource
+    )
     throw (::com::sun::star::sdbc::SQLException);
 
 //----------------------------------------------------------------------------------
 /** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
 */
 void throwGenericSQLException(
-            const ::rtl::OUString& _rMsg,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
-            const ::com::sun::star::uno::Any& _rNextException
-            )
+        const ::rtl::OUString& _rMsg,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
+        const ::com::sun::star::uno::Any& _rNextException
+    )
     throw (::com::sun::star::sdbc::SQLException);
 
 //----------------------------------------------------------------------------------
@@ -214,11 +269,24 @@ void throwFeatureNotImplementedException(
     )
     throw (::com::sun::star::sdbc::SQLException);
 
+//----------------------------------------------------------------------------------
 /** throws an SQLException
 */
 void throwSQLException(
         const sal_Char* _pAsciiMessage,
         const sal_Char* _pAsciiState,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const sal_Int32 _nErrorCode = 0,
+        const ::com::sun::star::uno::Any* _pNextException = NULL
+    )
+    throw (::com::sun::star::sdbc::SQLException);
+
+//----------------------------------------------------------------------------------
+/** throws an SQLException
+*/
+void throwSQLException(
+        const sal_Char* _pAsciiMessage,
+        StandardSQLState _eSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
         const ::com::sun::star::uno::Any* _pNextException = NULL
