@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:27:28 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,6 +460,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveToBookmark(bookmark);
+        m_pCache->clearModified();
         if(bRet)
         {
             // notification order
@@ -502,6 +503,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
+        m_pCache->clearModified();
         if(bRet)
         {
             // notification order
@@ -609,6 +611,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
             positionCache();
         sal_Bool bAfterLast = m_pCache->isAfterLast();
         bRet = m_pCache->next();
+        m_pCache->clearModified();
 
 
         if ( bRet || bAfterLast != m_pCache->isAfterLast() )
@@ -725,6 +728,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         {
             ORowSetRow aOldValues = getOldRow(bWasNew);
             m_pCache->beforeFirst();
+            m_pCache->clearModified();
 
             // notification order
             // - column values
@@ -766,6 +770,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
             ORowSetRow aOldValues = getOldRow(bWasNew);
 
             m_pCache->afterLast();
+            m_pCache->clearModified();
 
             // notification order
             // - column values
@@ -805,6 +810,7 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
         sal_Bool bMoved = ( bWasNew || !_aCheckFunctor(this) );
 
         bRet = _aMovementFunctor(m_pCache);
+        m_pCache->clearModified();
 
         if ( bRet )
         {
@@ -899,6 +905,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->absolute(row);
+        m_pCache->clearModified();
 
         if(bRet)
         {
@@ -951,6 +958,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
         bRet = m_pCache->relative(rows);
+        m_pCache->clearModified();
 
         if(bRet)
         {
@@ -998,6 +1006,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
         bRet = m_pCache->previous();
+        m_pCache->clearModified();
 
         // if m_bBeforeFirst is false and bRet is false than we stood on the first row
         if(!m_bBeforeFirst || bRet)
@@ -1025,6 +1034,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
     DBG_TRACE1("DBACCESS ORowSetBase::setCurrentRow() Clone = %i",m_bClone);
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
+    //m_pCache->resetInsertRow(sal_True);
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {
@@ -1158,8 +1168,6 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     sal_Bool bNull = m_aCurrentRow.isNull();
     ORowSetMatrix::iterator atest = m_aCurrentRow;
 #endif
-    //  OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
-    OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
     sal_Int32 i=0;
     try
     {
@@ -1250,7 +1258,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
 
     // remember the "inserted" and "modified" state for later firing
-    m_bWasNew       = m_pRowSet->isNew( ORowSetBase::GrantNotifierAccess() );;
+    m_bWasNew       = m_pRowSet->isNew( ORowSetBase::GrantNotifierAccess() );
     m_bWasModified  = m_pRowSet->isModified( ORowSetBase::GrantNotifierAccess() );
 
     // if the row set is on the insert row, then we need to cancel this
