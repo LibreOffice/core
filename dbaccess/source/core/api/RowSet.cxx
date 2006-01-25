@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:33:51 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1032,12 +1032,12 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
             ::osl::MutexGuard aCacheGuard( *m_pMutex);
             sal_Bool bInserted = m_pCache->insertRow();
 
+            // make sure that our row is set to the new inserted row before clearing the inser flags in the cache
+            m_pCache->resetInsertRow(bInserted);
+
             // notification order
             // - column values
             setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
-
-            // make sure that our row is set to the new inserted row before clearing the inser flags in the cache
-            m_pCache->resetInsertRow(bInserted);
 
             // - rowChanged
             notifyAllListenersRowChanged(aGuard,aEvt);
@@ -1175,11 +1175,11 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
 
     positionCache();
 
-    m_pCache->cancelRowUpdates();
-
     ORowSetRow aOldValues;
     if ( !m_aCurrentRow.isNull() )
         aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+
+    m_pCache->cancelRowUpdates();
 
     m_aBookmark     = m_pCache->getBookmark();
     m_aCurrentRow   = m_pCache->m_aMatrixIter;
@@ -1359,7 +1359,6 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     if ( m_pCache && ( m_pCache->m_bInserted || m_bModified) )
         return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
 
-    OSL_ENSURE(m_aCurrentRow != m_pCache->m_aInsertRow,"Current row stand on the insert row but all flags are wrong!");
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
@@ -1692,7 +1691,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         m_pCache->m_nPrivileges = Privilege::SELECT;
                     }
                     m_pCache->setMaxRowSize(m_nFetchSize);
-                    m_aCurrentRow   = m_pCache->createIterator();
+                    m_aCurrentRow   = m_pCache->createIterator(this);
                     m_aOldRow = m_pCache->registerOldRow();
                     // now we can clear the parameter row
                     m_aParameterRow.clear();
@@ -1749,8 +1748,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                                         i+1,
                                                                                         m_xActiveConnection->getMetaData(),
                                                                                         aDescription,
-                                                                                        m_aCurrentRow,
-                                                                                        m_pCache->getEnd());
+                                                                                        m_aCurrentRow);
                                     aColumnMap.insert(StringMap::value_type(sName,0));
                                     aColumns->push_back(pColumn);
                                     pColumn->setName(sName);
@@ -1835,8 +1833,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                                     i,
                                                                                     m_xActiveConnection->getMetaData(),
                                                                                     aDescription,
-                                                                                    m_aCurrentRow,
-                                                                                    m_pCache->getEnd());
+                                                                                    m_aCurrentRow);
                                 aColumns->push_back(pColumn);
                                 if(!sName.getLength())
                                 {
@@ -2500,7 +2497,7 @@ void ORowSet::checkUpdateIterator()
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow.isNull() || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if ( !m_pCache || columnIndex <= 0 || m_aCurrentRow.isNull() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         throwFunctionSequenceException(*this);
 }
 // -----------------------------------------------------------------------------
@@ -2545,7 +2542,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
     m_bAfterLast            = rParent.m_bAfterLast;
     m_pCache                = rParent.m_pCache;
     m_aBookmark             = rParent.m_aBookmark;
-    m_aCurrentRow           = m_pCache->createIterator();
+    m_aCurrentRow           = m_pCache->createIterator(this);
     m_xNumberFormatTypes    = rParent.m_xNumberFormatTypes;
 
     m_aOldRow = m_pCache->registerOldRow();
@@ -2575,8 +2572,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
                                                             i,
                                                             rParent.m_xActiveConnection->getMetaData(),
                                                             aDescription,
-                                                            m_aCurrentRow,
-                                                            m_pCache->getEnd());
+                                                            m_aCurrentRow);
         aColumns->push_back(pColumn);
         pColumn->setName(*pBegin);
         aNames.push_back(*pBegin);
