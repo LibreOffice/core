@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:09:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,8 +796,8 @@ BOOL Gallery::RenameTheme( const String& rOldName, const String& rNewName )
     // Ueberpruefen, ob neuer Themenname schon vorhanden ist
     if( pThemeEntry && !HasTheme( rNewName ) && ( !pThemeEntry->IsReadOnly() || pThemeEntry->IsImported() ) )
     {
-        SfxListener             aDummyListener;
-        GalleryTheme*   pThm = AcquireTheme( rOldName, aDummyListener );
+        SfxListener   aListener;
+        GalleryTheme* pThm = AcquireTheme( rOldName, aListener );
 
         if( pThm )
         {
@@ -820,7 +820,7 @@ BOOL Gallery::RenameTheme( const String& rOldName, const String& rNewName )
             }
 
             Broadcast( GalleryHint( GALLERY_HINT_THEME_RENAMED, aOldName, pThm->GetName() ) );
-            ReleaseTheme( pThm, aDummyListener );
+            ReleaseTheme( pThm, aListener );
             bRet = TRUE;
         }
     }
@@ -851,17 +851,21 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
         }
         else
         {
-            SfxListener     aDummyListener;
-            GalleryTheme*   pThm = AcquireTheme( rThemeName, aDummyListener );
-            INetURLObject   aThmURL( pThm->GetThmURL() );
-            INetURLObject   aSdgURL( pThm->GetSdgURL() );
-            INetURLObject   aSdvURL( pThm->GetSdvURL() );
+            SfxListener     aListener;
+            GalleryTheme*   pThm = AcquireTheme( rThemeName, aListener );
 
-            ReleaseTheme( pThm, aDummyListener );
+            if( pThm )
+            {
+                INetURLObject   aThmURL( pThm->GetThmURL() );
+                INetURLObject   aSdgURL( pThm->GetSdgURL() );
+                INetURLObject   aSdvURL( pThm->GetSdvURL() );
 
-            KillFile( aThmURL );
-            KillFile( aSdgURL );
-            KillFile( aSdvURL );
+                ReleaseTheme( pThm, aListener );
+
+                KillFile( aThmURL );
+                KillFile( aSdgURL );
+                KillFile( aSdvURL );
+            }
         }
 
         delete aThemeList.Remove( pThemeEntry );
