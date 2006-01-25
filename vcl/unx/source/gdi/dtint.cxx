@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:39:01 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #ifdef USE_CDE
 #include <cdeint.hxx>
 #endif
-#include <kdeint.hxx>
+#include <dtint.hxx>
 #include <saldisp.hxx>
 #include <saldata.hxx>
 #include <wmadaptor.hxx>
@@ -55,6 +55,7 @@
 
 #include <osl/file.h>
 #include <osl/process.h>
+#include <osl/security.h>
 
 #include <set>
 #include <stdio.h>
@@ -83,8 +84,16 @@ DtIntegrator::DtIntegrator() :
     mpSalDisplay = GetSalData()->GetDisplay();
     mpDisplay = mpSalDisplay->GetDisplay();
     aIntegratorList.Insert( this, LIST_APPEND );
-    static const char* pHome = getenv( "HOME" );
-    aHomeDir = String( pHome, osl_getThreadTextEncoding() );
+    OUString aDir;
+    oslSecurity aCur = osl_getCurrentSecurity();
+    if( aCur )
+    {
+        osl_getHomeDir( aCur, &aDir.pData );
+        osl_freeSecurityHandle( aCur );
+        OUString aSysDir;
+        osl_getSystemPathFromFileURL( aDir.pData, &aSysDir.pData );
+        aHomeDir = aSysDir;
+    }
 }
 
 DtIntegrator::~DtIntegrator()
@@ -116,8 +125,6 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
         if( aOver.equalsIgnoreAsciiCase( "cde" ) )
             return new CDEIntegrator();
 #endif
-        if( aOver.equalsIgnoreAsciiCase( "kde" ) )
-            return new KDEIntegrator();
         if( aOver.equalsIgnoreAsciiCase( "none" ) )
             return new DtIntegrator();
     }
@@ -134,9 +141,6 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
         return new CDEIntegrator();
     }
 #endif
-
-    if( pSalDisplay->getWMAdaptor()->getWindowManagerName().EqualsAscii( "KWin" ) )
-        return new KDEIntegrator();
 
     // default: generic implementation
     return new DtIntegrator();
