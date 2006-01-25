@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:49:30 $
+#   last change: $Author: hr $ $Date: 2006-01-25 15:08:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 
 PRJ = ..$/..$/..
-TARGET  = SingleSelectQueryComposer
+TARGET  = DbaComplexTests
 PRJNAME = $(TARGET)
 PACKAGE = complex$/dbaccess
 
@@ -48,6 +48,7 @@ JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRu
 JAVAFILES       = \
         SingleSelectQueryComposer.java \
         RowSetEventListener.java \
+        HsqlDatabase.java \
         RowSet.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -70,6 +71,8 @@ ALL: 	ALLDEP
 .INCLUDE :  target.mk
 
 
-run:
+run: $(CLASSDIR)$/$(JARTARGET)
     java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -sce dbaccess.sce
 
+run_%: $(CLASSDIR)$/$(JARTARGET)
+    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.dbaccess.$(@:s/run_//)
