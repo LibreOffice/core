@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:14:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,6 +419,51 @@ void throwSQLException( const sal_Char* _pAsciiMessage, const sal_Char* _pAsciiS
         _nErrorCode,
         _pNextException ? *_pNextException : Any()
     );
+}
+
+// -----------------------------------------------------------------------------
+void throwSQLException( const sal_Char* _pAsciiMessage, StandardSQLState _eSQLState,
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
+        const Any* _pNextException ) throw (SQLException)
+{
+    throwSQLException( _pAsciiMessage, getStandardSQLStateAscii( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
+}
+
+// -----------------------------------------------------------------------------
+const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
+{
+    const sal_Char* pAsciiState = NULL;
+    switch ( _eState )
+    {
+        case SQL_WRONG_PARAMETER_NUMBER:    pAsciiState = "07001"; break;
+        case SQL_INVALID_DESCRIPTOR_INDEX:  pAsciiState = "07009"; break;
+        case SQL_UNABLE_TO_CONNECT:         pAsciiState = "08001"; break;
+        case SQL_NUMERIC_OUT_OF_RANGE:      pAsciiState = "22003"; break;
+        case SQL_INVALID_DATE_TIME:         pAsciiState = "22007"; break;
+        case SQL_INVALID_CURSOR_STATE:      pAsciiState = "24000"; break;
+        case SQL_TABLE_OR_VIEW_EXISTS:      pAsciiState = "42S01"; break;
+        case SQL_TABLE_OR_VIEW_NOT_FOUND:   pAsciiState = "42S02"; break;
+        case SQL_INDEX_ESISTS:              pAsciiState = "42S11"; break;
+        case SQL_INDEX_NOT_FOUND:           pAsciiState = "42S12"; break;
+        case SQL_COLUMN_EXISTS:             pAsciiState = "42S21"; break;
+        case SQL_COLUMN_NOT_FOUND:          pAsciiState = "42S22"; break;
+        case SQL_GENERAL_ERROR:             pAsciiState = "HY000"; break;
+        case SQL_OPERATION_CANCELED:        pAsciiState = "HY008"; break;
+        case SQL_FUNCTION_SEQUENCE_ERROR:   pAsciiState = "HY010"; break;
+        case SQL_INVALID_CURSOR_POSITION:   pAsciiState = "HY109"; break;
+        case SQL_INVALID_BOOKMARK_VALUE:    pAsciiState = "HY111"; break;
+        case SQL_FEATURE_NOT_IMPLEMENTED:   pAsciiState = "HYC00"; break;
+        case SQL_FUNCTION_NOT_SUPPORTED:    pAsciiState = "IM001"; break;
+    }
+    if ( !pAsciiState )
+        throw RuntimeException();
+    return pAsciiState;
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString getStandardSQLState( StandardSQLState _eState )
+{
+    return ::rtl::OUString::createFromAscii( getStandardSQLStateAscii( _eState ) );
 }
 
 // -----------------------------------------------------------------------------
