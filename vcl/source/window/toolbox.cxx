@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:55:12 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4191,8 +4191,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
         bDrawHotSpot = FALSE;
-    else if( !HasFocus() && HasChildPathFocus() )   // focus is in our childwindow: no highlight
-        bDrawHotSpot = FALSE;
     /*
     else
         if( pWin && !pWin->ImplGetWindowImpl()->mbToolBox )
@@ -4371,7 +4369,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
         // only clear highlight when focus is not in toolbar
         BOOL bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos );
-        if ( bClearHigh && !HasChildPathFocus() || bMenuButtonHit )
+        if ( bClearHigh || bMenuButtonHit )
         {
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
             {
