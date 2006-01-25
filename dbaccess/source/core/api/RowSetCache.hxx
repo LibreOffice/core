@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:43:41 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,6 @@ namespace dbaccess
         sal_Bool                    m_bBeforeFirst ;
         sal_Bool                    m_bAfterLast ;
         sal_Bool                    m_bInserted;
-        sal_Bool                    m_bDeleted ;
         sal_Bool                    m_bUpdated ;
         sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
@@ -234,8 +233,8 @@ namespace dbaccess
         sal_Bool isAfterLast(  );
         sal_Bool isFirst(  );
         sal_Bool isLast(  );
-        void beforeFirst(  );
-        void afterLast(  );
+        sal_Bool beforeFirst(  );
+        sal_Bool afterLast(  );
         sal_Bool first(  );
         sal_Bool last(  );
         sal_Int32 getRow(  );
@@ -245,7 +244,6 @@ namespace dbaccess
         void refreshRow(  );
         sal_Bool rowUpdated(  );
         sal_Bool rowInserted(  );
-        sal_Bool rowDeleted(  );
 
     // ::com::sun::star::sdbc::XResultSetUpdate
         sal_Bool insertRow();
@@ -253,13 +251,10 @@ namespace dbaccess
 
         void updateRow();
         void updateRow( ORowSetMatrix::iterator& _rUpdateRow );
-        void deleteRow();
+        bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );
         void moveToCurrentRow(  );
-
-    // ::com::sun::star::sdbcx::XDeleteRows
-        ::com::sun::star::uno::Sequence< sal_Int32 > deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows );
     };
 }
 #endif
