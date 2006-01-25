@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 09:11:46 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2129,7 +2129,14 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
-    FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_TARGET_LIGHT;
+    FT_Int nLoadFlags = FT_LOAD_DEFAULT;
+
+#ifdef FT_LOAD_TARGET_LIGHT
+    // enable "light hinting" if available
+    if( nFTVERSION >= 2103 )
+        nLoadFlags |= FT_LOAD_TARGET_LIGHT;
+#endif
+
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
