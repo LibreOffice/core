@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:05:46 $
+#   last change: $Author: hr $ $Date: 2006-01-25 11:41:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ SLOFILES=	\
         $(SLO)$/xlfd_extd.obj	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj		\
-        $(SLO)$/kdeint.obj		\
         $(SLO)$/pspgraphics.obj
 
 .IF "$(USE_XPRINT)" == "TRUE"
