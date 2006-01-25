@@ -88,7 +88,11 @@ Const sTestString = &quot;Automatical Test&quot;
 		nCurrentAction = cDBDelete
 		sCurrentMessage = cMessageDatabaseDelete
 		oRowSet.deleteRow()
-		bResult = (nRowCount - oRowSet.RowCount = 1)
+		bResult = (nRowCount - oRowSet.RowCount = 0)
+		if ( bResult ) Then
+			oRowSet.next()
+			bResult = (nRowCount - oRowSet.RowCount = 1)
+		End If
 		LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, FileChannel)
 		LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, MainFileChannel)
 		SetStatus (FilterType, cDBDelete, bResult)
