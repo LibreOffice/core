@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:42:53 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,9 +133,6 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
 #endif
 #ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
 #include "SingleSelectQueryComposer.hxx"
@@ -272,19 +269,12 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_nMaxFieldSize(0)
     ,m_nTransactionIsolation(0)
     ,m_nPrivileges(0)
-    ,m_nAsyncUpdateRowCount(0)
     ,m_nMaxRows(0)
     ,m_nQueryTimeOut(0)
     ,m_bUseEscapeProcessing(sal_True)
     ,m_bApplyFilter(sal_False)
-    ,m_bInserted(sal_False)
-    ,m_bDeleted(sal_False)
-    ,m_bUpdated(sal_False)
     ,m_bCreateStatement(sal_True)
-    ,m_bCanceled(sal_False)
-    ,m_bRowObsolete(sal_False)
     ,m_bModified(sal_False)
-    ,m_bOwnsResultRow(sal_False)
     ,m_bRebuildConnOnExecute(sal_False)
     ,m_bNew(sal_False)
     ,m_bIsBookmarable(sal_True)
@@ -713,10 +703,10 @@ void ORowSet::freeResources()
         m_aBookmark     = Any();
         m_bBeforeFirst  = sal_True;
         m_bAfterLast    = sal_False;
-        m_bRowCountFinal= sal_False;
         m_bNew          = sal_False;
         m_bModified     = sal_False;
-        m_nRowCount     = 0;
+        m_bLastKnownRowCountFinal = sal_False;
+        m_nLastKnownRowCount      = 0;
         if ( m_aOldRow.isValid() )
             m_aOldRow->clearRow();
     }
@@ -1027,35 +1017,32 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         if ( !m_aCurrentRow.isNull() )
             aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
-        if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
-        {
-            ::osl::MutexGuard aCacheGuard( *m_pMutex);
-            sal_Bool bInserted = m_pCache->insertRow();
+        notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
-            // make sure that our row is set to the new inserted row before clearing the inser flags in the cache
-            m_pCache->resetInsertRow(bInserted);
+        ::osl::MutexGuard aCacheGuard( *m_pMutex);
+        sal_Bool bInserted = m_pCache->insertRow();
 
-            // notification order
-            // - column values
-            setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
+        // make sure that our row is set to the new inserted row before clearing the insert flags in the cache
+        m_pCache->resetInsertRow(bInserted);
 
-            // - rowChanged
-            notifyAllListenersRowChanged(aGuard,aEvt);
+        // notification order
+        // - column values
+        setCurrentRow( sal_False, sal_True, aOldValues, aGuard ); // we don't move here
 
-            // - IsModified
-            if(!m_bModified)
-                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-            OSL_ENSURE( !m_bModified, "ORowSet::insertRow: just updated, but _still_ modified?" );
+        // - rowChanged
+        notifyAllListenersRowChanged(aGuard,aEvt);
 
-            // - IsNew
-            if(m_bNew != bOld)
-                fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+        // - IsModified
+        if(!m_bModified)
+            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+        OSL_ENSURE( !m_bModified, "ORowSet::insertRow: just updated, but _still_ modified?" );
 
-            // - RowCount/IsRowCountFinal
-            fireRowcount();
-        }
-        else
-            throwRowSetVetoException( *this, "The insertion of the record has been vetoed." );
+        // - IsNew
+        if(m_bNew != bOld)
+            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+
+        // - RowCount/IsRowCountFinal
+        fireRowcount();
     }
 }
 // -------------------------------------------------------------------------
@@ -1083,27 +1070,24 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
 
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
-        if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
-        {
-            m_pCache->updateRow(m_aCurrentRow.operator ->());
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
+        notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
-            // notification order
-            // - column values
-            ORowSetBase::firePropertyChange(aOldValues);
+        m_pCache->updateRow(m_aCurrentRow.operator ->());
+        m_aBookmark     = m_pCache->getBookmark();
+        m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
 
-            // - rowChanged
-            notifyAllListenersRowChanged(aGuard,aEvt);
+        // notification order
+        // - column values
+        ORowSetBase::firePropertyChange(aOldValues);
 
-            // - IsModified
-            if(!m_bModified)
-                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-            OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
-        }
-        else
-            throwRowSetVetoException( *this, "The update of the record has been vetoed." );
+        // - rowChanged
+        notifyAllListenersRowChanged(aGuard,aEvt);
+
+        // - IsModified
+        if(!m_bModified)
+            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+        OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
     }
 }
 // -------------------------------------------------------------------------
@@ -1112,50 +1096,50 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
-    // deleteRow is not allowed when:
-    // stands before the first row
-    // after the last row
-    // stands on the insert row
-    // the concurrency is read only
-    if(!m_pCache || m_bBeforeFirst || m_bAfterLast || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || ((m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE))
-        throwFunctionSequenceException(*this);
+    checkCache();
+
+    if ( m_bBeforeFirst || m_bAfterLast )
+        throwSQLException( "Cannot delete the before-first or after-last row.", SQL_INVALID_CURSOR_POSITION, *this );
+    if ( m_bNew )
+        throwSQLException( "Cannot delete the insert-row.", SQL_INVALID_CURSOR_POSITION, *this );
+    if  ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
+        throwSQLException( "Result set is read only.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+    if ( ( m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE )
+        throwSQLException( "DELETE privilege not available.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+    if ( rowDeleted() )
+        throwSQLException( "Current row already deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     // this call position the cache indirect
-    notifyClonesRowDelete(m_aBookmark);
+    Any aBookmarkToDelete( m_aBookmark );
 
-    positionCache();
+    positionCache( MOVE_NONE_REFRESH_ONLY );
+    sal_Int32 nDeletePosition = m_pCache->getRow();
+
+    notifyRowSetAndClonesRowDelete( aBookmarkToDelete );
 
     ORowSetRow aOldValues;
     if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && m_pCache->m_aMatrixIter->isValid() )
         aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,1);
-    if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
-    {
-        m_nPosition = m_pCache->getRow();
-        m_pCache->deleteRow();
-        notifyClonesRowDeleted(m_aBookmark);
+    notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
-        m_aBookmark     = Any();
-        m_aCurrentRow   = m_pCache->getEnd();
-        m_aCurrentRow.setBookmark(Any());
+    m_pCache->deleteRow();
+    notifyRowSetAndClonesRowDeleted( aBookmarkToDelete, nDeletePosition );
 
-        ORowSetNotifier aNotifier( this );
-            // this will call cancelRowModification on the cache if necessary
+    ORowSetNotifier aNotifier( this );
+        // this will call cancelRowModification on the cache if necessary
 
-        // notification order
-        // - rowChanged
-        notifyAllListenersRowChanged(aGuard,aEvt);
+    // notification order
+    // - rowChanged
+    notifyAllListenersRowChanged(aGuard,aEvt);
 
-        // - IsModified
-        // - IsNew
-        aNotifier.fire( );
+    // - IsModified
+    // - IsNew
+    aNotifier.fire( );
 
-        // - RowCount/IsRowCountFinal
-        fireRowcount();
-    }
-    else
-        throwRowSetVetoException( *this, "The deletion of the row has been vetoed." );
+    // - RowCount/IsRowCountFinal
+    fireRowcount();
 }
 
 // -------------------------------------------------------------------------
@@ -1164,16 +1148,18 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( *m_pMutex );
-    if(m_bBeforeFirst || m_bAfterLast)
+    if ( m_bBeforeFirst || m_bAfterLast || rowDeleted() )
         return; // nothing to do so return
 
+    checkCache();
     // cancelRowUpdates is not allowed when:
-    // standing on the insert row
-    // the concurrency is read only
-    if(!m_pCache || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    // - standing on the insert row
+    // - the concurrency is read only
+    // - the current row is deleted
+    if ( m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         throwFunctionSequenceException(*this);
 
-    positionCache();
+    positionCache( MOVE_NONE_REFRESH_ONLY );
 
     ORowSetRow aOldValues;
     if ( !m_aCurrentRow.isNull() )
@@ -1221,18 +1207,18 @@ void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >&
 void ORowSet::notifyAllListeners(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,rowSetChanged);
+    m_aRowsetListeners.notifyEach( &XRowSetListener::rowSetChanged, aEvt );
 }
 // -------------------------------------------------------------------------
 void ORowSet::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,cursorMoved);
+    m_aRowsetListeners.notifyEach( &XRowSetListener::cursorMoved, aEvt );
 }
 // -------------------------------------------------------------------------
-void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
+void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard, const EventObject& aEvt)
 {
-    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,rowChanged);
+    m_aRowsetListeners.notifyEach( &XRowSetListener::rowChanged, aEvt );
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard)
@@ -1242,30 +1228,34 @@ sal_Bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard
     return bCheck;
 }
 // -------------------------------------------------------------------------
-sal_Bool ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
+void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
 {
     NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
-    return bCheck;
+    if ( !bCheck )
+        throwRowSetVetoException( *this, "The record operation has been vetoed." );
 }
 // -------------------------------------------------------------------------
 void ORowSet::fireRowcount()
 {
-    if(m_nRowCount != m_pCache->m_nRowCount)
+    sal_Int32 nCurrentRowCount( impl_getRowCount() );
+    sal_Bool bCurrentRowCountFinal( m_pCache->m_bRowCountFinal );
+
+    if ( m_nLastKnownRowCount != nCurrentRowCount )
     {
         sal_Int32 nHandle = PROPERTY_ID_ROWCOUNT;
         Any aNew,aOld;
-        aNew <<= m_pCache->m_nRowCount;aOld <<= m_nRowCount;
+        aNew <<= nCurrentRowCount; aOld <<= m_nLastKnownRowCount;
         fire(&nHandle,&aNew,&aOld,1,sal_False);
-        m_nRowCount = m_pCache->m_nRowCount;
+        m_nLastKnownRowCount = nCurrentRowCount;
     }
-    if(!m_bRowCountFinal && m_bRowCountFinal != m_pCache->m_bRowCountFinal)
+    if ( !m_bLastKnownRowCountFinal && ( m_bLastKnownRowCountFinal != bCurrentRowCountFinal ) )
     {
         sal_Int32 nHandle = PROPERTY_ID_ISROWCOUNTFINAL;
         Any aNew,aOld;
-        aNew <<= bool2any(m_pCache->m_bRowCountFinal);
-        aOld <<= bool2any(m_bRowCountFinal);
+        aNew <<= bool2any( bCurrentRowCountFinal );
+        aOld <<= bool2any( m_bLastKnownRowCountFinal );
         fire(&nHandle,&aNew,&aOld,1,sal_False);
-        m_bRowCountFinal = m_pCache->m_bRowCountFinal;
+        m_bLastKnownRowCountFinal = bCurrentRowCountFinal;
     }
 }
 // -------------------------------------------------------------------------
@@ -1275,19 +1265,29 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
-    if ((m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT)
-        throwFunctionSequenceException(*this);
+    if ( ( m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT )
+        throwSQLException( "No insert privileges", SQL_GENERAL_ERROR, *this );
 
-
-    if(notifyAllListenersCursorBeforeMove(aGuard))
+    if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
         // remember old value for fire
-        // check before because the resultset could be empty
-        if(m_aBookmark.hasValue())
-            positionCache();
-
         ORowSetRow aOldValues;
-        if ( !m_bBeforeFirst && !m_bAfterLast && m_pCache->m_aMatrixIter != m_pCache->getEnd() && m_pCache->m_aMatrixIter->isValid() )
+
+        if ( rowDeleted() )
+        {
+            positionCache( MOVE_FORWARD );
+            m_pCache->next();
+            setCurrentRow( sal_True, sal_False, aOldValues, aGuard );
+        }
+        else
+            positionCache( MOVE_NONE_REFRESH_ONLY );
+
+        // check before because the resultset could be empty
+        if  (   !m_bBeforeFirst
+            &&  !m_bAfterLast
+            &&  m_pCache->m_aMatrixIter != m_pCache->getEnd()
+            &&  m_pCache->m_aMatrixIter->isValid()
+            )
             aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
         const sal_Bool bNewState = m_bNew;
@@ -1310,6 +1310,9 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
         // - IsNew
         if ( bNewState != m_bNew )
             fireProperty( PROPERTY_ID_ISNEW, m_bNew, bNewState );
+
+        // - RowCount/IsRowCountFinal
+        fireRowcount();
     }
 }
 // -------------------------------------------------------------------------
@@ -1318,27 +1321,35 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
-
     checkPositioningAllowed();
 
-    if(m_pCache && ( m_pCache->m_bInserted || m_bModified ))
+    if ( !m_pCache->m_bInserted && !m_bModified )
+        // nothing to do if we're not on the insertion row, and not modified otherwise
+        return;
+
+    if ( rowDeleted() )
+        // this would perhaps even justify a RuntimeException ....
+        // if the current row is deleted, then no write access to this row should be possible. So,
+        // m_bModified should be true. Also, as soon as somebody calls moveToInsertRow,
+        // our current row should not be deleted anymore. So, we should not have survived the above
+        // check "if ( !m_pCache->m_bInserted && !m_bModified )"
+        throwSQLException( "The current row is deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+
+    if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
-        if(notifyAllListenersCursorBeforeMove(aGuard))
-        {
-            positionCache();
-            m_pCache->moveToCurrentRow();
+        positionCache( MOVE_NONE_REFRESH_ONLY );
+        m_pCache->moveToCurrentRow();
 
-            ORowSetNotifier aNotifier( this );
-                // this will call cancelRowModification on the cache if necessary
+        ORowSetNotifier aNotifier( this );
+            // this will call cancelRowModification on the cache if necessary
 
-            // notification order
-            // - cursorMoved
-            notifyAllListenersCursorMoved(aGuard);
+        // notification order
+        // - cursorMoved
+        notifyAllListenersCursorMoved(aGuard);
 
-            // - IsModified
-            // - IsNew
-            aNotifier.fire();
-        }
+        // - IsModified
+        // - IsNew
+        aNotifier.fire();
     }
 }
 // -------------------------------------------------------------------------
@@ -1956,71 +1967,58 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
-    Sequence< sal_Int32 > aRet;
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,rows.getLength());
     // notify the rowset listeners
-    if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
+    notifyAllListenersRowBeforeChange(aGuard,aEvt);
+
+    Sequence< sal_Int32 > aResults( rows.getLength() );
+    const Any* row = rows.getConstArray();
+    const Any* rowEnd = rows.getConstArray() + rows.getLength();
+    sal_Int32* result = aResults.getArray();
+    for ( ; row != rowEnd; ++row, ++result )
     {
+        *result = 0;
+        if ( !m_pCache->moveToBookmark( *row ) )
+            continue;
+        sal_Int32 nDeletePosition = m_pCache->getRow();
+
         // first notify the clones so that they can save their position
-        const Any* pBegin = rows.getConstArray();
-        const Any* pEnd   = pBegin + rows.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            notifyClonesRowDelete(*pBegin);
-            if(compareBookmarks( m_aBookmark,*pBegin) == 0)
-            {
-                positionCache();
-                m_nPosition = m_pCache->getRow();
-            }
-        }
-        // now delete the rows
-        aRet = m_pCache->deleteRows(rows);
+        notifyRowSetAndClonesRowDelete( *row );
+
+        // now delete the row
+        if ( !m_pCache->deleteRow() )
+            continue;
+        *result = 1;
 
         // now notify that we have deleted
-        pBegin = rows.getConstArray();
-
-        const sal_Int32* pRetBegin  = aRet.getConstArray();
-        const sal_Int32* pRetEnd    = pRetBegin + aRet.getLength();
-        OSL_ENSURE(aRet.getLength() == rows.getLength(),"ORowSet::deleteRows: The length of the rows and returnstatus is not equal!");
-        for(;pBegin != pEnd;++pBegin)
-        {
-            if(*pRetBegin)
-            {
-                notifyClonesRowDeleted(*pBegin);
-                if(compareBookmarks( m_aBookmark,*pBegin) == 0)
-                {
-                    m_aOldRow->clearRow();
-                    m_aCurrentRow   = m_pCache->getEnd();
-                    m_aBookmark     = Any();
-                    m_aCurrentRow.setBookmark(m_aBookmark);
-                }
-            }
-        }
-
-        aEvt.Rows = aRet.getLength();
-
-        // we have to check if we stand on the insert row and if so we have to reset it
-        ORowSetNotifier aNotifier( this );
-            // this will call cancelRowModification on the cache if necessary
-
-        // notification order
-        // - rowChanged
-        notifyAllListenersRowChanged(aGuard,aEvt);
-
-        // - IsModified
-        // - IsNew
-        aNotifier.fire();
-
-        // - RowCount/IsRowCountFinal
-        fireRowcount();
+        notifyRowSetAndClonesRowDeleted( *row, nDeletePosition );
     }
-    else
-        throwRowSetVetoException( *this, "The deletion of the records has been vetoed." );
-    return aRet;
+
+    aEvt.Rows = aResults.getLength();
+
+    // we have to check if we stand on the insert row and if so we have to reset it
+    ORowSetNotifier aNotifier( this );
+        // this will call cancelRowModification on the cache if necessary
+
+    // notification order
+    // - rowChanged
+    notifyAllListenersRowChanged(aGuard,aEvt);
+
+    // - IsModified
+    // - IsNew
+    aNotifier.fire();
+
+    // - RowCount/IsRowCountFinal
+    fireRowcount();
+
+    return aResults;
 }
 // -----------------------------------------------------------------------------
-void ORowSet::notifyClonesRowDelete(const Any& _rBookmark)
+void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
 {
+    // notify ourself
+    onDeleteRow( _rBookmark );
+    // notify the clones
     for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); m_aClones.end() != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
@@ -2028,13 +2026,16 @@ void ORowSet::notifyClonesRowDelete(const Any& _rBookmark)
         {
             ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
             if(pClone)
-                pClone->rowDelete(_rBookmark);
+                pClone->onDeleteRow( _rBookmark );
         }
     }
 }
 //------------------------------------------------------------------------------
-void ORowSet::notifyClonesRowDeleted(const Any& _rBookmark)
+void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 _nPos )
 {
+    // notify ourself
+    onDeletedRow( _rBookmark, _nPos );
+    // notify the clones
     for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); m_aClones.end() != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
@@ -2042,7 +2043,7 @@ void ORowSet::notifyClonesRowDeleted(const Any& _rBookmark)
         {
             ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
             if(pClone)
-                pClone->rowDeleted(_rBookmark);
+                pClone->onDeletedRow( _rBookmark, _nPos );
         }
     }
 }
@@ -2497,8 +2498,15 @@ void ORowSet::checkUpdateIterator()
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if ( !m_pCache || columnIndex <= 0 || m_aCurrentRow.isNull() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
-        throwFunctionSequenceException(*this);
+    checkCache();
+    if ( columnIndex <= 0 )
+        throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
+    if ( rowDeleted() )
+        throwSQLException( "Current row is deleted", SQL_INVALID_CURSOR_POSITION, *this );
+    if ( m_aCurrentRow.isNull() )
+        throwSQLException( "Invalid cursor state", SQL_INVALID_CURSOR_STATE, *this );
+    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+        throwSQLException( "Result set is not writeable", SQL_GENERAL_ERROR, *this );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
@@ -2527,8 +2535,6 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
              ,ORowSetBase(OComponentHelper::rBHelper,_pMutex)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
-             ,m_bDeleted(rParent.m_bDeleted)
-             ,m_bRowObsolete(rParent.m_bRowObsolete)
              ,m_bIsBookmarable(sal_True)
              ,m_pParent(&rParent)
 {
@@ -2727,27 +2733,6 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
     return 0;
 }
 // -----------------------------------------------------------------------------
-void ORowSetClone::rowDelete(const ::com::sun::star::uno::Any& _rBookmark)
-{
-    if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
-    {
-        OSL_ENSURE(m_aBookmark.hasValue(),"ORowSetClone::rowDelete: Bookmark isn't valid!");
-        ::osl::MutexGuard aGuard( *m_pMutex );
-        m_pCache->moveToBookmark(m_aBookmark);
-        m_nPosition = m_pCache->getRow();
-    }
-}
-// -----------------------------------------------------------------------------
-void ORowSetClone::rowDeleted(const ::com::sun::star::uno::Any& _rBookmark)
-{
-    if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
-    {
-        m_aBookmark     = Any();
-        m_aCurrentRow   = m_pCache->getEnd();
-        m_aCurrentRow.setBookmark(Any());
-    }
-}
-// -----------------------------------------------------------------------------
 void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     switch(nHandle)
@@ -2784,6 +2769,24 @@ sal_Bool ORowSetClone::isModified( )
 sal_Bool ORowSetClone::isNew( )
 {
     return sal_False;
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSetClone::execute(  ) throw(SQLException, RuntimeException)
+{
+    throwFunctionNotSupportedException( "RowSetClone::XRowSet::execute", *this );
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSetClone::addRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
+{
+    throwFunctionNotSupportedException( "RowSetClone::XRowSet", *this );
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSetClone::removeRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
+{
+    throwFunctionNotSupportedException( "RowSetClone::XRowSet", *this );
 }
 
 } // dbaccess
