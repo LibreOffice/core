@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:13:47 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,10 @@ namespace dbaccess
     {
     protected:
         ORowSetCacheIterator        m_aColumnValue;
-        ORowSetMatrix::iterator&    m_rEnd;             // end of the matrix to when we reach the end
         ::com::sun::star::uno::Any  m_aOldValue;
 
         ::rtl::OUString             m_aDescription;     // description
+        ORowSetBase*                m_pRowSet;
 
         virtual ~ORowSetDataColumn();
     public:
@@ -75,8 +75,7 @@ namespace dbaccess
                           sal_Int32 _nPos,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const ::rtl::OUString& _rDescription,
-                          const ORowSetCacheIterator& _rColumnValue,
-                          ORowSetMatrix::iterator& _rEnd);
+                          const ORowSetCacheIterator& _rColumnValue);
 
 
         // com::sun::star::lang::XTypeProvider
