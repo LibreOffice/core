@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:44:50 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,6 @@ bool PrintFontManager::initFontconfig()
                                                     (void *) NULL );
     FcPattern* pPattern = rWrapper.FcPatternCreate();
     FcFontSet* pFSet = rWrapper.FcFontList( pConfig, pPattern, pOSet );
-    rtl_TextEncoding aThreadTextEncoding = osl_getThreadTextEncoding();
 
     if( pFSet )
     {
@@ -401,7 +400,7 @@ bool PrintFontManager::initFontconfig()
             if( aFonts.empty() )
                 continue;
 
-            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), aThreadTextEncoding ), sal_True );
+            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), sal_True );
             PrintFont* pUpdate = aFonts.front();
             if( ++aFonts.begin() != aFonts.end() ) // more than one font
             {
@@ -490,7 +489,7 @@ bool PrintFontManager::initFontconfig()
                 }
                 if( eStyleRes == FcResultMatch )
                 {
-                    pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), aThreadTextEncoding );
+                    pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), RTL_TEXTENCODING_UTF8 );
                 }
 
                 // update font cache
