@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:35:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,14 +186,13 @@ private:
     GraphicObject*                  mpGraphicObject;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
-    sal_Bool                        mbInitialized;
 
 protected:
 
-                                    GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos );
+                                    GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy );
                                     ~GalleryTransferable();
 
-    void                            InitData();
+    void                            InitData( bool bLazy );
 
     // TransferableHelper
     virtual void                    AddSupportedFormats();
