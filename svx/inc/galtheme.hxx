@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:07:15 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,8 @@ private:
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
-    ULONG                       mnLockCount;
+    ULONG                       mnThemeLockCount;
+    ULONG                       mnBroadcasterLockCount;
     ULONG                       nDragPos;
     BOOL                        bDragging;
     BOOL                        bAbortActualize;
@@ -160,9 +161,12 @@ public:
     void                        SetDragging( BOOL bSet ) { bDragging = bSet; }
     BOOL                        IsDragging() const { return bDragging; }
 
-    void                        LockBroadcaster() { mnLockCount++; }
-    SVX_DLLPUBLIC void                      UnlockBroadcaster( ULONG nUpdatePos = 0 );
-    BOOL                        IsBroadcasterLocked() const { return mnLockCount > 0; }
+    void                        LockTheme() { ++mnThemeLockCount; }
+    BOOL                        UnlockTheme();
+
+    void                        LockBroadcaster() { mnBroadcasterLockCount++; }
+    SVX_DLLPUBLIC void          UnlockBroadcaster( ULONG nUpdatePos = 0 );
+    BOOL                        IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
     void                        SetDragPos( ULONG nPos ) { nDragPos = nPos; }
     ULONG                       GetDragPos() const { return nDragPos; }
