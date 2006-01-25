@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:53:28 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3003,6 +3003,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
+
+    // #i59364# high contrast mode
+    bool bHC = ( aStyleSet.GetFaceColor().IsDark() ||
+                 aStyleSet.GetWindowColor().IsDark() );
+    aStyleSet.SetHighContrastMode( bHC );
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
