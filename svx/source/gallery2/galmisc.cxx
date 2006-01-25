@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:38:09 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,20 @@ ResMgr* GetGalleryResMgr()
     }
 
     return pGalleryResMgr;
+}
+
+// -------------------------
+// - GalleryResGetBitmapEx -
+// -------------------------
+
+BitmapEx GalleryResGetBitmapEx( ULONG nId )
+{
+    BitmapEx aBmpEx( GAL_RESID( nId ) );
+
+    if( !aBmpEx.IsTransparent() )
+            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
+
+    return aBmpEx;
 }
 
 // ----------------------
@@ -468,15 +482,15 @@ IMPL_LINK( GalleryProgress, Update, GraphicFilter*, pFilter )
 // - GalleryTransferable -
 // -----------------------
 
-GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos ) :
+GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
     mpGraphicObject( NULL ),
     mpImageMap( NULL ),
-    mpURL( NULL ),
-    mbInitialized( sal_False )
+    mpURL( NULL )
 {
+    InitData( bLazy );
 }
 
 // ------------------------------------------------------------------------
@@ -487,61 +501,62 @@ GalleryTransferable::~GalleryTransferable()
 
 // ------------------------------------------------------------------------
 
-void GalleryTransferable::InitData()
+void GalleryTransferable::InitData( bool bLazy )
 {
-    if( !mbInitialized )
+    switch( meObjectKind )
     {
-        switch( meObjectKind )
+        case( SGA_OBJ_SVDRAW ):
         {
-            case( SGA_OBJ_ANIM ):
-            case( SGA_OBJ_BMP ):
-            case( SGA_OBJ_INET ):
+            if( !bLazy )
             {
-                Graphic aGraphic;
+                if( !mpGraphicObject )
+                {
+                    Graphic aGraphic;
 
-                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                    mpGraphicObject = new GraphicObject( aGraphic );
+                    if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                        mpGraphicObject = new GraphicObject( aGraphic );
+                }
 
-                mpURL = new INetURLObject;
+                if( !mxModelStream.Is() )
+                {
+                    mxModelStream = new SotStorageStream( String() );
+                    mxModelStream->SetBufferSize( 16348 );
 
-                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                    delete mpURL, mpURL = NULL;
+                    if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
+                        mxModelStream.Clear();
+                    else
+                        mxModelStream->Seek( 0 );
+                }
             }
-            break;
-
-            case( SGA_OBJ_SOUND ):
-            {
-                mpURL = new INetURLObject;
-
-                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                    delete mpURL, mpURL = NULL;
-            }
-            break;
-
-            case( SGA_OBJ_SVDRAW ):
-            {
-                Graphic aGraphic;
-
-
-                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                    mpGraphicObject = new GraphicObject( aGraphic );
-
-                mxModelStream = new SotStorageStream( String() );
-                mxModelStream->SetBufferSize( 16348 );
-
-                if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
-                    mxModelStream.Clear();
-                else
-                    mxModelStream->Seek( 0 );
-            }
-            break;
-
-            default:
-                DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
-            break;
         }
+        break;
 
-        mbInitialized = sal_True;
+        case( SGA_OBJ_ANIM ):
+        case( SGA_OBJ_BMP ):
+        case( SGA_OBJ_INET ):
+        case( SGA_OBJ_SOUND ):
+        {
+            if( !mpURL )
+            {
+                mpURL = new INetURLObject;
+
+                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                    delete mpURL, mpURL = NULL;
+            }
+
+            if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
+            {
+                Graphic aGraphic;
+
+                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                    mpGraphicObject = new GraphicObject( aGraphic );
+            }
+        }
+        break;
+
+        default:
+            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
+        break;
     }
 }
 
@@ -549,42 +564,32 @@ void GalleryTransferable::InitData()
 
 void GalleryTransferable::AddSupportedFormats()
 {
-    InitData();
-
-    if( mpURL )
-        AddFormat( FORMAT_FILE );
-
-    if( mxModelStream.Is() )
+    if( SGA_OBJ_SVDRAW == meObjectKind )
     {
-/*!!!
-        Graphic     aGraphic;
-        ImageMap    aImageMap;
-
-        if( CreateIMapGraphic( *mpModel, aGraphic, aImageMap ) )
-        {
-            delete mpGraphicObject, mpGraphicObject = new GraphicObject( aGraphic );
-            delete mpImageMap, mpImageMap = new ImageMap( aImageMap );
-
-            AddFormat( SOT_FORMATSTR_ID_SVIM );
-        }
-        else
-*/
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
-    }
-
-    if( mpGraphicObject )
-    {
+        AddFormat( SOT_FORMATSTR_ID_DRAWING );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
+        AddFormat( FORMAT_GDIMETAFILE );
+        AddFormat( FORMAT_BITMAP );
+    }
+    else
+    {
+        if( mpURL )
+            AddFormat( FORMAT_FILE );
 
-        if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+        if( mpGraphicObject )
         {
-            AddFormat( FORMAT_GDIMETAFILE );
-            AddFormat( FORMAT_BITMAP );
-        }
-        else
-        {
-            AddFormat( FORMAT_BITMAP );
-            AddFormat( FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_SVXB );
+
+            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            {
+                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( FORMAT_BITMAP );
+            }
+            else
+            {
+                AddFormat( FORMAT_BITMAP );
+                AddFormat( FORMAT_GDIMETAFILE );
+            }
         }
     }
 }
@@ -596,11 +601,11 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bRet = sal_False;
 
-    InitData();
+    InitData( false );
 
-    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && mxModelStream.Is() )
+    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && ( SGA_OBJ_SVDRAW == meObjectKind ) )
     {
-        bRet = SetObject( &mxModelStream, 0, rFlavor );
+        bRet = ( mxModelStream.Is() && SetObject( &mxModelStream, 0, rFlavor ) );
     }
     else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
     {
@@ -671,7 +676,6 @@ void GalleryTransferable::ObjectReleased()
 
 void GalleryTransferable::CopyToClipboard( Window* pWindow )
 {
-    InitData();
     TransferableHelper::CopyToClipboard( pWindow );
 }
 
@@ -688,14 +692,4 @@ void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceAction
         mpTheme->SetDragPos( mnObjectPos );
         TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
     }
-}
-
-BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
-{
-    BitmapEx aBmpEx( GAL_RESID( nId ) );
-
-    if( !aBmpEx.IsTransparent() )
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
-
-    return aBmpEx;
 }
