@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:58:54 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1382,7 +1382,7 @@ void FmGridControl::DeleteSelectedRows()
 
                     bNewPos = sal_True;
                     // if it's not the row for inserting we keep the bookmark
-                    if (!IsEmptyRow(nIdx))
+                    if (!IsInsertionRow(nIdx))
                         aBookmark = m_pSeekCursor->getBookmark();
                 }
             }
@@ -1408,6 +1408,7 @@ void FmGridControl::DeleteSelectedRows()
 
         // now delete the row
         Sequence <sal_Int32> aDeletedRows;
+        SetUpdateMode( FALSE );
         try
         {
             aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
@@ -1415,6 +1416,7 @@ void FmGridControl::DeleteSelectedRows()
         catch(SQLException&)
         {
         }
+        SetUpdateMode( TRUE );
 
         // how many rows are deleted?
         sal_Int32 nDeletedRows = 0;
@@ -1422,7 +1424,7 @@ void FmGridControl::DeleteSelectedRows()
         for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
         {
             if (pSuccess[i])
-                nDeletedRows++;
+                ++nDeletedRows;
         }
 
         // sind Zeilen geloescht worden?
@@ -1443,19 +1445,23 @@ void FmGridControl::DeleteSelectedRows()
                         // no valid bookmark so move to the insert row
                         else
                         {
-                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
                             xUpdateCursor->moveToInsertRow();
                         }
                     }
                     else
                     {
                         Reference< ::com::sun::star::beans::XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
-                        sal_Int32 nRecordCount;
+
+                        sal_Int32 nRecordCount(0);
                         xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
+                        if ( m_pDataCursor->rowDeleted() )
+                            --nRecordCount;
+
                         // there are no rows left and we have an insert row
                         if (!nRecordCount && GetEmptyRow().Is())
                         {
-                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
                             xUpdateCursor->moveToInsertRow();
                         }
                         else if (nRecordCount)
@@ -1499,7 +1505,7 @@ void FmGridControl::DeleteSelectedRows()
                 if (bAllSelected)
                 {
                     SelectAll();
-                    if (IsEmptyRow(GetRowCount() - 1))  // einfuegeZeile nicht
+                    if (IsInsertionRow(GetRowCount() - 1))  // einfuegeZeile nicht
                         SelectRow(GetRowCount() - 1, sal_False);
                 }
                 else
@@ -2035,7 +2041,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
         for (i=0; i<nSelectedRows; ++i)
         {
             nIdx = ::comphelper::getINT32(pBookmarks[i]);
-            if (IsEmptyRow(nIdx))
+            if (IsInsertionRow(nIdx))
             {
                 // leerzeile nicht loeschen
                 aBookmarks.realloc(--nSelectedRows);
