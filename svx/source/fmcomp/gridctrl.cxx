@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1860,7 +1860,7 @@ sal_Bool DbGridControl::SeekRow(long nRow)
             if ((nRow == m_nCurrentPos) && getDisplaySynchron())
                 m_xPaintRow = m_xCurrentRow;
             // seek to the empty insert row
-            else if (IsEmptyRow(nRow))
+            else if (IsInsertionRow(nRow))
                 m_xPaintRow = m_xEmptyRow;
             else
             {
@@ -2055,7 +2055,7 @@ DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
         else
             return DbGridControl_Base::CURRENT;
     }
-    else if (IsEmptyRow(nRow))
+    else if (IsInsertionRow(nRow))
         return DbGridControl_Base::NEW;
     else if (!IsValid(m_xSeekRow))
         return DbGridControl_Base::DELETED;
@@ -2121,7 +2121,7 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
             {
                 sal_Bool bNewRowInserted = sal_False;
                 // Should we go to the insertrow ?
-                if (IsEmptyRow(nNewRow))
+                if (IsInsertionRow(nNewRow))
                 {
                     // to we need to move the cursor to the insert row?
                     // we need to insert the if the current row isn't the insert row or if the
@@ -2285,9 +2285,13 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     // if we are on the same row only repaint
     // but this is only possible for rows which are not inserted, in that case the comparision result
     // may not be correct
-    else if ( m_xCurrentRow.Is() && !m_xCurrentRow->IsNew() )
-    {
-        if ( !m_pDataCursor->isBeforeFirst() && !m_pDataCursor->isAfterLast() )
+    else
+        if  (   m_xCurrentRow.Is()
+            &&  !m_xCurrentRow->IsNew()
+            &&  !m_pDataCursor->isBeforeFirst()
+            &&  !m_pDataCursor->isAfterLast()
+            &&  !m_pDataCursor->rowDeleted()
+            )
         {
             sal_Bool bEqualBookmarks = CompareBookmark( m_xCurrentRow->GetBookmark(), m_pDataCursor->getBookmark() );
 
@@ -2304,7 +2308,6 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
                 return;
             }
         }
-    }
 
     // weg von der Row des DatenCursors
     if (m_xPaintRow == m_xCurrentRow)
@@ -2423,10 +2426,10 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
             // gerade ein Datensatz eingefuegt wird
             m_nSeekPos = nRow;
         }
-        else if (IsEmptyRow(nRow))  // Leerzeile zum Einfuegen von Datensaetzen
+        else if (IsInsertionRow(nRow))  // Leerzeile zum Einfuegen von Datensaetzen
             m_nSeekPos = nRow;
     }
-    else if (IsEmptyRow(nRow))  // Leerzeile zum Einfuegen von Datensaetzen
+    else if (IsInsertionRow(nRow))  // Leerzeile zum Einfuegen von Datensaetzen
         m_nSeekPos = nRow;
     else if ((-1 == nRow) && (GetRowCount() == ((m_nOptions & OPT_INSERT) ? 1 : 0)) && m_pSeekCursor->isAfterLast())
         m_nSeekPos = nRow;
@@ -2437,10 +2440,23 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         long nSteps = 0;
         try
         {
-            nSteps = nRow - (m_pSeekCursor->getRow() - 1);// Tatsaechliche Position im Cursor
-            bAbsolute = bAbsolute || (abs(nSteps) > 100);   // Sprung zu groß ?
+            if ( m_pSeekCursor->rowDeleted() )
+            {
+                // somebody deleted the current row of the seek cursor. Move it away from this row.
+                m_pSeekCursor->next();
+                if ( m_pSeekCursor->isAfterLast() || m_pSeekCursor->isBeforeFirst() )
+                    bAbsolute = sal_True;
+            }
 
-            if (bAbsolute)  // absolut positionierung
+            if ( !bAbsolute )
+            {
+                DBG_ASSERT( !m_pSeekCursor->isAfterLast() && !m_pSeekCursor->isBeforeFirst(),
+                    "DbGridControl::SeekCursor: how did the seek cursor get to this position?!" );
+                nSteps = nRow - (m_pSeekCursor->getRow() - 1);
+                bAbsolute = bAbsolute || (abs(nSteps) > 100);
+            }
+
+            if ( bAbsolute )
             {
                 if ((bSuccess = m_pSeekCursor->absolute(nRow + 1)))
                     m_nSeekPos = nRow;
@@ -3260,7 +3276,7 @@ sal_Bool DbGridControl::IsCurrentAppending() const
 }
 
 //------------------------------------------------------------------------------
-sal_Bool DbGridControl::IsEmptyRow(long nRow) const
+sal_Bool DbGridControl::IsInsertionRow(long nRow) const
 {
     return (m_nOptions & OPT_INSERT) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
