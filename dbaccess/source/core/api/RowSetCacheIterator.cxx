@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:43:56 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ ORowSetRow& ORowSetCacheIterator::operator *()
 // -----------------------------------------------------------------------------
 const ORowSetRow& ORowSetCacheIterator::operator *() const
 {
-    if ( !m_pRowSet->isInsertRow(ORowSetBase::GrantNotifierAccess()) && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
+    if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
     {
         OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
         m_pCache->moveToBookmark(m_aIter->second.aBookmark);
@@ -97,7 +97,7 @@ ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->()
 // -----------------------------------------------------------------------------
 const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
 {
-    if ( !m_pRowSet->isInsertRow(ORowSetBase::GrantNotifierAccess()) && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
+    if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
     {
         OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
         m_pCache->moveToBookmark(m_aIter->second.aBookmark);
@@ -132,7 +132,7 @@ sal_Bool ORowSetCacheIterator::isNull() const
     if ( !bRet )
     {
         ORowSetCacheIterator_Helper aHelper = m_aIter->second;
-        bRet = ( m_pRowSet->isInsertRow(ORowSetBase::GrantNotifierAccess())
+        bRet = ( m_pRowSet->isInsertRow()
             ?
             m_aIter->second.aIterator == m_pCache->m_pInsertMatrix->end()
             :
