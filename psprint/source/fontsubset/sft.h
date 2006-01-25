@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:25:36 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.13 2005-11-01 10:25:36 kz Exp $ */
+/* $Id: sft.h,v 1.14 2006-01-25 11:36:41 hr Exp $ */
 
 /**
 
@@ -604,5 +604,25 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/* indexes into _TrueTypeFont::tables[] and _TrueTypeFont::tlens[] */
+#define O_maxp 0     /* 'maxp' */
+#define O_glyf 1     /* 'glyf' */
+#define O_head 2     /* 'head' */
+#define O_loca 3     /* 'loca' */
+#define O_name 4     /* 'name' */
+#define O_hhea 5     /* 'hhea' */
+#define O_hmtx 6     /* 'hmtx' */
+#define O_cmap 7     /* 'cmap' */
+#define O_vhea 8     /* 'vhea' */
+#define O_vmtx 9     /* 'vmtx' */
+#define O_OS2  10    /* 'OS/2' */
+#define O_post 11    /* 'post' */
+#define O_kern 12    /* 'kern' */
+#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
+#define O_prep 14    /* 'prep' - only used in TT->TT generation */
+#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
+#define O_gsub 16    /* 'GSUB' */
+#define NUM_TAGS 17
 
 #endif /* __SUBFONT_H */
