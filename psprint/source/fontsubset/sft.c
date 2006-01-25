@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:25:24 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,42 +131,24 @@ static const sal_uInt32 TTFontClassTag = 0x74746663;  /* 'ttfc' */
 static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
 
-/* standard TrueType table tags and their ordinal numbers */
+/* standard TrueType table tags */
 #define T_maxp 0x6D617870
-#define O_maxp 0     /* 'maxp' */
 #define T_glyf 0x676C7966
-#define O_glyf 1     /* 'glyf' */
 #define T_head 0x68656164
-#define O_head 2     /* 'head' */
 #define T_loca 0x6C6F6361
-#define O_loca 3     /* 'loca' */
 #define T_name 0x6E616D65
-#define O_name 4     /* 'name' */
 #define T_hhea 0x68686561
-#define O_hhea 5     /* 'hhea' */
 #define T_hmtx 0x686D7478
-#define O_hmtx 6     /* 'hmtx' */
 #define T_cmap 0x636D6170
-#define O_cmap 7     /* 'cmap' */
 #define T_vhea 0x76686561
-#define O_vhea 8     /* 'vhea' */
 #define T_vmtx 0x766D7478
-#define O_vmtx 9     /* 'vmtx' */
 #define T_OS2  0x4F532F32
-#define O_OS2  10    /* 'OS/2' */
 #define T_post 0x706F7374
-#define O_post 11    /* 'post' */
 #define T_kern 0x6B65726E
-#define O_kern 12    /* 'kern' */
 #define T_cvt  0x63767420
-#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
 #define T_prep 0x70726570
-#define O_prep 14    /* 'prep' - only used in TT->TT generation */
 #define T_fpgm 0x6670676D
-#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
 #define T_gsub 0x47535542
-#define O_gsub 16    /* 'GSUB' */
-#define NUM_TAGS 17
 
 #define LAST_URANGE_BIT 69
 const char *ulcodes[LAST_URANGE_BIT+2] = {
@@ -1127,6 +1109,10 @@ static void GetNames(TrueTypeFont *t)
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int i, r;
 
+    /* #129743# simple sanity check for name table entry count */
+    if( nTableSize <= n * 12 + 6 )
+        n = 0;
+
     /* PostScript name: preferred Microsoft */
     t->psname = NULL;
     if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1)
@@ -1346,7 +1332,7 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
 }
 
 static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32 cChar) {
-    sal_uInt32* pCMAP12 = (sal_uInt16*)pCmap;
+    const sal_uInt32* pCMAP12 = (const sal_uInt32*)pCmap;
     int nLength = Int32FromMOTA( pCMAP12[1] );
     int nGroups = Int32FromMOTA( pCMAP12[3] );
     int nLower = 0;
@@ -1358,7 +1344,7 @@ static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32 cChar) {
     /* binary search in "segmented coverage" subtable */
     while( nLower < nUpper ) {
         int nIndex = (nLower + nUpper) / 2;
-        sal_uInt32* pEntry = &pCMAP12[ 4 + 3*nIndex ];
+        const sal_uInt32* pEntry = &pCMAP12[ 4 + 3*nIndex ];
         sal_uInt32 cStart = Int32FromMOTA( pEntry[0] );
         sal_uInt32 cLast  = Int32FromMOTA( pEntry[1] );
         if( cChar < cStart )
@@ -1855,7 +1841,7 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     GetNames(t);
     FindCmap(t);
     GetKern(t);
-    ReadGSUB(t,t->tables[O_gsub],0,0);
+    ReadGSUB( t, 0, 0 );
 
     *ttf = t;
     return SF_OK;
@@ -2532,41 +2518,54 @@ int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
 
 TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, int mode)
 {
-    sal_uInt8 *table;
+    sal_uInt8* pTable;
     TTSimpleGlyphMetrics *res;
     int i;
     sal_uInt16 glyphID;
     sal_uInt32 n;
     int UPEm = ttf->unitsPerEm;
+    int nTableSize;
 
     if (mode == 0) {
-        table = getTable(ttf, O_hmtx);
         n = ttf->numberOfHMetrics;
+        pTable = getTable( ttf, O_hmtx );
+        nTableSize = getTableSize( ttf, O_hmtx );
     } else {
-        table = getTable(ttf, O_vmtx);
         n = ttf->numOfLongVerMetrics;
+        pTable = getTable( ttf, O_vmtx );
+        nTableSize = getTableSize( ttf, O_vmtx );
     }
 
     if (!nGlyphs || !glyphArray) return 0;        /* invalid parameters */
-    if (!n || !table) return 0;                   /* the font does not contain the requested metrics */
+    if (!n || !pTable) return 0;                  /* the font does not contain the requested metrics */
 
     res = calloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
     assert(res != 0);
 
     for (i=0; i<nGlyphs; i++) {
+        int nAdvOffset, nLsbOffset;
         glyphID = glyphArray[i];
 
         if (glyphID < n) {
-
-            res[i].adv = XUnits(UPEm, GetUInt16(table, 4 * glyphID, 1));
-            res[i].sb  = XUnits(UPEm, GetInt16(table, 4 * glyphID + 2, 1));
+            nAdvOffset = 4 * glyphID;
+            nLsbOffset = nAdvOffset + 2;
         } else {
-            res[i].adv = XUnits(UPEm, GetUInt16(table, 4 * (n - 1), 1));
-            if( glyphID-n < ttf->nglyphs )
-                res[i].sb = XUnits(UPEm, GetInt16(table + n * 4, (glyphID - n) * 2, 1));
-            else /* font is broken */
-                res[i].sb = XUnits(UPEm, GetInt16(table, 4*(n-1) + 2, 1));
+            nAdvOffset = 4 * (n - 1);
+            if( glyphID < ttf->nglyphs )
+                nLsbOffset = 4 * n + 2 * (glyphID - n);
+            else /* font is broken -> use lsb of last hmetrics */
+                nLsbOffset = nAdvOffset + 2;
         }
+
+        if( nAdvOffset >= nTableSize)
+            res[i].adv = 0; /* better than a crash for buggy fonts */
+        else
+            res[i].adv = XUnits( UPEm, GetUInt16( pTable, nAdvOffset, 1) );
+
+        if( nLsbOffset >= nTableSize)
+            res[i].sb  = 0; /* better than a crash for buggy fonts */
+        else
+            res[i].sb  = XUnits( UPEm, GetInt16( pTable, nLsbOffset, 1) );
     }
 
     return res;
@@ -2684,27 +2683,28 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 {
     sal_uInt8 *glyf = getTable(ttf, O_glyf);
     sal_uInt8 *hmtx = getTable(ttf, O_hmtx);
-    sal_uInt8 *ptr;
     sal_uInt32 length;
     GlyphData *d;
     ControlPoint *cp;
     int i, n, m;
 
-    if (glyphID >= ttf->nglyphs) return 0;
+    if( glyphID >= ttf->nglyphs )
+        return 0;
 
-    ptr = glyf + ttf->goffsets[glyphID];
+    /* #127161# check the glyph offsets */
+    length = getTableSize( ttf, O_glyf );
+    if( length < ttf->goffsets[ glyphID+1 ] )
+        return 0;
+
     length = ttf->goffsets[glyphID+1] - ttf->goffsets[glyphID];
 
     d = malloc(sizeof(GlyphData)); assert(d != 0);
 
-    if (length) {
+    if (length > 0) {
+        sal_uInt8 *srcptr = glyf + ttf->goffsets[glyphID];
         d->ptr = malloc((length + 1) & ~1); assert(d->ptr != 0);
-        memcpy(d->ptr, ptr, length);
-        if (GetInt16(ptr, 0, 1) >= 0) {
-            d->compflag = 0;
-        } else {
-            d->compflag = 1;
-        }
+        memcpy( d->ptr, srcptr, length );
+        d->compflag = (GetInt16( srcptr, 0, 1 ) < 0);
     } else {
         d->ptr = 0;
         d->compflag = 0;
@@ -2728,7 +2728,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
         d->ncontours = 0;
     }
 
-    /* get adwance width and left sidebearing */
+    /* get advance width and left sidebearing */
     if (glyphID < ttf->numberOfHMetrics) {
         d->aw = GetUInt16(hmtx, 4 * glyphID, 1);
         d->lsb = GetInt16(hmtx, 4 * glyphID + 2, 1);
