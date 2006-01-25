@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:35:18 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -584,8 +584,8 @@ namespace dbaccess
                         aRet.push_back( *pDataSourceSetting );
                     }
                 }
-
-                return Sequence< PropertyValue >(&(*aRet.begin()),aRet.size());
+                if ( !aRet.empty() )
+                    return Sequence< PropertyValue >(&(*aRet.begin()),aRet.size());
             }
             return Sequence< PropertyValue >();
         }
