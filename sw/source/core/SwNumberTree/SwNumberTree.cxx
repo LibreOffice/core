@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:14:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,10 +147,15 @@ void SwNumberTreeNode::ClearObsoletePhantoms()
 
         if ((*aIt)->mChildren.empty())
         {
+            // --> OD 2006-01-17 #i60652#
+            // Because <mChildren.erase(aIt)> could destroy the element, which
+            // is referenced by <mItLastValid>, it's needed to adjust
+            // <mItLastValid> before erasing <aIt>.
+            SetLastValid(mChildren.end());
+            // <--
+
             delete *aIt;
             mChildren.erase(aIt);
-
-            SetLastValid(mChildren.end());
         }
     }
 }
@@ -398,14 +403,21 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
 
         _rDestNode.mChildren.insert(aItUpper, mChildren.end());
 
+        // --> OD 2006-01-17 #i60652#
+        // Because <mChildren.erase(aItUpper, mChildren.end())> could destroy
+        // the element, which is referenced by <mItLastValid>, it's needed to
+        // adjust <mItLastValid> before erasing <aIt>.
+        SetLastValid( mChildren.end() );
+        // <--
+
         mChildren.erase(aItUpper, mChildren.end());
 
-        tSwNumberTreeChildren::iterator aItNewLastValid = mChildren.end();
-
-        if (! mChildren.empty())
-            aItNewLastValid--;
-
-        SetLastValid(aItNewLastValid);
+        // --> OD 2006-01-17 #i60652#
+        if ( !mChildren.empty() )
+        {
+            SetLastValid( --(mChildren.end()) );
+        }
+        // <--
     }
 
 #ifdef __SW_NUMBER_TREE_SANITY_CHECK
@@ -420,6 +432,13 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
     {
         tSwNumberTreeChildren::iterator aItBegin = mChildren.begin();
         SwNumberTreeNode * pMyFirst = *mChildren.begin();
+
+        // --> OD 2006-01-17 #i60652#
+        // Because <mChildren.erase(aItBegin)> could destroy the element,
+        // which is referenced by <mItLastValid>, it's needed to adjust
+        // <mItLastValid> before erasing <aItBegin>.
+        SetLastValid(mChildren.end());
+        // <--
 
         if (pMyFirst->IsPhantom())
         {
@@ -444,8 +463,6 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 
         pDest->mChildren.insert(mChildren.begin(), mChildren.end());
         mChildren.clear();
-
-        SetLastValid(mChildren.end());
     }
 
     ASSERT (mChildren.empty(), "MoveChildren failed!");
@@ -651,12 +668,17 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
             pRemove->MoveChildren(*aItPred);
         }
 
-        mChildren.erase(aRemoveIt);
-
+        // --> OD 2006-01-17 #i60652#
+        // Because <mChildren.erase(aRemoveIt)> could destroy the element,
+        // which is referenced by <mItLastValid>, it's needed to adjust
+        // <mItLastValid> before erasing <aRemoveIt>.
         if (aItPred != mChildren.end() && (*aItPred)->IsPhantom())
             SetLastValid(mChildren.end());
         else
             SetLastValid(aItPred);
+        // <--
+
+        mChildren.erase(aRemoveIt);
 
         if (aItPred != mChildren.end())
             NotifyInvalidChildren();
@@ -1158,7 +1180,7 @@ void SwNumberTreeNode::SetLastValid
     {
         mItLastValid = aItValid;
         // --> OD 2005-10-19 #126009# - invalidation of children of next not
-        // counted not is needed
+        // counted is needed
         if ( GetParent() )
         {
             tSwNumberTreeChildren::iterator aParentChildIt =
