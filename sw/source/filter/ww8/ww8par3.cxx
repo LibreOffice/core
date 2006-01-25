@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:05 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -761,8 +761,21 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
     myIter aEnd = aOfsNumsXCH.end();
-    while (aIter++ != aEnd)
-        (*aIter) = 0;
+    // --> OD 2006-01-16 #i60633# - suppress access on <aOfsNumsXCH.end()>
+    if ( aIter != aEnd )
+    {
+        // Somehow the first removed vector element, at which <aIter>
+        // points to, isn't reset to zero.
+        // Investigation is needed to clarify why. It seems that only
+        // special arrays are handled correctly by this code.
+        ++aIter;
+        while (aIter != aEnd)
+        {
+            (*aIter) = 0;
+            ++aIter;
+        }
+    }
+    // <--
 
     sal_uInt8 nUpperLevel = 0;  // akt. Anzeigetiefe fuer den Writer
     for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
