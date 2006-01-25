@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:02:41 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,12 @@
 
 namespace dbaccess
 {
+    class ORowSetBase;
     typedef struct
     {
         ORowSetMatrix::iterator     aIterator;
         ::com::sun::star::uno::Any  aBookmark;
+        ORowSetBase*                pRowSet;
     } ORowSetCacheIterator_Helper;
 
     DECLARE_STL_STDKEY_MAP(sal_Int32,ORowSetCacheIterator_Helper,ORowSetCacheMap);
@@ -58,14 +60,16 @@ namespace dbaccess
         friend class ORowSetCache;
         ORowSetCacheMap::iterator   m_aIter;
         ORowSetCache*               m_pCache;
+        ORowSetBase*                m_pRowSet;
     protected:
-        ORowSetCacheIterator(const ORowSetCacheMap::iterator& _rIter,ORowSetCache* _pCache)
+        ORowSetCacheIterator(const ORowSetCacheMap::iterator& _rIter,ORowSetCache* _pCache,ORowSetBase* _pRowSet)
             : m_aIter(_rIter)
             ,m_pCache(_pCache)
+            ,m_pRowSet(_pRowSet)
         {
         }
     public:
-        ORowSetCacheIterator() :m_pCache(NULL),m_aIter(){}
+        ORowSetCacheIterator() :m_pCache(NULL),m_aIter(),m_pRowSet(NULL){}
         ORowSetCacheIterator(const ORowSetCacheIterator& _rRH);
         ORowSetCacheIterator& operator =(const ORowSetCacheIterator&);
 
