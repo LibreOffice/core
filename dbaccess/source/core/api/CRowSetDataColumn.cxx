@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:13:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,10 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const ::rtl::OUString& _rDescription,
-                                      const ORowSetCacheIterator& _rColumnValue,
-                                      ORowSetMatrix::iterator& _rEnd)
+                                      const ORowSetCacheIterator& _rColumnValue)
     : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aDescription(_rDescription)
     ,m_aColumnValue(_rColumnValue)
-    ,m_rEnd(_rEnd)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
 }
@@ -155,7 +153,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             OColumnSettings::getFastPropertyValue( rValue, nHandle );
             break;
         case PROPERTY_ID_VALUE:
-            if(!m_aColumnValue.isNull() && m_aColumnValue != m_rEnd && m_aColumnValue->isValid())
+            if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
             {
                 ORowSetRow aRow = *m_aColumnValue;
                 OSL_ENSURE((sal_Int32)aRow->size() > m_nPos,"Pos is greater than size of vector");
@@ -237,7 +235,7 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 // -------------------------------------------------------------------------
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if(!m_aColumnValue.isNull() && m_aColumnValue != m_rEnd && m_aColumnValue->isValid() && (!((*(*m_aColumnValue))[m_nPos] == _rOldValue)))
+    if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() && (!((*(*m_aColumnValue))[m_nPos] == _rOldValue)) )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
@@ -245,7 +243,7 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
-    else if ( !m_aColumnValue.isNull() && m_aColumnValue == m_rEnd && !_rOldValue.isNull() )
+    else if ( !m_aColumnValue.isNull() && !_rOldValue.isNull() )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
