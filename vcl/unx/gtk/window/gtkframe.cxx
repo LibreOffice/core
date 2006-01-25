@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:53:44 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,8 +193,85 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_asciitilde:    nCode = KEY_TILDE;      break;
             case GDK_leftsinglequotemark:
             case GDK_quoteleft: nCode = KEY_QUOTELEFT;      break;
+            // some special cases, also see saldisp.cxx
+            // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
+            case 0x1000FF02: // apXK_Copy
+                nCode = KEY_COPY;
+                break;
+            case 0x1000FF03: // apXK_Cut
+                nCode = KEY_CUT;
+                break;
+            case 0x1000FF04: // apXK_Paste
+                nCode = KEY_PASTE;
+                break;
+            case 0x1000FF14: // apXK_Repeat
+                nCode = KEY_REPEAT;
+                break;
+            // Exit, Save
+            // - - - - - - - - - - - - - - D E C - - - - - - - - - - - - - 0x1000
+            case 0x1000FF00:
+                nCode = KEY_DELETE;
+                break;
+            // - - - - - - - - - - - - - -  H P  - - - - - - - - - - - - - 0x1000
+            case 0x1000FF73: // hpXK_DeleteChar
+                nCode = KEY_DELETE;
+                break;
+            case 0x1000FF74: // hpXK_BackTab
+            case 0x1000FF75: // hpXK_KP_BackTab
+                nCode = KEY_TAB;
+                break;
+            // - - - - - - - - - - - - - - I B M - - - - - - - - - - - - -
+            // - - - - - - - - - - - - - - O S F - - - - - - - - - - - - - 0x1004
+            case 0x1004FF02: // osfXK_Copy
+                nCode = KEY_COPY;
+                break;
+            case 0x1004FF03: // osfXK_Cut
+                nCode = KEY_CUT;
+                break;
+            case 0x1004FF04: // osfXK_Paste
+                nCode = KEY_PASTE;
+                break;
+            case 0x1004FF07: // osfXK_BackTab
+                nCode = KEY_TAB;
+                break;
+            case 0x1004FF08: // osfXK_BackSpace
+                nCode = KEY_BACKSPACE;
+                break;
+            case 0x1004FF1B: // osfXK_Escape
+                nCode = KEY_ESCAPE;
+                break;
+            // Up, Down, Left, Right, PageUp, PageDown
+            // - - - - - - - - - - - - - - S C O - - - - - - - - - - - - -
+            // - - - - - - - - - - - - - - S G I - - - - - - - - - - - - - 0x1007
+            // - - - - - - - - - - - - - - S N I - - - - - - - - - - - - -
+            // - - - - - - - - - - - - - - S U N - - - - - - - - - - - - - 0x1005
+            case 0x1005FF10: // SunXK_F36
+                nCode = KEY_F11;
+                break;
+            case 0x1005FF11: // SunXK_F37
+                nCode = KEY_F12;
+                break;
+            case 0x1005FF70: // SunXK_Props
+                nCode = KEY_PROPERTIES;
+                break;
+            case 0x1005FF71: // SunXK_Front
+                nCode = KEY_FRONT;
+                break;
+            case 0x1005FF72: // SunXK_Copy
+                nCode = KEY_COPY;
+                break;
+            case 0x1005FF73: // SunXK_Open
+                nCode = KEY_OPEN;
+                break;
+            case 0x1005FF74: // SunXK_Paste
+                nCode = KEY_PASTE;
+                break;
+            case 0x1005FF75: // SunXK_Cut
+                nCode = KEY_CUT;
+                break;
         }
     }
+
     return nCode;
 }
 
