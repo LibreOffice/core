@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:03:43 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 14:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 // - Statics -
 // -----------
 
-static SfxListener aDummyListener;
+static SfxListener aLockListener;
 
 // -------------------
 // - GalleryExplorer -
@@ -138,14 +138,15 @@ BOOL GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
             for( ULONG i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
                 rObjList.Insert( new String( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) ), LIST_APPEND );
 
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -167,7 +168,9 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
     Gallery* pGal = ImplGetGallery();
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( pGal->GetThemeName( nThemeId ), aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( pGal->GetThemeName( nThemeId ), aListener );
+
         if( pTheme )
         {
             for( ULONG i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
@@ -180,7 +183,7 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
                     pTheme->ReleaseObject( pObj );
                 }
             }
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
     return( rList.size() > 0 );
@@ -209,14 +212,15 @@ BOOL GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, c
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener   aListener;
+        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
             INetURLObject aURL( rURL );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
             bRet = pTheme->InsertURL( aURL );
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -240,12 +244,13 @@ ULONG GalleryExplorer::GetObjCount( const String& rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
             nRet = pTheme->GetObjectCount();
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -271,7 +276,8 @@ BOOL GalleryExplorer::GetGraphicObj( const String& rThemeName, ULONG nPos,
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
@@ -281,7 +287,7 @@ BOOL GalleryExplorer::GetGraphicObj( const String& rThemeName, ULONG nPos,
             if( pThumb )
                 bRet = bRet || pTheme->GetThumb( nPos, *pThumb, bProgress );
 
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -307,12 +313,13 @@ BOOL GalleryExplorer::InsertGraphicObj( const String& rThemeName, const Graphic&
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
             bRet = pTheme->InsertGraphic( rGraphic );
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -336,7 +343,8 @@ ULONG GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
@@ -344,7 +352,7 @@ ULONG GalleryExplorer::GetSdrObjCount( const String& rThemeName )
                 if( SGA_OBJ_SVDRAW == pTheme->GetObjectKind( i ) )
                     nRet++;
 
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -369,7 +377,8 @@ BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
@@ -390,7 +399,7 @@ BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
                 }
             }
 
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -415,12 +424,13 @@ BOOL GalleryExplorer::InsertSdrObj( const String& rThemeName, FmFormModel& rMode
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener     aListener;
+        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
             bRet = pTheme->InsertModel( rModel );
-            pGal->ReleaseTheme( pTheme, aDummyListener );
+            pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
@@ -444,10 +454,13 @@ BOOL GalleryExplorer::BeginLocking( const String& rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aLockListener );
 
         if( pTheme )
+        {
+            pTheme->LockTheme();
             bRet = TRUE;
+        }
     }
 
     return bRet;
@@ -470,14 +483,22 @@ BOOL GalleryExplorer::EndLocking( const String& rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aDummyListener );
+        SfxListener   aListener;
+        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aListener );
 
         if( pTheme )
         {
-            // release twice ( 1. acquired theme, 2. locked theme )
-            pGal->ReleaseTheme( pTheme, aDummyListener );
-            pGal->ReleaseTheme( pTheme, aDummyListener );
-            bRet = TRUE;
+            const BOOL bReleaseLockedTheme = pTheme->UnlockTheme();
+
+            // release acquired theme
+            pGal->ReleaseTheme( pTheme, aListener );
+
+            if( bReleaseLockedTheme )
+            {
+                // release locked theme
+                pGal->ReleaseTheme( pTheme, aLockListener );
+                bRet = TRUE;
+            }
         }
     }
 
