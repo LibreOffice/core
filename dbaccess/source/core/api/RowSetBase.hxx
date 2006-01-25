@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:01:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 13:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,13 +330,14 @@ namespace dbaccess
 
         // ==========================================================
         // granular access control
-        struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
+        struct GrantNotifierAccess { friend class ORowSetNotifier; friend class ORowSetCacheIterator; friend class ORowSetCache; private: GrantNotifierAccess () { } };
 
         // cancel the insertion, if necessary (means if we're on the insert row)
         inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
         inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
         inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
         inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
+        inline  sal_Bool    isInsertRow( const GrantNotifierAccess& ) { return isNew() || isModified(); }
         inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );
