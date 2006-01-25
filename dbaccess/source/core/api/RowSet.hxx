@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:00:41 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 15:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,19 +159,12 @@ namespace dbaccess
         sal_Int32                   m_nCommandType;
         sal_Int32                   m_nTransactionIsolation;
         sal_Int32                   m_nPrivileges;
-        sal_Int32                   m_nAsyncUpdateRowCount;
+        sal_Int32                   m_nLastKnownRowCount;
+        sal_Bool                    m_bLastKnownRowCountFinal;
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
-        sal_Bool                    m_bFirst ;
-        sal_Bool                    m_bLast ;
         sal_Bool                    m_bCreateStatement ;    // determines we to create a new prepared statement
-        sal_Bool                    m_bDeleted ;
-        sal_Bool                    m_bInserted ;
-        sal_Bool                    m_bUpdated ;
-        sal_Bool                    m_bOwnsResultRow ;
-        sal_Bool                    m_bRowObsolete ;
         sal_Bool                    m_bModified ;
-        sal_Bool                    m_bCanceled ;
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarable ;
         sal_Bool                    m_bNew ;
@@ -188,10 +181,13 @@ namespace dbaccess
         // fire a change for one column
         // _nPos starts at zero
         void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue);
-        // inform the clones that we have deleted some records
-        void notifyClonesRowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
-        // inform the clones that we will delete some records
-        void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
+
+        /// informs the clones (and ourself) that we are going to delete a record with a given bookmark
+        void notifyRowSetAndClonesRowDelete( const ::com::sun::star::uno::Any& _rBookmark );
+
+        /// inform the clones (and ourself) that we have deleted a record with a given bookmark
+        void notifyRowSetAndClonesRowDeleted( const ::com::sun::star::uno::Any& _rBookmark, sal_Int32 _nPos );
+
         void checkUpdateIterator();
         const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
         void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
@@ -206,8 +202,8 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
 
         virtual void fireRowcount();
-        virtual sal_Bool notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
-        virtual void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
+                void notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
+                void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::lang::EventObject& rEvt);
         virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
@@ -403,10 +399,6 @@ namespace dbaccess
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
         sal_Bool                    m_bIsBookmarable;
-        sal_Bool                    m_bFirst : 1;
-        sal_Bool                    m_bLast : 1;
-        sal_Bool                    m_bRowObsolete : 1;
-        sal_Bool                    m_bDeleted : 1;
 
     protected:
         // the clone can not insert anything
@@ -453,16 +445,16 @@ namespace dbaccess
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }
 
+    // ::com::sun::star::sdbc::XRowSet
+        virtual void SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
+
     // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-        // is called when the rowset is going to delete this bookmark _rBookmark
-        void rowDelete(const ::com::sun::star::uno::Any& _rBookmark);
-        // is called when the rowset has deleted this bookmark _rBookmark
-        void rowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
     };
 
 }
