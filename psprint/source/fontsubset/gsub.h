@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsub.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:38:49 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ int HasVerticalGSUB( struct _TrueTypeFont* pTTFile );
 
 int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int wmode );
 
-int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
-              int nRequestedScript, int nRequestedLangsys );
+int ReadGSUB( struct _TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
 
 #endif /* _PSP_GSUB_H */
