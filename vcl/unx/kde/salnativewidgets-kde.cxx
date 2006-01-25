@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:37:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-25 11:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1964,6 +1964,11 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
+
+    // #i59364# high contrast mode
+    bool bHC = ( aStyleSettings.GetFaceColor().IsDark() ||
+                 aStyleSettings.GetWindowColor().IsDark() );
+    aStyleSettings.SetHighContrastMode( bHC );
 
     rSettings.SetStyleSettings( aStyleSettings );
 }
