@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:06:36 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2041,20 +2041,45 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
 
     if ( bVisible && pData && pData->eType == MENUITEM_SEPARATOR )
     {
-        // always avoid adjacent separators
-        USHORT nCount = (USHORT) pItemList->Count();
-        USHORT n;
-        MenuItemData* pNextData = NULL;
-        // search next visible item
-        for( n = nPos + 1; n < nCount; n++ )
-        {
-            pNextData = pItemList->GetDataFromPos( n );
-            if( pNextData->bVisible )
-                break;
-        }
-        // check for separator
-        if( pNextData && pNextData->bVisible && pNextData->eType == MENUITEM_SEPARATOR )
+        if( nPos == 0 ) // no separator should be shown at the very beginning
             bVisible = FALSE;
+        else
+        {
+            // always avoid adjacent separators
+            USHORT nCount = (USHORT) pItemList->Count();
+            USHORT n;
+            MenuItemData* pNextData = NULL;
+            // search next visible item
+            for( n = nPos + 1; n < nCount; n++ )
+            {
+                pNextData = pItemList->GetDataFromPos( n );
+                if( pNextData && pNextData->bVisible )
+                {
+                    if( pNextData->eType == MENUITEM_SEPARATOR || ImplIsVisible(n) )
+                        break;
+                }
+            }
+            if( n == nCount ) // no next visible item
+                bVisible = FALSE;
+            // check for separator
+            if( pNextData && pNextData->bVisible && pNextData->eType == MENUITEM_SEPARATOR )
+                bVisible = FALSE;
+
+            if( bVisible )
+            {
+                for( n = nPos; n > 0; n-- )
+                {
+                    pNextData = pItemList->GetDataFromPos( n-1 );
+                    if( pNextData && pNextData->bVisible )
+                    {
+                        if( pNextData->eType != MENUITEM_SEPARATOR && ImplIsVisible(n-1) )
+                            break;
+                    }
+                }
+                if( n == 0 ) // no previous visible item
+                    bVisible = FALSE;
+            }
+        }
     }
 
     // Fuer den Menubar nicht erlaubt, weil ich nicht mitbekomme
@@ -2064,36 +2089,10 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
     {
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
             bVisible = FALSE;
-        else if ( pData->eType != MENUITEM_SEPARATOR )
+        else if ( pData->eType != MENUITEM_SEPARATOR ) // separators handled above
         {
             // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( TRUE ) );
             bVisible = pData->bEnabled; // SubMenus nicht pruefen, weil sie ggf. erst im Activate() gefuellt werden.
-        }
-        else
-        {
-            // Ein Separator ist nur dann visible, wenn davor sichtbare Eintraege stehen.
-            USHORT nCount = (USHORT) pItemList->Count();
-            USHORT n;
-            BOOL bPrevVisible = FALSE;
-            BOOL bNextVisible = FALSE;
-            for ( n = nPos; !bPrevVisible && n; )
-            {
-                pData = pItemList->GetDataFromPos( --n );
-                if ( pData->eType != MENUITEM_SEPARATOR )
-                    bPrevVisible = pData->bEnabled; // && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( TRUE ) );
-                else
-                    break;
-            }
-            if ( bPrevVisible )
-            {
-                for ( n = nPos+1; !bNextVisible && ( n < nCount ); n++ )
-                {
-                    pData = pItemList->GetDataFromPos( n );
-                    if ( pData->eType != MENUITEM_SEPARATOR )
-                        bNextVisible = pData->bEnabled; // && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( TRUE ) );
-                }
-            }
-            bVisible = bPrevVisible && bNextVisible;
         }
     }
 
@@ -2428,7 +2427,22 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                         mpLayoutData->m_aLineItemIds.push_back( pData->nId );
                         mpLayoutData->m_aLineItemPositions.push_back( n );
                     }
+                    // #i47946# with NWF painted menus the background is transparent
+                    // since DrawCtrlText can depend on the background (e.g. for
+                    // TEXT_DRAW_DISABLE), temporarily set a background which
+                    // hopefully matches the NWF background since it is read
+                    // from the system style settings
+                    bool bSetTmpBackground = !pWin->IsBackground() && pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL );
+                    if( bSetTmpBackground )
+                    {
+                        Color aBg = bIsMenuBar ?
+                            pWin->GetSettings().GetStyleSettings().GetMenuBarColor() :
+                            pWin->GetSettings().GetStyleSettings().GetMenuColor();
+                        pWin->SetBackground( Wallpaper( aBg ) );
+                    }
                     pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
+                    if( bSetTmpBackground )
+                        pWin->SetBackground();
                 }
 
                 // Accel
