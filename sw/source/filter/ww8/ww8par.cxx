@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:31:16 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -930,7 +930,11 @@ void SwWW8ImplReader::Read_StyleCode( USHORT, const BYTE* pData, short nLen )
         bCpxStyle = false;
         return;
     }
-    USHORT nColl = SVBT16ToShort(pData);
+    USHORT nColl = 0;
+    if (pWwFib->GetFIBVersion() <= ww::eWW2)
+        nColl = *pData;
+    else
+        nColl = SVBT16ToShort(pData);
     if (nColl < nColls)
     {
         SetTxtFmtCollAndListLevel( *pPaM, pCollA[nColl] );
@@ -3708,7 +3712,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     USHORT eMode = REDLINE_SHOW_INSERT;
 
-    mpSprmParser = new wwSprmParser(pWwFib->nVersion);
+    mpSprmParser = new wwSprmParser(pWwFib->GetFIBVersion());
 
     // praktische Hilfsvariablen besetzen:
     bVer6  = (6 == pWwFib->nVersion);
@@ -4655,7 +4659,10 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     {
         case 6:
         case 7:
-            if ((0xa5dc != nMagic) && ((nMagic < 0xa697 ) || (nMagic > 0xa699)))
+            if (
+                (0xa5dc != nMagic && 0xa5db != nMagic) &&
+                (nMagic < 0xa697 || nMagic > 0xa699)
+               )
             {
                 //JP 06.05.99: teste auf eigenen 97-Fake!
                 if (pStg && 0xa5ec == nMagic)
@@ -4755,6 +4762,9 @@ ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const St
             refStrm->SetBufferSize( nOldBuffSize );
             refStrm.Clear();
         }
+        else if (pIn)
+            pIn->ResetError();
+
     }
     return nRet;
 }
@@ -4816,7 +4826,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
                 nStartCp += rReader.nDrawCpO;
                 nEndCp   += rReader.nDrawCpO;
                 WW8PLCFx_Cp_FKP* pChp = rReader.pPlcxMan->GetChpPLCF();
-                wwSprmParser aSprmParser(rReader.pWwFib->nVersion);
+                wwSprmParser aSprmParser(rReader.pWwFib->GetFIBVersion());
                 while (nStartCp <= nEndCp && !nPictureId)
                 {
                     WW8PLCFxDesc aDesc;
