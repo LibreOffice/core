@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:56:47 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1647,6 +1647,7 @@ sal_uInt16 addLoadLocal(
                 break;
             }
         } else {
+            bool wrap = false;
             if (any) {
                 switch (sort) {
                 case codemaker::UnoType::SORT_BOOLEAN:
@@ -1659,236 +1660,28 @@ sal_uInt16 addLoadLocal(
                 case codemaker::UnoType::SORT_CHAR:
                 case codemaker::UnoType::SORT_STRING:
                 case codemaker::UnoType::SORT_TYPE:
-                    // Assuming that no Java types are derived from
-                    // com.sun.star.uno.Type:
-                    code->loadLocalReference(*index);
-                    stack = size = 1;
+                        // assuming that no Java types are derived from
+                        // com.sun.star.uno.Type
                     break;
 
                 case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
-                    code->instrDup();
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")));
-                    code->instrDup();
-                    code->loadStringConstant(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("[]unsigned short")));
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("SEQUENCE")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/TypeClass;")));
-                    dependencies->insert(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Ljava/lang/String;"
-                                "Lcom/sun/star/uno/TypeClass;)V")));
-                    code->loadLocalReference(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
-                    stack = 6;
-                    break;
-
                 case codemaker::UnoType::SORT_UNSIGNED_LONG:
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
-                    code->instrDup();
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")));
-                    code->instrDup();
-                    code->loadStringConstant(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("[]unsigned long")));
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("SEQUENCE")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/TypeClass;")));
-                    dependencies->insert(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Ljava/lang/String;"
-                                "Lcom/sun/star/uno/TypeClass;)V")));
-                    code->loadLocalReference(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
-                    stack = 6;
-                    break;
-
                 case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
-                    code->instrDup();
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")));
-                    code->instrDup();
-                    code->loadStringConstant(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("[]unsigned hyper")));
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("SEQUENCE")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/TypeClass;")));
-                    dependencies->insert(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/TypeClass")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Ljava/lang/String;"
-                                "Lcom/sun/star/uno/TypeClass;)V")));
-                    code->loadLocalReference(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
-                    stack = 6;
-                    break;
-
                 case codemaker::UnoType::SORT_ANY:
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
-                    code->instrDup();
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("ANY")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/Type;")));
-                    code->loadLocalReference(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
-                    stack = 4;
+                    wrap = true;
                     break;
 
                 case codemaker::UnoType::SORT_COMPLEX:
                     switch (typeClass) {
                     case RT_TYPE_ENUM:
-                        // Assuming that no Java types are derived from Java
-                        // types that are directly derived from
-                        // com.sun.star.uno.Enum:
-                        code->loadLocalReference(*index);
-                        stack = 1;
+                            // assuming that no Java types are derived from Java
+                            // types that are directly derived from
+                            // com.sun.star.uno.Enum
                         break;
 
                     case RT_TYPE_STRUCT:
                     case RT_TYPE_INTERFACE:
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")));
-                        code->instrDup();
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")));
-                        code->instrDup();
-                        code->loadStringConstant(
-                            createUnoName(manager, nucleus, rank, args));
-                        code->instrGetstatic(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM("SEQUENCE")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Lcom/sun/star/uno/TypeClass;")));
-                        dependencies->insert(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")));
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Ljava/lang/String;"
-                                    "Lcom/sun/star/uno/TypeClass;)V")));
-                        code->loadLocalReference(*index);
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Lcom/sun/star/uno/Type;"
-                                    "Ljava/lang/Object;)V")));
-                        stack = 6;
+                        wrap = true;
                         break;
 
                     default:
@@ -1901,6 +1694,33 @@ sal_uInt16 addLoadLocal(
                     OSL_ASSERT(false);
                     break;
                 }
+            }
+            if (wrap) {
+                code->instrNew(
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")));
+                code->instrDup();
+                code->instrNew(
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+                code->instrDup();
+                code->loadStringConstant(
+                    createUnoName(manager, nucleus, rank, args));
+                code->instrInvokespecial(
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;)V")));
+                code->loadLocalReference(*index);
+                code->instrInvokespecial(
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V")));
+                stack = 5;
             } else {
                 code->loadLocalReference(*index);
                 stack = 1;
