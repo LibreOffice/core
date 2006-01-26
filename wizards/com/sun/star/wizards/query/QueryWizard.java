@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:21:39 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ public class QueryWizard extends WizardDialog {
             //      if (CurDBMetaData.xDBMetaData.supportsColumnAliasing()) don't use -> too dangerous!!!
             i = insertRoadmapItem(i, false, SOTITLESPAGE - 1, SOTITLESPAGE);
             i = insertRoadmapItem(i, false, SOSUMMARYPAGE - 1, SOSUMMARYPAGE);
-            setRoadmapInteractive(false);
+            setRoadmapInteractive(true);
             setRoadmapComplete(true);
             setCurrentRoadmapItemID((short) 1);
         } catch (com.sun.star.uno.Exception exception) {
