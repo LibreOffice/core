@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styles.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:03 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,8 @@ namespace
         bool operator() (const sal_Char *pEntry) const
             { return mrName.EqualsAscii(pEntry); }
     };
-}
 
-namespace ww
-{
-    //Original code/idea by Takashi Ono for CJK
-    sti GetCanonicalStiFromEnglishName(const String &rName) throw()
+    const sal_Char **GetStiNames() throw()
     {
         static const sal_Char *stiName[] =
         {
@@ -166,15 +162,69 @@ namespace ww
         StaticAssert((sizeof(stiName) / sizeof(stiName[0])) == stiMax,
             WrongSizeOfArray);
 
+        return stiName;
+    }
+}
+
+namespace ww
+{
+    //Original code/idea by Takashi Ono for CJK
+    sti GetCanonicalStiFromEnglishName(const String &rName) throw()
+    {
         typedef const sal_Char** myIter;
         sti eRet = stiUser;
-        myIter aBegin = &stiName[0];
+        myIter aBegin = GetStiNames();
         myIter aEnd(aBegin);
         std::advance(aEnd, stiMax);
         myIter aIter = std::find_if(aBegin, aEnd, SameName(rName));
         if (aIter != aEnd)
             eRet = static_cast<sti>(std::distance(aBegin, aIter));
         return eRet;
+    }
+
+    const sal_Char* GetEnglishNameFromSti(sti eSti) throw()
+    {
+        if (eSti >= stiMax)
+            return 0;
+        else
+            return GetStiNames()[eSti];
+    }
+
+    bool StandardStiIsCharStyle(sti eSti) throw()
+    {
+        switch (eSti)
+        {
+            case stiFtnRef:
+            case stiAtnRef:
+            case stiLnn:
+            case stiPgn:
+            case stiEdnRef:
+            case stiNormalChar:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    sti GetCanonicalStiFromStc(sal_uInt8 stc) throw()
+    {
+        if (stc == 0)
+            return stiNormal;
+        else if (stc < 222)
+            return stiUser;
+        else
+        {
+            static sti aMapping[] =
+            {
+                stiNil, stiAtnRef, stiAtnText, stiToc8, stiToc7, stiToc6,
+                stiToc5, stiToc4, stiToc3, stiToc2, stiToc1, stiIndex7,
+                stiIndex6, stiIndex5, stiIndex4, stiIndex3, stiIndex2,
+                stiIndex1, stiLnn, stiIndexHeading, stiFooter, stiHeader,
+                stiFtnRef, stiFtnText, stiLev9, stiLev8, stiLev7, stiLev6,
+                stiLev5, stiLev4, stiLev3, stiLev2, stiLev1, stiNormIndent
+            };
+            return aMapping[stc-222];
+        }
     }
 }
 
