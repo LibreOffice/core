@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:39:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1134,28 +1134,28 @@ USHORT PushButton::ImplGetTextStyle( ULONG nDrawFlags ) const
 static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
                                       long nX, long nY,
                                       Color& rColor, BOOL bBlack )
-            {
+{
     Color aOldLineColor = pDev->GetLineColor();
     Color aOldFillColor = pDev->GetFillColor();
 
     pDev->SetLineColor();
     if ( bBlack )
         pDev->SetFillColor( Color( COL_BLACK ) );
-            else
+    else
         pDev->SetFillColor( rColor );
     pDev->DrawRect( Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
     pDev->DrawRect( Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
     pDev->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
     pDev->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
     if ( bBlack )
-            {
+    {
         pDev->SetFillColor( rColor );
         pDev->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
         pDev->DrawRect( Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
-            }
+    }
     pDev->SetLineColor( aOldLineColor );
     pDev->SetFillColor( aOldFillColor );
-        }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1180,6 +1180,8 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         aColor = Color( COL_BLACK );
     else if ( IsControlForeground() )
         aColor = GetControlForeground();
+    else if( nDrawFlags & WINDOW_DRAW_ROLLOVER )
+        aColor = rStyleSettings.GetButtonRolloverTextColor();
     else
         aColor = rStyleSettings.GetButtonTextColor();
 
@@ -1378,7 +1380,9 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         aInRect.Right()-=4;
 
         // draw content using the same aInRect as non-native VCL would do
-        ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
+        ImplDrawPushButtonContent( this,
+                                   (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
+                                   aInRect, aTextRect, bLayout );
 
         if ( HasFocus() )
             ShowFocus( ImplGetFocusRect() );
