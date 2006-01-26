@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:25:11 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,14 @@ bool create_folder(
         // fallback:
         url = expandUnoRcUrl( url );
         slash = url.lastIndexOf( '/' );
+    }
+    if (slash < 0) {
+        // invalid: has to be at least "auth:/..."
+        if (throw_exc)
+            throw ContentCreationException(
+                OUSTR("Cannot create folder (invalid path): ") + url,
+                Reference<XInterface>(), ContentCreationError_UNKNOWN );
+        return false;
     }
     ::ucb::Content parentContent;
     if (! create_folder(
