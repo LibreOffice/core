@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:40:52 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1869,9 +1869,11 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Input boxes, list boxes
     aStyleSettings.SetFieldColor( toColor( qColorGroup.base() ) );
     aStyleSettings.SetFieldTextColor( toColor( qColorGroup.text() ) );
+    aStyleSettings.SetFieldRolloverTextColor( toColor( qColorGroup.text() ) );
 
     // Buttons
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
+    aStyleSettings.SetButtonRolloverTextColor( toColor( qColorGroup.buttonText() ) );
 
     // Disable color
     aStyleSettings.SetDisableColor( toColor( qColorGroup.mid() ) );
