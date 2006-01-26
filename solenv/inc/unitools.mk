@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:50:38 $
+#   last change: $Author: hr $ $Date: 2006-01-26 17:44:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@ CFGEX*=cfgex
 ULFCONV*=ulfconv
 
 MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
-
-EXECTEST:= $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 
 SCP_CHECK_TOOL:=checkscp$E
 
@@ -175,4 +173,4 @@ ECHONL=echo
 RM+=$(RMFLAGS)
 ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
-
+EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
