@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDialog.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:48:56 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,11 @@ public class UnoDialog implements EventNames {
     public static short getSelectedItemPos(XListBox _xListBox){
         short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), "SelectedItems");
         return ipos[0];
+    }
+
+    public static boolean isListBoxSelected(XListBox _xListBox){
+        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), "SelectedItems");
+        return ipos.length > 0;
     }
 
 
