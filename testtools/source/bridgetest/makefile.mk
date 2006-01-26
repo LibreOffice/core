@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:22:22 $
+#   last change: $Author: hr $ $Date: 2006-01-26 17:40:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,12 @@ SHL2VERSIONMAP = component.LINUXIgcc3.map
 SHL2VERSIONMAP = component.map
 .ENDIF
 
-
+SHL3TARGET = constructors.uno
+SHL3OBJS = $(SLO)$/constructors.obj
+SHL3STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
+SHL3VERSIONMAP = component.map
+SHL3IMPLIB = i$(SHL3TARGET)
+DEF3NAME = $(SHL3TARGET)
 
 .IF "$(SOLAR_JAVA)" != ""
 JARFILES = java_uno.jar jurt.jar ridl.jar
@@ -198,7 +203,7 @@ $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
 
 $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
-        $(MISC)$/$(TARGET)$/bootstrap.rdb
+        $(MISC)$/$(TARGET)$/bootstrap.rdb $(SHL3TARGETN)
     - $(MKDIR) $(@:d)
     +cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
         -c acceptor.uno$(DLLPOST) \
@@ -208,7 +213,8 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         -c uuresolver.uno$(DLLPOST) \
         -c bridgetest.uno$(DLLPOST) \
         -c cppobj.uno$(DLLPOST) \
-        -c uriproc.uno$(DLLPOST)
+        -c uriproc.uno$(DLLPOST) \
+        -c $(SHL3TARGETN:f)
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
