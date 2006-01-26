@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:20:47 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,13 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.test.performance.ComplexTypes;
 import com.sun.star.test.performance.XPerformanceTest;
 
+import test.testtools.bridgetest.BadConstructorArguments;
+import test.testtools.bridgetest.Constructors;
 import test.testtools.bridgetest.TestDataElements;
 import test.testtools.bridgetest.TestElement;
 import test.testtools.bridgetest.TestEnum;
 import test.testtools.bridgetest.TestPolyStruct;
+import test.testtools.bridgetest.TestStruct;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
 import test.testtools.bridgetest.XMulti;
@@ -58,9 +61,10 @@ import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.registry.XRegistryKey;
 
+import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
-
-
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.XInterface;
 
 public class TestComponent {
     static public final boolean DEBUG = false;
@@ -1086,6 +1090,108 @@ public class TestComponent {
              aSeqDim3[0] = arLong3;
         }
 
+        public void testConstructorsService(XComponentContext context)
+            throws BadConstructorArguments
+        {
+            Constructors.create1(context,
+                true,
+                Byte.MIN_VALUE,
+                Short.MIN_VALUE,
+                (short) -1,
+                Integer.MIN_VALUE,
+                -1,
+                Long.MIN_VALUE,
+                -1L,
+                0.123f,
+                0.456,
+                'X',
+                "test",
+                Type.ANY,
+                new Any(Type.BOOLEAN, Boolean.TRUE),
+                new boolean[] { true },
+                new byte[] { Byte.MIN_VALUE },
+                new short[] { Short.MIN_VALUE },
+                new short[] { (short) -1 },
+                new int[] { Integer.MIN_VALUE },
+                new int[] { -1 },
+                new long[] { Long.MIN_VALUE },
+                new long[] { -1L },
+                new float[] { 0.123f },
+                new double[] { 0.456 },
+                new char[] { 'X' },
+                new String[] { "test" },
+                new Type[] { Type.ANY },
+                new Boolean[] { Boolean.TRUE },
+                new boolean[][] { new boolean[] { true } },
+                new Object[][] {
+                    new Object[] { new Any(Type.BOOLEAN, Boolean.TRUE) } },
+                new TestEnum[] { TestEnum.TWO },
+                new TestStruct[] { new TestStruct(10) },
+                new TestPolyStruct[] { new TestPolyStruct(Boolean.TRUE) },
+                new TestPolyStruct[] {
+                    new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)) },
+                new Object[] { null },
+                TestEnum.TWO,
+                new TestStruct(10),
+                new TestPolyStruct(Boolean.TRUE),
+                new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)),
+                null);
+            Constructors.create2(context, new Object[] {
+                Boolean.TRUE,
+                new Byte(Byte.MIN_VALUE),
+                new Short(Short.MIN_VALUE),
+                new Any(Type.UNSIGNED_SHORT, new Short((short) -1)),
+                new Integer(Integer.MIN_VALUE),
+                new Any(Type.UNSIGNED_LONG, new Integer(-1)),
+                new Long(Long.MIN_VALUE),
+                new Any(Type.UNSIGNED_HYPER, new Long(-1L)),
+                new Float(0.123f),
+                new Double(0.456),
+                new Character('X'),
+                "test",
+                Type.ANY,
+                new Any(Type.BOOLEAN, Boolean.TRUE),
+                new boolean[] { true },
+                new byte[] { Byte.MIN_VALUE },
+                new short[] { Short.MIN_VALUE },
+                new Any(
+                    new Type("[]unsigned short"), new short[] { (short) -1 }),
+                new int[] { Integer.MIN_VALUE },
+                new Any(new Type("[]unsigned long"), new int[] { -1 }),
+                new long[] { Long.MIN_VALUE },
+                new Any(new Type("[]unsigned hyper"), new long[] { -1L }),
+                new float[] { 0.123f },
+                new double[] { 0.456 },
+                new char[] { 'X' },
+                new String[] { "test" },
+                new Type[] { Type.ANY },
+                new Any(new Type("[]any"), new Boolean[] { Boolean.TRUE }),
+                new boolean[][] { new boolean[] { true } },
+                new Object[][] {
+                    new Object[] { new Any(Type.BOOLEAN, Boolean.TRUE) } },
+                new TestEnum[] { TestEnum.TWO },
+                new TestStruct[] { new TestStruct(10) },
+                new Any(
+                    new Type(
+                        "[]test.testtools.bridgetest.TestPolyStruct<boolean>"),
+                    new TestPolyStruct[] { new TestPolyStruct(Boolean.TRUE) }),
+                new Any(
+                    new Type("[]test.testtools.bridgetest.TestPolyStruct<any>"),
+                    new TestPolyStruct[] {
+                        new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE))
+                    }),
+                new XInterface[] { null },
+                TestEnum.TWO,
+                new TestStruct(10),
+                new Any(
+                    new Type(
+                        "test.testtools.bridgetest.TestPolyStruct<boolean>"),
+                    new TestPolyStruct(Boolean.TRUE)),
+                new Any(
+                    new Type("test.testtools.bridgetest.TestPolyStruct<any>"),
+                    new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE))),
+                null });
+        }
     }
 
     /**
