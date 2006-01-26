@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:08:18 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,6 +370,11 @@ void PDFWriter::SetAntialiasing( USHORT nMode )
 void PDFWriter::SetLayoutMode( ULONG nMode )
 {
     ((PDFWriterImpl*)pImplementation)->setLayoutMode( (sal_Int32)nMode );
+}
+
+void PDFWriter::SetDigitLanguage( LanguageType eLang )
+{
+    ((PDFWriterImpl*)pImplementation)->setDigitLanguage( eLang );
 }
 
 void PDFWriter::SetTextColor( const Color& rColor )
