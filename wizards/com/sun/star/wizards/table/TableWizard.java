@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWizard.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:24:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,10 +178,13 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             super.setStepEnabled(SOFIELDSFORMATPAGE, true);
             super.setStepEnabled(SOPRIMARYKEYPAGE, true);
             if (bPrimaryKeysiscompleted){
-                super.enablefromStep(SOFINALPAGE, bFinalPageiscompleted);
+                super.enablefromStep(SOFINALPAGE, true);
+                super.enableFinishButton(bFinalPageiscompleted);
             }
-            else
+            else{
                 super.enablefromStep(SOFINALPAGE, false);
+                enableNextButton(false);
+            }
         }
         else
             if (_ndialogpage == SOFIELDSFORMATPAGE)
