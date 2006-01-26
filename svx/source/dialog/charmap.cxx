@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:41:13 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ int SvxShowCharSet::FirstInView( void ) const
 int SvxShowCharSet::LastInView( void ) const
 {
     ULONG nIndex = FirstInView();
-    nIndex += ROW_COUNT * COLUMN_COUNT;
+    nIndex += ROW_COUNT * COLUMN_COUNT - 1;
     if( nIndex > maFontCharMap.GetCharCount() - 1 )
         nIndex = maFontCharMap.GetCharCount() - 1;
     return nIndex;
