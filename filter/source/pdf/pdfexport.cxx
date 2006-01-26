@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:39:34 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1084,6 +1084,13 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 }
                 break;
 
+                case META_TEXTLANGUAGE_ACTION:
+                {
+                    const  MetaTextLanguageAction* pA = (const MetaTextLanguageAction*) pAction;
+                    rWriter.SetDigitLanguage( pA->GetTextLanguage() );
+                }
+                break;
+
                 case( META_WALLPAPER_ACTION ):
                 {
                     const MetaWallpaperAction* pA = (const MetaWallpaperAction*) pAction;
@@ -1100,12 +1107,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_REFPOINT_ACTION ):
                 {
                     // !!! >>> we don't want to support this actions
-                }
-                break;
-
-                case META_TEXTLANGUAGE_ACTION:
-                {
-                    // TODO: Implement me for tagged PDF
                 }
                 break;
 
