@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:33:03 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,9 @@ public:
         // the same for double values
         void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
         // appends LineInfo
-        void appendLineInfo( const LineInfo& rInfo, rtl::OStringBuffer& rBuffer ) const;
+        // returns false if too many dash array entry were created for
+        // the implementation limits of some PDF readers
+        bool appendLineInfo( const LineInfo& rInfo, rtl::OStringBuffer& rBuffer ) const;
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
         void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, rtl::OStringBuffer& rBuffer ) const;
 
@@ -470,6 +472,7 @@ public:
     // else false
     static bool compressStream( SvMemoryStream* );
 
+    static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 private:
     static const BuiltinFont m_aBuiltinFonts[14];
 
@@ -574,6 +577,7 @@ private:
         Region          m_aClipRegion;
         sal_Int32       m_nAntiAlias;
         sal_Int32       m_nLayoutMode;
+        LanguageType    m_aDigitLanguage;
         sal_Int32       m_nTransparentPercent;
         sal_uInt16      m_nFlags;
         sal_uInt16      m_nUpdateFlags;
@@ -587,6 +591,7 @@ private:
         static const sal_uInt16 updateAntiAlias             = 0x0040;
         static const sal_uInt16 updateLayoutMode            = 0x0080;
         static const sal_uInt16 updateTransparentPercent    = 0x0100;
+        static const sal_uInt16 updateDigitLanguage         = 0x0200;
 
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
@@ -891,6 +896,12 @@ public:
     {
         m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLayoutMode;
+    }
+
+    void setDigitLanguage( LanguageType eLang )
+    {
+        m_aGraphicsStack.front().m_aDigitLanguage = eLang;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateDigitLanguage;
     }
 
     void setTextAlign( TextAlign eAlign )
