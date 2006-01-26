@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:50:55 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -941,7 +941,6 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     };
     ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
             "FeldFunc-Tabelle stimmt nicht" );
-
 
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
     ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
