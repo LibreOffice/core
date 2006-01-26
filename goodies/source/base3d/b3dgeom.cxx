@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:59 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,7 +661,7 @@ Vector3D B3dGeometry::CalcNormal(UINT32 nLow, UINT32 nHigh) const
         else if(!pVec3)
         {
             pVec3 = &(((B3dGeometry*)this)->aEntityBucket[nLow++].Point().GetVector3D());
-            if(*pVec3 == *pVec2 || pVec3 == pVec1)
+            if(*pVec3 == *pVec2 || *pVec3 == *pVec1) // #125865#
                 pVec3 = NULL;
         }
     }
