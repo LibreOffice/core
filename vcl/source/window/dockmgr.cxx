@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:54:40 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,6 +547,7 @@ public:
     ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin );
     ~ImplPopupFloatWin();
 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     virtual void        Paint( const Rectangle& rRect );
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -575,6 +576,17 @@ ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper*
 ImplPopupFloatWin::~ImplPopupFloatWin()
 {
     mpDockingWin = NULL;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
+{
+    // switch off direct accessibilty support for this window
+
+    // this is to avoid appearance of this window as standalone window in the accessibility hierarchy
+    // as this window is only used as a helper for subtoolbars that are not teared-off, the parent toolbar
+    // has to provide accessibility support (as implemented in the toolkit)
+    // so the contained toolbar should appear as child of the correponsing toolbar item of the parent toolbar
+    return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
 }
 
 Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()
