@@ -54,6 +54,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     String[][] OfficialFiles;
     String[][] PrivateFiles;
     String[] Norms;
+        String[] NormPaths;
     String[] NormNames;
 
     String sTemplatePath;
@@ -866,45 +867,73 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
         LocaleCodes lc = new LocaleCodes(xmsf);
         String [] allLocales = lc.getIDs();
-        String[] nameList = {"",""};
+        Object [] nameList = {"",""};
+                String [] nameList1 = {"",""};
+                String [] nameList2 = {"",""};
+                Vector allPaths = new Vector();
         String sLetterSubPath = "/wizard/letter/";
 
         try {
-            sLetterPath = FileAccess.deleteLastSlashfromUrl(sTemplatePath);
-            String [] PathParts = sLetterPath.split("/");
+            sTemplatePath = FileAccess.deleteLastSlashfromUrl(sTemplatePath);
+            String [] PathParts = sTemplatePath.split("/");
             String nuString ="";
+                        String sMainPath;
             for (int i=0; i<(PathParts.length -1); i++) {
                 nuString = nuString + PathParts[i] + "/";
             }
-            sLetterPath = nuString;
-            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
-            sLetterPath = sLetterPath + sLetterSubPath;
-            sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
+            sMainPath = nuString;
+            sMainPath = FileAccess.deleteLastSlashfromUrl(sMainPath);
+
+            sLetterPath = sMainPath + sLetterSubPath;
+            //sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
 
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
-            nameList = xSimpleFileAccess.getFolderContents(sLetterPath, true);
+            nameList1 = xSimpleFileAccess.getFolderContents(sMainPath, true);
+                        nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
+                        for (int i=0;i<nameList1.length;i++) {
+                            String theFileName = FileAccess.getFilename(nameList1[i]);
+                            if (!theFileName.equalsIgnoreCase("wizard")) {
+                                allPaths.add(nameList1[i]+ sLetterSubPath + theFileName);
+                            }
+                        }
+                        for (int i=0;i<nameList2.length;i++) {
+                        boolean found = false;
+                            for (int t=0;t<nameList1.length;t++) {
+                                if (FileAccess.getFilename(nameList2[i]).equalsIgnoreCase(FileAccess.getFilename(nameList1[t])) ) {
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                allPaths.add(nameList2[i]);
+                            }
+                        }
+                        nameList = allPaths.toArray();
+
+
         } catch (CommandAbortedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (NoValidPathException e) {
+        //} catch (NoValidPathException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        //  e.printStackTrace();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         Norms = new String[nameList.length];
+                NormPaths = new String[nameList.length];
         String [] LanguageLabels;
         LanguageLabels = new String[Norms.length];
 
         boolean found = false;
         String cIsoCode = "";
         String MSID = "";
+                int z = 0;
         for (int i=0; i < nameList.length; i++) {
             found = false;
-            cIsoCode = FileAccess.getFilename(nameList[i]);
+            cIsoCode = FileAccess.getFilename((String)nameList[i]);
             for (int t=0; t < allLocales.length; t++) {
                 String [] aLang = allLocales[t].split(";");
                 if (cIsoCode.equalsIgnoreCase(aLang[1])) {
@@ -923,8 +952,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                     }
                 }
             }
-            Norms[i] = cIsoCode;
-            LanguageLabels[i] = lc.getLanguageString(MSID);
+
+                        if (found) {
+                            Norms[z] = cIsoCode;
+                            NormPaths[z] = (String) nameList[i];
+                            LanguageLabels[z] = lc.getLanguageString(MSID);
+                            z++;
+                        }
         }
 
         setControlProperty("lstLetterNorm", "StringItemList", LanguageLabels);
@@ -950,14 +984,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public boolean initializeTemplates(XMultiServiceFactory xMSF) {
-        try {
             sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
             //creation of the language independent path:
-            sLetterPath = FileAccess.getParentDir(sTemplatePath);
-            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
-            String sLetterSubPath = "/wizard/letter/" + sCurrentNorm;
-            sLetterPath = FileAccess.combinePaths(xMSF, sLetterPath, sLetterSubPath);
-            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "");
+            String sLetterPath = NormPaths[getCurrentLetter().cp_Norm];
 
             BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
             OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
@@ -972,10 +1001,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             setControlProperty("lstPrivateStyle", "SelectedItems", new short[]{0});
 
             return true;
-        } catch (NoValidPathException nopathexception) {
-            nopathexception.printStackTrace();
-            return false;
-        }
     }
 
     public void initializeElements() {
@@ -1029,7 +1054,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_SENDERRECEIVER], RM_SENDERRECEIVER);
         i = insertRoadmapItem(i, false, resources.RoadmapLabels[RM_FOOTER], RM_FOOTER);
         i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_FINALSETTINGS], RM_FINALSETTINGS);
-        setRoadmapInteractive(false);
+        setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
     }
