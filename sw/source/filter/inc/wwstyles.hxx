@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wwstyles.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:52:00 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 #define WW_WWSTYLES_HXX
 
 class String;       //yuck...
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 namespace ww
 {
@@ -175,6 +179,52 @@ namespace ww
         <a href="mailto:tono@openoffice.org">Takashi Ono</a>
     */
     sti GetCanonicalStiFromEnglishName(const String &rString) throw();
+
+    /** Find the WinWord sti index of an old <= Word2 stc (style code)
+
+        When importing a Word 2 document we would like to treat styles as
+        similiar to how word 8 does as possible, to this end word will treat
+        some styles with special codes as inbuilt styles, and some as user
+        defined styles.
+
+        @param
+        stc the Style code to test to see what winword sti word would give
+        such a code
+
+        @return the sti that word would give it. stiUser if word would treat
+        it as a user defined style.
+
+        @author
+        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+    */
+    sti GetCanonicalStiFromStc(sal_uInt8 stc) throw();
+
+    /** Find the WinWord english name from a sti index
+
+        Map the word style index to it's english name
+
+        @param
+        sti the Style index
+
+        @return the name word would give it if it's an inbuilt name, otherwise
+        NULL
+
+        @author
+        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+    */
+    const sal_Char* GetEnglishNameFromSti(sti eSti) throw();
+
+    /** Determine if the WinWord sti is standard Character Style
+
+        @param
+        sti the Style index
+
+        @return true if a known inbuild character style
+
+        @author
+        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+    */
+    bool StandardStiIsCharStyle(sti eSti) throw();
 };
 
 #endif
