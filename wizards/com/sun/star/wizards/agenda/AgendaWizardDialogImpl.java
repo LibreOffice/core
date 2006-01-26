@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:06:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     public void insertPathSelectionControl() {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 24 ), "HID:" + ( HID + 25 ));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myAgendaTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";
@@ -540,8 +540,9 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
-            xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
+            //Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
+            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", new PropertyValue[0]);
+                        xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
             XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
             ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
             try {
