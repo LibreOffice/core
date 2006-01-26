@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:46:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3944,6 +3944,21 @@ sal_Bool ServiceType::dumpHxxFile(
                 if (!hasRestParameter(i)) {
                     includes.addAny();
                     includes.addSequence();
+                    sal_uInt16 params = m_reader.getMethodParameterCount(i);
+                    for (sal_uInt16 j = 0; j < params; ++j) {
+                        if (codemaker::UnoType::getSort(
+                                codemaker::UnoType::decompose(
+                                    rtl::OUStringToOString(
+                                        m_reader.getMethodParameterTypeName(
+                                            i, j),
+                                        RTL_TEXTENCODING_UTF8),
+                                    0, 0))
+                            == codemaker::UnoType::SORT_CHAR)
+                        {
+                            includes.addCppuUnotypeHxx();
+                            break;
+                        }
+                    }
                 }
                 codemaker::ExceptionTree tree;
                 for (sal_uInt16 j = 0; j < m_reader.getMethodExceptionCount(i);
@@ -4098,13 +4113,37 @@ sal_Bool ServiceType::dumpHxxFile(
                           " ::com::sun::star::uno::Any > the_arguments(")
                       << params << ");\n";
                     for (sal_uInt16 j = 0; j < params; ++j) {
-                        o << indent() << "the_arguments[" << j << "] <<= "
-                          << translateIdentifier(
-                              rtl::OUStringToOString(
-                                  m_reader.getMethodParameterName(i, j),
-                                  RTL_TEXTENCODING_UTF8),
-                              "param", false)
-                          << ";\n";
+                        o << indent() << "the_arguments[" << j << "] ";
+                        rtl::OString param(
+                            translateIdentifier(
+                                rtl::OUStringToOString(
+                                    m_reader.getMethodParameterName(i, j),
+                                    RTL_TEXTENCODING_UTF8),
+                                "param", false));
+                        sal_Int32 rank;
+                        if (codemaker::UnoType::getSort(
+                                codemaker::UnoType::decompose(
+                                    rtl::OUStringToOString(
+                                        m_reader.getMethodParameterTypeName(
+                                            i, j),
+                                        RTL_TEXTENCODING_UTF8),
+                                    &rank, 0))
+                            == codemaker::UnoType::SORT_CHAR)
+                        {
+                            o << "= ::com::sun::star::uno::Any(&" << param
+                              << ", ::cppu::UnoType< ";
+                            for (sal_Int32 i = 0; i < rank; ++i) {
+                                o << "::cppu::UnoSequenceType< ";
+                            }
+                            o << "::cppu::UnoCharType";
+                            for (sal_Int32 i = 0; i < rank; ++i) {
+                                o << " >";
+                            }
+                            o << " >::get())";
+                        } else {
+                            o << "<<= " << param;
+                        }
+                        o << ";\n";
                     }
                 }
                 o << indent() << "::com::sun::star::uno::Reference< "
