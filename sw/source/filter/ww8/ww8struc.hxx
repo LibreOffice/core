@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,53 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
     LongToSVBT32( n, *(SVBT32*)p );
     p+= 4;
 }
+
+struct Word2CHPX
+{
+    sal_uInt16 fBold:1;
+    sal_uInt16 fItalic:1;
+    sal_uInt16 fRMarkDel:1;
+    sal_uInt16 fOutline:1;
+    sal_uInt16 fFldVanish:1;
+    sal_uInt16 fSmallCaps:1;
+    sal_uInt16 fCaps:1;
+    sal_uInt16 fVanish:1;
+    sal_uInt16 fRMark:1;
+    sal_uInt16 fSpec:1;
+    sal_uInt16 fStrike:1;
+    sal_uInt16 fObj:1;
+    sal_uInt16 fBoldBi:1;
+    sal_uInt16 fItalicBi:1;
+    sal_uInt16 fBiDi:1;
+    sal_uInt16 fDiacUSico:1;
+    sal_uInt16 fsIco:1;
+    sal_uInt16 fsFtc:1;
+    sal_uInt16 fsHps:1;
+    sal_uInt16 fsKul:1;
+    sal_uInt16 fsPos:1;
+    sal_uInt16 fsSpace:1;
+    sal_uInt16 fsLid:1;
+    sal_uInt16 fsIcoBi:1;
+    sal_uInt16 fsFtcBi:1;
+    sal_uInt16 fsHpsBi:1;
+    sal_uInt16 fsLidBi:1;
+
+    sal_uInt16 ftc;
+    sal_uInt16 hps;
+    sal_uInt8 qpsSpace:6;
+    sal_uInt8 fSysVanish:1;
+    sal_uInt8 fNumRun:1;
+    sal_uInt8 ico:5;
+    sal_uInt8 kul:3;
+    sal_uInt8 hpsPos;
+    sal_uInt8 icoBi;
+    sal_uInt16 lid;
+    sal_uInt16 ftcBi;
+    sal_uInt16 hpsBi;
+    sal_uInt16 lidBi;
+    sal_uInt32 fcPic;
+};
+
 
 typedef sal_Int16 WW8_PN;
 typedef sal_Int32 WW8_FC;
