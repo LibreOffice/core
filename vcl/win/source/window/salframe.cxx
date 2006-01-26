@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:55:36 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #include <string.h>
 #include <limits.h>
 
-#ifdef DBG_UTIL
 #include <stdio.h>
-#endif
 
 #ifndef _SVWIN_HXX
 #include <tools/svwin.h>
@@ -2832,6 +2830,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetDialogColor( aStyleSettings.GetFaceColor() );
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
+    aStyleSettings.SetButtonRolloverTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
@@ -2840,6 +2839,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetFieldColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
+    aStyleSettings.SetFieldRolloverTextColor( aStyleSettings.GetFieldTextColor() );
     aStyleSettings.SetHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHT ) ) );
     aStyleSettings.SetHighlightTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
     aStyleSettings.SetMenuHighlightColor( aStyleSettings.GetHighlightColor() );
