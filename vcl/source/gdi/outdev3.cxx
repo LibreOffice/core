@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.212 $
+ *  $Revision: 1.213 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:39:21 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -978,7 +978,11 @@ static void ImplFontSubstitute( String& rFontName,
     // TODO: get rid of O(N) searches
     for(; pEntry; pEntry = pEntry->mpNext )
     {
-        if ( ((pEntry->mnFlags & nFlags) || !nFlags)
+    // only replace if
+    //     (pEntry->subst_always && nFlags.subst_always)
+    // && !(pEntry->screen_only && nFlags.screen_only)
+    // TODO: font replacement UI needs to be redesigned
+        if ( ((pEntry->mnFlags & nFlags) == FONT_SUBSTITUTE_ALWAYS)
         &&    (pEntry->maSearchName == rFontName) )
         {
             rFontName = pEntry->maSearchReplaceName;
@@ -2811,7 +2815,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         }
         else
             nTokenPos = STRING_NOTFOUND;
-        ImplFontSubstitute( aSearchName, 0, pDevSpecific );
+        ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
@@ -6011,6 +6015,13 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         if( !ImplGetGraphics() )
             return NULL;
 
+    // initialize font if needed
+    if( mbNewFont )
+        if( !ImplNewFont() )
+            return NULL;
+    if( mbInitFont )
+        ImplInitFont();
+
     // check string index and length
     String aStr = rOrigStr;
     if( (ULONG)nMinIndex + nLen >= aStr.Len() )
@@ -6041,13 +6052,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             }
         }
     }
-
-    // initialize font if needed
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return NULL;
-    if( mbInitFont )
-        ImplInitFont();
 
     // convert from logical units to physical units
     // recode string if needed
@@ -7437,7 +7441,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
         pSalLayout->Release();
     }
 
-    if( bRet || (OUTDEV_PRINTER == meOutDevType) )
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
         return bRet;
 
     // fall back to bitmap method to get the bounding rectangle,
@@ -7606,12 +7610,12 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
             // transform polygon to pixel units
             ::basegfx::B2DHomMatrix aMatrix;
 
-        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+            int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
                 Point aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
                 aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-        aMatrix.translate( aRotatedOfs.X(), aRotatedOfs.Y() );
+                aMatrix.translate( aRotatedOfs.X(), aRotatedOfs.Y() );
             }
 
             if( nWidthFactor > 1 )
@@ -7620,7 +7624,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 aMatrix.scale( fFactor, fFactor );
             }
 
-        if( !aMatrix.isIdentity() )
+            if( !aMatrix.isIdentity() )
             {
                 ::basegfx::B2DPolyPolygonVector::iterator aIt = rVector.begin();
                 for(; aIt != rVector.end(); ++aIt )
@@ -7638,7 +7642,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         const_cast<OutputDevice&>(*this).mbNewFont = TRUE;
     }
 
-    if( bRet || (OUTDEV_PRINTER == meOutDevType) )
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
         return bRet;
 
     // fall back to bitmap conversion ------------------------------------------
@@ -7735,16 +7739,16 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 bSuccess = false;
             else
             {
-        // convert units to logical width
+                // convert units to logical width
                 for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
                 {
                     Polygon& rPoly = aPolyPoly[j];
                     for (USHORT k = 0; k < rPoly.GetSize(); ++k)
                     {
                         Point& rPt = rPoly[k];
-            rPt -= aOffset;
-            int nPixelX = rPt.X() - ((OutputDevice&)aVDev).mnTextOffX + nXOffset;
-            int nPixelY = rPt.Y() - ((OutputDevice&)aVDev).mnTextOffY;
+                        rPt -= aOffset;
+                        int nPixelX = rPt.X() - ((OutputDevice&)aVDev).mnTextOffX + nXOffset;
+                        int nPixelY = rPt.Y() - ((OutputDevice&)aVDev).mnTextOffY;
                         rPt.X() = ImplDevicePixelToLogicWidth( nPixelX );
                         rPt.Y() = ImplDevicePixelToLogicHeight( nPixelY );
                     }
@@ -7755,16 +7759,16 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 if( aPolyPoly.Count() > 0 )
                 {
                     // convert  to B2DPolyPolygon
-            // TODO: get rid of intermediate tool's PolyPolygon
+                    // TODO: get rid of intermediate tool's PolyPolygon
                     ::basegfx::B2DPolyPolygon aB2DPolyPoly = aPolyPoly.getB2DPolyPolygon();
                     ::basegfx::B2DHomMatrix aMatrix;
                     aMatrix.scale( fScaleX, fScaleY );
                     int nAngle = GetFont().GetOrientation();
                     if( nAngle )
                         aMatrix.rotate( nAngle * F_PI1800 );
-            aB2DPolyPoly.transform( aMatrix );
+                    aB2DPolyPoly.transform( aMatrix );
                     rVector.push_back( aB2DPolyPoly );
-        }
+                }
             }
         }
 
