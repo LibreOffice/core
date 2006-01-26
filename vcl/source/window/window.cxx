@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.224 $
+ *  $Revision: 1.225 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:55:45 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2470,7 +2470,7 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 
     // #98943# draw toolbox selection
     if( !aSelectionRect.IsEmpty() )
-        DrawSelectionBackground( aSelectionRect, 2, FALSE, TRUE, FALSE );
+        DrawSelectionBackground( aSelectionRect, 3, FALSE, TRUE, FALSE );
 
     if ( pChildRegion )
         delete pChildRegion;
@@ -6137,7 +6137,7 @@ void Window::SetParent( Window* pNewParent )
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
     SystemWindow *pNewSysWin = NULL;
     BOOL bChangeTaskPaneList = FALSE;
-    if( pSysWin->ImplIsInTaskPaneList( this ) )
+    if( pSysWin && pSysWin->ImplIsInTaskPaneList( this ) )
     {
         pNewSysWin = ImplGetLastSystemWindow( pNewParent );
         if( pNewSysWin && pNewSysWin != pSysWin )
@@ -8787,9 +8787,13 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
 
             case WINDOW_DOCKINGWINDOW:
-            case WINDOW_SYSWINDOW:
-            case WINDOW_FLOATINGWINDOW: nRole = mpWindowImpl->mbFrame ? accessibility::AccessibleRole::FRAME :
-                                                            accessibility::AccessibleRole::PANEL; break;
+            case WINDOW_SYSWINDOW:      nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
+                                                                          accessibility::AccessibleRole::PANEL; break;
+
+            case WINDOW_FLOATINGWINDOW: nRole = ( mpWindowImpl->mbFrame ||
+                                                 (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) ||
+                                                 (GetStyle() & WB_OWNERDRAWDECORATION) ) ? accessibility::AccessibleRole::FRAME :
+                                                                                           accessibility::AccessibleRole::WINDOW; break;
 
             case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::ROOT_PANE; break;
 
@@ -9062,7 +9066,10 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
             {
                 aSelectionFillCol = COL_BLACK;
                 SetLineColor( COL_BLACK );
-                nPercent = 0;
+                if( highlight == 3 )
+                    nPercent = 80;
+                else
+                    nPercent = 0;
             }
             else
                 nPercent = 70;          // selected ( dark )
