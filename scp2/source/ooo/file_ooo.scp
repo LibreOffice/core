@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:44:51 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ End
 File gid_File_Bin_Pkgchk
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = "pkgchk.bin";
   #else
@@ -158,7 +158,7 @@ End
 File gid_File_Bin_MsiPkgchk
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "msi-pkgchk.exe";
 End
 #endif
@@ -199,7 +199,7 @@ End
 File gid_File_Bin_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = "unopkg.bin";
   #else
