@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:42 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ static bool performQueryForUnknownType(XBridgeTest xLBT)
 }
 
 // //==================================================================================================
-static bool performTest(XBridgeTest xLBT)
+bool performTest(XBridgeTest xLBT)
 {
 	check( xLBT != null, "### no test interface!" );
     bool bRet = true;
@@ -620,6 +620,14 @@ static bool performTest(XBridgeTest xLBT)
 
         }
 
+    XBridgeTest2 xBT2 = xLBT as XBridgeTest2;
+    if (xBT2 != null) {
+        try {
+            xBT2.testConstructorsService(m_xContext);
+        } catch (BadConstructorArguments) {
+            bRet = false;
+        }
+    }
 
     return bRet;
 }
@@ -973,7 +981,7 @@ static bool raiseException(XBridgeTest xLBT )
     return false;
 }
 
-    static private void perform_test( XBridgeTest xLBT )
+    private void perform_test( XBridgeTest xLBT )
     {
         bool bRet= true;;
        bRet = check( performTest( xLBT ), "standard test" ) && bRet;
