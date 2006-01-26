@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:32:47 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
     public void setRoadmapInteractive(boolean _bInteractive) {
-//      Helper.setUnoPropertyValue(oRoadmap, "Activated", new Boolean(_bInteractive));
+        Helper.setUnoPropertyValue(oRoadmap, "Activated", new Boolean(_bInteractive));
     }
 
     public void setRoadmapComplete(boolean bComplete) {
@@ -442,9 +442,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                 setStepEnabled(i, _bDoEnable);
             enableFinishButton(_bDoEnable);
             if (!_bDoEnable)
-                enableNextButton(_iStep > getCurrentStep() + 1);
+                enableNextButton(_iStep > getCurrentStep()+1);
             else
-                enableNextButton(true);
+                enableNextButton(!(getCurrentStep() == nMaxStep));
 
         }
     }
