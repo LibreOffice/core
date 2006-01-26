@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,15 +41,10 @@
 #ifndef LONG_MAX
 #include <limits.h>
 #endif
-#ifndef __SGI_STLSTACK
 #include <stack>
-#endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
+#include <algorithm>
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
@@ -62,6 +57,14 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>       // ASSERT()
+#endif
+
+#ifndef WW_SORTEDARRAY_HXX
+#include "sortedarray.hxx"
 #endif
 
 #ifndef WW8STRUC_HXX
@@ -114,9 +117,6 @@ public:
 
 typedef wwString<sal_uInt16> ww8String;
 
-//simple template that manages a static [] array by sorting at construction
-template<class C> class wwSortedArray;
-
 struct SprmInfo
 {
     sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
@@ -125,20 +125,21 @@ struct SprmInfo
 };
 
 //a managed sorted sequence of sprminfos
-typedef wwSortedArray<SprmInfo> wwSprmSearcher;
+typedef ww::SortedArray<SprmInfo> wwSprmSearcher;
 //a managed sorted sequence of sprms
-typedef wwSortedArray<sal_uInt16> wwSprmSequence;
+typedef ww::SortedArray<sal_uInt16> wwSprmSequence;
 
 //wwSprmParser knows how to take a sequence of bytes and split it up into
 //sprms and their arguments
 class wwSprmParser
 {
 private:
-    int mnVersion;
+    ww::WordVersion meVersion;
     BYTE mnDelta;
     const wwSprmSearcher *mpKnownSprms;
     static const wwSprmSearcher* GetWW8SprmSearcher();
     static const wwSprmSearcher* GetWW6SprmSearcher();
+    static const wwSprmSearcher* GetWW2SprmSearcher();
 
     SprmInfo GetSprmInfo(sal_uInt16 nId) const;
 
@@ -147,7 +148,7 @@ private:
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
     //7- ids are very different to 8+ ones
-    wwSprmParser(int nVersion);
+    wwSprmParser(ww::WordVersion eVersion);
     //Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
@@ -162,9 +163,9 @@ public:
     USHORT GetSprmTailLen(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
 
     //The minimum acceptable sprm len possible for this type of parser
-    int MinSprmLen() const { return (mnVersion < 8) ? 2 : 3; }
+    int MinSprmLen() const { return (IsSevenMinus(meVersion)) ? 2 : 3; }
 
-    inline int getVersion() const { return mnVersion; }
+    inline int getVersion() const { return meVersion; } //cmc, I'm dubious about the usage of this, how can it be 0
 };
 
 //--Line abovewhich the code has meaningful comments
@@ -384,7 +385,7 @@ enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260 };
 class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 {
 private:
-    BYTE nVersion;          // Versionsnummer des FIB
+    ww::WordVersion meVer;  // Version number of FIB
     bool bIsSprm;           // PLCF von Sprms oder von anderem ( Footnote, ... )
     WW8_FC nStartFc;
     bool bDirty;
@@ -393,8 +394,8 @@ private:
     WW8PLCFx(const WW8PLCFx&);
     WW8PLCFx& operator=(const WW8PLCFx&);
 public:
-    WW8PLCFx(BYTE nFibVersion, bool bSprm)
-        : nVersion(nFibVersion), bIsSprm(bSprm), bDirty(false) {}
+    WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
+        : meVer(eVersion), bIsSprm(bSprm), bDirty(false) {}
     bool IsSprm() const { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;
@@ -408,7 +409,7 @@ public:
     virtual USHORT GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
-    BYTE GetVersion() const { return nVersion; }
+    ww::WordVersion GetFIBVersion() const { return meVer; }
     void SetStartFc( WW8_FC nFc ) { nStartFc = nFc; }
     WW8_FC GetStartFc() const { return nStartFc; }
     void SetDirty(bool bIn) {bDirty=bIn;}
@@ -429,7 +430,7 @@ private:
     WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&);
     WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&);
 public:
-    WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD,
+    WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, WW8PLCFx_PCD* pPLCFx_PCD,
         const WW8ScannerBase* pBase );
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
@@ -452,8 +453,8 @@ private:
     WW8PLCFx_PCD(const WW8PLCFx_PCD&);
     WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&);
 public:
-    WW8PLCFx_PCD(BYTE nVersion, WW8PLCFpcd* pPLCFpcd, WW8_CP nStartCp,
-        bool bVer67P);
+    WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
+        WW8_CP nStartCp, bool bVer67P);
     virtual ~WW8PLCFx_PCD();
     virtual ULONG GetIMax() const;
     virtual ULONG GetIdx() const;
@@ -518,8 +519,9 @@ public:
 
         wwSprmParser maSprmParser;
     public:
-        WW8Fkp (BYTE nFibVer,SvStream* pFKPStrm,SvStream* pDataStrm,
-            long _nFilePos,long nItemSiz,ePLCFT ePl,WW8_FC nStartFc = -1);
+        WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
+            SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
+            WW8_FC nStartFc = -1);
         void Reset(WW8_FC nPos);
         long GetFilePos() const { return nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
@@ -676,8 +678,8 @@ private:
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&);
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&);
 public:
-    WW8PLCFx_SubDoc(SvStream* pSt, BYTE nVersion, WW8_CP nStartCp, long nFcRef,
-        long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
+    WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
+    long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
     virtual ~WW8PLCFx_SubDoc();
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
@@ -921,7 +923,7 @@ struct WW8PLCFxSaveAll
 
 class WW8ScannerBase
 {
-friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion,
+friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase );
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
@@ -1249,7 +1251,7 @@ public:
 
 
     WW8_FC fcSttbfAssoc;    // 0x158 offset to STTBF of associated strings. See STTBFASSOC.
-    INT32 cbSttbfAssoc; // 0x15C
+    INT32 lcbSttbfAssoc; // 0x15C
 
     WW8_FC fcClx;           // 0x160 file  offset of beginning of information for complex files.
     INT32 lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
@@ -1416,6 +1418,7 @@ public:
     WW8Fib( BYTE nVersion = 6 );
     bool Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(UINT16 chs);
+    ww::WordVersion GetFIBVersion() const;
 };
 
 class WW8Style
@@ -1674,6 +1677,11 @@ public:
 };
 
 void SwapQuotesInField(String &rFmt);
+
+Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize);
+std::vector<BYTE> ChpxToSprms(const Word2CHPX &rChpx);
+
+ULONG SafeReadString(ByteString &rStr,USHORT nLen,SvStream &rStrm);
 
 #endif
 
