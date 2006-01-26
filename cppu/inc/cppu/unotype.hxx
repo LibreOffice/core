@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:54:18 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ template< typename > class UnoType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
+
+   @since UDK 3.2.2
 */
 struct UnoVoidType;
 
@@ -82,6 +84,8 @@ struct UnoVoidType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
+
+   @since UDK 3.2.2
 */
 struct UnoUnsignedShortType;
 
@@ -93,6 +97,8 @@ struct UnoUnsignedShortType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
+
+   @since UDK 3.2.2
 */
 struct UnoCharType;
 
@@ -105,6 +111,8 @@ struct UnoCharType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
+
+   @since UDK 3.2.2
 */
 template< typename > struct UnoSequenceType;
 
@@ -270,6 +278,8 @@ namespace cppu {
    appropriate template argument (the latter three to unambiguously specify UNO
    types, as the UNO types UNSIGNED SHORT and CHAR map to the same C++ type),
    and com::sun::star::uno::Reference with any appropriate template argument.
+
+   @since UDK 3.2.2
 */
 template< typename T > class UnoType {
 public:
@@ -281,7 +291,7 @@ public:
 private:
     UnoType(UnoType &); // not defined
     ~UnoType(); // not defined
-    void operator =(UnoType); // not defined
+    void operator =(UnoType &); // not defined
 };
 
 /**
@@ -291,6 +301,8 @@ private:
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
+
+   @since UDK 3.2.2
 */
 template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourUnsigned(T const *) {
@@ -304,6 +316,8 @@ getTypeFavourUnsigned(T const *) {
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
+
+   @since UDK 3.2.2
 */
 inline ::com::sun::star::uno::Type const &
 getTypeFavourUnsigned(sal_uInt16 const *) {
@@ -317,6 +331,8 @@ getTypeFavourUnsigned(sal_uInt16 const *) {
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
+
+   @since UDK 3.2.2
 */
 template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *);
