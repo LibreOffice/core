@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeInspector.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:26:00 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,6 +255,12 @@ public class TypeInspector{
         if (!supportsDataType(_curDataType)){
             switch(_curDataType)
             {
+                case DataType.BIT:
+                        retDataType = convertDataType(DataType.BOOLEAN);
+                        break;
+                case DataType.BOOLEAN:
+                        retDataType = convertDataType(DataType.BIT);
+                        break;
                 case DataType.TINYINT:
                     retDataType = convertDataType(DataType.SMALLINT);
                     break;
