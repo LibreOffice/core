@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgetest.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "com/sun/star/lang/IllegalArgumentException.idl"
+#include "com/sun/star/uno/XComponentContext.idl"
 #include "com/sun/star/uno/XInterface.idl"
 
 module test { module testtools { module bridgetest {
@@ -307,6 +308,56 @@ interface XBridgeTest : XBridgeTestBase
     [attribute] long                     RuntimeException;
 };
 
+
+exception BadConstructorArguments: com::sun::star::uno::Exception {};
+
+service Constructors: com::sun::star::uno::XInterface {
+    create1(
+        [in] boolean arg0,
+        [in] byte arg1,
+        [in] short arg2,
+        [in] unsigned short arg3,
+        [in] long arg4,
+        [in] unsigned long arg5,
+        [in] hyper arg6,
+        [in] unsigned hyper arg7,
+        [in] float arg8,
+        [in] double arg9,
+        [in] char arg10,
+        [in] string arg11,
+        [in] type arg12,
+        [in] any arg13,
+        [in] sequence< boolean > arg14,
+        [in] sequence< byte > arg15,
+        [in] sequence< short > arg16,
+        [in] sequence< unsigned short > arg17,
+        [in] sequence< long > arg18,
+        [in] sequence< unsigned long > arg19,
+        [in] sequence< hyper > arg20,
+        [in] sequence< unsigned hyper > arg21,
+        [in] sequence< float > arg22,
+        [in] sequence< double > arg23,
+        [in] sequence< char > arg24,
+        [in] sequence< string > arg25,
+        [in] sequence< type > arg26,
+        [in] sequence< any > arg27,
+        [in] sequence< sequence< boolean > > arg28,
+        [in] sequence< sequence< any > > arg29,
+        [in] sequence< TestEnum > arg30,
+        [in] sequence< TestStruct > arg31,
+        [in] sequence< TestPolyStruct< boolean > > arg32,
+        [in] sequence< TestPolyStruct< any > > arg33,
+        [in] sequence< com::sun::star::uno::XInterface > arg34,
+        [in] TestEnum arg35,
+        [in] TestStruct arg36,
+        [in] TestPolyStruct< boolean > arg37,
+        [in] TestPolyStruct< any > arg38,
+        [in] com::sun::star::uno::XInterface arg39)
+        raises (BadConstructorArguments);
+
+    create2([in] any... args) raises (BadConstructorArguments);
+};
+
 /** Extended tests with sequences.
  */
 interface XBridgeTest2 : XBridgeTest
@@ -369,7 +420,9 @@ interface XBridgeTest2 : XBridgeTest
                        [out] sequence< sequence< long > > aSeqDim2,
                        [out] sequence< sequence < sequence < long > > > aSeqDim3);
 
-
+    void testConstructorsService(
+        [in] com::sun::star::uno::XComponentContext context)
+        raises (BadConstructorArguments);
 };
 
 }; }; };
