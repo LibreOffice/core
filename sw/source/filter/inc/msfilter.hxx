@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:50:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,8 +417,8 @@ namespace sw
             explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
             void operator()(SwFltStackEntry *pEntry);
         private:
-        //No assignment
-        SetInDocAndDelete& operator=(const SetInDocAndDelete&);
+            //No assignment
+            SetInDocAndDelete& operator=(const SetInDocAndDelete&);
         };
 
         /**
@@ -437,8 +437,8 @@ namespace sw
                     pEntry->SetEndPos(mrPos);
             }
         private:
-        //No assignment
-        CloseIfOpen& operator=(const CloseIfOpen&);
+            //No assignment
+            CloseIfOpen& operator=(const CloseIfOpen&);
         };
 
         /**
