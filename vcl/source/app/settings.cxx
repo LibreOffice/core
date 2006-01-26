@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:07:04 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,7 +529,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maRadioCheckFont( rData.maRadioCheckFont ),
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
-    maIconFont( rData.maIconFont )
+    maIconFont( rData.maIconFont ),
+    maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
+    maFieldRolloverTextColor( rData.maButtonRolloverTextColor )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -598,6 +600,7 @@ void ImplStyleData::SetStandardStyles()
     maShadowColor               = Color( COL_GRAY );
     maDarkShadowColor           = Color( COL_BLACK );
     maButtonTextColor           = Color( COL_BLACK );
+    maButtonRolloverTextColor   = Color( COL_BLACK );
     maRadioCheckTextColor       = Color( COL_BLACK );
     maGroupTextColor            = Color( COL_BLACK );
     maLabelTextColor            = Color( COL_BLACK );
@@ -610,6 +613,7 @@ void ImplStyleData::SetStandardStyles()
     maMonoColor                 = Color( COL_BLACK );
     maFieldColor                = Color( COL_WHITE );
     maFieldTextColor            = Color( COL_BLACK );
+    maFieldRolloverTextColor    = Color( COL_BLACK );
     maActiveColor               = Color( COL_BLUE );
     maActiveColor2              = Color( COL_BLACK );
     maActiveTextColor           = Color( COL_WHITE );
