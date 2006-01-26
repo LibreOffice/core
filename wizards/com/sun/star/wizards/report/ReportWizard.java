@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:22:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 12),  SOSORTPAGE);       // Orderby is always supported
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 13), SOTEMPLATEPAGE);
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 14), SOSTOREPAGE);
-        setRoadmapInteractive(false);
+        setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
     }
