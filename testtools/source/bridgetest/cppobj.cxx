@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kz $ $Date: 2005-01-18 13:28:03 $
-#*    $Revision: 1.7 $
+#*    last change   $Author: hr $ $Date: 2006-01-26 17:40:24 $
+#*    $Revision: 1.8 $
 #*
 #*    $Logfile: $
 #*
@@ -10,6 +10,7 @@
 #************************************************************************/
 #include <stdio.h>
 
+#include "cppu/unotype.hxx"
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
@@ -28,6 +29,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 
+#include "test/testtools/bridgetest/Constructors.hpp"
 #include "test/testtools/bridgetest/TestPolyStruct.hpp"
 #include "test/testtools/bridgetest/XBridgeTest2.hpp"
 #include "test/testtools/bridgetest/XMulti.hpp"
@@ -426,6 +428,9 @@ public: // XBridgeTest
                              Sequence< Any >& aSeqAny,
                              Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                              Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 )
+        throw (RuntimeException);
+    virtual void SAL_CALL testConstructorsService(
+        Reference< XComponentContext > const & context)
         throw (RuntimeException);
 
 public:
@@ -864,9 +869,118 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
     aSeqDim3 = _arLong3;
 }
 
-
-
-
+void Test_Impl::testConstructorsService(
+    Reference< XComponentContext > const & context) throw (RuntimeException)
+{
+    Sequence< sal_Bool > arg14(1); arg14[0] = true;
+    Sequence< sal_Int8 > arg15(1); arg15[0] = SAL_MIN_INT8;
+    Sequence< sal_Int16 > arg16(1); arg16[0] = SAL_MIN_INT16;
+    Sequence< sal_uInt16 > arg17(1); arg17[0] = SAL_MAX_UINT16;
+    Sequence< sal_Int32 > arg18(1); arg18[0] = SAL_MIN_INT32;
+    Sequence< sal_uInt32 > arg19(1); arg19[0] = SAL_MAX_UINT32;
+    Sequence< sal_Int64 > arg20(1); arg20[0] = SAL_MIN_INT64;
+    Sequence< sal_uInt64 > arg21(1); arg21[0] = SAL_MAX_UINT64;
+    Sequence< float > arg22(1); arg22[0] = 0.123f;
+    Sequence< double > arg23(1); arg23[0] = 0.456;
+    Sequence< sal_Unicode > arg24(1); arg24[0] = 'X';
+    Sequence< OUString > arg25(1);
+    arg25[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("test"));
+    Sequence< Type > arg26(1); arg26[0] = UnoType< Any >::get();
+    Sequence< Any > arg27(1); arg27[0] <<= true;
+    Sequence< Sequence< sal_Bool > > arg28(1);
+    arg28[0] = Sequence< sal_Bool >(1); arg28[0][0] = true;
+    Sequence< Sequence< Any > > arg29(1); arg29[0] = Sequence< Any >(1);
+    arg29[0][0] <<= true;
+    Sequence< TestEnum > arg30(1); arg30[0] = TestEnum_TWO;
+    Sequence< TestStruct > arg31(1); arg31[0].member = 10;
+    Sequence< TestPolyStruct< sal_Bool > > arg32(1); arg32[0].member = true;
+    Sequence< TestPolyStruct< Any > > arg33(1); arg33[0].member <<= true;
+    Sequence< Reference< XInterface > > arg34(1);
+    Constructors::create1(context,
+        true,
+        SAL_MIN_INT8,
+        SAL_MIN_INT16,
+        SAL_MAX_UINT16,
+        SAL_MIN_INT32,
+        SAL_MAX_UINT32,
+        SAL_MIN_INT64,
+        SAL_MAX_UINT64,
+        0.123f,
+        0.456,
+        'X',
+        OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+        UnoType< Any >::get(),
+        makeAny(true),
+        arg14,
+        arg15,
+        arg16,
+        arg17,
+        arg18,
+        arg19,
+        arg20,
+        arg21,
+        arg22,
+        arg23,
+        arg24,
+        arg25,
+        arg26,
+        arg27,
+        arg28,
+        arg29,
+        arg30,
+        arg31,
+        arg32,
+        arg33,
+        arg34,
+        TestEnum_TWO,
+        TestStruct(10),
+        TestPolyStruct< sal_Bool >(true),
+        TestPolyStruct< Any >(makeAny(true)),
+        Reference< XInterface >(0));
+    Sequence< Any > args(40);
+    args[0] <<= true;
+    args[1] <<= SAL_MIN_INT8;
+    args[2] <<= SAL_MIN_INT16;
+    args[3] <<= SAL_MAX_UINT16;
+    args[4] <<= SAL_MIN_INT32;
+    args[5] <<= SAL_MAX_UINT32;
+    args[6] <<= SAL_MIN_INT64;
+    args[7] <<= SAL_MAX_UINT64;
+    args[8] <<= 0.123f;
+    args[9] <<= 0.456;
+    sal_Unicode arg10c = 'X';
+    args[10].setValue(&arg10c, UnoType< UnoCharType >::get());
+    args[11] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("test"));
+    args[12] <<= UnoType< Any >::get();
+    args[13] <<= true;
+    args[14] <<= arg14;
+    args[15] <<= arg15;
+    args[16] <<= arg16;
+    args[17] <<= arg17;
+    args[18] <<= arg18;
+    args[19] <<= arg19;
+    args[20] <<= arg20;
+    args[21] <<= arg21;
+    args[22] <<= arg22;
+    args[23] <<= arg23;
+    args[24].setValue(&arg24, UnoType< UnoSequenceType< UnoCharType > >::get());
+    args[25] <<= arg25;
+    args[26] <<= arg26;
+    args[27] <<= arg27;
+    args[28] <<= arg28;
+    args[29] <<= arg29;
+    args[30] <<= arg30;
+    args[31] <<= arg31;
+    args[32] <<= arg32;
+    args[33] <<= arg33;
+    args[34] <<= arg34;
+    args[35] <<= TestEnum_TWO;
+    args[36] <<= TestStruct(10);
+    args[37] <<= TestPolyStruct< sal_Bool >(true);
+    args[38] <<= TestPolyStruct< Any >(makeAny(true));
+    args[39] <<= Reference< XInterface >(0);
+    Constructors::create2(context, args);
+}
 
 // XServiceInfo
 //__________________________________________________________________________________________________
