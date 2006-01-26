@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:50:29 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,6 @@ namespace
     {
         return CalcHdFtDist(rFmt, rFmt.GetULSpace().GetLower());
     }
-
 
     /*
      SwTxtFmtColl and SwCharFmt are quite distinct types and how they are
