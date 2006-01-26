@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:50:01 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,11 @@ void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 void SpinButton::MouseButtonUp( const MouseEvent& )
 {
     ReleaseMouse();
+    if ( mbRepeat )
+    {
+        maRepeatTimer.Stop();
+        maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat() );
+    }
 
     if ( mbUpperIn )
     {
@@ -282,12 +287,6 @@ void SpinButton::MouseButtonUp( const MouseEvent& )
     }
 
     mbInitialUp = mbInitialDown = FALSE;
-
-    if ( mbRepeat )
-    {
-        maRepeatTimer.Stop();
-        maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-    }
 }
 
 // -----------------------------------------------------------------------
