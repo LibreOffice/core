@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:57:10 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2237,15 +2237,20 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
 
     const sal_Bool bCurve(rPolygon.areControlPointsUsed());
     const sal_Bool bClosed(rPolygon.isClosed());
-    const sal_uInt32 nCount(rPolygon.count());
+    sal_uInt32 nB2DLocalCount(rPolygon.count());
 
     if(bCurve)
     {
+        // #127979# Reduce source point count hard to the limit of the tools Polygon
+        if(nB2DLocalCount > ((0x0000ffff / 3L) - 1L))
+        {
+            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
+        }
+
         // curve creation
-        const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0L ));
+        const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1L : 0L ));
         const sal_uInt32 nTargetCount(nLoopCount ? (nLoopCount * 3L) + 1L : 0L);
-        DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "Polygon::Polygon: Too many points in given ::basegfx::B2DPolygon (!)");
         mpImplPolygon = new ImplPolygon( sal_uInt16(nTargetCount) );
         mpImplPolygon->ImplCreateFlagArray();
 
@@ -2295,7 +2300,7 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
                 // test continuity with previous control point
                 if(bVectorAUsed && (bClosed || a))
                 {
-                    const sal_uInt32 nPrevInd(a == 0L ? nCount  - 1L : a - 1L);
+                    const sal_uInt32 nPrevInd(a == 0L ? nB2DLocalCount  - 1L : a - 1L);
                     ::basegfx::B2DVector aB2DVectorPrev(rPolygon.getControlPointB(nPrevInd) - aB2DPointA);
                     ::basegfx::B2VectorContinuity eCont = ::basegfx::getContinuity(aB2DVectorPrev, aB2DVectorA);
 
@@ -2310,7 +2315,7 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
                 }
             }
 
-            if(rPolygon.isClosed())
+            if(bClosed)
             {
                 // add first point as closing point
                 mpImplPolygon->mpPointAry[nIndex] = mpImplPolygon->mpPointAry[0];
@@ -2319,7 +2324,7 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
             else
             {
                 // add last point as closing point
-                ::basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nCount - 1L));
+                ::basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1L));
                 Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
                 mpImplPolygon->mpPointAry[nIndex] = aEnd;
                 mpImplPolygon->mpFlagAry[nIndex] = (BYTE)POLY_NORMAL;
@@ -2328,24 +2333,29 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
     }
     else
     {
+        // #127979# Reduce source point count hard to the limit of the tools Polygon
+        if(nB2DLocalCount > (0x0000ffff - 1L))
+        {
+            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            nB2DLocalCount = (0x0000ffff - 1L);
+        }
+
         // point list creation
-        const sal_uInt32 nTargetCount(nCount + (bClosed ? 1L : 0L));
-        DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "Polygon::Polygon: Too many points in given ::basegfx::B2DPolygon (!)");
+        const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1L : 0L));
         mpImplPolygon = new ImplPolygon( sal_uInt16(nTargetCount) );
 
-        if(nCount)
+        if(nB2DLocalCount)
         {
             sal_uInt16 nIndex(0);
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0L); a < nB2DLocalCount; a++)
             {
                 ::basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
                 Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
                 mpImplPolygon->mpPointAry[nIndex++] = aPoint;
             }
 
-            if(rPolygon.isClosed())
+            if(bClosed)
             {
                 // add first point as closing point
                 mpImplPolygon->mpPointAry[nIndex] = mpImplPolygon->mpPointAry[0];
