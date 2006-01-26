@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:50:41 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,6 +775,8 @@ struct ANLDRuleMap
     ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
 };
 
+class SprmReadInfo;
+
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
@@ -1065,6 +1067,8 @@ private:
     int nDropCap;
 
 //---------------------------------------------
+
+    const SprmReadInfo& GetSprmReadInfo(USHORT nId) const;
 
     bool StyleExists(int nColl) const { return (nColl < nColls); }
     SwWW8StyInf *GetStyle(USHORT nColl) const;
@@ -1411,7 +1415,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
     void Read_LR(               USHORT nId, const BYTE*, short nLen );
-    void AdjustStyleTabStops(long nLeft, SwWW8StyInf *pSty);
+    void AdjustStyleTabStops(long nLeft, SwWW8StyInf &rSty);
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
