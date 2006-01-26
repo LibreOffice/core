@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,7 +1012,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : maSprmParser(rReader_.GetFib().nVersion), rReader(rReader_),
+    : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_),
     rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_), pLFOInfos(0),
     nUniqueList(1)
 {
