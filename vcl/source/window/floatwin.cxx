@@ -4,9 +4,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:46 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:10:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -708,7 +708,14 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     // so they can be compared across different frames
     // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
     maFloatRect             = rRect;
-    maFloatRect.SetPos( GetParent()->OutputToAbsoluteScreenPixel( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) ) );
+    if( GetParent()->ImplHasMirroredGraphics() )
+    {
+        maFloatRect.SetPos( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) );
+        maFloatRect = GetParent()->ImplOutputToUnmirroredAbsoluteScreenPixel( maFloatRect );
+    }
+    else
+        maFloatRect.SetPos( GetParent()->OutputToAbsoluteScreenPixel( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) ) );
+
     maFloatRect.Left()     -= 2;
     maFloatRect.Top()      -= 2;
     maFloatRect.Right()    += 2;
