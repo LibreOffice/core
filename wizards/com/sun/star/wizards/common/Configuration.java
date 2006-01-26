@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:14:30 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:19:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,11 @@ public abstract class Configuration {
         snames = xNameAccessNode.getElementNames();
         String[] sdisplaynames = new String[snames.length];
         for (int i = 0; i < snames.length; i++){
-            sdisplaynames[i] = (String) Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname);
+            Object oContent = Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname);
+            if (!AnyConverter.isVoid(oContent))
+                sdisplaynames[i] = (String) Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname);
+            else
+                sdisplaynames[i] = snames[i];
         }
         return sdisplaynames;
     } catch (Exception e) {
