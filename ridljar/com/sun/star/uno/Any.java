@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:21:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2005-09-08 13:21:32 $
+ * @version     $Revision: 1.9 $ $ $Date: 2006-01-26 17:41:46 $
  */
 public class Any {
     /**
@@ -76,8 +76,7 @@ public class Any {
      * @deprecated as of UDK 2.0
      */
     public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
+        this(new Type(zInterface), object);
     }
 
     /** Constructs a new any with a given type and value
@@ -85,6 +84,9 @@ public class Any {
         @param object the value of the any.
      */
     public Any(Type type, Object object) {
+        if (type.equals(Type.ANY)) {
+            throw new IllegalArgumentException("Any cannot contain Any");
+        }
         _type   = type;
         _object = object;
     }
