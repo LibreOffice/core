@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:58:32 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,9 +341,10 @@ namespace basegfx
                 ::std::sort(aSortNodes.begin(), aSortNodes.end());
 
                 // handle common nodes
-                for(a = 0L; a < aSortNodes.size() - 1L; a++)
+                for(a = 0L; a < nCount; a++)
                 {
-                    for(sal_uInt32 b(a + 1L); aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint) && b < aSortNodes.size(); b++)
+                    // #129701# test b before using it, not after. Also use nCount instead of aSortNodes.size()
+                    for(sal_uInt32 b(a + 1L); b < nCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
                     {
                         impHandleCommon(maPointNodes[aSortNodes[a].mnIndex], maPointNodes[aSortNodes[b].mnIndex]);
                     }
@@ -649,9 +650,10 @@ namespace basegfx
                 ::std::sort(aSortNodes.begin(), aSortNodes.end());
 
                 // handle common nodes
-                for(a = 0L; a < aSortNodes.size() - 1L; a++)
+                for(a = 0L; a < mnPointCount - 1L; a++)
                 {
-                    for(b = a + 1L; aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint) && b < aSortNodes.size(); b++)
+                    // #129701# test b before using it, not after. Also use mnPointCount instead of aSortNodes.size()
+                    for(b = a + 1L; b < mnPointCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
                     {
                         impHandleCommon(maPointNodes[aSortNodes[a].mnIndex], maPointNodes[aSortNodes[b].mnIndex]);
                     }
