@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:56:37 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
 {
-    fprintf( fOutput, "%ld", ((RscRangeInst *)rInst.pData)->nValue + nMin );
+    fprintf( fOutput, "%ld", long( ((RscRangeInst *)rInst.pData)->nValue + nMin ) );
 }
 
 /*************************************************************************
