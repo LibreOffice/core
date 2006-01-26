@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:23:18 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,21 +105,26 @@ const OUString OfficePipeId::operator () ()
     OSL_ASSERT( userPath.getLength() > 0 );
 
     // normalize path:
-    ::osl::FileStatus status( FileStatusMask_FileURL );
-    ::osl::DirectoryItem dirItem;
-    if (::osl::DirectoryItem::get( userPath, dirItem )
-        != ::osl::DirectoryItem::E_None ||
+    osl::FileStatus status( FileStatusMask_FileURL );
+    osl::DirectoryItem dirItem;
+    if (osl::DirectoryItem::get( userPath, dirItem )
+        == osl::DirectoryItem::E_None &&
         dirItem.getFileStatus( status )
-        != ::osl::DirectoryItem::E_None ||
-        !status.isValid( FileStatusMask_FileURL ) ||
-        ::osl::FileBase::getAbsoluteFileURL(
-            OUString(), status.getFileURL(), userPath )
-        != ::osl::FileBase::E_None)
+        == osl::DirectoryItem::E_None &&
+        status.isValid( FileStatusMask_FileURL ))
     {
-        throw RuntimeException(
-            OUSTR("No valid file URL in " SAL_CONFIGFILE("bootstrap") ": ") +
-            userPath, Reference<XInterface>() );
+        // path exists:
+        if (osl::FileBase::getAbsoluteFileURL(
+                OUString(), status.getFileURL(), userPath )
+            != ::osl::FileBase::E_None)
+        {
+            // but cannot be made absolute:
+            throw RuntimeException(
+                OUSTR("Cannot make absolute URL: ") + status.getFileURL(),
+                Reference<XInterface>() );
+        }
     }
+    // else invalid path, seems that user installation hasn't been written yet
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if (digest <= 0) {
