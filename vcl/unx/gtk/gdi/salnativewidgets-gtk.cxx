@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:40:06 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1914,7 +1914,7 @@ static void NWPaintOneSpinButton(   GdkPixmap   *           pixmap,
     else
         arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 - 1);
 
-    gtk_paint_arrow( gSpinButtonWidget->style, pixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gSpinButtonWidget,
+    gtk_paint_arrow( gSpinButtonWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gSpinButtonWidget,
             "spinbutton", (nPart == PART_BUTTON_UP) ? GTK_ARROW_UP : GTK_ARROW_DOWN, TRUE,
             (arrowRect.Left() - aAreaRect.Left()), (arrowRect.Top() - aAreaRect.Top()),
             arrowRect.GetWidth(), arrowRect.GetHeight() );
@@ -2827,6 +2827,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldTextColor( aTextColor );
     aStyleSet.SetHelpTextColor( aTextColor );
 
+    // mouse over text colors
+    aTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
+    aStyleSet.SetButtonRolloverTextColor( aTextColor );
+    aStyleSet.SetFieldRolloverTextColor( aTextColor );
+
     // background colors
     Color aBackColor = getColor( pStyle->bg[GTK_STATE_NORMAL] );
     Color aBackFieldColor = getColor( pStyle->base[ GTK_STATE_NORMAL ] );
@@ -2837,7 +2842,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
     aStyleSet.SetHelpColor( aBackColor );
-   // ancient wisdom tells us a mystic algorithm how to set checked color
+    // ancient wisdom tells us a mystic algorithm how to set checked color
     if( aBackColor == COL_LIGHTGRAY )
         aStyleSet.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
     else
