@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2609,6 +2609,7 @@ void ImplWin::ImplDraw( bool bLayout )
 
     if( ! bLayout )
     {
+        ControlState nState = CTRL_STATE_ENABLED;
         if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
         {
@@ -2618,7 +2619,6 @@ void ImplWin::ImplDraw( bool bLayout )
             Window *pWin = GetParent();
 
             ImplControlValue aControlValue;
-            ControlState nState = CTRL_STATE_ENABLED;
             if ( !pWin->IsEnabled() )
             nState &= ~CTRL_STATE_ENABLED;
             if ( pWin->HasFocus() )
@@ -2668,7 +2668,11 @@ void ImplWin::ImplDraw( bool bLayout )
             }
             else
             {
-                Color aColor = rStyleSettings.GetFieldTextColor();
+                Color aColor;
+                if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
+                    aColor = rStyleSettings.GetFieldRolloverTextColor();
+                else
+                    aColor = rStyleSettings.GetFieldTextColor();
                 if( IsControlForeground() )
                     aColor = GetControlForeground();
                 SetTextColor( aColor );
@@ -2999,6 +3003,13 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         Point aPos = GetParent()->GetPosPixel();
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aSz );
+
+        // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
+        // where the document is unmirrored
+        // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
+        if( GetParent()->GetParent()->ImplHasMirroredGraphics() && !GetParent()->GetParent()->IsRTLEnabled() )
+            GetParent()->GetParent()->ImplReMirror( aRect );
+
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
