@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:06:43 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1553,8 +1553,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
     }
     mnLevel = nLevel;
-    if( mnLevel <= 1 )
-        return;
 
     // merge the fallback levels
     long nXPos = 0;
@@ -1562,7 +1560,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     int nActiveCharPos = nCharPos[0];
-    while( nValid[0] )
+    while( nValid[0] && (nLevel > 1))
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
@@ -1645,7 +1643,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( aMultiArgs.mpDXArray )
         {
             // the run advance is the width from the first char
-        // in the run to the first char in the next run
+            // in the run to the first char in the next run
             nRunAdvance = 0;
             int nRelPos = nCharPos[0] - mnMinCharPos;
             if( nRelPos > 0 )
@@ -1659,7 +1657,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nRunAdvance *= mpLayouts[n]->GetUnitsPerPixel();
         }
 
-    // adjust advance width from fallback font units to base units
+        // adjust advance width from fallback font units to base units
         if( n > 0 )
             nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
 
