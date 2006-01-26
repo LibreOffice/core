@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kz $ $Date: 2005-01-18 13:27:23 $
-#*    $Revision: 1.14 $
+#*    last change   $Author: hr $ $Date: 2006-01-26 17:39:56 $
+#*    $Revision: 1.15 $
 #*
 #*    $Logfile: $
 #*
@@ -32,6 +32,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Type.hxx"
 
+#include "test/testtools/bridgetest/BadConstructorArguments.hpp"
 #include "test/testtools/bridgetest/TestPolyStruct.hpp"
 #include "test/testtools/bridgetest/XBridgeTest.hpp"
 #include "test/testtools/bridgetest/XBridgeTest2.hpp"
@@ -403,7 +404,9 @@ void MyClass::release() throw ()
 }
 
 //==================================================================================================
-static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
+static sal_Bool performTest(
+    const Reference<XComponentContext> & xContext,
+    const Reference<XBridgeTest > & xLBT )
 {
     check( xLBT.is(), "### no test interface!" );
     sal_Bool bRet = sal_True;
@@ -890,6 +893,14 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         Sequence<TestElement> seqStructRet = xBT2->setSequenceStruct(arStruct);
         bRet = check( seqStructRet == arStruct, "sequence test") && bRet;
     }
+    // Issue #i60341# shows that the most interesting case is were Java calls
+    // the constructors; however, since this client is currently not available
+    // in Java, while the server is, the logic is reversed here:
+    try {
+        xBT2->testConstructorsService(xContext);
+    } catch (BadConstructorArguments &) {
+        bRet = false;
+    }
     }
     return bRet;
 }
@@ -1141,7 +1152,8 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 
         Reference<XBridgeTest > xLBT;
         bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
-        bRet = check( performTest( xLBT ), "standard test" ) && bRet;
+        bRet = check( performTest( m_xContext, xLBT ), "standard test" )
+            && bRet;
         bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
         bRet = check( raiseOnewayException( xLBT ),
                       "oneway exception test" ) && bRet;
