@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:26:20 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -124,7 +125,7 @@ import com.sun.star.wizards.web.data.CGStyle;
  *
  */
 
-public abstract class WWD_Startup extends WWD_General implements XItemListener{
+public abstract class WWD_Startup extends WWD_General{
 
     SimpleDataAware sda = null;
     /**
@@ -543,12 +544,20 @@ public abstract class WWD_Startup extends WWD_General implements XItemListener{
     }
 
 
-    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
-        sda.updateData();
-        //TODO xf uncomment
-        //refresh.eventPerformed(ie);
-    }
+    public class SimpleDataawareUpdater implements XItemListener{
+        /* (non-Javadoc)
+         * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
+         */
+        public void disposing(EventObject arg0) {
+            // TODO Auto-generated method stub
+        }
 
+        public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
+            sda.updateData();
+            //TODO xf uncomment
+            //refresh.eventPerformed(ie);
+        }
+    }
 
     /**
      * attaches to each ui-data-control (like checkbox, groupbox or
@@ -579,7 +588,7 @@ public abstract class WWD_Startup extends WWD_General implements XItemListener{
         //page 3 : Layout
         Object design = settings.cp_DefaultSession.cp_Design;
         sda = new SimpleDataAware(design, new DataAware.PropertyValue("Layout",design), ilLayouts, new DataAware.PropertyValue("Selected",ilLayouts));
-        ilLayouts.addItemListener(this);
+        ilLayouts.addItemListener(new SimpleDataawareUpdater());
         designAware.add(sda);
 
         //page 4 : layout 2
