@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:39:52 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3423,7 +3423,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highl
     }
 
     if( !bNativeOk )
-        pThis->DrawSelectionBackground( rRect, highlight, bChecked, TRUE, bIsWindow );
+        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, TRUE, bIsWindow );
 }
 
 void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLayout )
