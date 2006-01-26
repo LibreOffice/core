@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,7 +648,11 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
         }
     }
     else
+    {
         err = GetLastError();
+        // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
+        DeleteBitmap( hBmpBitmap );
+    }
 
     return pSalBitmap;
 }
