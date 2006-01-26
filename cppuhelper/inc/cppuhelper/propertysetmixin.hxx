@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetmixin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:16:39 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ template< typename T > class PropertySetMixin;
    &ldquo;<code>PropertySetMixin::Implements</code>&rdquo; instead of
    &ldquo;<code>PropertySetMixinImpl::Implements</code>&rdquo;).
 
-   @since #i51720#
+   @since UDK 3.2.1
 */
 class PropertySetMixinImpl:
     public com::sun::star::beans::XPropertySet,
@@ -455,7 +455,7 @@ private:
    @descr No specializations of this class template should be added by client
    code.
 
-   @since #i51720#
+   @since UDK 3.2.1
 */
 template< typename T > class PropertySetMixin: public PropertySetMixinImpl {
 protected:
