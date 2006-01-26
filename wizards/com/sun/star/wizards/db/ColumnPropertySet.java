@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnPropertySet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:22:53 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.TypeInspector;
@@ -61,6 +62,7 @@ public class ColumnPropertySet {
     public void assignPropertyValues(PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties){
         try {
             nType = ((Integer) Properties.getPropertyValue(_aNewColPropertyValues, "Type")).intValue();
+            nType = oTypeInspector.convertDataType(nType);
             if (Properties.hasPropertyValue(_aNewColPropertyValues, "TypeName"))
                 sTypeName = (String) Properties.getPropertyValue(_aNewColPropertyValues, "TypeName");
             setType(nType, sTypeName);
@@ -73,6 +75,8 @@ public class ColumnPropertySet {
             }
             if (_bsetDefaultProperties)
                 assignPropertyValue("IsNullable", new Integer(oTypeInspector.isNullable(xPropertySet)));
+            if ((getType() == DataType.VARCHAR) && (((Integer) xPropertySet.getPropertyValue("Precision")).intValue() == 0))
+                xPropertySet.setPropertyValue("Precision", new Integer(50));
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -83,6 +87,7 @@ public class ColumnPropertySet {
     try {
         Property[] aNewColProperties = _xNewPropertySet.getPropertySetInfo().getProperties();
         nType = ((Integer)_xNewPropertySet.getPropertyValue("Type")).intValue();
+        nType = oTypeInspector.convertDataType(nType);
         sTypeName = (String) _xNewPropertySet.getPropertyValue("TypeName");
         setType(nType, sTypeName);
         for (int i = 0; i < aNewColProperties.length; i++){
@@ -94,8 +99,20 @@ public class ColumnPropertySet {
                 assignPropertyValue(sPropName, oColValue);
             }
         }
+        if ((getType() == DataType.VARCHAR) && (((Integer) xPropertySet.getPropertyValue("Precision")).intValue() == 0))
+            xPropertySet.setPropertyValue("Precision", new Integer(50));
+
     } catch (Exception e) {
         e.printStackTrace(System.out);
+    }}
+
+
+    private int getPrecision(){
+    try{
+        return ((Integer) xPropertySet.getPropertyValue("Precision")).intValue();
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return 0;
     }}
 
 
