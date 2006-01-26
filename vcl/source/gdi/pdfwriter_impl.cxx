@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:53:00 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,12 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <algorithm>
 
 #include <pdfwriter_impl.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -59,7 +63,6 @@
 
 #include "implncvt.hxx"
 
-#include <algorithm>
 
 using namespace vcl;
 using namespace rtl;
@@ -231,6 +234,24 @@ void doTestCode()
 
     aWriter.EndStructureElement();
     aWriter.EndStructureElement();
+
+    LineInfo aLI( LINE_DASH, 3 );
+    aLI.SetDashCount( 2 );
+    aLI.SetDashLen( 50 );
+    aLI.SetDotCount( 2 );
+    aLI.SetDotLen( 25 );
+    aLI.SetDistance( 15 );
+    Point aLIPoints[] = { Point( 4000, 10000 ),
+                          Point( 8000, 12000 ),
+                          Point( 3000, 19000 ) };
+    Polygon aLIPoly( 3, aLIPoints );
+    aWriter.SetLineColor( Color( COL_BLUE ) );
+    aWriter.SetFillColor();
+    aWriter.DrawPolyLine( aLIPoly, aLI );
+
+    aLI.SetDashCount( 4 );
+    aLIPoly.Move( 1000, 1000 );
+    aWriter.DrawPolyLine( aLIPoly, aLI );
 
     aWriter.NewPage();
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -1107,24 +1128,39 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
     appendDouble( fLength, rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
+bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
 {
+    bool bRet = true;
     if( rInfo.GetStyle() == LINE_DASH )
     {
         rBuffer.append( "[ " );
-        for( int n = 0; n < rInfo.GetDashCount(); n++ )
+        if( rInfo.GetDashLen() == rInfo.GetDotLen() ) // degraded case
         {
             appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
             rBuffer.append( ' ' );
             appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
             rBuffer.append( ' ' );
         }
-        for( int m = 0; m < rInfo.GetDotCount(); m++ )
+        else
         {
-            appendMappedLength( (sal_Int32)rInfo.GetDotLen(), rBuffer );
-            rBuffer.append( ' ' );
-            appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
-            rBuffer.append( ' ' );
+            // check for implementation limits of dash array
+            // in PDF reader apps (e.g. acroread)
+            if( 2*(rInfo.GetDashCount() + rInfo.GetDotCount()) > 10 )
+                bRet = false;
+            for( int n = 0; n < rInfo.GetDashCount(); n++ )
+            {
+                appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
+                rBuffer.append( ' ' );
+                appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
+                rBuffer.append( ' ' );
+            }
+            for( int m = 0; m < rInfo.GetDotCount(); m++ )
+            {
+                appendMappedLength( (sal_Int32)rInfo.GetDotLen(), rBuffer );
+                rBuffer.append( ' ' );
+                appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
+                rBuffer.append( ' ' );
+            }
         }
         rBuffer.append( "] 0 d\r\n" );
     }
@@ -1135,6 +1171,7 @@ void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
     }
     else if( rInfo.GetWidth() == 0 )
         rBuffer.append( "0 w\r\n" );
+    return bRet;
 }
 
 void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer ) const
@@ -5700,13 +5737,23 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     OStringBuffer aLine;
 
     aLine.append( "q " );
-    m_aPages.back().appendLineInfo( rInfo, aLine );
-    m_aPages.back().appendPoint( rStart, aLine );
-    aLine.append( " m " );
-    m_aPages.back().appendPoint( rStop, aLine );
-    aLine.append( " l S Q\r\n" );
+    if( m_aPages.back().appendLineInfo( rInfo, aLine ) )
+    {
+        m_aPages.back().appendPoint( rStart, aLine );
+        aLine.append( " m " );
+        m_aPages.back().appendPoint( rStop, aLine );
+        aLine.append( " l S Q\r\n" );
 
-    writeBuffer( aLine.getStr(), aLine.getLength() );
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+    }
+    else
+    {
+        PDFWriter::ExtLineInfo aInfo;
+        convertLineInfoToExtLineInfo( rInfo, aInfo );
+        Point aPolyPoints[2] = { rStart, rStop };
+        Polygon aPoly( 2, aPolyPoints );
+        drawPolyLine( aPoly, aInfo );
+    }
 }
 
 void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth )
@@ -6648,10 +6695,45 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
 
     OStringBuffer aLine;
     aLine.append( "q " );
-    m_aPages.back().appendLineInfo( rInfo,aLine );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
-    drawPolyLine( rPoly );
-    writeBuffer( "Q\r\n", 3 );
+    if( m_aPages.back().appendLineInfo( rInfo, aLine ) )
+    {
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+        drawPolyLine( rPoly );
+        writeBuffer( "Q\r\n", 3 );
+    }
+    else
+    {
+        PDFWriter::ExtLineInfo aInfo;
+        convertLineInfoToExtLineInfo( rInfo, aInfo );
+        drawPolyLine( rPoly, aInfo );
+    }
+}
+
+void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut )
+{
+    DBG_ASSERT( rIn.GetStyle() == LINE_DASH, "invalid conversion" );
+    rOut.m_fLineWidth           = rIn.GetWidth();
+    rOut.m_fTransparency        = 0.0;
+    rOut.m_eCap                 = PDFWriter::capButt;
+    rOut.m_eJoin                = PDFWriter::joinMiter;
+    rOut.m_fMiterLimit          = 10;
+    rOut.m_aDashArray.clear();
+
+    int nDashes     = rIn.GetDashCount();
+    int nDashLen    = rIn.GetDashLen();
+    int nDistance   = rIn.GetDistance();
+    for( int n  = 0; n < nDashes; n++ )
+    {
+        rOut.m_aDashArray.push_back( nDashLen );
+        rOut.m_aDashArray.push_back( nDistance );
+    }
+    int nDots       = rIn.GetDotCount();
+    int nDotLen     = rIn.GetDotLen();
+    for( int n  = 0; n < nDots; n++ )
+    {
+        rOut.m_aDashArray.push_back( nDotLen );
+        rOut.m_aDashArray.push_back( nDistance );
+    }
 }
 
 void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo )
@@ -6673,38 +6755,65 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
     aLine.append( "q " );
     m_aPages.back().appendMappedLength( rInfo.m_fLineWidth, aLine );
     aLine.append( " w" );
-    switch( rInfo.m_eCap )
+    if( rInfo.m_aDashArray.size() < 10 ) // implmentation limit of acrobat reader
     {
-        default:
-        case PDFWriter::capButt:   aLine.append( " 0 J" );break;
-        case PDFWriter::capRound:  aLine.append( " 1 J" );break;
-        case PDFWriter::capSquare: aLine.append( " 2 J" );break;
-    }
-    switch( rInfo.m_eJoin )
-    {
-        default:
-        case PDFWriter::joinMiter:
-        aLine.append( " 0 j " );
-        m_aPages.back().appendMappedLength( rInfo.m_fMiterLimit, aLine );
-        aLine.append( " M" );
-        break;
-        case PDFWriter::joinRound:  aLine.append( " 1 j" );break;
-        case PDFWriter::joinBevel:  aLine.append( " 2 j" );break;
-    }
-    if( rInfo.m_aDashArray.size() > 0 )
-    {
-        aLine.append( " [ " );
-        for( std::vector<double>::const_iterator it = rInfo.m_aDashArray.begin();
-             it != rInfo.m_aDashArray.end(); ++it )
+        switch( rInfo.m_eCap )
         {
-            m_aPages.back().appendMappedLength( *it, aLine );
-            aLine.append( ' ' );
+            default:
+            case PDFWriter::capButt:   aLine.append( " 0 J" );break;
+            case PDFWriter::capRound:  aLine.append( " 1 J" );break;
+            case PDFWriter::capSquare: aLine.append( " 2 J" );break;
         }
-        aLine.append( "] 0 d" );
+        switch( rInfo.m_eJoin )
+        {
+            default:
+            case PDFWriter::joinMiter:
+            aLine.append( " 0 j " );
+            m_aPages.back().appendMappedLength( rInfo.m_fMiterLimit, aLine );
+            aLine.append( " M" );
+            break;
+            case PDFWriter::joinRound:  aLine.append( " 1 j" );break;
+            case PDFWriter::joinBevel:  aLine.append( " 2 j" );break;
+        }
+        if( rInfo.m_aDashArray.size() > 0 )
+        {
+            aLine.append( " [ " );
+            for( std::vector<double>::const_iterator it = rInfo.m_aDashArray.begin();
+                 it != rInfo.m_aDashArray.end(); ++it )
+            {
+                m_aPages.back().appendMappedLength( *it, aLine );
+                aLine.append( ' ' );
+            }
+            aLine.append( "] 0 d" );
+        }
+        aLine.append( "\r\n" );
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+        drawPolyLine( rPoly );
     }
-    aLine.append( "\r\n" );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
-    drawPolyLine( rPoly );
+    else
+    {
+        basegfx::B2DPolygon aPoly( rPoly.getB2DPolygon() );
+        basegfx::B2DPolyPolygon aPolyPoly( basegfx::tools::applyLineDashing( aPoly, rInfo.m_aDashArray ) );
+        sal_uInt32 nPolygons = aPolyPoly.count();
+        for( sal_uInt32 nPoly = 0; nPoly < nPolygons; nPoly++ )
+        {
+            aLine.append( (nPoly != 0 && (nPoly & 7) == 0) ? "\r\n" : " " );
+            aPoly = aPolyPoly.getB2DPolygon( nPoly );
+            DBG_ASSERT( aPoly.count() != 2, "erroneous sub polygon" );
+            basegfx::B2DPoint aStart = aPoly.getB2DPoint( 0 );
+            basegfx::B2DPoint aStop  = aPoly.getB2DPoint( 1 );
+            m_aPages.back().appendPoint( Point( FRound(aStart.getX()),
+                                                FRound(aStart.getY()) ),
+                                         aLine );
+            aLine.append( " m " );
+            m_aPages.back().appendPoint( Point( FRound(aStop.getX()),
+                                                FRound(aStop.getY()) ),
+                                         aLine );
+            aLine.append( " l" );
+        }
+        aLine.append( " S " );
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+    }
     writeBuffer( "Q\r\n", 3 );
 
     if( rInfo.m_fTransparency != 0.0 )
@@ -7848,6 +7957,12 @@ void PDFWriterImpl::updateGraphicsState()
     {
         rNewState.m_nUpdateFlags &= ~GraphicsState::updateLayoutMode;
         getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
+    }
+
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateDigitLanguage) )
+    {
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateDigitLanguage;
+        getReferenceDevice()->SetDigitLanguage( rNewState.m_aDigitLanguage );
     }
 
     if( (rNewState.m_nUpdateFlags & GraphicsState::updateLineColor) )
