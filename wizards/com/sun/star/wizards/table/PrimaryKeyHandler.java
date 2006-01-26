@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrimaryKeyHandler.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:40:49 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 17:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
             if (benableSeveralPrimekeyControls)
                 CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, (curPrimaryKeySelection.getSelectedFieldNames().length > 0));
             else if (benableSinglePrimekeyControls)
-                CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, lstSinglePrimeKey.getSelectedItemPos() != -1);
+                CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, UnoDialog.isListBoxSelected(lstSinglePrimeKey)); //.getSelectedItemPos() != -1);
             else if (optAddAutomatically.getState())
                 CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, true);
         }
