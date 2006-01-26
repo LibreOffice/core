@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:59:50 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,19 +233,6 @@ struct W1_FIB
     // SVBT16 fComplex :1;//        0004 when 1, file is in complex, fast-saved format.
     BOOL fComplexGet() { return ((fFlagsGet() >> 2) & 1); }
 };
-#if OSL_DEBUG_LEVEL > 1
-#define WW2B || ((W1_FIB*)pHeader)->wIdentGet() == 0xA5DB &&  \
-                ((W1_FIB*)pHeader)->nFibGet() == 0x2D
-#else
-#define WW2B
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-#define WW3B || ((W1_FIB*)pHeader)->wIdentGet() == 0xA5DC &&  \
-                ((W1_FIB*)pHeader)->nFibGet() == 0x65
-#else
-#define WW3B
-#endif
 
 const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     const String &rFileName, const String& rUserData) const
@@ -277,15 +264,17 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     }
     else if( sWW5 == pName )
     {
-        bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA5DC
-                 && ((W1_FIB*)pHeader)->nFibGet() == 0x65 )
-                 /*&& ((W1_FIB*)pHeader)->fComplexGet() == 0*/);
+        W1_FIB *pW1Header = (W1_FIB*)pHeader;
+        if (pW1Header->wIdentGet() == 0xA5DC && pW1Header->nFibGet() == 0x65)
+            bRet = true; /*WW5*/
+        else if (pW1Header->wIdentGet() == 0xA5DB && pW1Header->nFibGet() == 0x2D)
+            bRet = true; /*WW2*/
     }
     else if( sWW1 == pName )
     {
         bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA59C
-                 && ((W1_FIB*)pHeader)->nFibGet() == 0x21
-                 WW2B ) && ((W1_FIB*)pHeader)->fComplexGet() == 0);
+                 && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
+                && ((W1_FIB*)pHeader)->fComplexGet() == 0);
     }
     else if( sSwDos == pName )
     {
