@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:05 $
+ *  last change: $Author: hr $ $Date: 2006-01-26 18:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,14 +255,23 @@ friend class SwWW8ImplReader;
     bool bFCTLSizeChanged;  // For Simulating Default-CTL FontSize
     bool bWidowsChanged;    // For Simulating Default-Widows / Orphans
 
-    void ImportSprms(long nPosFc, short nLen, bool bPap);
+    void ImportSprms(sal_Size nPosFc, short nLen, bool bPap);
+    void ImportSprms(BYTE *pSprms, short nLen, bool bPap);
     void ImportGrupx(short nLen, bool bPara, bool bOdd);
     short ImportUPX(short nLen, bool bPAP, bool bOdd);
 
     void Set1StyleDefaults();
     void Import1Style(USHORT nNr);
     void RecursiveReg(USHORT nNr);
+
+    void ImportStyles();
+
+    void ImportNewFormatStyles();
     void ScanStyles();
+    void ImportOldFormatStyles();
+
+    bool PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle);
+    void PostStyle(SwWW8StyInf &rSI, bool bOldNoImp);
 
     //No copying
     WW8RStyle(const WW8RStyle&);
