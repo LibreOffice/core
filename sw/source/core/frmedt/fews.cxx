@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:18:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1015,13 +1015,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // OD 12.11.2003 #i22341# - adjust vertical 'virtual' anchor position
             // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
             // character and vertical aligned at character or top of line
-            if ( _nAnchorId == FLY_AUTO_CNTNT &&
+            // --> OD 2005-12-29 #125800#
+            // <pFrm>, which is the anchor frame or the proposed anchor frame,
+            // doesn't have to be a text frame (e.g. edit a to-page anchored
+            // fly frame). Thus, assure this.
+            const SwTxtFrm* pTxtFrm( dynamic_cast<const SwTxtFrm*>(pFrm) );
+            if ( pTxtFrm &&
+                 _nAnchorId == FLY_AUTO_CNTNT &&
                  ( _eVertRelOrient == REL_CHAR ||
                    _eVertRelOrient == REL_VERT_LINE ) )
             {
-                ASSERT( pFrm->ISA(SwTxtFrm),
-                        "<SwFEShell::CalcBoundRect(..)> - wrong anchor frame." )
-                const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pFrm);
                 SwTwips nTop = 0L;
                 if ( _eVertRelOrient == REL_CHAR )
                 {
@@ -1064,12 +1067,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // --> OD 2004-10-05 #i26945# - adjust horizontal 'virtual' anchor
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
-            if ( _nAnchorId == FLY_AUTO_CNTNT &&
+            if ( pTxtFrm &&
+                 _nAnchorId == FLY_AUTO_CNTNT &&
                  _eHoriRelOrient == REL_CHAR )
             {
-                ASSERT( pFrm->ISA(SwTxtFrm),
-                        "<SwFEShell::CalcBoundRect(..)> - wrong anchor frame." )
-                const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pFrm);
                 SwTwips nLeft = 0L;
                 SwRect aCharRect;
                 if ( _pToCharCntntPos )
@@ -1287,9 +1288,33 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
             return bVert;
 
         SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+        // --> OD 2006-01-06 #123831# - make code robust:
+        if ( !pObj )
+        {
+            ASSERT( false,
+                    "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
+            return bVert;
+        }
+        // <--
         // OD 2004-03-29 #i26791#
         SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
+        // --> OD 2006-01-06 #123831# - make code robust:
+        if ( !pContact )
+        {
+            ASSERT( false,
+                    "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
+            return bVert;
+        }
+        // <--
         const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
+        // --> OD 2006-01-06 #123831# - make code robust:
+        if ( !pRef )
+        {
+            ASSERT( false,
+                    "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
+            return bVert;
+        }
+        // <--
 
         if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
