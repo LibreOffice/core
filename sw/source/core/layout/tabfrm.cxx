@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:48:15 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,10 +493,16 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
             SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
             while ( pTmpSourceRow )
             {
-                if ( pTmpSourceRow->IsFollowFlowRow() )
+                // --> FME 2006-01-10 #125926# Achtung! It is possible,
+                // that pTmpSourceRow->IsFollowFlowRow() but pTmpDestRow
+                // cannot be found. In this case, we have to move the complete
+                // row.
+                SwRowFrm* pTmpDestRow = (SwRowFrm*)pCurrDestCell->Lower();
+                // <--
+
+                if ( pTmpSourceRow->IsFollowFlowRow() && pTmpDestRow )
                 {
                     // move content from follow flow row to pTmpDestRow:
-                    SwRowFrm* pTmpDestRow = (SwRowFrm*)pCurrDestCell->Lower();
                     while ( pTmpDestRow->GetNext() )
                         pTmpDestRow = (SwRowFrm*)pTmpDestRow->GetNext();
 
@@ -3408,8 +3414,10 @@ void SwTabFrm::Cut()
     {
         ASSERT( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
         SwSectionFrm *pSct = 0;
-        if( !pUp->Lower() && pUp->IsInSct() &&
-            !(pSct = pUp->FindSctFrm())->ContainsCntnt() )
+        // --> OD 2006-01-04 #126020# - adjust check for empty section
+        if ( !pUp->Lower() && pUp->IsInSct() &&
+             !(pSct = pUp->FindSctFrm())->ContainsAny() )
+        // <--
         {
             if ( pUp->GetUpper() )
             {
