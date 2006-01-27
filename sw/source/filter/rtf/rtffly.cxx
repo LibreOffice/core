@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:49:07 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,14 +418,18 @@ void SwRTFParser::SetFlysInDoc()
                     if (!pNd->IsTableNode() && (pNd = pNd->FindTableNode()))
                     {
                         const SwNode* pTblBxNd;
+
                         // Ende der Tabelle ist hinter dieser Box ??
                         if( pNd->EndOfSectionIndex() == nSectEnd )
                             aRg.aEnd = nSectEnd+1;
                         // is the end in the first box of the table, then
                         // move before the table (Bug 67663)
+                        // but the range must not become emtpy, i.e. aStart==aEnd
+                        // because otherwise we will get a crash (126506) later on
                         else if( 0 != ( pTblBxNd = aRg.aEnd.GetNode().
                                                 FindTableBoxStartNode()) &&
-                                 pTblBxNd->GetIndex() - 1 == pNd->GetIndex())
+                                 pTblBxNd->GetIndex() - 1 == pNd->GetIndex() &&
+                                 &aRg.aStart.GetNode() != pNd )
                             aRg.aEnd = *pNd;
                         else
                         {
