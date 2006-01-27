@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:40:08 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 15:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& r
 
 FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
 
+FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
 // ***********************************************************************
 // Diverse Exportfilter
 // ***********************************************************************
