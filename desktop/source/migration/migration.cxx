@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:37:27 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,11 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/backend/XLayer.hpp>
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 
 using namespace rtl;
 using namespace osl;
@@ -130,7 +132,7 @@ OUString MigrationImpl::getOldVersionName()
 
 sal_Bool MigrationImpl::checkMigration()
 {
-    if (m_aInfo.userdata.getLength() > 0)
+    if (m_aInfo.userdata.getLength() > 0 && ! checkMigrationCompleted())
         return sal_True;
     else
         return sal_False;
@@ -153,22 +155,32 @@ MigrationImpl::~MigrationImpl()
 
 sal_Bool MigrationImpl::doMigration()
 {
-    if (sal_True /*checkState()*/)
+    sal_Bool result = sal_False;
+    try{
+        copyFiles();
+
+        // execute the migration items from Setup.xcu
+        // and refresh the cache
+        copyConfig();
+        refresh();
+
+        // execute custom migration services from Setup.xcu
+        // and refresh the cache
+        runServices();
+        refresh();
+
+
+        result = sal_True;
+    } catch (...)
     {
-        try{
-            copyFiles();
-            copyConfig();
-            runServices();
-            refresh();
-            return sal_True;
-        } catch (...)
-        {
-            OString aMsg("An unexpected exception was thrown during migration");
-            aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
-            aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
-        }
+        OString aMsg("An unexpected exception was thrown during migration");
+        aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
+        aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
+
+    // prevent running the migration multiple times
+    setMigrationCompleted();
     return sal_False;
 }
 
@@ -182,6 +194,32 @@ void MigrationImpl::refresh()
         OSL_ENSURE(sal_False, "could not get XRefresh interface from default config provider. No refresh done.");
 
 }
+
+void MigrationImpl::setMigrationCompleted()
+{
+    try {
+        Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), UNO_QUERY_THROW);
+        aPropertySet->setPropertyValue(OUString::createFromAscii("MigrationCompleted"), makeAny(sal_True));
+        Reference< XChangesBatch >(aPropertySet, UNO_QUERY_THROW)->commitChanges();
+    } catch (...) {
+        // fail silently
+    }
+}
+
+sal_Bool MigrationImpl::checkMigrationCompleted()
+{
+    sal_Bool bMigrationCompleted = sal_False;
+    try {
+        Reference< XPropertySet > aPropertySet(
+            getConfigAccess("org.openoffice.Setup/Office"), UNO_QUERY_THROW);
+        aPropertySet->getPropertyValue(
+            OUString::createFromAscii("MigrationCompleted")) >>= bMigrationCompleted;
+    } catch (Exception& e) {
+        // just return false...
+    }
+    return bMigrationCompleted;
+}
+
 
 migrations_vr MigrationImpl::readMigrationSteps()
 {
@@ -654,7 +692,14 @@ void MigrationImpl::runServices()
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
                 aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
                 OSL_ENSURE(sal_False, aMsg.getStr());
+            } catch (...)
+            {
+                OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
+                aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +
+                    "\nNo message available";
+                OSL_ENSURE(sal_False, aMsg.getStr());
             }
+
         }
         i_mig++;
     }
