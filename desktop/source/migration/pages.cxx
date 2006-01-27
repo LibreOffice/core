@@ -4,12 +4,12 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:38:14 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:21:25 $
  *
  *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ *  the terms of GNU Lesser General Public License Version .1.
  *
  *
  *    GNU Lesser General Public License Version 2.1
@@ -58,8 +58,22 @@
 #include <comphelper/configurationhelper.hxx>
 #endif
 
-namespace desktop
-{
+#ifndef _RTL_BOOTSTRAP_HXX_
+#include <rtl/bootstrap.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
+
 
 using namespace rtl;
 using namespace osl;
@@ -68,7 +82,11 @@ using namespace svt;
 using namespace com::sun::star::system;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::uno;
+
+namespace desktop {
 
 static void _setBold(FixedText& ft)
 {
@@ -117,10 +135,6 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
 
 }
 
-WelcomePage::OEMType WelcomePage::checkOEM()
-{
-    return OEM_NONE;
-}
 
 bool WelcomePage::checkEval()
 {
@@ -504,6 +518,99 @@ sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
     }
     return sal_True;
 }
+
+static char const OEM_PRELOAD_SECTION[] = "Bootstrap";
+static char const OEM_PRELOAD[]     = "Preload";
+static char const STR_TRUE[]        = "1";
+static char const STR_FALSE[]       = "0";
+
+static sal_Bool existsURL( OUString const& _sURL )
+{
+    using namespace osl;
+    DirectoryItem aDirItem;
+
+    if (_sURL.getLength() != 0)
+        return ( DirectoryItem::get( _sURL, aDirItem ) == DirectoryItem::E_None );
+
+    return sal_False;
+}
+
+
+// locate soffice.ini/.rc file
+static OUString locateIniFile()
+{
+    OUString aUserDataPath;
+    OUString aSofficeIniFileURL;
+
+    // Retrieve the default file URL for the soffice.ini/rc
+    rtl::Bootstrap().getIniName( aSofficeIniFileURL );
+
+    if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
+    {
+        const char CONFIG_DIR[] = "/config";
+
+        sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
+        if ( nIndex > 0 )
+        {
+            OUString        aUserSofficeIniFileURL;
+            OUStringBuffer  aBuffer( aUserDataPath );
+            aBuffer.appendAscii( CONFIG_DIR );
+            aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
+            aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
+
+            if ( existsURL( aUserSofficeIniFileURL ))
+                return aUserSofficeIniFileURL;
+        }
+    }
+    // Fallback try to use the soffice.ini/rc from program folder
+    return aSofficeIniFileURL;
+}
+
+// check whether the OEMPreload flag was set in soffice.ini/.rc
+static sal_Int32 checkOEMPreloadFlag()
+{
+    OUString aSofficeIniFileURL;
+    aSofficeIniFileURL = locateIniFile();
+    Config aConfig(aSofficeIniFileURL);
+    aConfig.SetGroup( OEM_PRELOAD_SECTION );
+    ByteString sResult = aConfig.ReadKey( OEM_PRELOAD );
+    return sResult.ToInt32();
+    /*
+    if ( sResult == STR_TRUE )
+        return sal_True;
+    else
+        return sal_False;
+    */
+}
+
+static void disableOEMPreloadFlag()
+{
+    OUString aSofficeIniFileURL = locateIniFile();
+    if ( aSofficeIniFileURL.getLength() > 0 )
+    {
+        Config aConfig(aSofficeIniFileURL);
+        aConfig.SetGroup( OEM_PRELOAD_SECTION );
+        aConfig.WriteKey( OEM_PRELOAD, STR_FALSE );
+        aConfig.Flush();
+    }
+}
+
+WelcomePage::OEMType WelcomePage::checkOEM()
+{
+  sal_Int32 oemResult = checkOEMPreloadFlag();
+  switch (oemResult) {
+  case 1:
+    return OEM_NORMAL;
+    break;
+  case 2:
+    return OEM_EXTENDED;
+    break;
+  default:
+    return OEM_NONE;
+  }
+}
+
+
 
 } // namespace desktop
 
