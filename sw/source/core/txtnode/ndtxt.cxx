@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 19:59:20 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1688,11 +1688,14 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
                 while ( nI < rStr.Len() )
                 {
                     cChar = rStr.GetChar( nI++ );
-                    nTmpPos = static_cast<xub_StrLen>(pCheckIt->xCheck->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode ));
+                    const xub_StrLen nPrevPos = static_cast<xub_StrLen>(pCheckIt->xCheck->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode ));
 
                     // valid sequence or sequence could be corrected:
-                    if ( nTmpPos != aTmpText.getLength() )
+                    if ( nPrevPos != aTmpText.getLength() )
+                    {
                         bInputCorrected = true;
+                        nTmpPos = nPrevPos + 1;
+                    }
                 }
 
                 aText = aTmpText;
