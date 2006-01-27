@@ -28,6 +28,7 @@ T4_CALC = \
     calc_DIF \
     writer_web_HTML \
     calc_Lotus \
+    calc_QPro \
     calc_MS_Excel_40 \
     calc_MS_Excel_40_VorlageTemplate \
     calc_MS_Excel_5095 \
@@ -54,6 +55,7 @@ F4_CALC = \
     DIF \
     HTML__StarCalc_ \
     Lotus \
+        QPro \
     MS_Excel_4_0 \
     MS_Excel_4_0_Vorlage_Template \
     MS_Excel_5_0_95 \
