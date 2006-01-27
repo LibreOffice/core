@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:09:02 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 13:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1258,9 +1258,13 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
-    // announce X11 fonts
-    XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
-    pX11FontList->AnnounceFonts( pList );
+    static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
+    if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
+    {
+        // announce X11 fonts
+        XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
+        pX11FontList->AnnounceFonts( pList );
+    }
 
     // prepare the GlyphCache using psprint's font infos
     aX11GlyphPeer.SetDisplay( GetXDisplay(),
