@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:33:30 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1288,8 +1288,30 @@ void SwCntntFrm::MakeAll()
 
         //FixSize einstellen, die VarSize wird von Format() justiert.
         if ( !bValidSize )
-            (Frm().*fnRect->fnSetWidth)( (GetUpper()->
-                                         Prt().*fnRect->fnGetWidth)() );
+        {
+            // --> OD 2006-01-03 #125452#
+            // invalidate printing area flag, if the following conditions are hold:
+            // - current frame width is 0.
+            // - current printing area width is 0.
+            // - frame width is adjusted to a value greater than 0.
+            // - printing area flag is TRUE.
+            // Thus, it's assured that the printing area is adjusted, if the
+            // frame area width changes its width from 0 to something greater
+            // than 0.
+            // Note: A text frame can be in such a situation, if the format is
+            //       triggered by method call <SwCrsrShell::SetCrsr()> after
+            //       loading the document.
+            const SwTwips nNewFrmWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+            if ( bValidPrtArea && nNewFrmWidth > 0 &&
+                 (Frm().*fnRect->fnGetWidth)() == 0 &&
+                 (Prt().*fnRect->fnGetWidth)() == 0 )
+            {
+                bValidPrtArea = FALSE;
+            }
+
+            (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
+            // <--
+        }
         if ( !bValidPrtArea )
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
