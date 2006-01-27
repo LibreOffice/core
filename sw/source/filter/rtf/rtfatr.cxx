@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:26:52 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2095,8 +2095,12 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
                 for( USHORT nCellSpan = pCell->GetColSpan(), nCS = 1;
                         nCS < nCellSpan; ++nCS, ++nColCnt )
                 {
-                    pBoxArr[ nColCnt+1 ] = pBoxArr[ nColCnt ];
-                    pRowSpans[ nColCnt+1 ] = pRowSpans[ nColCnt ];
+                    ASSERT( nColCnt+1 < rCols.Count(), "More colspan than columns" );
+                    if( nColCnt+1 < rCols.Count() ) // robust against wrong colspans
+                    {
+                        pBoxArr[ nColCnt+1 ] = pBoxArr[ nColCnt ];
+                        pRowSpans[ nColCnt+1 ] = pRowSpans[ nColCnt ];
+                    }
                 }
             }
             if( 1 != pRowSpans[ nColCnt ] )
@@ -2105,6 +2109,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
 
         for( ; nColCnt < rCols.Count() && pRowSpans[ nColCnt ]; ++nColCnt )
             bFixRowHeight = TRUE;
+        nColCnt = rCols.Count(); // A wrong cellspan-value could cause a nColCnt > rCols.Count()
 
         // Start Tabellendefinition
         rWrt.Strm() << sRTF_TROWD << aTblAdjust.GetBuffer();
