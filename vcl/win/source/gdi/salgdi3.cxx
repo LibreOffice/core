@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 16:34:10 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 13:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2436,6 +2436,11 @@ const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont,
     rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TYPE1;
     WCHAR aFaceName[64];
     int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
+    // #i59854# strip eventual null byte
+    while( nFNLen > 0 && aFaceName[nFNLen-1] == 0 )
+        nFNLen--;
+    if( nFNLen == 0 )
+        *pDataLen = 0;
     rInfo.m_aPSName     = String( aFaceName, nFNLen );
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
