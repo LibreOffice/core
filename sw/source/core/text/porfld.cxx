@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:19:12 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,6 +421,14 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
+                // --> FME 2006-01-11 #i59759# Erase additional control
+                // characters from field string, otherwise we get stuck in
+                // a loop.
+                case CHAR_ZWSP :
+                case CHAR_ZWNBSP :
+        //        case CHAR_RLM :
+        //        case CHAR_LRM :
+                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
