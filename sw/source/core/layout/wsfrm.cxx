@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:20:40 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,15 +1147,18 @@ void SwCntntFrm::Cut()
     if ( pUp )
     {
         SwSectionFrm *pSct;
-        if ( !pUp->Lower() && ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() )
-            || ( pUp->IsInSct() &&
-                // -->  FME 2004-06-03 #i29438#
-                // We have to consider the case that the section may be "empty"
-                // except from a temporary empty table frame.
-                // This can happen due to the new cell split feature.
-                !pUp->IsCellFrm() &&
-                // <--
-                 !(pSct = pUp->FindSctFrm())->ContainsCntnt() ) ) )
+        if ( !pUp->Lower() &&
+             ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() ) ||
+               ( pUp->IsInSct() &&
+                 // -->  FME 2004-06-03 #i29438#
+                 // We have to consider the case that the section may be "empty"
+                 // except from a temporary empty table frame.
+                 // This can happen due to the new cell split feature.
+                 !pUp->IsCellFrm() &&
+                 // <--
+                 // --> OD 2006-01-04 #126020# - adjust check for empty section
+                 !(pSct = pUp->FindSctFrm())->ContainsAny() ) ) )
+                 // <--
         {
             if ( pUp->GetUpper() )
             {
