@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:22:01 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,12 +922,21 @@ void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
                 itr != aModuleList.end(); ++itr)
             {
                 //Check the cacheline has atleast one client reference
+
+
                 if (itr->second->clientReferences() > 0)
                 {
                     ComponentRequest aRequest(itr->first,i->first);
                     refreshComponent(aRequest);
+                } else
+                {
+                    // FIXME: otherwise dispose now
+                    // XXX: (lo) refresh all, preventing cache corruption.
+                    // An unused component should be purged from the cache
+                    // instead of being refreshed
+                    ComponentRequest aRequest(itr->first,i->first);
+                    refreshComponent(aRequest);
                 }
-                // FIXME: otherwise dispose now
             }
         }
     }
