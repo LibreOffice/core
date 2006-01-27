@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migration_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:37:59 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@ private:
     void copyConfig();
     void runServices();
     void refresh();
+
+    void setMigrationCompleted();
+    sal_Bool checkMigrationCompleted();
 
 public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
