@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:23:01 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:39:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,7 +602,7 @@ void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
 
     // prufe vor dem setzen des Formates, ob dieses ueberhaupt noch im
     // Dokument vorhanden ist. Wurde es schon geloescht, gibt es kein Undo !!
-    if( nNdWhich == pCntntNd->GetNodeType() )
+    if( pCntntNd && nNdWhich == pCntntNd->GetNodeType() )
     {
         if( ND_TEXTNODE == nNdWhich )
         {
@@ -926,18 +926,21 @@ void SwHstryResetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     ASSERT( pCntntNd, "wo ist mein CntntNode" );
 
-    const USHORT* pArr = aArr.GetData();
-    if( USHRT_MAX == nEnd && USHRT_MAX == nStart )
+    if (pCntntNd)
     {
-        // kein Bereich also Schnittstelle zum Content-Node
-        for( USHORT n = aArr.Count(); n; --n, ++pArr )
-            pCntntNd->ResetAttr( *pArr );
-    }
-    else
-    {
-        // Bereich: also Schnittstelle zum Text-Node
-        for( USHORT n = aArr.Count(); n; --n, ++pArr )
-            ((SwTxtNode*)pCntntNd)->Delete( *pArr, nStart, nEnd );
+        const USHORT* pArr = aArr.GetData();
+        if( USHRT_MAX == nEnd && USHRT_MAX == nStart )
+        {
+            // kein Bereich also Schnittstelle zum Content-Node
+            for( USHORT n = aArr.Count(); n; --n, ++pArr )
+                pCntntNd->ResetAttr( *pArr );
+        }
+        else
+        {
+            // Bereich: also Schnittstelle zum Text-Node
+            for( USHORT n = aArr.Count(); n; --n, ++pArr )
+                ((SwTxtNode*)pCntntNd)->Delete( *pArr, nStart, nEnd );
+        }
     }
 
     pDoc->DoUndo( bDoesUndo );
