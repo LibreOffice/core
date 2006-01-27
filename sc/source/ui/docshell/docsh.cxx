@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:09:34 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 15:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
 static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
 static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
 static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
+static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
 static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
 static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
@@ -1092,6 +1093,26 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SetError(eError);
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
+        }
+        else if (aFltName.EqualsAscii(pFilterQPro6))
+        {
+            ScColumn::bDoubleAlloc = TRUE;
+            FltError eError = ScImportQuattroPro( rMedium, &aDocument);
+            ScColumn::bDoubleAlloc = FALSE;
+            if (eError != eERR_OK)
+            {
+                if (!GetError())
+                    SetError( eError );
+                if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                    bRet = TRUE;
+            }
+            else
+                bRet = TRUE;
+            // TODO: Filter should set column widths. Not doing it here, it may
+            // result in very narrow or wide columns, depending on content.
+            // Setting row heights makes cells with font size attribution or
+            // wrapping enabled look nicer..
+            bSetRowHeights = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterRtf))
         {
