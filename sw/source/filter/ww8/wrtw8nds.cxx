@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:49:24 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2164,6 +2164,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nTotal = rCols.Count();
         for( nColCnt = 0, nBox = 0; nBox < nTotal; ++nColCnt )
         {
+            ASSERT( nColCnt < rCols.Count(), "Leaving table" );
             if( !pRowSpans[ nColCnt ] )
             {
                 // set new BoxPtr
@@ -2173,8 +2174,12 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 for( USHORT nCellSpan = pCell->GetColSpan(), nCS = 1;
                         nCS < nCellSpan; ++nCS, ++nColCnt )
                 {
-                    pBoxArr[ nColCnt+1 ] = pBoxArr[ nColCnt ];
-                    pRowSpans[ nColCnt+1 ] = pRowSpans[ nColCnt ];
+                    ASSERT( nColCnt+1 < rCols.Count(), "More colspan than columns" );
+                    if( nColCnt+1 < rCols.Count() ) // robust against wrong colspans
+                    {
+                        pBoxArr[ nColCnt+1 ] = pBoxArr[ nColCnt ];
+                        pRowSpans[ nColCnt+1 ] = pRowSpans[ nColCnt ];
+                    }
                 }
                 ++nRealColCnt;
             }
@@ -2191,6 +2196,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 ++nRealColCnt;
             bFixRowHeight = true;
         }
+        nColCnt = rCols.Count(); // A wrong cellspan-value could cause a nColCnt > rCols.Count()
 
         if (!bFixRowHeight)
         {
