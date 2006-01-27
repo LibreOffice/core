@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:11:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,10 +615,14 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     // Wenn durch das Cut&Paste ein leerer SectionFrm entstanden ist, sollte
     // dieser automatisch verschwinden.
     SwSectionFrm *pSct;
+    // --> OD 2006-01-04 #126020# - adjust check for empty section
     if ( pOldParent && !pOldParent->Lower() &&
          (pOldParent->IsInSct() &&
-          !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() ) )
+          !(pSct = pOldParent->FindSctFrm())->ContainsAny() ) )
+    // <--
+    {
             pSct->DelEmpty( FALSE );
+    }
 
     // In einem spaltigen Bereich rufen wir lieber kein Calc "von unten"
     if( !rThis.IsInSct() &&
@@ -2346,7 +2350,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             else
             {
                 SwSectionFrm* pSectFrm = pNewUpper->FindSctFrm();
-                if( pSectFrm && !pSectFrm->IsColLocked() && !pSectFrm->ContainsCntnt() )
+                // --> OD 2006-01-04 #126020# - adjust check for empty section
+                if ( pSectFrm && !pSectFrm->IsColLocked() && !pSectFrm->ContainsAny() )
+                // <--
                 {
                     pSectFrm->DelEmpty( TRUE );
                     delete pSectFrm;
