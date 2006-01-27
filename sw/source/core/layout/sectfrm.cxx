@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:15:44 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1400,7 +1400,9 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 if( pFrm->IsColumnFrm() && pFrm->GetNext() )
                 {
                     FormatWidthCols( *pAttr, nRemaining, MINLAY );
-                    while( HasFollow() && !GetFollow()->ContainsCntnt() )
+                    // --> OD 2006-01-04 #126020# - adjust check for empty section
+                    while( HasFollow() && !GetFollow()->ContainsAny() )
+                    // <--
                     {
                         SwFrm* pOld = GetFollow();
                         GetFollow()->DelEmpty( FALSE );
