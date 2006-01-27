@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:29:30 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,7 +1521,7 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions = new SvtPathOptions;
 //        SetSplashScreenProgress(40);
-        pLanguageOptions = new SvtLanguageOptions(sal_True);
+//        pLanguageOptions = new SvtLanguageOptions(sal_True);
 //        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
@@ -1565,6 +1565,9 @@ void Desktop::Main()
             }
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
+
+        // keep a language options instance...
+        pLanguageOptions = new SvtLanguageOptions(sal_True);
 
         if (xGlobalBroadcaster.is())
         {
