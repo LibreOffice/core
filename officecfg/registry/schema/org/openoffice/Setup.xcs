@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:53:44 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,7 +321,16 @@
 					<desc>is set to true, when the FirstStartWizard has been completed</desc>
 				</info>
 				<value>false</value>
-			</prop>						
+			</prop>
+			<prop oor:name="MigrationCompleted" oor:type="xs:boolean">
+				<info>
+					<author>LO</author>
+					<desc>This should be set to true, as soon as settings from
+                    nother version have been imported into this installation
+                    in order to prevent multiple migrations</desc>
+				</info>
+				<value>false</value>
+			</prop>						            
 			<set oor:name="Factories" oor:node-type="Factory">
 				<info>
 					<author>AS</author>
