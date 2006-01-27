@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:36:07 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,11 @@ namespace DOM
         OUString aData;
         if (m_aNodePtr != NULL)
         {
-            aData = OUString((const sal_Char*)m_aNodePtr->content, strlen((const sal_Char*)m_aNodePtr->content),  RTL_TEXTENCODING_UTF8);
+            OSL_ENSURE(m_aNodePtr->content, "character data node with NULL content, please inform lars.oppermann@sun.com!");
+            if (m_aNodePtr->content != NULL)
+            {
+                aData = OUString((const sal_Char*)m_aNodePtr->content, strlen((const sal_Char*)m_aNodePtr->content),  RTL_TEXTENCODING_UTF8);
+            }
         }
         return aData;
     }
@@ -233,3 +237,4 @@ namespace DOM
 
 
 } // namspace DOM
+
