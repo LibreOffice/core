@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 10:00:26 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "splash.hxx"
-
+#include <stdio.h>
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
 #endif
@@ -142,6 +142,7 @@ SplashScreen::~SplashScreen()
     Application::RemoveEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
     Hide();
+
 }
 
 void SAL_CALL SplashScreen::start(const OUString& aText, sal_Int32 nRange)
@@ -478,66 +479,3 @@ Sequence<OUString> SplashScreen::impl_getSupportedServiceNames()
 
 }
 
-#if 0
-// component management stuff...
-// ----------------------------------------------------------------------------
-extern "C"
-{
-using namespace desktop;
-
-void SAL_CALL
-component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **ppEnvironment)
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
-{
-    Reference< XMultiServiceFactory > xMan(reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
-    Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
-
-    // register service
-    ::rtl::OUString aTempStr;
-    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SplashScreen::impl_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    Reference< XRegistryKey > xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(SplashScreen::impl_getSupportedServiceNames()[0]);
-
-    return sal_True;
-}
-
-void * SAL_CALL
-component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *pRegistryKey)
-{
-    void* pReturn = NULL ;
-    if  ( pImplementationName && pServiceManager )
-    {
-        // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory > xFactory;
-        Reference< XMultiServiceFactory >  xServiceManager(
-            reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
-
-        if (desktop::SplashScreen::impl_getImplementationName().compareToAscii( pImplementationName ) == COMPARE_EQUAL )
-        {
-            xFactory = Reference< XSingleServiceFactory >(
-                cppu::createOneInstanceFactory(
-                    xServiceManager, SplashScreen::impl_getImplementationName(),
-                    SplashScreen::getInstance, SplashScreen::impl_getSupportedServiceNames()));
-        }
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-
-    // Return with result of this operation.
-    return pReturn ;
-}
-
-} // extern "C"
-#endif
