@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:31:25 $
+#   last change: $Author: hr $ $Date: 2006-01-27 15:52:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,7 @@ LIB4FILES=	\
     $(SLB)$/xcl97.lib \
     $(SLB)$/html.lib \
     $(SLB)$/lotus.lib \
+    $(SLB)$/qpro.lib\
     $(SLB)$/rtf.lib \
     $(SLB)$/xml.lib \
     $(SLB)$/accessibility.lib \
@@ -293,5 +294,6 @@ LIB8OBJFILES = \
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
 
 
