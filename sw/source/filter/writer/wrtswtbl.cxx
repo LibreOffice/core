@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:01:22 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     if( bUseLayoutHeights )
     {
         // Erstmal versuchen wir die Hoehe ueber das Layout zu bekommen
-        long nHeight = pLine->GetLineHeight();
+        long nHeight = pLine->GetTableLineHeight();
         if( nHeight > 0 )
             return nHeight;
 
@@ -471,7 +471,20 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
         if( nLine < nLines-1 || nParentLineHeight==0  )
         {
-            nRPos += GetLineHeight( pLine );
+            long nLineHeight = GetLineHeight( pLine );
+            nRPos += nLineHeight;
+            if( nParentLineHeight && nStartRPos + nParentLineHeight <= nRPos )
+            {
+                /* If you have corrupt line height information, e.g. breaking rows in complex table
+                layout, you may run into this robust code.
+                It's not allowed that subrows leaves their parentrow. If this would happen the line
+                height of subrow is reduced to a part of the remaining height */
+                ASSERT( FALSE, "Corrupt line height I" );
+                nRPos -= nLineHeight;
+                nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
+                nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
+                nRPos += nLineHeight;
+            }
             SwWriteTableRow *pRow = new SwWriteTableRow( nRPos, bUseLayoutHeights);
             USHORT nRow;
             if( aRows.Seek_Entry( pRow, &nRow ) )
@@ -587,7 +600,19 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         // Position der letzten ueberdeckten Zeile ermitteln
         long nOldRPos = nRPos;
         if( nLine < nLines-1 || nParentLineHeight==0 )
-            nRPos += GetLineHeight( pLine );
+        {
+            long nLineHeight = GetLineHeight( pLine );
+            nRPos += nLineHeight;
+            if( nParentLineHeight && nStartRPos + nParentLineHeight <= nRPos )
+            {
+                /* See comment in CollectTableRowCols */
+                ASSERT( FALSE, "Corrupt line height II" );
+                nRPos -= nLineHeight;
+                nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
+                nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
+                nRPos += nLineHeight;
+            }
+        }
         else
             nRPos = nStartRPos + nParentLineHeight;
 
@@ -596,6 +621,15 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
         BOOL bFound = aRows.Seek_Entry( &aRow, &nRow );
         ASSERT( bFound, "Wo ist die Zeile geblieben?" );
+
+        ASSERT( nOldRow <= nRow, "Don't look back!" );
+        if( nOldRow > nRow )
+        {
+            nOldRow = nRow;
+            if( nOldRow )
+                --nOldRow;
+        }
+
 
         SwWriteTableRow *pRow = aRows[nOldRow];
         SwWriteTableRow *pEndRow = aRows[nRow];
