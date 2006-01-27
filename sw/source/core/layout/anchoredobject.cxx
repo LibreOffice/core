@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:01:12 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,22 @@ const SwPageFrm* SwAnchoredObject::GetPageFrm() const
 
 void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
 {
-    mpPageFrm = _pNewPageFrm;
+    // --> OD 2006-01-02 #125977#
+    if ( mpPageFrm != _pNewPageFrm )
+    {
+        // clear member, which denotes the layout frame at which the vertical
+        // position is oriented at, if it doesn't fit to the new page frame.
+        if ( GetVertPosOrientFrm() &&
+             ( !_pNewPageFrm ||
+               _pNewPageFrm != GetVertPosOrientFrm()->FindPageFrm() ) )
+        {
+            ClearVertPosOrientFrm();
+        }
+
+        // assign new page frame
+        mpPageFrm = _pNewPageFrm;
+    }
+    // <--
 }
 
 // =============================================================================
