@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:18:09 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1253,21 +1253,96 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
 
     for( n = 0; n < aArr.Count(); ++n )
     {
-        // neuen Anker anlegen
         const _ZSortFly& rZSortFly = aArr[ n ];
+
+        // --> OD 2006-01-04 #i59964#
+        // correct determination of new anchor position
         SwFmtAnchor aAnchor( *rZSortFly.GetAnchor() );
-        SwPosition *pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
-        long nOffset = pNewPos->nNode.GetIndex() -
-                            rRg.aStart.GetIndex();
-        SwNodeIndex aIdx( rSttIdx, nOffset );
-        pNewPos->nNode = aIdx;
-        // die am Zeichen Flys wieder ans das vorgegebene Zeichen setzen
-        if( FLY_AUTO_CNTNT == aAnchor.GetAnchorId() &&
-            aIdx.GetNode().IsTxtNode() )
-            pNewPos->nContent.Assign( (SwTxtNode*)&aIdx.GetNode(),
-                                        pNewPos->nContent.GetIndex() );
+        SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
+        // for at-paragraph and at-character anchored objects the new anchor
+        // position can *not* be determined by the difference of the current
+        // anchor position to the start of the copied range, because not
+        // complete selected sections in the copied range aren't copied - see
+        // method <SwNodes::_CopyNodes(..)>.
+        // Thus, the new anchor position in the destination document is found
+        // by counting the text nodes.
+        if ( aAnchor.GetAnchorId() == FLY_AT_CNTNT ||
+             aAnchor.GetAnchorId() == FLY_AUTO_CNTNT )
+        {
+            // First, determine number of anchor text node in the copied range.
+            // Note: The anchor text node *have* to be inside the copied range.
+            ULONG nAnchorTxtNdNumInRange( 0L );
+            bool bAnchorTxtNdFound( false );
+            SwNodeIndex aIdx( rRg.aStart );
+            while ( !bAnchorTxtNdFound && aIdx <= rRg.aEnd )
+            {
+                if ( aIdx.GetNode().IsTxtNode() )
+                {
+                    ++nAnchorTxtNdNumInRange;
+                    bAnchorTxtNdFound = aAnchor.GetCntntAnchor()->nNode == aIdx;
+                }
+
+                ++aIdx;
+            }
+            if ( !bAnchorTxtNdFound )
+            {
+                // This case can *not* happen, but to be robust take the first
+                // text node in the destination document.
+                ASSERT( false,
+                        "<SwDoc::_CopyFlyInFly(..)> - anchor text node in copied range not found" );
+                nAnchorTxtNdNumInRange = 1;
+            }
+            // Second, search corresponding text node in destination document
+            // by counting forward from start insert position <rSttIdx> the
+            // determined number of text nodes.
+            aIdx = rSttIdx;
+            SwNodeIndex aAnchorNdIdx( rSttIdx );
+            const SwNode& aEndOfContentNd =
+                                    aIdx.GetNode().GetNodes().GetEndOfContent();
+            while ( nAnchorTxtNdNumInRange > 0 &&
+                    &(aIdx.GetNode()) != &aEndOfContentNd )
+            {
+                if ( aIdx.GetNode().IsTxtNode() )
+                {
+                    --nAnchorTxtNdNumInRange;
+                    aAnchorNdIdx = aIdx;
+                }
+
+                ++aIdx;
+            }
+            if ( !aAnchorNdIdx.GetNode().IsTxtNode() )
+            {
+                // This case can *not* happen, but to be robust take the first
+                // text node in the destination document.
+                ASSERT( false,
+                        "<SwDoc::_CopyFlyInFly(..)> - found anchor node index isn't a text node" );
+                aAnchorNdIdx = rSttIdx;
+                while ( !aAnchorNdIdx.GetNode().IsTxtNode() )
+                {
+                    ++aAnchorNdIdx;
+                }
+            }
+            // apply found anchor text node as new anchor position
+            pNewPos->nNode = aAnchorNdIdx;
+        }
         else
+        {
+            long nOffset = pNewPos->nNode.GetIndex() - rRg.aStart.GetIndex();
+            SwNodeIndex aIdx( rSttIdx, nOffset );
+            pNewPos->nNode = aIdx;
+        }
+        // <--
+        // die am Zeichen Flys wieder ans das vorgegebene Zeichen setzen
+        if ( FLY_AUTO_CNTNT == aAnchor.GetAnchorId() &&
+             pNewPos->nNode.GetNode().IsTxtNode() )
+        {
+            pNewPos->nContent.Assign( (SwTxtNode*)&pNewPos->nNode.GetNode(),
+                                        pNewPos->nContent.GetIndex() );
+        }
+        else
+        {
             pNewPos->nContent.Assign( 0, 0 );
+        }
 
         // ueberpruefe Rekursion: Inhalt in "seinen eigenen" Frame
         // kopieren. Dann nicht kopieren
