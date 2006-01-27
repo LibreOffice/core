@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:33:49 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 14:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1445,7 +1445,10 @@ void SwFlyAtCntFrm::MakeObjPos()
     // --> OD 2004-10-22 #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its
     // environment is already cleared.
-    if ( ClearedEnvironment() && HasClearedEnvironment() )
+    // --> OD 2006-01-02 #125977# - before checking for cleared environment
+    // check, if member <mpVertPosOrientFrm> is set.
+    if ( GetVertPosOrientFrm() &&
+         ClearedEnvironment() && HasClearedEnvironment() )
     {
         return;
     }
