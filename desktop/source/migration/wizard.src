@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:34:57 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 16:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ String STR_WELCOME_OEM_EXT
     Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\n"
     "Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. "
     "Please read these files carefully. You can also find detailed information on the Sun website \n\n"
-    "http://www.sun.com/&PRODUCTNAME.\n\nSupport:\n\nGet FREE software support valid for 60 days from "
+    "http://www.sun.com/%PRODUCTNAME.\n\nSupport:\n\nGet FREE software support valid for 60 days from "
     "date of purchase. To take advantage of this offer, visit the website below.\n\n"
     "http://www.sun.com/star/service\n\nClick 'Next' to continue.";
 };
@@ -229,7 +229,7 @@ TabPage TP_LICENSE
     };
     MultiLineEdit ML_LICENSE
     {
-        PosSize = MAP_APPFONT (MARGINLEFT+INDENT, MARGINTOP + 8*ROWHEIGHT, BODYWIDTH-INDENT , BODYHEIGHT - 8*ROWHEIGHT - 15-2*MARGINBOTTOM) ;
+        PosSize = MAP_APPFONT (MARGINLEFT+INDENT, MARGINTOP + 8*ROWHEIGHT, BODYWIDTH-INDENT , BODYHEIGHT - 8*ROWHEIGHT - 20-2*MARGINBOTTOM) ;
         Border = TRUE;
         VScroll = TRUE;
         ReadOnly = TRUE;
@@ -237,7 +237,7 @@ TabPage TP_LICENSE
     PushButton PB_LICENSE_DOWN
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-15 ) ;
+        Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-18 ) ;
         Size = MAP_APPFONT ( 50, 15 ) ;
         Text [ de ] = "Blätt~ern";
         Text [ en-US ] = "Scroll Do~wn";
