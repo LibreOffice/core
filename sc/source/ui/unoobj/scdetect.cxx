@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:09:17 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 15:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@ static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
 static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
 static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
 static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
+static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
 static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
 static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
@@ -602,6 +603,13 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             0x0004, 0x0000,                   // File Revision Subcode
                             M_ENDE };
 
+            const UINT16 pQPro[] =
+                               { 0x0000, 0x0000, 0x0002, 0x0000,
+                                 M_ALT(4), 0x0001, 0x0002, // WB1, WB2
+                                 0x0006, 0x0007,           // QPro 6/7 (?)
+                                 0x0010,
+                                 M_ENDE };
+
                         const UINT16 pDIF1[] =          // DIF mit CR-LF
                             {
                             'T', 'A', 'B', 'L', 'E',
@@ -637,7 +645,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pDIF2,
                             pSylk,
                             pLotusNew,
-                            pLotus2
+                            pLotus2,
+                            pQPro
                             };
                         const UINT16 nFilterCount = sizeof(ppFilterPatterns) / sizeof(ppFilterPatterns[0]);
 
@@ -653,7 +662,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pFilterDif,
                             pFilterSylk,
                             pFilterLotus,
-                            pFilterLotus
+                            pFilterLotus,
+                            pFilterQPro6
                             };
 
                         const UINT16 nByteMask = 0xFF;
