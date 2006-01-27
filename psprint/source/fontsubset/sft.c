@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:36:25 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 13:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1108,6 +1108,7 @@ static void GetNames(TrueTypeFont *t)
 
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int i, r;
+    sal_Bool bPSNameOK = sal_True;
 
     /* #129743# simple sanity check for name table entry count */
     if( nTableSize <= n * 12 + 6 )
@@ -1176,6 +1177,31 @@ static void GetNames(TrueTypeFont *t)
         t->subfamily = strdup("");
     }
 
+    /* #i60349# sanity check psname
+     * psname parctically has to be 7bit ascii and should not contains spaces
+     * there is a class of broken fonts which do not fullfill that at all, so let's try
+     * if the family name is 7bit ascii and take it instead if so
+     */
+    /* check psname */
+    for( i = 0; t->psname[i] != 0 && bPSNameOK; i++ )
+        if( t->psname[ i ] < 33 || (t->psname[ i ] & 0x80) )
+            bPSNameOK = sal_False;
+    if( bPSNameOK == sal_False )
+    {
+        sal_Bool bReplace = sal_True;
+        /* check if family is a suitable replacement */
+        if( t->ufamily && t->family )
+        {
+            for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
+                if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
+                    bReplace = sal_False;
+            if( bReplace )
+            {
+                free( t->psname );
+                t->psname = strdup( t->family );
+            }
+        }
+    }
 }
 
 enum cmapType {
