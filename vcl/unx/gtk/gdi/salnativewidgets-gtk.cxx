@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:11:08 $
+ *  last change: $Author: hr $ $Date: 2006-01-27 13:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1137,9 +1137,15 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
 
     // GTK enforces radio groups, so that if we don't have 2 buttons in the group,
     // the single button will always be active.  So we have to have 2 buttons.
+
+    // #i59666# set the members directly where we should use
+    // gtk_toggle_button_set_active. reason: there are animated themes
+    // which are in active state only after a while leading to painting
+    // intermediate states between active/inactive. Let's hope that
+    // GtkToggleButtone stays binary compatible.
     if (!isChecked)
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gRadioWidgetSibling), TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gRadioWidget), isChecked );
+        GTK_TOGGLE_BUTTON(gRadioWidgetSibling)->active = TRUE;
+    GTK_TOGGLE_BUTTON(gRadioWidget)->active = isChecked;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
@@ -1185,7 +1191,7 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
     // Set the shadow based on if checked or not so we get a checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
     NWSetWidgetState( gCheckWidget, nState, stateType );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gCheckWidget), isChecked );
+    GTK_TOGGLE_BUTTON(gCheckWidget)->active = isChecked;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
