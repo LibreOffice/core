@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 15:43:46 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:22:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ JAVAFILES = \
     AccessibleStateAdapter.java \
     AccessibleTextImpl.java \
     AccessibleValueImpl.java \
+    Alert.java \
     Application.java \
     Button.java \
     CheckBox.java \
