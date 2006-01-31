@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:02:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,18 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
             {
                 ScDetOpData* pDetData(pOpList->GetObject( static_cast<USHORT>(nIndex) ));
                 if( pDetData )
-                    rDetOp.AddOperation( pDetData->GetOperation(), pDetData->GetPos(), nIndex );
+                {
+                    const ScAddress& rDetPos = pDetData->GetPos();
+                    SCTAB nTab = rDetPos.Tab();
+                    if ( nTab < pDoc->GetTableCount() )
+                    {
+                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, nIndex );
+
+                        // #123981# cells with detective operations are written even if empty
+                        pSharedData->SetLastColumn( nTab, rDetPos.Col() );
+                        pSharedData->SetLastRow( nTab, rDetPos.Row() );
+                    }
+                }
             }
             rDetOp.Sort();
         }
@@ -1207,7 +1218,7 @@ void ScXMLExport::WriteRowContent()
     }
 }
 
-void ScXMLExport::WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex,
+void ScXMLExport::WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex,
     const sal_Int8 nFlag, const sal_Int32 nEqualRows)
 {
     AddAttribute(sAttrStyleName, *pRowStyles->GetStyleNameByIndex(nIndex));
@@ -1225,7 +1236,15 @@ void ScXMLExport::WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex,
         GetMM100UnitConverter().convertNumber(aBuf, nEqualRows);
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aBuf.makeStringAndClear());
     }
-    sal_Int32 nCellStyleIndex((*pDefaults->GetRowDefaults())[nRow].nIndex);
+
+    const ScMyDefaultStyleList& rRowDefaults = *pDefaults->GetRowDefaults();
+    if ( nRow >= rRowDefaults.size() )
+    {
+        // #123981# used to happen with detective operations - if there are more cases, use the last row's style
+        DBG_ERRORFILE("WriteRowStartTag: not enough defaults");
+        nRow = rRowDefaults.size() - 1;
+    }
+    sal_Int32 nCellStyleIndex(rRowDefaults[nRow].nIndex);
     if (nCellStyleIndex != -1)
         AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,
             *pCellStyles->GetStyleNameByIndex(nCellStyleIndex,
@@ -2132,7 +2151,15 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             {
                 ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                 if (pData)
+                {
                     pSharedData->AddNoteObj(xShape, pData->aStt);
+
+                    // #i60851# When the file is saved while editing a new note,
+                    // the cell is still empty -> last column/row must be updated
+                    DBG_ASSERT( pData->aStt.Tab() == nCurrentTable, "invalid table in object data" );
+                    pSharedData->SetLastColumn( nCurrentTable, pData->aStt.Col() );
+                    pSharedData->SetLastRow( nCurrentTable, pData->aStt.Row() );
+                }
             }
             else
             {
