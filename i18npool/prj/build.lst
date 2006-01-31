@@ -13,9 +13,12 @@ inp  i18npool\source\numberformatcode           nmake   -   all inp_numformat in
 inp  i18npool\source\defaultnumberingprovider   nmake   -   all inp_dnum inp_utypes NULL
 inp  i18npool\source\nativenumber               nmake   -   all inp_natnum inp_utypes NULL
 inp  i18npool\source\indexentry                 nmake   -   all inp_index inp_utypes NULL
+inp  i18npool\source\indexentry\data            nmake   -   all inp_index_data inp_index NULL
 inp  i18npool\source\collator                   nmake   -   all inp_collator inp_utypes NULL
+inp  i18npool\source\collator\data              nmake   -   all inp_collator_data inp_collator NULL
 inp  i18npool\source\inputchecker               nmake   -   all inp_inputchecker inp_utypes NULL
 inp  i18npool\source\textconversion             nmake   -   all inp_textconversion inp_utypes NULL
+inp  i18npool\source\textconversion\data        nmake   -   all inp_textconv_dict inp_textconversion NULL
 inp  i18npool\source\search                     nmake   -   all inp_search inp_utypes NULL
-inp  i18npool\util                              nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker inp_textconversion inp_search NULL
+inp  i18npool\util                              nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_index_data inp_collator inp_collator_data inp_inputchecker inp_textconversion inp_textconv_dict inp_search NULL
 
