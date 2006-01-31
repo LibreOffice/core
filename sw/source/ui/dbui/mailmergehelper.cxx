@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:30:29 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,18 +632,25 @@ String SwAddressPreview::FillData(
                 aCol >>= xColumn;
                 if(xColumn.is())
                 {
-                    ::rtl::OUString sReplace = xColumn->getString();
+                    try
+                    {
+                        ::rtl::OUString sReplace = xColumn->getString();
 
-                    if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
-                    {
-                        if( rExcludeCountry.getLength() && sReplace != rExcludeCountry )
-                            aItem.sText = sReplace;
+                        if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
+                        {
+                            if( rExcludeCountry.getLength() && sReplace != rExcludeCountry )
+                                aItem.sText = sReplace;
+                            else
+                                aItem.sText.Erase();
+                        }
                         else
-                            aItem.sText.Erase();
+                        {
+                            aItem.sText = sReplace;
+                        }
                     }
-                    else
+                    catch( sdbc::SQLException& )
                     {
-                        aItem.sText = sReplace;
+                        DBG_ERROR("SQLException caught")
                     }
                 }
             }
