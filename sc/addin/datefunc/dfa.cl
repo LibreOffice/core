@@ -1,14 +1,37 @@
-/*------------------------------------------------------------------------
-
-$Workfile:   DFA.CL  $
-
-$Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sc/addin/datefunc/dfa.cl,v 1.1.1.1 2000-09-18 16:44:46 hr Exp $
-
-Description:	StarCalc Datefunc AddIn Example
-
-(c) Copyright 1998 - 2000, Sun Microsystems, Inc.
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dfa.cl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:27 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 static char datefunc_Id[]="@(#) StarCalc Datefunc AddIn (c) 1998-2000 Sun Microsystems, Inc.";
 
@@ -712,41 +735,3 @@ char* pName, char* pDesc )
 	}
 
 }
-
-/*------------------------------------------------------------------------
-
-$Log: not supported by cvs2svn $
-Revision 1.6  1999/08/10 12:47:12  NN
-#68039# copyright
-
-   
-      Rev 1.5   10 Aug 1999 14:47:12   NN
-   #68039# copyright
-   
-      Rev 1.4   20 May 1999 12:59:40   ER
-   #66274# GetFunctionData: DFA_WEEKSINYEAR_NAME statt DFA_DAYSINYEAR_NAME
-
-      Rev 1.3   29 Apr 1999 14:55:50   ER
-   #57689# xlang.h statt tools/lang.hxx
-
-      Rev 1.3   29 Apr 1999 14:45:32   ER
-   #57689# xlang.hxx statt tools/lang.hxx
-
-      Rev 1.2   29 Apr 1999 12:54:04   ER
-   #57689# Internationalisierung
-
-      Rev 1.1   15 Mar 1999 16:27:50   HJS
-   aufgeraeumt
-
-      Rev 1.0   10 Mar 1999 12:47:04   BEI
-   Initial revision.
-
-      Rev 1.1   13 Jul 1998 18:15:40   BEI
-   2 Languages
-
-      Rev 1.0   07 Jul 1998 20:36:22   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-
