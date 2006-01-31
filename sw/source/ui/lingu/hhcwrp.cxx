@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:33 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,12 +672,19 @@ void SwHHCWrapper::Convert()
             SwPaM aPam(rNode);
             aPam.Move( fnMoveBackward, fnGoDoc ); // move to start of document
 
-            pSttPos = aPam.GetPoint();
+            pSttPos = aPam.GetPoint();  //! using a PaM here makes sure we will get only text nodes
             SwTxtNode *pTxtNode = pSttPos->nNode.GetNode().GetTxtNode();
+            // just in case we check anyway...
+            if (!pTxtNode || !pTxtNode->IsTxtNode())
+                return;
             pConvArgs = new SwConversionArgs( GetSourceLanguage(),
                             pTxtNode, pSttPos->nContent,
                             pTxtNode, pSttPos->nContent );
         }
+        DBG_ASSERT( pConvArgs->pStartNode && pConvArgs->pStartNode->IsTxtNode(),
+                "failed to get proper start text node" );
+        DBG_ASSERT( pConvArgs->pEndNode && pConvArgs->pEndNode->IsTxtNode(),
+                "failed to get proper end text node" );
 
         // chinese conversion specific settings
         DBG_ASSERT( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
