@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formnavigation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:38 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,8 +124,6 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException)
     {
-        DBG_ASSERT( m_nConnectedFeatures, "OFormNavigationHelper::statusChanged: where does this come from? All features are disconnected!" );
-
         sal_Int32 nFeatureId = -1;
         for (   FeatureMap::iterator aFeature = m_aSupportedFeatures.begin();
                 aFeature != m_aSupportedFeatures.end();
