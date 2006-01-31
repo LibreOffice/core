@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:34 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,10 +229,6 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         case NT_service_member:
             if (getNodeType() == NT_singleton) {
                 OSL_ASSERT(superName.getLength() == 0);
-                if (!idlc()->getOptions()->isValid("-C")) {
-                    return true;
-                }
-//                superName = static_cast< AstServiceMember * >(*i)->
                 superName = ((AstServiceMember *)(*i))->
                     getRealService()->getRelativName();
                 break;
