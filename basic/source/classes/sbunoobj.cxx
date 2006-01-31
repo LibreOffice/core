@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:51 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1640,7 +1640,8 @@ TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
 void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    if( bNeedIntrospection ) doIntrospection();
+    if( bNeedIntrospection )
+        doIntrospection();
 
     const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
     if( pHint )
@@ -1651,6 +1652,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbUnoMethod* pMeth = PTR_CAST(SbUnoMethod,pVar);
         if( pProp )
         {
+            bool bInvocation = pProp->isInvocationBased();
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
                 // Test-Properties
@@ -1682,7 +1684,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     return;
                 }
 
-                if( mxUnoAccess.is() )
+                if( !bInvocation && mxUnoAccess.is() )
                 {
                     try
                     {
@@ -1713,7 +1715,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
                     }
                 }
-                else if( mxInvocation.is() )
+                else if( bInvocation && mxInvocation.is() )
                 {
                     try
                     {
@@ -1743,7 +1745,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
             else if( pHint->GetId() == SBX_HINT_DATACHANGED )
             {
-                if( mxUnoAccess.is() )
+                if( !bInvocation && mxUnoAccess.is() )
                 {
                     if( pProp->aUnoProp.Attributes & PropertyAttribute::READONLY )
                     {
@@ -1784,7 +1786,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e4 ) );
                     }
                 }
-                else if( mxInvocation.is() )
+                else if( bInvocation && mxInvocation.is() )
                 {
                     // Wert von Uno nach Sbx uebernehmen
                     Any aAnyValue = sbxToUnoValueImpl( pVar );
@@ -1814,6 +1816,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         }
         else if( pMeth )
         {
+            bool bInvocation = pMeth->isInvocationBased();
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
                 // Anzahl Parameter -1 wegen Param0 == this
@@ -1822,7 +1825,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 BOOL bOutParams = FALSE;
                 UINT32 i;
 
-                if( mxUnoAccess.is() )
+                if( !bInvocation && mxUnoAccess.is() )
                 {
                     // Infos holen
                     const Sequence<ParamInfo>& rInfoSeq = pMeth->getParamInfos();
@@ -1883,7 +1886,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         }
                     }
                 }
-                else if( pParams && mxInvocation.is() )
+                else if( bInvocation && pParams && mxInvocation.is() )
                 {
                     bool bOLEAutomation = true;
                     // TODO: bOLEAutomation = xOLEAutomation.is()
@@ -1938,7 +1941,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 GetSbData()->bBlockCompilerError = TRUE;  // #106433 Block compiler errors for API calls
                 try
                 {
-                    if( mxUnoAccess.is() )
+                    if( !bInvocation && mxUnoAccess.is() )
                     {
                         Any aRetAny = pMeth->m_xUnoMethod->invoke( getUnoAny(), args );
 
@@ -1964,7 +1967,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             }
                         }
                     }
-                    else if( mxInvocation.is() )
+                    else if( bInvocation && mxInvocation.is() )
                     {
                         Sequence< INT16 > OutParamIndex;
                         Sequence< Any > OutParam;
@@ -2056,12 +2059,15 @@ SbUnoObject::SbUnoObject( const String& aName, const Any& aUnoObj_ )
             return;
     }
 
+    Reference< XTypeProvider > xTypeProvider;
 #ifdef INVOCATION_ONLY
     // Invocation besorgen
     mxInvocation = createDynamicInvocationFor( aUnoObj_ );
 #else
     // Hat das Object selbst eine Invocation?
     mxInvocation = Reference< XInvocation >( x, UNO_QUERY );
+
+    xTypeProvider = Reference< XTypeProvider >( x, UNO_QUERY );
 #endif
 
     if( mxInvocation.is() )
@@ -2072,11 +2078,14 @@ SbUnoObject::SbUnoObject( const String& aName, const Any& aUnoObj_ )
         // mxMaterialHolder = Reference< XMaterialHolder >::query( mxInvocation );
 
         // ExactName holen
-        mxExactName = Reference< XExactName >::query( mxInvocation );
+        mxExactNameInvocation = Reference< XExactName >::query( mxInvocation );
 
         // Rest bezieht sich nur auf Introspection
-        bNeedIntrospection = FALSE;
-        return;
+        if( !xTypeProvider.is() )
+        {
+            bNeedIntrospection = FALSE;
+            return;
+        }
     }
 
     // Introspection-Flag
@@ -2217,9 +2226,11 @@ SbUnoMethod::SbUnoMethod
 (
     const String& aName,
     SbxDataType eSbxType,
-    Reference< XIdlMethod > xUnoMethod_
+    Reference< XIdlMethod > xUnoMethod_,
+    bool bInvocation
 )
     : SbxMethod( aName, eSbxType )
+    , mbInvocation( bInvocation )
 {
     m_xUnoMethod = xUnoMethod_;
     pParamInfoSeq = NULL;
@@ -2287,9 +2298,11 @@ SbUnoProperty::SbUnoProperty
     const String& aName,
     SbxDataType eSbxType,
     const Property& aUnoProp_,
-    UINT32 nId_
+    UINT32 nId_,
+    bool bInvocation
 )
     : SbxProperty( aName, eSbxType )
+    , mbInvocation( bInvocation )
 {
     aUnoProp = aUnoProp_;
     nId = nId_;
@@ -2339,21 +2352,22 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
 
     SbxVariable* pRes = SbxObject::Find( rName, t );
 
-    if( bNeedIntrospection ) doIntrospection();
+    if( bNeedIntrospection )
+        doIntrospection();
 
     // Neu 4.3.1999: Properties on Demand anlegen, daher jetzt perIntrospectionAccess
     // suchen, ob doch eine Property oder Methode des geforderten Namens existiert
     if( !pRes )
     {
         OUString aUName( rName );
-        if( mxExactName.is() )
-        {
-            OUString aUExactName = mxExactName->getExactName( aUName );
-            if( aUExactName.getLength() )
-                aUName = aUExactName;
-        }
         if( mxUnoAccess.is() )
         {
+            if( mxExactName.is() )
+            {
+                OUString aUExactName = mxExactName->getExactName( aUName );
+                if( aUExactName.getLength() )
+                    aUName = aUExactName;
+            }
             if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
             {
                 const Property& rProp = mxUnoAccess->
@@ -2367,7 +2381,7 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                     eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
                 // Property anlegen und reinbraten
-                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0 );
+                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0, false );
                 QuickInsert( (SbxVariable*)xVarRef );
                 pRes = xVarRef;
             }
@@ -2379,8 +2393,8 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                     getMethod( aUName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 
                 // SbUnoMethode anlegen und reinbraten
-                SbxVariableRef xMethRef = new SbUnoMethod
-                    ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod );
+                SbxVariableRef xMethRef = new SbUnoMethod( rxMethod->getName(),
+                    unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
                 QuickInsert( (SbxVariable*)xMethRef );
                 pRes = xMethRef;
             }
@@ -2434,21 +2448,28 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                 }
             }
         }
-        else if( mxInvocation.is() )
+        if( !pRes && mxInvocation.is() )
         {
+            if( mxExactNameInvocation.is() )
+            {
+                OUString aUExactName = mxExactNameInvocation->getExactName( aUName );
+                if( aUExactName.getLength() )
+                    aUName = aUExactName;
+            }
+
             try
             {
                 if( mxInvocation->hasProperty( aUName ) )
                 {
                     // Property anlegen und reinbraten
-                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0 );
+                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0, true );
                     QuickInsert( (SbxVariable*)xVarRef );
                     pRes = xVarRef;
                 }
                 else if( mxInvocation->hasMethod( aUName ) )
                 {
                     // SbUnoMethode anlegen und reinbraten
-                    SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod );
+                    SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true );
                     QuickInsert( (SbxVariable*)xMethRef );
                     pRes = xMethRef;
                 }
@@ -2489,15 +2510,15 @@ void SbUnoObject::implCreateDbgProperties( void )
     Property aProp;
 
     // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
-    SbxVariableRef xVarRef = new SbUnoProperty( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, aProp, -1 );
+    SbxVariableRef xVarRef = new SbUnoProperty( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, aProp, -1, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -2: Properties ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_PROPERTIES, SbxSTRING, aProp, -2 );
+    xVarRef = new SbUnoProperty( ID_DBG_PROPERTIES, SbxSTRING, aProp, -2, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -3: Methoden ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, aProp, -3 );
+    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, aProp, -3, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 
@@ -2537,7 +2558,7 @@ void SbUnoObject::implCreateAll( void )
             eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
         // Property anlegen und reinbraten
-        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, i );
+        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, i, false );
         QuickInsert( (SbxVariable*)xVarRef );
     }
 
@@ -2556,7 +2577,7 @@ void SbUnoObject::implCreateAll( void )
 
         // SbUnoMethode anlegen und reinbraten
         SbxVariableRef xMethRef = new SbUnoMethod
-            ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod );
+            ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
         QuickInsert( (SbxVariable*)xMethRef );
     }
 }
