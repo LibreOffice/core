@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:02:35 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1822,8 +1822,11 @@ void ScInputHandler::UpdateFormulaMode()
 
 void ScInputHandler::ShowRefFrame()
 {
-    pActiveViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    if ( pRefViewSh && pRefViewSh != pActiveViewSh )
+    // #123169# Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
+    // checks in NotifyChange, and lead to keeping the wrong value in pActiveViewSh.
+    // A local variable is used instead.
+    ScTabViewShell* pVisibleSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    if ( pRefViewSh && pRefViewSh != pVisibleSh )
     {
         BOOL bFound = FALSE;
         SfxViewFrame* pRefFrame = pRefViewSh->GetViewFrame();
