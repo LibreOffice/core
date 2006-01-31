@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:52:24 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,103 +33,41 @@
  *
  ************************************************************************/
 
-#ifndef _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
-#define _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
+#ifndef _I18N_INDEXENTRYSUPPLIER_ASIAN_HXX_
+#define _I18N_INDEXENTRYSUPPLIER_ASIAN_HXX_
 
 #include <indexentrysupplier_common.hxx>
+#include <osl/module.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 //  ----------------------------------------------------
-//  class IndexEntrySupplier_CJK
+//  class IndexEntrySupplier_asian
 //  ----------------------------------------------------
 
-class IndexEntrySupplier_CJK : public IndexEntrySupplier_Common {
+class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_CJK( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Common(rxMSF) {
-        implementationName = "com.sun.star.i18n.IndexEntrySupplier_CJK";
-    };
+    IndexEntrySupplier_asian( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    ~IndexEntrySupplier_asian();
 
-    virtual rtl::OUString SAL_CALL getIndexString( const sal_Unicode ch, const sal_Unicode idxStr[],
-        const sal_uInt16 idx1[], const sal_uInt16 idx2[]) throw (com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getIndexString( const sal_Unicode ch,
-        const sal_uInt16 idx1[], const sal_Unicode idx2[]) throw (com::sun::star::uno::RuntimeException);
+    rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,
+            const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm )
+            throw (com::sun::star::uno::RuntimeException);
+    rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& rIndexEntry,
+            const rtl::OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
+            throw (com::sun::star::uno::RuntimeException);
+    sal_Int16 SAL_CALL compareIndexEntry(
+            const rtl::OUString& rIndexEntry1, const rtl::OUString& rPhoneticEntry1,
+            const com::sun::star::lang::Locale& rLocale1,
+            const rtl::OUString& rIndexEntry2, const rtl::OUString& rPhoneticEntry2,
+            const com::sun::star::lang::Locale& rLocale2 )
+            throw (com::sun::star::uno::RuntimeException);
+    rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& rIndexEntry,
+            const com::sun::star::lang::Locale& rLocale )
+            throw (com::sun::star::uno::RuntimeException);
+private:
+    oslModule hModule;
 };
-
-#define INDEXENTRYSUPPLIER_CJK( algorithm ) \
-class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_CJK {\
-public:\
-    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_CJK (rxMSF) {\
-        implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
-    };\
-    virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) \
-        throw (com::sun::star::uno::RuntimeException);\
-    virtual rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& IndexEntry, \
-        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )\
-        throw (com::sun::star::uno::RuntimeException);\
-};
-
-#define INDEXENTRYSUPPLIER_PHONETIC( algorithm ) \
-class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_CJK {\
-public:\
-    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_CJK (rxMSF) {\
-        implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
-    };\
-    virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) \
-        throw (com::sun::star::uno::RuntimeException);\
-    virtual rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& IndexEntry, \
-        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )\
-        throw (com::sun::star::uno::RuntimeException);\
-    virtual sal_Int16 SAL_CALL compareIndexEntry( const rtl::OUString& IndexEntry1,\
-        const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,\
-        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,\
-        const com::sun::star::lang::Locale& rLocale2 )\
-        throw (com::sun::star::uno::RuntimeException);\
-};
-
-#define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm ) \
-class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_ja_phonetic {\
-public:\
-    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_ja_phonetic (rxMSF) {\
-        implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
-    };\
-    virtual sal_Bool SAL_CALL loadAlgorithm(\
-        const com::sun::star::lang::Locale& rLocale,\
-        const rtl::OUString& SortAlgorithm, sal_Int32 collatorOptions ) \
-        throw (com::sun::star::uno::RuntimeException);\
-};
-
-#if defined( INDEXENTRYSUPPLIER_zh_pinyin ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_PHONETIC( zh_pinyin )
-#endif
-#if defined( INDEXENTRYSUPPLIER_zh_stroke ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_stroke )
-#endif
-#if defined( INDEXENTRYSUPPLIER_zh_radical ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_radical )
-#endif
-#if defined( INDEXENTRYSUPPLIER_zh_zhuyin ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_PHONETIC( zh_zhuyin )
-#endif
-#if defined( INDEXENTRYSUPPLIER_zh_TW_radical ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_TW_radical )
-#endif
-#if defined( INDEXENTRYSUPPLIER_zh_TW_stroke ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_TW_stroke )
-#endif
-#if defined( INDEXENTRYSUPPLIER_ko_dict ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_PHONETIC( ko_dict )
-#endif
-#if defined( INDEXENTRYSUPPLIER_ja_phonetic ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_PHONETIC( ja_phonetic )
-INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_syllable )
-INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_consonant )
-INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_syllable )
-INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_consonant )
-#endif
-#undef INDEXENTRYSUPPLIER_CJK
 
 } } } }
 #endif
