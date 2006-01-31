@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:57:47 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #endif
 #ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _CTRLBOX_HXX //autogen
 #include <svtools/ctrlbox.hxx>
@@ -181,7 +184,7 @@ class SmFontDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmFontDialog(Window * pParent, BOOL bHideCheckboxes, BOOL bFreeRes = TRUE);
+    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, BOOL bHideCheckboxes, BOOL bFreeRes = TRUE);
 
     const Font& GetFont() const { return Face; }
     void        SetFont(const Font &rFont);
@@ -242,11 +245,13 @@ class SmFontTypeDialog : public ModalDialog
     MenuButton          aMenuButton;
     PushButton          aDefaultButton;
 
+    OutputDevice       *pFontListDev;
+
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmFontTypeDialog(Window *pParent, BOOL bFreeRes = TRUE);
+    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, BOOL bFreeRes = TRUE);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -418,6 +423,8 @@ class SmSymbolDialog : public ModalDialog
     SmSymSetManager    &rSymSetMgr;
     const SmSymSet     *pSymSet;
 
+    OutputDevice       *pFontListDev;
+
     DECL_LINK(SymbolSetChangeHdl, ListBox *);
     DECL_LINK(SymbolChangeHdl, SmShowSymbolSet *);
     DECL_LINK(SymbolDblClickHdl, SmShowSymbolSet *);
@@ -433,7 +440,8 @@ class SmSymbolDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmSymbolDialog(Window * pParent, SmSymSetManager &rSymSetMgr, BOOL bFreeRes = TRUE);
+    SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
+            SmSymSetManager &rSymSetMgr, BOOL bFreeRes = TRUE);
     virtual ~SmSymbolDialog();
 
     BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
@@ -493,8 +501,8 @@ class SmSymDefineDialog : public ModalDialog
                        &rSymSetMgr;
     const SmSym        *pOrigSymbol;
 
-    FontList           *pFontList;
     const SubsetMap    *pSubsetMap;
+    FontList           *pFontList;
 
     DECL_LINK(OldSymbolChangeHdl, ComboBox *);
     DECL_LINK(OldSymbolSetChangeHdl, ComboBox *);
@@ -535,7 +543,7 @@ class SmSymDefineDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmSymDefineDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFreeRes = TRUE);
+    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes = TRUE);
     ~SmSymDefineDialog();
 
     // Dialog
