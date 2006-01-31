@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:24:33 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,10 +138,108 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
+TYPEINIT1(SwXTextSectionClient, SwClient);
+/*-- 20.12.2005 09:56:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXTextSectionClient::SwXTextSectionClient(
+            SwSectionFmt& rFmt,
+            SwXTextSection& rTextSection,
+            uno::Reference< text::XTextSection > xSection ) :
+            SwClient(&rFmt),
+            m_pSection( &rTextSection ),
+            m_xReference( xSection )
+
+{
+    m_pSection->SetClient( this );
+}
+/*-- 20.12.2005 09:56:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXTextSectionClient::~SwXTextSectionClient()
+{
+    uno::Reference< text::XTextSection > xSection( m_xReference );
+    if(xSection.is())
+    {
+        m_pSection->SetClient( 0 );
+    }
+}
+/*-- 20.12.2005 09:56:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextSection > SwXTextSectionClient::GetXTextSection()
+{
+    return uno::Reference< text::XTextSection >( m_xReference );
+}
+
+/*-- 29.12.2005 11:29:30---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+/*SwXTextSection* SwXTextSectionClient::GetSwTextSection()
+{
+    if( m_xReference.is() )
+        return m_pSection;;
+} */
+
+/*-- 10.12.98 14:42:52---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextSectionClient::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
+        (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            ((SwModify*)GetRegisteredIn())->Remove(this);
+    else
+        ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+    {
+        uno::Reference< text::XTextSection > xSection( m_xReference );
+        if(xSection.is())
+        {
+            m_pSection->SetClient( 0 );
+            m_pSection->aLstnrCntnr.Disposing();
+            m_xReference = uno::Reference< text::XTextSection >();
+
+            Application::PostUserEvent(
+                STATIC_LINK( this, SwXTextSectionClient, RemoveSectionClient_Impl ), this );
+        }
+    }
+}
+
+/*-- 29.12.2005 13:04:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_STATIC_LINK( SwXTextSectionClient, RemoveSectionClient_Impl,
+                      SwXTextSectionClient*, pClient )
+{
+    delete pClient;
+    return 0;
+}
+
+/*-- 20.12.2005 09:56:36---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextSection >  SwXTextSectionClient::CreateXTextSection(
+        SwSectionFmt* pFmt, BOOL bIndexHeader )
+{
+    SwXTextSection* pNew;
+    uno::Reference< text::XTextSection >  xSection = pNew = new SwXTextSection( pFmt != 0, bIndexHeader );
+    if(pFmt)
+        new SwXTextSectionClient( *pFmt, *pNew, xSection );
+    return xSection;
+}
+
+/*-- 29.12.2005 10:23:37---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXTextSectionClient* SwXTextSectionClient::Create(SwXTextSection& rSection,
+        uno::Reference< text::XTextSection >xSection, SwSectionFmt& rFmt )
+{
+    return new SwXTextSectionClient( rFmt, rSection, xSection );
+}
 /******************************************************************
  *
  ******************************************************************/
-TYPEINIT1(SwXTextSection, SwClient);
 struct SwTextSectionProperties_Impl
 {
 
@@ -234,14 +332,14 @@ sal_Int64 SAL_CALL SwXTextSection::getSomething( const uno::Sequence< sal_Int8 >
 /*-- 10.12.98 14:47:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextSection::SwXTextSection(SwSectionFmt* pFmt, BOOL bIndexHeader) :
-        SwClient(pFmt),
+SwXTextSection::SwXTextSection(sal_Bool bWithFormat, sal_Bool bIndexHeader) :
+//        SwClient(pFmt),
+        m_pClient( 0 ),
         aLstnrCntnr( (text::XTextContent*)this),
         aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_SECTION)),
-//          _pMap(aSwMapProvider.getPropertyMap(PROPERTY_MAP_SECTION)),
-        m_bIsDescriptor(pFmt == 0),
+        m_bIsDescriptor(!bWithFormat),
         m_bIndexHeader(bIndexHeader),
-        pProps(pFmt ? 0 : new SwTextSectionProperties_Impl())
+        pProps(bWithFormat ? 0 : new SwTextSectionProperties_Impl())
 {
 
 }
@@ -251,6 +349,7 @@ SwXTextSection::SwXTextSection(SwSectionFmt* pFmt, BOOL bIndexHeader) :
 SwXTextSection::~SwXTextSection()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    delete m_pClient;
     delete pProps;
 }
 /*-- 10.12.98 14:47:08---------------------------------------------------
@@ -266,12 +365,12 @@ uno::Reference< text::XTextSection >  SwXTextSection::getParentSection(void) thr
         SwSectionFmt* pParentFmt = pSectFmt->GetParent();
         if(pParentFmt)
         {
-            SwXTextSection* pxSect = (SwXTextSection*)SwClientIter(*pParentFmt).
-                                                        First(TYPE(SwXTextSection));
-            if(pxSect)
-                aRef = pxSect;
+            SwXTextSectionClient* pClient = (SwXTextSectionClient*)SwClientIter(*pParentFmt).
+                                                        First(TYPE(SwXTextSectionClient));
+            if(pClient)
+                aRef = pClient->GetXTextSection();
             else
-                aRef = new SwXTextSection(pParentFmt);
+                aRef = SwXTextSectionClient::CreateXTextSection(pParentFmt);
         }
     }
     else
@@ -296,12 +395,13 @@ uno::Sequence< uno::Reference< text::XTextSection >  > SwXTextSection::getChildS
         for(sal_uInt16 i = 0; i < aChildren.Count(); i++)
         {
             SwSectionFmt* pChild = aChildren.GetObject(i)->GetFmt();
-            SwXTextSection* pxSect = (SwXTextSection*)SwClientIter(*pChild).
-                                                        First(TYPE(SwXTextSection));
-            if(pxSect)
-                pArray[i] = pxSect;
+            SwXTextSectionClient* pClient = (SwXTextSectionClient*)SwClientIter(*pChild).
+                                                        First(TYPE(SwXTextSectionClient));
+
+            if(pClient)
+                pArray[i] = pClient->GetXTextSection();
             else
-                pArray[i] = new SwXTextSection(pChild);
+                pArray[i] = SwXTextSectionClient::CreateXTextSection(pChild);
         }
     }
     return aSeq;
@@ -421,7 +521,14 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
             aSect.SetPasswd(pProps->aPassword);
 
         pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
-        pRet->GetFmt()->Add(this);
+        // now create the client
+        m_refCount++;
+        // keep block to remove Reference before the refcount is decremented
+        {
+            uno::Reference< text::XTextSection> xSection( this );
+            m_pClient = SwXTextSectionClient::Create(*this, xSection, *pRet->GetFmt());
+        }
+        m_refCount--;
 
         // #97450# XML import must hide sections depending on their old
         //         condition status
@@ -500,18 +607,20 @@ void SwXTextSection::dispose(void) throw( uno::RuntimeException )
 /*-- 10.12.98 14:47:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSection::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextSection::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
+            throw( uno::RuntimeException )
 {
-    if(!GetRegisteredIn())
+    if(!GetFmt())
         throw uno::RuntimeException();
     aLstnrCntnr.AddListener(aListener);
 }
 /*-- 10.12.98 14:47:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSection::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextSection::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
+            throw( uno::RuntimeException )
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
+    if(!GetFmt() || !aLstnrCntnr.RemoveListener(aListener))
         throw uno::RuntimeException();
 }
 /*-- 10.12.98 14:47:11---------------------------------------------------
@@ -1568,17 +1677,12 @@ uno::Sequence< OUString > SwXTextSection::getSupportedServiceNames(void) throw( 
     return aRet;
 }
 
-/*-- 10.12.98 14:42:52---------------------------------------------------
+/*-- 20.12.2005 10:27:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSection::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+SwSectionFmt*   SwXTextSection::GetFmt()const
 {
-    if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
-        (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
-    else
-        ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-        aLstnrCntnr.Disposing();
+    return m_pClient ?
+        const_cast<SwSectionFmt*>(static_cast< const SwSectionFmt* >(m_pClient->GetRegisteredIn()))
+        : 0;
 }
-
