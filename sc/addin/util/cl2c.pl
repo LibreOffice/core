@@ -1,17 +1,39 @@
 #!/usr/solar/bin/perl
 
-#------------------------------------------------------------------------
+##########################################################################
 #
-# $Workfile:   CL2C.PL  $
+#  OpenOffice.org - a multi-platform office productivity suite
 #
-# $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sc/addin/util/cl2c.pl,v 1.1.1.1 2000-09-18 16:44:47 hr Exp $
+#  $RCSfile: cl2c.pl,v $
 #
-# Description:  StarCalc AddIn Helper Create .c File from .cl and .src file
+#  $Revision: 1.2 $
 #
-# (c) Copyright 1998 - 2000, Sun Microsystems, Inc.
+#  last change: $Author: kz $ $Date: 2006-01-31 18:34:22 $
+#
+#  The Contents of this file are made available subject to
+#  the terms of GNU Lesser General Public License Version 2.1.
 #
 #
-#------------------------------------------------------------------------
+#    GNU Lesser General Public License Version 2.1
+#    =============================================
+#    Copyright 2005 by Sun Microsystems, Inc.
+#    901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#    This library is free software; you can redistribute it and/or
+#    modify it under the terms of the GNU Lesser General Public
+#    License version 2.1, as published by the Free Software Foundation.
+#
+#    This library is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    Lesser General Public License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public
+#    License along with this library; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#    MA  02111-1307  USA
+#
+##########################################################################
 
 if ( $#ARGV != 3 ) {
     print STDERR "usage: cl2c.pl <file.cl> <file.c> <file.src> <resname>\n";
@@ -156,6 +178,9 @@ sub maketext {
             if ( $textdef =~ /\[\s+(.*)\s+\]/ ) {
                 $langname=$1;
             }
+            else {
+                $langname="ENGLISH_US";     # no [...] => not to be translated
+            }
 
             $langname="LANGUAGE_" . uc($langname);
 
@@ -163,6 +188,10 @@ sub maketext {
             $text=sconv($text);
             # english_us, not english because it's developer's pigeon
             if ( $langname eq "LANGUAGE_ENGLISH_US" ) {
+                $text_english=$text;
+            }
+            # ISO coded, obtain at least the default
+            elsif ( $langname =~ /^LANGUAGE_EN-US$/ ) {
                 $text_english=$text;
             }
             # we don't know about USER languages, ENGLISH will be appended later
