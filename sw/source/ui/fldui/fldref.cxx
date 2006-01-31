@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:40:21 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,18 +142,18 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     // Typ-Listbox fuellen
 
     // mit den Sequence-Typen auffuellen
-    SwView *pView = ::GetActiveView();
-    ASSERT(pView, View fehlt);
-    SwWrtShell &rSh = pView->GetWrtShell();
+    SwWrtShell *pSh = GetWrtShell();
+    if(!pSh)
+        pSh = ::GetActiveWrtShell();
     USHORT nPos;
 
-    USHORT nFldTypeCnt = rSh.GetFldTypeCount(RES_SETEXPFLD);
+    USHORT nFldTypeCnt = pSh->GetFldTypeCount(RES_SETEXPFLD);
 
     for (USHORT n = 0; n < nFldTypeCnt; ++n)
     {
-        SwSetExpFieldType* pType = (SwSetExpFieldType*)rSh.GetFldType(n, RES_SETEXPFLD);
+        SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(n, RES_SETEXPFLD);
 
-        if ((GSE_SEQ & pType->GetType()) && pType->GetDepends() && rSh.IsUsed(*pType))
+        if ((GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
         {
             nPos = aTypeLB.InsertEntry(pType->GetName());
             aTypeLB.SetEntryData(nPos, (void*)(REFFLDFLAG | n));
@@ -161,19 +161,19 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
 
     // Textmarken - jetzt immer (wegen Globaldokumenten)
-    nFldTypeCnt = rSh.GetBookmarkCnt(TRUE);
+    nFldTypeCnt = pSh->GetBookmarkCnt(TRUE);
     nPos = aTypeLB.InsertEntry(sBookmarkTxt);
     aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_BOOKMARK);
 
     // Fussnoten:
-    if( rSh.HasFtns() )
+    if( pSh->HasFtns() )
     {
         nPos = aTypeLB.InsertEntry(sFootnoteTxt);
         aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_FOOTNOTE);
     }
 
     // Endnoten:
-    if( rSh.HasFtns(TRUE) )
+    if( pSh->HasFtns(TRUE) )
     {
         nPos = aTypeLB.InsertEntry(sEndnoteTxt);
         aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_ENDNOTE);
@@ -379,8 +379,17 @@ IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, pBox )
             break;
 
         case TYP_SETREFFLD:
-            aValueED.SetText(::GetActiveView()->GetWrtShell().GetSelTxt());
-            break;
+        {
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh)
+            {
+                aValueED.SetText(pSh->GetSelTxt());
+            }
+
+        }
+        break;
 
         default:
             if (!IsFldEdit() || aSelectionLB.GetSelectEntryCount())
@@ -397,7 +406,9 @@ IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, pBox )
 
 void SwFldRefPage::UpdateSubType()
 {
-    SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwWrtShell *pSh = GetWrtShell();
+    if(!pSh)
+        pSh = ::GetActiveWrtShell();
     SwGetRefField* pRefFld = (SwGetRefField*)GetCurField();
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -645,10 +656,11 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
 
     if (REFFLDFLAG & nTypeId)
     {
-        SwView *pView = ::GetActiveView();
-        ASSERT(pView, View fehlt);
-        SwWrtShell &rSh = pView->GetWrtShell();
-
+        SwWrtShell *pSh = GetWrtShell();
+        if(!pSh)
+        {
+            pSh = ::GetActiveWrtShell();
+        }
         if (nTypeId == REFFLDFLAG_BOOKMARK)     // TextMarken!
         {
             aName = aNameED.GetText();
@@ -666,7 +678,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             nSubType = REF_FOOTNOTE;
             aName.Erase();
 
-            if (rSh.GetSeqFtnList(aArr) && aArr.SeekEntry(aElem, &nPos))
+            if (pSh->GetSeqFtnList(aArr) && aArr.SeekEntry(aElem, &nPos))
             {
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
@@ -687,7 +699,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             nSubType = REF_ENDNOTE;
             aName.Erase();
 
-            if (rSh.GetSeqFtnList(aArr, TRUE) && aArr.SeekEntry(aElem, &nPos))
+            if (pSh->GetSeqFtnList(aArr, TRUE) && aArr.SeekEntry(aElem, &nPos))
             {
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
@@ -700,7 +712,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         else                                // SeqenceFelder
         {
             // zum Seq-FeldTyp die Felder besorgen:
-            SwSetExpFieldType* pType = (SwSetExpFieldType*)rSh.GetFldType(
+            SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
                                     nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
             if( pType )
             {
