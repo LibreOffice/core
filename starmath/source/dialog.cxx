@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:00:06 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,7 +404,8 @@ void SmFontDialog::SetFont(const Font &rFont)
 }
 
 
-SmFontDialog::SmFontDialog(Window * pParent, BOOL bHideCheckboxes, BOOL bFreeRes)
+SmFontDialog::SmFontDialog(Window * pParent,
+        OutputDevice *pFntListDevice, BOOL bHideCheckboxes, BOOL bFreeRes)
     : ModalDialog(pParent,SmResId(RID_FONTDIALOG)),
     aFixedText1     (this, ResId(1)),
     aFontBox        (this, ResId(1)),
@@ -420,13 +421,8 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bHideCheckboxes, BOOL bFreeRes
 
     {
         WaitObject( this );
-        // get FontList from printer (if possible), otherwise from application window
-        SmViewShell *pView = SmGetActiveView();
-        DBG_ASSERT(pView, "Sm : NULL pointer");
-        OutputDevice *pDev = pView->GetDoc()->GetPrinter();
-        if (!pDev || pDev->GetDevFontCount() == 0)
-            pDev = &pView->GetGraphicWindow();
-        FontList aFontList(pDev);
+
+        FontList aFontList( pFntListDevice );
 
         USHORT  nCount = aFontList.GetFontNameCount();
         for (USHORT i = 0;  i < nCount;  i++)
@@ -600,7 +596,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 
     if (pActiveListBox)
     {
-        SmFontDialog *pFontDialog = new SmFontDialog(this, bHideCheckboxes);
+        SmFontDialog *pFontDialog = new SmFontDialog(this, pFontListDev, bHideCheckboxes);
 
         pActiveListBox->WriteTo(*pFontDialog);
         if (pFontDialog->Execute() == RET_OK)
@@ -628,7 +624,7 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButt
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
 
-SmFontTypeDialog::SmFontTypeDialog(Window * pParent, BOOL bFreeRes)
+SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_FONTTYPEDIALOG)),
     aFixedText1    (this, ResId(1)),
     aVariableFont  (this, ResId(1)),
@@ -649,7 +645,8 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, BOOL bFreeRes)
     aOKButton1     (this, ResId(1)),
     aCancelButton1 (this, ResId(1)),
     aMenuButton    (this, ResId(1)),
-    aDefaultButton (this, ResId(2))
+    aDefaultButton (this, ResId(2)),
+    pFontListDev    (pFntListDevice)
 {
     if (bFreeRes)
         FreeResource();
@@ -1480,7 +1477,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, pButton )
 {
     DBG_ASSERT(pButton == &aEditBtn, "Sm : falsches Argument");
 
-    SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, rSymSetMgr);
+    SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymSetMgr);
 
     // aktuelles Symbol und SymbolSet am neuen Dialog setzen
     const XubString  aSymSetName (aSymbolSets.GetSelectEntry()),
@@ -1555,7 +1552,8 @@ IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 
 
-SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFreeRes) :
+SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
+        SmSymSetManager &rMgr, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
     aSymbolSetText      (this, ResId(1)),
     aSymbolSets         (this, ResId(1)),
@@ -1565,7 +1563,8 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
     aCloseBtn           (this, ResId(3)),
     aEditBtn            (this, ResId(1)),
     aGetBtn             (this, ResId(2)),
-    rSymSetMgr          (rMgr)
+    rSymSetMgr          (rMgr),
+    pFontListDev        (pFntListDevice)
 {
     if (bFreeRes)
         FreeResource();
@@ -1764,10 +1763,12 @@ void SmSymDefineDialog::FillFonts(BOOL bDelete)
     // alle Fonts der 'FontList' in die Fontliste aufnehmen
     // von denen mit gleichen Namen jedoch nur einen (denn der Style wird
     // ueber die 'FontStyleBox' gewaehlt und nicht auch noch hier)
-    DBG_ASSERT(pFontList, "Sm : NULL pointer");
-    USHORT  nCount = pFontList->GetFontNameCount();
-    for (USHORT i = 0;  i < nCount;  i++)
-        aFonts.InsertEntry( pFontList->GetFontName(i).GetName() );
+    if (pFontList)
+    {
+        USHORT  nCount = pFontList->GetFontNameCount();
+        for (USHORT i = 0;  i < nCount;  i++)
+            aFonts.InsertEntry( pFontList->GetFontName(i).GetName() );
+    }
 }
 
 
@@ -2092,7 +2093,8 @@ void SmSymDefineDialog::UpdateButtons()
 }
 
 
-SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BOOL bFreeRes) :
+SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
+        OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMDEFINEDIALOG)),
     aOldSymbolText      (this, ResId(1)),
     aOldSymbols         (this, ResId(1)),
@@ -2128,14 +2130,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     if (bFreeRes)
         FreeResource();
 
-    // get FontList from printer (if possible), otherwise from application window
-    SmViewShell *pView = SmGetActiveView();
-    DBG_ASSERT(pView, "Sm : NULL pointer");
-    OutputDevice *pDev = pView->GetDoc()->GetPrinter();
-    if (!pDev || pDev->GetDevFontCount() == 0)
-        pDev = &pView->GetGraphicWindow();
-    pFontList = new FontList(pDev);
-
+    pFontList = new FontList( pFntListDevice );
 
     pOrigSymbol = 0;
 
@@ -2174,7 +2169,6 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
 
 SmSymDefineDialog::~SmSymDefineDialog()
 {
-    delete pFontList;
     delete pSubsetMap;
     delete pOrigSymbol;
 }
@@ -2421,8 +2415,9 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rStyleName)
 {
     // Font (FontInfo) passend zu Namen und Style holen
-    DBG_ASSERT(pFontList, "Sm : NULL pointer");
-    FontInfo  aFI( pFontList->Get(rFontName, WEIGHT_NORMAL, ITALIC_NONE) );
+    FontInfo aFI;
+    if (pFontList)
+        aFI = pFontList->Get(rFontName, WEIGHT_NORMAL, ITALIC_NONE);
     SetFontStyle(rStyleName, aFI);
 
     aCharsetDisplay.SetFont(aFI);
