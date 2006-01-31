@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:35:43 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,14 +290,17 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         OSL_ENSURE(sName.getLength(),"Invalid name for a document container!");
         ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
         ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(sName);
+        TContentPtr pElementImpl;
         if ( aFind == pItem->m_aDocumentMap.end() )
         {
-            aFind = pItem->m_aDocumentMap.insert(ODefinitionContainer_Impl::Documents::value_type(sName,ODefinitionContainer_Impl::Documents::mapped_type(new ODefinitionContainer_Impl))).first;
-            aFind->second->m_aProps.aTitle = sName;
-            aFind->second->m_pDataSource = m_pImpl->m_pDataSource;
-        }
-        OSL_ENSURE( aFind != pItem->m_aDocumentMap.end() ," Invalid entry in map!");
-        xContent = new ODocumentContainer(m_xORB,*this,aFind->second,ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION);
+            pElementImpl.reset(new ODefinitionContainer_Impl);
+            pElementImpl->m_aProps.aTitle = sName;
+            pElementImpl->m_pDataSource = m_pImpl->m_pDataSource;
+        } // if ( aFind == pItem->m_aDocumentMap.end() )
+        else
+            pElementImpl = aFind->second;
+        OSL_ENSURE( pElementImpl ," Invalid entry in map!");
+        xContent = new ODocumentContainer(m_xORB,*this,pElementImpl,ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION);
 
         // copy children
         if ( xCopyFrom.is() )
