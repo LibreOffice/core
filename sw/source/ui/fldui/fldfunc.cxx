@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:33:01 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,13 +379,16 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 break;
 
             case TYP_HIDDENTXTFLD:
+            {
                 aNameFT.SetText(SW_RESSTR(STR_COND));
                 aNameED.SetDropEnable(TRUE);
                 aValueFT.SetText(SW_RESSTR(STR_INSTEXT));
-                if (!IsFldEdit() )
-                    aValueED.SetText(::GetActiveView()->GetWrtShell().GetSelTxt());
+                SwWrtShell* pSh = GetActiveWrtShell();
+                if (!IsFldEdit() && pSh )
+                    aValueED.SetText(pSh->GetSelTxt());
                 bName = bValue = TRUE;
-                break;
+            }
+            break;
 
             case TYP_CONDTXTFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
