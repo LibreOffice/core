@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:00:49 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@
 #include <mailmergewizard.hrc>
 
 using namespace svt;
+using namespace ::com::sun::star;
 /*-- 01.04.2004 16:52:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -214,6 +215,8 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     {
         //close the dialog, remove the target view, show the source view
         m_nRestartPage = _nState;
+        //set ResultSet back to start
+        m_rConfigItem.MoveResultSet(1);
         EndDialog(RET_REMOVE_TARGET);
         return;
     }
