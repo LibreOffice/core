@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:59:39 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1207,8 +1207,14 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_SYMBOLS_CATALOGUE:
         {
+            // get device used to retrieve the FontList
+            OutputDevice *pDev = GetPrinter();
+            if (!pDev || pDev->GetDevFontCount() == 0)
+                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+            DBG_ASSERT (pDev, "device for font list missing" );
+
             SmModule *pp = SM_MOD1();
-            SmSymbolDialog(NULL, pp->GetSymSetManager()).Execute();
+            SmSymbolDialog(NULL, pDev, pp->GetSymSetManager()).Execute();
             RestartFocusTimer();
         }
         break;
@@ -1259,7 +1265,13 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONT:
         {
-            SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog(NULL);
+            // get device used to retrieve the FontList
+            OutputDevice *pDev = GetPrinter();
+            if (!pDev || pDev->GetDevFontCount() == 0)
+                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+            DBG_ASSERT (pDev, "device for font list missing" );
+
+            SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
 
             SmFormat aOldFormat  = GetFormat();
             pFontTypeDialog->ReadFrom( aOldFormat );
@@ -1404,12 +1416,19 @@ void SmDocShell::Execute(SfxRequest& rReq)
                    aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))) &&
                 aData.GetInputStream( nId, xStrm ) && xStrm.is() )
             {
-                uno::Reference < embed::XStorage > xStorage =
-                        ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
-                uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
-                SfxMedium aMedium( xStorage, String() );
-                Insert( aMedium );
-                UpdateText();
+                try
+                {
+                    uno::Reference < embed::XStorage > xStorage =
+                            ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
+                    uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
+                    SfxMedium aMedium( xStorage, String() );
+                    Insert( aMedium );
+                    UpdateText();
+                }
+                catch (uno::Exception &)
+                {
+                    DBG_ERROR( "SmDocShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
+                }
             }
         }
         break;
