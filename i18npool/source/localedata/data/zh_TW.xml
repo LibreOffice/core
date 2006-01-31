@@ -282,10 +282,10 @@
 </LC_COLLATION>
 <LC_SEARCH ref="zh_CN"/>
 <LC_INDEX>
-<IndexKey unoid="stroke" default="true" phonetic="false"/>
-<IndexKey unoid="radical" default="false" phonetic="false"/>
-<IndexKey unoid="zhuyin" default="false" phonetic="true"/>
-<IndexKey unoid="pinyin" default="false" phonetic="true"/>
+<IndexKey unoid="stroke" default="true" phonetic="false" module="asian"/>
+<IndexKey unoid="radical" default="false" phonetic="false" module="asian"/>
+<IndexKey unoid="zhuyin" default="false" phonetic="true" module="asian"/>
+<IndexKey unoid="pinyin" default="false" phonetic="true" module="asian"/>
 <UnicodeScript>70</UnicodeScript>
 <FollowPageWord></FollowPageWord>
 <FollowPageWord></FollowPageWord>
