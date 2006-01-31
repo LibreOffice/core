@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:40:46 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,7 @@ PrevLineCommentLbl:
         bPrevLineExtentsComment = FALSE;
         aSym = String::CreateFromAscii( "REM" );
         USHORT nLen = String( pLine ).Len();
-        if( pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
+        if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = TRUE;
         nCol2 += nLen;
         pLine = NULL;
