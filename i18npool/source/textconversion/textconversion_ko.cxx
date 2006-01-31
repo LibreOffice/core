@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:15:43 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,6 @@ using namespace com::sun::star::uno;
 using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
-
-// defined in hangul2hanja.cxx generated from hangul2hanja.dic by genconv_dict
-extern const sal_Unicode* getHangul2HanjaData();
-extern const Hangul_Index* getHangul2HanjaIndex();
-extern const sal_Int16 getHangul2HanjaIndexCount();
-extern const sal_uInt16* getHanja2HangulIndex();
-extern const sal_Unicode* getHanja2HangulData();
 
 #define SCRIPT_OTHERS   0
 #define SCRIPT_HANJA    1
@@ -124,11 +117,17 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
     return unicode::getUnicodeScriptType(c, typeList, SCRIPT_OTHERS);
 }
 
-Sequence< OUString > SAL_CALL getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja)
+Sequence< OUString > SAL_CALL
+TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja)
 {
     sal_Unicode ch;
     Sequence< OUString > output;
-    if (toHanja) {
+    const sal_Unicode* (*getHangul2HanjaData)() = (const sal_Unicode* (*)())getFunctionBySymbol("getHangul2HanjaData");
+    const Hangul_Index* (*getHangul2HanjaIndex)() = (const Hangul_Index* (*)()) getFunctionBySymbol("getHangul2HanjaIndex");
+    const sal_Int16 (*getHangul2HanjaIndexCount)() = (const sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
+    const sal_uInt16* (*getHanja2HangulIndex)() = (const sal_uInt16* (*)()) getFunctionBySymbol("getHanja2HangulIndex");
+    const sal_Unicode* (*getHanja2HangulData)() = (const sal_Unicode* (*)()) getFunctionBySymbol("getHanja2HangulData");
+    if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
         ch = aText[nStartPos];
         const Hangul_Index *Hangul_ko = getHangul2HanjaIndex();
         sal_Int16 top =  getHangul2HanjaIndexCount() - 1;
@@ -150,7 +149,7 @@ Sequence< OUString > SAL_CALL getCharConversions(const OUString& aText, sal_Int3
                 break;
             }
         }
-    } else {
+    } else if (! toHanja && getHanja2HangulIndex && getHanja2HangulData) {
         rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength ); // defined in x_rtl_ustring.h
         sal_Int32 count = 0;
         while (count < nLength) {
