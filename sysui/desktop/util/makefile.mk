@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 14:58:26 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:20:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,12 +81,13 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
 
 .ENDIF          # "$(ENABLE_GNOMEVFS)"!=""
 
-.IF "$(OS)"!="SOLARIS"
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 TARFILE=$(BIN)$/rpm$/openoffice.org-desktop-integration.tar.gz
-.IF "$(DPKG)" != ""
+.ENDIF
+
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 TARFILE2=$(BIN)$/deb$/openoffice.org-desktop-integration.tar.gz
-.ENDIF  # "$(DPKG)" != ""
-.ENDIF  # "$(OS)"!="SOLARIS"
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -113,17 +114,18 @@ $(SCRIPTS) : $$(@:f)
     +@cat $(@:f) | tr -d "\015" > $@
     +@chmod 555 $@
 
-.IF "$(OS)"!="SOLARIS"
+.IF "$(TARFILE)" != ""
 
 $(TARFILE) : $(PKGDIR)$/{$(shell ls $(PKGDIR))}
     $(MKDIRHIER) $(@:d)
     tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)/ | gzip > $@
-.ENDIF
 
-.IF "$(DPKG)" != ""
+.ENDIF # "$(TARFILE)" != ""
+
+.IF "$(TARFILE2)" != ""
 
 $(TARFILE2) : $(shell ls $(PKGDIR)$/*.deb)
     $(MKDIRHIER) $(@:d)
     tar -C $(PKGDIR) -cf - {$(<:f)} | gzip > $@
     
-.ENDIF # IF "$(DPKG)" != ""
+.ENDIF
