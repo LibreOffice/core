@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:38:47 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -773,9 +770,7 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
             {
                 USHORT nCount = (USHORT)(nEnd - nStart);
                 GetNumberingInfo();
-                SvtLanguageOptions aLangOpt;
-                if(xNumberingInfo.is() &&
-                    (aLangOpt.IsCJKFontEnabled()||aLangOpt.IsCTLFontEnabled()))
+                if(xNumberingInfo.is())
                 {
                     Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
                     const sal_Int16* pTypes = aTypes.getConstArray();
