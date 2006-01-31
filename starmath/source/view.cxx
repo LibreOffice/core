@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:15:29 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,8 +412,7 @@ void SmGraphicWindow::SetTotalSize ()
 
 void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    if (! (SfxViewShell::Current() &&
-           SfxViewShell::Current()->KeyInput(rKEvt)))
+    if (! (GetView() && GetView()->KeyInput(rKEvt)) )
         ScrollableWindow::KeyInput(rKEvt);
 }
 
