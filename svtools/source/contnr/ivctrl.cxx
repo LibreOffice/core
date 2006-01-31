@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:07:25 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,8 @@ void SvtIconChoiceCtrl::GetFocus()
     Control::GetFocus();
     ULONG nPos;
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
-    _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
+    if ( pSelectedEntry )
+        _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
 }
 
 void SvtIconChoiceCtrl::LoseFocus()
@@ -442,7 +443,10 @@ void SvtIconChoiceCtrl::ClickIcon()
     ULONG nPos;
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
     _aClickIconHdl.Call( this );
-    _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
+/*
+    if ( pSelectedEntry )
+        _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
+*/
 }
 BOOL SvtIconChoiceCtrl::IsEntryEditing() const
 {
