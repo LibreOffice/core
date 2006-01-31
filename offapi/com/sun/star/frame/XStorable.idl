@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 11:30:17 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,16 @@ published interface XStorable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** stores the object's persistent data to a URL and
-        lets the object become the representation of this new URL.
+        makes this URL the new location of the object.
 
         <p>This is the normal behavior for UI's "save-as" feature.</p>
+
+        <p>The change of the location makes it necessary to store the document in
+        a format that the object can load. For this reason the implementation of
+        <member>XStorable::storeAsURL()</member> will throw an exception if a pure
+        export filter is used, it will accept only combined import/export filters.
+        For such filters the method <member>XStorable::storeToURL()</member>
+        must be used that does not change the location of the object.</p>
 
         @param sURL
             specifies the new location of this component
@@ -147,6 +154,10 @@ published interface XStorable: com::sun::star::uno::XInterface
         continues to be a representation of the old URL.
 
         <p>This is the normal behavior for UI's export feature.</p>
+
+        <p>This method accepts all kinds of export filters, not only combined
+        import/export filters because it implements an exporting capability, not a
+        persistence capability.</p>
 
         @throws com::sun::star::io::IOException
             if an IO error occured during save operation
