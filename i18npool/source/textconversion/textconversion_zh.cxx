@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:15:56 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,21 +49,6 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-// defined in stc_char.cxx and stc_word.cxx  generated from stc_char.dic and stc_word.dic
-// by genconv_dict
-extern const sal_uInt16* getSTC_CharIndex_S2T();
-extern const sal_Unicode* getSTC_CharData_S2T();
-extern const sal_uInt16* getSTC_CharIndex_S2V();
-extern const sal_Unicode* getSTC_CharData_S2V();
-extern const sal_uInt16* getSTC_CharIndex_T2S();
-extern const sal_Unicode* getSTC_CharData_T2S();
-
-extern const sal_uInt16* getSTC_WordIndex_S2T(sal_Int32 &count);
-extern const sal_uInt16* getSTC_WordIndex_T2S(sal_Int32 &count);
-extern const sal_uInt16* getSTC_WordEntry_S2T();
-extern const sal_uInt16* getSTC_WordEntry_T2S();
-extern const sal_Unicode* getSTC_WordData(sal_Int32 &count);
-
 TextConversion_zh::TextConversion_zh( const Reference < XMultiServiceFactory >& xMSF )
 {
     Reference < XInterface > xI;
@@ -77,26 +62,31 @@ TextConversion_zh::TextConversion_zh( const Reference < XMultiServiceFactory >& 
 
 sal_Unicode SAL_CALL getOneCharConversion(sal_Unicode ch, const sal_Unicode* Data, const sal_uInt16* Index)
 {
-    sal_Unicode address = Index[ch>>8];
-    if (address != 0xFFFF)
-        address = Data[address + (ch & 0xFF)];
-    return (address != 0xFFFF) ? address : ch;
+    if (Data && Index) {
+        sal_Unicode address = Index[ch>>8];
+        if (address != 0xFFFF)
+            address = Data[address + (ch & 0xFF)];
+        return (address != 0xFFFF) ? address : ch;
+    } else {
+        return ch;
+    }
 }
 
-OUString SAL_CALL getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
+OUString SAL_CALL
+TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
 {
     const sal_Unicode *Data;
     const sal_uInt16 *Index;
 
     if (toSChinese) {
-        Data = getSTC_CharData_T2S();
-        Index = getSTC_CharIndex_T2S();
+        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_T2S"))();
+        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_T2S"))();
     } else if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
-        Data = getSTC_CharData_S2V();
-        Index = getSTC_CharIndex_S2V();
+        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_S2V"))();
+        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2V"))();
     } else {
-        Data = getSTC_CharData_S2T();
-        Index = getSTC_CharIndex_S2T();
+        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_S2T"))();
+        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2T"))();
     }
 
     rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength ); // defined in x_rtl_ustring.h
@@ -106,10 +96,10 @@ OUString SAL_CALL getCharConversion(const OUString& aText, sal_Int32 nStartPos, 
     return OUString( newStr->buffer, nLength);
 }
 
-OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
+OUString SAL_CALL
+TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
     sal_Int32 dictLen = 0;
-    const sal_Unicode *wordData = getSTC_WordData(dictLen);
     sal_Int32 maxLen = 0;
     const sal_uInt16 *index;
     const sal_uInt16 *entry;
@@ -117,20 +107,21 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
     const sal_uInt16 *charIndex;
     sal_Bool one2one=sal_True;
 
+    const sal_Unicode *wordData = ((const sal_Unicode* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordData"))(dictLen);
     if (toSChinese) {
-        index = getSTC_WordIndex_T2S(maxLen);
-        entry = getSTC_WordEntry_T2S();
-        charData = getSTC_CharData_T2S();
-        charIndex = getSTC_CharIndex_T2S();
+        index = ((const sal_uInt16* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordIndex_T2S"))(maxLen);
+        entry = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_WordEntry_T2S"))();
+        charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_T2S"))();
+        charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_T2S"))();
     } else {
-        index = getSTC_WordIndex_S2T(maxLen);
-        entry = getSTC_WordEntry_S2T();
+        index = ((const sal_uInt16* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordIndex_S2T"))(maxLen);
+        entry = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_WordEntry_S2T"))();
         if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
-            charData = getSTC_CharData_S2V();
-            charIndex = getSTC_CharIndex_S2V();
+            charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_S2V"))();
+            charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_S2V"))();
         } else {
-            charData = getSTC_CharData_S2T();
-            charIndex = getSTC_CharIndex_S2T();
+            charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_S2T"))();
+            charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_S2T"))();
         }
     }
 
