@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:08:56 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>
-#include <data/zh_pinyin.h>
-#include <data/zh_zhuyin.h>
-#include <data/ko_phonetic.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -82,49 +79,10 @@ sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) 
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale ) throw (RuntimeException)
 {
-        static OUString space(OUString::createFromAscii(" "));
-        OUString candidate;
-        // TODO: the phonetic candidate will be provided by language engine for CJK.
-        if (rLocale.Language.equalsAscii("zh")) {
-            sal_Unicode *Str;
-            sal_uInt16 *Index1, *Index2;
-            if (rLocale.Country.equalsAscii("TW") ||
-                rLocale.Country.equalsAscii("HK") ||
-                rLocale.Country.equalsAscii("MO")) {
-                    Str = ZhuYinStr_zh;
-                    Index1 = ZhuYinIndex1_zh;
-                    Index2 = ZhuYinIndex2_zh;
-            } else {
-                    Str = PinYinStr_zh;
-                    Index1 = PinYinIndex1_zh;
-                    Index2 = PinYinIndex2_zh;
-            }
-
-            for (sal_Int32 i=0; i < rIndexEntry.getLength(); i++) {
-                sal_Unicode ch = rIndexEntry[i];
-                sal_uInt16 address = Index1[ch>>8];
-                if (address != 0xFFFF)
-                    address = Index2[address + (ch & 0xFF)];
-                if (i > 0)
-                    candidate += space;
-                if (address != 0xFFFF)
-                    candidate += OUString(&Str[address]);
-            }
-        } else if (rLocale.Language.equalsAscii("ja")) {
-            ; // TODO
-        } else if (rLocale.Language.equalsAscii("ko")) {
-            for (sal_Int32 i=0; i < rIndexEntry.getLength(); i++) {
-                sal_Unicode ch = rIndexEntry[i];
-                sal_uInt16 address = PhoneticIndex_ko[ch>>8];
-                if (address != 0xFFFF)
-                    address = PhoneticCharacter_ko[address + (ch & 0xFF)];
-                if (address != 0xFFFF)
-                    candidate += OUString(&address, 1);
-                else
-                    candidate += space;
-            }
-        }
-        return candidate;
+        if (getLocaleSpecificIndexEntrySupplier(rLocale, OUString()).is())
+            return xIES->getPhoneticCandidate(rIndexEntry, rLocale);
+        else
+            throw RuntimeException();
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
@@ -175,11 +133,16 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
             return xIES;
         else if (xMSF.is()) {
+            LocaleData ld;
             aLocale = rLocale;
             if (rSortAlgorithm.getLength() == 0)
-                aSortAlgorithm = LocaleData().getDefaultIndexAlgorithm( rLocale );
+                aSortAlgorithm = ld.getDefaultIndexAlgorithm( rLocale );
             else
                 aSortAlgorithm = rSortAlgorithm;
+
+            OUString module = ld.getIndexModuleByAlgorithm(rLocale, aSortAlgorithm);
+            if (module.getLength() > 0 && createLocaleSpecificIndexEntrySupplier(module))
+                return xIES;
 
             sal_Int32 l = rLocale.Language.getLength();
             sal_Int32 c = rLocale.Country.getLength();
