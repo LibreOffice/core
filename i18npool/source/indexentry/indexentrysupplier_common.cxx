@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_common.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:09:35 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( cons
 OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUString& rIndexEntry,
     const lang::Locale& rLocale ) throw (RuntimeException)
 {
-    throw RuntimeException();
+    return OUString();
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& rLocale ) throw (RuntimeException)
@@ -82,22 +82,8 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
     usePhonetic = LocaleData().isPhonetic(rLocale, rAlgorithm);
     collator->loadCollatorAlgorithm(rAlgorithm, rLocale, collatorOptions);
     aLocale = rLocale;
+    aAlgorithm = rAlgorithm;
     return sal_True;
-}
-
-const OUString& SAL_CALL IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
-    const OUString& PhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
-{
-    // The condition for using phonetic entry is:
-    // usePhonetic is set for the algorithm;
-    // rLocale for phonetic entry is same as aLocale for algorithm,
-    // which means Chinese phonetic will not be used for Japanese algorithm;
-    // phonetic entry is not blank.
-    if (usePhonetic && PhoneticEntry.getLength() > 0 && rLocale.Language == aLocale.Language &&
-            rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
-        return PhoneticEntry;
-    else
-        return IndexEntry;
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
@@ -111,18 +97,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
     const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const lang::Locale& rLocale2 )
     throw (RuntimeException)
 {
-    sal_Int16 result =
-            collator->compareString(getEntry(rIndexEntry1, rPhoneticEntry1, rLocale1),
-                                    getEntry(rIndexEntry2, rPhoneticEntry2, rLocale2));
-
-    // equivalent of phonetic entries does not mean equivalent of index entries.
-    // we have to continue comparing index entry here.
-    if (result == 0 && usePhonetic && rPhoneticEntry1.getLength() > 0 &&
-            rLocale1.Language == rLocale2.Language && rLocale1.Country == rLocale2.Country &&
-            rLocale1.Variant == rLocale2.Variant)
-        return collator->compareString(rIndexEntry1, rIndexEntry2);
-
-    return result;
+    return collator->compareString(rIndexEntry1, rIndexEntry2);
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
@@ -135,6 +110,22 @@ OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool bM
     const lang::Locale& rLocale ) throw (RuntimeException)
 {
     throw RuntimeException();
+}
+
+const OUString& SAL_CALL
+IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
+    const OUString& PhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
+{
+    // The condition for using phonetic entry is:
+    // usePhonetic is set for the algorithm;
+    // rLocale for phonetic entry is same as aLocale for algorithm,
+    // which means Chinese phonetic will not be used for Japanese algorithm;
+    // phonetic entry is not blank.
+    if (usePhonetic && PhoneticEntry.getLength() > 0 && rLocale.Language == aLocale.Language &&
+            rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
+        return PhoneticEntry;
+    else
+        return IndexEntry;
 }
 
 OUString SAL_CALL
