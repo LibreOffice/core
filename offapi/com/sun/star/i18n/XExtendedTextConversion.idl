@@ -2,9 +2,9 @@
  *
  * $RCSfile: XExtendedTextConversion.idl,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
- * last change: $Author: rt $ $Date: 2005-11-11 10:56:10 $
+ * last change: $Author: kz $ $Date: 2006-01-31 18:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConve
     //-------------------------------------------------------------------------
     /**
         The functionality of this method is same as
-        <type scope="::com::sun::star::i18n::XTextConversion>getConversion</type>,
+        <member scope="::com::sun::star::i18n">XTextConversion::getConversion()</member>,
         except an additional output parameter rOffset.
 
         @param rOffset
