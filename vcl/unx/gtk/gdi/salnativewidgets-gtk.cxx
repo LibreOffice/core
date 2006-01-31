@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 13:50:07 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2099,6 +2099,10 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart nPart,
         // Allow the tab to draw a right border if needed
         tabRect.Right() -= 1;
     }
+
+    // #129732# avoid degenerate cases which might lead to crashes
+    if( tabRect.GetWidth() <= 1 || tabRect.GetHeight() <= 1 )
+        return false;
 
     if( nType == CTRL_TAB_ITEM )
     {
