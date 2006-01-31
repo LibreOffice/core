@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:12:41 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:39:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,18 +51,19 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=   \
             $(SLO)$/indexentrysupplier.obj \
             $(SLO)$/indexentrysupplier_asian.obj \
-            $(SLO)$/indexentrysupplier_zh_pinyin.obj \
-            $(SLO)$/indexentrysupplier_zh_stroke.obj \
-            $(SLO)$/indexentrysupplier_zh_radical.obj \
-            $(SLO)$/indexentrysupplier_zh_zhuyin.obj \
-            $(SLO)$/indexentrysupplier_zh_TW_radical.obj \
-            $(SLO)$/indexentrysupplier_zh_TW_stroke.obj \
-            $(SLO)$/indexentrysupplier_ko_dict.obj \
             $(SLO)$/indexentrysupplier_ja_phonetic.obj \
             $(SLO)$/indexentrysupplier_default.obj \
             $(SLO)$/indexentrysupplier_common.obj
 
+APP1TARGET = genindex_data
+
+APP1OBJS   = $(OBJ)$/genindex_data.obj
+
+APP1STDLIBS = $(SALLIB) \
+        $(ICUINLIB) \
+        $(ICUUCLIB)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
