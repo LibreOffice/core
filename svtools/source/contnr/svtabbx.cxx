@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:56:19 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -951,7 +951,8 @@ Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     OSL_ENSURE( m_pAccessible, "Invalid call: Accessible is null" );
-    return new ::svt::AccessibleBrowseBoxTableCell( m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos );
+    return new ::svt::AccessibleBrowseBoxTableCell(
+        m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
 }
 // -----------------------------------------------------------------------
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
