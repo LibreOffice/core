@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:43:36 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ Collator_Unicode::Collator_Unicode()
 {
     implementationName = "com.sun.star.i18n.Collator_Unicode";
     collator = NULL;
-    rulesImage = NULL;
 }
 
 Collator_Unicode::~Collator_Unicode()
@@ -76,9 +75,47 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
     if (!collator) {
         // load ICU collator
         UErrorCode status = U_ZERO_ERROR;
-        if (rulesImage) {
-            collator = new RuleBasedCollator(rulesImage, status);
-        } else {
+        if (OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
+            OUStringBuffer aBuf;
+#ifdef SAL_DLLPREFIX
+            aBuf.appendAscii(SAL_DLLPREFIX);
+#endif
+            aBuf.appendAscii( "collator_data" ).appendAscii( SAL_DLLEXTENSION );
+            oslModule hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+            if (hModule) {
+                const sal_uInt8* (*func)() = NULL;
+                aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
+                if (rLocale.Language.equalsAscii("zh")) {
+                    OUString func_base = aBuf.makeStringAndClear();
+                    if (OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0)
+                        func=(const sal_uInt8* (*)()) osl_getSymbol(hModule,
+                                    (func_base + OUString::createFromAscii("TW_") + rAlgorithm).pData);
+                    if (!func)
+                        func=(const sal_uInt8* (*)()) osl_getSymbol(hModule, (func_base + rAlgorithm).pData);
+                } else {
+                    if (rLocale.Language.equalsAscii("ja")) {
+                        // replace algrithm name to implementation name.
+                        if (rAlgorithm.equalsAscii("phonetic (alphanumeric first)") )
+                            aBuf.appendAscii("phonetic_alphanumeric_first");
+                        else if (rAlgorithm.equalsAscii("phonetic (alphanumeric last)"))
+                            aBuf.appendAscii("phonetic_alphanumeric_last");
+                        else
+                            aBuf.append(rAlgorithm);
+                    } else {
+                        aBuf.append(rAlgorithm);
+                    }
+                    func=(const sal_uInt8* (*)()) osl_getSymbol(hModule, aBuf.makeStringAndClear().pData);
+                }
+                if (func) {
+                    const sal_uInt8* ruleImage=func();
+                    collator = new RuleBasedCollator(ruleImage, status);
+                    if (! U_SUCCESS(status))
+                        throw RuntimeException();
+                }
+                osl_unloadModule(hModule);
+            }
+        }
+        if (!collator) {
            // load ICU collator
             /** ICU collators are loaded using a locale only.
                 ICU uses Variant as collation algorithm name (like de__PHONEBOOK
@@ -92,9 +129,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                    OUStringToOString(rAlgorithm, RTL_TEXTENCODING_ASCII_US).getStr());
 
             collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
+            if (! U_SUCCESS(status))
+                throw RuntimeException();
         }
-        if (! U_SUCCESS(status))
-            throw RuntimeException();
     }
 
     if (options & CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT)
@@ -129,3 +166,4 @@ Collator_Unicode::getSupportedServiceNames() throw( RuntimeException )
 }
 
 } } } }
+
