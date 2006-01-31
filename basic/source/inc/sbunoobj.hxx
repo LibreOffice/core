@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:39 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ class SbUnoObject: public SbxObject
     Reference< XMaterialHolder > mxMaterialHolder;
     Reference< XInvocation > mxInvocation;
     Reference< XExactName > mxExactName;
+    Reference< XExactName > mxExactNameInvocation;
     BOOL bNeedIntrospection;
     Any maTmpUnoObj;    // Only to save obj for doIntrospection!
 
@@ -134,14 +135,20 @@ class SbUnoMethod : public SbxMethod
     SbUnoMethod* pPrev;
     SbUnoMethod* pNext;
 
+    bool mbInvocation;      // Method is based on invocation
+
 public:
     TYPEINFO();
 
-    SbUnoMethod( const String& aName, SbxDataType eSbxType, Reference< XIdlMethod > xUnoMethod_ );
+    SbUnoMethod( const String& aName, SbxDataType eSbxType, Reference< XIdlMethod > xUnoMethod_,
+        bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo();
 
     const Sequence<ParamInfo>& getParamInfos( void );
+
+    bool isInvocationBased( void )
+        { return mbInvocation; }
 };
 
 
@@ -153,11 +160,16 @@ class SbUnoProperty : public SbxProperty
     Property aUnoProp;
     UINT32 nId;
 
+    bool mbInvocation;      // Property is based on invocation
+
     virtual ~SbUnoProperty();
 public:
     TYPEINFO();
     SbUnoProperty( const String& aName, SbxDataType eSbxType,
-        const Property& aUnoProp_, UINT32 nId_ );
+        const Property& aUnoProp_, UINT32 nId_, bool bInvocation );
+
+    bool isInvocationBased( void )
+        { return mbInvocation; }
 };
 
 // Factory-Klasse fuer das Anlegen von Uno-Structs per DIM AS NEW
