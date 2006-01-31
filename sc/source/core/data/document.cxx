@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:04:31 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #ifndef __SGI_STL_SET
 #include <set>
 #endif
+#include "autonamecache.hxx"
 
 struct ScDefaultAttr
 {
@@ -2400,8 +2401,14 @@ void ScDocument::CompileXML()
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
+    // #b6355215# set AutoNameCache to speed up automatic name lookup
+    DBG_ASSERT( !pAutoNameCache, "AutoNameCache already set" );
+    pAutoNameCache = new ScAutoNameCache( this );
+
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i]) pTab[i]->CompileXML( aProgress );
+
+    DELETEZ( pAutoNameCache );  // valid only during CompileXML, where cell contents don't change
 
     if ( pCondFormList )
         pCondFormList->CompileXML();
