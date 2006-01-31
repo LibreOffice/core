@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textToPronounce_zh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:34:29 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,22 @@ sal_Int16 SAL_CALL TextToPronounce_zh::getType() throw (RuntimeException)
     return TransliterationType::ONE_TO_ONE| TransliterationType::IGNORE;
 }
 
+const sal_Unicode* SAL_CALL
+TextToPronounce_zh::getPronounce(const sal_Unicode ch)
+{
+    static const sal_Unicode emptyString[]={0};
+    if (idx) {
+        sal_uInt16 address = idx[0][ch>>8];
+        if (address != 0xFFFF)
+            return &idx[2][idx[1][address + (ch & 0xFF)]];
+    }
+    return emptyString;
+}
+
 OUString SAL_CALL
 TextToPronounce_zh::folding(const OUString & inStr, sal_Int32 startPos,
         sal_Int32 nCount, Sequence< sal_Int32 > & offset) throw (RuntimeException)
 {
-    sal_Unicode u;
     OUStringBuffer sb;
     const sal_Unicode * chArr = inStr.getStr() + startPos;
 
@@ -68,41 +79,30 @@ TextToPronounce_zh::folding(const OUString & inStr, sal_Int32 startPos,
 
     offset[0] = 0;
     for (sal_Int32 i = 0; i < nCount; i++) {
-        u = chArr[i];
-        j = pronTab[u];
-        if (j == -1) {
-            if (useOffset)
-                offset[i + 1] = offset[i];
-            continue;
-        }
-
-        sb.append(&pronList[pronIdx[j]], pronIdx[j + 1] - pronIdx[j]);
+        OUString pron(getPronounce(chArr[i]));
+        sb.append(pron);
 
         if (useOffset)
-            offset[i + 1] = offset[i] + pronIdx[j + 1] - pronIdx[j];
+            offset[i + 1] = offset[i] + pron.getLength();
     }
-    return OUString(sb.getStr());
+    return sb.makeStringAndClear();
 }
 
 OUString SAL_CALL
 TextToPronounce_zh::transliterateChar2String( sal_Unicode inChar) throw(RuntimeException)
 {
-    sal_Int32 j = pronTab[inChar];
-    if (j == -1)
-        return OUString();
-    else
-        return OUString(&pronList[pronIdx[j]], pronIdx[j + 1] - pronIdx[j]);
+    return OUString(getPronounce(inChar));
 }
 
 sal_Unicode SAL_CALL
 TextToPronounce_zh::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
 {
-    sal_Int32 j = pronTab[inChar];
-    if (j == -1)
+    const sal_Unicode* pron=getPronounce(inChar);
+    if (!pron || !pron[0])
         return 0;
-    if (pronIdx[j + 1] - pronIdx[j] > 1)
+    if (pron[1])
         throw MultipleCharsOutputException();
-    return pronList[pronIdx[j]];
+    return *pron;
 }
 
 sal_Bool SAL_CALL
@@ -113,7 +113,7 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     sal_Int32 realCount;
     int i;  // loop variable
     const sal_Unicode * s1, * s2;
-    sal_Unicode u1, u2;
+    const sal_Unicode *pron1, *pron2;
 
     if (nCount1 + pos1 > str1.getLength())
         nCount1 = str1.getLength() - pos1;
@@ -126,9 +126,9 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     s1 = str1.getStr() + pos1;
     s2 = str2.getStr() + pos2;
     for (i = 0; i < realCount; i++) {
-        u1 = * s1++;
-        u2 = * s2 ++;
-        if (pronTab[u1] != pronTab[u2]) {
+        pron1=getPronounce(*s1++);
+        pron2=getPronounce(*s2++);
+        if (pron1 != pron2) {
             nMatch1 = nMatch2 = i;
             return sal_False;
         }
@@ -137,24 +137,35 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     return (nCount1 == nCount2);
 }
 
-#include <data/pron_zh_cn.h>
-
-TextToPinyin_zh_CN::TextToPinyin_zh_CN() {
-        pronList = pronList_zh_cn;
-        pronIdx = pronIdx_zh_cn;
-        pronTab = pronTab_zh_cn;
+TextToPinyin_zh_CN::TextToPinyin_zh_CN() : TextToPronounce_zh("get_zh_pinyin")
+{
         transliterationName = "ChineseCharacterToPinyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToPinyin_zh_CN";
 }
 
-#include <data/pron_zh_tw.h>
-
-TextToChuyin_zh_TW::TextToChuyin_zh_TW() {
-        pronList = pronList_zh_tw;
-        pronIdx = pronIdx_zh_tw;
-        pronTab = pronTab_zh_tw;
+TextToChuyin_zh_TW::TextToChuyin_zh_TW() : TextToPronounce_zh("get_zh_zhuyin")
+{
         transliterationName = "ChineseCharacterToChuyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToChuyin_zh_TW";
 }
 
+TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
+{
+#ifdef SAL_DLLPREFIX
+    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION);
+#else
+    OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
+#endif
+    hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
+    idx=NULL;
+    if (hModule) {
+        sal_uInt16** (*function)() = (sal_uInt16** (*)()) osl_getSymbol(hModule, OUString::createFromAscii(func_name).pData);
+        if (function)
+            idx=function();
+    }
+}
+TextToPronounce_zh::~TextToPronounce_zh()
+{
+    if (hModule) osl_unloadModule(hModule);
+}
 } } } }
