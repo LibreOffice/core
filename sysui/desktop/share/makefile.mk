@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 13:00:54 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:20:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
 MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 SPECFILES = \
     $(MISC)/redhat-menus.spec \
     $(MISC)/suse-menus.spec \
@@ -109,7 +109,7 @@ $(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf
     @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
     @mv -f $(@).$(INPATH) $@
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 $(SPECFILES) : add_specfile_triggers.sed symlink_triggers
 $(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
     @sed -f ../share/add_specfile_triggers.sed $< | tr -d "\015" >$@
