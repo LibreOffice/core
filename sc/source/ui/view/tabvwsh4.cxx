@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:10:02 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@
 #include "scextopt.hxx"
 #include "printopt.hxx"
 #include "drawview.hxx"
+#include "fupoor.hxx"
 
 #ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
@@ -326,9 +327,21 @@ USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
     if ( pHdl && pHdl->IsInputMode() )
         pHdl->EnterHandler();
 
-    // #110797#
-    if ( GetDrawView() )
-        GetDrawView()->EndTextEdit();
+    // #110797# draw text edit mode must be closed
+    FuPoor* pPoor = GetDrawFuncPtr();
+    if ( pPoor && ( IsDrawTextShell() || pPoor->GetSlotID() == SID_DRAW_NOTEEDIT ) )
+    {
+        // "clean" end of text edit, including note handling, subshells and draw func switching,
+        // as in FuDraw and ScTabView::DrawDeselectAll
+        GetViewData()->GetDispatcher().Execute( pPoor->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+    }
+    ScDrawView* pDrView = GetScDrawView();
+    if ( pDrView )
+    {
+        // force end of text edit, to be safe
+        // #128314# ScEndTextEdit must always be used, to ensure correct UndoManager
+        pDrView->ScEndTextEdit();
+    }
 
     if ( pFormShell )
     {
