@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:36:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
 #endif
 
 using namespace com::sun::star::uno;
@@ -130,10 +127,7 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
             SetEntryData( nEntry, (void*)nValue );
         }
     }
-    //#104079# extended numberings are only insert when CJK support is switched on
-    SvtLanguageOptions aLangOpt;
-    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) &&
-            (aLangOpt.IsCJKFontEnabled() || aLangOpt.IsCTLFontEnabled()))
+    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
     {
         if(pImpl->xInfo.is())
         {
