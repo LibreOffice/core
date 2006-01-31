@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:04:20 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,6 +703,28 @@ BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
         BOOL bFound = TRUE;
         bChangeCol = ( nStartCol == 0 && nEndCol == MAXCOL );
         bChangeRow = ( nStartRow == 0 && nEndRow == MAXROW );
+        BOOL bForcedChangeRow = FALSE;
+
+        // #i53558# Crop entire column of old row limit to real print area with
+        // some fuzzyness.
+        if (!bChangeRow && nStartRow == 0)
+        {
+            SCROW nPAEndRow;
+            bFound = pDoc->GetPrintAreaVer( nPrintTab, nStartCol, nEndCol, nPAEndRow, bNotes );
+            // Say we don't want to print more than ~1000 empty rows, which are
+            // about 14 pages intentionally left blank..
+            const SCROW nFuzzy = 23*42;
+            if (nPAEndRow + nFuzzy < nEndRow)
+            {
+                bForcedChangeRow = TRUE;
+                nEndRow = nPAEndRow;
+            }
+            else
+                bFound = TRUE;  // user seems to _want_ to print some empty rows
+        }
+        // TODO: in case we extend the number of columns we may have to do the
+        // same for horizontal cropping.
+
         if ( bChangeCol && bChangeRow )
             bFound = pDoc->GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes );
         else if ( bChangeCol )
@@ -712,6 +734,9 @@ BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
 
         if (!bFound)
             return FALSE;   // leer
+
+        if (bForcedChangeRow)
+            bChangeRow = TRUE;
     }
 
     pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab,
