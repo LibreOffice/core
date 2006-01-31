@@ -46,9 +46,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:08:38 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:25:04 $
  *
  ************************************************************************/
 
@@ -113,8 +113,8 @@ class FileInputStream
     FileInputStream( const char* pFilename );
     ~FileInputStream();
 
-    int getc() { return (m_nPos < m_nLen) ? int(m_pMemory[m_nPos++]) : -1; }
-    void ungetc()
+    int getChar() { return (m_nPos < m_nLen) ? int(m_pMemory[m_nPos++]) : -1; }
+    void ungetChar()
     {
         if( m_nPos > 0 )
             m_nPos--;
@@ -278,18 +278,18 @@ static char *token( FileInputStream* stream, int& rLen )
 
     /* skip over white space */
     // relies on EOF = -1
-    while( is_white_Array[ (ch = stream->getc()) & 255 ] )
+    while( is_white_Array[ (ch = stream->getChar()) & 255 ] )
         ;
 
     idx = 0;
     while( ch != -1 && ! is_delimiter_Array[ ch & 255 ] )
     {
         ident[idx++] = ch;
-        ch = stream->getc();
+        ch = stream->getChar();
     }
 
     if (ch == -1 && idx < 1) return ((char *)NULL);
-    if (idx >= 1 && ch != ':' ) stream->ungetc();
+    if (idx >= 1 && ch != ':' ) stream->ungetChar();
     if (idx < 1 ) ident[idx++] = ch;    /* single-character token */
     ident[idx] = 0;
     rLen = idx;
@@ -311,16 +311,16 @@ static char *linetoken( FileInputStream* stream )
     static char ident[MAX_NAME]; /* storage buffer for keywords */
     int ch, idx;
 
-    while ((ch = stream->getc()) == ' ' || ch == '\t' );
+    while ((ch = stream->getChar()) == ' ' || ch == '\t' );
 
     idx = 0;
     while (ch != -1 && ch != lineterm && ch != '\r')
     {
         ident[idx++] = ch;
-        ch = stream->getc();
+        ch = stream->getChar();
     } /* while */
 
-    stream->ungetc();
+    stream->ungetChar();
     ident[idx] = 0;
 
     return(ident);  /* returns pointer to the token */
