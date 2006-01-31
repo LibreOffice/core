@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 14:58:05 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:20:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ KDEICONLIST = \
     locolor/{16x16 32x32}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     locolor/{16x16 32x32}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 PKGNAME=$(shell sed -n -e 's/^Name: //p' $(TARGET)-menus.spec)
 RPMFILE=$(PKGDIR)/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
@@ -147,7 +147,7 @@ ULFDIR = $(COMMONMISC)$/desktopshare
 
 .INCLUDE :  target.mk
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 ALLTAR : $(RPMFILE) 
 
@@ -226,6 +226,7 @@ $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
 # --- packaging ---------------------------------------------------
     
 $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
+    @-$(MKDIRHIER) $(@:d)
     -$(RM) $(@:d)$/$(PKGNAME)-*.noarch.rpm $(BIN)$/noarch$/$(PKGNAME)-*.noarch.rpm 
     @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec $(RPMMACROS) \
         --buildroot $(LAUNCHERDIR) \
