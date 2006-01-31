@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:37:21 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1878,12 +1878,6 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         if ( evt.PropertyName.equals( PROPERTY_READONLY ) )
         {
             sBindingControlledProperty = PROPERTY_READONLY;
-#if FS_PRIV_DEBUG
-            sal_Bool bValue = sal_False;
-            OSL_VERIFY( evt.NewValue >>= bValue );
-            setPropertyValue( PROPERTY_BACKGROUNDCOLOR, makeAny( sal_Int32( bValue ? 0xFF0000 : 0xFFFFFF ) ) );
-            setPropertyValue( PROPERTY_TEXTCOLOR, makeAny( sal_Int32( bValue ? 0x000000 : 0x00000 ) ) );
-#endif
         }
         else if ( evt.PropertyName.equals( PROPERTY_RELEVANT ) )
         {
@@ -2729,7 +2723,10 @@ Any OBoundControlModel::translateControlValueToExternalValue( ) const
 //------------------------------------------------------------------------------
 Any OBoundControlModel::translateControlValueToValidatableValue( ) const
 {
-    return translateControlValueToExternalValue();
+    OSL_PRECOND( m_xValidator.is(), "OBoundControlModel::translateControlValueToValidatableValue: no validator, so why should I?" );
+    if ( m_xValidator == m_xExternalBinding )
+        return translateControlValueToExternalValue();
+    return getControlValue();
 }
 
 //------------------------------------------------------------------------------
