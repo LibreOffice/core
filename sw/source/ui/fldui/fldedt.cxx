@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:37:50 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,8 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 
     }
     pPage->SetHelpId(nHelpId);
+    static_cast<SwFldPage*>(pPage)->SetWrtShell(pSh);
+
     SetTabPage(pPage);
 
     String sTitle(GetText());
