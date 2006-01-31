@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 14:57:10 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:19:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ TARGET=freedesktop
 
 # --- Files --------------------------------------------------------
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 PACKAGE_RPM = $(MISC)$/$(TARGET).rpmflag
 
@@ -59,7 +59,7 @@ PACKAGE_RPM = $(MISC)$/$(TARGET).rpmflag
 
 .INCLUDE :  target.mk
 
-.IF "$(RPM)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 ALLTAR : $(PACKAGE_RPM)
 
@@ -68,6 +68,7 @@ ALLTAR : $(PACKAGE_RPM)
 $(PACKAGE_RPM) : $(MISC)$/redhat.rpmflag
 
 $(PACKAGE_RPM) : $(MISC)/$(TARGET)-menus.spec
+    @-$(MKDIRHIER) $(@:d)
     -@$(RM) $(PKGDIR)$/openoffice.org-$(TARGET)-*.noarch.rpm $(BIN)/noarch/openoffice.org-$(TARGET)-*.noarch.rpm
     @$(MKDIRHIER) $(MISC)$/$(TARGET)
     @$(MKDIRHIER) $(MISC)$/$(TARGET)$/BUILD
