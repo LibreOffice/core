@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:35:01 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,10 +191,14 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
         }
         else
         {
-            SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-            SwDBData aTmp(pSh->GetDBData());
-
-            aDatabaseTLB.Select(aTmp.sDataSource, aTmp.sCommand, aEmptyStr);
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh)
+            {
+                SwDBData aTmp(pSh->GetDBData());
+                aDatabaseTLB.Select(aTmp.sDataSource, aTmp.sCommand, aEmptyStr);
+            }
         }
     }
 
@@ -244,7 +248,9 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
     aData.sDataSource = aDatabaseTLB.GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
-    SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwWrtShell *pSh = GetWrtShell();
+    if(!pSh)
+        pSh = ::GetActiveWrtShell();
 
     if (!aData.sDataSource.getLength())
         aData = pSh->GetDBData();
@@ -342,7 +348,9 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
     if (nOld != GetTypeSel())
     {
-        SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
+        SwWrtShell *pSh = GetWrtShell();
+        if(!pSh)
+            pSh = ::GetActiveWrtShell();
         BOOL bCond = FALSE, bSetNo = FALSE, bFormat = FALSE, bDBFormat = FALSE;
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
