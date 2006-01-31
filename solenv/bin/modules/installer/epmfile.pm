@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:43:27 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:23:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,11 @@ sub create_epm_header
     {
         $provides = "solarisprovides";   # the name in the packagelist
         $requires = "solarisrequires";   # the name in the packagelist
+    }
+    elsif ( $installer::globals::isfreebsdpkgbuild )
+    {
+        $provides = "freebsdprovides";   # the name in the packagelist
+        $requires = "freebsdrequires";   # the name in the packagelist
     }
     else
     {
