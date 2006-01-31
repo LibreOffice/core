@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:42:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,10 +197,15 @@ void SwFldVarPage::Reset(const SfxItemSet& rSet)
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         aTypeLB.SetEntryData(nPos, (void*)nTypeId);
         aNumFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
-        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
-        if(pFormat)
-            aNumFormatLB.SetLanguage(pFormat->GetLanguage());
+        SwWrtShell *pSh = GetWrtShell();
+        if(!pSh)
+            pSh = ::GetActiveWrtShell();
+        if(pSh)
+        {
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            if(pFormat)
+                aNumFormatLB.SetLanguage(pFormat->GetLanguage());
+        }
     }
 
     // alte Pos selektieren
@@ -391,12 +396,17 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                     if (!IsFldDlgHtmlMode())
                     {
-                        SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
-                                    ::GetActiveView()->GetWrtShell().
-                                    GetFldType(RES_SETEXPFLD, sName);
+                        SwWrtShell *pSh = GetWrtShell();
+                        if(!pSh)
+                            pSh = ::GetActiveWrtShell();
+                        if(pSh)
+                        {
+                            SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
+                                    pSh->GetFldType(RES_SETEXPFLD, sName);
 
-                        if (pSetTyp && pSetTyp->GetType() == GSE_STRING)
-                            aNumFormatLB.SelectEntryPos(0); // Textuell
+                            if (pSetTyp && pSetTyp->GetType() == GSE_STRING)
+                                aNumFormatLB.SelectEntryPos(0); // Textuell
+                        }
                     }
                 }
             }
@@ -436,16 +446,21 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         aNameED.SetText(sName);
 
                     // gibt es ein entprechendes SetField
-                    SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
-                                ::GetActiveView()->GetWrtShell().
-                                GetFldType(RES_SETEXPFLD, sName);
-
-                    if(pSetTyp)
+                    SwWrtShell *pSh = GetWrtShell();
+                    if(!pSh)
+                        pSh = ::GetActiveWrtShell();
+                    if(pSh)
                     {
-                        if (pSetTyp->GetType() & GSE_STRING)    // Textuell?
-                            bFormat = TRUE;
-                        else                    // Numerisch
-                            bNumFmt = TRUE;
+                        SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
+                                pSh->GetFldType(RES_SETEXPFLD, sName);
+
+                        if(pSetTyp)
+                        {
+                            if (pSetTyp->GetType() & GSE_STRING)    // Textuell?
+                                bFormat = TRUE;
+                            else                    // Numerisch
+                                bNumFmt = TRUE;
+                        }
                     }
                 }
                 else
@@ -930,8 +945,11 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
 
             SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
 
-            if (pType)
-                bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh && pType)
+                bDelete = !pSh->IsUsed( *pType );
         }
         break;
 
@@ -941,8 +959,11 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
             // Gibts schon einen entsprechenden Type
             SwFieldType* pType = GetFldMgr().GetFldType(RES_USERFLD, sName);
 
-            if (pType)
-                bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh && pType)
+                bDelete = !pSh->IsUsed( *pType );
 
             pType = GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
             if (!pType) // Kein Namenskonflikt mit Variablen
@@ -965,25 +986,30 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
             if (pFldType)
             {
 
-                SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-                const SwFldTypes* p = rSh.GetDoc()->GetFldTypes();
-                USHORT i;
-
-                for (i = 0; i < INIT_FLDTYPES; i++)
+                SwWrtShell *pSh = GetWrtShell();
+                if(!pSh)
+                    pSh = ::GetActiveWrtShell();
+                if(pSh)
                 {
-                    SwFieldType* pType = (*p)[ i ];
-                    if (pType == pFldType)
-                        break;
+                    const SwFldTypes* p = pSh->GetDoc()->GetFldTypes();
+                    USHORT i;
+
+                    for (i = 0; i < INIT_FLDTYPES; i++)
+                    {
+                        SwFieldType* pType = (*p)[ i ];
+                        if (pType == pFldType)
+                            break;
+                    }
+
+                    if (i >= INIT_FLDTYPES && !pSh->IsUsed(*pFldType))
+                        bDelete = TRUE;
+
+                    if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & GSE_SEQ))
+                        bInsert = FALSE;
+
+                    if (nTypeId == TYP_SETFLD && (pFldType->GetType() & GSE_SEQ))
+                        bInsert = FALSE;
                 }
-
-                if (i >= INIT_FLDTYPES && !rSh.IsUsed(*pFldType))
-                    bDelete = TRUE;
-
-                if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & GSE_SEQ))
-                    bInsert = FALSE;
-
-                if (nTypeId == TYP_SETFLD && (pFldType->GetType() & GSE_SEQ))
-                    bInsert = FALSE;
             }
             if (GetFldMgr().GetFldType(RES_USERFLD, sName))
                 bInsert = FALSE;
@@ -1039,7 +1065,13 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
             }
 
             UpdateSubType();
-            ::GetActiveView()->GetWrtShell().SetModified();
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh)
+            {
+                pSh->SetModified();
+            }
         }
         break;
 
@@ -1064,55 +1096,66 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 
             if (pType)  // Aendern
             {
-                SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-                rSh.StartAllAction();
-
-                if (nTypeId == TYP_USERFLD)
+                SwWrtShell *pSh = GetWrtShell();
+                if(!pSh)
+                    pSh = ::GetActiveWrtShell();
+                if(pSh)
                 {
-                    if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
+                    pSh->StartAllAction();
+
+                    if (nTypeId == TYP_USERFLD)
                     {
-                        ULONG nFmt = nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat();
-                        if (nFmt)
-                        {   // Sprache auf Office-Sprache umstellen, da String im Office
-                            // Format vom Kalkulator erwartet wird und so in den Dlg
-                            // eingegeben werden sollte
-                            SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-                            nFmt = SwValueField::GetSystemFormat(rSh.GetNumberFormatter(), nFmt);
+                        if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
+                        {
+                            ULONG nFmt = nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat();
+                            if (nFmt)
+                            {   // Sprache auf Office-Sprache umstellen, da String im Office
+                                // Format vom Kalkulator erwartet wird und so in den Dlg
+                                // eingegeben werden sollte
+                                SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
+                                nFmt = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nFmt);
+                            }
+                            ((SwUserFieldType*)pType)->SetContent(aValueED.GetText(), nFmt);
+                            ((SwUserFieldType*)pType)->SetType(
+                                nNumFormatPos == 0 ? GSE_STRING : GSE_EXPR );
                         }
-                        ((SwUserFieldType*)pType)->SetContent(aValueED.GetText(), nFmt);
-                        ((SwUserFieldType*)pType)->SetType(
-                            nNumFormatPos == 0 ? GSE_STRING : GSE_EXPR );
                     }
-                }
-                else
-                {
-                    if (nFormat != LISTBOX_ENTRY_NOTFOUND)
+                    else
                     {
-                        //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
-                        //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
-                        ((SwDDEFieldType*)pType)->SetCmd(sValue);
-                        ((SwDDEFieldType*)pType)->SetType((USHORT)nFormat);
+                        if (nFormat != LISTBOX_ENTRY_NOTFOUND)
+                        {
+                            //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
+                            //              Namen haben! Wird hier noch nicht beachtet.
+                            USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+                            sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
+                            ((SwDDEFieldType*)pType)->SetCmd(sValue);
+                            ((SwDDEFieldType*)pType)->SetType((USHORT)nFormat);
+                        }
                     }
-                }
-                pType->UpdateFlds();
+                    pType->UpdateFlds();
 
-                rSh.EndAllAction();
+                    pSh->EndAllAction();
+                }
             }
             else        // Neu
             {
                 if(nTypeId == TYP_USERFLD)
                 {
-                    SwUserFieldType aType( ::GetActiveView()->GetWrtShellPtr()->GetDoc(), sName );
-
-                    if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
+                    SwWrtShell *pSh = GetWrtShell();
+                    if(!pSh)
+                        pSh = ::GetActiveWrtShell();
+                    if(pSh)
                     {
-                        aType.SetType(nNumFormatPos == 0 ? GSE_STRING : GSE_EXPR);
-                        aType.SetContent( sValue, nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat() );
-                        aSelectionLB.InsertEntry(sName);
-                        aSelectionLB.SelectEntry(sName);
-                        GetFldMgr().InsertFldType( aType ); // Userfld Neu
+                        SwUserFieldType aType( pSh->GetDoc(), sName );
+
+                        if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
+                        {
+                            aType.SetType(nNumFormatPos == 0 ? GSE_STRING : GSE_EXPR);
+                            aType.SetContent( sValue, nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat() );
+                            aSelectionLB.InsertEntry(sName);
+                            aSelectionLB.SelectEntry(sName);
+                            GetFldMgr().InsertFldType( aType ); // Userfld Neu
+                        }
                     }
                 }
                 else
@@ -1207,10 +1250,14 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& rSet)
             // Sprache auf Office-Sprache umstellen, da String im Office-
             // Format vom Kalkulator erwartet wird und so in den Dlg
             // eingegeben werden sollte
-            SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-            SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-
-            nFormat = SwValueField::GetSystemFormat(rSh.GetNumberFormatter(), nFormat);
+            SwWrtShell *pSh = GetWrtShell();
+            if(!pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh)
+            {
+                SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
+                nFormat = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nFormat);
+            }
         }
     }
     sal_Unicode cSeparator = ' ';
