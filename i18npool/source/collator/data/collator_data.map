@@ -1,0 +1,23 @@
+OOO_1.1 {
+global:
+    GetVersionInfo;
+    component_getDescriptionFunc;
+    get_zh_charset;
+    get_zh_pinyin;
+    get_zh_radical;
+    get_zh_stroke;
+    get_zh_TW_charset;
+    get_zh_TW_radical;
+    get_zh_TW_stroke;
+    get_zh_zhuyin;
+    get_ja_charset;
+    get_ja_phonetic_alphanumeric_first;
+    get_ja_phonetic_alphanumeric_last;
+    get_ko_charset;
+    get_km_charset;
+    get_ne_charset;
+    get_dz_charset;
+
+local:
+    *;
+};
