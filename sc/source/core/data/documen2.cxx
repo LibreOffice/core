@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:04:00 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,6 +319,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pConsolidateDlgData( NULL ),
         pLoadedSymbolStringCellList( NULL ),
         pRecursionHelper( NULL ),
+        pAutoNameCache( NULL ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
         nFormulaCodeInTree(0),
@@ -573,6 +574,7 @@ ScDocument::~ScDocument()
     delete pOtherObjects;
     delete pRecursionHelper;
 
+    DBG_ASSERT( !pAutoNameCache, "AutoNameCache still set in dtor" );
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
