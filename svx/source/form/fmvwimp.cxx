@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:40:26 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,8 +294,8 @@ FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >&   
         Reference< XForm >  xForm;
         for (sal_uInt32 i = 0; i < nLength; i++)
         {
-            xForms->getByIndex(i) >>= xForm;
-            setController(xForm, rWindow.GetControlContainerRef() );
+            if ( xForms->getByIndex(i) >>= xForm )
+                setController( xForm, rWindow.GetControlContainerRef() );
         }
     }
 }
@@ -471,8 +471,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,
     Reference< XForm >  xSubForm;
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
-        xFormCps->getByIndex(i) >>= xSubForm;
-        if (xSubForm.is())
+        if ( xFormCps->getByIndex(i) >>= xSubForm )
             setController(xSubForm, xCC, pController);
     }
 }
