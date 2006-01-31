@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:29:07 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1408,10 +1408,10 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
     }
 
     awt::Rectangle aMinRectangle = AddBorderToArea( awt::Rectangle() );
-    if ( aResult.Width < aMinRectangle.Width )
-        aResult.Width = aMinRectangle.Width + 1;
-    if ( aResult.Height < aMinRectangle.Height )
-        aResult.Height = aMinRectangle.Height + 1;
+    if ( aResult.Width < aMinRectangle.Width + 2 )
+        aResult.Width = aMinRectangle.Width + 2;
+    if ( aResult.Height < aMinRectangle.Height + 2 )
+        aResult.Height = aMinRectangle.Height + 2;
 
     return aResult;
 }
