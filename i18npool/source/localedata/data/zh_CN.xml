@@ -280,9 +280,9 @@
 </SearchOptions>
 </LC_SEARCH>
 <LC_INDEX>
-<IndexKey unoid="pinyin" default="true" phonetic="true"/>
-<IndexKey unoid="stroke" default="false" phonetic="false"/>
-<IndexKey unoid="radical" default="false" phonetic="false"/>
+<IndexKey unoid="pinyin" default="true" phonetic="true" module="asian"/>
+<IndexKey unoid="stroke" default="false" phonetic="false" module="asian"/>
+<IndexKey unoid="radical" default="false" phonetic="false" module="asian"/>
 <UnicodeScript>70</UnicodeScript>
 <FollowPageWord></FollowPageWord>
 <FollowPageWord></FollowPageWord>
