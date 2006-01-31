@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:24:41 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,35 @@ using namespace com::sun::star::uno;
 using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
+
+TextConversion::TextConversion()
+{
+#ifdef SAL_DLLPREFIX
+    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"textconv_dict"SAL_DLLEXTENSION);
+#else
+    OUString lib=OUString::createFromAscii("textconv_dict"SAL_DLLEXTENSION);
+#endif
+    hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
+}
+
+TextConversion::~TextConversion()
+{
+    if (hModule) osl_unloadModule(hModule);
+}
+
+static void* nullFunc()
+{
+    return NULL;
+}
+
+void* SAL_CALL
+TextConversion::getFunctionBySymbol(const sal_Char* func)
+{
+    if (hModule)
+        return osl_getSymbol(hModule, OUString::createFromAscii(func).pData);
+    else
+        return (void*) nullFunc;
+}
 
 OUString SAL_CALL
 TextConversion::getImplementationName() throw( RuntimeException )
