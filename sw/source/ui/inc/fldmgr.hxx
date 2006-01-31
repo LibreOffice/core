@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:13:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,9 @@ private:
 public:
     SwFldMgr(SwWrtShell* pSh = 0);
     ~SwFldMgr();
+
+    void                SetWrtShell( SwWrtShell* pShell )
+                        {   pWrtShell = pShell;     }
 
     // Feld einfuegen ueber TypeId (TYP_ ...)
     BOOL            InsertFld(  const SwInsertFld_Data& rData );
