@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:15:10 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <osl/module.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -54,6 +55,8 @@ class TextConversion: public cppu::WeakImplHelper2
 >
 {
 public:
+        TextConversion();
+        ~TextConversion();
         // Methods
         virtual com::sun::star::i18n::TextConversionResult SAL_CALL
         getConversions( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
@@ -95,6 +98,8 @@ public:
             throw( com::sun::star::uno::RuntimeException );
 protected :
     const sal_Char* implementationName;
+    oslModule hModule;
+    void* SAL_CALL getFunctionBySymbol(const sal_Char* func);
 };
 
 // for Hangul2Hanja conversion
@@ -149,6 +154,8 @@ private :
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
+        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+            getCharConversions(const rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja);
 };
 
 //  ----------------------------------------------------
@@ -200,6 +207,7 @@ private :
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
         rtl::OUString SAL_CALL getWordConversion(const ::rtl::OUString& aText,
             sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, com::sun::star::uno::Sequence <sal_Int32>& offset);
+        rtl:: OUString SAL_CALL getCharConversion(const rtl:: OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions);
         com::sun::star::lang::Locale aLocale;
 };
 
