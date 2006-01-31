@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:04:41 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,6 +330,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             // only one frame may be active at a given time
             if ( !pWindow->HasActiveChildFrame() &&
                  ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                   getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                    getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             {
                 aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
@@ -340,6 +341,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
             if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                 getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                  getAccessibleRole() == accessibility::AccessibleRole::DIALOG )  // #i18891#
             {
                 aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
@@ -512,6 +514,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
         if ( pWindow->HasChildPathFocus() &&
              ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+               getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
