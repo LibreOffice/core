@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:20:08 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ void cpp2uno_call(
     typelib_TypeDescriptionReference * pReturnTypeRef, // 0 indicates void return
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void ** pCallStack,
-    sal_Int64 * pRegisterReturn /* space for register return */ )
+    void * pReturnValue )
 {
     // pCallStack: ret, [return ptr], this, params
     char * pCppStack = (char *)(pCallStack +1);
@@ -74,7 +74,7 @@ void cpp2uno_call(
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
         {
-            pUnoReturn = pRegisterReturn; // direct way for simple types
+            pUnoReturn = pReturnValue; // direct way for simple types
         }
         else // complex return via ptr (pCppReturn)
         {
@@ -215,7 +215,7 @@ void cpp2uno_call(
                 uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
             }
             // complex return ptr is set to eax
-            *(void **)pRegisterReturn = pCppReturn;
+            *static_cast< void ** >(pReturnValue) = pCppReturn;
         }
         if (pReturnTypeDescr)
         {
@@ -228,7 +228,7 @@ void cpp2uno_call(
 //==================================================================================================
 extern "C" void cpp_vtable_call(
     int nFunctionIndex, int nVtableOffset, void** pCallStack,
-    sal_Int64 nRegReturn )
+    void * pReturnValue )
 {
     OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
 
@@ -275,7 +275,7 @@ extern "C" void cpp_vtable_call(
                 pCppI, aMemberDescr.get(),
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef,
                 0, 0, // no params
-                pCallStack, &nRegReturn );
+                pCallStack, pReturnValue );
         }
         else
         {
@@ -290,7 +290,7 @@ extern "C" void cpp_vtable_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
                 1, &aParam,
-                pCallStack, &nRegReturn );
+                pCallStack, pReturnValue );
         }
         break;
     }
@@ -324,7 +324,7 @@ extern "C" void cpp_vtable_call(
                         &pInterface, pTD, cpp_acquire );
                     pInterface->release();
                     TYPELIB_DANGER_RELEASE( pTD );
-                    *(void **)&nRegReturn = pCallStack[1];
+                    *static_cast< void ** >(pReturnValue) = pCallStack[1];
                     break;
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
@@ -336,7 +336,7 @@ extern "C" void cpp_vtable_call(
                 ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pReturnTypeRef,
                 ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->nParams,
                 ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pParams,
-                pCallStack, &nRegReturn );
+                pCallStack, pReturnValue );
         }
         break;
     }
