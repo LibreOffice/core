@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:40:07 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ class SwFldPage : public SfxTabPage
     String              aLstStrArr[ coLBCount ];
     SwFldMgr            aMgr;
     SwField             *pCurFld;
+    SwWrtShell*         pWrtShell;
     USHORT              nFldDlgAktGrpSel;
     USHORT              nPageId;
     USHORT              nTypeSel;
@@ -74,6 +75,7 @@ protected:
     BOOL                IsFldDlgHtmlMode() const    { return bFldDlgHtmlMode;}
     BOOL                IsRefresh() const           { return bRefresh;}
     SwField*            GetCurField()               { return pCurFld;}
+    SwWrtShell*         GetWrtShell() { return pWrtShell;}
 
     DECL_LINK( InsertHdl, Button *pBtn = 0 );
     DECL_LINK( NumFormatHdl, ListBox *pBtn = 0 );
@@ -106,6 +108,7 @@ public:
     virtual void        ActivatePage();
 
     inline SwFldMgr&    GetFldMgr()         { return aMgr; }
+    void                SetWrtShell( SwWrtShell* pWrtShell );
     void                EditNewField( BOOL bOnlyActivate = FALSE );
     virtual USHORT      GetGroup() = 0;
 };
