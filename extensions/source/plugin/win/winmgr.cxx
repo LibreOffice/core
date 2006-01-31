@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:58:36 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,18 +92,6 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
     TCHAR arPluginsPath[MAX_PATH];
     arPluginsPath[0] = 0;
 
-#ifdef UNICODE
-    if (::rtl_ustr_indexOfStr( pPluginsPath, L"%programfiles%" ) == 0)
-    {
-        const char * p = ::getenv( "ProgramFiles" );
-        if (p)
-        {
-            OUString aStr( OUString::createFromAscii( p ) );
-            ::lstrcpy( arPluginsPath, aStr.getStr() );
-            pPluginsPath += 14;
-        }
-    }
-#else
     if (::rtl_str_indexOfStr( pPluginsPath, "%programfiles%" ) == 0)
     {
         const char * p = ::getenv( "ProgramFiles" );
@@ -113,7 +101,6 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
             pPluginsPath += 14;
         }
     }
-#endif
     ::lstrcat( arPluginsPath, pPluginsPath );
     ::lstrcat( arPluginsPath, _T("\\") );
 
@@ -126,12 +113,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 
     while (hFind != INVALID_HANDLE_VALUE)
     {
-#ifdef UNICODE
-        OString aStr( OUStringToOString( aFindData.cFileName, RTL_TEXTENCODING_MS_1252 ) );
-        OString aName( aStr ); // cAsE?
-#else
         OString aName( aFindData.cFileName );
-#endif
         aName.toAsciiLowerCase();
 
         // no netscape default plugin anymore...
@@ -144,11 +126,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
             ::lstrcpy( arComplete, arPluginsPath );
             ::lstrcat( arComplete, aFindData.cFileName );
 
-#ifdef UNICODE
-            OUString path( arComplete );
-#else
             OUString path( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
-#endif
             rPlugins[ aName ] = path;
 #if OSL_DEBUG_LEVEL > 1
             logPlugin( path );
@@ -168,12 +146,8 @@ static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlu
     TCHAR arPluginsPath[MAX_PATH];
     DWORD dwPluginsPathSize = sizeof(arPluginsPath);
 
-#ifdef UNICODE
-    ::lstrcpy( arPluginsPath, rPath.getStr() );
-#else
     OString aStr( OUStringToOString( rPath, RTL_TEXTENCODING_MS_1252 ) );
     ::strcpy( arPluginsPath, aStr.getStr() );
-#endif
 
     addPluginsFromPath( arPluginsPath, rPlugins );
 }
@@ -321,12 +295,8 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
             // DLL name
             OUString aName( (*iPos).second.getStr() );
 
-#ifdef UNICODE
-            ::lstrcpy( arFileName, aName.getStr() );
-#else
             OString aStr( OUStringToOString( aName, RTL_TEXTENCODING_MS_1252 ) );
             ::strcpy( arFileName, aStr.getStr() );
-#endif
             dwSize = ::GetFileVersionInfoSize( arFileName, &dwDummy );
 
             char * pVersionData = NULL;
@@ -336,16 +306,12 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                 // optional comment
                 OUString aComment;
 
-                TCHAR * pInfo, * pInfo2;
-                UINT nSize;
+                TCHAR * pInfo = NULL, * pInfo2 = NULL;
+                UINT nSize = 0;
                 if (::VerQueryValue( pVersionData, _T("\\StringFileInfo\\040904E4\\ProductName"),
                                      (void**)&pInfo, &nSize ) && pInfo)
                 {
-#ifdef UNICODE
-                    aComment.operator=( pInfo );
-#else
                     aComment.operator=( OStringToOUString( OString(pInfo), RTL_TEXTENCODING_MS_1252 ) );
-#endif
                 }
 
                 // mandatory mime type and file extensions
@@ -354,15 +320,10 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                     ::VerQueryValue( pVersionData, _T("\\StringFileInfo\\040904E4\\FileExtents"),
                                      (void**)&pInfo2, &nSize ) && pInfo2)
                 {
-#ifdef UNICODE
-                    OUString aExt( pInfo2 );
-                    OUString aMIME( pInfo );
-#else
                     OString aStr2( pInfo2 );
                     OString aExt( aStr2 );
                     OString aStr( pInfo );
                     OString aMIME( aStr );
-#endif
                     aMIME.trim();
 
                     // count mime tokens
@@ -391,21 +352,17 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                             break;
 
                         PluginDescription & rDescr = pDescriptions[nStart+nTok];
-#ifdef UNICODE
-                        rDescr.Mimetype = aMIME.getToken( 0, '|', nIndex );
-#else
                         OString aMIMEToken( aMIME.getToken( 0, '|', nIndex ) );
+                        OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
+                        if( aMIMEToken.getLength() == 0 || aExtToken2.getLength() == 0 )
+                            continue;
+
                         rDescr.Mimetype = OUString(
                             aMIMEToken.getStr(), aMIMEToken.getLength(), RTL_TEXTENCODING_MS_1252 );
-#endif
                         if (! rDescr.Mimetype.getLength())
                             break;
-#ifdef UNICODE
-                        OUString aExtToken( aExt.getToken( 0, '|', nIndex2 ) );
-#else
-                        OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
+
                         OUString aExtToken( aExtToken2.getStr(), aExtToken2.getLength(), RTL_TEXTENCODING_MS_1252 );
-#endif
                         rDescr.PluginName = aName;
                         rDescr.Description = aComment;
 
