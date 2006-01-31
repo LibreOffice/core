@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:27:57 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,10 @@ bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
             InvalidateEntry( GetCurEntry() );
         SetCurEntry( _pEntry );
         if ( GetCurEntry() )
+        {
             InvalidateEntry( GetCurEntry() );
+            CallEventListeners( VCLEVENT_LISTBOX_SELECT, GetCurEntry() );
+        }
         updateHelpText();
         return true;
     }
@@ -344,7 +347,10 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         if ( pOldCurrent )
             InvalidateEntry( pOldCurrent );
         if ( pNewCurrent )
+        {
             InvalidateEntry( pNewCurrent );
+            CallEventListeners( VCLEVENT_LISTBOX_SELECT, pNewCurrent );
+        } // if ( pNewCurrent )
         updateHelpText();
     }
 }
