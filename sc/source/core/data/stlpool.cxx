@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:13:02 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,8 +324,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     lcl_CheckFont( *pSet, eCtl, DEFAULTFONT_CTL_SPREADSHEET, ATTR_CTL_FONT );
 
     // #i55300# default CTL font size for Thai has to be larger
-    if ( eCtl == LANGUAGE_THAI )
-        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
+    // #i59408# The 15 point size causes problems with row heights, so no different
+    // size is used for Thai in Calc for now.
+//    if ( eCtl == LANGUAGE_THAI )
+//        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
 
     //------------
     // 2. Ergebnis
