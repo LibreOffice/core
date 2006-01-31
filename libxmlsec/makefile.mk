@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:58:06 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:27:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
+.IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN'
 .ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
