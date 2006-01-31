@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:06:08 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #include "docoptio.hxx"
 #include "errorcodes.hxx"
 #include "parclass.hxx"
+#include "autonamecache.hxx"
 
 
 String* ScCompiler::pSymbolTableNative = NULL;
@@ -1185,45 +1186,34 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         BOOL bTwo = FALSE;
         ScAddress aOne( 0, 0, aPos.Tab() );
         ScAddress aTwo( MAXCOL, MAXROW, aPos.Tab() );
-        ScCellIterator aIter( pDoc, ScRange( aOne, aTwo ) );
-        for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
+
+        ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
+        if ( pNameCache )
         {
-            if ( bFound )
-            {   // stop if everything else is further away
-                if ( nMax < (long)aIter.GetCol() )
-                    break;      // aIter
-            }
-            CellType eType = pCell->GetCellType();
-            BOOL bOk = (eType == CELLTYPE_FORMULA ?
-                ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
-                && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                : TRUE );
-            if ( bOk && pCell->HasStringData() )
+            //  #b6355215# use GetNameOccurences to collect all positions of aName on the sheet
+            //  (only once), similar to the outer part of the loop in the "else" branch.
+
+            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurences( aName, aPos.Tab() );
+
+            //  Loop through the found positions, similar to the inner part of the loop in the "else" branch.
+            //  The order of addresses in the vector is the same as from ScCellIterator.
+
+            ScAutoNameAddresses::const_iterator aEnd(rAddresses.end());
+            for ( ScAutoNameAddresses::const_iterator aAdrIter(rAddresses.begin()); aAdrIter != aEnd; ++aAdrIter )
             {
-                String aStr;
-                switch ( eType )
-                {
-                    case CELLTYPE_STRING:
-                        ((ScStringCell*)pCell)->GetString( aStr );
-                    break;
-                    case CELLTYPE_FORMULA:
-                        ((ScFormulaCell*)pCell)->GetString( aStr );
-                    break;
-                    case CELLTYPE_EDIT:
-                        ((ScEditCell*)pCell)->GetString( aStr );
-                    break;
-                    case CELLTYPE_NONE:
-                    case CELLTYPE_VALUE:
-                    case CELLTYPE_NOTE:
-                    case CELLTYPE_SYMBOLS:
-                    case CELLTYPE_DESTROYED:
-                        ;   // nothing, prevent compiler warning
-                    break;
+                ScAddress aAddress( *aAdrIter );        // cell address with an equal string
+
+                if ( bFound )
+                {   // stop if everything else is further away
+                    if ( nMax < (long)aAddress.Col() )
+                        break;      // aIter
                 }
-                if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                if ( aAddress != aPos )
                 {
-                    SCCOL nCol = aIter.GetCol();
-                    SCROW nRow = aIter.GetRow();
+                    // same treatment as in isEqual case below
+
+                    SCCOL nCol = aAddress.Col();
+                    SCROW nRow = aAddress.Row();
                     long nC = nMyCol - nCol;
                     long nR = nMyRow - nRow;
                     if ( bFound )
@@ -1234,7 +1224,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             if ( nC < 0 || nR < 0 )
                             {   // right or below
                                 bTwo = TRUE;
-                                aTwo.Set( nCol, nRow, aIter.GetTab() );
+                                aTwo.Set( nCol, nRow, aAddress.Tab() );
                                 nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                                 nDistance = nD;
                             }
@@ -1244,7 +1234,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 // current entry and nMyRow is below (CellIter
                                 // runs column-wise)
                                 bTwo = FALSE;
-                                aOne.Set( nCol, nRow, aIter.GetTab() );
+                                aOne.Set( nCol, nRow, aAddress.Tab() );
                                 nMax = Max( nMyCol + nC, nMyRow + nR );
                                 nDistance = nD;
                             }
@@ -1252,7 +1242,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                     }
                     else
                     {
-                        aOne.Set( nCol, nRow, aIter.GetTab() );
+                        aOne.Set( nCol, nRow, aAddress.Tab() );
                         nDistance = nC * nC + nR * nR;
                         nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                     }
@@ -1260,6 +1250,85 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                 }
             }
         }
+        else
+        {
+            ScCellIterator aIter( pDoc, ScRange( aOne, aTwo ) );
+            for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
+            {
+                if ( bFound )
+                {   // stop if everything else is further away
+                    if ( nMax < (long)aIter.GetCol() )
+                        break;      // aIter
+                }
+                CellType eType = pCell->GetCellType();
+                BOOL bOk = (eType == CELLTYPE_FORMULA ?
+                    ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
+                    && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
+                    : TRUE );
+                if ( bOk && pCell->HasStringData() )
+                {
+                    String aStr;
+                    switch ( eType )
+                    {
+                        case CELLTYPE_STRING:
+                            ((ScStringCell*)pCell)->GetString( aStr );
+                        break;
+                        case CELLTYPE_FORMULA:
+                            ((ScFormulaCell*)pCell)->GetString( aStr );
+                        break;
+                        case CELLTYPE_EDIT:
+                            ((ScEditCell*)pCell)->GetString( aStr );
+                        break;
+                        case CELLTYPE_NONE:
+                        case CELLTYPE_VALUE:
+                        case CELLTYPE_NOTE:
+                        case CELLTYPE_SYMBOLS:
+                        case CELLTYPE_DESTROYED:
+                            ;   // nothing, prevent compiler warning
+                        break;
+                    }
+                    if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                    {
+                        SCCOL nCol = aIter.GetCol();
+                        SCROW nRow = aIter.GetRow();
+                        long nC = nMyCol - nCol;
+                        long nR = nMyRow - nRow;
+                        if ( bFound )
+                        {
+                            long nD = nC * nC + nR * nR;
+                            if ( nD < nDistance )
+                            {
+                                if ( nC < 0 || nR < 0 )
+                                {   // right or below
+                                    bTwo = TRUE;
+                                    aTwo.Set( nCol, nRow, aIter.GetTab() );
+                                    nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                                    nDistance = nD;
+                                }
+                                else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
+                                {
+                                    // upper left, only if not further up than the
+                                    // current entry and nMyRow is below (CellIter
+                                    // runs column-wise)
+                                    bTwo = FALSE;
+                                    aOne.Set( nCol, nRow, aIter.GetTab() );
+                                    nMax = Max( nMyCol + nC, nMyRow + nR );
+                                    nDistance = nD;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            aOne.Set( nCol, nRow, aIter.GetTab() );
+                            nDistance = nC * nC + nR * nR;
+                            nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                        }
+                        bFound = TRUE;
+                    }
+                }
+            }
+        }
+
         if ( bFound )
         {
             ScAddress aAdr;
