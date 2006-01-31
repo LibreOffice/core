@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textToPronounce_zh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:13 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,21 @@
 #define _I18N_TRANSLITERATION_TEXTTOPRONOUNCE_ZH_HXX_
 
 #include <transliteration_Ignore.hxx>
+#include <indexentrysupplier_asian.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class TextToPronounce_zh : public transliteration_Ignore
 {
 protected:
-        sal_Unicode * pronList;
-        sal_Int32 * pronIdx;
-        sal_Int32 * pronTab;
+        oslModule hModule;
+        sal_uInt16 **idx;
+        const sal_Unicode* SAL_CALL getPronounce(const sal_Unicode ch);
 
 public:
+        TextToPronounce_zh(const sal_Char* func_name);
+        ~TextToPronounce_zh();
+
         rtl::OUString SAL_CALL
         folding(const rtl::OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 > & offset)
         throw (com::sun::star::uno::RuntimeException);
@@ -75,8 +79,8 @@ public: \
 };
 
 #ifdef TRANSLITERATION_ALL
-TRANSLITERATION_TextToPronounce_zh( TextToPinyin_zh_CN )
-TRANSLITERATION_TextToPronounce_zh( TextToChuyin_zh_TW )
+TRANSLITERATION_TextToPronounce_zh( TextToPinyin_zh_CN)
+TRANSLITERATION_TextToPronounce_zh( TextToChuyin_zh_TW)
 #endif
 #undef TRANSLITERATION_TextToPronounce_zh
 
