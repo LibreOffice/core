@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 14:19:37 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,7 @@
 #include <string.h>
 
 #ifndef NE_XML_H
-#ifdef SYSTEM_NEON
 #include <ne_xml.h>
-#else
-#include <neon/ne_xml.h>
-#endif
 #endif
 
 #ifndef _LOCKENTRYSEQUENCE_HXX_
