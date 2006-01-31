@@ -19,4 +19,16 @@ mkdir: %_DEST%\inc%_EXT%\i18npool
 ..\%__SRC%\lib\libdict_*.so %_DEST%\lib%_EXT%\libdict_*.so
 ..\%__SRC%\lib\libdict_*.dylib %_DEST%\lib%_EXT%\libdict_*.dylib
 
+..\%__SRC%\bin\collator_data.dll %_DEST%\bin%_EXT%\collator_data.dll
+..\%__SRC%\lib\libcollator_data.so %_DEST%\lib%_EXT%\libcollator_data.so
+..\%__SRC%\lib\libcollator_data.dylib %_DEST%\lib%_EXT%\libcollator_data.dylib
+
+..\%__SRC%\bin\index_data.dll %_DEST%\bin%_EXT%\index_data.dll
+..\%__SRC%\lib\libindex_data.so %_DEST%\lib%_EXT%\libindex_data.so
+..\%__SRC%\lib\libindex_data.dylib %_DEST%\lib%_EXT%\libindex_data.dylib
+
+..\%__SRC%\bin\textconv_dict.dll %_DEST%\bin%_EXT%\textconv_dict.dll
+..\%__SRC%\lib\libtextconv_dict.so %_DEST%\lib%_EXT%\libtextconv_dict.so
+..\%__SRC%\lib\libtextconv_dict.dylib %_DEST%\lib%_EXT%\libtextconv_dict.dylib
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
