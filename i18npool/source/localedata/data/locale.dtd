@@ -60,6 +60,8 @@
         'msgid                     CDATA              #REQUIRED'>
 <!ENTITY % RefLocale
         'ref                     CDATA              #IMPLIED'>
+<!ENTITY % LIBModule
+        'module                     CDATA              #IMPLIED'>
 <!-- The locale referred to for the sub categories -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
@@ -302,6 +304,7 @@ http://oss.software.ibm.com/icu/charts/collation/
 -->
 <!ELEMENT IndexKey (#PCDATA)>
 <!ATTLIST IndexKey  %UNOModule;>
+<!ATTLIST IndexKey  %LIBModule;>
 <!ATTLIST IndexKey  default (true|false) #REQUIRED >
 <!ATTLIST IndexKey  phonetic (true|false) #REQUIRED >
 <!--
