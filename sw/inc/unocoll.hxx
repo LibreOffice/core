@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:19:39 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,7 +397,7 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::text::XTextSection*        GetObject( SwSectionFmt& rFmt );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection> GetObject( SwSectionFmt& rFmt );
 };
 /*-----------------12.02.98 07:51-------------------
 
