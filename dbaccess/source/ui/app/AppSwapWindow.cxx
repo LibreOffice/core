@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:16:29 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,12 +78,13 @@ using namespace ::com::sun::star::container;
 // class OApplicationSwapWindow
 DBG_NAME(OApplicationSwapWindow)
 //==================================================================
-OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow) : Control(_pParent,WB_DIALOGCONTROL )
+OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow) : Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
     ,m_pBorderWin(_pBorderWindow)
     ,m_eLastType(E_NONE)
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
+//  SetCompoundControl( TRUE );
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -91,7 +92,7 @@ OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow
     m_aIconControl.setControlActionListener(_pBorderWindow->getView()->getActionListener());
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
-    m_aIconControl.Enable(TRUE);
+    //m_aIconControl.Enable(TRUE);
 }
 // -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
