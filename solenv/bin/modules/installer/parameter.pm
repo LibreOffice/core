@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-19 17:04:07 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:24:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,13 @@ sub setglobalvariables
         {
             $installer::globals::issolarispkgbuild = 1;
             $installer::globals::epmoutpath = "packages";
+        }
+    }
+    if ( $installer::globals::compiler =~ /unxfbsd/ )
+    {
+        if ( $installer::globals::packageformat eq "bsd" )
+        {
+            $installer::globals::isfreebsdpkgbuild = 1;
         }
     }
 
