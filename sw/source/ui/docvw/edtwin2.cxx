@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:21:59 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,8 +207,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         if( pSdrView )
         {
             SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
-            bWeiter = ((SwDPage*)pPV->GetPage())->RequestHelp(this,
-                                                            pSdrView, rEvt);
+            SwDPage* pPage = pPV ? ((SwDPage*)pPV->GetPage()) : 0;
+            bWeiter = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
         }
     }
 
