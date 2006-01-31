@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:50:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,17 +199,11 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
     if ((nErr = pStream->GetError()))
         return nErr;
 
-#ifdef NO_MORE
-    if( nLen > ICMAX )  // ICMAX = 64 max ICS Wortlänge
-    {
-        bDirty = TRUE;
-        return FALSE;
-    }
-#endif
-
     sal_Char aWordBuf[ BUFSIZE ];
     BOOL bNegativ;
 
+    if (nLen >= BUFSIZE)
+        return nErr;
     pStream->Read(aWordBuf, nLen);
     if ((nErr = pStream->GetError()))
         return nErr;
