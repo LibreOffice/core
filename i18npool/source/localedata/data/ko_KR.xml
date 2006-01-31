@@ -311,7 +311,7 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="true" default="true" unoid="dict" />
+    <IndexKey phonetic="true" default="true" unoid="dict" module="asian"/>
     <UnicodeScript>70</UnicodeScript>
   </LC_INDEX>
   <LC_CALENDAR>
