@@ -1,3 +1,17 @@
+--- misc/STLport-4.5/stlport/stdarg.h	2001-01-27 02:39:59.000000000 +0100
++++ misc/build/STLport-4.5/stlport/stdarg.h	2005-05-01 19:37:22.000000000 +0200
+@@ -20,7 +20,11 @@
+ #  define _STLP_DONT_POP_0x261
+ # endif
+ 
++#if defined(__GNUC__) && defined(__APPLE__) && (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4) && (__GNUC__ == 3)
++#  include _STLP_NATIVE_HEADER(../stdarg.h)
++#else
+ # include _STLP_NATIVE_C_HEADER(stdarg.h)
++#endif
+ 
+ # if (_STLP_OUTERMOST_HEADER_ID == 0x261)
+ #  if ! defined (_STLP_DONT_POP_0x261)
 --- misc/STLport-4.5/stlport/stl/c_locale.h	2001-05-31 05:24:41.000000000 +0200
 +++ misc/build/STLport-4.5/stlport/stl/c_locale.h	2005-05-01 23:19:20.000000000 +0200
 @@ -290,16 +290,28 @@
