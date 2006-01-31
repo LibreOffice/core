@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:17:04 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,9 @@
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
 #endif
 
 
@@ -866,7 +869,8 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+            throw(::com::sun::star::uno::RuntimeException);
 
 
     //XIndexAccess
@@ -890,6 +894,35 @@ public:
 /*-----------------09.03.98 13:57-------------------
 
 --------------------------------------------------*/
+
+class SwXTextSection;
+class SwXTextSectionClient : public SwClient
+{
+    friend class SwXTextSection;
+    SwXTextSection*                                                                 m_pSection;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XTextSection >    m_xReference;
+    //SwClient
+    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    SwXTextSectionClient(
+            SwSectionFmt& rFmt,
+            SwXTextSection& rTextSection,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection > xSection );
+    virtual ~SwXTextSectionClient();
+    DECL_STATIC_LINK( SwXTextSectionClient, RemoveSectionClient_Impl,
+                      SwXTextSectionClient* );
+
+public:
+    TYPEINFO();
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection > GetXTextSection();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection >
+            CreateXTextSection(SwSectionFmt* pFmt = 0, BOOL bIndexHeader = FALSE );
+    static SwXTextSectionClient* Create(
+            SwXTextSection& rSection,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection > xSection,
+            SwSectionFmt& rFmt );
+};
+
 struct SwTextSectionProperties_Impl;
 class SwXTextSection : public cppu::WeakImplHelper7
 <
@@ -900,9 +933,10 @@ class SwXTextSection : public cppu::WeakImplHelper7
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::container::XNamed,
     ::com::sun::star::lang::XUnoTunnel
->,
-    public SwClient
+>/*,
+    public SwClient*/
 {
+    friend class SwXTextSectionClient;
     SwEventListenerContainer        aLstnrCntnr;
     SfxItemPropertySet              aPropSet;
 
@@ -910,20 +944,21 @@ class SwXTextSection : public cppu::WeakImplHelper7
     BOOL                            m_bIndexHeader;
     String                          m_sName;
     SwTextSectionProperties_Impl*   pProps;
+    SwXTextSectionClient*           m_pClient;
 protected:
     void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    SwXTextSection(sal_Bool bWithFormat, sal_Bool bIndexHeader = FALSE);
     virtual ~SwXTextSection();
+    void                            ResetClient() {m_pClient = 0;}
+    void                            SetClient( SwXTextSectionClient* pClient ){m_pClient = pClient;}
+
 public:
-    SwXTextSection(SwSectionFmt* pFmt = 0, BOOL bIndexHeader = FALSE);
-
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    TYPEINFO();
 
     //XTextSection
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection >  SAL_CALL getParentSection(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -971,11 +1006,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+//   virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    SwSectionFmt*   GetFmt()const {return (SwSectionFmt*)GetRegisteredIn();}
+    SwSectionFmt*   GetFmt()const;
     static SwXTextSection* GetImplementation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xRef );
 };
 /*-----------------12.02.98 08:01-------------------
