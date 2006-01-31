@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:36:45 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,10 +191,15 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         aTypeLB.SetEntryData(nPos, (void*)nTypeId);
         aNumFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
-        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
-        if(pFormat)
-            aNumFormatLB.SetLanguage(pFormat->GetLanguage());
+        SwWrtShell *pSh = GetWrtShell();
+        if(!pSh)
+            pSh = ::GetActiveWrtShell();
+        if(pSh)
+        {
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            if(pFormat)
+                aNumFormatLB.SetLanguage(pFormat->GetLanguage());
+        }
     }
 
     // alte Pos selektieren
