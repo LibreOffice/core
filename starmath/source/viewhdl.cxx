@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:15:43 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,21 +111,32 @@ void SAL_CALL SmClipboardChangeListener::disposing(
 void SAL_CALL SmClipboardChangeListener::changedContents(
                             const ClipboardEvent& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
 {
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if( pView )
     {
         {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            TransferableDataHelper aDataHelper( rEventObject.Contents );
+            sal_Bool bHasTransferable = aDataHelper.GetTransferable().is();
 
-        TransferableDataHelper aDataHelper( rEventObject.Contents );
-        pView->bPasteState = aDataHelper.GetTransferable().is() &&
-            ( aDataHelper.HasFormat( FORMAT_STRING ) ||
-            aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
-            (aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
-                && aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE )));
+            //! according to CD the above call to GetTransferable may create a (new)
+            //! message loop and thus result in re-entrant code.
+            //! Thus it was suggested to check 'pView' here again.
+            if (pView)
+            {
+                pView->bPasteState = bHasTransferable &&
+                    ( aDataHelper.HasFormat( FORMAT_STRING ) ||
+                    aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
+                    (aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
+                        && aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE )));
+            }
         }
 
-        SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
-        rBind.Invalidate( SID_PASTE );
+        if (pView)
+        {
+            SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
+            rBind.Invalidate( SID_PASTE );
+        }
     }
 }
 
@@ -161,6 +172,10 @@ void SmClipboardChangeListener::AddRemoveListener( BOOL bAdd )
 
 void SmViewShell::AddRemoveClipboardListener( BOOL bAdd )
 {
+    // AddRemoveListener and ViewDestroyed below should be an
+    // atomic operation and must not be 'interrupted' by other code
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if( bAdd && !xClipEvtLstnr.is() )
     {
         xClipEvtLstnr = pClipEvtLstnr = new SmClipboardChangeListener( *this );
