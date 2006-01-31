@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:56:53 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1156,6 +1156,13 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
 
 rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 {
+    if ( nIndex < 0 || nIndex >= aStyleNames.size() )
+    {
+        // #123981# should no longer happen, use first style then
+        DBG_ERRORFILE("GetStyleNameByIndex: invalid index");
+        return aStyleNames[0];
+    }
+
     return aStyleNames[nIndex];
 }
 
