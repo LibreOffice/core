@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:39:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,7 +406,21 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 if ( (*it).second.xModel == xModel )
                 {
                     // Adjust title.
-                    (*it).second.aTitle = getDocumentTitle( Event.Source );
+                    rtl:: OUString aTitle = getDocumentTitle( Event.Source );
+                    (*it).second.aTitle = aTitle;
+
+                    // Adjust storage.
+                    uno::Reference< document::XStorageBasedDocument >
+                        xDoc( Event.Source, uno::UNO_QUERY );
+                    OSL_ENSURE( xDoc.is(), "Got no document::XStorageBasedDocument!" );
+
+                    uno::Reference< embed::XStorage > xStorage
+                        = xDoc->getDocumentStorage();
+                    OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+
+                    rtl:: OUString aDocId = getDocumentId( Event.Source );
+
+                    m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
                     break;
                 }
                 ++it;
