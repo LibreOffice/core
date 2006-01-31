@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:52:15 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,7 @@ LocaleData::getIndexAlgorithm( const Locale& rLocale ) throw(RuntimeException)
         if ( indexArray ) {
             Sequence< OUString > seq(indexCount);
             for(sal_Int16 i = 0; i < indexCount; i++) {
-              seq[i] = indexArray[i*4];
+              seq[i] = indexArray[i*5];
             }
             return seq;
         }
@@ -585,8 +585,8 @@ LocaleData::getDefaultIndexAlgorithm( const Locale& rLocale ) throw(RuntimeExcep
 
         if ( indexArray ) {
             for(sal_Int16 i = 0; i < indexCount; i++) {
-              if (indexArray[i*4 + 2][0])
-                  return OUString(indexArray[i*4]);
+              if (indexArray[i*5 + 3][0])
+                  return OUString(indexArray[i*5]);
             }
         }
         return OUString();
@@ -600,41 +600,46 @@ LocaleData::hasPhonetic( const Locale& rLocale ) throw(RuntimeException)
 
         if ( indexArray ) {
             for(sal_Int16 i = 0; i < indexCount; i++) {
-              if (indexArray[i*4 + 3][0])
+              if (indexArray[i*5 + 4][0])
                   return sal_True;
             }
         }
         return sal_False;
 }
 
-sal_Bool SAL_CALL
-LocaleData::isPhonetic( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
+sal_Unicode ** SAL_CALL
+LocaleData::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString& algorithm)
 {
         sal_Int16 indexCount = 0;
         sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
-
         if ( indexArray ) {
             for(sal_Int16 i = 0; i < indexCount; i++) {
-              if (algorithm == OUString(indexArray[i*4]))
-                  return indexArray[i*4 + 3][0] ? sal_False : sal_True;
+              if (algorithm.equals(indexArray[i*5]))
+                  return indexArray+i*5;
             }
         }
-        return sal_False;
+        return NULL;
+}
+
+sal_Bool SAL_CALL
+LocaleData::isPhonetic( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
+{
+        sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+        return (indexArray && indexArray[4][0]) ? sal_True : sal_False;
 }
 
 OUString SAL_CALL
 LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
-        sal_Int16 indexCount = 0;
-        sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
+        sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+        return indexArray ? OUString::createFromAscii("0-9")+OUString(indexArray[2]) : OUString();
+}
 
-        if ( indexArray ) {
-            for(sal_Int16 i = 0; i < indexCount; i++) {
-              if (algorithm.equals(indexArray[i*3]))
-                  return OUString::createFromAscii("0-9")+OUString(indexArray[i*4 + 1]);
-            }
-        }
-        return OUString();
+OUString SAL_CALL
+LocaleData::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
+{
+        sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+        return indexArray ? OUString(indexArray[1]) : OUString();
 }
 
 Sequence< UnicodeScript > SAL_CALL
