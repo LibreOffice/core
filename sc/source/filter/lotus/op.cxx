@@ -4,9 +4,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:42:56 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -631,7 +631,11 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                     for( int i = 0; i < nTabCount; i++)
                     {
                         std::map<UINT16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
-                        pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, nTab + i, loc->second );
+
+                        // #126338# apparently, files with invalid index occur in the wild -> don't crash then
+                        DBG_ASSERT( loc != aLotusPatternPool.end(), "invalid format index" );
+                        if ( loc != aLotusPatternPool.end() )
+                            pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, nTab + i, loc->second );
                     }
                 }
                 else
