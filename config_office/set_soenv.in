@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.87 $
-# Date:        $Date: 2006-01-31 18:26:43 $
+# Version:     $Revision: 1.88 $
+# Date:        $Date: 2006-01-31 18:28:58 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1709,6 +1709,7 @@ ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
+ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
 ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
@@ -1795,6 +1796,7 @@ ToFile( "SYSTEM_MYSPELL",    "@SYSTEM_MYSPELL@",   "e" );
 ToFile( "MYSPELL_CFLAGS",    "@MYSPELL_CFLAGS@",   "e" );
 ToFile( "MYSPELL_LIBS",      "@MYSPELL_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
+ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
