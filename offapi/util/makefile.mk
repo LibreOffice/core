@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 09:10:19 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:25:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,16 +45,6 @@ TARGET=offapi_db
 .INCLUDE :  makefile.pmk
 
 # ------------------------------------------------------------------
-
-#regcheck .PHONY:
-#	$(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb
-
-# ------------------------------------------------------------------
-
-#UNOIDLDBREGS= \
-#	$(SOLARBINDIR)$/udkapi.rdb
-
-#i20156 - add xmlsecurity module related
 UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
@@ -141,10 +131,8 @@ UNOIDLDBFILES= \
     $(UCR)$/xsec-csax.db \
     $(UCR)$/xsec-sax.db \
     $(UCR)$/xsec-wrapper.db
-#i20156 - end
 
-REFERENCE_RDB=$(PRJ)$/type_reference$/OO_20$/types.rdb
-REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_20$/types_doc.rdb
+REFERENCE_RDB=$(PRJ)$/type_reference$/types.rdb
 
 REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
@@ -167,9 +155,11 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 #JSC: The type library has changed, all temporary not checked types are removed
 #     and will be check from now on.
 # ATTENTION: no special handling for types is allowed.
+#
+#JSC: i have removed the doc rdb because all type information is already in the
+#     types.rdb, even the service and singleton type info. IDL docu isn't checked.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db \
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
         && echo > $(REGISTRYCHECKFLAG)
 
 .INCLUDE :  target.mk
