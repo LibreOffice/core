@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:54:05 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,13 +211,16 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
         sal_uInt32 nBits;
 
-        switch( GetScanlineFormat() )
+        const ULONG nScanlineFormat = GetScanlineFormat();
+        switch( nScanlineFormat )
         {
             case( BMP_FORMAT_1BIT_MSB_PAL ):
+            case( BMP_FORMAT_1BIT_LSB_PAL ):
                 nBits = 1;
             break;
 
             case( BMP_FORMAT_4BIT_MSN_PAL ):
+            case( BMP_FORMAT_4BIT_LSN_PAL ):
                 nBits = 4;
             break;
 
@@ -247,7 +250,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
             default:
             {
-                DBG_ERROR( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format" );
+                DBG_ERROR( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
                 nBits = 0;
             }
             break;
