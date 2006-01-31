@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:15:01 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,7 +1125,9 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         if( pHRuler->IsVisible() || pVRuler->IsVisible() )
         {
             const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
-            USHORT nZoom = USHORT(rFrac.GetNumerator() * 100L / rFrac.GetDenominator());
+            USHORT nZoom = 100;
+            if (0 != rFrac.GetDenominator())
+                nZoom = USHORT(rFrac.GetNumerator() * 100L / rFrac.GetDenominator());
 
             const Fraction aFrac( nZoom, 100 );
             pVRuler->SetZoom( aFrac );
