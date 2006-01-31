@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 10:50:02 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:27:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -177,16 +177,27 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
+.IF "$(ALLOC)" == "TCMALLOC"
+STDLIBCUIST+=-ltcmalloc
+STDLIBGUIMT+=-ltcmalloc
+STDLIBCUIMT+=-ltcmalloc
+STDLIBGUIST+=-ltcmalloc
+STDSHLGUIMT+=-ltcmalloc
+STDSHLCUIMT+=-ltcmalloc
+STDSHLGUIST+=-ltcmalloc
+STDSHLCUIST+=-ltcmalloc
+.ENDIF
+
 # libraries for linking applications
-STDLIBCUIST=-ldl -lm
-STDLIBGUIMT=-lX11 -ldl -lpthread -lm
-STDLIBCUIMT=-ldl -lpthread -lm
-STDLIBGUIST=-lX11 -ldl -lm
+STDLIBCUIST+=-ldl -lm
+STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
+STDLIBCUIMT+=-ldl -lpthread -lm
+STDLIBGUIST+=-lX11 -ldl -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
-STDSHLCUIMT=-ldl -lpthread -lm
-STDSHLGUIST=-lX11 -lXext -ldl -lm
-STDSHLCUIST=-ldl -lm
+STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
+STDSHLCUIMT+=-ldl -lpthread -lm
+STDSHLGUIST+=-lX11 -lXext -ldl -lm
+STDSHLCUIST+=-ldl -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
