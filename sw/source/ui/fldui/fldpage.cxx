@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:39:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
                         const SfxItemSet &rAttrSet )
     :SfxTabPage     (pParent, rId, rAttrSet),
     pCurFld         (0),
+    pWrtShell       (0),
     nPageId         (rId.GetId()),
     nFldDlgAktGrpSel(0),
     nTypeSel        (LISTBOX_ENTRY_NOTFOUND),
@@ -154,12 +155,17 @@ void SwFldPage::Init()
         if( bFldDlgHtmlMode && bFirstHTMLInit )
         {
             bFirstHTMLInit = FALSE;
-            SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-            SwDoc* pDoc = pSh->GetDoc();
-            pSh->InsertFldType( SwSetExpFieldType( pDoc,
+            SwWrtShell *pSh = pWrtShell;
+            if(! pSh)
+                pSh = ::GetActiveWrtShell();
+            if(pSh)
+            {
+                SwDoc* pDoc = pSh->GetDoc();
+                pSh->InsertFldType( SwSetExpFieldType( pDoc,
                                     String::CreateFromAscii("HTML_ON"), 1));
-            pSh->InsertFldType( SwSetExpFieldType(pDoc,
+                pSh->InsertFldType( SwSetExpFieldType(pDoc,
                                     String::CreateFromAscii("HTML_OFF"), 1));
+            }
         }
     }
 }
@@ -200,7 +206,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 {
     BOOL bRet = FALSE;
     SwView* pView = GetActiveView();
-    SwWrtShell *pSh = pView->GetWrtShellPtr();
+    SwWrtShell *pSh = pWrtShell ? pWrtShell : pView->GetWrtShellPtr();
 
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
@@ -462,5 +468,11 @@ IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, pLst )
 
     return 0;
 }
+/*-- 19.12.2005 14:05:47---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
+void SwFldPage::SetWrtShell( SwWrtShell* pShell )
+{
+    pWrtShell = pShell;
+    aMgr.SetWrtShell( pShell );
+}
