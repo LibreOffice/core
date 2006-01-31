@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:15:30 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,7 +363,7 @@ void OApplicationController::disconnect()
     {
         // temporary (hopefully!) hack for #i55274#
         Reference< XFlushable > xFlush( m_xDataSourceConnection, UNO_QUERY );
-        if ( xFlush.is() )
+        if ( xFlush.is() && m_xMetaData.is() && !m_xMetaData->isReadOnly() )
             xFlush->flush();
     }
     catch( const Exception& e )
