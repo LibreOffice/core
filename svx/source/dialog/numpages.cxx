@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:02:28 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
@@ -1778,8 +1775,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
 
-    SvtLanguageOptions aLangOpt;
-    if(xInfo.is() && (aLangOpt.IsCJKFontEnabled()||aLangOpt.IsCTLFontEnabled()))
+    if(xInfo.is())
     {
         Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
         const sal_Int16* pTypes = aTypes.getConstArray();
