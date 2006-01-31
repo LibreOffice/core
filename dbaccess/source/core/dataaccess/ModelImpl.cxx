@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:34:31 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,11 +758,7 @@ sal_Bool ODatabaseModelImpl::commitEmbeddedStorage( sal_Bool _bPreventRootCommit
     {
         TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
         if ( aFind != m_aStorages.end() )
-        {
-            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
-            if ( bStore = xTrans.is() )
-                xTrans->commit();
-        }
+            bStore = commitStorageIfWriteable(aFind->second);
     }
     catch(Exception&)
     {
