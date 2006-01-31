@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-01 14:57:30 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:47:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,19 +48,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-MY_MISC_CXXFILES = \
-        $(MISC)$/hhc_char.cxx \
-        $(MISC)$/stc_char.cxx \
-        $(MISC)$/stc_word.cxx
-
 SLOFILES=   \
         $(SLO)$/textconversionImpl.obj \
         $(SLO)$/textconversion.obj \
         $(SLO)$/textconversion_ko.obj \
-        $(SLO)$/textconversion_zh.obj \
-        $(SLO)$/hhc_char.obj \
-        $(SLO)$/stc_char.obj \
-        $(SLO)$/stc_word.obj
+        $(SLO)$/textconversion_zh.obj
 
 APP1TARGET = genconv_dict
 
@@ -71,12 +63,4 @@ APP1STDLIBS = $(SALLIB)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-data$/%.dic : $(APP1TARGETN)
-    +@echo dummy
-
-$(MISC)$/%.cxx : data$/%.dic
-    $(APP1TARGETN)$ $* $< $@
-
-
 
