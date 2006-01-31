@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:28:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ public class AccessBridge {
                     case AccessibleRole.WINDOW:
                     case AccessibleRole.FRAME:
                     case AccessibleRole.DIALOG:
+                    case AccessibleRole.ALERT:
                         return getTopWindowImpl(xAccessible);
 
                     default:
