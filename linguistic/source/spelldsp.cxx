@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:55 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -610,16 +610,17 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spellInAny(
     {
         INT32         nNumLang = aLanguages.getLength();
         const INT16  *pLang    = aLanguages.getConstArray();
-        for (int i = 0;  i < nNumLang;  ++i, ++pLang )
+        for (int i = 0;  i < nNumLang;  ++i)
         {
-            if (pLang[i] == nPreferredResultLang)   // already checked!
+            INT16 nLang = pLang[i];
+            if (nLang == nPreferredResultLang)  // already checked!
                 continue;
 
             // Bug 71632
-            if( LANGUAGE_NONE != pLang[i] && hasLanguage( pLang[i] ) )
+            if( LANGUAGE_NONE != nLang && hasLanguage( nLang ) )
             {
                 Reference< XSpellAlternatives >
-                        xLast( spell_Impl( aWord, pLang[i], rProperties, TRUE ));
+                        xLast( spell_Impl( aWord, nLang, rProperties, TRUE ));
 
                 // remember first spelling alternatives found
                 if (xLast.is() && !xAlt.is())
