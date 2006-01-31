@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-01 14:53:06 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:36:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,26 +48,16 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+LOCAL_RULE_LANGS:=$(shell ls data/*.txt|cut -c6,7|sort -u)
+.IF "$(GUI)"=="WNT"
+CFLAGSCXX+=-DLOCAL_RULE_LANGS="\"$(LOCAL_RULE_LANGS)\""
+.ELSE
+CFLAGSCXX+=-DLOCAL_RULE_LANGS='"$(LOCAL_RULE_LANGS)"'
+.ENDIF
 SLOFILES=   \
         $(SLO)$/collatorImpl.obj \
         $(SLO)$/chaptercollator.obj \
-        $(SLO)$/collator_unicode.obj \
-        $(SLO)$/collator_zh_pinyin.obj \
-        $(SLO)$/collator_dz_charset.obj \
-        $(SLO)$/collator_zh_radical.obj \
-        $(SLO)$/collator_zh_stroke.obj \
-        $(SLO)$/collator_zh_charset.obj \
-        $(SLO)$/collator_zh_zhuyin.obj \
-        $(SLO)$/collator_zh_TW_radical.obj \
-        $(SLO)$/collator_zh_TW_stroke.obj \
-        $(SLO)$/collator_zh_TW_charset.obj \
-        $(SLO)$/collator_ne_charset.obj \
-        $(SLO)$/collator_ko_charset.obj \
-        $(SLO)$/collator_km_charset.obj \
-        $(SLO)$/collator_ja_charset.obj \
-        $(SLO)$/collator_ja_phonetic_alphanumeric_first.obj \
-        $(SLO)$/collator_ja_phonetic_alphanumeric_last.obj
-
+        $(SLO)$/collator_unicode.obj
 
 APP1TARGET = gencoll_rule
 
@@ -80,12 +70,4 @@ APP1STDLIBS = $(SALLIB) \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-
-data/%.txt : $(APP1TARGETN)
-    +@echo dummy
-$(MISC)$/collator_%.cxx : data/%.txt
-    $(APP1TARGETN)$ $< $@ $*
-
-
 
