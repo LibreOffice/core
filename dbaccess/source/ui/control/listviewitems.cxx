@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listviewitems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:34:16 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
-
 //........................................................................
 namespace dbaui
 {
@@ -51,14 +50,12 @@ namespace dbaui
         SvLBoxString::InitViewData(pView,pEntry, _pViewData);
         if (!_pViewData)
             _pViewData = pView->GetViewDataItem( pEntry, this );
-
-        Font aOldFont( pView->GetFont());
-        Font aFont( aOldFont );
+        pView->Push(PUSH_ALL);
+        Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->SetFont( aFont );
-
         _pViewData->aSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
-        pView->SetFont( aOldFont );
+        pView->Pop();
     }
 
     //------------------------------------------------------------------------
@@ -72,14 +69,13 @@ namespace dbaui
     {
         if (m_bEmphasized)
         {
-            Font aOldFont( rDev.GetFont());
-            Font aFont( aOldFont );
+            rDev.Push(PUSH_ALL);
+            Font aFont( rDev.GetFont());
             aFont.SetWeight(WEIGHT_BOLD);
             rDev.SetFont( aFont );
-
             Point aPos(rPos);
             rDev.DrawText( aPos, GetText() );
-            rDev.SetFont( aOldFont );
+            rDev.Pop();
         }
         else
             SvLBoxString::Paint(rPos, rDev, nFlags, pEntry);
