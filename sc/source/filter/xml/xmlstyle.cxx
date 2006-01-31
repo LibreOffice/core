@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:12:39 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,21 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
     MAP( "Width", XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
 //  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
+    { 0L }
+};
+
+const XMLPropertyMapEntry aXMLScRowStylesImportProperties[] =
+{
+    // #i57867# Include background color (CellBackColor/IsCellBackgroundTransparent) for import only.
+    // Import and export should use the same map, with MID_FLAG_NO_PROPERTY_EXPORT for the background entries,
+    // but this doesn't work at the moment because SvXMLImportPropertyMapper compares MID_FLAG_NO_PROPERTY to 0.
+    // If this is changed (not for 2.0.x), a single map can be used again.
+
+    MAP( "CellBackColor", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP( "Height", XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT),
+    MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_ROW|XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE),
+    MAP( "OptimalHeight", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT),
     { 0L }
 };
 
