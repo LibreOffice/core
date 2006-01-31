@@ -1,14 +1,37 @@
-/*------------------------------------------------------------------------
-
-$Workfile:   ROT13.CL  $
-
-$Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sc/addin/rot13/rot13.cl,v 1.1.1.1 2000-09-18 16:44:46 hr Exp $
-
-Description:    StarCalc ROT13 AddIn Example
-
-(c) Copyright 1998 - 2000, Sun Microsystems, Inc.
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: rot13.cl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:56 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 static char rot13_Id[]="@(#) StarCalc Rot13 AddIn (c) 1998-2000 Sun Microsystems, Inc.";
 
@@ -141,42 +164,3 @@ void CALLTYPE Rot13(char *ret, char *src)
     }
     *ret=*src;
 }
-
-
-/*------------------------------------------------------------------------
-
-$Log: not supported by cvs2svn $
-Revision 1.5  1999/08/10 12:48:46  NN
-#68039# copyright
-
-   
-      Rev 1.4   10 Aug 1999 14:48:46   NN
-   #68039# copyright
-   
-      Rev 1.3   29 Apr 1999 14:56:48   ER
-   #57689# xlang.h statt tools/lang.hxx
-
-      Rev 1.3   29 Apr 1999 14:45:08   ER
-   #57689# xlang.hxx statt tools/lang.hxx
-
-      Rev 1.2   29 Apr 1999 12:53:30   ER
-   #57689# Internationalisierung
-
-      Rev 1.1   15 Mar 1999 16:47:12   HJS
-   aufgeraeumt
-
-      Rev 1.0   10 Mar 1999 12:07:18   BEI
-   Initial revision.
-
-      Rev 1.2   13 Jul 1998 17:57:16   BEI
-   2 Languages
-
-      Rev 1.1   09 Jul 1998 09:00:50   TRI
-   keine C++ Kommentar in C Files
-
-      Rev 1.0   07 Jul 1998 20:36:36   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-
