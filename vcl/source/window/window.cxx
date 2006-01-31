@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.225 $
+ *  $Revision: 1.226 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:10:53 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -8709,8 +8709,8 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_INFOBOX:
             case WINDOW_WARNINGBOX:
             case WINDOW_ERRORBOX:
-            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::DIALOG; break; // #i12331, DIALOG must be used to
-                                                                                        // to allow activation, those are frames!
+            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::ALERT; break;
+
             case WINDOW_MODELESSDIALOG:
             case WINDOW_MODALDIALOG:
             case WINDOW_SYSTEMDIALOG:
