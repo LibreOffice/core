@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 14:56:56 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:19:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ KDEICONLIST = \
     locolor/{16x16 32x32}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     locolor/{16x16 32x32}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
 
-.IF "$(DPKG)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 
 PKGNAME=openoffice.org-$(TARGET)-menus
 DEBFILE=$(PKGDIR)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
@@ -157,7 +157,7 @@ ULFDIR = $(COMMONMISC)$/desktopshare
 
 .INCLUDE :  target.mk
 
-.IF "$(DPKG)"!=""
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 
 ALLTAR : $(DEBFILE) 
 
