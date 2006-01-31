@@ -1,0 +1,81 @@
+07/07/2004 (SB): BugID=i29741
+  Reference registries for the OOo 2.0 branch copied from the OOo 1.1 branch:
+    OO_20/types.rdb <- OO_11/types.rdb 1.6
+    OO_20/types_doc.rdb <- OO_11/types_doc.rdb 1.8
+  Changed accumulation-based services to single-interface--based ones
+  (types_doc.rdb only):
+    com.sun.star.bridge.UnoUrlResolver
+    com.sun.star.connection.Acceptor
+    com.sun.star.connection.Connector
+
+07/08/2004 (SB): BugID=i29741
+  Changed accumulation-based services to single-interface--based ones
+  (types_doc.rdb only):
+    com.sun.star.sdb.InteractionHandler
+    com.sun.star.sdbc.ConnectionPool
+
+07/12/2004 (SB): BugID=i29741
+  Resync'ed OO_20/types_doc.rdb <- OO_11/types_doc.rdb 1.10 (plus all
+  modifications listed above)
+
+08/18/2004 (JSC/JL): BugID=i31702
+  remove needs entry in com.sun.star.system.SimpleCommandMail because needs is 
+  deprecated and it caused an assertion in the cli_ure project while generating
+  the cli interfaces from type library.
+
+11/19/2004 (JSC/TL): BugID=i36687
+  adjust ChainedTextFrame service. Remove XChainable interface and insert propeties.
+  Interface was never implmented and the functionality was supported by properties.
+
+01/20/2005 (JSC): BugID=i40985
+  change const value com.sun.star.configuration.backend.NodeAttribute:MASK to 
+  0x7F00 insterad of 0xFF00. Necessary because of a bug fix in idlc and possible
+  because only 3 bits are masked.
+
+02/18/05 (JSC/TL): BugID=i42890
+  change ForBiddenCharacters property of com.sun.star.document.Settings
+  -> remove the readonly flag, it should never have been readonly.
+
+05/10/05 (JSC/TL): BugID=i43697
+  we removed the duplicated reference to XEnumerationAccess.
+
+08/26/05 (JSC): TaskID=i53814
+  I've exchanged the current type library to the type library of OO2.0 (build m125) 
+  for all further compatibility type checks.
+
+10/21/05 (JSC): TaskID=i56329
+  Correct com.sun.star.sdb.OfficeDatabaseDocument, it supports one more interface
+  and it is not published -> compatible change.
+  Correct com.sun.star.text.XEnumerationAccess, remove duplicate interface from 
+  published service. Also a compatible change.
+  Probably the regcompare tools needs to be improved
+
+10/26/05 (JSC): TaskID=i25406, i25472, i50417
+  ..style.CharacterPropertiesAsian -> remove 3 wrong paragraph properties
+  ..style.PageProperties -> for 93 properties related to footer and header 
+  the attribute maybevoid was inserted
+  ..text.textfield.DateTime -> NumberFormat changed from short to long
+  to ensure that the same format is used in all applications
+
+01/25/06 (JSC): TaskID=i611389
+  change the compatibility test to use always the type library in the type_reference
+  directory. We need only one reference per source stand. I have also removed the 
+  types_doc.rdb because all type info is already in the normal types.rdb, even
+  the service nad singleton type info.
+  In the same step i have updated the reference type library with the rdb of 
+  OOo2.0.1 and have patched the following singleton types to ensure that we need 
+  only one type ibrary:
+    - com.sun.star.script.browse.theBrowseNodeFactory
+    - com.sun.star.script.provider.theMasterScriptProviderFactory
+    - com.sun.star.util.theMacroExpander
+    - com.sun.star.util.theOfficeInstallationDirectories
+  
+01/25/06 (JSC): TaskID=i49101
+  adapt com.sun.star.text.GenericTextDocument service. Insert support of 
+  com.sun.star.lang.XMultiServiceFactory because this interface was missing but 
+  is substantial for text documents and was implemented from the beginning.
+
+  
+
+
+
