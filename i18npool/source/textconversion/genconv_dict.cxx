@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genconv_dict.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:57:16 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(cfp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
     fprintf(cfp, "#include <sal/types.h>\n");
     fprintf(cfp, "#include <textconversion.hxx>\n");
-    fprintf(cfp, "\nnamespace com { namespace sun { namespace star { namespace i18n {\n");
+    fprintf(cfp, "\nextern \"C\" {\n");
 
     if (strcmp(argv[1], "hhc_char") == 0)
         make_hhc_char(sfp, cfp);
@@ -83,7 +83,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     else if (strcmp(argv[1], "stc_word") == 0)
         make_stc_word(sfp, cfp);
 
-    fprintf (cfp, "} } } }\n");
+    fprintf (cfp, "}\n");
 
     fclose(sfp);
     fclose(cfp);
@@ -128,7 +128,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     }
     fprintf(cfp, "\n};\n");
 
-    fprintf(cfp, "\nstatic const Hangul_Index Hangul2HanjaIndex[] = {\n");
+    fprintf(cfp, "\nstatic const com::sun::star::i18n::Hangul_Index Hangul2HanjaIndex[] = {\n");
     for (i = 0; i < count; i++)
         fprintf(cfp, "\t{ 0x%04x, 0x%04x, 0x%02x },\n",
                         Hangul2HanjaData[i][0],
@@ -172,8 +172,8 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
 
     // create function to return arrays
     fprintf (cfp, "\tconst sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
-    fprintf (cfp, "\tconst Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
-    fprintf (cfp, "\tconst sal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(Hangul_Index); }\n");
+    fprintf (cfp, "\tconst com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
+    fprintf (cfp, "\tconst sal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
     fprintf (cfp, "\tconst sal_uInt16* getHanja2HangulIndex() { return Hanja2HangulIndex; }\n");
     fprintf (cfp, "\tconst sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
 }
