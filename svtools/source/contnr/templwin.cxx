@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:13:11 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,6 +424,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 {
     aDummyHeaderBar.Show();
 
+    aIconCtrl.SetAccessibleName( String( RTL_CONSTASCII_USTRINGPARAM("Groups") ) );
       aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.SetChoiceWithCursor( TRUE );
     aIconCtrl.SetSelectionMode( SINGLE_SELECTION );
