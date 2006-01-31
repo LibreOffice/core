@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:55:05 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,10 +990,13 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 {
     m_aPaperFormats.clear();
 
-    ULONG   nCount = ImplDeviceCaps( this, DC_PAPERSIZE, NULL, pSetupData );
-    POINT*  pPaperSizes = NULL;
+    DWORD nCount = ImplDeviceCaps( this, DC_PAPERSIZE, NULL, pSetupData );
+    if( nCount == (DWORD)-1 )
+        nCount = 0;
+
+    POINT* pPaperSizes = NULL;
     char* pNamesBuffer = NULL;
-    if ( nCount && (nCount != ((ULONG)-1)) )
+    if( nCount )
     {
         pPaperSizes = new POINT[nCount];
         memset( pPaperSizes, 0, nCount*sizeof(POINT) );
@@ -1003,7 +1006,7 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
         ImplDeviceCaps( this, DC_PAPERNAMES, pNamesBuffer, pSetupData );
     }
 
-    for ( ULONG i = 0; i < nCount; i++ )
+    for( DWORD i = 0; i < nCount; ++i )
     {
         vcl::PaperInfo aInfo;
         aInfo.m_nPaperWidth  = (pPaperSizes[i].x + 5) / 10;
