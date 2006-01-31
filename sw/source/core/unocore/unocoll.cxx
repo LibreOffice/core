@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:21:47 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :
         case SW_SERVICE_TEXT_SECTION :
-            xRet = (cppu::OWeakObject*)new SwXTextSection( 0, SW_SERVICE_INDEX_HEADER_SECTION == nObjectType);
+            xRet = SwXTextSectionClient::CreateXTextSection( 0, SW_SERVICE_INDEX_HEADER_SECTION == nObjectType);
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
@@ -1214,7 +1214,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
+    uno::Reference< XTextSection >  xRet;
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -1233,15 +1233,14 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if(nIndex >= 0 && nIndex < rFmts.Count())
         {
             SwSectionFmt* pFmt = rFmts[(sal_uInt16)nIndex];
-            uno::Reference< XTextSection >  xSect = GetObject(*pFmt);
-            aRet.setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0));
+            xRet = GetObject(*pFmt);
         }
         else
             throw IndexOutOfBoundsException();
     }
     else
         throw uno::RuntimeException();
-    return aRet;
+    return makeAny(xRet);
 }
 /*-- 14.01.99 09:06:06---------------------------------------------------
 
@@ -1364,13 +1363,17 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
 /*-- 14.01.99 09:06:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-XTextSection*   SwXTextSections::GetObject( SwSectionFmt& rFmt )
+uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 {
-    SwXTextSection* pSect = (SwXTextSection*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXTextSection ));
-    if( !pSect )
-        pSect = new SwXTextSection(&rFmt);
-    return pSect;
+    SwXTextSectionClient* pClient = (SwXTextSectionClient*)SwClientIter( rFmt ).
+                                    First( TYPE( SwXTextSectionClient ));
+    uno::Reference< XTextSection > xRet;
+    if( pClient  )
+        xRet = pClient->GetXTextSection();
+    // it is possible that the client is still registered but the reference is already invalid
+    if( !xRet.is() )
+        xRet = SwXTextSectionClient::CreateXTextSection(&rFmt);
+    return xRet;
 }
 /******************************************************************
  *
