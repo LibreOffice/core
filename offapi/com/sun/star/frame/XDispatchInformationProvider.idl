@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDispatchInformationProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:10:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ published interface XDispatchInformationProvider: com::sun::star::uno::XInterfac
 
         @returns
             name and group name of every command supported. A group ID which is
-            not supported returns an empty <type scope="com::sun::star::uno>Sequence</type>.
+            not supported returns an empty <type scope="com::sun::star::uno">Sequence</type>.
     */
     sequence < DispatchInformation > getConfigurableDispatchInformation( [in] short CommandGroup );
 };
