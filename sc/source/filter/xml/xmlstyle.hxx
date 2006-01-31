@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:12:57 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ using namespace rtl;
 extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
+extern const XMLPropertyMapEntry aXMLScRowStylesImportProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 
 //CellStyles
