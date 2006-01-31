@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:42:22 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,7 +522,9 @@ void __EXPORT EditorWindow::LoseFocus()
 BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
 {
     BOOL bChanged = FALSE;
-    if ( pEditEngine && pEditEngine->IsModified() )
+    if ( pEditEngine && pEditEngine->IsModified()
+        && !GetEditView()->IsReadOnly() )   // Added because of #i60626, otherwise
+            // any read only bug in the text engine could lead to a crash later
     {
         if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
         {
