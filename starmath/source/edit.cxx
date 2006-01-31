@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:06:40 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         BOOL bCallBase = TRUE;
-        SfxViewShell* pViewShell = SfxViewShell::Current();
+        SfxViewShell* pViewShell = GetView();
         if ( pViewShell && pViewShell->ISA(SmViewShell) )
         {
             // Terminate possible InPlace mode
@@ -467,7 +467,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
         {
-            if ( !SfxViewShell::Current()->KeyInput(rKEvt) )
+            SmViewShell *pView = GetView();
+            if ( pView && !pView->KeyInput(rKEvt) )
             {
                     /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
                 Flush();
@@ -479,7 +480,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             {
                 //SFX hat evtl. Slot an der View gecallt und dabei (wg. Hack
                 //im SFX) den Focus auf die View gesetzt
-                SfxViewShell* pVShell = SfxViewShell::Current();
+                SfxViewShell* pVShell = GetView();
                 if ( pVShell && pVShell->ISA(SmViewShell) &&
                      ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
                 {
