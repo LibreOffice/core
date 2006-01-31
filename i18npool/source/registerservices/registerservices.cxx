@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:44:51 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,9 @@
 #include <breakiterator_hi.hxx>
 #include <breakiterator_unicode.hxx>
 
-#define INDEXENTRYSUPPLIER_ALL
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
+#include <indexentrysupplier_ja_phonetic.hxx>
 #include <indexentrysupplier_common.hxx>
 #include <indexentrysupplier_default.hxx>
 
@@ -146,13 +146,7 @@ IMPL_CREATEINSTANCE( NativeNumberSupplier )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_pinyin )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_radical )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_stroke )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_zhuyin )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_dict )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_asian )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
@@ -176,21 +170,6 @@ IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_Unicode )
-IMPL_CREATEINSTANCE( Collator_dz_charset )
-IMPL_CREATEINSTANCE( Collator_zh_pinyin )
-IMPL_CREATEINSTANCE( Collator_zh_radical )
-IMPL_CREATEINSTANCE( Collator_zh_stroke )
-IMPL_CREATEINSTANCE( Collator_zh_zhuyin )
-IMPL_CREATEINSTANCE( Collator_zh_TW_radical )
-IMPL_CREATEINSTANCE( Collator_zh_TW_stroke )
-IMPL_CREATEINSTANCE( Collator_ko_charset )
-IMPL_CREATEINSTANCE( Collator_zh_charset )
-IMPL_CREATEINSTANCE( Collator_ja_charset )
-IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_first )
-IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_last )
-IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
-IMPL_CREATEINSTANCE( Collator_ne_charset )
-IMPL_CREATEINSTANCE( Collator_km_charset )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
@@ -332,30 +311,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_pinyin",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_pinyin",
-        &IndexEntrySupplier_zh_pinyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_radical",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_radical",
-        &IndexEntrySupplier_zh_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_stroke",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_stroke",
-        &IndexEntrySupplier_zh_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_zhuyin",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_zhuyin",
-        &IndexEntrySupplier_zh_zhuyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
-        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
-        "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
-        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ko_dict",
-        "com.sun.star.i18n.IndexEntrySupplier_ko_dict",
-        &IndexEntrySupplier_ko_dict_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
-        "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
-        &IndexEntrySupplier_ko_dict_CreateInstance },   // share same table with ko_dict
+    {   "com.sun.star.i18n.IndexEntrySupplier_asian",
+        "com.sun.star.i18n.IndexEntrySupplier_asian",
+        &IndexEntrySupplier_asian_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
         "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
         &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_CreateInstance },
@@ -434,45 +392,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.Collator_dz_charset",
-        "com.sun.star.i18n.Collator_dz_charset",
-        &Collator_dz_charset_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_pinyin",
-        "com.sun.star.i18n.Collator_zh_pinyin",
-        &Collator_zh_pinyin_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_radical",
-        "com.sun.star.i18n.Collator_zh_radical",
-        &Collator_zh_radical_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_stroke",
-        "com.sun.star.i18n.Collator_zh_stroke",
-        &Collator_zh_stroke_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_zhuyin",
-        "com.sun.star.i18n.Collator_zh_zhuyin",
-        &Collator_zh_zhuyin_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_TW_radical",
-        "com.sun.star.i18n.Collator_zh_TW_radical",
-        &Collator_zh_TW_radical_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_TW_stroke",
-        "com.sun.star.i18n.Collator_zh_TW_stroke",
-        &Collator_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ko_charset",
-        "com.sun.star.i18n.Collator_ko_charset",
-        &Collator_ko_charset_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric first)",
-        "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric first)",
-        &Collator_ja_phonetic_alphanumeric_first_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric last)",
-        "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric last)",
-        &Collator_ja_phonetic_alphanumeric_last_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ja_charset",
-        "com.sun.star.i18n.Collator_ja_charset",
-        &Collator_ja_charset_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_charset",
-        "com.sun.star.i18n.Collator_zh_charset",
-        &Collator_zh_charset_CreateInstance },
-    {   "com.sun.star.i18n.Collator_zh_TW_charset",
-        "com.sun.star.i18n.Collator_zh_TW_charset",
-        &Collator_zh_TW_charset_CreateInstance },
     {   "com.sun.star.i18n.ScriptTypeDetector",
         "com.sun.star.i18n.ScriptTypeDetector",
         &ScriptTypeDetector_CreateInstance },
@@ -626,14 +545,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
-
-    {   "com.sun.star.i18n.Collator_ne_charset",
-        "com.sun.star.i18n.Collator_ne_charset",
-        &Collator_ne_charset_CreateInstance },
-
-    {   "com.sun.star.i18n.Collator_km_charset",
-        "com.sun.star.i18n.Collator_km_charset",
-        &Collator_km_charset_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }
