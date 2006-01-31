@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 14:44:27 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,18 @@
  ************************************************************************/
 #include "sc.hrc" // Definition RID_XXX in StarCalc
 #include "dfa.hrc"
+
+/* #i54546# The code belonging to this resource file is sample code for the
+ * legacy AddIn interface. The interface is still supported, but deprecated.
+ * The strings here were displayed in the function wizard. To prevent
+ * duplicated and useless translation effort (functions and strings are also
+ * part of the new scaddin module), the strings here are now layed out as fixed
+ * untranslatable strings. The entire mechanism with the ../util/cl2c.pl perl
+ * script merging the raw .cl and the .src during build time didn't work
+ * anymore anyway, since we switched from MS-LCIDs / telephone area codes to
+ * ISO codes for resources, and introduced localize.sdf files. Returned was
+ * always an empty string. Now at least the fixed English string is returned.
+ * */
 
 Resource RID_SC_ADDIN_DFA
 {
@@ -172,44 +184,3 @@ Resource RID_SC_ADDIN_DFA
         Text = "Returns the number of weeks in the year in relation to a date";
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
