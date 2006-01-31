@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:48:02 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,6 +278,9 @@ Module gid_Module_Root_Files_5
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,
+    gid_File_Lib_Collator_Data,
+    gid_File_Lib_Index_Data,
+    gid_File_Lib_Textconv_Dict,
 	gid_File_Lib_Acceptor,
 	gid_File_Lib_Basprov,
 	gid_File_Lib_Behelper,
