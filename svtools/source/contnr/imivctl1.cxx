@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:07:09 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:46:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,7 +562,9 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, BOOL
         }
         if( pEntry == pCursor )
             ShowCursor( TRUE );
-    }
+    } // if( bUpdateMode )
+
+    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
 }
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()
