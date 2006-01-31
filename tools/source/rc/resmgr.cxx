@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:31:11 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1570,6 +1570,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "trying fallback: %s\n", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
             #endif
+            ResMgr* pCurThreadMgr = ResData::get().getThreadResMgr();
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
             // try to recreate the resource stack
@@ -1602,6 +1603,9 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             {
                 delete pFallback;
                 pFallback = NULL;
+                // ResMgr::GetResource has set pFallback as ThreadResMgr
+                // the destructor sets NULL, so set the original ResMgr again
+                ResData::get().setThreadResMgr( pCurThreadMgr );
             }
         }
     }
