@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-13 16:48:31 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:48:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,67 +48,11 @@ CLASSPATH:=$(XCLASSPATH)
 
 .INCLUDE : settings.mk
 
-SOLARCOMMONDOCDIR=$(SOLARVERSION)$/common$(PROEXT)$/doc$(EXT_UPDMINOR)
-SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 
 # --- ANT build environment  ---------------------------------------
 
-.IF "$(SOLAR_JAVA)"!=""
+.INCLUDE : antsettings.mk
 
-.IF "$(ANT_HOME)" == ""
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
-.EXPORT : ANT_HOME
-.ENDIF
-ANT_LIB*:=$(ANT_HOME)$/lib
-
-ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar
-PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
-
-.IF "$(ANT)" == ""
-ANT*:=$(ANT_HOME)$/bin$/ant
-.ENDIF
-
-.IF "$(ANT_BUILDFILE)"==""
-ANT_BUILDFILE=build.xml
-.ENDIF
-
-.IF "$(ANT_DEBUG)"==""
-.IF "$(debug)"==""
-ANT_DEBUG=off
-.ELSE
-ANT_DEBUG=on
-.ENDIF
-.ENDIF
-
-.IF "$(ANT_OPT)"==""
-.IF "$(optimize)"==""
-ANT_OPT=off
-.ELSE
-ANT_OPT=on
-.ENDIF
-.ENDIF
-
-.IF "$(JDK)"=="gcj"
-JAVA_HOME=
-.EXPORT : JAVA_HOME
-ANT_FLAGS!:=-Dbuild.compiler=gcj -Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) \
- -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) \
- -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) \
- -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
- -Dcommon.doc=$(SOLARCOMMONDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-.ELSE
-ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) \
- -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" \
- -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) \
- -Dcommon.jar=$(SOLARCOMMONBINDIR) -Dcommon.doc=$(SOLARCOMMONDOCDIR) \
- -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-.ENDIF
-.ELSE # No java
-ANT=
-ANT_FLAGS=
-.ENDIF
- 
- 
 .INCLUDE : target.mk
 
 CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
