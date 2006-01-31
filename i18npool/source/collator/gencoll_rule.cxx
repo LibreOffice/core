@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:52:53 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     fprintf(fp, " * All Rights Reserved.\n");
     fprintf(fp, " */\n\n");
     fprintf(fp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
-    fprintf(fp, "#include <collator_unicode.hxx>\n");
-    fprintf(fp, "\nnamespace com { namespace sun { namespace star { namespace i18n {\n");
+    fprintf(fp, "#include <sal/types.h>\n");
+    fprintf(fp, "\nextern \"C\" {\n");
 
     // generate main dict. data array
     fprintf(fp, "\nstatic const sal_uInt8 %s[] = {", name);
@@ -74,11 +74,8 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     }
     fprintf(fp, "\n};\n\n");
 
-    fprintf(fp, "Collator_%s::Collator_%s()\n{\n", name, name);
-    fprintf(fp, "\timplementationName = \"com.sun.star.i18n.Collator_%s\";\n", name);
-    fprintf(fp, "\trulesImage = %s;\n}\n\n", name);
-
-    fprintf (fp, "} } } }\n");
+    fprintf(fp, "const sal_uInt8* get_%s() { return %s; }\n\n", name, name);
+    fprintf (fp, "}\n");
 
     fclose(fp);
 
