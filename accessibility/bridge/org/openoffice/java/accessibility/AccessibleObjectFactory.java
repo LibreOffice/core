@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:32:54 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,6 +514,11 @@ public class AccessibleObjectFactory {
             java.awt.Window w;
             if (role == AccessibleRole.DIALOG) {
                 w = new Dialog(new Application(),
+                    xAccessibleContext.getAccessibleName(),
+                    xAccessibleStateSet.contains(AccessibleStateType.MODAL),
+                    xAccessibleComponent);
+            } else if (role == AccessibleRole.ALERT) {
+                w = new Alert(new Application(),
                     xAccessibleContext.getAccessibleName(),
                     xAccessibleStateSet.contains(AccessibleStateType.MODAL),
                     xAccessibleComponent);
