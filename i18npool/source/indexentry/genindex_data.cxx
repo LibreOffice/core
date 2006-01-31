@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: genindex_data.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:36:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sal/main.h>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+
+using namespace ::rtl;
+
+/* Main Procedure */
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
+    FILE *fp;
+
+    if (argc < 4) exit(-1);
+
+    fp = fopen(argv[1], "rb");  // open the source file for read;
+    if (fp == NULL) {
+        printf("Open the rule source file failed.");
+        return 1;
+    }
+
+
+    sal_Int32 i, j, k;
+    sal_Int32 address[0x10000];
+    for (i=0; i<0x10000; i++) address[i]=-1;
+    OUString sep=OUString(sal_Unicode('|'));
+    OUString result=sep;
+    sal_Int32 max=0;
+
+    sal_Char str[1024];
+    while (fgets(str, 1024, fp)) {
+        // don't convert last new line character to Ostr.
+        sal_Int32 len = strlen(str) - 1;
+        // skip comment line
+        if (len == 0 || str[0] == '#')
+            continue;
+
+        // input file is in UTF-8 encoding
+        OUString Ostr = OUString((const sal_Char *)str, len, RTL_TEXTENCODING_UTF8);
+        len = Ostr.getLength();
+        if (len == 0)
+            continue; // skip empty line.
+
+        OUString key=Ostr.copy(2)+sep;
+        sal_Int32 idx = result.indexOf(key);
+        if (key.getLength() > max) max=key.getLength();
+        if (idx >= 0) {
+            address[Ostr.toChar()]=idx;
+        } else {
+            address[Ostr.toChar()]=result.getLength();
+            result+=key;
+        }
+    }
+    fclose(fp);
+
+    fp = fopen(argv[2], "wb");
+    if (fp == NULL) {
+        printf("Can't create the C source file.");
+        return 1;
+    }
+
+    fprintf(fp, "/*\n");
+    fprintf(fp, " * Copyright(c) 1999 - 2006, Sun Microsystems, Inc.\n");
+    fprintf(fp, " * All Rights Reserved.\n");
+    fprintf(fp, " */\n\n");
+    fprintf(fp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
+    fprintf(fp, "#include <sal/types.h>\n");
+    fprintf(fp, "\nextern \"C\" {\n");
+
+    sal_Int32 index[0x100];
+    for (i=k=0; i<0x100; i++) {
+        index[i] = 0xFFFF;
+        for (j=0; j<0x100; j++) {
+            if (address[i*0x100+j] >=0) {
+                index[i]=0x100*k++;
+                break;
+            }
+        }
+    }
+
+    fprintf(fp, "\nstatic const sal_uInt16 idx1[] = {");
+    for (i = k = 0; i < 0x100;  i++) {
+        if (k++ % 16 == 0) fprintf(fp, "\n\t");
+        fprintf(fp, "0x%04x, ", index[i]);
+    }
+    fprintf(fp, "\n};\n\n");
+
+    sal_Int32 len=result.getLength();
+    const sal_Unicode *ustr=result.getStr();
+    fprintf(fp, "\nstatic const sal_uInt16 idx2[] = {");
+    for (i = k = 0; i<0x100; i++) {
+        if (index[i] != 0xFFFF) {
+            for (j = 0; j<0x100; j++) {
+                if (k++ % 16 == 0) fprintf(fp, "\n\t");
+                sal_Int32 ad=address[i*0x100+j];
+                fprintf(fp, "0x%04x, ", ad == -1 ? 0 : max == 2 ? ustr[ad] : ad);
+            }
+            fprintf(fp, "\n\t");
+        }
+    }
+    fprintf(fp, "\n};\n\n");
+
+    if (max == 2) {
+        fprintf(fp, "\nstatic const sal_uInt16 *idx3 = NULL;\n\n");
+    } else {
+        fprintf(fp, "\nstatic const sal_uInt16 idx3[] = {");
+        for (i = k = 0; i < len;  i++) {
+            if (k++ % 16 == 0) fprintf(fp, "\n\t");
+            fprintf(fp, "0x%04x, ", (sep.toChar() == ustr[i]) ? 0 : ustr[i]);
+        }
+        fprintf(fp, "\n};\n\n");
+    }
+
+    fprintf(fp, "const sal_uInt16** get_%s()\n{\n\tstatic const sal_uInt16 *idx[]={idx1, idx2, idx3};\n\treturn idx;\n}\n\n", argv[3]);
+    fprintf (fp, "}\n");
+
+    fclose(fp);
+    return 0;
+}   // End of main
