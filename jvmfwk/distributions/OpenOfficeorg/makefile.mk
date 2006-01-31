@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:26:17 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:28:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ $(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml javavendors
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     +-$(COPY) javavendors_macosx.xml $(BIN)$/javavendors_ooo.xml
-.ELIF "$(OS)"=="LINUX"
+.ELIF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
     +-$(COPY) javavendors_linux.xml $(BIN)$/javavendors_ooo.xml
 .ELSE
     +-$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
