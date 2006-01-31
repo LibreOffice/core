@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:35:56 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,10 +151,13 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
         const SwField* pCurField = GetCurField();
         nSubType = ((SwDocInfoField*)pCurField)->GetSubType() & 0xff;
         aFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
-        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
-        if(pFormat)
-            aFormatLB.SetLanguage(pFormat->GetLanguage());
+        SwWrtShell *pSh = GetWrtShell();
+        if(pSh)
+        {
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            if(pFormat)
+                aFormatLB.SetLanguage(pFormat->GetLanguage());
+        }
     }
 
     USHORT nSelEntryData = USHRT_MAX;
@@ -334,14 +337,17 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (!nFormat && (nNewType == NUMBERFORMAT_DATE || nNewType == NUMBERFORMAT_TIME))
                 {
-                    SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-                    SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-                    LanguageType eLang = aFormatLB.GetCurLanguage();
+                    SwWrtShell *pSh = GetWrtShell();
+                    if(pSh)
+                    {
 
-                    if (nNewType == NUMBERFORMAT_DATE)
-                        nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
-                    else if (nNewType == NUMBERFORMAT_TIME)
-                        nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
+                        SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
+                        LanguageType eLang = aFormatLB.GetCurLanguage();
+                        if (nNewType == NUMBERFORMAT_DATE)
+                            nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
+                        else if (nNewType == NUMBERFORMAT_TIME)
+                            nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
+                    }
                 }
                 aFormatLB.SetDefFormat(nFormat);
             }
