@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:03:18 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ class ScRecursionHelper;
 struct RowInfo;
 struct ScTableInfo;
 struct ScTabOpParam;
+class ScAutoNameCache;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -303,6 +304,8 @@ private:
     List*               pLoadedSymbolStringCellList;    // binary file format import of symbol font string cells
 
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
+
+    ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
 
     sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
@@ -791,6 +794,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            CalcAfterLoad();
     void            CompileAll();
     void            CompileXML();
+
+    ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
 
                     // Automatisch Berechnen
     void            SetAutoCalc( BOOL bNewAutoCalc );
