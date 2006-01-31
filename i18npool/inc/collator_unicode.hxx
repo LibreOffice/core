@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:51:23 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <osl/module.h>
 #include <unicode/tblcoll.h>
 
 //      ----------------------------------------------------
@@ -81,33 +82,10 @@ public:
 
 protected:
     const sal_Char *implementationName;
-    const sal_uInt8 *rulesImage;
 private:
     RuleBasedCollator *collator;
 };
 
-#define COLLATOR( algorithm ) \
-class Collator_##algorithm : public Collator_Unicode {\
-public:\
-    Collator_##algorithm(); \
-};
-
-COLLATOR( dz_charset )
-COLLATOR( zh_pinyin )
-COLLATOR( zh_radical )
-COLLATOR( zh_stroke )
-COLLATOR( zh_charset )
-COLLATOR( zh_zhuyin )
-COLLATOR( zh_TW_radical )
-COLLATOR( zh_TW_stroke )
-COLLATOR( zh_TW_charset )
-COLLATOR( ne_charset )
-COLLATOR( ko_charset )
-COLLATOR( km_charset )
-COLLATOR( ja_charset )
-COLLATOR( ja_phonetic_alphanumeric_first )
-COLLATOR( ja_phonetic_alphanumeric_last )
-#undef COLLATOR
 } } } }
 
 #endif
