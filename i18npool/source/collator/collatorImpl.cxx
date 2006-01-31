@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:06:53 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ CollatorImpl::loadCollatorAlgorithm(const OUString& impl, const lang::Locale& rL
         loadCachedCollator(rLocale, impl);
 
     if (cachedItem)
-        cachedItem->xC->loadCollatorAlgorithm(cachedItem->service, nLocale = rLocale, collatorOptions);
+        cachedItem->xC->loadCollatorAlgorithm(cachedItem->algorithm, nLocale = rLocale, collatorOptions);
     else
         throw RuntimeException(); // impl could not be loaded
 
@@ -227,7 +227,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
              // load service with name <base>_<lang>_<algorithm>
              createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rSortAlgorithm).makeStringAndClear(),
                  rSortAlgorithm)) ||
-            // load service with name <algorithm>
+            // load service with name <base>_<algorithm>
             (a > 0 &&
              createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
             // load default service with name <base>_Unicode
