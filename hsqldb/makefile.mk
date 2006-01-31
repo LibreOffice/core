@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:27:52 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:42:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@ TARGET=so_hsqldb
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE : antsettings.mk
+
 .INCLUDE :  version.mk
 .INCLUDE :	minor.mk
 
@@ -51,7 +53,9 @@ TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
       
 TARFILE_ROOTDIR=hsqldb
 
-CONVERTFILES=build$/build.xml
+CONVERTFILES=build$/build.xml\
+        doc/changelist_1_8_0.txt\
+        src/org/hsqldb/resources/sql-error-messages_it.properties
 PATCH_FILE_NAME=hsqldb_1_8_0
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
@@ -60,19 +64,7 @@ PATCH_FILE_NAME=hsqldb_1_8_0
 #                     src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
 #                     src$/org$/hsqldb$/test$/TestCollation.java
 
-.IF "$(ANT_HOME)" == ""
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
-.EXPORT : ANT_HOME
-.ENDIF
-ANT_LIB*:=$(ANT_HOME)$/lib
-
-ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar
-PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
-
-.IF "$(ANT)" == ""
-ANT*:=$(ANT_HOME)$/bin$/ant
-.ENDIF
-
+# override buildfile
 ANT_BUILDFILE=build$/build.xml
 
 .IF "$(JDK)"=="gcj"
