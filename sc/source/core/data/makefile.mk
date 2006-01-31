@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:26:40 $
+#   last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ AUTOSEG=true
 SLOFILES =  \
     $(SLO)$/attarray.obj \
     $(SLO)$/attrib.obj \
+    $(SLO)$/autonamecache.obj \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell.obj \
     $(SLO)$/cell2.obj \
