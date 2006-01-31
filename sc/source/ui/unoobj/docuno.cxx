@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:37:48 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #pragma hdrstop
 
+#include "scitems.hxx"
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -171,6 +172,9 @@ const SfxItemPropertyMap* lcl_GetRowsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND, &::getCppuType((const sal_Int32*)0), 0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND, &::getBooleanCppuType(), 0, MID_GRAPHIC_TRANSPARENT },
+        // not sorted, not used with SfxItemPropertyMap::GetByName
         {0,0,0,0}
     };
     return aRowsPropertyMap_Impl;
@@ -1347,7 +1351,11 @@ void SAL_CALL ScModelObj::setPropertyValue(
         if ( aNewOpt != rOldOpt )
         {
             pDoc->SetDocOptions( aNewOpt );
-            pDocShell->DoHardRecalc( TRUE );    //! Recalc nur bei entsprechenden Optionen?
+            //  Don't recalculate while loading XML, when the formula text is stored.
+            //  Recalculation after loading is handled separately.
+            //! Recalc only for options that need it?
+            if ( !pDoc->IsImportingXML() )
+                pDocShell->DoHardRecalc( TRUE );
             pDocShell->SetDocumentModified();
         }
     }
@@ -2563,6 +2571,18 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
             else
                 aFunc.RemovePageBreak( FALSE, ScAddress(0,nRow,nTab), TRUE, TRUE, TRUE );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLBACK ) || aNameString.EqualsAscii( SC_UNONAME_CELLTRAN ) )
+    {
+        // #i57867# Background color is specified for row styles in the file format,
+        // so it has to be supported along with the row properties (import only).
+
+        // Use ScCellRangeObj to set the property for all cells in the rows
+        // (this means, the "row attribute" must be set before individual cell attributes).
+
+        ScRange aRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab );
+        uno::Reference<beans::XPropertySet> xRangeObj = new ScCellRangeObj( pDocShell, aRange );
+        xRangeObj->setPropertyValue( aPropertyName, aValue );
+    }
 }
 
 uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -2609,6 +2629,15 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
     {
         BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nStartRow, nTab ) & (CR_MANUALBREAK)) );
         ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLBACK ) || aNameString.EqualsAscii( SC_UNONAME_CELLTRAN ) )
+    {
+        // Use ScCellRangeObj to get the property from the cell range
+        // (for completeness only, this is not used by the XML filter).
+
+        ScRange aRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab );
+        uno::Reference<beans::XPropertySet> xRangeObj = new ScCellRangeObj( pDocShell, aRange );
+        aAny = xRangeObj->getPropertyValue( aPropertyName );
     }
 
     return aAny;
