@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:41:13 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2825,7 +2825,8 @@ ConvertDataList::ConvertDataList( void )
     // FORCE: 1 Newton is...
     NEWD( "N",      1.0000000000000000E00,  CDC_Force ); // Newton
     NEWD( "dyn",    1.0000000000000000E05,  CDC_Force ); // Dyn
-    NEWD( "pond",   1.019716E02,            CDC_Force ); // Pond
+    NEWD( "lbf",    2.24808923655339E-01,   CDC_Force ); // Pound-Force
+    NEWD( "pond",   1.019716E02,            CDC_Force ); // *** Pond
 
     // ENERGY: 1 Joule is...
     NEWD( "J",      1.0000000000000000E00,  CDC_Energy ); // Joule
@@ -2837,7 +2838,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours
 //  NEWD( "HPh",    3.72506430801000E-07,   CDC_Energy ); // Horsepower Hours
     NEWD( "Wh",     2.7777777777777778E-04, CDC_Energy ); // Watt Hours
-    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); // BTU
+    NEWD( "flb",    2.37304222192651E01,    CDC_Energy ); // Foot Pound
+    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); // British Thermal Unit
 
     // POWER: 1 Watt is...
     NEWD( "W",      1.0000000000000000E00,  CDC_Power ); // Watt
@@ -2861,7 +2863,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "tbs",        6.7613333333333333E01,  CDC_Volume ); // Tablespoon
     NEWD( "oz",         3.3806666666666667E01,  CDC_Volume ); // Ounce Liquid
     NEWD( "cup",        4.2258333333333333E00,  CDC_Volume ); // Cup
-    NEWD( "pt",         2.1129166666666667E00,  CDC_Volume ); // Pint
+    NEWD( "pt",         2.1129166666666667E00,  CDC_Volume ); // US Pint
+    NEWD( "uk_pt",      1.75975569552166E00,    CDC_Volume ); // UK Pint
     NEWD( "qt",         1.0564583333333333E00,  CDC_Volume ); // Quart
     NEWD( "gal",        2.6411458333333333E-01, CDC_Volume ); // Gallone
     NEWD( "l",          1.0000000000000000E00,  CDC_Volume ); // Liter
@@ -2888,13 +2891,13 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); // *** Square Nautical Mile
     NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
     NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
-    NEWD( "yd2",        1.0936132983377078E00,  CDC_Area ); // *** Square Yard
+    NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); // *** Square Yard
     NEWD( "ang2",       1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
     NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica
-    NEWD( "Morgen",     2.553167E03,            CDC_Area ); // *** Morgen
-    NEWD( "ar",         1.000000E02,            CDC_Area ); // *** Ar
-    NEWD( "acre",       4.046856E03,            CDC_Area ); // *** Acre
-    NEWD( "ha",         1.000000E04,            CDC_Area ); // *** Hectare
+    NEWD( "Morgen",     4.0000000000000000E-04, CDC_Area ); // *** Morgen
+    NEWD( "ar",         1.000000E-02,           CDC_Area ); // *** Ar
+    NEWD( "acre",       2.471053815E-04,        CDC_Area ); // *** Acre
+    NEWD( "ha",         1.000000E-04,           CDC_Area ); // *** Hectare
     NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); // ***
 
     // SPEED: 1 Meter per Second is...
@@ -2919,8 +2922,9 @@ ConvertDataList::~ConvertDataList()
 
 double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE
 {
-    if( rFrom == rTo )
-        return fVal;
+// This will not catch illegal units
+//   if( rFrom == rTo )
+//       return fVal;
 
     ConvertData*    pFrom = NULL;
     ConvertData*    pTo = NULL;
