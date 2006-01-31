@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:55:39 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,6 +834,8 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
             ::rtl::OUString str;
             str = currNode->getAttr() -> getValueByName("unoid");
             of.writeParameter("IndexID", str, nbOfIndexs);
+            str = currNode->getAttr() -> getValueByName("module");
+            of.writeParameter("IndexModule", str, nbOfIndexs);
             str = currNode->getValue();
             of.writeParameter("IndexKey", str, nbOfIndexs);
             str = currNode -> getAttr() -> getValueByName("default");
@@ -863,6 +865,10 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\nstatic const sal_Unicode* IndexArray[] = {\n");
     for(i = 0; i < nbOfIndexs; i++) {
         of.writeAsciiString("\tIndexID");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+
+        of.writeAsciiString("\tIndexModule");
         of.writeInt(i);
         of.writeAsciiString(",\n");
 
