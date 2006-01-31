@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:56:14 $
+ *  last change: $Author: kz $ $Date: 2006-01-31 18:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,6 +587,39 @@ File gid_File_Lib_Dict_Zh
     Name = STRING(CONCAT2(libdict_zh,UNXSUFFIX));
   #else
     Name = "dict_zh.dll";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+File gid_File_Lib_Collator_Data
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libcollator_data,UNXSUFFIX));
+  #else
+    Name = "collator_data.dll";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+File gid_File_Lib_Index_Data
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libindex_data,UNXSUFFIX));
+  #else
+    Name = "index_data.dll";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+File gid_File_Lib_Textconv_Dict
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libtextconv_dict,UNXSUFFIX));
+  #else
+    Name = "textconv_dict.dll";
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
