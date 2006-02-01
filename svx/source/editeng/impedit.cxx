@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:44:07 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1494,17 +1494,28 @@ BOOL ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
     EditSelection aTmpNewSel( GetEditSelection().Max(), aPaM );
 
-    GetEditSelection().Max() = aPaM;
+    // --> OD 2005-12-16 #i27299#
+    // work on copy of current selection and set new selection, if it has changed.
+    EditSelection aNewEditSelection( GetEditSelection() );
+
+    aNewEditSelection.Max() = aPaM;
     if ( !pEditEngine->pImpEditEngine->aSelEngine.HasAnchor() )
     {
-        if ( GetEditSelection().Min() != aPaM )
-            pEditEngine->pImpEditEngine->CursorMoved( GetEditSelection().Min().GetNode() );
-        GetEditSelection().Min() = aPaM;
+        if ( aNewEditSelection.Min() != aPaM )
+            pEditEngine->pImpEditEngine->CursorMoved( aNewEditSelection.Min().GetNode() );
+        aNewEditSelection.Min() = aPaM;
     }
     else
     {
         DrawSelection( aTmpNewSel );
     }
+
+    // set changed text selection
+    if ( GetEditSelection() != aNewEditSelection )
+    {
+        SetEditSelection( aNewEditSelection );
+    }
+    // <--
 
     BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
     ShowCursor( bGotoCursor, bForceCursor );
