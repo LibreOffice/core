@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:41:34 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,17 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#include "mtnotification.hxx"
+#include "oleembobj.hxx"
+
 // TODO: when conversion service is ready this headers should disappear
 #include <svtools/filter.hxx>
 #include <vcl/graph.hxx>
+
+#include <tools/link.hxx>
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -92,4 +100,54 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 
     return sal_False;
 }
+
+// =====================================================================
+// MainThreadNotificationRequest
+// =====================================================================
+
+MainThreadNotificationRequest::MainThreadNotificationRequest( OleEmbeddedObject* pObj )
+: m_pObject( pObj )
+, m_xObject( static_cast< embed::XEmbeddedObject* >( pObj ) )
+{}
+
+void MainThreadNotificationRequest::mainThreadWorkerStart( MainThreadNotificationRequest* pMTRequest )
+{
+    if ( Application::GetMainThreadIdentifier() == osl_getThreadIdentifier( NULL ) )
+    {
+        // this is the main thread
+        worker( pMTRequest, pMTRequest );
+    }
+    else
+        Application::PostUserEvent( STATIC_LINK( NULL, MainThreadNotificationRequest, worker ), pMTRequest );
+}
+
+IMPL_STATIC_LINK( MainThreadNotificationRequest, worker, MainThreadNotificationRequest*, pMTRequest )
+{
+    if ( pMTRequest )
+    {
+        if ( pMTRequest->m_pObject )
+        {
+            try
+            {
+                uno::Reference< uno::XInterface > xLock = pMTRequest->m_xObject.get();
+                if ( xLock.is() )
+                {
+                    // this is the main thread, the solar mutex must be locked
+                    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    pMTRequest->m_pObject->OnViewChanged_Impl();
+                }
+            }
+            catch( uno::Exception& )
+            {
+                // ignore all the errors
+            }
+        }
+
+        delete pMTRequest;
+    }
+
+    return 0;
+}
+
+// =====================================================================
 
