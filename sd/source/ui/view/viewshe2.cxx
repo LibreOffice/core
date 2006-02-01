@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:31:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1048,15 +1048,16 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
                                                 aUnit,
                                                 GetDoc()->GetScaleUnit() );
 
-        // sichtbarer Ausschnitt wird nur inplace veraendert!
-        aRect.SetSize(aObjAreaSize);
-        pSdClient->SetObjArea(aRect);
-
         Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
         aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
+
+        // sichtbarer Ausschnitt wird nur inplace veraendert!
+        aRect.SetSize(aObjAreaSize);
+        // the object area size must be set after scaling, since it triggers the resizing
+        pSdClient->SetObjArea(aRect);
 
         // switching to edit mode for OLEs was disabled when OLE
         // is member of a group all the time. I dont know why it
