@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:48:00 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2954,10 +2954,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
     pImp->GetShell()->EnableSmooth( TRUE );
 
-#ifdef ACCESSIBLE_LAYOUT
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
-#endif
 
 #ifndef PRODUCT
 #if OSL_DEBUG_LEVEL > 1
