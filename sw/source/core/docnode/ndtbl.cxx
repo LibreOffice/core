@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:48:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,14 @@
 
 #include <map>
 #include <algorithm>
+// --> OD 2005-12-05 #i27138#
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+// <--
 
 // #i17764# delete table redlines when modifying the table structure?
 // #define DEL_TABLE_REDLINES 1
@@ -2182,13 +2190,28 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
     // liegt der gefundene ContentNode vor oder hinter der Tabelle ?
     BOOL bBehind = EndOfSectionIndex() < pIdxBehind->GetIndex();
 
-    SwFrm *pFrm, *pNew;
-
+    SwFrm *pFrm( 0L );
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( 0 != (pFrm = aNode2Layout.NextFrm()) )
     {
-        pNew = MakeFrm();
+        SwTabFrm* pNew = MakeFrm();
         pNew->Paste( pFrm->GetUpper(),  bBehind ? pFrm : pFrm->GetNext() );
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for next paragraph will change
+        // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+        {
+            ViewShell* pViewShell( pNew->GetShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pNew->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
+            }
+        }
+        // <--
         ((SwTabFrm*)pNew)->RegistFlys();
     }
 }
@@ -2213,6 +2236,22 @@ void SwTableNode::DelFrms()
             {
                 while ( pFrm->HasFollow() )
                     pFrm->JoinAndDelFollows();
+                // --> OD 2005-12-01 #i27138#
+                // notify accessibility paragraphs objects about changed
+                // CONTENT_FLOWS_FROM/_TO relation.
+                // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+                // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+                {
+                    ViewShell* pViewShell( pFrm->GetShell() );
+                    if ( pViewShell && pViewShell->GetLayout() &&
+                         pViewShell->GetLayout()->IsAnyShellAccessible() )
+                    {
+                        pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+                    }
+                }
+                // <--
                 pFrm->Cut();
                 delete pFrm;
                 bAgain = TRUE;
