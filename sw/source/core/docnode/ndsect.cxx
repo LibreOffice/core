@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:18:09 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,18 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+// --> OD 2005-12-01 #i27138#
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+// <--
+
 
 // OD 04.11.2003 #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
@@ -1175,6 +1187,23 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                         pUp = (SwLayoutFrm*)pUp->Lower();
                     }
                     pNew->Paste( pUp, NULL );
+                    // --> OD 2005-12-01 #i27138#
+                    // notify accessibility paragraphs objects about changed
+                    // CONTENT_FLOWS_FROM/_TO relation.
+                    // Relation CONTENT_FLOWS_FROM for next paragraph will change
+                    // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+                    if ( pNew->IsTxtFrm() )
+                    {
+                        ViewShell* pViewShell( pNew->GetShell() );
+                        if ( pViewShell && pViewShell->GetLayout() &&
+                             pViewShell->GetLayout()->IsAnyShellAccessible() )
+                        {
+                            pViewShell->InvalidateAccessibleParaFlowRelation(
+                                dynamic_cast<SwTxtFrm*>(pNew->FindNextCnt( true )),
+                                dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
+                        }
+                    }
+                    // <--
                     pNew = pSct;
                 }
 
@@ -1185,6 +1214,23 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 else
                     // der neue liegt hinter mir
                     pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
+                // --> OD 2005-12-01 #i27138#
+                // notify accessibility paragraphs objects about changed
+                // CONTENT_FLOWS_FROM/_TO relation.
+                // Relation CONTENT_FLOWS_FROM for next paragraph will change
+                // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+                if ( pNew->IsTxtFrm() )
+                {
+                    ViewShell* pViewShell( pNew->GetShell() );
+                    if ( pViewShell && pViewShell->GetLayout() &&
+                         pViewShell->GetLayout()->IsAnyShellAccessible() )
+                    {
+                        pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pNew->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
+                    }
+                }
+                // <--
                 if ( bInitNewSect )
                     static_cast<SwSectionFrm*>(pNew)->Init();
             }
