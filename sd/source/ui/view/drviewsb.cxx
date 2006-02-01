@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:57:25 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -852,8 +852,7 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 
     SdPage* pCurrentPage = GetDoc()->GetSdPage( aTabControl.GetCurPageId() - 1, GetPageKind() );
 
-    return ( aNewName.Equals( pCurrentPage->GetName() )
-             || GetDocSh()->IsNewPageNameValid( aNewName ) );
+    return pCurrentPage && ( aNewName.Equals( pCurrentPage->GetName() ) || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
 
