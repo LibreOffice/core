@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:38:39 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,13 +621,9 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         // If there is an accessible layout we must call modify even
         // with length zero, because we have to notify about the changed
         // text node.
-        if( nTxtLen != nSplitPos
-#ifdef ACCESSIBLE_LAYOUT
-                ||
+        if( nTxtLen != nSplitPos ||
             ( (pRootFrm = pNode->GetDoc()->GetRootFrm()) != 0 &&
-               pRootFrm->IsAnyShellAccessible() )
-#endif
-              )
+              pRootFrm->IsAnyShellAccessible() ) )
 
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
