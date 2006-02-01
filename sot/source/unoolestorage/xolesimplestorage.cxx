@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:57:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
+
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <storinfo.hxx>
 
@@ -377,7 +379,19 @@ void SAL_CALL OLESimpleStorage::replaceByName( const ::rtl::OUString& aName, con
         throw lang::DisposedException();
 
     removeByName( aName );
-    insertByName( aName, aElement );
+
+    try
+    {
+        insertByName( aName, aElement );
+    }
+    catch( container::ElementExistException& )
+    {
+           uno::Any aCaught( ::cppu::getCaughtException() );
+
+        throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                            uno::Reference< uno::XInterface >(),
+                                            aCaught );
+    }
 }
 
 // --------------------------------------------------------------------------------
