@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:45:18 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,9 +384,7 @@ public:
 
     SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
     void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen
-#ifdef ACCESSIBLE_LAYOUT
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
-#endif
 
     // finde/loeschen den Fly, in dem der Cursor steht
     SwFrmFmt* WizzardGetFly();
@@ -481,9 +479,7 @@ public:
 
     USHORT IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
                                     //zaehlt aber nicht die Objekte in Gruppen.
-#ifdef ACCESSIBLE_LAYOUT
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
-#endif
 
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
