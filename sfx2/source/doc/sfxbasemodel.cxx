@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:48:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:11:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3082,53 +3082,16 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                         Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                         xUIConfigStorage->setStorage( xConfigStorage );
                     }
+                    else
+                    {
+                        OSL_ENSURE( sal_False, "Unexpected scenario!\n" );
+                    }
                 }
 
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
             else if ( SFX_EVENT_LOADFINISHED == pNamedHint->GetEventId() )
             {
-                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
-            }
-            else if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
-            {
-                // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                {
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
-                    xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
-                }
-            }
-            else if ( SFX_EVENT_SAVEDOC == pNamedHint->GetEventId() )
-            {
-                // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                {
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
-                    xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
-                }
-            }
-            else if ( SFX_EVENT_SAVEDOCDONE == pNamedHint->GetEventId()
-                   || SFX_EVENT_SAVEDOCFAILED == pNamedHint->GetEventId()
-                   || SFX_EVENT_SAVEASDOCFAILED == pNamedHint->GetEventId() )
-            {
-                // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                {
-                    REFERENCE< XSTORAGE > xConfigStorage;
-                    rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
-
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
-                    if ( !xConfigStorage.is() )
-                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
-
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
-                    xUIConfigStorage->setStorage( xConfigStorage );
-                }
-
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
             else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
@@ -3140,23 +3103,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 TransformItems( SID_SAVEASDOC, *pSet, aArgs );
                 addTitle_Impl( aArgs, aTitle );
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
-
-                // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                {
-                    REFERENCE< XSTORAGE > xConfigStorage;
-                    rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
-
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
-                    if ( !xConfigStorage.is() )
-                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
-
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
-                    xUIConfigStorage->setStorage( xConfigStorage );
-                }
-
-                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
 
             postEvent_Impl( pNamedHint->GetEventId() );
@@ -4135,6 +4081,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
     }
     else
     {
+        // TODO/LATER: if the provided storage has some data inside the storing might fail, probably the storage must be truncated
         // TODO/LATER: is it possible to have a template here?
         m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, sal_False );
 
@@ -4168,7 +4115,9 @@ void SAL_CALL SfxBaseModel::switchToStorage( const REFERENCE< XSTORAGE >& xStora
     if ( !m_pData->m_pObjectShell.Is() )
         throw IOEXCEPTION(); // TODO:
 
-    if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+    // the persistence should be switched only if the storage is different
+    if ( xStorage != m_pData->m_pObjectShell->GetStorage()
+      && !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
     {
         sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
         throw task::ErrorCodeIOException( ::rtl::OUString(),
