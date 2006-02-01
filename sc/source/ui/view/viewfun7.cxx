@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:14:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 }
 
 BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
-                                const Size* pDescSize )
+                                const Size* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType )
 {
     MakeDrawLayer();
     if ( xObj.is() )
@@ -330,6 +330,9 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 
         ScDrawView* pDrView = GetScDrawView();
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
+        if ( pReplGraph )
+            pSdrObj->SetGraphicToObj( *pReplGraph, aMediaType );
+
         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
         GetViewData()->GetViewShell()->SetDrawShell( TRUE );
