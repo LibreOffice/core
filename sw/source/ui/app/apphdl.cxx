@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:47:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:48:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -942,6 +942,8 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     if(pView->IsMailMergeSourceView())
                         pMMConfig->SetSourceView( pView );
                     pView->SetMailMergeConfigItem(0, 0, sal_True);
+                    //#i59242# re-create result set
+                    pMMConfig->DisposeResultSet();
                     SfxViewFrame* pViewFrame = pView->GetViewFrame();
                     pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, FALSE);
                     DBG_ASSERT(pMMConfig, "no MailMergeConfigItem available");
