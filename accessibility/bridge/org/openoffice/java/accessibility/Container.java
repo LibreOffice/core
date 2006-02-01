@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Container.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:36:43 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,8 +351,13 @@ public class Container extends java.awt.Container implements javax.accessibility
                     case AccessibleEventId.BOUNDRECT_CHANGED:
                         firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                         break;
+                    /*
+                     * the Java AccessBridge for GNOME maps SELECTION_PROPERTY change events
+                     * for objects of role TEXT to object:text-selection-changed
+                     */
+                    case AccessibleEventId.TEXT_SELECTION_CHANGED:
                     case AccessibleEventId.SELECTION_CHANGED:
-                        firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                         break;
                     case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
                         handleAllChildrenChangedEvent();
