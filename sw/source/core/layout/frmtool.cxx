@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:55:38 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1443,6 +1443,25 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
 
             pFrm->InsertBehind( pLay, pPrv );
+            // --> OD 2005-12-01 #i27138#
+            // notify accessibility paragraphs objects about changed
+            // CONTENT_FLOWS_FROM/_TO relation.
+            // Relation CONTENT_FLOWS_FROM for next paragraph will change
+            // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+            if ( pFrm->IsTxtFrm() )
+            {
+                ViewShell* pViewShell( pFrm->GetShell() );
+                // no notification, if <ViewShell> is in construction
+                if ( pViewShell && !pViewShell->IsInConstructor() &&
+                     pViewShell->GetLayout() &&
+                     pViewShell->GetLayout()->IsAnyShellAccessible() )
+                {
+                    pViewShell->InvalidateAccessibleParaFlowRelation(
+                        dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                        dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+                }
+            }
+            // <--
             // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
             // for setting position at newly inserted frame
             lcl_SetPos( *pFrm, *pLay );
@@ -1470,6 +1489,24 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
 
             pFrm->InsertBehind( pLay, pPrv );
+            // --> OD 2005-12-01 #i27138#
+            // notify accessibility paragraphs objects about changed
+            // CONTENT_FLOWS_FROM/_TO relation.
+            // Relation CONTENT_FLOWS_FROM for next paragraph will change
+            // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+            {
+                ViewShell* pViewShell( pFrm->GetShell() );
+                // no notification, if <ViewShell> is in construction
+                if ( pViewShell && !pViewShell->IsInConstructor() &&
+                     pViewShell->GetLayout() &&
+                     pViewShell->GetLayout()->IsAnyShellAccessible() )
+                {
+                    pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+                }
+            }
+            // <--
             if ( bObjsDirect && pTbl->Count() )
                 ((SwTabFrm*)pFrm)->RegistFlys();
             // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
@@ -1529,6 +1566,24 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                             ((SwTxtFrm*)pPrv)->Prepare( PREP_QUOVADIS, 0, FALSE );
                     }
                 }
+                // --> OD 2005-12-01 #i27138#
+                // notify accessibility paragraphs objects about changed
+                // CONTENT_FLOWS_FROM/_TO relation.
+                // Relation CONTENT_FLOWS_FROM for next paragraph will change
+                // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+                {
+                    ViewShell* pViewShell( pFrm->GetShell() );
+                    // no notification, if <ViewShell> is in construction
+                    if ( pViewShell && !pViewShell->IsInConstructor() &&
+                         pViewShell->GetLayout() &&
+                         pViewShell->GetLayout()->IsAnyShellAccessible() )
+                    {
+                        pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+                    }
+                }
+                // <--
                 pFrm->CheckDirChange();
 
                 // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
