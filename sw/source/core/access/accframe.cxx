@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:47:51 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,29 +382,6 @@ void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
             }
             ++aIter;
         }
-    }
-}
-
-void SwAccessibleFrame::MergeLowerBounds( SwRect& rBounds,
-                                             const SwRect& rVisArea,
-                                          const SwFrm *pFrm,
-                                          sal_Bool bInPagePreview )
-{
-    const SwFrmOrObjSList aVisList( rVisArea, pFrm );
-    SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
-    while( aIter != aVisList.end() )
-    {
-        const SwFrmOrObj& rLower = *aIter;
-        if( rLower.IsAccessible( bInPagePreview ) )
-        {
-            rBounds.Union( rLower.GetBounds() );
-        }
-        else if( rLower.GetSwFrm() )
-        {
-            MergeLowerBounds( rBounds, rVisArea, rLower.GetSwFrm(),
-                              bInPagePreview );
-        }
-        ++aIter;
     }
 }
 
