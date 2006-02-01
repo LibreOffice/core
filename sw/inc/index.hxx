@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:47:01 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 // Maximale Anzahl von Indizies im IndexArray (zum Abtesten auf Ueberlaeufe)
 class SwIndex;
 class SwIndexReg;
-class SwPosition;
+struct SwPosition;
 
 #ifdef PRODUCT
 #define INLINE inline
