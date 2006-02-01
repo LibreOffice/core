@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:52:12 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,9 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
-, m_bHasSizeToSet( sal_False )
 , m_nCachedAspect( 0 )
+, m_bHasSizeToSet( sal_False )
+, m_nAspectToSet( 0 )
 , m_bGotStatus( sal_False )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
@@ -111,8 +112,9 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
 , m_bHasCachedSize( sal_False )
-, m_bHasSizeToSet( sal_False )
 , m_nCachedAspect( 0 )
+, m_bHasSizeToSet( sal_False )
+, m_nAspectToSet( 0 )
 , m_bGotStatus( sal_False )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
@@ -140,8 +142,9 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
-, m_bHasSizeToSet( sal_False )
 , m_nCachedAspect( 0 )
+, m_bHasSizeToSet( sal_False )
+, m_nAspectToSet( 0 )
 , m_bGotStatus( sal_False )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
