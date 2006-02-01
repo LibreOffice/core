@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:38:23 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 #include "View.hxx"
 
 #include <vector>
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
 
 #ifndef _REF_HXX
 #include <tools/ref.hxx>
@@ -212,7 +216,17 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
         if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().is() )
-            pSdrOleObj = (SdrOle2Obj*) pObj;
+        {
+            // If object has no persistence it must be copied as part of the document
+            try
+            {
+                uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                if ( xPersObj.is() && xPersObj->hasEntry() )
+                     pSdrOleObj = (SdrOle2Obj*) pObj;
+            }
+            catch( uno::Exception& )
+            {}
+        }
     }
 
     if( pSdrOleObj )
@@ -250,7 +264,17 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
         if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().is() )
-            pSdrOleObj = (SdrOle2Obj*) pObj;
+        {
+            // If object has no persistence it must be copied as part of the document
+            try
+            {
+                uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                if ( xPersObj.is() && xPersObj->hasEntry() )
+                     pSdrOleObj = (SdrOle2Obj*) pObj;
+            }
+            catch( uno::Exception& )
+            {}
+        }
     }
 
     if( pDocSh )
