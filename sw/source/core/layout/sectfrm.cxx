@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:36:23 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,25 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
     }
     SwFrm* pUp = GetUpper();
     if( pUp )
+    {
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        {
+            ViewShell* pViewShell( GetShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                                dynamic_cast<SwTxtFrm*>(FindNextCnt( true )),
+                                dynamic_cast<SwTxtFrm*>(FindPrevCnt( true )) );
+            }
+        }
+        // <--
         _Cut( bRemove );
+    }
     if( IsFollow() )
     {
         SwSectionFrm *pMaster = FindMaster();
