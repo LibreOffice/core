@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:57:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,10 +134,8 @@
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
-#endif
 #endif
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
@@ -405,10 +403,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         GetDrawView()->AdjustMarkHdl(FALSE);
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     if( Imp()->IsAccessible() )
         Imp()->FireAccessibleEvents();
-#endif
 }
 
 /******************************************************************************
@@ -1273,10 +1269,8 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
 
-#ifdef ACCESSIBLE_LAYOUT
     if( Imp()->IsAccessible() )
         Imp()->UpdateAccessible();
-#endif
 
 }
 
@@ -2332,6 +2326,35 @@ void ViewShell::InvalidateAccessibleFocus()
 {
     if( Imp()->IsAccessible() )
         Imp()->GetAccessibleMap().InvalidateFocus();
+}
+
+/** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
+    OD 2005-12-01 #i27138#
+
+    @author OD
+*/
+void ViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
+                                                      const SwTxtFrm* _pToTxtFrm )
+{
+    if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
+    {
+        Imp()->_InvalidateAccessibleParaFlowRelation( _pFromTxtFrm, _pToTxtFrm );
+    }
+}
+
+/** invalidate text selection for paragraphs
+
+    OD 2005-12-12 #i27301#
+
+    @author OD
+*/
+void ViewShell::InvalidateAccessibleParaTextSelection()
+{
+    if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
+    {
+        Imp()->_InvalidateAccessibleParaTextSelection();
+    }
 }
 
 /* -----------------------------06.05.2002 13:23------------------------------
