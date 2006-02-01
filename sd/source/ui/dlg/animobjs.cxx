@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:28:49 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,6 +292,8 @@ IMPL_LINK( AnimationWindow, ClickStopHdl, void *, EMPTYARG )
 
 IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
+    ScopeLockGuard aGuard( maPlayLock );
+
     bMovie = TRUE;
     BOOL bDisableCtrls = FALSE;
     ULONG nCount = aBmpExList.Count();
@@ -867,14 +869,21 @@ void AnimationWindow::Resize()
 
 BOOL AnimationWindow::Close()
 {
-    SfxBoolItem aItem( SID_ANIMATION_OBJECTS, FALSE );
+    if( maPlayLock.isLocked() )
+    {
+        return FALSE;
+    }
+    else
+    {
+        SfxBoolItem aItem( SID_ANIMATION_OBJECTS, FALSE );
 
-    GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute(
+            SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-    SfxDockingWindow::Close();
+        SfxDockingWindow::Close();
 
-    return( TRUE );
+        return TRUE;
+    }
 }
 
 // -----------------------------------------------------------------------
