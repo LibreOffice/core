@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:20:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -995,15 +995,16 @@ void View::DoConnect(SdrOle2Obj* pObj)
                                                            aMapUnit,
                                                            pDoc->GetScaleUnit() );
 
-                    // sichtbarer Ausschnitt wird nur inplace veraendert!
-                    aRect.SetSize(aObjAreaSize);
-                    pSdClient->SetObjArea(aRect);
-
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
                     aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
                     aScaleHeight.ReduceInaccurate(10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
+
+                    // sichtbarer Ausschnitt wird nur inplace veraendert!
+                    // the object area must be set after the scaling, since it triggers resize
+                    aRect.SetSize(aObjAreaSize);
+                    pSdClient->SetObjArea(aRect);
                 }
             }
         }
