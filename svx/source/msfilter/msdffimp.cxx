@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:55:23 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1885,10 +1885,10 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             {
                 Graphic aGraf;
                 // first try to get BLIP from cache
-                BOOL bOK = rManager.GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf );
+                BOOL bOK = rManager.GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL );
                 // then try directly from stream (i.e. Excel chart hatches/bitmaps)
                 if ( !bOK )
-                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf );
+                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf, NULL );
                 if ( bOK )
                 {
                     Bitmap aBmp( aGraf.GetBitmap() );
@@ -4379,6 +4379,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     SdrObject*  pRet = NULL;
     String      aFilename;
     String      aLinkFileName, aLinkFilterName;
+    Rectangle   aVisArea;
 
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
@@ -4394,7 +4395,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         //   UND, ODER folgendes:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
         {
-            if (!(bGrfRead = GetBLIP(nBlipId, aGraf)))
+            if ( !( bGrfRead = GetBLIP( nBlipId, aGraf, &aVisArea ) ) )
             {
                 /*
                 Still no luck, lets look at the end of this record for a FBSE pool,
@@ -4415,7 +4416,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                     {
                         rSt.SeekRel(nSkip);
                         if (0 == rSt.GetError())
-                            bGrfRead = GetBLIPDirect( rSt, aGraf );
+                            bGrfRead = GetBLIPDirect( rSt, aGraf, &aVisArea );
                     }
                 }
             }
@@ -4556,8 +4557,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
         {
             // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf,
-                              aBoundRect, rObjData.nCalledByGroup );
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect, aVisArea, rObjData.nCalledByGroup );
             // <--
         }
         if( !pRet )
@@ -4594,6 +4594,11 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                 aLinkFilterName = aFilterName;
             }
         }
+
+        // set the size from BLIP if there is one
+        if ( pRet && bGrfRead && !aVisArea.IsEmpty() )
+            pRet->SetBLIPSizeRectangle( aVisArea );
+
         if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
         {                                               // name is already set in ImportOLE !!
             // JP 01.12.99: SetName before SetModel - because in the other order the Bug 70098 is active
@@ -6827,7 +6832,7 @@ BOOL SvxMSDffManager::GetShape(ULONG nId, SdrObject*&         rpShape,
 /*      Zugriff auf ein BLIP zur Laufzeit (bei bereits bekannter Blip-Nr)
     ---------------------------------
 ******************************************************************************/
-BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
+BOOL SvxMSDffManager::GetBLIP( ULONG nIdx_, Graphic& rData, Rectangle* pVisArea ) const
 {
     BOOL bOk = FALSE;       // Ergebnisvariable initialisieren
     if ( pStData )
@@ -6877,7 +6882,7 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
             if( pStData->GetError() )
                 pStData->ResetError();
             else
-                bOk = GetBLIPDirect( *pStData, rData );
+                bOk = GetBLIPDirect( *pStData, rData, pVisArea );
             if( pStData2 && !bOk )
             {
                 // Fehler, aber zweite Chance: es gibt noch einen zweiten
@@ -6891,7 +6896,7 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
                 if( pStData2->GetError() )
                     pStData2->ResetError();
                 else
-                    bOk = GetBLIPDirect( *pStData2, rData );
+                    bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
                 // alte FilePos des zweiten Daten-Stream restaurieren
                 pStData2->Seek( nOldPosData2 );
             }
@@ -6917,7 +6922,7 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
 /*      Zugriff auf ein BLIP zur Laufzeit (mit korrekt positioniertem Stream)
     ---------------------------------
 ******************************************************************************/
-BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
+BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea ) const
 {
     ULONG nOldPos = rBLIPStream.Tell();
 
@@ -6948,6 +6953,9 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
 
                 // scale to 1/100mm
                 aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
+
+                if ( pVisArea )     // seem that we currently are skipping the visarea position
+                    *pVisArea = Rectangle( Point(), aMtfSize100 );
 
                 // skip rest of header
                 nSkip = 6;
@@ -7157,6 +7165,7 @@ BOOL SvxMSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
 SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
                                        const Graphic& rGrf,
                                        const Rectangle& rBoundRect,
+                                       const Rectangle& rVisArea,
                                        const int _nCalledByGroup ) const
 // <--
 {
@@ -7167,7 +7176,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
         pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                                        rGrf, rBoundRect, pStData, nError,
+                                        rGrf, rBoundRect, rVisArea, pStData, nError,
                                         nSvxMSDffOLEConvFlags );
     return pRet;
 }
@@ -7631,6 +7640,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 const uno::Reference < embed::XStorage >& xDestStorage,
                 const Graphic& rGrf,
                 const Rectangle& rBoundRect,
+                const Rectangle& rVisArea,
                 SvStream* pDataStrm,
                 ErrCode& rError,
                 UINT32 nConvertFlags )
@@ -7746,14 +7756,30 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
                 // working with visual area can switch the object to running state
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
-                //xInplaceObj->EnableSetModified( FALSE );
                 awt::Size aAwtSz;
-                aAwtSz.Width = aSz.Width();
-                aAwtSz.Height = aSz.Height();
-                xObj->setVisualAreaSize( nAspect, aAwtSz );
-                //xInplaceObj->EnableSetModified( TRUE );*/
+                try
+                {
+                    // the provided visual area should be used, if there is any
+                    if ( rVisArea.IsEmpty() )
+                    {
+                        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                        Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
+                        aAwtSz.Width = aSz.Width();
+                        aAwtSz.Height = aSz.Height();
+                    }
+                    else
+                    {
+                        aAwtSz.Width = rVisArea.GetWidth();
+                        aAwtSz.Height = rVisArea.GetHeight();
+                    }
+                    //xInplaceObj->EnableSetModified( FALSE );
+                    xObj->setVisualAreaSize( nAspect, aAwtSz );
+                    //xInplaceObj->EnableSetModified( TRUE );*/
+                }
+                catch( uno::Exception& )
+                {
+                    OSL_ENSURE( sal_False, "Could not set visual area of the object!\n" );
+                }
 
                 svt::EmbeddedObjectRef aObj( xObj, nAspect );
 
