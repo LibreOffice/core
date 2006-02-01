@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:47:15 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1248,6 +1248,24 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTxtNd, 0 ) );
 }
 
+// --> OD 2005-12-14 #i27301# - helper class, which notifies the accessibility
+// about invalid text selections in its destructor
+class SwNotifyAccAboutInvalidTextSelections
+{
+    private:
+        SwCrsrShell& mrCrsrSh;
+
+    public:
+        SwNotifyAccAboutInvalidTextSelections( SwCrsrShell& _rCrsrSh )
+            : mrCrsrSh( _rCrsrSh )
+        {}
+
+        ~SwNotifyAccAboutInvalidTextSelections()
+        {
+            mrCrsrSh.InvalidateAccessibleParaTextSelection();
+        }
+};
+// <--
 void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 {
     SET_CURR_SHELL( this );
@@ -1266,6 +1284,10 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             bIgnoreReadonly = TRUE;
         return;             // wenn nicht, dann kein Update !!
     }
+
+    // --> OD 2005-12-14 #i27301#
+    SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
+    // <--
 
     if ( bIgnoreReadonly )
     {
@@ -1424,10 +1446,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 pVisCrsr->Show();           // wieder anzeigen
             }
             eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
-#ifdef ACCESSIBLE_LAYOUT
             if( pTblFrm && Imp()->IsAccessible() )
                 Imp()->InvalidateAccessibleCursorPosition( pTblFrm );
-#endif
             return;
         }
     }
@@ -1695,10 +1715,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
-#ifdef ACCESSIBLE_LAYOUT
     if( pFrm && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
-#endif
 
     // switch from blinking cursor to read-only-text-selection cursor
     const long nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
