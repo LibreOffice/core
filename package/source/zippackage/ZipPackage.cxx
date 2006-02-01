@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:51:31 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <comphelper/seekableinput.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using namespace rtl;
 using namespace ucb;
@@ -258,25 +259,6 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 };
 
 //===========================================================================
-
-void copyInputToOutput_Impl( const Reference< XInputStream >& aIn, const Reference< XOutputStream >& aOut )
-{
-    sal_Int32 nRead;
-    Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
-
-    do
-    {
-        nRead = aIn->readBytes ( aSequence, n_ConstBufferSize );
-        if ( nRead < n_ConstBufferSize )
-        {
-            Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-            aOut->writeBytes ( aTempBuf );
-        }
-        else
-            aOut->writeBytes ( aSequence );
-    }
-    while ( nRead == n_ConstBufferSize );
-}
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pZipFile( NULL )
@@ -1108,7 +1090,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
             // it is allowed to throw WrappedTargetException
             WrappedTargetException aException;
             if ( aCaught >>= aException )
-                throw;
+                throw aException;
 
             throw WrappedTargetException(
                     OUString( RTL_CONSTASCII_USTRINGPARAM ( "Problem writing the original content!" ) ),
@@ -1233,7 +1215,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
             try
             {
                 // then copy the contents of the tempfile to our output stream
-                copyInputToOutput_Impl( xContentStream, xOutputStream );
+                ::comphelper::OStorageHelper::CopyInputToOutput( xContentStream, xOutputStream );
                 xOutputStream->flush();
                 uno::Reference< io::XAsyncOutputMonitor > asyncOutputMonitor(
                     xOutputStream, uno::UNO_QUERY);
@@ -1279,7 +1261,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 {
                     try
                     {
-                        copyInputToOutput_Impl( xContentStream, aOrigFileStream );
+                        ::comphelper::OStorageHelper::CopyInputToOutput( xContentStream, aOrigFileStream );
                         aOrigFileStream->closeOutput();
                     }
                     catch( uno::Exception& )
