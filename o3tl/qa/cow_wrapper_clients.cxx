@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cow_wrapper_clients.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-01-25 16:17:20 $
+ *  last change: $Author: thb $ $Date: 2006-02-01 10:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) :
 cow_wrapper_client2& cow_wrapper_client2::operator=( const cow_wrapper_client2& rSrc )
 {
     maImpl = rSrc.maImpl;
+
+    return *this;
 }
 
 void cow_wrapper_client2::modify( int nVal )
