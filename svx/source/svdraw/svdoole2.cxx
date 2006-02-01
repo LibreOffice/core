@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:50:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1487,6 +1487,48 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+{
+    sal_Bool bResult = sal_False;
+
+    sal_Int32 nState = xObj->getCurrentState();
+    if ( nState == embed::EmbedStates::LOADED )
+    {
+        bResult = sal_True;
+    }
+    else
+    {
+        sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
+        uno::Reference < util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+
+        if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
+        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) &&
+        !( xModifiable.is() && xModifiable->isModified() ) &&
+        !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
+        {
+            try
+            {
+                xObj->changeState( embed::EmbedStates::LOADED );
+                bResult = sal_True;
+            }
+            catch( ::com::sun::star::uno::Exception& e )
+            {
+                (void)e;
+                DBG_ERROR(
+                    (OString("SdrOle2Obj::Unload=(), "
+                            "exception caught: ") +
+                    rtl::OUStringToOString(
+                        comphelper::anyToString( cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 )).getStr() );
+            }
+        }
+    }
+
+    return bResult;
+}
+
+// -----------------------------------------------------------------------------
+
 BOOL SdrOle2Obj::Unload()
 {
     BOOL bUnloaded = FALSE;
@@ -1507,40 +1549,7 @@ BOOL SdrOle2Obj::Unload()
 
     if ( pModel && xObjRef.is() )
     {
-        sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
-        sal_Int32 nState = xObjRef->getCurrentState();
-        if ( nState == embed::EmbedStates::LOADED )
-        {
-            bUnloaded = TRUE;
-            return bUnloaded;
-        }
-        else
-        {
-            uno::Reference < util::XModifiable > xModifiable( xObjRef->getComponent(), uno::UNO_QUERY );
-
-            if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != nMiscStatus    &&
-            //TODO/LATER: no refcounting tricks anymore!
-            //1 < (*ppObjRef)->GetRefCount()                   &&
-            !( xModifiable.is() && xModifiable->isModified() ) &&
-            !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE ) )
-            {
-                try
-                {
-                    xObjRef->changeState( embed::EmbedStates::LOADED );
-                    bUnloaded = TRUE;
-                }
-                catch( ::com::sun::star::uno::Exception& e )
-                {
-                    (void)e;
-                    DBG_ERROR(
-                        (OString("SdrOle2Obj::Unload=(), "
-                                "exception caught: ") +
-                        rtl::OUStringToOString(
-                            comphelper::anyToString( cppu::getCaughtException() ),
-                            RTL_TEXTENCODING_UTF8 )).getStr() );
-                }
-            }
-        }
+        bUnloaded = Unload( xObjRef.GetObject(), GetAspect() );
     }
 
     return bUnloaded;
@@ -1674,6 +1683,10 @@ sal_Bool SdrOle2Obj::IsChart() const
 }
 
 // -----------------------------------------------------------------------------
+void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const ::rtl::OUString& aMediaType )
+{
+    xObjRef.SetGraphic( aGraphic, aMediaType );
+}
 
 sal_Bool SdrOle2Obj::IsCalc() const
 {
