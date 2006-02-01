@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:20:15 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,7 @@ UINT32 SwMSDffManager::GetFilterFlags()
 SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
                                       const Graphic& rGrf,
                                       const Rectangle& rBoundRect,
+                                      const Rectangle& rVisArea,
                                       const int _nCalledByGroup ) const
 {
     // --> OD 2004-12-14 #i32596# - no import of OLE object, if it's inside a group.
@@ -368,7 +369,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
         {
             ErrCode nError = ERRCODE_NONE;
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                rGrf, rBoundRect, pStData, nError, nSvxMSDffOLEConvFlags );
+                rGrf, rBoundRect, rVisArea, pStData, nError, nSvxMSDffOLEConvFlags );
         }
     }
     return pRet;
