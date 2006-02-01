@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:21:36 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,6 +751,22 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 
     pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
     pFoll->SetFtn( FALSE );
+    // --> OD 2005-12-01 #i27138#
+    // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
+    // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+    // and relation CONTENT_FLOWS_TO for current previous paragraph, which
+    // is <this>, will change.
+    {
+        ViewShell* pViewShell( pFoll->GetShell() );
+        if ( pViewShell && pViewShell->GetLayout() &&
+             pViewShell->GetLayout()->IsAnyShellAccessible() )
+        {
+            pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFoll->FindNextCnt( true )),
+                            this );
+        }
+    }
+    // <--
     pFoll->Cut();
     delete pFoll;
     pFollow = pNxt;
@@ -775,6 +791,22 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     SetFollow( pNew );
 
     pNew->Paste( GetUpper(), GetNext() );
+    // --> OD 2005-12-01 #i27138#
+    // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
+    // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+    // and relation CONTENT_FLOWS_TO for current previous paragraph, which
+    // is <this>, will change.
+    {
+        ViewShell* pViewShell( pNew->GetShell() );
+        if ( pViewShell && pViewShell->GetLayout() &&
+             pViewShell->GetLayout()->IsAnyShellAccessible() )
+        {
+            pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pNew->FindNextCnt( true )),
+                            this );
+        }
+    }
+    // <--
 
     // Wenn durch unsere Aktionen Fussnoten in pNew landen,
     // so muessen sie umgemeldet werden.
