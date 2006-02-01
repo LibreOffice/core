@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:19:33 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,6 +985,14 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             bMoveArea = bLayoutRTL;
         }
         aVis.Left() = aVis.Right() - nDiff;
+        // --> OD 2005-12-22 #i49561#
+        // Important note:
+        // The set offset of the visible area of the EditView for centered and
+        // right alignment in horizontal layout is consider by instances of
+        // class <ScEditObjectViewForwarder> in its methods <LogicToPixel(..)>
+        // and <PixelToLogic(..)>. This is needed for the correct visibility
+        // of paragraphs in edit mode at the accessibility API.
+        // <--
         pEditView[eWhich]->SetVisArea(aVis);
         //
 
