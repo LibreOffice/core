@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:30:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,9 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
         Graphic aGraph(aWMF);
 
         ErrCode nErr = ERRCODE_NONE;
+        Rectangle aVisArea;
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,0,nErr,0);
+            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0);
 
         if (pRet)
         {
