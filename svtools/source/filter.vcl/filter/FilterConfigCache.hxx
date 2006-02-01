@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:32:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,15 +102,6 @@ class SVT_DLLPUBLIC FilterConfigCache
         CacheVector         aImport;
         CacheVector         aExport;
         sal_Bool            bUseConfig;
-
-        SVT_DLLPRIVATE sal_Bool         ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::beans::PropertyValue >& rFilterProperties );
-        SVT_DLLPRIVATE sal_Bool         ImplAddFilterEntry( sal_Int32& nFlags,
-                                                const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::beans::PropertyValue >& rFilterProperties,
-                                                    const ::com::sun::star::uno::Reference<
-                                                        ::com::sun::star::container::XNameAccess >& xTypeAccess,
-                                                            const ::rtl::OUString& rInternalFilterName );
 
         static sal_Bool   bInitialized;
         static sal_Int32  nIndType;
