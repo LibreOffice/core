@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:50:49 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,8 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
@@ -4360,9 +4358,7 @@ void SwEditWin::GetFocus()
 {
     rView.GotFocus();
     Window::GetFocus();
-#ifdef ACCESSIBLE_LAYOUT
     rView.GetWrtShell().InvalidateAccessibleFocus();
-#endif
 }
 
 /******************************************************************************
@@ -4373,9 +4369,7 @@ void SwEditWin::GetFocus()
 
 void SwEditWin::LoseFocus()
 {
-#ifdef ACCESSIBLE_LAYOUT
     rView.GetWrtShell().InvalidateAccessibleFocus();
-#endif
     Window::LoseFocus();
     if( pQuickHlpData->bClear )
         pQuickHlpData->Stop( rView.GetWrtShell() );
@@ -5059,7 +5053,6 @@ void SwEditWin::SetChainMode( BOOL bOn )
     rView.GetViewFrame()->GetBindings().Invalidate(aInva);
 }
 
-#ifdef ACCESSIBLE_LAYOUT
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
@@ -5073,7 +5066,6 @@ void SwEditWin::SetChainMode( BOOL bOn )
 
     return xAcc;
 }
-#endif
 
 //-------------------------------------------------------------
 
