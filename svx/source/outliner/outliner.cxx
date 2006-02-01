@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:50:45 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2355,6 +2355,28 @@ IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
     }
 
     return 0;
+}
+
+/** sets a link that is called at the beginning of a drag operation at an edit view */
+void Outliner::SetBeginDropHdl( const Link& rLink )
+{
+    pEditEngine->SetBeginDropHdl( rLink );
+}
+
+Link Outliner::GetBeginDropHdl() const
+{
+    return pEditEngine->GetBeginDropHdl();
+}
+
+/** sets a link that is called at the end of a drag operation at an edit view */
+void Outliner::SetEndDropHdl( const Link& rLink )
+{
+    pEditEngine->SetEndDropHdl( rLink );
+}
+
+Link Outliner::GetEndDropHdl() const
+{
+    return pEditEngine->GetEndDropHdl();
 }
 
 sal_Bool DrawPortionInfo::IsRTL() const
