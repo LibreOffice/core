@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:59:08 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -511,7 +511,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             xObj = pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName );
                         }
 
-                        if ( xObj.is() )
+                        if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         {
                             // set properties from dialog
                             uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY );
