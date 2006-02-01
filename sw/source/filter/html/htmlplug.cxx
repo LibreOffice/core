@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:45:25 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -935,34 +935,40 @@ void SwHTMLParser::InsertFloatingFrame()
     try
     {
         // TODO/MBA: testing
-        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-        ::rtl::OUString aName = aFrameDesc.GetName();
-        ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
-        sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
-        Size aMargin = aFrameDesc.GetMargin();
+        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+        {
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                ::rtl::OUString aName = aFrameDesc.GetName();
+                ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
+                sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
+                Size aMargin = aFrameDesc.GetMargin();
 
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( aName ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( aName ) );
 
-        if ( eScroll == ScrollingAuto )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
-                uno::makeAny( sal_True ) );
-        else
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
-                uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+                if ( eScroll == ScrollingAuto )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                        uno::makeAny( sal_True ) );
+                else
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                        uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-        //if ( aFrmDescr.IsFrameBorderSet() )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
-                uno::makeAny( bHasBorder ) );
-        /*else
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
-                uno::makeAny( sal_True ) );*/
+                //if ( aFrmDescr.IsFrameBorderSet() )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                        uno::makeAny( bHasBorder ) );
+                /*else
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                        uno::makeAny( sal_True ) );*/
 
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
-            uno::makeAny( sal_Int32( aMargin.Width() ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                    uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
-            uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                    uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+            }
+        }
     }
     catch ( uno::Exception& )
     {
