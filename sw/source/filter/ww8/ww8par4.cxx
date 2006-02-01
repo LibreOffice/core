@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
-    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet)
+    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const Rectangle& aVisArea )
 {
     ::SetProgressState(nProgress, mpDocShell);     // Update
     SwFrmFmt* pFmt = 0;
@@ -354,7 +354,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     GrafikCtor();
 
     Graphic aGraph;
-    SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet);
+    SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
 
     // create flyset
     SfxItemSet* pTempSet = 0;
@@ -436,7 +436,7 @@ bool SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
 }
 
 SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
-    const Graphic* pGrf, const SfxItemSet* pFlySet )
+    const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
 {
     SdrObject* pRet = 0;
     ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
@@ -529,7 +529,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
             ErrCode nError = ERRCODE_NONE;
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                aSrcStgName, xSrc0, mpDocShell->GetStorage(), rGraph, aRect, pTmpData, nError,
+                aSrcStgName, xSrc0, mpDocShell->GetStorage(), rGraph, aRect, aVisArea, pTmpData, nError,
                 SwMSDffManager::GetFilterFlags());
             pDataStream->Seek( nOldPos );
         }
