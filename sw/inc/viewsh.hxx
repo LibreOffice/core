@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:32 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,10 +65,8 @@
 #include <errhdl.hxx>
 #endif
 
-#ifdef ACCESSIBLE_LAYOUT
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
-#endif
 
 class SfxObjectShellRef;
 class SwDoc;
@@ -95,6 +93,9 @@ class SvtAccessibilityOptions;
 class Fraction;
 // OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
+// --> OD 2005-12-01 #i27138#
+class SwTxtFrm;
+// <--
 
 struct SwAccessibilityOptions;
 
@@ -475,6 +476,33 @@ public:
 
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
+
+    /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
+        OD 2005-12-01 #i27138#
+
+        @author OD
+
+        @param _pFromTxtFrm
+        input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
+        has to be invalidated.
+        If NULL, no CONTENT_FLOWS_FROM relation has to be invalidated
+
+        @param _pToTxtFrm
+        input parameter - paragraph frame, for which the relation CONTENT_FLOWS_TO
+        has to be invalidated.
+        If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
+    */
+    void InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
+                                               const SwTxtFrm* _pToTxtFrm );
+
+    /** invalidate text selection for paragraphs
+
+        OD 2005-12-12 #i27301#
+
+        @author OD
+    */
+    void InvalidateAccessibleParaTextSelection();
 
     String GetMarkListDescription() const ;
 
