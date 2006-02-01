@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:01:21 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,7 +1126,14 @@ SwAssignFieldsControl::SwAssignFieldsControl(
             uno::Reference< XColumn > xColumn;
             aCol >>= xColumn;
             if(xColumn.is())
-                pNewPreview->SetText(xColumn->getString());
+                try
+                {
+                    pNewPreview->SetText(xColumn->getString());
+                }
+                catch(SQLException& rEx)
+                {
+                    rEx;
+                }
         }
         if(!i)
         {
