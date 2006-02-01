@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:20:30 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -577,6 +577,7 @@ private:
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGrf,
                                   const Rectangle& rBoundRect,
+                                  const Rectangle& rVisArea,
                                   const int _nCalledByGroup ) const;
     // <--
 
@@ -1203,10 +1204,10 @@ private:
     SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
-        const SfxItemSet* pFlySet=0 );
+        const SfxItemSet* pFlySet=0, const Rectangle& aVisArea = Rectangle() );
 
     SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0,
-        const SfxItemSet* pGrfSet = 0);
+        const SfxItemSet* pGrfSet = 0, const Rectangle& aVisArea = Rectangle() );
     SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
         const SfxItemSet &rGrfSet);
 
