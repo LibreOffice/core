@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:56:12 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,14 @@
 #ifndef _ACCHYPERTEXTDATA_HXX
 #include <acchypertextdata.hxx>
 #endif
-
+// --> OD 2005-12-02 #i27138#
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
+// <--
 #include <comphelper/accessibletexthelper.hxx>
 
 #include <algorithm>
@@ -238,7 +245,9 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
     sal_Int32 nRet = -1;
 
     // get the selection's point, and test whether it's in our node
-    SwPaM* pCaret = GetCrsr();  // caret is first PaM in PaM-ring
+    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
+    SwPaM* pCaret = GetCursor( false );  // caret is first PaM in PaM-ring
+    // <--
     if( pCaret != NULL )
     {
         const SwTxtNode* pNode = GetTxtNode();
@@ -276,7 +285,9 @@ sal_Bool SwAccessibleParagraph::GetSelection(
     nEnd = -1;
 
     // get the selection, and test whether it affects our text node
-    SwPaM* pCrsr = GetCrsr();
+    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
+    SwPaM* pCrsr = GetCursor( true );
+    // <--
     if( pCrsr != NULL )
     {
         // get SwPosition for my node
@@ -347,7 +358,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                     }
                     else
                     {
-                        DBG_ASSERT( nHere == nStartIndex,
+                        DBG_ASSERT( nHere == nEndIndex,
                                     "miscalculated index" );
 
                         // selection ends in this node: then select everything
@@ -395,13 +406,19 @@ sal_Bool SwAccessibleParagraph::GetSelection(
     return bRet;
 }
 
-SwPaM* SwAccessibleParagraph::GetCrsr()
+// --> OD 2005-12-20 #i27301# - new parameter <_bForSelection>
+SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
 {
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
     SwPaM* pCrsr = NULL;
     SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
-    if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
+    // --> OD 2005-12-20 #i27301#
+    // - if cursor is retrieved for selection, the cursors for a table selection
+    //   has to be returned.
+    if ( pCrsrShell != NULL &&
+         ( _bForSelection || !pCrsrShell->IsTableMode() ) )
+    // <--
     {
         SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
                             ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
@@ -440,7 +457,9 @@ void SwAccessibleParagraph::GetStates(
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
     // FOCUSED (simulates node index of cursor)
-    SwPaM* pCaret = GetCrsr();
+    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
+    SwPaM* pCaret = GetCursor( false );
+    // <--
     const SwTxtNode* pTxtNd = GetTxtNode();
     if( pCaret != 0 && pTxtNd != 0 &&
         pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
@@ -939,6 +958,49 @@ Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     return aLoc;
 }
 
+/** paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
+
+    OD 2005-12-02 #i27138#
+
+    @author OD
+*/
+Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
+    throw ( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    utl::AccessibleRelationSetHelper* pHelper = new utl::AccessibleRelationSetHelper();
+
+    const SwTxtFrm* pTxtFrm = dynamic_cast<const SwTxtFrm*>(GetFrm());
+    ASSERT( pTxtFrm,
+            "<SwAccessibleParagraph::getAccessibleRelationSet()> - missing text frame");
+    if ( pTxtFrm )
+    {
+        const SwCntntFrm* pPrevCntFrm( pTxtFrm->FindPrevCnt( true ) );
+        if ( pPrevCntFrm )
+        {
+            Sequence<Reference<XInterface> > aSequence(1);
+            aSequence[0] = GetMap()->GetContext( pPrevCntFrm );
+            AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
+                                        aSequence );
+            pHelper->AddRelation( aAccRel );
+        }
+
+        const SwCntntFrm* pNextCntFrm( pTxtFrm->FindNextCnt( true ) );
+        if ( pNextCntFrm )
+        {
+            Sequence<Reference<XInterface> > aSequence(1);
+            aSequence[0] = GetMap()->GetContext( pNextCntFrm );
+            AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
+                                        aSequence );
+            pHelper->AddRelation( aAccRel );
+        }
+    }
+
+    return pHelper;
+}
+
 void SAL_CALL SwAccessibleParagraph::grabFocus()
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -948,7 +1010,9 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 
     // get cursor shell
     SwCrsrShell *pCrsrSh = GetCrsrShell();
-    SwPaM *pCrsr = GetCrsr();
+    // --> OD 2005-12-20 #i27301# - consider new method signature
+    SwPaM *pCrsr = GetCursor( false );
+    // <--
     const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     const SwTxtNode* pTxtNd = pTxtFrm->GetTxtNode();
 
