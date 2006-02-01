@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:59:28 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1255,13 +1255,15 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     sal_Bool bNeedsDisconnectionOnFail = sal_False;
 
+    sal_Bool bStoreToSameLocation = sal_False;
+
     // use UCB for case sensitive/insensitive file name comparison
     if ( pMedium
       && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && SfxMedium::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
-        // the target file is the same as original ( Save procedure )
+        bStoreToSameLocation = sal_True;
 
         // before we overwrite the original file, we will make a backup if there is a demand for that
         // if the backup is not created here it will be created internally and will be removed in case of successful saving
@@ -1594,9 +1596,16 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // if the target medium is an alien format and the "old" medium was an own format and the "old" medium
             // has a name, the object storage must be exchanged, because now we need a new temporary storage
             // as object storage
-            if ( !bCopyTo && IsPackageStorageFormat_Impl(*pMedium) && !IsPackageStorageFormat_Impl(rMedium) )
+            if ( !bCopyTo && bStorageBasedSource && !bStorageBasedTarget )
             {
-                if ( pMedium->GetName().Len()
+                if ( bStoreToSameLocation )
+                {
+                    // if the old medium already disconnected from document storage, the storage still must
+                    // be switched if backup file is used
+                    if ( bNeedsDisconnectionOnFail )
+                        ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
+                }
+                else if ( pMedium->GetName().Len()
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
                 {
                     OSL_ENSURE( pMedium->GetName().Len(), "Fallback is used, the medium without name should not dispose the storage!\n" );
@@ -3406,8 +3415,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
     if ( bSendNotification )
     {
-        // this notification will be sent by caller from sfxbasemodel
-        // SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOC, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
     }
 
     return bResult;
