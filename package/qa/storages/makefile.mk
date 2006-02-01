@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 14:07:34 $
+#   last change: $Author: kz $ $Date: 2006-02-01 19:13:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ JAVAFILES       =\
                 StorageUnitTest.java\
                 StorageTest.java\
                 TestHelper.java\
+                BorderedStream.java\
                 Test01.java\
                 Test02.java\
                 Test03.java\
@@ -69,7 +70,8 @@ JAVAFILES       =\
                 RegressionTest_i30677.java\
                 RegressionTest_i27773.java\
                 RegressionTest_i46848.java\
-                RegressionTest_i55821.java
+                RegressionTest_i55821.java\
+                RegressionTest_125919.java
 
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
