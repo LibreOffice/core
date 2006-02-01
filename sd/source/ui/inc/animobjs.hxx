@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:21:56 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,10 @@
 
 #ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
+#endif
+
+#ifndef _SD_SCOPELOCK_HXX
+#include "misc/scopelock.hxx"
 #endif
 
 class SdDrawDocument;
@@ -183,6 +187,7 @@ private:
     SfxBindings*                pBindings;
     AnimationControllerItem*    pControllerItem;
 
+    ScopeLock       maPlayLock;
     //------------------------------------
 
     DECL_LINK( ClickFirstHdl, void * );
