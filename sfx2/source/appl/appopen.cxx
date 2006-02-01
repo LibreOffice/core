@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:22:37 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,7 +521,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 //REMOVE                xDoc->DoHandsOff();
             if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
-            NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, xDoc ) );
         }
         catch( uno::Exception& )
         {
