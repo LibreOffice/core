@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:51:56 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 #ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+
 
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
@@ -223,7 +227,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     {
                         aGuard.clear();
                         try {
-                            m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
+                            m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
                             m_bHasSizeToSet = sal_False;
                         }
                         catch( uno::Exception& ) {}
@@ -250,7 +254,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     {
                         aGuard.clear();
                         try {
-                            m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
+                            m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
                             m_bHasSizeToSet = sal_False;
                         }
                         catch( uno::Exception& ) {}
@@ -380,10 +384,27 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             if ( !m_pOleComponent )
                 throw uno::RuntimeException();
 
+            // ==== the STAMPIT related solution =============================
+            m_aVerbExecutionController.StartControlExecution();
+            // ===============================================================
+
             m_pOleComponent->ExecuteVerb( nVerbID );
+
+            // ==== the STAMPIT related solution =============================
+            sal_Bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
+
+            // this workaround is implemented for STAMPIT object
+            // if object was modified during verb execution it is saved here
+            if ( bModifiedOnExecution && m_pOleComponent->IsDirty() )
+                SaveObject_Impl();
+            // ===============================================================
         }
         catch( uno::Exception& )
         {
+            // ==== the STAMPIT related solution =============================
+            m_aVerbExecutionController.EndControlExecution_WasModified();
+            // ===============================================================
+
             aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
             throw;
@@ -552,9 +573,11 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object must be in running state!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+    sal_Int64 nResult = 0;
+
 #ifdef WNT
     if ( m_bGotStatus && m_nStatusAspect == nAspect )
-        return m_nStatus;
+        nResult = m_nStatus;
     else if ( m_pOleComponent )
     {
         // OLE should allow to get status even in loaded state
@@ -564,16 +587,12 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
         m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
         m_nStatusAspect = nAspect;
         m_bGotStatus = sal_True;
-        return m_nStatus;
+        nResult = m_nStatus;
     }
-    else
 #endif
-    {
-        return 0;
-        // TODO/LATER: not sure that returning of a default value is better
-        // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-        //                          uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-    }
+
+    // this implementation needs size to be provided after object loading/creating to work in optimal way
+    return ( nResult | embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD );
 }
 
 //----------------------------------------------
