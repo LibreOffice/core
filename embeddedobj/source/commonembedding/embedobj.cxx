@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:50:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,14 +136,16 @@ void OCommonEmbeddedObject::Deactivate()
     //MBA if ( !xModif.is() )
     //MBA    throw uno::RuntimeException();
 
-    if ( !m_xClientSite.is() )
+    // no need to lock for the initialization
+    uno::Reference< embed::XEmbeddedClient > xClientSite = m_xClientSite;
+    if ( !xClientSite.is() )
         throw embed::WrongStateException(); //TODO: client site is not set!
 
     // store document if it is modified
     if ( xModif.is() && xModif->isModified() )
     {
         try {
-            m_xClientSite->saveObject();
+            xClientSite->saveObject();
         }
         catch( embed::ObjectSaveVetoException& )
         {
@@ -159,7 +161,7 @@ void OCommonEmbeddedObject::Deactivate()
 
     m_pDocHolder->CloseFrame();
 
-    m_xClientSite->visibilityChanged( sal_False );
+    xClientSite->visibilityChanged( sal_False );
 }
 
 //----------------------------------------------
