@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:39:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1234,18 +1234,26 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
                 if ( aUniqueId.Len() )
                 {
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+                    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
 
-                    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+                    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
                     {
+                        ::com::sun::star::uno::Any aAny;
+                        ::com::sun::star::awt::Rectangle* pVisArea = NULL;
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) )
+                        {
+                            pVisArea = new ::com::sun::star::awt::Rectangle;
+                            aAny >>= (*pVisArea);
+                        }
                         Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-                        sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL );
+                        sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea, NULL );
                         if ( nBlibId )
                         {
                             AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
-                            uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
                             ImplCreateGraphicAttributes( aXPropSet, nBlibId, sal_False );
                             bRetValue = sal_True;
                         }
+                        delete pVisArea;
                     }
                 }
             }
@@ -1455,7 +1463,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
                 sal_uInt32 nBlibId = 0;
                 if ( aUniqueId.Len() )
-                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pGraphicAttr );
+                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr );
                 if ( nBlibId )
                 {
                     if ( bCreateFillBitmap )
@@ -1474,7 +1482,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 SvMemoryStream aMemStrm;
                 Rectangle aRect;
 
-                if ( aUniqueId.Len() && aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, pGraphicAttr ) )
+                if ( aUniqueId.Len() && aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr ) )
                 {
                     // grab BLIP from stream and insert directly as complex property
                     // ownership of stream memory goes to complex property
@@ -3708,7 +3716,7 @@ sal_Bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPr
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteString& rId,
-                                                const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr )
+                                            const Rectangle& rBoundRect, const com::sun::star::awt::Rectangle* pVisArea, const GraphicAttr* pGraphicAttr )
 {
     sal_uInt32          nBlibId = 0;
     GraphicObject       aGraphicObject( rId );
@@ -3889,10 +3897,18 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     */
                     UINT32 nPrefWidth = p_EscherBlibEntry->maPrefSize.Width();
                     UINT32 nPrefHeight = p_EscherBlibEntry->maPrefSize.Height();
-                    Size aPrefSize(lcl_SizeToEmu(p_EscherBlibEntry->maPrefSize, p_EscherBlibEntry->maPrefMapMode));
-                    UINT32 nWidth = aPrefSize.Width() * 360;
-                    UINT32 nHeight = aPrefSize.Height() * 360;
-
+                    UINT32 nWidth, nHeight;
+                    if ( pVisArea )
+                    {
+                        nWidth = pVisArea->Width * 360;
+                        nHeight = pVisArea->Height * 360;
+                    }
+                    else
+                    {
+                        Size aPrefSize(lcl_SizeToEmu(p_EscherBlibEntry->maPrefSize, p_EscherBlibEntry->maPrefMapMode));
+                        nWidth = aPrefSize.Width() * 360;
+                        nHeight = aPrefSize.Height() * 360;
+                    }
                     rPicOutStrm << nUncompressedSize // WMFSize without FileHeader
                     << (sal_Int32)0     // da die Originalgroesse des WMF's (ohne FileHeader)
                     << (sal_Int32)0     // nicht mehr feststellbar ist, schreiben wir 10cm / x
