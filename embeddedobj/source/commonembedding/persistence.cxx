@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:50:17 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,7 +686,8 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Int32 nStorageFormat,
                                                     const ::rtl::OUString& aBaseURL,
-                                                    const ::rtl::OUString& aHierarchName )
+                                                    const ::rtl::OUString& aHierarchName,
+                                                    sal_Bool bAttachToTheStorage )
 {
     OSL_ENSURE( xStorage.is(), "No storage is provided for storing!" );
 
@@ -726,6 +727,8 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
         aArgs[1].Value <<= aHierarchName;
 
         xDoc->storeToStorage( xStorage, aArgs );
+        if ( bAttachToTheStorage )
+            xDoc->switchToStorage( xStorage );
     }
     else
 #endif
@@ -1134,7 +1137,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
@@ -1267,7 +1270,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     {
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
@@ -1490,7 +1493,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         }
 
         aGuard.clear();
-        StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName );
+        StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName, sal_True );
         aGuard.reset();
     }
 
