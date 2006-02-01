@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@
             <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
             <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.AppletObject</value></prop>
             <prop oor:name="ObjectMiscStatus">
-                <value>4294967680</value>
+                <value>4294969728</value>
             </prop>
             <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
         </node>
@@ -126,7 +126,7 @@
             <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
             <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.PluginObject</value></prop>
             <prop oor:name="ObjectMiscStatus">
-                <value>384</value>
+                <value>2432</value>
             </prop>
             <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
         </node>
@@ -134,7 +134,7 @@
             <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
             <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.IFrameObject</value></prop>
             <prop oor:name="ObjectMiscStatus">
-                <value>384</value>
+                <value>2432</value>
             </prop>
             <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
         </node>
