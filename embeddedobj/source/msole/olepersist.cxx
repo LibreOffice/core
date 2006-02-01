@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:52:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@
 
 #include <rtl/logfile.hxx>
 
+#include <comphelper/storagehelper.hxx>
+
 
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
@@ -101,9 +103,31 @@
 
 using namespace ::com::sun::star;
 
+class VerbExecutionControllerGuard
+{
+    VerbExecutionController& m_rController;
+public:
+
+    VerbExecutionControllerGuard( VerbExecutionController& rController )
+    : m_rController( rController )
+    {
+        m_rController.LockNotification();
+    }
+
+    ~VerbExecutionControllerGuard()
+    {
+        m_rController.UnlockNotification();
+    }
+};
+
 //------------------------------------------------------
 // TODO: probably later those common functions should be moved
 //       to a separate helper library.
+
+//------------------------------------------------------
+uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
 //-------------------------------------------------------------------------
 sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
@@ -117,31 +141,6 @@ sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::S
             return sal_False;
 
     return sal_True;
-}
-
-//-------------------------------------------------------------------------
-const sal_Int32 n_ConstBufferSize = 32000;
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                             const uno::Reference< io::XOutputStream >& aOut )
-{
-    sal_Int32 nRead;
-    uno::Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
-
-    if ( aIn.is() && aOut.is() )
-    {
-        do
-        {
-            nRead = aIn->readBytes ( aSequence, n_ConstBufferSize );
-            if ( nRead < n_ConstBufferSize )
-            {
-                uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-                aOut->writeBytes ( aTempBuf );
-            }
-            else
-                aOut->writeBytes ( aSequence );
-        }
-        while ( nRead == n_ConstBufferSize );
-    }
 }
 
 //-----------------------------------------------
@@ -226,7 +225,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
             if ( xTempOutStream.is() )
             {
                 // copy stream contents to the file
-                copyInputToOutput_Impl( xInStream, xTempOutStream );
+                ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
                 xTempOutStream->closeOutput();
                 xTempOutStream = uno::Reference< io::XOutputStream >();
             }
@@ -258,7 +257,6 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     return aResult;
 }
 
-//----------------------------------------------
 ::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const ::rtl::OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     throw( io::IOException, uno::RuntimeException )
 {
@@ -291,30 +289,6 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     return aResult;
 }
 
-//-----------------------------------------------
-uno::Reference< io::XStream > GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream,
-                                      const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-        throw( io::IOException )
-{
-    OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
-
-    uno::Reference < io::XStream > xTempFile(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-            uno::UNO_QUERY_THROW );
-
-    uno::Reference< io::XOutputStream > xTempOutStream = xTempFile->getOutputStream();
-    if ( xTempOutStream.is() )
-    {
-        copyInputToOutput_Impl( xInStream, xTempOutStream );
-        xTempOutStream->flush();
-    }
-    else
-        throw io::IOException(); // TODO:
-
-    return xTempFile;
-}
-
-
 //------------------------------------------------------
 void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const ::rtl::OUString& aMediaType )
 {
@@ -337,12 +311,87 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
 }
 
 //------------------------------------------------------
-uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream,
-                                                             const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+void VerbExecutionController::StartControlExecution()
+{
+    osl::MutexGuard aGuard( m_aVerbExecutionMutex );
+
+    // the class is used to detect STAMPIT object, that can never be active
+    if ( !m_bVerbExecutionInProgress && !m_bWasEverActive )
+    {
+        m_bVerbExecutionInProgress = sal_True;
+        m_nVerbExecutionThreadIdentifier = osl_getThreadIdentifier( NULL );
+        m_bChangedOnVerbExecution = sal_False;
+    }
+}
+
+//------------------------------------------------------
+sal_Bool VerbExecutionController::EndControlExecution_WasModified()
+{
+    osl::MutexGuard aGuard( m_aVerbExecutionMutex );
+
+    sal_Bool bResult = sal_False;
+    if ( m_bVerbExecutionInProgress && m_nVerbExecutionThreadIdentifier == osl_getThreadIdentifier( NULL ) )
+    {
+        bResult = m_bChangedOnVerbExecution;
+        m_bVerbExecutionInProgress = sal_False;
+    }
+
+    return bResult;
+}
+
+//------------------------------------------------------
+void VerbExecutionController::ModificationNotificationIsDone()
+{
+    osl::MutexGuard aGuard( m_aVerbExecutionMutex );
+
+    if ( m_bVerbExecutionInProgress && osl_getThreadIdentifier( NULL ) == m_nVerbExecutionThreadIdentifier )
+        m_bChangedOnVerbExecution = sal_True;
+}
+
+//-----------------------------------------------
+void VerbExecutionController::LockNotification()
+{
+    osl::MutexGuard aGuard( m_aVerbExecutionMutex );
+    if ( m_nNotificationLock < SAL_MAX_INT32 )
+        m_nNotificationLock++;
+}
+
+//-----------------------------------------------
+void VerbExecutionController::UnlockNotification()
+{
+    osl::MutexGuard aGuard( m_aVerbExecutionMutex );
+    if ( m_nNotificationLock > 0 )
+        m_nNotificationLock--;
+}
+
+//-----------------------------------------------
+uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
+        throw( io::IOException )
+{
+    OSL_ENSURE( xInStream.is(), "Wrong parameter is provided!\n" );
+
+    uno::Reference < io::XStream > xTempFile(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            uno::UNO_QUERY_THROW );
+
+    uno::Reference< io::XOutputStream > xTempOutStream = xTempFile->getOutputStream();
+    if ( xTempOutStream.is() )
+    {
+        ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
+        xTempOutStream->flush();
+    }
+    else
+        throw io::IOException(); // TODO:
+
+    return xTempFile;
+}
+
+//------------------------------------------------------
+uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream )
         throw ( uno::Exception )
 {
     // TODO/LATER: Actually this should be done by a centralized component ( may be a graphical filter )
-    if ( !xFactory.is() )
+    if ( !m_xFactory.is() )
         throw uno::RuntimeException();
 
     uno::Reference< io::XInputStream > xInStream = xStream->getInputStream();
@@ -363,11 +412,41 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
         return xStream;
     }
 
+//  sal_Bool bSetSizeToRepl = sal_False;
+//  awt::Size aSizeToSet;
+
     sal_uInt32 nHeaderOffset = 0;
     if ( ( nRead >= 8 && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1 )
-      && ( aData[4] == 2 || aData[4] == 3 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
+      && ( aData[4] == 2 || aData[4] == 3 || aData[4] == 14 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
     {
         nHeaderOffset = 40;
+        xSeek->seek( 8 );
+
+        // TargetDevice might be used in future, currently the cache has specified NULL
+        uno::Sequence< sal_Int8 > aHeadData( 4 );
+        nRead = xInStream->readBytes( aHeadData, 4 );
+        sal_uInt32 nLen = 0;
+        if ( nRead == 4 && aHeadData.getLength() == 4 )
+            nLen = ( ( ( (sal_uInt32)aHeadData[3] * 0x100 + (sal_uInt32)aHeadData[2] ) * 0x100 ) + (sal_uInt32)aHeadData[1] ) * 0x100 + (sal_uInt32)aHeadData[0];
+        if ( nLen > 4 )
+        {
+            xInStream->skipBytes( nLen - 4 );
+            nHeaderOffset += nLen - 4;
+        }
+
+//      if ( aData[4] == 3 )
+//      {
+//          try
+//          {
+//
+//              aSizeToSet = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+//              aSizeToSet.Width /= 364; //2540; // let the size be in inches, as wmf requires
+//              aSizeToSet.Height /= 364; //2540; // let the size be in inches, as wmf requires
+//              bSetSizeToRepl = sal_True;
+//          }
+//          catch( uno::Exception& )
+//          {}
+//      }
     }
     else if ( nRead > 4 )
     {
@@ -384,7 +463,7 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
     {
         // this is either a bitmap or a metafile clipboard format, retrieve the pure stream
         uno::Reference < io::XStream > xResult(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xResultSeek( xResult, uno::UNO_QUERY_THROW );
         uno::Reference < io::XOutputStream > xResultOut = xResult->getOutputStream();
@@ -392,8 +471,50 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
         if ( !xResultOut.is() || !xResultIn.is() )
             throw uno::RuntimeException();
 
+        // if it is windows metafile the size must be provided
+        // the solution is not used currently
+//      if ( bSetSizeToRepl && abs( aSizeToSet.Width ) < 0xFFFF && abs( aSizeToSet.Height ) < 0xFFFF )
+//      {
+//          uno::Sequence< sal_Int8 > aHeader(22);
+//          sal_uInt8* pBuffer = (sal_uInt8*)aHeader.getArray();
+//
+//          // write 0x9ac6cdd7L
+//          pBuffer[0] = 0xd7;
+//          pBuffer[1] = 0xcd;
+//          pBuffer[2] = 0xc6;
+//          pBuffer[3] = 0x9a;
+//
+//          // following data seems to have no value
+//          pBuffer[4] = 0;
+//          pBuffer[5] = 0;
+//
+//          // must be set to 0
+//          pBuffer[6] = 0;
+//          pBuffer[7] = 0;
+//          pBuffer[8] = 0;
+//          pBuffer[9] = 0;
+//
+//          // width of the picture
+//          pBuffer[10] = abs( aSizeToSet.Width ) % 0x100;
+//          pBuffer[11] = ( abs( aSizeToSet.Width ) / 0x100 ) % 0x100;
+//
+//          // height of the picture
+//          pBuffer[12] = abs( aSizeToSet.Height ) % 0x100;
+//          pBuffer[13] = ( abs( aSizeToSet.Height ) / 0x100 ) % 0x100;
+//
+//          // write 2540
+//          pBuffer[14] = 0x6c; //0xec;
+//          pBuffer[15] = 0x01; //0x09;
+//
+//          // fill with 0
+//          for ( sal_Int32 nInd = 16; nInd < 22; nInd++ )
+//              pBuffer[nInd] = 0;
+//
+//          xResultOut->writeBytes( aHeader );
+//      }
+
         xSeek->seek( nHeaderOffset ); // header size for these formats
-        copyInputToOutput_Impl( xInStream, xResultOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xResultOut );
         xResultOut->closeOutput();
         xResultSeek->seek( 0 );
         xSeek->seek( 0 );
@@ -516,7 +637,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         xTempOutStream->writeBytes( aSigData );
 
         // write the rest of the stream
-        copyInputToOutput_Impl( xInCacheStream, xTempOutStream );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xInCacheStream, xTempOutStream );
 
         // write the size of the stream
         sal_Int64 nLength = xTempSeek->getLength() - 40;
@@ -649,7 +770,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
                 if ( xNameContainer.is() )
                 {
-                    for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
+                    for ( sal_uInt8 nInd = 0; nInd < 10 && !bExists; nInd++ )
                     {
                         ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
                         aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
@@ -701,7 +822,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                 {
                     if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )
                     {
-                        xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream, m_xFactory );
+                        xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream );
                         if ( xResult.is() )
                             break;
                     }
@@ -717,7 +838,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     {
                         if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )
                         {
-                            xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream, m_xFactory );
+                            xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream );
                             if ( xResult.is() )
                                 break;
                         }
@@ -811,6 +932,8 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     if ( bShow && m_nObjectState == embed::EmbedStates::RUNNING )
     {
         m_nObjectState = embed::EmbedStates::ACTIVE;
+        m_aVerbExecutionController.ObjectIsActive();
+
         aGuard.clear();
         StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
     }
@@ -839,11 +962,33 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 //------------------------------------------------------
 void OleEmbeddedObject::OnViewChanged_Impl()
 {
-    if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    // For performance reasons the notification currently is ignored, STAMPIT object is the exception,
+    // it can never be active and never call SaveObject, so it is the only way to detect that it is changed
+
+    // ==== the STAMPIT related solution =============================
+    // the following variable is used to detect whether the object was modified during verb execution
+    m_aVerbExecutionController.ModificationNotificationIsDone();
+
+    // The following things are controlled by VerbExecutionController:
+    // - if the verb execution is in progress and the view is changed the object will be stored
+    // after the execution, so there is no need to send the notification.
+    // - the STAMPIT object can never be active.
+    if ( m_aVerbExecutionController.CanDoNotification()
+      && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
     {
-        MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
+        OSL_ENSURE( ClassIDsEqual( m_aClassID, GetSequenceClassID( 0x852ee1c9, 0x9058, 0x44ba, 0x8c,0x6c,0x0c,0x5f,0xc6,0x6b,0xdb,0x8d ) )
+                    || ClassIDsEqual( m_aClassID, GetSequenceClassID( 0xcf1b4491, 0xbea3, 0x4c9f, 0xa7,0x0f,0x22,0x1b,0x1e,0xca,0xef,0x3e ) ),
+                    "Expected to be triggered for STAMPIT only! Please contact developers!\n" );
+
+        // The view is changed while the object is in running state, save the new object
+        m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
+        SaveObject_Impl();
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
     }
+    // ===============================================================
 }
 
 //------------------------------------------------------
@@ -998,7 +1143,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
 
         xTrunc->truncate();
 
-        copyInputToOutput_Impl( xTempInStream, xOutStream );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
     }
     else
         throw io::IOException(); // TODO:
@@ -1172,7 +1317,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 if ( !xCachedSeek.is() )
                 {
                     xCachedVisualRepresentation
-                        = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream(), m_xFactory );
+                        = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream() );
                     bNeedLocalCache = sal_False;
                 }
             }
@@ -1201,7 +1346,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( xCachedVisualRepresentation.is() )
         {
             if ( bNeedLocalCache )
-                m_xNewCachedVisRepl = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream(), m_xFactory );
+                m_xNewCachedVisRepl = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream() );
             else
                 m_xNewCachedVisRepl = xCachedVisualRepresentation;
         }
@@ -1439,6 +1584,8 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
+
     StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_False );
 
     // TODO: should the listener notification be done?
@@ -1460,6 +1607,8 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
     StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_True );
 
@@ -1502,8 +1651,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         SwitchOwnPersistence( m_xNewParentStorage, m_xNewObjectStream, m_aNewEntryName );
         m_bStoreVisRepl = m_bNewVisReplInStream;
         SetVisReplInStream( m_bNewVisReplInStream );
-        if ( m_xNewCachedVisRepl.is() )
-            m_xCachedVisualRepresentation = m_xNewCachedVisRepl;
+        m_xCachedVisualRepresentation = m_xNewCachedVisRepl;
     }
     else
     {
@@ -1529,6 +1677,20 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
     m_bStoreLoaded = sal_False;
 
+    if ( bUseNew && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
+    {
+        // the object replacement image should be updated, so the cached size as well
+        m_bHasCachedSize = sal_False;
+        try
+        {
+            // the call will cache the size in case of success
+            // probably it might need to be done earlier, while the object is in active state
+            getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
     aGuard.clear();
     if ( bUseNew )
     {
@@ -1537,7 +1699,9 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         // the object can be changed only on windows
         // the notification should be done only if the object is not in loaded state
         if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
+        {
             MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
+        }
     }
 }
 
@@ -1603,6 +1767,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
+
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
@@ -1623,7 +1789,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     sal_Bool bStoreLoaded = sal_True;
 
 #ifdef WNT
-    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent )
+    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && m_pOleComponent->IsDirty() )
     {
         bStoreLoaded = sal_False;
 
@@ -1680,6 +1846,20 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         }
 
         SetVisReplInStream( m_bStoreVisRepl );
+    }
+
+    if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
+    {
+        // the object replacement image should be updated, so the cached size as well
+        m_bHasCachedSize = sal_False;
+        try
+        {
+            // the call will cache the size in case of success
+            // probably it might need to be done earlier, while the object is in active state
+            getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+        }
+        catch( uno::Exception& )
+        {}
     }
 
     aGuard.clear();
