@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:52:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
@@ -61,6 +65,7 @@
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
 
+#include <comphelper/seqstream.hxx>
 
 using namespace ::com::sun::star;
 
@@ -130,10 +135,12 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize.
     // SetExtent() is called only for objects that require it,
     // it should not be called for MSWord documents to workaround problem i49369
+    // If cached size is not set, that means that this is the size initialization, so there is no need to set the real size
     sal_Bool bAllowToSetExtent =
       ( ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
       && !ClassIDsEqual( m_aClassID, GetSequenceClassID( 0x00020906L, 0x0000, 0x0000,
-                                                           0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 ) ) );
+                                                           0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 ) )
+      && m_bHasCachedSize );
 
     if ( m_nObjectState == embed::EmbedStates::LOADED && bAllowToSetExtent )
     {
@@ -150,14 +157,18 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
 
     if ( m_pOleComponent && m_nObjectState != embed::EmbedStates::LOADED && bAllowToSetExtent )
     {
+        awt::Size aSizeToSet = aSize;
         aGuard.clear();
         try {
-            m_pOleComponent->SetExtent( aSize, nAspect ); // will throw an exception in case of failure
+            m_pOleComponent->SetExtent( aSizeToSet, nAspect ); // will throw an exception in case of failure
+            m_bHasSizeToSet = sal_False;
         }
         catch( uno::Exception& )
         {
             // some objects do not allow to set the size even in running state
             m_bHasSizeToSet = sal_True;
+            m_aSizeToSet = aSizeToSet;
+            m_nAspectToSet = nAspect;
         }
         aGuard.reset();
     }
@@ -185,24 +196,20 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+    awt::Size aResult;
+
 #ifdef WNT
-    if ( m_pOleComponent && !m_bHasSizeToSet )
+    // TODO/LATER: Support different aspects
+    if ( m_pOleComponent && !m_bHasSizeToSet && nAspect == embed::Aspects::MSOLE_CONTENT )
     {
-        // the order is following: first ask for the size from IViewObject, than ask for the size from cache,
-        // and then ask for the size from IOleObject ( the result from the last one can be different from
-        // the first one, for example in case of MSWord document )
         try
         {
-            m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
-            m_nCachedAspect = nAspect;
-            m_bHasCachedSize = sal_True;
-        }
-        catch( lang::IllegalArgumentException& )
-        {
-            // there is no OLEcache for the aspect
-            // the internal cache will be used, if any
-
-            if ( !m_bHasCachedSize )
+            // the cached size updated every time the object is stored
+            if ( m_bHasCachedSize )
+            {
+                aResult = m_aCachedSize;
+            }
+            else
             {
                 // there is no internal cache
                 awt::Size aSize;
@@ -211,23 +218,36 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 sal_Bool bSuccess = sal_False;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
+                    OSL_ENSURE( sal_False, "Loaded object has no cached size!\n" );
+
                     // try to switch the object to RUNNING state and request the value again
                     try {
                         changeState( embed::EmbedStates::RUNNING );
                     }
                     catch( uno::Exception )
                     {
-                        // if the extent can not be retrieved in the loaded state ( means
-                        // IViewObject is not able to provide it ) and there is no cache
-                        // and the object can not be switched to running state, throw an exception
                         throw embed::NoVisualAreaSizeException(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
+                                uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
                     }
+                }
 
+                try
+                {
+                    // first try to get size using replacement image
+                    aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+                    bSuccess = sal_True;
+                }
+                catch( uno::Exception& )
+                {
+                }
+
+                if ( !bSuccess )
+                {
                     try
                     {
-                        aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+                        // second try the cached replacement image
+                        aSize = m_pOleComponent->GetCachedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = sal_True;
                     }
                     catch( uno::Exception& )
@@ -237,9 +257,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
                 if ( !bSuccess )
                 {
-                    // no size from IViewObject is available, object is in running state
                     try
                     {
+                        // third try the size reported by the object
                         aSize = m_pOleComponent->GetReccomendedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = sal_True;
                     }
@@ -258,11 +278,13 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 m_aCachedSize = aSize;
                 m_nCachedAspect = nAspect;
                 m_bHasCachedSize = sal_True;
+
+                aResult = m_aCachedSize;
             }
-            else
-            {
-                OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
-            }
+        }
+        catch ( embed::NoVisualAreaSizeException& )
+        {
+            throw;
         }
         catch ( uno::Exception& )
         {
@@ -278,6 +300,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         if ( m_bHasCachedSize )
         {
             OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
+            aResult = m_aCachedSize;
         }
         else
         {
@@ -287,7 +310,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         }
     }
 
-    return m_aCachedSize;
+    return aResult;
 }
 
 embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
@@ -311,7 +334,9 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     embed::VisualRepresentation aVisualRepr;
 
     // TODO: in case of different aspects they must be applied to the mediatype and XTransferable must be used
-    if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream ) )
+    // the cache is used only as a fallback if object is not in loaded state
+    if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream )
+      && m_nObjectState == embed::EmbedStates::LOADED )
     {
         m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
         SetVisReplInStream( m_xCachedVisualRepresentation.is() );
@@ -324,23 +349,50 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
 #ifdef WNT
     else if ( m_pOleComponent )
     {
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-            changeState( embed::EmbedStates::RUNNING );
+        try
+        {
+            if ( m_nObjectState == embed::EmbedStates::LOADED )
+                changeState( embed::EmbedStates::RUNNING );
 
-        datatransfer::DataFlavor aDataFlavor(
-                ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-                ::rtl::OUString::createFromAscii( "Windows Metafile" ),
-                ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+            datatransfer::DataFlavor aDataFlavor(
+                    ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
+                    ::rtl::OUString::createFromAscii( "Windows Metafile" ),
+                    ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
-        aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
-        aVisualRepr.Flavor = aDataFlavor;
+            aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
+            aVisualRepr.Flavor = aDataFlavor;
+
+            uno::Sequence< sal_Int8 > aVisReplSeq;
+            aVisualRepr.Data >>= aVisReplSeq;
+            if ( aVisReplSeq.getLength() )
+            {
+                m_xCachedVisualRepresentation = GetNewFilledTempStream_Impl(
+                        uno::Reference< io::XInputStream > ( static_cast< io::XInputStream* > (
+                            new ::comphelper::SequenceInputStream( aVisReplSeq ) ) ) );
+            }
+
+            return aVisualRepr;
+        }
+        catch( uno::Exception& )
+        {}
     }
 #endif
-    else
+
+    // the cache is used only as a fallback if object is not in loaded state
+    if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream ) )
+    {
+        m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+        SetVisReplInStream( m_xCachedVisualRepresentation.is() );
+    }
+
+    if ( !m_xCachedVisualRepresentation.is() )
+    {
+        // no representation can be retrieved
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
 
-    return aVisualRepr;
+    return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
 }
 
 sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
