@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:56:52 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -898,14 +898,28 @@ BOOL SwOLEObj::UnloadObject()
     //Nicht notwendig im Doc DTor (MM)
     //ASSERT( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
     //        "Falscher RefCount fuers Unload" );
-    const SwDoc* pDoc;
+    if ( pOLENd )
+    {
+        const SwDoc* pDoc = pOLENd->GetDoc();
+        bRet = UnloadObject( xOLERef.GetObject(), pDoc, pOLENd->GetAspect() );
+    }
 
-    sal_Int32 nState = xOLERef.is() ? xOLERef->getCurrentState() : embed::EmbedStates::LOADED;
-    DBG_ASSERT( nState != embed::EmbedStates::LOADED, "Strange state of cached object!" );
-    BOOL bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
-    if( pOLENd && nState != embed::EmbedStates::LOADED &&
-        !( pDoc = pOLENd->GetDoc())->IsInDtor() && !bIsActive &&
-        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != xOLERef->getStatus( pOLENd->GetAspect() ) )
+    return bRet;
+}
+
+BOOL SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
+{
+    if ( !pDoc )
+        return FALSE;
+
+    BOOL bRet = TRUE;
+       sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
+       BOOL bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
+    sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
+
+       if( nState != embed::EmbedStates::LOADED && !pDoc->IsInDtor() && !bIsActive &&
+        embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
+        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) )
     {
         SfxObjectShell* p = pDoc->GetPersist();
         if( p )
@@ -914,10 +928,10 @@ BOOL SwOLEObj::UnloadObject()
             {
                 try
                 {
-                    uno::Reference < util::XModifiable > xMod( xOLERef->getComponent(), uno::UNO_QUERY );
+                    uno::Reference < util::XModifiable > xMod( xObj->getComponent(), uno::UNO_QUERY );
                     if( xMod.is() && xMod->isModified() )
                     {
-                        uno::Reference < embed::XEmbedPersist > xPers( xOLERef.GetObject(), uno::UNO_QUERY );
+                        uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else
@@ -925,7 +939,7 @@ BOOL SwOLEObj::UnloadObject()
                     }
 
                     // setting object to loaded state will remove it from cache
-                    xOLERef->changeState( embed::EmbedStates::LOADED );
+                    xObj->changeState( embed::EmbedStates::LOADED );
                 }
                 catch ( uno::Exception& )
                 {
