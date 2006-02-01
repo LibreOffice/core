@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:20:58 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,9 +272,7 @@ public:
     const SwView &GetView() const { return rView; }
           SwView &GetView()       { return rView; }
 
-#ifdef ACCESSIBLE_LAYOUT
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
-#endif
 
     // Tipfenster loeschen
     static void ClearTip();
