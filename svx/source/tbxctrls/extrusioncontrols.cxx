@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:46:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1469,7 +1469,7 @@ void ExtrusionSurfaceControl::StateChanged( USHORT nSID, SfxItemState eState, co
 
 //========================================================================
 
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SfxInt32Item );
+SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 
 ExtrusionColorControl::ExtrusionColorControl(
     USHORT nSlotId, USHORT nId, ToolBox& rTbx )
