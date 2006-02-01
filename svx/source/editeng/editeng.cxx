@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:46:48 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2753,6 +2753,29 @@ BOOL EditEngine::HasValidData( ::com::sun::star::uno::Reference< ::com::sun::sta
 
     return bValidData;
 }
+
+/** sets a link that is called at the beginning of a drag operation at an edit view */
+void EditEngine::SetBeginDropHdl( const Link& rLink )
+{
+    pImpEditEngine->SetBeginDropHdl( rLink );
+}
+
+Link EditEngine::GetBeginDropHdl() const
+{
+    return pImpEditEngine->GetBeginDropHdl();
+}
+
+/** sets a link that is called at the end of a drag operation at an edit view */
+void EditEngine::SetEndDropHdl( const Link& rLink )
+{
+    pImpEditEngine->SetEndDropHdl( rLink );
+}
+
+Link EditEngine::GetEndDropHdl() const
+{
+    return pImpEditEngine->GetEndDropHdl();
+}
+
 
 
 // ---------------------------------------------------
