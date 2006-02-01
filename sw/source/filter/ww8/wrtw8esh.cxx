@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:51:43 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1566,7 +1566,7 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
             Rectangle aRect( aEmptyPoint, aSize );
 
             sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
-                aRect, 0 );
+                aRect, NULL, 0 );
             if (nBlibId)
                 aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
         }
@@ -1694,7 +1694,26 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     {
         SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
         SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-        //com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
+        ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
+
+        // the rectangle is used to transport the size of the object
+        // the left, top corner is set to ( 0, 0 ) by default constructor,
+        // if the width and height are set correctly bRectIsSet should be set to true
+        ::com::sun::star::awt::Rectangle aRect;
+        sal_Bool bRectIsSet = sal_False;
+
+        if ( xObj.is() )
+        {
+            try
+            {
+                ::com::sun::star::awt::Size aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                aRect.Width = aSize.Width;
+                aRect.Height = aSize.Height;
+                bRectIsSet = sal_True;
+            }
+            catch( uno::Exception& )
+            {}
+        }
 
         /*
         #i5970#
@@ -1710,7 +1729,7 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         EscherPropertyContainer aPropOpt;
         const SwMirrorGrf &rMirror = rOLENd.GetSwAttrSet().GetMirrorGrf();
         WriteOLEPicture(aPropOpt, AddMirrorFlags(0xa00 | SHAPEFLAG_OLESHAPE,
-            rMirror), pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId);
+            rMirror), pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId, bRectIsSet ? &aRect : NULL );
 
         nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
         WriteGrfAttr(rOLENd, aPropOpt);
@@ -1752,7 +1771,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
             Rectangle aRect(aEmptyPoint, aSize);
 
             sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
-                aRect, 0);
+                aRect, NULL, 0);
             if (nBlibId)
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
@@ -2735,7 +2754,7 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
 
 void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
-    sal_uInt32 nShapeId)
+    sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea )
 {
     //nShapeFlags == 0xA00 + flips and ole active
     AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
@@ -2748,7 +2767,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         aRect.SetPos(Point(0,0));
         aRect.Right() = DrawModelToEmu(aRect.Right());
         aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
-        sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
+        sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, pVisArea, 0); // SJ: the fourth parameter (VisArea) should be set..
         if (nBlibId)
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
     }
@@ -2772,7 +2791,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         EscherPropertyContainer aPropOpt;
         WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,
-            *pSdrObj, nShapeId);
+            *pSdrObj, nShapeId, NULL );
 
         WriteFlyFrameAttr( rFmt, mso_sptPictureFrame , aPropOpt );
         aPropOpt.Commit( GetStream() );
