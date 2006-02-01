@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-08 16:31:09 $
+#   last change: $Author: kz $ $Date: 2006-02-01 18:40:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ EXCEPTIONSFILES=				\
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/presvish.obj \
         $(SLO)$/sdview.obj	\
+        $(SLO)$/sdview2.obj	\
         $(SLO)$/sdview3.obj  \
         $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
