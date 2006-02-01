@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:17:53 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,10 @@ private:
 
 protected:
     void SetName( const ::rtl::OUString& rName ) { sName = rName; }
-    sal_Int16 GetRole() const { return nRole; }
+    inline sal_Int16 GetRole() const
+    {
+        return nRole;
+    }
 
     void SetParent( SwAccessibleContext *pParent );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
@@ -150,8 +153,14 @@ protected:
     const SwAccessibleMap *GetMap() const { return pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
-    inline ViewShell* GetShell();
-    inline const ViewShell* GetShell() const;
+    inline ViewShell* GetShell()
+    {
+        return GetMap()->GetShell();
+    }
+    inline const ViewShell* GetShell() const
+    {
+        return GetMap()->GetShell();
+    }
 
     /** convenience method to get SwCrsrShell through accessibility map
      * @returns SwCrsrShell, or NULL if none is found */
@@ -178,7 +187,10 @@ protected:
 
     // Invalidate the states of all children of the specified SwFrm. The
     // SwFrm might belong the the current object or to any child or grandchild!
-    void InvalidateChildrenStates( const SwFrm *pFrm, sal_uInt8 nStates );
+    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+    void InvalidateChildrenStates( const SwFrm* _pFrm,
+                                   tAccessibleStates _nStates );
+    // <--
 
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.
@@ -377,21 +389,38 @@ public:
     void InvalidateFocus();
 
     // Check states
-    void InvalidateStates( sal_uInt8 nStates );
+    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+    void InvalidateStates( tAccessibleStates _nStates );
+    // <--
 
     // the XAccessibleRelationSet may have changed
     void InvalidateRelation( sal_uInt16 nType );
+
+    /** text selection has changed
+
+        OD 2005-12-14 #i27301#
+
+        @author OD
+    */
+    void InvalidateTextSelection();
 
     const ::rtl::OUString& GetName() const { return sName; }
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
     sal_Bool Select( SwPaM *pPaM, SdrObject *pObj, sal_Bool bAdd );
-    inline sal_Bool Select( SwPaM& rPaM );
-    inline sal_Bool Select( SdrObject *pObj, sal_Bool bAdd );
+    inline sal_Bool Select( SwPaM& rPaM )
+    {
+        return Select( &rPaM, 0, sal_False );
+    }
+    inline sal_Bool Select( SdrObject *pObj, sal_Bool bAdd )
+    {
+        return Select( 0, pObj, bAdd );
+    }
+
     static ::rtl::OUString GetResource( sal_uInt16 nResId,
-                                 const ::rtl::OUString *pArg1 = 0,
-                                 const ::rtl::OUString *pArg2 = 0 );
+                                        const ::rtl::OUString *pArg1 = 0,
+                                        const ::rtl::OUString *pArg2 = 0 );
 
 
 };
@@ -424,22 +453,5 @@ const sal_Char sMissingWindow[] = "window is missing";
     {                                                                       \
         THROW_RUNTIME_EXCEPTION( i, sMissingWindow );                       \
     }
-
-
-inline ViewShell* SwAccessibleContext::GetShell()
-{ return GetMap()->GetShell(); }
-
-inline const ViewShell* SwAccessibleContext::GetShell() const
-{ return GetMap()->GetShell(); }
-
-inline sal_Bool SwAccessibleContext::Select( SwPaM& rPaM )
-{
-    return Select( &rPaM, 0, sal_False );
-}
-inline sal_Bool SwAccessibleContext::Select( SdrObject *pObj, sal_Bool bAdd )
-{
-    return Select( 0, pObj, bAdd );
-}
-
 #endif
 
