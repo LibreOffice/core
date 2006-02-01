@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:18:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,14 @@
 #ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
 #endif
+// --> OD 2005-12-05 #i27138#
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star::i18n;
 
@@ -1336,6 +1344,23 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     {
         pNew = rNode.MakeFrm();
         pNew->Paste( pUpper, pFrm );
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for next paragraph will change
+        // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+        if ( pNew->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pNew->GetShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pNew->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
+            }
+        }
+        // <--
     }
 }
 
@@ -1357,6 +1382,23 @@ void SwCntntNode::DelFrms()
     for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
          pFrm = (SwCntntFrm*)aIter.Next() )
     {
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pFrm->GetShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+        // <--
         if( pFrm->HasFollow() )
             pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
         if( pFrm->IsFollow() )
