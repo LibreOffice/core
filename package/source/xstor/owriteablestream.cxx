@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-23 11:01:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include <comphelper/storagehelper.hxx>
 
 #include "oseekinstream.hxx"
 #include "mutexholder.hxx"
@@ -166,25 +168,6 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMul
 const sal_Int32 n_ConstBufferSize = 32000;
 
 //-----------------------------------------------
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                             const uno::Reference< io::XOutputStream >& aOut )
-{
-    sal_Int32 nRead;
-    uno::Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
-
-    do
-    {
-        nRead = aIn->readBytes ( aSequence, n_ConstBufferSize );
-        if ( nRead < n_ConstBufferSize )
-        {
-            uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-            aOut->writeBytes ( aTempBuf );
-        }
-        else
-            aOut->writeBytes ( aSequence );
-    }
-    while ( nRead == n_ConstBufferSize );
-}
 
 ::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory )
 {
@@ -470,7 +453,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                     if ( xTempOutStream.is() )
                     {
                         // copy stream contents to the file
-                        copyInputToOutput_Impl( xOrigStream, xTempOutStream );
+                        ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
                         xTempOutStream->closeOutput();
                         xTempOutStream = uno::Reference< io::XOutputStream >();
                     }
@@ -588,7 +571,7 @@ void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream 
     if ( !xTempInStream.is() )
         throw io::IOException(); //TODO:
 
-    copyInputToOutput_Impl( xTempInStream, xOutStream );
+    ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
 }
 
 // =================================================================================================
@@ -1197,7 +1180,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
         throw uno::RuntimeException();
 
     if ( xDataToCopy.is() )
-        copyInputToOutput_Impl( xDataToCopy, xTempOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xDataToCopy, xTempOut );
 
     xTempOut->closeOutput();
     xTempSeek->seek( 0 );
@@ -1448,7 +1431,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     uno::Exception eThrown;
     sal_Bool bThrown = sal_False;
     try {
-        copyInputToOutput_Impl( m_xInStream, xDestOutStream );
+        ::comphelper::OStorageHelper::CopyInputToOutput( m_xInStream, xDestOutStream );
     }
     catch ( uno::Exception& e )
     {
