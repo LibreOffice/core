@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:50:32 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1966,15 +1966,50 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
                 }
             }
+            else
+            {
+                // the descriptor contains the wrong object size
+                // the following call will let the MSOLE objects cache the size if it is possible
+                // it should be done while the object is running
+                try
+                {
+                    xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
             //Ende mit Hack!
 
-            rSh.InsertOleObject( xObj );
+            svt::EmbeddedObjectRef xObjRef( xObj );
+
+            // try to get the replacement image from the clipboard
+            Graphic aGraphic;
+            ULONG nGrFormat = 0;
+            if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                nGrFormat = SOT_FORMATSTR_ID_SVXB;
+            else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                nGrFormat = SOT_FORMAT_GDIMETAFILE;
+            else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                nGrFormat = SOT_FORMAT_BITMAP;
+
+            // insert replacement image ( if there is one ) into the object helper
+            if ( nGrFormat )
+            {
+                datatransfer::DataFlavor aDataFlavor;
+                SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                   xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
+            }
+
+            rSh.InsertOleObject( xObjRef );
             nRet = 1;
 
             if( nRet && ( nActionFlags &
                 ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
                 SwTransferable::_PasteTargetURL( rData, rSh, 0, 0, FALSE );
 
+            // let the object be unloaded if possible
+            SwOLEObj::UnloadObject( xObj, rSh.GetDoc(), embed::Aspects::MSOLE_CONTENT );
         }
     }
     return nRet;
