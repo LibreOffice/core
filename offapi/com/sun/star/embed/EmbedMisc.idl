@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EmbedMisc.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:02:37 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,12 +174,18 @@ constants EmbedMisc
     // ----------------------------------------------------------------------
     /**
      */
-    const hyper EMBED_ACTIVATEIMMEDIATELY = 4294967296;
+    const hyper EMBED_ACTIVATEIMMEDIATELY = 0x100000000;
 
     // ----------------------------------------------------------------------
     /**
      */
-    const hyper EMBED_NEVERRESIZE = 8589934592;
+    const hyper EMBED_NEVERRESIZE = 0x200000000;
+
+    // ----------------------------------------------------------------------
+    /** The object needs the size to be provided from the container after
+        it is loaded to function in optimal way.
+     */
+    const hyper EMBED_NEEDSSIZEONLOAD = 0x400000000;
 
 };
 
