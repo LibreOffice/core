@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:52:47 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,6 +427,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
                 if ( xObj.is() )
                 {
+                    svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
+
                     // set properties from dialog
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
@@ -510,6 +512,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 comphelper::EmbeddedObjectContainer aCnt;
                 ::rtl::OUString aName;
                 xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
+                svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
                 uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                 if ( xSet.is() )
                 {
@@ -560,6 +563,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             comphelper::EmbeddedObjectContainer aCnt;
             ::rtl::OUString aName;
             xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ) );
+            svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
