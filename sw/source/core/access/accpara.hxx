@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:49 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,12 @@ class SwAccessibleParagraph :
     /// determine the current selection. Fill the values with
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
-    SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
+
+    // helper for GetSelection and getCaretPosition
+    // --> OD 2005-12-20 #i27301#
+    // - add parameter <_bForSelection>, which indicates, if the cursor is
+    //   retrieved for selection or for caret position.
+    SwPaM* GetCursor( const bool _bForSelection );
 
     /// for cut/copy/paste: execute a particular slot at the view shell
     void ExecuteAtViewShell( UINT16 nSlot );
@@ -252,6 +257,16 @@ public:
         getLocale (void)
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
+    /** paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
+
+        OD 2005-12-02 #i27138#
+
+        @author OD
+    */
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+        getAccessibleRelationSet (void)
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
 
