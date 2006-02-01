@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:06:52 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         }
     }
 
+    sal_Bool bProvideDTD = sal_False;
     if ( aDocMediaType.getLength() )
     {
         if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
@@ -168,6 +169,8 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
+
+            bProvideDTD = sal_True;
         }
     }
 
@@ -175,12 +178,12 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
     xHandler->startDocument();
     Reference < XExtendedDocumentHandler > xExtHandler ( xHandler, UNO_QUERY );
-    if (xExtHandler.is())
+    if ( xExtHandler.is() && bProvideDTD )
     {
         OUString aDocType ( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_DOCTYPE ) );
         xExtHandler->unknown ( aDocType );
+        xHandler->ignorableWhitespace ( sWhiteSpace );
     }
-    xHandler->ignorableWhitespace ( sWhiteSpace );
     xHandler->startElement( sManifestElement, xRootAttrList );
 
     for (sal_uInt32 i = 0 ; i < nManLength ; i++)
