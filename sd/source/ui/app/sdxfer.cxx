@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:18:57 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:40:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -257,9 +260,15 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
         if( pObj->ISA( SdrOle2Obj ) )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
-            if( xObj.is() )
-                pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
+            try
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
+                uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if( xObj.is() && xPersist.is() && xPersist->hasEntry() )
+                    pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
+            }
+            catch( uno::Exception& )
+            {}
         }
         else if( pObj->ISA( SdrGrafObj ) && (pSourceDoc && !pSourceDoc->GetAnimationInfo( pObj )) )
         {
