@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -760,7 +760,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 else
                 {
                     if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
+                    {
+                        // the size from BLIP, if there is any, should be already set
                         pRet = InsertOle(*((SdrOle2Obj*)pObject), aAttrSet, aGrSet);
+                    }
                     else
                     {
                         if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
@@ -769,7 +772,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             const Graphic& rGraph = pGraphObject->GetGraphic();
 
                             if (nObjLocFc)  // is it a OLE-Object?
-                                pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet);
+                                pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet, pObject->GetBLIPSizeRectangle());
 
                             if (!pRet)
                             {
