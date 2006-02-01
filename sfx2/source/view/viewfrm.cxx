@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:24:25 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             pMed->SetOpenMode( SFX_STREAM_READONLY, pMed->IsDirect() );
                             pMed->ReOpen();
                             pSh->DoSaveCompleted( pMed );
-                            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, pSh ) );
                         }
 
                         // r/o-Doc kann nicht in Editmode geschaltet werden?
@@ -604,7 +603,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         pSh->DoSaveCompleted( pMed );
                         pSh->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-                        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, pSh ) );
                         rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), sal_True ) );
                         rReq.Done( sal_True );
                         // if( nOpenMode == SFX_STREAM_READONLY )
