@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:02 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ protected:
         EscherPropertyContainer& rPropOpt);
     void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
-        sal_uInt32 nShapeId);
+        sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea );
     void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
     INT32 DrawModelToEmu(INT32 nVal) const
