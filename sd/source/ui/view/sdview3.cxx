@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:38:36 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1015,6 +1015,24 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SDRINSERT_DONTMARK;
                     }
 
+                    // try to get the replacement image from the clipboard
+                    Graphic aGraphic;
+                    ULONG nGrFormat = 0;
+                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
+                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
+                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_BITMAP;
+
+                    // insert replacement image ( if there is one ) into the object helper
+                    if ( nGrFormat )
+                    {
+                        datatransfer::DataFlavor aDataFlavor;
+                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                        pObj->SetGraphicToObj( aGraphic, aDataFlavor.MimeType );
+                    }
+
                     InsertObject( pObj, *pPV, nOptions );
 
                     if( pImageMap )
@@ -1125,11 +1143,31 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SDRINSERT_DONTMARK;
                     }
 
+                    // try to get the replacement image from the clipboard
+                    Graphic aGraphic;
+                    ULONG nGrFormat = 0;
+                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
+                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
+                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_BITMAP;
+
+                    // insert replacement image ( if there is one ) into the object helper
+                    if ( nGrFormat )
+                    {
+                        datatransfer::DataFlavor aDataFlavor;
+                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                        pObj->SetGraphicToObj( aGraphic, aDataFlavor.MimeType );
+                    }
+
                     InsertObject( pObj, *pPV, nOptions );
 
                     if( pImageMap )
                         pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
 
+                    // let the object stay in loaded state after insertion
+                    pObj->Unload();
                     bReturn = TRUE;
                 }
             }
