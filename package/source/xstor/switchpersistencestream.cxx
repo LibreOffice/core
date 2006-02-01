@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switchpersistencestream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 14:18:39 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 #endif
 
+#include <comphelper/storagehelper.hxx>
 #include <switchpersistencestream.hxx>
 
 using namespace ::com::sun::star;
@@ -181,10 +182,6 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 }
 
 // ------------------------------------------------------------------------
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                             const uno::Reference< io::XOutputStream >& aOut );
-
-// ------------------------------------------------------------------------
 void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< io::XStream > xTargetStream = xStream;
@@ -217,7 +214,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     sal_Int64 nPos = m_pStreamData->m_xOrigSeekable->getPosition();
     m_pStreamData->m_xOrigSeekable->seek( 0 );
-    copyInputToOutput_Impl( m_pStreamData->m_xOrigInStream, xTargetOutStream );
+    ::comphelper::OStorageHelper::CopyInputToOutput( m_pStreamData->m_xOrigInStream, xTargetOutStream );
     xTargetOutStream->flush();
     xTargetSeek->seek( nPos );
 
