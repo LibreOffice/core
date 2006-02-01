@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:18:22 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 15:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,23 +683,23 @@ namespace accessibility
                         }
                     }
 
-                    uno::Any aOldCursor;
-
-                    // #i13705# The old cursor can only contain valid
-                    // values if it's the same paragraph!
-                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND &&
-                        maLastSelection.nEndPara == aSelection.nEndPara )
-                    {
-                        aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
-                    }
-                    else
-                    {
-                        aOldCursor <<= static_cast<sal_Int32>(-1);
-                    }
-
                     // #100530# no caret events if not focused.
                     if( mbGroupHasFocus )
                     {
+                        uno::Any aOldCursor;
+
+                        // #i13705# The old cursor can only contain valid
+                        // values if it's the same paragraph!
+                        if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND &&
+                            maLastSelection.nEndPara == aSelection.nEndPara )
+                        {
+                            aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
+                        }
+                        else
+                        {
+                            aOldCursor <<= static_cast<sal_Int32>(-1);
+                        }
+
                         maParaManager.FireEvent( aSelection.nEndPara,
                                                  aSelection.nEndPara+1,
                                                  AccessibleEventId::CARET_CHANGED,
@@ -720,50 +720,116 @@ namespace accessibility
                         makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
                                        ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
 
+                    // --> OD 2005-12-15 #i27299#
+                    // event TEXT_SELECTION_CHANGED has to be submitted.
+                    const sal_Int16 nTextSelChgEventId =
+                                    AccessibleEventId::TEXT_SELECTION_CHANGED;
+                    // <--
                     // #107037# notify selection change
                     if( maLastSelection.nStartPara == EE_PARA_NOT_FOUND )
                     {
                         // last selection is undefined
-                        if( aSelection.nStartPos != aSelection.nEndPos ||
-                            aSelection.nStartPara != aSelection.nEndPara )
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        if ( aSelection.HasRange() )
+                        // <--
                         {
                             // selection was undefined, now is on
                             maParaManager.FireEvent( sortedSelection.first,
                                                      sortedSelection.second+1,
-                                                     AccessibleEventId::SELECTION_CHANGED );
+                                                     nTextSelChgEventId );
                         }
                     }
                     else
                     {
                         // last selection is valid
-                        if( (maLastSelection.nStartPos != maLastSelection.nEndPos ||
-                             maLastSelection.nStartPara != maLastSelection.nEndPara) &&
-                            (aSelection.nStartPos == aSelection.nEndPos &&
-                             aSelection.nStartPara == aSelection.nEndPara) )
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        if ( maLastSelection.HasRange() &&
+                             !aSelection.HasRange() )
+                        // <--
                         {
                             // selection was on, now is empty
                             maParaManager.FireEvent( sortedLastSelection.first,
                                                      sortedLastSelection.second+1,
-                                                     AccessibleEventId::SELECTION_CHANGED );
+                                                     nTextSelChgEventId );
                         }
-                        else if( (maLastSelection.nStartPos == maLastSelection.nEndPos &&
-                                  maLastSelection.nStartPara == maLastSelection.nEndPara) &&
-                                 (aSelection.nStartPos != aSelection.nEndPos ||
-                                  aSelection.nStartPara != aSelection.nEndPara) )
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        else if( !maLastSelection.HasRange() &&
+                                 aSelection.HasRange() )
+                        // <--
                         {
                             // selection was empty, now is on
                             maParaManager.FireEvent( sortedSelection.first,
                                                      sortedSelection.second+1,
-                                                     AccessibleEventId::SELECTION_CHANGED );
+                                                     nTextSelChgEventId );
                         }
-                        else
+                        // --> OD 2005-12-15 #i27299#
+                        // - no event TEXT_SELECTION_CHANGED event, if new and
+                        //   last selection are empty.
+                        else if ( maLastSelection.HasRange() &&
+                                  aSelection.HasRange() )
+                        // <--
                         {
-                            // selection was on, now is different: take union of ranges
-                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
-                                                           sortedLastSelection.second),
-                                                     ::std::max(sortedSelection.first,
-                                                           sortedLastSelection.second)+1,
-                                                     AccessibleEventId::SELECTION_CHANGED );
+                            // --> OD 2005-12-16 #i27299#
+                            // - send event TEXT_SELECTION_CHANGED for difference
+                            //   between last and new selection.
+//                            // selection was on, now is different: take union of ranges
+//                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
+//                                                           sortedLastSelection.second),
+//                                                     ::std::max(sortedSelection.first,
+//                                                           sortedLastSelection.second)+1,
+//                                                     nTextSelChgEventId );
+                            // use sorted last and new selection
+                            ESelection aTmpLastSel( maLastSelection );
+                            aTmpLastSel.Adjust();
+                            ESelection aTmpSel( aSelection );
+                            aTmpSel.Adjust();
+                            // first submit event for new and changed selection
+                            sal_uInt32 nPara = aTmpSel.nStartPara;
+                            for ( ; nPara <= aTmpSel.nEndPara; ++nPara )
+                            {
+                                bool bSubmit( false );
+                                if ( nPara < aTmpLastSel.nStartPara ||
+                                     nPara > aTmpLastSel.nEndPara )
+                                {
+                                    // new selection on paragraph <nPara>
+                                    maParaManager.FireEvent( nPara,
+                                                             nTextSelChgEventId );
+                                }
+                                else
+                                {
+                                    // check for changed selection on paragraph <nPara>
+                                    const xub_StrLen nParaStartPos =
+                                            nPara == aTmpSel.nStartPara
+                                            ? aTmpSel.nStartPos : 0;
+                                    const xub_StrLen nParaEndPos =
+                                            nPara == aTmpSel.nEndPara
+                                            ? aTmpSel.nEndPos : STRING_LEN;
+                                    const xub_StrLen nLastParaStartPos =
+                                            nPara == aTmpLastSel.nStartPara
+                                            ? aTmpLastSel.nStartPos : 0;
+                                    const xub_StrLen nLastParaEndPos =
+                                            nPara == aTmpLastSel.nEndPara
+                                            ? aTmpLastSel.nEndPos : STRING_LEN;
+                                    if ( nParaStartPos != nLastParaStartPos ||
+                                         nParaEndPos != nLastParaEndPos )
+                                    {
+                                        maParaManager.FireEvent(
+                                                    nPara, nTextSelChgEventId );
+                                    }
+                                }
+                            }
+                            // second submit event for 'old' selections
+                            nPara = aTmpLastSel.nStartPara;
+                            for ( ; nPara <= aTmpLastSel.nEndPara; ++nPara )
+                            {
+                                bool bSubmit( false );
+                                if ( nPara < aTmpSel.nStartPara ||
+                                     nPara > aTmpSel.nEndPara )
+                                {
+                                    maParaManager.FireEvent( nPara,
+                                                             nTextSelChgEventId );
+                                }
+                            }
                         }
                     }
 
@@ -1466,6 +1532,10 @@ namespace accessibility
             if( pEditSourceHint )
             {
                 maEventQueue.Append( *pEditSourceHint );
+                // --> OD 2005-12-19 #i27299#
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
+                // <--
             }
             else if( pTextHint )
             {
@@ -1502,9 +1572,17 @@ namespace accessibility
                     case TEXT_HINT_BLOCKNOTIFICATION_START:
                     case TEXT_HINT_INPUT_START:
                         ++maEventOpenFrames;
-
+                        // --> OD 2005-12-19 #i27299# - no FALLTROUGH
+                        // reason: event will not be processes, thus appending
+                        // the event isn't necessary.
+                        break;
+                        // <--
                     default:
                         maEventQueue.Append( *pTextHint );
+                        // --> OD 2005-12-19 #i27299#
+                        if( maEventOpenFrames == 0 )
+                            ProcessQueue();
+                        // <--
                         break;
                 }
             }
@@ -1733,7 +1811,7 @@ namespace accessibility
     //------------------------------------------------------------------------
 
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
-        mpImpl( new AccessibleTextHelper_Impl )
+        mpImpl( new AccessibleTextHelper_Impl() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
