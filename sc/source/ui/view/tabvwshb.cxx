@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:18:14 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,15 +123,16 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
         Size aOleSize( aSz.Width, aSz.Height );
 
-        // sichtbarer Ausschnitt wird nur inplace veraendert!
-        aRect.SetSize( aOleSize );
-        pClient->SetObjArea( aRect );
-
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
         aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pClient->SetSizeScale(aScaleWidth,aScaleHeight);
+
+        // sichtbarer Ausschnitt wird nur inplace veraendert!
+        // the object area must be set after the scaling since it triggers the resizing
+        aRect.SetSize( aOleSize );
+        pClient->SetObjArea( aRect );
 
         ((ScClient*)pClient)->SetGrafEdit( NULL );
     }
@@ -179,10 +180,6 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             aOleSize = OutputDevice::LogicToLogic( aOleSize,
                                                    aUnit, MAP_100TH_MM );
 
-            // sichtbarer Ausschnitt wird nur inplace veraendert!
-            aRect.SetSize( aOleSize );
-            pClient->SetObjArea( aRect );
-
             if ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
             {
                 //  scale must always be 1 - change VisArea if different from client size
@@ -208,6 +205,11 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                 aScaleHeight.ReduceInaccurate(10);
                 pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
+
+            // sichtbarer Ausschnitt wird nur inplace veraendert!
+            // the object area must be set after the scaling since it triggers the resizing
+            aRect.SetSize( aOleSize );
+            pClient->SetObjArea( aRect );
 
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
