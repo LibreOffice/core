@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:17:55 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,9 @@ namespace accessibility
             if( !IsReferencable( nParagraphIndex ) )
             {
                 // there is no hard reference available, create object then
-                AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd );
+                // --> OD 2006-01-11 #i27138#
+                AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd, this );
+                // <--
                 uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
                 if( !xChild.is() )
