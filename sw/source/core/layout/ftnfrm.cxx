@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:12:51 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3321,5 +3321,51 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
     SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
     SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, FALSE );
     return pCFrm;
+}
+
+/** search for last content in the current footnote frame
+
+    OD 2005-12-02 #i27138#
+
+    @author OD
+*/
+SwCntntFrm* SwFtnFrm::FindLastCntnt()
+{
+    SwCntntFrm* pLastCntntFrm( 0L );
+
+    // find last lower, which is a content frame or contains content.
+    // hidden text frames, empty sections and empty tables have to be skipped.
+    SwFrm* pLastLowerOfFtn( GetLower() );
+    SwFrm* pTmpLastLower( pLastLowerOfFtn );
+    while ( pTmpLastLower && pTmpLastLower->GetNext() )
+    {
+        pTmpLastLower = pTmpLastLower->GetNext();
+        if ( ( pTmpLastLower->IsTxtFrm() &&
+               !static_cast<SwTxtFrm*>(pTmpLastLower)->IsHiddenNow() ) ||
+             ( pTmpLastLower->IsSctFrm() &&
+               static_cast<SwSectionFrm*>(pTmpLastLower)->GetSection() &&
+               static_cast<SwSectionFrm*>(pTmpLastLower)->ContainsCntnt() ) ||
+             ( pTmpLastLower->IsTabFrm() &&
+               static_cast<SwTabFrm*>(pTmpLastLower)->ContainsCntnt() ) )
+        {
+            pLastLowerOfFtn = pTmpLastLower;
+        }
+    }
+
+    // determine last content frame depending on type of found last lower.
+    if ( pLastLowerOfFtn && pLastLowerOfFtn->IsTabFrm() )
+    {
+        pLastCntntFrm = static_cast<SwTabFrm*>(pLastLowerOfFtn)->FindLastCntnt();
+    }
+    else if ( pLastLowerOfFtn && pLastLowerOfFtn->IsSctFrm() )
+    {
+        pLastCntntFrm = static_cast<SwSectionFrm*>(pLastLowerOfFtn)->FindLastCntnt();
+    }
+    else
+    {
+        pLastCntntFrm = dynamic_cast<SwCntntFrm*>(pLastLowerOfFtn);
+    }
+
+    return pLastCntntFrm;
 }
 
