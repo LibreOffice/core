@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:00:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
         Graphic         aBmpGraphic( aBmpEx );
         GraphicObject   aMappedGraphicObject( aBmpGraphic );
 
-        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aMappedGraphicObject.GetUniqueID(), aRect, NULL );
+        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aMappedGraphicObject.GetUniqueID(), aRect, NULL, NULL );
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
