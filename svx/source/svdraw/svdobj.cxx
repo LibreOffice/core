@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:32:09 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4026,6 +4026,23 @@ bool SdrObject::ImpAddLineGeomteryForMiteredLines()
 sal_Bool SdrObject::HasFillStyle() const
 {
     return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != XFILL_NONE);
+}
+
+
+// #i52224#
+// on import of OLE object from MS documents the BLIP size might be retrieved,
+// the following four methods are used to control it;
+// usually this data makes no sence after the import is finished, since the object
+// might be resized
+
+Rectangle SdrObject::GetBLIPSizeRectangle() const
+{
+    return maBLIPSizeRectangle;
+}
+
+void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
+{
+    maBLIPSizeRectangle = aRect;
 }
 
 // #b4899532#
