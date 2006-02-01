@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:37:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2022,6 +2022,12 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 
 bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 {
+    DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateTitleObject(), pPage == 0?" );
+    DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateTitleObject(), pPara == 0?" );
+
+    if( !pPage || !pPara )
+        return false;
+
     ::Outliner*             pOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
     OutlinerParaObject* pOPO = NULL;
@@ -2103,6 +2109,12 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
 bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 {
+    DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateOutlineObject(), pPage == 0?" );
+    DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateOutlineObject(), pPara == 0?" );
+
+    if( !pPage || !pPara )
+        return false;
+
     ::Outliner*         pOutliner = pOlView->GetOutliner();
     OutlinerParaObject* pOPO = NULL;
     SdrTextObj*         pTO  = NULL;
