@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:48:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ class SwAccessibleMap;
 class SwAccessibleFrame
 {
     SwRect maVisArea;
-    const SwFrm *mpFrm;
+    const SwFrm* mpFrm;
     const sal_Bool mbIsInPagePreview;
 
     static sal_Int32 GetChildCount( const SwRect& rVisArea,
@@ -77,10 +77,6 @@ class SwAccessibleFrame
                              ::std::list< SwFrmOrObj >& rChildren,
                              sal_Bool bInPagePreview );
 
-    static void MergeLowerBounds( SwRect& rBounds,
-                                  const SwRect& rVisArea,
-                                  const SwFrm *pFrm,
-                                  sal_Bool bInPagePreview );
 protected:
 
     sal_Bool IsEditable( ViewShell *pVSh ) const;
@@ -91,9 +87,15 @@ protected:
     inline sal_Bool IsShowing( const SwFrmOrObj& rFrmOrObj ) const;
     inline sal_Bool IsShowing() const;
 
-    inline sal_Bool IsInPagePreview() const { return mbIsInPagePreview; }
+    inline sal_Bool IsInPagePreview() const
+    {
+        return mbIsInPagePreview;
+    }
 
-    void ClearFrm() { mpFrm = 0; }
+    inline void ClearFrm()
+    {
+        mpFrm = 0;
+    }
 
     SwAccessibleFrame( const SwRect& rVisArea,
                        const SwFrm *pFrm,
@@ -127,8 +129,15 @@ protected:
                                     const SwAccessibleMap *pMap ) const;
     inline void GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const;
 
-    inline void SetVisArea( const SwRect& rNewVisArea );
-    const SwRect& GetVisArea() const { return maVisArea; }
+    inline void SetVisArea( const SwRect& rNewVisArea )
+    {
+        maVisArea = rNewVisArea;
+    }
+
+    inline const SwRect& GetVisArea() const
+    {
+        return maVisArea;
+    }
 
 
     String GetFormattedPageNumber() const;
@@ -178,15 +187,9 @@ inline SwFrmOrObj SwAccessibleFrame::GetChildAtPixel( const Point& rPos,
     return GetChildAtPixel( maVisArea, mpFrm, rPos, IsInPagePreview(), pMap );
 }
 
-inline void SwAccessibleFrame::GetChildren(
-        ::std::list< SwFrmOrObj >& rChildren ) const
+inline void SwAccessibleFrame::GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const
 {
     GetChildren( maVisArea, mpFrm, rChildren, IsInPagePreview() );
-}
-
-inline void SwAccessibleFrame::SetVisArea( const SwRect& rNewVisArea )
-{
-    maVisArea = rNewVisArea;
 }
 #endif
 
