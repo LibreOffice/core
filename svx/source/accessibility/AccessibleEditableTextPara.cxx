@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:17:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,15 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 
+// --> OD 2006-01-11 #i27138#
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
+// <--
+
 #ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
 #endif
@@ -151,19 +160,25 @@ namespace accessibility
 {
     DBG_NAME( AccessibleEditableTextPara )
 
-    AccessibleEditableTextPara::AccessibleEditableTextPara( const uno::Reference< XAccessible >& rParent ) :
-        AccessibleTextParaInterfaceBase( m_aMutex ),
-        mnParagraphIndex( 0 ),
-        mnIndexInParent( 0 ),
-        mpEditSource( NULL ),
-        maEEOffset( 0, 0 ),
-        mxParent( rParent ),
-        // well, that's strictly (UNO) exception safe, though not
-        // really robust. We rely on the fact that this member is
-        // constructed last, and that the constructor body catches
-        // exceptions, thus no chance for exceptions once the Id is
-        // fetched. Nevertheless, normally should employ RAII here...
-        mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
+    // --> OD 2006-01-11 #i27138# - add parameter <_pParaManager>
+    AccessibleEditableTextPara::AccessibleEditableTextPara(
+                                const uno::Reference< XAccessible >& rParent,
+                                const AccessibleParaManager* _pParaManager )
+        : AccessibleTextParaInterfaceBase( m_aMutex ),
+          mnParagraphIndex( 0 ),
+          mnIndexInParent( 0 ),
+          mpEditSource( NULL ),
+          maEEOffset( 0, 0 ),
+          mxParent( rParent ),
+          // well, that's strictly (UNO) exception safe, though not
+          // really robust. We rely on the fact that this member is
+          // constructed last, and that the constructor body catches
+          // exceptions, thus no chance for exceptions once the Id is
+          // fetched. Nevertheless, normally should employ RAII here...
+          mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient()),
+          // --> OD 2006-01-11 #i27138#
+          mpParaManager( _pParaManager )
+          // <--
     {
 #ifdef DBG_UTIL
         DBG_CTOR( AccessibleEditableTextPara, NULL );
@@ -1009,8 +1024,45 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        // no relations, therefore empty
-        return uno::Reference< XAccessibleRelationSet >();
+        // --> OD 2006-01-11 #i27138# - provide relations CONTENT_FLOWS_FROM
+        // and CONTENT_FLOWS_TO
+        if ( mpParaManager )
+        {
+            utl::AccessibleRelationSetHelper* pAccRelSetHelper =
+                                        new utl::AccessibleRelationSetHelper();
+            sal_Int32 nMyParaIndex( GetParagraphIndex() );
+            // relation CONTENT_FLOWS_FROM
+            if ( nMyParaIndex > 0 &&
+                 mpParaManager->IsReferencable( nMyParaIndex - 1 ) )
+            {
+                uno::Sequence<uno::Reference<XInterface> > aSequence(1);
+                aSequence[0] =
+                    mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().getRef();
+                AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
+                                            aSequence );
+                pAccRelSetHelper->AddRelation( aAccRel );
+            }
+
+            // relation CONTENT_FLOWS_TO
+            if ( (nMyParaIndex + 1) < mpParaManager->GetNum() &&
+                 mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
+            {
+                uno::Sequence<uno::Reference<XInterface> > aSequence(1);
+                aSequence[0] =
+                    mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().getRef();
+                AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
+                                            aSequence );
+                pAccRelSetHelper->AddRelation( aAccRel );
+            }
+
+            return pAccRelSetHelper;
+        }
+        else
+        {
+            // no relations, therefore empty
+            return uno::Reference< XAccessibleRelationSet >();
+        }
+        // <--
     }
 
     uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet() throw (uno::RuntimeException)
