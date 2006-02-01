@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:31:38 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class EventMultiplexerEvent;
 namespace sd {
 
 class OutlineViewShell;
+class OutlineViewModelChangeGuard;
 
 static const int MAX_OUTLINERVIEWS = 4;
 
@@ -122,6 +123,8 @@ public:
     DECL_LINK( EndMovingHdl, Outliner * );
     DECL_LINK( RemovingPagesHdl, OutlinerView * );
     DECL_LINK( IndentingPagesHdl, OutlinerView * );
+    DECL_LINK( BeginDropHdl, void * );
+    DECL_LINK( EndDropHdl, void * );
 
     ULONG         GetPaperWidth() const { return 21000; }  // DIN A4 Breite
 
@@ -231,6 +234,9 @@ private:
     DECL_LINK( AppEventListenerHdl, void * );
 
     DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent*);
+
+    /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
+    std::auto_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
 };
 
 // calls IgnoreCurrentPageChangesLevel with true in ctor and with false in dtor
