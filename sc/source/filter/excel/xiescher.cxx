@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:58:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1621,12 +1621,13 @@ SdrObject* XclImpDffManager::CreateSdrObject( const XclImpOleObj& rOleObj, const
         if( pDocShell && rStorageName.Len() )
         {
             Graphic aGraph;
-            if( GetBLIP( rOleObj.GetShapeBlipId(), aGraph ) )
+            Rectangle aVisArea;
+            if( GetBLIP( rOleObj.GetShapeBlipId(), aGraph, &aVisArea ) )
             {
                 SotStorageRef xSrcStrg = GetRootStorage();
                 ErrCode nError = ERRCODE_NONE;
                 xSdrObj.reset( CreateSdrOLEFromStorage( rStorageName, xSrcStrg,
-                    pDocShell->GetStorage(), aGraph, rAnchorRect, 0, nError, mnOleImpFlags ) );
+                    pDocShell->GetStorage(), aGraph, rAnchorRect, aVisArea, 0, nError, mnOleImpFlags ) );
             }
         }
     }
