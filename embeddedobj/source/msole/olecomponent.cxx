@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:51:30 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,14 @@
 #include <platform.h>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
 
 #include "olecomponent.hxx"
 #include "olewrapclient.hxx"
 #include "advisesink.hxx"
 #include "oleembobj.hxx"
+#include "mtnotification.hxx"
 
 using namespace ::com::sun::star;
 
@@ -89,7 +91,6 @@ FORMATETC pFormatTemplates[FORMATS_NUM] = {
                     { CF_ENHMETAFILE, NULL, 0, -1, TYMED_ENHMF },
                     { CF_METAFILEPICT, NULL, 0, -1, TYMED_MFPICT },
                     { CF_BITMAP, NULL, 0, -1, TYMED_GDI } };
-
 
 
 struct OleComponentNative_Impl {
@@ -246,9 +247,11 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
-                // TODO: probably in future mapmode must be used in conversion
-                nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, NULL );
-                pBuf = new unsigned char[nBufSize+22];
+                nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, NULL ) + 22;
+                pBuf = new unsigned char[nBufSize];
+
+
+                // TODO/LATER: the unit size must be calculated correctly
                 *( (long* )pBuf ) = 0x9ac6cdd7L;
                 *( (short* )( pBuf+6 )) = ( SHORT ) 0;
                 *( (short* )( pBuf+8 )) = ( SHORT ) 0;
@@ -256,16 +259,16 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
                 *( (short* )( pBuf+12 )) = ( SHORT ) pMF->yExt;
                 *( (short* )( pBuf+14 )) = ( USHORT ) 2540;
 
-                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
+
+                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize - 22, pBuf + 22 ) )
                 {
                     if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", 57 ) )
                     {
-                        aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize + 22 );
+                        aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
                         bAnyIsReady = sal_True;
                     }
                 }
 
-                nBufSize += 22;
                 GlobalUnlock( aMedium.hMetaFilePict );
             }
         }
@@ -620,7 +623,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
     // not realy needed for now, since object is updated on saving
     // m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, 0, m_pImplAdviseSink );
 
-    // remove all the caches and register own specific one
+    // remove all the caches
     IOleCache* pIOleCache = NULL;
     if ( SUCCEEDED( m_pNativeImpl->m_pObj->QueryInterface( IID_IOleCache, (void**)&pIOleCache ) ) && pIOleCache )
     {
@@ -636,6 +639,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
                 hr = pIOleCache->Uncache( aSD.dwConnection );
         }
 
+        // No IDataObject implementation, caching must be used instead
         DWORD nConn;
         FORMATETC aFormat = { 0, 0, DVASPECT_CONTENT, -1, TYMED_MFPICT };
         hr = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
@@ -657,7 +661,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
 
     // the only need in this registration is workaround for close notification
     m_pNativeImpl->m_pOleObject->Advise( m_pImplAdviseSink, ( DWORD* )&m_nAdvConn );
-    m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, ADVF_PRIMEFIRST, m_pImplAdviseSink );
+    m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, 0, m_pImplAdviseSink );
 
     OleSetContainedObject( m_pNativeImpl->m_pOleObject, TRUE );
 
@@ -949,6 +953,25 @@ void OleComponent::RunObject()
 }
 
 //----------------------------------------------
+awt::Size OleComponent::CalculateWithFactor( const awt::Size& aSize,
+                                            const awt::Size& aMultiplier,
+                                            const awt::Size& aDivisor )
+{
+    awt::Size aResult;
+
+    sal_Int64 nWidth = (sal_Int64)aSize.Width * (sal_Int64)aMultiplier.Width / (sal_Int64)aDivisor.Width;
+    sal_Int64 nHeight = (sal_Int64)aSize.Height * (sal_Int64)aMultiplier.Height / (sal_Int64)aDivisor.Height;
+    OSL_ENSURE( nWidth < SAL_MAX_INT32 && nWidth > SAL_MIN_INT32
+             && nHeight < SAL_MAX_INT32 && nHeight > SAL_MIN_INT32,
+             "Unacceptable result size!" );
+
+    aResult.Width = (sal_Int32)nWidth;
+    aResult.Height = (sal_Int32)nHeight;
+
+    return aResult;
+}
+
+//----------------------------------------------
 void OleComponent::CloseObject()
 {
     if ( m_pNativeImpl->m_pOleObject && OleIsRunning( m_pNativeImpl->m_pOleObject ) )
@@ -1054,7 +1077,87 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    awt::Size aSize;
+    sal_Bool bGotSize = sal_False;
+
+    if ( nMSAspect == DVASPECT_CONTENT )
+    {
+        // Try to get the size from the replacement image first
+        CComPtr< IDataObject > pDataObject;
+        HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
+        if ( SUCCEEDED( hr ) || pDataObject )
+        {
+            STGMEDIUM aMedium;
+            FORMATETC aFormat = pFormatTemplates[1]; // use windows metafile format
+            aFormat.dwAspect = nMSAspect;
+
+            hr = pDataObject->GetData( &aFormat, &aMedium );
+            if ( SUCCEEDED( hr ) && aMedium.tymed == TYMED_MFPICT ) // Win Metafile
+            {
+                METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
+                if ( pMF )
+                {
+                    // the object uses 0.01 mm as unit, so the metafile size should be converted to object unit
+                    sal_Int64 nMult = 1;
+                    sal_Int64 nDiv = 1;
+                    switch( pMF->mm )
+                    {
+                        case MM_HIENGLISH:
+                            nMult = 254;
+                            nDiv = 100;
+                            break;
+
+                        case MM_LOENGLISH:
+                            nMult = 254;
+                            nDiv = 10;
+                            break;
+
+                        case MM_LOMETRIC:
+                            nMult = 10;
+                            break;
+
+                        case MM_TWIPS:
+                            nMult = 254;
+                            nDiv = 144;
+                            break;
+
+                        case MM_ISOTROPIC:
+                        case MM_ANISOTROPIC:
+                        case MM_HIMETRIC:
+                            // do nothing
+                            break;
+                    }
+
+                    sal_Int64 nX = ( (sal_Int64)abs( pMF->xExt ) ) * nMult / nDiv;
+                    sal_Int64 nY = ( (sal_Int64)abs( pMF->yExt ) ) * nMult / nDiv;
+                    if (  nX < SAL_MAX_INT32 && nY < SAL_MAX_INT32 )
+                    {
+                        aSize.Width = ( sal_Int32 )nX;
+                        aSize.Height = ( sal_Int32 )nY;
+                        bGotSize = sal_True;
+                    }
+                    else
+                        OSL_ENSURE( sal_False, "Unexpected size is provided!" );
+                }
+            }
+        }
+    }
+
+    if ( !bGotSize )
+        throw lang::IllegalArgumentException();
+
+    return aSize;
+}
+
+//----------------------------------------------
+awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
+{
+    if ( !m_pNativeImpl->m_pOleObject )
+        throw embed::WrongStateException(); // TODO: the object is in wrong state
+
+    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
     SIZEL aSize;
+
     HRESULT hr = m_pNativeImpl->m_pViewObject2->GetExtent( nMSAspect, -1, NULL, &aSize );
 
     if ( FAILED( hr ) )
@@ -1066,12 +1169,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
         //else
         //  throw io::IOException(); // TODO
 
-        // actually the following method returns periodically a different value than the method from IViewObject
-        // for this reason it is separated in GetReccomendedExtent call
-        // hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
-        // if ( FAILED( hr ) )
-            throw lang::IllegalArgumentException();
-        //  throw io::IOException(); // TODO
+        throw lang::IllegalArgumentException();
     }
 
     return awt::Size( aSize.cx, aSize.cy );
@@ -1132,7 +1230,8 @@ sal_Bool OleComponent::IsDirty()
     if ( FAILED( hr ) || !pPersistStorage )
         throw io::IOException(); // TODO
 
-    return ( pPersistStorage->IsDirty() != S_FALSE );
+    hr = pPersistStorage->IsDirty();
+    return ( hr != S_FALSE );
 }
 
 //----------------------------------------------
@@ -1152,8 +1251,9 @@ void OleComponent::StoreOwnTmpIfNecessary()
         if ( FAILED( hr ) )
             throw io::IOException(); // TODO
 
+        // it is possible that the object decided not to store, then it might return S_FALSE that in no failure
         hr = pPersistStorage->SaveCompleted( NULL );
-        if ( FAILED( hr ) )
+        if ( FAILED( hr ) && hr != E_UNEXPECTED )
             throw io::IOException(); // TODO
 
 //REMOVE        if ( !bStoreVisReplace )
@@ -1210,6 +1310,7 @@ sal_Bool OleComponent::OnShowWindow_Impl( sal_Bool bShow )
 
     {
         osl::MutexGuard aGuard( m_aMutex );
+
         if ( m_pUnoOleObject )
         {
             pLockObject = m_pUnoOleObject;
@@ -1229,7 +1330,6 @@ sal_Bool OleComponent::OnShowWindow_Impl( sal_Bool bShow )
 //----------------------------------------------
 void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 {
-    // TODO: make a notification ?
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
     OleEmbeddedObject* pLockObject = NULL;
 
@@ -1244,10 +1344,12 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
     if ( pLockObject )
     {
-        pLockObject->OnViewChanged_Impl();
+        // the request will be deleted immedeatelly after execution by it's implementation
+        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( pLockObject );
+        MainThreadNotificationRequest::mainThreadWorkerStart( pMTNotifRequest );
+
         pLockObject->release();
     }
-
 }
 
 //----------------------------------------------
@@ -1428,16 +1530,8 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
             }
         }
 
-        if ( !bSupportedFlavor && m_pNativeImpl->m_pIStorage && nRequestedAspect == DVASPECT_CONTENT )
-        {
-            // try to retrieve cached representation
-            bSupportedFlavor = GetGraphicalCache_Impl( aFlavor, aResult );
-        }
-
-        if ( !bSupportedFlavor )
-        {
-            // TODO: implement workaround for stampit ( if required )
-        }
+        // If the replacement could not be retrieved, the cached representaion should be used
+        // currently it is not necessary to retrieve it here, so it is implemented in the object itself
     }
     // TODO: Investigate if there is already the format name
     //       and whether this format is really required
@@ -1459,7 +1553,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         {
             OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
             if ( !m_pUnoOleObject )
-                throw uno::RuntimeException();
+            throw uno::RuntimeException();
 
             m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
 
