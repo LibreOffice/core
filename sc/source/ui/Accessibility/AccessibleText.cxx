@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:20:45 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,8 +193,15 @@ void ScViewForwarder::SetInvalid()
 class ScEditObjectViewForwarder : public SvxViewForwarder
 {
     Window*             mpWindow;
+    // --> OD 2005-12-21 #i49561#
+    // - EditView needed for access to its visible area.
+    const EditView* mpEditView;
+    // <--
 public:
-                        ScEditObjectViewForwarder(Window* pWindow);
+                        // --> OD 2005-12-21 #i49561#
+                        ScEditObjectViewForwarder( Window* pWindow,
+                                                   const EditView* _pEditView);
+                        // <--
     virtual             ~ScEditObjectViewForwarder();
 
     virtual BOOL        IsValid() const;
@@ -205,11 +212,15 @@ public:
     void                SetInvalid();
 };
 
-ScEditObjectViewForwarder::ScEditObjectViewForwarder(Window* pWindow)
+// --> OD 2005-12-21 #i49561#
+ScEditObjectViewForwarder::ScEditObjectViewForwarder( Window* pWindow,
+                                                      const EditView* _pEditView )
     :
-    mpWindow(pWindow)
+    mpWindow(pWindow),
+    mpEditView( _pEditView )
 {
 }
+// <--
 
 ScEditObjectViewForwarder::~ScEditObjectViewForwarder()
 {
@@ -239,7 +250,18 @@ Rectangle ScEditObjectViewForwarder::GetVisArea() const
 Point ScEditObjectViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     if (mpWindow)
-        return mpWindow->LogicToPixel( rPoint, rMapMode );
+    {
+        // --> OD 2005-12-21 #i49561# - consider offset of the visible area
+        // of the EditView before converting point to pixel.
+        Point aPoint( rPoint );
+        if ( mpEditView )
+        {
+            Rectangle aEditViewVisArea( mpEditView->GetVisArea() );
+            aPoint += aEditViewVisArea.TopLeft();
+        }
+        return mpWindow->LogicToPixel( aPoint, rMapMode );
+        // <--
+    }
     else
         DBG_ERROR("this ViewForwarder is not valid");
     return Point();
@@ -248,7 +270,18 @@ Point ScEditObjectViewForwarder::LogicToPixel( const Point& rPoint, const MapMod
 Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     if (mpWindow)
-        return mpWindow->PixelToLogic( rPoint, rMapMode );
+    {
+        // --> OD 2005-12-21 #i49561# - consider offset of the visible area
+        // of the EditView after converting point to logic.
+        Point aPoint( mpWindow->PixelToLogic( rPoint, rMapMode ) );
+        if ( mpEditView )
+        {
+            Rectangle aEditViewVisArea( mpEditView->GetVisArea() );
+            aPoint -= aEditViewVisArea.TopLeft();
+        }
+        return aPoint;
+        // <--
+    }
     else
         DBG_ERROR("this ViewForwarder is not valid");
     return Point();
@@ -979,7 +1012,11 @@ SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
 SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
-        mpViewForwarder = new ScEditObjectViewForwarder(mpWindow);
+    {
+        // --> OD 2005-12-21 #i49561#
+        mpViewForwarder = new ScEditObjectViewForwarder( mpWindow, mpEditView );
+        // <--
+    }
     return mpViewForwarder;
 }
 
