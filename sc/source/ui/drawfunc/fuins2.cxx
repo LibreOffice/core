@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:57:12 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                         SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
                         comphelper::EmbeddedObjectContainer aCnt( xStorage );
                         xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
-                        if ( xObj.is() )
+                        if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         {
                             // set properties from dialog
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
