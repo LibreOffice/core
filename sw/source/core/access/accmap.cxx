@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:03:38 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,14 @@
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
 #endif
+// --> OD 2005-12-13 #i27301#
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -400,8 +408,12 @@ SwAccessibleObjShape_Impl
 struct SwAccessibleEvent_Impl
 {
 public:
-    enum EventType { CARET_OR_STATES, INVALID_CONTENT, POS_CHANGED,
-                     CHILD_POS_CHANGED, SHAPE_SELECTION, DISPOSE };
+    enum EventType { CARET_OR_STATES,
+                     INVALID_CONTENT,
+                     POS_CHANGED,
+                     CHILD_POS_CHANGED,
+                     SHAPE_SELECTION,
+                     DISPOSE };
 
 private:
     SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
@@ -411,71 +423,144 @@ private:
                                         // the same as xAcc for any other
                                         // event type
     EventType   meType;                 // The event type
-    sal_uInt8   mnStates;               // check states or update caret pos
+    // --> OD 2005-12-12 #i27301# - use new type definition for <mnStates>
+    tAccessibleStates mnStates;         // check states or update caret pos
+    // <--
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
-    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                             const SwFrmOrObj& rFrmOrObj ) :
-        mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( 0 )
+    SwAccessibleEvent_Impl( EventType eT,
+                            SwAccessibleContext *pA,
+                            const SwFrmOrObj& rFrmOrObj )
+        : mxAcc( pA ),
+          maFrmOrObj( rFrmOrObj ),
+          meType( eT ),
+          mnStates( 0 )
     {}
-    SwAccessibleEvent_Impl( EventType eT, const SwFrmOrObj& rFrmOrObj ) :
-        maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( 0 )
+
+    SwAccessibleEvent_Impl( EventType eT,
+                            const SwFrmOrObj& rFrmOrObj )
+        : maFrmOrObj( rFrmOrObj ),
+          meType( eT ),
+          mnStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::DISPOSE == meType,
                 "wrong event constructor, DISPOSE only" );
     }
-    SwAccessibleEvent_Impl( EventType eT ) :
-        meType( eT ), mnStates( 0 )
+
+    SwAccessibleEvent_Impl( EventType eT )
+        : meType( eT ),
+          mnStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
                 "wrong event constructor, SHAPE_SELECTION only" );
     }
-    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                            const SwFrmOrObj& rFrmOrObj, const SwRect& rR ) :
-        maOldBox( rR ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ),
-        mnStates( 0 )
+
+    SwAccessibleEvent_Impl( EventType eT,
+                            SwAccessibleContext *pA,
+                            const SwFrmOrObj& rFrmOrObj,
+                            const SwRect& rR )
+        : maOldBox( rR ),
+          mxAcc( pA ),
+          maFrmOrObj( rFrmOrObj ),
+          meType( eT ),
+          mnStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
                 SwAccessibleEvent_Impl::POS_CHANGED == meType,
                 "wrong event constructor, (CHILD_)POS_CHANGED only" );
     }
-    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                            const SwFrmOrObj& rFrmOrObj, sal_uInt8 nSt  ) :
-        mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( nSt )
+
+    // --> OD 2005-12-12 #i27301# - use new type definition for parameter <_nStates>
+    SwAccessibleEvent_Impl( EventType eT,
+                            SwAccessibleContext *pA,
+                            const SwFrmOrObj& rFrmOrObj,
+                            const tAccessibleStates _nStates )
+        : mxAcc( pA ),
+          maFrmOrObj( rFrmOrObj ),
+          meType( eT ),
+          mnStates( _nStates )
     {
         ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
-    inline void SetType( EventType eT ){ meType = eT; }
-    inline EventType    GetType() const { return meType; }
+    // <SetType(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    inline void SetType( EventType eT )
+    {
+        meType = eT;
+    }
+    inline EventType GetType() const
+    {
+        return meType;
+    }
 
-    inline ::vos::ORef < SwAccessibleContext > GetContext() const;
+    inline ::vos::ORef < SwAccessibleContext > GetContext() const
+    {
+        Reference < XAccessible > xTmp( mxAcc );
+        ::vos::ORef < SwAccessibleContext > xAccImpl(
+                            static_cast<SwAccessibleContext*>( xTmp.get() ) );
 
-    inline const SwRect& GetOldBox() const { return maOldBox; }
-    inline void SetOldBox( const SwRect& rOldBox ) { maOldBox = rOldBox; }
+        return xAccImpl;
+    }
 
-    inline const SwFrmOrObj& GetFrmOrObj() const { return maFrmOrObj; }
+    inline const SwRect& GetOldBox() const
+    {
+        return maOldBox;
+    }
+    // <SetOldBox(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    inline void SetOldBox( const SwRect& rOldBox )
+    {
+        maOldBox = rOldBox;
+    }
 
-    inline void SetStates( sal_uInt8 nSt ) { mnStates |= nSt; }
-    inline sal_Bool IsUpdateCursorPos() const { return (mnStates & ACC_STATE_CARET) != 0; }
-    inline sal_Bool IsInvalidateStates() const { return (mnStates & ACC_STATE_MASK) != 0; }
-    inline sal_Bool IsInvalidateRelation() const { return (mnStates & ACC_STATE_RELATION_MASK) != 0; }
-    inline sal_uInt8 GetStates() const { return mnStates & ACC_STATE_MASK; }
-    inline sal_uInt8 GetAllStates() const { return mnStates; }
+    inline const SwFrmOrObj& GetFrmOrObj() const
+    {
+        return maFrmOrObj;
+    }
+
+    // <SetStates(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    // --> OD 2005-12-12 #i27301# - use new type definition for parameter <_nStates>
+    inline void SetStates( tAccessibleStates _nStates )
+    {
+        mnStates |= _nStates;
+    }
+    // <--
+
+    inline sal_Bool IsUpdateCursorPos() const
+    {
+        return (mnStates & ACC_STATE_CARET) != 0;
+    }
+    inline sal_Bool IsInvalidateStates() const
+    {
+        return (mnStates & ACC_STATE_MASK) != 0;
+    }
+    inline sal_Bool IsInvalidateRelation() const
+    {
+        return (mnStates & ACC_STATE_RELATION_MASK) != 0;
+    }
+    // --> OD 2005-12-12 #i27301# - new event TEXT_SELECTION_CHANGED
+    inline sal_Bool IsInvalidateTextSelection() const
+    {
+        return ( mnStates & ACC_STATE_TEXT_SELECTION_CHANGED ) != 0;
+    }
+    // <--
+    // --> OD 2005-12-12 #i27301# - use new type definition <tAccessibleStates>
+    // for return value
+    inline tAccessibleStates GetStates() const
+    {
+        return mnStates & ACC_STATE_MASK;
+    }
+    // <--
+    // --> OD 2005-12-12 #i27301# - use new type definition <tAccessibleStates>
+    // for return value
+    inline tAccessibleStates GetAllStates() const
+    {
+        return mnStates;
+    }
+    // <--
 };
-
-inline ::vos::ORef < SwAccessibleContext >
-    SwAccessibleEvent_Impl::GetContext() const
-{
-    Reference < XAccessible > xTmp( mxAcc );
-    ::vos::ORef < SwAccessibleContext > xAccImpl(
-         static_cast< SwAccessibleContext * >( xTmp.get() ) );
-
-    return xAccImpl;
-}
 
 //------------------------------------------------------------------------------
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
@@ -486,10 +571,18 @@ class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
 
 public:
 
-    SwAccessibleEventList_Impl() : mbFiring( sal_False ) {}
+    SwAccessibleEventList_Impl()
+        : mbFiring( sal_False )
+    {}
 
-    inline void SetFiring() { mbFiring = sal_True; }
-    inline sal_Bool IsFiring() const { return mbFiring; }
+    inline void SetFiring()
+    {
+        mbFiring = sal_True;
+    }
+    inline sal_Bool IsFiring() const
+    {
+        return mbFiring;
+    }
 };
 
 //------------------------------------------------------------------------------
@@ -536,6 +629,38 @@ class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
 {
 };
 
+//------------------------------------------------------------------------------
+// --> OD 2005-12-13 #i27301# - map containing the accessible paragraph, which
+// have a selection. Needed to keep this information to submit corresponding
+// TEXT_SELECTION_CHANGED events.
+struct SwAccessibleParaSelection
+{
+    xub_StrLen nStartOfSelection;
+    xub_StrLen nEndOfSelection;
+
+    SwAccessibleParaSelection( const xub_StrLen _nStartOfSelection,
+                               const xub_StrLen _nEndOfSelection )
+        : nStartOfSelection( _nStartOfSelection ),
+          nEndOfSelection( _nEndOfSelection )
+    {}
+};
+
+struct SwXAccWeakRefComp
+{
+    sal_Bool operator()( const WeakReference<XAccessible>& _rXAccWeakRef1,
+                         const WeakReference<XAccessible>& _rXAccWeakRef2 ) const
+    {
+        return _rXAccWeakRef1.get() < _rXAccWeakRef2.get();
+    }
+};
+
+typedef ::std::map< WeakReference < XAccessible >,
+                    SwAccessibleParaSelection,
+                    SwXAccWeakRefComp > _SwAccessibleSelectedParas_Impl;
+
+class SwAccessibleSelectedParas_Impl: public _SwAccessibleSelectedParas_Impl
+{};
+// <--
 //------------------------------------------------------------------------------
 static sal_Bool AreInSameTable( const Reference< XAccessible >& rAcc,
                                  const SwFrm *pFrm )
@@ -602,10 +727,28 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             if( rEvent.IsInvalidateStates() )
                 xAccImpl->InvalidateStates( rEvent.GetStates() );
             if( rEvent.IsInvalidateRelation() )
-                xAccImpl->InvalidateRelation(
-                    (rEvent.GetAllStates() & ACC_STATE_RELATION_FROM) != 0 ?
-                    AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED :
-                    AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
+            {
+                // --> OD 2005-12-01 #i27138#
+                // both events CONTENT_FLOWS_FROM_RELATION_CHANGED and
+                // CONTENT_FLOWS_TO_RELATION_CHANGED are possible
+                if ( rEvent.GetAllStates() & ACC_STATE_RELATION_FROM )
+                {
+                    xAccImpl->InvalidateRelation(
+                        AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED );
+                }
+                if ( rEvent.GetAllStates() & ACC_STATE_RELATION_TO )
+                {
+                    xAccImpl->InvalidateRelation(
+                        AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
+                }
+                // <--
+            }
+            // --> OD 2005-12-12 #i27301# - submit event TEXT_SELECTION_CHANGED
+            if ( rEvent.IsInvalidateTextSelection() )
+            {
+                xAccImpl->InvalidateTextSelection();
+            }
+            // <--
         }
     }
 }
@@ -631,7 +774,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     {
 
         SwAccessibleEventMap_Impl::iterator aIter =
-            mpEventMap->find( rEvent.GetFrmOrObj() );
+                                        mpEventMap->find( rEvent.GetFrmOrObj() );
         if( aIter != mpEventMap->end() )
         {
             SwAccessibleEvent_Impl aEvent( *(*aIter).second );
@@ -644,8 +787,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // A CARET_OR_STATES event is added to any other
                 // event only. It is broadcasted after any other event, so the
                 // event should be put to the back.
-                ASSERT( aEvent.GetType() !=
-                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 aEvent.SetStates( rEvent.GetAllStates() );
                 break;
@@ -655,11 +797,9 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // POS_CHANGED event.
                 // Therefor, the event's type has to be adapted and the event
                 // has to be put at the end.
-                ASSERT( aEvent.GetType() !=
-                               SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
-                if( aEvent.GetType() ==
-                        SwAccessibleEvent_Impl::CARET_OR_STATES )
+                if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
                     aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
                 break;
             case SwAccessibleEvent_Impl::POS_CHANGED:
@@ -667,8 +807,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // flags) as well as INVALID_CONTENT. The old box position
                 // has to be stored however if the old event is not a
                 // POS_CHANGED itself.
-                ASSERT( aEvent.GetType() !=
-                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() != SwAccessibleEvent_Impl::POS_CHANGED )
                     aEvent.SetOldBox( rEvent.GetOldBox() );
@@ -679,13 +818,11 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // events. The only action that needs to be done again is
                 // to put the old event to the back. The new one cannot be used,
                 // because we are interested in the old frame bounds.
-                ASSERT( aEvent.GetType() ==
-                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::SHAPE_SELECTION:
-                ASSERT( aEvent.GetType() ==
-                            SwAccessibleEvent_Impl::SHAPE_SELECTION,
+                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::SHAPE_SELECTION,
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
@@ -900,6 +1037,9 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mpShapes( 0  ),
     mpEvents( 0  ),
     mpEventMap( 0  ),
+    // --> OD 2005-12-13 #i27301#
+    mpSelectedParas( 0 ),
+    // <--
     mpVSh( pSh ),
         mpPreview( 0 ),
     mnPara( 1 ),
@@ -972,6 +1112,10 @@ SwAccessibleMap::~SwAccessibleMap()
         mpShapeMap = 0;
         delete mpShapes;
         mpShapes = 0;
+        // --> OD 2005-12-13 #i27301#
+        delete mpSelectedParas;
+        mpSelectedParas = 0;
+        // <--
     }
 
     delete mpPreview;
@@ -1750,10 +1894,12 @@ void SwAccessibleMap::SetCursorContext(
     mxCursorContext = xAcc;
 }
 
-void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates, const SwFrm *pFrm )
+// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
+                                        const SwFrm* _pFrm )
 {
     // Start with the frame or the first upper that is accessible
-    SwFrmOrObj aFrmOrObj( pFrm );
+    SwFrmOrObj aFrmOrObj( _pFrm );
     while( aFrmOrObj.GetSwFrm() &&
             !aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
         aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
@@ -1767,15 +1913,16 @@ void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates, const SwFrm *pFrm )
     {
         SwAccessibleEvent_Impl aEvent(
                 SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
-                        pAccImpl->GetFrm(), nStates );
+                        pAccImpl->GetFrm(), _nStates );
         AppendEvent( aEvent );
     }
     else
     {
         FireEvents();
-        pAccImpl->InvalidateStates( nStates );
+        pAccImpl->InvalidateStates( _nStates );
     }
 }
+// <--
 
 void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
                                               sal_Bool bFrom )
@@ -1785,14 +1932,13 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
         Reference < XAccessible > xAcc;
-        Reference < XAccessible > xParentAcc;
         {
             vos::OGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                                        mpFrmMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != mpFrmMap->end() )
                 {
                     xAcc = (*aIter).second;
@@ -1804,21 +1950,20 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
         if( xAcc.is() )
         {
             SwAccessibleContext *pAccImpl =
-                static_cast< SwAccessibleContext *>( xAcc.get() );
+                            static_cast< SwAccessibleContext *>( xAcc.get() );
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
-                        pFrm, bFrom ? ACC_STATE_RELATION_FROM
-                                    : ACC_STATE_RELATION_TO );
+                    SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl, pFrm,
+                    bFrom ? ACC_STATE_RELATION_FROM : ACC_STATE_RELATION_TO );
                 AppendEvent( aEvent );
             }
             else
             {
                 FireEvents();
-                pAccImpl->InvalidateRelation( bFrom ?
-                    AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED :
-                    AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
+                pAccImpl->InvalidateRelation( bFrom
+                        ? AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED
+                        : AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
             }
         }
     }
@@ -1829,6 +1974,67 @@ void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
 {
     _InvalidateRelationSet( pMaster, sal_False );
     _InvalidateRelationSet( pFollow, sal_True );
+}
+
+/** invalidation CONTENT_FLOW_FROM/_TO relation of a paragraph
+
+    OD 2005-12-01 #i27138#
+
+    @author OD
+*/
+void SwAccessibleMap::InvalidateParaFlowRelation( const SwTxtFrm& _rTxtFrm,
+                                                  const bool _bFrom )
+{
+    _InvalidateRelationSet( &_rTxtFrm, _bFrom );
+}
+
+/** invalidation of text selection of a paragraph
+
+    OD 2005-12-12 #i27301#
+
+    @author OD
+*/
+void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
+{
+    // first, see if this frame is accessible, and if so, get the respective
+    SwFrmOrObj aFrmOrObj( &_rTxtFrm );
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    {
+        Reference < XAccessible > xAcc;
+        {
+            vos::OGuard aGuard( maMutex );
+
+            if( mpFrmMap )
+            {
+                SwAccessibleContextMap_Impl::iterator aIter =
+                                        mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
+                {
+                    xAcc = (*aIter).second;
+                }
+            }
+        }
+
+        // deliver event directly, or queue event
+        if( xAcc.is() )
+        {
+            SwAccessibleContext *pAccImpl =
+                            static_cast< SwAccessibleContext *>( xAcc.get() );
+            if( GetShell()->ActionPend() )
+            {
+                SwAccessibleEvent_Impl aEvent(
+                    SwAccessibleEvent_Impl::CARET_OR_STATES,
+                    pAccImpl, &_rTxtFrm,
+                    ACC_STATE_TEXT_SELECTION_CHANGED );
+                AppendEvent( aEvent );
+            }
+            else
+            {
+                FireEvents();
+                pAccImpl->InvalidateTextSelection();
+            }
+        }
+    }
 }
 
 // OD 15.01.2003 #103492# - complete re-factoring of method due to new page/print
@@ -2215,6 +2421,220 @@ Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
     else
     {
         return Size( 0, 0 );
+    }
+}
+
+/** method to build up a new data structure of the accessible pararaphs,
+    which have a selection
+
+    OD 2005-12-13 #i27301#
+    Important note: method has to used inside a mutual exclusive section
+
+    @author OD
+*/
+SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
+{
+    // no accessible contexts, no selection
+    if ( !mpFrmMap )
+    {
+        return 0L;
+    }
+
+    // get cursor as an instance of its base class <SwPaM>
+    SwPaM* pCrsr( 0L );
+    {
+        SwCrsrShell* pCrsrShell = dynamic_cast<SwCrsrShell*>(GetShell());
+        if ( pCrsrShell )
+        {
+            SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCrsrShell);
+            if ( !pFEShell ||
+                 ( !pFEShell->IsFrmSelected() &&
+                   pFEShell->IsObjSelected() == 0 ) )
+            {
+                // get cursor without updating an existing table cursor.
+                pCrsr = pCrsrShell->GetCrsr( FALSE );
+            }
+        }
+    }
+    // no cursor, no selection
+    if ( !pCrsr )
+    {
+        return 0L;
+    }
+
+    SwAccessibleSelectedParas_Impl* pRetSelectedParas( 0L );
+
+    // loop on all cursors
+    SwPaM* pRingStart = pCrsr;
+    do {
+
+        // for a selection the cursor has to have a mark.
+        // for savety reasons assure that point and mark are in text nodes
+        if ( pCrsr->HasMark() &&
+             pCrsr->GetPoint()->nNode.GetNode().IsTxtNode() &&
+             pCrsr->GetMark()->nNode.GetNode().IsTxtNode() )
+        {
+            SwPosition* pStartPos = pCrsr->Start();
+            SwPosition* pEndPos = pCrsr->End();
+            // loop on all text nodes inside the selection
+            SwNodeIndex aIdx( pStartPos->nNode );
+            for ( ; aIdx.GetIndex() <= pEndPos->nNode.GetIndex(); ++aIdx )
+            {
+                SwTxtNode* pTxtNode( aIdx.GetNode().GetTxtNode() );
+                if ( pTxtNode )
+                {
+                    // loop on all text frames registered at the text node.
+                    SwClientIter aIter( *pTxtNode );
+                    for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                         pFrm;
+                         pFrm = (SwFrm*)aIter.Next() )
+                    {
+                        ASSERT( dynamic_cast<SwTxtFrm*>(pFrm),
+                                "<SwAccessibleMap::_BuildSelectedParas()> - unexpected frame type" );
+                        SwTxtFrm* pTxtFrm( dynamic_cast<SwTxtFrm*>(pFrm) );
+                        if ( pTxtFrm )
+                        {
+                            WeakReference < XAccessible > xWeakAcc;
+                            SwAccessibleContextMap_Impl::iterator aIter =
+                                                    mpFrmMap->find( pTxtFrm );
+                            if( aIter != mpFrmMap->end() )
+                            {
+                                xWeakAcc = (*aIter).second;
+                                SwAccessibleParaSelection aDataEntry(
+                                    pTxtNode == &(pStartPos->nNode.GetNode())
+                                                ? pStartPos->nContent.GetIndex()
+                                                : 0,
+                                    pTxtNode == &(pEndPos->nNode.GetNode())
+                                                ? pEndPos->nContent.GetIndex()
+                                                : STRING_LEN );
+                                SwAccessibleSelectedParas_Impl::value_type
+                                                aEntry( xWeakAcc, aDataEntry );
+                                if ( !pRetSelectedParas )
+                                {
+                                    pRetSelectedParas =
+                                            new SwAccessibleSelectedParas_Impl;
+                                }
+                                pRetSelectedParas->insert( aEntry );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // prepare next turn: get next cursor in ring
+        pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+    } while ( pCrsr != pRingStart );
+
+    return pRetSelectedParas;
+}
+
+/** invalidation of text selection of all paragraphs
+
+    OD 2005-12-13 #i27301#
+
+    @author OD
+*/
+void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
+{
+    vos::OGuard aGuard( maMutex );
+
+    // keep previously known selected paragraphs
+    SwAccessibleSelectedParas_Impl* pPrevSelectedParas( mpSelectedParas );
+
+    // determine currently selected paragraphs
+    mpSelectedParas = _BuildSelectedParas();
+
+    // compare currently selected paragraphs with the previously selected
+    // paragraphs and submit corresponding TEXT_SELECTION_CHANGED events.
+    // first, search for new and changed selections.
+    // on the run remove selections from previously known ones, if they are
+    // also in the current ones.
+    if ( mpSelectedParas )
+    {
+        SwAccessibleSelectedParas_Impl::iterator aIter = mpSelectedParas->begin();
+        for ( ; aIter != mpSelectedParas->end(); ++aIter )
+        {
+            bool bSubmitEvent( false );
+            if ( !pPrevSelectedParas )
+            {
+                // new selection
+                bSubmitEvent = true;
+            }
+            else
+            {
+                SwAccessibleSelectedParas_Impl::iterator aPrevSelected =
+                                        pPrevSelectedParas->find( (*aIter).first );
+                if ( aPrevSelected != pPrevSelectedParas->end() )
+                {
+                    // check, if selection has changed
+                    if ( (*aIter).second.nStartOfSelection !=
+                                    (*aPrevSelected).second.nStartOfSelection ||
+                         (*aIter).second.nEndOfSelection !=
+                                    (*aPrevSelected).second.nEndOfSelection )
+                    {
+                        // changed selection
+                        bSubmitEvent = true;
+                    }
+                    pPrevSelectedParas->erase( aPrevSelected );
+                }
+                else
+                {
+                    // new selection
+                    bSubmitEvent = true;
+                }
+            }
+
+            if ( bSubmitEvent )
+            {
+                Reference < XAccessible > xAcc( (*aIter).first );
+                if ( xAcc.is() )
+                {
+                    ::vos::ORef < SwAccessibleContext > xAccImpl(
+                                static_cast<SwAccessibleContext*>( xAcc.get() ) );
+                    if ( xAccImpl.isValid() && xAccImpl->GetFrm() )
+                    {
+                        const SwTxtFrm* pTxtFrm(
+                            dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
+                        ASSERT( pTxtFrm,
+                                "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
+                        if ( pTxtFrm )
+                        {
+                            InvalidateParaTextSelection( *pTxtFrm );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // second, handle previous selections - after the first step the data
+    // structure of the previously known only contains the 'old' selections
+    if ( pPrevSelectedParas )
+    {
+        SwAccessibleSelectedParas_Impl::iterator aIter = pPrevSelectedParas->begin();
+        for ( ; aIter != pPrevSelectedParas->end(); ++aIter )
+        {
+            Reference < XAccessible > xAcc( (*aIter).first );
+            if ( xAcc.is() )
+            {
+                ::vos::ORef < SwAccessibleContext > xAccImpl(
+                            static_cast<SwAccessibleContext*>( xAcc.get() ) );
+                if ( xAccImpl.isValid() && xAccImpl->GetFrm() )
+                {
+                    const SwTxtFrm* pTxtFrm(
+                            dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
+                    ASSERT( pTxtFrm,
+                            "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
+                    if ( pTxtFrm )
+                    {
+                        InvalidateParaTextSelection( *pTxtFrm );
+                    }
+                }
+            }
+        }
+
+        delete pPrevSelectedParas;
     }
 }
 
