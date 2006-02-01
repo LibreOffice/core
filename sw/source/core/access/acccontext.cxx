@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:45:55 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,11 +431,11 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     Dispose( sal_True );
 }
 
-
-void SwAccessibleContext::InvalidateChildrenStates( const SwFrm *pFrm,
-                                                sal_uInt8 nStates )
+// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
+                                                    tAccessibleStates _nStates )
 {
-    const SwFrmOrObjSList aVisList( GetVisArea(), pFrm );
+    const SwFrmOrObjSList aVisList( GetVisArea(), _pFrm );
 
     SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
@@ -448,9 +448,9 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm *pFrm,
             if( rLower.IsAccessible( GetShell()->IsPreView() ) )
                 xAccImpl = GetMap()->GetContextImpl( pLower, sal_False );
             if( xAccImpl.isValid() )
-                xAccImpl->InvalidateStates( nStates );
+                xAccImpl->InvalidateStates( _nStates );
             else
-                InvalidateChildrenStates( pLower, nStates );
+                InvalidateChildrenStates( pLower, _nStates );
         }
         else
         {
@@ -459,6 +459,7 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm *pFrm,
         ++aIter;
     }
 }
+// <--
 
 void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
                                        sal_Bool bRecursive )
@@ -1312,14 +1313,15 @@ void SwAccessibleContext::InvalidateFocus()
     _InvalidateFocus();
 }
 
-void SwAccessibleContext::InvalidateStates( sal_uInt8 nStates )
+// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
 {
     if( GetMap() )
     {
         ViewShell *pVSh = GetMap()->GetShell();
         if( pVSh )
         {
-            if( (nStates & ACC_STATE_EDITABLE) != 0 )
+            if( (_nStates & ACC_STATE_EDITABLE) != 0 )
             {
                 sal_Bool bIsOldEditableState;
                 sal_Bool bIsNewEditableState = IsEditable( pVSh );
@@ -1333,7 +1335,7 @@ void SwAccessibleContext::InvalidateStates( sal_uInt8 nStates )
                     FireStateChangedEvent( AccessibleStateType::EDITABLE,
                                            bIsNewEditableState  );
             }
-            if( (nStates & ACC_STATE_OPAQUE) != 0 )
+            if( (_nStates & ACC_STATE_OPAQUE) != 0 )
             {
                 sal_Bool bIsOldOpaqueState;
                 sal_Bool bIsNewOpaqueState = IsOpaque( pVSh );
@@ -1349,14 +1351,29 @@ void SwAccessibleContext::InvalidateStates( sal_uInt8 nStates )
             }
         }
 
-        InvalidateChildrenStates( GetFrm(), nStates );
+        InvalidateChildrenStates( GetFrm(), _nStates );
     }
 }
+// <--
 
 void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = nType;
+
+    FireAccessibleEvent( aEvent );
+}
+
+/** text selection has changed
+
+    OD 2005-12-14 #i27301#
+
+    @author OD
+*/
+void SwAccessibleContext::InvalidateTextSelection()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
 
     FireAccessibleEvent( aEvent );
 }
