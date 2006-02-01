@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:59:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,6 +557,10 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         if(pUserData->xResultSet.is())
         {
             SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
+            if(rConfigItem.GetResultSet() != pUserData->xResultSet)
+                ::comphelper::disposeComponent( pUserData->xResultSet );
+            pUserData->xResultSet = 0;
+
             rConfigItem.DisposeResultSet();
         }
         pUserData->xSource.clear();
