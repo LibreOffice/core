@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeyHandler.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:28:36 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,11 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
                 event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED);
 
             eventQueue.postEvent(vke);
+
+            // VCL events for TABs have empty KeyChar
+            if (event.KeyCode == com.sun.star.awt.Key.TAB ) {
+                event.KeyChar = '\t';
+            }
 
             // Synthesize KEY_TYPED event to emulate Java behavior
             if (event.KeyChar != 0) {
