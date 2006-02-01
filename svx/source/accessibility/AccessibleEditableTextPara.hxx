@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:19 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@
 #include "unoedprx.hxx"
 #endif
 
-
 namespace accessibility
 {
     typedef ::cppu::WeakComponentImplHelper6< ::com::sun::star::accessibility::XAccessible,
@@ -129,7 +128,13 @@ namespace accessibility
 
     public:
         /// Create accessible object for given parent
-        AccessibleEditableTextPara ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rParent );
+        // --> OD 2006-01-11 #i27138#
+        // - add parameter <_pParaManager> (default value NULL)
+        //   This has to be the the instance of <AccessibleParaManager>, which
+        //   created and manages this accessible paragraph.
+        AccessibleEditableTextPara ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rParent,
+                                     const AccessibleParaManager* _pParaManager = NULL );
+        // <--
 
         virtual ~AccessibleEditableTextPara ();
 
@@ -428,6 +433,13 @@ namespace accessibility
 
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
+
+        // --> OD 2006-01-11 #i27138#
+        // the paragraph manager, which created this instance - is NULL, if
+        // instance isn't created by AccessibleParaManager.
+        // Needed for method <getAccessibleRelationSet()> to retrieve predecessor
+        // paragraph and the successor paragraph.
+        const AccessibleParaManager* mpParaManager;
     };
 
 } // end of namespace accessibility
