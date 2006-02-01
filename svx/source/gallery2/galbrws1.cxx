@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:05:37 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,11 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     Control     ( pParent, rResId ),
     maNewTheme  ( this, WB_3DLOOK ),
     mpThemes    ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
-    mpGallery   ( pGallery )
+    mpGallery   ( pGallery ),
+    aImgNormal  ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
+    aImgDefault ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
+    aImgReadOnly( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
+    aImgImported( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) )
 {
     StartListening( *mpGallery );
 
@@ -195,11 +199,6 @@ ULONG GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 
     if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
     {
-        static const Image aImgNormal( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) );
-        static const Image aImgDefault( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) );
-        static const Image aImgReadOnly( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) );
-        static const Image aImgImported( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) );
-
         const Image* pImage;
 
         if( pEntry->IsImported() )
