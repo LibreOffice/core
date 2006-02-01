@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:22:12 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,29 +403,55 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbx
             if ( pFactories )
             {
                 SfxTbxCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                         ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                           ( rFactories[nFactory]->nSlotId == nSlotId) ) )
-                    {
-                        pCtrl = rFactories[nFactory]->pCtor( nSlotId, nTbxId, *pBox );
-                        pCtrl->pImpl->pFact = rFactories[nFactory];
-                        return pCtrl;
-                    }
+                USHORT nFactory;
+                const USHORT nCount = rFactories.Count();
+
+                // search for a factory with the given slot id
+                for( nFactory = 0; nFactory < nCount; ++nFactory )
+                    if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )
+                        break;
+
+                if( nFactory == nCount )
+                {
+                    // if no factory exists for the given slot id, see if we
+                    // have a generic factory with the correct slot type and slot id == 0
+                    for ( nFactory = 0; nFactory < nCount; ++nFactory )
+                        if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
+                            break;
+                }
+
+                if( nFactory < nCount )
+                {
+                    pCtrl = rFactories[nFactory]->pCtor( nSlotId, nTbxId, *pBox );
+                    pCtrl->pImpl->pFact = rFactories[nFactory];
+                    return pCtrl;
+                }
             }
         }
 
         SfxTbxCtrlFactArr_Impl &rFactories = pApp->GetTbxCtrlFactories_Impl();
+        USHORT nFactory;
+        const USHORT nCount = rFactories.Count();
 
-        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                 ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                   ( rFactories[nFactory]->nSlotId == nSlotId) ) )
-            {
-                pCtrl = rFactories[nFactory]->pCtor( nSlotId, nTbxId, *pBox );
-                pCtrl->pImpl->pFact = rFactories[nFactory];
-                return pCtrl;
-            }
+        for( nFactory = 0; nFactory < nCount; ++nFactory )
+            if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )
+                break;
+
+        if( nFactory == nCount )
+        {
+            // if no factory exists for the given slot id, see if we
+            // have a generic factory with the correct slot type and slot id == 0
+            for( nFactory = 0; nFactory < nCount; ++nFactory )
+                if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
+                    break;
+        }
+
+        if( nFactory < nCount )
+        {
+            pCtrl = rFactories[nFactory]->pCtor( nSlotId, nTbxId, *pBox );
+            pCtrl->pImpl->pFact = rFactories[nFactory];
+            return pCtrl;
+        }
     }
 
     return NULL;
