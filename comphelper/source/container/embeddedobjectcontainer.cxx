@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:00:00 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
 #endif
 
 #include <comphelper/seqstream.hxx>
@@ -391,9 +394,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
         AddEmbeddedObject( xObj, rNewName );
 
-        // a freshly created object should be running always
-        if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::LOADED )
-            xObj->changeState( embed::EmbedStates::RUNNING );
+        OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
+                    "A freshly create object should be running always!\n" );
     }
     catch ( uno::Exception& )
     {
@@ -573,9 +575,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         if ( !xRet.is() )
             // no object could be created, so withdraw insertion
             pImpl->mxStorage->removeElement( rNewName );
-        else
-            // freshly created objects always should be running!
-            xRet->changeState( embed::EmbedStates::RUNNING );
     }
     catch ( uno::Exception& )
     {
@@ -600,8 +599,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
                 pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
-        // freshly created objects always should be running!
-        xObj->changeState( embed::EmbedStates::RUNNING );
+           OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
+                    "A freshly create object should be running always!\n" );
 
         // possible optimization: store later!
         if ( xPersist.is())
@@ -631,17 +630,14 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceLink(
                 pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
-        // a freshly created object should be in running state
-        if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::LOADED )
-        {
-            uno::Sequence< sal_Int32 > aSupportedStates = xObj->getReachableStates();
-            for ( sal_Int32 nInd = 0; nInd < aSupportedStates.getLength(); nInd++ )
-                if ( aSupportedStates[nInd] == embed::EmbedStates::RUNNING )
-                {
-                    xObj->changeState( embed::EmbedStates::RUNNING );
-                    break;
-                }
-        }
+        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+
+           OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
+                    "A freshly create object should be running always!\n" );
+
+        // possible optimization: store later!
+        if ( xPersist.is())
+            xPersist->storeOwn();
 
         AddEmbeddedObject( xObj, rNewName );
     }
@@ -660,7 +656,7 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
 
     sal_Bool bResult = sal_False;
 
-    if ( &rSrc != this && aOrigName.getLength() && aTargetName.getLength() )
+    if ( ( &rSrc != this || !aOrigName.equals( aTargetName ) ) && aOrigName.getLength() && aTargetName.getLength() )
     {
         ::rtl::OUString aMediaType;
         uno::Reference < io::XInputStream > xGrStream = rSrc.GetGraphicStream( aOrigName, &aMediaType );
@@ -674,6 +670,9 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
 sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyEmbeddedObject" );
+
+    OSL_ENSURE( sal_False,
+                "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
 
     // get the object name before(!) it is assigned to a new storage
     ::rtl::OUString aOrigName;
@@ -821,9 +820,22 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
 
     OSL_ENSURE( xResult.is(), "Can not copy embedded object that has no persistance!\n" );
 
-    // the object is successfully copied, try to copy graphical replacement
-    if ( xResult.is() && aOrigName.getLength() )
-        TryToCopyGraphReplacement( rSrc, aOrigName, rName );
+    if ( xResult.is() )
+    {
+        // the object is successfully copied, try to copy graphical replacement
+        if ( aOrigName.getLength() )
+            TryToCopyGraphReplacement( rSrc, aOrigName, rName );
+
+        // the object might need the size to be set
+        try
+        {
+            if ( xResult->getStatus( embed::Aspects::MSOLE_CONTENT ) & embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD )
+                xResult->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT,
+                                            xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
+        }
+        catch( uno::Exception& )
+        {}
+    }
 
     return xResult;
 }
