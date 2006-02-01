@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:50:19 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2041,13 +2041,11 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
         pRecalc4 = GetParaPortions().GetObject( (USHORT)(aOldPositions.Min()-1) );
     }
 
-#ifndef SVX_LIGHT
-    if ( IsUndoEnabled() && !IsInUndo())
-        InsertUndo( new EditUndoMoveParagraphs( this, aOldPositions, nNewPos ) );
-#endif
-
     MoveParagraphsInfo aMoveParagraphsInfo( aOldPositions.Min(), aOldPositions.Max(), nNewPos );
     aBeginMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
+
+    if ( IsUndoEnabled() && !IsInUndo())
+        InsertUndo( new EditUndoMoveParagraphs( this, aOldPositions, nNewPos ) );
 
     // Position nicht aus dem Auge verlieren!
     ParaPortion* pDestPortion = GetParaPortions().SaveGetObject( nNewPos );
