@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:43:23 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
@@ -60,6 +63,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -204,7 +208,26 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                         GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 if ( xObj.is() )
                 {
-                    PasteObject( aPos, xObj, &aObjDesc.maSize );
+                    // try to get the replacement image from the clipboard
+                    Graphic aGraphic;
+                    ULONG nGrFormat = 0;
+                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
+                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
+                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_BITMAP;
+
+                    // insert replacement image ( if there is one ) into the object helper
+                    if ( nGrFormat )
+                    {
+                        datatransfer::DataFlavor aDataFlavor;
+                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType );
+                    }
+                    else
+                        PasteObject( aPos, xObj, &aObjDesc.maSize );
+
                     bRet = TRUE;
                 }
                 else
@@ -253,7 +276,28 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
                 if ( xObj.is() )
                 {
-                    PasteObject( aPos, xObj, &aObjDesc.maSize );
+                    // try to get the replacement image from the clipboard
+                    Graphic aGraphic;
+                    ULONG nGrFormat = 0;
+                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
+                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
+                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_BITMAP;
+
+                    // insert replacement image ( if there is one ) into the object helper
+                    if ( nGrFormat )
+                    {
+                        datatransfer::DataFlavor aDataFlavor;
+                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType );
+                    }
+                    else
+                        PasteObject( aPos, xObj, &aObjDesc.maSize );
+
+                    // let object stay in loaded state after insertion
+                    SdrOle2Obj::Unload( xObj, embed::Aspects::MSOLE_CONTENT );
                     bRet = TRUE;
                 }
                 else
