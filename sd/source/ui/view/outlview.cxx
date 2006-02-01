@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:37:57 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:52:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "undo/undoobjects.hxx"
+#include "undo/undomanager.hxx"
 
 namespace sd {
 
@@ -271,6 +272,8 @@ OutlineView::OutlineView (
 
 OutlineView::~OutlineView()
 {
+    DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!" );
+
     Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().RemoveEventListener( aLink );
     DisconnectFromApplication();
@@ -944,6 +947,20 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, pEditStatus )
     return 0;
 }
 
+IMPL_LINK( OutlineView, BeginDropHdl, void *, EMPTYARG )
+{
+    DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!" );
+
+    maDragAndDropModelGuard.reset( new OutlineViewModelChangeGuard( *this ) );
+    return 0;
+}
+
+IMPL_LINK( OutlineView, EndDropHdl, void *, EMPTYARG )
+{
+    maDragAndDropModelGuard.reset(0);
+    return 0;
+}
+
 /*************************************************************************
 |*
 |* Handler fuer den Beginn einer Absatzverschiebung
@@ -1008,12 +1025,11 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 {
-    DBG_ASSERT(isRecordingUndo(), "sd::OutlineView::BeginMovingHdl(), model change without undo?!" );
-
     OutlineViewPageChangesGuard aGuard(this);
 
     DBG_ASSERT(pSelectedParas, "keine Absatzliste");
     DBG_ASSERT(pOldParaOrder, "keine Absatzliste");
+    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::EndMovingHdl(), model change without undo?!" );
 
     // Einfuegeposition anhand des ersten Absatzes suchen
     Paragraph* pSearchIt = (Paragraph*)pSelectedParas->First();
@@ -1063,6 +1079,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     pSelectedParas = NULL;
     delete pOldParaOrder;
     pOldParaOrder = NULL;
+
     return 0;
 }
 
@@ -1404,7 +1421,16 @@ SdPage* OutlineView::GetActualPage()
     OutlinerView* pActiveView = GetViewByWindow(pWin);
     ::Outliner* pOutl = pActiveView->GetOutliner();
     std::auto_ptr<List> pSelList( static_cast< List* >(pActiveView->CreateSelectionList()) );
-    return GetPageForParagraph(pOutl, static_cast<Paragraph*>(pSelList->First()) );
+
+    SdPage* pCurrent = GetPageForParagraph(pOutl, static_cast<Paragraph*>(pSelList->First()) );
+    DBG_ASSERT( pCurrent ||
+                (pDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(pDocSh->GetUndoManager())->isInUndo()) ||
+                maDragAndDropModelGuard.get(),
+                "sd::OutlineView::GetActualPage(), no current page?" );
+    if( pCurrent )
+        return pCurrent;
+    else
+        return pDoc->GetSdPage( 0, PK_STANDARD );
 }
 
 SdPage* OutlineView::GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara )
@@ -1421,7 +1447,10 @@ SdPage* OutlineView::GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara )
             nPageToSelect++;
     }
 
-    return static_cast< SdPage* >( pDoc->GetSdPage( (USHORT)nPageToSelect, PK_STANDARD) );
+    if( nPageToSelect < (sal_uInt32)pDoc->GetSdPageCount( PK_STANDARD ) )
+        return static_cast< SdPage* >( pDoc->GetSdPage( (USHORT)nPageToSelect, PK_STANDARD) );
+    else
+        return 0;
 }
 
 Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
@@ -1552,6 +1581,8 @@ void OutlineView::SetLinks()
     pOutliner->SetIndentingPagesHdl(LINK(this, OutlineView, IndentingPagesHdl));
     pOutliner->SetMinDepth(0);
     pOutliner->SetStatusEventHdl(LINK(this, OutlineView, StatusEventHdl));
+    pOutliner->SetBeginDropHdl(LINK(this,OutlineView, BeginDropHdl));
+    pOutliner->SetEndDropHdl(LINK(this,OutlineView, EndDropHdl));
 }
 
 
