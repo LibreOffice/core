@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:50:01 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1738,6 +1738,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
         ShowCursor( DoAutoScroll(), TRUE );
         delete pDragAndDropInfo;
         pDragAndDropInfo = NULL;
+        pEditEngine->GetEndDropHdl().Call(GetEditViewPtr());
     }
 }
 
@@ -1749,6 +1750,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
 
     if ( pDragAndDropInfo->bDragAccepted )
     {
+        pEditEngine->GetBeginDropHdl().Call(GetEditViewPtr());
         BOOL bChanges = FALSE;
 
         HideDDCursor();
