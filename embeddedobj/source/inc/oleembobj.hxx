@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:51:18 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,47 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 
+#include <osl/thread.h>
+
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
+
+class VerbExecutionController
+{
+    // the following mutex is allowed to be locked only for variables initialization, so no deadlock can be caused
+    ::osl::Mutex    m_aVerbExecutionMutex;
+
+    sal_Bool m_bVerbExecutionInProgress;
+    oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
+    sal_Bool m_bChangedOnVerbExecution;
+
+    sal_Bool m_bWasEverActive;
+    sal_Int32 m_nNotificationLock;
+
+public:
+
+    VerbExecutionController()
+    : m_bVerbExecutionInProgress( sal_False )
+    , m_nVerbExecutionThreadIdentifier( 0 )
+    , m_bChangedOnVerbExecution( sal_False )
+    , m_bWasEverActive( sal_False )
+    , m_nNotificationLock( 0 )
+    {}
+
+    void StartControlExecution();
+    sal_Bool EndControlExecution_WasModified();
+    void ModificationNotificationIsDone();
+
+    void LockNotification();
+    void UnlockNotification();
+
+    // no need to lock anything to check the value of the numeric members
+    sal_Bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
+    // ... or to change it
+    void ObjectIsActive() { m_bWasEverActive = sal_True; }
+};
+
 
 class OleComponent;
 class OwnView_Impl;
@@ -137,9 +175,13 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
 
     // TODO/LATER: may need to cache more than one aspect in future
     sal_Bool m_bHasCachedSize; // the object has cached size
-    sal_Bool m_bHasSizeToSet;  // the object has cached size that should be set to OLE component
     ::com::sun::star::awt::Size m_aCachedSize;
     sal_Int64 m_nCachedAspect;
+
+    sal_Bool m_bHasSizeToSet;  // the object has cached size that should be set to OLE component
+    ::com::sun::star::awt::Size m_aSizeToSet; // this size might be different from the cached one ( scaling is applied )
+    sal_Int64 m_nAspectToSet;
+
 
     // cache the status of the object
     // TODO/LATER: may need to cache more than one aspect in future
@@ -161,9 +203,19 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     // whether the object should be initialized from clipboard in case of default initialization
     sal_Bool m_bFromClipboard;
 
-    ::rtl::OUString m_aTempURL;
+    // STAMPIT solution
+    // the following member is used during verb execution to detect whether the verb execution modifies the object
+    VerbExecutionController m_aVerbExecutionController;
 
 protected:
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > TryToGetAcceptableFormat_Impl(
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream )
+        throw ( ::com::sun::star::uno::Exception );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetNewFilledTempStream_Impl(
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
+        throw( ::com::sun::star::io::IOException );
 
     void SwitchComponentToRunningState_Impl();
 
