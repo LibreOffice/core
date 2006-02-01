@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:05:11 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ public:
                                         BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
-    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL );
+    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString() );
     BOOL            PasteBitmap( const Point&, const Bitmap& );
     BOOL            PasteMetaFile( const Point&, const GDIMetaFile& );
     BOOL            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
