@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageUnitTest.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:07:14 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,8 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteRegressionTest_i30677",
                                 "ExecuteRegressionTest_i27773",
                                 "ExecuteRegressionTest_i46848",
-                                "ExecuteRegressionTest_i55821"};
+                                "ExecuteRegressionTest_i55821",
+                                "ExecuteRegressionTest_125919"};
     }
 
     public String getTestObjectName()
@@ -244,6 +245,12 @@ public class StorageUnitTest  extends ComplexTestCase
     {
         StorageTest aTest = new RegressionTest_i55821( m_xMSF, m_xStorageFactory, log );
         assure( "RegressionTest_i55821 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_125919()
+    {
+        StorageTest aTest = new RegressionTest_125919( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_125919 failed!", aTest.test() );
     }
 }
 
