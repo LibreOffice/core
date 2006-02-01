@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:49:50 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@
 #endif
 
 #include <comphelper/seekableinput.hxx>
+#include <comphelper/storagehelper.hxx>
 
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -91,8 +92,6 @@ using namespace cppu;
 using namespace rtl;
 
 Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 > ();
-
-void copyInputToOutput_Impl( const Reference< io::XInputStream >& aIn, const Reference< io::XOutputStream >& aOut );
 
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
@@ -212,7 +211,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
         throw io::IOException(); // TODO:
 
     // copy the raw stream to the temporary file starting from the current position
-    copyInputToOutput_Impl( GetOwnSeekStream(), xTempOut );
+    ::comphelper::OStorageHelper::CopyInputToOutput( GetOwnSeekStream(), xTempOut );
     xTempOut->closeOutput();
     xTempSeek->seek( 0 );
 
@@ -308,7 +307,7 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_B
             throw io::IOException(); // TODO:
 
         // copy the raw stream to the temporary file
-        copyInputToOutput_Impl( xInRaw, xTempOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xInRaw, xTempOut );
         xTempOut->closeOutput();
         xTempSeek->seek( 0 );
 
