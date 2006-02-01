@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:21 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,8 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
-#endif
 #endif
 
 // OD 12.12.2002 #103492#
@@ -158,11 +156,9 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pDrawView( 0 ),
     nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
-    mpPgPrevwLayout( 0 )
-#ifdef ACCESSIBLE_LAYOUT
-    ,pAccMap( 0 )
-#endif
-    ,pSdrObjCached(NULL)
+    mpPgPrevwLayout( 0 ),
+    pAccMap( 0 ),
+    pSdrObjCached(NULL)
 {
     bResetXorVisibility = bShowHdlPaint =
     bResetHdlHiddenPaint = bScrolled =
@@ -185,9 +181,7 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 
 SwViewImp::~SwViewImp()
 {
-#ifdef ACCESSIBLE_LAYOUT
     delete pAccMap;
-#endif
 
     // OD 12.12.2002 #103492#
     delete mpPgPrevwLayout;
@@ -393,7 +387,6 @@ void SwViewImp::InitPagePreviewLayout()
         mpPgPrevwLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
 }
 
-#ifdef ACCESSIBLE_LAYOUT
 void SwViewImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
@@ -489,6 +482,63 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
     } while ( pTmp != pVSh );
 }
 
+ /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
+    OD 2005-12-01 #i27138#
+
+    @author OD
+*/
+void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
+                                                       const SwTxtFrm* _pToTxtFrm )
+{
+    if ( !_pFromTxtFrm && !_pToTxtFrm )
+    {
+        // No text frame provided. Thus, nothing to do.
+        return;
+    }
+
+    ViewShell* pVSh = GetShell();
+    ViewShell* pTmp = pVSh;
+    do
+    {
+        if ( pTmp->Imp()->IsAccessible() )
+        {
+            if ( _pFromTxtFrm )
+            {
+                pTmp->Imp()->GetAccessibleMap().
+                            InvalidateParaFlowRelation( *_pFromTxtFrm, true );
+            }
+            if ( _pToTxtFrm )
+            {
+                pTmp->Imp()->GetAccessibleMap().
+                            InvalidateParaFlowRelation( *_pToTxtFrm, false );
+            }
+        }
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
+
+/** invalidate text selection for paragraphs
+
+    OD 2005-12-12 #i27301#
+
+    @author OD
+*/
+void SwViewImp::_InvalidateAccessibleParaTextSelection()
+{
+    ViewShell* pVSh = GetShell();
+    ViewShell* pTmp = pVSh;
+    do
+    {
+        if ( pTmp->Imp()->IsAccessible() )
+        {
+            pTmp->Imp()->GetAccessibleMap().InvalidateTextSelectionOfAllParas();
+        }
+
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
+
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
 void SwViewImp::UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                                          const Fraction&  _rScale,
@@ -555,5 +605,3 @@ String SwViewImp::GetMarkListDescription() const
 
     return aResult;
 }
-
-#endif
