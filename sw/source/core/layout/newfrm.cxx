@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:19:25 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,10 +489,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     pDestroy( 0 ),
     nPhyPageNums( 0 ),
     pDrawPage( 0 ),
-    nBrowseWidth( MM50*4 )  //2cm Minimum
-#ifdef ACCESSIBLE_LAYOUT
-    ,nAccessibleShells( 0 )
-#endif
+    nBrowseWidth( MM50*4 ), //2cm Minimum
+    nAccessibleShells( 0 )
 {
     nType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
@@ -505,15 +503,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     pDoc->StopIdleTimer();
     pDoc->SetRootFrm( this );       //Fuer das Erzeugen der Flys durch MakeFrms()
     bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
-
-#ifndef VERTICAL_LAYOUT
-#ifdef QUER
-    //StarWriter /QUER ? bitteschoen:
-    SetFixSize( pHeight );
-#else
-    SetFixSize( pWidth );
-#endif
-#endif
 
     SdrModel *pMd = pDoc->GetDrawModel();
     if ( pMd )
@@ -604,39 +593,8 @@ SwRootFrm::~SwRootFrm()
 
     delete pCurrShells;
 
-#ifdef ACCESSIBLE_LAYOUT
     ASSERT( 0==nAccessibleShells, "Some accessible shells are left" );
-#endif
 }
-
-/*************************************************************************
-|*
-|*  SwRootFrm::SetFixSize()
-|*
-|*  Ersterstellung      MA 23. Jul. 92
-|*  Letzte Aenderung    MA 11. Mar. 93
-|*
-|*************************************************************************/
-
-#ifndef VERTICAL_LAYOUT
-
-void SwRootFrm::SetFixSize( SzPtr pNew )
-{
-    if ( pNew == pHeight )
-    {
-        GetFmt()->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-        bVarHeight = bFixWidth = FALSE;
-        bFixHeight = TRUE;
-    }
-    else
-    {
-        GetFmt()->SetAttr( SwFmtFillOrder( ATT_TOP_DOWN ) );
-        bVarHeight = bFixWidth = TRUE;
-        bFixHeight = FALSE;
-    }
-}
-
-#endif
 
 /*************************************************************************
 |*
