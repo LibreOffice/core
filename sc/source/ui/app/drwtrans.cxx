@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:21:53 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,15 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             UINT16 nSdrObjKind = pObject->GetObjIdentifier();
             if (nSdrObjKind == OBJ_OLE2)
             {
-                bOleObj = TRUE;
+                // if object has no persistence it must be copied as a part of document
+                try
+                {
+                    uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
+                    if ( xPersObj.is() && xPersObj->hasEntry() )
+                        bOleObj = TRUE;
+                }
+                catch( uno::Exception& )
+                {}
                 // aOleData is initialized later
             }
 
