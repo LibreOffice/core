@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:07:01 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1094,7 +1094,6 @@ BOOL SwFEShell::IsFrmSelected() const
                                         (ViewShell*)this );
 }
 
-#ifdef ACCESSIBLE_LAYOUT
 sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
 {
     if ( IsFrmSelected() || !Imp()->HasDrawView() )
@@ -1103,7 +1102,6 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
         return Imp()->GetDrawView()
                     ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
 }
-#endif
 
 /*************************************************************************
 |*
