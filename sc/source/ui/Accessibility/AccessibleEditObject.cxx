@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:18:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,12 @@
 #ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
 #endif
+#ifndef SC_SCMOD_HXX
+#include "scmod.hxx"
+#endif
+#ifndef SC_INPUTHDL_HXX
+#include "inputhdl.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -77,6 +83,9 @@
 #endif
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -327,25 +336,34 @@ void ScAccessibleEditObject::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
+        ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData;
         if (meObjectType == CellInEditMode || meObjectType == EditControl)
         {
-            ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData
+            pAccessibleTextData.reset
                 (new ScAccessibleEditObjectTextData(mpEditView, mpWindow));
-            ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
-
-            mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
-            mpTextHelper->SetEventSource(this);
         }
         else
         {
-            ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData
+            pAccessibleTextData.reset
                 (new ScAccessibleEditLineTextData(NULL, mpWindow));
-            ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
-
-            mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
-            mpTextHelper->SetEventSource(this);
         }
+
+        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper->SetEventSource(this);
         mpTextHelper->SetFocus(mbHasFocus);
+
+        // #i54814# activate cell in edit mode
+        if( meObjectType == CellInEditMode )
+        {
+            // do not activate cell object, if top edit line is active
+            const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+            if( pInputHdl && !pInputHdl->IsTopMode() )
+            {
+                SdrHint aHint( HINT_BEGEDIT );
+                mpTextHelper->GetEditSource().GetBroadcaster().Broadcast( aHint );
+            }
+        }
     }
 }
 
