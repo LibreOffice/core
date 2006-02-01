@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:38:33 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,8 @@ private:
     void StoreDocToStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                 sal_Int32 nStorageVersion,
                                 const ::rtl::OUString& aBaseURL,
-                                const ::rtl::OUString& aHierarchName );
+                                const ::rtl::OUString& aHierarchName,
+                                sal_Bool bAttachToStorage );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr );
