@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:09:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,7 +846,8 @@ SwFrm *SwFrm::_FindNext()
     return pRet;
 }
 
-SwCntntFrm *SwFrm::_FindNextCnt()
+// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 {
     SwFrm *pThis = this;
 
@@ -884,8 +885,11 @@ SwCntntFrm *SwFrm::_FindNextCnt()
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
-            if ( bBody || bFtn )
+            // --> OD 2005-12-01 #i27138#
+            if ( bBody || ( bFtn && !_bInSameFtn ) )
+            // <--
             {
+                // handling for environments 'footnotes' and 'document body frames':
                 while ( pNxtCnt )
                 {
                     if ( (bBody && pNxtCnt->IsInDocBody()) ||
@@ -894,10 +898,47 @@ SwCntntFrm *SwFrm::_FindNextCnt()
                     pNxtCnt = pNxtCnt->GetNextCntntFrm();
                 }
             }
-            else if ( pThis->IsInFly() )
-                return pNxtCnt;
-            else    //Fuss-/oder Kopfbereich
+            // --> OD 2005-12-01 #i27138#
+            else if ( bFtn && _bInSameFtn )
             {
+                // handling for environments 'each footnote':
+                // Assure that found next content frame belongs to the same footnotes
+                const SwFtnFrm* pFtnFrmOfNext( pNxtCnt->FindFtnFrm() );
+                const SwFtnFrm* pFtnFrmOfCurr( pThis->FindFtnFrm() );
+                ASSERT( pFtnFrmOfCurr,
+                        "<SwFrm::_FindNextCnt() - unknown layout situation: current frame has to have an upper footnote frame." );
+                if ( pFtnFrmOfNext == pFtnFrmOfCurr )
+                {
+                    return pNxtCnt;
+                }
+                else if ( pFtnFrmOfCurr->GetFollow() )
+                {
+                    // next content frame has to be the first content frame
+                    // in the follow footnote, which contains a content frame.
+                    SwFtnFrm* pFollowFtnFrmOfCurr(
+                                        const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
+                    pNxtCnt = 0L;
+                    do {
+                        pFollowFtnFrmOfCurr = pFollowFtnFrmOfCurr->GetFollow();
+                        pNxtCnt = pFollowFtnFrmOfCurr->ContainsCntnt();
+                    } while ( !pNxtCnt && pFollowFtnFrmOfCurr->GetFollow() );
+                    return pNxtCnt;
+                }
+                else
+                {
+                    // current content frame is the last content frame in the
+                    // footnote - no next content frame exists.
+                    return 0L;
+                }
+            }
+            // <--
+            else if ( pThis->IsInFly() )
+                // handling for environments 'unlinked fly frame' and
+                // 'group of linked fly frames':
+                return pNxtCnt;
+            else
+            {
+                // handling for environments 'page header' and 'page footer':
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
                 while ( pUp && pUp->GetUpper() &&
@@ -912,6 +953,151 @@ SwCntntFrm *SwFrm::_FindNextCnt()
         }
     }
     return 0;
+}
+
+/** method to determine previous content frame in the same environment
+    for a flow frame (content frame, table frame, section frame)
+
+    OD 2005-11-30 #i27138#
+
+    @author OD
+*/
+SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
+{
+    if ( !IsFlowFrm() )
+    {
+        // nothing to do, if current frame isn't a flow frame.
+        return 0L;
+    }
+
+    SwCntntFrm* pPrevCntntFrm( 0L );
+
+    // Because method <SwCntntFrm::GetPrevCntntFrm()> is used to travel
+    // through the layout, a content frame, at which the travel starts, is needed.
+    SwCntntFrm* pCurrCntntFrm = dynamic_cast<SwCntntFrm*>(this);
+
+    // perform shortcut, if current frame is a follow, and
+    // determine <pCurrCntntFrm>, if current frame is a table or section frame
+    if ( pCurrCntntFrm && pCurrCntntFrm->IsFollow() )
+    {
+        // previous content frame is its master content frame
+        pPrevCntntFrm = pCurrCntntFrm->FindMaster();
+    }
+    else if ( IsTabFrm() )
+    {
+        SwTabFrm* pTabFrm( static_cast<SwTabFrm*>(this) );
+        if ( pTabFrm->IsFollow() )
+        {
+            // previous content frame is the last content of its master table frame
+            pPrevCntntFrm = pTabFrm->FindMaster()->FindLastCntnt();
+        }
+        else
+        {
+            // start content frame for the search is the first content frame of
+            // the table frame.
+            pCurrCntntFrm = pTabFrm->ContainsCntnt();
+        }
+    }
+    else if ( IsSctFrm() )
+    {
+        SwSectionFrm* pSectFrm( static_cast<SwSectionFrm*>(this) );
+        if ( pSectFrm->IsFollow() )
+        {
+            // previous content frame is the last content of its master section frame
+            pPrevCntntFrm = pSectFrm->FindMaster()->FindLastCntnt();
+        }
+        else
+        {
+            // start content frame for the search is the first content frame of
+            // the section frame.
+            pCurrCntntFrm = pSectFrm->ContainsCntnt();
+        }
+    }
+
+    // search for next content frame, depending on the environment, in which
+    // the current frame is in.
+    if ( !pPrevCntntFrm && pCurrCntntFrm )
+    {
+        pPrevCntntFrm = pCurrCntntFrm->GetPrevCntntFrm();
+        if ( pPrevCntntFrm )
+        {
+            if ( pCurrCntntFrm->IsInFly() )
+            {
+                // handling for environments 'unlinked fly frame' and
+                // 'group of linked fly frames':
+                // Nothing to do, <pPrevCntntFrm> is the one
+            }
+            else
+            {
+                const bool bInDocBody = pCurrCntntFrm->IsInDocBody();
+                const bool bInFtn  = pCurrCntntFrm->IsInFtn();
+                if ( bInDocBody || ( bInFtn && !_bInSameFtn ) )
+                {
+                    // handling for environments 'footnotes' and 'document body frames':
+                    // Assure that found previous frame is also in one of these
+                    // environments. Otherwise, travel further
+                    while ( pPrevCntntFrm )
+                    {
+                        if ( ( bInDocBody && pPrevCntntFrm->IsInDocBody() ) ||
+                             ( bInFtn && pPrevCntntFrm->IsInFtn() ) )
+                        {
+                            break;
+                        }
+                        pPrevCntntFrm = pPrevCntntFrm->GetPrevCntntFrm();
+                    }
+                }
+                else if ( bInFtn && _bInSameFtn )
+                {
+                    // handling for environments 'each footnote':
+                    // Assure that found next content frame belongs to the same footnotes
+                    const SwFtnFrm* pFtnFrmOfPrev( pPrevCntntFrm->FindFtnFrm() );
+                    const SwFtnFrm* pFtnFrmOfCurr( pCurrCntntFrm->FindFtnFrm() );
+                    if ( pFtnFrmOfPrev != pFtnFrmOfCurr )
+                    {
+                        if ( pFtnFrmOfCurr->GetMaster() )
+                        {
+                            SwFtnFrm* pMasterFtnFrmOfCurr(
+                                        const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
+                            pPrevCntntFrm = 0L;
+                            do {
+                                pMasterFtnFrmOfCurr = pMasterFtnFrmOfCurr->GetMaster();
+                                pPrevCntntFrm = pMasterFtnFrmOfCurr->FindLastCntnt();
+                            } while ( !pPrevCntntFrm &&
+                                      pMasterFtnFrmOfCurr->GetFollow() );
+                        }
+                        else
+                        {
+                            // current content frame is the first content in the
+                            // footnote - no previous content exists.
+                            pPrevCntntFrm = 0L;;
+                        }
+                    }
+                }
+                else
+                {
+                    // handling for environments 'page header' and 'page footer':
+                    // Assure that found previous frame is also in the same
+                    // page header respectively page footer as <pCurrCntntFrm>
+                    // Note: At this point its clear, that <pCurrCntntFrm> has
+                    //       to be inside a page header or page footer and that
+                    //       neither <pCurrCntntFrm> nor <pPrevCntntFrm> are
+                    //       inside a fly frame.
+                    //       Thus, method <FindFooterOrHeader()> can be used.
+                    ASSERT( pCurrCntntFrm->FindFooterOrHeader(),
+                            "<SwFrm::_FindPrevCnt()> - unknown layout situation: current frame should be in page header or page footer" );
+                    ASSERT( !pPrevCntntFrm->IsInFly(),
+                            "<SwFrm::_FindPrevCnt()> - unknown layout situation: found previous frame should *not* be inside a fly frame." );
+                    if ( pPrevCntntFrm->FindFooterOrHeader() !=
+                                            pCurrCntntFrm->FindFooterOrHeader() )
+                    {
+                        pPrevCntntFrm = 0L;
+                    }
+                }
+            }
+        }
+    }
+
+    return pPrevCntntFrm;
 }
 
 SwFrm *SwFrm::_FindPrev()
