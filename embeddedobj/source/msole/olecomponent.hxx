@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:51:43 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
 
     sal_Bool m_bOleInitialized;
 
+
     sal_Bool InitializeObject_Impl();
 
     void CreateNewIStorage_Impl();
@@ -154,6 +155,12 @@ public:
     OleComponent* createEmbeddedCopyOfLink();
 
     void disconnectEmbeddedObject();
+
+    static ::com::sun::star::awt::Size CalculateWithFactor( const ::com::sun::star::awt::Size& aSize,
+                                                            const ::com::sun::star::awt::Size& aMultiplier,
+                                                            const ::com::sun::star::awt::Size& aDivisor );
+
+    ::com::sun::star::awt::Size CalculateTheRealSize( const ::com::sun::star::awt::Size& aContSize, sal_Bool bUpdate );
 
     // ==== Initialization ==================================================
     void LoadEmbeddedObject( const ::rtl::OUString& aTempURL );
@@ -186,6 +193,7 @@ public:
     void SetExtent( const ::com::sun::star::awt::Size& aVisAreaSize, sal_Int64 nAspect );
 
     ::com::sun::star::awt::Size GetExtent( sal_Int64 nAspect );
+    ::com::sun::star::awt::Size GetCachedExtent( sal_Int64 nAspect );
     ::com::sun::star::awt::Size GetReccomendedExtent( sal_Int64 nAspect );
 
     sal_Int64 GetMiscStatus( sal_Int64 nAspect );
