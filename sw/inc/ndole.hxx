@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:02:16 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 18:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@ public:
     ~SwOLEObj();
 
     BOOL UnloadObject();
+    static BOOL UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
+                                const SwDoc* pDoc,
+                                sal_Int64 nAspect );
+
     String GetDescription();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
