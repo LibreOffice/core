@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:04:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:23:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,9 @@ class SwRegionRects;
 class XOutputDevice;
 class SdrPaintInfoRec;
 struct SdrPaintProcRec;
-#ifdef ACCESSIBLE_LAYOUT
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
-#endif
 // OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
 // OD 15.01.2003 #103492#
@@ -83,6 +81,9 @@ class SwPagePreviewLayout;
 #endif
 // OD 15.01.2003 #103492#
 #include <vector>
+// --> OD 2005-12-01 #i27138#
+class SwTxtFrm;
+// <--
 
 class SwViewImp
 {
@@ -111,9 +112,7 @@ class SwViewImp
                                  //ausgetragen.
     SwLayIdle     *pIdleAct;     //Analog zur SwLayAction fuer SwLayIdle.
 
-#ifdef ACCESSIBLE_LAYOUT
     SwAccessibleMap *pAccMap;       // Accessible Wrappers
-#endif
 
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
@@ -185,9 +184,38 @@ class SwViewImp
 
 private:
 
-#ifdef ACCESSIBLE_LAYOUT
     SwAccessibleMap *CreateAccessibleMap();
-#endif
+
+    /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
+        OD 2005-12-01 #i27138#
+        implementation for wrapper method
+        <ViewShell::InvalidateAccessibleParaFlowRelation(..)>
+
+        @author OD
+
+        @param _pFromTxtFrm
+        input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
+        has to be invalidated.
+        If NULL, no CONTENT_FLOWS_FROM relation has to be invalidated
+
+        @param _pToTxtFrm
+        input parameter - paragraph frame, for which the relation CONTENT_FLOWS_TO
+        has to be invalidated.
+        If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
+    */
+    void _InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
+                                                const SwTxtFrm* _pToTxtFrm );
+
+    /** invalidate text selection for paragraphs
+
+        OD 2005-12-12 #i27301#
+        implementation for wrapper method
+        <ViewShell::InvalidateAccessibleParaTextSelection(..)>
+
+        @author OD
+    */
+    void _InvalidateAccessibleParaTextSelection();
 
 public:
     SwViewImp( ViewShell * );
@@ -290,7 +318,6 @@ public:
         return mpPgPrevwLayout;
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     // Is this view accessible?
     sal_Bool IsAccessible() const { return pAccMap != 0; }
 
@@ -342,7 +369,6 @@ public:
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
-#endif
 
     String GetMarkListDescription() const;
 };
@@ -375,7 +401,6 @@ inline const SwPageFrm *SwViewImp::GetFirstVisPage() const
     return pFirstVisPage;
 }
 
-#ifdef ACCESSIBLE_LAYOUT
 inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
 {
     if( !pAccMap )
@@ -412,8 +437,5 @@ inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
     SwRect aEmptyRect;
     MoveAccessible( 0, pObj, aEmptyRect );
 }
-
-#endif
-
 #endif //_VIEWIMP_HXX
 
