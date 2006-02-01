@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:32:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,126 +148,6 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
     }
     return aShortName;
 }
-sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
-{
-    return sal_False;
-}
-sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
-                                                const Sequence< PropertyValue >& rFilterProperties,
-                                                    const Reference< XNameAccess >& xTypeAccess,
-                                                        const OUString& rInternalFilterName )
-{
-    return sal_False;
-}
-/*
-sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
-{
-    static OUString sUserData   ( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) );
-    static OUString sMagic      ( RTL_CONSTASCII_USTRINGPARAM( "OO" ) );
-
-    sal_Bool bIsOwn = sal_False;
-    sal_Int32 i, nCount = rFilterProperties.getLength();
-    for ( i = 0; i < nCount; i++ )
-    {
-        if ( rFilterProperties[ i ].Name.equals( sUserData ) )
-        {
-            Sequence < OUString > lUserData;
-            rFilterProperties[ i ].Value >>= lUserData;
-            if ( lUserData.getLength() == TOKEN_COUNT_FOR_OWN_FILTER )
-            {
-                if ( lUserData[ TOKEN_INDEX_FOR_IDENT ].equals( sMagic ) )
-                    bIsOwn = sal_True;
-            }
-            break;
-        }
-    }
-    return bIsOwn;
-}
-
-sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
-                                                const Sequence< PropertyValue >& rFilterProperties,
-                                                    const Reference< XNameAccess >& xTypeAccess,
-                                                        const OUString& rInternalFilterName )
-{
-    static OUString sExtensions         ( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
-    static OUString sMediaType          ( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
-
-    static OUString sTrue               ( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
-
-    sal_Bool bFilterEntryCreated = sal_False;
-
-    try
-    {
-        FilterConfigCacheEntry aEntry;
-
-        if ( nIndType >= 0 )
-            rFilterProperties[ nIndType ].Value >>= aEntry.sType;
-        if ( nIndUIName >= 0 )
-            rFilterProperties[ nIndUIName ].Value >>= aEntry.sUIName;
-        if ( nIndDocumentService >= 0 )
-            rFilterProperties[ nIndDocumentService ].Value >>= aEntry.sDocumentService;
-        if ( nIndFilterService >= 0 )
-            rFilterProperties[ nIndFilterService ].Value >>= aEntry.sFilterService;
-        if ( nIndFlags >= 0 )
-            rFilterProperties[ nIndFlags ].Value >>= aEntry.nFlags;
-        if ( nIndUserData >= 0 )
-        {
-            Sequence < OUString > lUserData;
-            rFilterProperties[ nIndUserData ].Value >>= lUserData;
-            if ( lUserData.getLength() == TOKEN_COUNT_FOR_OWN_FILTER )
-            {
-                aEntry.bHasDialog = lUserData[ TOKEN_INDEX_FOR_HASDIALOG ].equalsIgnoreAsciiCase( sTrue );
-                aEntry.CreateFilterName( lUserData[ TOKEN_INDEX_FOR_FILTER ] );
-            }
-        }
-        if ( nIndFileFormatVersion >= 0 )
-            rFilterProperties[ nIndFileFormatVersion ].Value >>= aEntry.nFileFormatVersion;
-        if ( nIndTemplateName >= 0 )
-            rFilterProperties[ nIndTemplateName ].Value >>= aEntry.sTemplateName;
-
-        if ( aEntry.IsValid() )
-        {
-            aEntry.sInternalFilterName = rInternalFilterName;
-            // trying to get the corresponding type for this filter
-            if ( xTypeAccess->hasByName( aEntry.sType ) )
-            {
-                Any aTypePropertySet = xTypeAccess->getByName( aEntry.sType );
-                Sequence< PropertyValue > lProperties;
-                aTypePropertySet >>= lProperties;
-                sal_Int32 j, nCount = lProperties.getLength();
-
-                for ( j = 0; j < nCount; j++ )
-                {
-                    PropertyValue aPropValue( lProperties[ j ] );
-                    if ( aPropValue.Name.equals( sExtensions ) )
-                        aPropValue.Value >>= aEntry.lExtensionList;
-                    else if ( aPropValue.Name.equals( sMediaType ) )
-                        aPropValue.Value >>= aEntry.sMediaType;
-                }
-                // The first extension will be used
-                // to generate our internal FilterType ( BMP, WMF ... )
-
-                String aExtension( aEntry.GetShortName() );
-                if ( aExtension.Len() == 3 )
-                {
-                    if ( aEntry.nFlags & 1 )
-                        aImport.push_back( aEntry );
-                    if ( aEntry.nFlags & 2 )
-                        aExport.push_back( aEntry );
-                    if ( aEntry.nFlags & 3 )
-                        bFilterEntryCreated = sal_True;
-                    nFlags = aEntry.nFlags;
-                }
-            }
-        }
-    }
-    catch ( ::com::sun::star::uno::Exception& )
-    {
-        DBG_ERROR( "FilterConfigCache::FilterConfigEntry::ImplAddFilterEntry : exception while reading the filter properties" );
-    }
-    return bFilterEntryCreated;
-}
-*/
 
 /** helper to open the configuration root of the underlying
     config package
@@ -341,63 +221,66 @@ void FilterConfigCache::ImplInit()
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );
     Reference< XNameAccess > xFilterAccess( openConfig("filters"), UNO_QUERY );
 
-    Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
-    sal_Int32 nAllFilterCount = lAllFilter.getLength();
-
-    for ( sal_Int32 i = 0; i < nAllFilterCount; i++ )
+    if ( xTypeAccess.is() && xFilterAccess.is() )
     {
-        OUString sInternalFilterName = lAllFilter[ i ];
-        Reference< XPropertySet > xFilterSet;
-        xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
-        if (!xFilterSet.is())
-            continue;
+        Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
+        sal_Int32 nAllFilterCount = lAllFilter.getLength();
 
-        FilterConfigCacheEntry aEntry;
+        for ( sal_Int32 i = 0; i < nAllFilterCount; i++ )
+        {
+            OUString sInternalFilterName = lAllFilter[ i ];
+            Reference< XPropertySet > xFilterSet;
+            xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
+            if (!xFilterSet.is())
+                continue;
 
-        aEntry.sInternalFilterName = sInternalFilterName;
-        xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
-        xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
-        xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
-        Sequence< OUString > lFlags;
-        xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
-        if (lFlags.getLength()!=1 || !lFlags[0].getLength())
-            continue;
-        if (lFlags[0].equalsIgnoreAsciiCaseAscii("import"))
-            aEntry.nFlags = 1;
-        else
-        if (lFlags[0].equalsIgnoreAsciiCaseAscii("export"))
-            aEntry.nFlags = 2;
+            FilterConfigCacheEntry aEntry;
 
-        OUString sUIComponent;
-        xFilterSet->getPropertyValue(SUICOMPONENT) >>= sUIComponent;
-        aEntry.bHasDialog = sUIComponent.getLength();
+            aEntry.sInternalFilterName = sInternalFilterName;
+            xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
+            xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
+            xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
+            Sequence< OUString > lFlags;
+            xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
+            if (lFlags.getLength()!=1 || !lFlags[0].getLength())
+                continue;
+            if (lFlags[0].equalsIgnoreAsciiCaseAscii("import"))
+                aEntry.nFlags = 1;
+            else
+            if (lFlags[0].equalsIgnoreAsciiCaseAscii("export"))
+                aEntry.nFlags = 2;
 
-        ::rtl::OUString sFormatName;
-        xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
-        aEntry.CreateFilterName( sFormatName );
+            OUString sUIComponent;
+            xFilterSet->getPropertyValue(SUICOMPONENT) >>= sUIComponent;
+            aEntry.bHasDialog = sUIComponent.getLength();
 
-        Reference< XPropertySet > xTypeSet;
-        xTypeAccess->getByName( aEntry.sType ) >>= xTypeSet;
-        if (!xTypeSet.is())
-            continue;
+            ::rtl::OUString sFormatName;
+            xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
+            aEntry.CreateFilterName( sFormatName );
 
-        xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
-        xTypeSet->getPropertyValue(SEXTENSIONS) >>= aEntry.lExtensionList;
+            Reference< XPropertySet > xTypeSet;
+            xTypeAccess->getByName( aEntry.sType ) >>= xTypeSet;
+            if (!xTypeSet.is())
+                continue;
 
-        // The first extension will be used
-        // to generate our internal FilterType ( BMP, WMF ... )
-        String aExtension( aEntry.GetShortName() );
-        if (aExtension.Len() != 3)
-            continue;
+            xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
+            xTypeSet->getPropertyValue(SEXTENSIONS) >>= aEntry.lExtensionList;
 
-        if ( aEntry.nFlags & 1 )
-            aImport.push_back( aEntry );
-        if ( aEntry.nFlags & 2 )
-            aExport.push_back( aEntry );
+            // The first extension will be used
+            // to generate our internal FilterType ( BMP, WMF ... )
+            String aExtension( aEntry.GetShortName() );
+            if (aExtension.Len() != 3)
+                continue;
 
-        // bFilterEntryCreated!?
-        if (!( aEntry.nFlags & 3 ))
-            continue; //? Entry was already inserted ... but following code will be supressed?!
+            if ( aEntry.nFlags & 1 )
+                aImport.push_back( aEntry );
+            if ( aEntry.nFlags & 2 )
+                aExport.push_back( aEntry );
+
+            // bFilterEntryCreated!?
+            if (!( aEntry.nFlags & 3 ))
+                continue; //? Entry was already inserted ... but following code will be supressed?!
+        }
     }
 };
 
