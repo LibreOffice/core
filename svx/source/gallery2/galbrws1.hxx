@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:05:52 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,11 @@ private:
     GalleryButton           maNewTheme;
     GalleryThemeListBox*    mpThemes;
     Gallery*                mpGallery;
+
+    Image                   aImgNormal;
+    Image                   aImgDefault;
+    Image                   aImgReadOnly;
+    Image                   aImgImported;
 
     void                    ImplAdjustControls();
     ULONG                   ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
