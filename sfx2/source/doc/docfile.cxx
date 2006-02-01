@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:59:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2370,7 +2370,7 @@ void SfxMedium::Init_Impl()
             if ( aUrl.HasMark() )
             {
                 aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
-                pSet->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
+                GetItemSet()->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
             }
 
             // try to convert the URL into a physical name - but never change a physical name
