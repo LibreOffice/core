@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:08:50 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,16 @@ public:
         return mbUnlockPosOfLowerObjs;
     }
     // <--
+    /** search for last content in the current footnote frame
+
+        OD 2005-12-02 #i27138#
+
+        @author OD
+
+        @return SwCntntFrm*
+        pointer to found last content frame. NULL, if none is found.
+    */
+    SwCntntFrm* FindLastCntnt();
 };
 
 #endif  //_FTNFRM_HXX
