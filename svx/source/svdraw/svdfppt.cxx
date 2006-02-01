@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:41:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1982,6 +1982,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
 SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                            const Graphic& rGraf,
                                            const Rectangle& rBoundRect,
+                                           const Rectangle& rVisArea,
                                            const int _nCalledByGroup ) const
 // <--
 {
@@ -2132,17 +2133,26 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     {
                                         // TODO/LATER: get ViewAspect from MSDoc
                                         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                                        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                                        Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                            aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
 
                                         //TODO/LATER: keep on hacking?!
                                         // modifiziert wollen wir nicht werden
                                         //xInplaceObj->EnableSetModified( FALSE );
-                                        awt::Size aSz;
-                                        aSz.Width = aSize.Width();
-                                        aSz.Height = aSize.Height();
-                                        xObj->setVisualAreaSize( nAspect, aSz );
+                                        if ( rVisArea.IsEmpty() )
+                                        {
+                                            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                                            Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                                aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
+
+                                            awt::Size aSz;
+                                            aSz.Width = aSize.Width();
+                                            aSz.Height = aSize.Height();
+                                            xObj->setVisualAreaSize( nAspect, aSz );
+                                        }
+                                        else
+                                        {
+                                            awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
+                                            xObj->setVisualAreaSize( nAspect, aSize );
+                                        }
                                         //xInplaceObj->EnableSetModified( TRUE );
 
                                         svt::EmbeddedObjectRef aObj( xObj, nAspect );
@@ -3541,7 +3551,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                         {
                             rSt >> nType;
                             Graphic aGraphic;
-                            if ( rMan.GetBLIPDirect( rSt, aGraphic ) )
+                            if ( rMan.GetBLIPDirect( rSt, aGraphic, NULL ) )
                             {
                                 UINT32 nInstance = aBuGraAtomHd.nRecInstance;
                                 PPTBuGraEntry* pBuGra = new PPTBuGraEntry( aGraphic, nInstance );
@@ -5757,7 +5767,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
             case mso_fillTexture :
             {
                 Graphic aGraf;
-                if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf ) )
+                if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL ) )
                 {
                     Bitmap aBmp( aGraf.GetBitmap() );
                     Size aSize( aBmp.GetSizePixel() );
