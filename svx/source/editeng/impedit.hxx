@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:47:26 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 12:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -545,6 +545,8 @@ private:
     Link                aBeginPasteOrDropHdl;
     Link                aEndPasteOrDropHdl;
     Link                aModifyHdl;
+    Link                maBeginDropHdl;
+    Link                maEndDropHdl;
 
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
@@ -1044,6 +1046,14 @@ public:
     BOOL                IsVerboseTextComments() const { return bVerboseTextComments; }
 
     BOOL                mbLastTryMerge;
+
+    /** sets a link that is called at the beginning of a drag operation at an edit view */
+    void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
+    Link                GetBeginDropHdl() const { return maBeginDropHdl; }
+
+    /** sets a link that is called at the end of a drag operation at an edit view */
+    void            SetEndDropHdl( const Link& rLink ) { maEndDropHdl = rLink; }
+    Link            GetEndDropHdl() const { return maEndDropHdl; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
