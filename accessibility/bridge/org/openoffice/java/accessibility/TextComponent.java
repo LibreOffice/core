@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextComponent.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:42:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,16 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                         case AccessibleRelationType.MEMBER_OF:
                             relationSet.add(new javax.accessibility.AccessibleRelation(
                                 javax.accessibility.AccessibleRelation.MEMBER_OF,
+                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                            break;
+                        case AccessibleRelationType.CONTENT_FLOWS_TO:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                "flowsTo",
+                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                            break;
+                        case AccessibleRelationType.CONTENT_FLOWS_FROM:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                "flowsFrom",
                                 getAccessibleComponents(unoAccessibleRelation.TargetSet)));
                             break;
                         default:
