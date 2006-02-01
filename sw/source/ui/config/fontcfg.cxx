@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:50:33 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 13:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eL
     }
     if( eLang == LANGUAGE_THAI && nFontType >= FONT_STANDARD_CTL )
     {
-        nRet = nRet * 3 / 2;
+        nRet = nRet * 4 / 3;
     }
     return nRet;
 }
