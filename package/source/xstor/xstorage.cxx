@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:12:35 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 19:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#include <comphelper/storagehelper.hxx>
+
 #include "xstorage.hxx"
 #include "owriteablestream.hxx"
 #include "disposelistener.hxx"
@@ -150,8 +152,6 @@ struct StorInternalData_Impl
 //=========================================================
 
 extern uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF );
-extern void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                                    const uno::Reference< io::XOutputStream >& aOut );
 
 ::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory );
 
@@ -172,7 +172,7 @@ void completeStorageStreamCopy_Impl( const uno::Reference< io::XStream >& xSourc
             throw io::IOException(); // TODO
 
         // TODO: headers of encripted streams should be copied also
-        copyInputToOutput_Impl( xSourceInStream, xDestOutStream );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
         const char* pStrings[3] = { "MediaType", "Compressed", "UseCommonStoragePasswordEncryption" };
         for ( int ind = 0; ind < 3; ind++ )
@@ -193,7 +193,7 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInp
     if ( !xTempOut.is() || !xTempIn.is() )
         throw io::IOException();
 
-    copyInputToOutput_Impl( xInStream, xTempOut );
+    ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOut );
     xTempOut->closeOutput();
 
     return xTempIn;
@@ -2912,7 +2912,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
             throw io::IOException();
 
         // Copy temporary file to a new one
-        copyInputToOutput_Impl( xRawInStream, xTempOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempOut );
         xTempOut->closeOutput();
         xSeek->seek( 0 );
     }
@@ -3004,7 +3004,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             throw io::IOException();
 
         // Copy temporary file to a new one
-        copyInputToOutput_Impl( xRawInStream, xTempOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempOut );
         xTempOut->closeOutput();
         xSeek->seek( 0 );
 
