@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:19:34 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,9 +142,7 @@ class SwRootFrm: public SwLayoutFrm
     SwDestroyList* pDestroy;
 
     USHORT  nPhyPageNums;           //Anzahl der Seiten.
-#ifdef ACCESSIBLE_LAYOUT
     sal_uInt16 nAccessibleShells;   // Number of accessible shells
-#endif
 
     void ImplCalcBrowseWidth();
     void ImplInvalidateBrowseWidth();
@@ -202,9 +200,6 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 
-#ifndef VERTICAL_LAYOUT
-    void   SetFixSize( SzPtr );
-#endif
     Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
 
     //! Searches for the content frame that is closest to
@@ -315,11 +310,9 @@ public:
     void SetCallbackActionEnabled( BOOL b ) { bCallbackActionEnabled = b; }
     BOOL IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
 
-#ifdef ACCESSIBLE_LAYOUT
     sal_Bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
     void AddAccessibleShell() { ++nAccessibleShells; }
     void RemoveAccessibleShell() { --nAccessibleShells; }
-#endif
 
     /** get page frame by phyiscal page number
 
