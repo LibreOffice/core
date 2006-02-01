@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:18:58 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,7 @@ class SwAnchoredObject;
 #define FRM_LAYOUT      0x3FFF
 #define FRM_CNTNT       0xC000
 #define FRM_FTNBOSS     0x0006
-#ifdef ACCESSIBLE_LAYOUT
 #define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
-#endif
 
         //Weils so schon ist das ganze als Bitfeld....
 //0000 0000 0000 0001   ROOT
@@ -309,7 +307,69 @@ class SwFrm: public SwClient
 
     SwFrm *_FindNext();
     SwFrm *_FindPrev();
-    SwCntntFrm *_FindNextCnt();
+
+    /** method to determine next content frame in the same environment
+        for a flow frame (content frame, table frame, section frame)
+
+        OD 2005-11-30 #i27138# - adding documentation:
+        Travelling downwards through the layout to determine the next content
+        frame in the same environment. There are several environments in a
+        document, which form a closed context regarding this function. These
+        environments are:
+        - Each page header
+        - Each page footer
+        - Each unlinked fly frame
+        - Each group of linked fly frames
+        - All footnotes
+        - All document body frames
+        OD 2005-11-30 #i27138# - adding parameter <_bInSameFtn>
+        Its default value is <false>. If its value is <true>, the environment
+        'All footnotes' is no longer treated. Instead each footnote is treated
+        as an own environment.
+
+        @author OD
+
+        @param _bInSameFtn
+        input parameter - boolean indicating, that the found next content
+        frame has to be in the same footnote frame. This parameter is only
+        relevant for flow frames in footnotes.
+
+        @return SwCntntFrm*
+        pointer to the found next content frame. It's NULL, if none exists.
+    */
+    SwCntntFrm* _FindNextCnt( const bool _bInSameFtn = false );
+
+    /** method to determine previous content frame in the same environment
+        for a flow frame (content frame, table frame, section frame)
+
+        OD 2005-11-30 #i27138#
+        Travelling upwards through the layout to determine the previous content
+        frame in the same environment. There are several environments in a
+        document, which form a closed context regarding this function. These
+        environments are:
+        - Each page header
+        - Each page footer
+        - Each unlinked fly frame
+        - Each group of linked fly frames
+        - All footnotes
+        - All document body frames
+        OD 2005-11-30 #i27138# - adding parameter <_bInSameFtn>
+        Its default value is <false>. If its value is <true>, the environment
+        'All footnotes' is no longer treated. Instead each footnote is treated
+        as an own environment.
+
+        @author OD
+
+        @param _bInSameFtn
+        input parameter - boolean indicating, that the found previous content
+        frame has to be in the same footnote frame. This parameter is only
+        relevant for flow frames in footnotes.
+
+        @return SwCntntFrm*
+        pointer to the found previous content frame. It's NULL, if none exists.
+    */
+    SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
+
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE & );
     SwFrm* _GetIndPrev();
@@ -615,7 +675,9 @@ public:
     inline SwFlyFrm     *FindFlyFrm();
     inline SwSectionFrm *FindSctFrm();
     inline SwFrm        *FindNext();
-    inline SwCntntFrm   *FindNextCnt();
+    // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+    inline SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
+    // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
     inline const SwRootFrm *FindRootFrm() const;
@@ -627,9 +689,39 @@ public:
     inline const SwFlyFrm  *FindFlyFrm() const;
     inline const SwSectionFrm *FindSctFrm() const;
     inline const SwFrm     *FindNext() const;
-    inline const SwCntntFrm *FindNextCnt() const;
+    // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+    inline const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
+    // <--
     inline const SwFrm     *FindPrev() const;
            const SwFrm     *GetLower()  const;
+
+    /** inline wrapper method for <_FindPrevCnt(..)>
+
+        OD 2005-11-30 #i27138#
+
+        @author OD
+    */
+    inline SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false )
+    {
+        if ( GetPrev() && GetPrev()->IsCntntFrm() )
+            return (SwCntntFrm*)(GetPrev());
+        else
+            return _FindPrevCnt( _bInSameFtn );
+    }
+
+    /** inline const wrapper method for <_FindPrevCnt(..)>
+
+        OD 2005-11-30 #i27138#
+
+        @author OD
+    */
+    inline const SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false ) const
+    {
+        if ( GetPrev() && GetPrev()->IsCntntFrm() )
+            return (const SwCntntFrm*)(GetPrev());
+        else
+            return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
+    }
 
     SwFrm* GetIndPrev()
         { return ( pPrev || !IsInSct() ) ? pPrev : _GetIndPrev(); }
@@ -795,9 +887,7 @@ public:
                                         //stehen.
     inline BOOL IsRetoucheFrm() const;  //Frms die Retouchefaehig sind bzw. die
                                         //u.U. hinter sich Retouchieren muessen.
-#ifdef ACCESSIBLE_LAYOUT
     inline BOOL IsAccessibleFrm() const;
-#endif
 
     void PrepareCrsr();                 //Die CrsrShell darf.
 
@@ -1067,20 +1157,24 @@ inline const SwFrm *SwFrm::FindNext() const
     else
         return ((SwFrm*)this)->_FindNext();
 }
-inline SwCntntFrm *SwFrm::FindNextCnt()
+// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
 {
     if ( pNext && pNext->IsCntntFrm() )
         return (SwCntntFrm*)pNext;
     else
-        return _FindNextCnt();
+        return _FindNextCnt( _bInSameFtn );
 }
-inline const SwCntntFrm *SwFrm::FindNextCnt() const
+// <--
+// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
 {
     if ( pNext && pNext->IsCntntFrm() )
         return (SwCntntFrm*)pNext;
     else
-        return ((SwFrm*)this)->_FindNextCnt();
+        return ((SwFrm*)this)->_FindNextCnt( _bInSameFtn );
 }
+// <--
 inline SwFrm *SwFrm::FindPrev()
 {
     if ( pPrev && !pPrev->IsSctFrm() )
@@ -1177,11 +1271,8 @@ inline BOOL SwFrm::IsRetoucheFrm() const
 {
     return GetType() & 0xCA40 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
 }
-#ifdef ACCESSIBLE_LAYOUT
 inline BOOL SwFrm::IsAccessibleFrm() const
 {
     return GetType() & FRM_ACCESSIBLE ? TRUE : FALSE;
 }
-#endif
-
 #endif
