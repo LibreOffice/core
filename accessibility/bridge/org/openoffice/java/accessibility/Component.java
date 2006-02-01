@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:36:26 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:30:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,13 @@ public abstract class Component extends java.awt.Component {
                         firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
                                                 AccessibleTextImpl.convertTextSegment(event.OldValue),
                                                 AccessibleTextImpl.convertTextSegment(event.NewValue));
+                        break;
+                    /*
+                     * the Java AccessBridge for GNOME maps SELECTION_PROPERTY change events
+                     * for objects of role TEXT to object:text-selection-changed
+                     */
+                    case AccessibleEventId.TEXT_SELECTION_CHANGED:
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                         break;
                     case AccessibleEventId.CARET_CHANGED:
                         firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
