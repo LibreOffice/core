@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Paragraph.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:40:35 $
+ *  last change: $Author: kz $ $Date: 2006-02-01 14:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,16 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
                         case AccessibleRelationType.MEMBER_OF:
                             relationSet.add(new javax.accessibility.AccessibleRelation(
                                 javax.accessibility.AccessibleRelation.MEMBER_OF,
+                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                            break;
+                        case AccessibleRelationType.CONTENT_FLOWS_TO:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                "flowsTo",
+                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                            break;
+                        case AccessibleRelationType.CONTENT_FLOWS_FROM:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                "flowsFrom",
                                 getAccessibleComponents(unoAccessibleRelation.TargetSet)));
                             break;
                         default:
