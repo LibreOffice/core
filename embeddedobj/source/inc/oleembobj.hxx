@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:37:47 $
+ *  last change: $Author: kz $ $Date: 2006-02-02 16:07:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
 
     // whether the object should be initialized from clipboard in case of default initialization
     sal_Bool m_bFromClipboard;
+
+    ::rtl::OUString m_aTempURL;
 
     // STAMPIT solution
     // the following member is used during verb execution to detect whether the verb execution modifies the object
