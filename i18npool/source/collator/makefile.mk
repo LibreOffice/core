@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:36:27 $
+#   last change: $Author: kz $ $Date: 2006-02-02 15:09:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-LOCAL_RULE_LANGS:=$(shell ls data/*.txt|cut -c6,7|sort -u)
+tempvar:=$(shell +cd data && ls *.txt)
+LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(tempvar) $(i:s/-/_/:s/_/ /:1)))
 .IF "$(GUI)"=="WNT"
 CFLAGSCXX+=-DLOCAL_RULE_LANGS="\"$(LOCAL_RULE_LANGS)\""
 .ELSE
