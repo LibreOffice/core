@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:49:59 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_cppuhelper";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.1.0";
+    Version = "1.0.2.0";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -216,7 +216,7 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "policy.1.0.cli_cppuhelper";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.0.0";
+    Version = "2.0.0.0";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -257,7 +257,7 @@ File gid_File_Lib_Cli_Types_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_types";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.1.1.0";
+    Version = "1.1.2.0";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -273,7 +273,7 @@ File gid_File_Lib_Policy_Cli_Types_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "policy.1.1.cli_types";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.0.0";
+    Version = "2.0.0.0";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -350,7 +350,7 @@ File gid_File_Lib_Cli_Ure_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_ure";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.1.0";
+    Version = "1.0.2.0";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -365,7 +365,7 @@ File gid_File_Lib_Policy_Cli_Ure_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "policy.1.0.cli_ure";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.0.0";
+    Version = "2.0.0.0";
     Culture = "neutral";
     Attributes = "0";
 End
