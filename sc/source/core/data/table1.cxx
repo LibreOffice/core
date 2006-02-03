@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:53:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:24:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     aName( rNewName ),
     nTab( nNewTab ),
     bLayoutRTL( FALSE ),
+    bLoadingRTL( FALSE ),
     bScenario( FALSE ),
     bActiveScenario( FALSE ),
     nScenarioFlags( 0 ),
@@ -249,6 +250,11 @@ void ScTable::SetVisible( BOOL bVis )
 void ScTable::SetLayoutRTL( BOOL bSet )
 {
     bLayoutRTL = bSet;
+}
+
+void ScTable::SetLoadingRTL( BOOL bSet )
+{
+    bLoadingRTL = bSet;
 }
 
 void ScTable::SetScenario( BOOL bFlag )
