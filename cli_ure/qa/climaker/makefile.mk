@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 16:43:44 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:13:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ CSCFLAGS += -optimize+
 .ENDIF
 
 
-OUTDIR=$(BIN)$/qa
+OUTDIR=$(BIN)$/qa$/climaker
 EXETARGET=$(OUTDIR)$/test_climaker.exe
 
 ALLTAR: $(EXETARGET)
