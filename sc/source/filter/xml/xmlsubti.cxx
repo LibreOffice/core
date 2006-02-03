@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:59 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,27 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 }
                         }
                         rImport.SetTableStyle(sStyleName);
+
+                        if ( sStyleName.getLength() )
+                        {
+                            // #i57869# All table style properties for all sheets are now applied here,
+                            // before importing the contents.
+                            // This is needed for the background color.
+                            // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
+                            // allow hiding the first sheet.
+                            // RTL layout is only remembered, not actually applied, so the shapes can
+                            // be loaded before mirroring.
+
+                            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+                            if (xProperties.is())
+                            {
+                                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                    XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
+                                if (pStyle)
+                                    pStyle->FillPropertySet(xProperties);
+                            }
+                        }
                     }
 
                 }
