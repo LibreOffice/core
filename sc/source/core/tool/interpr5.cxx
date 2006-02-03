@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:55:58 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2357,10 +2357,14 @@ BOOL ScInterpreter::RGetVariances( ScMatrix* pV, ScMatrix* pX,
     }
     else
     {
-        Pop();      // pC bleibt erhalten
-        // Varianzen auf der Diagonalen, andere sind Kovarianzen
-        for (i = 0; i < nC; i++)
-            pV->PutDouble(pC->GetDouble(i, i), i);
+        // #i61216# ScMatInv no longer modifies the original matrix, so just calling Pop() doesn't work
+        pC = PopMatrix();
+        if ( pC.Is() )
+        {
+            // Varianzen auf der Diagonalen, andere sind Kovarianzen
+            for (i = 0; i < nC; i++)
+                pV->PutDouble(pC->GetDouble(i, i), i);
+        }
     }
     return bOk;
 }
