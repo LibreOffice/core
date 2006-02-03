@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-19 17:00:59 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:15:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ POLICYASSEMBLY = policy.1.0.cli_ure.dll
 
 #!!! Always change version if code has changed. Provide a publisher
 #policy assembly!!!
-ASSEMBLY_VERSION="1.0.1.0"
+ASSEMBLY_VERSION="1.0.2.0"
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
@@ -94,7 +94,7 @@ $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll
 $(OUT)$/bin$/$(POLICYASSEMBLY) : cli_ure.config
     +$(COPY) cli_ure.config $(OUT)$/bin  
     +$(WRAPCMD) AL.exe -out:$@ \
-            -version:1.0.0.0 \
+            -version:2.0.0.0 \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:cli_ure.config
 
