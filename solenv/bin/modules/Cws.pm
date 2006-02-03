@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 09:50:24 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:13:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -425,13 +425,13 @@ sub is_helprelevant
     return $self->is_helprelevant_from_eis();
 }
 
-#Get the l10n status
+# Set the l10n status
 sub set_l10n_status
 {
     my $self        = shift;
     my $status      = shift;
 
-    return $self->set_l10n_status_from_eis( $status );
+    return $self->set_l10n_status_in_eis( $status );
 }
 
 # Get the l10n status
@@ -442,7 +442,29 @@ sub get_l10n_status
     return $self->get_l10n_status_from_eis();
 }
 
+# Get target release for CWS
+sub get_release
+{
+    my $self        = shift;
 
+    return $self->get_release_from_eis();
+}
+
+# Get due date
+sub get_due_date
+{
+    my $self        = shift;
+
+    return $self->get_due_date_from_eis();
+}
+
+# Get due date QA
+sub get_due_date_qa
+{
+    my $self        = shift;
+
+    return $self->get_due_date_qa_from_eis();
+}
 
 # Query master milestone combination for being used by an
 # active CWS
@@ -1332,7 +1354,7 @@ sub get_l10n_status_from_eis
     return $result;
 }
 
-sub set_l10n_status_from_eis
+sub set_l10n_status_in_eis
 {
     my $self        = shift;
     my $status      = Eis::to_string( shift );
@@ -1349,7 +1371,7 @@ sub set_l10n_status_from_eis
 
     eval { $result = $eis->setL10n( $id , $status ) };
     if ( $@ ) {
-        carp("ERROR: set_l10n_status_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+        carp("ERROR: set_l10n_status_in_eis(): EIS database transaction failed. Reason:\n$@\n");
     }
 
     return $result;
@@ -1402,6 +1424,74 @@ sub clone_cws_in_eis
     return 1;
 }
 
+sub get_release_from_eis
+{
+    my $self   = shift;
+    my $master = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->getRelease($id) };
+    if ( $@ ) {
+        carp("ERROR:  get_release_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub get_due_date_from_eis
+{
+    my $self   = shift;
+    my $master = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->getDueDate($id) };
+    if ( $@ ) {
+        carp("ERROR:  get_due_date_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub get_due_date_qa_from_eis
+{
+    my $self   = shift;
+    my $master = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->getDueDateQA($id) };
+    if ( $@ ) {
+        carp("ERROR:  get_due_date_qa_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
 
 #logging
 sub set_log_entry_in_eis
@@ -1486,3 +1576,4 @@ sub init_eis_connector
 ####
 
 1; # needed by "use" or "require"
+# vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
