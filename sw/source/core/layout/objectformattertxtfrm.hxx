@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:34:20 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:18:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,33 +129,6 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
                                     sal_uInt32& _noToPageNum,
                                     bool& _boInFollow );
 
-        /** method to check the conditions, if 'anchor is moved forward'
-
-            OD 2004-10-11 #i26945#
-            OD 2005-03-30 #i43913# - add output parameter <_boInFollow>
-
-            @author OD
-
-            @param _nIdxOfCollected
-            input parameter - index of collected anchored object, for which the
-            conditions have to be checked.
-
-            @param _noToPageNum
-            output parameter - number of page frame, the 'anchor' of the returned
-            anchored object is.
-
-            @param _boInFollow
-            output parameter - boolean, indicating that anchor text frame is
-            currently on the same page, but it's a follow of in a follow row,
-            which will move forward. value only relevant, if method return <true>.
-
-            @return boolean
-            indicating, if 'anchor is moved forward'
-        */
-        bool _CheckMovedFwdCondition( const sal_uInt32 _nIdxOfCollected,
-                                      sal_uInt32& _noToPageNum,
-                                      bool& _boInFollow );
-
         /** method to format the anchor frame for checking of the move forward condition
 
             OD 2005-01-11 #i40141#
@@ -202,6 +175,44 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
             formatted including its previous frames of the page.
         */
         static void FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtFrm );
+
+        /** method to check the conditions, if 'anchor is moved forward'
+
+            OD 2004-10-11 #i26945#
+            OD 2005-03-30 #i43913# - add output parameter <_boInFollow>
+            OD 2006-01-27 #i58182# - replace method by a corresponding static
+            method, because it's needed for the iterative positioning algorithm.
+
+            @author OD
+
+            @param _rAnchoredObj
+            input parameter - anchored object, for which the condition has to checked.
+
+            @param _nFromPageNum
+            input parameter - number of the page, on which the check is performed
+
+            @param _bAnchoredAtMasterBeforeFormatAnchor
+            input parameter - boolean indicating, that the given anchored object
+            was anchored at the master frame before the anchor frame has been
+            formatted.
+
+            @param _noToPageNum
+            output parameter - number of page frame, the 'anchor' of the returned
+            anchored object is.
+
+            @param _boInFollow
+            output parameter - boolean, indicating that anchor text frame is
+            currently on the same page, but it's a follow of in a follow row,
+            which will move forward. value only relevant, if method return <true>.
+
+            @return boolean
+            indicating, if 'anchor is moved forward'
+        */
+        static bool CheckMovedFwdCondition( SwAnchoredObject& _rAnchoredObj,
+                                            const sal_uInt32 _nFromPageNum,
+                                            const bool _bAnchoredAtMasterBeforeFormatAnchor,
+                                            sal_uInt32& _noToPageNum,
+                                            bool& _boInFollow );
 };
 
 #endif
