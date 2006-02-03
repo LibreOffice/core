@@ -4,9 +4,9 @@
  *
  *  $RCSfile: korder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:53:56 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,8 @@
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
 #endif
-#ifndef _STLP_VECTOR
-#include "stl/vector"
-#endif
 
+#include <vector>
 #include <kabc/addressee.h>
 
 namespace connectivity
