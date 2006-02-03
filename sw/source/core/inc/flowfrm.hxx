@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:18:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,40 @@ public:
 
     BOOL IsPageBreak( BOOL bAct ) const;
     BOOL IsColBreak( BOOL bAct ) const;
+
+    /** method to determine, if the current flow frame has a page break before attribute.
+
+        OD 2006-01-27 #i57765#
+        A flow frame has a page break before attribute, if itself has break
+        attribute SVX_BREAK_PAGE_BEFORE or SVX_BREAK_PAGE_BOTH, or its previous
+        flow frame has break attribute SVX_BREAK_PAGE_AFTER or SVX_BREAK_PAGE_BOTH,
+        or a previous flow frame exists and flow frame has a page description.
+        Note: Previous hidden text frames has to be skipped.
+
+        @author OD
+
+        @param _pProposedPrevFrm
+        input parameter - proposed previous frame. Could be a hidden text frame.
+        Could be NULL, if no previous frame exists.
+    */
+    bool HasAttrPageBreakBefore( const SwFrm* _pProposedPrevFrm ) const;
+
+    /** method to determine, if the current flow frame has a column break before attribute.
+
+        OD 2006-01-27 #i57765#
+        A flow frame has a column break before attribute, if itself has break
+        attribute SVX_BREAK_COLUMN_BEFORE or SVX_BREAK_COLUMN_BOTH, or its previous
+        flow frame has break attribute SVX_BREAK_COLUMN_AFTER or SVX_BREAK_COLUMN_BOTH.
+        Note: Previous hidden text frames has to be skipped.
+
+        @author OD
+
+        @param _pProposedPrevFrm
+        input parameter - proposed previous frame. Could be a hidden text frame.
+        Could be NULL, if no previous frame exists.
+    */
+    bool HasAttrColBreakBefore( const SwFrm* _pProposedPrevFrm ) const;
+
     sal_Bool HasLockedFollow() const;
 
     BOOL HasParaSpaceAtPages( BOOL bSct ) const;
