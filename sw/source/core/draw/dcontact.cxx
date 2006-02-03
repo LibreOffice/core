@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:12:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -839,7 +839,13 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     maAnchoredDrawObj(),
     mbMasterObjCleared( false ),
     // OD 10.10.2003 #112299#
-    mbDisconnectInProgress( false )
+    mbDisconnectInProgress( false ),
+    // --> OD 2006-01-18 #129959#
+    mbUserCallActive( false ),
+    // Note: value of <meEventTypeOfCurrentUserCall> isn't of relevance, because
+    //       <mbUserCallActive> is FALSE.
+    meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
+    // <--
 {
     // clear vector containing 'virtual' drawing objects.
     maDrawVirtObjs.clear();
@@ -1316,10 +1322,85 @@ void SwDrawContact::Changed( const SdrObject& rObj,
         pDoc->GetRootFrm()->EndAllAction();
 }
 
+// --> OD 2006-01-18 #129959#
+// helper class for method <SwDrawContact::_Changed(..)> for handling nested
+// <SdrObjUserCall> events
+class NestedUserCallHdl
+{
+    private:
+        SwDrawContact* mpDrawContact;
+        bool mbParentUserCallActive;
+        SdrUserCallType meParentUserCallEventType;
+
+    public:
+        NestedUserCallHdl( SwDrawContact* _pDrawContact,
+                           SdrUserCallType _eEventType )
+            : mpDrawContact( _pDrawContact ),
+              mbParentUserCallActive( _pDrawContact->mbUserCallActive ),
+              meParentUserCallEventType( _pDrawContact->meEventTypeOfCurrentUserCall )
+        {
+            mpDrawContact->mbUserCallActive = true;
+            mpDrawContact->meEventTypeOfCurrentUserCall = _eEventType;
+        }
+
+        ~NestedUserCallHdl()
+        {
+            mpDrawContact->mbUserCallActive = mbParentUserCallActive;
+            mpDrawContact->meEventTypeOfCurrentUserCall = meParentUserCallEventType;
+        }
+
+        bool IsNestedUserCall()
+        {
+            return mbParentUserCallActive;
+        }
+
+        void AssertNestedUserCall()
+        {
+            if ( IsNestedUserCall() )
+            {
+                bool bAssert( true );
+                // Currently its known, that a nested event SDRUSERCALL_RESIZE
+                // could occur during parent user call SDRUSERCALL_INSERTED,
+                // SDRUSERCALL_DELETE and SDRUSERCALL_RESIZE for edge objects.
+                // Also possible are nested SDRUSERCALL_CHILD_RESIZE events for
+                // edge objects
+                // Thus, assert all other combinations
+                if ( ( meParentUserCallEventType == SDRUSERCALL_INSERTED ||
+                       meParentUserCallEventType == SDRUSERCALL_DELETE ||
+                       meParentUserCallEventType == SDRUSERCALL_RESIZE ) &&
+                     mpDrawContact->meEventTypeOfCurrentUserCall == SDRUSERCALL_RESIZE )
+                {
+                    bAssert = false;
+                }
+                else if ( meParentUserCallEventType == SDRUSERCALL_CHILD_RESIZE &&
+                          mpDrawContact->meEventTypeOfCurrentUserCall == SDRUSERCALL_CHILD_RESIZE )
+                {
+                    bAssert = false;
+                }
+
+                if ( bAssert )
+                {
+                    ASSERT( false,
+                            "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
+                }
+            }
+        }
+};
+
+// <--
 void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )
 {
+    // --> OD 2006-01-18 #129959#
+    // suppress handling of nested <SdrObjUserCall> events
+    NestedUserCallHdl aNestedUserCallHdl( this, eType );
+    if ( aNestedUserCallHdl.IsNestedUserCall() )
+    {
+        aNestedUserCallHdl.AssertNestedUserCall();
+        return;
+    }
+    // <--
     // OD 05.08.2002 #100843# - do *not* notify, if document is destructing
     // --> OD 2004-10-21 #i35912# - do *not* notify for as-character anchored
     // drawing objects.
@@ -1510,15 +1591,21 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // <--
                 }
             }
-            // --> OD 2005-08-15 #i53320# - reset positioning attributes,
-            // if anchored drawing object isn't yet positioned.
-            else if ( pAnchoredDrawObj->NotYetPositioned() &&
-                      static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()).IsPosAttrSet() )
-            {
-                const_cast<SwDrawFrmFmt&>(
-                    static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()))
-                        .ResetPosAttr();
-            }
+            // --> OD 2006-01-18 #129959#
+            // It reveals that the following code causes several defects -
+            // on copying or on ungrouping a group shape containing edge objects.
+            // Testing fix for #i53320# also reveal that the following code
+            // isn't necessary.
+//            // --> OD 2005-08-15 #i53320# - reset positioning attributes,
+//            // if anchored drawing object isn't yet positioned.
+//            else if ( pAnchoredDrawObj->NotYetPositioned() &&
+//                      static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()).IsPosAttrSet() )
+//            {
+//                const_cast<SwDrawFrmFmt&>(
+//                    static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()))
+//                        .ResetPosAttr();
+//            }
+//            // <--
             // <--
         }
         break;
