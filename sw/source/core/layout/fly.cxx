@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:24:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,11 @@
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
-
+// --> OD 2006-01-31 #i53298#
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
+#endif
+// <--
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
@@ -1560,18 +1564,23 @@ void CalcCntnt( SwLayoutFrm *pLay,
             // due to its keep-attribute, if current frame is a follow or is locked.
             // --> OD 2005-03-08 #i44049# - do not consider invalid previous
             // frame due to its keep-attribute, if it can't move forward.
+            // --> OD 2006-01-27 #i57765# - do not consider invalid previous
+            // frame, if current frame has a column/page break before attribute.
             SwFrm* pTmpPrev = pFrm->FindPrev();
-            const bool bPrevInvalid = ( pFrm->IsFlowFrm()
-                                        ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
-                                            !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() )
-                                        : true ) &&
-                                      pTmpPrev &&
-                                      !pTmpPrev->GetValidPosFlag() &&
-                                      pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
-                                      pLay->IsAnLower( pTmpPrev ) &&
-                                      ( pTmpPrev->IsFlowFrm()
-                                        ? SwFlowFrm::CastFlowFrm(pTmpPrev)->IsKeepFwdMoveAllowed()
-                                        : true );
+            const bool bPrevInvalid =
+              ( pFrm->IsFlowFrm()
+                ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
+                    !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() &&
+                    !SwFlowFrm::CastFlowFrm(pFrm)->HasAttrPageBreakBefore( pTmpPrev ) &&
+                    !SwFlowFrm::CastFlowFrm(pFrm)->HasAttrColBreakBefore( pTmpPrev ) )
+                : true ) &&
+              pTmpPrev &&
+              !pTmpPrev->GetValidPosFlag() &&
+              pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
+              pLay->IsAnLower( pTmpPrev ) &&
+              ( pTmpPrev->IsFlowFrm()
+                ? SwFlowFrm::CastFlowFrm(pTmpPrev)->IsKeepFwdMoveAllowed()
+                : true );
             // <--
 
             // format floating screen objects anchored to the frame.
@@ -2000,13 +2009,40 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
 
 void SwFlyFrm::ChgSize( const Size& aNewSize )
 {
-    if ( aNewSize != Frm().SSize() )
+    // --> OD 2006-01-19 #i53298#
+    // If the fly frame anchored at-paragraph or at-character contains an OLE
+    // object, assure that the new size fits into the current clipping area
+    // of the fly frame
+    Size aAdjustedNewSize( aNewSize );
+    {
+        if ( dynamic_cast<SwFlyAtCntFrm*>(this) &&
+             Lower() && dynamic_cast<SwNoTxtFrm*>(Lower()) &&
+             static_cast<SwNoTxtFrm*>(Lower())->GetNode()->GetOLENode() )
+        {
+            SwRect aClipRect;
+            ::CalcClipRect( GetVirtDrawObj(), aClipRect, FALSE );
+            if ( aAdjustedNewSize.Width() > aClipRect.Width() )
+            {
+                aAdjustedNewSize.setWidth( aClipRect.Width() );
+            }
+            if ( aAdjustedNewSize.Height() > aClipRect.Height() )
+            {
+                aAdjustedNewSize.setWidth( aClipRect.Height() );
+            }
+        }
+    }
+    // <--
+    if ( aAdjustedNewSize != Frm().SSize() )
     {
         SwFrmFmt *pFmt = GetFmt();
         SwFmtFrmSize aSz( pFmt->GetFrmSize() );
-        aSz.SetWidth( aNewSize.Width() );
-        if ( Abs(aNewSize.Height() - aSz.GetHeight()) > 1 )
-            aSz.SetHeight( aNewSize.Height() );
+        aSz.SetWidth( aAdjustedNewSize.Width() );
+        // --> OD 2006-01-19 #i53298# - no tolerance any more.
+        // If it reveals that the tolerance is still needed, then suppress a
+        // <SetAttr> call, if <aSz> equals the current <SwFmtFrmSize> attribute.
+//        if ( Abs(aAdjustedNewSize.Height() - aSz.GetHeight()) > 1 )
+        aSz.SetHeight( aAdjustedNewSize.Height() );
+        // <--
         // uebers Doc fuers Undo!
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );
     }
