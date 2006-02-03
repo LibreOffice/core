@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:45:11 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,6 +960,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
     if ( !bOASIS )
     {
         lcl_AdjustOutlineStylesForOOo( rDoc );
+        // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
+        // so we have to set a dynamic default after importing SO7
+        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, FALSE ) );
     }
     // <--
 
