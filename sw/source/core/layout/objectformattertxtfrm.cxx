@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:34:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,11 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 sal_uInt32 nToPageNum( 0L );
                 // --> OD 2005-03-30 #i43913#
                 bool bDummy( false );
-                if ( _CheckMovedFwdCondition( nIdx, nToPageNum, bDummy ) )
+                // --> OD 2006-01-27 #i58182# - consider new method signature
+                if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition( *GetCollectedObj( nIdx ),
+                                              GetPgNumOfCollected( nIdx ),
+                                              IsCollectedAnchoredAtMaster( nIdx ),
+                                              nToPageNum, bDummy ) )
                 // <--
                 {
                     // --> OD 2005-06-01 #i49987# - consider, that anchor frame
@@ -609,7 +613,11 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
         {
             // --> OD 2004-10-11 #i26945# - use new method <_CheckMovedFwdCondition(..)>
             // --> OD 2005-03-30 #i43913#
-            if ( _CheckMovedFwdCondition( i, _noToPageNum, _boInFollow ) )
+            // --> OD 2006-01-27 #i58182# - consider new method signature
+            if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition( *GetCollectedObj( i ),
+                                          GetPgNumOfCollected( i ),
+                                          IsCollectedAnchoredAtMaster( i ),
+                                          _noToPageNum, _boInFollow ) )
             {
                 pRetAnchoredObj = pAnchoredObj;
                 break;
@@ -621,20 +629,22 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
     return pRetAnchoredObj;
 }
 
-bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
-                                            const sal_uInt32 _nIdxOfCollected,
+// --> OD 2006-01-27 #i58182#
+// - replace private method by corresponding static public method
+bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
+                                            SwAnchoredObject& _rAnchoredObj,
+                                            const sal_uInt32 _nFromPageNum,
+                                            const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
                                             bool& _boInFollow )
 {
     bool bAnchorIsMovedForward( false );
 
-    const sal_uInt32 nFromPageNum = GetPgNumOfCollected( _nIdxOfCollected );
-    SwAnchoredObject* pAnchoredObj = GetCollectedObj( _nIdxOfCollected );
-    SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
+    SwPageFrm* pPageFrmOfAnchor = _rAnchoredObj.FindPageFrmOfAnchor();
     if ( pPageFrmOfAnchor )
     {
         const sal_uInt32 nPageNum = pPageFrmOfAnchor->GetPhyPageNum();
-        if ( nPageNum > nFromPageNum )
+        if ( nPageNum > _nFromPageNum )
         {
             _noToPageNum = nPageNum;
             bAnchorIsMovedForward = true;
@@ -647,13 +657,13 @@ bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
     // is now anchored at a text frame,  which is in a follow flow row,
     // which will be on the next page.
     if ( !bAnchorIsMovedForward &&
-         ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT ||
-           pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CNTNT ) &&
-         IsCollectedAnchoredAtMaster( _nIdxOfCollected ) )
+         _bAnchoredAtMasterBeforeFormatAnchor &&
+         ( _rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT ||
+           _rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CNTNT ) )
     {
-        SwFrm* pAnchorFrm = pAnchoredObj->GetAnchorFrmContainingAnchPos();
+        SwFrm* pAnchorFrm = _rAnchoredObj.GetAnchorFrmContainingAnchPos();
         ASSERT( pAnchorFrm->IsTxtFrm(),
-                "<SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(..) - wrong type of anchor frame>" );
+                "<SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..) - wrong type of anchor frame>" );
         SwTxtFrm* pAnchorTxtFrm = static_cast<SwTxtFrm*>(pAnchorFrm);
         bool bCheck( false );
         if ( pAnchorTxtFrm->IsFollow() )
@@ -680,7 +690,7 @@ bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
             }
             if ( !pColFrm || !pColFrm->GetNext() )
             {
-                _noToPageNum = nFromPageNum + 1;
+                _noToPageNum = _nFromPageNum + 1;
                 bAnchorIsMovedForward = true;
                 // --> OD 2005-03-30 #i43913#
                 _boInFollow = true;
@@ -692,6 +702,7 @@ bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
 
     return bAnchorIsMovedForward;
 }
+// <--
 
 // --> OD 2005-01-12 #i40140# - helper method to format layout frames used by
 // method <SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()>
