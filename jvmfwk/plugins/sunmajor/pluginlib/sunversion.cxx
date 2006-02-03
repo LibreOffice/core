@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:31:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,9 +207,18 @@ bool SunVersion::init(const char *szVersion)
         if (m_preRelease == Rel_NONE)
             return false;
 #if defined(FREEBSD)
-      if (m_preRelease == Rel_FreeBSD) {
-         m_nUpdateSpecial = *pCur;
-    return true;
+      if (m_preRelease == Rel_FreeBSD)
+      {
+          pCur++; //elemnate `p'
+          if (pCur < pEnd && isdigit(*pCur))
+              pCur ++;
+          int len = pCur - pLast -1; //elemenate `p'
+          if (len >= 127)
+              return false;
+          strncpy(buf, (pLast+1), len); //elemenate `p'
+          buf[len] = 0;
+          m_nUpdateSpecial = atoi(buf)+100; //hack for FBSD #i56953#
+          return true;
       }
 #endif
     }
@@ -249,27 +258,7 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
     else if (! strcmp(szRelease, "rc3"))
         return Rel_RC3;
 #if defined (FREEBSD)
-    else if (! strcmp(szRelease, "p1"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p2"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p3"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p4"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p5"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p6"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p7"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p8"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p9"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p10"))
-        return Rel_FreeBSD;
-    else if (! strcmp(szRelease, "p11"))
+    else if (! strncmp(szRelease, "p", 1))
         return Rel_FreeBSD;
 #endif
     else
