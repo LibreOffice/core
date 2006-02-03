@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:49:22 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #include "kfields.hxx"
 #endif
+#include <klocale.h>
 
 #ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
 #include "FDatabaseMetaDataResultSet.hxx"
@@ -80,7 +81,7 @@ KabDatabaseMetaData::~KabDatabaseMetaData()
 const ::rtl::OUString & KabDatabaseMetaData::getAddressBookTableName()
 {
     static const ::rtl::OUString aAddressBookTableName
-        (::rtl::OUString::createFromAscii("KDE Address Book"));
+        (::rtl::OUString::createFromAscii( i18n("Address Book") ));
 
     return aAddressBookTableName;
 }
