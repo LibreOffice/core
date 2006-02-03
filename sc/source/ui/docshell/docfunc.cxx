@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:09:19 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2151,7 +2151,7 @@ BOOL ScDocFunc::SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi )
 
     ScDocShellModificator aModificator( rDocShell );
 
-    if ( !bVisible )
+    if ( !bVisible && !pDoc->IsImportingXML() )     // #i57869# allow hiding in any order for loading
     {
         //  nicht alle Tabellen ausblenden
 
