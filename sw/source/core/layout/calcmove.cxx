@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:35:32 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1207,13 +1207,20 @@ void SwCntntFrm::MakeAll()
                                                     *(GetAttrSet()->GetDoc()),
                                                     *(static_cast<SwTxtFrm*>(this)),
                                                     nToPageNum );
+        // --> OD 2006-01-27 #i58182#
+        // Also move a paragraph forward, which is the first one inside a table cell.
         if ( bMoveFwdByObjPos &&
              FindPageFrm()->GetPhyPageNum() < nToPageNum &&
-             lcl_Prev( this ) && IsMoveable() )
+             ( lcl_Prev( this ) ||
+               GetUpper()->IsCellFrm() ||
+               ( GetUpper()->IsSctFrm() &&
+                 GetUpper()->GetUpper()->IsCellFrm() ) ) &&
+             IsMoveable() )
         {
             bMovedFwd = TRUE;
             MoveFwd( bMakePage, FALSE );
         }
+        // <--
     }
     // <--
 
@@ -1488,7 +1495,17 @@ void SwCntntFrm::MakeAll()
         //dazu fuehren, dass seine Position obwohl unrichtig valide ist.
         if ( bValidPos )
         {
-            if ( bFtn )
+            // --> OD 2006-01-23 #i59341#
+            // Workaround for inadequate layout algorithm:
+            // suppress invalidation and calculation of position, if paragraph
+            // has formatted itself at least STOP_FLY_FORMAT times and
+            // has anchored objects.
+            // Thus, the anchored objects get the possibility to format itself
+            // and this probably solve the layout loop.
+            if ( bFtn &&
+                 nFormatCount <= STOP_FLY_FORMAT &&
+                 !GetDrawObjs() )
+            // <--
             {
                 bValidPos = FALSE;
                 MakePos();
