@@ -949,7 +949,7 @@ Optional Features:
   --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
                           where Qt and KDE are available.
 
-  --disable-kdeab         Disable the KDE Addressbook support
+  --disable-kdeab         Disable the KDE address book support
 
   --disable-binfilter:    Disable legacy binary file formats filters
 
@@ -19447,15 +19447,15 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether to enable KDE Addressbook support" >&5
-echo $ECHO_N "checking whether to enable KDE Addressbook support... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether to enable KDE address book support" >&5
+echo $ECHO_N "checking whether to enable KDE address book support... $ECHO_C" >&6
 if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
    save_CXXFLAGS=$CXXFLAGS
    CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
-   echo "$as_me:$LINENO: checking whether KDE is >= 3.2" >&5
-echo $ECHO_N "checking whether KDE is >= 3.2... $ECHO_C" >&6
+   echo "$as_me:$LINENO: checking whether KDE is between 3.2 and 3.6" >&5
+echo $ECHO_N "checking whether KDE is between 3.2 and 3.6... $ECHO_C" >&6
        if test "$cross_compiling" = yes; then
   { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
 See \`config.log' for more details." >&5
@@ -19473,7 +19473,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 #include <kdeversion.h>
 
 int main(int argc, char **argv) {
-       if((KDE_VERSION_MAJOR == 3 && KDE_VERSION_MINOR >= 2) || KDE_VERSION_MAJOR > 3) return 0;
+       if (KDE_VERSION_MAJOR == 3 && 2 <= KDE_VERSION_MINOR && KDE_VERSION_MINOR <= 6) return 0;
        else return 1;
 }
 
@@ -19497,8 +19497,8 @@ echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-{ { echo "$as_me:$LINENO: error: KDE version too old, you need at least 3.2 for the KDE AB support" >&5
-echo "$as_me: error: KDE version too old, you need at least 3.2 for the KDE AB support" >&2;}
+{ { echo "$as_me:$LINENO: error: KDE version too old or too recent, please use another version of KDE or disable KDE address book support" >&5
+echo "$as_me: error: KDE version too old or too recent, please use another version of KDE or disable KDE address book support" >&2;}
    { (exit 1); exit 1; }; }
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
