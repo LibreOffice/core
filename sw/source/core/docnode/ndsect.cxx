@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:21:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -894,6 +894,31 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
         // Sonderfall fuer die Reader/Writer
         if( &pEnde->GetNode() != &GetEndOfContent() )
             aInsPos = pEnde->GetIndex()+1;
+        // #i58710: We created a RTF document with a section break inside a table cell
+        // We are not able to handle a section start inside a table and the section end outside.
+        const SwNode* pLastNode = pSectNd->StartOfSectionNode()->EndOfSectionNode();
+        if( aInsPos > pLastNode->GetIndex() )
+            aInsPos = pLastNode->GetIndex();
+        // Another way round: if the section starts outside a table but the end is inside...
+        // aInsPos is at the moment the Position where my EndNode will be inserted
+        const SwStartNode* pStartNode = aInsPos.GetNode().StartOfSectionNode();
+        // This StartNode should be in front of me, but if not, I wanna survive
+        ULONG nMyIndex = pSectNd->GetIndex();
+        if( pStartNode->GetIndex() > nMyIndex ) // Suspicious!
+        {
+            const SwNode* pTemp;
+            do
+            {
+                pTemp = pStartNode; // pTemp is a suspicious one
+                pStartNode = pStartNode->StartOfSectionNode();
+            }
+            while( pStartNode->GetIndex() > nMyIndex );
+            pTemp = pTemp->EndOfSectionNode();
+            // If it starts behind me but ends behind my end...
+            if( pTemp->GetIndex() >= aInsPos.GetIndex() )
+                aInsPos = pTemp->GetIndex()+1; // ...I have to correct my end position
+        }
+
     }
     else
     {
