@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2006-01-10 17:00:30 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:13:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.17 $ ';
+my $id_str = ' $Revision: 1.18 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -373,7 +373,7 @@ sub update_workspace {
     my @dir_content = readdir(SOURCES);
     close SOURCES;
     my $master_tag =  $cws->get_master_tag();
-    my $config = CwsConfig::get_config;
+    my $config = CwsConfig->get_config;
     my $cvs_module = CvsModule->new();
     $cvs_module->cvs_method($config->get_cvs_server_method());
     $cvs_module->vcsid($config->get_cvs_server_id());
@@ -423,7 +423,6 @@ sub copy_workspace
     my $success = 1;
     my $accessmaster = 1;
 
-    # Ause: Deine Spielwiese
     my $result = 0;
     my $platform = "";
     my @found_platforms = ();
@@ -630,7 +629,17 @@ sub register_workspace
     my $hostname = hostname();
     my $dir = $opt_dir ? $opt_dir : cwd();
     my $abspath = File::Spec->rel2abs("$dir/$child");
-    my $vcsid = $ENV{VCSID};
+    my $config = CwsConfig->get_config();
+    my $vcsid = $config->vcsid();
+
+    if ( !$vcsid ) {
+        if ( $log ) {
+            print_error("Can't determine owner for CWS '$child'. Please set VCSID environment variable.", 6);
+        }
+        else {
+            print_error("Can't determine owner for CWS '$child'. Please set CVS_ID entry in \$HOME/.cwsrc.", 6);
+        }
+    }
 
     if ( $is_promotion ) {
         my $rc = $cws->promote($vcsid, "$hostname:$abspath");
@@ -708,3 +717,5 @@ sub usage
     print STDERR "    -p p1,p2,p3    only create workspace for specified platforms\n";
     print STDERR "    -f        don't perform checkout after creation\n" if !defined($log);
 }
+
+# vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
