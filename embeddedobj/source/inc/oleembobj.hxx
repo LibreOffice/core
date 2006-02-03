@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-02 16:07:36 $
+ *  last change: $Author: rt $ $Date: 2006-02-03 08:50:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,6 @@ protected:
 
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
-    void OnViewChanged_Impl();
 
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
@@ -305,6 +304,8 @@ public:
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     virtual ~OleEmbeddedObject();
+
+    void OnViewChanged_Impl();
 
 // XEmbeddedObject
 
