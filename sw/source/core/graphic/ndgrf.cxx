@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:08:07 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1092,13 +1092,20 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         // re-generating its name.
         // A save action can have changed the filename of the embedded graphic,
         // because a changed unique ID of the graphic is calculated.
-        if ( !_refPics->hasByName( _aStrmName ) ||
-             !_refPics->isStreamElement( _aStrmName ) )
+        // --> OD 2006-01-30 #b6364738#
+        // recursive calls of <GetUniqueID()> have to be avoided.
+        // Thus, use local static boolean to assure this.
+        static bool bInRegenerateStrmName( false );
+        if ( !bInRegenerateStrmName &&
+             ( !_refPics->hasByName( _aStrmName ) ||
+               !_refPics->isStreamElement( _aStrmName ) ) )
         {
+            bInRegenerateStrmName = true;
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
             _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
             _aStrmName += aExtStr;
+            bInRegenerateStrmName = false;
         }
         // <--
 
