@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-19 17:00:38 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:15:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ ECHOQUOTE=
 
 #!!! Always change version if code has changed. Provide a publisher
 #policy assembly!!!
-ASSEMBLY_VERSION="1.0.1.0"
+ASSEMBLY_VERSION="1.0.2.0"
 POLICYASSEMBLY = policy.1.0.cli_cppuhelper.dll
 
 ASSEMBLY_KEY="$(BIN)$/cliuno.snk"
@@ -130,7 +130,7 @@ DEF1NAME = $(SHL1TARGET)
 $(OUT)$/bin$/$(POLICYASSEMBLY) : cli_cppuhelper.config
     +$(COPY) cli_cppuhelper.config $(OUT)$/bin  
     +$(WRAPCMD) AL.exe -out:$@ \
-            -version:1.0.0.0 \
+            -version:2.0.0.0 \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:cli_cppuhelper.config
 
