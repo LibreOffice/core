@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:38 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:23:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,6 +962,18 @@ void ScDocument::SetImportingXML( BOOL bVal )
     bImportingXML = bVal;
     if (pDrawLayer)
         pDrawLayer->EnableAdjust(!bImportingXML);
+
+    if ( !bVal )
+    {
+        // #i57869# after loading, do the real RTL mirroring for the sheets that have the LoadingRTL flag set
+
+        for ( SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++ )
+            if ( pTab[nTab]->IsLoadingRTL() )
+            {
+                pTab[nTab]->SetLoadingRTL( FALSE );
+                SetLayoutRTL( nTab, TRUE );             // includes mirroring; bImportingXML must be cleared first
+            }
+    }
 }
 
 vos::ORef<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
