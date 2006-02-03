@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2005-11-11 09:11:46 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
     }
     catch(...)
     {
+        DBG_ERRORFILE( "SvxImportMSVBasic::ImportForms_Impl - any exception caught" );
         //bRet = false;
     }
     SFX_APP()->LeaveBasicCall();
