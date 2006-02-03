@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:56:22 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7127,12 +7127,30 @@ if( var )                                                   \
 
 // *** macros end ***
 
-void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
+namespace {
+
+enum XclDumpControlType
+{
+    EXC_CTRL_PUSHBUTTON,
+    EXC_CTRL_TOGGLEBUTTON,
+    EXC_CTRL_CHECKBOX,
+    EXC_CTRL_OPTIONBUTTON,
+    EXC_CTRL_LABEL,
+    EXC_CTRL_EDIT,
+    EXC_CTRL_LISTBOX,
+    EXC_CTRL_COMBOBOX,
+    EXC_CTRL_SPIN,
+    EXC_CTRL_SCROLLBAR,
+    EXC_CTRL_IMAGE,
+    EXC_CTRL_UNKNOWN
+};
+
+XclDumpControlType lclReadControlGuid( SvStream& rInStrm, SvStream& rOutStrm )
 {
     static const XclGuid aPushButtonGuid(   0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77, 0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
     static const XclGuid aToggleButtonGuid( 0x8BD21D60, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
     static const XclGuid aCheckBoxGuid(     0x8BD21D40, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aRadioButtonGuid(  0x8BD21D50, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aOptionButtonGuid( 0x8BD21D50, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
     static const XclGuid aLabelGuid(        0x978C9E23, 0xD4B0, 0x11CE, 0xBF, 0x2D, 0x00, 0xAA, 0x00, 0x3F, 0x40, 0xD0 );
     static const XclGuid aEditGuid(         0x8BD21D10, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
     static const XclGuid aListBoxGuid(      0x8BD21D20, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
@@ -7141,6 +7159,79 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
     static const XclGuid aScrollBarGuid(    0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D );
     static const XclGuid aImageGuid(        0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 );
 
+    XclDumpControlType eCtrlType = EXC_CTRL_UNKNOWN;
+    XclGuid aGuid;
+    rInStrm >> aGuid;
+    rOutStrm << "guid=" << aGuid << " (";
+    if( aGuid == aPushButtonGuid )
+    {
+        eCtrlType = EXC_CTRL_PUSHBUTTON;
+        rOutStrm << "PushButton";
+    }
+    else if( aGuid == aToggleButtonGuid )
+    {
+        eCtrlType = EXC_CTRL_TOGGLEBUTTON;
+        rOutStrm << "ToggleButton";
+    }
+    else if( aGuid == aCheckBoxGuid )
+    {
+        eCtrlType = EXC_CTRL_CHECKBOX;
+        rOutStrm << "CheckBox";
+    }
+    else if( aGuid == aOptionButtonGuid )
+    {
+        eCtrlType = EXC_CTRL_OPTIONBUTTON;
+        rOutStrm << "RadioButton";
+    }
+    else if( aGuid == aLabelGuid )
+    {
+        eCtrlType = EXC_CTRL_LABEL;
+        rOutStrm << "Label";
+    }
+    else if( aGuid == aEditGuid )
+    {
+        eCtrlType = EXC_CTRL_EDIT;
+        rOutStrm << "Edit";
+    }
+    else if( aGuid == aListBoxGuid )
+    {
+        eCtrlType = EXC_CTRL_LISTBOX;
+        rOutStrm << "ListBox";
+    }
+    else if( aGuid == aComboBoxGuid )
+    {
+        eCtrlType = EXC_CTRL_COMBOBOX;
+        rOutStrm << "ComboBox";
+    }
+    else if( aGuid == aSpinGuid )
+    {
+        eCtrlType = EXC_CTRL_SPIN;
+        rOutStrm << "Spin";
+    }
+    else if( aGuid == aScrollBarGuid )
+    {
+        eCtrlType = EXC_CTRL_SCROLLBAR;
+        rOutStrm << "ScrollBar";
+    }
+    else if( aGuid == aImageGuid )
+    {
+        eCtrlType = EXC_CTRL_IMAGE;
+        rOutStrm << "Image";
+    }
+    else
+    {
+        eCtrlType = EXC_CTRL_UNKNOWN;
+        rOutStrm << "*UNKNOWN*";
+    }
+    rOutStrm << ")";
+
+    return eCtrlType;
+};
+
+} // namespace
+
+void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
+{
     if( !pDumpStream ) return;
     rInStrm.Seek( STREAM_SEEK_TO_END );
     ULONG nInSize = rInStrm.Tell();
@@ -7157,20 +7248,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
     __AddDec( aStrmLen, nInSize );
     rOutStrm << aStrmLen.GetBuffer() << "\n";
 
-    enum {
-        xlCtrlPushButton,
-        xlCtrlToggleButton,
-        xlCtrlCheckBox,
-        xlCtrlRadioButton,
-        xlCtrlLabel,
-        xlCtrlEdit,
-        xlCtrlListBox,
-        xlCtrlComboBox,
-        xlCtrlSpin,
-        xlCtrlScrollBar,
-        xlCtrlImage,
-        xlCtrlUnknown
-    } eCtrlType = xlCtrlUnknown;
+    XclDumpControlType eCtrlType = EXC_CTRL_UNKNOWN;
 
     for( StrmPortionMap::const_iterator aIt = maCtlsPosMap.begin(), aEnd = maCtlsPosMap.end(); aIt != aEnd; ++aIt )
     {
@@ -7190,76 +7268,13 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
             __AddHex( t, aIt->first );
             t.Append( "  len=" );
             __AddHex( t, aIt->second );
-            t.Append( "  guid=" );
+            t.Append( "  " );
             rOutStrm << t.GetBuffer();
 
             // control type
-            XclGuid aGuid;
-            rInStrm >> aGuid;
-            rOutStrm << aGuid << " (";
-            if( aGuid == aPushButtonGuid )
-            {
-                eCtrlType = xlCtrlPushButton;
-                rOutStrm << "PushButton";
-            }
-            else if( aGuid == aToggleButtonGuid )
-            {
-                eCtrlType = xlCtrlToggleButton;
-                rOutStrm << "ToggleButton";
-            }
-            else if( aGuid == aCheckBoxGuid )
-            {
-                eCtrlType = xlCtrlCheckBox;
-                rOutStrm << "CheckBox";
-            }
-            else if( aGuid == aRadioButtonGuid )
-            {
-                eCtrlType = xlCtrlRadioButton;
-                rOutStrm << "RadioButton";
-            }
-            else if( aGuid == aLabelGuid )
-            {
-                eCtrlType = xlCtrlLabel;
-                rOutStrm << "Label";
-            }
-            else if( aGuid == aEditGuid )
-            {
-                eCtrlType = xlCtrlEdit;
-                rOutStrm << "Edit";
-            }
-            else if( aGuid == aListBoxGuid )
-            {
-                eCtrlType = xlCtrlListBox;
-                rOutStrm << "ListBox";
-            }
-            else if( aGuid == aComboBoxGuid )
-            {
-                eCtrlType = xlCtrlComboBox;
-                rOutStrm << "ComboBox";
-            }
-            else if( aGuid == aSpinGuid )
-            {
-                eCtrlType = xlCtrlSpin;
-                rOutStrm << "Spin";
-            }
-            else if( aGuid == aScrollBarGuid )
-            {
-                eCtrlType = xlCtrlScrollBar;
-                rOutStrm << "ScrollBar";
-            }
-            else if( aGuid == aImageGuid )
-            {
-                eCtrlType = xlCtrlImage;
-                rOutStrm << "Image";
-            }
-            else
-            {
-                eCtrlType = xlCtrlUnknown;
-                rOutStrm << "*UNKNOWN*";
-            }
-            rOutStrm << ")\n";
-
-            if( eCtrlType != xlCtrlUnknown )
+            XclDumpControlType eCtrlType = lclReadControlGuid( rInStrm, rOutStrm );
+            rOutStrm << "\n";
+            if( eCtrlType != EXC_CTRL_UNKNOWN )
             {
                 // header
                 sal_uInt16 nId, nSize;
@@ -7282,7 +7297,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
 
                     switch( eCtrlType )
                     {
-                        case xlCtrlPushButton:
+                        case EXC_CTRL_PUSHBUTTON:
                         {
                             EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                             EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
@@ -7326,12 +7341,12 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                         }
                         break;
 
-                        case xlCtrlToggleButton:
-                        case xlCtrlCheckBox:
-                        case xlCtrlRadioButton:
-                        case xlCtrlEdit:
-                        case xlCtrlListBox:
-                        case xlCtrlComboBox:
+                        case EXC_CTRL_TOGGLEBUTTON:
+                        case EXC_CTRL_CHECKBOX:
+                        case EXC_CTRL_OPTIONBUTTON:
+                        case EXC_CTRL_EDIT:
+                        case EXC_CTRL_LISTBOX:
+                        case EXC_CTRL_COMBOBOX:
                         {
                             EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                             EXC_CTRLDUMP_ADDFLAG( 0x00000001, "option" );
@@ -7433,7 +7448,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                         }
                         break;
 
-                        case xlCtrlLabel:
+                        case EXC_CTRL_LABEL:
                         {
                             EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                             EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
@@ -7482,8 +7497,8 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                         }
                         break;
 
-                        case xlCtrlSpin:
-                        case xlCtrlScrollBar:
+                        case EXC_CTRL_SPIN:
+                        case EXC_CTRL_SCROLLBAR:
                         {
                             EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                             EXC_CTRLDUMP_ADDFLAG( 0x00000001, "forecolor" );
@@ -7536,7 +7551,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                         }
                         break;
 
-                        case xlCtrlImage:
+                        case EXC_CTRL_IMAGE:
                         {
                             EXC_CTRLDUMP_STARTFLAG( "content-flags" );
                             EXC_CTRLDUMP_ADDFLAG( 0x0004, "autosize" );
