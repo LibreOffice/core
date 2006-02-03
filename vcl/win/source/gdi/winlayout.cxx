@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:55:20 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1263,12 +1263,13 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // now itemize the substring with its context
-    for( int nItemCapacity = 16;; nItemCapacity *= 4 )
+    for( int nItemCapacity = 16;; nItemCapacity *= 8 )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
         HRESULT nRC = (*pScriptItemize)(
             rArgs.mpStr + mnSubStringMin, nSubStringEnd - mnSubStringMin,
-            nItemCapacity, &aScriptControl, &aScriptState, mpScriptItems, &mnItemCount );
+            nItemCapacity - 1, &aScriptControl, &aScriptState,
+            mpScriptItems, &mnItemCount );
         if( !nRC )  // break loop when everything is correctly itemized
             break;
 
