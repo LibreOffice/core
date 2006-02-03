@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:14:24 $
+#  last change: $Author: kz $ $Date: 2006-02-03 17:15:04 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -208,11 +208,25 @@ $(COMP2_PACKAGE) : $(COMP2_JAR) $(COMP2_UNOPKG_MANIFEST)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(COMP2_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
 
-$(SAMPLE_GEN_OUT)/devguide_%_register_component.flag : $(OUT_BIN)/%.$(UNOPKG_EXT)
+$(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.flag : $(OUT_BIN)/$(COMP1_NAME).$(UNOPKG_EXT)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$*.$(UNOPKG_EXT)")
+	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOPKG_EXT)")
+	@echo flagged > $(subst /,$(PS),$@)
+else
+	@echo --------------------------------------------------------------------------------
+	@echo  If you want to install your component automatically, please set the environment
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
+	@echo  possible if no office instance is running. 
+	@echo --------------------------------------------------------------------------------
+endif
+
+$(SAMPLE_GEN_OUT)/devguide_$(COMP2_NAME)_register_component.flag : $(OUT_BIN)/$(COMP2_NAME).$(UNOPKG_EXT)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOPKG_EXT)")
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
