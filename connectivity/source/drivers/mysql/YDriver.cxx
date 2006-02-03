@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:31:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,11 @@ namespace connectivity
             {
                 aProps.push_back( PropertyValue(
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
+                                    ,0
+                                    ,makeAny(sal_True)
+                                    ,PropertyState_DIRECT_VALUE) );
+                aProps.push_back( PropertyValue(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreventGetVersionColumns"))
                                     ,0
                                     ,makeAny(sal_True)
                                     ,PropertyState_DIRECT_VALUE) );
