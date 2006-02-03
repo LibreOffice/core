@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:27:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3249,6 +3249,11 @@ static void NWEnsureGTKSpinButton( void )
     {
         GtkAdjustment *adj = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 2, 1, 1, 1) );
         gSpinButtonWidget = gtk_spin_button_new( adj, 1, 2 );
+
+        //Setting non-editable means it doesn't blink, so there's no timeouts
+        //running around to nobble us
+        gtk_editable_set_editable(GTK_EDITABLE(gSpinButtonWidget), false);
+
         NWAddWidgetToCacheWindow( gSpinButtonWidget );
     }
 }
