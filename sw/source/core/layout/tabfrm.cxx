@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:36:50 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1127,6 +1127,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
         //
         (pFoll->Frm().*fnRect->fnAddWidth)( (Frm().*fnRect->fnGetWidth)() );
         (pFoll->Prt().*fnRect->fnAddWidth)( (Prt().*fnRect->fnGetWidth)() );
+        (pFoll->Frm().*fnRect->fnSetLeft)( (Frm().*fnRect->fnGetLeft)() );
 
         //
         // Insert the new follow table
@@ -3303,7 +3304,19 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
                         pPrevFrm = pPrevFrm->GetNext();
                     }
                     bMoveAnyway = BwdMoveNecessary( pNewPage, aRect) > 1;
-                    nSpace = (aRect.*fnRectX->fnGetHeight)();
+
+                    // --> FME 2006-01-20 #i54861# Due to changes made in PrepareMake,
+                    // the tabfrm may not have a correct position. Therefore
+                    // it is possible that pNewUpper->Prt().Height == 0. In this
+                    // case the above calculation of nSpace might give wrong
+                    // results and we really do not want to MoveBackwrd into a
+                    // 0 height frame. If nTmpSpace is already <= 0, we take this
+                    // value:
+                    const SwTwips nTmpSpace = (aRect.*fnRectX->fnGetHeight)();
+                    if ( (pNewUpper->Prt().*fnRectX->fnGetHeight)() > 0 || nTmpSpace <= 0 )
+                        nSpace = nTmpSpace;
+                    // <--
+
                     if ( GetFmt()->GetDoc()->IsBrowseMode() )
                         nSpace += pNewUpper->Grow( LONG_MAX, TRUE );
                 }
@@ -3715,7 +3728,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                         const SwFmtFrmSize &rSz = rFrmFmt.GetFrmSize();
                         if( !rSz.GetHeightPercent() )
                         {
-                            const SwTwips nFlyWidth =
+                            const SwTwips nDistOfFlyBottomToAnchorTop =
                                 (pAnchoredObj->GetObjRect().*fnRect->fnGetHeight)() +
                                     ( bVert ?
                                       pAnchoredObj->GetCurrRelPos().X() :
@@ -3726,8 +3739,22 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                                     (pTmp->Frm().*fnRect->fnGetTop)(),
                                     (pFrm->Frm().*fnRect->fnGetTop)() );
 
-                            nHeight = Max( nHeight, nFlyWidth + nFrmDiff -
+                            nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop + nFrmDiff -
                                             (pFrm->Frm().*fnRect->fnGetHeight)() );
+
+                            // --> FME 2006-01-24 #i56115# The first height calculation
+                            // gives wrong results if pFrm->Prt().Y() > 0. We do
+                            // a second calculation based on the actual rectangles of
+                            // pFrm and pAnchoredObj, and use the maximum of the results.
+                            // I do not want to remove the first calculation because
+                            // if clipping has been applied, using the GetCurrRelPos
+                            // might be the better option to calculate nHeight.
+                            const SwTwips nDistOfFlyBottomToAnchorTop2 = (*fnRect->fnYDiff)(
+                                                                            (pAnchoredObj->GetObjRect().*fnRect->fnGetBottom)(),
+                                                                            (pFrm->Frm().*fnRect->fnGetBottom)() );
+
+                            nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop2 );
+                            // <--
                         }
                     }
                 }
@@ -4682,9 +4709,14 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
         // not fit into the cell anymore:
         SwTwips nDistanceToUpperPrtBottom =
             (pFrm->Frm().*fnRect->fnBottomDist)( (pLay->*fnRect->fnGetPrtBottom)());
+        // --> OD 2006-01-19 #i56146# - Revise fix of issue #i26945#
+        // do *not* consider content inside fly frames, if it's an undersized paragraph.
         // --> OD 2004-10-08 #i26945# - consider content inside fly frames
         if ( nDistanceToUpperPrtBottom < 0 &&
-             ( pFrm->IsInFly() || pFrm->IsInSplitTableRow() ) )
+             ( ( pFrm->IsInFly() &&
+                 ( !pFrm->IsTxtFrm() ||
+                   !static_cast<SwTxtFrm*>(pFrm)->IsUndersized() ) ) ||
+               pFrm->IsInSplitTableRow() ) )
         // <--
         {
             pFrm->InvalidatePos();
