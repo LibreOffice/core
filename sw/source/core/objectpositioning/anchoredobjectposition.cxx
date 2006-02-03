@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:34:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,9 +516,17 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
         // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
         if ( _bCheckBottom &&
              _nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
-                aPgAlignArea.Bottom() )
+                // --> OD 2006-01-13 #129959#
+                // Do not mix usage of <top + height> and <bottom>
+//                aPgAlignArea.Bottom() )
+                aPgAlignArea.Top() + aPgAlignArea.Height() )
+                // <--
         {
-            nAdjustedRelPosY = aPgAlignArea.Bottom() -
+            // --> OD 2006-01-13 #129959#
+            // Do not mix usage of <top + height> and <bottom>
+//            nAdjustedRelPosY = aPgAlignArea.Bottom() -
+            nAdjustedRelPosY = aPgAlignArea.Top() + aPgAlignArea.Height() -
+            // <--
                                _nTopOfAnch -
                                aObjSize.Height();
         }
