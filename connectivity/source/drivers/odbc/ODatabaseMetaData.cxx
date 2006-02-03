@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:33:39 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,20 +274,29 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
+    bool bSuccess = false;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openVersionColumns(m_bUseCatalog ? catalog : Any(),schema,table);
+        if ( !m_pConnection->preventGetVersionColumns() )
+        {
+            ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+            xRef = pResult;
+            pResult->openVersionColumns(m_bUseCatalog ? catalog : Any(),schema,table);
+            bSuccess = true;
+        }
     }
     catch(SQLException&)
+    {
+    }
+
+    if ( !bSuccess )
     {
         ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         xRef = pResult;
         pResult->setVersionColumnsMap();
     }
-    return xRef;
 
+    return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
