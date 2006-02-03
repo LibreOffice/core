@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:19:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,11 +673,11 @@ class ContainerRecReader
             pFlags = static_cast<sal_uInt8*>(&nUnknown13);
             if ( pFlags[0] == 0xf5 )
             {
-                nSkipLen = 8;
+                nSkipLen = 4;
             }
             else
             {
-                nSkipLen = 8;
+                nSkipLen = 4;
             }
             if ( pFlags[1] != 0x01 )
             {
@@ -695,23 +695,23 @@ class ContainerRecReader
                 case 0x11e5:
                 case 0x21e5:
                 case 0x41e5:
-                    nSkipLen = 4;
+                    nSkipLen = 0;
                     bHasControlTip = true;
                     break;
                 case 0x1D5:
                 case 0x1E5:
-                    nSkipLen = 4;
+                    nSkipLen = 0;
                     break;
                 case 0x3f5:
                 case 0x9f5:
                 case 0x11f5: //
                 case 0x21f5: //  Guess
                 case 0x41f5: //
-                    nSkipLen = 8;
+                    nSkipLen = 4;
                     bHasControlTip = true;
                     break;
                 case 0x1F5:
-                    nSkipLen = 8;
+                    nSkipLen = 4;
                     break;
             }
 #endif
@@ -721,6 +721,7 @@ class ContainerRecReader
             pS->SeekRel(nSkipLen);
             nCount += nSkipLen;
 
+            *pS >> rec.nSubStreamLen;
             *pS >> rec.nTabPos;
             *pS >> rec.nTypeIdent;
             nCount += 4;
@@ -3599,9 +3600,8 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
     if ( rec.nTypeIdent == SPINBUTTON ||
         rec.nTypeIdent == TABSTRIP)
     {
-        // need to skip or read the record in the stream
-        // but then discard it
-        pControl->FullRead(oStream);
+        // skip the record in the stream, discard the control
+        oStream->SeekRel( rec.nSubStreamLen );
         delete pControl;
     }
     else
@@ -3616,7 +3616,6 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
                static_cast< OCX_ContainerControl* >( pControl );
             oStream = pContainer->getContainerStream();
         }
-
 
         pControl->sName = rec.cName;
         // Position of controls is relative to the container
@@ -3635,7 +3634,15 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
             // applied to all containees
             pControl->mnStep = mnStep;
         }
+
+        // #117490# DR: container records provide size of substream, use it here...
+
+        // remember initial position to set correct stream position
+        ULONG nStrmPos = oStream->Tell();
+        // import control, may return with invalid stream position
         pControl->FullRead(oStream);
+        // set stream to position behind substream of this control
+        oStream->Seek( nStrmPos + rec.nSubStreamLen );
 
         //need to fake grouping behaviour for radio ( option ) buttons
         if ( rec.nTypeIdent == OPTIONBUTTON )
@@ -5174,7 +5181,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
         // only import image control for UserForms
         return sal_False;
     }
-    long nStart = pS->Tell();
+    ULONG nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
@@ -5220,6 +5227,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
     // np a bit of a guess ( until proved incorrect )
     if ( pBlockFlags[ 1 ] & 0x4 )
     {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         hasEmbeddedImage = true;
         sal_uInt16 unknown;
         *pS >> unknown;
@@ -5228,6 +5236,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
 
     if ( pBlockFlags[ 1 ] & 0x8 )
     {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nPictureAlignment;
 
     }
