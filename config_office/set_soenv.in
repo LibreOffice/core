@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.88 $
-# Date:        $Date: 2006-01-31 18:28:58 $
+# Version:     $Revision: 1.89 $
+# Date:        $Date: 2006-02-03 17:36:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -616,18 +616,31 @@ elsif ( $platform =~ m/cygwin/ )
 }
 elsif ( $platform =~ m/darwin/ ) 
 {     print "Setting Mac OS X/Darwin specific values... ";
-      $outfile        = "MacosxEnv.Set"; 
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      $CPU            = "P";
-      $CPUNAME        = "POWERPC";
+      if ($platform =~ m/^i[3456]86/)
+      {
+          print "Setting values for Mac OS X/Darwin on Intel... ";
+          $outfile        = "MacOSXIntelEnv.Set"; 
+          $CPU            = "I";
+          $CPUNAME        = "INTEL";
+          $DLLSUFFIX      = "mxi";
+          $OUTPATH        = "unxmacxi";
+      }
+      elsif ($platform =~ m/^powerpc/)
+      {
+          print "Setting values for Mac OS X/Darwin on PowerPC... ";
+          $outfile        = "MacOSXPPCEnv.Set"; 
+          $CPU            = "P";
+          $CPUNAME        = "POWERPC";
+          $DLLSUFFIX      = "mxp";
+          $OUTPATH        = "unxmacxp";
+      }
       $CVER           = "C300";
-      $DLLSUFFIX      = "mxp";
       $GUI            = "UNX";
       $GUIENV         = "sal";
       $GVER           = "VCL";
-      $OUTPATH        = "unxmacxp";
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $OS             = "MACOSX";
