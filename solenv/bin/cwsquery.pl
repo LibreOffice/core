@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 13:09:45 $
+#   last change: $Author: kz $ $Date: 2006-02-03 17:13:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.9 $ ';
+my $id_str = ' $Revision: 1.10 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -76,7 +76,7 @@ my $opt_child  = '';        # option: child workspace
 my $opt_milestone  = '';    # option: milestone
 
 # list of available query modes
-my @query_modes = qw(modules taskids state latest current owner integrated approved nominated ready new);
+my @query_modes = qw(modules taskids status latest current owner integrated approved nominated ready new release due due_qa help ui);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -146,17 +146,17 @@ sub query_taskids
     return;
 }
 
-sub query_state
+sub query_status
 {
     my $cws = shift;
 
     if ( is_valid_cws($cws) ) {
-        my $state = $cws->get_approval();
-        if ( !$state ) {
+        my $status = $cws->get_approval();
+        if ( !$status ) {
             print_error("Internal error: can't get approval status.", 3);
         } else {
             print_message("Approval status:");
-            print "$state\n";
+            print "$status\n";
         }
     }
     return;
@@ -337,6 +337,86 @@ sub is_valid_cws
     return 1;
 }
 
+sub query_release
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $release = $cws->get_release();
+            print_message("Release target:");
+        if ( !$release ) {
+            print "not set\n";
+        } else {
+            print "$release\n";
+        }
+    }
+    return;
+}
+
+sub query_due
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $due = $cws->get_due_date();
+            print_message("Due date:");
+        if ( !$due ) {
+            print "not set\n";
+        } else {
+            print "$due\n";
+        }
+    }
+    return;
+}
+
+sub query_due_qa
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $due_qa = $cws->get_due_date_qa();
+            print_message("Due date (QA):");
+        if ( !$due_qa ) {
+            print "not set\n";
+        } else {
+            print "$due_qa\n";
+        }
+    }
+    return;
+}
+
+sub query_help
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $help = $cws->is_helprelevant();
+            print_message("Help relevant:");
+        if ( !$help ) {
+            print "false\n";
+        } else {
+            print "true\n";
+        }
+    }
+    return;
+}
+
+sub query_ui
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $help = $cws->is_uirelevant();
+            print_message("UI relevant:");
+        if ( !$help ) {
+            print "false\n";
+        } else {
+            print "true\n";
+        }
+    }
+    return;
+}
+
 sub parse_options
 {
     # parse options and do some sanity checks
@@ -348,12 +428,18 @@ sub parse_options
         exit(1);
     }
 
+    my $mode = lc($ARGV[0]);
+
+    # cwquery mode 'state' has been renamed to 'status' to be more consistent
+    # with CVS etc. 'state' is still an alias for 'status'
+    $mode = 'status' if $mode eq 'state';
+
     # there will be more query modes over time
-    if ( !exists $query_modes_hash{lc($ARGV[0])} ) {
+    if ( !exists $query_modes_hash{$mode} ) {
         usage();
         exit(1);
     }
-    return lc($ARGV[0]);
+    return $mode;
 }
 
 sub print_message
@@ -382,17 +468,23 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|owner|state|taskids>\n";
+    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|owner|status|taskids>\n";
+    print STDERR "       cwsquery [-h] [-m master] [-c child] <release|due|due_qa|help|ui>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
     print STDERR "       cwsquery [-h] [-m master] [-ms milestone/step] <integrated>\n";
     print STDERR "       cwsquery [-h] [-m master] <new|approved|nominated|ready>\n";
     print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
+    print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
     print STDERR "\towner\t\tquery CWS owner\n";
-    print STDERR "\tstate\t\tquery approval status of CWS\n";
+    print STDERR "\tstatus\t\tquery approval status of CWS\n";
     print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
-    print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
+    print STDERR "\trelease\t\tquery for target release of CWS\n";
+    print STDERR "\tdue\t\tquery for due date of CWS\n";
+    print STDERR "\tdue_qa\t\tquery for due date (QA) of CWS\n";
+    print STDERR "\thelp\t\tquery if the CWS is help relevant\n";
+    print STDERR "\tui\t\tquery if the CWS is UI relevant\n";
     print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
     print STDERR "\tintegrated\tquery integrated CWSs for milestone\n";
     print STDERR "\tnew\t\tquery for new CWSs\n";
@@ -407,7 +499,7 @@ sub usage
     print STDERR "Examples:\n";
     print STDERR "\tcwsquery modules \n";
     print STDERR "\tcwsquery -m SRX644 -c uno4 modules \n";
-    print STDERR "\tcwsquery -m SRX645 -c pmselectedfixes state\n";
+    print STDERR "\tcwsquery -m SRX645 -c pmselectedfixes status\n";
     print STDERR "\tcwsquery taskids\n";
     print STDERR "\tcwsquery -m SRC680 latest\n";
     print STDERR "\tcwsquery -m SRC680 -ms m130 integrated\n";
