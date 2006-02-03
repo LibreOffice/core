@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:04:15 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_nStatementCount(0)
                          ,m_bParameterSubstitution(sal_False)
                          ,m_bIgnoreDriverPrivileges(sal_False)
+                         ,m_bPreventGetVersionColumns(sal_False)
 {
     m_pDriver->acquire();
     ModuleContext::AddRef();
@@ -235,6 +236,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     const char* pCharSet    = "CharSet";
     const char* pParaName   = "ParameterNameSubstitution";
     const char* pPrivName   = "IgnoreDriverPrivileges";
+    const char* pVerColName = "PreventGetVersionColumns";   // #i60273#
     const char* pRetrieving = "IsAutoRetrievingEnabled";
     const char* pRetriStmt  = "AutoRetrievingStatement";
 
@@ -250,6 +252,8 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
             pBegin->Value >>= bSilent;
         else if(!pBegin->Name.compareToAscii(pPrivName))
             pBegin->Value >>= m_bIgnoreDriverPrivileges;
+        else if(!pBegin->Name.compareToAscii(pVerColName))
+            pBegin->Value >>= m_bPreventGetVersionColumns;
         else if(!pBegin->Name.compareToAscii(pParaName))
             pBegin->Value >>= m_bParameterSubstitution;
         else if(!pBegin->Name.compareToAscii(pRetrieving))
