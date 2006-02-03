@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:59:46 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ private:
     String          aComment;
     BOOL            bScenario;
     BOOL            bLayoutRTL;
+    BOOL            bLoadingRTL;
 
     String          aLinkDoc;
     String          aLinkFlt;
@@ -199,7 +200,9 @@ public:
     void        SetVisible( BOOL bVis );
 
     BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
+    BOOL        IsLoadingRTL() const                         { return bLoadingRTL; }
     void        SetLayoutRTL( BOOL bSet );
+    void        SetLoadingRTL( BOOL bSet );
 
     BOOL        IsScenario() const                           { return bScenario; }
     void        SetScenario( BOOL bFlag );
