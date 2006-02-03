@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:33 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,6 +838,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
+#include <sal/config.h>
 
 /* OS X locale discovery function from dylib */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
@@ -865,7 +866,15 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
         if( !isDarwin )
         {
             /* Load the locale discovery library if we are running on OS X */
-            const sal_Char   *aLocaleLibName             = "libsalextra_x11osx_mxp.dylib";
+
+//FIXME : this have to be changed for Universal binaries
+#if defined INTEL
+        const sal_Char   *aLocaleLibName         = "libsalextra_x11osx_mxi" SAL_DLLEXTENSION;
+#elif defined POWERPC
+        const sal_Char   *aLocaleLibName         = "libsalextra_x11osx_mxp" SAL_DLLEXTENSION;
+#else
+//other case does not exist
+#endif
             const sal_Char   *aGetOSXLocaleFunctionName  = "macxp_getOSXLocale";
             oslModule         pLocaleLib;
             void             *pFunc;
