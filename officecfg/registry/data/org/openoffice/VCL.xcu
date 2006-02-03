@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:56:19 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1976,6 +1976,29 @@
         </prop>
         <prop oor:name="FontType">
           <value>Italic,Script</value>
+        </prop>
+      </node>
+      <node oor:name="din" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+        </prop>
+        <prop oor:name="SubstFontsMS">
+          <value></value>
+        </prop>
+        <prop oor:name="SubstFontsPS">
+          <value></value>
+        </prop>
+        <prop oor:name="SubstFontsHTML">
+          <value></value>
+        </prop>
+        <prop oor:name="FontWeight">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontWidth">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Default,Standard,Normal,SansSerif</value>
         </prop>
       </node>
       <node oor:name="dingbats" oor:op="replace">
