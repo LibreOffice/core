@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:00:47 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,9 @@ void ScXMLBodyContext::EndElement()
         if (pChangeTrackingImportHelper)
             pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 
+#if 0
+        // #i57869# table styles are applied before the contents now
+
         std::vector<rtl::OUString> aTableStyleNames(GetScImport().GetTableStyle());
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() && !aTableStyleNames.empty())
@@ -284,6 +287,7 @@ void ScXMLBodyContext::EndElement()
                 }
             }
         }
+#endif
 
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
