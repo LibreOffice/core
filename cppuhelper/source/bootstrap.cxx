@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:11:31 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,7 +547,12 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             buf.makeStringAndClear()
         };
         rtl_uString * ar_args [] = {
-            args[ 0 ].pData, args[ 1 ].pData, args[ 2 ].pData
+            args[ 0 ].pData,
+            args[ 1 ].pData,
+            args[ 2 ].pData,
+            args[ 3 ].pData,
+            args[ 4 ].pData,
+            args[ 5 ].pData
         };
         ::osl::Security sec;
 
