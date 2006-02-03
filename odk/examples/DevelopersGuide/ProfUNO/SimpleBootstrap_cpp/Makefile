@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:13:29 $
+#  last change: $Author: kz $ $Date: 2006-02-03 17:14:51 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -88,7 +88,7 @@ $(OUT_APP_OBJ)/%.$(OBJ_EXT) : %.cxx $(APP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_APP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/_%$(EXE_EXT) : $(OUT_APP_OBJ)/%.$(OBJ_EXT)
+$(OUT_BIN)/_$(APP_NAME)$(EXE_EXT) : $(OUT_APP_OBJ)/$(APP_NAME).$(OBJ_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_APP_GEN))
 ifeq "$(OS)" "WIN"
@@ -99,11 +99,12 @@ else
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_BIN)/_%$(EXE_EXT)
+$(OUT_BIN)/$(APP_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP_NAME)$(EXE_EXT)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$(BIN_DIR)/unoapploader$(EXE_EXT)) $(subst /,$(PS),$@)
 	touch $@
 
-SimpleBootstrapCppExample : $(OUT_BIN)/SimpleBootstrap_cpp$(EXE_EXT)
+SimpleBootstrapCppExample : $(OUT_BIN)/$(APP_NAME)$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
