@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:31 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:23:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,6 +499,16 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
     {
+        if ( bImportingXML )
+        {
+            // #i57869# only set the LoadingRTL flag, the real setting (including mirroring)
+            // is applied in SetImportingXML(FALSE). This is so the shapes can be loaded in
+            // normal LTR mode.
+
+            pTab[nTab]->SetLoadingRTL( bRTL );
+            return;
+        }
+
         pTab[nTab]->SetLayoutRTL( bRTL );       // only sets the flag
         pTab[nTab]->SetDrawPageSize();
 
