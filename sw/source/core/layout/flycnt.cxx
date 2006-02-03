@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:36:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,6 +486,14 @@ void SwFlyAtCntFrm::MakeAll()
                             dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
                     ASSERT( pAnchPosAnchorFrm,
                             "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
+                    // --> OD 2006-01-27 #i58182# - For the usage of new method
+                    // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
+                    // to check move forward of anchor frame due to the object
+                    // positioning it's needed to know, if the object is anchored
+                    // at the master frame before the anchor frame is formatted.
+                    const bool bAnchoredAtMaster( !pAnchPosAnchorFrm->IsFollow() );
+                    // <--
+
                     // --> OD 2005-11-17 #i56300#
                     // perform complete format of anchor text frame and its
                     // previous frames, which have become invalid due to the
@@ -494,8 +502,13 @@ void SwFlyAtCntFrm::MakeAll()
                     // <--
                     // --> OD 2004-10-22 #i35911#
                     // --> OD 2005-01-14 #i40444#
-                    if ( pAnchPosAnchorFrm->FindPageFrm()->GetPhyPageNum() >
-                                                GetPageFrm()->GetPhyPageNum() )
+                    // --> OD 2006-01-27 #i58182# - usage of new method
+                    // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
+                    sal_uInt32 nToPageNum( 0L );
+                    bool bDummy( false );
+                    if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
+                                        *this, GetPageFrm()->GetPhyPageNum(),
+                                        bAnchoredAtMaster, nToPageNum, bDummy ) )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                         // --> OD 2005-09-29 #125370#,#125957# - mark anchor text frame
@@ -504,12 +517,12 @@ void SwFlyAtCntFrm::MakeAll()
                         const SwPageFrm* pAnchorPageFrm =
                                                 pAnchPosAnchorFrm->FindPageFrm();
                         bool bInsert( true );
-                        sal_uInt32 nToPageNum( 0L );
+                        sal_uInt32 nAnchorFrmToPageNum( 0L );
                         const SwDoc& rDoc = *(GetFrmFmt().GetDoc());
                         if ( SwLayouter::FrmMovedFwdByObjPos(
-                                                rDoc, *pAnchorTxtFrm, nToPageNum ) )
+                                                rDoc, *pAnchorTxtFrm, nAnchorFrmToPageNum ) )
                         {
-                            if ( nToPageNum < pAnchorPageFrm->GetPhyPageNum() )
+                            if ( nAnchorFrmToPageNum < nToPageNum )
                                 SwLayouter::RemoveMovedFwdFrm( rDoc, *pAnchorTxtFrm );
                             else
                                 bInsert = false;
@@ -517,7 +530,7 @@ void SwFlyAtCntFrm::MakeAll()
                         if ( bInsert )
                         {
                             SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTxtFrm,
-                                                           pAnchorPageFrm->GetPhyPageNum() );
+                                                           nToPageNum );
                         }
                         // <--
                     }
