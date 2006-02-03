@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-01-31 18:28:45 $
+dnl * Date: $Date: 2006-02-03 17:35:08 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.151 $ )
+AC_REVISION( $Revision: 1.152 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -173,7 +173,7 @@ AC_ARG_ENABLE(kde,
                           where Qt and KDE are available.
 ],,)
 AC_ARG_ENABLE(kdeab,
-[  --disable-kdeab         Disable the KDE Addressbook support
+[  --disable-kdeab         Disable the KDE address book support
 ],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 AC_ARG_ENABLE(binfilter,
 [  --disable-binfilter:    Disable legacy binary file formats filters
@@ -4062,20 +4062,20 @@ AC_SUBST(GOBJECT_LIBS)
 dnl ===================================================================
 dnl Test whether to include KDE AB support
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable KDE Addressbook support])
+AC_MSG_CHECKING([whether to enable KDE address book support])
 if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
    AC_MSG_RESULT([yes])
    save_CXXFLAGS=$CXXFLAGS
    CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
-   AC_MSG_CHECKING([whether KDE is >= 3.2])
+   AC_MSG_CHECKING([whether KDE is between 3.2 and 3.6])
        AC_TRY_RUN([
 #include <kdeversion.h>
 
 int main(int argc, char **argv) {
-       if((KDE_VERSION_MAJOR == 3 && KDE_VERSION_MINOR >= 2) || KDE_VERSION_MAJOR > 3) return 0;
+       if (KDE_VERSION_MAJOR == 3 && 2 <= KDE_VERSION_MINOR && KDE_VERSION_MINOR <= 6) return 0;
        else return 1;
 }
-       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old, you need at least 3.2 for the KDE AB support])])
+       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])])
    CXXFLAGS=$save_CXXFLAGS
    ENABLE_KAB=TRUE
 else
