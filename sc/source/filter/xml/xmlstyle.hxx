@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:37:55 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 18:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesImportProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
+extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];
 
 //CellStyles
 #define XML_SC_TYPE_CELLPROTECTION                  (XML_SC_TYPES_START +  1)
