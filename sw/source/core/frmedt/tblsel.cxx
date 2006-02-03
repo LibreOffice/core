@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:55:26 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,9 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     int bChkProtected = TBLSEARCH_PROTECT & eSearchType;
 
     BOOL bTblIsValid;
-    int nLoopMax = 100;     //JP 28.06.99: max 100 loops - Bug 67292
+    // --> FME 2006-01-25 #i55421# Reduced value 10
+    int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
+    // <--
     USHORT i;
 
     do {
@@ -582,7 +584,9 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
 
     BOOL bTblIsValid, bValidChartSel;
-    int nLoopMax = 100;     //JP 28.06.99: max 100 loops - Bug 67292
+    // --> FME 2006-01-25 #i55421# Reduced value 10
+    int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
+    // <--
     USHORT i = 0;
 
     do {
