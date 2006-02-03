@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:21:26 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,15 +129,17 @@ bool SwNodeNum::IsCounted() const
 
     if (mpTxtNode)
     {
-        const SwNumFmt * pNumFmt = GetNumFmt();
-
-        if (pNumFmt)
-        {
-            sal_Int16 nType = pNumFmt->GetNumberingType();
-
-            if ( nType != SVX_NUM_NUMBER_NONE)
-                aResult = mpTxtNode->IsCounted();
-        }
+        // --> OD 2006-01-25 #i59559#
+        // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
+//        const SwNumFmt * pNumFmt = GetNumFmt();
+//        if (pNumFmt)
+//        {
+//            sal_Int16 nType = pNumFmt->GetNumberingType();
+//            if ( nType != SVX_NUM_NUMBER_NONE)
+//                aResult = mpTxtNode->IsCounted();
+//        }
+        aResult = mpTxtNode->IsCounted();
+        // <--
     }
     else
         aResult = SwNumberTreeNode::IsCounted();
