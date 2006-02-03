@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:20:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1255,13 +1255,22 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                         bEvade = sal_True; // Nicht seitengeb. weichen Rahmengeb. aus
                     else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
                         return sal_False; // Rahmengebundene weichen abs.geb. nicht aus
-                    else if( bInFooterOrHeader )
-                        return sal_False;  // In header or footer no wrapping
-                                           // if both bounded at paragraph
-                    else // Zwei Flies mit (auto-)absatzgebunder Verankerung ...
-                    // ... entscheiden nach der Reihenfolge ihrer Anker im Dok.
-                        bEvade = rNewA.GetCntntAnchor()->nNode.GetIndex() <=
-                                rCurrA.GetCntntAnchor()->nNode.GetIndex();
+                    // --> OD 2006-01-30 #i57062#
+                    // In order to avoid loop situation, it's decided to adjust
+                    // the wrapping behaviour of content of at-paragraph/at-character
+                    // anchored objects to one in the page header/footer and
+                    // the document body --> content of at-paragraph/at-character
+                    // anchored objects doesn't wrap around each other.
+//                    else if( bInFooterOrHeader )
+//                        return sal_False;  // In header or footer no wrapping
+//                                           // if both bounded at paragraph
+//                    else // Zwei Flies mit (auto-)absatzgebunder Verankerung ...
+//                    // ... entscheiden nach der Reihenfolge ihrer Anker im Dok.
+//                      bEvade = rNewA.GetCntntAnchor()->nNode.GetIndex() <=
+//                              rCurrA.GetCntntAnchor()->nNode.GetIndex();
+                    else
+                        return sal_False;
+                    // <--
                 }
             }
 
@@ -1361,7 +1370,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             }
         }
     }
-    return 0;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -1905,8 +1914,16 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                         continue;
                 }
 
-                if ( mbIgnoreCurrentFrame && pCurrFrm == &lcl_TheAnchor( pObj ) )
+                // --> OD 2006-01-20 #i58642#
+                // Compare <GetMaster()> instead of <pCurrFrm> with the anchor
+                // frame of the anchored object, because a follow frame have
+                // to ignore the anchored objects of its master frame.
+                // Note: Anchored objects are always registered at the master
+                //       frame, exception are as-character anchored objects,
+                //       but these aren't handled here.
+                if ( mbIgnoreCurrentFrame && GetMaster() == &lcl_TheAnchor( pObj ) )
                     continue;
+                // <--
 
                 if( pRect )
                 {
