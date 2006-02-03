@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenQuery.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:20:00 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -107,7 +107,7 @@ public class OpenQuery {
         // the DataSourceName can be a data source registered with [PRODUCTNAME], among other possibilities
         xProp.setPropertyValue("DataSourceName","Bibliography");
 
-        // the CommandType must be TABLE, QUERY or COMMAND – here we use COMMAND
+        // the CommandType must be TABLE, QUERY or COMMAND, here we use COMMAND
         xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.COMMAND));
 
         // the Command could be a table or query name or a SQL command, depending on the CommandType
