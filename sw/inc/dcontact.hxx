@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:35 $
+ *  last change: $Author: kz $ $Date: 2006-02-03 17:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,6 +404,10 @@ bool CheckControlLayer( const SdrObject *pObj );
 //Zeichenobjekte im StarWriter (SwClient) und den Objekten selbst im Drawing
 //(SdrObjUserCall).
 
+// --> OD 2006-01-18 #129959#
+class NestedUserCallHdl;
+// <--
+
 class SwDrawContact : public SwContact
 {
     private:
@@ -422,6 +426,17 @@ class SwDrawContact : public SwContact
         // OD 16.05.2003 #108784# - data structure for collecting 'virtual'
         // drawing object supporting drawing objects in headers/footers.
         std::list<SwDrawVirtObj*> maDrawVirtObjs;
+
+        // --> OD 2006-01-18 #129959#
+        // Needed data for handling of nested <SdrObjUserCall> events in
+        // method <_Changed(..)>
+        bool mbUserCallActive;
+        // event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
+        // Note: value only valid, if <mbUserCallActive> is TRUE.
+        SdrUserCallType meEventTypeOfCurrentUserCall;
+
+        friend class NestedUserCallHdl;
+        // <--
 
         // unary function used by <list> iterator to find a disconnected 'virtual'
         // drawing object
