@@ -77,7 +77,7 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS=-c -GX -MT
+CC_FLAGS=-c -GX -MT -Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-Zi
 endif
