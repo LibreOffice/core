@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:39:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+// values asigned to capitalization types
+#define CAPTYPE_UNKNOWN 0
+#define CAPTYPE_NOCAP   1
+#define CAPTYPE_INITCAP 2
+#define CAPTYPE_ALLCAP  3
+#define CAPTYPE_MIXED   4
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -325,6 +331,8 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
     SvtPathOptions aPathOpt;
 
     int nHyphenationPos = -1;
+        int nHyphenationPosAlt = -1;
+        int nHyphenationPosAltHyph = -1;
     int wordlen;
     char *hyphens;
         char *lcword;
@@ -376,12 +384,22 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
           }
            aDicts[k].aPtr = dict;
                aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
+               if (aDicts[k].aEnc == RTL_TEXTENCODING_DONTKNOW) {
+                  if (strcmp("ISCII-DEVANAGARI", dict->cset) == 0) {
+                     aDicts[k].aEnc = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                  } else if (strcmp("UTF-8", dict->cset) == 0) {
+                     aDicts[k].aEnc = RTL_TEXTENCODING_UTF8;
+                  }
+               }
         }
 
             // other wise hyphenate the word with that dictionary
             dict = aDicts[k].aPtr;
             aEnc = aDicts[k].aEnc;
             pCC =  aDicts[k].apCC;
+
+            sal_uInt16 ct = CAPTYPE_UNKNOWN;
+            ct = capitalType(aWord, pCC);
 
             // first convert any smart quotes or apostrophes to normal ones
         OUStringBuffer rBuf(aWord);
@@ -401,8 +419,12 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             OString encWord(OU2ENC(nTerm,aEnc));
 
         wordlen = encWord.getLength();
-            lcword = new char[wordlen+1];
-        hyphens = new char[wordlen+5];
+            lcword = new char[wordlen + 1];
+        hyphens = new char[wordlen + 5];
+
+            char ** rep = NULL; // replacements of discretionary hyphenation
+            int * pos = NULL; // array of [hyphenation point] minus [deletion position]
+            int * cut = NULL; // length of deletions in original word
 
             // copy converted word into simple char buffer
             strcpy(lcword,encWord.getStr());
@@ -411,54 +433,117 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             int n = wordlen-1;
         while((n >=0) && (lcword[n] == '.')) n--;
             n++;
-            // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
             if (n > 0) {
-           if (hnj_hyphen_hyphenate(dict, lcword, n, hyphens))
+           if (hnj_hyphen_hyphenate2(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut))
            {
               //whoops something did not work
               delete[] hyphens;
                   delete[] lcword;
+                  if (rep) {
+                    for(int j = 0; j < n; j++) {
+                        if (rep[j]) free(rep[j]);
+                    }
+                    free(rep);
+                  }
+                  if (pos) free(pos);
+                  if (cut) free(cut);
               return NULL;
            }
             }
+
             // now backfill hyphens[] for any removed trailing periods
             for (int c = n; c < wordlen; c++) hyphens[c] = '0';
             hyphens[wordlen] = '\0';
 
-            //fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
-        OUStringBuffer  hyphenatedWordBuffer;
-            OUString hyphenatedWord;
         INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
         for (INT32 i = 0; i < encWord.getLength(); i++)
         {
-            hyphenatedWordBuffer.append(aWord[i]);
+                int leftrep = 0;
                 BOOL hit = (wordlen >= minLen);
-                hit = hit && (hyphens[i]&1) && (i < Leading);
-                hit = hit && (i >= (minLead-1) );
-                hit = hit && ((wordlen - i - 1) >= minTrail);
-            if (hit)
-            {
+                if (!rep || !rep[i] || (i >= n)) {
+                    hit = hit && (hyphens[i]&1) && (i < Leading);
+                    hit = hit && (i >= (minLead-1) );
+                    hit = hit && ((wordlen - i - 1) >= minTrail);
+                } else {
+                    // calculate change character length before hyphenation point signed with '='
+                    for (char * c = rep[i]; *c && (*c != '='); c++) {
+                        if (aEnc == RTL_TEXTENCODING_UTF8) {
+                            if (((unsigned char) *c) >> 6 != 2) leftrep++;
+                        } else leftrep++;
+                    }
+                    hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
+                    hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
+                    hit = hit && ((wordlen - i - 1 + strlen(rep[i]) - leftrep - 1) >= minTrail);
+                }
+            if (hit) {
             nHyphenationPos = i;
-            hyphenatedWordBuffer.append(sal_Unicode('='));
-            }
+                    if (rep && (i < n) && rep[i]) {
+                        nHyphenationPosAlt = i - pos[i];
+                        nHyphenationPosAltHyph = i + leftrep - pos[i];
+                    }
+                }
          }
 
-            hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-        // fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-            // fflush(stderr);
-         if (nHyphenationPos  == -1)
+         if (nHyphenationPos  == -1) {
              xRes = NULL;
-         else
-         {
-             xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
-                       aWord, nHyphenationPos );
-         }
+             } else {
+                if (rep && rep[nHyphenationPos]) {
+                    // remove equal sign
+                    char * s = rep[nHyphenationPos];
+                    int eq = 0;
+                    for (; *s; s++) {
+                        if (*s == '=') eq = 1;
+                        if (eq) *s = *(s + 1);
+                    }
+                    OUString repHyphlow(rep[nHyphenationPos], strlen(rep[nHyphenationPos]), aEnc);
+                    OUString repHyph;
+                    switch (ct) {
+                       case CAPTYPE_ALLCAP:
+                     {
+                               repHyph = makeUpperCase(repHyphlow, pCC);
+                               break;
+                             }
+                       case CAPTYPE_INITCAP:
+                     {
+                               if (nHyphenationPosAlt == 0) {
+                                    repHyph = makeInitCap(repHyphlow, pCC);
+                               } else {
+                                    repHyph = repHyphlow;
+                               }
+                               break;
+                             }
+                           default:
+                     {
+                               repHyph = repHyphlow;
+                               break;
+                             }
+            }
 
-         delete[] hyphens;
-             delete[] lcword;
-         return xRes;
+                    // handle shortening
+                    int nPos = (nHyphenationPosAltHyph < nHyphenationPos) ?
+                        nHyphenationPosAltHyph : nHyphenationPos;
+                    // dicretionary hyphenation
+                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
+                aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
+                        nHyphenationPosAltHyph);
+                } else {
+                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
+                       aWord, nHyphenationPos);
+                }
+        }
 
+            delete[] lcword;
+        delete[] hyphens;
+            if (rep) {
+                for(int j = 0; j < n; j++) {
+                    if (rep[j]) free(rep[j]);
+                }
+                free(rep);
+            }
+            if (pos) free(pos);
+            if (cut) free(cut);
+        return xRes;
     }
         return NULL;
 }
@@ -472,7 +557,9 @@ Reference < XHyphenatedWord > SAL_CALL
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException)
 {
-  /* alternative spelling isn't  supported by tex dictionaries */
+  /* alternative spelling isn't supported by tex dictionaries */
+  /* XXX: OOo's extended libhjn algorithm can support alternative spellings with extended TeX dic. */
+  /* TASK: implement queryAlternativeSpelling() */
   return NULL;
 }
 
@@ -533,6 +620,13 @@ Reference< XPossibleHyphens > SAL_CALL
         }
      aDicts[k].aPtr = dict;
          aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
+         if (aDicts[k].aEnc == RTL_TEXTENCODING_DONTKNOW) {
+            if (strcmp("ISCII-DEVANAGARI", dict->cset) == 0) {
+               aDicts[k].aEnc = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+            } else if (strcmp("UTF-8", dict->cset) == 0) {
+               aDicts[k].aEnc = RTL_TEXTENCODING_UTF8;
+            }
+         }
       }
 
       // other wise hyphenate the word with that dictionary
@@ -622,6 +716,29 @@ Reference< XPossibleHyphens > SAL_CALL
 
 }
 
+sal_uInt16 SAL_CALL Hyphenator::capitalType(const OUString& aTerm, CharClass * pCC)
+{
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen)) {
+              String aStr(aTerm);
+              sal_Int32 nc = 0;
+              for (sal_Int32 tindex = 0; tindex < tlen;  tindex++) {
+               if (pCC->getCharacterType(aStr,tindex) &
+                       ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
+          }
+
+              if (nc == 0) return (sal_uInt16) CAPTYPE_NOCAP;
+
+              if (nc == tlen) return (sal_uInt16) CAPTYPE_ALLCAP;
+
+              if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
+                      ::com::sun::star::i18n::KCharacterType::UPPER))
+                   return (sal_uInt16) CAPTYPE_INITCAP;
+
+              return (sal_uInt16) CAPTYPE_MIXED;
+    }
+        return (sal_uInt16) CAPTYPE_UNKNOWN;
+}
 
 OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
@@ -629,6 +746,29 @@ OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * p
       return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
         return aTerm;
 }
+
+OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass * pCC)
+{
+        if (pCC)
+              return pCC->toUpper_rtl(aTerm, 0, aTerm.getLength());
+        return aTerm;
+}
+
+
+OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC)
+{
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen)) {
+              OUString bTemp = aTerm.copy(0,1);
+              if (tlen > 1)
+                   return ( pCC->toUpper_rtl(bTemp, 0, 1)
+                             + pCC->toLower_rtl(aTerm,1,(tlen-1)) );
+
+          return pCC->toUpper_rtl(bTemp, 0, 1);
+    }
+        return aTerm;
+}
+
 
 
 
@@ -844,3 +984,9 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
 
 
 ///////////////////////////////////////////////////////////////////////////
+
+#undef CAPTYPE_UNKNOWN
+#undef CAPTYPE_NOCAP
+#undef CAPTYPE_INITCAP
+#undef CAPTYPE_ALLCAP
+#undef CAPTYPE_MIXED
