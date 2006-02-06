@@ -2,13 +2,13 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="UCB" script:language="StarBasic">&apos;Option explicit
 Public oDocument
-Dim oDocInfo as object
+Public oDocInfo as object
 Const SBMAXDIRCOUNT = 10
 Dim CurDirMaxCount as Integer
 Dim sDirArray(SBMAXDIRCOUNT-1) as String
 Dim DirIndex As Integer
 Dim iDirCount as Integer
-Dim bInterruptSearch as Boolean
+Public bInterruptSearch as Boolean
 
 Sub Main()
 Dim LocsfileContent(0) as String
