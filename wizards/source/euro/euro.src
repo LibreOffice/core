@@ -4,9 +4,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:15:57 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 11:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,8 +351,8 @@ Text [ en-US ] = "Sheet cannot be unprotected";
 
 String MESSAGES + 13
 {
-Text [ de ] = "Der AutoPilot kann dieses Dokument nicht bearbeiten, da in Dokumenten mit geschützten Tabellen keine Zellvorlagen modifiziert werden können.";
-Text [ en-US ] = "The AutoPilot cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
+Text [ de ] = "Der Assistent kann dieses Dokument nicht bearbeiten, da in Dokumenten mit geschützten Tabellen keine Zellvorlagen modifiziert werden können.";
+Text [ en-US ] = "The Wizard cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
 };
 
 
@@ -426,8 +426,8 @@ String MESSAGES + 23
 
 String MESSAGES + 24
 {
-    Text [ de ] = "Autopilot abbrechen";
-    Text [ en-US ] = "Cancel AutoPilot";
+    Text [ de ] = "Assistent abbrechen";
+    Text [ en-US ] = "Cancel Wizard";
 };
 
  String CURRENCIES
