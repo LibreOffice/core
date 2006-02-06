@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:21:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -100,11 +100,14 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
     , m_ftHead(this, WizardResId(FT_WELCOME_HEADER))
     , m_ftBody(this, WizardResId(FT_WELCOME_BODY))
     , m_pParent(parent)
+    , bIsEvalVersion(false)
+    , bNoEvalText(false)
 {
     FreeResource();
 
     _setBold(m_ftHead);
 
+    checkEval();
     // we need to choose the welcome text that is diplayed
     // choices are the default text, default text+migradtion,
     // OEM and extended OEM
@@ -119,7 +122,7 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
             m_ftBody.SetText( aText );
         }
-        if (checkEval()) {
+        if (bIsEvalVersion && (! bNoEvalText)) {
             String aText(WizardResId(STR_WELCOME_EVAL));
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
             m_ftBody.SetText( aText );
@@ -136,19 +139,25 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
 }
 
 
-bool WelcomePage::checkEval()
+void WelcomePage::checkEval()
 {
-    bool bResult = false;
     Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     Reference< XMaterialHolder > xHolder(xFactory->createInstance(
         OUString::createFromAscii("com.sun.star.tab.tabreg")), UNO_QUERY);
     if (xHolder.is()) {
         Any aData = xHolder->getMaterial();
         Sequence < NamedValue > aSeq;
-        if (aData >>= aSeq) bResult = true;
+        if (aData >>= aSeq) {
+            bIsEvalVersion = true;
+            for (int i=0; i< aSeq.getLength(); i++) {
+                if (aSeq[i].Name.equalsAscii("NoEvalText")) {
+                    aSeq[i].Value >>= bNoEvalText;
+                }
+            }
+        }
     }
-    return bResult;
 }
+
 
 void WelcomePage::ActivatePage()
 {
