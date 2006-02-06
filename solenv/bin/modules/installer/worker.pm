@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 15:01:43 $
+#   last change: $Author: rt $ $Date: 2006-02-06 10:52:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1346,14 +1346,18 @@ sub prepare_windows_patchfiles
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if ( $styles =~ /\bDONTRENAMEINPATCH\b/ ) { next; }
 
+        # special handling for files with flag DONTSHOW. This files get the extension ".dontshow" to be filtered by dialogs.
+        my $localwindowspatchlevel = $windowspatchlevel;
+        if ( $styles =~ /\bDONTSHOW\b/ ) { $localwindowspatchlevel = $localwindowspatchlevel . "\.dontshow"; }
+
         my $olddestination = $onefile->{'destination'};
-        my $newdestination = $olddestination . "." . $windowspatchlevel;
+        my $newdestination = $olddestination . "." . $localwindowspatchlevel;
         my $localfilename = $olddestination;
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localfilename);  # file name part
-        my $line = "\"" . $localfilename . "\"" . "=" . "\"" . "\." . $windowspatchlevel . "\"";
+        my $line = "\"" . $localfilename . "\"" . "=" . "\"" . "\." . $localwindowspatchlevel . "\"";
         $onefile->{'destination'} = $newdestination;
 
-        my $newfilename = $onefile->{'Name'} . "." . $windowspatchlevel;
+        my $newfilename = $onefile->{'Name'} . "." . $localwindowspatchlevel;
         $onefile->{'Name'} = $newfilename;
 
         # adding section information (section is the directory)
