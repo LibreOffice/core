@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:50:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,15 @@ public:
     inline SwCntntFrm *ContainsCntnt();
     const SwCellFrm *FirstCell() const;
     inline SwCellFrm *FirstCell();
-    const SwFrm *ContainsAny() const;
-    inline SwFrm *ContainsAny();
+    // --> OD 2006-02-01 #130797#
+    // Method <ContainsAny()> doesn't investigate content of footnotes by default.
+    // But under certain circumstances this investigation is intended.
+    // Thus, introduce new optional parameter <_bInvestigateFtnForSections>.
+    // It's default is <false>, still indicating that content of footnotes isn't
+    // investigated for sections.
+    const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
+    inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
+    // <--
     BOOL IsAnLower( const SwFrm * ) const;
 
     const SwFrmFmt *GetFmt() const { return (const SwFrmFmt*)GetDep(); }
@@ -181,10 +188,12 @@ inline SwCellFrm* SwLayoutFrm::FirstCell()
     return (SwCellFrm*)(((const SwLayoutFrm*)this)->FirstCell());
 }
 
-inline SwFrm* SwLayoutFrm::ContainsAny()
+// --> OD 2006-02-01 #130797#
+inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
-    return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny());
+    return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny( _bInvestigateFtnForSections ));
 }
+// <--
 
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
 inline BOOL SwFrm::IsColBodyFrm() const
