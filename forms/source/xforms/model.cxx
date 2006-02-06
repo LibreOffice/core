@@ -4,9 +4,9 @@
  *
  *  $RCSfile: model.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:18:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,11 +305,16 @@ void Model::removeMIPs( void* pTag )
     OSL_ENSURE( pTag != NULL, "empty tag?" );
 
     for( MIPs_t::iterator aIter = maMIPs.begin();
-         aIter != maMIPs.end();
-         aIter ++ )
+         aIter != maMIPs.end(); )
     {
         if( aIter->second.first == pTag )
+        {
+            MIPs_t::iterator next( aIter ); ++next;
             maMIPs.erase( aIter );
+            aIter = next;
+        }
+        else
+            ++aIter;
     }
 }
 
