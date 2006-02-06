@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:39:16 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1638,16 +1638,22 @@ void ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
     {
         rWrt.Strm() << '{' << sRTF_PICT;
 
-        long nXSizeAdd = -(rCr.GetLeft() + rCr.GetRight());
-        long nYSizeAdd = -(rCr.GetTop() + rCr.GetBottom());
+        long nXCroppedSize = rOrig.Width()-(rCr.GetLeft() + rCr.GetRight());
+        long nYCroppedSize = rOrig.Height()-(rCr.GetTop() + rCr.GetBottom());
+        /* #127543#: Graphic with a zero height or width, typically copied from webpages, caused
+        crashes. */
+        if( !nXCroppedSize )
+            nXCroppedSize = 100;
+        if( !nYCroppedSize )
+            nYCroppedSize = 100;
 
         //Given the original size and taking cropping into account
         //first, how much has the original been scaled to get the
         //final rendered size
         rWrt.Strm() << sRTF_PICSCALEX;
-        rWrt.OutLong((100 * rRendered.Width()) / (rOrig.Width() + nXSizeAdd));
+        rWrt.OutLong((100 * rRendered.Width()) / nXCroppedSize);
         rWrt.Strm() << sRTF_PICSCALEY;
-        rWrt.OutLong((100 * rRendered.Height()) / (rOrig.Height() + nYSizeAdd));
+        rWrt.OutLong((100 * rRendered.Height()) / nYCroppedSize);
 
         rWrt.Strm() << sRTF_PICCROPL;
         rWrt.OutLong(rCr.GetLeft());
