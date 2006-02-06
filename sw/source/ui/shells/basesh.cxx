@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:52:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2074,7 +2074,6 @@ void SwBaseShell::SetFrmMode(USHORT nMode, SwWrtShell *pSh )
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
-    pFrmMgr(0),
     pGetStateSet(0)
 {
     SwWrtShell& rWrtSh = rView.GetWrtShell();
@@ -2087,7 +2086,6 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
 
 SwBaseShell::~SwBaseShell()
 {
-    delete pFrmMgr;
     if( rView.GetCurShell() == this )
         rView.ResetSubShell();
 
@@ -2690,68 +2688,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
     if(!bDone)
         rReq.Done();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-int SwBaseShell::InsertGraphic( const String &rPath, const String &rFilter,
-                                BOOL bLink, GraphicFilter *pFlt,
-                                Graphic* pPreviewGrf, BOOL bRule )
-{
-    SwWait aWait( *rView.GetDocShell(), TRUE );
-
-    Graphic aGrf;
-    int nRes = GRFILTER_OK;
-    if ( pPreviewGrf )
-        aGrf = *pPreviewGrf;
-    else
-    {
-        if( !pFlt )
-            pFlt = ::GetGrfFilter();
-        Link aOldLink = pFlt->GetUpdatePercentHdl();
-        pFlt->SetUpdatePercentHdl( LINK( this, SwBaseShell, UpdatePercentHdl ));
-        ::StartProgress( STR_STATSTR_IMPGRF, 0, 100, rView.GetDocShell() );
-        nRes = ::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
-        ::EndProgress( rView.GetDocShell() );
-        pFlt->SetUpdatePercentHdl( aOldLink );
-    }
-
-    if( GRFILTER_OK == nRes )
-    {
-        SwWrtShell &rSh = GetShell();
-        rSh.StartAction();
-        if( bLink )
-        {
-            SwDocShell* pDocSh = GetView().GetDocShell();
-            INetURLObject aTemp(
-                pDocSh->HasName() ?
-                    pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
-                    rtl::OUString());
-
-            String sURL = URIHelper::SmartRel2Abs(
-                aTemp, rPath, URIHelper::GetMaybeFileHdl() );
-
-            rSh.Insert( sURL,
-                        rFilter, aGrf, pFrmMgr, bRule );
-        }
-        else
-            rSh.Insert( aEmptyStr, aEmptyStr, aGrf, pFrmMgr );
-        // nach dem EndAction ist es zu spaet, weil die Shell dann schon zerstoert sein kann
-        DELETEZ(pFrmMgr);
-        rSh.EndAction();
-    }
-    return nRes;
-}
-
-
-IMPL_LINK_INLINE_START( SwBaseShell, UpdatePercentHdl, GraphicFilter *, pFilter )
-{
-    ::SetProgressState( pFilter->GetPercent(), rView.GetDocShell() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SwBaseShell, UpdatePercentHdl, GraphicFilter *, pFilter )
-
 
 // ----------------------------------------------------------------------------
 
