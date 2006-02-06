@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:25:49 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2325,6 +2325,17 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
         if (sNumRuleName.Len() > 0)
         {
             pRet = GetDoc()->FindNumRulePtr( sNumRuleName );
+            // --> OD 2006-01-13 #i60395#
+            // It's not allowed to apply the outline numbering rule as hard
+            // attribute to a paragraph.
+            // Because currently not all situation are known, in which such
+            // a situation is triggered, it's asserted in order to find these.
+            ASSERT( !pRet || !HasSwAttrSet() ||
+                    pRet != GetDoc()->GetOutlineNumRule() ||
+                    SFX_ITEM_SET !=
+                      GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ),
+                    "<SwTxtNode::_GetNumRule(..)> - found outline numbering rule as hard attribute at a paragraph. This isn't allowed. It's a serious defect, please inform OD" );
+            // <--
         }
         else // numbering is turned off
             bNoNumRule = true;
@@ -3458,11 +3469,18 @@ void SwTxtNode::SyncNumberAndNumRule()
                      : GetLevel();
         // <--
 
-        if (nLevel < 0)
+        // --> OD 2006-01-12 #i60395#
+        // Consider that <GetOutlineLevel()> could return NO_NUMBERING
+        if ( nLevel < 0 ||
+             nLevel == NO_NUMBERING )
             nLevel = 0;
+        // <--
 
+        // --> OD 2006-01-12 #i60395#
+        // the valid numbering level range is [0, MAXLEVEL)
         if (nLevel > MAXLEVEL)
-            nLevel = MAXLEVEL;
+            nLevel = MAXLEVEL - 1;
+        // <--
 
         // --> OD 2005-11-02 #i51089 - TUNING#
         mpNodeNum->RemoveMe();
