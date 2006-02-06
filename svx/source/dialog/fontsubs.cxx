@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:05:45 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aNonPropFontsOnlyCB.SetClickHdl(LINK(this, SvxFontSubstTabPage, NonPropFontsHdl));
     static long aStaticTabs[]=
     {
-        5, 0, 30, 60, 154, 248
+//        5, 0, 30, 60, 154, 248
+        4, 0, 30, 60, 154
     };
 
     aCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
@@ -158,7 +159,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader += sHeader3;
     sHeader += sTabSpace;
     sHeader += sHeader4;
-    sHeader += sTabSpace;
+//   sHeader += sTabSpace;
     aCheckLB.InsertHeaderEntry(sHeader);
 
     HeaderBar* pBar = aCheckLB.GetTheHeaderBar();
@@ -512,13 +513,22 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
         ULONG nSelPos = GetModel()->GetAbsPos(GetCurEntry());
-        USHORT nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
-        if(IsChecked(nSelPos, 0))
-            nCheck += 2;
-        nCheck--;
-        nCheck &= 3;
-        CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
-        CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        USHORT nCol = GetCurrentTabPos() - 1;
+        if ( nCol < 2 )
+        {
+            CheckEntryPos( nSelPos, nCol, !IsChecked( nSelPos, nCol ) );
+            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)GetEntry( nSelPos ) );
+        }
+        else
+        {
+            USHORT nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
+            if(IsChecked(nSelPos, 0))
+                nCheck += 2;
+            nCheck--;
+            nCheck &= 3;
+            CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
+            CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        }
     }
     else
         SvxSimpleTable::KeyInput(rKEvt);
