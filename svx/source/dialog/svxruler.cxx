@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:54:00 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3632,14 +3632,17 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
 */
 
 {
-    SvxTabStop aTabStop = (*pTabStopItem)[pRuler_Imp->nIdx];
-    aTabStop.GetAdjustment() = ToAttrTab_Impl(pMenu->GetCurItemId()-1);
-    pTabStopItem->Remove(pRuler_Imp->nIdx);
-    pTabStopItem->Insert(aTabStop);
-    USHORT nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
-    pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
-    UpdateTabs();
-    pRuler_Imp->nIdx = 0;
+    if(pTabStopItem && pTabStopItem->Count() > pRuler_Imp->nIdx)
+    {
+        SvxTabStop aTabStop = (*pTabStopItem)[pRuler_Imp->nIdx];
+        aTabStop.GetAdjustment() = ToAttrTab_Impl(pMenu->GetCurItemId()-1);
+        pTabStopItem->Remove(pRuler_Imp->nIdx);
+        pTabStopItem->Insert(aTabStop);
+        USHORT nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
+        pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
+        UpdateTabs();
+        pRuler_Imp->nIdx = 0;
+    }
     return 0;
 }
 
