@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:26:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1716,10 +1716,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         // #i23725#
                         BOOL bDone = FALSE;
-                        if (rSh.IsSttPara() &&
-                            NULL == rSh.GetCurNumRule() &&
-                            !rSh.HasSelection() ) // i40834
+                        // --> OD 2006-01-31 - try to add comment for code snip:
+                        // Remove the paragraph indent, if the cursor is at the
+                        // beginning of a paragraph, there is no selection
+                        // and no numbering rule found at the current paragraph
+                        // --> OD 2006-01-31 #b6341339#, #i58776#
+                        // Also try to remove indent, if current paragraph
+                        // has numbering rule, but isn't counted and only
+                        // key <backspace> is hit.
+                        const bool bOnlyBackspaceKey(
+                                    KEY_BACKSPACE == rKeyCode.GetFullCode() );
+                        if ( rSh.IsSttPara() &&
+                             !rSh.HasSelection() && // i40834
+                             ( NULL == rSh.GetCurNumRule() ||
+                               ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
+                        {
                             bDone = rSh.TryRemoveIndent();
+                        }
+                        // <--
 
                         // -> #i23725#
                         if (bDone)
@@ -1744,10 +1758,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 }
                             }
                             // <- #i23725#
-                            if( ! bDone && rSh.NumOrNoNum
-                                (KEY_BACKSPACE != rKeyCode.GetFullCode(),
-                                      TRUE))
+                            // --> OD 2006-01-31 #b6341339#, #i58776#
+                            // In this situation method <SwEditShell::NumOrNoNum(..)>
+                            // should only change the <IsCounted()> state of
+                            // the current paragraph depending of the key.
+                            // On <backspace> it is set to <false>,
+                            // on <shift-backspace> it is set to <true>.
+                            // No switching on or off of the numbering at the
+                            // current paragraph is intended here.
+                            // Thus, assure that method <SwEditShell::NumOrNum(..)>
+                            // is only called for the intended purpose.
+                            if ( !bDone &&
+                                 ( ( !rSh.IsNoNum() && bOnlyBackspaceKey ) ||
+                                   ( rSh.IsNoNum() && !bOnlyBackspaceKey ) ) &&
+                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, TRUE ) )
+                            {
                                 eKeyState = KS_NumOrNoNum;
+                            }
+                            // <--
                         }
                     }
                     break;
