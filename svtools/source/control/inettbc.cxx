@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:41:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:45:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,11 +665,8 @@ void SvtMatchContext_Impl::run()
 {
     ::vos::OGuard aGuard( GetMutex() );
     if( bStop )
-    {
         // have we been stopped while we were waiting for the mutex?
-        delete this;
         return;
-    }
 
     // Reset match lists
     pCompletions->Remove( 0, pCompletions->Count() );
