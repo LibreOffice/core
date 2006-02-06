@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:42:33 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 12:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     aFctSet( this, &aSelEng, pLBView ),
     pIntlWrapper( NULL ), // #102891# -----------------------
     pTabBar( NULL ),
-    nExtendedWinBits( 0 )
+    nExtendedWinBits( 0 ),
+    bAreChildrenTransient( sal_True )
 
 {
     osl_incrementInterlockedCount(&s_nImageRefCount);
@@ -264,10 +265,13 @@ void SvImpLBox::CalcCellFocusRect( SvLBoxEntry* pEntry, Rectangle& rRect )
             SvLBoxItem* pItem = pCursor->GetItem( nCurTabPos );
             rRect.Left() = pView->GetTab( pCursor, pItem )->GetPos();
         }
-        SvLBoxItem* pNextItem = pCursor->GetItem( nCurTabPos + 1 );
-        long nRight = pView->GetTab( pCursor, pNextItem )->GetPos() - 1;
-        if ( nRight < rRect.Right() )
-            rRect.Right() = nRight;
+        if ( pCursor->ItemCount() > ( nCurTabPos + 1 ) )
+        {
+            SvLBoxItem* pNextItem = pCursor->GetItem( nCurTabPos + 1 );
+            long nRight = pView->GetTab( pCursor, pNextItem )->GetPos() - 1;
+            if ( nRight < rRect.Right() )
+                rRect.Right() = nRight;
+        }
     }
 }
 
@@ -2358,6 +2362,15 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         {
             if( bSubLstOpLR && IsNowExpandable() )
                 pView->Expand( pCursor );
+            else if ( bIsCellFocusEnabled && pCursor )
+            {
+                if ( nCurTabPos < ( pView->TabCount() - 1 /*!2*/ ) )
+                {
+                    ++nCurTabPos;
+                    ShowCursor( TRUE );
+                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                }
+            }
             else if( pView->nWindowStyle & WB_HSCROLL )
             {
                 long    nThumb = aHorSBar.GetThumbPos();
@@ -2373,15 +2386,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     EndScroll();
                 }
             }
-            else if ( bIsCellFocusEnabled && pCursor )
-            {
-                if ( nCurTabPos < ( pView->TabCount() - 2 ) )
-                {
-                    ++nCurTabPos;
-                    ShowCursor( TRUE );
-                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
-                }
-            }
             else
                 bKeyUsed = FALSE;
             break;
@@ -2389,7 +2393,16 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            if( pView->nWindowStyle & WB_HSCROLL )
+            if ( bIsCellFocusEnabled )
+            {
+                if ( nCurTabPos > FIRST_ENTRY_TAB )
+                {
+                    --nCurTabPos;
+                    ShowCursor( TRUE );
+                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                }
+            }
+            else if ( pView->nWindowStyle & WB_HSCROLL )
             {
                 long    nThumb = aHorSBar.GetThumbPos();
                 nThumb -= aHorSBar.GetLineSize();
@@ -2416,15 +2429,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if( bSubLstOpLR && IsExpandable() )
                 pView->Collapse( pCursor );
-            else if ( bIsCellFocusEnabled )
-            {
-                if ( nCurTabPos > FIRST_ENTRY_TAB )
-                {
-                    --nCurTabPos;
-                    ShowCursor( TRUE );
-                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
-                }
-            }
             else
                 bKeyUsed = FALSE;
             break;
