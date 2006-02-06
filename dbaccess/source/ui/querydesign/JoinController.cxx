@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:41:49 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
         }
     }
     pData->SetPosition(Point(nX,nY));
-    pData->SetSize(Size(nHeight, nWidth));
+    pData->SetSize(Size(nWidth, nHeight));
     m_vTableData.push_back(pData);
 }
 // -----------------------------------------------------------------------------
