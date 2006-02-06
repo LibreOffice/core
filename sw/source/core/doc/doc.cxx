@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:56:26 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1031,17 +1031,28 @@ BOOL SwDoc::RemoveInvisibleContent()
         SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
         if ( pTxtNd )
         {
+            bool bRemoved = false;
+            SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
             if ( pTxtNd->HasHiddenCharAttribute( true ) )
             {
+                bRemoved = TRUE;
                 bRet = TRUE;
-                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
                 aPam.DeleteMark();
                 DelFullPara( aPam );
             }
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
             {
+                bRemoved = TRUE;
+                bRet = TRUE;
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
+
+            // --> FME 2006-01-11 #120473#
+            // Footnotes/Frames may have been removed, therefore we have
+            // to reset n:
+            if ( bRemoved )
+                n = aPam.GetPoint()->nNode.GetIndex();
+            // <--
         }
     }
 
