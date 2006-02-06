@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:08:40 $
+#   last change: $Author: rt $ $Date: 2006-02-06 17:25:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/srcview.obj \
         $(SLO)$/swcli.obj  \
         $(SLO)$/uivwimp.obj \
+        $(SLO)$/view2.obj \
         $(SLO)$/viewling.obj
 
 # --- Tagets -------------------------------------------------------
