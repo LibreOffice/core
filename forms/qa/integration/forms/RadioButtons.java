@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButtons.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:30:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ import com.sun.star.accessibility.*;
 import com.sun.star.container.*;
 import com.sun.star.beans.*;
 
-import complexlib.ComplexTestCase;
 import integration.forms.dbfTools;
 import integration.forms.DocumentHelper;
 import integration.forms.SpreadsheetDocument;
