@@ -49,7 +49,7 @@ private:
         int thInitialize (const char* indxpath, const char* datpath);
 
         // internal close and cleanup dat and idx files
-        int thCleanup ();
+        void thCleanup ();
 
         // read a text line (\n terminated) stripping off line terminator
         int readLine(FILE * pf, char * buf, int nc);
