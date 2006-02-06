@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:43:26 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,9 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
     if ( bInfoChanged )
         WriteInfo();
     ResetBlockMode ();
+    if(xDocShellRef.Is())
+        xDocShellRef->DoClose();
+    xDocShellRef = 0;
     if( pDoc && !pDoc->RemoveLink() )
         delete pDoc;
 }
