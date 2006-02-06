@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:52:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -906,21 +906,19 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else if(sPath.Len())
         {
-            if (!pFrmMgr)
-                pFrmMgr = new SwFlyFrmAttrMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
+            SwFlyFrmAttrMgr aFrmMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
             // am FrmMgr muessen die richtigen Parameter eingestellt werden
 
-            pFrmMgr->SetAnchor(FLY_IN_CNTNT);
+            aFrmMgr.SetAnchor(FLY_IN_CNTNT);
 
             rSh.SplitNode( FALSE, FALSE );
             rSh.SplitNode( FALSE, FALSE );
             rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             rSh.SetAttr(SvxAdjustItem(SVX_ADJUST_CENTER,RES_PARATR_ADJUST ));
-            if(GRFILTER_OK == InsertGraphic(sPath, aEmptyStr, TRUE, 0, 0 ))
+            if(GRFILTER_OK == GetView().InsertGraphic(sPath, aEmptyStr, TRUE, 0, 0 ))
                 bRet = TRUE;
             rSh.EnterStdMode();
             rSh.Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-            DELETEZ(pFrmMgr);
         }
         rSh.EndAllAction();
         rSh.EndUndo(UIUNDO_INSERT_RULER);
