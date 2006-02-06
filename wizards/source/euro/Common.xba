@@ -7,7 +7,7 @@ Public DialogPassword as Object
 Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
-	CurMimeType = GetDocumentType(oDocument)
+	CurMimeType = Tools.GetDocumentType(oDocument)
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
