@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:17:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 12:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ private:
     FixedText           maHintDocFT;
     FixedText           maHintBasicFT;
     FixedText           maHintPackageFT;
-    SvxSimpleTable      maSignaturesLB;
+    SvxSimpleTable      maSignaturesLB; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     FixedImage          maSigsValidImg;
     FixedInfo           maSigsValidFI;
     FixedImage          maSigsInvalidImg;
