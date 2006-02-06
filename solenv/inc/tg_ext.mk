@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 12:09:33 $
+#   last change: $Author: rt $ $Date: 2006-02-06 16:19:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@ PATCH_FILE_DEP:=$(PRJ)$/$(NEW_PATCH_FILE_NAME)
 TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
 .ENDIF          # "$(TAR_EXCLUDES)"!=""
 
-#clean PWD to let a build_action=dmake set it with new value
-.IF "$(GUI)"=="WNT"
+# Clean PWD to let a build_action=dmake set it with new value. (See iz61212)
+.IF "$(USE_SHELL)"=="4nt"
 PWD:=
 .EXPORT : PWD
-.ENDIF          # "$(GUI)"=="WNT"
+.ENDIF          # "$(USE_SHELL)"=="4nt"
 
 .IF "$(ADDITIONAL_FILES)"!=""
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
