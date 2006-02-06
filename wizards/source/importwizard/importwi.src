@@ -4,9 +4,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:16:35 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 11:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,8 @@ String sCloseButton
 
 String sWelcometextLabel1
 {
-    Text [ de ] = "Dieser Assistent wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue OpenDocument Format um.";
-    Text [ en-US ] = "This wizards converts documents in the old StarOffice format and Microsoft Office documents to the new OpenDocument format.";
+    Text [ de ] = "Dieser Assistent wandelt Dokumente des %PRODUCTNAME - Formates und Microsoft Office - Dokumente in das neue OpenDocument Format um.";
+    Text [ en-US ] = "This wizard converts documents in %PRODUCTNAME format and Microsoft Office documents to the new OpenDocument format.";
 };
 
 String sWelcometextLabel2
