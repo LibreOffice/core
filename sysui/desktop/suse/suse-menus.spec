@@ -79,6 +79,23 @@ if [ -x /usr/bin/update-mime-database ]; then
   update-mime-database /usr/share/mime
 fi
 
+# run only on first install, since postun is run when updating
+# post would be run before the old files are removed 
+if [ "$1" = "1" ] ; then  # first install
+  for themedir in /opt/gnome/share/icons/gnome /opt/gnome/share/icons/hicolor /opt/kde3/share/icons/hicolor /opt/kde3/share/icons/locolor; do
+    if [ -e $themedir/icon-theme.cache ] ; then
+      # touch in, in case we cannot find gtk-update-icon-cache (just to make sure)
+      touch $themedir
+      # path to gtk-update-icon-cache is not in rpm's install_script_path by default.
+      if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+        /opt/gnome/bin/gtk-update-icon-cache $themedir
+      fi
+      # ignore errors (e.g. when there is a cache, but no index.theme)
+      true
+    fi
+  done
+fi
+
 # update /etc/mime.types
 # backing out existing entries to avoid duplicates
 sed '
@@ -247,6 +264,19 @@ if [ "$1" = 0 ] ; then
     update-mime-database /usr/share/mime
   fi
 fi
+#run always
+for themedir in /opt/gnome/share/icons/gnome /opt/gnome/share/icons/hicolor /opt/kde3/share/icons/hicolor /opt/kde3/share/icons/locolor; do
+  if [ -e $themedir/icon-theme.cache ] ; then
+    # touch in, in case we cannot find gtk-update-icon-cache (just to make sure)
+    touch $themedir
+    # path to gtk-update-icon-cache is not in rpm's install_script_path by default.
+    if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+      /opt/gnome/bin/gtk-update-icon-cache $themedir
+    fi
+    # ignore errors (e.g. when there is a cache, but no index.theme)
+    true
+  fi
+done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
