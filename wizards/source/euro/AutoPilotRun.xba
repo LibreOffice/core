@@ -60,7 +60,7 @@ Dim bDisposable as Boolean
 			FilterList(0) = &quot;application/x-starcalc&quot;
 			FilterList(1) = &quot;application/vnd.stardivision.calc&quot;
 			FilterList(2) = &quot;application/vnd.sun.xml.calc&quot;
-			FilterList(3) = &quot;application/x-vnd.oasis.openoffice.spreadsheet&quot;
+			FilterList(3) = &quot;application/vnd.oasis.opendocument.spreadsheet&quot;
 			If DialogModel.chkTextDocuments.State = 1 Then
 				ReDim Preserve FilterList(8) as String
 				
@@ -68,7 +68,7 @@ Dim bDisposable as Boolean
 				FilterList(5) = &quot;application/vnd.stardivision.writer&quot;
 				FilterList(6) = &quot;application/vnd.stardivision.writer/web&quot;
 				FilterList(7) = &quot;application/vnd.sun.xml.writer&quot;
-				FilterList(8) = &quot;application/x-vnd.oasis.openoffice.text&quot;
+				FilterList(8) = &quot;application/vnd.oasis.opendocument.text&quot;
 			End If
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
 			TotDocCount = Ubound(FilesList(),1) + 1
