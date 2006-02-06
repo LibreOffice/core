@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:27:19 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,7 +643,7 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     {
         aCol._SetOrtho(false);
         USHORT nWishWidth = 0, nHalfPrev = 0;
-        for (USHORT n = 0, i = 0; n < rSection.maPageInfo.maColumns.size(); n += 2, ++i )
+        for(USHORT n=0, i=0; n < rSection.maPageInfo.maColumns.size() && i < nCols; n += 2, ++i )
         {
             SwColumn* pCol = aCol.GetColumns()[ i ];
             pCol->SetLeft( nHalfPrev );
