@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:17:24 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,9 +616,11 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     // dieser automatisch verschwinden.
     SwSectionFrm *pSct;
     // --> OD 2006-01-04 #126020# - adjust check for empty section
+    // --> OD 2006-02-01 #130797# - correct fix #126020#
     if ( pOldParent && !pOldParent->Lower() &&
-         (pOldParent->IsInSct() &&
-          !(pSct = pOldParent->FindSctFrm())->ContainsAny() ) )
+         ( pOldParent->IsInSct() &&
+           !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() &&
+           !pSct->ContainsAny( true ) ) )
     // <--
     {
             pSct->DelEmpty( FALSE );
@@ -2430,7 +2432,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             {
                 SwSectionFrm* pSectFrm = pNewUpper->FindSctFrm();
                 // --> OD 2006-01-04 #126020# - adjust check for empty section
-                if ( pSectFrm && !pSectFrm->IsColLocked() && !pSectFrm->ContainsAny() )
+                // --> OD 2006-02-01 #130797# - correct fix #126020#
+                if ( pSectFrm && !pSectFrm->IsColLocked() &&
+                     !pSectFrm->ContainsCntnt() && !pSectFrm->ContainsAny( true ) )
                 // <--
                 {
                     pSectFrm->DelEmpty( TRUE );
