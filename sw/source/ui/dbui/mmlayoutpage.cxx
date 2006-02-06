@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:03:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -675,11 +675,20 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                             sCondition = sNameColumnBase;
                         break;
                     }
-                    SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyStr, 0, &rShell );
-                    aFldMgr.InsertFld( aData );
+
                     if(bHideEmptyParagraphs && sHideParagraphsExpression.Len())
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyStr, 0, &rShell );
+                        String sComplete( sCondition );
+                        sComplete.Insert('(', 0);
+                        sComplete.AppendAscii( ") OR (");
+                        sComplete += sHideParagraphsExpression;
+                        sComplete += ')';
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, aEmptyStr, 0, &rShell );
+                        aFldMgr.InsertFld( aData );
+                    }
+                    else
+                    {
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyStr, 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                     //now the text has to be inserted
