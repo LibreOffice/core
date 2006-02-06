@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:44:41 $
+#   last change: $Author: rt $ $Date: 2006-02-06 13:51:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ SCP_PRODUCT_TYPE=osl
 .IF "$(GUI)"=="WNT"
 PARFILES= \
         module_quickstart.par              \
+        file_quickstart.par                \
         registryitem_quickstart.par
 .ENDIF
 
