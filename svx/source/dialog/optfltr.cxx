@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:35:53 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,13 +415,24 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
         ULONG nSelPos = GetModel()->GetAbsPos(GetCurEntry());
-        USHORT nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SV_BUTTON_CHECKED ? 1 : 0;
-        if(GetCheckButtonState( GetEntry(nSelPos), 0 ))
-            nCheck += 2;
-        nCheck--;
-        nCheck &= 3;
-        CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
-        CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        USHORT nCol = GetCurrentTabPos() - 1;
+        if ( nCol < 2 )
+        {
+            SvLBoxEntry* pEntry = GetEntry( nSelPos );
+            sal_Bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
+            CheckEntryPos( nSelPos, nCol, !bIsChecked );
+            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pEntry );
+        }
+        else
+        {
+            USHORT nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SV_BUTTON_CHECKED ? 1 : 0;
+            if(GetCheckButtonState( GetEntry(nSelPos), 0 ))
+                nCheck += 2;
+            nCheck--;
+            nCheck &= 3;
+            CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
+            CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        }
     }
     else
         SvxSimpleTable::KeyInput(rKEvt);
