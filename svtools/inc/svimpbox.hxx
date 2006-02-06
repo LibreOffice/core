@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:00:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 12:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,8 @@ private:
     BOOL                bContextMenuHandling : 1;
     BOOL                bIsCellFocusEnabled : 1;
 
+    sal_Bool            bAreChildrenTransient;
+
     Point               aEditClickPos;
     Timer               aEditTimer;
 
@@ -261,6 +263,9 @@ private:
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvLBoxEntry* pEntry );
 
     void                CalcCellFocusRect( SvLBoxEntry* pEntry, Rectangle& rRect );
+
+    inline sal_Bool     AreChildrenTransient() const { return bAreChildrenTransient; }
+    inline void         SetChildrenNotTransient() { bAreChildrenTransient = sal_False; }
 
 public:
     SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
