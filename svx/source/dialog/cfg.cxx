@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 14:25:18 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:14:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1891,6 +1891,10 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             }
         }
 
+#ifdef DBG_UTIL
+        DBG_ASSERT( pCurrentSaveInData, "SvxConfigPage::Reset(): no SaveInData" );
+#endif
+
         if ( CanConfig( aModuleId ) )
         {
             // Load configuration for other open documents which have
@@ -2034,28 +2038,31 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
     USHORT nSelectionPos = aTopLevelListBox.GetSelectEntryPos();
     aTopLevelListBox.Clear();
 
-    SvxEntries::const_iterator iter =
-        GetSaveInData()->GetEntries()->begin();
-
-    SvxEntries::const_iterator end =
-        GetSaveInData()->GetEntries()->end();
-
-    for ( ; iter != end; iter++ )
+    if ( GetSaveInData() && GetSaveInData()->GetEntries() )
     {
-        SvxConfigEntry* pEntryData = *iter;
+        SvxEntries::const_iterator iter = GetSaveInData()->GetEntries()->begin();
+        SvxEntries::const_iterator end = GetSaveInData()->GetEntries()->end();
 
-        USHORT nPos = aTopLevelListBox.InsertEntry(
-            stripHotKey( pEntryData->GetName() ) );
-
-        aTopLevelListBox.SetEntryData( nPos, pEntryData );
-
-        if ( pEntryData == pToSelect )
+        for ( ; iter != end; iter++ )
         {
-            nSelectionPos = nPos;
-        }
+            SvxConfigEntry* pEntryData = *iter;
+            USHORT nPos = aTopLevelListBox.InsertEntry( stripHotKey( pEntryData->GetName() ) );
+            aTopLevelListBox.SetEntryData( nPos, pEntryData );
 
-        AddSubMenusToUI( stripHotKey( pEntryData->GetName() ), pEntryData );
+            if ( pEntryData == pToSelect )
+                nSelectionPos = nPos;
+
+            AddSubMenusToUI( stripHotKey( pEntryData->GetName() ), pEntryData );
+        }
     }
+#ifdef DBG_UTIL
+    else
+    {
+        DBG_ASSERT( GetSaveInData(), "SvxConfigPage::ReloadTopLevelListBox(): no SaveInData" );
+        DBG_ASSERT( GetSaveInData()->GetEntries() ,
+            "SvxConfigPage::ReloadTopLevelListBox(): no SaveInData entries" );
+    }
+#endif
 
     nSelectionPos = nSelectionPos < aTopLevelListBox.GetEntryCount() ?
         nSelectionPos : aTopLevelListBox.GetEntryCount() - 1;
@@ -3949,17 +3956,15 @@ SaveInData* SvxToolbarConfigPage::CreateSaveInData(
 }
 
 ToolbarSaveInData::ToolbarSaveInData(
-    const uno::Reference <
-        css::ui::XUIConfigurationManager >& xCfgMgr,
-    const uno::Reference <
-        css::ui::XUIConfigurationManager >& xParentCfgMgr,
+    const uno::Reference < css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference < css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
-    bool docConfig )
-    :
-        SaveInData ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
-        m_aDescriptorContainer(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) ),
-        pRootEntry( 0 )
+    bool docConfig ) :
+
+    SaveInData              ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
+    m_aDescriptorContainer  ( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) ),
+    pRootEntry              ( NULL )
+
 {
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
@@ -3975,10 +3980,7 @@ ToolbarSaveInData::ToolbarSaveInData(
 
 ToolbarSaveInData::~ToolbarSaveInData()
 {
-    if ( pRootEntry != NULL )
-    {
-        delete pRootEntry;
-    }
+    delete pRootEntry;
 }
 
 void ToolbarSaveInData::SetSystemStyle(
