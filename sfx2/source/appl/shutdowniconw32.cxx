@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:48:58 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,6 +892,9 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
     bool    bQuickstarterInstalled = false;
+
+// Quick hack for 130127
+/*
     HKEY    hKey;
 
     if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, TEXT("Software\\OpenOffice.org"), 0, KEY_READ, &hKey ) )
@@ -916,7 +919,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
             RegCloseKey( hKey );
         }
     }
-
+*/
     return bQuickstarterInstalled;
 }
 
