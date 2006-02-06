@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:42:21 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,11 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         case PROPERTY_ID_VALUE:
             if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
             {
+                ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
+                ::osl::MutexGuard aGuard( *pMutex );
+#if OSL_DEBUG_LEVEL > 0
                 ORowSetRow aRow = *m_aColumnValue;
+#endif
                 OSL_ENSURE((sal_Int32)aRow->size() > m_nPos,"Pos is greater than size of vector");
                 rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
             }
