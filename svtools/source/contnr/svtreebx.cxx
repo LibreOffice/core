@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:44:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 12:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1405,7 +1405,18 @@ void SvTreeListBox::ImplEditEntry( SvLBoxEntry* pEntry )
     }
 }
 
+sal_Bool SvTreeListBox::AreChildrenTransient() const
+{
+    return pImp->AreChildrenTransient();
+}
+
+void SvTreeListBox::SetChildrenNotTransient()
+{
+    pImp->SetChildrenNotTransient();
+}
+
 void SvTreeListBox::EditedText( const XubString& rStr )
+
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if(pEdEntry) // we have to check if this entry is null that means that it is removed while editing
