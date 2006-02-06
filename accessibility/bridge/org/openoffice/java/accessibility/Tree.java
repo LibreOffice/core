@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Tree.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:43:12 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
 
         /** Returns the AccessibleTable interface of this object */
         public javax.accessibility.AccessibleTable getAccessibleTable() {
-            return this;
+            return ( unoAccessibleTable != null ) ? this : null;
         }
 
         /** Returns the specified Accessible child of the object */
