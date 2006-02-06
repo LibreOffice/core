@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:21:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2378,6 +2378,11 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     : pSttNd->FindSectionNode();
         if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag()/*IsHiddenFlag()*/ ) )
         {
+            // #130650# in a table in table situation we have to assure that we don't leave the
+            // outer table cell when the inner table is looking for a PrvNxt...
+            SwTableNode* pTableNd = pSttNd->IsTableNode()
+                    ? pSttNd->FindStartNode()->FindTableNode()
+                    : pSttNd->FindTableNode();
             SwNodeIndex aIdx( rFrmIdx );
             SwNode* pNd;
             if( pEnd )
@@ -2395,7 +2400,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
             else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, TRUE, FALSE )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, TRUE ) &&
                     // nach vorne nie aus der Tabelle hinaus!
-                    pFrmNd->FindTableNode() == pSttNd->FindTableNode() &&
+                    pFrmNd->FindTableNode() == pTableNd &&
                     // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
                     (!pFrmNd->FindTableNode() || pFrmNd->FindTableBoxStartNode()
                         == pSttNd->FindTableBoxStartNode() ) &&
@@ -2416,13 +2421,10 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                 if( ( pEnd && ( pFrmNd = &aIdx.GetNode())->IsCntntNode() ) ||
                     ( 0 != ( pFrmNd = GoNextSection( &aIdx, TRUE, FALSE )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, TRUE ) &&
-                    // JP 27.01.99: wenn der "Start"Node ein TabellenNode ist,
-                    // dann kann der dahinter liegende nie der gleiche sein!
-                    ( pSttNd->IsTableNode() ||
-                      ( pFrmNd->FindTableNode() == pSttNd->FindTableNode() &&
+                    ( pFrmNd->FindTableNode() == pTableNd &&
                         // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
                         (!pFrmNd->FindTableNode() || pFrmNd->FindTableBoxStartNode()
-                        == pSttNd->FindTableBoxStartNode() ))) &&
+                        == pSttNd->FindTableBoxStartNode() ) ) &&
                      (!pSectNd || pSttNd->IsSectionNode() ||
                       pSectNd->EndOfSectionIndex() > pFrmNd->GetIndex())
                     ))
