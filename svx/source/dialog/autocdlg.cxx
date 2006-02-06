@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:05:51 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,13 +990,22 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
         ULONG nSelPos = GetSelectEntryPos();
-        USHORT nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
-        if(IsChecked(nSelPos, 0))
-            nCheck += 2;
-        nCheck--;
-        nCheck &= 3;
-        CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
-        CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        USHORT nCol = GetCurrentTabPos() - 1;
+        if ( nCol < 2 )
+        {
+            CheckEntryPos( nSelPos, nCol, !IsChecked( nSelPos, nCol ) );
+            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)GetEntry( nSelPos ) );
+        }
+        else
+        {
+            USHORT nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
+            if(IsChecked(nSelPos, 0))
+                nCheck += 2;
+            nCheck--;
+            nCheck &= 3;
+            CheckEntryPos(nSelPos, 1, 0 != (nCheck & 1));
+            CheckEntryPos(nSelPos, 0, 0 != (nCheck & 2));
+        }
     }
     else
         SvxSimpleTable::KeyInput(rKEvt);
