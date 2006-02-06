@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:15:48 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,17 +415,22 @@ class SwDrawContact : public SwContact
         // 'master' drawing object
         SwAnchoredDrawObject maAnchoredDrawObj;
 
-        // OD 2004-04-01 #i26791# - boolean indicating set 'master' drawing
-        // object has been cleared.
-        bool mbMasterObjCleared;
-
-        // OD 10.10.2003 #112299# - internal flag to indicate that disconnect
-        // from layout is in progress
-        bool mbDisconnectInProgress;
-
         // OD 16.05.2003 #108784# - data structure for collecting 'virtual'
         // drawing object supporting drawing objects in headers/footers.
         std::list<SwDrawVirtObj*> maDrawVirtObjs;
+
+        // OD 2004-04-01 #i26791# - boolean indicating set 'master' drawing
+        // object has been cleared.
+        bool mbMasterObjCleared : 1;
+
+        // OD 10.10.2003 #112299# - internal flag to indicate that disconnect
+        // from layout is in progress
+        bool mbDisconnectInProgress : 1;
+
+        // --> OD 2006-01-23 #124157# - boolean indicating that drawing object
+        // is connected to the Writer layout as an anchored object.
+        bool mbConnectedToLayout : 1;
+        // <--
 
         // --> OD 2006-01-18 #129959#
         // Needed data for handling of nested <SdrObjUserCall> events in
@@ -474,6 +479,11 @@ class SwDrawContact : public SwContact
         // OD 2004-03-31 #i26791#
         void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );
 
+        // --> OD 2006-01-23 #124157#
+        // no copy-constructor and no assignment operator
+        SwDrawContact( const SwDrawContact& );
+        SwDrawContact& operator=( const SwDrawContact& );
+        // <--
     public:
         TYPEINFO();
 
