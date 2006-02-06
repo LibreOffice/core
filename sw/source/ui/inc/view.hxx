@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:21:32 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,8 @@ class SwTxtNode; // #i23726#
 struct SwPrintData;
 class SwFormatClipboard;
 struct SwConversionArgs;
+class Graphic;
+class GraphicFilter;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -320,6 +322,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
+    SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
+
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
@@ -390,6 +394,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SW_DLLPRIVATE virtual void  Move();
 
+    SW_DLLPRIVATE BOOL          InsertGraphicDlg( SfxRequest& );
 
 protected:
 
@@ -654,6 +659,12 @@ public:
 
     void ExecFormatPaintbrush(SfxRequest &);
     void StateFormatPaintbrush(SfxItemSet &);
+
+    //public fuer D&D
+    int     InsertGraphic( const String &rPath, const String &rFilter,
+                            BOOL bLink = TRUE, GraphicFilter *pFlt = 0,
+                            Graphic* pPreviewGrf = 0,
+                            BOOL bRule = FALSE );
 };
 
 // ----------------- inline Methoden ----------------------
