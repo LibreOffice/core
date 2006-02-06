@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:23:02 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,14 +75,14 @@ End
 
 File gid_File_Registry_Spool_Oo_Setup_Base_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-base.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Base_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name = "/registry/spool/org/openoffice/Office/Common-base.xcu";
 End
