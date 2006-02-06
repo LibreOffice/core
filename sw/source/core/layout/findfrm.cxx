@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:23:50 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,10 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 |*
 |*************************************************************************/
 
-const SwFrm *SwLayoutFrm::ContainsAny() const
+// --> OD 2006-02-01 #130797#
+// New parameter <_bInvestigateFtnForSections> controls investigation of
+// content of footnotes for sections.
+const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
 {
     //LayoutBlatt nach unten hin suchen und wenn dieses keinen Inhalt hat
     //solange die weiteren Blatter abklappern bis Inhalt gefunden oder der
@@ -191,7 +194,9 @@ const SwFrm *SwLayoutFrm::ContainsAny() const
     // Oder bis wir einen SectionFrm oder TabFrm gefunden haben
 
     const SwLayoutFrm *pLayLeaf = this;
-    BOOL bNoFtn = IsSctFrm();
+    // --> OD 2006-02-01 #130797#
+    const bool bNoFtn = IsSctFrm() && !_bInvestigateFtnForSections;
+    // <--
     do
     {
         while ( ( (!pLayLeaf->IsSctFrm() && !pLayLeaf->IsTabFrm())
