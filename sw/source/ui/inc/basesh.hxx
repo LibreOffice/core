@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:00:00 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,8 @@ class SwBaseShell: public SfxShell
     SvUShortsSort aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
-    DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
 protected:
-    SwFlyFrmAttrMgr*    pFrmMgr;
-
     SwWrtShell&         GetShell();
     SwWrtShell*         GetShellPtr();
 
@@ -141,12 +138,6 @@ public:
     static void    SetFrmMode( USHORT nMode, SwWrtShell *pShell );  //Mit Update!
     static void   _SetFrmMode( USHORT nMode )   { nFrameMode = nMode; }
     static USHORT  GetFrmMode()                 { return nFrameMode;  }
-
-    //public fuer D&D
-    int     InsertGraphic( const String &rPath, const String &rFilter,
-                            BOOL bLink = TRUE, GraphicFilter *pFlt = 0,
-                            Graphic* pPreviewGrf = 0,
-                            BOOL bRule = FALSE );
 
 };
 
