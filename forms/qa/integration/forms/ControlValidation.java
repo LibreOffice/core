@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControlValidation.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ import com.sun.star.container.*;
 import com.sun.star.beans.*;
 import com.sun.star.form.binding.*;
 
-import complexlib.ComplexTestCase;
 import integration.forms.DocumentHelper;
 import integration.forms.NumericValidator;
 import integration.forms.TextValidator;
@@ -75,6 +74,11 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
     public String getTestObjectName()
     {
         return "Form Control Validation Test";
+    }
+
+    public static boolean isInteractiveTest()
+    {
+        return true;
     }
 
     /* ------------------------------------------------------------------ */
