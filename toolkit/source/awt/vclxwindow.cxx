@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:23:48 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         WindowType nType = pWindow->GetType();
 
-        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() )
+        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
             if ( xAcc.is() )
