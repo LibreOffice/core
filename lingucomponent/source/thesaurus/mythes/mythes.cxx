@@ -18,9 +18,7 @@ MyThes::MyThes(const char* idxpath, const char * datpath)
     if (thInitialize(idxpath, datpath) != 1) {
         fprintf(stderr,"Error - can't open %s or %s\n",idxpath, datpath);
         fflush(stderr);
-        if (encoding) free((void*)encoding);
-        if (list)  free((void*)list);
-        if (offst) free((void*)offst);
+        thCleanup();
         // did not initialize properly - throw exception?
     }
 }
@@ -28,13 +26,7 @@ MyThes::MyThes(const char* idxpath, const char * datpath)
 
 MyThes::~MyThes()
 {
-    if (thCleanup() != 1) {
-        /* did not cleanup properly - throw exception? */
-    }
-    if (encoding) free((void*)encoding);
-    encoding = NULL;
-    list = NULL;
-    offst = NULL;
+    thCleanup();
 }
 
 
@@ -51,6 +43,11 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
     // parse in encoding and index size */
     char * wrd;
     wrd = (char *)calloc(1, MAX_WD_LEN);
+    if (!wrd) {
+       fprintf(stderr,"Error - bad memory allocation\n");
+       fflush(stderr);
+       return 0;
+    }
     int len = readLine(pifile,wrd,MAX_WD_LEN);
     encoding = mystrdup(wrd);
     len = readLine(pifile,wrd,MAX_WD_LEN);
@@ -73,13 +70,18 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
     {
         int np = mystr_indexOfChar(wrd,'|');
         if (nw < idxsz) {
-           if (np >= 0) {
-              *(wrd+np) = '\0';
-              list[nw] = (char *)calloc(1,(np+1));
-              memcpy((list[nw]),wrd,np);
-              offst[nw] = atoi(wrd+np+1);
-              nw++;
-       }
+            if (np >= 0) {
+                *(wrd+np) = '\0';
+                list[nw] = (char *)calloc(1,(np+1));
+                if (!list[nw]) {
+                    fprintf(stderr,"Error - bad memory allocation\n");
+                    fflush(stderr);
+                    return 0;
+                }
+                memcpy((list[nw]),wrd,np);
+                offst[nw] = atoi(wrd+np+1);
+                nw++;
+            }
         }
         len = readLine(pifile,wrd,MAX_WD_LEN);
     }
@@ -99,7 +101,7 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
 }
 
 
-int MyThes::thCleanup()
+void MyThes::thCleanup()
 {
     /* first close the data file */
     if (pdfile) {
@@ -116,11 +118,14 @@ int MyThes::thCleanup()
         }
     }
 
+    if (encoding) free((void*)encoding);
     if (list)  free((void*)list);
     if (offst) free((void*)offst);
 
+    encoding = NULL;
+    list = NULL;
+    offst = NULL;
     nw = 0;
-    return 1;
 }
 
 
