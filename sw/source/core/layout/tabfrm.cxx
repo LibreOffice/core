@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:18:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3428,8 +3428,10 @@ void SwTabFrm::Cut()
         ASSERT( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
         SwSectionFrm *pSct = 0;
         // --> OD 2006-01-04 #126020# - adjust check for empty section
+        // --> OD 2006-02-01 #130797# - correct fix #126020#
         if ( !pUp->Lower() && pUp->IsInSct() &&
-             !(pSct = pUp->FindSctFrm())->ContainsAny() )
+             !(pSct = pUp->FindSctFrm())->ContainsCntnt() &&
+             !pSct->ContainsAny( true ) )
         // <--
         {
             if ( pUp->GetUpper() )
@@ -4877,7 +4879,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
                 if ( aTmp.IsOver( aRect ) )
                 {
-                    const SwFmtSurround &rSur = pAnchoredObj->GetFrmFmt().GetSurround();
+                    const SwFrmFmt& rAnchoredObjFrmFmt = pAnchoredObj->GetFrmFmt();
+                    const SwFmtSurround &rSur = rAnchoredObjFrmFmt.GetSurround();
+
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
@@ -4894,9 +4898,12 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                         // --> OD 2005-08-08 #i52904# - no vertical alignment,
                         // if object, anchored inside cell, has temporarly
                         // consider its wrapping style on object positioning.
+                        // --> FME 2006-02-01 #i58806# - no vertical alignment
+                        // if object does not follow the text flow.
                         if ( bConsiderWrapOnObjPos ||
                              !IsAnLower( pAnch ) ||
-                             pAnchoredObj->IsTmpConsiderWrapInfluence() )
+                             pAnchoredObj->IsTmpConsiderWrapInfluence() ||
+                             !rAnchoredObjFrmFmt.GetFollowTextFlow().GetValue() )
                         // <--
                         {
                             bVertDir = FALSE;
