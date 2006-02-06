@@ -6,8 +6,6 @@
 
 package integration.forms;
 
-import complexlib.ComplexTestCase;
-
 /**
  *
  * @author  fs93730
