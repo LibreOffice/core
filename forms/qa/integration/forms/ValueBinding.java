@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ValueBinding.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:32:26 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,11 @@ public class ValueBinding extends integration.forms.TestCase
     public ValueBinding()
     {
         super( DocumentType.WRITER );
+    }
+
+    public static boolean isInteractiveTest()
+    {
+        return true;
     }
 
     /* ------------------------------------------------------------------ */
