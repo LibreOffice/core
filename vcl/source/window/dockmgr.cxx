@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:10:00 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,6 +566,8 @@ public:
 ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin ) :
     FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
 {
+    mpWindowImpl->mbToolbarFloatingWindow = TRUE;   // indicate window type, required for accessibility
+                                                    // which should not see this window as a toplevel window
     mpDockingWin = pDockingWin;
     mbHighlight = FALSE;
     mbMoving = FALSE;
