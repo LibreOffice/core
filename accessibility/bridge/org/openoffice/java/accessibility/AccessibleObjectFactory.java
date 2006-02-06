@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:22:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,8 +432,11 @@ public class AccessibleObjectFactory {
                 }
                 break;
             case AccessibleRole.TABLE_CELL:
-                c = new Container(javax.accessibility.AccessibleRole.PANEL,
-                    xAccessible, xAccessibleContext);
+                if( xAccessibleContext.getAccessibleChildCount() > 0 )
+                    c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                        xAccessible, xAccessibleContext);
+                else
+                    c = new Label(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.TEXT:
                 c = new TextComponent(xAccessible, xAccessibleContext);
@@ -486,7 +489,7 @@ public class AccessibleObjectFactory {
             if (! Build.PRODUCT) {
                 String property = System.getProperty("AccessBridgeLogging");
                 if ((property != null) && (property.indexOf("event") != -1)) {
-                    XAccessibleEventLog.addEventListener(xAccessibleContext);
+                    XAccessibleEventLog.addEventListener(xAccessibleContext, c);
                 }
             }
         }
