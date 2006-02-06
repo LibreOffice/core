@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:11:20 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ private:
     Selection               theCurSel;
     SvxTPFilter*            pTPFilter;
     SvxTPView*              pTPView;
-    SvxRedlinTable*         pTheView;
+    SvxRedlinTable*         pTheView; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
