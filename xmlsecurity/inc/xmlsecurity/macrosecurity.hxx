@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:07:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 12:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 private:
     FixedLine           maTrustCertFL;
     ReadOnlyImage       maTrustCertROFI;
-    SvxSimpleTable      maTrustCertLB;
+    SvxSimpleTable      maTrustCertLB;  // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     PushButton          maAddCertPB;
     PushButton          maViewCertPB;
     PushButton          maRemoveCertPB;
