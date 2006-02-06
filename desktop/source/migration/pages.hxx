@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:38:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,10 @@ private:
         OEM_NONE, OEM_NORMAL, OEM_EXTENDED
     };
     OEMType checkOEM();
-    bool checkEval();
+    bool bIsEvalVersion;
+    bool bNoEvalText;
+    void checkEval();
+
 
 public:
     WelcomePage( svt::OWizardMachine* parent, const ResId& resid);
