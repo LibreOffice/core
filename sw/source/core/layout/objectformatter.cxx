@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:13:33 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,8 +460,12 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             {
                 _FormatObjCntnt( rFlyFrm );
             }
+        // --> OD 2006-02-02 #i57917#
+        // stop formatting of anchored object, if restart of layout process is requested.
         } while ( !rFlyFrm.IsValid() &&
+                  !_rAnchoredObj.RestartLayoutProcess() &&
                   rFlyFrm.GetAnchorFrm() == &GetAnchorFrm() );
+        // <--
     }
     else if ( _rAnchoredObj.ISA(SwAnchoredDrawObject) )
     {
