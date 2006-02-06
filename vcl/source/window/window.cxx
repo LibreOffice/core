@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.226 $
+ *  $Revision: 1.227 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:24:59 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -666,6 +666,7 @@ void Window::ImplInitData( WindowType nType )
     mpWindowImpl->mbPushButton        = FALSE;        // TRUE: PushButton is the base class
     mpWindowImpl->mbToolBox         = FALSE;        // TRUE: ToolBox is the base class
     mpWindowImpl->mbMenuFloatingWindow= FALSE;      // TRUE: MenuFloatingWindow is the base class
+    mpWindowImpl->mbToolbarFloatingWindow= FALSE;       // TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
     mpWindowImpl->mbSplitter            = FALSE;        // TRUE: Splitter is the base class
     mpWindowImpl->mbVisible           = FALSE;        // TRUE: Show( TRUE ) called
     mpWindowImpl->mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
