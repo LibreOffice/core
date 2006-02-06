@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:22:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2496,8 +2496,11 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
 
     // delete first and last entry
     ASSERT( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" )
-    rFill.Remove( 0, 1 );
-    rFill.Remove( rFill.Count() - 1 , 1 );
+    // --> FME 2006-01-19 #i60818# There may be only one entry in rFill. Make
+    // code robust by checking count of rFill.
+    if ( rFill.Count() ) rFill.Remove( 0, 1 );
+    if ( rFill.Count() ) rFill.Remove( rFill.Count() - 1 , 1 );
+    // <--
     rFill.SetLastRowAllowedToChange( !pTab->HasFollowFlowLine() );
 }
 
