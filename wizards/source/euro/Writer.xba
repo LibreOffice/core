@@ -68,4 +68,5 @@ Dim MaxIndex as Integer
 		End If
 	Wend
 	oDocument.GetTextFields.refresh()
-End Sub</script:module>
+End Sub
+</script:module>
