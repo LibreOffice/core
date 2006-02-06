@@ -31,8 +31,6 @@
 
 package qa.drivers.hsqldb;
 
-import org.hsqldb.HsqlProperties;
-
 import java.io.*;
 
 
