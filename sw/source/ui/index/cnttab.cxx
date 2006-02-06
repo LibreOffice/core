@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:54:46 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 10:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,7 +662,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
             String sTemplateWithoutExt( sTemplate );
 #ifndef MAC_WITHOUT_EXT
-            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sxw") );
+            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".odt") );
 #endif
 
             SvtPathOptions aOpt;
@@ -670,6 +670,13 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             BOOL bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
 #ifndef MAC_WITHOUT_EXT
+            if( !bExist )
+            {
+                // 6.0 (extension .sxw)
+                sTemplate = sTemplateWithoutExt;
+                sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sxw") );
+                bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+            }
             if( !bExist )
             {
                 // 5.0 (extension .vor)
