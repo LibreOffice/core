@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:06:52 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,6 +595,12 @@ interface BaseTextEditView : View
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+        SID_INSERT_GRAPHIC // status(final|play)
+        [
+                ExecMethod = Execute ;
+                StateMethod = NoState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
 }
 
 interface GlobalContents : Collection
