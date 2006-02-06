@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:40:02 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,8 +217,10 @@ public:
 
 
 private:
+        sal_uInt16 SAL_CALL capitalType(const OUString&, CharClass *);
         OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
-
+        OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
+        OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
 };
 
 inline OUString Hyphenator::getImplementationName_Static() throw()
