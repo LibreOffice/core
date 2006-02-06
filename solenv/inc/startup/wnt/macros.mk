@@ -41,6 +41,7 @@ E *:= .exe	# Executables
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR        := \\
+# See iz61212 for the reason why PWD is overwritten
    PWD:=$(shell +echo %_cwd)
 .EXPORT : PWD
    
@@ -59,8 +60,6 @@ E *:= .exe	# Executables
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
-# See IZ 11093 why PWD has to be overwritten
-   PWD:=$(shell +pwd)
 .EXPORT : PWD
 
 .ENDIF
