@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2411,7 +2411,12 @@ void _FndBox::DelFrms( SwTable &rTable )
                         if ( pPrev )
                         {
                             pPrev->SetFollow( pFollow );
-                            pPrev->SetFollowFlowLine( pUp->HasFollowFlowLine() );
+                            // --> FME 2006-01-31 #i60340# Do not transfer the
+                            // flag from pUp to pPrev. pUp may still have the
+                            // flag set although there is not more follow flow
+                            // line associated with pUp.
+                            pPrev->SetFollowFlowLine( FALSE );
+                            // <--
                         }
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
