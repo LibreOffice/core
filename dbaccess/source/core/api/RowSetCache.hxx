@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 15:10:55 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,11 +120,6 @@ namespace dbaccess
 
         typedef ::std::vector< TORowSetOldRowHelperRef >    TOldRowSetRows;
 
-        ::osl::Mutex            m_aRowCountMutex, // mutex for rowcount changes
-                                // we need a extra mutex for columns to prevend deadlock when setting new values
-                                // for a row
-                                m_aColumnsMutex;
-
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
@@ -158,7 +153,6 @@ namespace dbaccess
         sal_Bool                    m_bRowCountFinal ;
         sal_Bool                    m_bBeforeFirst ;
         sal_Bool                    m_bAfterLast ;
-        sal_Bool                    m_bInserted;
         sal_Bool                    m_bUpdated ;
         sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
@@ -254,7 +248,6 @@ namespace dbaccess
         bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );
-        void moveToCurrentRow(  );
     };
 }
 #endif
