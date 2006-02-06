@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 15:11:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,5 +140,9 @@ sal_Bool ORowSetCacheIterator::isNull() const
         );
     }
     return  bRet;
-
+}
+// -----------------------------------------------------------------------------
+::osl::Mutex* ORowSetCacheIterator::getMutex() const
+{
+    return m_pRowSet ? m_pRowSet->getMutex() : NULL;
 }
