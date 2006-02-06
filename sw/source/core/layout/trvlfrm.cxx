@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:48:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2640,7 +2640,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
-            while ( pCntnt != pEndFrm )
+            // --> OD 2006-01-24 #123908# - introduce robust code:
+            // The stacktrace issue reveals that <pCntnt> could be NULL.
+            // One root cause found by AMA - see #130650#
+            ASSERT( pCntnt,
+                    "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
+            while ( pCntnt && pCntnt != pEndFrm )
+            // <--
             {
                 if ( pCntnt->IsInFly() )
                 {
@@ -2677,6 +2683,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     }
                 }
                 pCntnt = pCntnt->GetNextCntntFrm();
+                // --> OD 2006-01-24 #123908#
+                ASSERT( pCntnt,
+                        "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
+                // <--
             }
             if ( aPrvRect.HasArea() )
                 Sub( aRegion, aPrvRect );
