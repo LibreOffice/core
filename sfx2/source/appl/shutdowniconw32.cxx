@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 12:34:52 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 13:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,38 +889,51 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 // ------------------
 // install/uninstall
 
+static bool FileExistsW( LPCWSTR lpPath )
+{
+    bool    bExists = false;
+    WIN32_FIND_DATAW    aFindData;
+
+    HANDLE  hFind = FindFirstFileW( lpPath, &aFindData );
+
+    if ( INVALID_HANDLE_VALUE != hFind )
+    {
+        bExists = true;
+        FindClose( hFind );
+    }
+
+    return bExists;
+}
+
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
-    bool    bQuickstarterInstalled = false;
-
-// Quick hack for 130127
-/*
-    HKEY    hKey;
-
-    if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, TEXT("Software\\OpenOffice.org"), 0, KEY_READ, &hKey ) )
+    wchar_t aPath[_MAX_PATH];
+    if( isNT() )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("QuickStarterInstalled"),  NULL, NULL, NULL, NULL ) )
-        {
-            bQuickstarterInstalled = true;
-        }
+        GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
+    }
+    else
+    {
+        char szPathA[_MAX_PATH];
+        int len = GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
 
-        RegCloseKey( hKey );
+        // calc the string wcstr len
+        int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
+
+        // copy the string if necessary
+        if ( nNeededWStrBuffSize > 0 )
+            MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
     }
 
-    if ( !bQuickstarterInstalled )
-    {
-        if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("Software\\OpenOffice.org"), 0, KEY_READ, &hKey ) )
-        {
-            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("QuickStarterInstalled"),  NULL, NULL, NULL, NULL ) )
-            {
-                bQuickstarterInstalled = true;
-            }
+    OUString aOfficepath( aPath );
+    int i = aOfficepath.lastIndexOf((sal_Char) '\\');
+    if( i != -1 )
+        aOfficepath = aOfficepath.copy(0, i);
 
-            RegCloseKey( hKey );
-        }
-    }
-*/
-    return bQuickstarterInstalled;
+    OUString quickstartExe(aOfficepath);
+    quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
+
+    return FileExistsW( quickstartExe.getStr() );
 }
 
 void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
