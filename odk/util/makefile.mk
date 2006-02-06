@@ -20,8 +20,8 @@ ALLTAR:\
 
 
 $(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
-    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*"
-    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/odkidl.zip idl/*
+    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*" $(CHECKZIPRESULT)
+    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/odkidl.zip idl/* $(CHECKZIPRESULT)
 
 ODK_OO_FILES=\
     $(PRJ)$/index.html \
@@ -50,5 +50,5 @@ ODK_OO_FILES=\
 
 
 $(BIN)$/odk_oo.zip : $(ODK_OO_FILES)
-    +cd $(PRJ) && $(WRAPCMD) zip -urq $(subst,$(PRJ)$/, $(BIN)$/odk_oo.zip) $(subst,$(PRJ)$/, $<)
+    +cd $(PRJ) && $(WRAPCMD) zip -urq $(subst,$(PRJ)$/, $(BIN)$/odk_oo.zip) $(subst,$(PRJ)$/, $<) $(CHECKZIPRESULT)
 
