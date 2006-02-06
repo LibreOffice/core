@@ -464,7 +464,7 @@ Dim Isthere as Boolean
 	PWIndex = -1
 	If iDialogPage = 1 Then
 		ToggleWindow(False)
-		sDocType = GetDocumentType(ThisComponent)
+		sDocType = Tools.GetDocumentType(ThisComponent)
 		If sDocType = &quot;sCalc&quot; Then
 			bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 		End If
@@ -530,4 +530,5 @@ Dim bTakeThisLocale as Boolean
 	Next n
 	CurrIndex = -1
 	InitializeLocales = False
-End Function</script:module>
+End Function
+</script:module>
