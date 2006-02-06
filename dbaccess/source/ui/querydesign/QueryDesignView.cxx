@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:43:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2862,7 +2862,8 @@ void OQueryDesignView::SaveUIConfig()
         pCtrl->SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );
         //  pCtrl->SaveTabFieldsWidth( m_pSelectionBox );
         pCtrl->setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
-        pCtrl->setSplitPos( m_aSplitter.GetSplitPosPixel() );
+        if ( m_aSplitter.GetSplitPosPixel() != 0 )
+            pCtrl->setSplitPos( m_aSplitter.GetSplitPosPixel() );
     }
 }
 // -----------------------------------------------------------------------------
