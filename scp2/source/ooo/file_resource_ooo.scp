@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:56:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ STD_RES_FILE( gid_File_Res_Epg, epg )
 
 STD_RES_FILE( gid_File_Res_Epp, epp )
 
-STD_RES_FILE( gid_File_Res_Eur, eur )
+STD_RES_FILE_PATCH( gid_File_Res_Eur, eur )
 
 STD_RES_FILE( gid_File_Res_Frm, frm)
 
@@ -67,7 +67,7 @@ STD_RES_FILE( gid_File_Res_Fps_Office, fps_office)
 
 STD_RES_FILE( gid_File_Res_Gal, gal )
 
-STD_RES_FILE( gid_File_Res_Imp, imp )
+STD_RES_FILE_PATCH( gid_File_Res_Imp, imp )
 
 STD_RES_FILE( gid_File_Res_Deployment, deployment )
 STD_RES_FILE( gid_File_Res_DeploymentGui, deploymentgui )
