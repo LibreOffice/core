@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:16:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,12 +243,26 @@ void SwDoc::PropagateOutlineRule()
 
                 pTxtNode->SyncNumberAndNumRule();
 
-                SwNumRule * pCurNumRule = pTxtNode->GetNumRule();
-
-                if (pCurNumRule == NULL || pCurNumRule == GetOutlineNumRule())
-                {
-                    pTxtNode->SetLevel(pColl->GetOutlineLevel());
-                }
+                // --> OD 2006-01-12 #126588# - applying outline level of
+                // paragraph style at text node, if its numbering rule is the
+                // outline numbering rule doesn't seem to be necessary due to
+                // the changes in <SwTxtNode::SyncNumberAndNumRule()>.
+                // Thus, only assert, if numbering level of text node with
+                // outline numbering rule doesn't fit to outline level of
+                // its paragraph style.
+                ASSERT( pTxtNode->GetNumRule() != GetOutlineNumRule() ||
+                        pTxtNode->GetLevel() == pColl->GetOutlineLevel(),
+                        "<SwDoc::PropagateOutlineRule()> - text node doesn't have excepted numbering level" );
+//                SwNumRule * pCurNumRule = pTxtNode->GetNumRule();
+//                // --> OD 2006-01-12 #126588#
+//                // Do not set numbering level at text node, if text node has
+//                // no numbering rule. Because in this situation, it isn't inserted
+//                // into any numbering tree. Thus, a <SetLevel(..)> isn't correct -
+//                // it only creates an not inserted numberring tree node.
+//                if ( pCurNumRule == GetOutlineNumRule() )
+//                {
+//                    pTxtNode->SetLevel(pColl->GetOutlineLevel());
+//                }
 
                 pClient = aIter.Next();
             }
@@ -678,8 +692,13 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             }
             else
             {
-                ASSERT( false,
-                        "<lcl_FindOutlineNum(..)> - text node with outline level, but without number. This is a serious defect -> inform OD" );
+                // --> OD 2006-01-12 #126588#
+                // A text node, which has an outline paragraph style applied and
+                // has as hard attribute 'no numbering' set, has an outline level,
+                // but no numbering tree node. Thus, consider this situation in
+                // the assertion condition.
+                ASSERT( !pNd->GetNumRule(),
+                        "<lcl_FindOutlineNum(..)> - text node with outline level and numbering rule, but without numbering tree node. This is a serious defect -> inform OD" );
             }
         }
     }
@@ -997,7 +1016,11 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
         // <--
     }
 
-    if( bSetItem )
+    // --> OD 2006-01-13 #i60395#
+    // It's not allowed to apply the outline numbering rule as hard attribute
+    // to document content - typically paragraphs.
+    if ( bSetItem && pNew != GetOutlineNumRule() )
+    // <--
     {
         Insert( rPam, SwNumRuleItem( pNew->GetName() ) );
     }
