@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlTest.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:28:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 package integration.forms;
 
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XNamingService;
 import com.sun.star.uno.Any;
 
 import com.sun.star.container.XNameAccess;
@@ -69,20 +70,22 @@ import com.sun.star.awt.XImageProducer;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleEditableText;
 
-import complexlib.ComplexTestCase;
 import integration.forms.dbfTools;
 import integration.forms.DocumentHelper;
 import integration.forms.FormLayer;
+
+import connectivity.tools.HsqlDatabase;
 
 import util.utils;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
 
-public class FormControlTest extends ComplexTestCase
+public class FormControlTest extends complexlib.ComplexTestCase
 {
     private static String s_tableName        = "CTC_form_controls";
 
+    private HsqlDatabase            m_databaseDocument;
     private XDataSource             m_dataSource;
     private XPropertySet            m_dataSourceProps;
     private XMultiServiceFactory    m_orb;
@@ -90,6 +93,8 @@ public class FormControlTest extends ComplexTestCase
     private FormLayer               m_formLayer;
     private XPropertySet            m_masterForm;
     private String                  m_sImageURL;
+
+    private final String            m_dataSourceName = "integration.forms.FormControlTest";
 
     /* ------------------------------------------------------------------ */
     public String[] getTestMethodNames()
@@ -469,33 +474,44 @@ public class FormControlTest extends ComplexTestCase
 
     //=========================================================================
     /* ------------------------------------------------------------------ */
-    private boolean ensureDataSource() throws com.sun.star.uno.Exception
+    private boolean ensureDataSource() throws Exception
     {
         m_orb = (XMultiServiceFactory)param.getMSF();
 
-        XNameAccess aDSContext = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+        XNameAccess databaseContext = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
             m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
+        XNamingService namingService = (XNamingService)UnoRuntime.queryInterface( XNamingService.class,
+            databaseContext );
+
+        // revoke the data source, if it previously existed
+        if ( databaseContext.hasByName( m_dataSourceName ) )
+            namingService.revokeObject( m_dataSourceName );
+
+        // // create a new ODB file, and register it with its URL
+        m_databaseDocument = new HsqlDatabase( m_orb );
+        String documentURL = m_databaseDocument.getDocumentURL();
+        namingService.registerObject( m_dataSourceName, databaseContext.getByName( documentURL ) );
 
         String sDataSourceName = (String)param.get( "datasource" );
         if ( null == sDataSourceName )
-            sDataSourceName = "FormControlTest";
-        if ( !aDSContext.hasByName( sDataSourceName ) )
+            sDataSourceName = m_dataSourceName;
+        if ( !databaseContext.hasByName( sDataSourceName ) )
         {
             log.println( "\n" );
             log.println( "There is no data source named '" + sDataSourceName + "'\n" );
             log.println( "You need to create a data source in your office installation, pointing" );
-            log.println( "to a database (preferably MySQL, other types not tested so far)" );
+            log.println( "to a database (preferably embedded HSQLDB, other types not tested so far)" );
             log.println( "which this test should work with.\n" );
             log.println( "The test will automatically create and populate a sample table in this" );
             log.println( "data source.\n" );
             log.println( "Unless specified otherwise in the FormControlTest.props, the expected" );
-            log.println( "name of the data source is \"FormControlTest\".\n\n" );
+            log.println( "name of the data source is \"" + m_dataSourceName + "\".\n\n" );
             return false;
         }
         log.println( "using data source " + sDataSourceName );
 
         m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
-            aDSContext.getByName( sDataSourceName ) );
+            databaseContext.getByName( sDataSourceName ) );
         m_dataSourceProps = dbfTools.queryPropertySet( m_dataSource );
         return m_dataSource != null;
     }
@@ -571,19 +587,18 @@ public class FormControlTest extends ComplexTestCase
     /* ------------------------------------------------------------------ */
     private String getCreateTableStatement( )
     {
-        String sCreateTableStatement = "CREATE TABLE CTC_form_controls (";
-        sCreateTableStatement += "ID int(11) NOT NULL default '0',";
-        sCreateTableStatement += "f_integer int(11) default NULL,";
-        sCreateTableStatement += "f_text varchar(50) default NULL,";
-        sCreateTableStatement += "f_decimal decimal(10,2) default NULL,";
-        sCreateTableStatement += "f_date date default NULL,";
-        sCreateTableStatement += "f_time time default NULL,";
-        sCreateTableStatement += "f_timestamp datetime default NULL,";
-        sCreateTableStatement += "f_blob blob,";
-        sCreateTableStatement += "f_text_enum varchar(50) default NULL,";
-        sCreateTableStatement += "f_tinyint tinyint(4) default NULL,";
-        sCreateTableStatement += "PRIMARY KEY  (ID)";
-        sCreateTableStatement += ") TYPE=MyISAM;";
+        String sCreateTableStatement = "CREATE TABLE \"CTC_form_controls\" (";
+        sCreateTableStatement += "\"ID\" INTEGER NOT NULL PRIMARY KEY,";
+        sCreateTableStatement += "\"f_integer\" INTEGER default NULL,";
+        sCreateTableStatement += "\"f_text\" VARCHAR(50) default NULL,";
+        sCreateTableStatement += "\"f_decimal\" DECIMAL(10,2) default NULL,";
+        sCreateTableStatement += "\"f_date\" DATE default NULL,";
+        sCreateTableStatement += "\"f_time\" TIME default NULL,";
+        sCreateTableStatement += "\"f_timestamp\" DATETIME default NULL,";
+        sCreateTableStatement += "\"f_blob\" VARBINARY,";
+        sCreateTableStatement += "\"f_text_enum\" VARCHAR(50) default NULL,";
+        sCreateTableStatement += "\"f_tinyint\" TINYINT default NULL";
+        sCreateTableStatement += ");";
         return sCreateTableStatement;
     }
 
@@ -642,7 +657,7 @@ public class FormControlTest extends ComplexTestCase
         }
 
         // drop the table, if it already exists
-        if  (  !implExecuteStatement( xConn, "DROP TABLE IF EXISTS CTC_form_controls" )
+        if  (  !implExecuteStatement( xConn, "DROP TABLE CTC_form_controls IF EXISTS" )
             || !implExecuteStatement( xConn, getCreateTableStatement() )
             )
         {
@@ -650,7 +665,7 @@ public class FormControlTest extends ComplexTestCase
             return false;
         }
 
-        String sInsertionPrefix = "INSERT INTO CTC_form_controls VALUES (";
+        String sInsertionPrefix = "INSERT INTO \"CTC_form_controls\" VALUES (";
         String[] aValues = getSampleDataValueString();
         for ( int i=0; i<aValues.length; ++i )
             if ( !implExecuteStatement( xConn, sInsertionPrefix + aValues[ i ] + ")" ) )
@@ -816,8 +831,7 @@ public class FormControlTest extends ComplexTestCase
     {
         try
         {
-            XStatement xStatement = xConn.createStatement( );
-            xStatement.execute( sStatement );
+            m_databaseDocument.executeSQL( sStatement );
         }
         catch(com.sun.star.sdbc.SQLException e)
         {
