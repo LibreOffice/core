@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:54:50 $
+#   last change: $Author: rt $ $Date: 2006-02-06 13:51:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ SCP1FILES +=                           \
              registryitem_math.par     \
              folderitem_math.par       \
              module_quickstart.par     \
+             file_quickstart.par       \
              registryitem_quickstart.par
 
 .IF "$(NETTOOLKIT)"==""
@@ -231,6 +232,7 @@ SCP2FILES +=                           \
              registryitem_math.par     \
              folderitem_math.par       \
              module_quickstart.par     \
+             file_quickstart.par       \
              registryitem_quickstart.par
 
 .IF "$(NETTOOLKIT)"==""
