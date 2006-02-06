@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:05:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,31 +366,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             delete pDlg;
             break;
         }
-        case SID_INSERT_GRAPHIC:
-            //if (!pItem)
-            {
-                rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
-            }
-/*
-            else
-            {
-                String rName = aEmptyStr;
-                BOOL bLink = FALSE;
-                rName = ((const SfxStringItem *)pItem)->GetValue();
-                String rFilter = aEmptyStr;
-
-                if ( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_FILTER, TRUE, &pItem) )
-                    rFilter = ((const SfxStringItem *)pItem)->GetValue();
-                if ( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, TRUE, &pItem) )
-                    bLink = ((const SfxBoolItem *)pItem)->GetValue();
-
-                if ( !rName.Len() )
-                    rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg()));
-                else
-                    rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphic( rName, rFilter, bLink )));
-            }
-*/
-            break;
         case SID_INSERTDOC:
             if (!pItem)
             {
