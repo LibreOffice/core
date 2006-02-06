@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAccessibleEventLog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:44:03 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
 
     private static XAccessibleEventLog theEventListener = null;
 
+    private static java.util.Hashtable proxyList = new java.util.Hashtable();
+
     /** Creates a new instance of UNOAccessibleEventListener */
     public XAccessibleEventLog() {
     }
@@ -58,11 +60,17 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
         return theEventListener;
     }
 
-    public static void addEventListener(XAccessibleContext xac) {
+    public static void addEventListener(XAccessibleContext xac, java.awt.Component c) {
         XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
             UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, xac);
         if (broadcaster != null) {
             broadcaster.addEventListener(XAccessibleEventLog.get());
+
+            // remember the proxy objects
+            synchronized (proxyList) {
+//                proxyList.put(UnoRuntime.generateOid(xac), new WeakReference(c));
+                proxyList.put(UnoRuntime.generateOid(xac), c);
+            }
         }
     }
 
@@ -145,8 +153,25 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     }
 
     protected static void logMessage(Object o, String s) {
-        XAccessible xa = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, o);
-        logMessage((javax.accessibility.Accessible) AccessibleObjectFactory.getAccessibleComponent(xa), s);
+        XAccessibleContext xac = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, o);
+        if( xac != null ) {
+            String oid = UnoRuntime.generateOid(xac);
+            synchronized (proxyList) {
+                  logMessage( (javax.accessibility.Accessible) proxyList.get( oid ), s );
+//                WeakReference r = (WeakReference) proxyList.get( oid );
+//                if(r != null) {
+//                    System.err.println( "*** Warning *** event is " + r.get() );
+//                    logMessage( (javax.accessibility.Accessible) r.get(), s );
+//                } else {
+//                    System.err.println( "*** Warning *** event source not found in broadcaster list" );
+//                }
+            }
+        } else {
+            System.err.println( "*** Warning *** event source does not implement XAccessibleContext" );
+
+            XAccessible xa = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, o);
+            logMessage((javax.accessibility.Accessible) AccessibleObjectFactory.getAccessibleComponent(xa), s);
+        }
     }
 
     protected static void logMessage(javax.accessibility.Accessible a, String s) {
