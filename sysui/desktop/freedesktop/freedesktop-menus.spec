@@ -125,6 +125,17 @@ if [ "$1" = "1" ] ; then  # first install
   if (which update-mime-database); then
     update-mime-database /usr/share/mime
   fi
+  for theme in gnome hicolor locolor; do
+    if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
+      # touch it, just in case we cannot find the binary...
+      touch /usr/share/icons/$theme
+      if (which gtk-update-icon-cache); then
+        gtk-update-icon-cache /usr/share/icons/$theme
+      fi
+      # ignore errors (e.g. when there is a cache, but no index.theme)
+      true
+    fi
+  done
 fi
 
 # update /etc/mime.types
@@ -266,6 +277,17 @@ fi
 if (which update-mime-database); then
   update-mime-database /usr/share/mime
 fi
+for theme in gnome hicolor locolor; do
+  if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
+    # touch it, just in case we cannot find the binary...
+    touch /usr/share/icons/$theme
+    if (which gtk-update-icon-cache); then
+      gtk-update-icon-cache /usr/share/icons/$theme
+    fi
+    # ignore errors (e.g. when there is a cache, but no index.theme)
+    true
+  fi
+done
 
 %files 
 # specify stale symlinks verbatim, not as glob - a change in recent versions of 
