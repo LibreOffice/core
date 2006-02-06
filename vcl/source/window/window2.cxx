@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:58:08 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1734,6 +1734,11 @@ BOOL Window::IsDialog() const
 BOOL Window::IsMenuFloatingWindow() const
 {
     return mpWindowImpl->mbMenuFloatingWindow;
+}
+
+BOOL Window::IsToolbarFloatingWindow() const
+{
+    return mpWindowImpl->mbToolbarFloatingWindow;
 }
 
 void Window::EnableAllResize( BOOL bEnable )
