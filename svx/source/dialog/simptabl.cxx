@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simptabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:02:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,22 +61,20 @@ SvxSimpTblContainer::SvxSimpTblContainer( Window* pParent, const ResId& rResId):
 
 long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=TRUE;
-
-    USHORT nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_KEYINPUT)
+    long nResult = TRUE;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
-        USHORT nKey=aKeyCode.GetCode();
-        if(nKey==KEY_TAB)
-        {
-            GetParent()->Notify(rNEvt);
-        }
+        const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        USHORT nKey = aKeyCode.GetCode();
+        if ( nKey == KEY_TAB )
+            GetParent()->Notify( rNEvt );
+        else if ( m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT ) )
+            return 0;
         else
-            nResult=Control::PreNotify(rNEvt);
+            nResult = Control::PreNotify( rNEvt );
     }
     else
-        nResult=Control::PreNotify(rNEvt);
+        nResult = Control::PreNotify( rNEvt );
 
     return nResult;
 }
@@ -85,7 +83,7 @@ long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
 // SvxSimpleTable ------------------------------------------------------------
 
 SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
-        SvTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
+        SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         aPrivContainer(pParent,nBits|WB_DIALOGCONTROL),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         bResizeFlag(FALSE),
@@ -98,6 +96,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
 
     SetParent(&aPrivContainer);
     aHeaderBar.SetParent(&aPrivContainer);
+    aPrivContainer.SetTable( this );
 
     aHeaderBar.SetStartDragHdl(LINK( this, SvxSimpleTable, StartDragHdl));
     aHeaderBar.SetDragHdl(LINK( this, SvxSimpleTable, DragHdl));
@@ -105,13 +104,17 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
     aHeaderBar.SetSelectHdl(LINK( this, SvxSimpleTable, HeaderBarClick));
     aHeaderBar.SetDoubleClickHdl(LINK( this, SvxSimpleTable, HeaderBarDblClick));
 
+    EnableCellFocus();
+    DisableTransientChildren();
+    InitHeaderBar( &aHeaderBar );
+
     aHeaderBar.Show();
-    SvTabListBox::Show();
+    SvHeaderTabListBox::Show();
 }
 
 
 SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
-        SvTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
+        SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         aPrivContainer(pParent,rResId),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
         bResizeFlag(TRUE),
@@ -126,6 +129,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
     pMyParentWin=pParent;
     SetParent(&aPrivContainer);
     aHeaderBar.SetParent(&aPrivContainer);
+    aPrivContainer.SetTable( this );
 
     WinBits nBits=aPrivContainer.GetStyle()|WB_DIALOGCONTROL;
     aPrivContainer.SetStyle(nBits);
@@ -147,11 +151,16 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
     aHeaderBar.SetSizePixel(HbSize);
 
     thePos.Y()+=HbSize.Height();
-    SvTabListBox::SetPosPixel(thePos);
-    SvTabListBox::SetSizePixel(theWinSize);
+    SvHeaderTabListBox::SetPosPixel(thePos);
+    SvHeaderTabListBox::SetSizePixel(theWinSize);
+
+    EnableCellFocus();
+    DisableTransientChildren();
+    InitHeaderBar( &aHeaderBar );
+
     aHeaderBar.Show();
     SetWindowBits(WB_CLIPCHILDREN | WB_HSCROLL);
-    SvTabListBox::Show();
+    SvHeaderTabListBox::Show();
 }
 
 SvxSimpleTable::~SvxSimpleTable()
@@ -175,8 +184,8 @@ void SvxSimpleTable::UpdateViewSize()
     aHeaderBar.SetSizePixel(HbSize);
 
     thePos.Y()+=HbSize.Height();
-    SvTabListBox::SetPosPixel(thePos);
-    SvTabListBox::SetSizePixel(theWinSize);
+    SvHeaderTabListBox::SetPosPixel(thePos);
+    SvHeaderTabListBox::SetSizePixel(theWinSize);
     Invalidate();
 }
 
@@ -190,12 +199,12 @@ void SvxSimpleTable::NotifyScrolled()
         aHeaderBar.Update();
         nOldPos=nOffset;
     }
-    SvTabListBox::NotifyScrolled();
+    SvHeaderTabListBox::NotifyScrolled();
 }
 
 void SvxSimpleTable::SetTabs()
 {
-    SvTabListBox::SetTabs();
+    SvHeaderTabListBox::SetTabs();
 
     USHORT nPrivTabCount = TabCount();
     if ( nPrivTabCount )
@@ -203,10 +212,10 @@ void SvxSimpleTable::SetTabs()
         if ( nPrivTabCount > aHeaderBar.GetItemCount() )
             nPrivTabCount = aHeaderBar.GetItemCount();
 
-        USHORT i, nNewSize = (USHORT)GetTab(0), nPos = 0;
+        USHORT i, nNewSize = static_cast< USHORT >( GetTab(0) ), nPos = 0;
         for ( i = 1; i < nPrivTabCount; ++i )
         {
-            nNewSize = GetTab(i) - nPos;
+            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
             nPos = (USHORT)GetTab(i);
         }
@@ -217,12 +226,12 @@ void SvxSimpleTable::SetTabs()
 
 void SvxSimpleTable::SetTabs( long* pTabs, MapUnit eMapUnit)
 {
-    SvTabListBox::SetTabs(pTabs,eMapUnit);
+    SvHeaderTabListBox::SetTabs(pTabs,eMapUnit);
 }
 
 void SvxSimpleTable::Paint( const Rectangle& rRect )
 {
-    SvTabListBox::Paint(rRect );
+    SvHeaderTabListBox::Paint(rRect );
 
     USHORT nPrivTabCount = TabCount();
     USHORT nPos = 0;
@@ -241,9 +250,9 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
 
         for(USHORT i=1;i<nPrivTabCount;i++)
         {
-            nNewSize=GetTab(i)-nPos;
-            aHeaderBar.SetItemSize(i,nNewSize );
-            nPos=(USHORT) GetTab(i);
+            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
+            aHeaderBar.SetItemSize( i, nNewSize );
+            nPos= static_cast< USHORT >( GetTab(i) );
         }
     }
     bPaintFlag=TRUE;
@@ -333,7 +342,7 @@ void SvxSimpleTable::SetPosSizePixel( const Point& rNewPos, Size& rNewSize )
 void SvxSimpleTable::SetPosSize( const Point& rNewPos, const Size& rNewSize )
 {
     aPrivContainer.SetPosPixel(rNewPos);
-    SvTabListBox::SetPosSizePixel(rNewPos,rNewSize);
+    SvHeaderTabListBox::SetPosSizePixel(rNewPos,rNewSize);
 }
 
 Size SvxSimpleTable::GetSizePixel() const
@@ -419,7 +428,7 @@ void SvxSimpleTable::HBarStartDrag()
     if(!aHeaderBar.IsItemMode())
     {
         Rectangle aSizeRect(Point(0,0),
-            SvTabListBox::GetOutputSizePixel());
+            SvHeaderTabListBox::GetOutputSizePixel());
         aSizeRect.Left()=-GetXOffset()+aHeaderBar.GetDragPos();
         aSizeRect.Right()=-GetXOffset()+aHeaderBar.GetDragPos();
         ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
@@ -431,7 +440,7 @@ void SvxSimpleTable::HBarDrag()
     if(!aHeaderBar.IsItemMode())
     {
         Rectangle aSizeRect(Point(0,0),
-            SvTabListBox::GetOutputSizePixel());
+            SvHeaderTabListBox::GetOutputSizePixel());
         aSizeRect.Left()=-GetXOffset()+aHeaderBar.GetDragPos();
         aSizeRect.Right()=-GetXOffset()+aHeaderBar.GetDragPos();
         ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
@@ -452,9 +461,9 @@ void SvxSimpleTable::HBarEndDrag()
         //for(USHORT i=1;i<=nPrivTabCount;i++)
         for(USHORT i=1;i<nPrivTabCount;i++)
         {
-            nNewSize=aHeaderBar.GetItemSize(i)+nPos;
-            SetTab(i,nNewSize,MAP_PIXEL);
-            nPos=nNewSize;
+            nNewSize = static_cast< USHORT >( aHeaderBar.GetItemSize(i) ) + nPos;
+            SetTab( i, nNewSize, MAP_PIXEL );
+            nPos = nNewSize;
         }
     }
     bPaintFlag=FALSE;
@@ -471,7 +480,7 @@ void SvxSimpleTable::Command( const CommandEvent& rCEvt )
 {
     aCEvt=rCEvt;
     aCommandLink.Call(this);
-    SvTabListBox::Command(rCEvt);
+    SvHeaderTabListBox::Command(rCEvt);
 }
 
 IMPL_LINK( SvxSimpleTable, StartDragHdl, HeaderBar*, pCtr)
