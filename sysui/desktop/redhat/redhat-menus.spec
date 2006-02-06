@@ -77,6 +77,22 @@ if [ -x /usr/bin/update-mime-database ]; then
   update-mime-database /usr/share/mime
 fi
 
+# run only on first install, since postun is run when updating
+# post would be run before the old files are removed 
+if [ "$1" = "1" ] ; then  # first install
+  for theme in gnome hicolor locolor; do
+    if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
+      # touch it, just in case we cannot find the binary...
+      touch /usr/share/icons/$theme
+      if (which gtk-update-icon-cache); then
+        gtk-update-icon-cache /usr/share/icons/$theme
+      fi
+      # ignore errors (e.g. when there is a cache, but no index.theme)
+      true
+    fi
+  done
+fi
+
 # update /etc/mime.types
 # backing out existing entries to avoid duplicates
 sed '
@@ -245,6 +261,18 @@ if [ "$1" = 0 ] ; then
     update-mime-database /usr/share/mime
   fi
 fi
+#run always
+for theme in gnome hicolor locolor; do
+  if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
+    # touch it, just in case we cannot find the binary...
+    touch /usr/share/icons/$theme
+    if (which gtk-update-icon-cache); then
+      gtk-update-icon-cache /usr/share/icons/$theme
+    fi
+    # ignore errors (e.g. when there is a cache, but no index.theme)
+    true
+  fi
+done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
