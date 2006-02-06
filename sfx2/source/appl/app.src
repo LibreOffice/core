@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:22:23 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 19:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1301,7 +1301,7 @@ WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
     //HelpId = HID_WARNING_SECURITY_NO_HYPERLINKS;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ de ] = "Der Hyperlink wird aus Sicherheitsgünden nicht aus geführt.\nDie angegebene Adresse wird nicht geöffnet.";
+    Message [ de ] = "Der Hyperlink wird aus SicherheitsgrÃ¼nden nicht ausgefÃ¼hrt.\nDie angegebene Adresse wird nicht geÃ¶ffnet.";
     Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
 };
 
