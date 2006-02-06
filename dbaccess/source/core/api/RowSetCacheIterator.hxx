@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:44:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@ namespace dbaccess
 
         void setBookmark(const ::com::sun::star::uno::Any&  _rBookmark);
         ::com::sun::star::uno::Any getBookmark() const { return m_aIter->second.aBookmark; }
+        ::osl::Mutex*   getMutex() const;
     };
 }
 #endif // DBACCESS_ROWSETCACHEITERATOR_HXX
