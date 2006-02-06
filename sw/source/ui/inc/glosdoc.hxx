@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:17:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 16:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SV_DECL_REF( SwDocShell )
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XAutoTextGroup > AutoTextGroupRef;
 typedef ::std::vector< AutoTextGroupRef > UnoAutoTextGroups;
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry > AutoTextEntryRef;
+typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XAutoTextEntry > AutoTextEntryRef;
 typedef ::std::vector< AutoTextEntryRef > UnoAutoTextEntries;
 
 #define GLOS_DELIM (sal_Unicode)'*'
