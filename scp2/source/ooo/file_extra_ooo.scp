@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_extra_ooo.scp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 16:08:57 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ End
 File gid_File_Extra_Cfgusr
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE, PATCH);
     Name = "cfgusr.zip";
 End
 
@@ -243,7 +243,7 @@ End
 File gid_File_Extra_Palettes_Lang
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE, PATCH);
     EXTRA_ALL_LANG(palettes);
 End
 
@@ -313,7 +313,7 @@ End
 File gid_File_Extra_Tplwizdesktop_Lang
     Dir = gid_Dir_Template_Internal;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Styles = (ARCHIVE, DONT_OVERWRITE, PATCH);
     EXTRA_ALL_LANG(tplwizdesktop);
 End
 
