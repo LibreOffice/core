@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:47:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 12:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ End
 
 File gid_File_Basic_Euro
     Dir = gid_Dir_Basic_Euro;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     Name = "basicsrveuro.zip";
 End
 
@@ -56,7 +56,7 @@ End
 
 File gid_File_Basic_Importwiz
     Dir = gid_Dir_Basic_Importwiz;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     Name = "basicsrvimport.zip";
 End
 
@@ -92,7 +92,7 @@ End
 
 File gid_File_Basic_Tools
     Dir = gid_Dir_Basic_Tools;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     Name = "basicsrvtools.zip";
 End
 
