@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,6 +846,9 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     //       <mbUserCallActive> is FALSE.
     meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
     // <--
+    // --> OD 2006-01-23 #124157#
+    mbConnectedToLayout( false )
+    // <--
 {
     // clear vector containing 'virtual' drawing objects.
     maDrawVirtObjs.clear();
@@ -1679,64 +1682,69 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         else
             DisconnectFromLayout();
     }
-    // --> OD 2004-07-01 #i28701# - on change of wrapping style, hell|heaven layer,
-    // or wrapping style influence an update of the <SwSortedObjs> list,
-    // the drawing object is registered in, has to be performed. This is triggered
-    // by the 1st parameter of method call <_InvalidateObjs(..)>.
-    else if ( RES_SURROUND == nWhich ||
-              RES_OPAQUE == nWhich ||
-              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
-              ( RES_ATTRSET_CHG == nWhich &&
-                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_SURROUND, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_OPAQUE, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
+    // --> OD 2006-01-23 #124157#
+    // no further notifications, if not connected to the Writer layout
+    else if ( mbConnectedToLayout )
     {
-        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
-        NotifyBackgrdOfAllVirtObjs( 0L );
-        _InvalidateObjs( true );
-    }
-    else if ( RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
-              RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
-              // --> OD 2004-07-01 #i28701# - add attribute 'Follow text flow'
-              RES_FOLLOW_TEXT_FLOW == nWhich ||
-              ( RES_ATTRSET_CHG == nWhich &&
-                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_LR_SPACE, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_UL_SPACE, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_HORI_ORIENT, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_VERT_ORIENT, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_FOLLOW_TEXT_FLOW, FALSE ) ) ) )
-    {
-        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
-        NotifyBackgrdOfAllVirtObjs( 0L );
-        _InvalidateObjs();
-    }
-    // --> OD 2004-10-26 #i35443#
-    else if ( RES_ATTRSET_CHG == nWhich )
-    {
-        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
-        NotifyBackgrdOfAllVirtObjs( 0L );
-        _InvalidateObjs();
-    }
-    // <--
-    else if ( RES_REMOVE_UNO_OBJECT == nWhich )
-    {
-        // nothing to do
-    }
+        // --> OD 2004-07-01 #i28701# - on change of wrapping style, hell|heaven layer,
+        // or wrapping style influence an update of the <SwSortedObjs> list,
+        // the drawing object is registered in, has to be performed. This is triggered
+        // by the 1st parameter of method call <_InvalidateObjs(..)>.
+        if ( RES_SURROUND == nWhich ||
+                  RES_OPAQUE == nWhich ||
+                  RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
+                  ( RES_ATTRSET_CHG == nWhich &&
+                    ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_SURROUND, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_OPAQUE, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
+        {
+            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+            NotifyBackgrdOfAllVirtObjs( 0L );
+            _InvalidateObjs( true );
+        }
+        else if ( RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
+                  RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
+                  // --> OD 2004-07-01 #i28701# - add attribute 'Follow text flow'
+                  RES_FOLLOW_TEXT_FLOW == nWhich ||
+                  ( RES_ATTRSET_CHG == nWhich &&
+                    ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_LR_SPACE, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_UL_SPACE, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_HORI_ORIENT, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_VERT_ORIENT, FALSE ) ||
+                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                                RES_FOLLOW_TEXT_FLOW, FALSE ) ) ) )
+        {
+            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+            NotifyBackgrdOfAllVirtObjs( 0L );
+            _InvalidateObjs();
+        }
+        // --> OD 2004-10-26 #i35443#
+        else if ( RES_ATTRSET_CHG == nWhich )
+        {
+            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+            NotifyBackgrdOfAllVirtObjs( 0L );
+            _InvalidateObjs();
+        }
+        // <--
+        else if ( RES_REMOVE_UNO_OBJECT == nWhich )
+        {
+            // nothing to do
+        }
 #if OSL_DEBUG_LEVEL > 1
-    else
-    {
-        ASSERT( false,
-                "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
-    }
+        else
+        {
+            ASSERT( false,
+                    "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
+        }
 #endif
+    }
 
     // --> OD 2005-07-18 #i51474#
     GetAnchoredObj( 0L )->ResetLayoutProcessBools();
@@ -1843,6 +1851,11 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // OD 10.10.2003 #112299#
     mbDisconnectInProgress = false;
+
+    // --> OD 2006-01-23 #124157#
+    // Now the drawing object is disconnected from the Writer layout
+    mbConnectedToLayout = false;
+    // <--
 }
 
 // OD 26.06.2003 #108784# - method to remove 'master' drawing object
@@ -2111,6 +2124,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     {
         // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
         _InvalidateObjs();
+        // --> OD 2006-01-23 #124157#
+        // Now the drawing object is connected to the Writer layout
+        mbConnectedToLayout = true;
+        // <--
     }
 }
 
