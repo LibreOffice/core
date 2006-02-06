@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:47:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-06 13:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,13 @@
 #ifndef _SVTOOLS_ACCESSIBLETABLISTBOX_HXX
 #include "accessibletablistbox.hxx"
 #endif
-#ifndef _SVTOOLS_ACCESSIBILEBROWSEBOXTABLECELL_HXX
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXTABLECELL_HXX
 #include "AccessibleBrowseBoxTableCell.hxx"
 #endif
-#ifndef _SVTOOLS_ACCESSIBILEBROWSEBOXHEADERCELL_HXX
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
+#include "AccessibleBrowseBoxCheckBoxCell.hxx"
+#endif
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
 #include "AccessibleBrowseBoxHeaderCell.hxx"
 #endif
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
@@ -507,6 +510,20 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, USH
     GetModel()->InvalidateEntry( pEntry );
 }
 
+String SvTabListBox::GetCellText( ULONG nPos, USHORT nCol ) const
+{
+    SvLBoxEntry* pEntry = GetEntryOnPos( nPos );
+    DBG_ASSERT( pEntry, "SvTabListBox::GetCellText(): Invalid Entry" );
+    XubString aResult;
+    if ( pEntry && pEntry->ItemCount() > ( nCol + 1 ) )
+    {
+        SvLBoxItem* pStr = pEntry->GetItem( nCol + 1 );
+        if ( pStr && pStr->IsA() == SV_ITEM_ID_LBOXSTRING )
+            aResult = static_cast< SvLBoxString* >( pStr )->GetText();
+    }
+    return aResult;
+}
+
 ULONG SvTabListBox::GetEntryPos( const XubString& rStr, USHORT nCol )
 {
     ULONG nPos = 0;
@@ -739,6 +756,22 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 
 // -----------------------------------------------------------------------
 
+sal_Bool SvHeaderTabListBox::IsItemChecked( SvLBoxEntry* pEntry, USHORT nCol ) const
+{
+    SvButtonState eState = SV_BUTTON_UNCHECKED;
+    SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( nCol + 1 ) );
+
+    if ( pItem && ( (SvLBoxItem*)pItem )->IsA() == SV_ITEM_ID_LBOXBUTTON )
+    {
+        USHORT nButtonFlags = pItem->GetButtonFlags();
+        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+    }
+
+    return ( eState == SV_BUTTON_CHECKED );
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
@@ -762,6 +795,32 @@ IMPL_LINK( SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, EMPTYARG )
         }
     }
     return 0;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
+{
+    sal_Bool bRet = sal_False;
+    SvLBoxEntry* pEntry = GetEntry( _nRow );
+    if ( pEntry )
+    {
+        USHORT nItemCount = pEntry->ItemCount();
+        if ( nItemCount > ( _nColumn + 1 ) )
+        {
+            SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( _nColumn + 1 ) );
+            if ( pItem && ( (SvLBoxItem*)pItem )->IsA() == SV_ITEM_ID_LBOXBUTTON )
+            {
+                bRet = sal_True;
+                _rState = ( ( pItem->GetButtonFlags() & SV_ITEMSTATE_UNCHECKED ) == 0 )
+                            ? STATE_CHECK : STATE_NOCHECK;
+            }
+        }
+        else
+        {
+            DBG_ERRORFILE( "SvHeaderTabListBox::IsCellCheckBox(): column out of range" );
+        }
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -951,8 +1010,40 @@ Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     OSL_ENSURE( m_pAccessible, "Invalid call: Accessible is null" );
-    return new ::svt::AccessibleBrowseBoxTableCell(
-        m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
+
+    Reference< XAccessible > xChild;
+    sal_Int32 nIndex = -1;
+
+    if ( !AreChildrenTransient() )
+    {
+        // first call? -> initial list
+        if ( m_aAccessibleChildren.empty() )
+        {
+            sal_Int32 nCount = ( GetRowCount() + 1 ) * GetColumnCount();
+            m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
+        }
+
+        nIndex = ( _nRow * GetColumnCount() ) + _nColumnPos + GetColumnCount();
+        xChild = m_aAccessibleChildren[ nIndex ];
+    }
+
+    if ( !xChild.is() )
+    {
+        TriState eState = STATE_DONTKNOW;
+        sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
+        if ( bIsCheckBox )
+            xChild = new ::svt::AccessibleCheckBoxCell(
+                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, sal_True, sal_False );
+        else
+            xChild = new ::svt::AccessibleBrowseBoxTableCell(
+                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
+
+        // insert into list
+        if ( !AreChildrenTransient() )
+            m_aAccessibleChildren[ nIndex ] = xChild;
+    }
+
+    return xChild;
 }
 // -----------------------------------------------------------------------
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
@@ -965,7 +1056,11 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
 {
     // first call? -> initial list
     if ( m_aAccessibleChildren.empty() )
-        m_aAccessibleChildren.assign( GetColumnCount(), Reference< XAccessible >() );
+    {
+        sal_Int32 nCount = AreChildrenTransient() ? GetColumnCount()
+                                                  : ( GetRowCount() + 1 ) * GetColumnCount();
+        m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
+    }
 
     // get header
     Reference< XAccessible > xChild = m_aAccessibleChildren[ _nColumn ];
@@ -1041,9 +1136,13 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16& _rnColPos, 
                 sal_uInt16 nColumnCount = GetColumnCount();
                 sal_Int32 nRow = _nPos / nColumnCount;
                 sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
-                aRetText = GetEntryText( nRow, nColumn );
+                aRetText = GetCellText( nRow, nColumn );
             }
             break;
+        }
+        case ::svt::BBTYPE_CHECKBOXCELL:
+        {
+            break; // checkbox cells have no name
         }
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         {
@@ -1070,17 +1169,23 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16& _rnColPos, 
     {
         case ::svt::BBTYPE_TABLECELL:
         {
-            static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-            static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+            if ( _nPos != -1 )
+            {
+                static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+                static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
 
-            sal_uInt16 nColumnCount = GetColumnCount();
-            sal_Int32 nRow = _nPos / nColumnCount;
-            sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
+                sal_uInt16 nColumnCount = GetColumnCount();
+                sal_Int32 nRow = _nPos / nColumnCount;
+                sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-            String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
-            aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
-            aText.SearchAndReplace( sVar2, m_pHeaderBar->GetItemText( m_pHeaderBar->GetItemId( nColumn ) ) );
-            aRetText = aText;
+                String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
+                aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
+                String sColHeader = m_pHeaderBar->GetItemText( m_pHeaderBar->GetItemId( nColumn ) );
+                if ( sColHeader.Len() == 0 )
+                    sColHeader = String::CreateFromInt32( nColumn );
+                aText.SearchAndReplace( sVar2, sColHeader );
+                aRetText = aText;
+            }
             break;
         }
     }
@@ -1106,7 +1211,9 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( _eType == ::svt::BBTYPE_TABLE )
             {
-                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+
+                if ( AreChildrenTransient() )
+                    _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
                 _rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
             }
             break;
@@ -1136,10 +1243,14 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
 void SvHeaderTabListBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const
 {
     _rStateSet.AddState( AccessibleStateType::SELECTABLE );
-    _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+    if ( AreChildrenTransient() )
+        _rStateSet.AddState( AccessibleStateType::TRANSIENT );
 
     if ( IsCellVisible( _nRow, _nColumn ) )
+    {
         _rStateSet.AddState( AccessibleStateType::VISIBLE );
+        _rStateSet.AddState( AccessibleStateType::ENABLED );
+    }
 
     if ( IsSelected( GetEntry( _nRow ) ) )
     {
