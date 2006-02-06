@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:03:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-06 17:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,19 +47,60 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#endif
+
+
+#define _SVSTDARR_STRINGSSORTDTOR
+#include <svtools/svstdarr.hxx>
+
 #ifndef _AEITEM_HXX
 #include <svtools/aeitem.hxx>
 #endif
+#ifndef _FILTER_HXX
+#include <svtools/filter.hxx>
+#endif
 
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
 #endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
+#ifndef _CAPTION_HXX
+#include <caption.hxx>
+#endif
 
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef _SFX_PASSWD_HXX
 #include <sfx2/passwd.hxx>
@@ -67,11 +108,17 @@
 #ifndef _SFX2_DIALOG_HXX
 #include <sfx2/sfxdlg.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #ifndef _SFX_HELP_HXX
 #include <sfx2/sfxhelp.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_HTMLMODE_HXX
+#include <svx/htmlmode.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -90,6 +137,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_IMPGRF_HXX
+#include  <svx/impgrf.hxx>
 #endif
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
@@ -249,6 +299,15 @@
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
+#endif
+#ifndef _STATSTR_HRC
+#include <statstr.hrc>
+#endif
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
@@ -280,6 +339,10 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+#ifndef _FRMMGR_HXX
+#include <frmmgr.hxx>
+#endif
+
 //CHINA001 #ifndef _MAILMRGE_HXX
 //CHINA001 #include "mailmrge.hxx"
 //CHINA001 #endif
@@ -307,6 +370,7 @@ static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 
 using namespace ::rtl;
+using namespace sfx2;
 using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::util;
@@ -316,6 +380,8 @@ using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace com::sun::star::ui::dialogs;
+
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
 /*---------------------------------------------------------------------------
@@ -341,6 +407,289 @@ String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
 
     return aStr;
 }
+
+
+IMPL_LINK_INLINE_START( SwView, UpdatePercentHdl, GraphicFilter *, pFilter )
+{
+    ::SetProgressState( pFilter->GetPercent(), GetDocShell() );
+    return 0;
+}
+IMPL_LINK_INLINE_END( SwView, UpdatePercentHdl, GraphicFilter *, pFilter )
+
+
+int SwView::InsertGraphic( const String &rPath, const String &rFilter,
+                                BOOL bLink, GraphicFilter *pFlt,
+                                Graphic* pPreviewGrf, BOOL bRule )
+{
+    SwWait aWait( *GetDocShell(), TRUE );
+
+    Graphic aGrf;
+    int nRes = GRFILTER_OK;
+    if ( pPreviewGrf )
+        aGrf = *pPreviewGrf;
+    else
+    {
+        if( !pFlt )
+            pFlt = ::GetGrfFilter();
+        Link aOldLink = pFlt->GetUpdatePercentHdl();
+        pFlt->SetUpdatePercentHdl( LINK( this, SwView, UpdatePercentHdl ));
+        ::StartProgress( STR_STATSTR_IMPGRF, 0, 100, GetDocShell() );
+        nRes = ::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
+        ::EndProgress( GetDocShell() );
+        pFlt->SetUpdatePercentHdl( aOldLink );
+    }
+
+    if( GRFILTER_OK == nRes )
+    {
+        SwFlyFrmAttrMgr aFrmMgr( TRUE, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
+
+        SwWrtShell &rSh = GetWrtShell();
+        rSh.StartAction();
+        if( bLink )
+        {
+            SwDocShell* pDocSh = GetDocShell();
+            INetURLObject aTemp(
+                pDocSh->HasName() ?
+                    pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
+                    rtl::OUString());
+
+            String sURL = URIHelper::SmartRel2Abs(
+                aTemp, rPath, URIHelper::GetMaybeFileHdl() );
+
+            rSh.Insert( sURL,
+                        rFilter, aGrf, &aFrmMgr, bRule );
+        }
+        else
+            rSh.Insert( aEmptyStr, aEmptyStr, aGrf, &aFrmMgr );
+        // nach dem EndAction ist es zu spaet, weil die Shell dann schon zerstoert sein kann
+        rSh.EndAction();
+    }
+    return nRes;
+}
+
+
+BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
+{
+#ifndef ENABLE_PROP_WITHOUTLINK
+#define ENABLE_PROP_WITHOUTLINK 0x08
+#endif
+
+    BOOL bReturn = FALSE;
+    SwDocShell* pDocShell = GetDocShell();
+    USHORT nHtmlMode = ::GetHtmlMode(pDocShell);
+    // im HTML-Mode nur verknuepft einfuegen
+    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC | SFXWB_SHOWSTYLES );
+    pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
+    pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
+    Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
+    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+    if(nHtmlMode & HTMLMODE_ON)
+    {
+        sal_Bool bTrue = sal_True;
+        Any aVal(&bTrue, ::getBooleanCppuType());
+        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
+        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+    }
+
+    SvStringsSortDtor aFormats;
+    SwDoc* pDoc = pDocShell->GetDoc();
+    const USHORT nArrLen = pDoc->GetFrmFmts()->Count();
+    USHORT i;
+    for( i = 0; i < nArrLen; i++ )
+    {
+        SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
+        if(pFmt->IsDefault() || pFmt->IsAuto())
+            continue;
+        String *pFormat = new String(pFmt->GetName());
+        aFormats.Insert(pFormat);
+    }
+
+    // pool formats
+    //
+    const SvStringsDtor& rFrmPoolArr = SwStyleNameMapper::GetFrmFmtUINameArray();
+    for( i = 0; i < rFrmPoolArr.Count(); i++ )
+    {
+        String *pFormat = new String(*rFrmPoolArr[i]);
+        if (!aFormats.Insert(pFormat))
+            delete pFormat;
+    }
+
+    Sequence<OUString> aListBoxEntries(aFormats.Count());
+    OUString* pEntries = aListBoxEntries.getArray();
+    sal_Int16 nSelect = 0;
+    String sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
+    for(i = 0; i < aFormats.Count(); ++i)
+    {
+        pEntries[i] = *aFormats[i];
+        if(pEntries[i].equals(sGraphicFormat))
+            nSelect = i;
+    }
+    try
+    {
+        Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
+
+        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+            ListboxControlActions::ADD_ITEMS , aTemplates );
+
+        Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
+        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+            ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
+    }
+    catch(Exception& )
+    {
+        DBG_ERROR("control acces failed")
+    }
+
+    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+    BOOL bShowError = !pName;
+    if( pName || ERRCODE_NONE == pFileDlg->Execute() )
+    {
+
+        String aFileName, aFilterName;
+        if ( pName )
+        {
+            aFileName = pName->GetValue();
+            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
+            if ( pFilter )
+                aFilterName = pFilter->GetValue();
+        }
+        else
+        {
+            aFileName = pFileDlg->GetPath();
+            aFilterName = pFileDlg->GetCurrentFilter();
+            rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
+            rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
+
+            sal_Bool bAsLink;
+            if(nHtmlMode & HTMLMODE_ON)
+                bAsLink = sal_True;
+            else
+            {
+                try
+                {
+                    Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                    bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                    Any aTemplateValue = xCtrlAcc->getValue(
+                        ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                        ListboxControlActions::GET_SELECTED_ITEM );
+                    OUString sTmpl;
+                    aTemplateValue >>= sTmpl;
+                    rReq.AppendItem( SfxStringItem( FN_PARAM_2, sTmpl) );
+                }
+                catch(Exception& )
+                {
+                    DBG_ERROR("control acces failed")
+                }
+            }
+            rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
+        }
+
+        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
+
+        sal_Bool bAsLink;
+        if( nHtmlMode & HTMLMODE_ON )
+            bAsLink = sal_True;
+        else
+        {
+            if ( rReq.GetArgs() )
+            {
+                if ( pAsLink )
+                    bAsLink = pAsLink->GetValue();
+                if ( pStyle )
+                    sGraphicFormat = pStyle->GetValue();
+            }
+            else
+            {
+                Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                Any aTemplateValue = xCtrlAcc->getValue(
+                    ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                    ListboxControlActions::GET_SELECTED_ITEM );
+                OUString sTmpl;
+                aTemplateValue >>= sTmpl;
+                sGraphicFormat = sTmpl;
+                if ( sGraphicFormat.Len() )
+                    rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
+            }
+        }
+
+        SwWrtShell& rSh = GetWrtShell();
+        rSh.StartAction();
+
+        /// #111827#
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_GRAPHIC_DEFNAME)));
+
+        rSh.StartUndo(UNDO_INSERT, &aRewriter);
+
+        USHORT nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
+
+        // Format ist ungleich Current Filter, jetzt mit auto. detection
+        if( nError == GRFILTER_FORMATERROR )
+            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, ::GetGrfFilter() );
+        if ( rSh.IsFrmSelected() )
+        {
+            SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
+            if(!pFmt)
+                pFmt = pDoc->MakeFrmFmt(sGraphicFormat,
+                                        pDocShell->GetDoc()->GetDfltFrmFmt(),
+                                        TRUE, FALSE);
+            rSh.SetFrmFmt( pFmt );
+        }
+
+        RESOURCE_TYPE nResId = 0;
+        switch( nError )
+        {
+            case GRFILTER_OPENERROR:
+                nResId = STR_GRFILTER_OPENERROR;
+                break;
+            case GRFILTER_IOERROR:
+                nResId = STR_GRFILTER_IOERROR;
+                break;
+            case GRFILTER_FORMATERROR:
+                nResId = STR_GRFILTER_FORMATERROR;
+                break;
+            case GRFILTER_VERSIONERROR:
+                nResId = STR_GRFILTER_VERSIONERROR;
+                break;
+            case GRFILTER_FILTERERROR:
+                nResId = STR_GRFILTER_FILTERERROR;
+                break;
+            case GRFILTER_TOOBIG:
+                nResId = STR_GRFILTER_TOOBIG;
+                break;
+        }
+
+        rSh.EndAction();
+        if( nResId )
+        {
+            if( bShowError )
+            {
+                InfoBox aInfoBox( GetWindow(), SW_RESSTR( nResId ));
+                aInfoBox.Execute();
+            }
+            rReq.Ignore();
+        }
+        else
+        {
+            // set the specific graphic attrbutes to the graphic
+            bReturn = TRUE;
+            AutoCaption( GRAPHIC_CAP );
+            rReq.Done();
+        }
+
+        rSh.EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
+    }
+
+    delete pFileDlg;
+
+    return bReturn;
+}
+
 
 void __EXPORT SwView::Execute(SfxRequest &rReq)
 {
@@ -951,6 +1300,13 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case SID_INSERT_GRAPHIC:
+        {
+            rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
+        }
+        break;
+
+
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
