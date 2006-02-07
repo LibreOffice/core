@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:35:05 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,13 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >      m_xDocEventBroadcaster;
 
-    ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
-    sal_Bool                                            m_bCommitMasterStorage;
+    ::cppu::OInterfaceContainerHelper                                                   m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper                                                   m_aCloseListener;
+    ::cppu::OInterfaceContainerHelper                                                   m_aDocEventListeners;
+    sal_Bool                                                                            m_bCommitMasterStorage;
+
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
 
     void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
 
@@ -306,10 +309,42 @@ private:
         determines if the ownership should be transfered to the component which
         possibly vetos the closing
 
-    @throws ::com::sun::star::util::CloseVetoException
+    @raises ::com::sun::star::util::CloseVetoException
         if the closing was vetoed by any instance
     */
     void    impl_closeControllerFrames( sal_Bool _bDeliverOwnership );
+
+    /** does a reparenting at the given object container to ourself
+
+        Calls XChild::setParent at the given object, which must be one of our impl's or our
+        object containers (m_xForms, m_xReports, m_xTableDefinitions, m_xCommandDefinitions)
+    */
+    void    impl_reparent_nothrow( const ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer );
+
+    /** clears the given object container
+
+        Clearing is done via disposal - the method calls XComponent::dispose at the given object,
+        which must be one of our impl's or our object containers (m_xForms, m_xReports,
+        m_xTableDefinitions, m_xCommandDefinitions)
+
+        @param _rxContainer
+            the container to clear
+        @param _bResetAndRelease
+            <TRUE/> if and only if the given container should also be reset and release.
+    */
+    void    impl_clearObjectContainer(
+                ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+                bool _bResetAndRelease = false );
+
+    /** retrieves the forms or reports contained, creates and initializes it, if necessary
+
+        @raises DisposedException
+            if the instance is already disposed
+        @raises IllegalArgumentException
+            if <arg>_eType</arg> is not ODatabaseModelImpl::E_FORM and not ODatabaseModelImpl::E_REPORT
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType );
 };
 
 //........................................................................
