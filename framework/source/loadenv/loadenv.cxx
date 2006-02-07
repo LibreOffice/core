@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:06:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1247,20 +1247,13 @@ sal_Bool LoadEnv::impl_loadContent()
 
     // If we couldn't find a valid frame or the frame has no container window
     // we have to throw an exception.
-    if (!m_xTargetFrame.is() || !m_xTargetFrame->getContainerWindow().is() )
+    if (
+        ( ! m_xTargetFrame.is()                       ) ||
+        ( ! m_xTargetFrame->getContainerWindow().is() )
+       )
         throw LoadEnvException(LoadEnvException::ID_NO_TARGET_FOUND);
-    css::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
 
-    // OK - there is a valid target frame.
-    // But may be it contains already a document.
-    // Then we have to ask it, if it allows recylcing of this frame .-)
-    css::uno::Reference< css::frame::XController > xOldDoc = xTargetFrame->getController();
-    if (xOldDoc.is())
-    {
-        m_bReactivateControllerOnError = xOldDoc->suspend(sal_True);
-        if (!m_bReactivateControllerOnError)
-            throw LoadEnvException(LoadEnvException::ID_COULD_NOT_SUSPEND_CONTROLLER);
-    }
+    css::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
 
     // Now we have a valid frame ... and type detection was already done.
     // We should apply the module dependend window position and size to the
@@ -1625,6 +1618,10 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (xModified->isModified())
         return css::uno::Reference< css::frame::XFrame >();
 
+    Window* pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
+    if (pWindow && pWindow->IsInModalMode())
+        return css::uno::Reference< css::frame::XFrame >();
+
     // find out the application type of this document
     // We can recycle only documents, which uses the same application
     // then the new one.
@@ -1646,11 +1643,26 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (impl_isFrameAlreadyUsedForLoading(xTask))
         return css::uno::Reference< css::frame::XFrame >();
 
+    // OK - there is a valid target frame.
+    // But may be it contains already a document.
+    // Then we have to ask it, if it allows recylcing of this frame .-)
+    sal_Bool bReactivateOldControllerOnError = sal_False;
+    css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
+    if (xOldDoc.is())
+    {
+        bReactivateOldControllerOnError = xOldDoc->suspend(sal_True);
+        if (! bReactivateOldControllerOnError)
+            return css::uno::Reference< css::frame::XFrame >();
+    }
+
     // SAFE -> ..................................
     WriteGuard aWriteLock(m_aLock);
+
     css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
     if (!m_aTargetLock.setResource(xLock))
         return css::uno::Reference< css::frame::XFrame >();
+
+    m_bReactivateControllerOnError = bReactivateOldControllerOnError;
     aWriteLock.unlock();
     // <- SAFE ..................................
 
