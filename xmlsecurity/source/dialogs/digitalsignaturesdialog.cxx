@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:18:45 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #include <tools/time.hxx>
 
 #include "dialogs.hrc"
+#include "helpids.hrc"
 #include "resourcemanager.hxx"
 
 #include <vcl/msgbox.hxx> // Until encrypted docs work...
@@ -134,6 +135,9 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
     ,maHelpBtn          ( this, ResId( BTN_HELP ) )
 {
+    // --> PB #i48253 the tablistbox needs its own unique id
+    maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
+    // <--
     static long nTabs[] = { 4, 0, 6*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
     maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
