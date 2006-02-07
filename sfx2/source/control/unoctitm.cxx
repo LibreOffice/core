@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:09:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@
 #include "msgpool.hxx"
 #include "objsh.hxx"
 
+namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 //long nOfficeDispatchCount = 0;
@@ -479,6 +480,12 @@ SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
     return pControllerItem->GetDispatcher();
 }
 
+void SfxOfficeDispatch::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    if ( pControllerItem )
+        pControllerItem->SetFrame( xFrame );
+}
+
 void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
 {
     if ( pControllerItem )
@@ -566,6 +573,11 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
         aObject.Source = (::cppu::OWeakObject*) pDispatch;
         pDispatch->GetListeners().disposeAndClear( aObject );
     }
+}
+
+void SfxDispatchController_Impl::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame)
+{
+    xFrame = _xFrame;
 }
 
 void SfxDispatchController_Impl::setMasterSlaveCommand( sal_Bool bSet )
@@ -763,6 +775,17 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             lNewArgs[nMarkArg].Value <<= aURL.Mark;
         }
 
+        css::uno::Reference< css::frame::XFrame > xFrameRef(xFrame.get(), css::uno::UNO_QUERY);
+        if (! xFrameRef.is() && pDispatcher)
+        {
+            SfxViewFrame* pViewFrame = pDispatcher->GetFrame();
+            if (pViewFrame)
+                xFrameRef = pViewFrame->GetFrame()->GetFrameInterface();
+        }
+        SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
+        if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
+            aInternalSet.Put( SfxUnoAnyItem( SID_DOCFRAME, css::uno::makeAny(xFrameRef) ) );
+
         sal_Bool bSuccess = sal_False;
         sal_Bool bFailure = sal_False;
         const SfxPoolItem* pItem = NULL;
@@ -790,7 +813,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     if ( aSet.Count() )
                     {
                         // execute with arguments - call directly
-                        pItem = pDispatcher->Execute( GetId(), nCall, nModifier, aSet );
+                        pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
                         bSuccess = (pItem != NULL);
                     }
                     else
@@ -798,6 +821,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         // execute using bindings, enables support for toggle/enum etc.
                         SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
                         aReq.SetModifier( nModifier );
+                        aReq.SetInternalArgs_Impl(aInternalSet);
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                         pItem = aReq.GetReturnValue();
                         bSuccess = aReq.IsDone() || pItem != NULL;
@@ -815,11 +839,12 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             // AppDispatcher
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             TransformParameters( GetId(), lNewArgs, aSet );
+
             if ( aSet.Count() )
-                pItem = pDispatcher->Execute( GetId(), nCall, nModifier, aSet );
+                pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
             else
                 // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                pItem = pDispatcher->Execute( GetId(), nCall, 0, nModifier );
+                pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
             if ( SfxApplication::Is_Impl() )
