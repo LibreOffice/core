@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:14:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:22:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,32 +661,33 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // done to be shure, that only valid results leave this function!
     rFlatTypes.clear();
 
-    // Note: We dont check any possible constellation of these three supported
-    // properties! We check preselection from top to bottom ...
-    // Please read docu inside header :-)
+    /* #i55122#
+        Sometimes we must detect files without or with real unknown extensions.
+        If it does not work /which can happen of course .-)/, the user tried to preselect
+        the right format. But some special dialogs (e.g. "Insert->Sheet From File")
+        add it's own preselection too.
+        So we have a combination of preselected values ...
 
-    ::rtl::OUString sValue;
+        The we should preferr the most important one - set by the user.
+        And the user normaly preselects a filter or type. The preslected
+        document service cames from the dialog.
 
-    sValue = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
-    if (sValue.getLength())
-    {
-        impl_getPreselectionForDocumentService(sValue, aParsedURL, rFlatTypes);
-        return;
-    }
+        Further it doesnt matter if the user preselected a filter or a document service.
+        A filter selection is always more explicit then a document service selection.
+        So it must be pereferred. An order between type and filter selection cant be discussed .-)
+    */
 
-    sValue = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
-    if (sValue.getLength())
-    {
-        impl_getPreselectionForFilter(sValue, aParsedURL, rFlatTypes);
-        return;
-    }
+    ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
+    if (sSelectedType.getLength())
+        impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes);
 
-    sValue = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
-    if (sValue.getLength())
-    {
-        impl_getPreselectionForType(sValue, aParsedURL, rFlatTypes);
-        return;
-    }
+    ::rtl::OUString sSelectedFilter = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
+    if (sSelectedFilter.getLength())
+        impl_getPreselectionForFilter(sSelectedFilter, aParsedURL, rFlatTypes);
+
+    ::rtl::OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
+    if (sSelectedDoc.getLength())
+        impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
 
 /*-----------------------------------------------
