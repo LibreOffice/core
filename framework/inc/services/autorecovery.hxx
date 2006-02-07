@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:22:47 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,10 +325,11 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
                 //-------------------------------
                 TDocumentInfo()
-                    : DocumentState  (E_UNKNOWN)
-                    , UsedForSaving  (sal_False)
-                    , ListenForModify(sal_False)
-                    , ID             (-1       )
+                    : DocumentState   (E_UNKNOWN)
+                    , UsedForSaving   (sal_False)
+                    , ListenForModify (sal_False)
+                    , ID              (-1       )
+                    , IgnoreClosing   (sal_False)
                 {}
 
                 //-------------------------------
@@ -362,6 +363,15 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     was stored as temp. file and was not modified again by the user.
                 */
                 sal_Bool ListenForModify;
+
+                //-------------------------------
+                /** For SessionSave we must close all open documents by ourself.
+                    But because we are listen for documents events, we get some ...
+                    and deregister these documents from our configuration.
+                    That's why we mark these documents as "Closed by ourself" so we can
+                    ignore these "OnUnload" or disposing() events .-)
+                */
+                sal_Bool IgnoreClosing;
 
                 //-------------------------------
                 /** TODO: document me */
