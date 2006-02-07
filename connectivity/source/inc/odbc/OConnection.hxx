@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:34:47 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 12:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ namespace connectivity
             sal_Bool        m_bUseOldDateFormat;
             sal_Bool        m_bParameterSubstitution;
             sal_Bool        m_bIgnoreDriverPrivileges;
+            sal_Bool        m_bPreventGetVersionColumns;    // #i60273#
 
 
             SQLRETURN       OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent);
@@ -169,6 +170,7 @@ namespace connectivity
             inline sal_Bool     isCatalogUsed()                     const { return m_bUseCatalog; }
             inline sal_Bool     isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
             inline sal_Bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
+            inline sal_Bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
             inline sal_Bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
             inline SQLHANDLE        getDriverHandle()               const { return m_pDriverHandleCopy;}
             inline ODBCDriver*      getDriver()                     const { return m_pDriver;}
