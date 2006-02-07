@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:14:48 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,7 +848,7 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
     return new SvxEventConfigPage( pParent, rSet );
 }
 
-sal_Bool impl_showKeyConfigTabPage()
+sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
     static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
@@ -858,7 +858,6 @@ sal_Bool impl_showKeyConfigTabPage()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XFrame >              xFrame  = xDesktop->getActiveFrame();
         css::uno::Reference< css::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
 
         if (xMM.is() && xFrame.is())
@@ -899,9 +898,6 @@ SvxConfigDialog::SvxConfigDialog(
     AddTabPage( RID_SVXPAGE_TOOLBARS, CreateSvxToolbarConfigPage, NULL );
     AddTabPage( RID_SVXPAGE_EVENTS, CreateSvxEventConfigPage, NULL );
 
-    if (!impl_showKeyConfigTabPage())
-        RemoveTabPage( RID_SVXPAGE_KEYBOARD );
-
     const SfxPoolItem* pItem =
         pSet->GetItem( pSet->GetPool()->GetWhich( SID_CONFIG ) );
 
@@ -914,6 +910,14 @@ SvxConfigDialog::SvxConfigDialog(
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
     }
+}
+
+void SvxConfigDialog::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    m_xFrame = xFrame;
+
+    if (!impl_showKeyConfigTabPage( xFrame ))
+        RemoveTabPage( RID_SVXPAGE_KEYBOARD );
 }
 
 SvxConfigDialog::~SvxConfigDialog()
@@ -930,8 +934,10 @@ void SvxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
     switch ( nId )
     {
         case RID_SVXPAGE_MENUS:
-            break;
         case RID_SVXPAGE_TOOLBARS:
+            {
+                rPage.SetFrame(m_xFrame);
+            }
             break;
         default:
             break;
@@ -1721,7 +1727,7 @@ SvxConfigPage::~SvxConfigPage()
 {
 }
 
-void SvxConfigPage::Reset( const SfxItemSet& )
+void SvxConfigPage::Reset( const SfxItemSet& aSet )
 {
     // If we haven't initialised our XMultiServiceFactory reference
     // then Reset is being called at the opening of the dialog.
@@ -1744,13 +1750,24 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                     "com.sun.star.frame.Desktop" ) ) ),
             uno::UNO_QUERY );
 
-        m_xFrame = xFramesSupplier->getActiveFrame();
+        m_xFrame = GetFrame();
+
+        if ( !m_xFrame.is() )
+            m_xFrame = xFramesSupplier->getActiveFrame();
+
         if ( !m_xFrame.is() )
         {
             uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY );
             m_xFrame = xDesktop->getCurrentFrame();
-            if ( !m_xFrame.is() && SfxViewFrame::Current() )
-                m_xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+        }
+
+        if ( !m_xFrame.is() && SfxViewFrame::Current() )
+            m_xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+
+        if ( !m_xFrame.is() )
+        {
+            DBG_ERRORFILE( "SvxConfigPage::Reset(): no active frame" );
+            return;
         }
 
         uno::Reference< css::frame::XModuleManager > xModuleManager(
@@ -1781,12 +1798,6 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             title = title.replaceAt(
                 index, aSearchString.getLength(), aModuleName );
             aTopLevelSeparator.SetText( title );
-        }
-
-        if ( !m_xFrame.is() )
-        {
-            DBG_ERRORFILE( "SvxConfigPage::Reset(): no active frame" );
-            return;
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
