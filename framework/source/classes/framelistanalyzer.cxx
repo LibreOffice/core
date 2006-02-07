@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelistanalyzer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:10:44 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ void FrameListAnalyzer::impl_analyze()
         try
         {
             css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
-            css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
         }
