@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:14:40 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,19 +182,15 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     {
         OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
     }
-    Reference<XChild> xChild(m_pImpl->m_xForms.get(),UNO_QUERY);
-    if ( xChild.is() )
-        xChild->setParent(static_cast<OWeakObject*>(this));
 
-    xChild.set(m_pImpl->m_xReports.get(),UNO_QUERY);
-    if ( xChild.is() )
-        xChild->setParent(static_cast<OWeakObject*>(this));
-    xChild.set(m_pImpl->m_xTableDefinitions.get(),UNO_QUERY);
-    if ( xChild.is() )
-        xChild->setParent(static_cast<OWeakObject*>(this));
-    xChild.set(m_pImpl->m_xCommandDefinitions.get(),UNO_QUERY);
-    if ( xChild.is() )
-        xChild->setParent(static_cast<OWeakObject*>(this));
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        impl_reparent_nothrow( m_xForms );
+        impl_reparent_nothrow( m_xReports );
+        impl_reparent_nothrow( m_pImpl->m_xTableDefinitions );
+        impl_reparent_nothrow( m_pImpl->m_xCommandDefinitions );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 //--------------------------------------------------------------------------
 ODatabaseDocument::~ODatabaseDocument()
@@ -254,15 +250,11 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 
         if ( m_pImpl->m_bOwnStorage )
             ::comphelper::disposeComponent(m_pImpl->m_xStorage);
-        Reference< XNameAccess > xContainer = m_pImpl->m_xForms;
-        ::comphelper::disposeComponent(xContainer);
-        xContainer = m_pImpl->m_xReports;
-        ::comphelper::disposeComponent(xContainer);
-        xContainer = m_pImpl->m_xTableDefinitions;
-        ::comphelper::disposeComponent(xContainer);
 
-        xContainer = m_pImpl->m_xCommandDefinitions;
-        ::comphelper::disposeComponent(xContainer);
+        impl_clearObjectContainer( m_xForms );
+        impl_clearObjectContainer( m_xReports );
+        impl_clearObjectContainer( m_pImpl->m_xTableDefinitions );
+        impl_clearObjectContainer( m_pImpl->m_xCommandDefinitions );
 
         m_pImpl->m_aContainer.clear();
         m_pImpl->lateInit();
@@ -679,6 +671,53 @@ void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& xOption
 {
 }
 // -----------------------------------------------------------------------------
+void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess >& _rxContainer )
+{
+    Reference< XChild > xChild( _rxContainer.get(), UNO_QUERY );
+    if  ( xChild.is() )
+        xChild->setParent( *this );
+}
+// -----------------------------------------------------------------------------
+void ODatabaseDocument::impl_clearObjectContainer( WeakReference< XNameAccess >& _rxContainer, bool _bResetAndRelease )
+{
+    Reference< XNameAccess > xContainer = _rxContainer;
+    ::comphelper::disposeComponent( xContainer );
+
+    if ( _bResetAndRelease )
+    {
+        Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( NULL );
+        _rxContainer = Reference< XNameAccess >();
+    }
+}
+// -----------------------------------------------------------------------------
+Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType )
+{
+    ModelMethodGuard aGuard( *this );
+    OSL_POSTCOND( m_pImpl.is(), "ODatabaseDocument::impl_getDocumentContainer_throw: Impl is NULL" );
+
+    if ( ( _eType != ODatabaseModelImpl::E_FORM ) && ( _eType != ODatabaseModelImpl::E_REPORT ) )
+        throw IllegalArgumentException();
+
+    bool bFormsContainer = _eType == ODatabaseModelImpl::E_FORM;
+
+    WeakReference< XNameAccess >& rContainerRef( bFormsContainer ? m_xForms : m_xReports );
+    Reference< XNameAccess > xContainer = rContainerRef;
+    if ( !xContainer.is() )
+    {
+        if ( !m_pImpl->m_aContainer[ _eType ].get() )
+        {
+            m_pImpl->m_aContainer[ _eType ] = TContentPtr( new ODefinitionContainer_Impl );
+            m_pImpl->m_aContainer[ _eType ]->m_pDataSource = m_pImpl.get();
+            m_pImpl->m_aContainer[ _eType ]->m_aProps.aTitle = ::rtl::OUString::createFromAscii( bFormsContainer ? "forms" : "reports" );
+        }
+        rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_xServiceFactory, *this, m_pImpl->m_aContainer[ _eType ], bFormsContainer );
+        impl_reparent_nothrow( xContainer );
+    }
+    return xContainer;
+}
+// -----------------------------------------------------------------------------
 void ODatabaseDocument::impl_closeControllerFrames( sal_Bool _bDeliverOwnership )
 {
     ::std::vector< Reference< XController> > aCopy = m_pImpl->m_aControllers;
@@ -744,44 +783,12 @@ void SAL_CALL ODatabaseDocument::removeCloseListener( const Reference< ::com::su
 // -----------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getFormDocuments(  ) throw (RuntimeException)
 {
-    ModelMethodGuard aGuard( *this );
-    OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
-
-    Reference< XNameAccess > xContainer = m_pImpl->m_xForms;
-    if ( !xContainer.is() )
-    {
-        if ( !m_pImpl->m_aContainer[ODatabaseModelImpl::E_FORM].get() )
-        {
-            ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("forms"));
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_FORM] = TContentPtr(new ODefinitionContainer_Impl);
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_FORM]->m_pDataSource = m_pImpl.get();
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_FORM]->m_aProps.aTitle = sName;
-        }
-        xContainer = new ODocumentContainer(m_pImpl->m_xServiceFactory,*this,m_pImpl->m_aContainer[ODatabaseModelImpl::E_FORM],sal_True);
-        m_pImpl->m_xForms = xContainer;
-    }
-    return xContainer;
+    return impl_getDocumentContainer_throw( ODatabaseModelImpl::E_FORM );
 }
 // -----------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getReportDocuments(  ) throw (RuntimeException)
 {
-    ModelMethodGuard aGuard( *this );
-    OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
-
-    Reference< XNameAccess > xContainer = m_pImpl->m_xReports;
-    if ( !xContainer.is() )
-    {
-        if ( !m_pImpl->m_aContainer[ODatabaseModelImpl::E_REPORT].get() )
-        {
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_REPORT] = TContentPtr(new ODefinitionContainer_Impl);
-            ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("reports"));
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_REPORT]->m_pDataSource = m_pImpl.get();
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_REPORT]->m_aProps.aTitle = sName;
-        }
-        xContainer = new ODocumentContainer(m_pImpl->m_xServiceFactory,*this,m_pImpl->m_aContainer[ODatabaseModelImpl::E_REPORT],sal_False);
-        m_pImpl->m_xReports = xContainer;
-    }
-    return xContainer;
+    return impl_getDocumentContainer_throw( ODatabaseModelImpl::E_REPORT );
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseDocument::WriteThroughComponent(
@@ -1078,19 +1085,10 @@ void ODatabaseDocument::disposing()
         m_xDocEventBroadcaster = NULL;
         m_xUIConfigurationManager = NULL;
 
-        Reference<XChild> xChild(m_pImpl->m_xForms.get(),UNO_QUERY);
-        if ( xChild.is() )
-            xChild->setParent(NULL);
-
-        xChild.set(m_pImpl->m_xReports.get(),UNO_QUERY);
-        if ( xChild.is() )
-            xChild->setParent(NULL);
-        xChild.set(m_pImpl->m_xTableDefinitions.get(),UNO_QUERY);
-        if ( xChild.is() )
-            xChild->setParent(NULL);
-        xChild.set(m_pImpl->m_xCommandDefinitions.get(),UNO_QUERY);
-        if ( xChild.is() )
-            xChild->setParent(NULL);
+        impl_clearObjectContainer( m_xForms, true );
+        impl_clearObjectContainer( m_xReports, true );
+        impl_clearObjectContainer( m_pImpl->m_xTableDefinitions, true );
+        impl_clearObjectContainer( m_pImpl->m_xCommandDefinitions, true );
 
         m_pImpl->modelIsDisposing( ODatabaseModelImpl::ResetModelAccess() );
     }
