@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:06:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,8 +408,11 @@ DEFINE_INIT_SERVICE                 (   Frame,
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        :   PropertySetHelper           ( xFactory,
-                                          &Application::GetSolarMutex(),
+        :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
+        ,   TransactionBase             (                                                   )
+        ,   PropertySetHelper           ( xFactory,
+                                          &m_aLock,
+                                          &m_aTransactionManager,
                                           sal_False) // FALSE => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
