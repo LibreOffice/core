@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:39:15 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,8 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
                                         | DRAW_COMPONENT
                                         | IMPRESS_COMPONENT
                                         | CALC_COMPONENT
-                                        | WRITER_COMPONENT,
+                                        | WRITER_COMPONENT
+                                        | MATH_COMPONENT,
                                         bInstallForAllUser );
             }
 
