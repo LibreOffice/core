@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:26:51 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 13:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,7 +844,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     mbUserCallActive( false ),
     // Note: value of <meEventTypeOfCurrentUserCall> isn't of relevance, because
     //       <mbUserCallActive> is FALSE.
-    meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
+    meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY ),
     // <--
     // --> OD 2006-01-23 #124157#
     mbConnectedToLayout( false )
