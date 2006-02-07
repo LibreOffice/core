@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:30:32 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,14 @@
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
+#include <threadhelp/transactionbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -279,7 +287,9 @@ class Frame :   // interfaces
                 public  css::frame::XComponentLoader                ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
-                public PropertySetHelper                            ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
+                public  ThreadHelpBase                              ,
+                public  TransactionBase                             ,
+                public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
                 public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
     //-------------------------------------------------------------------------------------------------------------
