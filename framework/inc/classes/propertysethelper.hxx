@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:40:39 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,6 @@ namespace framework{
 */
 class PropertySetHelper : public css::beans::XPropertySet
                         , public css::beans::XPropertySetInfo
-                        , public ThreadHelpBase
-                        , public TransactionBase
 {
     //-------------------------------------------------------------------------
     /* types */
@@ -119,6 +117,9 @@ class PropertySetHelper : public css::beans::XPropertySet
         // hold it weak ... otherwhise this helper has to be "killed" explicitly .-)
         css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
 
+        LockHelper& m_rLock;
+        TransactionManager& m_rTransactionManager;
+
     //-------------------------------------------------------------------------
     /* native interface */
     public:
@@ -129,10 +130,24 @@ class PropertySetHelper : public css::beans::XPropertySet
          *  @param  xSMGR
          *          points to an uno service manager, which is used internaly to create own
          *          needed uno services.
+         *
+         *  @param  pExternalLock
+         *          this helper must be used as a baseclass ...
+         *          but then it should synchronize its own calls
+         *          with the same lock then it's superclass uses.
+         *
+         *  @param  pExternalTransactionManager
+         *          this helper must be used as a baseclass ...
+         *          but then it should synchronize its own calls
+         *          with the same transaction manager then it's superclass.
+         *
+         *  @param  bReleaseLockOnCall
+         *          see member m_bReleaseLockOnCall
          */
-        PropertySetHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR             ,
-                                ::vos::IMutex*                                          pSolarMutex       ,
-                                sal_Bool                                                bReleaseLockOnCall);
+        PropertySetHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR                       ,
+                                LockHelper*                                             pExternalLock               ,
+                                TransactionManager*                                     pExternalTransactionManager ,
+                                sal_Bool                                                bReleaseLockOnCall          );
 
         //---------------------------------------------------------------------
         /** free all needed memory.
