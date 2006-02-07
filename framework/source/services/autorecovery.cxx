@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:23:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1052,7 +1052,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
         return;
     }
 
-    // dispose from one of our cache documents ?
+    // dispose from one of our cached documents ?
     // Normaly they should send a OnUnload message ...
     // But some stacktraces shows another possible use case .-)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
@@ -1811,43 +1811,48 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     AutoRecovery::TDocumentList::iterator pIt1  = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     AutoRecovery::TDocumentInfo&          rInfo = *pIt1;
 
-    implts_flushConfigItem(rInfo);
-    implts_startModifyListeningOnDoc(rInfo);
-
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    aCacheLock.unlock();
+    implts_flushConfigItem(rInfo);
+    implts_startModifyListeningOnDoc(rInfo);
 
-    /* start listening for disposing() events!
-       Normaly a document should send a OnUnload notification if it's closed or disposed.
-       But some stacktraces show another possible solution .-)
-       So we try to remove disposed models from our internal cache before we try to use it ...
-    */
-    css::uno::Reference< css::lang::XEventListener > xThis      (static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::lang::XComponent >     xComponent (xDocument                                  , css::uno::UNO_QUERY      );
-    if (xComponent.is())
-        xComponent->addEventListener(xThis);
+    aCacheLock.unlock();
 }
 
 //-----------------------------------------------
 void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument     ,
                                                    sal_Bool                                   bStopListening)
 {
-    CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
     // Attention: Dont leave SAFE section, if you work with pIt!
     // Because it points directly into the m_lDocCache list ...
+    CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt == m_lDocCache.end())
         return; // unknown document => not a runtime error! Because we register only a few documents. see registration ...
 
     AutoRecovery::TDocumentInfo aInfo = *pIt;
-    m_lDocCache.erase(pIt);
+
+    aCacheLock.unlock();
+
+    // Sometimes we close documents by ourself.
+    // And these documents cant be deregistered.
+    // Otherwhise we loos our configuration data ... but need it !
+    // see SessionSave !
+    if (aInfo.IgnoreClosing)
+        return;
+
+    CacheLockGuard aCacheLock2(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
+    pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
+    if (pIt != m_lDocCache.end())
+        m_lDocCache.erase(pIt);
     pIt = m_lDocCache.end(); // otherwhise its not specified what pIt means!
+    aCacheLock2.unlock();
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -1858,20 +1863,6 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     */
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
-
-    aCacheLock.unlock();
-
-    /* This method is called within disposing() of the document too. But there it's not a good idea to
-       deregister us as listener. Furter it make no sense - because the broadcaster dies.
-       So we supress deregistration in such case ...
-    */
-    if (bStopListening)
-    {
-        css::uno::Reference< css::lang::XEventListener > xThis1    (static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::lang::XComponent >     xComponent(xDocument                                  , css::uno::UNO_QUERY      );
-        if (xComponent.is())
-            xComponent->removeEventListener(xThis1);
-    }
 
     implts_removeTempFile(aInfo.OldTempURL, aInfo.AppModule);
     implts_removeTempFile(aInfo.NewTempURL, aInfo.AppModule);
@@ -2055,103 +2046,56 @@ void AutoRecovery::implts_prepareSessionShutdown()
     // a) reset modified documents (of course the must be saved before this method is called!)
     // b) close it without showing any UI!
 
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    // SAFE ->
+    CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
-    // Attention: Because we close all documents during we use an iterator over the list of all open documents,
-    // we must be aware that the iterator will be invalid ...
-    // It seeems to be better, to get a copy of all open documents .-)
-
-    try
+    AutoRecovery::TDocumentList::iterator pIt;
+    for (  pIt  = m_lDocCache.begin();
+           pIt != m_lDocCache.end()  ;
+         ++pIt                       )
     {
-        ::std::vector< css::uno::Reference< css::frame::XFrame > > lTasks;
-        css::uno::Reference< css::frame::XFramesSupplier >         xDesktop  (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XIndexAccess >        xContainer(xDesktop->getFrames()                     , css::uno::UNO_QUERY_THROW);
-        sal_Int32                                                  c         = xContainer->getCount();
-        sal_Int32                                                  i         = 0;
+        AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
-        for (i=0; i<c; ++i)
+        // Prevent us from deregistration of these documents.
+        // Because we close these documents by ourself (see XClosable below) ...
+        // it's fact, that we reach our deregistration method. There we
+        // must not(!) update our configuration ... Otherwhise all
+        // session data are lost !!!
+        rInfo.IgnoreClosing = sal_True;
+
+        // reset modified flag of these documents (ignoring the notification about it!)
+        // Otherwise a message box is shown on closing these models.
+        implts_stopModifyListeningOnDoc(rInfo);
+        css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
+        if (xModify.is())
+            xModify->setModified(sal_False);
+
+        // close the model.
+        css::uno::Reference< css::util::XCloseable > xClose(rInfo.Document, css::uno::UNO_QUERY);
+        if (xClose.is())
         {
-            css::uno::Reference< css::frame::XFrame > xTask;
-            xContainer->getByIndex(i) >>= xTask;
-            if (!xTask.is())
-                continue;
-            lTasks.push_back(xTask);
-        }
-
-        ::std::vector< css::uno::Reference< css::frame::XFrame > >::const_iterator pIt;
-        for (  pIt  = lTasks.begin();
-               pIt != lTasks.end()  ;
-             ++pIt                  )
-        {
-            css::uno::Reference< css::frame::XFrame > xTask = *pIt;
-            if (!xTask.is())
-                continue;
-
-            // reset the modified flag of an may existing model
-            css::uno::Reference< css::frame::XModel >      xModel;
-            css::uno::Reference< css::frame::XController > xController(xTask->getController(), css::uno::UNO_QUERY);
-            if (xController.is())
-                xModel = xController->getModel();
-            css::uno::Reference< css::util::XModifiable > xModify(xModel, css::uno::UNO_QUERY);
-            if (xModify.is())
-                xModify->setModified(sal_False);
-
-            // try to close the frame
-            css::uno::Reference< css::util::XCloseable > xClose(xTask, css::uno::UNO_QUERY);
-            if (xClose.is())
+            try
             {
-                try
-                {
-                    // dont deliver the owner ship! Otherwise we risk an asynchronous closing frame ...
-                    // But we must work synchronously!
-                    xClose->close(sal_False);
-                    continue;
-                }
-                catch(const css::lang::DisposedException&)
-                    {
-                        // closed ... disposed ... always the same .-)
-                        continue;
-                    }
-                catch(const css::util::CloseVetoException&)
-                    {
-                        // ??? Normaly there is no chance to bring a veto against a session shutdown.
-                        // The user itself will kill us next time .-(
-                        // Let it run ... may be we will not run into other trouble.-)
-                        continue;
-                    }
+                xClose->close(sal_False);
             }
+            /*
+            catch(const css::lang::DisposedException&)
+                {
+                    // closed ... disposed ... always the same .-)
+                }
+            */
+            catch(const css::uno::Exception&)
+                {
+                    // At least it's only a try to close these documents before anybody else it does.
+                    // So it seams to be possible to ignore any error here .-)
+                }
 
-            // shouldnt be reached normaly .. excepting there is a new office application using
-            // non standard frames .-(
-            css::uno::Reference< css::lang::XComponent > xDispose(xTask, css::uno::UNO_QUERY);
-            if (xDispose.is())
-            {
-                try
-                {
-                    xDispose->dispose();
-                    continue;
-                }
-                catch(const css::lang::DisposedException&)
-                    {
-                        // closed ... disposed ... always the same .-)
-                        continue;
-                    }
-            }
+            rInfo.Document.clear();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        {
-            throw exRun;
-        }
-    catch(const css::uno::Exception&)
-        {}
 
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    aCacheLock.unlock();
+    // <- SAFE
 }
 
 //-----------------------------------------------
