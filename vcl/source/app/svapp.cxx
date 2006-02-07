@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:58:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1468,11 +1468,13 @@ Window* Application::GetDefDialogParent()
                 return NULL;
             }
 
-            // use only decorated windows
-            if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
+            // MAV: before the implementation has used only decorated windows,
+            //      but it is not true in case of ActiveX or plugin scenario,
+            //      so this check is commented out
+            // if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
                 return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
-            else
-                return NULL;
+            // else
+            //    return NULL;
         }
         // last active application frame
         else if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
