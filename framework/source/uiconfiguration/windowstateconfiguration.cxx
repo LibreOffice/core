@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:51:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -761,7 +761,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                             case PROPERTY_SOFTCLOSE:
                                 aWindowStateInfo.bSoftClose = bValue; break;
                             case PROPERTY_CONTEXTACTIVE:
-                                aWindowStateInfo.bContextActive; break;
+                                aWindowStateInfo.bContextActive = bValue; break;
                         }
                     }
                 }
@@ -1524,7 +1524,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
 
-    ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.begin();
+    ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.find( aName );
     return ( pIter != m_aModuleToFileHashMap.end() );
 }
 
