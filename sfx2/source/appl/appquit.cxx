@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:27:56 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,12 @@ void SfxApplication::Deinitialize()
     DELETEZ( pAppData_Impl->pTemplates );
 
     DELETEZ(pImp->pTemplateDlg);
-    SetViewFrame(0);
+    // By definition there shouldn't be any open view frames when we reach
+    // this method. Therefore this call makes no sense and is the source of
+    // some stack traces, which we don't understand.
+    // For more information see:
+    // #123501#
+    //SetViewFrame(0);
     bDowning = FALSE;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
