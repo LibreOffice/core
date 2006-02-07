@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:03:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,8 @@
 #include "docfile.hxx"
 #include "mnumgr.hxx"
 #include "workwin.hxx"
+
+namespace css = ::com::sun::star;
 
 //==================================================================
 DBG_NAME(SfxDispatcherFlush);
@@ -1294,6 +1296,42 @@ const SfxPoolItem* SfxDispatcher::Execute( const SfxExecuteItem& rItem )
     delete [] (SfxPoolItem**)pPtr;
 
     return pRet;
+}
+
+//--------------------------------------------------------------------
+const SfxPoolItem*  SfxDispatcher::Execute(
+    USHORT nSlot,
+    SfxCallMode nCall,
+    SfxItemSet* pArgs,
+    SfxItemSet* pInternalArgs,
+    USHORT nModi)
+{
+    if ( IsLocked(nSlot) )
+        return 0;
+
+    SfxShell *pShell = 0;
+    const SfxSlot *pSlot = 0;
+    if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, sal_False,
+                               SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
+    {
+        SfxAllItemSet aSet( pShell->GetPool() );
+        if ( pArgs )
+        {
+            SfxItemIter aIter(*pArgs);
+            for ( const SfxPoolItem *pArg = aIter.FirstItem();
+                pArg;
+                pArg = aIter.NextItem() )
+                MappedPut_Impl( aSet, *pArg );
+        }
+        SfxRequest aReq( nSlot, nCall, aSet );
+        if (pInternalArgs)
+            aReq.SetInternalArgs_Impl( *pInternalArgs );
+        aReq.SetModifier( nModi );
+
+        _Execute( *pShell, *pSlot, aReq, nCall );
+        return aReq.GetReturnValue();
+    }
+    return 0;
 }
 
 //--------------------------------------------------------------------
