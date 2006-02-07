@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:53:47 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@ typedef std::vector< SvxConfigEntry* > SvxEntries;
 
 class SVX_DLLPUBLIC SvxConfigDialog : public SfxTabDialog
 {
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+
 public:
     SvxConfigDialog( Window*, const SfxItemSet* );
     ~SvxConfigDialog();
@@ -128,6 +131,8 @@ public:
 
     virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short               Ok();
+
+    void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
 
 class SaveInData : public ImageProvider
