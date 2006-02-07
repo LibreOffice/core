@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:37:02 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1886,6 +1886,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
     if ( pSlot )
     {
         SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
+        pDispatch->SetFrame(m_xFrame);
         pDispatch->SetMasterUnoCommand( bMasterCommand );
         xDisp = pDispatch;
     }
