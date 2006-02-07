@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:51:56 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
+
+#include <comphelper/storagehelper.hxx>
 
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
@@ -1334,28 +1336,6 @@ static sal_Bool _UCBOpenContentSync(
 
 
 //----------------------------------------------------------------------------
-static void copyInputToOutput( const Reference< XInputStream >& aIn, const Reference< XOutputStream >& aOut )
-{
-    const sal_Int32 nConstBufferSize = 32000;
-
-    sal_Int32 nRead;
-    Sequence < sal_Int8 > aSequence ( nConstBufferSize );
-
-    do
-    {
-        nRead = aIn->readBytes ( aSequence, nConstBufferSize );
-        if ( nRead < nConstBufferSize )
-        {
-            Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-            aOut->writeBytes ( aTempBuf );
-        }
-        else
-            aOut->writeBytes ( aSequence );
-    }
-    while ( nRead == nConstBufferSize );
-}
-
-//----------------------------------------------------------------------------
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_xInputStream (NULL)
     , m_pCommandThread( NULL )
@@ -1437,35 +1417,41 @@ sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 
 sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, sal_Bool bSetXSeekable )
 {
-    BOOL bRet;
+    sal_Bool bRet = sal_False;
 
-    vos::OClearableGuard aGuard( m_aMutex );
-    if ( !m_bDontClose && m_xInputStream.is() )
-        m_xInputStream->closeInput();
-
-    m_xInputStream = rxInputStream;
-
-    if( bSetXSeekable )
+    try
     {
-        m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
-        if( !m_xSeekable.is() && rxInputStream.is() )
-        {
-            Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                                UNO_QUERY );
+        vos::OClearableGuard aGuard( m_aMutex );
 
-            if( rxTempOut.is() )
+        if ( !m_bDontClose && m_xInputStream.is() )
+            m_xInputStream->closeInput();
+
+        m_xInputStream = rxInputStream;
+
+        if( bSetXSeekable )
+        {
+            m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
+            if( !m_xSeekable.is() && rxInputStream.is() )
             {
-                copyInputToOutput( rxInputStream, rxTempOut );
-                m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
-                m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
+                Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
+                                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                                    UNO_QUERY );
+
+                if( rxTempOut.is() )
+                {
+                    ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
+                    m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
+                    m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
+                }
             }
         }
-    }
 
-    bRet = m_xInputStream.is();
-    aGuard.clear();
+        bRet = m_xInputStream.is();
+        // aGuard.clear();
+    }
+    catch( Exception& )
+    {}
 
     if ( m_bStreamValid && m_xInputStream.is() )
         m_aInitialized.set();
