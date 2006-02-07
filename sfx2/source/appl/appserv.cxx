@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:29 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             pAppData_Impl->bInQuit = TRUE;
             Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
+            rReq.ForgetAllArgs();
+
             // if terminate() failed, pAppData_Impl->bInQuit will now be FALSE, allowing further calls of SID_QUITAPP
             BOOL bTerminated = xDesktop->terminate();
             if (!bTerminated)
@@ -370,9 +372,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         SID_CONFIG, pStringItem->GetValue() ) );
                 }
 
+                Reference< XFrame > xFrame;
+                const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
+                SFX_ITEMSET_ARG( pIntSet, pFrame, SfxUnoAnyItem, SID_DOCFRAME, FALSE );
+                if (pFrame)
+                    pFrame->GetValue() >>= xFrame;
+
                 SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
                     ResId( RID_SVXDLG_CUSTOMIZE ),
-                    NULL, &aSet, pViewFrame );
+                    NULL, &aSet, xFrame );
 
                   if ( pDlg )
                 {
