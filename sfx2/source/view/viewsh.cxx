@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:33:05 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1123,18 +1123,17 @@ void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
                             const SfxHint& rHint,
                             const TypeId& rHintType )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint)) )
+    if ( rHint.IsA(TYPE(SfxEventHint)) && &rBC == GetObjectShell() && GetController().is() )
     {
         switch ( ((SfxEventHint&)rHint).GetEventId() )
         {
             case SFX_EVENT_LOADFINISHED:
             {
-                if ( GetController().is() )
+                SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
+                SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
+                if ( pItem )
                 {
-                    SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                    SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
-                    if ( pItem )
-                        pImp->pController->restoreViewData( pItem->GetValue() );
+                    pImp->pController->restoreViewData( pItem->GetValue() );
                     pSet->ClearItem( SID_VIEW_DATA );
                 }
                 break;
