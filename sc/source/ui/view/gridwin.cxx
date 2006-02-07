@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:14:47 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:27:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1530,6 +1530,20 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
 {
+    // We have to check if a context menu is shown and we have an UI
+    // active inplace client. In that case we have to ignore the event.
+    // Otherwise we would crash (context menu has been
+    // opened by inplace client and we would deactivate the inplace client,
+    // the contex menu is closed by VCL asynchronously which in the end
+    // would work on deleted objects or the context menu has no parent anymore)
+    // See #126086# and #128122#
+    SfxViewShell* pViewSh = pViewData->GetViewShell();
+    SfxInPlaceClient* pClient = pViewSh->GetIPClient();
+    if ( pClient &&
+         pClient->IsObjectInPlaceActive() &&
+         PopupMenu::IsInExecute() )
+        return;
+
     aCurMousePos = rMEvt.GetPosPixel();
 
     //  Filter-Popup beendet sich mit eigenem Mausklick, nicht erst beim Klick
@@ -2646,7 +2660,22 @@ void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWi
 
 void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 {
+    // The command event is send to the window after a possible context
+    // menu from an inplace client is closed. Now we have the chance to
+    // deactivate the inplace client without any problem regarding parent
+    // windows and code on the stack.
+    // For more information, see #126086# and #128122#
     USHORT nCmd = rCEvt.GetCommand();
+    ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
+    SfxInPlaceClient* pClient = pTabViewSh->GetIPClient();
+    if ( pClient &&
+         pClient->IsObjectInPlaceActive() &&
+         nCmd == COMMAND_CONTEXTMENU )
+    {
+        pTabViewSh->DeactivateOle();
+        return;
+    }
+
     ScModule* pScMod = SC_MOD();
     DBG_ASSERT( nCmd != COMMAND_STARTDRAG, "ScGridWindow::Command called with COMMAND_STARTDRAG" );
 
