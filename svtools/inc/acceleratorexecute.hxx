@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:03:02 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,9 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
     // const, types
     private:
 
-        /** TODO document me */
+        /** @deprecated
+                replaced by internal class AsyncAccelExec ...
+                remove this resource here if we go forwards to next major */
         typedef ::std::vector< ::std::pair< ::com::sun::star::util::URL, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > > TCommandQueue;
 
     //-------------------------------------------
@@ -153,10 +155,14 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleCfg;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocCfg;
 
-        /** TODO document me */
+        /** @deprecated
+                replaced by internal class AsyncAccelExec ...
+                remove this resource here if we go forwards to next major */
         TCommandQueue m_lCommandQueue;
 
-        /** TODO document me */
+        /** @deprecated
+                replaced by internal class AsyncAccelExec ...
+                remove this resource here if we go forwards to next major */
         ::vcl::EventPoster m_aAsyncCallback;
 
     //-------------------------------------------
@@ -279,7 +285,9 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         SVT_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > impl_ts_getURLParser();
 
         //---------------------------------------
-        /** TODO document me */
+        /** @deprecated
+                replaced by internal class AsyncAccelExec ...
+                remove this resource here if we go forwards to next major */
         DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 };
 
