@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:32:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SFX_CLIENTSH_HXX
+#include <sfx2/ipclient.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -2397,6 +2400,21 @@ void SwEditWin::RstMBDownFlags()
 
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
+    SwWrtShell &rSh = rView.GetWrtShell();
+
+    // We have to check if a context menu is shown and we have an UI
+    // active inplace client. In that case we have to ignore the mouse
+    // button down event. Otherwise we would crash (context menu has been
+    // opened by inplace client and we would deactivate the inplace client,
+    // the contex menu is closed by VCL asynchronously which in the end
+    // would work on deleted objects or the context menu has no parent anymore)
+    // See #126086# and #128122#
+    SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
+    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+
+    if ( bIsOleActive && PopupMenu::IsInExecute() )
+        return;
+
     MouseEvent rMEvt(_rMEvt);
 
     GrabFocus();
@@ -2414,7 +2432,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if( bWasShdwCrsr )
         delete pShadCrsr, pShadCrsr = 0;
 
-    SwWrtShell &rSh = rView.GetWrtShell();
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( IsChainMode() )
@@ -4412,6 +4429,8 @@ void SwEditWin::LoseFocus()
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
+    SwWrtShell &rSh = rView.GetWrtShell();
+
     if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() )
     {
         //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
@@ -4419,9 +4438,20 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    BOOL bCallBase      = TRUE;
+    // The command event is send to the window after a possible context
+    // menu from an inplace client has been closed. Now we have the chance
+    // to deactivate the inplace client without any problem regarding parent
+    // windows and code on the stack.
+    // For more information, see #126086# and #128122#
+    SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
+    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
+    {
+        rSh.FinishOLEObj();
+        return;
+    }
 
-    SwWrtShell &rSh = rView.GetWrtShell();
+    BOOL bCallBase      = TRUE;
 
     switch ( rCEvt.GetCommand() )
     {
