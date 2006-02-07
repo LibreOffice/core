@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:34:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ private:
 
 public:
 
-    enum
+    enum ObjectType
     {
         E_FORM   = 0,
         E_REPORT = 1,
@@ -226,8 +226,6 @@ public:
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
 
     /// the URL the document was loaded from
     ::rtl::OUString                                     m_sFileURL;
