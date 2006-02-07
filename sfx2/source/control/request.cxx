@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: svesik $ $Date: 2004-04-21 13:09:46 $ $Revision: 1.14 $
+// $Author: rt $ $Date: 2006-02-07 10:28:52 $ $Revision: 1.15 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -172,6 +172,9 @@ SfxRequest::SfxRequest
     pImp->bUseTarget = rOrig.pImp->bUseTarget;
     pImp->aTarget = rOrig.pImp->aTarget;
     pImp->nModifier = rOrig.pImp->nModifier;
+
+    // deep copy needed !
+    pImp->pInternalArgs = (rOrig.pImp->pInternalArgs ? new SfxAllItemSet(*rOrig.pImp->pInternalArgs) : 0);
 
     if ( pArgs )
         pImp->SetPool( pArgs->GetPool() );
@@ -638,6 +641,14 @@ void SfxRequest::Done( BOOL bRelease )
     Done_Impl( pArgs );
     if( bRelease )
         DELETEZ( pArgs );
+}
+
+//--------------------------------------------------------------------
+
+void SfxRequest::ForgetAllArgs()
+{
+    DELETEZ( pArgs );
+    DELETEZ( pImp->pInternalArgs );
 }
 
 //--------------------------------------------------------------------
