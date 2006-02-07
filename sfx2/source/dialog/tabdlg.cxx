@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:33:11 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,9 +221,24 @@ struct TabPageImpl
 {
     BOOL                        mbStandard;
     sfx::ItemConnectionArray    maItemConn;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     TabPageImpl() : mbStandard( FALSE ) {}
 };
+
+void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    if (pImpl)
+        pImpl->mxFrame = xFrame;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxTabPage::GetFrame()
+{
+    if (pImpl)
+        return pImpl->mxFrame;
+    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
+}
+
 
 /*  -----------------------------------------------------------------
     Hilfsfunktion: Finden einer Page anhand seiner Id
