@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:08:39 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 
 //_______________________________________________
@@ -552,6 +556,54 @@ void CacheLockGuard::unlock()
 }
 
 //-----------------------------------------------
+DispatchParams::DispatchParams()
+    : m_nWorkingEntryID(-1)
+{
+};
+
+//-----------------------------------------------
+DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
+                               const css::uno::Reference< css::uno::XInterface >& xOwner)
+{
+    m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID, (sal_Int32)-1                                       );
+    m_xProgress               = lArgs.getUnpackedValueOrDefault(PROP_PROGRESS, css::uno::Reference< css::task::XStatusIndicator >());
+    m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, ::rtl::OUString()                                   );
+    m_xHoldRefForAsyncOpAlive = xOwner;
+};
+
+//-----------------------------------------------
+DispatchParams::DispatchParams(const DispatchParams& rCopy)
+{
+    m_xProgress               = rCopy.m_xProgress;
+    m_sSavePath               = rCopy.m_sSavePath;
+    m_nWorkingEntryID         = rCopy.m_nWorkingEntryID;
+    m_xHoldRefForAsyncOpAlive = rCopy.m_xHoldRefForAsyncOpAlive;
+};
+
+//-----------------------------------------------
+DispatchParams::~DispatchParams()
+{};
+
+//-----------------------------------------------
+DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
+{
+    m_xProgress               = rCopy.m_xProgress;
+    m_sSavePath               = rCopy.m_sSavePath;
+    m_nWorkingEntryID         = rCopy.m_nWorkingEntryID;
+    m_xHoldRefForAsyncOpAlive = rCopy.m_xHoldRefForAsyncOpAlive;
+    return *this;
+}
+
+//-----------------------------------------------
+void DispatchParams::forget()
+{
+    m_sSavePath       = ::rtl::OUString();
+    m_nWorkingEntryID = -1;
+    m_xProgress.clear();
+    m_xHoldRefForAsyncOpAlive.clear();
+};
+
+//-----------------------------------------------
 DEFINE_XINTERFACE_1(DbgListener                                 ,
                     OWeakObject                                 ,
                     DIRECT_INTERFACE(css::frame::XStatusListener))
@@ -624,7 +676,6 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFa
     , m_aAsyncDispatcher        ( LINK( this, AutoRecovery, implts_asyncDispatch )  )
     , m_eJob                    (AutoRecovery::E_NO_JOB                             )
     , m_nDocCacheLock           (0                                                  )
-    , m_nWorkingEntryID         (-1                                                 )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
@@ -679,33 +730,29 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
        return;
     }
 
-    ::comphelper::SequenceAsHashMap lArgs(lArguments);
-    sal_Bool  bAsynchron        = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False                                 );
-              m_nWorkingEntryID = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID          , (sal_Int32)-1                                       );
-              m_xProgress       = lArgs.getUnpackedValueOrDefault(PROP_PROGRESS          , css::uno::Reference< css::task::XStatusIndicator >());
-              m_sSavePath       = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH          , ::rtl::OUString()                                   );
+    ::comphelper::SequenceAsHashMap lArgs   (lArguments);
+    sal_Bool                        bAsync  = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False);
+    DispatchParams                  aParams (lArgs, static_cast< css::frame::XDispatch* >(this));
 
     // Hold this instance alive till the asynchronous operation will be finished.
-    m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< css::frame::XDispatch* >(this));
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    if (bAsync)
+        m_aDispatchParams = aParams;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    if (bAsynchron)
+    if (bAsync)
         m_aAsyncDispatcher.Post(0);
     else
-        implts_dispatch();
+        implts_dispatch(aParams);
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_dispatch()
+void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-    sal_Int32                                   eJob        = m_eJob;
-    css::uno::Reference< css::uno::XInterface > xMethodHold = m_xSelfHold;
-    m_xSelfHold.clear();
+    sal_Int32 eJob = m_eJob;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -735,40 +782,40 @@ void AutoRecovery::implts_dispatch()
         {
             LOG_RECOVERY("... prepare emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
-            implts_prepareEmergencySave();
+            implts_prepareEmergencySave(aParams);
         }
         else
         if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
         {
             LOG_RECOVERY("... do emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
-            implts_doEmergencySave();
+            implts_doEmergencySave(aParams);
         }
         else
         if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
         {
             LOG_RECOVERY("... do recovery ...")
-            implts_doRecovery();
+            implts_doRecovery(aParams);
         }
         else
         if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
         {
             LOG_RECOVERY("... do session save ...")
             bAllowAutoSaveReactivation = sal_False;
-            implts_doSessionSave();
+            implts_doSessionSave(aParams);
         }
         else
         if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
         {
             LOG_RECOVERY("... do session restore ...")
-            implts_doSessionRestore();
+            implts_doSessionRestore(aParams);
         }
         else
         if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
-            implts_backupWorkingEntry();
+            implts_backupWorkingEntry(aParams);
         else
         if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
-            implts_cleanUpWorkingEntry();
+            implts_cleanUpWorkingEntry(aParams);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -788,6 +835,7 @@ void AutoRecovery::implts_dispatch()
     {
         m_eJob |= AutoRecovery::E_AUTO_SAVE;
     }
+
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -1647,7 +1695,15 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
 //-----------------------------------------------
 IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, pVoid)
 {
-    implts_dispatch();
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    DispatchParams                              aParams                = m_aDispatchParams;
+    css::uno::Reference< css::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
+    m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
+    aWriteLock.unlock();
+    // <- SAFE
+
+    implts_dispatch(aParams);
     return 0;
 }
 
@@ -1867,9 +1923,15 @@ void AutoRecovery::implts_actualizeModifiedState(const css::uno::Reference< css:
         if (xModify.is())
             bModified = xModify->isModified();
         if (bModified)
+        {
             rInfo.DocumentState |= AutoRecovery::E_MODIFIED;
+            rInfo.DocumentState |= AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
+        }
         else
+        {
             rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED;
+            rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
+        }
     }
 
     aWriteLock.unlock();
@@ -1930,6 +1992,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
+
+    implts_flushConfigItem(rInfo);
 
     aCacheLock.unlock();
 
@@ -2091,19 +2155,18 @@ void AutoRecovery::implts_prepareSessionShutdown()
 }
 
 //-----------------------------------------------
-sal_Bool impl_mustBeSavedReal(const AutoRecovery::TDocumentInfo& aInfo)
-{
-    return ((aInfo.DocumentState & AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE ) == AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE);
-}
-
-//-----------------------------------------------
-AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLoop)
+AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
+                                                       const DispatchParams* pParams           )
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    css::uno::Reference< css::task::XStatusIndicator > xExternalProgress;
+    if (pParams)
+        xExternalProgress = pParams->m_xProgress;
 
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop      (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
     ::rtl::OUString                                    sBackupPath   (SvtPathOptions().GetBackupPath());
@@ -2227,7 +2290,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
         // <- SAFE --------------------------
         aWriteLock.unlock();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
-        implts_saveOneDoc(sBackupPath, aInfo);
+        implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         aWriteLock.lock();
         // SAFE -> --------------------------
@@ -2248,7 +2311,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
         // <- SAFE --------------------------
         aWriteLock.unlock();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
-        implts_saveOneDoc(sBackupPath, aInfo);
+        implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         aWriteLock.lock();
         // SAFE -> --------------------------
@@ -2260,8 +2323,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupPath,
-                                           AutoRecovery::TDocumentInfo& rInfo      )
+void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                                    sBackupPath      ,
+                                           AutoRecovery::TDocumentInfo&                        rInfo            ,
+                                     const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
     // no document? => can occure if we loaded our configuration with files,
     // which couldnt be recovered successfully. In such case we have all needed informations
@@ -2286,26 +2350,10 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupP
     if (rInfo.DefaultFilter.getLength())
         lNewArgs[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.DefaultFilter;
 
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xProgress.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    if (xProgress.is())
-    {
-        // use external progress object
-        lNewArgs[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
-        // HACK
-        // Use special property of the frame, to intercept status indicator events.
-        // Wont work with different views for the same document :-(
-        css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
-        if (xController.is())
-        {
-            css::uno::Reference< css::beans::XPropertySet > xFrameProps(xController->getFrame(), css::uno::UNO_QUERY_THROW);
-            xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(xProgress));
-        }
-    }
+    // prepare frame/document/mediadescriptor in a way, that it uses OUR progress .-)
+    if (xExternalProgress.is())
+        lNewArgs[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xExternalProgress;
+    impl_establishProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
 
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
@@ -2378,6 +2426,8 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupP
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
     }
 
+    // make sure the progress isnt referred any longer
+    impl_forgetProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
 
     // try to remove the old temp file.
     // Ignore any error here. We have a new temp file, which is up to date.
@@ -2395,7 +2445,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupP
 }
 
 //-----------------------------------------------
-AutoRecovery::ETimerType AutoRecovery::implts_openDocs()
+AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aParams)
 {
     AutoRecovery::ETimerType eTimer = AutoRecovery::E_DONT_START_TIMER;
 
@@ -2441,10 +2491,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs()
         lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= REFERRER_USER;
         lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
 
-        // use external progress object
-        css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xProgress.get(), css::uno::UNO_QUERY);
-        if (xProgress.is())
-            lDescriptor[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+        if (aParams.m_xProgress.is())
+            lDescriptor[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= aParams.m_xProgress;
 
         sal_Bool bBackupWasTried   = (
                                         ((rInfo.DocumentState & AutoRecovery::E_TRY_LOAD_BACKUP  ) == AutoRecovery::E_TRY_LOAD_BACKUP) || // temp. state!
@@ -2591,8 +2639,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR     = m_xSMGR    ;
-    css::uno::Reference< css::task::XStatusIndicator >     xProgress( m_xProgress.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -2611,14 +2658,11 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         xProvider->queryDispatch(aURL, SPECIALTARGET_SELF, 0),
         css::uno::UNO_QUERY_THROW);
 
-    // HACK
-    // Use special property of the frame, to intercept status indicator events.
-    // Wont work with different views for the same document :-(
-    css::uno::Reference< css::beans::XPropertySet > xFrameProps(xNewTarget, css::uno::UNO_QUERY_THROW);
-    xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(xProgress));
-
     // load the document and listen for the state of this operation.
     pLoadListener->setURL(aURL.Complete);
+
+    // make sure the right progress is used always.
+    impl_establishProgress(rInfo, lDescriptor, xNewTarget);
 
     try
     {
@@ -2628,7 +2672,6 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
             xLoadListener);
 
         pLoadListener->wait(0); // wait for ever!
-        xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
 
         css::frame::DispatchResultEvent aResult = pLoadListener->getResult();
         if (aResult.State != css::frame::DispatchResultState::SUCCESS)
@@ -2648,8 +2691,12 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
     {
         css::uno::Reference< css::util::XCloseable > xClose(xNewTarget, css::uno::UNO_QUERY);
         xClose->close(sal_True);
+        xNewTarget.clear();
         throw;
     }
+
+    // of course we must forget all references to this temp(!) progress
+    impl_forgetProgress(rInfo, lDescriptor, xNewTarget);
 }
 
 //-----------------------------------------------
@@ -2918,7 +2965,7 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool bLoadCache)
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_prepareEmergencySave()
+void AutoRecovery::implts_prepareEmergencySave(const DispatchParams& aParams)
 {
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
@@ -2928,7 +2975,7 @@ void AutoRecovery::implts_prepareEmergencySave()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_doEmergencySave()
+void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
 {
     // Write a hint "we chrashed" into the configuration, so
     // the error report tool is started too in case no recovery
@@ -2953,7 +3000,7 @@ void AutoRecovery::implts_doEmergencySave()
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop);
+        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, &aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -2966,12 +3013,12 @@ void AutoRecovery::implts_doEmergencySave()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_doRecovery()
+void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 {
     AutoRecovery::ETimerType eSuggestedTimer = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_openDocs();
+        eSuggestedTimer = implts_openDocs(aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -2993,7 +3040,7 @@ void AutoRecovery::implts_doRecovery()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_doSessionSave()
+void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
     LOG_RECOVERY("AutoRecovery::implts_doSessionSave()")
 
@@ -3012,7 +3059,7 @@ void AutoRecovery::implts_doSessionSave()
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop);
+        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, &aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -3039,14 +3086,14 @@ void AutoRecovery::implts_doSessionSave()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_doSessionRestore()
+void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
 {
     LOG_RECOVERY("AutoRecovery::implts_doSessionRestore() ...")
 
     AutoRecovery::ETimerType eSuggestedTimer = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_openDocs();
+        eSuggestedTimer = implts_openDocs(aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -3074,15 +3121,8 @@ void AutoRecovery::implts_doSessionRestore()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_backupWorkingEntry()
+void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    sal_Int32       nEntryID  = m_nWorkingEntryID;
-    ::rtl::OUString sSavePath = m_sSavePath;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentList::iterator pIt;
@@ -3091,7 +3131,7 @@ void AutoRecovery::implts_backupWorkingEntry()
          ++pIt                       )
     {
         const AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        if (rInfo.ID != nEntryID)
+        if (rInfo.ID != aParams.m_nWorkingEntryID)
             continue;
 
         ::rtl::OUString sSourceURL;
@@ -3108,7 +3148,7 @@ void AutoRecovery::implts_backupWorkingEntry()
             continue; // nothing real to save! An unmodified but new created document.
 
         INetURLObject aParser(sSourceURL);
-        AutoRecovery::EFailureSafeResult eResult = implts_copyFile(sSourceURL, sSavePath, aParser.getName());
+        AutoRecovery::EFailureSafeResult eResult = implts_copyFile(sSourceURL, aParams.m_sSavePath, aParser.getName());
         // TODO: Check eResult and react for errors (InteractionHandler!?)
         // Currently we ignore it ...
         // DONT UPDATE THE CACHE OR REMOVE ANY TEMP. FILES FROM DISK.
@@ -3118,14 +3158,8 @@ void AutoRecovery::implts_backupWorkingEntry()
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_cleanUpWorkingEntry()
+void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    sal_Int32 nEntryID = m_nWorkingEntryID;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
 
     AutoRecovery::TDocumentList::iterator pIt;
@@ -3134,7 +3168,7 @@ void AutoRecovery::implts_cleanUpWorkingEntry()
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        if (rInfo.ID != nEntryID)
+        if (rInfo.ID != aParams.m_nWorkingEntryID)
             continue;
 
         implts_removeTempFile(rInfo.OldTempURL, rInfo.AppModule);
@@ -3423,6 +3457,107 @@ void AutoRecovery::impl_showFullDiscError()
     ErrorBox dlgError(0, WB_OK, sMsg);
     dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
     dlgError.Execute();
+}
+
+//-----------------------------------------------
+void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+                                                ::comphelper::MediaDescriptor&             rArgs    ,
+                                          const css::uno::Reference< css::frame::XFrame >& xNewFrame)
+{
+    // external well known frame must be preferred (because it was created by ourself
+    // for loading documents into this frame)!
+    // But if no frame exists ... we can try to locate it using any frame bound to the provided
+    // document. Of course we must live without any frame in case the document does not exists at this
+    // point. But this state shouldnt occure. In such case xNewFrame should be valid ... hopefully .-)
+    css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
+    if (
+        (!xFrame.is()       ) &&
+        (rInfo.Document.is())
+       )
+    {
+        css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
+        if (xController.is())
+            xFrame = xController->getFrame();
+    }
+
+    // Any outside progress must be used ...
+    // Only if there is no progress, we can create our own one.
+    css::uno::Reference< css::task::XStatusIndicator > xInternalProgress;
+    css::uno::Reference< css::task::XStatusIndicator > xExternalProgress = rArgs.getUnpackedValueOrDefault(
+                                                                                ::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(),
+                                                                                css::uno::Reference< css::task::XStatusIndicator >() );
+
+    // Normaly a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
+    // But for a normal auto save we dont have such "external progress"... because this function is triggered by our own timer then.
+    // In such case we must create our own progress !
+    if (
+        (! xExternalProgress.is()) &&
+        (xFrame.is()             )
+       )
+    {
+        css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xFrame, css::uno::UNO_QUERY);
+        if (xProgressFactory.is())
+            xInternalProgress = xProgressFactory->createStatusIndicator();
+    }
+
+    // HACK
+    // An external provided progress (most given by the CrashSave/Recovery dialog)
+    // must be preferred. But we know that some application filters query it's own progress instance
+    // at the frame method Frame::createStatusIndicator().
+    // So we use a two step mechanism:
+    // 1) we set the progress inside the MediaDescriptor, which will be provided to the filter
+    // 2) and we set a special Frame property, which overwrites the normal behaviour of Frame::createStatusIndicator .-)
+    // But we supress 2) in case we uses an internal progress. Because then it doesnt matter
+    // if our applications make it wrong. In such case the internal progress resists at the same frame
+    // and there is no need to forward progress activities to e.g. an outside dialog .-)
+    if (
+        (xExternalProgress.is()) &&
+        (xFrame.is()           )
+       )
+    {
+        css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
+        if (xFrameProps.is())
+            xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(xExternalProgress));
+    }
+
+    // But inside the MediaDescriptor we must set our own create progress ...
+    // in case there is not already anothe rprogress set.
+    rArgs.createItemIfMissing(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), xInternalProgress);
+}
+
+//-----------------------------------------------
+void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+                                             ::comphelper::MediaDescriptor&             rArgs    ,
+                                       const css::uno::Reference< css::frame::XFrame >& xNewFrame)
+{
+    // external well known frame must be preferred (because it was created by ourself
+    // for loading documents into this frame)!
+    // But if no frame exists ... we can try to locate it using any frame bound to the provided
+    // document. Of course we must live without any frame in case the document does not exists at this
+    // point. But this state shouldnt occure. In such case xNewFrame should be valid ... hopefully .-)
+    css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
+    if (
+        (!xFrame.is()       ) &&
+        (rInfo.Document.is())
+       )
+    {
+        css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
+        if (xController.is())
+            xFrame = xController->getFrame();
+    }
+
+    // stop progress interception on corresponding frame.
+    css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
+    if (xFrameProps.is())
+        xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
+
+    // forget progress inside list of arguments.
+    ::comphelper::MediaDescriptor::iterator pArg = rArgs.find(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR());
+    if (pArg != rArgs.end())
+    {
+        rArgs.erase(pArg);
+        pArg = rArgs.end();
+    }
 }
 
 } // namespace framework
