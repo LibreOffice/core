@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:06:15 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@
 #include "selector.hxx" // for SvxScriptSelectorDialog
 #include "macropg.hxx" // for SvxMacroAssignDlg
 
+namespace css = ::com::sun::star;
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl)
@@ -1007,6 +1008,35 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
             break;
         case RID_SVXDLG_CUSTOMIZE :
             pDlg = new SvxConfigDialog( pParent, pAttrSet );
+            break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new AbstractTabDialog_Impl( pDlg );
+    return 0;
+}
+
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& rResId,
+                                                Window* pParent,
+                                                const SfxItemSet* pAttrSet,
+                                                const css::uno::Reference< css::frame::XFrame >& xViewFrame,
+                                                bool bEditFmt,
+                                                const String *pUserButtonText )
+{
+    SfxTabDialog* pDlg=NULL;
+    switch ( rResId.GetId() )
+    {
+        case RID_OFA_AUTOCORR_DLG :
+            pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
+            break;
+        case RID_SVXDLG_CUSTOMIZE :
+            {
+                SvxConfigDialog* pDlg1 = new SvxConfigDialog( pParent, pAttrSet );
+                pDlg1->SetFrame(xViewFrame);
+                pDlg = (SfxTabDialog*)pDlg1;
+            }
             break;
         default:
             break;
