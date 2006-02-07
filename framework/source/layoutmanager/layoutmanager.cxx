@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:10:41 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1051,7 +1051,6 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
 
     try
     {
-
         rtl::OUString aElementType;
         rtl::OUString aElementName;
         rtl::OUString aName;
@@ -1069,10 +1068,12 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
                 aName = pTbNames[i];
                 if ( impl_parseResourceURL( aName, aElementType, aElementName ))
                 {
-                    if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
+                    // Check that we only create:
+                    // - Toolbars (the statusbar is also member of the persistent window state)
+                    // - Not custom toolbars, there are created with their own method (implts_createCustomToolbars)
+                    if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ) &&
+                         aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
                     {
-
-
                         UIElement aNewToolbar( aElementName, aElementType, xUIElement );
                         aNewToolbar.m_aName = aName;
                         implts_readWindowStateData( aName, aNewToolbar );
