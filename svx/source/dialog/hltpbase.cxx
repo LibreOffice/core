@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:16:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,16 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
                                               SID_ATTR_MACROITEM );
         pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
-        SfxMacroAssignDlg aDlg (this, *pItemSet );
+        // --> PB 2006-01-13 #123474#
+        /*  disable HyperLinkDlg for input while the MacroAssignDlg is working
+            because if no JAVA is installed an error box occurs and then it is possible
+            to close the HyperLinkDlg before its child (MacroAssignDlg) -> GPF
+         */
+        BOOL bIsInputEnabled = GetParent()->IsInputEnabled();
+        if ( bIsInputEnabled )
+            GetParent()->EnableInput( FALSE );
+        // <--
+        SfxMacroAssignDlg aDlg( this, *pItemSet );
 
         // add events
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
@@ -597,6 +606,10 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
             pMacroPage->AddEvent( String( SVX_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
+        // --> PB 2006-01-13 #123474#
+        if ( bIsInputEnabled )
+            GetParent()->EnableInput( TRUE );
+        // <--
         // execute dlg
         if ( RET_OK == aDlg.Execute() )
         {
@@ -607,7 +620,6 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
                 pHyperlinkItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
             }
         }
-
         delete pItemSet;
     }
 
