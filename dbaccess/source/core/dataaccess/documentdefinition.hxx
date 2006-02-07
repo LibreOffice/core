@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:36:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ class ODocumentDefinition
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >       m_xFrameLoader;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >        m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
 
     OInterceptor*                                                                       m_pInterceptor;
@@ -208,6 +208,11 @@ public:
             the controller which belongs to the XModel of our (active) embedded object
     */
     void impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
+
+    /** removes the given frame from the desktop's frame collection
+        @raises ::com::sun::star::uno::RuntimeException
+    */
+    void impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
 protected:
     // OPropertyArrayUsageHelper
