@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:51:20 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,14 @@ umask(old_mode);
             else if ( err != FileBase::E_EXIST )
             {
                  // if f.e. name contains invalid chars stop trying to create files
-                 break;
+                 // but if there is a folder with such name proceed further
+
+                 DirectoryItem aTmpItem;
+                 FileStatus aTmpStatus( FileStatusMask_Type );
+                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                   || aTmpStatus.getFileType() != FileStatus::Directory )
+                     break;
             }
         }
     }
@@ -341,8 +348,17 @@ umask(old_mode);
                 break;
             }
             else if ( err != FileBase::E_EXIST )
+            {
                 // if f.e. name contains invalid chars stop trying to create dirs
-                break;
+                // but if there is a folder with such name proceed further
+
+                DirectoryItem aTmpItem;
+                FileStatus aTmpStatus( FileStatusMask_Type );
+                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                  || aTmpStatus.getFileType() != FileStatus::Directory )
+                    break;
+            }
         }
     }
 }
