@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:08:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,62 @@ namespace css = ::com::sun::star;
 
 namespace framework
 {
+
+//---------------------------------------
+/** @short  hold all needed informations for an asynchronous dispatch alive.
+
+    @descr  Because some operations are forced to be executed asynchronously
+            (e.g. requested by our CreashSave/Recovery dialog) ... we must make sure
+            that these informations wont be set as "normal" members of our AtoRecovery
+            instance. Otherwise they can disturb our normal AutoSave-timer handling.
+            e.g. it can be unclear then, which progress has to be used for storing documents ...
+ */
+struct DispatchParams
+{
+    public:
+         DispatchParams();
+         DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
+                        const css::uno::Reference< css::uno::XInterface >& xOwner);
+         DispatchParams(const DispatchParams& rCopy);
+        ~DispatchParams();
+
+         DispatchParams& operator=(const DispatchParams& rCopy);
+         void forget();
+
+    public:
+
+        //---------------------------------------
+        /** @short  can be set from outside and is provided to
+                    our internal started operations.
+
+            @descr  Normaly we use the normal status indicator
+                    of the document windows to show a progress.
+                    But in case we are used by any special UI,
+                    it can provide its own status indicator object
+                    to us - so we use it instead of the normal one.
+         */
+        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+
+        //---------------------------------------
+        /** TODO document me */
+        ::rtl::OUString m_sSavePath;
+
+        //---------------------------------------
+        /** @short  define the current cache entry, which should be used for current
+                    backup or cleanUp operation ... which is may be done asynchronous */
+        sal_Int32 m_nWorkingEntryID;
+
+        //---------------------------------------
+        /** @short  used for asyncoperations, to prevent us from dying.
+
+            @descr  If our dispatch() method was forced to start the
+                    internal operation asynchronous ... we send an event
+                    to start and return immediatly. But we must be shure that
+                    our instance live if the event callback reach us.
+                    So we hold an uno reference to ourself.
+         */
+        css::uno::Reference< css::uno::XInterface > m_xHoldRefForAsyncOpAlive;
+};
 
 //_______________________________________________
 /**
@@ -390,6 +446,11 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         ::vcl::EventPoster m_aAsyncDispatcher;
 
         //---------------------------------------
+        /** @see    DispatchParams
+         */
+        DispatchParams m_aDispatchParams;
+
+        //---------------------------------------
         /** @short  indicates, which time period is currently used by the
                     internal timer.
          */
@@ -409,48 +470,6 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** @short  contains all status listener registered at this instance.
          */
         ListenerHash m_lListener;
-
-        //---------------------------------------
-        /** @short  can be set from outside and is provided to
-                    our internal started operations.
-
-            @descr  Normaly we use the normal status indicator
-                    of the document windows to show a progress.
-                    But in case we are used by any special UI,
-                    it can provide its own status indicator object
-                    to us - so we use it instead of the normal one.
-         */
-        css::uno::WeakReference< css::task::XStatusIndicator > m_xProgress;
-
-        //---------------------------------------
-        /** TODO document me */
-        ::rtl::OUString m_sSavePath;
-
-        //---------------------------------------
-        /** @short  define the current cache entry, which should be used for current
-                    backup or cleanUp operation ... which is may be done asynchronous */
-        sal_Int32 m_nWorkingEntryID;
-
-        //---------------------------------------
-        /** @short  special debug option to make testing faster.
-
-            @descr  We dont interpret the timer unit as [min] ...
-                    we use [ms] instead of that. Further we dont
-                    wait 10 s for user idle ...
-         */
-        #if OSL_DEBUG_LEVEL > 1
-        sal_Bool m_dbg_bMakeItFaster;
-        #endif
-
-        /** @short  used for asyncoperations, to prevent us from dying.
-
-            @descr  If our dispatch() method was forced to start the
-                    internal operation asynchronous ... we send an event
-                    to start and return immediatly. But we must be shure that
-                    our instance live if the event callback reach us.
-                    So we hold an uno reference to ourself.
-         */
-        css::uno::Reference< css::uno::XInterface > m_xSelfHold;
 
         /** @descr  This member is used to prevent us against re-entrance problems.
                     A mutex cant help to prevent us from concurrent using of members
@@ -474,6 +493,21 @@ class AutoRecovery  : public  css::lang::XTypeProvider
          */
         sal_Int32 m_nMinSpaceDocSave;
         sal_Int32 m_nMinSpaceConfigSave;
+
+        //---------------------------------------
+        /** @short  special debug option to make testing faster.
+
+            @descr  We dont interpret the timer unit as [min] ...
+                    we use [ms] instead of that. Further we dont
+                    wait 10 s for user idle ...
+         */
+        #if OSL_DEBUG_LEVEL > 1
+        sal_Bool m_dbg_bMakeItFaster;
+        #endif
+
+        //---------------------------------------
+        // HACK ... TODO
+        css::uno::Reference< css::task::XStatusIndicator > m_xExternalProgress;
 
     //___________________________________________
     // interface
@@ -650,7 +684,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         /** @short  implements the dispatch real. */
-        void implts_dispatch();
+        void implts_dispatch(const DispatchParams& aParams);
 
         //---------------------------------------
         /** @short  validate new detected document and add it into the internal
@@ -750,12 +784,20 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                                  to postpone any document.
                                  ... bAllowUserIdleLoop must(!) be set to FALSE
 
+            @param  pParams
+                    sometimes this method is required inside an external dispatch request.
+                    The it contains some special environment variables, which overwrites
+                    our normal environment.
+                    AutoSave              => pParams == 0
+                    SessionSave/CrashSave => pParams != 0
+
             @return A suggestion, how the timer (if its not already disabled!)
                     should be restarted to full fill the requirements.
 
             @threadsafe
          */
-        AutoRecovery::ETimerType implts_saveDocs(sal_Bool bAllowUserIdleLoop);
+        AutoRecovery::ETimerType implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
+                                                 const DispatchParams* pParams        = 0);
 
         //---------------------------------------
         /** @short  save one of the current documents to a specific
@@ -791,8 +833,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
           */
-        void implts_saveOneDoc(const ::rtl::OUString&             sBackupPath,
-                                     AutoRecovery::TDocumentInfo& rInfo      );
+        void implts_saveOneDoc(const ::rtl::OUString&                                    sBackupPath      ,
+                                     AutoRecovery::TDocumentInfo&                        rInfo            ,
+                               const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress);
 
         //---------------------------------------
         /** @short  recovery all documents, which was saved during
@@ -802,7 +845,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
          */
-        AutoRecovery::ETimerType implts_openDocs();
+        AutoRecovery::ETimerType implts_openDocs(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
@@ -879,31 +922,31 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_prepareEmergencySave();
+        void implts_prepareEmergencySave(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_doEmergencySave();
+        void implts_doEmergencySave(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_doRecovery();
+        void implts_doRecovery(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_doSessionSave();
+        void implts_doSessionSave(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_doSessionRestore();
+        void implts_doSessionRestore(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_backupWorkingEntry();
+        void implts_backupWorkingEntry(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
-        void implts_cleanUpWorkingEntry();
+        void implts_cleanUpWorkingEntry(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me
@@ -947,6 +990,38 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         /// TODO document me
         static void impl_showFullDiscError();
+
+        //---------------------------------------
+        /** @short  try to create/use a progress and set it inside the
+                    environment.
+
+            @descr  The problem behind: There exists different use case of this method.
+                    a) An external progress is provided by our CrashSave or Recovery dialog.
+                    b) We must create our own progress e.g. for an AutoSave
+                    c) Sometimes our application filters dont use the progress
+                       provided by the MediaDescriptor. They uses the Frame everytime to create
+                       it's own progress. So we implemented a HACK for these and now we set
+                       an InterceptedProgress there for the time WE use this frame for loading/storing documents .-)
+
+            @param  xNewFrame
+                    must be set only in case WE create a new frame (e.g. for loading documents
+                    on session restore or recovery). Then search for a frame using rInfo.Document must
+                    be supressed and xFrame must be preferred instead .-)
+
+            @param  rInfo
+                    used e.g. to find the frame corresponding to a document.
+                    This frame must be used to create a new progress e.g. for an AutoSave.
+
+            @param  rArgs
+                    is used to set the new created progress as parameter on these set.
+         */
+        void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+                                          ::comphelper::MediaDescriptor&             rArgs    ,
+                                    const css::uno::Reference< css::frame::XFrame >& xNewFrame);
+
+        void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+                                       ::comphelper::MediaDescriptor&             rArgs    ,
+                                 const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 };
 
 } // namespace framework
