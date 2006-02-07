@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:51:49 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -680,8 +680,17 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
         if ( pBox )
             pBox->Enable();
     }
-    else if ( pBox )
+    else if ( pBox && ( pDocSh || ( !pDocSh && !ppFontList )))
+    {
+        // Disable box only when we have a SfxObjectShell and didn't get a font list OR
+        // we don't have a SfxObjectShell and no current font list.
+        // It's possible that we currently have no SfxObjectShell, but a current font list.
+        // See #i58471: When a user set the focus into the font name combo box and opens
+        // the help window with F1. After closing the help window, we disable the font name
+        // combo box. The SfxObjectShell::Current() method returns in that case zero. But the
+        // font list hasn't changed and therefore the combo box shouldn't be disabled!
         pBox->Disable();
+    }
 
     // in die FontBox ggf. auch die neue Liste f"ullen
     if ( pBox && bChanged )
