@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:59:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 
 //#include <sfx2/basedlgs.hxx>
@@ -570,6 +574,12 @@ public:
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SfxViewFrame* pViewFrame,
+                                            bool bEditFmt=false,
+                                            const String *pUserButtonText=0 );
+    virtual SfxAbstractTabDialog*       CreateTabDialog( const ResId& rResId,
+                                            Window* pParent,
+                                            const SfxItemSet* pAttrSet,
+                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
                                             const String *pUserButtonText=0 );
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,
