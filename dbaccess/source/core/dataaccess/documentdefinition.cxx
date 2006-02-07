@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:14:52 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,7 @@ void SAL_CALL ODocumentDefinition::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     closeObject();
     ::comphelper::disposeComponent(m_xListener);
-    m_xFrameLoader = NULL;
+    m_xDesktop = NULL;
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_TYPEPROVIDER3(ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base);
@@ -643,6 +643,16 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XFrame >& _rxFrame )
+{
+    if ( !m_xDesktop.is() )
+        m_xDesktop.set( m_xORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+
+    Reference< XFrames > xFrames( m_xDesktop->getFrames(), UNO_QUERY_THROW );
+    xFrames->remove( _rxFrame );
+}
+
+// -----------------------------------------------------------------------------
 void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode )
 {
     try
@@ -651,51 +661,34 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
         Reference< XController > xController( xModel.is() ? xModel->getCurrentController() : Reference< XController >() );
         if ( !xController.is() )
             return;
-        Reference< XFrame > xFrame( xController->getFrame() );
 
-        if ( m_xListener.is() )
-        {
-            // simply raise the window to top
-            if ( xFrame.is() )
-            {
-                Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
-                xTopWindow->toFront();
-            }
-        }
-        else
-        {
+        if ( !m_xListener.is() )
             // it's the first time the embedded object has been activated
-
-            //
-            if ( !m_xFrameLoader.is() )
-                m_xFrameLoader.set( m_xORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
-/*
-            // remove the frame from the desktop's frame collection because we need full control of it.
-            Reference< XFramesSupplier > xSup( m_xFrameLoader, UNO_QUERY_THROW );
-            Reference< XFrames > xFrames( xSup->getFrames(), UNO_QUERY_THROW );
-            xFrames->remove( xFrame );
-*/
             // create an OEmbedObjectHolder
             m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
 
-            // ensure that we ourself are kept alive as long as the embedded object's frame is
-            // opened
-            LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
+        Reference< XFrame > xFrame( xController->getFrame() );
+        // raise the window to top (especially necessary if this is not the first activation)
+        if ( xFrame.is() )
+        {
+            Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+            xTopWindow->toFront();
         }
 
+        // ensure that we ourself are kept alive as long as the embedded object's frame is
+        // opened
+        LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
+
+        // init the edit view
         if ( _bOpenedInDesignMode )
             impl_initObjectEditView( xController );
+
+        // remove the frame from the desktop's frame collection because we need full control of it.
+        impl_removeFrameFromDesktop_throw( xFrame );
     }
-    catch( const RuntimeException& e )
+    catch( const RuntimeException& )
     {
-    #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "ODocumentDefinition::impl_onActivateEmbeddedObject: caught an exception!\n" );
-        sMessage += "message:\n";
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( false, sMessage );
-    #else
-        e; // make compiler happy
-    #endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
