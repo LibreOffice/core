@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:21:39 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,6 +571,11 @@ String SfxHelp::GetHelpModuleName_Impl()
     }
     else
         aFactoryShortName = sDefaultModule;
+
+    // --> PB 2006/01/18 #i57912# Chart not longer a valid help module
+    if ( aFactoryShortName.equalsAscii( "schart" ) )
+        aFactoryShortName = sDefaultModule;
+    // <---
 
     sModuleName = String( aFactoryShortName );
     return sModuleName;
