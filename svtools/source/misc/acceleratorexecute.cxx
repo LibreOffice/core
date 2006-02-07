@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:13 $
+ *  last change: $Author: rt $ $Date: 2006-02-07 10:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef __com_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
 //===============================================
 // namespace
 
@@ -78,6 +82,41 @@ namespace  css = ::com::sun::star;
 
 //===============================================
 // definitions
+
+//-----------------------------------------------
+class SVT_DLLPRIVATE AsyncAccelExec
+{
+    public:
+
+        //---------------------------------------
+        /** creates a new instance of this class, which can be used
+            one times only!
+
+            This instance can be forced to execute it's internal set request
+            asynchronous. After that it deletes itself !
+         */
+        static AsyncAccelExec* createOnShotInstance(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                                                    const css::util::URL&                               aURL     );
+
+        void execAsync();
+
+    private:
+
+        //---------------------------------------
+        /** @short  allow creation of instances of this class
+                    by using our factory only!
+         */
+        SVT_DLLPRIVATE AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                                      const css::util::URL&                               aURL     );
+
+        DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
+
+    private:
+
+        ::vcl::EventPoster m_aAsyncCallback;
+        css::uno::Reference< css::frame::XDispatch > m_xDispatch;
+        css::util::URL m_aURL;
+};
 
 //-----------------------------------------------
 AcceleratorExecute::AcceleratorExecute()
@@ -209,12 +248,9 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
     if ( bRet = xDispatch.is() )
     {
-        // <- SAFE ----------------------------------
-        aLock.reset();
-        m_lCommandQueue.push_back(TCommandQueue::value_type(aURL,xDispatch));
-        m_aAsyncCallback.Post(0);
-        aLock.clear();
-        // <- SAFE ----------------------------------
+        // Note: Such instance can be used one times only and destroy itself afterwards .-)
+        AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
+        pExec->execAsync();
     }
 
     return bRet;
@@ -370,28 +406,51 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 //-----------------------------------------------
 IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
 {
-    // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    // replaced by AsyncAccelExec!
+    return 0;
+}
 
-    TCommandQueue::iterator pIt = m_lCommandQueue.begin();
-    if (pIt == m_lCommandQueue.end())
+//-----------------------------------------------
+AsyncAccelExec::AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                               const css::util::URL&                               aURL     )
+    : m_aAsyncCallback(LINK(this, AsyncAccelExec, impl_ts_asyncCallback))
+    , m_xDispatch     (xDispatch                                        )
+    , m_aURL          (aURL                                             )
+{
+}
+
+//-----------------------------------------------
+AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                                                     const css::util::URL&                               aURL     )
+{
+    AsyncAccelExec* pExec = new AsyncAccelExec(xDispatch, aURL);
+    return pExec;
+}
+
+//-----------------------------------------------
+void AsyncAccelExec::execAsync()
+{
+    m_aAsyncCallback.Post(0);
+}
+
+//-----------------------------------------------
+IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*, pVoid)
+{
+    if (! m_xDispatch.is())
         return 0;
-    css::util::URL aURL = pIt->first;
-    css::uno::Reference< css::frame::XDispatch > xDispatch = pIt->second;
-
-    m_lCommandQueue.erase(pIt);
-
-    aLock.clear();
-    // <- SAFE ----------------------------------
 
     try
     {
-        xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+        m_xDispatch->dispatch(m_aURL, css::uno::Sequence< css::beans::PropertyValue >());
     }
+    catch(const css::lang::DisposedException&)
+        {}
     catch(const css::uno::RuntimeException& exRuntime)
         { throw exRuntime; }
     catch(const css::uno::Exception&)
-        { }
+        {}
+
+    delete this;
 
     return 0;
 }
