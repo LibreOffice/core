@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:51:14 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,6 +292,14 @@
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
 #endif
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
@@ -3684,6 +3692,37 @@ void SwWW8ImplReader::StoreMacroCmds()
     }
 }
 
+void SwWW8ImplReader::ReadDocVars()
+{
+    std::vector<String> aDocVarStrings;
+    std::vector<ww::bytes> aDocVarStringIds;
+    std::vector<String> aDocValueStrings;
+    WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcStwUser,
+        pWwFib->lcbStwUser, bVer67 ? 2 : 0, eStructCharSet,
+        aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
+    {
+        using namespace com::sun::star;
+
+        uno::Reference<lang::XComponent> xModelComp(mpDocShell->GetModel(),
+           uno::UNO_QUERY);
+        uno::Reference<document::XDocumentInfoSupplier> xSupp( mpDocShell->GetModel(), uno::UNO_QUERY );
+        if ( xSupp.is() )
+        {
+            uno::Reference< document::XDocumentInfo> xDocInfo = xSupp->getDocumentInfo();
+            uno::Reference<beans::XPropertySet> xInfoProp( xDocInfo, uno::UNO_QUERY );
+            uno::Reference<beans::XPropertyContainer> xInfoContainer( xDocInfo, uno::UNO_QUERY );
+            for(int i=0;i<aDocVarStrings.size();i++)
+            {
+                uno::Any aDefaultValue;
+                ::rtl::OUString name(aDocVarStrings[i]);
+                uno::Any aValue;
+                aValue <<= ::rtl::OUString(aDocValueStrings[i]);
+                xInfoContainer->addProperty( name, 0, aValue);
+            }
+        }
+    }
+}
+
 ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 {
     ULONG nErrRet = 0;
@@ -3808,6 +3847,8 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] =
             aLinkStrings[i];
     }
+
+    ReadDocVars(); // #129053# import document variables as meta information.
 
     ::SetProgressState(nProgress, mpDocShell);    // Update
 
