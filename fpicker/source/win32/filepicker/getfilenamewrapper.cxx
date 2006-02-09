@@ -4,9 +4,9 @@
  *
  *  $RCSfile: getfilenamewrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:46:05 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,12 +80,17 @@ namespace /* private */
         GetFileNameParam* lpgfnp =
             reinterpret_cast<GetFileNameParam*>(pParam);
 
+        HRESULT hr = OleInitialize( NULL );
+
         if (lpgfnp->m_bOpen)
             lpgfnp->m_bRet = GetOpenFileName(lpgfnp->m_lpofn);
         else
             lpgfnp->m_bRet = GetSaveFileName(lpgfnp->m_lpofn);
 
         lpgfnp->m_ExtErr = CommDlgExtendedError();
+
+        if ( SUCCEEDED( hr ) )
+            OleUninitialize();
 
         return 0;
     }
@@ -161,8 +166,13 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
     }
     else
     {
+        HRESULT hr = OleInitialize( NULL );
+
         bRet = GetOpenFileName(lpofn);
         m_ExtendedDialogError = CommDlgExtendedError();
+
+        if ( SUCCEEDED( hr ) )
+            OleUninitialize();
     }
 
     return bRet;
