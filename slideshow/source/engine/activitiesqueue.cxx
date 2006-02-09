@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:22:55 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,7 @@ namespace presentation
                              ::boost::mem_fn( &Activity::dequeued ) );
         }
 
-        bool ActivitiesQueue::isEmpty()
+        bool ActivitiesQueue::isEmpty() const
         {
             return maCurrentActivitiesWaiting.empty() && maCurrentActivitiesReinsert.empty();
         }
