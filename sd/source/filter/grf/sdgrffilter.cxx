@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:18:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ GDIMetaFile SdGRFFilter::ImplRemoveClipRegionActions( const GDIMetaFile& rMtf )
             switch( pCopyAction->GetType() )
             {
                 case( META_CLIPREGION_ACTION ) :
-                    delete pCopyAction;
+                    pCopyAction->Delete();
                 break;
 
                 default:
