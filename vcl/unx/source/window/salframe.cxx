@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:09:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,7 @@ X11SalFrame::~X11SalFrame()
 
 void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 {
-    if( nStyle != mnExtStyle )
+    if( nStyle != mnExtStyle && !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
     {
         mnExtStyle = nStyle;
 
@@ -974,43 +974,49 @@ void X11SalFrame::SetIcon( USHORT nIcon )
 
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
-    if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+    if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
     {
-        XSizeHints* pHints = XAllocSizeHints();
-        long nSupplied = 0;
-        XGetWMNormalHints( GetXDisplay(),
-                           GetShellWindow(),
-                           pHints,
-                           &nSupplied
-                           );
-        pHints->max_width   = nWidth;
-        pHints->max_height  = nHeight;
-        pHints->flags |= PMaxSize;
-        XSetWMNormalHints( GetXDisplay(),
-                           GetShellWindow(),
-                           pHints );
-        XFree( pHints );
+        if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+        {
+            XSizeHints* pHints = XAllocSizeHints();
+            long nSupplied = 0;
+            XGetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints,
+                               &nSupplied
+                               );
+            pHints->max_width   = nWidth;
+            pHints->max_height  = nHeight;
+            pHints->flags |= PMaxSize;
+            XSetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints );
+            XFree( pHints );
+        }
     }
 }
 
 void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
-    if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+    if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
     {
-        XSizeHints* pHints = XAllocSizeHints();
-        long nSupplied = 0;
-        XGetWMNormalHints( GetXDisplay(),
-                           GetShellWindow(),
-                           pHints,
-                           &nSupplied
-                           );
-        pHints->min_width   = nWidth;
-        pHints->min_height  = nHeight;
-        pHints->flags |= PMinSize;
-        XSetWMNormalHints( GetXDisplay(),
-                           GetShellWindow(),
-                           pHints );
-        XFree( pHints );
+        if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+        {
+            XSizeHints* pHints = XAllocSizeHints();
+            long nSupplied = 0;
+            XGetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints,
+                               &nSupplied
+                               );
+            pHints->min_width   = nWidth;
+            pHints->min_height  = nHeight;
+            pHints->flags |= PMinSize;
+            XSetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints );
+            XFree( pHints );
+        }
     }
 }
 
@@ -1099,7 +1105,8 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         // actually map the window
         if( GetWindow() != GetShellWindow() )
         {
-            XMapWindow( GetXDisplay(), GetShellWindow() );
+            if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+                XMapWindow( GetXDisplay(), GetShellWindow() );
             XSelectInput( GetXDisplay(), GetShellWindow(), CLIENT_EVENTS );
         }
         if( nStyle_ & SAL_FRAME_STYLE_FLOAT )
@@ -1202,12 +1209,18 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         if( getInputContext() )
             getInputContext()->Unmap( this );
 
-        /*  FIXME: Is deleting the property really necessary ? It hurts
-         *  owner drawn windows at least.
-         */
-        if( mpParent && ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
-            XDeleteProperty( GetXDisplay(), GetShellWindow(), GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
-        XWithdrawWindow( GetXDisplay(), GetShellWindow(), GetDisplay()->GetScreenNumber() );
+        if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+        {
+            /*  FIXME: Is deleting the property really necessary ? It hurts
+             *  owner drawn windows at least.
+             */
+            if( mpParent && ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+                XDeleteProperty( GetXDisplay(), GetShellWindow(), GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
+            XWithdrawWindow( GetXDisplay(), GetShellWindow(), GetDisplay()->GetScreenNumber() );
+        }
+        else
+            XUnmapWindow( GetXDisplay(), GetWindow() );
+
         nShowState_ = SHOWSTATE_HIDDEN;
         if( IsFloatGrabWindow() && nVisibleFloats )
         {
@@ -1268,7 +1281,7 @@ void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
     {
         XWindowAttributes aAttrib;
 
-        XGetWindowAttributes( GetXDisplay(), GetShellWindow(), &aAttrib );
+        XGetWindowAttributes( GetXDisplay(), GetWindow(), &aAttrib );
 
         rWidth  = aAttrib.width;
         rHeight = aAttrib.height;
@@ -3657,7 +3670,8 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                          *  even if they are withdrawn when the respective
                          *  document is mapped.
                          */
-                        XUnmapWindow( GetXDisplay(), GetShellWindow() );
+                        if( ! (nStyle_ & SAL_FRAME_STYLE_CHILD) )
+                            XUnmapWindow( GetXDisplay(), GetShellWindow() );
                         break;
                     }
                     bMapped_   = TRUE;
