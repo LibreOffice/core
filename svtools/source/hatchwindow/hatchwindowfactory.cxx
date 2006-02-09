@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchwindowfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:50:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include "cppuhelper/factory.hxx"
 #endif
+
+#include "documentcloser.hxx"
 
 using namespace ::com::sun::star;
 
@@ -127,15 +129,30 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             reinterpret_cast< registry::XRegistryKey* >(pRegistryKey));
         uno::Reference< registry::XRegistryKey> xNewKey;
 
+        // OHatchWindowFactory registration
+
         xNewKey = xRegistryKey->createKey (
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
             OHatchWindowFactory::impl_staticGetImplementationName() +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
 
-        const uno::Sequence< ::rtl::OUString > aServices (
-            OHatchWindowFactory::impl_staticGetSupportedServiceNames());
+        uno::Sequence< ::rtl::OUString > aServices =
+            OHatchWindowFactory::impl_staticGetSupportedServiceNames();
         for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
             xNewKey->createKey( aServices.getConstArray()[i] );
+
+
+        // ODocumentCloser registration
+
+        xNewKey = xRegistryKey->createKey (
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            ODocumentCloser::impl_staticGetImplementationName() +
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+
+        aServices = ODocumentCloser::impl_staticGetSupportedServiceNames();
+        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
+            xNewKey->createKey( aServices.getConstArray()[i] );
+
 
         return sal_True;
     }
@@ -157,6 +174,15 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 OHatchWindowFactory::impl_staticCreateSelfInstance,
                 OHatchWindowFactory::impl_staticGetSupportedServiceNames());
         }
+        else if (ODocumentCloser::impl_staticGetImplementationName().compareToAscii (pImplementationName ) == 0)
+        {
+            xFactory = cppu::createSingleFactory(
+                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                ODocumentCloser::impl_staticGetImplementationName(),
+                ODocumentCloser::impl_staticCreateSelfInstance,
+                ODocumentCloser::impl_staticGetSupportedServiceNames() );
+        }
+
         if (xFactory.is())
         {
             xFactory->acquire();
