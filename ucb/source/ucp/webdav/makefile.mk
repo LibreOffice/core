@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-10 16:43:55 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:27:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(SYSTEM_NEON)" == "YES"
 CFLAGS+= $(NEON_CFLAGS)
+TWOFIVE:=$(shell pkg-config --atleast-version=0.25.0 neon && echo YES || echo NO)
+.IF "$(TWOFIVE)" == "YES"
+CFLAGS+=-DNEONTWOFIVE
+.ENDIF
 .ELSE
 NEONINCDIR=external$/neon
 CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
