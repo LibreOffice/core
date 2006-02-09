@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:50:52 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:10:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ SLOFILES=	\
             $(SLO)$/accessibletexthelper.obj \
             $(SLO)$/accimplaccess.obj \
             $(SLO)$/interaction.obj \
+            $(SLO)$/instancelocker.obj \
             $(SLO)$/types.obj \
             $(SLO)$/datetime.obj \
             $(SLO)$/numbers.obj \
