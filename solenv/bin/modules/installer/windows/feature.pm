@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:15:12 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:00:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ sub get_feature_level
     if ( $localdefault eq "NO" )    # explicitely set Default = "NO"
     {
         $level = "200";             # deselected in default installation, base is 100
+        if ( $installer::globals::patch ) { $level = "20"; }
     }
 
     # special handling for Java and Ada
