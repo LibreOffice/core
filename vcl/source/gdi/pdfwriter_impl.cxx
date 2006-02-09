@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:09:21 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1043,9 +1043,16 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
     sal_uInt32 nBufLen = rBuffer.getLength();
     if( nPoints > 0 )
     {
-        const BYTE* pFlagArray = rPoly.GetConstFlagAry();
+        /* #i61723# use "higher precision" for rectangles only else rounding
+         * issues similar to those for text can occur. The real solution for
+         * this and #i49748# will be switching to a transformation inside the
+         * produced PDF instead of transforming to user space ourselves.
+         */
+        Point aFakePoint;
+        Point* pFakePoint = rPoly.IsRect() ? NULL : &aFakePoint;
 
-        appendPoint( rPoly[0], rBuffer );
+        const BYTE* pFlagArray = rPoly.GetConstFlagAry();
+        appendPoint( rPoly[0], rBuffer, false, pFakePoint );
         rBuffer.append( " m\r\n" );
         for( int i = 1; i < nPoints; i++ )
         {
@@ -1053,18 +1060,18 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
             {
                 // bezier
                 DBG_ASSERT( pFlagArray[i+1] == POLY_CONTROL && pFlagArray[i+2] != POLY_CONTROL, "unexpected sequence of control points" );
-                appendPoint( rPoly[i], rBuffer );
+                appendPoint( rPoly[i], rBuffer, false, pFakePoint );
                 rBuffer.append( " " );
-                appendPoint( rPoly[i+1], rBuffer );
+                appendPoint( rPoly[i+1], rBuffer, false, pFakePoint );
                 rBuffer.append( " " );
-                appendPoint( rPoly[i+2], rBuffer );
+                appendPoint( rPoly[i+2], rBuffer, false, pFakePoint );
                 rBuffer.append( " c" );
                 i += 2; // add additionally consumed points
             }
             else
             {
                 // line
-                appendPoint( rPoly[i], rBuffer );
+                appendPoint( rPoly[i], rBuffer, false, pFakePoint );
                 rBuffer.append( " l" );
             }
             if( (rBuffer.getLength() - nBufLen) > 65 )
