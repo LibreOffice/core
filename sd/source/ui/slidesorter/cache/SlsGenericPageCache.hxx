@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:51:58 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ void GenericPageCache<
             maPreviewSize);
 
     if (mpQueueProcessor.get() == NULL)
-        mpQueueProcessor.reset(new QueueProcessor(mrView,maRequestQueue,*mpBitmapCache));
+        mpQueueProcessor.reset(new QueueProcessor(mrView,maRequestQueue,mpBitmapCache));
 }
 
 
@@ -255,10 +255,17 @@ void GenericPageCache<
     RequestData, CreationManager, RequestQueue, QueueProcessor
     >::ChangePreviewSize (const Size& rPreviewSize)
 {
-    if (mpBitmapCache.get() != NULL)
-        mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
-            mpBitmapCache, maPreviewSize, rPreviewSize);
-    maPreviewSize = rPreviewSize;
+    if (rPreviewSize != maPreviewSize)
+    {
+        if (mpBitmapCache.get() != NULL)
+        {
+            mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
+                mpBitmapCache, maPreviewSize, rPreviewSize);
+            if (mpQueueProcessor.get() != NULL)
+                mpQueueProcessor->SetBitmapCache(mpBitmapCache);
+            maPreviewSize = rPreviewSize;
+        }
+    }
 }
 
 
@@ -334,7 +341,7 @@ void GenericPageCache<
     {
         ::boost::shared_ptr<BitmapEx> pPreview (mpBitmapCache->GetBitmap(pPage));
         if (pPreview.get()==NULL || pPreview->GetSizePixel()!=rSize)
-            bIsUpToDate = false;
+              bIsUpToDate = false;
     }
 
     if ( ! bIsUpToDate)
@@ -379,8 +386,24 @@ void GenericPageCache<
 {
     if (mpBitmapCache.get() != NULL)
     {
+        // Suspend the queue processing temporarily to avoid the reinsertion
+        // of the request that is to be deleted.
+        mpQueueProcessor->Stop();
+
         maRequestQueue.RemoveRequest(rRequestData);
         mpQueueProcessor->RemoveRequest(rRequestData);
+
+        // Resume the queue processing.
+        if ( ! maRequestQueue.IsEmpty())
+        {
+            try
+            {
+                mpQueueProcessor->Start(maRequestQueue.GetFrontPriorityClass());
+            }
+            catch (::com::sun::star::uno::RuntimeException)
+            {
+            }
+        }
     }
 
     // We do not relase the preview bitmap that is associated with the page
