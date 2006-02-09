@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:51:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,6 +1222,8 @@ private:
     ULONG LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
     ULONG SetSubStreams(SvStorageStreamRef &rTableStream, SvStorageStreamRef &rDataStream);
     ULONG CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
+
+    void ReadDocVars();
 
     bool StartTable(WW8_CP nStartCp);
     bool InEqualApo(int nLvl) const;
