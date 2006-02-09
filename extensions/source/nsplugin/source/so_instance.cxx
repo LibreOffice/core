@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_instance.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:09:32 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -57,6 +58,7 @@
 #include "ns_debug.hxx"
 #include "so_env.hxx"
 #include "nsp_windows.hxx"
+#include "so_closelistener.hxx"
 
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
@@ -86,7 +88,8 @@ SoPluginInstance::SoPluginInstance(long pParent):
     m_xFrame(NULL),
     m_xFrames(NULL),
     m_xDispatcher(NULL),
-    m_xDispatchProvider(NULL)
+    m_xDispatchProvider(NULL),
+    m_pCloseListener(NULL)
 {
     m_nWidth = 0;
     m_nHeight = 0;
@@ -458,6 +461,15 @@ int SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
+         // register the closelistener that will prevent closing of the component
+        Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
+        if ( xCloseable.is() )
+        {
+            m_pCloseListener = new PluginDocumentClosePreventer();
+            m_xCloseListener = Reference< util::XCloseListener >( m_pCloseListener );
+            xCloseable->addCloseListener( m_xCloseListener );
+        }
+
         //free the input stream, it is hold by the m_xComponent
         xInputStream = Reference<io::XInputStream>();
 
@@ -516,37 +528,47 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
 {
     sal_Bool bRetval(sal_True);
 
-    m_hParent = hParent;
-
-    debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetWindow %s : %d\n",
-        ::rtl::OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(),
-        m_sURL.getLength() );
-    m_nWidth = w;
-    m_nHeight =h;
-    m_nX = x;
-    m_nY = y;
-
-    if (0 == m_sURL.getLength())
-        return sal_True;
-
-    if(!mxRemoteMSF.is())
+    if ( m_hParent && !hParent )
     {
-        bRetval = Connect();  // Connect to listening so and get mxRemoteMSF
-        if(!bRetval)
-        {
-            debug_fprintf(NSP_LOG_APPEND, "can not connect to remote service manager\n");
-            return sal_False;
-        }
+        // the plugin instance has the parent window set already and now it becomes NULL as parent window
+        // that means that the instance should be closed
+        Destroy();
+        m_hParent = hParent;
     }
-    debug_fprintf(NSP_LOG_APPEND, "in SoPluginInstance::SetWindow, begin LoadDocument(hParent)\n");
-    bRetval = LoadDocument(hParent);  // Load document into current window
-    if(!bRetval){
-        // try to reload document again
-        debug_fprintf(NSP_LOG_APPEND, "load document error, try to reload it once again\n");
-        mxRemoteMSF = Reference< XMultiServiceFactory >();
-        m_bInit = sal_False;
-        bRetval = LoadDocument(hParent);
-        debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);
+    else
+    {
+        m_hParent = hParent;
+
+        debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetWindow %s : %d\n",
+            ::rtl::OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(),
+            m_sURL.getLength() );
+        m_nWidth = w;
+        m_nHeight =h;
+        m_nX = x;
+        m_nY = y;
+
+        if (0 == m_sURL.getLength())
+            return sal_True;
+
+        if(!mxRemoteMSF.is())
+        {
+            bRetval = Connect();  // Connect to listening so and get mxRemoteMSF
+            if(!bRetval)
+            {
+                debug_fprintf(NSP_LOG_APPEND, "can not connect to remote service manager\n");
+                return sal_False;
+            }
+        }
+        debug_fprintf(NSP_LOG_APPEND, "in SoPluginInstance::SetWindow, begin LoadDocument(hParent)\n");
+        bRetval = LoadDocument(hParent);  // Load document into current window
+        if(!bRetval){
+            // try to reload document again
+            debug_fprintf(NSP_LOG_APPEND, "load document error, try to reload it once again\n");
+            mxRemoteMSF = Reference< XMultiServiceFactory >();
+            m_bInit = sal_False;
+            bRetval = LoadDocument(hParent);
+            debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);
+        }
     }
 
     return bRetval;
@@ -558,46 +580,60 @@ sal_Bool SoPluginInstance::Destroy(void)
     if(m_dParentStyl != 0)
         NSP_RestoreWinStyl(m_hParent, m_dParentStyl);
 #endif
-    if(m_xDispatcher.is()){
-     m_xDispatcher->executeDispatch(m_xDispatchProvider,
-                ::rtl::OUString::createFromAscii(".uno:CloseFrame"),
-                ::rtl::OUString::createFromAscii("_top"), 0,
-                Sequence< ::com::sun::star::beans::PropertyValue >() );
-    }
+//  if(m_xDispatcher.is()){
+//   m_xDispatcher->executeDispatch(m_xDispatchProvider,
+//                ::rtl::OUString::createFromAscii(".uno:CloseFrame"),
+//                ::rtl::OUString::createFromAscii("_top"), 0,
+//                Sequence< ::com::sun::star::beans::PropertyValue >() );
+//  }
 
-/*
-    Reference< util::XCloseable > xCloseable(m_xFrame, uno::UNO_QUERY);
-    Reference< lang::XComponent > xDisposable(m_xFrame, uno::UNO_QUERY);
+    uno::Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
 
     try
     {
-        if(xCloseable.is())
-            xCloseable->close(sal_True); //xCloseable->close(sal_False);
-        else if (xDisposable.is())
-            xDisposable->dispose();
+        if ( m_xCloseListener.is() )
+        {
+            if ( m_pCloseListener )
+                m_pCloseListener->StopPreventClose();
 
-        Reference< lang::XComponent > x(m_xUnoWin, uno::UNO_QUERY);
-        if(x.is())
-            x->dispose();
+            if ( xCloseable.is() )
+                xCloseable->removeCloseListener( m_xCloseListener );
+        }
     }
-    catch (const util::CloseVetoException&)
+    catch( uno::Exception& )
+    {}
+
+    try
     {
-        return sal_False;
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[0] <<= m_xFrame;
+        uno::Reference< lang::XComponent > xDocumentCloser(
+            mxRemoteMSF->createInstanceWithArguments(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.DocumentCloser" ) ),
+                aArgs ),
+            uno::UNO_QUERY_THROW );
+
+        xDocumentCloser->dispose(); // this call should close the document
     }
-    catch (const lang::DisposedException&)
+    catch( uno::Exception& )
     {
-        return sal_False;
-    }
-    catch (const uno::RuntimeException&){
-        return sal_False;
-    }
-    catch (const uno::Exception&)
-    {
-        return sal_False;
+           debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin.exe, could not close the document correctly!\n");
+        try
+        {
+            if ( xCloseable.is() )
+                xCloseable->close( sal_True );
+            else
+            {
+                uno::Reference< lang::XComponent > xDisposable( m_xFrame, uno::UNO_QUERY );
+                if ( xDisposable.is() )
+                    xDisposable->dispose();
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
     }
 
-    m_xFrame.clear();
-*/
     m_xUnoWin = Reference< awt::XWindow >();
     m_xComponent = Reference< XComponent >();
     m_xFrame = Reference< frame::XFrame >();
