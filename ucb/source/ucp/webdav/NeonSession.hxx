@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 08:47:16 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 #endif
 #ifndef _NEONTYPES_HXX_
 #include "NeonTypes.hxx"
+#endif
+
+#ifdef NEONTWOFIVE
+typedef void (*ne_header_handler)(void *userdata, const char *value);
 #endif
 
 namespace ucbhelper { class ProxyDecider; }
