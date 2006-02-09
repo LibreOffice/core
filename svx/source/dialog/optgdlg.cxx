@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:58:40 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -876,7 +876,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
             case 1: eSet = SFX_SYMBOLS_STYLE_DEFAULT;    break;
             case 2: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
             case 3: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
-//            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
+            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
             default:
                 DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconStyleLB should not be possible!" );
         }
@@ -1063,7 +1063,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
             case SFX_SYMBOLS_STYLE_DEFAULT:    nStyleLB_InitialSelection = 1; break;
             case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 2; break;
             case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 3; break;
-//            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
+            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
             default:                           nStyleLB_InitialSelection = 0; break;
         }
     }
