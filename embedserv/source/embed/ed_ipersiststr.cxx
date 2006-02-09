@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:53:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
 #include <com/sun/star/frame/XLoadable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -401,7 +404,13 @@ STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
 
 STDMETHODIMP EmbedDocument_Impl::IsDirty()
 {
-    return m_bIsDirty ? S_OK : S_FALSE;
+    if ( m_bIsDirty )
+        return S_OK;
+
+    uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    if ( xMod.is() )
+        return xMod->isModified() ? S_OK : S_FALSE;
+    return S_FALSE;
 }
 
 STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
@@ -682,7 +691,12 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                                 m_pOwnStream = CComPtr< IStream >();
                                 m_pExtStream = CComPtr< IStream >();
                                 if ( fSameAsLoad || pStgSave == m_pMasterStorage )
+                                {
+                                    uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+                                    if ( xMod.is() )
+                                        xMod->setModified( sal_False );
                                     m_bIsDirty = sal_False;
+                                }
                             }
                         }
                     }
@@ -890,7 +904,12 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
             m_aFileName = ::rtl::OUString();
 
             if ( !pszFileName || fRemember )
+            {
+                uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+                if ( xMod.is() )
+                    xMod->setModified( sal_False );
                 m_bIsDirty = sal_False;
+            }
         }
         catch( uno::Exception& )
         {
