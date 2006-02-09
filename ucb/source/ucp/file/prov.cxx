@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 17:17:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,7 +387,22 @@ FileProvider::compareContentIds(
             error = aItem2.getFileStatus( aStatus2 );
 
         if ( error == osl::FileBase::E_None )
+        {
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
+
+// Quick hack for Windows to threat all file systems as case insensitive
+#ifdef  WNT
+            if ( 0 != iComp )
+            {
+                error = osl::FileBase::getSystemPathFromFileURL( aStatus1.getFileURL(), aPath1 );
+                if ( error == osl::FileBase::E_None )
+                    error = osl::FileBase::getSystemPathFromFileURL( aStatus2.getFileURL(), aPath2 );
+
+                if ( error == osl::FileBase::E_None )
+                    iComp = _wcsicmp( aPath1.getStr(), aPath2.getStr() );
+            }
+#endif
+        }
     }
 
     return iComp;
