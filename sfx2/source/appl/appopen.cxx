@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:11:16 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
         SfxTopViewFrame *pFrame;
         for( pFrame = (SfxTopViewFrame*)
                  SfxViewFrame::GetFirst( xDoc, TYPE(SfxTopViewFrame) );
-             pFrame && !pFrame->IsVisible();
+             pFrame && !pFrame->IsVisible_Impl();
              pFrame = (SfxTopViewFrame*)
                  SfxViewFrame::GetNext( *pFrame, xDoc, TYPE(SfxTopViewFrame) ) );
         if ( pFrame )
@@ -315,23 +315,10 @@ void SetTemplate_Impl( const String &rFileName,
                         const String &rLongName,
                         SfxObjectShell *pDoc)
 {
-    SfxDocumentInfo &rInfo = pDoc->GetDocInfo();
-    rInfo.Clear();
-
     // write TemplateName to DocumentInfo of document
     // TemplateDate stays as default (=current date)
-    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
-    {
-        String aFoundName;
-        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rLongName, aFoundName ) )
-        {
-            INetURLObject aObj( rFileName );
-            rInfo.SetTemplateFileName( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            rInfo.SetTemplateName( rLongName );
-            rInfo.SetTemplateConfig( sal_False );
-        }
-    }
-
+    SfxDocumentInfo &rInfo = pDoc->GetDocInfo();
+    rInfo.ResetFromTemplate( rLongName, rFileName );
     pDoc->FlushDocInfo();
 }
 
