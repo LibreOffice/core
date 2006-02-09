@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:38:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,7 +881,7 @@ File gid_File_Lib_Go
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
