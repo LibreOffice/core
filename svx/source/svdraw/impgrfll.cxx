@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:21:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,12 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
     sal_Int32 nDX( ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue() );
     sal_Int32 nDY( ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue() );
 
+    UINT16 nTransp( ((XFillTransparenceItem&)
+                        (rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue() );
+    XFillFloatTransparenceItem aFillFloatTransparence((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
+
     GDIMetaFile* pMtf=NULL;
-    if( eFillStyle != XFILL_NONE &&
+    if( ( eFillStyle != XFILL_NONE ) && ( !aFillFloatTransparence.IsEnabled() ) && ( !nTransp ) &&
         (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
     {
         XPolyPolygon aGeometry;
