@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:57:58 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1123,7 +1123,7 @@ ExtraTable aSymbolExtraTab2[] =
     {0x221A, 0xD6}, {0x22C5, 0xD7}, {0x00AC, 0xD8}, {0x2227, 0xD9},
     {0x2228, 0xDA}, {0x21D4, 0xDB}, {0x21D0, 0xDC}, {0x21D2, 0xDE},
     {0x2329, 0xE1}, {0x2211, 0xE5}, {0x232A, 0xF1}, {0x222B, 0xF2},
-    {0x2320, 0xF3}, {0x2321, 0xF5}
+    {0x2320, 0xF3}, {0x2321, 0xF5}, {0x2013, 0x2D}
 };
 
 ExtraTable aSymbolExtraTab[] =
