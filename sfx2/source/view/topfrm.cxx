@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:06:27 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
+        pFrame->pImp->bHidden = FALSE;
         if ( pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
@@ -407,7 +408,21 @@ public:
 void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        SfxObjectShell* pDoc = pFrame->GetObjectShell();
+        if ( pDoc && !pFrame->IsVisible_Impl() )
+        {
+            pDoc->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+            pFrame->Show();
+            if ( pDoc->Get_Impl()->bHiddenLockedByAPI )
+            {
+                pDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
+                pDoc->OwnerLock(FALSE);
+            }
+        }
+
         pFrame->Resize();
+    }
     else
         Window::StateChanged( nStateChange );
 }
@@ -597,7 +612,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
         pFrame->InsertDocument( pDoc );
-        if ( pWindow && !bHidden )
+        if ( pWindow )
             pWindow->Show();
     }
 
@@ -1043,6 +1058,11 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             if ( pPluginItem && pPluginItem->GetValue() == 3 )
                 pFrame->Resize(TRUE);
         }
+    }
+    else
+    {
+        DBG_ASSERT( !IsInPlace() && !pPluginMode && !pPluginItem, "Special modes not compatible with hidden mode!" );
+        GetWindow().Show();
     }
 
     if ( bSetFocus )
