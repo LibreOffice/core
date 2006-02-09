@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:39:29 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include "rtl/tencinfo.h"
+#include <unotools/localfilehelper.hxx>
 
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
@@ -54,6 +55,8 @@
 #include "docinf.hxx"
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
+#include "appdata.hxx"
+#include "doctempl.hxx"
 
 //========================================================================
 
@@ -1252,6 +1255,35 @@ void SfxDocumentInfo::Clear()
     bPortableGraphics   = _bPortableGraphics;
     bSaveGraphicsCompressed = _bSaveGraphicsCompressed;
     bSaveOriginalGraphics = _bSaveOriginalGraphics;
+}
+
+void SfxDocumentInfo::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
+{
+    bReadOnly = FALSE;
+    bPasswd = FALSE;
+
+    aCreated  = SfxStamp( TIMESTAMP_INVALID_DATETIME );
+    aChanged  = SfxStamp( TIMESTAMP_INVALID_DATETIME );
+    aPrinted  = SfxStamp( TIMESTAMP_INVALID_DATETIME );
+    aTitle.Erase();
+
+    aTemplateName.Erase();
+    aTemplateFileName.Erase();
+    aTemplateDate = DateTime();
+    lTime = 0;
+    nDocNo = 1;
+    bTemplateConfig = sal_False;
+
+    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+    {
+        String aFoundName;
+        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+        {
+            INetURLObject aObj( rFileName );
+            aTemplateFileName = aObj.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            aTemplateName = rTemplateName;
+        }
+    }
 }
 
 const SfxDocumentInfo& SfxDocumentInfo::operator=( const SfxDocumentInfo& rInf)
