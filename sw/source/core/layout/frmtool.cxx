@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:24:22 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3556,11 +3556,13 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
 {
     SwFrm *pMinFrm = 0, *pTmpFrm;
     SwRect aCalcRect;
+    bool bClientIterChanged = false;
 
     SwClientIter aIter( rMod );
     do {
         pMinFrm = 0;
         Size aMinSize;
+        bClientIterChanged = false;
 
         for( pTmpFrm = (SwFrm*)aIter.First( TYPE( SwFrm )); pTmpFrm;
                 pTmpFrm = (SwFrm*)aIter.Next() )
@@ -3570,6 +3572,14 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
             {
                 if( pPoint )
                 {
+                    // --> FME 2006-02-03 #127369#
+                    // Set pointer to be watched. If a client is removed from
+                    // rMod (e.g., by deleting a frame), the bWatchDeleted flag
+                    // is set at the SwClientIter.
+                    const bool bWatchClientSet = pMinFrm != 0;
+                    aIter.SetWatchClient( pMinFrm );
+                    // <--
+
                     if( bCalcFrm )
                     {
                         // --> OD 2005-03-04 #b6234250# - format parent Writer
@@ -3586,8 +3596,17 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                         pTmpFrm->Calc();
                     }
 
-                    if( aIter.IsChanged() )     // der Liste hat sich ver-
-                        break;                  // aendert, neu anfangen !!
+                    // --> FME 2006-02-03 #127369#
+                    // The SwClientIter list has changed. Restart.
+                    // aIter.IsChanged basically checks if pTmpFrm has been
+                    // deleted. bWatchClientSet && aIter.GetWatchClient()
+                    // checks if pMinFrm has been deleted.
+                    // <--
+                    if( aIter.IsChanged() || ( bWatchClientSet && !aIter.GetWatchClient() ) )
+                    {
+                        bClientIterChanged = true;
+                        break;
+                    }
 
                     // bei Flys ggfs. ueber den Parent gehen wenn sie selbst
                     // nocht nicht "formatiert" sind
@@ -3650,7 +3669,7 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                 pMinFrm = pTmpFrm;
                 aMinSize = aCalcRect.SSize();
             }
-    } while( aIter.IsChanged() );
+    } while( bClientIterChanged );
 
     if( pPos && pMinFrm && pMinFrm->IsTxtFrm() )
         return ((SwTxtFrm*)pMinFrm)->GetFrmAtPos( *pPos );
