@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonHeadRequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:11:23 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,58 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+#ifdef NEONTWOFIVE
+static void process_headers(ne_request *req,
+                            DAVResource &rResource,
+                            const std::vector< ::rtl::OUString > &rHeaderNames)
+{
+    void *cursor = NULL;
+    const char *name, *value;
+
+    while ((cursor = ne_response_header_iterate(req, cursor,
+                                                &name, &value)) != NULL) {
+        rtl::OUString aHeaderName( rtl::OUString::createFromAscii( name ) );
+        rtl::OUString aHeaderValue( rtl::OUString::createFromAscii( value ) );
+
+        // Note: Empty vector means that all headers are requested.
+        bool bIncludeIt = ( rHeaderNames.size() == 0 );
+
+        if ( !bIncludeIt )
+        {
+            // Check whether this header was requested.
+            std::vector< ::rtl::OUString >::const_iterator it(
+                rHeaderNames.begin() );
+            const std::vector< ::rtl::OUString >::const_iterator end(
+                rHeaderNames.end() );
+
+            while ( it != end )
+            {
+                if ( (*it) == aHeaderName )
+                    break;
+
+                ++it;
+            }
+
+            if ( it != end )
+                bIncludeIt = true;
+        }
+
+        if ( bIncludeIt )
+        {
+            // Create & set the PropertyValue
+            beans::PropertyValue thePropertyValue;
+            thePropertyValue.Handle = -1;
+            thePropertyValue.Name   = aHeaderName;
+            thePropertyValue.State  = beans::PropertyState_DIRECT_VALUE;
+
+            thePropertyValue.Value  <<= aHeaderValue;
+
+            // Add the newly created PropertyValue
+            rResource.properties.push_back( thePropertyValue );
+        }
+    }
+}
+#else
 struct NeonHeadRequestContext
 {
     DAVResource * pResource;
@@ -113,6 +165,7 @@ extern "C" void NHR_ResponseHeaderCatcher( void * userdata,
         }
     }
 }
+#endif
 
 
 // -------------------------------------------------------------------
@@ -137,10 +190,16 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ) );
 
+#ifndef NEONTWOFIVE
     NeonHeadRequestContext aCtx( &ioResource, &inHeaderNames );
     ne_add_response_header_catcher( req, NHR_ResponseHeaderCatcher, &aCtx );
+#endif
 
     nError = ne_request_dispatch( req );
+
+#ifdef NEONTWOFIVE
+    process_headers(req, ioResource, inHeaderNames);
+#endif
 
     if ( nError == NE_OK && ne_get_status( req )->klass != 2 )
         nError = NE_ERROR;
