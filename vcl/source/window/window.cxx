@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.227 $
+ *  $Revision: 1.228 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:17:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:13:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,15 @@ WindowImpl::~WindowImpl()
 {
 }
 
+
+// -----------------------------------------------------------------------
+
+// helper method to allow inline constructor even for pWindow!=NULL case
+void ImplDelData::AttachToWindow( Window* pWindow )
+{
+    if( pWindow )
+        pWindow->ImplAddDel( this );
+}
 
 // -----------------------------------------------------------------------
 
@@ -3919,6 +3928,10 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
 // -----------------------------------------------------------------------
 void Window::ImplGrabFocus( USHORT nFlags )
 {
+    // some event listeners do really bad stuff
+    // => prepare for the worst
+    ImplDelData aDogTag( this );
+
     // Es soll immer das Client-Fenster den Focus bekommen. Falls
     // wir mal auch Border-Fenstern den Focus geben wollen,
     // muessten wir bei allen GrabFocus()-Aufrufen in VCL dafuer
@@ -4199,8 +4212,11 @@ void Window::ImplGrabFocus( USHORT nFlags )
                 if ( !ImplCallPreNotify( aNEvt ) )
                     GetFocus();
                 ImplCallActivateListeners( pOldFocusWindow );
-                mpWindowImpl->mnGetFocusFlags = 0;
-                mpWindowImpl->mbInFocusHdl = FALSE;
+                if( !aDogTag.IsDelete() )
+                {
+                    mpWindowImpl->mnGetFocusFlags = 0;
+                    mpWindowImpl->mbInFocusHdl = FALSE;
+                }
             }
         }
 
