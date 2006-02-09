@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:40:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2529,6 +2529,49 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
     }
 }
 
+// from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
+static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, String& rFontName)
+{
+    StarSymbolToMSMultiFont *pConvert = 0;
+    FontFamily eFamily = FAMILY_DECORATIVE;
+
+    if (!pConvert)
+    {
+        pConvert = CreateStarSymbolToMSMultiFont();
+    }
+    sal_Unicode cChar = rNumStr.GetChar(0);
+    String sFont = pConvert->ConvertChar(cChar);
+    if (sFont.Len())
+    {
+        rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
+        rFontName = sFont;
+        rChrSet = RTL_TEXTENCODING_SYMBOL;
+    }
+    else if ( (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
+    {
+        /*
+        Ok we can't fit into a known windows unicode font, but
+        we are not in the private area, so we are a
+        standardized symbol, so turn off the symbol bit and
+        let words own font substitution kick in
+        */
+        rChrSet = RTL_TEXTENCODING_UNICODE;
+        eFamily = FAMILY_SWISS;
+        rFontName = ::GetFontToken(rFontName, 0);
+    }
+    else
+    {
+        /*
+        Well we don't have an available substition, and we're
+        in our private area, so give up and show a standard
+        bullet symbol
+        */
+        rFontName.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Wingdings"));
+        rNumStr = static_cast< sal_Unicode >(0x6C);
+     }
+     delete pConvert;
+}
+
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > aXIndexReplace;
@@ -2648,6 +2691,18 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
+                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAscii("starsymbol") ||
+                            aFontDesc.Name.equalsIgnoreAsciiCaseAscii("opensymbol") )
+                        {
+                            String sFontName = aFontDesc.Name;
+                            String sNumStr = cBulletId;
+                            rtl_TextEncoding eChrSet = aFontDesc.CharSet;
+                            lcl_SubstituteBullet(sNumStr,eChrSet,sFontName);
+                            aFontDesc.Name = sFontName;
+                            cBulletId = sNumStr.GetChar( 0 );
+                            aFontDesc.CharSet = eChrSet;
+                         }
+
                         if ( aFontDesc.Name.getLength() )
                         {
 /*
