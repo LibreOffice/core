@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:59:15 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,10 +264,12 @@ struct SfxViewFrame_Impl
     sal_Bool            bModal:1;
     sal_Bool            bEnabled:1;
     sal_Bool            bEventFlag:1;
+    sal_Bool            bWindowWasEnabled:1;
 
                         SfxViewFrame_Impl()
                         : pReloader(0 )
                         , pMacro( 0 )
+                        , bWindowWasEnabled(sal_True)
                         {}
 
                         ~SfxViewFrame_Impl()
@@ -1217,12 +1219,13 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
     GetFrame()->ReleasingComponent_Impl( sal_True );
+    if ( GetWindow().HasChildPathFocus( sal_True ) )
+    {
+        DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
+        GetWindow().GrabFocus();
+    }
+
     SfxViewShell *pDyingViewSh = GetViewShell();
-    pImp->aLastType = xObjSh->Type();
-
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, xObjSh) );
-
-    HACK(MI weiss nicht wie !pSh sein kann - nach PlugIns isses aber so)
     if ( pDyingViewSh )
     {
         SetRestoreView_Impl( bStoreView );
@@ -1243,49 +1246,45 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
                 pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
         }
         pDispatcher->Pop( *pDyingViewSh );
+        pDispatcher->Flush();
+        pDyingViewSh->DisconnectAllClients();
+        SetViewShell_Impl(0);
+        delete pDyingViewSh;
     }
 #ifdef DBG_UTIL
     else
         DBG_ERROR("Keine Shell");
 #endif
 
-    GetDispatcher()->Flush();
-
-    if ( GetWindow().HasChildPathFocus( sal_True ) )
+    if ( xObjSh.Is() )
     {
-        DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
-        GetWindow().GrabFocus();
-    }
+         pImp->aLastType = xObjSh->Type();
+        pDispatcher->Pop( *xObjSh );
+        SfxModule* pModule = xObjSh->GetModule();
+        if( pModule )
+            pDispatcher->RemoveShell_Impl( *pModule );
+        pDispatcher->Flush();
+        EndListening( *xObjSh );
 
-    pDyingViewSh->DisconnectAllClients();
-    SetViewShell_Impl(0);
-    delete pDyingViewSh;
+        SFX_NOTIFY( *xObjSh, xObjSh->Type(),
+                SfxSimpleHint(SFX_HINT_TITLECHANGED),
+                TYPE(SfxSimpleHint) );
 
-    pDispatcher->Pop( *xObjSh );
-    SfxModule* pModule = xObjSh->GetModule();
-    if( pModule )
-        pDispatcher->RemoveShell_Impl( *pModule );
+        SFX_NOTIFY( *xObjSh, xObjSh->Type(),
+                SfxSimpleHint(SFX_HINT_DOCCHANGED),
+                TYPE(SfxSimpleHint) );
 
-    pDispatcher->Flush();
-    EndListening( *xObjSh );
-    SFX_NOTIFY( *xObjSh, xObjSh->Type(),
-            SfxSimpleHint(SFX_HINT_TITLECHANGED),
-            TYPE(SfxSimpleHint) );
-
-    SFX_NOTIFY( *xObjSh, xObjSh->Type(),
-            SfxSimpleHint(SFX_HINT_DOCCHANGED),
-            TYPE(SfxSimpleHint) );
-
-    if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        xObjSh->DoClose();
-    SfxObjectShellRef xDyingObjSh = xObjSh;
-    xObjSh.Clear();
-    if( ( GetFrameType() & SFXFRAME_HASTITLE ) && pImp->nDocViewNo )
-        xDyingObjSh->GetNoSet_Impl().ReleaseIndex(pImp->nDocViewNo-1);
-    if ( pImp->bObjLocked )
-    {
-        xDyingObjSh->OwnerLock( sal_False );
-        pImp->bObjLocked = sal_False;
+        if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+            xObjSh->DoClose();
+        SfxObjectShellRef xDyingObjSh = xObjSh;
+        xObjSh.Clear();
+        if( ( GetFrameType() & SFXFRAME_HASTITLE ) && pImp->nDocViewNo )
+            xDyingObjSh->GetNoSet_Impl().ReleaseIndex(pImp->nDocViewNo-1);
+        if ( pImp->bObjLocked )
+        {
+            xDyingObjSh->OwnerLock( sal_False );
+            pImp->bObjLocked = sal_False;
+        }
     }
 
     GetDispatcher()->SetDisableFlags( 0 );
@@ -2100,7 +2099,10 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         else
         {
             Window *pWindow = &GetFrame()->GetTopFrame()->GetWindow();
-            pWindow->EnableInput( bEnable, TRUE );
+            if ( !bEnable )
+                pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
+            if ( !bEnable || pImp->bWindowWasEnabled )
+                pWindow->EnableInput( bEnable, TRUE );
         }
 
         // cursor and focus
