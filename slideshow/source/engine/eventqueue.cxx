@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:25:42 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ namespace presentation
             return true;
         }
 
-        double EventQueue::process()
+        void EventQueue::process()
         {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
 
@@ -191,16 +191,19 @@ namespace presentation
 #endif
                 }
             }
-
-            // return time for next entry (if any)
-            return maEvents.empty() ?
-                ::std::numeric_limits<double>::max() :
-                maEvents.top().nTime;
         }
 
-        bool EventQueue::isEmpty()
+        bool EventQueue::isEmpty() const
         {
             return maEvents.empty();
+        }
+
+        double EventQueue::nextTimeout() const
+        {
+            // return time for next entry (if any)
+            return isEmpty() ?
+                ::std::numeric_limits<double>::max() :
+                maEvents.top().nTime - mpTimer->getElapsedTime();
         }
 
         void EventQueue::clear()
