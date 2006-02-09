@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:39 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ class SfxErrorHandler;
 class OutputDevice;
 class SdPage;
 class SdDrawDocument;
+class SfxFrame;
 
 namespace sd {
 class DrawDocShell;
@@ -183,6 +184,12 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
+    SfxFrame* ExecuteNewDocument( SfxRequest& rReq );
+
+    static void ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium );
+    static SfxFrame* CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTargetFrame = 0  );
+    static SfxFrame* CreateFromTemplate( const String& rTemplatePath, SfxFrame* pTargetFrame = 0 );
+
     /** The resource container controls the lifetime of some singletons.
     */
     ::std::auto_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
