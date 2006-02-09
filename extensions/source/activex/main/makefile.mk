@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:58:16 $
+#   last change: $Author: rt $ $Date: 2006-02-09 13:49:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ SLOFILES=\
     $(SLO)$/SOActiveX.obj \
     $(SLO)$/SOComWindowPeer.obj \
     $(SLO)$/SODispatchInterceptor.obj \
+    $(SLO)$/SOActionsApproval.obj \
     $(SLO)$/StdAfx2.obj
 
 SHL1TARGET=$(TARGET)
