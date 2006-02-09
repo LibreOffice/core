@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:47:23 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,22 @@ End
 
 File gid_File_Help_Swriter_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(swriter);
+    Patchfiles = ("swriter.db",
+                  "swriter.ht",
+                  "swriter.jar",
+                  "swriter.key",
+                  "swriter.tree",
+                  "swriter.idx/CONTEXTS",
+                  "swriter.idx/DICTIONARY",
+                  "swriter.idx/DOCS",
+                  "swriter.idx/DOCS.TAB",
+                  "swriter.idx/EDGE",
+                  "swriter.idx/LINKNAMES",
+                  "swriter.idx/OFFSETS",
+                  "swriter.idx/POSITIONS",
+                  "swriter.idx/SCHEMA"); 
 End
 
 #endif
