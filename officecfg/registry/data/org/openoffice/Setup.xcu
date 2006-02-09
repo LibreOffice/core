@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:53:27 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,8 +616,7 @@
                         org.openoffice.Office.Common/Misc/PluginsEnabled
                         org.openoffice.Office.Common/Misc/SymbolSet
                         org.openoffice.Office.Common/Misc/UseSystemFileDialog
-                        org.openoffice.Office.Common/Misc/UseSystemFileDialog
-                        org.openoffice.Office.Common/Misc/SymbolsStyle
+                        org.openoffice.Office.Common/Misc/SymbolStyle
                         org.openoffice.Office.Common/OfficeObjects
                         org.openoffice.Office.Common/Passwords
                         org.openoffice.Office.Common/Print/PrintingModifiesDocument
