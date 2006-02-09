@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:12:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,8 +107,8 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_TOOLBOXSTYLE         2
 #define PROPERTYNAME_USESYSTEMFILEDIALOG    ASCII_STR("UseSystemFileDialog")
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG  3
-#define PROPERTYNAME_SYMBOLSSTYLE           ASCII_STR("SymbolsStyle")
-#define PROPERTYHANDLE_SYMBOLSSTYLE         4
+#define PROPERTYNAME_SYMBOLSTYLE            ASCII_STR("SymbolStyle")
+#define PROPERTYHANDLE_SYMBOLSTYLE          4
 
 #define PROPERTYCOUNT                       5
 
@@ -285,7 +285,7 @@ static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
         case STYLE_SYMBOLS_DEFAULT:    return SFX_SYMBOLS_STYLE_DEFAULT;
         case STYLE_SYMBOLS_HICONTRAST: return SFX_SYMBOLS_STYLE_HICONTRAST;
         case STYLE_SYMBOLS_INDUSTRIAL: return SFX_SYMBOLS_STYLE_INDUSTRIAL;
-//      case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
+        case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
     }
 
     return SFX_SYMBOLS_STYLE_AUTO;
@@ -299,7 +299,7 @@ static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
         case SFX_SYMBOLS_STYLE_DEFAULT:    return STYLE_SYMBOLS_DEFAULT;
         case SFX_SYMBOLS_STYLE_HICONTRAST: return STYLE_SYMBOLS_HICONTRAST;
         case SFX_SYMBOLS_STYLE_INDUSTRIAL: return STYLE_SYMBOLS_INDUSTRIAL;
-//      case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
+        case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
     }
 
     return STYLE_SYMBOLS_AUTO;
@@ -375,13 +375,13 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 break;
             }
 
-            case PROPERTYHANDLE_SYMBOLSSTYLE :
+            case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 ::rtl::OUString aSymbolsStyle;
                 if( seqValues[nProperty] >>= aSymbolsStyle )
                     SetSymbolsStyleName( aSymbolsStyle );
                 else
-                    DBG_ERROR("Wrong type of \"Misc\\SymbolsStyle\"!" );
+                    DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
             }
@@ -461,12 +461,12 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                         }
                                                     break;
-            case PROPERTYHANDLE_SYMBOLSSTYLE        :   {
+            case PROPERTYHANDLE_SYMBOLSTYLE         :   {
                                                             ::rtl::OUString aSymbolsStyle;
                                                             if( seqValues[nProperty] >>= aSymbolsStyle )
                                                                 SetSymbolsStyleName( aSymbolsStyle );
                                                             else
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolsStyle\"!" );
+                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                         }
                                                     break;
         }
@@ -605,7 +605,7 @@ void SvtMiscOptions_Impl::Commit()
                 break;
             }
 
-            case PROPERTYHANDLE_SYMBOLSSTYLE :
+            case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO )
                     seqValues[nProperty] <<= GetSymbolsStyleName();
@@ -629,7 +629,7 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_USESYSTEMFILEDIALOG,
-        PROPERTYNAME_SYMBOLSSTYLE
+        PROPERTYNAME_SYMBOLSTYLE
     };
 
     // Initialize return sequence with these list ...
