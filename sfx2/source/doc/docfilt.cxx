@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:39:13 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,8 +386,9 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
                 {
                     // get filter from storage MediaType
                     pFilter = rMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
-                    if ( !pFilter && bTemplate )
+                    if ( !pFilter )
                         // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
+                        // or storage *is* a template, but bTemplate is not set
                         pFilter = rMatcher.GetFilter4ClipBoardId( nClipId );
                 }
 
