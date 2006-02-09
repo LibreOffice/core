@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:34:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,9 @@ class SW_DLLPUBLIC SwClientIter
     // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
     // Clients, wenn der Iterator gerade draufsteht.
     SwClientIter *pNxtIter;
+
+    SwClient* mpWatchClient;    // if set, SwModify::_Remove checks if this client is removed
+
     TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
@@ -249,6 +252,9 @@ public:
 
     SwClient* First( TypeId nType );
     SwClient* Next();
+
+    const SwClient* GetWatchClient() const { return mpWatchClient; }
+    void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }
 };
 
 inline SwClient* SwClientIter::GoRoot()     // wieder ab Root anfangen
