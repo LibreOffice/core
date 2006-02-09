@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:17:38 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,11 +378,11 @@ DockingManager::~DockingManager()
 {
     ::std::vector< ImplDockingWindowWrapper* >::iterator p;
     p = mDockingWindows.begin();
-    while( p != mDockingWindows.end() )
+    for(; p != mDockingWindows.end(); ++p )
     {
         delete (*p);
-        mDockingWindows.erase( p );
-        p++;
+        // HDU: no erasing needed as the vector will be destructed immediately
+        // p = mDockingWindows.erase( p );
     }
 }
 
