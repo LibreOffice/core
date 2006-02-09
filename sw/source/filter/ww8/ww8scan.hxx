@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:22:52 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1);
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
     USHORT nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
-    ::std::vector<ww::bytes>* pExtraArray = 0);
+    ::std::vector<ww::bytes>* pExtraArray = 0, ::std::vector<String>* pValueArray = 0);
 
 struct WW8FieldDesc
 {
