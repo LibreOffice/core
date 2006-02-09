@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:18:50 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1657,6 +1657,19 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             }
         }
     }
+
+    // --> FME 2006-01-13 #130210# Check if character *behind* the portion has
+    // to become the hook:
+    if ( i == nEnd && i < GetTxt().Len() && bNumFound )
+    {
+        const xub_Unicode cPos = GetChar( i );
+        if ( cPos != cTabDec && cPos != cTabSep && ( 0x2F >= cPos || cPos >= 0x3A ) )
+        {
+            cHookChar = GetChar( i );
+            SetTabDecimal( cHookChar );
+        }
+    }
+
     return i;
 }
 
