@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:07:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,6 +408,8 @@ BOOL PSDReader::ImplReadBody()
                             nX = 0;
                             nY++;
                             nBitCount = -1;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -427,6 +429,8 @@ BOOL PSDReader::ImplReadBody()
                             nX = 0;
                             nY++;
                             nBitCount = -1;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -453,6 +457,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -468,6 +474,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -498,6 +506,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -513,6 +523,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -535,6 +547,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -551,6 +565,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -573,6 +589,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -589,6 +607,8 @@ BOOL PSDReader::ImplReadBody()
                         {
                             nX = 0;
                             nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                         }
                     }
                 }
@@ -626,6 +646,8 @@ BOOL PSDReader::ImplReadBody()
                             {
                                 nX = 0;
                                 nY++;
+                            if ( nY == mpFileHeader->nRows )
+                                break;
                             }
                         }
                     }
@@ -651,6 +673,8 @@ BOOL PSDReader::ImplReadBody()
                             {
                                 nX = 0;
                                 nY++;
+                                if ( nY == mpFileHeader->nRows )
+                                    break;
                             }
                         }
                     }
@@ -701,6 +725,8 @@ BOOL PSDReader::ImplReadBody()
                     {
                         nX = 0;
                         nY++;
+                        if ( nY == mpFileHeader->nRows )
+                            break;
                     }
                 }
             }
@@ -720,6 +746,8 @@ BOOL PSDReader::ImplReadBody()
                     {
                         nX = 0;
                         nY++;
+                        if ( nY == mpFileHeader->nRows )
+                            break;
                     }
                 }
             }
