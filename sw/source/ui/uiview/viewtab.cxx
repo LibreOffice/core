@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:16:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,10 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           SwFmtCol& rCols)
 {
     ASSERT( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
+    // #126939# ruler executes that change the columns shortly after the selection has changed
+    // can result in a crash
+    if(rCols.GetNumCols() != rColItem.Count())
+        return;
 
     USHORT nLeft    = 0;
     SwTwips nSumAll= 0;  // Summiere alle Spalten und Raender auf
