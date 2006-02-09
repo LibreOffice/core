@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:11:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4088,8 +4088,12 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, String(), &aSet );
         aMedium.CanDisposeStorage_Impl( FALSE );
-        bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
-        m_pData->m_pObjectShell->DoSaveCompleted( NULL );
+        if ( aMedium.GetFilter() )
+        {
+            // storing without a valid filter will often crash
+            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
+            m_pData->m_pObjectShell->DoSaveCompleted( NULL );
+        }
     }
 
     if ( !bSuccess )
