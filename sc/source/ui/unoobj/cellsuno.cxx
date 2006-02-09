@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:11:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1525,6 +1525,10 @@ void ScCellRangesBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
             RefChanged();
+
+            // #129050# any change of the range address is broadcast to value (modify) listeners
+            if ( aValueListeners.Count() )
+                bGotDataChangedHint = TRUE;
         }
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
