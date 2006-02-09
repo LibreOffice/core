@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:23:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -953,10 +953,11 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
     {
         sal_uInt16 nId = pImp->nEventId;
         pImp->nEventId = 0;
-        if ( nId && !pImp->bHidden )
+        if ( nId )
         {
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
             // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-            // if ( !pSalvageItem )
+            if ( !pHiddenItem || !pHiddenItem->GetValue() /*&& !pSalvageItem*/ )
                 pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
     }
@@ -1218,10 +1219,10 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     pImp->nLoadedFlags |= nFlags;
 
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+    /*SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
     pImp->bHidden = sal_False;
     if ( pHiddenItem )
-        pImp->bHidden = pHiddenItem->GetValue();
+        pImp->bHidden = pHiddenItem->GetValue();*/
 
     if ( bSetModifiedTRUE )
         SetModified( sal_True );
