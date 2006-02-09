@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:38:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,7 +598,8 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     if ( codeset != NULL )
     {
         /* get codeset into mt save memory */
-        rtl_copyMemory( codeset_buf, codeset, sizeof(codeset_buf) );
+        strncpy( codeset_buf, codeset, sizeof(codeset_buf) );
+        codeset_buf[sizeof(codeset_buf) - 1] = 0;
         codeset = codeset_buf;
     }
 
