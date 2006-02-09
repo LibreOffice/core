@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:21:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2377,6 +2377,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc*, String& rStr )
     SwDBFieldType aD( &rDoc, aName, SwDBData() );   // Datenbank: Nichts
     SwFieldType* pFT = rDoc.InsertFldType( aD );
     SwDBField aFld( (SwDBFieldType*)pFT );
+    aFld.SetFieldCode( rStr );
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return FLD_OK;
 }
