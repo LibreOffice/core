@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:08:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
  * Es wird der erste Tabstop returnt, der groesser ist als nLinePos.
  */
 
-
-
 const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nLinePos,
     const SwTwips nLeft, const SwTwips nRight ) const
 {
@@ -99,16 +97,23 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nLinePos,
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewTabPortion()
+ *                    SwLineInfo::NumberOfTabStops()
  *************************************************************************/
 
+USHORT SwLineInfo::NumberOfTabStops() const
+{
+    return pRuler->Count();
+}
 
+/*************************************************************************
+ *                      SwTxtFormatter::NewTabPortion()
+ *************************************************************************/
 
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
     SwTabPortion *pTabPor = 0;
     SwTabPortion  *pLastTab = rInf.GetLastTab();
-    if( pLastTab && pLastTab->IsTabCntPortion() )
+    if( pLastTab && ( pLastTab->IsTabCntPortion() || pLastTab->IsTabDecimalPortion() ) )
         if( pLastTab->PostFormat( rInf ) )
             return 0;
 
@@ -217,7 +222,10 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 
     if ( bAuto )
     {
-        if ( SVX_TAB_ADJUST_DECIMAL == eAdj )
+        if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
+             // --> FME 2005-12-19 #127428#
+             1 == aLineInf.NumberOfTabStops() )
+             // <--
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }
     else
@@ -418,17 +426,36 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 {
     const KSHORT nRight = Min( GetTabPos(), rInf.Width() );
     const SwLinePortion *pPor = GetPortion();
+
     KSHORT nPorWidth = 0;
     while( pPor )
     {
-        DBG_LOOP;
+           DBG_LOOP;
         nPorWidth += pPor->Width();
         pPor = pPor->GetPortion();
     }
 
     const MSHORT nWhich = GetWhichPor();
     ASSERT( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
-    const KSHORT nDiffWidth = nRight - Fix();
+    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+
+    // --> FME 2005-12-19 #127428# Abandon dec. tab position if line is full:
+    if ( bTabCompat && POR_TABDECIMAL == nWhich )
+    {
+        KSHORT nPrePorWidth = static_cast<const SwTabDecimalPortion*>(this)->GetWidthOfPortionsUpToDecimalPosition();
+
+        // no value was set => no decimal character was found
+        if ( USHRT_MAX != nPrePorWidth )
+        {
+            if ( nPrePorWidth && nPorWidth - nPrePorWidth > rInf.Width() - nRight )
+            {
+                nPrePorWidth += nPorWidth - nPrePorWidth - ( rInf.Width() - nRight );
+            }
+
+            nPorWidth = nPrePorWidth - 1;
+        }
+    }
+    // <--
 
     if( POR_TABCENTER == nWhich )
     {
@@ -439,6 +466,8 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
         nPorWidth = nNewWidth;
     }
+
+    const KSHORT nDiffWidth = nRight - Fix();
 
     if( nDiffWidth > nPorWidth )
     {
