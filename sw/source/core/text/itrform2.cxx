@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:30:45 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,6 +1044,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
                 pPor = (SwLinePortion*)NewErgoSumPortion( rInf );
             rInf.SetErgoDone( sal_True );
         }
+
+        // 2) Arrow portions
         if( !pPor && !rInf.IsArrowDone() )
         {
             if( pFrm->GetOfst() && !pFrm->IsFollow() &&
@@ -1052,6 +1054,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetArrowDone( sal_True );
         }
 
+        // 3) Kerning portions at beginning of line in grid mode
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
@@ -1059,7 +1062,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
                 pPor = new SwKernPortion( *pCurr );
         }
 
-        // 2) Die Zeilenreste (mehrzeilige Felder)
+        // 4) Die Zeilenreste (mehrzeilige Felder)
         if( !pPor )
         {
             pPor = rInf.GetRest();
@@ -1073,7 +1076,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
     }
     else
     {
-        // 3) Die Fussnotenzahlen
+        // 5) Die Fussnotenzahlen
         if( !rInf.IsFtnDone() )
         {
             ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
@@ -1086,7 +1089,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetFtnDone( sal_True );
         }
 
-        // 4) Die ErgoSumTexte gibt es natuerlich auch im TextMaster,
+        // 6) Die ErgoSumTexte gibt es natuerlich auch im TextMaster,
         // entscheidend ist, ob der SwFtnFrm ein Follow ist.
         if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
@@ -1095,7 +1098,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetErgoDone( sal_True );
         }
 
-        // 5) Die Numerierungen
+        // 7) Die Numerierungen
         if( !rInf.IsNumDone() && !pPor )
         {
             ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
@@ -1106,25 +1109,26 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
                 pPor = (SwLinePortion*)NewNumberPortion( rInf );
             rInf.SetNumDone( sal_True );
         }
-        // 6) Die DropCaps
+        // 8) Die DropCaps
         if( !pPor && GetDropFmt() && ! rInf.IsMulti() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
-        // 7) Kerning portions at beginning of line in grid mode
+        // 9) Kerning portions at beginning of line in grid mode
         if ( !pPor && !pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
             if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
-
-        // 8) Decimal tab portion in table cell
-        if ( !pPor && !pCurr->GetPortion() &&
-             GetTxtFrm()->IsInTab() &&  rInf.GetVsh()->IsTabCompat() )
-        {
-            pPor = NewTabPortion( rInf, true );
-        }
     }
+
+    // 10) Decimal tab portion at the beginning of each line in table cells
+    if ( !pPor && !pCurr->GetPortion() &&
+         GetTxtFrm()->IsInTab() &&  rInf.GetVsh()->IsTabCompat() )
+    {
+        pPor = NewTabPortion( rInf, true );
+    }
+
     return pPor;
 }
 
@@ -1343,8 +1347,24 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                             // No break
             default        :
             {
-                if( rInf.GetLastTab() && cChar == rInf.GetTabDecimal() )
-                    rInf.SetFull( rInf.GetLastTab()->Format( rInf ) );
+                SwTabPortion* pLastTabPortion = rInf.GetLastTab();
+                if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
+                {
+                    // --> FME 2005-12-19 #127428# Abandon dec. tab position if line is full:
+                    // We have a decimal tab portion in the line and the next character has to be
+                    // aligned at the tab stop position. We store the width from the beginning of
+                    // the tab stop portion up to the portion containint the decimal separator:
+                    if ( rInf.GetVsh()->IsTabCompat() && POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
+                    {
+                        ASSERT( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" )
+                        const USHORT nWidthOfPortionsUpToDecimalPosition = (USHORT)(rInf.X() - pLastTabPortion->Fix() );
+                        static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
+                        rInf.SetTabDecimal( 0 );
+                    }
+                    // <--
+                    else
+                        rInf.SetFull( rInf.GetLastTab()->Format( rInf ) );
+                }
 
                 if( rInf.GetRest() )
                 {
