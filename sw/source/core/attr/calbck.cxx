@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:56:56 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,6 +372,12 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
         {
             if( pTmp->pAkt == pDepend || pTmp->pDelNext == pDepend )
                 pTmp->pDelNext = pR;
+
+            // --> FME 2006-02-03 #127369# Notify SwClientIter if mpWatchClient is removed
+            if ( pTmp->mpWatchClient == pDepend )
+                pTmp->mpWatchClient = 0;
+            // <--
+
             pTmp = pTmp->pNxtIter;
         }
 
@@ -488,6 +494,7 @@ SwClientIter::SwClientIter( SwModify& rModify )
 
     pAkt = rRoot.pRoot;
     pDelNext = pAkt;
+    mpWatchClient = 0;
 }
 
 
