@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:49:15 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1129,5 +1129,15 @@ sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_TLSWG, "\\tlswg" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_PGBRK, "\\pgbrk" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_PGDSCNO, "\\pgdscno" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SOUTLVL, "\\soutlvl" );
+
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHP, "\\shp" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SN, "\\sn" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SV, "\\sv" );
+/*
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPLEFT, "\\shpleft" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPTOP, "\\shptop" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPBOTTOM, "\\shpbottom" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPRIGHT, "\\shpright" );
+*/
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

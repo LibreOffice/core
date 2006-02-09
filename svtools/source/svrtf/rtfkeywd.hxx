@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:49:46 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1149,5 +1149,16 @@ extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLSWG, "\\tlsw
 extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRK, "\\pgbrk" );
 extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSCNO, "\\pgdscno" );
 extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
+
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHP, "\\shp" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SN, "\\sn" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SV, "\\sv" );
+/*
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPLEFT, "\\shpleft" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPTOP, "\\shptop" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBOTTOM, "\\shpbottom" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPRIGHT, "\\shpright" );
+*/
+
 
 #endif // _RTFKEYWD_HXX
