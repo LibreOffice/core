@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:53:15 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,13 +208,6 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
     }
 
     pCond->m_State = sal_False;
-    nRet = pthread_cond_broadcast(&pCond->m_Condition);
-    if ( nRet != 0 )
-    {
-       OSL_TRACE("osl_resetCondition : condition broadcast failed. Errno: %d; %s\n",
-                  nRet, strerror(nRet));
-        return sal_False;
-    }
 
     nRet = pthread_mutex_unlock(&pCond->m_Lock);
     if ( nRet != 0 )
@@ -252,7 +245,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
         return osl_cond_result_error;
     }
 
-    while ( ! pCond->m_State )
+    if ( ! pCond->m_State )
     {
         if ( pTimeout )
         {
