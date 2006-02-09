@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:38:39 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ public:
 class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     String  aContent;
+    String  sFieldCode; // contains Word's field code
     USHORT  nSubType;
     BOOL    bIsInBodyTxt    : 1;
     BOOL    bValidValue     : 1;
@@ -132,6 +133,12 @@ public:
 
     // Name erfragen
     virtual const String& GetPar1() const;
+
+    // access to the command string
+    const String&       GetFieldCode()   const
+                        { return sFieldCode;}
+    void                SetFieldCode(const String& rStr)
+                        { sFieldCode = rStr; }
 
     // DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
