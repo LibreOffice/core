@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 17:21:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1002,10 +1002,30 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 
 // -----------------------------------------------------------------------
 
-const Size& ToolBox::ImplGetDefaultImageSize() const
+const Size& ToolBox::GetDefaultImageSize() const
 {
-    static Size aLargeButtonSize( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
     static Size aSmallButtonSize( TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE );
+
+    static ULONG s_nSymbolsStyle = STYLE_SYMBOLS_DEFAULT;
+    static Size aLargeButtonSize( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
+
+    ULONG nSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
+    if ( s_nSymbolsStyle != nSymbolsStyle )
+    {
+        s_nSymbolsStyle = nSymbolsStyle;
+        switch ( nSymbolsStyle )
+        {
+            case STYLE_SYMBOLS_INDUSTRIAL:
+                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_INDUSTRIAL, TB_LARGEIMAGESIZE_INDUSTRIAL );
+                break;
+            case STYLE_SYMBOLS_CRYSTAL:
+                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_CRYSTAL, TB_LARGEIMAGESIZE_CRYSTAL );
+                break;
+            default:
+                aLargeButtonSize = Size( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
+        }
+    }
+
     return GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE ? aLargeButtonSize : aSmallButtonSize;
 }
 
