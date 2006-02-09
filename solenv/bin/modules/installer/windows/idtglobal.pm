@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:48:58 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:00:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,6 +1098,8 @@ sub get_position_in_sequencetable
 
     my $position = 0;
 
+    $action =~ s/^\s*behind_//;
+
     for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
     {
         my $line = ${$sequencetable}[$i];
@@ -1236,7 +1238,8 @@ sub add_custom_action_to_install_table
         my $actionposition = 0;
 
         if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
-        if ( $position ne "end" ) { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
+        elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
+        else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
 
         my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
         push(@{$installtable}, $line);
@@ -1853,7 +1856,22 @@ sub addcustomactions
             {
                 my $key = "Assignment" . $j;
                 my $value = "";
-                if ( $customaction->{$key} ) { $value = $customaction->{$key}; }
+                if ( $customaction->{$key} )
+                {
+                    $value = $customaction->{$key};
+
+                    # in a patch the Assignment can be overwritten by a PatchAssignment
+                    if ( $installer::globals::patch )
+                    {
+                        $patchkey = "PatchAssignment" . $j;
+                        if ( $customaction->{$patchkey} )
+                        {
+                            $value = $customaction->{$patchkey};
+                            $key = $patchkey;
+                        }
+                    }
+
+                }
                 else { last; }
 
                 # $value is now a comma separated list
