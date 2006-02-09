@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:05:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -725,6 +725,13 @@ class LoadEnv : private ThreadHelpBase
         /** @short  determine if it's allowed to open new document frames.
          */
         sal_Bool impl_furtherDocsAllowed();
+
+        //_______________________________________
+
+        /** @short  jumps to the requested bookmark inside a given document.
+         */
+        void impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
+                             const css::util::URL&                            aURL  );
 };
 
 } // namespace framework
