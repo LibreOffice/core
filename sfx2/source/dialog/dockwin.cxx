@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:51:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1476,7 +1476,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // KeyInput zuerst f"ur Dialogfunktionen zulassen
-        if ( !DockingWindow::Notify( rEvt ) )
+        if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current() )
             // dann auch global g"ultige Acceleratoren verwenden
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return TRUE;
