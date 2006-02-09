@@ -121,6 +121,10 @@ const char* aProxyStubWinPeer = "{00020424-0000-0000-C000-000000000046}";
 const char* aInterIDDispInt = "{9337694C-B27D-4384-95A4-9D8E0EABC9E5}";
 const char* aProxyStubDispInt = "{00020424-0000-0000-C000-000000000046}";
 
+// ISOActionsApproval interface information
+const char* aInterIDActApprove = "{029E9F1E-2B3F-4297-9160-8197DE7ED54F}";
+const char* aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}";
+
 // The following prefix is required for HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER ( not for HKEY_CLASSES_ROOT )
 const char* aLocalPrefix = "Software\\Classes\\";
 
@@ -228,6 +232,12 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers )
                           && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDWinPeer, &hkey2 )
                             && createKey( hkey2, "ProxyStubClsid", aProxyStubWinPeer )
                             && createKey( hkey2, "ProxyStubClsid32", aProxyStubWinPeer )
+                            && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
+                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                        && createKey( hkey1, aInterIDActApprove, "ISOActionsApproval" )
+                          && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDActApprove, &hkey2 )
+                            && createKey( hkey2, "ProxyStubClsid", aProxyStubActApprove )
+                            && createKey( hkey2, "ProxyStubClsid32", aProxyStubActApprove )
                             && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
                           && ERROR_SUCCESS == RegCloseKey( hkey2 )
                         && createKey( hkey1, aInterIDDispInt, "ISODispatchInterceptor" )
@@ -374,6 +384,10 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers )
            fErr = TRUE;
 
     wsprintf( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDDispInt );
+    if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey ) )
+           fErr = TRUE;
+
+    wsprintf( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDActApprove );
     if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey ) )
            fErr = TRUE;
 
@@ -547,7 +561,7 @@ STDAPI DllRegisterServer( void )
 
 STDAPI DllUnregisterServer( void )
 {
-    DllUnregisterServerNative( 31, FALSE );
-    return DllUnregisterServerNative( 31, TRUE );
+    DllUnregisterServerNative( 63, FALSE );
+    return DllUnregisterServerNative( 63, TRUE );
 }
 
