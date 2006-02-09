@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:23:04 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ ResMgr* GetGalleryResMgr()
 // - GalleryResGetBitmapEx -
 // -------------------------
 
-BitmapEx GalleryResGetBitmapEx( ULONG nId )
+BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
     BitmapEx aBmpEx( GAL_RESID( nId ) );
 
