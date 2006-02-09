@@ -56,6 +56,7 @@ protected:
 
     CComPtr<IDispatch>      mpDispFactory;
     CComPtr<IDispatch>      mpDispFrame;
+    CComPtr<IDispatch>      mpInstanceLocker;
     CComPtr<IDispatch>      mpDispWin;
     OLECHAR*                mCurFileUrl;
     BOOL                    mbLoad;
