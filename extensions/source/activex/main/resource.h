@@ -9,6 +9,8 @@
 #define IDR_SOCOMWINDOWPEER                 104
 #define IDB_SODISPATCHINTERCEPTOR                 105
 #define IDR_SODISPATCHINTERCEPTOR                 106
+#define IDB_SODOCUMENTEVENTLISTENER                 107
+#define IDR_SODOCUMENTEVENTLISTENER                 108
 
 
 // Next default values for new objects
