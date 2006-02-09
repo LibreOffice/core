@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:59:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,7 +441,7 @@ BOOL SfxProgress::SetState
                 pImp->pView = pDocView;
             else
             {
-                // don't show status indicator for hidden documents
+                // don't show status indicator for hidden documents (only valid while loading)
                 SfxMedium* pMedium = pObjSh->GetMedium();
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
