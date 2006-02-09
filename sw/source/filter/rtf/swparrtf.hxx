@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:55:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,11 @@
 #ifndef SW_MS_MSFILTER_HXX
 #include "../inc/msfilter.hxx"
 #endif
+
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
+
 
 extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCol, short nIdx,
     USHORT nOOIndex, USHORT nWWIndex, short *pSize);
@@ -391,6 +396,9 @@ class SwRTFParser : public SvxRTFParser
     void ReadListTable();
     USHORT ReadRevTbl();
     void ReadShpRslt();
+    void ReadDrawingObject();
+    void InsertShpObject(SdrObject* pStroke);
+    void ReadShapeObject();
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
     SwNumRule* GetNumRuleOfListNo( long nListNo,
