@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 19:34:22 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3805,7 +3805,7 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 /*  to be optimized like this:    */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
     USHORT nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
-    std::vector<ww::bytes>* pExtraArray)
+    std::vector<ww::bytes>* pExtraArray, ::std::vector<String>* pValueArray)
 {
     if(nLen==0)     // Handle Empty STTBF
         return;
@@ -3859,6 +3859,23 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
                 else
                     rStrm.SeekRel( nExtraLen );
             }
+        }
+        // #129053# read the value of the document variables, if requested.
+        if (pValueArray)
+        {
+                for( USHORT i=0; i < nStrings; i++ )
+                {
+                        if( bUnicode )
+                                pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
+                        else
+                        {
+                                BYTE nBChar;
+                                rStrm >> nBChar;
+                                ByteString aTmp;
+                                SafeReadString(aTmp,nBChar,rStrm);
+                                pValueArray->push_back(String(aTmp, eCS));
+                        }
+                }
         }
     }
     else
