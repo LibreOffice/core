@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_instance.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:41:46 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 #endif
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <rtl/ustring.hxx>
@@ -92,7 +93,7 @@
 
 typedef sal_Int32 NSP_HWND;
 
-
+class PluginDocumentClosePreventer;
 class SoPluginInstance
 {
 
@@ -124,6 +125,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchHelper > m_xDispatcher;
     // DispatchProvider of frame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
+
+    // the closelistener that will prevent document closing
+    PluginDocumentClosePreventer* m_pCloseListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xCloseListener;
 
     int LoadDocument(NSP_HWND hParent);
     sal_Bool Connect(void);
