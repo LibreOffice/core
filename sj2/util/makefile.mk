@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:39:06 $
+#   last change: $Author: rt $ $Date: 2006-02-09 15:12:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,10 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT" && "$(COMID)"=="MSC"
+.IF "$(GUI)$(COMID)"=="WNTMSC"
 SHL1STDLIBS+= \
         $(SVTOOLLIB)
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF # "$(GUI)$(COMID)"=="WNTMSC"
 
 .IF "$(SOLAR_JAVA)"!=""
     SHL1STDLIBS+=$(JVMACCESSLIB)
