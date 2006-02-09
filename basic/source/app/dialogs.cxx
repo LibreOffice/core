@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:15:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 15:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,9 @@
 
 #include <algorithm>
 
-HACK( #define protected public )
-#define protected public        // Kleine Schweinerei um an FreeResource ranzukommen
 #ifndef _TOOLS_RC_HXX //autogen
 #include <tools/rc.hxx>
 #endif
-#undef protected
 
 #ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
@@ -233,7 +230,6 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 , aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 {
     aConfig.EnablePersistence( FALSE );
-    aTabCtrl.FreeResource();
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OptionsDialog, ActivatePageHdl ) );
     aTabCtrl.SetCurPageId( RID_TP_PRO );
