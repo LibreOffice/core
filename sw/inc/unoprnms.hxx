@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:10:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -771,7 +771,8 @@ enum SwPropNameIds
 // --> FME 2005-12-13 #b6354161# Print empty pages
 /* 0704 */  UNO_NAME_PRINT_EMPTY_PAGES,
 // <--
-/* 0705 */  SW_PROPNAME_END
+/* 0705 */  UNO_NAME_FIELD_CODE,
+/* 0706 */  SW_PROPNAME_END
 };
 
 
