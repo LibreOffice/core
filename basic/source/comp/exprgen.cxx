@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:04 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,16 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         {
             case SbxEMPTY:   pGen->Gen( _EMPTY ); break;
             case SbxINTEGER: pGen->Gen( _CONST,  (short) nVal ); break;
-            case SbxSTRING:  pGen->Gen( _SCONST, nStringId ); break;
+            case SbxSTRING:
+            {
+                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, TRUE );
+                pGen->Gen( _SCONST, nStringId ); break;
+            }
             default:
-                nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
+            {
+                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
                 pGen->Gen( _NUMBER, nStringId );
+            }
         }
     }
     else if( IsOperand() )
@@ -138,7 +144,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     else if( IsTypeOf() )
     {
         pLeft->Gen();
-        pGen->Gen( _TESTCLASS, nStringId );
+        pGen->Gen( _TESTCLASS, nTypeStrId );
     }
     else
     {
