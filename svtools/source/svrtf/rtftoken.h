@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:36 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1244,7 +1244,16 @@ enum RTF_TOKEN_IDS {
     RTF_PGDSCNXT,
     RTF_PGDSCNO,
     RTF_PGBRK,
-    RTF_SOUTLVL
+    RTF_SOUTLVL,
+
+// shapes
+    RTF_SHP, RTF_SN, RTF_SV
+/*
+    RTF_SHPLEFT,
+    RTF_SHPTOP,
+    RTF_SHPBOTTOM,
+    RTF_SHPRIGHT
+*/
 
 };
 
