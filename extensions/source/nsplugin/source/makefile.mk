@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 11:13:31 $
+#   last change: $Author: rt $ $Date: 2006-02-09 13:52:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,13 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  	settings.mk
 
+INCPRE=$(SOLARINCDIR)$/npsdk
+
 .IF "$(GUI)"=="UNX"
+
+# not sure about -DMOZ_X11 but otheriwse some struct member don't exist...
+CFLAGS+=-DMOZ_X11
+
 .IF "$(ENABLE_GTK)"==""
 
 dummy:
@@ -53,11 +59,6 @@ dummy:
 .ELSE           # "$(ENABLE_GTK)"==""
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 INC+= -DNP_LINUX
-.IF "$(SYSTEM_MOZILLA)" == "YES"
-INCPRE=$(MOZ_NSPR_CFLAGS) -I$(MOZ_INC)/java -I$(MOZ_INC)/plugin
-# not sure about -DMOZ_X11 but otheriwse some struct member don't exist...
-CFLAGS+=-DSYSTEM_MOZILLA -DMOZ_X11
-.ENDIF
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
@@ -66,6 +67,8 @@ PKGCONFIG_MODULES=gtk+-2.0
 .IF "$(GUI)"=="WNT" 
 INC+= -DENGLISH
 .ENDIF
+
+
 # --- Files -------------------------------------
 
 SLOFILES=       $(SLO)$/npshell.obj \
@@ -75,16 +78,16 @@ SHL1OBJS=	$(SLO)$/npshell.obj \
             $(SLO)$/so_env.obj
 
 .IF "$(GUI)"=="UNX"
-SHL1OBJS+=$(SLO)$/npunix.obj
-SLOFILES+=$(SLO)$/npunix.obj
+STDLIBS+=$(SOLARLIBDIR)$/npunix.o
+SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 #.IF "$(OS)"!="FREEBSD"
 #SHL1STDLIBS+= -ldl -lnsl
 #.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
-SHL1OBJS+=$(SLO)$/npwin.obj
-SLOFILES+=$(SLO)$/npwin.obj
-SHL1STDLIBS+= shell32.lib
+STDLIBS+=$(SOLARLIBDIR)$/npwin.obj
+SHL1STDLIBS+= shell32.lib $(SOLARLIBDIR)$/npwin.obj
+
 .ENDIF
 
 
@@ -94,6 +97,7 @@ LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
 .ENDIF          # "$(OS)"=="SOLARIS"
 APP1TARGET=nsplugin$(EXEPOSTFIX)
 APP1OBJS=\
+        $(SLO)$/so_closelistener.obj\
         $(SLO)$/so_instance.obj\
         $(SLO)$/so_env.obj\
         $(SLO)$/so_main.obj
