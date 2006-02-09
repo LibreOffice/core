@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 14:34:23 $
+#   last change: $Author: rt $ $Date: 2006-02-09 17:06:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@ USE_JAVAVER=TRUE
 
 .IF "$(ENABLE_CRASHDUMP)"!=""
 SCPDEFS+=-DENABLE_CRASHDUMP
+.ENDIF
+
+.IF "$(BUILD_SPECIAL)"!=""
+SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
 
 .IF "$(JAVANUMVER)" >= "000100040000"
