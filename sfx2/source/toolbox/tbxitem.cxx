@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:00:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1750,7 +1750,15 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
     if ( !aImage )
         aImage = !!aMenuImage ? aMenuImage :
             SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig, bHC );
-    GetToolBox().SetItemImage( GetId(), aImage );
+    Size aBigSize( GetToolBox().GetDefaultImageSize() );
+    if ( bBig && aImage.GetSizePixel() != aBigSize )
+    {
+        BitmapEx aScaleBmpEx( aImage.GetBitmapEx() );
+        aScaleBmpEx.Scale( aBigSize, BMP_SCALE_INTERPOLATE );
+        GetToolBox().SetItemImage( GetId(), Image( aScaleBmpEx ) );
+    }
+    else
+        GetToolBox().SetItemImage( GetId(), aImage );
     aLastURL = aURL;
 }
 
