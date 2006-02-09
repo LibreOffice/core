@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:19:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1540,7 +1540,7 @@ void SfxFrame::Resize()
         else
         {
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
-            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell()->GetIPClient();
+            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetIPClient() : 0;
             if ( pClient && pClient->GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
