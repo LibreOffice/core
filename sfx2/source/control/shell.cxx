@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1505,7 +1505,7 @@ long DispatcherUpdate_Impl( void* pObj, void* pArg )
 void SfxShell::UIFeatureChanged()
 {
     SfxViewFrame *pFrame = GetFrame();
-    if ( pFrame && pFrame->IsVisible() )
+    if ( pFrame && pFrame->IsVisible_Impl() )
     {
         // Auch dann Update erzwingen, wenn Dispatcher schon geupdated ist,
         // sonst bleibt evtl. irgendwas in den gebunkerten Tools stecken.
