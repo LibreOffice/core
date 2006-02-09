@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:54:57 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,9 +243,24 @@ void SwRTFParser::ReadTable( int nToken )
         bReadNewCell = TRUE;
         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
         SwTableLine* pLine = rLns[ rLns.Count()-1 ];
-        for( USHORT n = nAktBox; n; )
-            nTblSz += pLine->GetTabBoxes()[ --n ]->GetFrmFmt()->
-                            GetFrmSize().GetWidth();
+        // very robust to avoid crashes like bug 127425 + crash reports 118743
+        if( pLine )
+        {
+            USHORT nTmpBox = nAktBox;
+            if( nTmpBox > pLine->GetTabBoxes().Count() )
+                nTmpBox = pLine->GetTabBoxes().Count();
+
+            for( USHORT n = nTmpBox; n; )
+            {
+                const SwTableBox *pTmp = pLine->GetTabBoxes()[ --n ];
+                if( pTmp )
+                {
+                    const SwFrmFmt* pTmpFmt = pTmp->GetFrmFmt();
+                    if( pTmpFmt )
+                        nTblSz += pTmpFmt->GetFrmSize().GetWidth();
+                }
+            }
+        }
     }
 
 
