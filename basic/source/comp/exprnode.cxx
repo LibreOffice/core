@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:39:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, const String& rVal )
 
     eType     = SbxSTRING;
     eNodeType = SbxSTRVAL;
-    nStringId = p->aGblStrings.Add( rVal, TRUE );
+    aStrVal   = rVal;
 }
 
 SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiExprList* l )
@@ -94,10 +94,10 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, USHORT nId )
 {
     BaseInit( p );
 
-    pLeft     = l;
-    eType     = SbxBOOL;
-    eNodeType = SbxTYPEOF;
-    nStringId = nId;
+    pLeft      = l;
+    eType      = SbxBOOL;
+    eNodeType  = SbxTYPEOF;
+    nTypeStrId = nId;
 }
 
 
@@ -213,11 +213,6 @@ short SbiExprNode::GetDepth()
     }
 }
 
-const String& SbiExprNode::GetString()
-{
-    USHORT n = ( eType == SbxSTRING ) ? nStringId : 0;
-    return pGen->GetParser()->aGblStrings.Find( n );
-}
 
 // Abgleich eines Baumes:
 // 1. Constant Folding
@@ -273,26 +268,17 @@ void SbiExprNode::FoldConstants()
             {
                 String rl( pLeft->GetString() );
                 String rr( pRight->GetString() );
-                String s;
-                bool bOk = true;
+                delete pLeft; pLeft = NULL;
+                delete pRight; pRight = NULL;
+                bComposite = FALSE;
                 if( eTok == PLUS || eTok == CAT )
                 {
-                    // #i45570: Block long strings
-                    UINT32 nTotalLen = rl.Len() + rr.Len();
-                    if( nTotalLen < 0x50 )
-                    {
-                        eTok = CAT;
-                        // Verkettung:
-                        s = rl;
-                        s += rr;
-                        nStringId = pGen->GetParser()->aGblStrings.Add( s, TRUE );
-                        eType = SbxSTRING;
-                        eNodeType = SbxSTRVAL;
-                    }
-                    else
-                    {
-                        bOk = false;
-                    }
+                    eTok = CAT;
+                    // Verkettung:
+                    aStrVal = rl;
+                    aStrVal += rr;
+                    eType = SbxSTRING;
+                    eNodeType = SbxSTRVAL;
                 }
                 else
                 {
@@ -323,12 +309,6 @@ void SbiExprNode::FoldConstants()
                             pGen->GetParser()->Error( SbERR_CONVERSION );
                             bError = TRUE;
                     }
-                }
-                if( bOk )
-                {
-                    delete pLeft; pLeft = NULL;
-                    delete pRight; pRight = NULL;
-                    bComposite = FALSE;
                 }
             }
             else
