@@ -12320,12 +12320,11 @@ elif test "$enable_mozilla" = "no"; then
     echo "$as_me:$LINENO: result: none" >&5
 echo "${ECHO_T}none" >&6
     WITH_MOZILLA=NO
-    BUILD_TYPE="$BUILD_TYPE NP_SDK"
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
     SYSTEM_MOZILLA=NO
-    BUILD_TYPE="$BUILD_TYPE MOZ NP_SDK"
+    BUILD_TYPE="$BUILD_TYPE MOZ"
 if test -z "$with_mozilla_version"; then
    MOZILLA_VERSION=
 else
