@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-07 14:42:08 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,22 @@ End
 
 File gid_File_Help_Scalc_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(scalc);
+    Patchfiles = ("scalc.db",
+                  "scalc.ht",
+                  "scalc.jar",
+                  "scalc.key",
+                  "scalc.tree",
+                  "scalc.idx/CONTEXTS",
+                  "scalc.idx/DICTIONARY",
+                  "scalc.idx/DOCS",
+                  "scalc.idx/DOCS.TAB",
+                  "scalc.idx/EDGE",
+                  "scalc.idx/LINKNAMES",
+                  "scalc.idx/OFFSETS",
+                  "scalc.idx/POSITIONS",
+                  "scalc.idx/SCHEMA"); 
 End
 
 #endif
