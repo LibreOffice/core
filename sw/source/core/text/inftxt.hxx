@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:51:16 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,8 @@ public:
         { return SvxParaVertAlignItem::BASELINE  != nVertAlign ||
                  SvxParaVertAlignItem::AUTOMATIC != nVertAlign; }
 #endif
+
+    USHORT NumberOfTabStops() const;
 
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
