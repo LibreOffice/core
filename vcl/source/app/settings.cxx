@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:07:46 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -725,7 +725,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString::createFromAscii( "default" );
         case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString::createFromAscii( "hicontrast" );
         case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
-//      case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
+        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
     }
 
     return ::rtl::OUString::createFromAscii( "auto" );
@@ -741,8 +741,8 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_HICONTRAST;
     else if ( rName == ::rtl::OUString::createFromAscii( "industrial" ) )
         return STYLE_SYMBOLS_INDUSTRIAL;
-//  else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
-//      return STYLE_SYMBOLS_CRYSTAL;
+    else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
+        return STYLE_SYMBOLS_CRYSTAL;
 
     return STYLE_SYMBOLS_AUTO;
 }
@@ -764,8 +764,8 @@ ULONG StyleSettings::GetCurrentSymbolsStyle() const
 
             if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
                 snDesktopStyle = STYLE_SYMBOLS_INDUSTRIAL;
-//          else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
-//              snDesktopStyle = STYLE_SYMBOLS_CRYSTAL;
+            else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
+                snDesktopStyle = STYLE_SYMBOLS_CRYSTAL;
 
             sbDesktopChecked = true;
         }
