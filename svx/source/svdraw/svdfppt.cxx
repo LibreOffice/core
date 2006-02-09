@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:01:41 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1573,93 +1573,65 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
         // PersistPtrs lesen (alle)
         nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;  // 1 mehr, damit ich immer direkt indizieren kann
         pPersistPtr = new UINT32[ nPersistPtrAnz ];             // (die fangen naemlich eigentlich bei 1 an)
-        memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
-
-        // SJ: new search mechanism from bottom to top (Issue 21122)
-        PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
-        sal_uInt32 nCurrentEditAtomStrmPos = aCurrentEditAtom.aHd.GetRecEndFilePos();
-        while( nCurrentEditAtomStrmPos )
+        if ( !pPersistPtr )
+            bOk = FALSE;
+        else
         {
-            sal_uInt32 nPersistIncPos = aCurrentEditAtom.nOffsetPersistDirectory;
-            if ( nPersistIncPos )
+            memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
+
+            // SJ: new search mechanism from bottom to top (Issue 21122)
+            PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
+            sal_uInt32 nCurrentEditAtomStrmPos = aCurrentEditAtom.aHd.GetRecEndFilePos();
+            while( nCurrentEditAtomStrmPos )
             {
-                rStCtrl.Seek( nPersistIncPos );
-                DffRecordHeader aPersistHd;
-                rStCtrl >> aPersistHd;
-                if ( aPersistHd.nRecType == PPT_PST_PersistPtrIncrementalBlock )
+                sal_uInt32 nPersistIncPos = aCurrentEditAtom.nOffsetPersistDirectory;
+                if ( nPersistIncPos )
                 {
-                    ULONG nPibLen = aPersistHd.GetRecEndFilePos();
-                    while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
+                    rStCtrl.Seek( nPersistIncPos );
+                    DffRecordHeader aPersistHd;
+                    rStCtrl >> aPersistHd;
+                    if ( aPersistHd.nRecType == PPT_PST_PersistPtrIncrementalBlock )
                     {
-                        sal_uInt32 nOfs, nAnz;
-                        rStCtrl >> nOfs;
-                        nAnz = nOfs;
-                        nOfs &= 0x000FFFFF;
-                        nAnz >>= 20;
-                        while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs < nPersistPtrAnz ) )
+                        ULONG nPibLen = aPersistHd.GetRecEndFilePos();
+                        while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
                         {
-                            sal_uInt32 nPt;
-                            rStCtrl >> nPt;
-                            if ( !pPersistPtr[ nOfs ] )
+                            sal_uInt32 nOfs, nAnz;
+                            rStCtrl >> nOfs;
+                            nAnz = nOfs;
+                            nOfs &= 0x000FFFFF;
+                            nAnz >>= 20;
+                            while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs < nPersistPtrAnz ) )
                             {
-                                pPersistPtr[ nOfs ] = nPt;
-                                if ( pPersistPtr[ nOfs ] > nStreamLen )
+                                sal_uInt32 nPt;
+                                rStCtrl >> nPt;
+                                if ( !pPersistPtr[ nOfs ] )
                                 {
-                                    bOk = FALSE;
-                                    DBG_ERROR("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
+                                    pPersistPtr[ nOfs ] = nPt;
+                                    if ( pPersistPtr[ nOfs ] > nStreamLen )
+                                    {
+                                        bOk = FALSE;
+                                        DBG_ERROR("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
+                                    }
                                 }
+                                nAnz--;
+                                nOfs++;
                             }
-                            nAnz--;
-                            nOfs++;
-                        }
-                        if ( bOk && nAnz > 0 )
-                        {
-                            DBG_ERROR("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
-                            bOk = FALSE;
+                            if ( bOk && nAnz > 0 )
+                            {
+                                DBG_ERROR("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
+                                bOk = FALSE;
+                            }
                         }
                     }
                 }
-            }
-            nCurrentEditAtomStrmPos = aCurrentEditAtom.nOffsetLastEdit < nCurrentEditAtomStrmPos ? aCurrentEditAtom.nOffsetLastEdit : 0;
-            if ( nCurrentEditAtomStrmPos )
-            {
-                rStCtrl.Seek( nCurrentEditAtomStrmPos );
-                rStCtrl >> aCurrentEditAtom;
-            }
-        }
-
-/* SJ: OLD Search mechanism from top to bottom
-        for ( pHd = aPptRecManager.GetRecordHeader( PPT_PST_PersistPtrIncrementalBlock, SEEK_FROM_BEGINNING );
-                pHd; pHd = aPptRecManager.GetRecordHeader( PPT_PST_PersistPtrIncrementalBlock, SEEK_FROM_CURRENT ) )
-        {
-            ULONG nPibLen = pHd->GetRecEndFilePos();
-            pHd->SeekToContent( rStCtrl );
-            while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
-            {
-                UINT32 nOfs, nAnz;
-                rStCtrl >> nOfs;
-                nAnz = nOfs;
-                nOfs &= 0x000FFFFF;
-                nAnz >>= 20;
-                while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs < nPersistPtrAnz ) )
+                nCurrentEditAtomStrmPos = aCurrentEditAtom.nOffsetLastEdit < nCurrentEditAtomStrmPos ? aCurrentEditAtom.nOffsetLastEdit : 0;
+                if ( nCurrentEditAtomStrmPos )
                 {
-                    rStCtrl >> pPersistPtr[ nOfs ];
-                    if ( pPersistPtr[ nOfs ] > nStreamLen )
-                    {
-                        bOk = FALSE;
-                        DBG_ERROR("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
-                    }
-                    nOfs++;
-                    nAnz--;
-                }
-                if ( bOk && nAnz > 0 )
-                {
-                    DBG_ERROR("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
-                    bOk = FALSE;
+                    rStCtrl.Seek( nCurrentEditAtomStrmPos );
+                    rStCtrl >> aCurrentEditAtom;
                 }
             }
         }
-*/
     }
     if ( rStCtrl.GetError() != 0 )
         bOk = FALSE;
@@ -3074,26 +3046,10 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             {
                                                 Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
-                                                aProcessData.nGroupingFlags = 0;
                                                 sal_Int32 nShapeId;
                                                 SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
-                                                    // maybe this is an animated textobj
-                                                    if ( aProcessData.nGroupingFlags && pObj->ISA( SdrObjGroup ) )
-                                                    {
-                                                        SdrObjList* pObjectList = ((SdrObjGroup*)pObj)->GetSubList();
-                                                        if ( pObjectList )
-                                                        {
-                                                            if ( pObjectList->GetObjCount() == 2 )
-                                                            {
-                                                                pRet->NbcInsertObject( pObjectList->NbcRemoveObject( 0 ) );
-                                                                SdrObject* pTemp = pObjectList->NbcRemoveObject( 0 );
-                                                                delete pObj;
-                                                                pObj = pTemp;
-                                                            }
-                                                        }
-                                                    }
                                                     pRet->NbcInsertObject( pObj );
 
                                                     if( nShapeId )
