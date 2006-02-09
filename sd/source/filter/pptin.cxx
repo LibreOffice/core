@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:28:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2694,22 +2694,6 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     if( pAnimation->HasSoundEffect() )
                                         pAnimation->SetSoundFileUrl( ReadSound( pAnimation->GetSoundRef() ) );
 
-                                    SdrObject* pEffObj = pObj;
-                                    if ( ( !rObjData.nCalledByGroup ) && pObj->ISA( SdrObjGroup ) )
-                                    {
-                                        if ( pAnimation->HasParagraphEffect() ) // ( ( pAnimation->nFlags & 0x4000 ) == 0 )
-                                        {   // if texteffect is used, we will split this groupobject later
-                                            SdrObjList* pObjectList = ((SdrObjGroup*)pObj)->GetSubList();
-                                            if ( pObjectList )
-                                            {
-                                                if ( pObjectList->GetObjCount() == 2 )
-                                                {
-                                                    pEffObj = pObjectList->GetObj( 1 );
-                                                    ((ProcessData*)pData)->nGroupingFlags = 1;
-                                                }
-                                            }
-                                        }
-                                    }
                                     bool bDontAnimateInvisibleShape = false;
                                     {
                                         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
@@ -2733,7 +2717,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     //maybe some actions necessary to ensure that animations on master pages are played before animations on normal pages
                                     ///mabe todo in future: bool bIsEffectOnMasterPage = !bInhabitanceChecked;?
 
-                                    aAnimations[pEffObj] = pAnimation;
+                                    aAnimations[pObj] = pAnimation;
 
                                     bAnimationInfoFound = TRUE;
                                 }
