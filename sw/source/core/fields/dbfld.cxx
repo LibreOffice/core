@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:48:44 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,6 +343,7 @@ SwField* SwDBField::Copy() const
     pTmp->bInitialized  = bInitialized;
     pTmp->nSubType      = nSubType;
     pTmp->SetValue(GetValue());
+    pTmp->sFieldCode = sFieldCode;
 
     return pTmp;
 }
@@ -509,6 +510,9 @@ BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
     case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
         break;
+    case FIELD_PROP_PAR2:
+        rAny <<= OUString(sFieldCode);
+        break;
     default:
         DBG_ERROR("illegal property");
     }
@@ -569,6 +573,9 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_PAR1:
         ::GetString( rAny, aContent );
         break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, sFieldCode );
+    break;
     default:
         DBG_ERROR("illegal property");
     }
