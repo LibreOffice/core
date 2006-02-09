@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:49:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1160,8 +1160,17 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
         {{sRTF_PGBRK},         RTF_PGBRK},
 
         {{sRTF_PGDSCNO},       RTF_PGDSCNO},
-        {{sRTF_SOUTLVL},       RTF_SOUTLVL}
+        {{sRTF_SOUTLVL},       RTF_SOUTLVL},
 
+        {{sRTF_SHP},       RTF_SHP},
+        /*
+        {{sRTF_SHPLEFT},       RTF_SHPLEFT}
+        {{sRTF_SHPTOP},       RTF_SHPTOP}
+        {{sRTF_SHPBOTTOM},       RTF_SHPBOTTOM}
+        {{sRTF_SHPRIGHT},       RTF_SHPRIGHT}
+        */
+        {{sRTF_SN},       RTF_SN},
+        {{sRTF_SV},       RTF_SV}
 };
 
 
