@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:08:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,18 +421,17 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                     bLoadState = pItem->GetValue();
             }
             else
-            {
-                SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
-                if ( !pDoc )
-                {
-                    css::uno::Reference< css::frame::XFrame > axFrame;
-                    pFrame->SetFrameInterface_Impl( axFrame );
-                    pFrame->DoClose();
-                }
-
                 bLoadState = sal_False;
+
+            if ( !bLoadState && bFrameCreated && pFrame && !pFrame->GetCurrentDocument() )
+            {
+                css::uno::Reference< css::frame::XFrame > axFrame;
+                pFrame->SetFrameInterface_Impl( axFrame );
+                pFrame->DoClose();
             }
 
+            xFrame.clear();
+            xListener.clear();
             return bLoadState;
         }
 
@@ -493,18 +492,17 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                         bLoadState = pItem->GetValue();
                 }
                 else
-                {
-                    if ( !pFrame->GetCurrentDocument() )
-                    {
-                        css::uno::Reference< css::frame::XFrame > axFrame;
-                        pFrame->SetFrameInterface_Impl( axFrame );
-                        pFrame->DoClose();
-                    }
-
                     bLoadState = sal_False;
+
+                if ( !bLoadState && bFrameCreated && pFrame && !pFrame->GetCurrentDocument() )
+                {
+                    css::uno::Reference< css::frame::XFrame > axFrame;
+                    pFrame->SetFrameInterface_Impl( axFrame );
+                    pFrame->DoClose();
                 }
 
                 xFrame.clear();
+                xListener.clear();
                 return bLoadState;
             }
     }
