@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:39:22 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
+#include <stdio.h>
 #ifndef _FILGLOB_HXX_
 #include "filglob.hxx"
 #endif
@@ -489,6 +489,10 @@ namespace fileaccess {
                     // Operation would block<br>
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
+                case FileBase::E_NOLCK:  // No record locks available<br>
+                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
+
                 case FileBase::E_FAULT: // Bad address<br>
                 case FileBase::E_LOOP:  // Too many symbolic links encountered<br>
                 case FileBase::E_NOSPC: // No space left on device<br>
@@ -629,6 +633,8 @@ namespace fileaccess {
                     ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
                     break;
                 case FileBase::E_NOLCK:  // No record locks available<br>
+                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
                 case FileBase::E_IO:     // I/O error<br>
                 case FileBase::E_BADF:   // Bad file<br>
                 case FileBase::E_FAULT:  // Bad address<br>
