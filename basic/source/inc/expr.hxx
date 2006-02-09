@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:37 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ enum SbiExprType {                  // Expression-Typen:
 
 enum SbiNodeType {
     SbxNUMVAL,                      // nVal = Wert
-    SbxSTRVAL,                      // nStringId = Wert
+    SbxSTRVAL,                      // aStrVal = Wert, before #i59791/#i45570: nStringId = Wert
     SbxVARVAL,                      // aVar = Wert
     SbxTYPEOF,                      // TypeOf ObjExpr Is Type
     SbxNODE                         // Node
@@ -85,10 +85,11 @@ class SbiExprNode {                  // Operatoren (und Operanden)
     friend class SbiExpression;
     friend class SbiConstExpression;
     union {
-        USHORT nStringId;           // gepoolter String-ID
+        USHORT nTypeStrId;          // gepoolter String-ID, #i59791/#i45570 Now only for TypeOf
         double nVal;                // numerischer Wert
         SbVar  aVar;                // oder Variable
     };
+    String aStrVal;                 // #i59791/#i45570 Store string directly
     SbiExprNode* pLeft;             // linker Zweig
     SbiExprNode* pRight;            // rechter Zweig (NULL bei unaeren Ops)
     SbiExprNode* pWithParent;       // Knoten, dessen Member this per with ist
@@ -133,7 +134,7 @@ public:
     SbiSymDef* GetRealVar();        // letzte Variable in x.y.z
     SbiExprNode* GetRealNode();     // letzter Knoten in x.y.z
     short GetDepth();               // Tiefe eines Baumes berechnen
-    const String& GetString();      // String liefern
+    const String& GetString()       { return aStrVal; }
 
     void Optimize();                // Baumabgleich
 
