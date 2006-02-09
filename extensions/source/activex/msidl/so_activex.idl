@@ -126,6 +126,29 @@ interface ISODispatchInterceptor : IDispatch
 
 
 
+
+[
+    object,
+    uuid(029E9F1E-2B3F-4297-9160-8197DE7ED54F),
+    dual,
+    helpstring("ISOActionsApproval Interface"),
+    pointer_default(unique)
+]
+interface ISOActionsApproval : IDispatch
+{
+//com.sun.star.embed.XActionsApproval
+
+    [id(1), helpstring("method approveAction")]
+                HRESULT approveAction( [in] long aActionID,
+                                        [out,retval] boolean* pbApproval );
+
+// the common UNO-COM staff
+    [propget, id(2), helpstring("property_implementedInterfaces")]
+                HRESULT Bridge_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
+};
+
+
+
 [
     uuid(61FA3F13-8061-4796-B055-3697ED28CB38),
     version(1.0),
@@ -173,5 +196,15 @@ library SO_ACTIVEXLib
     {
         [default] interface ISODispatchInterceptor;
     };
+
+    [
+        uuid(9F3697AC-7A18-4335-AF0A-65FAC2C35CC1),
+        helpstring("SOActionsApproval Class")
+    ]
+    coclass SOActionsApproval
+    {
+        [default] interface ISOActionsApproval;
+    };
+
 };
 
