@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Actions.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_Actions_idl__
+#define __com_sun_star_embed_Actions_idl__
+
+//============================================================================
+
+module com { module sun { module star { module embed {
+
+//============================================================================
+/** This constant set contains possible actions that could be approved by
+<type>ActionsApproval</type> implementation.
+*/
+constants Actions
+{
+    //------------------------------------------------------------------------
+    /** "Prevent Close" - throws veto excetion if target object is going to
+        close.
+
+        <p>
+        Usually a <type scope="com::sun::star::util">XCloseListener</type>
+        implementation could use this constant to request approval to throw
+        veto exception.
+        </p>
+     */
+    const long PREVENT_CLOSE = 1;
+
+    //------------------------------------------------------------------------
+    /** "Prevent Termination" - throws veto excetion if target object is going
+        to terminate.
+
+        <p>
+        Usually a <type scope="com::sun::star::frame">XTerminateListener</type>
+        implementation could use this constant to request approval to throw
+        veto exception.
+        </p>
+     */
+    const long PREVENT_TERMINATION = 2;
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+
