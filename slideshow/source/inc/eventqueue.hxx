@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:11:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,24 @@ namespace presentation
 
             /** Process the event queue.
 
-                This method performs the smallest atomic processing
-                possible on the queue (typically, this means one event
-                get processed).
+                This method executes all events whose timeout has
+                expired when calling this method (i.e. all events
+                whose scheduled time is less or equal the current
+                time).
+
+                Check for the next available event's timeout via
+                nextTimeout(), or whether the queue is empty
+                altogether via isEmpty().
+             */
+            void process();
+
+            /** Query state of the queue
+
+                @return false, if queue is empty, true otherwise
+             */
+            bool isEmpty() const;
+
+            /** Query timeout for the topmost event in the queue.
 
                 @return Timeout in seconds, until the next event is
                 ready. The time returned here is relative to the pres
@@ -81,15 +96,11 @@ namespace presentation
                 constructor). When the queue is empty (i.e. isEmpty()
                 returns true), the returned value is the highest
                 representable double value
-                (::std::numeric_limits<double>::max()).
-             */
-            double process();
-
-            /** Query state of the queue
-
-                @return false, if queue is empty, true otherwise
-             */
-            bool isEmpty();
+                (::std::numeric_limits<double>::max()). If the topmost
+                event in the queue is already pending, the timeout
+                returned here will actually be negative.
+            */
+            double nextTimeout() const;
 
             /** Remove all pending events from the queue.
              */
