@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:44 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
+#include <stddef.h>
 #include <stdio.h>
 #include "backtrace.h"
 
@@ -136,12 +137,55 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
 int backtrace( void **buffer, int max_frames )
 {
-    return 1;
+    struct frame *fp;
+    jmp_buf ctx;
+    int i;
+    /* get stack- and framepointer */
+    setjmp(ctx);
+    fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
+    for ( i=0; (i<FRAME_OFFSET) && (fp!=0); i++)
+        fp = fp->fr_savfp;
+    /* iterate through backtrace */
+    for (i=0; fp && fp->fr_savpc && i<max_frames; i++)
+    {
+        /* store frame */
+        *(buffer++) = (void *)fp->fr_savpc;
+        /* next frame */
+        fp=fp->fr_savfp;
+    }
+    return i;
 }
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
+    FILE    *fp = fdopen( fd, "w" );
 
+    if ( fp )
+    {
+        void **pFramePtr;
+        for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
+        {
+            Dl_info     dli;
+            ptrdiff_t   offset;
+
+            if ( 0 != dladdr( *pFramePtr, &dli ) )
+            {
+                if ( dli.dli_fname && dli.dli_fbase )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
+                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+                }
+                if ( dli.dli_sname && dli.dli_saddr )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
+                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+                }
+            }
+            fprintf( fp, "[0x%x]\n", *pFramePtr );
+        }
+        fflush( fp );
+        fclose( fp );
+    }
 }
 #endif /* defined FREEBSD */
 
