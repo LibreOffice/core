@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // KeyInput zuerst f"ur Dialogfunktionen zulassen ( TAB etc. )
-        if ( !ModelessDialog::Notify( rEvt ) )
+        if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
             // dann auch global g"ultige Acceleratoren verwenden
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;
@@ -557,7 +557,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // KeyInput zuerst f"ur Dialogfunktionen zulassen
-        if ( !FloatingWindow::Notify( rEvt ) )
+        if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
             // dann auch global g"ultige Acceleratoren verwenden
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;
