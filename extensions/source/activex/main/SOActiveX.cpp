@@ -5,6 +5,7 @@
 #include "SOActiveX.h"
 #include "SOComWindowPeer.h"
 #include "SODispatchInterceptor.h"
+#include "SOActionsApproval.h"
 
 #define STAROFFICE_WINDOWCLASS "SOParentWindow"
 
@@ -170,14 +171,40 @@ HRESULT CSOActiveX::Cleanup()
     mpDispTempFile = CComPtr< IDispatch >();
     mbReadyForActivation = FALSE;
 
+    if( mpInstanceLocker )
+    {
+        ExecuteFunc( mpInstanceLocker, L"dispose", NULL, 0, &dummyResult );
+        mpInstanceLocker = CComPtr< IDispatch >();
+    }
+
     if( mpDispFrame )
     {
-        // mpDispFrame->dispose();
+        BOOL bCloserActivated = FALSE;
 
-        CComVariant aPropVar;
-        aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_TRUE;
-        if ( !SUCCEEDED( ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult ) ) )
-            ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+        CComPtr<IDispatch> pDispDocumentCloser;
+        HRESULT hr = GetIDispByFunc( mpDispFactory,
+                                     L"createInstance",
+                                     &CComVariant( L"com.sun.star.embed.DocumentCloser" ),
+                                     1,
+                                     pDispDocumentCloser );
+        if ( SUCCEEDED( hr ) && pDispDocumentCloser )
+        {
+            hr = ExecuteFunc( pDispDocumentCloser, L"initialize", &CComVariant( mpDispFrame ), 1, &dummyResult );
+            if( SUCCEEDED( hr ) )
+            {
+                // the following call will let the closing happen
+                hr = ExecuteFunc( pDispDocumentCloser, L"dispose", NULL, 0, &dummyResult );
+                bCloserActivated = SUCCEEDED( hr );
+            }
+        }
+
+        if ( !bCloserActivated )
+        {
+            CComVariant aPropVar;
+            aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_TRUE;
+            if ( !SUCCEEDED( ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult ) ) )
+                ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+        }
 
         mpDispFrame = CComPtr< IDispatch >();
     }
@@ -466,6 +493,43 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     aPosArgs[0] = CComVariant( 12 );
     hr = ExecuteFunc( mpDispWin, L"setPosSize", aPosArgs, 5, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
+
+    // create frame locker if there is such service
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.embed.InstanceLocker" ), 1, mpInstanceLocker );
+    if( SUCCEEDED( hr ) && mpInstanceLocker )
+    {
+        SAFEARRAY FAR* pInitVals = SafeArrayCreateVector( VT_VARIANT, 0, 3 );
+
+        // the first sequence element
+        long nInitInd = 0;
+        CComVariant pFrameVariant( mpDispFrame );
+        SafeArrayPutElement( pInitVals, &nInitInd, &pFrameVariant );
+
+        // the second sequence element
+        nInitInd = 1;
+        CComVariant pStrArr( 1L );
+        SafeArrayPutElement( pInitVals, &nInitInd, &pStrArr );
+
+        // the third sequence element
+        nInitInd = 2;
+        CComPtr<IDispatch> pdispValueObj;
+        hr = GetIDispByFunc( mpDispFactory, L"Bridge_GetValueObject", NULL, 0, pdispValueObj );
+        if( !SUCCEEDED( hr ) || !pdispValueObj ) return hr;
+
+        CComVariant aValueArgs[2];
+        aValueArgs[1] = CComVariant( L"com.sun.star.embed.XActionsApproval" );
+        CComPtr< CComObject< SOActionsApproval > > pApproval( new CComObject<SOActionsApproval>() );
+        aValueArgs[0] = CComVariant ( pApproval );
+
+        hr = ExecuteFunc( pdispValueObj, L"Set", aValueArgs, 2, &dummyResult );
+        if( !SUCCEEDED( hr ) ) return hr;
+
+        SafeArrayPutElement( pInitVals, &nInitInd, &CComVariant( pdispValueObj ) );
+
+        // execute initialize()
+        hr = ExecuteFunc( mpInstanceLocker, L"initialize", &CComVariant( pInitVals ), 1, &dummyResult );
+        if( !SUCCEEDED( hr ) ) return hr;
+    }
 
     return S_OK;
 }
@@ -769,7 +833,9 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             if( mpDispFrame )
             {
                 CComVariant dummyResult;
-                ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+                CComVariant aPropVar;
+                aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_FALSE;
+                HRESULT hr = ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult );
                 mpDispFrame = CComPtr<IDispatch>();
             }
 
