@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:11:48 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,6 +990,13 @@ WinSalFrame::~WinSalFrame()
 {
     SalData* pSalData = GetSalData();
 
+    // remove frame from framelist
+    WinSalFrame** ppFrame = &pSalData->mpFirstFrame;
+    for(; (*ppFrame != this) && *ppFrame; ppFrame = &(*ppFrame)->mpNextFrame );
+    if( *ppFrame )
+        *ppFrame = mpNextFrame;
+    mpNextFrame = NULL;
+
     // Release Cache DC
     if ( mpGraphics2 &&
          mpGraphics2->mhDC )
@@ -1003,6 +1010,7 @@ WinSalFrame::~WinSalFrame()
         ImplSalDeInitGraphics( mpGraphics );
         ReleaseDC( mhWnd, mpGraphics->mhDC );
         delete mpGraphics;
+        mpGraphics = NULL;
     }
 
     if ( mhWnd )
@@ -1021,18 +1029,8 @@ WinSalFrame::~WinSalFrame()
         // destroy system frame
         if ( !DestroyWindow( mhWnd ) )
             SetWindowPtr( mhWnd, 0 );
-    }
 
-    // remove frame from framelist
-    if ( this == pSalData->mpFirstFrame )
-        pSalData->mpFirstFrame = mpNextFrame;
-    else
-    {
-        WinSalFrame* pTempFrame = pSalData->mpFirstFrame;
-        while ( pTempFrame->mpNextFrame != this )
-            pTempFrame = pTempFrame->mpNextFrame;
-
-        pTempFrame->mpNextFrame = mpNextFrame;
+        mhWnd = 0;
     }
 }
 
