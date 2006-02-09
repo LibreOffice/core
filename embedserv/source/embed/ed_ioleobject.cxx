@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:52:03 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,7 @@ HRESULT EmbedDocument_Impl::SaveObject()
                 iAdvise->second->OnSave( );
     }
 
-    notify();
+    notify( false );
 
     return hr;
 }
@@ -394,7 +394,7 @@ HRESULT EmbedDocument_Impl::ShowObject()
 }
 
 
-void EmbedDocument_Impl::notify()
+void EmbedDocument_Impl::notify( bool bDataChanged )
 {
     for ( AdviseSinkHashMapIterator iAdvise =
               m_aAdviseHashMap.begin();
@@ -403,7 +403,7 @@ void EmbedDocument_Impl::notify()
         if ( iAdvise->second )
             iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
 
-    if ( m_pDAdviseHolder )
+    if ( m_pDAdviseHolder && bDataChanged )
         m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
 
