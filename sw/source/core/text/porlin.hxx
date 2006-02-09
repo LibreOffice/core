@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:30:58 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,7 @@ public:
     inline const sal_Bool IsErgoSumPortion()const{ return nWhichPor == POR_ERGOSUM;}
     inline const sal_Bool IsQuoVadisPortion()const{ return nWhichPor==POR_QUOVADIS;}
     inline const sal_Bool IsTabCntPortion( )const{ return nWhichPor==POR_TABCENTER;}
+    inline const sal_Bool IsTabDecimalPortion() const { return nWhichPor == POR_TABDECIMAL;}
     inline const sal_Bool IsTabLeftPortion()const{ return nWhichPor == POR_TABLEFT;}
     inline const sal_Bool IsFtnNumPortion( )const{ return nWhichPor == POR_FTNNUM; }
     inline const sal_Bool IsFtnPortion( )   const{ return nWhichPor == POR_FTN; }
