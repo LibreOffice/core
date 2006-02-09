@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:40:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,14 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             bStatus = FALSE;
             break;
         }
+
         nNextPos = pWMF->Tell() + ( nRecSize - 8 );
+
+        if ( nNextPos > nEndPos )
+        {
+            bStatus = FALSE;
+            break;
+        }
 
         if( aBmpSaveList.Count() && ( nRecType != EMR_STRETCHBLT ) && ( nRecType != EMR_STRETCHDIBITS ) )
                 pOut->ResolveBitmapActions( aBmpSaveList );
@@ -966,7 +973,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                             {
                                 ByteString aCharacter( aText.GetChar( i ), pOut->GetCharSet() );
                                 pDX[ i ] = 0;
-                                for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ); k++ )
+                                for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ) && ( i < aText.Len() ); k++ )
                                     pDX[ i ] += pOldDx[ j++ ];
                             }
                             delete[] pOldDx;
