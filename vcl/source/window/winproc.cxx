@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:06:51 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -987,6 +987,10 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
 
     // determine last input time
     pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
+
+    // #127104# workaround for destroyed windows
+    if( pWindow->ImplGetWindowImpl() == NULL )
+        return 0;
 
     // find window - is every time the window which has currently the
     // focus or the last time the focus.
@@ -2281,16 +2285,17 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
 
     long nRet = 0;
 
+    Window* pWindow = reinterpret_cast<Window*>( pInst );
     // #119709# for some unknown reason it is possible to receive events (in this case key events)
     // although the corresponding VCL window must have been destroyed already
     // at least ImplGetWindowImpl() was NULL in these cases, so check this here
-    if( !((Window*) pInst)->ImplGetWindowImpl() )
+    if( pWindow->ImplGetWindowImpl() == NULL )
         return 0;
 
     switch ( nEvent )
     {
         case SALEVENT_MOUSEMOVE:
-            nRet = ImplHandleSalMouseMove( (Window*)pInst, (SalMouseEvent*)pEvent );
+            nRet = ImplHandleSalMouseMove( pWindow, (SalMouseEvent*)pEvent );
             break;
         case SALEVENT_EXTERNALMOUSEMOVE:
         {
@@ -2303,14 +2308,14 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             aSalMouseEvent.mnButton = 0;
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseMove( (Window*)pInst, &aSalMouseEvent );
+            nRet = ImplHandleSalMouseMove( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSELEAVE:
-            nRet = ImplHandleSalMouseLeave( (Window*)pInst, (SalMouseEvent*)pEvent );
+            nRet = ImplHandleSalMouseLeave( pWindow, (SalMouseEvent*)pEvent );
             break;
         case SALEVENT_MOUSEBUTTONDOWN:
-            nRet = ImplHandleSalMouseButtonDown( (Window*)pInst, (SalMouseEvent*)pEvent );
+            nRet = ImplHandleSalMouseButtonDown( pWindow, (SalMouseEvent*)pEvent );
             break;
         case SALEVENT_EXTERNALMOUSEBUTTONDOWN:
         {
@@ -2323,11 +2328,11 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseButtonDown( (Window*)pInst, &aSalMouseEvent );
+            nRet = ImplHandleSalMouseButtonDown( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSEBUTTONUP:
-            nRet = ImplHandleSalMouseButtonUp( (Window*)pInst, (SalMouseEvent*)pEvent );
+            nRet = ImplHandleSalMouseButtonUp( pWindow, (SalMouseEvent*)pEvent );
             break;
         case SALEVENT_EXTERNALMOUSEBUTTONUP:
         {
@@ -2340,53 +2345,53 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseButtonUp( (Window*)pInst, &aSalMouseEvent );
+            nRet = ImplHandleSalMouseButtonUp( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSEACTIVATE:
-            nRet = ImplHandleSalMouseActivate( (Window*)pInst, (SalMouseActivateEvent*)pEvent );
+            nRet = ImplHandleSalMouseActivate( pWindow, (SalMouseActivateEvent*)pEvent );
             break;
         case SALEVENT_KEYINPUT:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
-            nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYINPUT,
+            nRet = ImplHandleKey( pWindow, EVENT_KEYINPUT,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, TRUE );
             }
             break;
         case SALEVENT_EXTERNALKEYINPUT:
             {
             KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
-            nRet = ImplHandleKey( (Window*) pInst, EVENT_KEYINPUT,
+            nRet = ImplHandleKey( pWindow, EVENT_KEYINPUT,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), FALSE );
             }
             break;
         case SALEVENT_KEYUP:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
-            nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYUP,
+            nRet = ImplHandleKey( pWindow, EVENT_KEYUP,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, TRUE );
             }
             break;
         case SALEVENT_EXTERNALKEYUP:
             {
             KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
-            nRet = ImplHandleKey( (Window*) pInst, EVENT_KEYUP,
+            nRet = ImplHandleKey( pWindow, EVENT_KEYUP,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), FALSE );
             }
             break;
         case SALEVENT_KEYMODCHANGE:
-            ImplHandleSalKeyMod( (Window*)pInst, (SalKeyModEvent*)pEvent );
+            ImplHandleSalKeyMod( pWindow, (SalKeyModEvent*)pEvent );
             break;
 
         case SALEVENT_INPUTLANGUAGECHANGE:
-            ImplHandleInputLanguageChange( (Window*)pInst );
+            ImplHandleInputLanguageChange( pWindow );
             break;
 
         case SALEVENT_MENUACTIVATE:
         case SALEVENT_MENUDEACTIVATE:
         case SALEVENT_MENUHIGHLIGHT:
         case SALEVENT_MENUCOMMAND:
-            nRet = ImplHandleMenuEvent( (Window*)pInst, (SalMenuEvent*)pEvent, nEvent );
+            nRet = ImplHandleMenuEvent( pWindow, (SalMenuEvent*)pEvent, nEvent );
             break;
 
         case SALEVENT_WHEELMOUSE:
@@ -2397,7 +2402,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
                 pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
 
             SalWheelMouseEvent* pWheelEvt = (SalWheelMouseEvent*)pEvent;
-            nRet = ImplHandleWheelEvent( (Window*)pInst,
+            nRet = ImplHandleWheelEvent( pWindow,
                                          pWheelEvt->mnX, pWheelEvt->mnY,
                                          pWheelEvt->mnTime,
                                          pWheelEvt->mnDelta,
@@ -2412,14 +2417,14 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             SalPaintEvent* pPaintEvt = (SalPaintEvent*)pEvent;
             Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
                                   Size( pPaintEvt->mnBoundWidth, pPaintEvt->mnBoundHeight ) );
-            ImplHandlePaint( (Window*)pInst, aBoundRect );
+            ImplHandlePaint( pWindow, aBoundRect );
             }
             break;
 
         case SALEVENT_MOVE:
             {
-            SalFrameGeometry g = ((Window*)pInst)->ImplGetWindowImpl()->mpFrame->GetGeometry();
-            ImplHandleMove( (Window*)pInst, g.nX, g.nY );
+            SalFrameGeometry g = pWindow->ImplGetWindowImpl()->mpFrame->GetGeometry();
+            ImplHandleMove( pWindow, g.nX, g.nY );
             }
             break;
 
@@ -2427,33 +2432,33 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             {
             long nNewWidth;
             long nNewHeight;
-            ((Window*)pInst)->ImplGetWindowImpl()->mpFrame->GetClientSize( nNewWidth, nNewHeight );
-            ImplHandleResize( (Window*)pInst, nNewWidth, nNewHeight );
+            pWindow->ImplGetWindowImpl()->mpFrame->GetClientSize( nNewWidth, nNewHeight );
+            ImplHandleResize( pWindow, nNewWidth, nNewHeight );
             }
             break;
 
         case SALEVENT_MOVERESIZE:
             {
-            SalFrameGeometry g = ((Window*)pInst)->ImplGetWindowImpl()->mpFrame->GetGeometry();
-            ImplHandleMoveResize( (Window*)pInst, g.nX, g.nY, g.nWidth, g.nHeight );
+            SalFrameGeometry g = pWindow->ImplGetWindowImpl()->mpFrame->GetGeometry();
+            ImplHandleMoveResize( pWindow, g.nX, g.nY, g.nWidth, g.nHeight );
             }
             break;
 
         case SALEVENT_CLOSEPOPUPS:
             {
-            KillOwnPopups( (Window*)pInst );
+            KillOwnPopups( pWindow );
             }
             break;
 
         case SALEVENT_GETFOCUS:
-            ImplHandleGetFocus( (Window*)pInst );
+            ImplHandleGetFocus( pWindow );
             break;
         case SALEVENT_LOSEFOCUS:
-            ImplHandleLoseFocus( (Window*)pInst );
+            ImplHandleLoseFocus( pWindow );
             break;
 
         case SALEVENT_CLOSE:
-            ImplHandleClose( (Window*)pInst );
+            ImplHandleClose( pWindow );
             break;
 
         case SALEVENT_SHUTDOWN:
@@ -2486,7 +2491,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_FONTCHANGED:
         case SALEVENT_DATETIMECHANGED:
         case SALEVENT_KEYBOARDCHANGED:
-            ImplHandleSalSettings( (Window*)pInst, nEvent );
+            ImplHandleSalSettings( pWindow, nEvent );
             break;
 
         case SALEVENT_USEREVENT:
@@ -2496,19 +2501,19 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_EXTTEXTINPUT:
             {
             SalExtTextInputEvent* pEvt = (SalExtTextInputEvent*)pEvent;
-            nRet = ImplHandleExtTextInput( (Window*)pInst, pEvt->mnTime,
+            nRet = ImplHandleExtTextInput( pWindow, pEvt->mnTime,
                                            pEvt->maText, pEvt->mpTextAttr,
                                            pEvt->mnCursorPos, pEvt->mnCursorFlags );
             }
             break;
         case SALEVENT_ENDEXTTEXTINPUT:
-            nRet = ImplHandleEndExtTextInput( (Window*)pInst );
+            nRet = ImplHandleEndExtTextInput( pWindow );
             break;
         case SALEVENT_EXTTEXTINPUTPOS:
-            ImplHandleSalExtTextInputPos( (Window*)pInst, (SalExtTextInputPosEvent*)pEvent );
+            ImplHandleSalExtTextInputPos( pWindow, (SalExtTextInputPosEvent*)pEvent );
             break;
         case SALEVENT_INPUTCONTEXTCHANGE:
-            nRet = ImplHandleInputContextChange( (Window*)pInst, ((SalInputContextChangeEvent*)pEvent)->meLanguage );
+            nRet = ImplHandleInputContextChange( pWindow, ((SalInputContextChangeEvent*)pEvent)->meLanguage );
             break;
 
 #ifdef DBG_UTIL
