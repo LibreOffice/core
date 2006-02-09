@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:56:41 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,19 @@ File gid_File_Help_Sdatabase_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(sdatabase);
+    Patchfiles = ("sdatabase.db",
+                  "sdatabase.ht",
+                  "sdatabase.jar",
+                  "sdatabase.key",
+                  "sdatabase.idx/CONTEXTS",
+                  "sdatabase.idx/DICTIONARY",
+                  "sdatabase.idx/DOCS",
+                  "sdatabase.idx/DOCS.TAB",
+                  "sdatabase.idx/EDGE",
+                  "sdatabase.idx/LINKNAMES",
+                  "sdatabase.idx/OFFSETS",
+                  "sdatabase.idx/POSITIONS",
+                  "sdatabase.idx/SCHEMA"); 
 End
 
 #endif
