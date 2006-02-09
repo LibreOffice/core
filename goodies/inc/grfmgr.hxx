@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:17:12 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,9 +507,10 @@ private:
     BOOL            ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                       const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
                                       const ULONG nFlags, BitmapEx* pBmpEx = NULL );
-    BOOL            ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    BOOL            ImplCreateOutput( OutputDevice* pOut,
+                                      const Point& rPt, const Size& rSz,
                                       const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                      const ULONG nFlags, GDIMetaFile* pMtf = NULL );
+                                      const ULONG nFlags, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx );
 
     BOOL            ImplCreateScaled( const BitmapEx& rBmpEx,
                                       long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
