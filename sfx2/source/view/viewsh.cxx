@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:59:29 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1397,7 +1397,7 @@ void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
 
 SfxObjectShell* SfxViewShell::GetObjectShell()
 {
-    return GetViewFrame()->GetObjectShell();
+    return pFrame ? pFrame->GetObjectShell() : NULL;
 }
 
 //--------------------------------------------------------------------
