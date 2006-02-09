@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:50:03 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:00:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ sub convert
 
         if ( $oneline =~ /^\s*\w+\s+\=\s*\(.*\)\s*\;\s*$/ )     # only one line
         {
-            if ( ! ( $oneline =~ /^\s*Assignment\d+\s*\=/ ))
+            if (( ! ( $oneline =~ /^\s*Assignment\d+\s*\=/ )) && ( ! ( $oneline =~ /^\s*PatchAssignment\d+\s*\=/ )))
             {
                 $oneline =~ s/\s//g;        # removing whitespaces in lists
                 $oneline =~ s/\=/\ \=\ /;   # adding whitespace around equals sign
