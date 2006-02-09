@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:24:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ struct SfxObjectShell_Impl
                         bSupportsEventMacros: 1,
                         bLoadingWindows: 1,
                         bBasicInitialized :1,
-                        bHidden :1, // indicates a hidden view shell
+                        //bHidden :1, // indicates a hidden view shell
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
                         bOwnsStorage:1,
                         bNoBaseURL:1,
@@ -217,8 +217,8 @@ struct SfxObjectShell_Impl
         bHiddenLockedByAPI( sal_False ),
         bInCloseEvent( sal_False ),
         bLoadingWindows( sal_False ),
-        bPreserveVersions( sal_True ),
-        bHidden( sal_False )
+        bPreserveVersions( sal_True )
+        //, bHidden( sal_False )
         , nStyleFilter( 0 )
         , nMacroMode( -1 )
         , bDisposing( sal_False )
