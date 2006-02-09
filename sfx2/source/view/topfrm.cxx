@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:59:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -916,6 +916,9 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     if ( !pJumpItem && !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
             !pImp->bHidden && pDoc->LoadWindows_Impl( this ) )
     {
+        if ( GetCurrentDocument() != pDoc )
+            // something went wrong during insertion
+            return sal_False;
         pDoc->OwnerLock( sal_False );
         return sal_True;
     }
@@ -945,7 +948,6 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
         if ( pFrame->GetObjectShell() )
         {
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, pFrame->GetObjectShell() ) );
             pFrame->ReleaseObjectShell_Impl( sal_False );
         }
 
@@ -964,6 +966,9 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
         bBrowsing = sal_False;
         pFrame = new SfxTopViewFrame( this, pDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
+        if ( !pFrame->GetViewShell() )
+            return sal_False;
+
         if ( pPluginItem && pPluginItem->GetValue() == 1 )
         {
             pFrame->ForceOuterResize_Impl( FALSE );
@@ -1290,9 +1295,17 @@ SfxTopViewFrame::SfxTopViewFrame
         LockAdjustPosSizePixel();
     }
 
-    // ViewShell erzeugen
-    if ( pObjShell )
-        SwitchToViewShell_Impl( nViewId );
+    try
+    {
+        if ( pObjShell )
+            SwitchToViewShell_Impl( nViewId );
+    }
+    catch (com::sun::star::uno::Exception& )
+    {
+        // make sure that the ctor is left regularly
+        ReleaseObjectShell_Impl();
+        return;
+    }
 
     if ( GetFrame()->IsInPlace() )
     {
