@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:39:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 12:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,9 +670,14 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
     {
         eType = pExpr->GetType();
         if( pExpr->IsNumber() )
+        {
             nVal = pExpr->nVal;
+        }
         else
-            nVal = 0, aVal = pParser->aGblStrings.Find( pExpr->nStringId );
+        {
+            nVal = 0;
+            aVal = pExpr->aStrVal;
+        }
     }
     else
     {
