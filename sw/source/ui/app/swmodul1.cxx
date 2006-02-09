@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:10 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,13 +250,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben")
     const TypeId aTypeId = TYPE(SwView);
-    // auf Sichtbarkeit pruefen, bis der Sfx das GetFirst/Next
-    //mit bOnlyVisible implementiert hat
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
-    while(pNView && !pNView->GetViewFrame()->IsVisible())
-    {
-        pNView = (SwView*)SfxViewShell::GetNext(*pNView, &aTypeId);
-    }
+    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
     return pNView;
 }
 
