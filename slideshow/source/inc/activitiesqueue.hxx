@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:03:23 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ namespace presentation
 
                 @return false, if queue is empty, true otherwise
              */
-            bool isEmpty();
+            bool isEmpty() const;
 
             /** Remove all pending activities from the queue.
              */
