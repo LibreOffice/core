@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:52:43 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,22 @@ struct DIBInfoHeader
                     ~DIBInfoHeader() {}
 };
 
+namespace
+{
+    inline USHORT discretizeBitcount( UINT16 nInputCount )
+    {
+        return ( nInputCount <= 1 ) ? 1 :
+               ( nInputCount <= 4 ) ? 4 :
+               ( nInputCount <= 8 ) ? 8 : 24;
+    }
+
+    inline bool isBitfieldCompression( ULONG nScanlineFormat )
+    {
+        return nScanlineFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ||
+            nScanlineFormat == BMP_FORMAT_32BIT_TC_MASK;
+    }
+}
+
 // ----------
 // - Bitmap -
 // ----------
@@ -169,9 +185,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
 
     if( ImplReadDIBInfoHeader( rIStm, aHeader ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
     {
-        USHORT nBitCount = ( aHeader.nBitCount <= 1 ) ? 1 :
-                           ( aHeader.nBitCount <= 4 ) ? 4 :
-                           ( aHeader.nBitCount <= 8 ) ? 8 : 24;
+        const USHORT nBitCount( discretizeBitcount(aHeader.nBitCount) );
 
         const Size          aSizePixel( aHeader.nWidth, aHeader.nHeight );
         BitmapPalette       aDummyPal;
@@ -686,39 +700,38 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
     aHeader.nHeight = rAcc.Height();
     aHeader.nPlanes = 1;
 
-    switch( rAcc.GetScanlineFormat() )
+    if( isBitfieldCompression( rAcc.GetScanlineFormat() ) )
     {
-        case( BMP_FORMAT_16BIT_TC_LSB_MASK ):
-        case( BMP_FORMAT_32BIT_TC_MASK ):
-        {
-            aHeader.nBitCount = ( rAcc.GetScanlineFormat() == BMP_FORMAT_16BIT_TC_LSB_MASK ) ? 16 : 32;
-            nCompression = BITFIELDS;
-        }
-        break;
+        aHeader.nBitCount = ( rAcc.GetScanlineFormat() == BMP_FORMAT_16BIT_TC_LSB_MASK ) ? 16 : 32;
+        aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
 
-        default:
-        {
-            // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
-            // not handled properly below (would have to set color
-            // masks, and nCompression=BITFIELDS - but color mask is
-            // not set for formats != *_TC_*). Note that this very
-            // problem might cause trouble at other places - the
-            // introduction of 32 bit RGBA bitmaps is relatively
-            // recent.
-            aHeader.nBitCount = ::std::min( 24U,
-                                            (unsigned int)rAcc.GetBitCount() );
+        nCompression = BITFIELDS;
+    }
+    else
+    {
+        // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
+        // not handled properly below (would have to set color
+        // masks, and nCompression=BITFIELDS - but color mask is
+        // not set for formats != *_TC_*). Note that this very
+        // problem might cause trouble at other places - the
+        // introduction of 32 bit RGBA bitmaps is relatively
+        // recent.
+        // #i59239# discretize bitcount to 1,4,8,24 (other cases
+        // are not written below)
+        const UINT16 nBitCount( (UINT16)rAcc.GetBitCount() );
+        aHeader.nBitCount = discretizeBitcount( nBitCount );
+        aHeader.nSizeImage = rAcc.Height() *
+            AlignedWidth4Bytes( rAcc.Width()*aHeader.nBitCount );
 
-            if( bCompressed )
-            {
-                if( 4 == aHeader.nBitCount )
-                    nCompression = RLE_4;
-                else if( 8 == aHeader.nBitCount )
-                    nCompression = RLE_8;
-            }
-            else
-                nCompression = COMPRESS_NONE;
+        if( bCompressed )
+        {
+            if( 4 == nBitCount )
+                nCompression = RLE_4;
+            else if( 8 == nBitCount )
+                nCompression = RLE_8;
         }
-        break;
+        else
+            nCompression = COMPRESS_NONE;
     }
 
     if( ( rOStm.GetCompressMode() & COMPRESSMODE_ZBITMAP ) &&
@@ -728,8 +741,6 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
     }
     else
         aHeader.nCompression = nCompression;
-
-    aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
 
     if( maPrefSize.Width() && maPrefSize.Height() && ( maPrefMapMode != aMapPixel ) )
     {
@@ -814,7 +825,8 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
 
 BOOL Bitmap::ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc )
 {
-    UINT32  nPalCount = ( rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : rAcc.HasColorMask() ? 3UL : 0UL );
+    UINT32  nPalCount = ( rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() :
+                          isBitfieldCompression( rAcc.GetScanlineFormat() ) ? 3UL : 0UL );
     UINT32  nOffset = 14 + DIBINFOHEADERSIZE + nPalCount * 4UL;
 
     rOStm << (UINT16) 0x4D42;
@@ -894,9 +906,11 @@ BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
         // formats != *_TC_*). Note that this very problem might cause
         // trouble at other places - the introduction of 32 bit RGBA
         // bitmaps is relatively recent.
-        const USHORT nBitCount = ::std::min( 24U,
-                                            (unsigned int)rAcc.GetBitCount() );
-        const ULONG  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() * nBitCount);
+        // #i59239# discretize bitcount for aligned width to 1,4,8,24
+        // (other cases are not written below)
+        const USHORT nBitCount( (USHORT)rAcc.GetBitCount() );
+        const ULONG  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() *
+                                                         discretizeBitcount(nBitCount));
         BOOL         bNative = FALSE;
 
         switch( rAcc.GetScanlineFormat() )
@@ -992,7 +1006,10 @@ BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
                 }
                 break;
 
+                // #i59239# fallback to 24 bit format, if bitcount is non-default
                 default:
+                    // FALLTHROUGH intended
+                case( 24 ):
                 {
                     BitmapColor aPixelColor;
 
