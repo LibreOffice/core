@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:12:42 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:21:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.12 $ ';
+my $id_str = ' $Revision: 1.13 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,19 +103,20 @@ sub parse_options
 {
     my $opt_help;
     my $p = Getopt::Long::Parser->new();
+    my @custom_path_list;
     my $success =$p->getoptions(
                              '-h' => \$opt_help,
                              '-o=s' => \$out_file,
                              '-g=s' => \$global_path,
                              '-m=s' => \$module_path,
-                             '-c=s' => \@custom_path,
+                             '-c=s' => \@custom_path_list,
                              '-l=s' => \@imagelist_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
 
     if ( $opt_help || !$success || !$out_file || !$global_path
-        || !$module_path || !@custom_path || !@imagelist_path )
+        || !$module_path || !@custom_path_list || !@imagelist_path )
     {
         usage();
         exit(1);
@@ -127,14 +128,26 @@ sub parse_options
 
     # Check if out_file can be written.
     my $out_dir = dirname($out_file);
-    print_error("no such directory: '$out_dir'", 2) if ! -d $out_dir;
-    print_error("can't search directory: '$out_dir'", 2) if ! -x $out_dir;
-    print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
 
     # Check paths.
-    foreach ($global_path, $module_path, @custom_path, @imagelist_path) {
+    foreach ($out_dir, $global_path, $module_path, @imagelist_path) {
         print_error("no such directory: '$_'", 2) if ! -d $_;
         print_error("can't search directory: '$_'", 2) if ! -x $_;
+    }
+    print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
+
+    # Use just the working paths
+    @custom_path = ();
+    foreach (@custom_path_list) {
+        if ( ! -d $_ ) {
+            print_warning("skipping non-existing directory: '$_'", 2);
+        }
+        elsif ( ! -x $_ ) {
+            print_error("can't search directory: '$_'", 2);
+        }
+        else {
+            push @custom_path, $_;
+        }
     }
 }
 
