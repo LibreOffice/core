@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:57:14 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -830,7 +830,6 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
     }
 
     // View erzeugen
-    SfxViewFrame* pViewFrame = 0;
     if ( xDoc.Is() )
     {
         SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
@@ -865,7 +864,7 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
         {
             if ( pFrame->GetCurrentDocument() == xDoc || pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
             {
-                if (bHidden)
+                if ( bHidden )
                 {
                     xDoc->RestoreNoDelete();
                     xDoc->OwnerLock( TRUE );
@@ -873,14 +872,16 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
                 }
 
                 if ( pFrame->GetCurrentDocument() != xDoc )
-                    pFrame->InsertDocument( xDoc );
-                pViewFrame = pFrame->GetCurrentViewFrame();
+                {
+                    if ( pFrame->InsertDocument( xDoc ) )
+                        rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
+                    else
+                        xDoc->DoClose();
+                }
             }
             else
                 xDoc.Clear();
         }
-
-        rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
     }
 
     return rReq.GetReturnValue();
