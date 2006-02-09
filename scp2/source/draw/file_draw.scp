@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:57:27 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,21 @@ End
 
 File gid_File_Help_Sdraw_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(sdraw);
+    Patchfiles = ("sdraw.db",
+                  "sdraw.ht",
+                  "sdraw.jar",
+                  "sdraw.key",
+                  "sdraw.idx/CONTEXTS",
+                  "sdraw.idx/DICTIONARY",
+                  "sdraw.idx/DOCS",
+                  "sdraw.idx/DOCS.TAB",
+                  "sdraw.idx/EDGE",
+                  "sdraw.idx/LINKNAMES",
+                  "sdraw.idx/OFFSETS",
+                  "sdraw.idx/POSITIONS",
+                  "sdraw.idx/SCHEMA"); 
 End
 
 #endif
