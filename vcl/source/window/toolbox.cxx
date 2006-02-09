@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:10:38 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1944,8 +1944,8 @@ BOOL ToolBox::ImplCalcItem()
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
 
     // set defaults if image or text is needed but empty
-    nDefWidth       = ImplGetDefaultImageSize().Width();
-    nDefHeight      = ImplGetDefaultImageSize().Height();
+    nDefWidth       = GetDefaultImageSize().Width();
+    nDefHeight      = GetDefaultImageSize().Height();
 
     // determine minimum size necessary in NWF
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
