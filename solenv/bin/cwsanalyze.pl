@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-07 17:03:23 $
+#   last change: $Author: rt $ $Date: 2006-02-09 14:22:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.12 $ ';
+my $id_str = ' $Revision: 1.13 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,7 +103,7 @@ my @commit_veto_list = (
                         # The defs file mechanism is not compatible with CWS.
                         # It really needs to be changed.
                         'defs\/wntmsci\d+$'
-                );
+                       );
 foreach (@commit_veto_list) {
     $commit_veto_hash{$_}++;
 }
@@ -370,14 +370,11 @@ sub analyze_module
                 print_error("Can't chdir() to '$dir/$module'", 6);
             }
         }
-        foreach my $change_ref (@{$changed_files_ref}) {
+      ANALYZE: foreach my $change_ref (@{$changed_files_ref}) {
             # Check against vetoed files
             foreach my $veto_pattern ( keys %commit_veto_hash ) {
                 if ( $change_ref->[0] =~ /$veto_pattern/ ) {
-                    print "\tA", "\t",
-                            $change_ref->[0], " def file detected, will be ignored\n";
-                    plog("A\t$module/$change_ref->[0]: def file detected!");
-                    $nalerts++;
+                    next ANALYZE; # jump to next changed file
                 }
             }
             if ( !defined($change_ref->[1]) && !defined($change_ref->[2]) ) {
@@ -488,10 +485,6 @@ sub integrate_module
             # Check against vetoed files
             foreach my $veto_pattern ( keys %commit_veto_hash ) {
                 if ( $archive =~ /$veto_pattern/ ) {
-                    print "\tA", "\t",
-                            $archive, " def file detected. skipped\n";
-                    plog("C\t$module/$archive: def file detected!");
-                    $nalerts++;
                     next COMMIT; # jump to next changed file
                 }
             }
@@ -510,8 +503,8 @@ sub integrate_module
             my $branch_rev = $cvs_archive->get_branch_rev($cws_branch_tag);
             my $master_branch_rev = $cvs_archive->get_branch_rev($master_branch_tag);
             if ( !$branch_rev ) {
-                # can't happen
-                print_error("Internal error: can't determine CWS branch root", 0);
+                # If this go wrong it's most likely due to a CVS problem
+                print_error("Can't determine CWS branch root, CVS problems?", 99);
             }
             my @merge_comments;
             push(@merge_comments, get_revision_comments($cvs_archive, $branch_rev));
