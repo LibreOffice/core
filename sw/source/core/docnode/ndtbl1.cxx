@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:47:28 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 15:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,7 +727,11 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 }
 
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
-                if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
+                if ( pTab->IsFollow() &&
+                     ( pTab->IsInHeadline( *pCell ) ||
+                       // --> FME 2006-02-07 #126092# Same holds for follow flow rows.
+                       pCell->IsInFollowFlowRow() ) )
+                       // <--
                     continue;
 
                 SvxBoxItem aBox( pCell->GetFmt()->GetBox() );
