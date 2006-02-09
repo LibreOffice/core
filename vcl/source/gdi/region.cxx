@@ -4,9 +4,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:10:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1117,7 +1117,14 @@ BOOL Region::Intersect( const Rectangle& rRect )
     // #103137# Avoid banding for special cases
     if ( mpImplRegion->mpPolyPoly )
     {
-        // use the PolyPolygon:Clip method for rectangles, this is
+        // #127431# make ImplRegion unique, if not already.
+        if( mpImplRegion->mnRefCount > 1 )
+        {
+            mpImplRegion->mnRefCount--;
+            mpImplRegion = new ImplRegion( *mpImplRegion->mpPolyPoly );
+        }
+
+        // use the PolyPolygon::Clip method for rectangles, this is
         // fairly simple (does not even use GPC) and saves us from
         // unnecessary banding
         mpImplRegion->mpPolyPoly->Clip( rRect );
