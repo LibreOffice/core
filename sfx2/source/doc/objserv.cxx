@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:20:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,6 +250,122 @@ long SfxObjectShellClose_Impl( void* pObj, void* pArg )
 
 //=========================================================================
 
+class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+{
+    sal_Bool m_bGotOwnership;
+    sal_Bool m_bPreventClose;
+
+public:
+    SfxClosePreventer_Impl();
+
+    sal_Bool HasOwnership() { return m_bGotOwnership; }
+
+    void SetPreventClose( sal_Bool bPrevent ) { m_bPreventClose = bPrevent; }
+
+    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+        throw ( uno::RuntimeException, util::CloseVetoException );
+
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException ) ;
+
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException ) ;
+
+} ;
+
+SfxClosePreventer_Impl::SfxClosePreventer_Impl()
+: m_bGotOwnership( sal_False )
+, m_bPreventClose( sal_True )
+{
+}
+
+void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+        throw ( uno::RuntimeException, util::CloseVetoException )
+{
+    if ( m_bPreventClose )
+    {
+        if ( !m_bGotOwnership )
+            m_bGotOwnership = bDeliverOwnership;
+
+        throw util::CloseVetoException();
+    }
+}
+
+void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+{}
+
+void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+{}
+
+//=========================================================================
+class SfxInstanceCloseGuard_Impl
+{
+    SfxClosePreventer_Impl* m_pPreventer;
+    uno::Reference< util::XCloseListener > m_xPreventer;
+    uno::Reference< util::XCloseable > m_xCloseable;
+
+public:
+    SfxInstanceCloseGuard_Impl()
+    : m_pPreventer( NULL )
+    {}
+
+    ~SfxInstanceCloseGuard_Impl();
+
+    sal_Bool Init_Impl( const uno::Reference< util::XCloseable >& xCloseable );
+};
+
+sal_Bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseable >& xCloseable )
+{
+    sal_Bool bResult = sal_False;
+
+    // do not allow reinit after the successful init
+    if ( xCloseable.is() && !m_xCloseable.is() )
+    {
+        try
+        {
+            m_pPreventer = new SfxClosePreventer_Impl();
+            m_xPreventer = uno::Reference< util::XCloseListener >( m_pPreventer );
+            xCloseable->addCloseListener( m_xPreventer );
+            m_xCloseable = xCloseable;
+            bResult = sal_True;
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Could not register close listener!\n" );
+        }
+    }
+
+    return bResult;
+}
+
+SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
+{
+    if ( m_xCloseable.is() && m_xPreventer.is() )
+    {
+        try
+        {
+            m_xCloseable->removeCloseListener( m_xPreventer );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        try
+        {
+            if ( m_pPreventer )
+            {
+                m_pPreventer->SetPreventClose( sal_False );
+
+                if ( m_pPreventer->HasOwnership() )
+                    m_xCloseable->close( sal_True ); // TODO: do it asynchronously
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
+
+//=========================================================================
+
 void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 {
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
@@ -370,6 +486,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         return;
     }
 
+    // this guard is created here to have it destruction at the end of the method
+    SfxInstanceCloseGuard_Impl aModelGuard;
+
     sal_Bool bIsPDFExport = sal_False;
     switch(nId)
     {
@@ -477,6 +596,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
+
+            // the model can not be closed till the end of this method
+            // if somebody tries to close it during this time the model will be closed
+            // at the end of the method
+            aModelGuard.Init_Impl( uno::Reference< util::XCloseable >( GetModel(), uno::UNO_QUERY ) );
 
             sal_Bool bDialogUsed = sal_False;
             sal_uInt32 nErrorCode = ERRCODE_NONE;
