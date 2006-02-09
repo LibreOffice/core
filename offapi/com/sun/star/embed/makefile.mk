@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:04:49 $
+#   last change: $Author: rt $ $Date: 2006-02-09 13:45:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ PACKAGE=com$/sun$/star$/embed
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    Actions.idl\
     Aspects.idl\
     BaseStorage.idl\
     ElementModes.idl\
@@ -56,15 +57,18 @@ IDLFILES=\
     EmbedUpdateModes.idl\
     EmbeddedObjectDescriptor.idl\
     EntryInitModes.idl\
+    DocumentCloser.idl\
     FileSystemStorage.idl\
     FileSystemStorageFactory.idl\
     InsertedObjectInfo.idl\
+    InstanceLocker.idl\
     Storage.idl\
     StorageStream.idl\
     StorageFactory.idl\
     VerbAttributes.idl\
     VisualRepresentation.idl\
     VerbDescriptor.idl\
+    XActionsApproval.idl\
     XPersistanceHolder.idl\
     XEmbeddedObject.idl\
     XVisualObject.idl\
