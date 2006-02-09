@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,64 @@
 #define MAP( cVal0, cVal1, nFrac )  ((BYTE)((((long)(cVal0)<<20L)+nFrac*((long)(cVal1)-(cVal0)))>>20L))
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
+
+// -----------
+// - helpers -
+// -----------
+
+namespace {
+
+void muckWithBitmap( const Point&    rDestPoint,
+                     const Size&     rDestSize,
+                     const Size&     rRefSize,
+                     bool&           o_rbNonBitmapActionEncountered )
+{
+    const Point aEmptyPoint;
+
+    if( aEmptyPoint != rDestPoint ||
+        rDestSize != rRefSize )
+    {
+        // non-fullscale, or offsetted bmp -> fallback to mtf
+        // rendering
+        o_rbNonBitmapActionEncountered = true;
+    }
+}
+
+BitmapEx muckWithBitmap( const BitmapEx& rBmpEx,
+                         const Point&    rSrcPoint,
+                         const Size&     rSrcSize,
+                         const Point&    rDestPoint,
+                         const Size&     rDestSize,
+                         const Size&     rRefSize,
+                         bool&           o_rbNonBitmapActionEncountered )
+{
+    BitmapEx aBmpEx;
+
+    muckWithBitmap(rDestPoint,
+                   rDestSize,
+                   rRefSize,
+                   o_rbNonBitmapActionEncountered);
+
+    if( o_rbNonBitmapActionEncountered )
+        return aBmpEx;
+
+    aBmpEx = rBmpEx;
+
+    if( (rSrcPoint.X() != 0 && rSrcPoint.Y() != 0) ||
+        rSrcSize != rBmpEx.GetSizePixel() )
+    {
+        // crop bitmap to given source rectangle (no
+        // need to copy and convert the whole bitmap)
+        const Rectangle aCropRect( rSrcPoint,
+                                   rSrcSize );
+        aBmpEx.Crop( aCropRect );
+    }
+
+    return aBmpEx;
+}
+
+} // namespace {
+
 
 // ------------------
 // - GraphicManager -
@@ -297,11 +355,28 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             if( mpCache->IsDisplayCacheable( pOut, rPt, rSz, rObj, rAttr ) )
             {
                 GDIMetaFile aDstMtf;
+                BitmapEx    aContainedBmpEx;
 
-                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, nFlags, &aDstMtf ) )
+                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, nFlags, aDstMtf, aContainedBmpEx ) )
                 {
-                    rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstMtf );
-                    bRet = TRUE;
+                    if( !!aContainedBmpEx )
+                    {
+                        // #117889# Use bitmap output method, if
+                        // metafile basically contains only a single
+                        // bitmap
+                        BitmapEx aDstBmpEx;
+
+                        if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
+                        {
+                            rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
+                            bRet = TRUE;
+                        }
+                    }
+                    else
+                    {
+                        rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstMtf );
+                        bRet = TRUE;
+                    }
                 }
             }
 
@@ -556,79 +631,296 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const ULONG nFlags, GDIMetaFile* pMtf )
+                                       const ULONG nFlags, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
-    if( !pMtf )
-    {
-        DBG_ERROR( "Missing..." );
-    }
-    else
-    {
-        Size aNewSize( rMtf.GetPrefSize() );
+    const Size aNewSize( rMtf.GetPrefSize() );
 
-        *pMtf = rMtf;
+    rOutMtf = rMtf;
 
-        if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
+    // #117889# count bitmap actions, and flag actions that paint, but
+    // are no bitmaps.
+    sal_Int32   nNumBitmaps(0);
+    bool        bNonBitmapActionEncountered(false);
+    if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
+    {
+        const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
+        const double fOutWH = (double) rSz.Width() / rSz.Height();
+
+        const double fScaleX = fOutWH / fGrfWH;
+        const double fScaleY = 1.0;
+
+        const MapMode& rPrefMapMode( rMtf.GetPrefMapMode() );
+        const Size&    rSizePix( pOut->LogicToPixel( aNewSize,
+                                                     rPrefMapMode ) );
+
+        // taking care of font width default if scaling metafile.
+        // #117889# use existing metafile scan, to determine whether
+        // the metafile basically displays a single bitmap. Note that
+        // the solution, as implemented here, is quite suboptimal (the
+        // cases where a mtf consisting basically of a single bitmap,
+        // that fail to pass the test below, are probably frequent). A
+        // better solution would involve FSAA, but that's currently
+        // expensive, and might trigger bugs on display drivers, if
+        // VDevs get bigger than the actual screen.
+        sal_uInt32  nCurPos;
+        MetaAction* pAct;
+        for( nCurPos = 0, pAct = (MetaAction*)rOutMtf.FirstAction(); pAct;
+             pAct = (MetaAction*)rOutMtf.NextAction(), nCurPos++ )
         {
-            const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
-            const double fOutWH = (double) rSz.Width() / rSz.Height();
-
-            double fScaleX = fOutWH / fGrfWH;
-            double fScaleY = 1.0;
-
-            // taking care of font width default if scaling metafile:
-            sal_uInt32 nCurPos;
-            MetaAction* pAct;
-            for( nCurPos = 0, pAct = (MetaAction*)pMtf->FirstAction(); pAct;
-                    pAct = (MetaAction*)pMtf->NextAction(), nCurPos++ )
+            MetaAction* pModAct = NULL;
+            switch( pAct->GetType() )
             {
-                MetaAction* pModAct = NULL;
-                switch( pAct->GetType() )
+                case META_FONT_ACTION:
                 {
-                    case META_FONT_ACTION :
+                    MetaFontAction* pA = (MetaFontAction*)pAct;
+                    Font aFont( pA->GetFont() );
+                    if ( !aFont.GetWidth() )
                     {
-                        MetaFontAction* pA = (MetaFontAction*)pAct;
-                        Font aFont( pA->GetFont() );
-                        if ( !aFont.GetWidth() )
-                        {
-                            FontMetric aFontMetric( pOut->GetFontMetric( aFont ) );
-                            aFont.SetWidth( aFontMetric.GetWidth() );
-                            pModAct = new MetaFontAction( aFont );
-                        }
+                        FontMetric aFontMetric( pOut->GetFontMetric( aFont ) );
+                        aFont.SetWidth( aFontMetric.GetWidth() );
+                        pModAct = new MetaFontAction( aFont );
                     }
                 }
-                if ( pModAct )
+                    // FALLTHROUGH intended
+                case META_NULL_ACTION:
+                    // FALLTHROUGH intended
+
+                    // OutDev state changes (which don't affect bitmap
+                    // output)
+                case META_LINECOLOR_ACTION:
+                    // FALLTHROUGH intended
+                case META_FILLCOLOR_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTCOLOR_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTFILLCOLOR_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTALIGN_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTLINECOLOR_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTLINE_ACTION:
+                    // FALLTHROUGH intended
+                case META_PUSH_ACTION:
+                    // FALLTHROUGH intended
+                case META_POP_ACTION:
+                    // FALLTHROUGH intended
+                case META_LAYOUTMODE_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTLANGUAGE_ACTION:
+                    // FALLTHROUGH intended
+                case META_COMMENT_ACTION:
+                    break;
+
+                    // bitmap output methods
+                case META_BMP_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpAction* pAction = (MetaBmpAction*)pAct;
+
+                        rOutBmpEx = BitmapEx( pAction->GetBitmap() );
+                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
+                                                            rPrefMapMode ),
+                                        pAction->GetBitmap().GetSizePixel(),
+                                        rSizePix,
+                                        bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                case META_BMPSCALE_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
+
+                        rOutBmpEx = BitmapEx( pAction->GetBitmap() );
+                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
+                                                            rPrefMapMode ),
+                                        pOut->LogicToPixel( pAction->GetSize(),
+                                                            rPrefMapMode ),
+                                        rSizePix,
+                                        bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                case META_BMPSCALEPART_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
+
+                        rOutBmpEx = muckWithBitmap( BitmapEx( pAction->GetBitmap() ),
+                                                    pAction->GetSrcPoint(),
+                                                    pAction->GetSrcSize(),
+                                                    pOut->LogicToPixel( pAction->GetDestPoint(),
+                                                                        rPrefMapMode ),
+                                                    pOut->LogicToPixel( pAction->GetDestSize(),
+                                                                        rPrefMapMode ),
+                                                    rSizePix,
+                                                    bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                case META_BMPEX_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
+
+                        rOutBmpEx = pAction->GetBitmapEx();
+                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
+                                                            rPrefMapMode ),
+                                        pAction->GetBitmapEx().GetSizePixel(),
+                                        rSizePix,
+                                        bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                case META_BMPEXSCALE_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
+
+                        rOutBmpEx = pAction->GetBitmapEx();
+                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
+                                                            rPrefMapMode ),
+                                        pOut->LogicToPixel( pAction->GetSize(),
+                                                            rPrefMapMode ),
+                                        rSizePix,
+                                        bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                case META_BMPEXSCALEPART_ACTION:
+                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                    {
+                        MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
+
+                        rOutBmpEx = muckWithBitmap( pAction->GetBitmapEx(),
+                                                    pAction->GetSrcPoint(),
+                                                    pAction->GetSrcSize(),
+                                                    pOut->LogicToPixel( pAction->GetDestPoint(),
+                                                                        rPrefMapMode ),
+                                                    pOut->LogicToPixel( pAction->GetDestSize(),
+                                                                        rPrefMapMode ),
+                                                    rSizePix,
+                                                    bNonBitmapActionEncountered );
+                        ++nNumBitmaps;
+                    }
+                    break;
+
+                    // these actions actually output something (that's
+                    // different from a bitmap)
+                case META_RASTEROP_ACTION:
+                    if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
+                        break;
+                    // FALLTHROUGH intended
+                case META_PIXEL_ACTION:
+                    // FALLTHROUGH intended
+                case META_POINT_ACTION:
+                    // FALLTHROUGH intended
+                case META_LINE_ACTION:
+                    // FALLTHROUGH intended
+                case META_RECT_ACTION:
+                    // FALLTHROUGH intended
+                case META_ROUNDRECT_ACTION:
+                    // FALLTHROUGH intended
+                case META_ELLIPSE_ACTION:
+                    // FALLTHROUGH intended
+                case META_ARC_ACTION:
+                    // FALLTHROUGH intended
+                case META_PIE_ACTION:
+                    // FALLTHROUGH intended
+                case META_CHORD_ACTION:
+                    // FALLTHROUGH intended
+                case META_POLYLINE_ACTION:
+                    // FALLTHROUGH intended
+                case META_POLYGON_ACTION:
+                    // FALLTHROUGH intended
+                case META_POLYPOLYGON_ACTION:
+                    // FALLTHROUGH intended
+
+                case META_TEXT_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTARRAY_ACTION:
+                    // FALLTHROUGH intended
+                case META_STRETCHTEXT_ACTION:
+                    // FALLTHROUGH intended
+                case META_TEXTRECT_ACTION:
+                    // FALLTHROUGH intended
+
+                case META_MASK_ACTION:
+                    // FALLTHROUGH intended
+                case META_MASKSCALE_ACTION:
+                    // FALLTHROUGH intended
+                case META_MASKSCALEPART_ACTION:
+                    // FALLTHROUGH intended
+
+                case META_GRADIENT_ACTION:
+                    // FALLTHROUGH intended
+                case META_HATCH_ACTION:
+                    // FALLTHROUGH intended
+                case META_WALLPAPER_ACTION:
+                    // FALLTHROUGH intended
+
+                case META_TRANSPARENT_ACTION:
+                    // FALLTHROUGH intended
+                case META_EPS_ACTION:
+                    // FALLTHROUGH intended
+                case META_FLOATTRANSPARENT_ACTION:
+                    // FALLTHROUGH intended
+                case META_GRADIENTEX_ACTION:
+                    // FALLTHROUGH intended
+
+                    // OutDev state changes that _do_ affect bitmap
+                    // output
+                case META_CLIPREGION_ACTION:
+                    // FALLTHROUGH intended
+                case META_ISECTRECTCLIPREGION_ACTION:
+                    // FALLTHROUGH intended
+                case META_ISECTREGIONCLIPREGION_ACTION:
+                    // FALLTHROUGH intended
+                case META_MOVECLIPREGION_ACTION:
+                    // FALLTHROUGH intended
+
+                case META_MAPMODE_ACTION:
+                    // FALLTHROUGH intended
+                case META_REFPOINT_ACTION:
+                    // FALLTHROUGH intended
+                default:
+                    bNonBitmapActionEncountered = true;
+                    break;
+            }
+            if ( pModAct )
+            {
+                rOutMtf.ReplaceAction( pModAct, nCurPos );
+                pAct->Delete();
+            }
+            else
+            {
+                if( pAct->GetRefCount() > 1 )
                 {
-                    pMtf->ReplaceAction( pModAct, nCurPos );
+                    rOutMtf.ReplaceAction( pModAct = pAct->Clone(), nCurPos );
                     pAct->Delete();
                 }
                 else
-                {
-                    if( pAct->GetRefCount() > 1 )
-                    {
-                        pMtf->ReplaceAction( pModAct = pAct->Clone(), nCurPos );
-                        pAct->Delete();
-                    }
-                    else
-                        pModAct = pAct;
-                }
-                pModAct->Scale( fScaleX, fScaleY );
+                    pModAct = pAct;
             }
-            pMtf->SetPrefSize( Size( FRound( aNewSize.Width() * fScaleX ),
-                                     FRound( aNewSize.Height() * fScaleY ) ) );
-
-/*
-            if( fGrfWH < fWinWH )
-                aNewSize.Width() = (long) ( ( aNewSize.Height() = rSz.Height.Height() ) * fGrfWH );
-            else
-                aNewSize.Height()= (long) ( ( aNewSize.Width() = rSz.Width() ) / fGrfWH );
-*/
+            pModAct->Scale( fScaleX, fScaleY );
         }
+        rOutMtf.SetPrefSize( Size( FRound( aNewSize.Width() * fScaleX ),
+                                   FRound( aNewSize.Height() * fScaleY ) ) );
+    }
 
+    if( nNumBitmaps != 1 || bNonBitmapActionEncountered )
+    {
         if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsMirrored() || rAttr.IsRotated() || rAttr.IsTransparent() )
-            ImplAdjust( *pMtf, rAttr, ADJUSTMENT_ALL );
+            ImplAdjust( rOutMtf, rAttr, ADJUSTMENT_ALL );
 
-        ImplDraw( pOut, rPt, rSz, *pMtf, rAttr );
+        ImplDraw( pOut, rPt, rSz, rOutMtf, rAttr );
+        rOutBmpEx = BitmapEx();
     }
 
     return TRUE;
