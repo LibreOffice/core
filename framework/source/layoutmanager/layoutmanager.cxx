@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:23:03 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1581,8 +1581,6 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 bWriteData = sal_True;
             }
 
-            xWindow->setPosSize( aPos.X(), aPos.Y(), 0, 0,
-                                 css::awt::PosSize::POS );
             if( bSetSize )
                 xWindow->setOutputSize( AWTSize( rElement.m_aFloatingData.m_aSize ) );
             else
@@ -1595,6 +1593,17 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                     pToolBox->SetOutputSizePixel( aSize );
                 }
             }
+
+            // #i60882# IMPORTANT: Set position after size as it is
+            // possible that we position some part of the toolbar
+            // outside of the desktop. A default constructed toolbar
+            // always has one line. Now VCL automatically
+            // position the toolbar back into the desktop. Therefore
+            // we resize the toolbar with the new (wrong) position.
+            // To fix this problem we have to set the size BEFORE the
+            // position.
+            xWindow->setPosSize( aPos.X(), aPos.Y(), 0, 0,
+                                 css::awt::PosSize::POS );
 
             if ( bWriteData )
                 implts_writeWindowStateData( rElement.m_aName, rElement );
