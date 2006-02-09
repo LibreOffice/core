@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:49:54 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,7 +796,14 @@ unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 
     OSL_ASSERT( pInst );
 
-    return pInst->run( );
+    HRESULT hr = OleInitialize( NULL );
+
+    unsigned int    result = pInst->run( );
+
+    if ( SUCCEEDED( hr ) )
+        OleUninitialize();
+
+    return result;
 }
 
 //---------------------------------------------------
