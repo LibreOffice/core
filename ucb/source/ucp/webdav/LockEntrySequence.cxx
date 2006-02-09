@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:16:50 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,11 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
                        rInData.getStr() + nStart,
                        nEnd - nStart + TOKEN_LENGTH );
 
+#ifdef NEONTWOFIVE
+        success = !ne_xml_failed( parser );
+#else
         success = !!ne_xml_valid( parser );
+#endif
 
         ne_xml_destroy( parser );
 
