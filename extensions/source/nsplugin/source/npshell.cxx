@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:38:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -104,6 +105,10 @@ long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 
 }
 
+#ifdef UNIX
+static pid_t nChildPID = 0;
+#endif
+
 // chdir to staroffice's program dir, start nspluin executable in child process, and use pipe to talk with it
 int do_init_pipe()
 {
@@ -116,7 +121,8 @@ int do_init_pipe()
 
     write_fd = fd[1];   // write fd
 #ifdef UNIX
-    int nChildPID = fork();
+    // the parent process will wait for the child process in NPP_Shutdown code
+    nChildPID = fork();
 
     if( ! nChildPID )  // child process
 #endif //end of UNIX
@@ -236,11 +242,7 @@ NPP_GetMIMEDescription(void)
 NPError
 // I am not actually sure wrt this, it ast least compiles with external
 // npapi.h now...
-#ifdef SYSTEM_MOZILLA
 NPP_GetValue(NPP instance, NPPVariable variable, void *value)
-#else
-NPP_GetValue(void * instance, NPPVariable variable, void *value)
-#endif
 {
     NPError err = NPERR_NO_ERROR;
 
@@ -295,6 +297,12 @@ NPP_Shutdown(void)
     msg.msg_id = SO_SHUTDOWN;
     sendMsg(&msg, sizeof(PLUGIN_MSG), 0);
     NSP_Close_Pipe(write_fd);
+
+#ifdef UNIX
+    // on Unix we should wait till the child process is dead
+    int nStatus;
+    waitpid( nChildPID, &nStatus, 0 );
+#endif
 }
 
 NPError
@@ -409,39 +417,74 @@ NPP_SetWindow(NPP instance, NPWindow* window)
     if (This == NULL)
         return NPERR_INVALID_INSTANCE_ERROR;
 
-    // Set window info for instance
-#ifdef UNIX
-    ws_info        = (NPSetWindowCallbackStruct *)window->ws_info;
-    This->window   = (Window) window->window;
-    This->x        = window->x;
-    This->y        = window->y;
-    This->width    = window->width;
-    This->height   = window->height;
-    This->display  = ws_info->display;
-    This->visual   = ws_info->visual;
-    This->depth    = ws_info->depth;
-    This->colormap = ws_info->colormap;
-#endif    //end of UNIX
-#ifdef WNT
-    This->fhWnd   = (HWND) window->window;
-    This->fWindow->x        = window->x;
-    This->fWindow->y        = window->y;
-    This->fWindow->width    = window->width;
-    This->fWindow->height   = window->height;
-#endif    //end of WNT
-    debug_fprintf(NSP_LOG_APPEND, "begin Set window of Office\n");
-    debug_fprintf(NSP_LOG_APPEND, "W=(%d) H=(%d)\n", window->width, window->height);
-
-    // Send SET_WINDOW message
+    // Prepare the general part of the SET_WINDOW message
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(msg));
     msg.msg_id = SO_SET_WINDOW;
     msg.instance_id = (plugin_Int32)instance;
-    msg.wnd_id = (plugin_Int32) window->window;
-    msg.wnd_x = window->x;
-    msg.wnd_y = window->y;
-    msg.wnd_w = window->width;
-    msg.wnd_h = window->height;
+
+    if ( window )
+    {
+        // Set window info for instance
+#ifdef UNIX
+        ws_info        = (NPSetWindowCallbackStruct *)window->ws_info;
+        This->window   = (Window) window->window;
+        This->x        = window->x;
+        This->y        = window->y;
+        This->width    = window->width;
+        This->height   = window->height;
+        This->display  = ws_info->display;
+        This->visual   = ws_info->visual;
+        This->depth    = ws_info->depth;
+        This->colormap = ws_info->colormap;
+#endif    //end of UNIX
+#ifdef WNT
+        This->fhWnd   = (HWND) window->window;
+        This->fWindow->x        = window->x;
+        This->fWindow->y        = window->y;
+        This->fWindow->width    = window->width;
+        This->fWindow->height   = window->height;
+#endif    //end of WNT
+        debug_fprintf(NSP_LOG_APPEND, "begin Set window of Office\n");
+        debug_fprintf(NSP_LOG_APPEND, "W=(%d) H=(%d)\n", window->width, window->height);
+
+        // fill the window dependent part of the message
+        msg.wnd_id = (plugin_Int32) window->window;
+        msg.wnd_x = window->x;
+        msg.wnd_y = window->y;
+        msg.wnd_w = window->width;
+        msg.wnd_h = window->height;
+    }
+    else
+    {
+        // empty window pointer usually means closing of the parent window
+#ifdef UNIX
+        ws_info        = NULL;
+        This->window   = (Window) NULL;
+        This->x        = 0;
+        This->y        = 0;
+        This->width    = 0;
+        This->height   = 0;
+        This->display  = NULL;
+        This->visual   = NULL;
+#endif    //end of UNIX
+#ifdef WNT
+        This->fhWnd   = (HWND) NULL;
+        This->fWindow->x        = 0;
+        This->fWindow->y        = 0;
+        This->fWindow->width    = 0;
+        This->fWindow->height   = 0;
+#endif    //end of WNT
+        debug_fprintf(NSP_LOG_APPEND, "Empty window pointer is provided\n");
+
+        // fill the window dependent part of the message
+        msg.wnd_id = (plugin_Int32) NULL;
+        msg.wnd_x = 0;
+        msg.wnd_y = 0;
+        msg.wnd_w = 0;
+        msg.wnd_h = 0;
+    }
+
     if((sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1)))
     {
         debug_fprintf(NSP_LOG_APPEND, "NPP_SetWindow return failure \n");
