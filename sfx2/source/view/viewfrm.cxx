@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:12:23 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1375,7 +1375,7 @@ String SfxViewFrame::UpdateTitle()
 
     // Name des SbxObjects
     String aSbxName = pObjSh->SfxShell::GetName();
-    if ( IsVisible() )
+    if ( IsVisible_Impl() )
     {
         aSbxName += ':';
         aSbxName += String::CreateFromInt32(pImp->nDocViewNo);
@@ -1837,7 +1837,7 @@ sal_uInt16 SfxViewFrame::Count(TypeId aType)
     {
         SfxViewFrame *pFrame = rFrames[i];
         if ( ( !aType || pFrame->IsA(aType) ) &&
-             pFrame->IsVisible() )
+             pFrame->IsVisible_Impl() )
             ++nFound;
     }
     return nFound;
@@ -1861,7 +1861,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if ( ( !pDoc || pDoc == pFrame->GetObjectShell() ) &&
              ( !aType || pFrame->IsA(aType) ) &&
-             ( !bOnlyIfVisible || pFrame->IsVisible()) )
+             ( !bOnlyIfVisible || pFrame->IsVisible_Impl()) )
             return pFrame;
     }
 
@@ -1893,7 +1893,7 @@ SfxViewFrame* SfxViewFrame::GetNext
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if ( ( !pDoc || pDoc == pFrame->GetObjectShell() ) &&
              ( !aType || pFrame->IsA(aType) ) &&
-             ( !bOnlyIfVisible || pFrame->IsVisible()) )
+             ( !bOnlyIfVisible || pFrame->IsVisible_Impl()) )
             return pFrame;
     }
     return 0;
@@ -1906,7 +1906,7 @@ void SfxViewFrame::CloseHiddenFrames_Impl()
     for ( sal_uInt16 nPos=0; nPos<rFrames.Count(); )
     {
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
-        if ( !pFrame->IsVisible() )
+        if ( !pFrame->IsVisible_Impl() )
             pFrame->DoClose();
         else
             nPos++;
@@ -2169,10 +2169,11 @@ void SfxViewFrame::Show()
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxViewFrame::IsVisible() const
+sal_Bool SfxViewFrame::IsVisible_Impl() const
 {
-    Window *pWin = pImp->bInCtor ? 0 : &GetWindow();
-    return GetFrame()->HasComponent() || pImp->bObjLocked || ( pWin && pWin->IsVisible() );
+    //Window *pWin = pImp->bInCtor ? 0 : &GetWindow();
+    //return GetFrame()->HasComponent() || pImp->bObjLocked || ( pWin && pWin->IsVisible() );
+    return pImp->bObjLocked;
 }
 
 //--------------------------------------------------------------------
@@ -2198,7 +2199,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
 {
     if ( GetViewShell() && !GetFrame()->IsClosing_Impl() )
     {
-        if ( IsVisible() )
+        if ( IsVisible_Impl() )
         {
             if ( GetViewShell() )
             {
