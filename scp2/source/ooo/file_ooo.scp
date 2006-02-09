@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 13:50:41 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,8 +570,14 @@ STD_RES_FILE( gid_File_Res_Eme, eme )
 
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(shared);
+    Patchfiles = ("shared.db",
+                  "shared.ht",
+                  "shared.jar",
+                  "shared.key",
+                  "shared.tree",
+                  "err.html"); 
 End
 
 File gid_File_Help_Help_Zip
@@ -582,13 +588,27 @@ End
 
 File gid_File_Help_Sbasic_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(sbasic);
+    Patchfiles = ("sbasic.db",
+                  "sbasic.ht",
+                  "sbasic.jar",
+                  "sbasic.key",
+                  "sbasic.tree",
+                  "sbasic.idx/CONTEXTS",
+                  "sbasic.idx/DICTIONARY",
+                  "sbasic.idx/DOCS",
+                  "sbasic.idx/DOCS.TAB",
+                  "sbasic.idx/EDGE",
+                  "sbasic.idx/LINKNAMES",
+                  "sbasic.idx/OFFSETS",
+                  "sbasic.idx/POSITIONS",
+                  "sbasic.idx/SCHEMA"); 
 End
 
 File gid_File_Help_Schart_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(schart);
 End
 
