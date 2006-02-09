@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DocumentCloser.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:44:24 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_embed_DocumentCloser_idl__
+#define __com_sun_star_embed_DocumentCloser_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_frame_DoubleInitializationException_idl__
+#include <com/sun/star/frame/DoubleInitializationException.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module embed {
+
+//-----------------------------------------------------------------------------
+/** The main task of this service is to close an office document frame embedded
+    in an application running in another process correctly.
+
+    <p>
+    The usual usage of this service is to create it, initialize with document
+    frame, and to dispose the service. While disposing the service will do all
+    the required actions to let the frame be closed using
+    <type scope="com::sun::star::util">XCloseable</type>::close( true ). Thus
+    in case there is a code that prevents closing of the frame the code
+    avtomatically becomes the owner of the frame.
+    </p>
+
+    <p>
+    In addition the code will disconnect the VCL window the frame is based on
+    from the container system window.
+    </p>
+*/
+service DocumentCloser : com::sun::star::lang::XComponent
+{
+    /** is used to initialize the object on it's creation.
+
+        @param xFrame
+                the frame of the document that should be closed.
+
+     */
+    DocumentCloserCtor1( [in] com::sun::star::frame::XFrame xFrame )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::frame::DoubleInitializationException,
+                ::com::sun::star::uno::Exception );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
