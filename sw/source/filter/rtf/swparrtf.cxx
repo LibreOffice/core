@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:22:09 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,47 @@
 #include <fmtlsplt.hxx> // SwLayoutSplit
 #endif
 
+#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
+#endif
+
+#ifndef _XPOLY_HXX
+#include <svx/xpoly.hxx>
+#endif
+
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
+
+#ifndef _SVDORECT_HXX
+#include <svx/svdorect.hxx>
+#endif
+
+
+#ifndef _FMTSRND_HXX
+#include <fmtsrnd.hxx>
+#endif
+
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+
+#ifndef _SVX_OPAQITEM_HXX
+#include <svx/opaqitem.hxx>
+#endif
+
+#ifndef _SVDOGRAF_HXX
+#include "svx/svdograf.hxx"
+#endif
+
 
 // einige Hilfs-Funktionen
 // char
@@ -1229,6 +1269,293 @@ void SwRTFParser::ReadShpRslt()
 }
 
 
+/*
+ * #127429#. Very basic support for the "Buchhalternase".
+ */
+void SwRTFParser::ReadDrawingObject()
+{
+    int nToken;
+    int level;
+    level=1;
+    Rectangle aRect;
+    XPolygon *pPolygon = NULL;
+    Point aPoint;
+    int points=0;
+    while (level>0 && IsParserWorking())
+    {
+        nToken = GetNextToken();
+        switch(nToken)
+        {
+            case '}':
+                level--;
+                break;
+            case '{':
+                level++;
+                break;
+            case RTF_DPX:
+                aRect.setX(nTokenValue);
+                break;
+            case RTF_DPXSIZE:
+                aRect.setWidth(nTokenValue);
+                break;
+            case RTF_DPY:
+                aRect.setY(nTokenValue);
+                break;
+            case RTF_DPYSIZE:
+                aRect.setHeight(nTokenValue);
+                break;
+            case RTF_DPPOLYCOUNT:
+                pPolygon = new XPolygon(nTokenValue);
+                break;
+            case RTF_DPPTX:
+                aPoint.setX(nTokenValue);
+                break;
+            case RTF_DPPTY:
+                aPoint.setY(nTokenValue);
+                if (pPolygon)
+                {
+                    (*pPolygon)[points++]=aPoint;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    SkipToken(-1);
+    /*
+    const Point aPointC1( 0, 0 );
+    const Point aPointC2( 100, 200 );
+    const Point aPointC3( 300, 400 );
+    XPolygon aPolygonC(3);
+    aPolygonC[0] = aPointC1;
+    aPolygonC[1] = aPointC2;
+    aPolygonC[2] = aPointC3;
+    */
+    if (pPolygon)
+    {
+        SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, XPolyPolygon(*pPolygon));
+        SfxItemSet aFlySet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+        SwFmtSurround aSur( SURROUND_PARALLEL );
+        aSur.SetContour( false );
+        aSur.SetOutside(true);
+        aFlySet.Put( aSur );
+        SwFmtFollowTextFlow aFollowTextFlow( FALSE );
+        aFlySet.Put( aFollowTextFlow );
+        /*
+        sw::util::SetLayer aSetLayer(*pDoc);
+        aSetLayer.SendObjectToHeaven(*pStroke);
+        */
+        /*
+            FLY_AT_CNTNT,       //Absatzgebundener Rahmen <to paragraph>
+        FLY_IN_CNTNT,       //Zeichengebundener Rahmen <as character>
+        FLY_PAGE,           //Seitengebundener Rahmen <to page>
+        FLY_AT_FLY,         //Rahmengebundener Rahmen ( LAYER_IMPL ) <to frame>
+        FLY_AUTO_CNTNT,     //Automatisch positionierter, absatzgebundener Rahmen <to character>
+        */
+        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        aAnchor.SetAnchor( pPam->GetPoint() );
+        aFlySet.Put( aAnchor );
+
+        /*
+        FRAME,          // Absatz inkl. Raender
+        PRTAREA,        // Absatz ohne Raender
+        REL_CHAR,       // an einem Zeichen
+        REL_PG_LEFT,    // im linken Seitenrand
+        REL_PG_RIGHT,   // im rechten Seitenrand
+        REL_FRM_LEFT,   // im linken Absatzrand
+        REL_FRM_RIGHT,  // im rechten Absatzrand
+        REL_PG_FRAME,   // Seite inkl. Raender, bei seitengeb. identisch mit FRAME
+        REL_PG_PRTAREA, // Seite ohne Raender, bei seitengeb. identisch mit PRTAREA
+        // OD 11.11.2003 #i22341#
+        REL_VERT_LINE,  // vertical relative to top of text line, only for to-character
+                        // anchored objects.
+
+
+            HORI_NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
+        HORI_RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
+        HORI_CENTER,
+        HORI_LEFT,
+        HORI_INSIDE,
+        HORI_OUTSIDE,
+        HORI_FULL,          //Spezialwert fuer Tabellen
+        HORI_LEFT_AND_WIDTH  //Auch fuer Tabellen
+        */
+        SwFmtHoriOrient aHori( 0, HORI_NONE, REL_PG_FRAME );
+        aFlySet.Put( aHori );
+        /*
+        VERT_NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
+        VERT_TOP,   //Der Rest ist fuer automatische Ausrichtung.
+        VERT_CENTER,
+        VERT_BOTTOM,
+        VERT_CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
+        VERT_CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
+        VERT_CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
+        VERT_LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
+        VERT_LINE_CENTER,   //entsprechend aus.
+        VERT_LINE_BOTTOM
+        */
+        SwFmtVertOrient aVert( 0, VERT_NONE, REL_PG_FRAME );
+        aFlySet.Put( aVert );
+
+        pDoc->GetOrCreateDrawModel();
+        SdrModel* pDrawModel  = pDoc->GetDrawModel();
+        SdrPage* pDrawPg = pDrawModel->GetPage(0);
+        pDrawPg->InsertObject(pStroke, 0);
+
+        pStroke->SetSnapRect(aRect);
+
+        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet);
+    }
+}
+
+void SwRTFParser::InsertShpObject(SdrObject* pStroke)
+{
+        SfxItemSet aFlySet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+        SwFmtSurround aSur( SURROUND_THROUGHT );
+        aSur.SetContour( false );
+        aSur.SetOutside(true);
+        aFlySet.Put( aSur );
+        SwFmtFollowTextFlow aFollowTextFlow( FALSE );
+        aFlySet.Put( aFollowTextFlow );
+
+        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        aAnchor.SetAnchor( pPam->GetPoint() );
+        aFlySet.Put( aAnchor );
+
+
+        SwFmtHoriOrient aHori( 0, HORI_NONE, REL_PG_FRAME );
+        aFlySet.Put( aHori );
+
+        SwFmtVertOrient aVert( 0, VERT_NONE, REL_PG_FRAME );
+        aFlySet.Put( aVert );
+
+        aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
+
+        pDoc->GetOrCreateDrawModel();
+        SdrModel* pDrawModel  = pDoc->GetDrawModel();
+        SdrPage* pDrawPg = pDrawModel->GetPage(0);
+        pDrawPg->InsertObject(pStroke, 0);
+
+        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet);
+}
+
+void SwRTFParser::ReadShapeObject()
+{
+    int nToken;
+    int level;
+    level=1;
+    Point aPointLeftTop;
+    Point aPointRightBottom;
+    String sn;
+    sal_Int32 shapeType=-1;
+    Graphic aGrf;
+    bool bGrfValid=false;
+
+    while (level>0 && IsParserWorking())
+    {
+        nToken = GetNextToken();
+        switch(nToken)
+        {
+            case '}':
+                level--;
+                break;
+            case '{':
+                level++;
+                break;
+            case RTF_SHPLEFT:
+                aPointLeftTop.setX(nTokenValue);
+                break;
+            case RTF_SHPTOP:
+                aPointLeftTop.setY(nTokenValue);
+                break;
+            case RTF_SHPBOTTOM:
+                aPointRightBottom.setY(nTokenValue);
+                break;
+            case RTF_SHPRIGHT:
+                aPointRightBottom.setX(nTokenValue);
+                break;
+            case RTF_SN:
+                nToken = GetNextToken();
+                ASSERT(nToken==RTF_TEXTTOKEN, "expected name");
+                sn=aToken;
+                break;
+            case RTF_SV:
+                nToken = GetNextToken();
+                if (nToken==RTF_TEXTTOKEN)
+                {
+                    if (sn.EqualsAscii("shapeType"))
+                    {
+                        shapeType=aToken.ToInt32();
+
+                    }
+                }
+                break;
+            case RTF_PICT:
+                {
+                        SvxRTFPictureType aPicType;
+                        bGrfValid=ReadBmpData( aGrf, aPicType );
+                }
+                break;
+            case RTF_SHPRSLT:
+                if (shapeType!=1 && shapeType!=20 && shapeType!=75)
+                {
+                    ReadShpRslt();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    SkipToken(-1);
+
+    switch(shapeType)
+    {
+    case 1: /* Rectangle */
+        {
+            Rectangle aRect(aPointLeftTop, aPointRightBottom);
+
+            SdrRectObj* pStroke = new SdrRectObj(aRect);
+            pStroke->SetSnapRect(aRect);
+
+            pDoc->GetOrCreateDrawModel();
+            SfxItemSet aSet(pDoc->GetDrawModel()->GetItemPool());
+            aSet.Put(XFillStyleItem(XFILL_NONE));
+            /*
+            aSet.Put(XLineStyleItem(XLINE_NONE));
+            aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
+            aSet.Put(SdrTextAutoGrowHeightItem(false));
+            aSet.Put(SdrTextAutoGrowWidthItem(false));
+            */
+            pStroke->SetMergedItemSet(aSet);
+
+
+            InsertShpObject(pStroke);
+        }
+        break;
+    case 20: /* Line */
+        {
+            XPolygon aLine(2);
+            aLine [0] = aPointLeftTop;
+            aLine [1] = aPointRightBottom;
+
+            SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, aLine);
+            //pStroke->SetSnapRect(aRect);
+
+            InsertShpObject(pStroke);
+        }
+        break;
+    case 75 : /* Picture */
+        if (bGrfValid) {
+            Rectangle aRect(aPointLeftTop, aPointRightBottom);
+
+            SdrRectObj* pStroke = new SdrGrafObj(aGrf);
+            pStroke->SetSnapRect(aRect);
+
+            InsertShpObject(pStroke);
+        }
+    }
+}
+
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion );
@@ -1381,6 +1708,12 @@ void SwRTFParser::NextToken( int nToken )
         break;
     case RTF_SHPRSLT:
         ReadShpRslt();
+        break;
+    case RTF_DO:
+        ReadDrawingObject();
+        break;
+    case RTF_SHP:
+        ReadShapeObject();
         break;
     case RTF_SHPPICT:
     case RTF_PICT:
