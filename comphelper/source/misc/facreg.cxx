@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:49:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
+
+#include "instancelocker.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -128,6 +130,9 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void * pServiceManag
             // OfficeInstallationDirectories
             writeInfo( pKey, OfficeInstallationDirectories_getImplementationName(), OfficeInstallationDirectories_getSupportedServiceNames() );
             registerSingleton( pKey, OfficeInstallationDirectories_getImplementationName(), OfficeInstallationDirectories_getSingletonName(), OfficeInstallationDirectories_getSingletonServiceName() );
+
+            // InstanceLocker
+            writeInfo( pKey, OInstanceLocker::impl_staticGetImplementationName(), OInstanceLocker::impl_staticGetSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -174,6 +179,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
                 OfficeInstallationDirectories_getImplementationName(),
                 OfficeInstallationDirectories_createInstance,
                 OfficeInstallationDirectories_getSupportedServiceNames() );
+        }
+        else if( OInstanceLocker::impl_staticGetImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                OInstanceLocker::impl_staticGetImplementationName(),
+                OInstanceLocker::impl_staticCreateSelfInstance,
+                OInstanceLocker::impl_staticGetSupportedServiceNames() );
         }
 
         if( xFactory.is())
