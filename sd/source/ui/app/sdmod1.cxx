@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:03 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@
 #endif
 #include "sdabstdlg.hxx" //CHINA001
 #include "dlgass.hrc" //CHINA001
+#include <memory>
 
 /*************************************************************************
 |*
@@ -130,9 +131,6 @@ void SdModule::Execute(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
     ULONG nSlotId = rReq.GetSlot();
-
-    // #94442# keep track of created frames
-    SfxFrame* pFrame = NULL;
 
     switch ( nSlotId )
     {
@@ -248,430 +246,14 @@ void SdModule::Execute(SfxRequest& rReq)
 
         case SID_SD_AUTOPILOT:
         case SID_NEWSD:
-        {
-            if ( SvtModuleOptions().IsImpress() )
             {
-                SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-                BOOL bStartWithTemplate = pOpt->IsStartWithTemplate();
-
-                BOOL bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
-                if( bNewDocDirect && !bStartWithTemplate )
-                {
-                    //we start without wizard
-
-                    //check wether we should load a template document
-                    bool bLoadTemplate = false;
-                    const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
-                    String aStandardTemplate = SfxObjectFactory::GetStandardTemplate( aServiceName );
-                    bLoadTemplate = aStandardTemplate.Len()>0;
-
-                    if( bLoadTemplate )
-                    {
-                        //load a template document
-
-                        SfxObjectShellLock xDocShell;
-
-                        SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-                        pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
-                        ULONG lErr = SFX_APP()->LoadTemplate( xDocShell, aStandardTemplate, TRUE, pSet );
-
-                        if( lErr )
-                            ErrorHandler::HandleError(lErr);
-                        else
-                        {
-                            SfxObjectShell* pDocShell = xDocShell;
-
-                            SfxViewFrame* pViewFrame = NULL;
-                            SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                            if ( pFrmItem && pDocShell )
-                            {
-                                pFrame = pFrmItem->GetFrame();
-                                pFrame->InsertDocument( pDocShell );
-                                pViewFrame = pFrame->GetCurrentViewFrame();
-                            }
-                            else if( pDocShell )
-                                pViewFrame = SFX_APP()->CreateViewFrame( *pDocShell );
-                        }
-                        break;
-                    }
-
-                    //create an empty document
-
-                    SfxObjectShellLock xDocShell;
-                    ::sd::DrawDocShell* pNewDocSh;
-                    xDocShell = pNewDocSh = new ::sd::DrawDocShell(
-                        SFX_CREATE_MODE_STANDARD,
-                        FALSE);
-                    if(pNewDocSh)
-                    {
-                        pNewDocSh->DoInitNew(NULL);
-                        SdDrawDocument* pDoc = pNewDocSh->GetDoc();
-                        if(pDoc)
-                        {
-                            pDoc->CreateFirstPages();
-                            pDoc->StopWorkStartupDelay();
-                        }
-
-                        SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                        if ( pFrmItem )
-                        {
-                            pFrame = pFrmItem->GetFrame();
-                            pFrame->InsertDocument( pNewDocSh );
-                        }
-                        else
-                            SFX_APP()->CreateViewFrame( *pNewDocSh );
-                    }
-
-                    // Make the layout menu visible in the tool pane.
-                    SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-                    SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                        ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
-                    GetDispatcher()->Execute (
-                        SID_TASK_PANE,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                        &aMakeToolPaneVisible,
-                        &aPanelId,
-                        NULL);
-
-                    break;
-                }
-
-                String aFileToOpen;
-                //CHINA001 AssistentDlg* pPilotDlg=new AssistentDlg( DIALOG_NO_PARENT, !bNewDocDirect );
-                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                AbstractAssistentDlg* pPilotDlg = pFact->CreateAssistentDlg(ResId( DLG_ASS ), NULL, !bNewDocDirect );
-                DBG_ASSERT(pPilotDlg, "Dialogdiet fail!");//CHINA001
-                // Open the Pilot
-                if( pPilotDlg->Execute()==RET_CANCEL )
-                {
-                    delete pPilotDlg;
-                    break;
-                }
-                else
-                {
-                    const String aPasswrd( pPilotDlg->GetPassword() );
-                    const sal_Bool bSummary = pPilotDlg->IsSummary();
-                    const sal_Int32 eMedium = pPilotDlg->GetOutputMedium();
-                    const String aDocPath( pPilotDlg->GetDocPath());
-                    const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
-
-                    // So that you can open the document without AutoLayout-Dialog
-                    pOpt->SetStartWithTemplate(FALSE);
-                    if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
-                        bStartWithTemplate = FALSE;
-
-                    if( pPilotDlg->GetStartType() == ST_OPEN )
-                    {
-                        String aFileToOpen = aDocPath;
-                        delete pPilotDlg;
-
-                        DBG_ASSERT( aFileToOpen.Len()!=0, "The autopilot should have asked for a file itself already!" );
-                        if(aFileToOpen.Len() != 0)
-                        {
-                            SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
-                            SfxStringItem aReferer( SID_REFERER, UniString() );
-                            SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
-
-                            SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                            if ( pFrmItem && pFrmItem->GetFrame())
-                            {
-                                pFrame = pFrmItem->GetFrame();
-
-                                SfxAllItemSet aSet( *pSet->GetPool() );
-                                aSet.Put( aFile );
-                                aSet.Put( aReferer );
-                                // Put the password into the request
-                                // only if it is not empty.
-                                if (aPasswrd.Len() > 0)
-                                    aSet.Put( aPassword );
-
-                                const SfxPoolItem* pRet = pFrame->LoadDocumentSynchron( aSet );
-                            }
-                            else
-                            {
-                                SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                                    SFX_APP()->GetPool());
-                                aRequest.AppendItem (aFile);
-                                aRequest.AppendItem (aReferer);
-                                // Put the password into the request
-                                // only if it is not empty.
-                                if (aPasswrd.Len() > 0)
-                                    aRequest.AppendItem (aPassword);
-                                aRequest.AppendItem (SfxStringItem (
-                                    SID_TARGETNAME,
-                                    String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
-                                try
-                                {
-                                    SFX_APP()->ExecuteSlot (aRequest);
-                                }
-                                catch (::com::sun::star::uno::Exception e)
-                                {
-                                    DBG_ASSERT (FALSE, "caught IllegalArgumentException while loading document from Impress autopilot");
-                                }
-                            }
-                        }
-
-                        pOpt->SetStartWithTemplate(bStartWithTemplate);
-                        if(bNewDocDirect && !bStartWithTemplate)
-                        {
-                            SfxItemSet* pRet = CreateItemSet( SID_SD_EDITOPTIONS );
-                            if(pRet)
-                            {
-                                ApplyItemSet( SID_SD_EDITOPTIONS, *pRet );
-                                delete pRet;
-                            }
-
-                        }
-                        break;
-                    }
-
-
-                    SfxObjectShellLock xShell( pPilotDlg->GetDocument() );
-                    SfxObjectShell* pShell = xShell;
-
-                    delete pPilotDlg;
-
-                    SfxViewFrame* pViewFrame = NULL;
-                    SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                    if ( pFrmItem && pShell )
-                    {
-                        pFrame = pFrmItem->GetFrame();
-                        pFrame->InsertDocument( pShell );
-                        pViewFrame = pFrame->GetCurrentViewFrame();
-                    }
-                    else if( pShell )
-                        pViewFrame = SFX_APP()->CreateViewFrame( *pShell );
-
-                    DBG_ASSERT( pViewFrame, "Kein ViewFrame!!" );
-
-                    pOpt->SetStartWithTemplate(bStartWithTemplate);
-                    if(bNewDocDirect && !bStartWithTemplate)
-                    {
-                        SfxItemSet* pRet = CreateItemSet( SID_SD_EDITOPTIONS );
-                        if(pRet)
-                        {
-                            ApplyItemSet( SID_SD_EDITOPTIONS, *pRet );
-                            delete pRet;
-                        }
-                    }
-
-                    if( pShell && pViewFrame )
-                    {
-                        ::sd::DrawDocShell* pDocShell =
-                              PTR_CAST(::sd::DrawDocShell,pShell);
-                        SdDrawDocument* pDoc = pDocShell->GetDoc();
-
-                        ::sd::ViewShellBase* pBase =
-                              ::sd::ViewShellBase::GetViewShellBase (
-                                  pViewFrame);
-                        OSL_ASSERT (pBase!=NULL);
-                        ::sd::ViewShell* pViewSh = pBase->GetMainViewShell ();
-                        SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
-
-                        if (pOptions && pViewSh)
-                        {
-                            // The AutoPilot-document shall be open without its own options
-                            ::sd::FrameView* pFrameView =
-                                  pViewSh->GetFrameView();
-                            pFrameView->Update(pOptions);
-                            pViewSh->ReadFrameViewData(pFrameView);
-                        }
-
-                        USHORT nPages=pDoc->GetPageCount();
-
-                        // settings for the Outputmedium
-                        Size aNewSize;
-                        UINT32 nLeft;
-                        UINT32 nRight;
-                        UINT32 nLower;
-                        UINT32 nUpper;
-                        switch(eMedium)
-                        {
-                            case OUTPUT_PAGE:
-                            case OUTPUT_OVERHEAD:
-                            {
-                                SfxPrinter* pPrinter = pDocShell->GetPrinter(TRUE);
-
-                                if (pPrinter->IsValid())
-                                {
-                                    // Der Printer gibt leider kein exaktes
-                                    // Format (z.B. A4) zurueck
-                                    Size aSize(pPrinter->GetPaperSize());
-                                    SvxPaper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
-
-                                    if (ePaper != SVX_PAPER_USER)
-                                    {
-                                        // Korrekte Size holen
-                                        aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
-                                    }
-
-                                    if (aSize.Height() > aSize.Width())
-                                    {
-                                         // Stets Querformat
-                                         aNewSize.Width()  = aSize.Height();
-                                         aNewSize.Height() = aSize.Width();
-                                    }
-                                    else
-                                    {
-                                         aNewSize = aSize;
-                                    }
-                                }
-                                else
-                                {
-                                    aNewSize=Size(29700, 21000);
-                                }
-
-                                if (eMedium == OUTPUT_PAGE)
-                                {
-                                    nLeft =1000;
-                                    nRight=1000;
-                                    nUpper=1000;
-                                    nLower=1000;
-                                }
-                                else
-                                {
-                                    nLeft =0;
-                                    nRight=0;
-                                    nUpper=0;
-                                    nLower=0;
-                                }
-                            }
-                            break;
-
-                            case OUTPUT_SLIDE:
-                            {
-                                aNewSize = Size(27000, 18000);
-                                nLeft =0;
-                                nRight=0;
-                                nUpper=0;
-                                nLower=0;
-                            }
-                            break;
-
-                            case OUTPUT_PRESENTATION:
-                            {
-                                aNewSize = Size(28000, 21000);
-                                nLeft =0;
-                                nRight=0;
-                                nUpper=0;
-                                nLower=0;
-                            }
-                            break;
-                        }
-
-                        BOOL bScaleAll = TRUE;
-                        USHORT nPageCnt = pDoc->GetMasterSdPageCount(PK_STANDARD);
-                        USHORT i;
-                        SdPage* pPage;
-
-                        for (i = 0; i < nPageCnt; i++)
-                        {
-                            // ********************************************************************
-                            // Erst alle MasterPages bearbeiten
-                            // ********************************************************************
-                            pPage = pDoc->GetMasterSdPage(i, PK_STANDARD);
-
-                            if (pPage)
-                            {
-                                if(eMedium != OUTPUT_ORIGINAL)
-                                {
-                                    Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
-                                    pPage->ScaleObjects(aNewSize, aBorderRect, bScaleAll);
-                                    pPage->SetSize(aNewSize);
-                                    pPage->SetBorder(nLeft, nUpper, nRight, nLower);
-                                }
-                                SdPage* pNotesPage = pDoc->GetMasterSdPage(i, PK_NOTES);
-                                DBG_ASSERT( pNotesPage, "Wrong page ordering!" );
-                                if( pNotesPage ) pNotesPage->CreateTitleAndLayout();
-                                pPage->CreateTitleAndLayout();
-                            }
-                        }
-
-                        nPageCnt = pDoc->GetSdPageCount(PK_STANDARD);
-
-                        for (i = 0; i < nPageCnt; i++)
-                        {
-                            // *********************************************************************
-                            // Danach alle Pages bearbeiten
-                            // *********************************************************************
-                            pPage = pDoc->GetSdPage(i, PK_STANDARD);
-
-                            if (pPage)
-                            {
-                                if(eMedium != OUTPUT_ORIGINAL)
-                                {
-                                    Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
-                                    pPage->ScaleObjects(aNewSize, aBorderRect, bScaleAll);
-                                    pPage->SetSize(aNewSize);
-                                    pPage->SetBorder(nLeft, nUpper, nRight, nLower);
-                                }
-                                SdPage* pNotesPage = pDoc->GetSdPage(i, PK_NOTES);
-                                DBG_ASSERT( pNotesPage, "Wrong page ordering!" );
-                                if( pNotesPage ) pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
-                                pPage->SetAutoLayout( pPage->GetAutoLayout() );
-                            }
-                        }
-
-                        SdPage* pHandoutPage = pDoc->GetSdPage(0, PK_HANDOUT);
-                        pHandoutPage->CreateTitleAndLayout(TRUE);
-
-                        if(eMedium != OUTPUT_ORIGINAL)
-                        {
-                            pViewFrame->GetDispatcher()->Execute(SID_SIZE_PAGE,
-                            SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-                        }
-
-                        if(bSummary)
-                            AddSummaryPage (pViewFrame, pDoc);
-
-                        if(aDocPath.Len() == 0) // leeres Document?
-                        {
-                            SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
-                            SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (UINT32) AUTOLAYOUT_TITLE );
-                            pViewFrame->GetDispatcher()->Execute(SID_MODIFYPAGE,
-                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
-                        }
-
-                        pDoc->SetChanged(!bIsDocEmpty);
-
-                        // clear document info
-                        SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-
-                        SfxStamp aCreated;
-                        SvtUserOptions aOptions;
-                        aCreated.SetName( aOptions.GetFullName() );
-                        rInfo.SetCreated( aCreated );
-
-                        SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
-                        rInfo.SetChanged( aInvalid );
-                        rInfo.SetPrinted( aInvalid );
-                        rInfo.SetTime( 0L );
-                        rInfo.SetDocumentNumber( 1 );
-                        rInfo.SetUseUserData( TRUE );
-
-                        // #94652# clear UNDO stack after autopilot
-                        SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-                        DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-                        if(pUndoManager->GetUndoActionCount())
-                            pUndoManager->Clear();
-
-                    }
-                }
-
-                // Make the layout menu visible in the tool pane.
-                SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-                SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                    ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
-                GetDispatcher()->Execute (
-                    SID_TASK_PANE,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                    &aMakeToolPaneVisible,
-                    &aPanelId,
-                    NULL);
+                SfxFrame* pFrame = ExecuteNewDocument( rReq );
+                // #94442# if a frame was created, set it as return value
+                if(pFrame)
+                    rReq.SetReturnValue(SfxFrameItem(0, pFrame));
             }
-        }
-        break;
+
+            break;
 
         case SID_OPENDOC:
         {
@@ -715,12 +297,6 @@ void SdModule::Execute(SfxRequest& rReq)
 
         default:
         break;
-    }
-
-    // #94442# if a frame was created, set it as return value
-    if(pFrame)
-    {
-        rReq.SetReturnValue(SfxFrameItem(0, pFrame));
     }
 }
 
@@ -928,6 +504,9 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
 void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument)
 {
+    if( !pViewFrame || !pViewFrame->GetDispatcher() || !pDocument )
+        return;
+
     pViewFrame->GetDispatcher()->Execute(SID_SUMMARY_PAGE,
         SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
@@ -963,3 +542,454 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
     }
 }
 
+SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, SfxFrame* pTargetFrame )
+{
+    SfxFrame* pFrame = 0;
+
+    SfxObjectShellLock xDocShell;
+
+    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+    pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
+
+    ULONG lErr = SFX_APP()->LoadTemplate( xDocShell, rTemplatePath, TRUE, pSet );
+
+    SfxObjectShell* pDocShell = xDocShell;
+
+    if( lErr )
+    {
+        ErrorHandler::HandleError(lErr);
+    }
+    else if( pDocShell )
+    {
+        if ( pTargetFrame )
+        {
+            pFrame = pTargetFrame;
+            pFrame->InsertDocument( pDocShell );
+        }
+        else
+        {
+            SfxViewFrame* pViewFrame = SFX_APP()->CreateViewFrame( *pDocShell );
+            if( pViewFrame )
+                pFrame = pViewFrame->GetFrame();
+        }
+    }
+
+    return pFrame;
+
+}
+
+SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
+{
+    SfxFrame* pFrame = 0;
+    if ( SvtModuleOptions().IsImpress() )
+    {
+        SfxFrame* pTargetFrame = 0;
+        SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+        if ( pFrmItem )
+            pTargetFrame = pFrmItem->GetFrame();
+
+        bool bMakeLayoutVisible = false;
+        SfxViewFrame* pViewFrame = NULL;
+
+        SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+        bool bStartWithTemplate = pOpt->IsStartWithTemplate();
+
+        bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
+        if( bNewDocDirect && !bStartWithTemplate )
+        {
+            //we start without wizard
+
+            //check wether we should load a template document
+            const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+            String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
+
+            if( aStandardTemplate.Len() > 0 )
+            {
+                //load a template document
+                pFrame = CreateFromTemplate( aStandardTemplate, pTargetFrame );
+            }
+            else
+            {
+                //create an empty document
+                pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, pTargetFrame );
+                bMakeLayoutVisible = true;
+            }
+        }
+        else
+        {
+            String aFileToOpen;
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            std::auto_ptr< AbstractAssistentDlg > pPilotDlg;
+            if( pFact )
+            {
+                pPilotDlg.reset( pFact->CreateAssistentDlg(ResId( DLG_ASS ), NULL, !bNewDocDirect ) );
+            }
+
+            DBG_ASSERT(pPilotDlg.get(), "Dialogdiet fail!");
+
+            // Open the Pilot
+            if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
+            {
+                const String aDocPath( pPilotDlg->GetDocPath());
+                const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
+
+                // So that you can open the document without AutoLayout-Dialog
+                pOpt->SetStartWithTemplate(FALSE);
+                if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
+                    bStartWithTemplate = FALSE;
+
+                if( pPilotDlg->GetStartType() == ST_OPEN )
+                {
+                    String aFileToOpen = aDocPath;
+
+                    DBG_ASSERT( aFileToOpen.Len()!=0, "The autopilot should have asked for a file itself already!" );
+                    if(aFileToOpen.Len() != 0)
+                    {
+                        const String aPasswrd( pPilotDlg->GetPassword() );
+
+                        SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
+                        SfxStringItem aReferer( SID_REFERER, UniString() );
+                        SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
+
+                        if ( pTargetFrame )
+                        {
+                            pFrame = pTargetFrame;
+
+                            SfxAllItemSet aSet( *rReq.GetArgs()->GetPool() );
+                            aSet.Put( aFile );
+                            aSet.Put( aReferer );
+                            // Put the password into the request
+                            // only if it is not empty.
+                            if (aPasswrd.Len() > 0)
+                                aSet.Put( aPassword );
+
+                            const SfxPoolItem* pRet = pFrame->LoadDocumentSynchron( aSet );
+                        }
+                        else
+                        {
+                            SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool());
+                            aRequest.AppendItem (aFile);
+                            aRequest.AppendItem (aReferer);
+                            // Put the password into the request
+                            // only if it is not empty.
+                            if (aPasswrd.Len() > 0)
+                                aRequest.AppendItem (aPassword);
+                            aRequest.AppendItem (SfxStringItem (
+                                SID_TARGETNAME,
+                                String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
+                            try
+                            {
+                                SFX_APP()->ExecuteSlot (aRequest);
+                            }
+                            catch (::com::sun::star::uno::Exception e)
+                            {
+                                DBG_ASSERT (FALSE, "caught IllegalArgumentException while loading document from Impress autopilot");
+                            }
+                        }
+                    }
+
+                    pOpt->SetStartWithTemplate(bStartWithTemplate);
+                    if(bNewDocDirect && !bStartWithTemplate)
+                    {
+                        std::auto_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
+                        if(pRet.get())
+                            ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
+
+                    }
+                }
+                else
+                {
+                    SfxObjectShellLock xShell( pPilotDlg->GetDocument() );
+                    SfxObjectShell* pShell = xShell;
+                    if( pShell )
+                    {
+                        if ( pTargetFrame )
+                        {
+                            pFrame = pTargetFrame;
+                            pFrame->InsertDocument( pShell );
+                            pViewFrame = pFrame->GetCurrentViewFrame();
+                        }
+                        else
+                        {
+                            pViewFrame = SFX_APP()->CreateViewFrame( *pShell );
+                            if( pViewFrame )
+                                pFrame = pViewFrame->GetFrame();
+                        }
+
+                        DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
+
+                        if(bNewDocDirect && !bStartWithTemplate)
+                        {
+                            std::auto_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
+                            if(pRet.get())
+                                ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
+                        }
+
+                        if( pShell && pViewFrame )
+                        {
+                            ::sd::DrawDocShell* pDocShell =
+                                  PTR_CAST(::sd::DrawDocShell,pShell);
+                            SdDrawDocument* pDoc = pDocShell->GetDoc();
+
+                            ::sd::ViewShellBase* pBase =
+                                  ::sd::ViewShellBase::GetViewShellBase (
+                                      pViewFrame);
+                            OSL_ASSERT (pBase!=NULL);
+                            ::sd::ViewShell* pViewSh = pBase->GetMainViewShell ();
+                            SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
+
+                            if (pOptions && pViewSh)
+                            {
+                                // The AutoPilot-document shall be open without its own options
+                                ::sd::FrameView* pFrameView = pViewSh->GetFrameView();
+                                pFrameView->Update(pOptions);
+                                pViewSh->ReadFrameViewData(pFrameView);
+                            }
+
+                            const sal_Int32 eMedium = pPilotDlg->GetOutputMedium();
+                            ChangeMedium( pDocShell, pViewFrame, pPilotDlg->GetOutputMedium() );
+
+                            if(pPilotDlg->IsSummary())
+                                AddSummaryPage(pViewFrame, pDoc);
+
+                            // empty document
+                            if((aDocPath.Len() == 0) && pViewFrame && pViewFrame->GetDispatcher())
+                            {
+                                SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
+                                SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (UINT32) AUTOLAYOUT_TITLE );
+                                pViewFrame->GetDispatcher()->Execute(SID_MODIFYPAGE,
+                                   SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
+                            }
+
+                            pDoc->SetChanged(!bIsDocEmpty);
+
+                            // clear document info
+                            SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
+
+                            SfxStamp aCreated;
+                            SvtUserOptions aOptions;
+                            aCreated.SetName( aOptions.GetFullName() );
+                            rInfo.SetCreated( aCreated );
+
+                            SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
+                            rInfo.SetChanged( aInvalid );
+                            rInfo.SetPrinted( aInvalid );
+                            rInfo.SetTime( 0L );
+                            rInfo.SetDocumentNumber( 1 );
+                            rInfo.SetUseUserData( TRUE );
+
+                            // #94652# clear UNDO stack after autopilot
+                            SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
+                            DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
+                            if(pUndoManager && pUndoManager->GetUndoActionCount())
+                                pUndoManager->Clear();
+
+                            bMakeLayoutVisible = true;
+                        }
+                    }
+                    pOpt->SetStartWithTemplate(bStartWithTemplate);
+                }
+            }
+        }
+
+        if( bMakeLayoutVisible )
+        {
+            SfxDispatcher* pDispatcher = 0;
+
+            if( !pViewFrame && pFrame )
+                pViewFrame = pFrame->GetCurrentViewFrame();
+            if( pViewFrame )
+                pDispatcher = pViewFrame->GetDispatcher();
+
+            if( pDispatcher )
+            {
+                // Make the layout menu visible in the tool pane.
+                SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+                SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX, ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
+                pDispatcher->Execute( SID_TASK_PANE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aMakeToolPaneVisible, &aPanelId, NULL);
+            }
+        }
+    }
+
+    return pFrame;
+}
+
+SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTargetFrame )
+{
+    SfxFrame* pFrame = 0;
+
+    SfxObjectShellLock xDocShell;
+    ::sd::DrawDocShell* pNewDocSh;
+    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD,FALSE,eDocType);
+    if(pNewDocSh)
+    {
+        pNewDocSh->DoInitNew(NULL);
+        SdDrawDocument* pDoc = pNewDocSh->GetDoc();
+        if(pDoc)
+        {
+            pDoc->CreateFirstPages();
+            pDoc->StopWorkStartupDelay();
+        }
+
+        if ( pTargetFrame )
+        {
+            pFrame = pTargetFrame;
+            pFrame->InsertDocument( pNewDocSh );
+        }
+        else
+        {
+            SfxViewFrame* pViewFrame = SFX_APP()->CreateViewFrame( *pNewDocSh );
+            if( pViewFrame )
+                pFrame = pViewFrame->GetFrame();
+        }
+    }
+
+    return pFrame;
+}
+
+void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium )
+{
+    if( !pDocShell )
+        return;
+
+    SdDrawDocument* pDoc = pDocShell->GetDoc();
+    if( !pDoc )
+        return;
+
+    // settings for the Outputmedium
+    Size aNewSize;
+    UINT32 nLeft;
+    UINT32 nRight;
+    UINT32 nLower;
+    UINT32 nUpper;
+    switch(eMedium)
+    {
+        case OUTPUT_PAGE:
+        case OUTPUT_OVERHEAD:
+        {
+            SfxPrinter* pPrinter = pDocShell->GetPrinter(TRUE);
+
+            if( pPrinter && pPrinter->IsValid())
+            {
+                // Der Printer gibt leider kein exaktes
+                // Format (z.B. A4) zurueck
+                Size aSize(pPrinter->GetPaperSize());
+                SvxPaper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
+
+                if (ePaper != SVX_PAPER_USER)
+                {
+                    // Korrekte Size holen
+                    aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
+                }
+
+                if (aSize.Height() > aSize.Width())
+                {
+                     // Stets Querformat
+                     aNewSize.Width()  = aSize.Height();
+                     aNewSize.Height() = aSize.Width();
+                }
+                else
+                {
+                     aNewSize = aSize;
+                }
+            }
+            else
+            {
+                aNewSize=Size(29700, 21000);
+            }
+
+            if (eMedium == OUTPUT_PAGE)
+            {
+                nLeft =1000;
+                nRight=1000;
+                nUpper=1000;
+                nLower=1000;
+            }
+            else
+            {
+                nLeft =0;
+                nRight=0;
+                nUpper=0;
+                nLower=0;
+            }
+        }
+        break;
+
+        case OUTPUT_SLIDE:
+        {
+            aNewSize = Size(27000, 18000);
+            nLeft =0;
+            nRight=0;
+            nUpper=0;
+            nLower=0;
+        }
+        break;
+
+        case OUTPUT_PRESENTATION:
+        {
+            aNewSize = Size(28000, 21000);
+            nLeft =0;
+            nRight=0;
+            nUpper=0;
+            nLower=0;
+        }
+        break;
+    }
+
+    BOOL bScaleAll = TRUE;
+    USHORT nPageCnt = pDoc->GetMasterSdPageCount(PK_STANDARD);
+    USHORT i;
+    SdPage* pPage;
+
+    // master pages first
+    for (i = 0; i < nPageCnt; i++)
+    {
+        pPage = pDoc->GetMasterSdPage(i, PK_STANDARD);
+
+        if (pPage)
+        {
+            if(eMedium != OUTPUT_ORIGINAL)
+            {
+                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                pPage->ScaleObjects(aNewSize, aBorderRect, bScaleAll);
+                pPage->SetSize(aNewSize);
+                pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            }
+            SdPage* pNotesPage = pDoc->GetMasterSdPage(i, PK_NOTES);
+            DBG_ASSERT( pNotesPage, "Wrong page ordering!" );
+            if( pNotesPage ) pNotesPage->CreateTitleAndLayout();
+            pPage->CreateTitleAndLayout();
+        }
+    }
+
+    nPageCnt = pDoc->GetSdPageCount(PK_STANDARD);
+
+    // then slides
+    for (i = 0; i < nPageCnt; i++)
+    {
+        pPage = pDoc->GetSdPage(i, PK_STANDARD);
+
+        if (pPage)
+        {
+            if(eMedium != OUTPUT_ORIGINAL)
+            {
+                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                pPage->ScaleObjects(aNewSize, aBorderRect, bScaleAll);
+                pPage->SetSize(aNewSize);
+                pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            }
+            SdPage* pNotesPage = pDoc->GetSdPage(i, PK_NOTES);
+            DBG_ASSERT( pNotesPage, "Wrong page ordering!" );
+            if( pNotesPage ) pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
+            pPage->SetAutoLayout( pPage->GetAutoLayout() );
+        }
+    }
+
+    SdPage* pHandoutPage = pDoc->GetSdPage(0, PK_HANDOUT);
+    pHandoutPage->CreateTitleAndLayout(TRUE);
+
+    if( (eMedium != OUTPUT_ORIGINAL) && pViewFrame && pViewFrame->GetDispatcher())
+    {
+        pViewFrame->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+    }
+}
