@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backtrace.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:59 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,17 @@ extern "C" {
 int backtrace( void **buffer, int max_frames );
 
 void backtrace_symbols_fd( void **buffer, int size, int fd );
+
+/* no frame.h on FreeBSD */
+#if defined FREEBSD
+struct frame {
+    long    arg0[8];
+    long    arg1[6];
+    struct frame *fr_savfp;
+    long    fr_savpc;
+};
+#endif
+
 
 #ifdef __cplusplus
 } /* extern "C" */
