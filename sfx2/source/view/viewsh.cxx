@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:29:45 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,6 +1081,9 @@ SfxViewShell* SfxViewShell::GetFirst
     for ( USHORT nPos = 0; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
+        if ( bOnlyVisible )
+            while( pShell && !pShell->GetViewFrame()->IsVisible_Impl() )
+                pShell = GetNext(*pShell, pType, bOnlyVisible);
         if ( !pType || pShell->IsA(*pType) )
             return pShell;
     }
@@ -1110,6 +1113,10 @@ SfxViewShell* SfxViewShell::GetNext
     for ( ++nPos; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
+        if ( bOnlyVisible )
+            while( pShell && !pShell->GetViewFrame()->IsVisible_Impl() )
+                pShell = GetNext(*pShell, pType, bOnlyVisible);
+
         if ( !pType || pShell->IsA(*pType) )
             return pShell;
     }
