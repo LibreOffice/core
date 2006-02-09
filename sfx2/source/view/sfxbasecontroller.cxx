@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:06:14 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1227,8 +1227,12 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            if ( !pView && m_pData->m_bIsFrameReleasedWithController)
-                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, pDoc) );
+            if ( m_pData->m_bIsFrameReleasedWithController )
+            {
+                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, pDoc ) );
+                if ( !pView )
+                    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, pDoc) );
+            }
 
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
             REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
