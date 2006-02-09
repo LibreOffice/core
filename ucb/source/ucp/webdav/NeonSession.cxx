@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:17:17 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,10 @@
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
+
+#ifndef EOL
+#    define EOL "\r\n"
+#endif
 
 // -------------------------------------------------------------------
 // RequestData
@@ -217,9 +221,12 @@ struct NeonRequestContext
 // ResponseBlockReader
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
-extern "C" void NeonSession_ResponseBlockReader( void *       inUserData,
-                                                 const char * inBuf,
-                                                 size_t       inLen )
+#ifdef NEONTWOFIVE
+extern "C" int NeonSession_ResponseBlockReader
+#else
+extern "C" void NeonSession_ResponseBlockReader
+#endif
+    (void * inUserData, const char * inBuf, size_t inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -237,15 +244,21 @@ extern "C" void NeonSession_ResponseBlockReader( void *       inUserData,
                 xInputStream->AddToStream( inBuf, inLen );
         }
     }
+#ifdef NEONTWOFIVE
+    return 0;
+#endif
 }
 
 // -------------------------------------------------------------------
 // ResponseBlockWriter
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
-extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
-                                                 const char * inBuf,
-                                                 size_t       inLen )
+#ifdef NEONTWOFIVE
+extern "C" int NeonSession_ResponseBlockWriter
+#else
+extern "C" void NeonSession_ResponseBlockWriter
+#endif
+    ( void *       inUserData, const char * inBuf, size_t inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -260,6 +273,9 @@ extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
             xOutputStream->writeBytes( aSeq );
         }
     }
+#ifdef NEONTWOFIVE
+    return 0;
+#endif
 }
 
 // -------------------------------------------------------------------
@@ -1522,6 +1538,23 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
 }
 */
 
+#ifdef NEONTWOFIVE
+static void run_header_handler(ne_request *req, ne_header_handler handler, void *userdata)
+{
+    void *cursor = NULL;
+    const char *name, *value;
+
+    while ((cursor = ne_response_header_iterate(req, cursor, &name, &value)) != NULL)
+    {
+        char buffer[8192];
+
+        ne_snprintf(buffer, sizeof buffer, "%s: %s", name, value);
+
+        handler(userdata, buffer);
+    }
+}
+#endif
+
 // -------------------------------------------------------------------
 // static
 int NeonSession::GET( ne_session * sess,
@@ -1533,12 +1566,15 @@ int NeonSession::GET( ne_session * sess,
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
-
+#ifndef NEONTWOFIVE
     ne_add_response_header_catcher( req, handler, userdata );
-
+#endif
     ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
 
     ret = ne_request_dispatch( req );
+#ifdef NEONTWOFIVE
+    run_header_handler(req, handler, userdata);
+#endif
 
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
