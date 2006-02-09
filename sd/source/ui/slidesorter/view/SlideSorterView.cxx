@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:54:11 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 17:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,6 +689,18 @@ void SlideSorterView::UpdatePageBorders (void)
         maModelBorder = PageObjectViewObjectContact::CalculatePageModelBorder (
             GetWindow(),
             mrModel.GetPageCount());
+
+        // Set the border at all page descriptors so that the contact
+        // objects have access to them.
+        model::SlideSorterModel::Enumeration aPageEnumeration (
+            mrModel.GetAllPagesEnumeration());
+        while (aPageEnumeration.HasMoreElements())
+        {
+            model::PageDescriptor& rDescriptor (
+                aPageEnumeration.GetNextElement());
+            rDescriptor.SetModelBorder(maModelBorder);
+            rDescriptor.SetPageNumberAreaModelSize(maPageNumberAreaModelSize);
+        }
 
         // Convert the borders to pixel coordinates and store them for later
         // use.
