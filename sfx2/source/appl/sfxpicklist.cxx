@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:48:14 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     return;
 
                 // ignore hidden documents
-                if ( pDocSh->Get_Impl()->bHidden )
+                if ( !SfxViewFrame::GetFirst( pDocSh, 0, TRUE ) )
                     return;
 
                 ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
