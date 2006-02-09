@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:24:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1409,6 +1409,40 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 }
 
 /*-----------------------------------------------
+    24.01.2006 15:11
+-----------------------------------------------*/
+void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
+                              const css::util::URL&                            aURL  )
+{
+    if (! aURL.Mark.getLength())
+        return;
+
+    css::uno::Reference< css::frame::XDispatchProvider > xProvider(xFrame, css::uno::UNO_QUERY);
+    if (! xProvider.is())
+        return;
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
+
+    css::util::URL aCmd;
+    aCmd.Complete = ::rtl::OUString::createFromAscii(".uno:JumpToMark");
+
+    css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
+    xParser->parseStrict(aCmd);
+
+    css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);
+    if (! xDispatcher.is())
+        return;
+
+    ::comphelper::SequenceAsHashMap lArgs;
+    lArgs[::rtl::OUString::createFromAscii("Bookmark")] <<= aURL.Mark;
+    xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
+}
+
+/*-----------------------------------------------
     31.07.2003 09:02
 -----------------------------------------------*/
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
@@ -1496,15 +1530,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // It's time to activate it. As special feature we try to jump internaly
             // if an optional jumpmark is given too.
             if (m_aURL.Mark.getLength())
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider(xTask, css::uno::UNO_QUERY);
-                if (xProvider.is())
-                {
-                    css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(m_aURL, SPECIALTARGET_SELF, 0);
-                    if (xDispatcher.is())
-                        xDispatcher->dispatch(m_aURL, m_lMediaDescriptor.getAsConstPropertyValueList());
-                }
-            }
+                impl_jumpToMark(xTask, m_aURL);
 
             // bring it to front ...
             impl_makeFrameWindowVisible(xTask->getContainerWindow(), sal_True);
