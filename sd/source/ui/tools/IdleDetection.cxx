@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:56:19 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,24 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
          pViewFrame!=NULL && !bIsSlideShowShowing;
          pViewFrame = SfxViewFrame::GetNext(*pViewFrame))
     {
-        // Check whether the frame is the active one.
-        uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame()->GetFrameInterface());
-        if (xFrame.is() && ! xFrame->isActive())
+        // Ignore the current frame when it does not exist, is not valid, or
+        // is not active.
+        bool bIgnoreFrame (true);
+        if (pViewFrame->GetFrame() != NULL)
         {
-            // Frames that are not active are ignored.
-            continue;
+            uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame()->GetFrameInterface());
+            try
+            {
+                if (xFrame.is() && xFrame->isActive())
+                    bIgnoreFrame = false;
+            }
+            catch (uno::RuntimeException e)
+            {
+                (void) e;
+            }
         }
+        if (bIgnoreFrame)
+            continue;
 
         // Get sd::ViewShell from active frame.
         ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pViewFrame);
