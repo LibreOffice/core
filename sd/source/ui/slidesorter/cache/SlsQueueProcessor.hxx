@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:52:20 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ public:
     QueueProcessor (
         view::SlideSorterView& rView,
         Queue& rQueue,
-        BitmapCache& rCache);
+        const ::boost::shared_ptr<BitmapCache>& rpCache);
 
     void Terminate (void);
 
@@ -121,6 +121,12 @@ public:
     */
     void RemoveRequest (RequestData& rRequest);
 
+    /** Use this method when the page cache is (maybe) using a different
+        BitmapCache.  This is usually necessary after calling
+        PageCacheManager::ChangeSize().
+    */
+    void SetBitmapCache (const ::boost::shared_ptr<BitmapCache>& rpCache);
+
 private:
     /** This mutex is used to guard the queue processor.  Be carefull not to
         mix its use with that of the solar mutex.
@@ -129,7 +135,7 @@ private:
 
     view::SlideSorterView& mrView;
     Queue& mrQueue;
-    BitmapCache& mrCache;
+    ::boost::shared_ptr<BitmapCache> mpCache;
     BitmapFactory maBitmapFactory;
 
     virtual void ProcessRequest (void);
@@ -144,11 +150,11 @@ template <class Queue, class RequestData, class BitmapFactory>
     QueueProcessor<Queue, RequestData, BitmapFactory>::QueueProcessor (
         view::SlideSorterView& rView,
         Queue& rQueue,
-        BitmapCache& rCache)
+        const ::boost::shared_ptr<BitmapCache>& rpCache)
         : maMutex(),
           mrView (rView),
           mrQueue (rQueue),
-          mrCache (rCache),
+          mpCache (rpCache),
           maBitmapFactory(rView)
 {
 }
@@ -209,10 +215,11 @@ template <class Queue, class RequestData, class BitmapFactory>
                         = pRequest->GetViewContact().GetPaintRectangle() - pPageView->GetOffset();
                 }
 
-                mrCache.SetBitmap (
-                    pRequest->GetPage(),
-                    maBitmapFactory.CreateBitmap(*pRequest),
-                    ePriorityClass!=NOT_VISIBLE);
+                if (mpCache.get() != NULL)
+                    mpCache->SetBitmap (
+                        pRequest->GetPage(),
+                        maBitmapFactory.CreateBitmap(*pRequest),
+                        ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
                 if (ePriorityClass != NOT_VISIBLE)
@@ -264,6 +271,16 @@ template <class Queue, class RequestData, class BitmapFactory>
 {
     // See the method declaration above for an explanation why this makes sense.
     ::osl::MutexGuard aGuard (maMutex);
+}
+
+
+
+
+template <class Queue, class RequestData, class BitmapFactory>
+    void QueueProcessor<Queue, RequestData, BitmapFactory>::SetBitmapCache (
+        const ::boost::shared_ptr<BitmapCache>& rpCache)
+{
+    mpCache = rpCache;
 }
 
 
