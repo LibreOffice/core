@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portab.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:02:20 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,13 +108,34 @@ public:
 
 class SwTabDecimalPortion : public SwTabPortion
 {
-    const xub_Unicode cTab;
+    const xub_Unicode mcTab;
+
+    /*
+     * During text formatting, we already store the width of the portions
+     * following the tab stop up to the decimal position. This value is
+     * evaluated during pLastTab->FormatEOL. FME 2006-01-06 #127428#.
+     */
+    USHORT mnWidthOfPortionsUpTpDecimalPosition;
+
 public:
     inline SwTabDecimalPortion( const KSHORT nTabPos, const xub_Unicode cTab,
                                 const xub_Unicode cFill = '\0' )
-         : SwTabPortion( nTabPos, cFill ), cTab(cTab)
+         : SwTabPortion( nTabPos, cFill ),
+           mcTab(cTab),
+           mnWidthOfPortionsUpTpDecimalPosition( USHRT_MAX )
     { SetWhichPor( POR_TABDECIMAL ); }
-    inline xub_Unicode GetTabDecimal() const { return cTab; }
+
+    inline xub_Unicode GetTabDecimal() const { return mcTab; }
+
+    inline void SetWidthOfPortionsUpToDecimalPosition( USHORT nNew )
+    {
+        mnWidthOfPortionsUpTpDecimalPosition = nNew;
+    }
+    inline USHORT GetWidthOfPortionsUpToDecimalPosition() const
+    {
+        return mnWidthOfPortionsUpTpDecimalPosition;
+    }
+
     OUTPUT_OPERATOR
 };
 
