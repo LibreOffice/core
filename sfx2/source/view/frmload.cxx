@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:26:16 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,6 +368,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 return pFrame->InsertDocument( pDoc );
             }
         }
+
+        DBG_ERROR("Model is not based on SfxObjectShell - wrong frame loader use!");
+        return sal_False;
     }
 
     // check for the URL pattern of our factory URLs
@@ -489,7 +492,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                     if (pItem)
                         bLoadState = pItem->GetValue();
                 }
-                else if ( xListener.is() )
+                else
                 {
                     if ( !pFrame->GetCurrentDocument() )
                     {
@@ -515,6 +518,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
 
     // !TODO: replace by direct construction of model (needs view factory)
+    DBG_ASSERT( pFilter, "No filter set!" );
+    if ( !pFilter )
+        return sal_False;
+
+    sal_Bool bDisaster = sal_False;
     SfxObjectShell* pDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
     if ( pDoc )
     {
@@ -539,7 +547,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             {
                 // remove old component
                 // if a frame was created already, it can't be an SfxComponent!
-                pFrame->GetFrameInterface()->setComponent( 0, 0 );
+                //pFrame->GetFrameInterface()->setComponent( 0, 0 );
                 if ( !bFrameCreated )
                     pFrame = SfxTopFrame::Create( rFrame );
             }
@@ -552,8 +560,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
                 bLoadState = sal_True;
             }
+            else
+                bDisaster = sal_True;
         }
         catch ( css::uno::Exception& )
+        {
+            bDisaster = sal_True;
+        }
+
+        if ( bDisaster )
         {
             if ( pFrame && !pFrame->GetCurrentDocument() )
             {
