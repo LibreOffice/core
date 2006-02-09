@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:46:06 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 
 SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 {
-    DBG_ASSERT( pPreferedFrame, "Can't be implemented in StarPortal!" );
+    DBG_ASSERT( pPreferedFrame, "Call without preferred Frame is not supported anymore!" );
     if ( pImp->bLoadingWindows || !pPreferedFrame )
         return NULL;
 
