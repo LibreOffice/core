@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:53 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 13:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ public:
 
     // c++ - methods
 
-    void notify();
+    void notify( bool bDataChanged = true );
     HRESULT SaveObject();
     HRESULT ShowObject();
     GUID GetGUID() const { return m_guid; }
