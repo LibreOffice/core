@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 16:46:21 $
+#   last change: $Author: rt $ $Date: 2006-02-09 17:07:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@
 # file locking now enabled by default
 SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
+
+# Uncomment the below line if you suspect that OpenGL is not
+# working on your system.
+# export SAL_NOOPENGL=true;
+
 
 # the following test is needed on Linux PPC with IBM j2sdk142
 if [ `uname -s` = "Linux" -a  "`uname -m`" = "ppc" ] ; then
