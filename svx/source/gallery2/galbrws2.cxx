@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:59:30 $
+ *  last change: $Author: rt $ $Date: 2006-02-09 14:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,12 +531,16 @@ void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoi
     {
         ImplSelectItemId( nItemId );
 
-        SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
-        rBindings.ENTERREGISTRATIONS();
-        GalleryThemePopup aMenu( mpCurTheme, nItemId - 1, GALLERYBROWSERMODE_PREVIEW == GetMode() );
-        rBindings.LEAVEREGISTRATIONS();
-        aMenu.SetSelectHdl( LINK( this, GalleryBrowser2, MenuSelectHdl ) );
-        aMenu.Execute( this, aSelPos  );
+        SfxViewFrame* pCurrentViewFrame = SfxViewFrame::Current();
+        if ( pCurrentViewFrame )
+        {
+            SfxBindings& rBindings = pCurrentViewFrame->GetBindings();
+            rBindings.ENTERREGISTRATIONS();
+            GalleryThemePopup aMenu( mpCurTheme, nItemId - 1, GALLERYBROWSERMODE_PREVIEW == GetMode() );
+            rBindings.LEAVEREGISTRATIONS();
+            aMenu.SetSelectHdl( LINK( this, GalleryBrowser2, MenuSelectHdl ) );
+            aMenu.Execute( this, aSelPos  );
+        }
     }
 }
 
