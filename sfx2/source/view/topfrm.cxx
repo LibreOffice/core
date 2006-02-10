@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:09:03 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,8 +647,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT 
 SfxTopFrame* SfxTopFrame::Create( Reference < XFrame > xFrame )
 {
     // create a new TopFrame to an external XFrame object ( wrap controller )
-    if ( !xFrame.is() )
-        DBG_ERROR( "Wrong parameter!" );
+    DBG_ASSERT( xFrame.is(), "Wrong parameter!" );
 
     Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
     SfxTopFrame* pFrame = new SfxTopFrame( pWindow );
@@ -1729,9 +1728,7 @@ void SfxTopFrame::CheckMenuCloser_Impl( MenuBar* pMenuBar )
     // checks if there is more than one "real" (not help) task window
     // in this case a close button is inserted into the menubar
 
-    if ( !xFrame.is() )
-        DBG_ERROR("Attention: this bug is very hard to reproduce. Please try to remember how you triggered it!");
-
+    DBG_ASSERT( xFrame.is(), "Attention: this bug is very hard to reproduce. Please try to remember how you triggered it!");
     if ( !xFrame.is() || !xFrame->getController().is() )
         // dummy component
         return;
