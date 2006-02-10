@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:16:33 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 09:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
@@ -319,6 +322,7 @@
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
+using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
     Beschreibung:   Globals
@@ -4498,7 +4502,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                             if ( pMenu )
                             {
                                 USHORT nId = ((PopupMenu*)pMenu)->Execute(this, aPixPos);
-                                pROPopup->Execute(this, nId);
+                                if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *rView.GetViewFrame(), nId ))
+                                    pROPopup->Execute(this, nId);
                             }
                             else
                                 pROPopup->Execute(this, aPixPos);
@@ -5216,7 +5221,6 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 {
     pCalendarWrapper->LoadDefaultCalendar( rSh.GetCurLang() );
 
-    using namespace ::com::sun::star;
     {
         uno::Sequence< i18n::CalendarItem > aNames(
                                             pCalendarWrapper->getMonths() );
