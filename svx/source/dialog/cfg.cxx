@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:16:25 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1419,23 +1419,6 @@ void MenuSaveInData::ApplyMenu(
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntry );
-
-            if ( pEntry->GetCommand().equalsAscii( ".uno:FormatMenu" ))
-            {
-                // Special popup menu "Format". It must be an empty popup menu!
-                uno::Reference< lang::XSingleComponentFactory >
-                    xFactory( rMenuBar, uno::UNO_QUERY );
-
-                uno::Reference< container::XIndexContainer >
-                    xSubMenuBar( xFactory->createInstanceWithContext(
-                        m_xComponentContext ), uno::UNO_QUERY );
-
-                sal_Int32 nIndex = aPropValueSeq.getLength();
-                aPropValueSeq.realloc( nIndex + 1 );
-                aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
-                aPropValueSeq[nIndex].Value <<= xSubMenuBar;
-            }
-
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
         }
