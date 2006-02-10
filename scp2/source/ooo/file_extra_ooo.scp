@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_extra_ooo.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 12:34:31 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 11:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,23 +138,27 @@ End
 
 #ifdef UNX
 
+#ifndef WITHOUT_AFMS
 File gid_File_Extra_Fontunxafm
     Dir = gid_Dir_Psprint_Fontmetric;
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
     Name = "fontunxafm.zip";
 End
+#endif
 
 #endif
 
 #ifdef UNX
 
+#ifndef WITHOUT_PPDS
 File gid_File_Extra_Fontunxppds
     Dir = gid_Dir_Psprint_Driver;
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
     Name = "fontunxppds.zip";
 End
+#endif
 
 #endif
 
