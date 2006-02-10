@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:10:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,7 +443,7 @@ void SwSrcView::Init()
     }
 
 //  StartListening(*GetViewFrame());
-    StartListening(*pDocShell);
+    StartListening(*pDocShell,TRUE);
 }
 
 /*--------------------------------------------------------------------
