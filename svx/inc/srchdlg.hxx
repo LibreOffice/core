@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:39:11 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,10 @@ private:
     FixedLine       aSearchCmdLine;
     PushButton      aReplaceBtn;
     PushButton      aReplaceAllBtn;
+
+    FixedLine       aSearchComponentFL;
+    PushButton      aSearchComponent1PB;
+    PushButton      aSearchComponent2PB;
 
     CheckBox        aMatchCaseCB;
     CheckBox        aWordBtn;
