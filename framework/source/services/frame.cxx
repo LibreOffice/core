@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:24:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 09:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,6 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bConnected                ( sal_False                                         ) // There exist no component inside of use => sal_False, we are not connected!
         ,   m_nExternalLockCount        ( 0                                                 )
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
-        ,   m_aPoster                   ( LINK( this, Frame, implts_windowClosing )         )
         ,   m_bIsHidden                 ( sal_True                                          )
 {
     // Check incoming parameter to avoid against wrong initialization.
@@ -2313,59 +2312,36 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
-    /* Attention:
-        Don't use any transaction registration here. Because we try to kill ourself.
-        And if we have registered this function as non breakable and force a close()->dispose() operation
-        this will wait for us for ever ...
-     */
+    // Look for rejected calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // deactivate this frame and try to close it
+    // deactivate this frame ...
+    deactivate();
+
+    // ... and try to close it
     // But do it asynchron inside the main thread.
     // VCL has no fun to do such things outside his main thread :-(
-    deactivate();
-    m_aPoster.Post(0);
-}
+    // Note: The used dispatch make it asynchronous for us .-)
 
-IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
-{
-        // try to close this frame
-        // But don't deliver the ownership to anyone.
-        // Because our "UI owner" will try it again if this request
-        // will fail.
-        // e.g. Somewhere try to open an impress document ... and during
-        // load process the wizard dialog comes up. Then it's possible for
-        // the user to click the window closer of the document window - this task
-        // disagree but gets the owner shipt and practice suicide directly after
-        // closing of the dialog. That's not fine.
-        // We must ignore this close() request then and user can try it later again ...
+    /*ATTENTION!
+        Don't try to suspend the controller here! Because it's done inside used dispatch().
+        Otherwhise the dialog "would you save your changes?" will be shown more then once ...
+     */
 
-    try
-    {
-        /*ATTENTION!
-            Don't try to suspend the controller here! Because it's done inside used dispatch().
-            Otherwhise the dialog "would you save your changes?" will be shown more then once ...
-         */
+    /* SAFE */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    aReadLock.unlock();
+    /* SAFE */
 
-        /* SAFE */
-        ReadGuard aReadLock( m_aLock );
-        css::uno::Reference< css::frame::XController > xController = m_xController;
-        aReadLock.unlock();
-        /* SAFE */
+    css::util::URL aURL;
+    aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
+    css::uno::Reference< css::util::XURLTransformer > xParser(xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
+    xParser->parseStrict(aURL);
 
-        css::util::URL aURL;
-        aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
-        css::uno::Reference< css::util::XURLTransformer > xParser(m_xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
-        if (xParser.is())
-            xParser->parseStrict(aURL);
-        css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL,SPECIALTARGET_TOP,0);
-        if (xCloser.is())
-            xCloser->dispatch(aURL,css::uno::Sequence< css::beans::PropertyValue >());
-    }
-    catch( css::util::CloseVetoException& )
-    {
-    }
-
-    return 0;
+    css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_TOP, 0);
+    if (xCloser.is())
+        xCloser->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
 }
 
 /*-****************************************************************************************************//**
