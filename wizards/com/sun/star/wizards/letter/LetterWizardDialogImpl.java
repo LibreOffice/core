@@ -922,10 +922,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             e.printStackTrace();
         }
 
-        Norms = new String[nameList.length];
-                NormPaths = new String[nameList.length];
+                Vector NormsVector = new Vector();
+                Vector NormsPathVector = new Vector();
+                Vector LanguageLabelsVector = new Vector();
         String [] LanguageLabels;
-        LanguageLabels = new String[Norms.length];
 
         boolean found = false;
         String cIsoCode = "";
@@ -954,12 +954,31 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             }
 
                         if (found) {
+                            NormsVector.add(cIsoCode);
+                            NormsPathVector.add((String) nameList[i]);
+                            LanguageLabelsVector.add(lc.getLanguageString(MSID));
+                            /*
                             Norms[z] = cIsoCode;
                             NormPaths[z] = (String) nameList[i];
                             LanguageLabels[z] = lc.getLanguageString(MSID);
                             z++;
+                             **/
                         }
         }
+
+
+                Norms = new String[NormsVector.size()];
+                NormsVector.toArray(Norms);
+
+                NormPaths = new String[NormsPathVector.size()];
+                NormsPathVector.toArray(NormPaths);
+
+                LanguageLabels = new String[LanguageLabelsVector.size()];
+                LanguageLabelsVector.toArray(LanguageLabels);
+
+                //Norms = new String[nameList.length];
+                //NormPaths = new String[nameList.length];
+        //LanguageLabels = new String[Norms.length];
 
         setControlProperty("lstLetterNorm", "StringItemList", LanguageLabels);
     }
