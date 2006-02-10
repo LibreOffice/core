@@ -2275,7 +2275,7 @@ SfxVoidItem FormatMenu SID_FORMATMENU
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = TRUE,
+        MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
@@ -5321,7 +5321,7 @@ SfxVoidItem PickList SID_PICKLIST
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = TRUE,
+        MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
