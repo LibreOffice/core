@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:11:04 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,29 +77,26 @@
 #ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <com/sun/star/ui/ItemType.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XToolbarController.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -109,11 +106,9 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
-
 #ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
 #include <svtools/toolboxcontroller.hxx>
 #endif
-
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -129,6 +124,7 @@
 //_________________________________________________________________________________________________________________
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -286,6 +282,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
     }
 
+    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
+    Reference< XComponentContext > xComponentContext;
+    Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
+
+    if ( xProps.is() )
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
+
     sal_uInt32  nElements( 0 );
     sal_Bool    bAppendSeparator( sal_False );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
@@ -353,11 +356,55 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 m_pToolBar->SetItemCommand( nId, aURL );
 
                 Reference< XStatusListener > xController;
-                svt::ToolboxController* pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
-                xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+
+                sal_Bool bMustBeInit( sal_True );
+
+                // Support external toolbar controller for add-ons!
+                if ( m_xToolbarControllerRegistration.is() &&
+                     m_xToolbarControllerRegistration->hasController( aURL, m_aModuleIdentifier ))
+                {
+                    if ( xToolbarControllerFactory.is() )
+                    {
+                        Sequence< Any > aArgs(5);
+                        PropertyValue   aPropValue;
+
+                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                        aPropValue.Value    = makeAny( m_aModuleIdentifier );
+                        aArgs[0] = makeAny( aPropValue );
+                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                        aPropValue.Value    = makeAny( m_xFrame );
+                        aArgs[1] = makeAny( aPropValue );
+                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                        aPropValue.Value    = makeAny( m_xServiceManager );
+                        aArgs[2] = makeAny( aPropValue );
+                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                        aPropValue.Value    = makeAny( xToolbarWindow );
+                        aArgs[3] = makeAny( aPropValue );
+                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemId" ));
+                        aPropValue.Value    = makeAny( sal_Int32( nId ));
+                        aArgs[4] = makeAny( aPropValue );
+
+                        try
+                        {
+                            xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                                                            aURL, aArgs, xComponentContext ),
+                                                                        UNO_QUERY );
+                        }
+                        catch ( uno::Exception& )
+                        {
+                        }
+                        bMustBeInit = sal_False; // factory called init already!
+                    }
+                }
+                else
+                {
+                    svt::ToolboxController* pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+                    xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+                }
+
                 m_aControllerVector.push_back( xController );
                 Reference< XInitialization > xInit( xController, UNO_QUERY );
-                if ( xInit.is() )
+                if ( xInit.is() && bMustBeInit )
                 {
                     PropertyValue aPropValue;
                     Sequence< Any > aArgs( 3 );
@@ -370,12 +417,44 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                     aPropValue.Value = makeAny( m_xServiceManager );
                     aArgs[2] = makeAny( aPropValue );
-                    xInit->initialize( aArgs );
+                    try
+                    {
+                        xInit->initialize( aArgs );
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
 
-                    // Notify controller implementation to its listeners. Controller is now useable from outside.
-                    Reference< XUpdatable > xUpdatable( xController, UNO_QUERY );
-                    if ( xUpdatable.is() )
+                // Request a item window from the toolbar controller and set it at the VCL toolbar
+                Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
+                if ( xTbxController.is() && xToolbarWindow.is() )
+                {
+                    Reference< XWindow > xWindow = xTbxController->createItemWindow( xToolbarWindow );
+                    if ( xWindow.is() )
+                    {
+                        Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
+                        if ( pItemWin )
+                        {
+                            WindowType nType = pItemWin->GetType();
+                            if ( nType == WINDOW_LISTBOX || nType == WINDOW_MULTILISTBOX || nType == WINDOW_COMBOBOX )
+                                pItemWin->SetAccessibleName( m_pToolBar->GetItemText( nId ) );
+                            m_pToolBar->SetItemWindow( nId, pItemWin );
+                        }
+                    }
+                }
+
+                // Notify controller implementation to its listeners. Controller is now useable from outside.
+                Reference< XUpdatable > xUpdatable( xController, UNO_QUERY );
+                if ( xUpdatable.is() )
+                {
+                    try
+                    {
                         xUpdatable->update();
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
                 }
 
                 ++nId;
