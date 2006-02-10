@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:32:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,21 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -101,6 +116,9 @@
 #include <tabcol.hxx>
 #endif
 
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
@@ -182,6 +200,7 @@
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
+using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung: Allgemeine List von StringPointern
  --------------------------------------------------------------------*/
@@ -843,4 +862,41 @@ String GetAppLangDateTimeString( const DateTime& rDT )
     String sRet( rAppLclData.getDate( rDT ));
     ( sRet += ' ' ) += rAppLclData.getTime( rDT, FALSE, FALSE );
     return sRet;
+}
+
+/*-- 26.01.2006 08:06:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId )
+{
+    bool bRet = false;
+    USHORT nItemCount = rMenu.GetItemCount();
+    String sCommand;
+    for( USHORT nItem = 0; nItem < nItemCount; ++nItem)
+    {
+        PopupMenu* pPopup = rMenu.GetPopupMenu( rMenu.GetItemId( nItem ) );
+        if(pPopup)
+        {
+            sCommand = pPopup->GetItemCommand(nId);
+            if(sCommand.Len())
+                break;
+        }
+    }
+    if(sCommand.Len())
+    {
+        uno::Reference< frame::XFrame >  xFrame = rViewFrame.GetFrame()->GetFrameInterface();
+        uno::Reference < frame::XDispatchProvider > xProv( xFrame, uno::UNO_QUERY );
+        util::URL aURL;
+        aURL.Complete = sCommand;
+        uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        xTrans->parseStrict( aURL );
+        uno::Reference< frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+        if( xDisp.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aSeq;
+            xDisp->dispatch( aURL, aSeq );
+            bRet = true;
+        }
+    }
+    return bRet;
 }
