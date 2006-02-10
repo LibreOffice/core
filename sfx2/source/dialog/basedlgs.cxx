@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:06:36 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 11:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,27 @@ using namespace ::rtl;
 
 #define USERITEM_NAME OUString::createFromAscii( "UserItem" )
 
-class SfxModelessDialog_Impl
+class SfxModelessDialog_Impl : public SfxListener
 {
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL                bConstructed;
+    BOOL            bConstructed;
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
+
+void SfxModelessDialog_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    {
+        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        {
+            case SFX_HINT_DYING:
+                pMgr->Destroy();
+                break;
+        }
+    }
+}
 
 class SfxFloatingWindow_Impl
 {
@@ -378,6 +392,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
+    if ( pBindinx )
+        pImp->StartListening( *pBindinx );
 }
 
 // -----------------------------------------------------------------------
@@ -394,6 +410,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
+    if ( pBindinx )
+        pImp->StartListening( *pBindinx );
 }
 
 // -----------------------------------------------------------------------
@@ -458,7 +476,7 @@ SfxModelessDialog::~SfxModelessDialog()
 */
 
 {
-    if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
 }
