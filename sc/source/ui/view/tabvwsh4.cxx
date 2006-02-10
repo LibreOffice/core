@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:39:18 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1716,9 +1716,8 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
     pCurFrameLine   = new SvxBorderLine( &aColBlack, 20, 0, 0 );
     pPivotSource    = new ScArea;
-    StartListening(*GetViewData()->GetDocShell());
-    StartListening(*GetViewFrame());
-    StartListening(*pSfxApp,TRUE);      // SfxViewShell hoert da schon zu?
+    StartListening(*GetViewData()->GetDocShell(),TRUE);
+    StartListening(*GetViewFrame(),TRUE);
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
     BOOL bFirstView = !pFirst
@@ -1890,9 +1889,11 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     UpdatePageBreakData();
 
-    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+    /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
     if (xFrame.is())
-        xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );
+        xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
+    // make Controller known to SFX
+    new ScTabViewObj( this );
 
     SetCurSubShell(OST_Cell);
     SvBorder aBorder;
@@ -1939,9 +1940,11 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         SetZoomType( rAppOpt.GetZoomType() );
     }
 
-    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+    /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
     if (xFrame.is())
-        xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );
+        xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
+    // make Controller known to SFX
+    new ScTabViewObj( this );
 
     SetCurSubShell(OST_Cell);
     SvBorder aBorder;
