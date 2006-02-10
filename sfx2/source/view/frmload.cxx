@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:17:00 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,26 +540,48 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             // !TODO: will be done by Framework!
             pMedium->SetUpdatePickList( !bHidden );
 
-            // !TODO: replace by ViewFactory
-            if ( pFrame->GetFrameInterface()->getController().is() )
+            /*
+                #121119#
+                We dont know why pFrame can be corrupt here.
+                But if it was deleted it shouldnt exists inside our global list.
+                May be we can use the damaged pointer to detect if it was removed from
+                this global list.
+            */
+            SfxFrame* pTmp=0;
+            for ( pTmp = SfxFrame::GetFirst(); pTmp; pTmp = SfxFrame::GetNext( *pTmp ) )
             {
-                // remove old component
-                // if a frame was created already, it can't be an SfxComponent!
-                //pFrame->GetFrameInterface()->setComponent( 0, 0 );
-                if ( !bFrameCreated )
-                    pFrame = SfxTopFrame::Create( rFrame );
+                if ( pFrame == pTmp )
+                    break;
             }
 
-            aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
-            if( pFrame->InsertDocument( pDoc ) )
+            if ( pTmp == pFrame )
             {
-                pFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-                String aURL = pDoc->GetMedium()->GetName();
-                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
-                bLoadState = sal_True;
+                // !TODO: replace by ViewFactory
+                if ( pFrame->GetFrameInterface()->getController().is() )
+                {
+                    // remove old component
+                    // if a frame was created already, it can't be an SfxComponent!
+                    // pFrame->GetFrameInterface()->setComponent( 0, 0 );
+                    if ( !bFrameCreated )
+                        pFrame = SfxTopFrame::Create( rFrame );
+                }
+
+                aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+                if( pFrame->InsertDocument( pDoc ) )
+                {
+                    pFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
+                    String aURL = pDoc->GetMedium()->GetName();
+                    SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
+                    bLoadState = sal_True;
+                }
+                else
+                    bDisaster = sal_True;
             }
             else
-                bDisaster = sal_True;
+            {
+                DBG_ERROR("#121119# You found the reason for a stacktrace! Frame destroyed while loading document.");
+                bLoadState = sal_False;
+            }
         }
         catch ( css::uno::Exception& )
         {
