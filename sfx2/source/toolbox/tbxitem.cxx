@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:26:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,18 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
     delete pWindow;
+
+    // Dispose an open sub toolbar. It's possible that we have an open
+    // sub toolbar while we get disposed. Therefore we have to dispose
+    // it now! Not doing so would result in a crash. The sub toolbar
+    // gets destroyed asynchronously and would access a non-existing
+    // parent toolbar! See #126569#
+    if ( pImpl->mxUIElement.is() )
+    {
+        Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
+        xComponent->dispose();
+    }
+    pImpl->mxUIElement = 0;
 
     // Delete my popup windows
     delete pImpl->mpFloatingWindow;
