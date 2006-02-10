@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:55:50 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include <toolkit/helper/vclunohelper.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -72,6 +73,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -105,6 +109,9 @@
 #endif
 #ifndef _INITUI_HXX
 #include <initui.hxx>               // fuer SpellPointer
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -787,9 +794,29 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 bRet = sal_True;
                 pWrtShell->SttSelect();
                 SwSpellPopup aPopup( pWrtShell, xAlt );
-                aPopup.Execute(
-                pEditWin,
-                aToFill.SVRect());
+                ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+                const Point aPixPos = GetEditWin().LogicToPixel( rPt );
+
+                aEvent.SourceWindow = VCLUnoHelper::GetInterface( pEditWin );
+                aEvent.ExecutePosition.X = aPixPos.X();
+                aEvent.ExecutePosition.Y = aPixPos.Y();
+                Menu* pMenu = 0;
+
+                if(TryContextMenuInterception( aPopup, pMenu, aEvent ))
+                {
+                    if ( pMenu )
+                    {
+                        USHORT nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
+                        if(!ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
+                            aPopup.Execute(nId);
+                    }
+                    else
+                    {
+                        aPopup.Execute(
+                            pEditWin,
+                            aToFill.SVRect());
+                    }
+                }
             }
 
             pWrtShell->Pop( sal_False );
