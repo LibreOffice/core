@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:17:37 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 15:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1368,8 +1368,14 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
                     }
-                    if( !nRemaining )
-                        nRemaining = nOldHeight - nUL;
+                    // --> OD 2006-02-09 #130878#
+                    // Do not keep old height, if content has no height.
+                    // The old height could be wrong due to wrong layout cache
+                    // and isn't corrected in the further formatting, because
+                    // the fly frame doesn't become invalid anymore.
+//                    if( !nRemaining )
+//                        nRemaining = nOldHeight - nUL;
+                    // <--
                 }
                 if ( GetDrawObjs() )
                 {
