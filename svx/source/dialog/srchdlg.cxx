@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:04:00 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,8 +75,23 @@
 #include <svtools/cjkoptions.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #pragma hdrstop
@@ -112,7 +127,8 @@
 #include "svxdlg.hxx" //CHINA001
 
 using namespace com::sun::star::i18n;
-
+using namespace com::sun::star;
+using namespace comphelper;
 // -----------------------------------------------------------------------
 
 #define REMEMBER_SIZE       10
@@ -153,6 +169,11 @@ struct SearchDlg_Impl
     USHORT*     pRanges;
     Timer       aSelectionTimer;
 
+    uno::Reference< frame::XDispatch > xCommand1Dispatch;
+    uno::Reference< frame::XDispatch > xCommand2Dispatch;
+    util::URL   aCommand1URL;
+    util::URL   aCommand2URL;
+
     SearchDlg_Impl( Window* pParent ) :
         aSearchFormats  ( pParent, ResId( FT_SEARCH_FORMATS ) ),
         aReplaceFormats ( pParent, ResId( FT_REPLACE_FORMATS ) ),
@@ -161,7 +182,14 @@ struct SearchDlg_Impl
         bFocusOnSearch  ( TRUE ),
         bDeltaCalculated( FALSE ),
         pRanges         ( NULL )
-        {}
+        {
+            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString::createFromAscii("vnd.sun.search:SearchViaComponent1");
+            aCommand1URL.Protocol = rtl::OUString::createFromAscii("vnd.sun.search:");
+            aCommand1URL.Path = rtl::OUString::createFromAscii("SearchViaComponent1");
+            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString::createFromAscii("vnd.sun.search:SearchViaComponent2");
+            aCommand2URL.Protocol = rtl::OUString::createFromAscii("vnd.sun.search:");
+            aCommand2URL.Path = rtl::OUString::createFromAscii("SearchViaComponent2");
+        }
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
 
@@ -353,6 +381,9 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     aSearchCmdLine  ( this, ResId( FL_SEARCH_COMMAND ) ),                   \
     aReplaceBtn     ( this, ResId( BTN_REPLACE ) ),                         \
     aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),                     \
+    aSearchComponentFL( this, ResId( FL_SEARCH_COMPONENT ) ), \
+    aSearchComponent1PB( this, ResId( BTN_COMPONENT_1 ) ), \
+    aSearchComponent2PB( this, ResId( BTN_COMPONENT_2 ) ), \
     aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),                       \
     aWordBtn        ( this, ResId( CB_WHOLE_WORDS ) ),                      \
     aButtonsFL      ( this, ResId( FL_BUTTONS ) ),                          \
@@ -448,6 +479,12 @@ SvxSearchDialog::~SvxSearchDialog()
 }
 
 // -----------------------------------------------------------------------
+void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
+{
+    Point aPos(rWindow.GetPosPixel());
+    aPos.Y() += nOffset;
+    rWindow.SetPosPixel(aPos);
+}
 
 void SvxSearchDialog::Construct_Impl()
 {
@@ -512,6 +549,112 @@ void SvxSearchDialog::Construct_Impl()
     if(!aCJKOptions.IsCJKFontEnabled())
     {
         aJapMatchFullHalfWidthCB.Hide();
+    }
+    //component extension - show component search buttons if the commands
+    // vnd.sun.star::SearchViaComponent1 and 2 are supported
+    SfxBindings& rBindings = GetBindings();
+    const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
+    const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
+    rtl::OUString sTarget = rtl::OUString::createFromAscii("_self");
+
+    if(xDispatchProv.is() &&
+            (pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0)).is())
+    {
+        aSearchComponentFL.Show();
+        aSearchComponent1PB.Show();
+    }
+    if(xDispatchProv.is() &&
+            (pImpl->xCommand2Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand2URL, sTarget, 0)).is())
+    {
+        if(!aSearchComponentFL.IsVisible())
+        {
+            aSearchComponent2PB.SetPosPixel(aSearchComponent1PB.GetPosPixel());
+        }
+        aSearchComponent2PB.Show();
+        aSearchComponentFL.Show();
+    }
+    if(aSearchComponent1PB.IsVisible() && aSearchComponent2PB.IsVisible())
+    {
+        //dialog must me resized
+        Size aDlgSize(GetSizePixel());
+//        FixedLinePosition = aButtonsFL.GetPosPixel();
+        sal_Int32 nOffset = aSearchCmdLine.GetPosPixel().Y() - aSearchAllBtn.GetPosPixel().Y()
+            - aButtonsFL.GetPosPixel().Y() + aSearchComponent2PB.GetPosPixel().Y();
+
+//        sal_Int32 nHeight = 2 * aSearchComponent2PB.GetPosPixel().Y() - aSearchComponent1PB.GetPosPixel().Y();
+        aDlgSize.Height() += nOffset;
+        Window* aWindows[] =
+        {
+            &aOptionsFL,
+            &aSelectionBtn,
+            &aBackwardsBtn,
+            &aRegExpBtn,
+            &aSimilarityBox,
+            &aSimilarityBtn,
+            &aLayoutBtn,
+            &aJapMatchFullHalfWidthCB,
+            &aJapOptionsCB,
+            &aJapOptionsBtn,
+            &aAttributeBtn,
+            &aFormatBtn,
+            &aNoFormatBtn,
+            &aCalcFL,
+            &aCalcSearchInFT,
+            &aCalcSearchInLB,
+            &aCalcSearchDirFT,
+            &aRowsBtn,
+            &aColumnsBtn,
+            &aAllSheetsCB,
+            &aButtonsFL,
+            &aHelpBtn,
+            &aCloseBtn,
+            pMoreBtn,
+            0
+        };
+        sal_Int32 nWindow = 0;
+        do
+        {
+            lcl_MoveDown( *aWindows[nWindow], nOffset );
+        }
+        while(aWindows[++nWindow]);
+
+        SetSizePixel(aDlgSize);
+
+                //get the labels of the FixedLine and the buttons
+                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchGroupLabel
+                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel1
+                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel2
+                try
+                {
+                    uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+                    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(xMgr->createInstance(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
+                            uno::UNO_QUERY);
+                    uno::Sequence< uno::Any > aArgs(1);
+                    ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/SearchOptions/"));
+                    aArgs[0] <<= sPath;
+
+                    uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess")),
+                                aArgs);
+                    uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
+                    if(xDirectAccess.is())
+                    {
+                        ::rtl::OUString sTemp;
+                        ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchGroupLabel"));
+                        uno::Any aRet = xDirectAccess->getByName(sProperty);
+                        aRet >>= sTemp;
+                        aSearchComponentFL.SetText( sTemp );
+                        aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel1")));
+                        aRet >>= sTemp;
+                        aSearchComponent1PB.SetText( sTemp );
+                        aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel2")));
+                        aRet >>= sTemp;
+                        aSearchComponent2PB.SetText( sTemp );
+                    }
+                }
+                catch(uno::Exception&){}
+
     }
 }
 
@@ -620,6 +763,8 @@ void SvxSearchDialog::InitControls_Impl()
     aCloseBtn.SetClickHdl( aLink );
     aSimilarityBtn.SetClickHdl( aLink );
     aJapOptionsBtn.SetClickHdl( aLink );
+    aSearchComponent1PB.SetClickHdl( aLink );
+    aSearchComponent2PB.SetClickHdl( aLink );
 
     aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
     aWordBtn.SetClickHdl( aLink );
@@ -1028,6 +1173,9 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aSearchAllBtn.Disable();
         aReplaceBtn.Disable();
         aReplaceAllBtn.Disable();
+        aSearchComponentFL.Enable(sal_False);
+        aSearchComponent1PB.Enable(sal_False);
+        aSearchComponent2PB.Enable(sal_False);
     }
     else
     {
@@ -1378,6 +1526,17 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             delete aDlg; //add for CHINA001
         }
     }
+    else if(pBtn == &aSearchComponent1PB || pBtn == &aSearchComponent2PB )
+    {
+        uno::Sequence < beans::PropertyValue > aArgs(1);
+        beans::PropertyValue* pArgs = aArgs.getArray();
+        pArgs[0].Name = ::rtl::OUString::createFromAscii("SearchString");
+        pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
+        if(pBtn == &aSearchComponent1PB)
+            pImpl->xCommand1Dispatch->dispatch(pImpl->aCommand1URL, aArgs);
+        else
+            pImpl->xCommand2Dispatch->dispatch(pImpl->aCommand2URL, aArgs);
+    }
 
     return 0;
 }
@@ -1409,6 +1568,9 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         }
         else
         {
+            aSearchComponentFL.Enable(sal_False);
+            aSearchComponent1PB.Enable(sal_False);
+            aSearchComponent2PB.Enable(sal_False);
             aSearchBtn.Disable();
             aSearchAllBtn.Disable();
             aReplaceBtn.Disable();
@@ -1620,13 +1782,13 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         Show();
     FASTBOOL bNoSearch = TRUE;
 
-    if ( ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0 )
-    {
-        aSearchBtn.Enable();
+    sal_Bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
+    aSearchBtn.Enable(bEnableSearch);
+
+    if( bEnableSearch )
         bNoSearch = FALSE;
-    }
-    else
-        aSearchBtn.Disable();
+
+
     if ( ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
     {
         aSearchAllBtn.Enable();
@@ -1656,6 +1818,9 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
     }
     else
         aReplaceAllBtn.Disable();
+    aSearchComponentFL.Enable(!bNoSearch);
+    aSearchComponent1PB.Enable(!bNoSearch);
+    aSearchComponent2PB.Enable(!bNoSearch);
     aSearchBtn.Enable( !bNoSearch );
     aSearchText.Enable( !bNoSearch );
     aSearchLB.Enable( !bNoSearch );
@@ -1728,6 +1893,9 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
 {
     if ( &aSearchBtn == pCtrl && ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0 )
     {
+        aSearchComponentFL.Enable();
+        aSearchComponent1PB.Enable();
+        aSearchComponent2PB.Enable();
         aSearchBtn.Enable();
         return;
     }
