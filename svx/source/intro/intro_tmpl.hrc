@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:56:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 11:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,7 @@ ItemList = \
     < "Keld Jorn Simonsen" ; > ; \
     < "Mukund Sivaraman" ; > ; \
     < "Manoranjan Kr. Singh" ; > ; \
+    < "G. Roderick Singleton" ; > ; \
     < "Joerg Skottke" ; > ; \
     < "Timothy P. Smith" ; > ; \
     < "Colm Smyth" ; > ; \
