@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:09:19 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2302,6 +2302,8 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
 #endif
 
     GetBindings().LEAVEREGISTRATIONS();
+
+    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
     return pViewShell;
 }
 
@@ -2430,11 +2432,12 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 */
 
 {
+    try{
     DBG_ASSERT( GetObjectShell(), "Kein Dokument!" );
 
     SfxObjectFactory &rDocFact = GetObjectShell()->GetFactory();
 
-    // die Indizes der neuen und alten ::com::sun::star::sdbcx::View-Shell finden
+    // find index of old and new ViewShell
     sal_uInt16 nOldNo = USHRT_MAX, nNewNo = USHRT_MAX;
     bIsIndex |= 0 == nViewId;
     for ( sal_uInt16 nNo = 0; nNo < rDocFact.GetViewFactoryCount(); ++nNo )
@@ -2445,7 +2448,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
             if ( bIsIndex && nViewId == nNo )
             {
                 nNewNo = nNo;
-                nViewId = nFoundId; // fuer nViewId == 0
+                nViewId = nFoundId; // for nViewId == 0
             }
             else if ( !bIsIndex && nViewId == nFoundId )
                nNewNo = nNo;
@@ -2456,7 +2459,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     if ( nNewNo == USHRT_MAX )
     {
-        // Bei unbekannter Id die Dafault-Id nehmen
+        // unknown ID -> fall back to default
         sal_uInt16 nFoundId = rDocFact.GetViewFactory(0).GetOrdinal();
         nNewNo = 0;
         nViewId = nFoundId;
@@ -2468,7 +2471,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     DBG_ASSERT( !pSh || nOldNo != USHRT_MAX, "old shell id not found" );
 
-    // existiert schon eine ViewShell?
+    // does a ViewShell exist already?
     sal_Bool bHasFocus = sal_False;
     SfxViewShell *pOldSh = pSh;
     if ( pOldSh )
@@ -2476,41 +2479,40 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         if ( !bHasFocus )
             bHasFocus = pOldSh->GetWindow() && pOldSh->GetWindow()->HasChildPathFocus( sal_True );
 
-        // dann diese schlie\sen
+        // ask wether it can be closed
         if ( !pOldSh->PrepareClose() )
             return sal_False;
 
-        // Jetzt alle SubShells wechhauen
+        // remove SubShells from Dispatcher before switching to new ViewShell
         pOldSh->PushSubShells_Impl( sal_False );
         sal_uInt16 nLevel = pDispatcher->GetShellLevel( *pOldSh );
         if ( nLevel )
         {
-            // Es gibt SubShells
             SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
             if ( pSubShell == pOldSh->GetSubShell() )
-                //"Echte" Subshells nicht deleten
+                //"real" SubShells are not deleted
                 pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL );
             else
+                // SubShells only known to Dispatcher must be deleted
                 pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
         }
+
         pDispatcher->Pop( *pOldSh );
         GetBindings().Invalidate( nOldNo + SID_VIEWSHELL0 );
     }
 
-    // Id der neuen ViewShell eintragen
+    // remember ViewID
     pImp->nCurViewId = nViewId;
     GetBindings().Invalidate( nNewNo + SID_VIEWSHELL0 );
 
-    // neue ViewShell erzeugen
+    // create new ViewShell
     SfxViewFactory &rViewFactory = rDocFact.GetViewFactory( nNewNo );
     LockAdjustPosSizePixel();
 
     GetBindings().ENTERREGISTRATIONS();
     pSh = rViewFactory.CreateInstance(this, pOldSh);
-    Window *pEditWin = pSh->GetWindow();
-    DBG_ASSERT( !pEditWin || !pEditWin->IsReallyVisible(), "don`t show your ViewShell`s Window by yourself!" );
 
-    // neue ViewShell in Frame einsetzen
+    // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
     GetDispatcher()->SetDisableFlags( 0 );
     SetViewShell_Impl(pSh);
 
@@ -2521,6 +2523,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         pSh->SetController( new SfxBaseController( pSh ) );
     Reference < XController > xController( pSh->GetController() );
     xFrame->setComponent( xWindow, xController );
+
     xController->attachFrame( xFrame );
     Reference < XModel > xModel( GetObjectShell()->GetModel() );
     if ( xModel.is() )
@@ -2536,18 +2539,18 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     pSh->PushSubShells_Impl();
     GetDispatcher()->Flush();
 
-    // ggf. UserData restaurieren
     if ( pImp->bRestoreView && pImp->aViewData.Len() )
     {
+        // restore view data if required
         pSh->ReadUserData( pImp->aViewData, sal_True );
         pImp->bRestoreView = sal_False;
     }
 
-    // Tools anordnen, bevor die Gr"os\se gesetzt wird
+    // create UI elements before size is set
     if ( SfxViewFrame::Current() == this )
         GetDispatcher()->Update_Impl( sal_True );
 
-    // ggf. Resize ausl"osen
+    // allow resize events to be processed
     UnlockAdjustPosSizePixel();
 
     Window* pFrameWin = &GetWindow();
@@ -2557,6 +2560,8 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     if ( GetWindow().IsReallyVisible() )
         DoAdjustPosSizePixel( pSh, Point(), GetWindow().GetOutputSizePixel() );
 
+    Window *pEditWin = pSh->GetWindow();
+    DBG_ASSERT( !pEditWin || !pEditWin->IsReallyVisible(), "don`t show your ViewShell`s Window by yourself!" );
     if ( pEditWin && pSh->IsShowView_Impl() )
     {
         pEditWin->Show();
@@ -2566,6 +2571,13 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     GetBindings().LEAVEREGISTRATIONS();
     delete pOldSh;
+    }
+    catch (...)
+    {
+        DBG_ERROR("Exception in SwitchToViewShell_Impl - urgent issue. Please contact development!");
+    }
+
+    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
     return sal_True;
 }
 //--------------------------------------------------------------------
@@ -2728,7 +2740,7 @@ void SfxViewFrame::ExecView_Impl
         {
             const SfxPoolItem *pItem = 0;
             if ( rReq.GetArgs() &&
-                 SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, sal_False, &pItem ) )
+                SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, sal_False, &pItem ) )
                 rReq.SetReturnValue( SfxBoolItem(0, SwitchToViewShell_Impl(
                     (sal_uInt16)((const SfxUInt16Item*) pItem)->GetValue()) ));
             break;
