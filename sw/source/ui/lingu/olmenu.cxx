@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:26:01 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,6 +289,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
     EnableItem( MN_INSERT, bEnable );
 
     RemoveDisabledEntries( TRUE, TRUE );
+    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 }
 
 /*--------------------------------------------------------------------------
@@ -296,18 +297,26 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 ---------------------------------------------------------------------------*/
 sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
 {
-    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+//    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
     sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
+    Execute( nRet );
+    return nRet;
+}
+/*-- 19.01.2006 08:15:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwSpellPopup::Execute( USHORT nId )
+{
     sal_Bool bAutoCorr = sal_False;
-    if( nRet > MN_AUTOCORR_START && nRet != USHRT_MAX )
+    if( nId > MN_AUTOCORR_START && nId != USHRT_MAX )
     {
-        nRet -= MN_AUTOCORR_START;
+        nId -= MN_AUTOCORR_START;
         bAutoCorr = sal_True;
     }
 
-    if( nRet && nRet != USHRT_MAX)
+    if( nId && nId != USHRT_MAX)
     {
-        int nAltIdx = nRet - 1;
+        int nAltIdx = nId - 1;
         if( xSpellAlt.is()  &&  nAltIdx < xSpellAlt->getAlternativesCount() )
         {
             sal_Bool bOldIns = pSh->IsInsMode();
@@ -361,7 +370,7 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
 
             String aOrigWord( xSpellAlt->getWord() ) ;
             String aNewWord;
-            if( nRet )
+            if( nId )
                 aNewWord = pString[ nAltIdx ];
             else
                 aNewWord = aOrigWord;
@@ -394,7 +403,7 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
             pSh->SetInsMode( bOldIns );
         }
         else
-            switch( nRet )
+            switch( nId )
             {
                 case MN_SPELLING:
                 {
@@ -424,7 +433,7 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
                 {
                     pSh->StartAction();
 
-                    if( MN_LANGUAGE_PARA == nRet )
+                    if( MN_LANGUAGE_PARA == nId )
                     {
                         if( !pSh->IsSttPara() )
                             pSh->MovePara( fnParaCurr, fnParaStart );
@@ -442,10 +451,10 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
                 }
                 break;
                 default:
-                    if(nRet >= MN_INSERT_START )
+                    if(nId >= MN_INSERT_START )
                     {
                         OUString aWord( xSpellAlt->getWord() );
-                        INT32 nDicIdx = nRet - MN_INSERT_START - 1;
+                        INT32 nDicIdx = nId - MN_INSERT_START - 1;
                         DBG_ASSERT( nDicIdx < aDics.getLength(),
                                     "dictionary index out of range" );
                         Reference< XDictionary > xDic =
@@ -464,6 +473,4 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
             }
     }
     pSh->EnterStdMode();
-    return nRet;
 }
-
