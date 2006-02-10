@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:16:29 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 11:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,14 +93,14 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 54 , 6 ) ;
         Size = MAP_APPFONT ( 118 , 16 ) ;
         WordBreak = TRUE ;
-        Text =  "$(VER)";
+        Text =  "OpenOffice.org 2.0.2";
        };
     FixedText ABOUT_FTXT_COPYRIGHT
     {
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
-         Text [ de ] =  "Copyright 2000-2005 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
-        Text[ en-US ] ="Copyright 2000-2005 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+         Text [ de ] =  "Copyright 2000-2006 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ en-US ] ="Copyright 2000-2006 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         WordBreak = TRUE ;
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
