@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:19:51 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 09:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,8 +329,8 @@ ViewShellBase::~ViewShellBase (void)
 
 void ViewShellBase::LateInit (void)
 {
-    StartListening(*GetViewFrame());
-    StartListening(*GetDocShell());
+    StartListening(*GetViewFrame(),TRUE);
+    StartListening(*GetDocShell(),TRUE);
 
     if ( ! GetDocShell()->IsPreview())
     {
