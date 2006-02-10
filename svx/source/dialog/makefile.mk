@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-30 10:08:12 $
+#   last change: $Author: rt $ $Date: 2006-02-10 08:55:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/macropg.obj \
     $(SLO)$/optjava.obj \
     $(SLO)$/docrecovery.obj	\
-    $(SLO)$/treeopt.obj
+    $(SLO)$/treeopt.obj     \
+    $(SLO)$/srchdlg.obj  
 
 .IF "$(GUI)"=="UNX"
 EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
