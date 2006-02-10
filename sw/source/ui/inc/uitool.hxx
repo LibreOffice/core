@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:12:07 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 08:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ class SwDocShell;
 class SwFrmFmt;
 class SwTabCols;
 class DateTime;
+class SfxViewFrame;
 
 // Umschalten einer Metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
@@ -108,5 +109,9 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
         SwWrtShell* pSh );
 
 String GetAppLangDateTimeString( const DateTime& );
+
+// search for a command string withing the menu structure and execute it
+// at the dispatcher if there is one, if executed return true
+bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId );
 
 #endif // _UITOOL_HXX
