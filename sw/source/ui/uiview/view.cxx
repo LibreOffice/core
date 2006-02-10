@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:02:46 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1062,8 +1062,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         aUsrPref.SetViewVRuler(sal_False);
     }
 
-    StartListening( *pViewFrame );
-    StartListening( *pDocSh );
+    StartListening( *pViewFrame, TRUE );
+    StartListening( *pDocSh, TRUE );
 
     // Vom HLineal den ZOOM-Faktor einstellen
     Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
@@ -1167,9 +1167,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     }
 
 
-    uno::Reference< awt::XWindow >  aTmpRef;
+    /*uno::Reference< awt::XWindow >  aTmpRef;
     pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
-                                            pViewImpl->GetUNOObject_Impl());
+                                            pViewImpl->GetUNOObject_Impl());*/
 
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
 
