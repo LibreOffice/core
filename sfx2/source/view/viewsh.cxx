@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:09:34 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,8 +774,8 @@ SfxViewShell::SfxViewShell
     pImp->bPlugInsActive = TRUE;
     pImp->bGotOwnerShip = FALSE;
     pImp->bGotFrameOwnerShip = FALSE;
-    if ( pFrame->GetParentViewFrame() )
-        pImp->bPlugInsActive = pFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
+    if ( pViewFrame->GetParentViewFrame() )
+        pImp->bPlugInsActive = pViewFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
     pImp->eScroll = SCROLLING_DEFAULT;
     pImp->nPrinterLocks = 0;
     pImp->pMenuBarResId = 0;
@@ -785,10 +785,10 @@ SfxViewShell::SfxViewShell
     pImp->bControllerSet = FALSE;
     pImp->bOwnsMenu = TRUE;
     pImp->nFamily = 0xFFFF;                 // undefined, default set by TemplateDialog
-    SetMargin( pFrame->GetMargin_Impl() );
+    SetMargin( pViewFrame->GetMargin_Impl() );
 
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
-    StartListening(*SFX_APP());
+    StartListening(*pViewFrame->GetObjectShell());
 
     // in Liste eintragen
     const SfxViewShell *pThis = this; // wegen der kranken Array-Syntax
@@ -806,25 +806,7 @@ SfxViewShell::~SfxViewShell()
     const SfxViewShell *pThis = this;
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Remove( rViewArr.GetPos(pThis) );
-//  if ( GetViewFrame()->GetFrame()->GetFrameSet_Impl() == pImp->pSetDescr )
-//      GetViewFrame()->GetFrame()->SetFrameSet_Impl( NULL );
-//  delete pImp->pSetDescr;
 
-/*
-    if ( pImp->pMenu && pImp->bOwnsMenu )
-    {
-        SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
-        SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
-        if ( pTop )
-        {
-            Menu* pMenu = pImp->pMenu->GetMenu()->GetSVMenu();
-            if ( pMenu == pTop->GetMenuBar_Impl() )
-                pTop->SetMenuBar_Impl( 0 );
-        }
-
-        delete pImp->pMenu;
-    }
-*/
     if ( pImp->pController )
     {
         pImp->pController->ReleaseShell_Impl();
@@ -1075,9 +1057,16 @@ SfxViewShell* SfxViewShell::GetFirst
     BOOL            bOnlyVisible
 )
 {
-    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( 0, 0, bOnlyVisible );
+    while ( pFrame )
+    {
+        SfxViewShell* pShell = pFrame->GetViewShell();
+        if ( pShell && ( !pType || pShell->IsA(*pType) ) )
+            return pShell;
+        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
+    }
 
-    // search for a SfxViewShell of the specified type
+    /*// search for a SfxViewShell of the specified type
     for ( USHORT nPos = 0; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
@@ -1086,7 +1075,7 @@ SfxViewShell* SfxViewShell::GetFirst
                 pShell = GetNext(*pShell, pType, bOnlyVisible);
         if ( !pType || pShell->IsA(*pType) )
             return pShell;
-    }
+    } */
 
     return 0;
 }
@@ -1101,7 +1090,18 @@ SfxViewShell* SfxViewShell::GetNext
     BOOL                bOnlyVisible
 )
 {
-    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
+    SfxViewFrame* pFrame = rPrev.GetViewFrame();
+    if ( pFrame )
+        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
+    while ( pFrame )
+    {
+        SfxViewShell* pShell = pFrame->GetViewShell();
+        if ( pShell && ( !pType || pShell->IsA(*pType) ) )
+            return pShell;
+        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
+    }
+
+    /*SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
 
     // refind the specified predecessor
     USHORT nPos;
@@ -1119,16 +1119,15 @@ SfxViewShell* SfxViewShell::GetNext
 
         if ( !pType || pShell->IsA(*pType) )
             return pShell;
-    }
+    } */
+
     return 0;
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
-                            const TypeId& rBCType,
-                            const SfxHint& rHint,
-                            const TypeId& rHintType )
+void SfxViewShell::Notify( SfxBroadcaster& rBC,
+                            const SfxHint& rHint )
 {
     if ( rHint.IsA(TYPE(SfxEventHint)) && &rBC == GetObjectShell() && GetController().is() )
     {
