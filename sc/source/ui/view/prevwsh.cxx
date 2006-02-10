@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:47 $
+ *  last change: $Author: rt $ $Date: 2006-02-10 10:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,7 @@ void ScPreviewShell::Construct( Window* pParent )
 
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
-    StartListening(*pDocShell);
-    StartListening(*SFX_APP());
+    StartListening(*pDocShell,TRUE);
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);
