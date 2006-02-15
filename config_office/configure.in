@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-02-10 11:17:38 $
+dnl * Date: $Date: 2006-02-15 11:07:30 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.155 $ )
+AC_REVISION( $Revision: 1.156 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2989,7 +2989,7 @@ http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/
 AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/)
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
   wintools.zip
 (from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)])
       else

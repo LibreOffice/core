@@ -12463,13 +12463,13 @@ echo $ECHO_N "checking for glib and libIDL binaries... $ECHO_C" >&6
 { { echo "$as_me:$LINENO: error: One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/)
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
   wintools.zip
 (from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&5
 echo "$as_me: error: One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/)
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
   wintools.zip
 (from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&2;}
    { (exit 1); exit 1; }; }
