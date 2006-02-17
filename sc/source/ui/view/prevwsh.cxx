@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:04:50 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ void ScPreviewShell::Construct( Window* pParent )
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
     StartListening(*pDocShell,TRUE);
+    StartListening(*SFX_APP(),TRUE);        // #i62045# #i62046# application is needed for Calc's own hints
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);
