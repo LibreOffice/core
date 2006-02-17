@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:47:10 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4935,6 +4935,13 @@ bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
 {
     if (nLvl)
         --nLvl;
+    // --> OD 2006-01-19 #i60827#
+    // check size of <maApos> to assure that <maApos.begin() + nLvl> can be performed.
+    if ( nLvl >= maApos.size() )
+    {
+        return false;
+    }
+    // <--
     mycApoIter aIter = std::find(maApos.begin() + nLvl, maApos.end(), true);
     if (aIter != maApos.end())
         return true;
