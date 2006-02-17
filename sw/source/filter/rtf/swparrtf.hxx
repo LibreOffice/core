@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:46:53 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,6 +368,7 @@ class SwRTFParser : public SvxRTFParser
     bool bNestedField;
     bool bTrowdRead;         // True, iff an \trowd definition was read after the last \row
 
+    int nZOrder;
     /*
      #i9243#
      In a footnote tables are not possible (for some obscure reason!)
@@ -397,7 +398,7 @@ class SwRTFParser : public SvxRTFParser
     USHORT ReadRevTbl();
     void ReadShpRslt();
     void ReadDrawingObject();
-    void InsertShpObject(SdrObject* pStroke);
+    void InsertShpObject(SdrObject* pStroke, int nZOrder);
     void ReadShapeObject();
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
