@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 09:57:41 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 18:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2312,11 +2312,18 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
-    // Look for rejected calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // deactivate this frame ...
-    deactivate();
+    /* #i62088#
+        Some interceptor objects intercept our "internaly asynchronoues implemented" dispatch call.
+        And they close this frame directly (means synchronous then).
+        Means: Frame::windowClosing()->Frame::close()
+        In such situation its not a good idea to hold this transaction count alive .-)
+    */
+    {
+        // Look for rejected calls.
+        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+        // deactivate this frame ...
+        deactivate();
+    }
 
     // ... and try to close it
     // But do it asynchron inside the main thread.
@@ -2342,6 +2349,10 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_TOP, 0);
     if (xCloser.is())
         xCloser->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+
+    // Attention: If this dispatch works synchronous ... and full fill its job ...
+    // this line of code will never be reached ...
+    // Or if it will be reached it will be for sure that all your member are gone .-)
 }
 
 /*-****************************************************************************************************//**
