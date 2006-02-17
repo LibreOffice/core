@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 10:46:25 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:28:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,13 +334,12 @@ void lcl_ExportBookmark(
     SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end();
-          aIter != aEnd;
-          ++aIter )
+          aIter != aEnd; )
     {
         SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
         if ( nIndex > pPtr->getIndex() )
         {
-            rBkmArr.erase( aIter );
+            rBkmArr.erase( aIter++ );
             continue;
         }
         if ( nIndex < pPtr->getIndex() )
@@ -363,7 +362,7 @@ void lcl_ExportBookmark(
                 rPortionArr.Count());
             pPortion->SetBookmark(pPtr->xBookmark);
         }
-        rBkmArr.erase( aIter );
+        rBkmArr.erase( aIter++ );
     }
 }
 /* -----------------------------18.12.00 14:51--------------------------------
@@ -719,14 +718,13 @@ void lcl_ExportRedline(
     // MTG: 23/11/05: We want this loop to iterate over all red lines in this
     // array. We will only insert the ones with index matches
     for ( SwXRedlinePortion_ImplList::iterator aIter = rRedlineArr.begin(), aEnd = rRedlineArr.end();
-          aIter != aEnd;
-          ++aIter )
+          aIter != aEnd; )
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
         ULONG nRealIndex = pPtr->getRealIndex();
         // MTG: 23/11/05: If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
-            rRedlineArr.erase ( aIter );
+            rRedlineArr.erase ( aIter++ );
         // MTG: 23/11/05: If the elements match, and them to the list
         else if ( nIndex == nRealIndex )
         {
@@ -735,7 +733,7 @@ void lcl_ExportRedline(
                             pPtr->pRedline, *pUnoCrsr, rParent,
                             pPtr->bStart)),
                 rPortionArr.Count());
-            rRedlineArr.erase ( aIter );
+            rRedlineArr.erase ( aIter++ );
         }
         // MTG: 23/11/05: If we've iterated past nIndex, exit the loop
         else
