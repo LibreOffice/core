@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 12:34:35 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,6 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 
 bool ShutdownIcon::GetAutostart( )
 {
-// Quick hack for 130127
-/*
 #ifdef WNT
     OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
     ResMgr* pMgr = SfxResId::GetResMgr();
@@ -194,8 +192,6 @@ bool ShutdownIcon::GetAutostart( )
 #else
     return false;
 #endif
-*/
-    return false;
 }
 
 
