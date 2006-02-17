@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:39:31 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,11 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+// --> OD, FLR 2006-02-16 #131205#
+#ifndef _DCONTACT_HXX
+#include "dcontact.hxx"
+#endif
+// <--
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
@@ -576,6 +581,17 @@ void SwRTFParser::SetFlysInDoc()
                 aEndNd--;
            }
         }
+
+        // --> OD, FLR 2006-02-16 #131205#
+        // Create draw contact object, which also creates a <SdrObject> instance,
+        // in order to set the order number.
+        // The order number is assumed to be the order of the text flow.
+        SwFlyDrawContact* pContact =
+                new SwFlyDrawContact( pFmt,
+                                      pFmt->GetDoc()->GetOrCreateDrawModel() );
+        pContact->GetMaster()->SetOrdNum( n );
+        // <--
+
         delete pFlySave;
     }
 
