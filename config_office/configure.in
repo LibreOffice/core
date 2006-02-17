@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-02-15 11:07:30 $
+dnl * Date: $Date: 2006-02-17 09:21:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.156 $ )
+AC_REVISION( $Revision: 1.157 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4173,6 +4173,8 @@ AC_SUBST(SCPDEFS)
 AC_MSG_CHECKING([whether to include PPDs])
 if test "$without_ppds" = "yes"; then
   AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
   WITHOUT_PPDS=YES
   SCPDEFS="$SCPDEFS -DWITHOUT_PPDS"
 fi
@@ -4182,6 +4184,8 @@ AC_SUBST(SCPDEFS)
 AC_MSG_CHECKING([whether to include AFMs])
 if test "$without_afms" = "yes"; then
   AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
   WITHOUT_AFMS=YES
   SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
 fi
