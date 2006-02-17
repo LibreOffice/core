@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:21:22 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,25 +1057,30 @@ SfxViewShell* SfxViewShell::GetFirst
     BOOL            bOnlyVisible
 )
 {
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( 0, 0, bOnlyVisible );
-    while ( pFrame )
-    {
-        SfxViewShell* pShell = pFrame->GetViewShell();
-        if ( pShell && ( !pType || pShell->IsA(*pType) ) )
-            return pShell;
-        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
-    }
-
-    /*// search for a SfxViewShell of the specified type
+    // search for a SfxViewShell of the specified type
+    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
+    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
     for ( USHORT nPos = 0; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
-        if ( bOnlyVisible )
-            while( pShell && !pShell->GetViewFrame()->IsVisible_Impl() )
-                pShell = GetNext(*pShell, pType, bOnlyVisible);
-        if ( !pType || pShell->IsA(*pType) )
-            return pShell;
-    } */
+        if ( pShell )
+        {
+            // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
+            // these ViewShells shouldn't be accessible anymore
+            // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
+            for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+            {
+                SfxViewFrame *pFrame = rFrames.GetObject(n);
+                if ( pFrame == pShell->GetViewFrame() )
+                {
+                    // only ViewShells with a valid ViewFrame will be returned
+                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                        return pShell;
+                    break;
+                }
+            }
+        }
+    }
 
     return 0;
 }
@@ -1090,36 +1095,34 @@ SfxViewShell* SfxViewShell::GetNext
     BOOL                bOnlyVisible
 )
 {
-    SfxViewFrame* pFrame = rPrev.GetViewFrame();
-    if ( pFrame )
-        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
-    while ( pFrame )
-    {
-        SfxViewShell* pShell = pFrame->GetViewShell();
-        if ( pShell && ( !pType || pShell->IsA(*pType) ) )
-            return pShell;
-        pFrame = SfxViewFrame::GetNext( *pFrame, 0, 0, bOnlyVisible );
-    }
-
-    /*SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
-
-    // refind the specified predecessor
+    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
+    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
     USHORT nPos;
     for ( nPos = 0; nPos < rShells.Count(); ++nPos )
         if ( rShells.GetObject(nPos) == &rPrev )
             break;
 
-    // search for a Frame of the specified type
     for ( ++nPos; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
-        if ( bOnlyVisible )
-            while( pShell && !pShell->GetViewFrame()->IsVisible_Impl() )
-                pShell = GetNext(*pShell, pType, bOnlyVisible);
-
-        if ( !pType || pShell->IsA(*pType) )
-            return pShell;
-    } */
+        if ( pShell )
+        {
+            // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
+            // these ViewShells shouldn't be accessible anymore
+            // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
+            for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+            {
+                SfxViewFrame *pFrame = rFrames.GetObject(n);
+                if ( pFrame == pShell->GetViewFrame() )
+                {
+                    // only ViewShells with a valid ViewFrame will be returned
+                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                        return pShell;
+                    break;
+                }
+            }
+        }
+    }
 
     return 0;
 }
@@ -1129,19 +1132,34 @@ SfxViewShell* SfxViewShell::GetNext
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint)) && &rBC == GetObjectShell() && GetController().is() )
+    if ( rHint.IsA(TYPE(SfxEventHint)) )
     {
         switch ( ((SfxEventHint&)rHint).GetEventId() )
         {
             case SFX_EVENT_LOADFINISHED:
             {
-                SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
-                if ( pItem )
+                if ( GetController().is() )
                 {
-                    pImp->pController->restoreViewData( pItem->GetValue() );
-                    pSet->ClearItem( SID_VIEW_DATA );
+                    // avoid access to dangling ViewShells
+                    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
+                    for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+                    {
+                        SfxViewFrame *pFrame = rFrames.GetObject(n);
+                        if ( pFrame == GetViewFrame() && &rBC == GetObjectShell() )
+                        {
+                            SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
+                            SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
+                            if ( pItem )
+                            {
+                                pImp->pController->restoreViewData( pItem->GetValue() );
+                                pSet->ClearItem( SID_VIEW_DATA );
+                            }
+
+                            break;
+                        }
+                    }
                 }
+
                 break;
             }
         }
