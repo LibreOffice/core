@@ -119,6 +119,7 @@ CSOActiveX::CSOActiveX()
 , mpDispatchInterceptor( NULL )
 , mnVersion( SO_NOT_DETECTED )
 , mbReadyForActivation( FALSE )
+, mbDrawLocked( FALSE )
 {
     CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
     HRESULT hr = CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&mpDispFactory);
@@ -709,7 +710,8 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     CComVariant aBarVis;
     aBarVis.vt = VT_BOOL; aBarVis.boolVal = VARIANT_FALSE;
     hr = CallDispatchMethod( L"slot:6661", &aBarName, &aBarVis, 1 );
-    if( !SUCCEEDED( hr ) ) return hr;
+    // does not work for some documents, but it is no error
+    // if( !SUCCEEDED( hr ) ) return hr;
 
     /*
     // create dispatch interceptor
@@ -820,8 +822,31 @@ SOVersion CSOActiveX::GetVersionConnected()
     return bResult;
 }
 
+class LockingGuard
+{
+    BOOL& mbLocked;
+public:
+    LockingGuard( BOOL& bLocked )
+    : mbLocked( bLocked )
+    {
+        mbLocked = TRUE;
+    }
+
+    ~LockingGuard()
+    {
+        mbLocked = FALSE;
+    }
+};
+
 HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
 {
+    // This method is called only in main thread, no need to lock it
+
+    // Get read of reentrance problems
+    if ( mbDrawLocked )
+        return S_OK;
+    LockingGuard aGuard( mbDrawLocked );
+
     if( m_spInPlaceSite && mCurFileUrl && mbReadyForActivation )
     {
         HWND hwnd;
@@ -897,6 +922,8 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
                             di.prcBounds->bottom - di.prcBounds->top );
             if( !SUCCEEDED( hr ) )
             {
+                // if the frame can not be opened do not try any more
+                mbReadyForActivation = FALSE;
                 OutputError_Impl( mOffWin, STG_E_ABNORMALAPIEXIT );
                 return hr;
             }
@@ -908,15 +935,11 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             mbLoad = FALSE;
             if( !SUCCEEDED( hr ) )
             {
+                // if the document can not be opened do not try any more
+                mbReadyForActivation = FALSE;
+
                 OutputError_Impl( mOffWin, STG_E_ABNORMALAPIEXIT );
 
-                if( ::IsWindow( mOffWin ) )
-                {
-                    ::DestroyWindow( mOffWin );
-                    mOffWin = NULL;
-                }
-
-                mbReadyForActivation = FALSE;
                 return hr;
             }
         }
