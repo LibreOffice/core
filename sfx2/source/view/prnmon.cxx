@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:42 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,10 @@ BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
 
 IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, pButton )
 {
+    if ( !pViewShell->GetPrinter()->IsJobActive() )
+        // we are still in StartJob, cancelling now might lead to a crash
+        return 0;
+
     if ( pMonitor )
         pMonitor->Hide();
 
