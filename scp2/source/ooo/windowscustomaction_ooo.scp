@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:12:21 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 13:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,26 @@ WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
 	Target = "UninstallPatchedFiles";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "RemoveIniValues");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
+	Name = "ShutDownQuickstarter";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "ShutDownQuickstarter";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
+	Assignment2 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "IsolateComponents");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
+	Assignment2 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
