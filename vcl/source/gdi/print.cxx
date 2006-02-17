@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:48:54 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1458,7 +1458,6 @@ BOOL Printer::StartJob( const XubString& rJobName )
         maJobName               = rJobName;
         mnCurPage               = 1;
         mnCurPrintPage          = 1;
-        mbJobActive             = TRUE;
         mbPrinting              = TRUE;
 
         if ( !mpPrinter->StartJob( pPrintFile, rJobName, Application::GetDisplayName(),
@@ -1474,12 +1473,12 @@ BOOL Printer::StartJob( const XubString& rJobName )
             maJobName           = aSaveJobName;
             mnCurPage           = 0;
             mnCurPrintPage      = 0;
-            mbJobActive         = FALSE;
             mbPrinting          = FALSE;
             mpPrinter = NULL;
             return FALSE;
         }
 
+        mbJobActive             = TRUE;
         StartPrint();
     }
     else
@@ -1496,11 +1495,11 @@ BOOL Printer::StartJob( const XubString& rJobName )
         String aSaveJobName     = maJobName;
         maJobName               = rJobName;
         mnCurPage               = 1;
-        mbJobActive             = TRUE;
         mbPrinting              = TRUE;
 
         if ( mpQPrinter->StartJob( rJobName ) )
         {
+            mbJobActive             = TRUE;
             StartPrint();
             mpQPrinter->StartQueuePrint();
         }
@@ -1509,7 +1508,6 @@ BOOL Printer::StartJob( const XubString& rJobName )
             mbNewJobSetup   = bSaveNewJobSetup;
             maJobName       = aSaveJobName;
             mnCurPage       = 0;
-            mbJobActive     = FALSE;
             mbPrinting      = FALSE;
             mnError = mpQPrinter->GetErrorCode();
             mpQPrinter->Destroy();
