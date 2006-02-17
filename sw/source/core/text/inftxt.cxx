@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:44:07 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 18:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1663,7 +1663,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
         const xub_Unicode cPos = GetChar( i );
-        if ( cPos != cTabDec && cPos != cTabSep && ( 0x2F >= cPos || cPos >= 0x3A ) )
+        if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
             cHookChar = GetChar( i );
             SetTabDecimal( cHookChar );
