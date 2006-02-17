@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:12:05 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -600,7 +600,7 @@ File gid_File_Lib_Collator_Data
     Name = "collator_data.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Index_Data
@@ -611,7 +611,7 @@ File gid_File_Lib_Index_Data
     Name = "index_data.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Textconv_Dict
@@ -622,7 +622,7 @@ File gid_File_Lib_Textconv_Dict
     Name = "textconv_dict.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Dlgprov
