@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 13:52:04 $
+#   last change: $Author: hr $ $Date: 2006-02-17 16:03:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,17 +90,18 @@ SHL1STDLIBS+= shell32.lib $(SOLARLIBDIR)$/npwin.obj
 
 .ENDIF
 
+OBJFILES=\
+        $(OBJ)$/so_closelistener.obj\
+        $(OBJ)$/so_instance.obj\
+        $(OBJ)$/so_env.obj\
+        $(OBJ)$/so_main.obj
 
 # --- Plugin executable -------------------------
 .IF "$(OS)"=="SOLARIS"
 LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
 .ENDIF          # "$(OS)"=="SOLARIS"
 APP1TARGET=nsplugin$(EXEPOSTFIX)
-APP1OBJS=\
-        $(SLO)$/so_closelistener.obj\
-        $(SLO)$/so_instance.obj\
-        $(SLO)$/so_env.obj\
-        $(SLO)$/so_main.obj
+APP1OBJS=$(OBJFILES)
 
 APP1STDLIBS=\
             $(CPPULIB)			\
@@ -121,7 +122,8 @@ APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
-APP1OBJS+=$(SLO)$/nsp_windows.obj
+DEPOBJFILES=$(OBJ)$/nsp_windows.obj
+APP1OBJS+=$(OBJ)$/nsp_windows.obj
 APP1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib oleaut32.lib uuid.lib
 .ENDIF
 
