@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:10:30 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,11 @@ void SAL_CALL OInstanceLocker::dispose()
 
     if ( m_xLockListener.is() )
     {
-        m_pLockListener->Dispose();
+        if ( m_pLockListener )
+        {
+            m_pLockListener->Dispose();
+            m_pLockListener = NULL;
+        }
         m_xLockListener = uno::Reference< uno::XInterface >();
     }
 
@@ -197,7 +201,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                                             xInstance,
                                             nModes,
                                             xApproval );
-        m_xLockListener = uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ) );
+        m_xLockListener = uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( m_pLockListener ) );
         m_pLockListener->Init();
     }
     catch( uno::Exception& )
@@ -304,7 +308,7 @@ void OLockListener::Dispose()
     if ( m_bDisposed )
         return;
 
-    if ( m_nMode && embed::Actions::PREVENT_CLOSE )
+    if ( m_nMode & embed::Actions::PREVENT_CLOSE )
     {
         try
         {
@@ -320,7 +324,7 @@ void OLockListener::Dispose()
         {}
     }
 
-    if ( m_nMode && embed::Actions::PREVENT_TERMINATION )
+    if ( m_nMode & embed::Actions::PREVENT_TERMINATION )
     {
         try
         {
