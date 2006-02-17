@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:21:02 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 16:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2572,8 +2572,10 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     GetBindings().LEAVEREGISTRATIONS();
     delete pOldSh;
     }
-    catch (...)
+    catch ( com::sun::star::uno::Exception& )
     {
+        // the SfxCode is not able to cope with exceptions thrown while creating views
+        // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here
         DBG_ERROR("Exception in SwitchToViewShell_Impl - urgent issue. Please contact development!");
     }
 
