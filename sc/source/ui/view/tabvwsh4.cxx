@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:05:05 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 15:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1718,6 +1718,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
     pPivotSource    = new ScArea;
     StartListening(*GetViewData()->GetDocShell(),TRUE);
     StartListening(*GetViewFrame(),TRUE);
+    StartListening(*pSfxApp,TRUE);              // #i62045# #i62046# application is needed for Calc's own hints
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
     BOOL bFirstView = !pFirst
@@ -1961,6 +1962,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     EndListening(*pDocSh);
     EndListening(*GetViewFrame());
+    EndListening(*SFX_APP());           // #i62045# #i62046# needed now - SfxViewShell no longer does it
 
     SC_MOD()->ViewShellGone(this);
 
