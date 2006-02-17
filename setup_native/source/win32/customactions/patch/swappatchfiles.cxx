@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 11:19:56 $
+ *  last change: $Author: hr $ $Date: 2006-02-17 13:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,20 +103,15 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
 
         fSuccess = MoveFileA( lpExistingFileNameA, lpNewFileNameA );
 
-        if ( !fSuccess && 0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
+        if ( !fSuccess && GetLastError() != ERROR_ACCESS_DENIED &&
+            0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
         {
             BOOL    bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
 
             fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
 
-            // In case of successfull copy do not return FALSE if delete fails.
-            // Error detection is done by GetLastError()
-
             if ( fSuccess )
-            {
-                SetLastError( NO_ERROR );
-                DeleteFileA( lpExistingFileNameA );
-            }
+                fSuccess = DeleteFileA( lpExistingFileNameA );
         }
 
     }
@@ -373,6 +368,43 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
             pSectionName += _tcslen(pSectionName) + 1;
         }
     }
+
+    return ERROR_SUCCESS;
+}
+
+extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
+{
+    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
+    std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
+
+    WIN32_FIND_DATA aFindFileData;
+    HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
+
+    if ( IsValidHandle(hFind) )
+    {
+        BOOL    fSuccess;
+        bool    fRenameSucceeded;
+
+        do
+        {
+            std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
+            std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
+
+            fRenameSucceeded = MoveFileExImpl( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
+            if ( fRenameSucceeded )
+            {
+                MoveFileExImpl( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
+                fSuccess = FindNextFile( hFind, &aFindFileData );
+            }
+        } while ( fSuccess && fRenameSucceeded );
+
+        if ( !fRenameSucceeded )
+            MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
+
+        FindClose( hFind );
+    }
+
 
     return ERROR_SUCCESS;
 }
