@@ -70,6 +70,9 @@ protected:
 
     BOOL                    mbReadyForActivation;
     CComPtr<IDispatch>      mpDispTempFile;
+
+    BOOL                    mbDrawLocked;
+
 public:
     CSOActiveX();
     ~CSOActiveX();
