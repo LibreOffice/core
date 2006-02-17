@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:08:52 $
+#   last change: $Author: hr $ $Date: 2006-02-17 13:28:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@ UWINAPILIB=
 SLOFILES = \
     $(SLO)$/swappatchfiles.obj \
     $(SLO)$/respintest.obj     \
+    $(SLO)$/shutdown_quickstart.obj \
+    $(SLO)$/quickstarter.obj \
     $(SLO)$/upgrade.obj
 
 
