@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:21:12 $
+#   last change: $Author: rt $ $Date: 2006-02-20 11:59:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.23 $ ';
+my $id_str = ' $Revision: 1.24 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -658,7 +658,7 @@ sub get_mws_location
     print_error("Location of master workspace '$masterws' not found in '$workspace_lst' database.", 3) if ( !defined($wslocation) ) ;
 
     if (! -d $wslocation) {
-        print_message("Master workspace not found!") ;
+        print_message("Master workspace not found at '$wslocation'!") ;
         return "";
     }
     return $wslocation;
