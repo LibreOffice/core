@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 15:28:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3700,7 +3700,7 @@ void SwWW8ImplReader::ReadDocVars()
     WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcStwUser,
         pWwFib->lcbStwUser, bVer67 ? 2 : 0, eStructCharSet,
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
-    {
+    if (!bVer67) {
         using namespace com::sun::star;
 
         uno::Reference<lang::XComponent> xModelComp(mpDocShell->GetModel(),
@@ -3717,7 +3717,10 @@ void SwWW8ImplReader::ReadDocVars()
                 ::rtl::OUString name(aDocVarStrings[i]);
                 uno::Any aValue;
                 aValue <<= ::rtl::OUString(aDocValueStrings[i]);
+                try {
                 xInfoContainer->addProperty( name, 0, aValue);
+                } catch(com::sun::star::beans::PropertyExistException &e) {
+                }
             }
         }
     }
