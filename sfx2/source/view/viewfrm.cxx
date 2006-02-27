@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 16:00:20 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2512,6 +2512,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     GetBindings().ENTERREGISTRATIONS();
     pSh = rViewFactory.CreateInstance(this, pOldSh);
 
+    Window *pEditWin = pSh->GetWindow();
+    DBG_ASSERT( !pEditWin || !pEditWin->IsReallyVisible(), "don`t show your ViewShell`s Window by yourself!" );
+
     // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
     GetDispatcher()->SetDisableFlags( 0 );
     SetViewShell_Impl(pSh);
@@ -2560,8 +2563,6 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     if ( GetWindow().IsReallyVisible() )
         DoAdjustPosSizePixel( pSh, Point(), GetWindow().GetOutputSizePixel() );
 
-    Window *pEditWin = pSh->GetWindow();
-    DBG_ASSERT( !pEditWin || !pEditWin->IsReallyVisible(), "don`t show your ViewShell`s Window by yourself!" );
     if ( pEditWin && pSh->IsShowView_Impl() )
     {
         pEditWin->Show();
