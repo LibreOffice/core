@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:56:11 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 17:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,11 +557,12 @@ void SvxSearchDialog::Construct_Impl()
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
     rtl::OUString sTarget = rtl::OUString::createFromAscii("_self");
 
+    bool bSearchComponent1 = false;
+    bool bSearchComponent2 = false;
     if(xDispatchProv.is() &&
             (pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0)).is())
     {
-        aSearchComponentFL.Show();
-        aSearchComponent1PB.Show();
+        bSearchComponent1 = true;
     }
     if(xDispatchProv.is() &&
             (pImpl->xCommand2Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand2URL, sTarget, 0)).is())
@@ -570,91 +571,102 @@ void SvxSearchDialog::Construct_Impl()
         {
             aSearchComponent2PB.SetPosPixel(aSearchComponent1PB.GetPosPixel());
         }
-        aSearchComponent2PB.Show();
-        aSearchComponentFL.Show();
+        bSearchComponent2 = true;
     }
-    if(aSearchComponent1PB.IsVisible() && aSearchComponent2PB.IsVisible())
+
+    if( bSearchComponent1 || bSearchComponent2 )
     {
-        //dialog must me resized
-        Size aDlgSize(GetSizePixel());
-//        FixedLinePosition = aButtonsFL.GetPosPixel();
-        sal_Int32 nOffset = aSearchCmdLine.GetPosPixel().Y() - aSearchAllBtn.GetPosPixel().Y()
-            - aButtonsFL.GetPosPixel().Y() + aSearchComponent2PB.GetPosPixel().Y();
+        //get the labels of the FixedLine and the buttons
+        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchGroupLabel
+        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel1
+        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel2
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(xMgr->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
+                    uno::UNO_QUERY);
+            uno::Sequence< uno::Any > aArgs(1);
+            ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/SearchOptions/"));
+            aArgs[0] <<= sPath;
 
-//        sal_Int32 nHeight = 2 * aSearchComponent2PB.GetPosPixel().Y() - aSearchComponent1PB.GetPosPixel().Y();
-        aDlgSize.Height() += nOffset;
-        Window* aWindows[] =
-        {
-            &aOptionsFL,
-            &aSelectionBtn,
-            &aBackwardsBtn,
-            &aRegExpBtn,
-            &aSimilarityBox,
-            &aSimilarityBtn,
-            &aLayoutBtn,
-            &aJapMatchFullHalfWidthCB,
-            &aJapOptionsCB,
-            &aJapOptionsBtn,
-            &aAttributeBtn,
-            &aFormatBtn,
-            &aNoFormatBtn,
-            &aCalcFL,
-            &aCalcSearchInFT,
-            &aCalcSearchInLB,
-            &aCalcSearchDirFT,
-            &aRowsBtn,
-            &aColumnsBtn,
-            &aAllSheetsCB,
-            &aButtonsFL,
-            &aHelpBtn,
-            &aCloseBtn,
-            pMoreBtn,
-            0
-        };
-        sal_Int32 nWindow = 0;
-        do
-        {
-            lcl_MoveDown( *aWindows[nWindow], nOffset );
+            uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess")),
+                        aArgs);
+            uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
+            if(xDirectAccess.is())
+            {
+                ::rtl::OUString sTemp;
+                ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchGroupLabel"));
+                uno::Any aRet = xDirectAccess->getByName(sProperty);
+                aRet >>= sTemp;
+                aSearchComponentFL.SetText( sTemp );
+                aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel1")));
+                aRet >>= sTemp;
+                aSearchComponent1PB.SetText( sTemp );
+                aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel2")));
+                aRet >>= sTemp;
+                aSearchComponent2PB.SetText( sTemp );
+            }
         }
-        while(aWindows[++nWindow]);
+        catch(uno::Exception&){}
 
-        SetSizePixel(aDlgSize);
+        if(aSearchComponent1PB.GetText().Len())
+        {
+            aSearchComponentFL.Show();
+            aSearchComponent1PB.Show();
+        }
+        if( aSearchComponent2PB.GetText().Len() )
+        {
+            aSearchComponentFL.Show();
+            aSearchComponent2PB.Show();
+        }
+        if( aSearchComponentFL.IsVisible())
+        {
 
-                //get the labels of the FixedLine and the buttons
-                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchGroupLabel
-                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel1
-                // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel2
-                try
-                {
-                    uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-                    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(xMgr->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
-                            uno::UNO_QUERY);
-                    uno::Sequence< uno::Any > aArgs(1);
-                    ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/SearchOptions/"));
-                    aArgs[0] <<= sPath;
+            //dialog must me resized
+            Size aDlgSize(GetSizePixel());
+            sal_Int32 nOffset = aSearchCmdLine.GetPosPixel().Y() - aSearchAllBtn.GetPosPixel().Y()
+                - aButtonsFL.GetPosPixel().Y() + aSearchComponent2PB.GetPosPixel().Y();
 
-                    uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess")),
-                                aArgs);
-                    uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
-                    if(xDirectAccess.is())
-                    {
-                        ::rtl::OUString sTemp;
-                        ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchGroupLabel"));
-                        uno::Any aRet = xDirectAccess->getByName(sProperty);
-                        aRet >>= sTemp;
-                        aSearchComponentFL.SetText( sTemp );
-                        aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel1")));
-                        aRet >>= sTemp;
-                        aSearchComponent1PB.SetText( sTemp );
-                        aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel2")));
-                        aRet >>= sTemp;
-                        aSearchComponent2PB.SetText( sTemp );
-                    }
-                }
-                catch(uno::Exception&){}
+            aDlgSize.Height() += nOffset;
+            Window* aWindows[] =
+            {
+                &aOptionsFL,
+                &aSelectionBtn,
+                &aBackwardsBtn,
+                &aRegExpBtn,
+                &aSimilarityBox,
+                &aSimilarityBtn,
+                &aLayoutBtn,
+                &aJapMatchFullHalfWidthCB,
+                &aJapOptionsCB,
+                &aJapOptionsBtn,
+                &aAttributeBtn,
+                &aFormatBtn,
+                &aNoFormatBtn,
+                &aCalcFL,
+                &aCalcSearchInFT,
+                &aCalcSearchInLB,
+                &aCalcSearchDirFT,
+                &aRowsBtn,
+                &aColumnsBtn,
+                &aAllSheetsCB,
+                &aButtonsFL,
+                &aHelpBtn,
+                &aCloseBtn,
+                pMoreBtn,
+                0
+            };
+            sal_Int32 nWindow = 0;
+            do
+            {
+                lcl_MoveDown( *aWindows[nWindow], nOffset );
+            }
+            while(aWindows[++nWindow]);
 
+            SetSizePixel(aDlgSize);
+        }
     }
 }
 
