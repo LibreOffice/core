@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:48:31 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,10 @@ const sal_Bool InitChunkSeq( SvStream& rStm, std::vector< vcl::PNGReader::ChunkD
     sal_uInt16  nIStmOldMode = rStm.GetNumberFormatInt();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
+        // check PNG file header magic number
     sal_uInt32 nDummy[ 2 ] = {0, 0};
     rStm >> nDummy[0] >> nDummy[1];
-    if( ! ( nDummy[0] == 0x89504e47 ) && ( nDummy[1] == 0x0d0a1a0a ) )
+    if( ( nDummy[0] != 0x89504e47 ) || ( nDummy[1] != 0x0d0a1a0a ) )
         bRet = sal_False;
     else
     {
