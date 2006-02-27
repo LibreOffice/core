@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recoveryui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:51:59 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,7 +341,7 @@ void RecoveryUI::impl_doRecovery()
     svxdr::IExtendedTabPage*   pPage3  = 0;
 
     pWizard->addTabPage(pPage1);
-    if ( !bRecoveryOnly )
+    if ( !bRecoveryOnly && new_crash_pending() )
     {
         pPage2 = new svxdr::ErrorRepWelcomeDialog(pWizard        );
         pPage3 = new svxdr::ErrorRepSendDialog   (pWizard        );
