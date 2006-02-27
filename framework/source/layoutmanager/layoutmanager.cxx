@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:56:45 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,10 +1042,14 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
          !m_bComponentAttached )
         return;
 
-    Reference< XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     Reference< XFrame > xFrame( m_xFrame );
+
+    Reference< XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
     aReadLock.unlock();
+
+    if ( implts_isPreviewModel( impl_getModelFromFrame( xFrame )))
+        return;
 
     std::vector< rtl::OUString > aMakeVisibleToolbars;
 
