@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:01:00 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ protected:
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;
     sal_Bool                    mbIsPlaceholder;
+    bool                        mbClearDefaultAttributes;
     sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
     rtl::OUString               maShapeId;
