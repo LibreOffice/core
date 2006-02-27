@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 16:00:08 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,7 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
 void SfxPrintProgress::DeleteOnEndPrint()
 {
     UnLock(); // jetzt schon, wg. Drucken im Thread
-#ifndef WIN
+#ifndef WNT
     // da das Drucken im 'Thread' unter Windows zu undefiniert ist bleibt der
     // Print-Monitor dort stehen, auf den anderen Plattformen kann man dann
     // weiterarbeiten, also kommt das Teil weg
