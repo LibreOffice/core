@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:21:27 $
+#   last change: $Author: kz $ $Date: 2006-02-27 16:35:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.13 $ ';
+my $id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -193,7 +193,7 @@ sub parse_image_list
 
     print_message("parsing '$image_list' ...") if $verbose;
     my $linecount = 0;
-    open(IMAGE_LIST, "< $image_list");
+    open(IMAGE_LIST, "< $image_list") or die "ERROR: can't open $image_list: $!";
     while ( <IMAGE_LIST> ) {
         $linecount++;
         next if /^\s*#/;
