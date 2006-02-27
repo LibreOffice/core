@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:54:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -931,7 +931,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_nXMax = pInfo->gfi->fontBBox.urx;
     m_nYMax = pInfo->gfi->fontBBox.ury;
 
-    if( ! bOnlyGlobalAttributes )
+    if( bFillEncodingvector || !bOnlyGlobalAttributes )
     {
         // fill in character metrics
 
