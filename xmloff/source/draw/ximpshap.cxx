@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:03:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-27 16:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,15 +261,16 @@ SdXMLShapeContext::SdXMLShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape ),
-    mxShapes( rShapes ),
-    mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
-    mbIsPlaceholder(FALSE),
-    mbIsUserTransformed(FALSE),
-    mxAttrList(xAttrList),
-    mnZOrder(-1),
-    maPosition(0, 0),
-    maSize(1, 1)
+:   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
+,   mxShapes( rShapes )
+,   mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
+,   mbIsPlaceholder(FALSE)
+,   mbIsUserTransformed(FALSE)
+,   mxAttrList(xAttrList)
+,   mnZOrder(-1)
+,   maPosition(0, 0)
+,   maSize(1, 1)
+,   mbClearDefaultAttributes( true )
 {
 }
 
@@ -494,7 +495,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
         xImp->addShape( xShape, mxAttrList, mxShapes );
 
-        if( !mbIsPlaceholder )
+        if( mbClearDefaultAttributes )
         {
             uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(xShape, uno::UNO_QUERY );
             if (xMultiPropertyStates.is())
@@ -856,6 +857,8 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
         {
             mbIsPlaceholder = IsXMLToken( rValue, XML_TRUE );
+            if( mbIsPlaceholder )
+                mbClearDefaultAttributes = false;
         }
         else if( IsXMLToken( rLocalName, XML_CLASS ) )
         {
@@ -2027,6 +2030,7 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
 {
+    mbClearDefaultAttributes = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////
