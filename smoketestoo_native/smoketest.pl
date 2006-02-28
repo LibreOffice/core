@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 14:43:42 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:34:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -129,16 +129,6 @@ elsif ($gui eq "UNX") {
     $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstraprc";
     $bootstrapiniTemp = $bootstrapini . "_";
-    $system = `uname -s`;
-    chomp $system;
-    $mach = `uname -m`;
-    chomp $mach;
-    if ( (defined($system)) && ($system eq "SunOS") && defined($mach) && ($mach eq sun4u) ) {
-        $ENV{DBGSV_INIT} = "dbgsv.init";
-    }
-    else {
-        $ENV{DBGSV_INIT} = "dbgsv.ini";
-    }
     $packpackage = $ENV{PKGFORMAT};
 }
 elsif ($gui eq $cygwin) {
@@ -224,6 +214,7 @@ $PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$Pa
 $DATA="$ENV{DMAKE_WORK_DIR}$PathSeparator" . "data$PathSeparator";
 $WORK_STAMP_LC=$ENV{WORK_STAMP};
 $WORK_STAMP_LC =~ tr/A-Z/a-z/;
+$ENV{DBGSV_INIT} = $DATA . "dbgsv.ini";
 
 if (defined($ENV{INSTALLPATH_SMOKETEST})) {
     $installpath_without = $ENV{INSTALLPATH_SMOKETEST};
@@ -264,7 +255,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.16 $ ';
+$id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
