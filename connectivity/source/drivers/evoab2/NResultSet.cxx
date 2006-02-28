@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:52:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,6 @@ using namespace com::sun::star::io;
 using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------------------
-//  IMPLEMENT_SERVICE_INFO(OEvoabResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
@@ -276,6 +275,7 @@ void OEvoabResultSet::construct( EBookQuery *pQuery, rtl::OString aTable, bool b
             m_pConnection->setPassword( aPassword );
         }
         m_nLength = g_list_length( m_pContacts );
+
         OSL_TRACE( "Query return %d records", m_nLength );
         m_nIndex = -1;
     }
@@ -288,8 +288,8 @@ void OEvoabResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_pStatement    = NULL;
-    m_xMetaData     = NULL;
+    m_pStatement = NULL;
+    m_xMetaData = NULL;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
@@ -300,7 +300,7 @@ Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(Runtime
     return aRet;
 }
 // -------------------------------------------------------------------------
- Sequence<  Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
+Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
 {
     OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
@@ -310,35 +310,195 @@ Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(Runtime
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 
+static int
+whichAddress(int value)
+{
+    int fieldEnum;
+    switch (value)
+    {
+        case HOME_ADDR_LINE1:
+        case HOME_ADDR_LINE2:
+        case HOME_CITY:
+        case HOME_STATE:
+        case HOME_COUNTRY:
+        case HOME_ZIP:
+            fieldEnum = e_contact_field_id("address_home");
+            break;
+
+        case WORK_ADDR_LINE1:
+        case WORK_ADDR_LINE2:
+        case WORK_CITY:
+        case WORK_STATE:
+        case WORK_COUNTRY:
+        case WORK_ZIP:
+            fieldEnum = e_contact_field_id("address_work");
+            break;
+
+        case OTHER_ADDR_LINE1:
+        case OTHER_ADDR_LINE2:
+        case OTHER_CITY:
+        case OTHER_STATE:
+        case OTHER_COUNTRY:
+        case OTHER_ZIP:
+            fieldEnum = e_contact_field_id("address_other");
+            break;
+
+            default: fieldEnum = e_contact_field_id("address_home");
+      }
+    return fieldEnum;
+}
+
+/*
+* This function decides the default column values based on the first field of EContactAddress.
+* The search order is Work->Home->other(defaults).
+*/
+static EContactAddress *
+getDefaultContactAddress(EContact *pContact,int *value)
+{
+    EContactAddress *ec = (EContactAddress *)e_contact_get(pContact,whichAddress(WORK_ADDR_LINE1));
+    if ( ec && (strlen(ec->street)>0) )
+    {
+        *value= *value +WORK_ADDR_LINE1 -1;
+        return ec;
+    }
+    else
+        {
+            ec = (EContactAddress *)e_contact_get(pContact,whichAddress(HOME_ADDR_LINE1));
+            if ( ec && (strlen(ec->street)>0) )
+            {
+                *value=*value+HOME_ADDR_LINE1-1;
+                return ec;
+            }
+        }
+
+    *value=*value+OTHER_ADDR_LINE1-1;
+    return (EContactAddress *)e_contact_get(pContact,whichAddress(OTHER_ADDR_LINE1));
+}
+
+static EContactAddress*
+getContactAddress(EContact *pContact, int * address_enum)
+{
+    EContactAddress *ec = NULL;
+    switch (*address_enum) {
+
+        case DEFAULT_ADDR_LINE1:
+        case DEFAULT_ADDR_LINE2:
+        case DEFAULT_CITY:
+        case DEFAULT_STATE:
+        case DEFAULT_COUNTRY:
+        case DEFAULT_ZIP:
+            ec = getDefaultContactAddress(pContact,address_enum);break;
+           default:
+            ec = (EContactAddress *)e_contact_get(pContact,whichAddress(*address_enum));
+    }
+    return ec;
+}
+
+static bool
+handleSplitAddress(EContact *pContact,GValue *pStackValue,int value)
+{
+
+    EContactAddress *ec = getContactAddress(pContact,&value) ;
+
+    if (ec==NULL)
+        return true;
+
+    switch (value) {
+        case WORK_ADDR_LINE1:
+            g_value_set_string(pStackValue,ec->street ); break;
+        case WORK_ADDR_LINE2:
+            g_value_set_string(pStackValue,ec->po ); break;
+        case WORK_CITY:
+            g_value_set_string(pStackValue,ec->locality ); break;
+        case WORK_STATE:
+             g_value_set_string(pStackValue,ec->region ); break;
+        case WORK_COUNTRY:
+            g_value_set_string(pStackValue,ec->country ); break;
+        case WORK_ZIP:
+            g_value_set_string(pStackValue,ec->code ); break;
+
+        case HOME_ADDR_LINE1:
+            g_value_set_string(pStackValue,ec->street ); break;
+        case HOME_ADDR_LINE2:
+            g_value_set_string(pStackValue,ec->po ); break;
+        case HOME_CITY:
+            g_value_set_string(pStackValue,ec->locality ); break;
+        case HOME_STATE:
+            g_value_set_string(pStackValue,ec->region ); break;
+        case HOME_COUNTRY:
+            g_value_set_string(pStackValue,ec->country ); break;
+        case HOME_ZIP:
+            g_value_set_string(pStackValue,ec->code ); break;
+
+        case OTHER_ADDR_LINE1:
+            g_value_set_string(pStackValue,ec->street ); break;
+        case OTHER_ADDR_LINE2:
+            g_value_set_string(pStackValue,ec->po ); break;
+        case OTHER_CITY:
+            g_value_set_string(pStackValue,ec->locality ); break;
+        case OTHER_STATE:
+            g_value_set_string(pStackValue,ec->region ); break;
+        case OTHER_COUNTRY:
+            g_value_set_string(pStackValue,ec->country ); break;
+        case OTHER_ZIP:
+            g_value_set_string(pStackValue,ec->code ); break;
+
+    }
+
+return false;
+}
 // -------------------------------------------------------------------------
 // XRow Interface
 
 bool
 OEvoabResultSet::getValue( sal_Int32 nColumnNum, GType nType, GValue *pStackValue)
 {
-    const GParamSpec *pSpec = evoab::getField (nColumnNum - 1);
+    const ColumnProperty * pSpecs = evoab::getField (nColumnNum );
+    if (!pSpecs)
+        return sal_False;
+    GParamSpec *pSpec = pSpecs->pField;
+    gboolean bIsSplittedColumn=pSpecs->bIsSplittedValue;
     EContact *pContact = getCur();
 
     m_bWasNull = true;
-    if (!pSpec || !pContact)
+    if (!pSpec || !pContact) {
         return false;
-
+    }
     if (G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType)
     {
-        g_warning ("Wrong type");
+#ifdef DEBUG
+        g_warning ("Wrong type (0x%x) (0x%x) '%s'",
+                   (int)G_PARAM_SPEC_VALUE_TYPE (pSpec), (int) nType,
+                   pSpec->name ? pSpec->name : "<noname>");
+#endif
         return false;
     }
     g_value_init (pStackValue, nType);
-    g_object_get_property (G_OBJECT (pContact),
-                           g_param_spec_get_name ((GParamSpec *) pSpec),
-                           pStackValue);
-    if (G_VALUE_TYPE (pStackValue) != nType)
+    if (bIsSplittedColumn)
     {
-        g_warning ("Fetched type mismatch");
-        g_value_unset (pStackValue);
-        return false;
+        for (int i=0;i<OTHER_ZIP;i++)
+        {
+            if (0 == strcmp (g_param_spec_get_name ((GParamSpec *)pSpec), evo_addr[i].pColumnName))
+            {
+                m_bWasNull = handleSplitAddress (pContact, pStackValue, evo_addr[i].value);
+                return true;
+            }
+        }
     }
-
+    else
+    {
+        g_object_get_property (G_OBJECT (pContact),
+                               g_param_spec_get_name ((GParamSpec *) pSpec),
+                               pStackValue);
+        if (G_VALUE_TYPE (pStackValue) != nType)
+        {
+#ifdef DEBUG
+            g_warning ("Fetched type mismatch");
+#endif
+            g_value_unset (pStackValue);
+            return false;
+        }
+    }
     m_bWasNull = false;
     return true;
 }
@@ -355,14 +515,18 @@ OEvoabResultSet::getValue( sal_Int32 nColumnNum, GType nType, GValue *pStackValu
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     rtl::OUString aResult;
-
-    GValue aValue = { 0, };
-    if (getValue (nColumnNum, G_TYPE_STRING, &aValue))
-    {
-        const char *pStr = g_value_get_string (&aValue);
-        rtl::OString aStr (pStr ? pStr : "");
-        aResult = rtl::OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 );
-        g_value_unset (&aValue);
+    if ( m_xMetaData.is())
+        {
+                OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
+                sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        GValue aValue = { 0, };
+        if (getValue (nFieldNumber, G_TYPE_STRING, &aValue))
+        {
+            const char *pStr = g_value_get_string (&aValue);
+            rtl::OString aStr (pStr ? pStr : "");
+            aResult = rtl::OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 );
+            g_value_unset (&aValue);
+        }
     }
     return aResult;
 }
@@ -373,11 +537,16 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     sal_Bool bResult = sal_False;
 
-    GValue aValue = { 0, };
-    if (getValue (nColumnNum, G_TYPE_BOOLEAN, &aValue))
-    {
-        bResult = g_value_get_boolean (&aValue);
-        g_value_unset (&aValue);
+    if ( m_xMetaData.is())
+        {
+                OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
+                sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        GValue aValue = { 0, };
+        if (getValue (nFieldNumber, G_TYPE_BOOLEAN, &aValue))
+        {
+            bResult = g_value_get_boolean (&aValue);
+            g_value_unset (&aValue);
+        }
     }
     return bResult ? sal_True : sal_False;
 }
@@ -606,6 +775,7 @@ sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeExceptio
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     m_nIndex = 0;
+    return true;
 }
 // -------------------------------------------------------------------------
 
@@ -615,6 +785,7 @@ sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     m_nIndex = m_nLength - 1;
+    return true;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -711,7 +882,6 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     }
     OSL_TRACE("In/Out: OEvoabResultSet::close" );
     dispose();
@@ -795,9 +965,7 @@ sal_Bool OEvoabResultSet::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void OEvoabResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const Any& rValue
-                                                 )
-                                                 throw (Exception)
+                                const Any& rValue) throw (Exception)
 {
     switch(nHandle)
     {

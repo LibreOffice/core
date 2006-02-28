@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:52:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#include "NDebug.hxx"
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
@@ -52,7 +53,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
 OEvoabResultSetMetaData::OEvoabResultSetMetaData(const ::rtl::OUString& _aTableName)
-    : m_aTableName(_aTableName)
+    : m_aTableName(_aTableName),
+      m_aEvoabFields()
 {
 
 }
@@ -60,6 +62,27 @@ OEvoabResultSetMetaData::OEvoabResultSetMetaData(const ::rtl::OUString& _aTableN
 OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 {
 }
+// -------------------------------------------------------------------------
+void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+{
+        OSQLColumns::const_iterator aIter;
+        static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
+
+        for (aIter = xColumns->begin(); aIter != xColumns->end(); ++aIter)
+        {
+                ::rtl::OUString aFieldName;
+                sal_uInt32 nFieldNumber;
+
+                (*aIter)->getPropertyValue(aName) >>= aFieldName;
+                nFieldNumber = findEvoabField(aFieldName);
+        if (nFieldNumber == -1)
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii("Invalid column name: ") + aFieldName,
+            NULL);
+                m_aEvoabFields.push_back(nFieldNumber);
+        }
+}
+
 // -------------------------------------------------------------------------
 void OEvoabResultSetMetaData::checkColumnIndex(sal_Int32 nColumnNum)  throw(SQLException, RuntimeException)
 {
@@ -74,12 +97,13 @@ sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 nCol
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnType( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-    return evoab::getFieldType (nColumnNum - 1);
+        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    return evoab::getFieldType (nField);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
-    return evoab::getFieldCount();
+    return m_aEvoabFields.size();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
@@ -94,17 +118,22 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 nColumnNum
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-    return evoab::getFieldName( nColumnNum - 1 );
+        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+        return evoab::getFieldName( nField );
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-    return evoab::getFieldTypeName( nColumnNum - 1 );
+        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    return evoab::getFieldTypeName( nField );
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-    const GParamSpec *pSpec = getField( nColumnNum - 1 );
+
+        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    const ColumnProperty *pSpecs = getField(nField);
+    GParamSpec *pSpec = pSpecs->pField;
     rtl::OUString aLabel;
 
     if( pSpec )
