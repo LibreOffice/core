@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:12:30 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,10 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     // Virtuelle Devices haben defaultmaessig einen weissen Hintergrund
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-    Erase();
+
+    // #i59283# don't erase user-provided surface
+    if( !pData )
+        Erase();
 
     // VirDev in Liste eintragen
     mpNext = pSVData->maGDIData.mpFirstVirDev;
