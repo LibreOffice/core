@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NCatalog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:49:37 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,14 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
         public:
             OEvoabCatalog(OEvoabConnection *_pCon);
-
+            inline OEvoabConnection* getConnection() const { return m_pConnection; }
             virtual void refreshTables();
             virtual void refreshViews() {}
             virtual void refreshGroups() {}
             virtual void refreshUsers() {}
+ // XTablesSupplier
+                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(
+                                        ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }

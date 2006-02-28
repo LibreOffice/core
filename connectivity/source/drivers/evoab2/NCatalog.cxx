@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NCatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:49:21 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ void OEvoabCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("%");
+    aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
 
@@ -92,3 +92,27 @@ void OEvoabCatalog::refreshTables()
     else
         m_pTables = new OEvoabTables(m_xMetaData,*this,m_aMutex,aVector);
 }
+// XTablesSupplier
+Reference< XNameAccess > SAL_CALL  OEvoabCatalog::getTables(  ) throw(RuntimeException)
+{
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        try
+        {
+                if (!m_pTables) {
+                        refreshTables();
+                        }
+        }
+        catch( const RuntimeException& )
+        {
+                // allowed to leave this method
+                throw;
+        }
+        catch( const Exception& )
+        {
+                // allowed
+        }
+
+        return m_pTables;
+}
+
