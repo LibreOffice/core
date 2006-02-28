@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:07:10 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ X11SalGraphics::X11SalGraphics()
     m_pVDev             = NULL;
     m_pDeleteColormap   = NULL;
     hDrawable_          = None;
+    pRenderFormat_      = NULL;
 
     pClipRegion_            = NULL;
     pPaintRegion_       = NULL;
