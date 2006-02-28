@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:39:40 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,17 @@
 
 #ifdef DBG_UTIL
 
-#include "svdata.hxx"
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 #include <limits.h>
+
+#include "svdata.hxx"
 #include <svsys.h>
+
+#ifdef WNT
+#undef min
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -83,6 +89,7 @@
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
 #endif
+#include <threadex.hxx>
 
 #ifndef _SV_DBGGUI_HXX
 #include <dbggui.hxx>
@@ -97,6 +104,8 @@
 #include "unohelp2.hxx"
 #endif
 #include <vos/mutex.hxx>
+
+#include <map>
 
 using namespace ::com::sun::star;
 
@@ -181,7 +190,7 @@ static sal_Char* pDbgHelpText[] =
 "passed if the pointer test is enabled.\n",
 "\n",
 "--- Options ---\n",
-"Initilize\n",
+"Initialize\n",
 "Allocated memory is initialized with 0x77 and free or freed memory "
 "is initialized with 0x33. This option has almost no impact on performance "
 "and should thus always be enabled during development. This will also "
@@ -381,6 +390,12 @@ static sal_Char* pDbgHelpText[] =
 "Causes a crash\n",
 "\n",
 "\n",
+"Reroute osl messages - Checkbox\n",
+"OSL_ASSERT and similar messages can be intercepted by the general DBG GUI\n",
+"or handled system specific as per normal handling in the sal library.\n",
+"default is to reroute osl assertions\n",
+"\n",
+"\n",
 "Settings\n",
 "------------------------------------------\n",
 "\n",
@@ -454,6 +469,61 @@ static sal_Char* pDbgHelpText[] =
 "\n",
 NULL
 };
+
+// =======================================================================
+
+namespace
+{
+    // -------------------------------------------------------------------
+    typedef ::std::map< XubString, DbgChannelId > UserDefinedChannels;
+    UserDefinedChannels& ImplDbgGetUserDefinedChannels()
+    {
+        static UserDefinedChannels s_aChannels;
+        return s_aChannels;
+    }
+
+    // -------------------------------------------------------------------
+    void ImplAppendUserDefinedChannels( ListBox& rList )
+    {
+        const UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
+        for ( UserDefinedChannels::const_iterator channel = rChannels.begin();
+              channel != rChannels.end();
+              ++channel
+            )
+        {
+            USHORT nEntryPos = rList.InsertEntry( channel->first );
+            rList.SetEntryData( nEntryPos, reinterpret_cast< void* >( channel->second ) );
+        }
+    }
+
+    // -------------------------------------------------------------------
+    void ImplSelectChannel( ListBox& rList, ULONG nChannelToSelect, USHORT nPositionOffset )
+    {
+        if ( nChannelToSelect < DBG_OUT_USER_CHANNEL_0 )
+            rList.SelectEntryPos( (USHORT)( nChannelToSelect - nPositionOffset ) );
+        else
+        {
+            for ( USHORT pos = 0; pos < rList.GetEntryCount(); ++pos )
+            {
+                DbgChannelId nChannelId = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( pos )) );
+                if ( nChannelId == nChannelToSelect )
+                {
+                    rList.SelectEntryPos( pos );
+                    return;
+                }
+            }
+        }
+    }
+    // -------------------------------------------------------------------
+    DbgChannelId ImplGetChannelId( const ListBox& rList, USHORT nPositionOffset )
+    {
+        USHORT nSelectedChannelPos = rList.GetSelectEntryPos();
+        DbgChannelId nSelectedChannel = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( nSelectedChannelPos )) );
+        if ( nSelectedChannel == 0)
+            return (DbgChannelId)( nSelectedChannelPos + nPositionOffset );
+        return nSelectedChannel;
+    }
+}
 
 // =======================================================================
 
@@ -545,6 +615,7 @@ private:
     ListBox         maWarningBox;
     FixedText       maErrorText;
     ListBox         maErrorBox;
+    CheckBox        maHookOSLBox;
     GroupBox        maBox4;
 
     OKButton        maOKButton;
@@ -592,6 +663,14 @@ DbgWindow::DbgWindow() :
 
 BOOL DbgWindow::Close()
 {
+    // remember window position
+    ByteString aState( GetWindowState() );
+    DbgData* pData = DbgGetData();
+    strncpy( pData->aDbgWinState, aState.GetBuffer(), std::min( sizeof( pData->aDbgWinState ), aState.Len() + 1U ) );
+    pData->aDbgWinState[ sizeof( pData->aDbgWinState ) - 1 ] = 0;
+    // and save for next session
+    DbgSaveData( *pData );
+
     delete this;
     ImplGetSVData()->maWinData.mpDbgWin = NULL;
     return TRUE;
@@ -745,6 +824,7 @@ DbgDialog::DbgDialog() :
     maWarningBox( this, WB_DROPDOWN ),
     maErrorText( this ),
     maErrorBox( this, WB_DROPDOWN ),
+    maHookOSLBox( this ),
     maBox4( this ),
     maOKButton( this, WB_DEFBUTTON ),
     maCancelButton( this ),
@@ -809,7 +889,7 @@ DbgDialog::DbgDialog() :
 
     {
     maMemInit.Show();
-    maMemInit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Initilize" ) ) );
+    maMemInit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Initialize" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_INIT )
         maMemInit.Check( TRUE );
     maMemInit.SetPosSizePixel( LogicToPixel( Point( 10, 50 ), aAppMap ),
@@ -957,6 +1037,15 @@ DbgDialog::DbgDialog() :
     }
 
     {
+    maHookOSLBox.Show();
+    maHookOSLBox.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Reroute osl debug ~messages" ) ) );
+    if ( pData->bHookOSLAssert )
+        maHookOSLBox.Check( TRUE );
+    maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
+                                  LogicToPixel( Size( 100, 12 ), aAppMap ) );
+    }
+
+    {
     maInclClassText.Show();
     maInclClassText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Include-ObjectTest-Filter" ) ) );
     maInclClassText.SetPosSizePixel( LogicToPixel( Point( 10, 150 ), aAppMap ),
@@ -1032,7 +1121,8 @@ DbgDialog::DbgDialog() :
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
-    maTraceBox.SelectEntryPos( (USHORT)pData->nTraceOut );
+    ImplAppendUserDefinedChannels( maTraceBox );
+    ImplSelectChannel( maTraceBox, pData->nTraceOut, 0 );
     maTraceBox.Show();
     maTraceBox.SetPosSizePixel( LogicToPixel( Point( 10, 220 ), aAppMap ),
                                 LogicToPixel( Size( 95, 80 ), aAppMap ) );
@@ -1054,7 +1144,8 @@ DbgDialog::DbgDialog() :
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
-    maWarningBox.SelectEntryPos( (USHORT)pData->nWarningOut );
+    ImplAppendUserDefinedChannels( maWarningBox );
+    ImplSelectChannel( maWarningBox, pData->nWarningOut, 0 );
     maWarningBox.Show();
     maWarningBox.SetPosSizePixel( LogicToPixel( Point( 115, 220 ), aAppMap ),
                                   LogicToPixel( Size( 95, 80 ), aAppMap ) );
@@ -1082,7 +1173,8 @@ DbgDialog::DbgDialog() :
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
-    maErrorBox.SelectEntryPos( (USHORT)pData->nErrorOut-mnErrorOff );
+    ImplAppendUserDefinedChannels( maErrorBox );
+    ImplSelectChannel( maErrorBox, pData->nErrorOut, mnErrorOff );
     maErrorBox.Show();
     maErrorBox.SetPosSizePixel( LogicToPixel( Point( 220, 220 ), aAppMap ),
                                 LogicToPixel( Size( 95, 80 ), aAppMap ) );
@@ -1092,36 +1184,36 @@ DbgDialog::DbgDialog() :
     maBox4.Show();
     maBox4.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Output" ) ) );
     maBox4.SetPosSizePixel( LogicToPixel( Point( 5, 120 ), aAppMap ),
-                            LogicToPixel( Size( 330, 120 ), aAppMap ) );
+                            LogicToPixel( Size( 330, 135 ), aAppMap ) );
     }
 
     {
     maOKButton.Show();
     maOKButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maOKButton.SetPosSizePixel( LogicToPixel( Point( 10, 245 ), aAppMap ),
+    maOKButton.SetPosSizePixel( LogicToPixel( Point( 10, 260 ), aAppMap ),
                                 LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
     maCancelButton.Show();
-    maCancelButton.SetPosSizePixel( LogicToPixel( Point( 70, 245 ), aAppMap ),
+    maCancelButton.SetPosSizePixel( LogicToPixel( Point( 70, 260 ), aAppMap ),
                                     LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
     maInfoButton.Show();
     maInfoButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
     maInfoButton.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Info..." ) ) );
-    maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 245 ), aAppMap ),
+    maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
     maHelpButton.Show();
-    maHelpButton.SetPosSizePixel( LogicToPixel( Point( 190, 245 ), aAppMap ),
+    maHelpButton.SetPosSizePixel( LogicToPixel( Point( 190, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
 
     {
     SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL Debug Options" ) ) );
-    SetOutputSizePixel( LogicToPixel( Size( 340, 265 ), aAppMap ) );
+    SetOutputSizePixel( LogicToPixel( Size( 340, 280 ), aAppMap ) );
     }
 }
 
@@ -1136,9 +1228,9 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         memcpy( &aData, DbgGetData(), sizeof( DbgData ) );
         aData.nTestFlags = 0;
 
-        aData.nTraceOut   = maTraceBox.GetSelectEntryPos();
-        aData.nWarningOut = maWarningBox.GetSelectEntryPos();
-        aData.nErrorOut   = maErrorBox.GetSelectEntryPos()+mnErrorOff;
+        aData.nTraceOut   = ImplGetChannelId( maTraceBox, 0 );
+        aData.nWarningOut = ImplGetChannelId( maWarningBox, 0 );
+        aData.nErrorOut   = ImplGetChannelId( maErrorBox, mnErrorOff );
 
         strncpy( aData.aDebugName, ByteString( maDebugName.GetText(), RTL_TEXTENCODING_UTF8 ).GetBuffer(), sizeof( aData.aDebugName ) );
         strncpy( aData.aInclClassFilter, ByteString( maInclClassFilter.GetText(), RTL_TEXTENCODING_UTF8 ).GetBuffer(), sizeof( aData.aInclClassFilter ) );
@@ -1151,10 +1243,8 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.aInclFilter[sizeof( aData.aInclFilter )-1] = '\0';
         aData.aExclFilter[sizeof( aData.aExclFilter )-1] = '\0';
 
-        if ( maOverwrite.IsChecked() )
-            aData.bOverwrite = TRUE;
-        else
-            aData.bOverwrite = FALSE;
+        aData.bOverwrite = maOverwrite.IsChecked() ? TRUE : FALSE;
+        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? TRUE : FALSE;
 
         if ( maXtorThis.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_THIS;
@@ -1210,15 +1300,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         if ( maBoldAppFont.IsChecked() )
             aData.nTestFlags |= DBG_TEST_BOLDAPPFONT;
 
-        // Fensterposition mit abspeichern
-        DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
-        if ( pDbgWindow )
-        {
-            ByteString aState = pDbgWindow->GetWindowState();
-            if ( aState.Len() < sizeof( aData.aDbgWinState ) )
-                memcpy( aData.aDbgWinState, aState.GetBuffer(), aState.Len() );
-        }
-
         // Daten speichern
         DbgSaveData( aData );
 
@@ -1226,10 +1307,12 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DBG_INSTOUTTRACE( aData.nTraceOut );
         DBG_INSTOUTWARNING( aData.nWarningOut );
         DBG_INSTOUTERROR( aData.nErrorOut );
+        DbgUpdateOslHook( &aData );
 
         DbgData* pData = DbgGetData();
-        pData->nTestFlags &= ~(DBG_TEST_XTOR_TRACE | DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT);
-        pData->nTestFlags |= aData.nTestFlags & (DBG_TEST_XTOR_TRACE | DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT);
+        #define IMMEDIATE_FLAGS (DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
+        pData->nTestFlags &= ~IMMEDIATE_FLAGS;
+        pData->nTestFlags |= aData.nTestFlags & IMMEDIATE_FLAGS;
         strncpy( pData->aInclClassFilter, aData.aInclClassFilter, sizeof( pData->aInclClassFilter ) );
         strncpy( pData->aExclClassFilter, aData.aExclClassFilter, sizeof( pData->aExclClassFilter ) );
         strncpy( pData->aInclFilter, aData.aInclFilter, sizeof( pData->aInclFilter ) );
@@ -1246,6 +1329,14 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
             aStyleSettings.SetAppFont( aFont );
             aSettings.SetStyleSettings( aStyleSettings );
             Application::SetSettings( aSettings );
+        }
+        if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
+        {
+            InfoBox aBox( this, String( RTL_CONSTASCII_USTRINGPARAM(
+                "Some of the changed settings will only be active after "
+                "restarting the process"
+                ) ) );
+            aBox.Execute();
         }
         EndDialog( TRUE );
     }
@@ -1755,8 +1846,67 @@ class DbgMessageBox : public ErrorBox
 
 #endif
 
+class SolarMessageBoxExecutor : public ::vcl::SolarThreadExecutor
+{
+private:
+    String  m_sDebugMessage;
+
+public:
+    SolarMessageBoxExecutor( const String& _rDebugMessage )
+        :m_sDebugMessage( _rDebugMessage )
+    {
+    }
+
+protected:
+    virtual long doIt();
+};
+
+long SolarMessageBoxExecutor::doIt()
+{
+    long nResult = RET_NO;
+
+    // Tracking beenden und Mouse freigeben, damit die Boxen nicht haengen
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maWinData.mpTrackWin )
+        pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
+    if ( pSVData->maWinData.mpCaptureWin )
+        pSVData->maWinData.mpCaptureWin->ReleaseMouse();
+
+#if ! defined USE_VCL_MSGBOX
+#ifdef WNT
+    BOOL bOldCallTimer = pSVData->mbNoCallTimer;
+    pSVData->mbNoCallTimer = TRUE;
+    MessageBeep( MB_ICONHAND );
+    nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.GetBuffer(), L"Debug Output",
+                                     MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
+    pSVData->mbNoCallTimer = bOldCallTimer;
+    switch ( nResult )
+    {
+        case IDYES:
+            nResult = RET_YES;
+            break;
+        case IDNO:
+            nResult = RET_NO;
+            break;
+        case IDCANCEL:
+            nResult = RET_CANCEL;
+            break;
+    }
+#endif // WNT
+#else
+    USHORT nOldMode = Application::GetSystemWindowMode();
+    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
+    DbgMessageBox aBox( m_sDebugMessage );
+    Application::SetSystemWindowMode( nOldMode );
+    nResult = aBox.Execute();
+#endif
+
+    return nResult;
+}
+
 void DbgPrintMsgBox( const char* pLine )
 {
+    // are modal message boxes prohibited at the moment?
     if ( Application::IsDialogCancelEnabled() )
     {
 #if defined( WNT )
@@ -1780,66 +1930,15 @@ void DbgPrintMsgBox( const char* pLine )
 #endif
     }
 
-#ifdef USE_VCL_MSGBOX
-    sal_Bool bAcquire = Application::GetSolarMutex().tryToAcquire();
-    if (!bAcquire)
-    {
-        Sound::Beep (SOUND_ERROR);
-        DbgPrintShell (pLine);
-        return;
-    }
-#endif
-
     strcpy( aDbgOutBuf, pLine );
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
 
-    // Tracking beenden und Mouse freigeben, damit die Boxen nicht haengen
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpTrackWin )
-        pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
-    if ( pSVData->maWinData.mpCaptureWin )
-        pSVData->maWinData.mpCaptureWin->ReleaseMouse();
+    SolarMessageBoxExecutor aMessageBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
+    long nResult = aMessageBox.execute();
 
-#if ! defined USE_VCL_MSGBOX
-#ifdef WNT
-    BOOL bOldCallTimer = pSVData->mbNoCallTimer;
-    pSVData->mbNoCallTimer = TRUE;
-    UniString aDebugStr( aDbgOutBuf, RTL_TEXTENCODING_UTF8 );
-    MessageBeep( MB_ICONHAND );
-    short nRet = (short)MessageBoxW( 0, (LPWSTR)aDebugStr.GetBuffer(), L"Debug Output",
-                                     MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
-    pSVData->mbNoCallTimer = bOldCallTimer;
-    switch ( nRet )
-    {
-        case IDYES:
-            nRet = RET_YES;
-            break;
-        case IDNO:
-            nRet = RET_NO;
-            break;
-        case IDCANCEL:
-            nRet = RET_CANCEL;
-            break;
-    }
-#endif // WNT
-#else
-    USHORT nOldMode = Application::GetSystemWindowMode();
-    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    DbgMessageBox aBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
-    Application::SetSystemWindowMode( nOldMode );
-    short nRet = aBox.Execute();
-#endif
-
-#ifdef USE_VCL_MSGBOX
-    if (bAcquire)
-    {
-        Application::GetSolarMutex().release();
-    }
-#endif
-
-    if ( nRet == RET_YES )
+    if ( nResult == RET_YES )
         GetpApp()->Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
-    else if ( nRet == RET_CANCEL )
+    else if ( nResult == RET_CANCEL )
         DbgCoreDump();
 }
 
@@ -1942,6 +2041,16 @@ void DbgGUIStart()
         ErrorBox( 0, WB_OK,
                   XubString( RTL_CONSTASCII_USTRINGPARAM( "TOOLS Library has no Debug-Routines" ) ) ).Execute();
     }
+}
+
+// -----------------------------------------------------------------------
+
+USHORT DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc )
+{
+    DbgChannelId nChannelId = DbgRegisterUserChannel( pProc );
+    UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
+    rChannels[ _rChannelUIName ] = nChannelId;
+    return nChannelId;
 }
 
 #endif // DBG_UTIL
