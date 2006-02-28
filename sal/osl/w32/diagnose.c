@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:34 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,20 @@
 #define NO_DEBUG_CRT
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
+static pfunc_osl_printDetailedDebugMessage  _pPrintDetailedDebugMessage = NULL;
 
 pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc )
 {
     pfunc_osl_printDebugMessage pOldFunc = _pPrintDebugMessage;
     _pPrintDebugMessage = pNewFunc;
 
+    return pOldFunc;
+}
+
+pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc )
+{
+    pfunc_osl_printDetailedDebugMessage pOldFunc = _pPrintDetailedDebugMessage;
+    _pPrintDetailedDebugMessage = pNewFunc;
     return pOldFunc;
 }
 
@@ -120,7 +128,9 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 
     OutputDebugString(szMessage);
 
-    if ( _pPrintDebugMessage )
+    if ( _pPrintDetailedDebugMessage )
+        _pPrintDetailedDebugMessage( pszFileName, nLine, pszMessage );
+    else if ( _pPrintDebugMessage )
         _pPrintDebugMessage( szMessage );
     else if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
     {
