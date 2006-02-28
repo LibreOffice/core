@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:52:57 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #ifndef _CONNECTIVITY_EVOAB_CONNECTION_HXX_
 #include "NConnection.hxx"
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 #include <com/sun/star/connection/XConnection.hpp>
 namespace connectivity
 {
@@ -59,11 +62,17 @@ namespace connectivity
         class OEvoabResultSetMetaData : public  OResultSetMetaData_BASE
         {
           ::rtl::OUString       m_aTableName;
+                  ::std::vector<sal_Int32>        m_aEvoabFields;
+
         protected:
             virtual ~OEvoabResultSetMetaData();
         public:
           OEvoabResultSetMetaData(const ::rtl::OUString& _aTableName);
-
+          void setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
+          inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
+                        { return m_aEvoabFields[columnIndex - 1]; }
+          inline sal_Int32 getFieldSize() const
+            {return m_aEvoabFields.size();}
           /// Avoid ambigous cast error from the compiler.
           inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
           { return this; }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:53:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,8 +195,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 EBookQuery *
 OStatement_Base::createTrue()
 { // Not the world's most efficient unconditional true but ...
-//FIXME: make enum hack to make it gud integer (E_CONTACT_FULL_NAME);
-return  e_book_query_field_exists (3);
+    return e_book_query_from_string("(exists \"full_name\")");
 }
 
 EBookQuery *
@@ -380,19 +379,28 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
             else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
             {   // One occurance of '%'  matches...
                 if ( aMatchString.indexOf ( WILDCARD ) == 0 )
-                    pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 1 ) );
+                    pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
 
                 else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
-                    pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
+                    pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
 
                 else
-                {
                     ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii( "like statement contains too many wildcards" ), NULL );
-                }
+                        ::rtl::OUString::createFromAscii( "like statement contains wildcard in the middle" ), NULL );
+
+
                 if( pResult && bNotLike )
                     pResult = e_book_query_not( pResult, TRUE );
             }
+            else if( aMatchString.getLength() >= 3 &&
+                     aMatchString.indexOf ( WILDCARD ) == 0 &&
+                     aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
+                // one '%' at the start and another at the end
+                pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
+            }
+            else
+                ::dbtools::throwGenericSQLException(
+                    ::rtl::OUString::createFromAscii( "like statement contains too many wildcards" ), NULL );
         }
         else
                 OSL_ASSERT( "Serious internal error" );
@@ -485,11 +493,20 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     g_message( "Parsed SQL to sexpr '%s'\n", pSexpr );
     g_free( pSexpr );
 #endif
-
+     ::vos::ORef<connectivity::OSQLColumns> xColumns;
     if (pQuery)
     {
         pResult->construct( pQuery, aTable, bIsWithoutWhere );
         e_book_query_unref( pQuery );
+        xColumns = m_aSQLIterator.getSelectColumns();
+        if (!xColumns.isValid())
+        {
+            ::dbtools::throwGenericSQLException(
+                ::rtl::OUString::createFromAscii("Invalid selection of columns"),
+                NULL);
+        }
+        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) pResult->getMetaData().get();
+        pMeta->setEvoabFields(xColumns);
     }
     m_xResultSet = xRS;
 
