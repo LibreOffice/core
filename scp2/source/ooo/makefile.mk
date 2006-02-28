@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 17:06:57 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:48:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,10 @@ SCPDEFS+=-DENABLE_DIRECTX
 SCPDEFS+=-DSYSTEM_FREETYPE
 .ENDIF
 
+.IF "$(SYSTEM_CAIRO)" == "YES"
+SCPDEFS+=-DSYSTEM_CAIRO
+.ENDIF
+
 .IF "$(SYSTEM_LIBXML)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBXML
 .ENDIF
@@ -145,6 +149,10 @@ SCPDEFS+=-DSYSTEM_HUNSPELL
 
 .IF "$(SYSTEM_XALAN)" == "YES"
 SCPDEFS+=-DSYSTEM_XALAN
+.ENDIF
+
+.IF "$(ENABLE_CAIRO)" == "TRUE"
+SCPDEFS+=-DENABLE_CAIRO
 .ENDIF
 
 SCPDEFS+=\
