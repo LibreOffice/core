@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:53:50 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,9 @@
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "NDebug.hxx"
 #endif
-
+#ifndef _CONNECTIVITY_EVOAB_TABLE_HXX_
+#include "NTable.hxx"
+#endif
 using namespace ::comphelper;
 
 using namespace ::cppu;
@@ -98,7 +100,7 @@ ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
     ::rtl::OUString aSchema = ::rtl::OUString::createFromAscii("%");
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("%");
+    aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
@@ -109,12 +111,17 @@ ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            OTable* pRet = new OTable( this, sal_True,
-                                       aName, xRow->getString( 4 ),
-                                       xRow->getString( 5 ), sEmpty );
-            xRet = pRet;
+            OEvoabTable* pRet = new OEvoabTable(
+                    this,
+                    (OEvoabConnection *)static_cast<OEvoabCatalog&>(m_rParent).getConnection(),
+                    aName,
+                    xRow->getString(4),
+                    xRow->getString(5),
+                    sEmpty);
+                    xRet = pRet;
         }
     }
+
     ::comphelper::disposeComponent(xResult);
 
     return xRet;

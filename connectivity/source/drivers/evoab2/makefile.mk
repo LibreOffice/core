@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:54:17 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:35:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ CFLAGS+=$(GOBJECT_CFLAGS)
 
 EXCEPTIONSFILES=\
     $(SLO)$/NDriver.obj \
+    $(SLO)$/NTable.obj \
+    $(SLO)$/NColumns.obj \
     $(SLO)$/NTables.obj \
     $(SLO)$/NCatalog.obj \
     $(SLO)$/NConnection.obj \
