@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:26:24 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,6 +408,14 @@ namespace abp
 
             case AST_EVOLUTION:
                 m_aNewDataSource = aContext.createNewEvolution( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_EVOLUTION_GROUPWISE:
+                m_aNewDataSource = aContext.createNewEvolutionGroupwise( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_EVOLUTION_LDAP:
+                m_aNewDataSource = aContext.createNewEvolutionLdap( m_aSettings.sDataSourceName );
                 break;
 
             case AST_KAB:
