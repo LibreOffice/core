@@ -4,9 +4,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:11:50 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,11 @@
 #endif
 
 #include <debug.hxx>
+#include <rtl/string.h>
+
+#include <vector>
+
+#include <osl/diagnose.h>
 
 // =======================================================================
 
@@ -148,9 +153,43 @@ struct DebugData
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintShell;
     DbgPrintLine            pDbgPrintTestTool;
+    ::std::vector< DbgPrintLine >
+                            aDbgPrintUserChannels;
     PointerList*            pProfList;
     PointerList*            pXtorList;
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
+    pfunc_osl_printDetailedDebugMessage
+                            pOldDebugMessageFunc;
+    bool                    bOslIsHooked;
+
+    DebugData()
+        :bInit( FALSE )
+        ,pDbgPrintMsgBox( FALSE )
+        ,pDbgPrintWindow( NULL )
+        ,pDbgPrintShell( NULL )
+        ,pDbgPrintTestTool( NULL )
+        ,pProfList( NULL )
+        ,pXtorList( NULL )
+        ,pDbgTestSolarMutex( NULL )
+        ,pOldDebugMessageFunc( NULL )
+        ,bOslIsHooked( false )
+    {
+        aDbgData.nTestFlags = DBG_TEST_RESOURCE | DBG_TEST_MEM_INIT;
+        aDbgData.bOverwrite = TRUE;
+        aDbgData.nTraceOut = DBG_OUT_NULL;
+        aDbgData.nWarningOut = DBG_OUT_NULL;
+        aDbgData.nErrorOut = DBG_OUT_MSGBOX;
+        aDbgData.bMemInit = 0x77;
+        aDbgData.bMemBound = 0x55;
+        aDbgData.bMemFree = 0x33;
+        aDbgData.bHookOSLAssert = TRUE;
+        aDbgData.aDebugName[0] = 0;
+        aDbgData.aInclFilter[0] = 0;
+        aDbgData.aExclFilter[0] = 0;
+        aDbgData.aInclClassFilter[0] = 0;
+        aDbgData.aExclClassFilter[0] = 0;
+        aDbgData.aDbgWinState[0] = 0;
+    }
 };
 
 #define DBG_TEST_XTOR_EXTRA (DBG_TEST_XTOR_THIS |  DBG_TEST_XTOR_FUNC |               \
@@ -160,32 +199,7 @@ struct DebugData
 // - statische Verwaltungsdaten -
 // ------------------------------
 
-static DebugData aDebugData =
-{
-    {
-    DBG_TEST_RESOURCE | DBG_TEST_MEM_INIT,
-    TRUE,
-    DBG_OUT_NULL,
-    DBG_OUT_NULL,
-    DBG_OUT_MSGBOX,
-    0x77,
-    0x55,
-    0x33,
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    },
-    FALSE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
+static DebugData aDebugData;
 
 #ifndef MAC
 static sal_Char aCurPath[260];
@@ -422,6 +436,169 @@ typedef FILE*       FILETYPE;
 
 // =======================================================================
 
+namespace
+{
+    enum ConfigSection
+    {
+        eOutput,
+        eMemory,
+        eGUI,
+        eObjects,
+        eTest,
+
+        eUnknown
+    };
+
+    void lcl_lineFeed( FILETYPE _pFile )
+    {
+        FilePrintF( _pFile, "%s", FILE_LINEEND );
+    }
+
+    const sal_Char* lcl_getSectionName( ConfigSection _eSection )
+    {
+        const sal_Char* pSectionName = NULL;
+        switch ( _eSection )
+        {
+            case eOutput    : pSectionName = "output";  break;
+            case eMemory    : pSectionName = "memory";  break;
+            case eGUI       : pSectionName = "gui";     break;
+            case eObjects   : pSectionName = "objects"; break;
+            case eTest      : pSectionName = "test";    break;
+        }
+        return pSectionName;
+    }
+
+    ConfigSection lcl_getSectionFromName( const sal_Char* _pSectionName, size_t _nSectionNameLength )
+    {
+        if ( strncmp( _pSectionName, "output",  _nSectionNameLength < 6 ? _nSectionNameLength : 6 ) == 0 )
+            return eOutput;
+        if ( strncmp( _pSectionName, "memory",  _nSectionNameLength < 6 ? _nSectionNameLength : 6 ) == 0 )
+            return eMemory;
+        if ( strncmp( _pSectionName, "gui",     _nSectionNameLength < 3 ? _nSectionNameLength : 3 ) == 0 )
+            return eGUI;
+        if ( strncmp( _pSectionName, "objects", _nSectionNameLength < 7 ? _nSectionNameLength : 7 ) == 0 )
+            return eObjects;
+        if ( strncmp( _pSectionName, "test",    _nSectionNameLength < 4 ? _nSectionNameLength : 4 ) == 0 )
+            return eTest;
+        return eUnknown;
+    }
+
+    void lcl_startSection( FILETYPE _pFile, ConfigSection _eSection )
+    {
+        FilePrintF( _pFile, "[%s]%s", lcl_getSectionName( _eSection ), FILE_LINEEND );
+    }
+
+    void lcl_writeConfigString( FILETYPE _pFile, const sal_Char* _pKeyName, const sal_Char* _pValue )
+    {
+        FilePrintF( _pFile, "%s=%s%s", _pKeyName, _pValue, FILE_LINEEND );
+    }
+
+    void lcl_writeConfigBoolean( FILETYPE _pFile, const sal_Char* _pKeyName, bool _bValue )
+    {
+        lcl_writeConfigString( _pFile, _pKeyName, _bValue ? "1" : "0" );
+    }
+
+    void lcl_writeConfigFlag( FILETYPE _pFile, const sal_Char* _pKeyName, ULONG _nAllFlags, ULONG _nCheckFlag )
+    {
+        lcl_writeConfigBoolean( _pFile, _pKeyName, ( _nAllFlags & _nCheckFlag ) != 0 );
+    }
+
+    void lcl_writeConfigOutChannel( FILETYPE _pFile, const sal_Char* _pKeyName, ULONG _nValue )
+    {
+        const sal_Char* names[ DBG_OUT_COUNT ] =
+        {
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+        };
+        lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
+    }
+    void lcl_writeHexByte( FILETYPE _pFile, const sal_Char* _pKeyName, BYTE _nValue )
+    {
+        sal_Char buf[RTL_STR_MAX_VALUEOFINT32];
+        rtl_String* stringData = NULL;
+        rtl_string_newFromStr_WithLength( &stringData, buf, rtl_str_valueOfInt32( buf, _nValue, 16 ) );
+
+        lcl_writeConfigString( _pFile, _pKeyName, stringData->buffer );
+
+        rtl_string_release( stringData );
+    }
+    bool lcl_isConfigSection( const sal_Char* _pLine, size_t _nLineLen )
+    {
+        if ( _nLineLen < 2 )
+            // not even enough space for '[' and ']'
+            return false;
+        if ( ( _pLine[0] == '[' ) && ( _pLine[ _nLineLen - 1 ] == ']' ) )
+            return true;
+        return false;
+    }
+    bool lcl_isConfigKey( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName )
+    {
+        size_t nKeyLength = strlen( _pKeyName );
+        if ( nKeyLength + 1 >= _nLineLen )
+            // not even long enough for the key name plus "=" plus a one-character value
+            return false;
+        if ( ( strncmp( _pLine, _pKeyName, nKeyLength ) == 0 ) && ( _pLine[ nKeyLength ] == '=' ) )
+            return true;
+        return false;
+    }
+    sal_Int32 lcl_tryReadConfigString( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_Char* _pValue, size_t _nValueLen )
+    {
+        if ( !lcl_isConfigKey( _pLine, _nLineLen, _pKeyName ) )
+            return 0;
+        size_t nValuePos = strlen( _pKeyName ) + 1;
+        size_t nValueLen = _nLineLen - nValuePos;
+        const sal_Char* pValue = _pLine + nValuePos;
+        strncpy( _pValue, pValue, ( _nValueLen > nValueLen ) ? nValueLen : _nValueLen );
+        _pValue[ ( _nValueLen > nValueLen ) ? nValueLen : _nValueLen - 1 ] = 0;
+        return strlen( _pValue );
+    }
+    void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnValue )
+    {
+        sal_Char aBuf[2];
+        size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
+        if ( nValueLen )
+            *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? TRUE : FALSE;
+    }
+    void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnValue )
+    {
+        const sal_Char* names[ DBG_OUT_COUNT ] =
+        {
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+        };
+        sal_Char aBuf[20];
+        size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
+        if ( nValueLen )
+        {
+            for ( ULONG name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+            {
+                if ( strcmp( aBuf, names[ name ] ) == 0 )
+                {
+                    *_out_pnValue = name;
+                    return;
+                }
+            }
+        }
+    }
+    void lcl_tryReadConfigFlag( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnAllFlags, ULONG _nCheckFlag )
+    {
+        sal_Char aBuf[2];
+        size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
+        if ( nValueLen )
+            if ( strcmp( aBuf, "1" ) == 0 )
+                *_out_pnAllFlags |= _nCheckFlag;
+            else
+                *_out_pnAllFlags &= ~_nCheckFlag;
+    }
+    void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, BYTE* _out_pnValue )
+    {
+        sal_Char aBuf[3];
+        size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
+        if ( nValueLen )
+            *_out_pnValue = (BYTE)rtl_str_toInt32( aBuf, 16 );
+    }
+}
+
+// =======================================================================
+
 PointerList::~PointerList()
 {
     PBlock* pBlock = pFirst;
@@ -571,25 +748,26 @@ BOOL PointerList::IsIn( const void* p ) const
 
 // =======================================================================
 
-static void DbgGetDbgFileName( sal_Char* pStr )
+static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
 {
 #if defined( UNX )
     const sal_Char* pName = getenv("DBGSV_INIT");
     if ( !pName )
         pName = ".dbgsv.init";
-    strcpy( pStr, pName );
+    strncpy( pStr, pName, nMaxLen );
 #elif defined( WNT )
     const sal_Char* pName = getenv("DBGSV_INIT");
     if ( pName )
-        strcpy( pStr, pName );
+        strncpy( pStr, pName, nMaxLen );
     else
-        GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, 200 );
+        GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, nMaxLen );
 #elif defined( OS2 )
     PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSV",
-                           "dbgsv.ini", (PSZ)pStr, 200 );
+                           "dbgsv.ini", (PSZ)pStr, nMaxLen );
 #else
-    strcpy( pStr, "dbgsv.ini" );
+    strncpy( pStr, "dbgsv.ini", nMaxLen );
 #endif
+    pStr[ nMaxLen - 1 ] = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -617,31 +795,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
-static int DbgImplIsAllErrorOut()
-{
-#if defined( WNT )
-    const sal_Char* pName = getenv("UPDATER");
-    if ( pName && (strcmp( pName, "YES" ) == 0) )
-        return TRUE;
-    if ( GetProfileInt( "sv", "dbgallerrorout", 0 ) )
-        return TRUE;
-    else
-        return FALSE;
-#elif defined( OS2 )
-    const sal_Char* pName = getenv("UPDATER");
-    if ( pName && (strcmp( pName, "YES" ) == 0) )
-        return TRUE;
-    if ( PrfQueryProfileInt( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGALLERROROUT", 0 ) )
-        return TRUE;
-    else
-        return FALSE;
-#else
-    return TRUE;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
 static void DbgDebugBeep()
 {
 #if defined( WNT )
@@ -663,13 +816,87 @@ static DebugData* GetDebugData()
         DbgGetLogFileName( aDebugData.aDbgData.aDebugName );
 
         // DEBUG.INI-File
-        FILETYPE pDbgFile;
-        sal_Char aBuf[4096];
-        DbgGetDbgFileName( aBuf );
-        if ( (pDbgFile = FileOpen( aBuf, "r" )) != NULL )
+        sal_Char aBuf[ 4096 ];
+        DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
+        FILETYPE pIniFile = FileOpen( aBuf, "r" );
+        if ( pIniFile != NULL )
         {
-            FileRead( &(aDebugData.aDbgData), sizeof( DbgData ), 1, pDbgFile );
-            FileClose( pDbgFile );
+            ConfigSection eCurrentSection = eUnknown;
+
+            // no sophisticated algorithm here, assume that the whole file fits into aBuf ...
+            ULONG nReallyRead = FileRead( aBuf, 1, sizeof( aBuf ) / sizeof( sal_Char ) - 1, pIniFile );
+            aBuf[ nReallyRead ] = 0;
+            const sal_Char* pLine = aBuf;
+            while ( const sal_Char* pNextLine = strstr( pLine, FILE_LINEEND ) )
+            {
+                size_t nLineLength = pNextLine - pLine;
+
+                if ( lcl_isConfigSection( pLine, nLineLength ) )
+                    eCurrentSection = lcl_getSectionFromName( pLine + 1, nLineLength - 2 );
+
+                // elements of the [output] section
+                if ( eCurrentSection == eOutput )
+                {
+                    lcl_tryReadConfigString( pLine, nLineLength, "log_file", aDebugData.aDbgData.aDebugName, sizeof( aDebugData.aDbgData.aDebugName ) );
+                    lcl_tryReadConfigBoolean( pLine, nLineLength, "overwrite", &aDebugData.aDbgData.bOverwrite );
+                    lcl_tryReadConfigString( pLine, nLineLength, "include", aDebugData.aDbgData.aInclFilter, sizeof( aDebugData.aDbgData.aInclFilter ) );
+                    lcl_tryReadConfigString( pLine, nLineLength, "exclude", aDebugData.aDbgData.aExclFilter, sizeof( aDebugData.aDbgData.aExclFilter ) );
+                    lcl_tryReadConfigString( pLine, nLineLength, "include_class", aDebugData.aDbgData.aInclClassFilter, sizeof( aDebugData.aDbgData.aInclClassFilter ) );
+                    lcl_tryReadConfigString( pLine, nLineLength, "exclude_class", aDebugData.aDbgData.aExclClassFilter, sizeof( aDebugData.aDbgData.aExclClassFilter ) );
+                    lcl_tryReadOutputChannel( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTraceOut );
+                    lcl_tryReadOutputChannel( pLine, nLineLength, "warning", &aDebugData.aDbgData.nWarningOut );
+                    lcl_tryReadOutputChannel( pLine, nLineLength, "error", &aDebugData.aDbgData.nErrorOut );
+                    lcl_tryReadConfigBoolean( pLine, nLineLength, "oslhook", &aDebugData.aDbgData.bHookOSLAssert );
+                }
+
+                // elements of the [memory] section
+                if ( eCurrentSection == eMemory )
+                {
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "initialize", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_INIT );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "overwrite", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_OVERWRITE );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "overwrite_free", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_OVERWRITEFREE );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "pointer", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_POINTER );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_REPORT );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_TRACE );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "new_and_delete", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_NEWDEL );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "object_test", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_XTOR );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "sys_alloc", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_SYSALLOC );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "leak_report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_LEAKREPORT );
+
+                    lcl_tryReadHexByte( pLine, nLineLength, "init_byte", &aDebugData.aDbgData.bMemInit );
+                    lcl_tryReadHexByte( pLine, nLineLength, "bound_byte", &aDebugData.aDbgData.bMemBound );
+                    lcl_tryReadHexByte( pLine, nLineLength, "free_byte", &aDebugData.aDbgData.bMemFree );
+                }
+
+                // elements of the [gui] section
+                if ( eCurrentSection == eGUI )
+                {
+                    lcl_tryReadConfigString( pLine, nLineLength, "debug_window_state", aDebugData.aDbgData.aDbgWinState, sizeof( aDebugData.aDbgData.aDbgWinState ) );
+                }
+
+                // elements of the [objects] section
+                if ( eCurrentSection == eObjects )
+                {
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_this", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_THIS );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_function", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_FUNC );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_exit", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_EXIT );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "generate_report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_REPORT );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_TRACE );
+                }
+
+                // elements of the [test] section
+                if ( eCurrentSection == eTest )
+                {
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "profiling", &aDebugData.aDbgData.nTestFlags, DBG_TEST_PROFILING );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "resources", &aDebugData.aDbgData.nTestFlags, DBG_TEST_RESOURCE );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "dialog", &aDebugData.aDbgData.nTestFlags, DBG_TEST_DIALOG );
+                    lcl_tryReadConfigFlag( pLine, nLineLength, "bold_app_font", &aDebugData.aDbgData.nTestFlags, DBG_TEST_BOLDAPPFONT );
+                }
+
+                pLine = pNextLine + strlen( FILE_LINEEND );
+            }
+
+            FileClose( pIniFile );
         }
 
 #ifndef MAC
@@ -681,11 +908,6 @@ static DebugData* GetDebugData()
             aDebugData.pXtorList = new PointerList;
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_PROFILING )
             aDebugData.pProfList = new PointerList;
-        if ( aDebugData.aDbgData.nErrorOut < DBG_OUT_MSGBOX )
-        {
-            if ( !DbgImplIsAllErrorOut() )
-                aDebugData.aDbgData.nErrorOut = DBG_OUT_MSGBOX;
-        }
     }
 
     return &aDebugData;
@@ -816,10 +1038,24 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
 
 // -----------------------------------------------------------------------
 
+void SAL_CALL dbg_printOslDebugMessage( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char * pszMessage )
+{
+    DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (USHORT)nLine );
+}
+
+// -----------------------------------------------------------------------
+
 static void DebugInit()
 {
     bDbgImplInMain = TRUE;
     ImplDbgInitLock();
+
+    DebugData* pData = GetDebugData();
+    if( pData->aDbgData.bHookOSLAssert && ! pData->bOslIsHooked )
+    {
+        pData->pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &dbg_printOslDebugMessage );
+        pData->bOslIsHooked = true;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -830,6 +1066,12 @@ static void DebugDeInit()
     ULONG       i;
     ULONG       nCount;
     ULONG       nOldOut;
+
+    if( pData->bOslIsHooked )
+    {
+        osl_setDetailedDebugMessageFunc( pData->pOldDebugMessageFunc );
+        pData->bOslIsHooked = FALSE;
+    }
 
     // Statistik-Ausgaben immer in File
     nOldOut = pData->aDbgData.nTraceOut;
@@ -883,10 +1125,12 @@ static void DebugDeInit()
     // funktioniert
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= (DBG_TEST_MEM | DBG_TEST_PROFILING);
+    pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintTestTool    = NULL;
     pData->pDbgPrintShell       = NULL;
     pData->pDbgPrintWindow      = NULL;
     pData->pDbgPrintShell       = NULL;
+    pData->pOldDebugMessageFunc = NULL;
     ImplDbgDeInitLock();
 }
 
@@ -1009,12 +1253,12 @@ BOOL ImplDbgFilterMessage( const sal_Char* pMsg )
 
 void* DbgFunc( USHORT nAction, void* pParam )
 {
-    DebugData* pData = ImplGetDebugData();
+    DebugData* pDebugData = ImplGetDebugData();
 
     if ( nAction == DBG_FUNC_GETDATA )
-        return (void*)&(pData->aDbgData);
+        return (void*)&(pDebugData->aDbgData);
     else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
-        return (void*)(pData->pDbgPrintMsgBox);
+        return (void*)(pDebugData->pDbgPrintMsgBox);
     else if ( nAction == DBG_FUNC_FILTERMESSAGE )
         if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
             return (void*) -1;
@@ -1038,31 +1282,81 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_SETPRINTMSGBOX:
-                pData->pDbgPrintMsgBox = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintMsgBox = (DbgPrintLine)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTWINDOW:
-                pData->pDbgPrintWindow = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintWindow = (DbgPrintLine)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTSHELL:
-                pData->pDbgPrintShell = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintShell = (DbgPrintLine)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTTESTTOOL:
-                pData->pDbgPrintTestTool = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintTestTool = (DbgPrintLine)pParam;
                 break;
 
             case DBG_FUNC_SAVEDATA:
                 {
-                FILETYPE pDbgFile;
-                sal_Char aBuf[4096];
-                DbgGetDbgFileName( aBuf );
-                if ( (pDbgFile = FileOpen( aBuf, "w" )) != NULL )
-                {
-                    FileWrite( pParam, sizeof( DbgData ), 1, pDbgFile );
-                    FileClose( pDbgFile );
-                }
+                const DbgData* pData = static_cast< const DbgData* >( pParam );
+
+                sal_Char aBuf[ 4096 ];
+                DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
+                FILETYPE pIniFile = FileOpen( aBuf, "w" );
+                if ( pIniFile == NULL )
+                    break;
+
+                lcl_startSection( pIniFile, eOutput );
+                lcl_writeConfigString( pIniFile, "log_file", pData->aDebugName );
+                lcl_writeConfigBoolean( pIniFile, "overwrite", pData->bOverwrite );
+                lcl_writeConfigString( pIniFile, "include", pData->aInclFilter );
+                lcl_writeConfigString( pIniFile, "exclude", pData->aExclFilter );
+                lcl_writeConfigString( pIniFile, "include_class", pData->aInclClassFilter );
+                lcl_writeConfigString( pIniFile, "exclude_class", pData->aExclClassFilter );
+                lcl_writeConfigOutChannel( pIniFile, "trace", pData->nTraceOut );
+                lcl_writeConfigOutChannel( pIniFile, "warning", pData->nWarningOut );
+                lcl_writeConfigOutChannel( pIniFile, "error", pData->nErrorOut );
+                lcl_writeConfigBoolean( pIniFile, "oslhook", pData->bHookOSLAssert );
+
+                lcl_lineFeed( pIniFile );
+                lcl_startSection( pIniFile, eMemory );
+                lcl_writeConfigFlag( pIniFile, "initialize", pData->nTestFlags, DBG_TEST_MEM_INIT );
+                lcl_writeConfigFlag( pIniFile, "overwrite", pData->nTestFlags, DBG_TEST_MEM_OVERWRITE );
+                lcl_writeConfigFlag( pIniFile, "overwrite_free", pData->nTestFlags, DBG_TEST_MEM_OVERWRITEFREE );
+                lcl_writeConfigFlag( pIniFile, "pointer", pData->nTestFlags, DBG_TEST_MEM_POINTER );
+                lcl_writeConfigFlag( pIniFile, "report", pData->nTestFlags, DBG_TEST_MEM_REPORT );
+                lcl_writeConfigFlag( pIniFile, "trace", pData->nTestFlags, DBG_TEST_MEM_TRACE );
+                lcl_writeConfigFlag( pIniFile, "new_and_delete", pData->nTestFlags, DBG_TEST_MEM_NEWDEL );
+                lcl_writeConfigFlag( pIniFile, "object_test", pData->nTestFlags, DBG_TEST_MEM_XTOR );
+                lcl_writeConfigFlag( pIniFile, "sys_alloc", pData->nTestFlags, DBG_TEST_MEM_SYSALLOC );
+                lcl_writeConfigFlag( pIniFile, "leak_report", pData->nTestFlags, DBG_TEST_MEM_LEAKREPORT );
+
+                lcl_lineFeed( pIniFile );
+                lcl_writeHexByte( pIniFile, "init_byte", pData->bMemInit );
+                lcl_writeHexByte( pIniFile, "bound_byte", pData->bMemBound );
+                lcl_writeHexByte( pIniFile, "free_byte", pData->bMemFree );
+
+                lcl_lineFeed( pIniFile );
+                lcl_startSection( pIniFile, eGUI );
+                lcl_writeConfigString( pIniFile, "debug_window_state", pData->aDbgWinState );
+
+                lcl_lineFeed( pIniFile );
+                lcl_startSection( pIniFile, eObjects );
+                lcl_writeConfigFlag( pIniFile, "check_this", pData->nTestFlags, DBG_TEST_XTOR_THIS );
+                lcl_writeConfigFlag( pIniFile, "check_function", pData->nTestFlags, DBG_TEST_XTOR_FUNC );
+                lcl_writeConfigFlag( pIniFile, "check_exit", pData->nTestFlags, DBG_TEST_XTOR_EXIT );
+                lcl_writeConfigFlag( pIniFile, "generate_report", pData->nTestFlags, DBG_TEST_XTOR_REPORT );
+                lcl_writeConfigFlag( pIniFile, "trace", pData->nTestFlags, DBG_TEST_XTOR_TRACE );
+
+                lcl_lineFeed( pIniFile );
+                lcl_startSection( pIniFile, eTest );
+                lcl_writeConfigFlag( pIniFile, "profiling", pData->nTestFlags, DBG_TEST_PROFILING );
+                lcl_writeConfigFlag( pIniFile, "resources", pData->nTestFlags, DBG_TEST_RESOURCE );
+                lcl_writeConfigFlag( pIniFile, "dialog", pData->nTestFlags, DBG_TEST_DIALOG );
+                lcl_writeConfigFlag( pIniFile, "bold_app_font", pData->nTestFlags, DBG_TEST_BOLDAPPFONT );
+
+                FileClose( pIniFile );
                 }
                 break;
 
@@ -1087,24 +1381,49 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_ALLERROROUT:
-                return (void*)(ULONG)DbgImplIsAllErrorOut();
+                return (void*)(ULONG)TRUE;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
-                pData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)pParam;
+                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)pParam;
                 break;
 
             case DBG_FUNC_TESTSOLARMUTEX:
-                if ( pData->pDbgTestSolarMutex )
-                    pData->pDbgTestSolarMutex();
+                if ( pDebugData->pDbgTestSolarMutex )
+                    pDebugData->pDbgTestSolarMutex();
                 break;
 
             case DBG_FUNC_PRINTFILE:
                 ImplDbgPrintFile( (const sal_Char*)pParam );
                 break;
+            case DBG_FUNC_UPDATEOSLHOOK:
+            {
+                const DbgData* pData = static_cast< const DbgData* >( pParam );
+                pDebugData->aDbgData.bHookOSLAssert = pData->bHookOSLAssert;
+                if( pDebugData->bOslIsHooked && ! pData->bHookOSLAssert )
+                {
+                    osl_setDetailedDebugMessageFunc( pDebugData->pOldDebugMessageFunc );
+                    pDebugData->bOslIsHooked = FALSE;
+                }
+                else if( ! pDebugData->bOslIsHooked && pData->bHookOSLAssert )
+                {
+                    pDebugData->pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &dbg_printOslDebugMessage );
+                    pDebugData->bOslIsHooked = TRUE;
+                }
+            }
+            break;
        }
 
         return NULL;
     }
+}
+
+// -----------------------------------------------------------------------
+
+DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
+{
+    DebugData* pData = ImplGetDebugData();
+    pData->aDbgPrintUserChannels.push_back( pProc );
+    return (DbgChannelId)( pData->aDbgPrintUserChannels.size() - 1 + DBG_OUT_USER_CHANNEL_0 );
 }
 
 // -----------------------------------------------------------------------
@@ -1423,13 +1742,10 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
         return;
     }
 
-    if ( (nDbgOut != DBG_OUT_ERROR) || DbgImplIsAllErrorOut() )
+    if ( ImplDbgFilterMessage( pMsg ) )
     {
-        if ( ImplDbgFilterMessage( pMsg ) )
-        {
-            bIn = FALSE;
-            return;
-        }
+        bIn = FALSE;
+        return;
     }
 
     ImplDbgLock();
@@ -1477,6 +1793,15 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
         }
         while ( nLine );
         strcat( aBufOut, pLine );
+    }
+
+    if ( ( nOut >= DBG_OUT_USER_CHANNEL_0 ) && ( nOut - DBG_OUT_USER_CHANNEL_0 < pData->aDbgPrintUserChannels.size() ) )
+    {
+        DbgPrintLine pPrinter = pData->aDbgPrintUserChannels[ nOut - DBG_OUT_USER_CHANNEL_0 ];
+        if ( pPrinter )
+            pPrinter( aBufOut );
+        else
+            nOut = DBG_OUT_DEBUGGER;
     }
 
     if ( nOut == DBG_OUT_COREDUMP )
