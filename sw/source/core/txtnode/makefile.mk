@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:12:57 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:37:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@ TARGET=txtnode
 
 .IF "$(mydebug)" != ""
 CDEFS+=-Dmydebug
-.ENDIF
-
-.IF "$(COMID)" == "gcc3"
-ENVCFLAGS=-fno-access-control
 .ENDIF
 
 # --- Files --------------------------------------------------------
