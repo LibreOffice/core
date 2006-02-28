@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:47:20 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -968,7 +968,7 @@ storeError OStorePageManager::symlink (
     // Mark 'Source' as symbolic link to 'Destination'.
     OStoreDirectoryPageObject aPage (*m_pDirect);
     aPage.attrib (STORE_ATTRIB_ISLINK);
-    aPage.dataLength (sizeof (aDstKey));
+    aPage.dataLength (sal_uInt32(sizeof(aDstKey)));
 
     // Allocate and save 'Source' directory page.
     eErrCode = base::allocate (aPage);

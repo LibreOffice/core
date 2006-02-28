@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stortree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:48:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORTREE_CXX "$Revision: 1.4 $"
+#define _STORE_STORTREE_CXX "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -104,7 +104,7 @@ void OStoreBTreeNodeData::swap (const D& rDescr)
 #ifdef OSL_BIGENDIAN
     m_aGuard.swap();
 
-    sal_uInt16 i, n = capacity(rDescr) / sizeof(T);
+    sal_uInt16 i, n = sal_uInt16(capacity(rDescr) / sizeof(T));
     for (i = 0; i < n; i++)
         m_pData[i].swap();
 #endif /* OSL_BIGENDIAN */
@@ -151,7 +151,7 @@ void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
 
         // insert.
         m_pData[i] = t;
-        base::m_aDescr.m_nUsed += sizeof(T);
+        base::m_aDescr.m_nUsed += sal_uInt16(sizeof(T));
     }
 }
 
@@ -169,7 +169,7 @@ void OStoreBTreeNodeData::remove (sal_uInt16 i)
 
         // truncate.
         m_pData[n - 1] = T();
-        base::m_aDescr.m_nUsed -= sizeof(T);
+        base::m_aDescr.m_nUsed -= sal_uInt16(sizeof(T));
     }
 }
 
