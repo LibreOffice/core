@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:09:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 12:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 }
             }
         }
+
+        TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
+
+        if ( _ltot( (long)GetCurrentProcessId(),szParentProcessId, 10 ) )
+            SetEnvironmentVariable( TEXT("ATTACHED_PARENT_PROCESSID"), szParentProcessId );
 
         PROCESS_INFORMATION aProcessInfo;
 
