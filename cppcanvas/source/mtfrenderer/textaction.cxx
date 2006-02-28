@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:42:02 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ namespace cppcanvas
                                                 ::std::min(
                                                     rSubset.mnSubsetEnd - rSubset.mnSubsetBegin,
                                                     rOrigContext.Length ),
-                                                0L ) );
+                                                sal_Int32( 0 ) ) );
 
                 const rendering::StringContext aContext( rOrigContext.Text,
                                                          nNewStartPos,
