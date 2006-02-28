@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:08:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,20 +509,20 @@ namespace vclcanvas
         // otherwise, truncation of size below might leave visible
         // areas uncovered by VDev.
         const ::Point aOutputPosition(
-            ::std::max( 0L,
+            ::std::max( sal_Int32( 0 ),
                         static_cast< sal_Int32 >(rRequestedArea.getMinX()) ),
-            ::std::max( 0L,
+            ::std::max( sal_Int32( 0 ),
                         static_cast< sal_Int32 >(rRequestedArea.getMinY()) ) );
         // round output size towards +infty. Don't want to truncate a
         // fraction of a sprite pixel... Limit coverage of VDev to
         // output device's area (i.e. not only to total size, but to
         // cover _only_ the visible parts).
         const ::Size aOutputSize(
-            ::std::max( 0L,
-                        ::std::min( rTargetSizePixel.Width() - aOutputPosition.X(),
+            ::std::max( sal_Int32( 0 ),
+                        ::std::min( static_cast< sal_Int32 >(rTargetSizePixel.Width() - aOutputPosition.X()),
                                     ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X() ))),
-            ::std::max( 0L,
-                        ::std::min( rTargetSizePixel.Height() - aOutputPosition.Y(),
+            ::std::max( sal_Int32( 0 ),
+                        ::std::min( static_cast< sal_Int32 >(rTargetSizePixel.Height() - aOutputPosition.Y()),
                                     ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y() ))));
 
         // early exit for empty output area.
