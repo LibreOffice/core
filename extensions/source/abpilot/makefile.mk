@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-19 17:27:56 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:39:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,10 @@ SLOFILES=	\
         $(EXCEPTIONSFILES)
 
 
-.IF "WITH_MOZILLA" != ""
+.IF "$(WITH_MOZILLA)" != "NO"
+.IF "$(SYSTEM_MOZILLA)" != "YES"
 CDEFS+=-DWITH_MOZILLA
+.ENDIF
 .ENDIF
 
 SRS1NAME=$(TARGET)
