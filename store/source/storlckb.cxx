@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:46:28 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.5 $"
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -93,10 +93,10 @@ using namespace store;
 /*
  * __store_convertTextToUnicode.
  */
-inline sal_Int32 __store_convertTextToUnicode (
+inline sal_Size __store_convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
-    const sal_Char *pSrcBuffer, sal_Int32 nSrcLength,
-    sal_Unicode    *pDstBuffer, sal_Int32 nDstLength)
+    const sal_Char *pSrcBuffer, sal_Size nSrcLength,
+    sal_Unicode    *pDstBuffer, sal_Size nDstLength)
 {
     sal_uInt32 nCvtInfo = 0;
     sal_Size nCvtBytes = 0;
@@ -325,8 +325,8 @@ storeError OStoreDirectory::iterate (storeFindData &rFindData)
             {
                 // Setup FindData.
                 sal_Char *p = m_pNode->m_aNameBlock.m_pData;
-                sal_Int32 n = rtl_str_getLength (p);
-                sal_Int32 k = rFindData.m_nLength;
+                sal_Size  n = rtl_str_getLength (p);
+                sal_Size  k = rFindData.m_nLength;
 
                 n = __store_convertTextToUnicode (
                     m_hTextCvt, p, n,
