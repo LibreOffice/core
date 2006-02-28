@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:40:01 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,11 +205,11 @@ DialogImpl::~DialogImpl()
     that->Resize();
 
     // calculate tabs:
-    sal_Int32 selWidth = that->m_treelb->GetSizePixel().getWidth();
-    sal_Int32 vscrollWidth =
+    long selWidth = that->m_treelb->GetSizePixel().getWidth();
+    long vscrollWidth =
         Application::GetSettings().GetStyleSettings().GetScrollBarSize();
 
-    sal_Int32 statusWidth = that->m_treelb->GetTextWidth(
+    long statusWidth = that->m_treelb->GetTextWidth(
         that->m_treelb->m_strEnabled );
     statusWidth = ::std::max(
         statusWidth, that->m_treelb->GetTextWidth(
