@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:24:26 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ TabPage OFA_TP_VIEW
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
-        Size = MAP_APPFONT( 110, 24 );
+        Size = MAP_APPFONT( 110, 16 );
         WordBreak = TRUE;
         Text[ de ] = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
         Text[ en-US ] = "Use system ~font for user interface";
@@ -342,13 +342,6 @@ TabPage OFA_TP_VIEW
         Text [ de ] = "Icons in Menüs ~anzeigen" ;
         Text [ en-US ] = "Show icons in menus";
     };
-    CheckBox CB_SHOW_INACTIVE
-    {
-        Pos = MAP_APPFONT ( 12, ROW_CB_SHOW_INACTIVE ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "I~naktive Menüeinträge anzeigen" ;
-        Text [ en-US ] = "Show i~nactive menu items" ;
-    };
     FixedLine FL_FONTLISTS
     {
         Pos = MAP_APPFONT ( 6, ROW_FL_FONTLISTS ) ;
@@ -371,60 +364,23 @@ TabPage OFA_TP_VIEW
         Text [ en-US ] = "Show font h~istory" ;
     };
 
-    FixedLine FL_RENDERING
-    {
-        Pos = MAP_APPFONT ( 6 , ROW_FL_REDERING ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Grafikausgabe" ;
-        Text [ en-US ] = "Graphics output";
-    };
-
-    CheckBox CB_USE_HARDACCELL
-    {
-        Pos = MAP_APPFONT ( 12, ROW_CB_USE_HARDACCELL ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Hardwarebeschleunigung verwenden" ;
-        Text [ en-US ] = "Use hardware acceleration" ;
-    };
-
-    FixedLine FL_WORKINGSET
-    {
-        Pos = MAP_APPFONT ( 133 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Wiederherstellen" ;
-        Text [ en-US ] = "Restore";
-    };
-    CheckBox BTN_DOCVIEW
-    {
-        Pos = MAP_APPFONT ( 139 , 14 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "~Bearbeitungsansicht" ;
-        Text [ en-US ] = "Editing view";
-    };
-    CheckBox BTN_OPENWIN
-    {
-        Pos = MAP_APPFONT ( 139 , 27 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Ge~öffnete Fenster" ;
-        Text [ en-US ] = "Open ~windows" ;
-    };
     FixedLine FL_3D
     {
-        Pos = MAP_APPFONT (  133, 47 ) ;
+        Pos = MAP_APPFONT (  133, ROW_FL_3D ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ de ] = "3D-Darstellung" ;
         Text [ en-US ] = "3D view" ;
     };
     CheckBox CB_3D_OPENGL
     {
-        Pos = MAP_APPFONT ( 139, 58 ) ;
+        Pos = MAP_APPFONT ( 139, ROW_CB_3D_OPENGL ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~OpenGL benutzen" ;
         Text [ en-US ] = "Use ~OpenGL" ;
     };
     CheckBox CB_3D_OPENGL_FASTER
     {
-        Pos = MAP_APPFONT ( 148 , 71 ) ;
+        Pos = MAP_APPFONT ( 148 , ROW_CB_3D_OPENGL_FASTER ) ;
         Size = MAP_APPFONT ( 104 , 10 ) ;
         Text [ x-comment ] = "; pb: verbesserte Bildschirmausgabe";
         Text [ de ] = "Op~timierte Ausgabe" ;
@@ -432,35 +388,52 @@ TabPage OFA_TP_VIEW
     };
     CheckBox CB_3D_DITHERING
     {
-        Pos = MAP_APPFONT ( 139 , 84 ) ;
+        Pos = MAP_APPFONT ( 139 , ROW_CB_3D_DITHERING ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Dithering benutzen" ;
         Text [ en-US ] = "Use ~dithering" ;
     };
     CheckBox CB_3D_SHOWFULL
     {
-        Pos = MAP_APPFONT ( 139 , 97 ) ;
+        Pos = MAP_APPFONT ( 139 , ROW_CB_3D_SHOWFULL ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Volldarstellung bei Interaktion" ;
         Text [ en-US ] = "Ob~ject refresh during interaction" ;
     };
+
+    FixedLine FL_RENDERING
+    {
+        Pos = MAP_APPFONT ( 133 , ROW_FL_RENDERING ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ de ] = "Grafikausgabe" ;
+        Text [ en-US ] = "Graphics output";
+    };
+
+    CheckBox CB_USE_HARDACCELL
+    {
+        Pos = MAP_APPFONT ( 139, ROW_CB_USE_HARDACCELL ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ de ] = "Hardwarebeschleunigung verwenden" ;
+        Text [ en-US ] = "Use hardware acceleration" ;
+    };
+
     FixedLine FL_MOUSE
     {
-        Pos = MAP_APPFONT ( 133 , 114 ) ;
+        Pos = MAP_APPFONT ( 133 , ROW_FL_MOUSE ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Maus" ;
         Text [ en-US ] = "Mouse";
     };
     FixedText FT_MOUSEPOS
     {
-        Pos = MAP_APPFONT ( 139, 125 ) ;
+        Pos = MAP_APPFONT ( 139, ROW_FT_MOUSEPOS ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Maus~positionierung" ;
         Text [ en-US ] = "Mouse positioning" ;
     };
     ListBox LB_MOUSEPOS
     {
-        Pos = MAP_APPFONT ( 139, 135 ) ;
+        Pos = MAP_APPFONT ( 139, ROW_LB_MOUSEPOS ) ;
         Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -480,14 +453,14 @@ TabPage OFA_TP_VIEW
     };
     FixedText FT_MOUSEMIDDLE
     {
-        Pos = MAP_APPFONT ( 139, 151 ) ;
+        Pos = MAP_APPFONT ( 139, ROW_FT_MOUSEMIDDLE ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Mittlere Ma~ustaste" ;
         Text [ en-US ] = "Middle mouse button";
     };
     ListBox LB_MOUSEMIDDLE
     {
-        Pos = MAP_APPFONT ( 139, 161 ) ;
+        Pos = MAP_APPFONT ( 139, ROW_LB_MOUSEMIDDLE ) ;
         Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
