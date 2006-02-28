@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:43:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.8 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.9 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -191,12 +191,12 @@ const sal_uInt32 store::OStorePageGuard::m_pTable[] =
  * crc32.
  */
 sal_uInt32 OStorePageGuard::crc32 (
-    sal_uInt32 nCRC32, const void *pData, sal_uInt32 nSize)
+    sal_uInt32 nCRC32, const void *pData, sal_Size nSize)
 {
     if (pData)
     {
         register const sal_uInt8 *p = (const sal_uInt8*)pData;
-        register sal_uInt32       n;
+        register sal_Size         n;
 
         nCRC32 = ~nCRC32;
         for (n = nSize; n > 0; n--)
@@ -249,7 +249,7 @@ storeError OStorePageObject::verify (const D& rDescr)
  * OStoreSuperBlock.
  *
  *======================================================================*/
-#define STORE_MAGIC_SUPERBLOCK 0x484D5343UL
+#define STORE_MAGIC_SUPERBLOCK sal_uInt32(0x484D5343)
 
 struct OStoreSuperBlock
 {
@@ -270,7 +270,8 @@ struct OStoreSuperBlock
      */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G) + sizeof(D) + 2 * (sizeof(L) + sizeof(sal_uInt32)));
+        return sal_uInt16(sizeof(G) + sizeof(D) +
+                          2 * (sizeof(L) + sizeof(sal_uInt32)));
     }
 
     /** Construction.
@@ -430,7 +431,7 @@ struct OStoreStateBlock
      */
     static sal_uInt16 size (void)
     {
-        return sizeof(sal_uInt32);
+        return sal_uInt16(sizeof(sal_uInt32));
     }
 
     /** Construction.
