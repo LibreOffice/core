@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:23:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 12:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,8 +591,12 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         // get the current active frame, which should be our "parent"
         // for this session
-        css::uno::Reference< css::frame::XFramesSupplier > xDesktop(m_xSMGR->createInstance(SERVICE_DESKTOP), css::uno::UNO_QUERY_THROW);
-        m_xFrame = xDesktop->getActiveFrame();
+        m_xFrame = GetFrame();
+        if ( !m_xFrame.is() )
+        {
+            css::uno::Reference< css::frame::XFramesSupplier > xDesktop(m_xSMGR->createInstance(SERVICE_DESKTOP), css::uno::UNO_QUERY_THROW);
+            m_xFrame = xDesktop->getActiveFrame();
+        }
 
         // identify module
         css::uno::Reference< css::frame::XModuleManager > xModuleManager    (m_xSMGR->createInstance(SERVICE_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
