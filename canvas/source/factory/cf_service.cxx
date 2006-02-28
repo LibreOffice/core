@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cf_service.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:46:34 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 #include "osl/mutex.hxx"
+#include "osl/process.h"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase3.hxx"
@@ -172,13 +173,14 @@ CanvasFactory::CanvasFactory(
     // append the usual preferred ones:
     sal_Int32 pos = m_services.getLength();
 #if defined WNT
-    m_services.realloc( pos + 4 );
+    m_services.realloc( pos + 5 );
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DXCanvas");
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.GLCanvas");
 #else
-    m_services.realloc( pos + 3 );
+    m_services.realloc( pos + 4 );
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.GLCanvas");
 #endif
+    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.CairoCanvas");
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.JavaCanvas");
     m_services[ pos   ] = OUSTR("com.sun.star.rendering.VCLCanvas");
 }
