@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:27:30 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,9 +330,19 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
+    ODataSource ODataSourceContext::createNewEvolutionLdap( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    {
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:ldap" );
+    }
+    //---------------------------------------------------------------------
+    ODataSource ODataSourceContext::createNewEvolutionGroupwise( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    {
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:groupwise" );
+    }
+    //---------------------------------------------------------------------
     ODataSource ODataSourceContext::createNewEvolution( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution" );
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:local" );
     }
 
     //---------------------------------------------------------------------
