@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:18:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,15 @@ Resource RSC_DATASOURCE_TYPES
     };
     String STR_EVOLUTION
     {
-        Text  ="sdbc:address:evolution";
+        Text  ="sdbc:address:evolution:local";
+    };
+    String STR_EVOLUTION_GROUPWISE
+    {
+        Text  ="sdbc:address:evolution:groupwise";
+    };
+    String STR_EVOLUTION_LDAP
+    {
+        Text  ="sdbc:address:evolution:ldap";
     };
     String STR_KAB
     {
@@ -201,8 +209,18 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     };
     String STR_EVOLUTION
     {
-        Text [ de ] = "Evolution Adressbuch";
-        Text[ en-US ] = "Evolution Address Book";
+        Text [ de ] = "Evolution Local Adressbuch";
+        Text[ en-US ] = "Evolution Local";
+    };
+    String STR_EVOLUTION_GROUPWISE
+    {
+        Text [ de ] = "Groupwise Adressbuch";
+        Text[ en-US ] = "Groupwise";
+    };
+    String STR_EVOLUTION_LDAP
+    {
+        Text [ de ] = "Evolution LDAP Adressbuch";
+        Text[ en-US ] = "Evolution LDAP";
     };
     String STR_KAB
     {
