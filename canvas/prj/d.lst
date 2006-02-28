@@ -1,4 +1,5 @@
 ..\%__SRC%\bin\canvastools*.dll %_DEST%\bin%_EXT%\canvastools*.dll
+..\%__SRC%\bin\cairocanvas*.dll %_DEST%\bin%_EXT%\cairocanvas*.dll
 ..\%__SRC%\bin\vclcanvas*.dll %_DEST%\bin%_EXT%\vclcanvas*.dll
 ..\%__SRC%\bin\nullcanvas*.dll %_DEST%\bin%_EXT%\nullcanvas*.dll
 ..\%__SRC%\bin\canvasfactory.uno.dll %_DEST%\bin%_EXT%\canvasfactory.uno.dll
