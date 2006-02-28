@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 12:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 
 #include <windows.h>
+#include <tlhelp32.h>
+#include <systools/win32/uwinapi.h>
 #include <winsock.h>
 #include <osl/diagnose.h>
 #include <sal/types.h>
@@ -252,10 +254,85 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
     return TRUE;
 }
 
+static DWORD GetParentProcessId()
+{
+    DWORD   dwParentProcessId = 0;
+    HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+
+    if ( IsValidHandle( hSnapshot ) )
+    {
+        PROCESSENTRY32  pe;
+        BOOL            fSuccess;
+
+        ZeroMemory( &pe, sizeof(pe) );
+        pe.dwSize = sizeof(pe);
+        fSuccess = Process32First( hSnapshot, &pe );
+
+        while( fSuccess )
+        {
+            if ( GetCurrentProcessId() == pe.th32ProcessID )
+            {
+                dwParentProcessId = pe.th32ParentProcessID;
+                break;
+            }
+
+            fSuccess = Process32Next( hSnapshot, &pe );
+        }
+
+        CloseHandle( hSnapshot );
+    }
+
+    return dwParentProcessId;
+}
+
+static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
+{
+    DWORD   dwParentProcessId = (DWORD)lpParam;
+
+    HANDLE  hParentProcess = OpenProcess( SYNCHRONIZE, FALSE, dwParentProcessId );
+    if ( IsValidHandle( hParentProcess ) )
+    {
+        if ( WAIT_OBJECT_0 == WaitForSingleObject( hParentProcess, INFINITE ) )
+        {
+            TerminateProcess( GetCurrentProcess(), 0 );
+        }
+        CloseHandle( hParentProcess );
+    }
+    return 0;
+}
+
 BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     switch (fdwReason)
     {
+        case DLL_PROCESS_ATTACH:
+        {
+            TCHAR   szBuffer[64];
+
+            // This code will attach the process to it's parent process
+            // if the parent process had set the environment variable.
+            // The corresponding code (setting the environment variable)
+            // is is desktop/win32/source/officeloader.cxx
+
+
+            DWORD   dwResult = GetEnvironmentVariable( "ATTACHED_PARENT_PROCESSID", szBuffer, sizeof(szBuffer) );
+
+            if ( dwResult && dwResult < sizeof(szBuffer) )
+            {
+                DWORD   dwThreadId = 0;
+
+                DWORD   dwParentProcessId = (DWORD)atol( szBuffer );
+
+                if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
+                {
+                    // No error check, it works or it does not
+                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId );
+                }
+            }
+
+            return TRUE;
+        }
+
         case DLL_THREAD_ATTACH:
             break;
 
