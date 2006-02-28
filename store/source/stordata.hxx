@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stordata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:45:37 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORDATA_HXX_
-#define _STORE_STORDATA_HXX_ "$Revision: 1.3 $"
+#define _STORE_STORDATA_HXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -67,7 +67,7 @@ namespace store
  * OStoreDataPageData.
  *
  *======================================================================*/
-#define STORE_MAGIC_DATAPAGE 0x94190310UL
+#define STORE_MAGIC_DATAPAGE sal_uInt32(0x94190310)
 
 struct OStoreDataPageData : public store::OStorePageData
 {
@@ -84,7 +84,7 @@ struct OStoreDataPageData : public store::OStorePageData
     */
     static sal_uInt16 size (void)
     {
-        return 0;
+        return sal_uInt16(0);
     }
 
     /** capacity.
@@ -160,7 +160,7 @@ inline OStoreDataPageObject::OStoreDataPageObject (page& rPage)
  * OStoreIndirectionPageData.
  *
  *======================================================================*/
-#define STORE_MAGIC_INDIRECTPAGE 0x89191107UL
+#define STORE_MAGIC_INDIRECTPAGE sal_uInt32(0x89191107)
 
 struct OStoreIndirectionPageData : public store::OStorePageData
 {
@@ -179,7 +179,7 @@ struct OStoreIndirectionPageData : public store::OStorePageData
     */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G));
+        return sal_uInt16(sizeof(G));
     }
 
     /** capacity.
@@ -197,11 +197,11 @@ struct OStoreIndirectionPageData : public store::OStorePageData
     */
     static sal_uInt16 capacityCount (const D& rDescr)
     {
-        return (capacity(rDescr) / sizeof(sal_uInt32));
+        return sal_uInt16(capacity(rDescr) / sizeof(sal_uInt32));
     }
     sal_uInt16 capacityCount (void) const
     {
-        return (capacity() / sizeof(sal_uInt32));
+        return sal_uInt16(capacity() / sizeof(sal_uInt32));
     }
 
     /** Construction.
@@ -428,7 +428,7 @@ struct OStoreDirectoryDataBlock
     */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G) + sizeof(LinkTable) + sizeof(sal_uInt32));
+        return sal_uInt16(sizeof(G) + sizeof(LinkTable) + sizeof(sal_uInt32));
     }
 
     /** initialize.
@@ -575,7 +575,7 @@ struct OStoreDirectoryDataBlock
  * OStoreDirectoryPageData.
  *
  *======================================================================*/
-#define STORE_MAGIC_DIRECTORYPAGE 0x62190120UL
+#define STORE_MAGIC_DIRECTORYPAGE sal_uInt32(0x62190120)
 
 struct OStoreDirectoryPageData : public store::OStorePageData
 {
