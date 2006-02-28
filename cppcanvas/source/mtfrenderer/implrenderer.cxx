@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:14:06 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2655,7 +2655,7 @@ namespace cppcanvas
                 {
                     // only a single action. Setup subset, and call functor
                     Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = ::std::max( 0L,
+                    aSubset.mnSubsetBegin = ::std::max( sal_Int32( 0 ),
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
                                                         nEndIndex - aRangeBegin->mnOrigIndex );
@@ -2672,7 +2672,7 @@ namespace cppcanvas
                     // render partial first, full intermediate, and
                     // partial last action
                     Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = ::std::max( 0L,
+                    aSubset.mnSubsetBegin = ::std::max( sal_Int32( 0 ),
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
 
