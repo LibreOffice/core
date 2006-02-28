@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stortree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:48:29 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.3 $"
+#define _STORE_STORTREE_HXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -134,7 +134,7 @@ struct OStoreBTreeEntry
  * OStoreBTreeNodeData.
  *
  *======================================================================*/
-#define STORE_MAGIC_BTREENODE 0x58190322UL
+#define STORE_MAGIC_BTREENODE sal_uInt32(0x58190322)
 
 struct OStoreBTreeNodeData : public store::OStorePageData
 {
@@ -153,7 +153,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G));
+        return sal_uInt16(sizeof(G));
     }
 
     /** capacity.
@@ -171,7 +171,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     sal_uInt16 capacityCount (void) const
     {
-        return (capacity() / sizeof(T));
+        return sal_uInt16(capacity() / sizeof(T));
     }
 
     /** usage.
@@ -189,12 +189,12 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     sal_uInt16 usageCount (void) const
     {
-        return (usage() / sizeof(T));
+        return sal_uInt16(usage() / sizeof(T));
     }
     void usageCount (sal_uInt16 nCount)
     {
         base::m_aDescr.m_nUsed  = base::size() + self::size();
-        base::m_aDescr.m_nUsed += nCount * sizeof(T);
+        base::m_aDescr.m_nUsed += sal_uInt16(nCount * sizeof(T));
     }
 
     /** Construction.
