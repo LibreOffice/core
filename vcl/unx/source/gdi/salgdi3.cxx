@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 13:50:19 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,12 +729,17 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
 void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
     Display* pDisplay = GetXDisplay();
-    Visual* pVisual = GetDisplay()->GetVisual()->GetVisual();
+    XRenderPictFormat* pVisualFormat = (XRenderPictFormat*) GetXRenderFormat();
+
+    if( !pVisualFormat )
+    {
+        Visual* pVisual = GetDisplay()->GetVisual()->GetVisual();
 #ifdef XRENDER_LINK
-    XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat ( pDisplay, pVisual );
+        pVisualFormat = XRenderFindVisualFormat ( pDisplay, pVisual );
 #else
-    XRenderPictFormat* pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
+        pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
 #endif
+    }
 
     // create xrender Picture for font foreground
     static Pixmap aPixmap;
