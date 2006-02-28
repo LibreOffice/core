@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:33:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ protected:
     SalColormap    *m_pColormap;
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
+    void*           pRenderFormat_;
 
     XLIB_Region     pPaintRegion_;
     XLIB_Region     pClipRegion_;
@@ -198,7 +199,7 @@ public:
     virtual             ~X11SalGraphics();
 
             void            Init( SalFrame *pFrame, Drawable aDrawable );
-            void            Init( X11SalVirtualDevice *pVirtualDevice );
+            void            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
 
@@ -207,6 +208,8 @@ public:
     inline  SalVisual       *GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
+    inline  void*           GetXRenderFormat() { return pRenderFormat_; }
+    inline  void            SetXRenderFormat( void* pRenderFormat ) { pRenderFormat_ = pRenderFormat; }
     inline  SalColormap    &GetColormap() const { return *m_pColormap; }
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
