@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:02:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,15 @@ typedef unsigned char       sal_uInt8;
     #define SAL_CONST_INT64(x)       x##i64
     #define SAL_CONST_UINT64(x)      x##ui64
 #elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
-    #if SAL_TYPES_SIZEOFLONGLONG == 8
+    #if SAL_TYPES_SIZEOFLONG == 8
+        typedef signed long int         sal_Int64;
+        typedef unsigned long int       sal_uInt64;
+
+
+        /*  The following are macros that will add the 64 bit constant suffix. */
+        #define SAL_CONST_INT64(x)       x##l
+        #define SAL_CONST_UINT64(x)      x##ul
+    #elif SAL_TYPES_SIZEOFLONGLONG == 8
         typedef signed long long    sal_Int64;
         typedef unsigned long long  sal_uInt64;
 
@@ -103,14 +111,6 @@ typedef unsigned char       sal_uInt8;
         #define SAL_CONST_INT64(x)       x##ll
         #define SAL_CONST_UINT64(x)      x##ull
 
-    #elif SAL_TYPES_SIZEOFLONG == 8
-        typedef signed long         sal_Int64;
-        typedef unsigned long       sal_uInt64;
-
-
-        /*  The following are macros that will add the 64 bit constant suffix. */
-        #define SAL_CONST_INT64(x)       x##l
-        #define SAL_CONST_UINT64(x)      x##ul
     #else
         #error "Could not find 64-bit type, add support for your architecture"
     #endif
@@ -185,6 +185,14 @@ typedef void *                   sal_Handle;
 #define SAL_MIN_INT64         ((sal_Int64)  (SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF) - 1))
 #define SAL_MAX_INT64         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
 #define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
+
+#if SAL_TYPES_SIZEOFLONG == 4
+#define SAL_MAX_SSIZE       SAL_MAX_INT32
+#define SAL_MAX_SIZE        SAL_MAX_UINT32
+#elif SAL_TYPES_SIZEOFLONG == 8
+#define SAL_MAX_SSIZE       SAL_MAX_INT64
+#define SAL_MAX_SIZE        SAL_MAX_UINT64
+#endif
 
 #if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX)
 #   define SAL_MAX_ENUM 0x7fffffff
