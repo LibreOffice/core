@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:50:17 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,129 +89,191 @@ namespace connectivity
         static sal_Int32    const s_nNULLABLE = 1;
         static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
 
-static GParamSpec **pFields = NULL;
-static guint        nFields = 0;
+        static ColumnProperty **pFields=NULL;
+        static guint        nFields = 0;
 
-static const char *pBlackList[] = {
-        "id",
-        "list-show-addresses"
-};
-
-static void
-initFields()
-{
-    if( !pFields )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pFields )
+        static const char *pBlackList[] =
         {
-            guint        nProps;
-            GParamSpec **pProps;
-            GParamSpec **pToBeFields;
-            pProps = g_object_class_list_properties
-                    ( (GObjectClass *) g_type_class_ref( E_TYPE_CONTACT ),
-                      &nProps );
-            pToBeFields = g_new0( GParamSpec *, nProps );
+            "id",
+            "list-show-addresses",
+            "address-label-home",
+            "address-label-work",
+            "address-label-other"
+        };
 
-            for ( guint i = 0; i < nProps; i++ )
-            {
-                switch (pProps[i]->value_type)
-                {
-                case G_TYPE_STRING:
-                case G_TYPE_BOOLEAN:
-                {
-                    bool bAdd = true;
-                    const char *pName = g_param_spec_get_name( pProps[i] );
-                    for (int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
-                    {
-                        if( !strcmp( pBlackList[j], pName ) )
-                        {
-                            bAdd = false;
-                            break;
-                        }
-                    }
-                    if( bAdd )
-                        pToBeFields[ nFields++ ] = g_param_spec_ref( pProps[i] );
-                    break;
-                }
-                default:
-                    break;
-                }
-            }
-            pFields = pToBeFields;
+    static void
+    splitColumn (ColumnProperty **pToBeFields)
+    {
+        for (int i = 0; i < OTHER_ZIP; i++)
+        {
+            pToBeFields[nFields] = g_new0(ColumnProperty,1);
+            pToBeFields[nFields]->bIsSplittedValue = true;
+            pToBeFields[nFields]->pField = g_param_spec_ref(g_param_spec_string (evo_addr[i].pColumnName,evo_addr[i].pColumnName,"",NULL,G_PARAM_WRITABLE));
+            nFields++;
         }
     }
-}
 
-guint
-getFieldCount()
-{
-    initFields();
-    return nFields;
-}
-
-const GParamSpec *
-getField(guint n)
-{
-    initFields();
-    if( n < nFields )
-        return pFields[n];
-    else
-        return NULL;
-}
-
-sal_Int32
-getFieldType( sal_Int32 nCol )
-{
-    sal_Int32 nType = DataType::VARCHAR;
-    initFields();
-    if (nCol >= 0 && nCol < nFields )
+    static void
+    initFields()
     {
-        if( pFields[nCol]->value_type == G_TYPE_STRING )
-            nType = DataType::VARCHAR;
+        if( !pFields )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pFields )
+            {
+                guint        nProps;
+                ColumnProperty **pToBeFields;
+                GParamSpec **pProps;
+                nFields = 0;
+                pProps = g_object_class_list_properties
+                    ( (GObjectClass *) g_type_class_ref( E_TYPE_CONTACT ),
+                         &nProps );
+                pToBeFields = g_new0(ColumnProperty  *, (nProps + OTHER_ZIP)/* new column(s)*/ );
+                for ( guint i = 0; i < nProps; i++ )
+                {
+                    switch (pProps[i]->value_type)
+                    {
+                        case G_TYPE_STRING:
+                        case G_TYPE_BOOLEAN:
+                        {
+                            bool bAdd = true;
+                            const char *pName = g_param_spec_get_name( pProps[i] );
+                            for (int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
+                            {
+                                if( !strcmp( pBlackList[j], pName ) )
+                                {
+                                    bAdd = false;
+                                    break;
+                                }
+                            }
+                            if( bAdd )
+                            {
+                                pToBeFields[nFields]= g_new0(ColumnProperty,1);
+                                pToBeFields[nFields]->bIsSplittedValue=false;
+                                pToBeFields[ nFields++ ]->pField = g_param_spec_ref( pProps[i] );
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+
+                splitColumn(pToBeFields);
+                pFields = pToBeFields;
+            }
+        }
+    }
+
+
+    guint
+    getFieldCount()
+    {
+        initFields();
+        return nFields;
+    }
+
+    const ColumnProperty *
+    getField(guint n)
+    {
+        initFields();
+        if( n < nFields )
+            return pFields[n];
         else
-            nType = DataType::BIT;
+            return NULL;
     }
-    return nType;
-}
 
-rtl::OUString
-getFieldTypeName( sal_Int32 nCol )
-{
-    switch( getFieldType( nCol ) )
+    sal_Int32
+    getFieldType( sal_Int32 nCol )
     {
-    case DataType::BIT:
-            return ::rtl::OUString::createFromAscii( "BIT" );
-    case DataType::VARCHAR:
-            return ::rtl::OUString::createFromAscii( "VARCHAR" );
-    default:
-            break;
+        sal_Int32 nType = DataType::VARCHAR;
+        initFields();
+        if (nCol >= 0 && nCol < nFields )
+        {
+            if( ((GParamSpec *)pFields[nCol]->pField)->value_type == G_TYPE_STRING )
+                nType = DataType::VARCHAR;
+            else
+                nType = DataType::BIT;
+        }
+        return nType;
     }
-    return ::rtl::OUString();
-}
 
-rtl::OUString
-getFieldName( sal_Int32 nCol )
-{
-    const GParamSpec *pSpec = getField( nCol );
-    rtl::OUString aName;
+    sal_Int32 findEvoabField(const rtl::OUString& aColName)
+    {
+        sal_Int32 nRet = -1;
+        sal_Bool bFound = sal_False;
+        initFields();
+        for (int i=0;(i < nFields) && !bFound;i++)
+        {
+            rtl::OUString aName = getFieldName(i);
+            if (aName == aColName)
+            {
+                nRet = i;
+                bFound = sal_True;
+            }
+        }
+        return nRet;
+    }
 
-    if( pSpec )
+    rtl::OUString
+    getFieldTypeName( sal_Int32 nCol )
+    {
+        switch( getFieldType( nCol ) )
+        {
+            case DataType::BIT:
+                return ::rtl::OUString::createFromAscii( "BIT" );
+            case DataType::VARCHAR:
+                return ::rtl::OUString::createFromAscii( "VARCHAR" );
+            default:
+                break;
+        }
+        return ::rtl::OUString();
+    }
+
+    rtl::OUString
+    getFieldName( sal_Int32 nCol )
+    {
+        const GParamSpec *pSpec = getField( nCol )->pField;
+        rtl::OUString aName;
+        initFields();
+
+        if( pSpec )
             aName = rtl::OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
                                             RTL_TEXTENCODING_UTF8 );
-    aName = aName.replace( '-', '_' );
-    return aName;
-}
+            aName = aName.replace( '-', '_' );
+        return aName;
+    }
+
+    void
+    free_column_resources()
+    {
+        for (int i=nFields-1;i > 0;i--)
+        {
+            if (pFields && pFields[i] )
+            {
+                if (pFields[i]->pField)
+                    g_param_spec_unref(pFields[i]->pField);
+                g_free(pFields[i]);
+            }
+        }
+       if(pFields)
+        {
+            g_free(pFields);
+            pFields=NULL;
+        }
+
+    }
+
 
     }
 }
+
 
 OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)
     : ::connectivity::ODatabaseMetaDataBase(_pCon)
     ,m_pConnection(_pCon)
 {
     OSL_ENSURE(m_pConnection,"OEvoabDatabaseMetaData::OEvoabDatabaseMetaData: No connection set!");
-    //construct();
 }
 void OEvoabDatabaseMetaData::construct()
 {
@@ -272,7 +334,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRow
             aRow[5] = new ORowSetValueDecorator( static_cast<sal_Int16>( getFieldType( i ) ) );
             aRow[6] = new ORowSetValueDecorator( getFieldTypeName( i ) );
 
-            OSL_TRACE( "   ColumnName = '%s'", g_param_spec_get_name( pFields[i] ) );
+            OSL_TRACE( "   ColumnName = '%s'", g_param_spec_get_name( pFields[i]->pField ) );
             // COLUMN_NAME
             aRow[4] = new ORowSetValueDecorator( getFieldName( i ) );
             // ORDINAL_POSITION
