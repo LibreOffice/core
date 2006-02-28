@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:40:21 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.6 $"
+#define _STORE_TYPES_H_ "$Revision: 1.7 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -71,9 +71,9 @@ extern "C" {
 /** Attributes (predefined).
     @see store_attrib()
  */
-#define STORE_ATTRIB_ISLINK  0x10000000UL
-#define STORE_ATTRIB_ISDIR   0x20000000UL
-#define STORE_ATTRIB_ISFILE  0x40000000UL
+#define STORE_ATTRIB_ISLINK  ((sal_uInt32)0x10000000)
+#define STORE_ATTRIB_ISDIR   ((sal_uInt32)0x20000000)
+#define STORE_ATTRIB_ISFILE  ((sal_uInt32)0x40000000)
 
 
 /** Access Mode enumeration.
