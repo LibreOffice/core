@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:18:27 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,8 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
             case DST_OUTLOOKEXP:
             case DST_FLAT:
             case DST_EVOLUTION:
+            case DST_EVOLUTION_GROUPWISE:
+            case DST_EVOLUTION_LDAP:
             case DST_KAB:
              case DST_THUNDERBIRD:
             case DST_CALC:
@@ -433,6 +435,8 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_OUTLOOKEXP:
         case DST_JDBC:
         case DST_EVOLUTION:
+        case DST_EVOLUTION_GROUPWISE:
+        case DST_EVOLUTION_LDAP:
         case DST_KAB:
             bEnableBrowseButton = FALSE;
             break;
@@ -474,6 +478,8 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
         case DST_EVOLUTION:
+        case DST_EVOLUTION_GROUPWISE:
+        case DST_EVOLUTION_LDAP:
         case DST_KAB:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP: //????
@@ -551,7 +557,11 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
             return DST_OUTLOOK;
         if (_rDsn.EqualsIgnoreCaseAscii("outlookexp", nSeparator,_rDsn.Len() - nSeparator))
             return DST_OUTLOOKEXP;
-        if (_rDsn.EqualsIgnoreCaseAscii("evolution", nSeparator,_rDsn.Len() - nSeparator))
+        if (_rDsn.EqualsIgnoreCaseAscii("evolution:ldap", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_EVOLUTION_LDAP;
+        if (_rDsn.EqualsIgnoreCaseAscii("evolution:groupwise", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_EVOLUTION_GROUPWISE;
+        if (_rDsn.EqualsIgnoreCaseAscii("evolution:local", nSeparator,_rDsn.Len() - nSeparator))
             return DST_EVOLUTION;
         if (_rDsn.EqualsIgnoreCaseAscii("kab", nSeparator,_rDsn.Len() - nSeparator))
             return DST_KAB;
