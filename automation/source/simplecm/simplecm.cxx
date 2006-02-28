@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:22 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,7 @@ BOOL SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
 {
     BOOL bWasError = FALSE;
     char* pBuffer = NULL;
-    ULONG nLen;
+    comm_UINT32 nLen;
     bWasError = pPacketHandler->ReceiveData( (void* &)pBuffer, nLen ) != C_ERROR_NONE;
     if ( !bWasError )
     {
