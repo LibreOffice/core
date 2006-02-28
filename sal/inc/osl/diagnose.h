@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:26:39 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,28 @@ sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorM
     For message delivery
 */
 
+/** a message delivery function which receives a pre-formatted message string
+*/
 typedef void (SAL_CALL *pfunc_osl_printDebugMessage)( const sal_Char * pszMessage );
 
+/** a message delivery function which receives detailed information about where the message was triggered
+*/
+typedef void (SAL_CALL *pfunc_osl_printDetailedDebugMessage)( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char* pszMessage );
+
+/** sets a message delivery function
+
+    The function set here is ignored if a function for detailed message information
+    (pfunc_osl_printDetailedDebugMessage) has been set.
+
+    The given message handler must be able to cope with a <NULL/> message.
+*/
 pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
+
+/** sets a delivery function for detailed message information.
+
+    The given message handler must be able to cope with a <NULL/> message.
+*/
+pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc );
 
 #ifdef __cplusplus
 }
