@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:53:36 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@ static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 typedef pfunc_osl_printDebugMessage oslDebugMessageFunc;
 static oslDebugMessageFunc volatile g_pDebugMessageFunc = 0;
 
+typedef pfunc_osl_printDetailedDebugMessage oslDetailedDebugMessageFunc;
+static oslDetailedDebugMessageFunc volatile g_pDetailedDebugMessageFunc = 0;
+
 static void osl_diagnose_backtrace_Impl (
     oslDebugMessageFunc f);
 
@@ -124,8 +127,7 @@ static void osl_diagnose_frame_Impl (
               sname ? sname : "???",
               offset);
 
-    if ( !getenv("DISABLE_SAL_DBGBOX") || 0 != f )
-        OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
+    OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 }
 
 /************************************************************************/
@@ -207,6 +209,17 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     sal_Int32       nLine,
     const sal_Char* pszMessage)
 {
+    /* If there's a callback for detailed messages, use it */
+    if ( g_pDetailedDebugMessageFunc != NULL )
+    {
+        g_pDetailedDebugMessageFunc( pszFileName, nLine, pszMessage );
+        return sal_False;
+    }
+
+    /* if SAL assertions are disabled in general, stop here */
+    if ( getenv("DISABLE_SAL_DBGBOX") )
+        return sal_False;
+
     oslDebugMessageFunc f = g_pDebugMessageFunc;
     char                szMessage[1024];
 
@@ -228,8 +241,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     pthread_mutex_lock(&g_mutex);
 
     /* output message buffer */
-    if ( !getenv("DISABLE_SAL_DBGBOX") || 0 != f )
-        OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
+    OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
     /* output backtrace */
     osl_diagnose_backtrace_Impl(f);
@@ -266,6 +278,17 @@ oslDebugMessageFunc SAL_CALL osl_setDebugMessageFunc (
 {
     oslDebugMessageFunc pOldFunc = g_pDebugMessageFunc;
     g_pDebugMessageFunc = pNewFunc;
+    return pOldFunc;
+}
+
+/************************************************************************/
+/* osl_setDetailedDebugMessageFunc */
+/************************************************************************/
+pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
+    pfunc_osl_printDetailedDebugMessage pNewFunc)
+{
+    oslDetailedDebugMessageFunc pOldFunc = g_pDebugMessageFunc;
+    g_pDetailedDebugMessageFunc = pNewFunc;
     return pOldFunc;
 }
 
