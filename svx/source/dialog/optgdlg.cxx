@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:24:13 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -545,6 +545,11 @@ IMPL_LINK( OfaMiscTabPage, HelpAgentResetHdl_Impl, PushButton*, EMPTYARG )
 namespace
 {
     // ...................................................................
+    static const sal_Char* getCairoRendererAsciiName()
+    {
+        return "com.sun.star.rendering.CairoCanvas";
+    }
+    // ...................................................................
     static const sal_Char* getDirectXRendererAsciiName()
     {
         return "com.sun.star.rendering.DXCanvas";
@@ -562,19 +567,26 @@ namespace
         static bool bIsAvailable = false;
         if ( !bWasHere )
         {
-            Reference< XInterface > xDirectXRenderer;
+            Reference< XInterface > xAcceleratedRenderer;
             try
             {
                 Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
                 if ( xORB.is() )
-                    xDirectXRenderer = xORB->createInstance(
+                {
+                    xAcceleratedRenderer = xORB->createInstance(
                         ::rtl::OUString::createFromAscii( getDirectXRendererAsciiName() )
                     );
+
+                    if( !xAcceleratedRenderer.is() )
+                        xAcceleratedRenderer = xORB->createInstance(
+                            ::rtl::OUString::createFromAscii( getCairoRendererAsciiName() )
+                        );
+                }
             }
             catch( const Exception& )
             {
             }
-            bIsAvailable = xDirectXRenderer.is();
+            bIsAvailable = xAcceleratedRenderer.is();
             bWasHere = true;
         }
         return bIsAvailable;
@@ -627,11 +639,12 @@ namespace
         do
         {
             ::rtl::OUString sServiceName = sPreferredServices.getToken( 0, ';', nTokenPos );
-            if ( sServiceName.equalsAscii( getDirectXRendererAsciiName() ) )
-                // the DirectX renderer is to be preferred (over the VCL renderer)
+            if ( sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
+                 sServiceName.equalsAscii( getCairoRendererAsciiName() ) )
+                // the accelerated renderers are to be preferred (over the VCL renderer)
                 return TRUE;
             if ( sServiceName.equalsAscii( getVCLRendererAsciiName() ) )
-                // the VCL renderer is to be preferred (over the DirectX renderer)
+                // the VCL renderer is to be preferred (over the accelerated renderers)
                 return FALSE;
         }
         while ( nTokenPos > 0 );
@@ -641,10 +654,17 @@ namespace
     // -------------------------------------------------------------------
     void VCLSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
     {
-        const sal_Char* pPreferredRenderer = _bEnabled ? getDirectXRendererAsciiName() : getVCLRendererAsciiName();
-
         ::rtl::OUStringBuffer aPreferredServices;
-        aPreferredServices.appendAscii( pPreferredRenderer );
+        if( _bEnabled )
+        {
+            aPreferredServices.appendAscii( getDirectXRendererAsciiName() );
+            aPreferredServices.append( (sal_Unicode)';' );
+            aPreferredServices.appendAscii( getCairoRendererAsciiName() );
+        }
+        else
+        {
+            aPreferredServices.appendAscii( getVCLRendererAsciiName() );
+        }
 
         // append all other services
         ::rtl::OUString sPreviouslyPreferred( implGetRendererPreference() );
@@ -652,7 +672,9 @@ namespace
         do
         {
             ::rtl::OUString sServiceName = sPreviouslyPreferred.getToken( 0, ';', nTokenPos );
-            if ( sServiceName.equalsAscii( pPreferredRenderer ) )
+            if ( !_bEnabled && sServiceName.equalsAscii( getVCLRendererAsciiName() ) ||
+                 _bEnabled && (sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
+                               sServiceName.equalsAscii( getCairoRendererAsciiName() )) )
                 // no duplicate ...
                 continue;
 
@@ -693,7 +715,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #endif
     aMenuFL             ( this, ResId( FL_MENU ) ),
     aMenuIconsCB        ( this, ResId( CB_MENU_ICONS )),
-    aShowInactiveItemsCB( this, ResId( CB_SHOW_INACTIVE ) ),
+    aShowInactiveItemsCB( this ), // #i59119# remove this for next incompatible build
     aFontListsFL        ( this, ResId( FL_FONTLISTS) ),
     aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
@@ -710,9 +732,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     a3DOpenGLFasterCB   ( this, ResId( CB_3D_OPENGL_FASTER ) ),
     a3DDitheringCB      ( this, ResId( CB_3D_DITHERING ) ),
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
-    aWorkingSetBox      ( this, ResId( FL_WORKINGSET ) ),
-    aDocViewBtn         ( this, ResId( BTN_DOCVIEW ) ),
-    aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) ),
+    aWorkingSetBox      ( this ), // #i59119# remove this for next incompatible build
+    aDocViewBtn         ( this ), // #i59119# remove this for next incompatible build
+    aOpenWinBtn         ( this ), // #i59119# remove this for next incompatible build
     pAppearanceCfg(new SvtTabAppearanceCfg)
 {
 
@@ -780,8 +802,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     Control* pMiscOptions[] =
     {
         &aMenuFL, &aFontShowCB, &aShowInactiveItemsCB,
-        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB,
-        &aRenderingFL, &aUseHardwareAccell
+        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
