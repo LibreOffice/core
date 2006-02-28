@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:22:52 $
+#   last change: $Author: kz $ $Date: 2006-02-28 11:59:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.13 $ ';
+my $id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -117,7 +117,10 @@ my $opt_fast              = 0;              # fast mode, disable conflict check
 my $opt_force             = 0;              # force integration
 my $opt_no_set_integrated = 0;              # don't toggle integration status
 my $vcsid = "unknown";
+my $opt_auto_int          = 0;              # integrate automatically if no conflicts are shown
+my $opt_quiet             = 0;              # minimal output
 my @args_bak = @ARGV;
+my @problem_log = ();
 
 #### main #####
 my $parameter_list = $log->array2string(";",@args_bak) if defined($log);
@@ -129,6 +132,7 @@ if ( $mode eq 'cwsanalyze' ) {
     analyze($cws, $dir, @modules);
 }
 else {
+    auto_int($cws, $dir,@modules) if ($opt_auto_int); # will exit and doesn't return
     integrate($cws, $dir, @modules);
 }
 print_plog();
@@ -173,7 +177,7 @@ sub parse_options
 {   my $dir = 0;
     my $help = 0;
     my $success = GetOptions('d=s' => \$dir, 'n' => \$opt_fast, 'h' => \$help,
-                             'F' => \$opt_force, 'q' => \$opt_no_set_integrated);
+                             'F' => \$opt_force, 'q' => \$opt_no_set_integrated, 'A' => \$opt_auto_int, 'z' => \$opt_quiet);
     if ( !$success || @ARGV<1 ) {
         usage();
         exit(1);
@@ -264,6 +268,7 @@ sub analyze
     $stats .=   "$ntotal_removed removed";
     $stats .= $opt_fast ? '' : ", $ntotal_conflicts conflict(s), $ntotal_alerts alert(s)";
     print_message($stats);
+    return ($ntotal_conflicts,$ntotal_alerts) if $opt_auto_int;
 }
 
 # Integrate child workspace into master.
@@ -367,7 +372,10 @@ sub analyze_module
             # chdir into module
             $save_dir = cwd();
             if ( !chdir("$dir/$module") ) {
-                print_error("Can't chdir() to '$dir/$module'", 6);
+                my $test = cwd();
+                if ( $test !~ /.+$dir\/$module$/) {
+                    print_error("Can't chdir() to '$dir/$module'", 6);
+                }
             }
         }
       ANALYZE: foreach my $change_ref (@{$changed_files_ref}) {
@@ -743,7 +751,7 @@ sub get_changed_files
 
     my ($master_branch_tag, $cws_branch_tag, $cws_root_tag) = $cws->get_tags();
 
-    $cvs_module->verbose(1);
+    $cvs_module->verbose(1) if (! $opt_quiet);
     STDOUT->autoflush(1);
     print_message("Retrieving changes ...");
     my $changed_files_ref;
@@ -880,28 +888,129 @@ sub get_cvs_root
     return ($method, $vcsid, $server, $repository);
 }
 
-# problem logging
+sub plog
 {
-    my @problem_log = ();
+    my $message = shift;
 
-    sub plog
-    {
-        my $message = shift;
+    push(@problem_log, $message);
+}
 
-        push(@problem_log, $message);
-    }
-
-    sub print_plog
-    {
-        if ( @problem_log ) {
-            print_message("========== Problem Log ==========");
-            foreach ( @problem_log ) {
-                print "\t$_\n";
-            }
-            print_message("========== End Problem Log ==========");
+sub print_plog
+{
+    if ( @problem_log ) {
+        print_message("========== Problem Log ==========");
+        foreach ( @problem_log ) {
+            print "\t$_\n";
         }
+        print_message("========== End Problem Log ==========");
     }
 }
+
+sub auto_int
+{
+    my $ai_cws = shift;
+    my $ai_dir = shift;
+    my @ai_modules = @_;
+    print "\n**** starting with automatic integration after successful analyses.****\n" if (! $opt_quiet);
+
+    # ... more stuff
+    my $conflicts = 1;
+    my $alarms    = 1;
+    ($conflicts,$alarms) = analyze($ai_cws, $ai_dir, @ai_modules);
+    $alarms = &check_alarms($alarms) if ($alarms > 0);
+    if ( $conflicts + $alarms == 0 ) {
+        print "no conflicts or alarms are shown during analyses.\n" if (! $opt_quiet);
+        print "starting integration...\n" if (! $opt_quiet);
+        # remove directory
+        if ( $ai_dir ne cwd() )
+    {
+            system("rm -rf $ai_dir");
+            print_error("Can't remove directory '$ai_dir'", 6)  if (-e $ai_dir );
+            mkdir ($ai_dir,0775);
+            print_error("Can't mkdir() to '$ai_dir'", 6) if ( !-e $ai_dir );
+    } else
+    {
+            system("rm -rf *");
+    }
+        integrate($ai_cws, $ai_dir, @ai_modules);
+        my @final_log = &check_status_plog($ai_dir);    # can't commit changes
+        if ( scalar(@final_log) > 0 ) {
+            print "====================== Final Problem Log =====================\n";
+            foreach my $problem(@final_log)
+            {
+                print "$problem\n"
+            }
+            print "==============================================================\n";
+        } else
+        {
+            print "\n**************** All can't commit changes problems are resolved. ****************\n";
+            print "****************        No further problems are known            ****************\n";
+        }
+    } else
+    {
+    &print_plog();
+        print STDERR "Conflicts and/or alarms occured during analysis.\n";
+        print STDERR "Can't continue...... Bye!\n";
+    }
+    $log->end_log_extended($script_name,$vcsid,"success");
+    exit;
+}
+
+sub check_alarms
+{
+    my $alarms = shift;
+    foreach my $line(@problem_log)
+    {
+        if ($line =~ /def\sfile\sdetected/g)
+        {
+            print "ignoreing def file alarm....\n";
+        $alarms--;
+        }
+    }
+    return $alarms;
+}
+
+sub check_status_plog
+{
+    # cvs status file -> "up to date"? -> ok!
+
+    my $ai_dir          = shift;
+    my $problem;
+    my @final_problem_log = ();
+
+    print "Checking CVS status of files which can't be commited.....\n" if (! $opt_quiet);
+    foreach $problem(@problem_log) {                        # @problem_log is global defined!
+        my @result = split(":",$problem);
+        if ( $result[1] =~ "can't commit changes!" ) {
+            $result[0] =~ s/^\s+//;   # remove leading blanks
+            my @result2 = split("/",$result[0]);
+            my $module = $result2[0];             # get module name
+            $result[0] =~ s/^$module\///g;        # get rest of the file path
+            if (!chdir("$ai_dir/$module") ) {
+                my $test = cwd();
+                print STDERR "Check Status: CWD=$test\n";
+                if ( $test !~ /.+$dir\/$module$/) {
+                    print_error("Check Status: Can't chdir() to '$dir/$module'", 6);
+                }
+            }
+
+            my $cvs_archive = get_cvs_archive($result[0]);
+            my ($status, $working_rev, $repository_rev, $sticky_tag, $branch_rev,
+                    $sticky_date, $sticky_options) = $cvs_archive->status();
+            if ( $status =~ /Up-to-date/ ) {      # OK!
+                next;
+            } else
+            {
+                push(@final_problem_log,($problem . "    CVS Status:$status"));
+            }
+        } else
+        {
+            # conflicts and other problems
+            push(@final_problem_log, $problem);
+        }
+    }
+    return @final_problem_log;
+}   ##check_status
 
 sub print_message
 {
@@ -945,6 +1054,9 @@ sub usage
         print STDERR "\t-d dir\tscratch space\n";
         print STDERR "\t-q \tdo not set child workspace status to 'integrated'\n";
         print STDERR "\t-F\tdo integration even if status is already 'integrated'\n";
+        print STDERR "\t-A\trun cwsanalyze previously and integrate automatically when no conflicts or alerts are shown.\n";
+        print STDERR "\t  \tCheck files with 'can't commit changes' message after integration automatically.\n";
+        print STDERR "\t-z\tminimial output (quiet mode)\n";
     }
     else {
         print STDERR "Usage: cwsanalyze [-h] [-d dir] [-n] <all|module> ... \n";
