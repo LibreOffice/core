@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:27:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,14 @@ namespace abp
         /// creates a new Thunderbird data source
         ODataSource createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
-        /// creates a new Evolution data source
+        /// creates a new Evolution local data source
         ODataSource createNewEvolution( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+
+        /// creates a new Evolution LDAP data source
+        ODataSource createNewEvolutionLdap( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+
+        /// creates a new Evolution GROUPWISE data source
+        ODataSource createNewEvolutionGroupwise( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new KDE address book data source
         ODataSource createNewKab( const ::rtl::OUString& _rName ) SAL_THROW (( ));

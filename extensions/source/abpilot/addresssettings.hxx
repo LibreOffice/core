@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresssettings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:27:17 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@ namespace abp
         AST_MORK,
         AST_THUNDERBIRD,
         AST_EVOLUTION,
+        AST_EVOLUTION_GROUPWISE,
+        AST_EVOLUTION_LDAP,
         AST_KAB,
         AST_LDAP,
         AST_OUTLOOK,
