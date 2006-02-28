@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:44:04 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.7 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.8 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -96,7 +96,7 @@
 /*
  * __store_memcpy.
  */
-inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
+inline void __store_memcpy (void * dst, const void * src, sal_Size n)
 {
     __STORE_CSTD::memcpy (dst, src, n);
 }
@@ -104,7 +104,7 @@ inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
 /*
  * __store_memmove.
  */
-inline void __store_memmove (void * dst, const void * src, sal_uInt32 n)
+inline void __store_memmove (void * dst, const void * src, sal_Size n)
 {
     __STORE_CSTD::memmove (dst, src, n);
 }
@@ -112,7 +112,7 @@ inline void __store_memmove (void * dst, const void * src, sal_uInt32 n)
 /*
  * __store_memset.
  */
-inline void __store_memset (void * dst, int val, sal_uInt32 n)
+inline void __store_memset (void * dst, int val, sal_Size n)
 {
     __STORE_CSTD::memset (dst, val, n);
 }
@@ -179,7 +179,7 @@ struct OStorePageGuard
     }
 
     static sal_uInt32 crc32 (
-        sal_uInt32 nCRC32, const void *pData, sal_uInt32 nSize);
+        sal_uInt32 nCRC32, const void *pData, sal_Size nSize);
 };
 
 /*========================================================================
@@ -397,8 +397,8 @@ struct OStorePageNameBlock
     */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G) + sizeof(K) + sizeof(sal_uInt32) +
-                sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]));
+        return sal_uInt16(sizeof(G) + sizeof(K) + sizeof(sal_uInt32) +
+                          sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]));
     }
 
     /** initialize.
@@ -510,7 +510,7 @@ struct OStorePageData
      */
     static sal_uInt16 size (void)
     {
-        return (sizeof(G) + sizeof(D) + 2 * sizeof(L));
+        return sal_uInt16(sizeof(G) + sizeof(D) + 2 * sizeof(L));
     }
 
     /** location.
@@ -532,7 +532,7 @@ struct OStorePageData
         return rtl_allocateMemory (n);
     }
 
-    static void* operator new (size_t n, sal_uInt16 nPageSize)
+    static void* operator new (size_t, sal_uInt16 nPageSize)
     {
         return rtl_allocateMemory (nPageSize);
     }
