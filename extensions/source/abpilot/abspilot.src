@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 18:07:05 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ de ] = "Mozilla / Netscape";
         Text [ en-US ] = "Mozilla / Netscape";
     };
+// All position & size/height data below this is not used
     RadioButton RB_THUNDERBIRD
     {
         Pos     = MAP_APPFONT ( 15, 79 ) ;
@@ -144,6 +145,22 @@ TabPage RID_PAGE_SELECTABTYPE
 
         Text [ de ] = "Evolution";
         Text [ en-US ] = "Evolution";
+    };
+    RadioButton RB_EVOLUTION_GROUPWISE
+     {
+         Pos        = MAP_APPFONT ( 15, 90 ) ;
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+
+        Text [ de ] = "Groupwise";
+        Text [ en-US ] = "Groupwise";
+    };
+    RadioButton RB_EVOLUTION_LDAP
+     {
+         Pos        = MAP_APPFONT ( 15, 90 ) ;
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+
+        Text [ de ] = "Evolution LDAP";
+        Text [ en-US ] = "Evolution LDAP";
     };
     RadioButton RB_KAB
      {
