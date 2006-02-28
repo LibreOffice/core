@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EApi.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:49:08 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,52 +51,41 @@ G_BEGIN_DECLS
 // We attempt to define a minimum API that we use:
 
 // e-contact.h
+#ifdef DECLARE_FN_POINTERS
+#define EAPI_EXTERN
+#else
+#define EAPI_EXTERN extern
+#endif
+
+
 typedef void EContact;
 #define E_CONTACT(a) ((EContact *)(a))
 #define E_TYPE_CONTACT (e_contact_get_type())
 typedef int EContactField;
 
+EAPI_EXTERN const char      *(*e_contact_field_name)   ( EContactField field_id);
+EAPI_EXTERN gpointer        (*e_contact_get)   (EContact *contact, EContactField field_id);
+EAPI_EXTERN const gpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
 // e-source.h
 typedef void ESource;
 #define E_SOURCE(a) ((ESource *)(a))
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-const char  *(*e_source_peek_name)    (ESource *source);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-const gchar *(*e_source_get_property) (ESource *source,
+EAPI_EXTERN const char  *(*e_source_peek_name)    (ESource *source);
+EAPI_EXTERN const gchar *(*e_source_get_property) (ESource *source,
                        const gchar *property);
 
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-GType         (*e_contact_get_type) (void);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EContactField (*e_contact_field_id) (const char *field_name);
+EAPI_EXTERN GType         (*e_contact_get_type) (void);
+EAPI_EXTERN EContactField (*e_contact_field_id) (const char *field_name);
 
 // e-source-list.h
 typedef void ESourceList;
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-GSList *(*e_source_list_peek_groups) (ESourceList *list);
+EAPI_EXTERN GSList *(*e_source_list_peek_groups) (ESourceList *list);
 
 // e-source-group.h
 typedef void ESourceGroup;
 #define E_SOURCE_GROUP(a) ((ESourceGroup *)(a))
 
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-GSList  *(*e_source_group_peek_sources) (ESourceGroup *group);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-const char *(*e_source_group_peek_base_uri)  (ESourceGroup *group);
+EAPI_EXTERN GSList  *(*e_source_group_peek_sources) (ESourceGroup *group);
+EAPI_EXTERN const char *(*e_source_group_peek_base_uri)  (ESourceGroup *group);
 // e-book.h
 typedef enum {
   E_BOOK_QUERY_IS,
@@ -108,76 +97,54 @@ typedef enum {
 typedef void EBook;
 typedef void EBookQuery;
 
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBook      *(*e_book_new)                     (ESource      *source,
-                           GError      **error);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-gboolean    (*e_book_open)                    (EBook       *book,
-                           gboolean     only_if_exists,
-                           GError     **error);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-const char *(*e_book_get_uri)                 (EBook        *book);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-ESource    *(*e_book_get_source)              (EBook        *book);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-gboolean    (*e_book_get_addressbooks)        (ESourceList **addressbook_sources,
-                           GError      **error);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-gboolean    (*e_book_get_contacts)            (EBook        *book,
-                           EBookQuery   *query,
-                           GList       **contacts,
-                           GError      **error);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-gboolean    (*e_book_authenticate_user)       (EBook        *book,
-                           const char   *user,
-                           const char   *passwd,
-                           const char   *auth_method,
-                           GError      **error);
+EAPI_EXTERN EBook      *(*e_book_new)       (ESource      *source,
+                                                GError      **error);
+
+EAPI_EXTERN gboolean    (*e_book_open)      (EBook       *book,
+                                                 gboolean     only_if_exists,
+                                              GError     **error);
+
+EAPI_EXTERN const char *(*e_book_get_uri)   (EBook        *book);
+EAPI_EXTERN ESource    *(*e_book_get_source)(EBook        *book);
+
+EAPI_EXTERN gboolean    (*e_book_get_addressbooks)        (ESourceList **addressbook_sources,
+                                                           GError      **error);
+
+EAPI_EXTERN gboolean    (*e_book_get_contacts)            (EBook        *book,
+                                                           EBookQuery   *query,
+                                                           GList       **contacts,
+                                                           GError      **error);
+
+EAPI_EXTERN gboolean    (*e_book_authenticate_user)       (EBook        *book,
+                                                           const char   *user,
+                                                           const char   *passwd,
+                                                           const char   *auth_method,
+                                                           GError      **error);
 
 // e-book-query.h
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBookQuery* (*e_book_query_field_exists) (EContactField   field);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBookQuery* (*e_book_query_field_test)   (EContactField   field,
-                      EBookQueryTest     test,
-                      const char        *value);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBookQuery* (*e_book_query_and)          (int nqs, EBookQuery **qs, gboolean unref);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBookQuery* (*e_book_query_or)           (int nqs, EBookQuery **qs, gboolean unref);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-EBookQuery* (*e_book_query_not)          (EBookQuery *q, gboolean unref);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-void        (*e_book_query_unref)        (EBookQuery *q);
-#ifndef _EVOLUTION_ALREADY_DEFINED_
-extern
-#endif
-char*       (*e_book_query_to_string)    (EBookQuery *q);
+EAPI_EXTERN EBookQuery* (*e_book_query_field_exists) (EContactField   field);
+EAPI_EXTERN EBookQuery* (*e_book_query_field_test)   (EContactField   field,
+                                                        EBookQueryTest     test,
+                                                      const char        *value);
+EAPI_EXTERN EBookQuery* (*e_book_query_and)          (int nqs, EBookQuery **qs, gboolean unref);
+EAPI_EXTERN EBookQuery* (*e_book_query_or)           (int nqs, EBookQuery **qs, gboolean unref);
+EAPI_EXTERN EBookQuery* (*e_book_query_not)          (EBookQuery *q, gboolean unref);
+EAPI_EXTERN void        (*e_book_query_unref)        (EBookQuery *q);
+EAPI_EXTERN char*       (*e_book_query_to_string)    (EBookQuery *q);
+EAPI_EXTERN EBookQuery* (*e_book_query_from_string)   (const char *query_string);
+
+typedef struct {
+        char *address_format; /* the two letter country code that
+                                 determines the format/meaning of the
+                                 following fields */
+        char *po;
+        char *ext;
+        char *street;
+        char *locality;
+        char *region;
+        char *code;
+        char *country;
+} EContactAddress;
 G_END_DECLS
 #endif
+
