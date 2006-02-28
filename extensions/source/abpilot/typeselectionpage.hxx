@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:28:44 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,30 @@ namespace abp
         FixedLine       m_aTypeSep;
         RadioButton     m_aMORK;
         RadioButton     m_aThunderbird;
+        RadioButton     m_aEvolutionGroupwise;
+        RadioButton     m_aEvolutionLdap;
         RadioButton     m_aEvolution;
         RadioButton     m_aKab;
         RadioButton     m_aLDAP;
         RadioButton     m_aOutlook;
         RadioButton     m_aOE;
         RadioButton     m_aOther;
+
+        struct ButtonItem {
+            RadioButton *m_pItem;
+            AddressSourceType m_eType;
+            bool         m_bVisible;
+
+            ButtonItem( RadioButton *pItem,
+                        AddressSourceType eType,
+                        bool         bVisible ) :
+                    m_pItem( pItem ),
+                    m_eType( eType ),
+                    m_bVisible( bVisible )
+            {}
+        };
+
+        ::std::vector< ButtonItem > m_aAllTypes;
 
     public:
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
