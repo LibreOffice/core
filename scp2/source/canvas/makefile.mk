@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 14:43:57 $
+#   last change: $Author: kz $ $Date: 2006-02-28 10:47:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@ SCPDEFS+=-DSYSTEM_AGG
 PARFILES= canvascommons.par		\
           directxcanvas.par     \
           vclcanvas.par
+
+.IF "$(ENABLE_CAIRO)" == "TRUE"
+PARFILES+= cairocanvas.par
+.ENDIF
 
 # --- File ---------------------------------------------------------
 
