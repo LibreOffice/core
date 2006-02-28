@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NPreparedStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:51:42 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,9 +121,8 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
+    free_column_resources();
     // Reset last warning message
-
     try {
         clearWarnings ();
         OStatement_BASE2::close();
@@ -132,8 +131,6 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
         // If we get an error, ignore
     }
 
-    // Remove this Statement object from the Connection object's
-    // list
 }
 // -------------------------------------------------------------------------
 
