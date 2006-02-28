@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EApi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:48:53 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,14 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 #include <stdio.h>
-#define _EVOLUTION_ALREADY_DEFINED_ 1
+#define  DECLARE_FN_POINTERS 1
 #ifndef _CONNECTIVITY_EVOAB_EVOLUTION_API_HXX_
 #include "EApi.h"
 #endif
 static char *eBookLibNames[] = {
-    "libebook.so.8",    // evolution-2.0
-    "libebook-1.2.so.3" // evolution-2.2
-    // FIXME: ask JPR about ABI compatibility going forwards
-    // "libebook-1.3.so.0",
-    // "libebook-1.4.so.0",
-    // "libebook-1.5.so.0"
+    "libebook.so.8",     // evolution-2.0
+    "libebook-1.2.so.3", // evolution-2.2
+    "libebook-1.2.so.5"  // evolution-2.4 and 2.6+
 };
 
 typedef void (*SymbolFunc) (void);
@@ -56,6 +53,8 @@ typedef void (*SymbolFunc) (void);
     const char *sym_name;
     SymbolFunc *ref_value;
     } aApiMap[] = {
+    SYM_MAP( e_contact_field_name ),
+    SYM_MAP( e_contact_get ),
     SYM_MAP( e_contact_get_type ),
     SYM_MAP( e_contact_field_id ),
     SYM_MAP( e_source_peek_name ),
@@ -74,6 +73,7 @@ typedef void (*SymbolFunc) (void);
     SYM_MAP( e_book_query_or ),
     SYM_MAP( e_book_query_not ),
     SYM_MAP( e_book_query_unref ),
+    SYM_MAP( e_book_query_from_string ),
     SYM_MAP( e_book_query_to_string ),
     SYM_MAP( e_book_query_field_exists ),
     SYM_MAP( e_source_group_peek_base_uri)
@@ -105,15 +105,15 @@ bool EApiInit()
 
     for( guint j = 0; j < G_N_ELEMENTS( eBookLibNames ); j++ )
     {
-    aModule = osl_loadModule( rtl::OUString::createFromAscii
-                  ( eBookLibNames[ j ] ).pData,
-                  SAL_LOADMODULE_DEFAULT );
-    if( aModule)
-    {
-        if ( tryLink( aModule, eBookLibNames[ j ] ) )
-        return true;
-        osl_unloadModule( aModule );
-    }
+        aModule = osl_loadModule( rtl::OUString::createFromAscii
+                                  ( eBookLibNames[ j ] ).pData,
+                                  SAL_LOADMODULE_DEFAULT );
+        if( aModule)
+        {
+            if ( tryLink( aModule, eBookLibNames[ j ] ) )
+                return true;
+            osl_unloadModule( aModule );
+        }
     }
     fprintf( stderr, "Can find no compliant libebook client libraries\n" );
     return false;
@@ -121,13 +121,14 @@ bool EApiInit()
 
 #if 0
 
-  Test code - enable &
+/*
+ * Test code - enable &
  *
  * Compile with ( after source LinuxIntelEnv.Set.sh )
-   gcc $SOLARDEF -I $SOLARSRC/sal/inc -I $SOLARSRC/sal/unxlngi4.pro/inc \
+   gcc $SOLARDEF -I $SOLARVER/$UPD/$INPATH/inc \
      -I. `pkg-config --cflags --libs gobject-2.0` \
-     -L $SOLARSRC/sal/unxlngi4.pro/lib -luno_sal -lstdc++ EApi.cxx
-
+     -L $SOLARVER/$UPD/$INPATH/lib -luno_sal -lstdc++ EApi.cxx
+ */
 
 int main( int argc, char **argv)
 {
