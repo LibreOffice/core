@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:07:29 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,11 +248,6 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
     SvtSaveOptions aOpt;
     BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPrefered;
-    BOOL bLoadDocView = aOpt.IsSaveDocView();
-
-    // In a StarPortal not possible at the moment
-    if ( !bLoadDocView )
-        return 0;
 
     // try to get viewdata information for XML format
     REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
