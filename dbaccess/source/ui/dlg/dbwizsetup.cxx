@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:36:41 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,27 +226,29 @@ using namespace ::cppu;
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 
 
-#define DBASE_PATH             1
-#define TEXT_PATH              2
-#define MSACCESS_PATH          3
-#define LDAP_PATH              4
-#define ADABAS_PATH            5
-#define ADO_PATH               6
-#define JDBC_PATH              7
-#define ORACLE_PATH            8
-#define MYSQL_JDBC_PATH        9
-#define MYSQL_ODBC_PATH        10
-#define ODBC_PATH              11
-#define SPREADSHEET_PATH       12
-#define OUTLOOKEXP_PATH        13
-#define OUTLOOK_PATH           14
-#define MOZILLA_PATH           15
-#define EVOLUTION_PATH         16
-#define KAB_PATH               17
-#define THUNDERBIRD_PATH       18
-#define CREATENEW_PATH         19
-#define USERDEFINED_PATH       20
-#define OPEN_DOC_PATH          21
+#define DBASE_PATH               1
+#define TEXT_PATH                2
+#define MSACCESS_PATH            3
+#define LDAP_PATH                4
+#define ADABAS_PATH              5
+#define ADO_PATH                 6
+#define JDBC_PATH                7
+#define ORACLE_PATH              8
+#define MYSQL_JDBC_PATH          9
+#define MYSQL_ODBC_PATH          10
+#define ODBC_PATH                11
+#define SPREADSHEET_PATH         12
+#define OUTLOOKEXP_PATH          13
+#define OUTLOOK_PATH             14
+#define MOZILLA_PATH             15
+#define EVOLUTION_PATH           16
+#define EVOLUTION_PATH_GROUPWISE 17
+#define EVOLUTION_PATH_LDAP      18
+#define KAB_PATH                 19
+#define THUNDERBIRD_PATH         20
+#define CREATENEW_PATH           21
+#define USERDEFINED_PATH         22
+#define OPEN_DOC_PATH            23
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -394,6 +396,16 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
+    if ( m_pCollection->hasAuthentication(DST_EVOLUTION_GROUPWISE))
+        declarePath( EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
+    if ( m_pCollection->hasAuthentication(DST_EVOLUTION_LDAP))
+        declarePath( EVOLUTION_PATH_LDAP, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( EVOLUTION_PATH_LDAP, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
     if ( m_pCollection->hasAuthentication(DST_KAB))
         declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
     else
@@ -540,6 +552,8 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_MOZILLA,      MOZILLA_PATH        },
             { DST_THUNDERBIRD,  THUNDERBIRD_PATH    },
             { DST_EVOLUTION,    EVOLUTION_PATH      },
+            { DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
+            { DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
             { DST_KAB,          KAB_PATH            },
             { DST_USERDEFINE1,  USERDEFINED_PATH    },
             { DST_USERDEFINE2,  USERDEFINED_PATH    },
@@ -613,6 +627,8 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
     {
         case DST_KAB:
         case DST_EVOLUTION:
+        case DST_EVOLUTION_GROUPWISE:
+        case DST_EVOLUTION_LDAP:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP:
         case DST_MOZILLA:
