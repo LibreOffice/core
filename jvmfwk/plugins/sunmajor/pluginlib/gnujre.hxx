@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:54 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@ public:
 
     virtual bool initialize(
         std::vector<std::pair<rtl::OUString, rtl::OUString> > props);
+    virtual int compareVersions(const rtl::OUString& sSecond) const;
+
 };
 
 }
