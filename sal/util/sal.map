@@ -449,6 +449,7 @@ UDK_3_0_0 {
         osl_acquireVolumeDeviceHandle;
 
         osl_setDebugMessageFunc;
+        osl_setDetailedDebugMessageFunc;
         osl_readLine;
         osl_getGlobalTimer;
         osl_getCanonicalName;
