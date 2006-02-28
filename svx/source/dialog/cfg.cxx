@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:17:43 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 12:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -935,6 +935,7 @@ void SvxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
     {
         case RID_SVXPAGE_MENUS:
         case RID_SVXPAGE_TOOLBARS:
+        case RID_SVXPAGE_KEYBOARD:
             {
                 rPage.SetFrame(m_xFrame);
             }
