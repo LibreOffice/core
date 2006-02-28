@@ -4,9 +4,9 @@
  *
  *  $RCSfile: t_base.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:49:39 $
+ *  last change: $Author: kz $ $Date: 2006-02-28 10:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _T_BASE_CXX "$Revision: 1.5 $"
+#define _T_BASE_CXX "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -346,13 +346,13 @@ static storeError __store_namei (
     return eErrCode;
 }
 
-static sal_Int32 __store_convertTextToUnicode (
+static sal_Size __store_convertTextToUnicode (
     rtl_TextToUnicodeConverter hConvert,
-    const sal_Char *pszText, sal_Int32 nTextLen,
-    sal_Unicode    *pBuffer, sal_Int32 nBuffer)
+    const sal_Char *pszText, sal_Size nTextLen,
+    sal_Unicode    *pBuffer, sal_Size nBuffer)
 {
     sal_uInt32 nInfo = 0;
-    sal_uInt32 nSrcLen = 0;
+    sal_Size   nSrcLen = 0;
 
     sal_Int32 nDstLen = rtl_convertTextToUnicode (
         hConvert, 0,
@@ -435,6 +435,7 @@ static void __store_testUnicode (const sal_Char *pszFilename)
  *======================================================================*/
 int SAL_CALL main (int argc, char **argv)
 {
+    OSL_PRECOND(argc > 1, "t_base: error: insufficient number of arguments.");
     if (argc < 2)
         return 0;
 
