@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:16:11 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ class ProgressCommandEnv
     void update_( css::uno::Any const & Status )
         throw (css::uno::RuntimeException);
 
+    void solarthread_dtor();
 public:
     virtual ~ProgressCommandEnv();
     inline ProgressCommandEnv( DialogImpl * mainDialog,
