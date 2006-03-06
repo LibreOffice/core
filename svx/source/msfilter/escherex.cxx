@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:01:11 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,29 +620,29 @@ void EscherPropertyContainer::CreateFillProperties(
                 if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
 
-                sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
-                                                aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ), sal_False ) )
-                                            ? *((sal_Int16*)aAny.getValue() )
-                                            : 0;
-                if ( nTransparency != 100 )
+                if ( EscherPropertyValueHelper::GetPropertyValue(
+                        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
                 {
-                    if ( nTransparency )    // opacity
-                        AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue(
-                            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
-                    {
-                        sal_uInt32 nFillColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
-                        nFillBackColor = nFillColor ^ 0xffffff;
-                        AddOpt( ESCHER_Prop_fillColor, nFillColor );
-                    }
-                    AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-                    AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
-                    break;
+                    sal_uInt32 nFillColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
+                    nFillBackColor = nFillColor ^ 0xffffff;
+                    AddOpt( ESCHER_Prop_fillColor, nFillColor );
                 }
+                AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+                AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+                break;
             }
             case ::com::sun::star::drawing::FillStyle_NONE :
                 AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
             break;
+        }
+        if ( eFS != ::com::sun::star::drawing::FillStyle_NONE )
+        {
+            sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
+                                    aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ), sal_True ) )
+                                    ? *((sal_Int16*)aAny.getValue() )
+                                    : 0;
+            if ( ( nTransparency != 100 ) && nTransparency )
+                AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
         }
     }
     CreateLineProperties( rXPropSet, bEdge );
