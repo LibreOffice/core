@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:43 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #include "ucbhelper/content.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "comphelper/servicedecl.hxx"
 #include "svtools/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/script/XLibraryContainer.hpp"
 #include <memory>
-
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -111,8 +111,7 @@ class BackendImpl : public t_helper
 
 public:
     BackendImpl( Sequence<Any> const & args,
-                 Reference<XComponentContext> const & xComponentContext,
-                 OUString const & implName );
+                 Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
     virtual void SAL_CALL update() throw (RuntimeException);
@@ -152,9 +151,8 @@ BackendImpl::PackageImpl::PackageImpl(
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName )
-    : t_helper( args, xComponentContext, implName ),
+    Reference<XComponentContext> const & xComponentContext )
+    : t_helper( args, xComponentContext ),
       m_xBasicLibTypeInfo( new Package::TypeInfo(
                                OUSTR("application/"
                                      "vnd.sun.star.basic-library"),
@@ -395,20 +393,11 @@ void BackendImpl::PackageImpl::processPackage_(
 
 } // anon namespace
 
-//==============================================================================
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR("com.sun.star.comp.deployment.script.PackageRegistryBackend");
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl( args, xComponentContext, getImplementationName() ) );
-}
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    "com.sun.star.comp.deployment.script.PackageRegistryBackend",
+    BACKEND_SERVICE_NAME );
 
 } // namespace script
 } // namespace backend
