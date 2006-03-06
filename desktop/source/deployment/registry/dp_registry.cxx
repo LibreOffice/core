@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_registry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:26:28 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "rtl/uri.hxx"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/sequence.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -516,8 +517,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
 Sequence< Reference<deployment::XPackageTypeInfo> >
 PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
-    return Sequence< Reference<deployment::XPackageTypeInfo> >(
-        &m_typesInfos[ 0 ], m_typesInfos.size() );
+    return comphelper::containerToSequence(m_typesInfos);
 }
 
 } // anon namespace
