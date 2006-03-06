@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:10:56 $
+#   last change: $Author: rt $ $Date: 2006-03-06 10:13:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ SLOFILES=	\
             $(SLO)$/mediadescriptor.obj \
             $(SLO)$/locale.obj \
             $(SLO)$/configurationhelper.obj \
-            $(SLO)$/scopeguard.obj
+            $(SLO)$/scopeguard.obj \
+            $(SLO)$/servicedecl.obj
 
 # --- Targets ----------------------------------
 
