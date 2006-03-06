@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:19:12 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,24 @@
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
+#endif
+// <--
+
+// --> OD 2006-02-22 #b6382898#
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
+#endif
+#ifndef _SVDOGRAF_HXX
+#include <svx/svdograf.hxx>
 #endif
 // <--
 
@@ -524,6 +542,45 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         }
     }
 
+}
+// <--
+
+// --> OD 2006-02-22 #b6382898#
+void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
+{
+    if ( _rDoc.GetDrawModel() &&
+         _rDoc.GetDrawModel()->GetPage( 0 ) )
+    {
+        const SdrPage& rSdrPage( *(_rDoc.GetDrawModel()->GetPage( 0 )) );
+
+        // iterate recursive with group objects over all shapes on the draw page
+        SdrObjListIter aIter( rSdrPage );
+        while( aIter.IsMore() )
+        {
+            SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );
+            if( pOle2Obj )
+            {
+                // found an ole2 shape
+                SdrObjList* pObjList = pOle2Obj->GetObjList();
+
+                // get its graphic
+                Graphic aGraphic;
+                pOle2Obj->Connect();
+                Graphic* pGraphic = pOle2Obj->GetGraphic();
+                if( pGraphic )
+                    aGraphic = *pGraphic;
+                pOle2Obj->Disconnect();
+
+                // create new graphic shape with the ole graphic and shape size
+                SdrGrafObj* pGraphicObj = new SdrGrafObj( aGraphic, pOle2Obj->GetCurrentBoundRect() );
+                // apply layer of ole2 shape at graphic shape
+                pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
+
+                // replace ole2 shape with the new graphic object and delete the ol2 shape
+                delete pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+            }
+        }
+    }
 }
 // <--
 
@@ -967,6 +1024,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
     // <--
 
     rDoc.PropagateOutlineRule();
+
+    // --> OD 2006-02-22 #b6382898#
+    // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
+    // Writer doesn't support such objects.
+    lcl_ConvertSdrOle2ObjsToSdrGrafObjs( rDoc );
+    // <--
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
