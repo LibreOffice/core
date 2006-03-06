@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:50:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,9 @@ inline void _assignInterface(
     SAL_THROW( () )
 {
     _acquire( pSource, acquire );
-    _release( *ppDest, release );
+    void * const pToBeReleased = *ppDest;
     *ppDest = pSource;
+    _release( pToBeReleased, release );
 }
 //--------------------------------------------------------------------------------------------------
 inline void * _queryInterface(
@@ -246,7 +247,7 @@ inline sal_Bool _assignData(
     SAL_THROW( () )
 {
     if (pDest == pSource)
-        return sal_True;
+        return _type_equals( pDestType, pSourceType );
 
     if (! pSource)
     {
@@ -595,8 +596,9 @@ inline sal_Bool _assignData(
         {
             // A null reference of any interface type can be converted to a null
             // reference of any other interface type:
-            _release(*static_cast< void ** >(pDest), release);
+            void * const pToBeReleased = *static_cast< void ** >(pDest);
             *static_cast< void ** >(pDest) = 0;
+            _release( pToBeReleased, release );
             return true;
         }
         else
@@ -617,12 +619,12 @@ inline sal_Bool _assignData(
             }
 
             // query for interface:
-            void * pQueried = _queryInterface(
-                *reinterpret_cast<void **>(pSource),
-                pDestType, queryInterface );
+            void * pQueried = _queryInterface( *static_cast<void **>(pSource),
+                                               pDestType, queryInterface );
             if (pQueried != 0) {
-                _release( *reinterpret_cast<void **>(pDest), release );
-                *reinterpret_cast<void **>(pDest) = pQueried;
+                void * const pToBeReleased = *static_cast<void **>(pDest);
+                *static_cast<void **>(pDest) = pQueried;
+                _release( pToBeReleased, release );
             }
             return (pQueried != 0);
         }
