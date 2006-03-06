@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anytostring.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:48:34 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,57 +34,46 @@
  ************************************************************************/
 
 #include "comphelper/anytostring.hxx"
-
-#include "rtl/ustring.hxx"
+#include "osl/diagnose.h"
 #include "rtl/ustrbuf.hxx"
 #include "typelib/typedescription.h"
-#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 
-
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
-namespace comphelper
-{
+namespace comphelper {
+namespace {
 
-//------------------------------------------------------------------------------
-static void appendTypeError(
-    OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
+void appendTypeError(
+    rtl::OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
 {
     buf.appendAscii(
         RTL_CONSTASCII_STRINGPARAM("<cannot get type description of type ") );
-    buf.append( OUString::unacquired( &typeRef->pTypeName ) );
+    buf.append( rtl::OUString::unacquired( &typeRef->pTypeName ) );
     buf.append( static_cast< sal_Unicode >('>') );
 }
 
-//------------------------------------------------------------------------------
-static inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
+inline void appendChar( rtl::OUStringBuffer & buf, sal_Unicode c )
 {
-    if (c < ' ' || c > '~')
-    {
+    if (c < ' ' || c > '~') {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\X") );
-        OUString s( OUString::valueOf( static_cast< sal_Int32 >(c), 16 ) );
+        rtl::OUString const s(
+            rtl::OUString::valueOf( static_cast< sal_Int32 >(c), 16 ) );
         for ( sal_Int32 f = 4 - s.getLength(); f > 0; --f )
             buf.append( static_cast< sal_Unicode >('0') );
         buf.append( s );
     }
-    else
-    {
+    else {
         buf.append( c );
     }
 }
 
 //------------------------------------------------------------------------------
-static void appendValue(
-    OUStringBuffer & buf,
-    void const * val, typelib_TypeDescriptionReference * typeRef,
-    bool prependType )
+void appendValue( rtl::OUStringBuffer & buf,
+                  void const * val, typelib_TypeDescriptionReference * typeRef,
+                  bool prependType )
 {
-    if (typeRef->eTypeClass == typelib_TypeClass_VOID)
-    {
+    if (typeRef->eTypeClass == typelib_TypeClass_VOID) {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("void") );
         return;
     }
@@ -96,21 +85,19 @@ static void appendValue(
         typeRef->eTypeClass != typelib_TypeClass_BOOLEAN)
     {
         buf.append( static_cast< sal_Unicode >('(') );
-        buf.append( OUString::unacquired( &typeRef->pTypeName ) );
+        buf.append( rtl::OUString::unacquired( &typeRef->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(") ") );
     }
 
-    switch (typeRef->eTypeClass)
-    {
-    case typelib_TypeClass_INTERFACE:
-    {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+    switch (typeRef->eTypeClass) {
+    case typelib_TypeClass_INTERFACE: {
+        buf.append( static_cast<sal_Unicode>('@') );
         buf.append( reinterpret_cast< sal_Int64 >(
-                        *reinterpret_cast< void * const * >(val) ), 16 );
-        Reference< lang::XServiceInfo > xServiceInfo(
-            *reinterpret_cast< XInterface * const * >(val), UNO_QUERY );
-        if (xServiceInfo.is())
-        {
+                        *static_cast< void * const * >(val) ), 16 );
+        uno::Reference< lang::XServiceInfo > xServiceInfo(
+            *static_cast< uno::XInterface * const * >(val),
+            uno::UNO_QUERY );
+        if (xServiceInfo.is()) {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
                                  " (ImplementationName = \"") );
             buf.append( xServiceInfo->getImplementationName() );
@@ -119,23 +106,20 @@ static void appendValue(
         break;
     }
     case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_EXCEPTION:
-    {
+    case typelib_TypeClass_EXCEPTION: {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
         typelib_TypeDescription * typeDescr = 0;
         typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
         if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
             appendTypeError( buf, typeRef );
         }
-        else
-        {
+        else {
             typelib_CompoundTypeDescription * compType =
                 reinterpret_cast< typelib_CompoundTypeDescription * >(
                     typeDescr );
             sal_Int32 nDescr = compType->nMembers;
 
-            if (compType->pBaseTypeDescription)
-            {
+            if (compType->pBaseTypeDescription) {
                 appendValue(
                     buf, val, reinterpret_cast<
                     typelib_TypeDescription * >(
@@ -155,14 +139,12 @@ static void appendValue(
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
                 typelib_TypeDescription * memberType = 0;
                 TYPELIB_DANGER_GET( &memberType, ppTypeRefs[ nPos ] );
-                if (memberType == 0)
-                {
+                if (memberType == 0) {
                     appendTypeError( buf, ppTypeRefs[ nPos ] );
                 }
-                else
-                {
+                else {
                     appendValue( buf,
-                                 reinterpret_cast< char const * >(
+                                 static_cast< char const * >(
                                      val ) + memberOffsets[ nPos ],
                                  memberType->pWeakRef, true );
                     TYPELIB_DANGER_RELEASE( memberType );
@@ -176,16 +158,13 @@ static void appendValue(
             typelib_typedescription_release( typeDescr );
         break;
     }
-    case typelib_TypeClass_SEQUENCE:
-    {
+    case typelib_TypeClass_SEQUENCE: {
         typelib_TypeDescription * typeDescr = 0;
         TYPELIB_DANGER_GET( &typeDescr, typeRef );
-        if (typeDescr == 0)
-        {
+        if (typeDescr == 0) {
             appendTypeError( buf,typeRef );
         }
-        else
-        {
+        else {
             typelib_TypeDescriptionReference * elementTypeRef =
                 reinterpret_cast<
                 typelib_IndirectTypeDescription * >(typeDescr)->pType;
@@ -199,7 +178,7 @@ static void appendValue(
             {
                 sal_Int32 nElementSize = elementTypeDescr->nSize;
                 uno_Sequence * seq =
-                    *reinterpret_cast< uno_Sequence * const * >(val);
+                    *static_cast< uno_Sequence * const * >(val);
                 sal_Int32 nElements = seq->nElements;
 
                 if (nElements > 0)
@@ -226,10 +205,9 @@ static void appendValue(
         }
         break;
     }
-    case typelib_TypeClass_ANY:
-    {
+    case typelib_TypeClass_ANY: {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
-        uno_Any const * pAny = reinterpret_cast< uno_Any const * >(val);
+        uno_Any const * pAny = static_cast< uno_Any const * >(val);
         appendValue( buf, pAny->pData, pAny->pType, true );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
         break;
@@ -239,11 +217,10 @@ static void appendValue(
                      typelib_TypeDescriptionReference * const * >(val)
                         )->pTypeName );
         break;
-    case typelib_TypeClass_STRING:
-    {
+    case typelib_TypeClass_STRING: {
         buf.append( static_cast< sal_Unicode >('\"') );
-        OUString const & str = OUString::unacquired(
-            reinterpret_cast< rtl_uString * const * >(val) );
+        rtl::OUString const & str = rtl::OUString::unacquired(
+            static_cast< rtl_uString * const * >(val) );
         sal_Int32 len = str.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
         {
@@ -258,8 +235,7 @@ static void appendValue(
         buf.append( static_cast< sal_Unicode >('\"') );
         break;
     }
-    case typelib_TypeClass_ENUM:
-    {
+    case typelib_TypeClass_ENUM: {
         typelib_TypeDescription * typeDescr = 0;
         typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
         if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
@@ -274,7 +250,7 @@ static void appendValue(
                 typeDescr )->nEnumValues;
             while (nPos--)
             {
-                if (pValues[ nPos ] == *reinterpret_cast< int const * >(val))
+                if (pValues[ nPos ] == *static_cast< int const * >(val))
                     break;
             }
             if (nPos >= 0)
@@ -293,15 +269,14 @@ static void appendValue(
         break;
     }
     case typelib_TypeClass_BOOLEAN:
-        if (*reinterpret_cast< sal_Bool const * >(val) != sal_False)
+        if (*static_cast< sal_Bool const * >(val) != sal_False)
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("true") );
         else
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("false") );
         break;
-    case typelib_TypeClass_CHAR:
-    {
+    case typelib_TypeClass_CHAR: {
         buf.append( static_cast< sal_Unicode >('\'') );
-        sal_Unicode c = *reinterpret_cast< sal_Unicode const * >(val);
+        sal_Unicode c = *static_cast< sal_Unicode const * >(val);
         if (c == '\'')
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\\'") );
         else if (c == '\\')
@@ -312,33 +287,33 @@ static void appendValue(
         break;
     }
     case typelib_TypeClass_FLOAT:
-        buf.append( *reinterpret_cast< float const * >(val) );
+        buf.append( *static_cast< float const * >(val) );
         break;
     case typelib_TypeClass_DOUBLE:
-        buf.append( *reinterpret_cast< double const * >(val) );
+        buf.append( *static_cast< double const * >(val) );
         break;
     case typelib_TypeClass_BYTE:
         buf.append( static_cast< sal_Int32 >(
-                        *reinterpret_cast< sal_Int8 const * >(val) ) );
+                        *static_cast< sal_Int8 const * >(val) ) );
         break;
     case typelib_TypeClass_SHORT:
         buf.append( static_cast< sal_Int32 >(
-                        *reinterpret_cast< sal_Int16 const * >(val) ) );
+                        *static_cast< sal_Int16 const * >(val) ) );
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
         buf.append( static_cast< sal_Int32 >(
-                        *reinterpret_cast< sal_uInt16 const * >(val) ) );
+                        *static_cast< sal_uInt16 const * >(val) ) );
         break;
     case typelib_TypeClass_LONG:
-        buf.append( *reinterpret_cast< sal_Int32 const * >(val) );
+        buf.append( *static_cast< sal_Int32 const * >(val) );
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
         buf.append( static_cast< sal_Int64 >(
-                        *reinterpret_cast< sal_uInt32 const * >(val) ) );
+                        *static_cast< sal_uInt32 const * >(val) ) );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        buf.append( *reinterpret_cast< sal_Int64 const * >(val) );
+        buf.append( *static_cast< sal_Int64 const * >(val) );
         break;
 //     case typelib_TypeClass_UNION:
 //     case typelib_TypeClass_ARRAY:
@@ -351,13 +326,15 @@ static void appendValue(
     }
 }
 
+} // anon namespace
+
 //==============================================================================
-OUString anyToString( Any const & value )
+rtl::OUString anyToString( uno::Any const & value )
 {
-    OUStringBuffer buf;
+    rtl::OUStringBuffer buf;
     appendValue( buf, value.getValue(), value.getValueTypeRef(), true );
     return buf.makeStringAndClear();
 }
 
-}
+} // namespace comphelper
 
