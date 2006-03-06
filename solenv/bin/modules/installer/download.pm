@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:09:36 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:28:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,10 @@ use File::Spec;
 use installer::exiter;
 use installer::files;
 use installer::globals;
-use installer::pathanalyzer;
-use installer::systemactions;
 use installer::logger;
+use installer::pathanalyzer;
+use installer::remover;
+use installer::systemactions;
 
 BEGIN { # This is needed so that cygwin's perl evaluates ACLs
     # (needed for correctly evaluating the -x test.)
@@ -99,7 +100,9 @@ sub determine_scriptfile_name
 {
     my ( $filename ) = @_;
 
-    $filename = $filename . "\.sh";
+    $installer::globals::downloadfileextension = ".sh";
+    $filename = $filename . $installer::globals::downloadfileextension;
+    $installer::globals::downloadfilename = $filename;
 
     my $infoline = "Setting download shell script file name to $filename\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -154,6 +157,70 @@ sub put_checksum_and_size_into_script
         ${$scriptfile}[$i] =~ s/DISCSPACEPLACEHOLDER/$size/;
     }
 
+}
+
+#########################################################
+# Calling md5sum
+#########################################################
+
+sub call_md5sum
+{
+    my ($filename) = @_;
+
+    $md5sumfile = "/usr/bin/md5sum";
+
+    if ( ! -f $md5sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/md5sum", "call_md5sum"); }
+
+    my $systemcall = "$md5sumfile $filename |";
+
+    my $md5sumoutput = "";
+
+    open (SUM, "$systemcall");
+    $md5sumoutput = <SUM>;
+    close (SUM);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $md5sumoutput;
+}
+
+#########################################################
+# Calling md5sum
+#########################################################
+
+sub get_md5sum
+{
+    ($md5sumoutput) = @_;
+
+    my $md5sum;
+
+    if  ( $md5sumoutput =~ /^\s*(\w+?)\s+/ )
+    {
+        $md5sum = $1;
+    }
+    else
+    {
+        installer::exiter::exit_program("ERROR: Incorrect return value from /usr/bin/md5sum: $md5sumoutput", "get_md5sum");
+    }
+
+    my $infoline = "Setting md5sum: $md5sum\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    return $md5sum;
 }
 
 #########################################################
@@ -292,7 +359,9 @@ sub create_tar_gz_file_from_package
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
 
-    my $targzname = $packagename . ".tar.gz";
+    $installer::globals::downloadfileextension = ".tar.gz";
+    my $targzname = $packagename . $installer::globals::downloadfileextension;
+    $installer::globals::downloadfilename = $targzname;
     my $ldpreloadstring = "";
     if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
@@ -314,6 +383,207 @@ sub create_tar_gz_file_from_package
         $infoline = "Success: Executed \"$systemcall\" successfully!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+}
+
+#########################################################
+# Setting type of installation
+#########################################################
+
+sub get_installation_type
+{
+    my $type = "";
+
+    if ( $installer::globals::languagepack ) { $type = "langpack"; }
+    else { $type = "install"; }
+
+    return $type;
+}
+
+#########################################################
+# Setting installation languages
+#########################################################
+
+sub get_downloadname_language
+{
+    my ($languagestringref) = @_;
+
+    my $languages = $$languagestringref;
+
+    if ( $installer::globals::added_english )
+    {
+        $languages =~ s/en-US_//;
+        $languages =~ s/_en-US//;
+    }
+
+    return $languages;
+}
+
+#########################################################
+# Setting download name, first part
+#########################################################
+
+sub get_downloadname_start
+{
+    my $start = "OOo";
+
+    return $start;
+}
+
+#########################################################
+# Setting installation addons
+#########################################################
+
+sub get_downloadname_addon
+{
+    my $addon = "";
+
+    if ( $installer::globals::product =~ /_wJRE\s*$/ ) { $addon = "_wJRE"; }
+
+    return $addon;
+}
+
+#########################################################
+# Looking for versionstring in version.info
+# This has to be the only content of this file.
+#########################################################
+
+sub get_versionstring
+{
+    my ( $versionfile ) = @_;
+
+    my $versionstring = "";
+
+    for ( my $i = 0; $i <= $#{$versionfile}; $i++ )
+    {
+        my $oneline = ${$versionfile}[$i];
+
+        if ( $oneline =~ /^\s*\#/ ) { next; } # comment line
+        if ( $oneline =~ /^\s*\"\s*(.*?)\s*\"\s*$/ )
+        {
+            $versionstring = $1;
+            last;
+        }
+    }
+
+    return $versionstring;
+}
+
+#########################################################
+# Returning the current product version
+# This has to be defined in file "version.info"
+# in directory $installer::globals::ooouploaddir
+#########################################################
+
+sub get_current_version
+{
+    my $infoline = "";
+    my $versionstring = "";
+    my $filename = "version.info";
+    # $filename = $installer::globals::ooouploaddir . $installer::globals::separator . $filename;
+
+    if ( -f $filename )
+    {
+        $infoline = "File $filename exists. Trying to find current version.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        my $versionfile = installer::files::read_file($filename);
+        $versionstring = get_versionstring($versionfile);
+        $infoline = "Setting version string: $versionstring\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "File $filename does not exist. No version setting in download file name.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    $installer::globals::oooversionstring = $versionstring;
+
+    return $versionstring;
+}
+
+#########################################################
+# Determining the download file name
+# Samples:
+# OOo_2.0.2rc1_060213_Solarisx86_install_de
+# OOo_2.0.2rc1_060213_LinuxIntel_langpack_zh-TW
+# OOo_2.0.2rc1_060213_SolarisSparc_install_zh-TW_wJRE
+# OOo_2.0.2rc1_060213_Win32Intel_install_zh-TW_wJRE
+# OOo_2.0.157_LinuxIntel_install_de
+#
+#########################################################
+
+sub set_download_filename
+{
+    my ($languagestringref, $allvariables) = @_;
+
+    my $start = get_downloadname_start();
+    # my $versionstring = get_current_version();
+    my $versionstring = "";
+    my $date = installer::logger::set_installation_date();
+    if ( $installer::globals::product =~ /_Dev\s*$/ ) { $date = ""; }
+    my $platform = installer::worker::get_platform_name();
+    my $type = get_installation_type();
+    my $language = get_downloadname_language($languagestringref);
+    my $addon = get_downloadname_addon();
+    if ( $installer::globals::product =~ /_Dev\s*$/ )
+    {
+        my $localminor = "";
+        if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
+        else { $localminor = $installer::globals::lastminor; }
+        if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
+        $versionstring = $allvariables->{'PRODUCTVERSION'} . "." . $localminor;
+    }
+
+    my $filename = $start . "_" . $versionstring . "_" . $date . "_" . $platform . "_" . $type . "_" . $language . $addon;
+
+    $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform is empty
+
+    $installer::globals::ooodownloadfilename = $filename;
+
+    return $filename;
+}
+
+#########################################################
+# Creating a tar.gz file
+#########################################################
+
+sub create_tar_gz_file_from_directory
+{
+    my ($installdir, $getuidlibrary, $downloaddir, $downloadfilename) = @_;
+
+    my $infoline = "";
+
+    my $packdir = $installdir;
+    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packdir);
+    my $changedir = $installdir;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$changedir);
+
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    $installer::globals::downloadfileextension = ".tar.gz";
+    $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
+    my $targzname = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
+
+    $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
+
+    my $returnvalue = system($systemcall);
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $targzname;
 }
 
 #########################################################
@@ -508,7 +778,9 @@ sub put_outputfilename_into_template
 {
     my ($templatefile, $downloadname) = @_;
 
-    $downloadname = $downloadname . ".exe";
+    $installer::globals::downloadfileextension = ".exe";
+    $downloadname = $downloadname . $installer::globals::downloadfileextension;
+    $installer::globals::downloadfilename = $downloadname;
 
     replace_one_variable($templatefile, "DOWNLOADNAMEPLACEHOLDER", $downloadname);
 }
@@ -1045,12 +1317,60 @@ sub remove_english_for_nsis_installer
 }
 
 ####################################################
+# Creating link tree for upload
+####################################################
+
+sub create_link_tree
+{
+    my ($sourcedownloadfile, $destfilename, $versionstring) = @_;
+
+    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for OOo upload not defined!", "create_link_tree"); }
+    my $versiondir = $installer::globals::ooouploaddir . $installer::globals::separator . $versionstring;
+    my $infoline = "Directory for the link: $versiondir\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    if ( ! -d $versiondir ) { installer::systemactions::create_directory_structure($versiondir); }
+
+    # inside directory $versiondir all links have to be created
+    my $linkdestination = $versiondir . $installer::globals::separator . $destfilename;
+
+    # If there is an older version of this file (link), it has to be removed
+    if ( -f $linkdestination ) { unlink($linkdestination); }
+
+    $infoline = "Creating hard link from $sourcedownloadfile to $linkdestination\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    installer::systemactions::hardlink_one_file($sourcedownloadfile, $linkdestination);
+}
+
+#######################################################
+# Setting supported platform for Sun OpenOffice.org
+# builds
+#######################################################
+
+sub is_supported_platform
+{
+    my $is_supported = 0;
+
+    if (( $installer::globals::islinuxrpmbuild ) ||
+        ( $installer::globals::issolarissparcbuild ) ||
+        ( $installer::globals::issolarisx86build ) ||
+        ( $installer::globals::iswindowsbuild ))
+    {
+        $is_supported = 1;
+    }
+
+    return $is_supported;
+}
+
+####################################################
 # Creating download installation sets
 ####################################################
 
 sub create_download_sets
 {
     my ($installationdir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref, $languagesarrayref) = @_;
+
+    my $infoline = "";
 
     installer::logger::print_message( "\n******************************************\n" );
     installer::logger::print_message( "... creating download installation set ...\n" );
@@ -1094,44 +1414,53 @@ sub create_download_sets
 
     # evaluating the name of the download file
 
-    $downloadname = resolve_variables_in_downloadname($allvariableshashref, $downloadname, $languagestringref);
+    if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $downloadname = set_download_filename($languagestringref, $allvariableshashref); }
+    else { $downloadname = resolve_variables_in_downloadname($allvariableshashref, $downloadname, $languagestringref); }
 
     if ( ! $installer::globals::iswindowsbuild )    # Unix specific part
     {
-        # find and read setup script template
-        my $scriptfilename = "downloadscript.sh";
-        my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
-        if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
-        my $scriptfile = installer::files::read_file($$scriptref);
-
-        my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        # add product name into script template
-        put_productname_into_script($scriptfile, $allvariableshashref);
-
-        # replace linenumber in script template
-        put_linenumber_into_script($scriptfile);
 
         # getting the path of the getuid.so (only required for Solaris and Linux)
         my $getuidlibrary = "";
         if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $getuidlibrary = get_path_for_library($includepatharrayref); }
 
-        # calling sum to determine checksum and size of the tar file
-        my $sumout = call_sum($installationdir, $getuidlibrary);
+        if ( $allvariableshashref->{'OOODOWNLOADNAME'} )
+        {
+            my $downloadfile = create_tar_gz_file_from_directory($installationdir, $getuidlibrary, $downloaddir, $downloadname);
+        }
+        else
+        {
+            # find and read setup script template
+            my $scriptfilename = "downloadscript.sh";
+            my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
+            if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
+            my $scriptfile = installer::files::read_file($$scriptref);
 
-        # writing checksum and size into scriptfile
-        put_checksum_and_size_into_script($scriptfile, $sumout);
+            $infoline = "Found  script file $scriptfilename: $$scriptref \n";
+            push( @installer::globals::logfileinfo, $infoline);
 
-        # saving the script file
-        my $newscriptfilename = determine_scriptfile_name($downloadname);
+            # add product name into script template
+            put_productname_into_script($scriptfile, $allvariableshashref);
 
-        installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
+            # replace linenumber in script template
+            put_linenumber_into_script($scriptfile);
 
-        $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
+            # calling sum to determine checksum and size of the tar file
+            my $sumout = call_sum($installationdir, $getuidlibrary);
 
-        if (( $installer::globals::issolarisbuild ) && ( $ENV{'SPECIAL_ADA_BUILD'} )) { create_tar_gz_file_from_package($installationdir, $getuidlibrary); }
-        else { include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary); }
+            # writing checksum and size into scriptfile
+            put_checksum_and_size_into_script($scriptfile, $sumout);
+
+            # saving the script file
+            my $newscriptfilename = determine_scriptfile_name($downloadname);
+
+            installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
+
+            $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
+
+            if (( $installer::globals::issolarisbuild ) && ( $ENV{'SPECIAL_ADA_BUILD'} )) { create_tar_gz_file_from_package($installationdir, $getuidlibrary); }
+            else { include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary); }
+        }
     }
     else    # Windows specific part
     {
@@ -1144,7 +1473,7 @@ sub create_download_sets
         if ( $nsispath eq "" ) {
             # If nsis is not found just skip the rest of this function
             # and do not create the NSIS file.
-            my $infoline = "\nNo NSIS SDK found. Skipping the generation of NSIS file.\n";
+            $infoline = "\nNo NSIS SDK found. Skipping the generation of NSIS file.\n";
             push(@installer::globals::logfileinfo, $infoline);
             installer::logger::print_message( "... no NSIS SDK found. Skipping the generation of NSIS file ... \n" );
             return $downloaddir;
@@ -1183,10 +1512,79 @@ sub create_download_sets
 
         # starting the NSIS SDK to create the download file
         call_nsis($nsispath, $nsifilename);
-
     }
 
     return $downloaddir;
+}
+
+####################################################
+# Creating OOo upload tree
+####################################################
+
+sub create_download_link_tree
+{
+    my ($downloaddir, $languagestringref, $allvariableshashref) = @_;
+
+    my $infoline;
+
+    installer::logger::print_message( "\n******************************************\n" );
+    installer::logger::print_message( "... creating download hard link ...\n" );
+    installer::logger::print_message( "******************************************\n" );
+
+    installer::logger::include_header_into_logfile("Creating download hard link:");
+    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Creating hard link, start");
+
+    if ( is_supported_platform() )
+    {
+        my $versionstring = "";
+        # Already defined $installer::globals::oooversionstring and $installer::globals::ooodownloadfilename ?
+
+        if ( ! $installer::globals::oooversionstring ) { $versionstring = get_current_version(); }
+        else { $versionstring = $installer::globals::oooversionstring; }
+
+        # Is $versionstring empty? If yes, there is nothing to do now.
+
+        $infoline = "Version string is set to: $versionstring\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ( $versionstring )
+        {
+            # Now the downloadfilename has to be set (if not already done)
+            my $destdownloadfilename = "";
+            if ( ! $installer::globals::ooodownloadfilename ) { $destdownloadfilename = set_download_filename($languagestringref, $versionstring, $allvariableshashref); }
+            else { $destdownloadfilename = $installer::globals::ooodownloadfilename; }
+
+            if ( $destdownloadfilename )
+            {
+                $destdownloadfilename = $destdownloadfilename . $installer::globals::downloadfileextension;
+
+                $infoline = "Setting destination download file name: $destdownloadfilename\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                my $sourcedownloadfile = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
+
+                $infoline = "Setting source download file name: $sourcedownloadfile\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                create_link_tree($sourcedownloadfile, $destdownloadfilename, $versionstring);
+                # my $md5sumoutput = call_md5sum($downloadfile);
+                # my $md5sum = get_md5sum($md5sumoutput);
+
+            }
+        }
+        else
+        {
+            $infoline = "Version string is empty. Nothing to do!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+    else
+    {
+        $infoline = "Platform not used for hard linking. Nothing to do!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: Creating hard link, stop");
 }
 
 1;
