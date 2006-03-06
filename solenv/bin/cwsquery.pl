@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:13:21 $
+#   last change: $Author: rt $ $Date: 2006-03-06 13:47:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.10 $ ';
+my $id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -76,7 +76,7 @@ my $opt_child  = '';        # option: child workspace
 my $opt_milestone  = '';    # option: milestone
 
 # list of available query modes
-my @query_modes = qw(modules taskids status latest current owner integrated approved nominated ready new release due due_qa help ui);
+my @query_modes = qw(modules taskids status latest current owner integrated approved nominated ready new planned release due due_qa help ui);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -322,6 +322,25 @@ sub query_new
     return;
 }
 
+sub query_planned
+{
+    my $cws       = shift;
+
+    my $masterws = $cws->master();
+
+    my @ready_cws = $cws->get_cws_with_state($masterws, 'planned');
+
+    if ( @ready_cws ) {
+        print_message("Master workspace '$masterws':");
+        print_message("CWSs with state 'planned':");
+        foreach (@ready_cws) {
+            print "$_\n";
+        }
+    }
+
+    return;
+}
+
 sub is_valid_cws
 {
     my $cws = shift;
@@ -472,7 +491,7 @@ sub usage
     print STDERR "       cwsquery [-h] [-m master] [-c child] <release|due|due_qa|help|ui>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
     print STDERR "       cwsquery [-h] [-m master] [-ms milestone/step] <integrated>\n";
-    print STDERR "       cwsquery [-h] [-m master] <new|approved|nominated|ready>\n";
+    print STDERR "       cwsquery [-h] [-m master] <planned|new|approved|nominated|ready>\n";
     print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
     print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
@@ -487,6 +506,7 @@ sub usage
     print STDERR "\tui\t\tquery if the CWS is UI relevant\n";
     print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
     print STDERR "\tintegrated\tquery integrated CWSs for milestone\n";
+    print STDERR "\tplanned\t\tquery for planned CWSs\n";
     print STDERR "\tnew\t\tquery for new CWSs\n";
     print STDERR "\tapproved\tquery CWSs approved by QA\n";
     print STDERR "\tnominated\tquery nominated CWSs\n";
