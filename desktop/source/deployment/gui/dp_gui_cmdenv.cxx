@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:56 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "vcl/msgbox.hxx"
+#include "vcl/threadex.hxx"
+#include "boost/bind.hpp"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -66,14 +68,20 @@ void ProgressCommandEnv::ProgressDialog::CancelButtonImpl::Click()
     }
 }
 
-//______________________________________________________________________________
-ProgressCommandEnv::~ProgressCommandEnv()
+void ProgressCommandEnv::solarthread_dtor()
 {
     if (m_progressDialog.get() != 0) {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         m_progressDialog->SetModalInputMode( FALSE );
         m_progressDialog.reset();
     }
+}
+
+//______________________________________________________________________________
+ProgressCommandEnv::~ProgressCommandEnv()
+{
+    vcl::solarthread::syncExecute(
+        boost::bind( &ProgressCommandEnv::solarthread_dtor, this ) );
 }
 
 //______________________________________________________________________________
