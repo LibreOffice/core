@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:51 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #include <tools/string.hxx>
 #ifndef _SD_PPT_EXANIMATIONS_HXX
 #include "pptexanimations.hxx"
+#endif
+#ifndef _SD_PPT_EXSOUNDCOLLECTION_HXX
+#include <pptexsoundcollection.hxx>
 #endif
 
 // ------------------------------------------------------------------------
@@ -357,41 +360,6 @@ class PPTExBulletProvider
 
                                 PPTExBulletProvider();
                                 ~PPTExBulletProvider();
-};
-
-class SoundEntry
-{
-        sal_uInt32              nFileSize;
-        String                  aSoundURL;
-
-        String                  ImplGetName() const;
-        String                  ImplGetExtension() const;
-
-    public :
-
-        sal_Bool                IsSameURL( const String& rURL ) const;
-        sal_uInt32              GetFileSize( ) const { return nFileSize; };
-
-                                SoundEntry( const String& rSoundURL );
-
-        // returns the size of a complete SoundContainer
-        sal_uInt32              GetSize( sal_uInt32 nId ) const;
-        void                    Write( SvStream& rSt, sal_uInt32 nId );
-};
-class SoundCollection : private List
-{
-        const SoundEntry*       ImplGetByIndex( sal_uInt32 nId ) const;
-
-    public:
-
-                                SoundCollection() {}
-                                ~SoundCollection();
-
-        sal_uInt32              GetId( const String& );
-
-        // returns the size of a complete SoundCollectionContainer
-        sal_uInt32              GetSize() const;
-        void                    Write( SvStream& rSt );
 };
 
 struct FontCollectionEntry
@@ -931,8 +899,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
 
         List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
-        FontCollection      maFontCollection;
-        SoundCollection     maSoundCollection;
+
+        FontCollection          maFontCollection;
+        ppt::ExSoundCollection  maSoundCollection;
 
         PHLayout&           ImplGetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
