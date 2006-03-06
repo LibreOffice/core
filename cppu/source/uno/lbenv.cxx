@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:35:41 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,22 +276,19 @@ static void SAL_CALL defenv_registerInterface(
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::ClearableMutexGuard guard( that->mutex );
 
-    OId2ObjectMap::const_iterator const iFind(
-        that->aOId2ObjectMap.find( rOId ) );
-    if (iFind == that->aOId2ObjectMap.end())
+    // try to insert dummy 0:
+    std::pair<OId2ObjectMap::iterator, bool> const insertion(
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
+    if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );
-        ::std::pair< OId2ObjectMap::iterator, bool > insertion(
-            that->aOId2ObjectMap.insert(
-                OId2ObjectMap::value_type( rOId, pOEntry ) ) );
-        OSL_ENSURE( insertion.second,
-                    "### inserting new object entry failed?!" );
+        insertion.first->second = pOEntry;
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( that, *ppInterface, pTypeDescr, 0 );
     }
     else // object entry exists
     {
-        ObjectEntry * pOEntry = iFind->second;
+        ObjectEntry * pOEntry = insertion.first->second;
         ++pOEntry->nRef; // another register call on object
         InterfaceEntry * pIEntry = pOEntry->find( pTypeDescr );
 
@@ -327,22 +324,19 @@ static void SAL_CALL defenv_registerProxyInterface(
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::ClearableMutexGuard guard( that->mutex );
 
-    OId2ObjectMap::const_iterator const iFind(
-        that->aOId2ObjectMap.find( rOId ) );
-    if (iFind == that->aOId2ObjectMap.end())
+    // try to insert dummy 0:
+    std::pair<OId2ObjectMap::iterator, bool> const insertion(
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
+    if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );
-        ::std::pair< OId2ObjectMap::iterator, bool > insertion(
-            that->aOId2ObjectMap.insert(
-                OId2ObjectMap::value_type( rOId, pOEntry ) ) );
-        OSL_ENSURE( insertion.second,
-                    "### inserting new object entry failed?!" );
+        insertion.first->second = pOEntry;
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( that, *ppInterface, pTypeDescr, freeProxy );
     }
     else // object entry exists
     {
-        ObjectEntry * pOEntry = iFind->second;
+        ObjectEntry * pOEntry = insertion.first->second;
 
         // first registration was an original, then registerProxyInterface():
         pOEntry->mixedObject |=
@@ -1018,7 +1012,6 @@ inline void EnvironmentsData::getRegisteredEnvironments(
 {
     OSL_ENSURE( pppEnvs && pnLen && memAlloc, "### null ptr!" );
 
-
     // max size
     uno_Environment ** ppFound = (uno_Environment **)alloca(
         sizeof(uno_Environment *) * aName2EnvMap.size() );
@@ -1134,11 +1127,6 @@ void SAL_CALL uno_getEnvironment(
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppEnv, "### null ptr!" );
-    if (*ppEnv) {
-        (*(*ppEnv)->release)( *ppEnv );
-        *ppEnv = 0;
-    }
-
     OUString const & rEnvTypeName = OUString::unacquired( &pEnvTypeName );
 
     EnvironmentsData & rData = getEnvironmentsData();
