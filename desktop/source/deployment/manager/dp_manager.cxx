@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:20:15 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
+#include "comphelper/servicedecl.hxx"
+#include "comphelper/sequence.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "svtools/inettype.hxx"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -58,6 +60,7 @@
 #include "com/sun/star/ucb/NameClashResolveRequest.hpp"
 #include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
+#include "boost/bind.hpp"
 #include <vector>
 
 
@@ -66,6 +69,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
+
+namespace dp_log {
+extern comphelper::service_decl::ServiceDecl const serviceDecl;
+}
 
 namespace dp_registry {
 Reference<deployment::XPackageRegistry> create(
@@ -284,7 +291,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
-                    OUSTR("com.sun.star.comp.deployment.ProgressLog"),
+                    dp_log::serviceDecl.getSupportedServiceNames()[0],
                     Sequence<Any>( &any_logFile, 1 ),
                     that->m_xComponentContext ),
                 UNO_QUERY_THROW );
@@ -326,20 +333,12 @@ PackageManagerImpl::~PackageManagerImpl()
 //______________________________________________________________________________
 void PackageManagerImpl::fireModified()
 {
-    ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
-        ::getCppuType( static_cast<Reference<
-                       util::XModifyListener> const *>(0) ) );
-    if (container != 0)
-    {
-        Sequence< Reference<XInterface> > elements(
-            container->getElements() );
-        lang::EventObject evt( static_cast<OWeakObject *>(this) );
-        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos ) {
-            Reference<util::XModifyListener> xListener(
-                elements[ pos ], UNO_QUERY );
-            if (xListener.is())
-                xListener->modified( evt );
-        }
+    ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
+        util::XModifyListener::static_type() );
+    if (pContainer != 0) {
+        pContainer->forEach<util::XModifyListener>(
+            boost::bind(&util::XModifyListener::modified, _1,
+                        lang::EventObject(static_cast<OWeakObject *>(this))) );
     }
 }
 
@@ -841,8 +840,7 @@ PackageManagerImpl::getDeployedPackages_(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
-    return Sequence< Reference<deployment::XPackage> >(
-        &packages[ 0 ], packages.size() );
+    return comphelper::containerToSequence(packages);
 }
 
 //______________________________________________________________________________
