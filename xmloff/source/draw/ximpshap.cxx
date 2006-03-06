@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:35:02 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,12 @@
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
 #endif
+
+// --> OD 2006-02-22 #b6382898#
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+// <--
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -539,7 +545,23 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
     {
         try
         {
-            uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
+            // --> OD 2006-02-22 #b6382898#
+            // Since fix for issue i33294 the Writer model doesn't support
+            // com.sun.star.drawing.OLE2Shape anymore.
+            // To handle Draw OLE objects it's decided to import these
+            // objects as com.sun.star.drawing.OLE2Shape and convert these
+            // objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            uno::Reference< drawing::XShape > xShape;
+            if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
+                 uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
+            {
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii("com.sun.star.drawing.temporaryForXMLImportOLE2Shape")), uno::UNO_QUERY);
+            }
+            else
+            {
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
+            }
+            // <--
             if( xShape.is() )
                 AddShape( xShape );
         }
