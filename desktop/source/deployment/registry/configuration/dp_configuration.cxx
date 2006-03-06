@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:28:54 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "osl/file.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/servicedecl.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "svtools/inettype.hxx"
 #include "com/sun/star/ucb/NameClash.hpp"
@@ -124,8 +125,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
 public:
     BackendImpl( Sequence<Any> const & args,
-                 Reference<XComponentContext> const & xComponentContext,
-                 OUString const & implName );
+                 Reference<XComponentContext> const & xComponentContext );
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -135,9 +135,8 @@ public:
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName )
-    : PackageRegistryBackend( args, xComponentContext, implName ),
+    Reference<XComponentContext> const & xComponentContext )
+    : PackageRegistryBackend( args, xComponentContext ),
       m_defaultProvider( xComponentContext->getValueByName(
                              OUSTR("/singletons/com.sun.star."
                                    "configuration.theDefaultProvider") ),
@@ -608,21 +607,11 @@ void BackendImpl::PackageImpl::processPackage_(
 
 } // anon namespace
 
-//==============================================================================
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR(
-        "com.sun.star.comp.deployment.configuration.PackageRegistryBackend");
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl( args, xComponentContext, getImplementationName() ) );
-}
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    "com.sun.star.comp.deployment.configuration.PackageRegistryBackend",
+    BACKEND_SERVICE_NAME );
 
 } // namespace configuration
 } // namespace backend
