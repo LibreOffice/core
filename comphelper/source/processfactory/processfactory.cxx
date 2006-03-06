@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:55:10 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#include "com/sun/star/beans/XPropertySet.hpp"
+
+
+using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace osl;
@@ -107,3 +111,22 @@ Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUStri
 
 } // namesapce comphelper
 
+extern "C" {
+uno::Reference<uno::XComponentContext> comphelper_getProcessComponentContext()
+{
+    uno::Reference<uno::XComponentContext> xRet;
+    uno::Reference<beans::XPropertySet> const xProps(
+        comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+    if (xProps.is()) {
+        try {
+            xRet.set( xProps->getPropertyValue(
+                          rtl::OUString(
+                              RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ),
+                      uno::UNO_QUERY );
+        }
+        catch (beans::UnknownPropertyException const&) {
+        }
+    }
+    return xRet;
+}
+} // extern "C"
