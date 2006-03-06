@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-06 10:52:50 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:29:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -478,6 +478,22 @@ sub analyze_and_save_logfile
     if ( $installer::globals::patch ) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
 
     return ($is_success, $finalinstalldir);
+}
+
+###############################################################
+# Analyzing and creating the log file
+###############################################################
+
+sub save_logfile_after_linking
+{
+    my ($loggingdir, $installlogdir, $current_install_number) = @_;
+
+    # Saving the logfile in the log file directory and additionally in a log directory in the install directory
+    my $numberedlogfilename = $installer::globals::logfilename;
+    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /log_/log_$current_install_number\_/; }
+    installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
+    installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
+    installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 }
 
 ###############################################################
@@ -1914,6 +1930,39 @@ sub collect_scpactions
     {
         push(@installer::globals::allscpactions, ${$allscpactions}[$i]);
     }
+}
+
+#################################################################
+# Setting the platform name for download
+#################################################################
+
+sub get_platform_name
+{
+    my $platformname = "";
+
+    if ( $installer::globals::islinuxrpmbuild )
+    {
+        $platformname = "LinuxIntel";
+    }
+    elsif ( $installer::globals::issolarissparcbuild )
+    {
+        $platformname = "SolarisSparc";
+    }
+    elsif ( $installer::globals::issolarisx86build )
+    {
+        $platformname = "Solarisx86";
+    }
+    elsif ( $installer::globals::iswindowsbuild )
+    {
+        $platformname = "Win32Intel";
+    }
+    else
+    {
+        # $platformname = $installer::globals::packageformat;
+        $platformname = $installer::globals::compiler;
+    }
+
+    return $platformname;
 }
 
 1;
