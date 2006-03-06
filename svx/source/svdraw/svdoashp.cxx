@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-19 13:38:08 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3638,7 +3638,9 @@ void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
     AdjustTextFrameWidthAndHeight() also has to be made, both
     actions are done by NbcSetSnapRect !  */
 //  SetRectsDirty();
-    NbcSetSnapRect( aRect );
+
+    Rectangle aTmp( aRect );    //creating temporary rectangle #i61108#
+    NbcSetSnapRect( aTmp );
 }
 
 SdrObjGeoData* SdrObjCustomShape::NewGeoData() const
