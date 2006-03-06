@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:26:31 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,21 +258,23 @@ void WeakComponentImplHelperBase::acquire()
 void WeakComponentImplHelperBase::release()
     throw ()
 {
-    if (1 == m_refCount && !rBHelper.bDisposed)
-    {
-        try
-        {
-            dispose();
+    if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // restore reference count:
+        osl_incrementInterlockedCount( &m_refCount );
+        if (! rBHelper.bDisposed) {
+            try {
+                dispose();
+            }
+            catch (RuntimeException const& exc) { // don't break throw ()
+                OSL_ENSURE(
+                    false, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                static_cast<void>(exc);
+            }
+            OSL_ASSERT( rBHelper.bDisposed );
         }
-        catch (RuntimeException & exc) // don't break throw ()
-        {
-#if OSL_DEBUG_LEVEL > 0
-            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, msg.getStr() );
-#endif
-        }
+        OWeakObject::release();
     }
-    OWeakObject::release();
 }
 //__________________________________________________________________________________________________
 void WeakComponentImplHelperBase::dispose()
@@ -386,22 +388,27 @@ void WeakAggComponentImplHelperBase::acquire()
 void WeakAggComponentImplHelperBase::release()
     throw ()
 {
-    Reference< XInterface > x( xDelegator );
-    if (!x.is() && 1 == m_refCount && !rBHelper.bDisposed)
-    {
-        try
-        {
-            dispose();
-        }
-        catch (RuntimeException & exc) // don't break throw ()
-        {
-#if OSL_DEBUG_LEVEL > 0
-            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, msg.getStr() );
-#endif
-        }
+    Reference<XInterface> const xDelegator_(xDelegator);
+    if (xDelegator_.is()) {
+        OWeakAggObject::release();
     }
-    OWeakAggObject::release();
+    else if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // restore reference count:
+        osl_incrementInterlockedCount( &m_refCount );
+        if (! rBHelper.bDisposed) {
+            try {
+                dispose();
+            }
+            catch (RuntimeException const& exc) { // don't break throw ()
+                OSL_ENSURE(
+                    false, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                static_cast<void>(exc);
+            }
+            OSL_ASSERT( rBHelper.bDisposed );
+        }
+        OWeakAggObject::release();
+    }
 }
 //__________________________________________________________________________________________________
 void WeakAggComponentImplHelperBase::dispose()
