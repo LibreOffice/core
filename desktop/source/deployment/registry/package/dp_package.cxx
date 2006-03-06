@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:30:56 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,14 @@
 #include "dp_interact.h"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
 #include "svtools/inettype.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/makesequence.hxx"
+#include "comphelper/sequence.hxx"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
@@ -71,8 +75,11 @@ namespace backend {
 namespace bundle {
 namespace {
 
+typedef cppu::ImplInheritanceHelper1<PackageRegistryBackend,
+                                     lang::XServiceInfo> ImplBaseT;
+
 //==============================================================================
-class BackendImpl : public PackageRegistryBackend
+class BackendImpl : public ImplBaseT
 {
     class PackageImpl : public ::dp_registry::backend::Package
     {
@@ -165,8 +172,14 @@ public:
     BackendImpl(
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext,
-        OUString const & implName,
         Reference<deployment::XPackageRegistry> const & xRootRegistry );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( OUString const& name )
+        throw (RuntimeException);
+    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (RuntimeException);
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -177,9 +190,8 @@ public:
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName,
     Reference<deployment::XPackageRegistry> const & xRootRegistry )
-    : PackageRegistryBackend( args, xComponentContext, implName ),
+    : ImplBaseT( args, xComponentContext ),
       m_xRootRegistry( xRootRegistry ),
       m_xBundleTypeInfo( new Package::TypeInfo(
                              OUSTR("application/vnd.sun.star.package-bundle"),
@@ -205,6 +217,25 @@ void BackendImpl::disposing()
 {
     m_xRootRegistry.clear();
     PackageRegistryBackend::disposing();
+}
+
+// XServiceInfo
+OUString BackendImpl::getImplementationName() throw (RuntimeException)
+{
+    return OUSTR("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
+}
+
+sal_Bool BackendImpl::supportsService( OUString const& name )
+    throw (RuntimeException)
+{
+    return getSupportedServiceNames()[0].equals(name);
+}
+
+Sequence<OUString> BackendImpl::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    return comphelper::makeSequence(
+        OUString::createFromAscii(BACKEND_SERVICE_NAME) );
 }
 
 // XPackageRegistry
@@ -618,8 +649,7 @@ void BackendImpl::PackageImpl::exportTo(
             xContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.io.Pipe"), xContext ), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
-            xPipe, Sequence< Sequence<beans::PropertyValue> >(
-                &manifest[ 0 ], manifest.size() ) );
+            xPipe, comphelper::containerToSequence(manifest) );
 
         // write buffered pipe data to content:
         ::ucb::Content manifestContent(
@@ -1040,10 +1070,7 @@ Reference<deployment::XPackageRegistry> create(
         args[ 1 ] <<= cachePath;
         args[ 2 ] <<= readOnly;
     }
-    return new BackendImpl(
-        args, xComponentContext,
-        OUSTR("com.sun.star.comp.deployment.bundle.PackageRegistryBackend"),
-        xRootRegistry );
+    return new BackendImpl( args, xComponentContext, xRootRegistry );
 }
 
 } // namespace bundle
