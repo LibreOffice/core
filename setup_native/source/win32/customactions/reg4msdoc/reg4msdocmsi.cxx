@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reg4msdocmsi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:35:28 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 14:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,12 +117,20 @@ extern "C" UINT __stdcall InstallUiSequenceEntry(MSIHANDLE handle)
     {
         UnsetMsiProp(handle, TEXT("SELECT_POWERPOINT"));
     }
+
+    SetMsiProp(handle, TEXT("UI_SEQUENCE_EXECUTED"));
+
     return ERROR_SUCCESS;
 }
 
 extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE handle)
 {
     //MessageBox(NULL, TEXT("InstallExecSequenceEntry"), TEXT("Information"), MB_OK | MB_ICONINFORMATION);
+
+    // Do nothing in repair mode.
+    // Then UI_SEQUENCE_EXECUTED is not set and Installed is set!
+    // In silent installation UI_SEQUENCE_EXECUTED is also not set, but Installed is not set.
+    if ((!IsSetMsiProp(handle, TEXT("UI_SEQUENCE_EXECUTED"))) && (IsMsiPropNotEmpty(handle, TEXT("Installed")))) { return ERROR_SUCCESS; }
 
     int reg4 = 0;
     int unreg4 = 0;
