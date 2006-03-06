@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:49:24 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:02:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,23 @@ sub get_productversion_for_property_table
 }
 
 #######################################################
+# Setting all feature names as Properties. This is
+# required for the Windows patch process.
+#######################################################
+
+sub set_featurename_properties_for_patch
+{
+    ($propertyfile) = @_;
+
+    for ( my $i = 0; $i <= $#installer::globals::featurecollector; $i++ )
+    {
+        my $onepropertyline =  $installer::globals::featurecollector[$i] . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+}
+
+#######################################################
 # Setting some important properties
 # (for finding the product in deinstallation process)
 #######################################################
@@ -292,6 +309,9 @@ sub update_property_table
 
     # Setting variables into propertytable
     set_important_properties($propertyfile, $allvariables, $languagestringref);
+
+    # Setting feature names as properties for Windows patch mechanism
+    if ( $installer::globals::patch ) { set_featurename_properties_for_patch($propertyfile); }
 
     # Saving the file
 
