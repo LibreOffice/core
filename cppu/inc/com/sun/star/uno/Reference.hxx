@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:34:00 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,8 +195,9 @@ inline void Reference< interface_type >::clear() SAL_THROW( () )
 {
     if (_pInterface)
     {
-        _pInterface->release();
+        XInterface * const pOld = _pInterface;
         _pInterface = 0;
+        pOld->release();
     }
 }
 //__________________________________________________________________________________________________
@@ -206,9 +207,10 @@ inline sal_Bool Reference< interface_type >::set(
 {
     if (pInterface)
         reinterpret_cast< XInterface * >(pInterface)->acquire();
-    if (_pInterface)
-        _pInterface->release();
+    XInterface * const pOld = _pInterface;
     _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    if (pOld)
+        pOld->release();
     return (0 != pInterface);
 }
 //__________________________________________________________________________________________________
@@ -216,9 +218,10 @@ template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () )
 {
-    if (_pInterface)
-        _pInterface->release();
+    XInterface * const pOld = _pInterface;
     _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    if (pOld)
+        pOld->release();
     return (0 != pInterface);
 }
 //__________________________________________________________________________________________________
