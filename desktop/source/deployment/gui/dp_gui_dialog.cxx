@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:38 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "ucbhelper/content.hxx"
 #include "unotools/configmgr.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/sequence.hxx"
 #include "tools/isolang.hxx"
 #include "tools/resmgr.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
@@ -501,11 +502,10 @@ DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel ) const
         if (xPackage.is())
             ret.push_back( xPackage );
     }
-    return Sequence< Reference<deployment::XPackage> >( &ret[ 0 ], ret.size() );
+    return comphelper::containerToSequence(ret);
 }
 
 namespace {
-
 struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
     const OUString operator () () {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
@@ -516,46 +516,6 @@ struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
         return ret;
     }
 };
-
-template <typename FuncT, typename ResultT>
-class SolarThreadEx : public vcl::SolarThreadExecutor
-{
-public:
-    explicit SolarThreadEx( FuncT func ) : m_func(func), m_result() {}
-
-    ::boost::function0<ResultT> m_func;
-    ResultT m_result;
-
-    virtual long doIt() {
-        try {
-            m_result = m_func();
-        }
-        catch (Exception &) {
-            OSL_ENSURE(
-                false, rtl::OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-        return 0;
-    }
-};
-
-template <typename FuncT, typename ResultT>
-inline ResultT executeInSolarThread( FuncT func )
-{
-    // no stack mem:
-    std::auto_ptr< SolarThreadEx<FuncT, ResultT> > threadEx(
-        new SolarThreadEx<FuncT, ResultT>(func) );
-    threadEx->execute();
-    return threadEx->m_result;
-}
-
-template <typename FuncT>
-inline typename FuncT::result_type executeInSolarThread( FuncT func )
-{
-    return executeInSolarThread<FuncT, typename FuncT::result_type>(func);
-}
-
 } // anon namespace
 
 //______________________________________________________________________________
@@ -639,7 +599,7 @@ void DialogImpl::clickAdd( USHORT )
     OSL_ASSERT( xPackageManager.is() );
 
     const Sequence<OUString> files(
-        executeInSolarThread(
+        vcl::solarthread::syncExecute(
             boost::bind( &DialogImpl::solarthread_raiseAddPicker, this,
                          xPackageManager ) ) );
     if (files.getLength() == 0)
@@ -755,9 +715,9 @@ void DialogImpl::clickEnableDisable( USHORT id )
 
 bool DialogImpl::solarthread_raiseExportPickers(
     Sequence< Reference<deployment::XPackage> > const & selection,
-    OUString * pDestFolder, OUString * pNewTitle, sal_Int32 * pNameClashAction )
+    OUString & rDestFolder, OUString & rNewTitle, sal_Int32 & rNameClashAction )
 {
-    *pNameClashAction = NameClash::ASK;
+    rNameClashAction = NameClash::ASK;
 
     if (selection.getLength() > 1)
     {
@@ -770,7 +730,7 @@ bool DialogImpl::solarthread_raiseExportPickers(
         xFolderPicker->setTitle( m_strExportPackages );
         if (xFolderPicker->execute() !=ui::dialogs::ExecutableDialogResults::OK)
             return false; // cancelled
-        *pDestFolder = xFolderPicker->getDirectory();
+        rDestFolder = xFolderPicker->getDirectory();
     }
     else // single item selected
     {
@@ -830,23 +790,14 @@ bool DialogImpl::solarthread_raiseExportPickers(
         ::ucb::Content destFolderContent(
             Reference<XContent>( xChild->getParent(), UNO_QUERY_THROW ),
             currentCmdEnv.get() );
-        *pDestFolder = destFolderContent.getURL();
-        *pNewTitle = ::rtl::Uri::decode( url.copy( url.lastIndexOf( '/' ) + 1 ),
-                                         rtl_UriDecodeWithCharset,
-                                         RTL_TEXTENCODING_UTF8 );
+        rDestFolder = destFolderContent.getURL();
+        rNewTitle = rtl::Uri::decode( url.copy( url.lastIndexOf( '/' ) + 1 ),
+                                      rtl_UriDecodeWithCharset,
+                                      RTL_TEXTENCODING_UTF8 );
         // overwrite, because FilePicker has already asked:
-        *pNameClashAction = NameClash::OVERWRITE;
+        rNameClashAction = NameClash::OVERWRITE;
     }
     return true;
-}
-
-namespace {
-struct ExportPickersOutParams {
-    OUString m_destFolder;
-    OUString m_newTitle;
-    sal_Int32 m_nameClashAction;
-    ExportPickersOutParams() : m_nameClashAction(NameClash::ASK) {}
-};
 }
 
 //______________________________________________________________________________
@@ -858,15 +809,16 @@ void DialogImpl::clickExport( USHORT )
     if (selection.getLength() == 0)
         return;
 
-    // no stack mem:
-    std::auto_ptr<ExportPickersOutParams> pExportPickersOutParams(
-        new ExportPickersOutParams );
-    if (! executeInSolarThread(
-            boost::bind( &DialogImpl::solarthread_raiseExportPickers, this,
-                         selection,
-                         &pExportPickersOutParams->m_destFolder,
-                         &pExportPickersOutParams->m_newTitle,
-                         &pExportPickersOutParams->m_nameClashAction ) ))
+    OUString destFolder;
+    OUString newTitle;
+    sal_Int32 nameClashAction = NameClash::ASK;
+    using namespace vcl::solarthread;
+    if (! syncExecute( boost::bind(
+                           &DialogImpl::solarthread_raiseExportPickers, this,
+                           selection,
+                           inout_by_ref(destFolder),
+                           inout_by_ref(newTitle),
+                           inout_by_ref(nameClashAction) ) ))
         return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
@@ -877,10 +829,8 @@ void DialogImpl::clickExport( USHORT )
     {
         Reference<deployment::XPackage> const & xPackage = selection[ pos ];
         currentCmdEnv->progressSection( xPackage->getDisplayName() );
-        OSL_ASSERT( pExportPickersOutParams->m_destFolder.getLength() > 0 );
-        xPackage->exportTo( pExportPickersOutParams->m_destFolder,
-                            pExportPickersOutParams->m_newTitle,
-                            pExportPickersOutParams->m_nameClashAction,
+        OSL_ASSERT( destFolder.getLength() > 0 );
+        xPackage->exportTo( destFolder, newTitle, nameClashAction,
                             currentCmdEnv.get() );
     }
 }
