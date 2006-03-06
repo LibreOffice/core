@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:25:50 $
+#   last change: $Author: rt $ $Date: 2006-03-06 10:21:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ SLOFILES = \
         $(SLO)$/dp_xml.obj \
         $(SLO)$/dp_log.obj \
         $(SLO)$/dp_persmap.obj \
-        $(SLO)$/dp_servicefactory.obj \
         $(SLO)$/dp_services.obj       \
         $(SLO)$/db.obj
 
