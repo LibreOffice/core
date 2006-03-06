@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:30:16 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,8 @@
 #include "cppuhelper/weakref.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/compbase3.hxx"
+#include "cppuhelper/compbase2.hxx"
 #include "tools/inetmime.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include <memory>
@@ -57,10 +56,12 @@ namespace dp_registry
 namespace backend
 {
 
-
 namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
+
+char const* const BACKEND_SERVICE_NAME =
+"com.sun.star.deployment.PackageRegistryBackend";
 
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
@@ -215,8 +216,7 @@ public:
                css::ucb::CommandAbortedException, css::uno::RuntimeException);
 };
 
-typedef ::cppu::WeakComponentImplHelper3<
-    css::lang::XServiceInfo,
+typedef ::cppu::WeakComponentImplHelper2<
     css::lang::XEventListener,
     css::deployment::XPackageRegistry > t_BackendBase;
 
@@ -226,7 +226,6 @@ class PackageRegistryBackend
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ::rtl::OUString m_cachePath;
-    const ::rtl::OUString m_implName;
 
     typedef ::std::hash_map<
         ::rtl::OUString, css::uno::WeakReference<css::deployment::XPackage>,
@@ -260,8 +259,7 @@ protected:
     virtual ~PackageRegistryBackend();
     PackageRegistryBackend(
         css::uno::Sequence<css::uno::Any> const & args,
-        css::uno::Reference<css::uno::XComponentContext> const & xContext,
-        ::rtl::OUString const & implName );
+        css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
@@ -274,15 +272,6 @@ public:
 
     inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.getLength() == 0; }
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(
-        ::rtl::OUString const & serviceName )
-        throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
