@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:05 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,8 +190,8 @@ struct DialogImpl :
     bool solarthread_raiseExportPickers(
         css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
         const & selection,
-        rtl::OUString * pDestFolder, rtl::OUString * pNewTitle,
-        sal_Int32 * pNameClashAction );
+        rtl::OUString & rDestFolder, rtl::OUString & rNewTitle,
+        sal_Int32 & rNameClashAction );
 
     void clickClose( USHORT id );
     void clickAdd( USHORT id );
