@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:11:34 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:12:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1489,7 +1489,8 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
             vec.push_back( p.first->second );
             ++p.first;
         }
-        ret = Sequence< Reference< XInterface > >( &vec[ 0 ], vec.size() );
+        ret = Sequence< Reference< XInterface > >(
+            vec.empty() ? 0 : &vec[ 0 ], vec.size() );
     }
 
     return ret;
