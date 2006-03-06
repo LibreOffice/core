@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:28:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:16:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ provoking error here, because PP ignores #error
 
 #define CPPU_STRINGIFY_EX( x ) #x
 #define CPPU_STRINGIFY( x ) CPPU_STRINGIFY_EX( x )
+
 /** Name for C++ compiler/ platform, e.g. "gcc3", "msci" */
 #define CPPU_CURRENT_LANGUAGE_BINDING_NAME CPPU_STRINGIFY( CPPU_ENV )
 
@@ -100,7 +101,9 @@ provoking error here, because PP ignores #error
 provoking error here, because PP ignores #error
 #endif /* CPPU_ENV */
 
-#endif /** __cplusplus */
+#undef TMP_CPPU_ENV
+
+#endif /* __cplusplus */
 
 /** Environment type name for binary C UNO. */
 #define UNO_LB_UNO "uno"
