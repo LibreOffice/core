@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_managerfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:21:22 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #include "dp_manager.h"
 #include "dp_resource.h"
 #include "cppuhelper/compbase1.hxx"
-#include "com/sun/star/registry/XRegistryKey.hpp"
+#include "comphelper/servicedecl.hxx"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 
 
@@ -78,26 +78,12 @@ public:
 };
 
 //==============================================================================
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR("com.sun.star.comp.deployment.PackageManagerFactory");
-}
-
-//==============================================================================
-Sequence<OUString> SAL_CALL getSupportedServiceNames()
-{
-    OUString strName( getImplementationName() );
-    return Sequence<OUString>( &strName, 1 );
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const &,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new PackageManagerFactoryImpl( xComponentContext ) );
-}
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<PackageManagerFactoryImpl>(),
+    // a private one:
+    "com.sun.star.comp.deployment.PackageManagerFactory",
+    "com.sun.star.comp.deployment.PackageManagerFactory" );
 
 //==============================================================================
 bool singleton_entries(
@@ -106,11 +92,11 @@ bool singleton_entries(
     try {
         Reference<registry::XRegistryKey> xKey(
             xRegistryKey->createKey(
-                getImplementationName() +
+                serviceDecl.getImplementationName() +
                 // xxx todo: use future generated function to get singleton name
                 OUSTR("/UNO/SINGLETONS/"
                       "com.sun.star.deployment.thePackageManagerFactory") ) );
-        xKey->setStringValue( getImplementationName() );
+        xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
         return true;
     }
     catch (registry::InvalidRegistryException & exc) {
