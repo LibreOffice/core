@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:01:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4495,13 +4495,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
             if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
             {
-
-                // Was: currently the luminance and contrast items are available
-                // in impress only
-                // Now: available in writer as well, so logically only do
-                // hackery for excel import
-                if ( !(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL)
-                        && ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ) )
+                if ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 )
                 {
                     if ( nBrightness )
                         rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
