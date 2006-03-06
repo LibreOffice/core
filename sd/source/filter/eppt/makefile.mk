@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:20:06 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,12 @@ ENABLE_EXCEPTIONS=TRUE
 NOOPTFILES= $(SLO)$/epptso.obj
 .ENDIF
 
-SLOFILES =	$(SLO)$/eppt.obj			\
-            $(SLO)$/epptso.obj			\
-            $(SLO)$/escherex.obj		\
-            $(SLO)$/dinfos2.obj			\
-            $(SLO)$/pptexanimations.obj
+SLOFILES =	$(SLO)$/eppt.obj				\
+            $(SLO)$/epptso.obj				\
+            $(SLO)$/escherex.obj			\
+            $(SLO)$/dinfos2.obj				\
+            $(SLO)$/pptexanimations.obj		\
+            $(SLO)$/pptexsoundcollection.obj
 
 SHL1TARGET	=	emp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	eppt
