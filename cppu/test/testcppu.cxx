@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:59:37 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1149,6 +1149,13 @@ void testArray(void)
  */
 int SAL_CALL main(int argc, char **argv)
 {
+    rtl::OUString const cppName(
+        RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    uno_Environment * pCppEnv = 0;
+    uno_getEnvironment( &pCppEnv, cppName.pData, 0 );
+    uno_getEnvironment( &pCppEnv, cppName.pData, 0 );
+    (*pCppEnv->release)( pCppEnv );
+
     try {
         typelib_setCacheSize( 200 );
         Reference< registry::XSimpleRegistry > xRegistry(
