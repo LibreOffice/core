@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:00:27 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:01:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package installer::windows::feature;
 
+use installer::existence;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
@@ -299,6 +300,12 @@ sub add_language_pack_feature
 
         push(@{$featuretableref}, $oneline);
 
+        # collecting all feature in global feature collector
+        if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+        {
+            push(@installer::globals::featurecollector, $feature{'feature'});
+        }
+
         # $onelanguage = "de"
         # $gid = "gm_Langpack_de"
         # -> only include if this is the language specific language name
@@ -349,6 +356,12 @@ sub add_multilingual_features
                     . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
 
         push(@{$featuretableref}, $oneline);
+
+        # collecting all feature in global feature collector
+        if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+        {
+            push(@installer::globals::featurecollector, $feature{'feature'});
+        }
     }
 }
 
@@ -440,6 +453,12 @@ sub create_feature_table
                     . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
 
             push(@featuretable, $oneline);
+
+            # collecting all feature in global feature collector
+            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+            {
+                push(@installer::globals::featurecollector, $feature{'feature'});
+            }
         }
 
         if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, $translationfile, $onelanguage); }
