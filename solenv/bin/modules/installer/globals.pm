@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:24:10 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,10 @@ BEGIN
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
     $patchaddon = "Patch";
+    $ooodownloadfilename = "";
+    $downloadfilename = "";
+    $downloadfileextension = "";
+    $oooversionstring = "";
 
     $is_copy_only_project = 0;
     $addchildprojects = 0;
