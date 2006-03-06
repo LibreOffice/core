@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:36 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1774,7 +1774,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     if ( mbUseNewAnimations )
     {
         SvMemoryStream amsofbtAnimGroup;
-        ppt::AnimationExporter aExporter( aSolverContainer );
+        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
         aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
         sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
         if ( nmsofbtAnimGroupSize )
