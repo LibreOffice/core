@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_migration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:22:04 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,12 @@
 
 #include "dp_misc.h"
 #include "dp_ucb.h"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "comphelper/servicedecl.hxx"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/task/XJob.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -58,15 +59,7 @@ using ::rtl::OUString;
 
 namespace dp_migration {
 
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR("com.sun.star.comp.deployment.migration.Migration_2_0");
-}
-
-namespace {
-
-class MigrationImpl : public ::cppu::WeakImplHelper2<
-    lang::XServiceInfo, task::XJob >
+class MigrationImpl : public ::cppu::WeakImplHelper1<task::XJob>
 {
     struct CommandEnvironmentImpl
         : public ::cppu::WeakImplHelper2< XCommandEnvironment,
@@ -86,17 +79,12 @@ class MigrationImpl : public ::cppu::WeakImplHelper2<
     const Reference<XComponentContext> m_xContext;
     OUString m_userData;
 
-public:
+protected:
     virtual ~MigrationImpl();
+public:
     MigrationImpl( Sequence<Any> const & args,
                    Reference<XComponentContext> const & xComponentContext );
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
     // XJob
     virtual Any SAL_CALL execute( Sequence<beans::NamedValue> const & args )
         throw (lang::IllegalArgumentException, Exception, RuntimeException);
@@ -119,25 +107,6 @@ MigrationImpl::MigrationImpl(
     if (m_userData.getLength() == 0)
         throw lang::IllegalArgumentException( OUSTR("missing UserData!"), 0,
                                               static_cast<sal_Int16>(-1) );
-}
-
-// XServiceInfo
-OUString MigrationImpl::getImplementationName() throw (RuntimeException)
-{
-    return ::dp_migration::getImplementationName();
-}
-
-sal_Bool MigrationImpl::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
-{
-    return getImplementationName().equals(serviceName);
-}
-
-Sequence<OUString> MigrationImpl::getSupportedServiceNames()
-    throw (RuntimeException)
-{
-    const OUString name( getImplementationName() );
-    return Sequence<OUString>( &name, 1 );
 }
 
 // XJob
@@ -275,15 +244,12 @@ void MigrationImpl::CommandEnvironmentImpl::handle(
     }
 }
 
-} // anon namespace
-
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new MigrationImpl( args, xComponentContext ) );
-}
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<MigrationImpl, sdecl::with_args<true> >(),
+    // a private one (config entry):
+    "com.sun.star.comp.deployment.migration.Migration_2_0",
+    "com.sun.star.comp.deployment.migration.Migration_2_0" );
 
 } // namespace dp_migration
 
