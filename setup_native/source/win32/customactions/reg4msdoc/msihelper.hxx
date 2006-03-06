@@ -61,6 +61,17 @@ void UnsetMsiProp(MSIHANDLE handle, LPCTSTR name);
 bool IsSetMsiProp(MSIHANDLE handle, LPCTSTR name);
 
 /**
+    Returns whether a certain property is set meaning
+    its value is not empty. This method should be used for
+    properties, that can have different values.
+
+    @returns
+    <TRUE/>if the value of the specified property is
+    not empty. If it is empty <FALSE/> will be returned.
+*/
+bool IsMsiPropNotEmpty(MSIHANDLE handle, LPCTSTR name);
+
+/**
     Query if this is an installation for all user or not.
 
     @param handle
