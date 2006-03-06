@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:17:00 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,26 +34,28 @@
  ************************************************************************/
 
 #include "dp_gui.h"
-#include "dp_servicefactory.h"
-#include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "unotools/configmgr.hxx"
+#include "comphelper/servicedecl.hxx"
+#include "comphelper/unwrapargs.hxx"
 #include "tools/isolang.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 
+#include "boost/bind.hpp"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-namespace {
+namespace dp_gui {
 
 //==============================================================================
-class MyApp : public Application
+class MyApp : public Application, private boost::noncopyable
 {
 public:
     MyApp();
@@ -81,26 +83,18 @@ void MyApp::Main()
 //##############################################################################
 
 //==============================================================================
-class ServiceImpl :
-    public ::cppu::WeakImplHelper3< lang::XServiceInfo,
-                                    ui::dialogs::XExecutableDialog,
-                                    task::XJobExecutor >
+class ServiceImpl
+    : public ::cppu::WeakImplHelper2<ui::dialogs::XExecutableDialog,
+                                     task::XJobExecutor>
 {
-    Reference<XComponentContext> m_xComponentContext;
-    Reference<awt::XWindow> m_xParent;
-    OUString m_view;
+    Reference<XComponentContext> const m_xComponentContext;
+    boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
+    boost::optional<OUString> /* const */ m_view;
     OUString m_initialTitle;
 
 public:
     ServiceImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( OUString const & title )
@@ -113,60 +107,11 @@ public:
 };
 
 //______________________________________________________________________________
-ServiceImpl::ServiceImpl(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-    : m_xComponentContext( xComponentContext )
+ServiceImpl::ServiceImpl( Sequence<Any> const& args,
+                          Reference<XComponentContext> const& xComponentContext)
+    : m_xComponentContext(xComponentContext)
 {
-    if (args.getLength() > 0) {
-        m_xParent.set( args[ 0 ], UNO_QUERY_THROW );
-        if (args.getLength() > 1)
-            m_view = args[ 1 ].get<OUString>();
-    }
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new ServiceImpl( args, xComponentContext ) );
-}
-
-//==============================================================================
-OUString SAL_CALL getImplementationName_()
-{
-    return OUSTR("com.sun.star.comp.deployment.ui.PackageManagerDialog");
-}
-
-//==============================================================================
-Sequence<OUString> SAL_CALL getSupportedServiceNames_()
-{
-    OUString strName = OUSTR("com.sun.star.deployment.ui.PackageManagerDialog");
-    return Sequence<OUString>( &strName, 1 );
-}
-
-// XServiceInfo
-//______________________________________________________________________________
-OUString ServiceImpl::getImplementationName()
-    throw (RuntimeException)
-{
-    return getImplementationName_();
-}
-
-//______________________________________________________________________________
-sal_Bool ServiceImpl::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
-{
-    return getSupportedServiceNames_()[ 0 ].equals( serviceName );
-}
-
-//______________________________________________________________________________
-Sequence<OUString> ServiceImpl::getSupportedServiceNames()
-    throw (RuntimeException)
-{
-    return getSupportedServiceNames_();
+    comphelper::unwrapArgs( args, m_parent, m_view );
 }
 
 // XExecutableDialog
@@ -176,7 +121,9 @@ void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
     if (::dp_gui::DialogImpl::s_dialog.is()) {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         ::dp_gui::DialogImpl::get(
-            m_xComponentContext, m_xParent, m_view )->SetText( title );
+            m_xComponentContext,
+            m_parent ? *m_parent : Reference<awt::XWindow>(),
+            m_view ? *m_view : OUString() )->SetText( title );
     }
     else
         m_initialTitle = title;
@@ -227,7 +174,9 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         ::rtl::Reference< ::dp_gui::DialogImpl > dialog(
             ::dp_gui::DialogImpl::get(
-                m_xComponentContext, m_xParent, m_view ) );
+                m_xComponentContext,
+                m_parent ? *m_parent : Reference<awt::XWindow>(),
+                m_view ? *m_view : OUString() ) );
         if (m_initialTitle.getLength() > 0) {
             dialog->SetText( m_initialTitle );
             m_initialTitle = OUString();
@@ -251,24 +200,18 @@ void ServiceImpl::trigger( OUString const & event ) throw (RuntimeException)
     execute();
 }
 
-const ::cppu::ImplementationEntry s_entries [] =
-{
-    {
-        (::cppu::ComponentFactoryFunc) create,
-        getImplementationName_,
-        getSupportedServiceNames_,
-        createFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
+namespace sdecl = comphelper::service_decl;
+sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<ServiceImpl, sdecl::with_args<true> >(),
+    "com.sun.star.comp.deployment.ui.PackageManagerDialog",
+    "com.sun.star.deployment.ui.PackageManagerDialog" );
 
-} // anon namespace
+} // namespace dp_gui
 
 extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -277,8 +220,8 @@ sal_Bool SAL_CALL component_writeInfo(
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )
 {
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, s_entries );
+    return component_writeInfoHelper(
+        pServiceManager, pRegistryKey, dp_gui::serviceDecl );
 }
 
 void * SAL_CALL component_getFactory(
@@ -286,8 +229,8 @@ void * SAL_CALL component_getFactory(
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )
 {
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, s_entries );
+    return component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl );
 }
 
 } // extern "C"
