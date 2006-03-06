@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 13:28:51 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 14:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,15 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Patch_SetFeatureState
+	Name = "SetFeatureState";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "SetFeatureState";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "InstallValidate");
 End
 
 WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
