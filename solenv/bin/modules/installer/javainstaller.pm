@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 15:01:29 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:01:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1563,10 +1563,28 @@ sub put_rpmpath_into_xmlfile
 
     my $alluniquenames = collect_uniquenames_in_xmlfile($xmlfile);
 
-    $infoline = "Number of packages in installation set: $#{$listofpackages}\n";
+    my $number = $#{$listofpackages} + 1;
+    $infoline = "Number of packages in installation set: $number\n";
     push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "Number of unique RPM names in xml file: $#{$alluniquenames}\n";
+    $number = $#{$alluniquenames} + 1;
+    $infoline = "Number of unique RPM names in xml file: $number\n";
     push( @installer::globals::logfileinfo, $infoline);
+
+    $infoline = "\nPackages in installation set:\n";
+    push( @installer::globals::logfileinfo, $infoline);
+    for ( my $i = 0; $i <= $#{$listofpackages}; $i++ )
+    {
+        $infoline = "${$listofpackages}[$i]\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    $infoline = "\nUnique RPM names in xml file:\n";
+    push( @installer::globals::logfileinfo, $infoline);
+    for ( my $i = 0; $i <= $#{$alluniquenames}; $i++ )
+    {
+        $infoline = "${$alluniquenames}[$i]\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 
     if ( $#{$alluniquenames} != $#{$listofpackages} ) { installer::exiter::exit_program("ERROR: xml file contains $#{$alluniquenames} unique names, but there are $#{$listofpackages} packages in installation set!", "put_rpmpath_into_xmlfile"); }
 
