@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:13:34 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/servicedecl.hxx"
+#include "comphelper/sequence.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "svtools/inettype.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
@@ -209,8 +211,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
 public:
     BackendImpl( Sequence<Any> const & args,
-                 Reference<XComponentContext> const & xComponentContext,
-                 OUString const & implName );
+                 Reference<XComponentContext> const & xComponentContext );
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -274,9 +275,8 @@ void BackendImpl::disposing()
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName )
-    : PackageRegistryBackend( args, xComponentContext, implName ),
+    Reference<XComponentContext> const & xComponentContext )
+    : PackageRegistryBackend( args, xComponentContext ),
       m_unorc_inited( false ),
       m_unorc_modified( false ),
       m_xDynComponentTypeInfo( new Package::TypeInfo(
@@ -580,10 +580,10 @@ void BackendImpl::unorc_verify_init(
                 xCmdEnv, false /* no throw */ ))
         {
             OUString line;
-            if (readLine( &line, OUSTR("UNO_JAVA_CLASSPATH="), ucb_content,
+            if (readLine( &line, OUSTR("PKG_UNO_JAVA_CLASSPATH="), ucb_content,
                           RTL_TEXTENCODING_UTF8 ))
             {
-                sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
+                sal_Int32 index = sizeof ("PKG_UNO_JAVA_CLASSPATH=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0) {
@@ -595,14 +595,14 @@ void BackendImpl::unorc_verify_init(
                         }
                         else
                             OSL_ENSURE(
-                                0, "### invalid UNO_JAVA_CLASSPATH entry!" );
+                                0, "### invalid PKG_UNO_JAVA_CLASSPATH entry!");
                     }
                 }
                 while (index >= 0);
             }
-            if (readLine( &line, OUSTR("UNO_TYPES="), ucb_content,
+            if (readLine( &line, OUSTR("PKG_UNO_TYPES="), ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
+                sal_Int32 index = sizeof ("PKG_UNO_TYPES=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0) {
@@ -615,14 +615,14 @@ void BackendImpl::unorc_verify_init(
                             m_rdb_typelibs.push_back( token );
                         }
                         else
-                            OSL_ENSURE( 0, "### invalid UNO_TYPES entry!" );
+                            OSL_ENSURE( 0, "### invalid PKG_UNO_TYPES entry!" );
                     }
                 }
                 while (index >= 0);
             }
-            if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
+            if (readLine( &line, OUSTR("PKG_UNO_SERVICES="), ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 start = sizeof ("UNO_SERVICES=?$ORIGIN/") - 1;
+                sal_Int32 start = sizeof ("PKG_UNO_SERVICES=?$ORIGIN/") - 1;
                 sal_Int32 sep = line.indexOf( ' ', start );
                 OSL_ASSERT( sep > 0 );
                 m_commonRDB = line.copy( start, sep - start );
@@ -633,10 +633,10 @@ void BackendImpl::unorc_verify_init(
                     &ucb_content,
                     makeURL( getCachePath(), getPlatformString() + OUSTR("rc")),
                     xCmdEnv, false /* no throw */ )) {
-                if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
+                if (readLine( &line, OUSTR("PKG_UNO_SERVICES="), ucb_content,
                               RTL_TEXTENCODING_UTF8 )) {
                     m_nativeRDB = line.copy(
-                        sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
+                        sizeof ("PKG_UNO_SERVICES=?$ORIGIN/") - 1 );
                 }
             }
         }
@@ -654,8 +654,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         return;
 
     ::rtl::OStringBuffer buf;
-    // UNO_USER_PACKAGES_CACHE, UNO_SHARED_PACKAGES_CACHE have to be resolved
-    // locally:
+    // UNO_USER_PACKAGES_CACHE, UNO_SHARED_PACKAGES_CACHE
+    // have to be resolved locally:
     if (m_eContext == CONTEXT_USER) {
         buf.append( RTL_CONSTASCII_STRINGPARAM(
                         "UNO_USER_PACKAGES_CACHE=$ORIGIN/../..") );
@@ -672,7 +672,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     {
         t_stringlist::const_iterator iPos( m_jar_typelibs.begin() );
         t_stringlist::const_iterator const iEnd( m_jar_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_JAVA_CLASSPATH=") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_JAVA_CLASSPATH=") );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
             const ::rtl::OString item(
@@ -688,7 +688,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     {
         t_stringlist::const_iterator iPos( m_rdb_typelibs.begin() );
         t_stringlist::const_iterator const iEnd( m_rdb_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_TYPES=") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_TYPES=") );
         while (iPos != iEnd) {
             buf.append( '?' );
             // encoded ASCII file-urls:
@@ -703,18 +703,19 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     }
     if (m_commonRDB.getLength() > 0 || m_nativeRDB.getLength() > 0)
     {
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_SERVICES=?$ORIGIN/") );
         buf.append( ::rtl::OUStringToOString(
                         m_commonRDB, RTL_TEXTENCODING_ASCII_US ) );
         if (m_nativeRDB.getLength() > 0)
         {
             buf.append( RTL_CONSTASCII_STRINGPARAM(
-                            " ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
+                            " ${$ORIGIN/${_OS}_${_ARCH}rc:PKG_UNO_SERVICES}") );
             buf.append(LF);
 
             // write native rc:
             ::rtl::OStringBuffer buf2;
-            buf2.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
+            buf2.append( RTL_CONSTASCII_STRINGPARAM(
+                             "PKG_UNO_SERVICES=?$ORIGIN/") );
             buf2.append( ::rtl::OUStringToOString(
                              m_nativeRDB, RTL_TEXTENCODING_ASCII_US ) );
             buf2.append(LF);
@@ -880,7 +881,7 @@ Reference<XComponentContext> raise_uno_process(
 
     oslProcess hProcess = raiseProcess(
         ProgramDir::get() + OUSTR("/uno"),
-        Sequence<OUString>( &args[ 0 ], args.size() ) );
+        comphelper::containerToSequence(args) );
     try {
         return Reference<XComponentContext>(
             resolveUnoURL( connectStr, xContext, abortChannel.get() ),
@@ -1294,23 +1295,14 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
 
 } // anon namespace
 
-//==============================================================================
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR(
-        "com.sun.star.comp.deployment.component.PackageRegistryBackend");
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl( args, xComponentContext, getImplementationName() ) );
-}
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    "com.sun.star.comp.deployment.component.PackageRegistryBackend",
+    BACKEND_SERVICE_NAME );
 
 } // namespace component
 } // namespace backend
 } // namespace dp_registry
+
 
