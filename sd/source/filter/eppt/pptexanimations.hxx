@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:10:21 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SD_PPTANIMATIONS_HXX
 #include "../ppt/pptanimations.hxx"
+#endif
+#ifndef _SD_PPT_EXSOUNDCOLLECTION_HXX
+#include <pptexsoundcollection.hxx>
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include <svx/escherex.hxx>
@@ -126,7 +129,9 @@ class AnimationExporter
     void exportAnimateTransform( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void exportAnimateColor( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, int nAfterEffectType );
     void exportIterate( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+
     const EscherSolverContainer& mrSolverContainer;
+    ppt::ExSoundCollection& mrExSoundCollection;
     void processAfterEffectNodes( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
     bool isAfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
@@ -138,7 +143,7 @@ class AnimationExporter
     std::list< AfterEffectNodePtr > maAfterEffectNodes;
 
 public:
-    AnimationExporter( const EscherSolverContainer& rSolverContainer );
+    AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection );
 
     void doexport( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, SvStream& rStrm );
 
