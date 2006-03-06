@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:39:01 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
 #endif
+
+#include <vector>
 
 //.........................................................................
 namespace comphelper
@@ -308,6 +310,14 @@ namespace comphelper
         return result;
     }
 
+    template <typename T>
+    inline ::com::sun::star::uno::Sequence<T> containerToSequence(
+        ::std::vector<T> const& v )
+    {
+        return ::com::sun::star::uno::Sequence<T>(
+            v.empty() ? 0 : &v[0], static_cast<sal_Int32>(v.size()) );
+    }
+
     //-------------------------------------------------------------------------
     /** Copy from a Sequence into a container
 
@@ -343,6 +353,7 @@ namespace comphelper
 //.........................................................................
 }   // namespace comphelper
 //.........................................................................
+
 
 #endif // _COMPHELPER_SEQUENCE_HXX_
 
