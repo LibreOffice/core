@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:26:12 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/servicedecl.hxx"
+#include "comphelper/unwrapargs.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 
@@ -70,25 +72,19 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
 //______________________________________________________________________________
 PackageRegistryBackend::PackageRegistryBackend(
     Sequence<Any> const & args,
-    Reference<XComponentContext> const & xContext,
-    OUString const & implName )
+    Reference<XComponentContext> const & xContext )
     : t_BackendBase( getMutex() ),
       m_xComponentContext( xContext ),
-      m_implName( implName ),
       m_eContext( CONTEXT_UNKNOWN ),
       m_readOnly( false )
 {
-    if (args.getLength() < 1)
-        throw lang::IllegalArgumentException(
-            OUSTR("No arguments passed!"), Reference<XInterface>(),
-            static_cast<sal_Int16>(-1) );
-
-    m_context = args[ 0 ].get<OUString>();
-    if (args.getLength() > 1) {
-        m_cachePath = args[ 1 ].get<OUString>();
-        if (args.getLength() > 2)
-            m_readOnly = args[ 2 ].get<bool>();
-    }
+    boost::optional<OUString> cachePath;
+    boost::optional<bool> readOnly;
+    comphelper::unwrapArgs( args, m_context, cachePath, readOnly );
+    if (cachePath)
+        m_cachePath = *cachePath;
+    if (readOnly)
+        m_readOnly = *readOnly;
 
     if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
         m_eContext = CONTEXT_USER;
@@ -128,39 +124,6 @@ void PackageRegistryBackend::disposing()
             OUSTR("caught unexpected exception while disposing!"),
             static_cast<OWeakObject *>(this), exc );
     }
-}
-
-// XServiceInfo
-//______________________________________________________________________________
-OUString PackageRegistryBackend::getImplementationName()
-    throw (RuntimeException)
-{
-//     check();
-    return m_implName;
-}
-
-//______________________________________________________________________________
-sal_Bool PackageRegistryBackend::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
-{
-//     check();
-    Sequence<OUString> supported_services( getSupportedServiceNames() );
-    OUString const * psupported_services = supported_services.getConstArray();
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; ) {
-        if (serviceName.equals( psupported_services[ pos ] ))
-            return true;
-    }
-    return false;
-}
-
-Sequence<OUString> SAL_CALL getSupportedServiceNames();
-
-//______________________________________________________________________________
-Sequence<OUString> PackageRegistryBackend::getSupportedServiceNames()
-    throw (RuntimeException)
-{
-//     check();
-    return ::dp_registry::backend::getSupportedServiceNames();
 }
 
 // XPackageRegistry
