@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:34:33 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #define _COMPHELPER_PROCESSFACTORY_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
+#if ! defined(_COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_)
+#include "com/sun/star/uno/XComponentContext.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -89,6 +89,13 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
     ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
 }
+
+extern "C" {
+/// @internal
+COMPHELPER_DLLPUBLIC
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
+comphelper_getProcessComponentContext();
+} // extern "C"
 
 #endif // _COMPHELPER_PROCESSFACTORY_HXX_
 
