@@ -4,3 +4,4 @@ GetUserInstallMode
 SetProductInstallMode
 ShutDownQuickstarter
 IsOfficeRunning
+SetFeatureState
