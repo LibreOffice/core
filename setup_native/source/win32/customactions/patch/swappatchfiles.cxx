@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 13:28:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 14:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <windows.h>
 #include <msiquery.h>
 #include <malloc.h>
+#include <assert.h>
 
 #ifdef UNICODE
 #define _UNICODE
@@ -54,10 +55,136 @@
 
 #include <systools/win32/uwinapi.h>
 
-
-
 #define WININIT_FILENAME    "wininit.ini"
 #define RENAME_SECTION      "rename"
+
+
+static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
+{
+    std::_tstring   result;
+    TCHAR   szDummy[1] = TEXT("");
+    DWORD   nChars = 0;
+
+    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
+    {
+        DWORD nBytes = ++nChars * sizeof(TCHAR);
+        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+        ZeroMemory( buffer, nBytes );
+        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+        result = buffer;
+    }
+
+    return  result;
+}
+
+// The provided GUID must be without surounding '{}'
+static std::_tstring GetGuidPart(const std::_tstring& guid, int index)
+{
+    assert((guid.length() == 36) && "No GUID or wrong format!");
+    assert(((index > -1) && (index < 5)) && "Out of range!");
+
+    if (index == 0) return std::_tstring(guid.c_str(), 8);
+    if (index == 1) return std::_tstring(guid.c_str() + 9, 4);
+    if (index == 2) return std::_tstring(guid.c_str() + 14, 4);
+    if (index == 3) return std::_tstring(guid.c_str() + 19, 4);
+    if (index == 4) return std::_tstring(guid.c_str() + 24, 12);
+
+    return std::_tstring();
+}
+
+static void Swap(char* p1, char* p2)
+{
+    char tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
+}
+
+static std::_tstring Invert(const std::_tstring& str)
+{
+    char* buff = reinterpret_cast<char*>(_alloca(str.length()));
+    strncpy(buff, str.c_str(), str.length());
+
+    char* front = buff;
+    char* back = buff + str.length() - 1;
+
+    while (front < back)
+        Swap(front++, back--);
+
+    return std::_tstring(buff, str.length());
+}
+
+// Convert the upgrade code (which is a GUID) according
+// to the way the windows installer does when writing it
+// to the registry
+// The first 8 bytes will be inverted, from the the last
+// 8 bytes always the nibbles will be inverted for further
+// details look in the MSDN under compressed registry keys
+static std::_tstring ConvertGuid(const std::_tstring& guid)
+{
+    std::_tstring convertedGuid;
+
+    std::_tstring part = GetGuidPart(guid, 0);
+    convertedGuid = Invert(part);
+
+    part = GetGuidPart(guid, 1);
+    convertedGuid += Invert(part);
+
+    part = GetGuidPart(guid, 2);
+    convertedGuid += Invert(part);
+
+    part = GetGuidPart(guid, 3);
+    convertedGuid += Invert(std::_tstring(part.c_str(), 2));
+    convertedGuid += Invert(std::_tstring(part.c_str() + 2, 2));
+
+    part = GetGuidPart(guid, 4);
+    int pos = 0;
+    for (int i = 0; i < 6; i++)
+    {
+        convertedGuid += Invert(std::_tstring(part.c_str() + pos, 2));
+        pos += 2;
+    }
+    return convertedGuid;
+}
+
+static inline bool IsSetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
+{
+    std::_tstring value = GetMsiProperty(handle, sProperty);
+    return (value.length() > 0);
+}
+
+static inline void UnsetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
+{
+    MsiSetProperty(handle, sProperty.c_str(), NULL);
+}
+
+static inline void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
+{
+    MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
+}
+
+static bool RegistryKeyHasUpgradeSubKey(HKEY hRootKey, const std::_tstring& regKey, const std::_tstring& upgradeKey)
+{
+    HKEY hKey;
+    if (RegOpenKey(hRootKey, regKey.c_str(), &hKey) == ERROR_SUCCESS)
+    {
+        DWORD nSubKeys;
+        DWORD lLongestSubKey;
+
+        if (RegQueryInfoKey(
+            hKey, NULL, NULL, NULL, &nSubKeys, &lLongestSubKey, NULL, NULL, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
+        {
+            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(lLongestSubKey + 1));
+
+            for (DWORD i = 0; i < nSubKeys; i++)
+            {
+                LONG ret = RegEnumKey(hKey, i, buffer, lLongestSubKey + 1);
+                if ((ret == ERROR_SUCCESS) && (buffer == upgradeKey))
+                    return true;
+            }
+        }
+    }
+    return false;
+}
 
 static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
 {
@@ -127,25 +254,6 @@ static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, D
         return MoveFileExA( lpExistingFileNameA, lpNewFileNameA, dwFlags );
 }
 
-
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
-    DWORD   nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return  result;
-}
-
 static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFileName2 )
 {
     std::_tstring   sTempFileName = sFileName1 + TEXT(".tmp");
@@ -153,8 +261,7 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
     bool fSuccess = true;
 
     //Try to move the original file to a temp file
-    fSuccess = MoveFileExImpl( sFileName1.c_str(), sTempFileName.c_str(),
-                           MOVEFILE_REPLACE_EXISTING  );
+    fSuccess = MoveFileExImpl( sFileName1.c_str(), sTempFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
 
     std::_tstring   mystr;
 
@@ -165,7 +272,7 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
         if ( fSuccess )
         {
             fSuccess = MoveFileExImpl( sTempFileName.c_str(), sFileName2.c_str(),
-                                       MOVEFILE_REPLACE_EXISTING );
+                                        MOVEFILE_REPLACE_EXISTING );
             if ( !fSuccess )
             {
                 MoveFileExImpl( sFileName1.c_str(), sFileName2.c_str(), MOVEFILE_REPLACE_EXISTING );
@@ -409,3 +516,115 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
+extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
+{
+    std::_tstring   mystr;
+
+    // 1. Reading Product Code from setup.ini of installed Office
+
+    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    // MessageBox(NULL, sInstallPath.c_str(), "INSTALLLOCATION", MB_OK);
+    std::_tstring sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
+
+    TCHAR szProductCode[32767];
+
+    GetPrivateProfileString(
+        TEXT("Bootstrap"),
+        TEXT("ProductCode"),
+        TEXT("NOTFOUND"),
+        szProductCode,
+        elementsof(szProductCode),
+        sSetupiniPath.c_str()
+        );
+
+    if ( !_tcsicmp( szProductCode, TEXT("NOTFOUND") ) )
+    {
+        // No setup.ini or no "ProductCode" in setup.ini. This is an invalid directory.
+        // MessageBox(NULL, "NOTFOUND set", "DEBUG", MB_OK);
+        return ERROR_SUCCESS;
+    }
+
+    // 2. Converting Product code
+
+    std::_tstring productCode = TEXT(szProductCode);
+    productCode = ConvertGuid(std::_tstring(productCode.c_str() + 1, productCode.length() - 2));
+    mystr = TEXT("Changed product code: ") + productCode;
+    // MessageBox(NULL, mystr.c_str(), "ProductCode", MB_OK);
+
+    // 3. Setting path in the Windows registry to find installed features
+
+    std::_tstring registryKey;
+    HKEY registryRoot;
+
+    if ( IsSetMsiProperty(handle, TEXT("ALLUSERS")) )
+    {
+        registryRoot = HKEY_LOCAL_MACHINE;
+        registryKey = TEXT("Software\\Classes\\Installer\\Features\\") + productCode;
+        mystr = registryKey;
+        // MessageBox( NULL, mystr.c_str(), "ALLUSERS", MB_OK );
+    }
+    else
+    {
+        registryRoot = HKEY_CURRENT_USER;
+        registryKey = TEXT("Software\\Microsoft\\Installer\\Features\\") + productCode;
+        mystr = registryKey;
+        // MessageBox( NULL, mystr.c_str(), "ALLUSERS", MB_OK );
+    }
+
+    // 4. Collecting all installed features from Windows registry
+
+    HKEY hKey;
+    if (RegOpenKey(registryRoot, registryKey.c_str(), &hKey) == ERROR_SUCCESS)
+    {
+        int counter = 0;
+        // DWORD counter = 0;
+        LONG lEnumResult;
+
+        do
+        {
+            TCHAR szValueName[8192];
+            DWORD nValueNameSize = sizeof(szValueName);
+            LPDWORD pValueNameSize = &nValueNameSize;
+            TCHAR szValueData[8192];
+            DWORD nValueDataSize = sizeof(szValueData);
+
+            lEnumResult = RegEnumValue( hKey, counter, szValueName, pValueNameSize, NULL, NULL, (LPBYTE)szValueData, &nValueDataSize);
+
+            if ( ERROR_SUCCESS == lEnumResult )
+            {
+                std::_tstring sValueName = szValueName;
+                std::_tstring sValueData = szValueData;
+
+                // mystr = sValueName;
+                // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
+                // mystr = sValueData;
+                // MessageBox( NULL, mystr.c_str(), "ValueData", MB_OK );
+
+                // Does this feature exist in this patch?
+                if ( IsSetMsiProperty(handle, sValueName) )
+                {
+                    // Feature is not installed, if szValueData starts with a "square" (ascii 6)
+                    if ( 6 == szValueData[0] )
+                    {
+                        MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_ABSENT); // do not install this feature
+                        // mystr = TEXT("Do NOT install: ") + sValueName;
+                        // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
+                    }
+                    else
+                    {
+                        MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_LOCAL); // do install this feature
+                        // mystr = TEXT("Do install: ") + sValueName;
+                        // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
+                    }
+                }
+            }
+
+            counter = counter + 1;
+
+        } while ( ERROR_SUCCESS == lEnumResult );
+
+        RegCloseKey( hKey );
+    }
+
+    return ERROR_SUCCESS;
+}
