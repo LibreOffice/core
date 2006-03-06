@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:31:08 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,33 +48,6 @@ using namespace com::sun::star::uno;
 /** */ //for docpp
 namespace cppu
 {
-
-/**
-   The mutex to synchronize the the queryAdapted call throug the connection point
-   with the release call at the weak object.
- */
-/*
-struct WeakMutexStatic
-{
-    Mutex       aMutex;
-    sal_Bool    bDestructed;
-
-    WeakMutexStatic()
-        : bDestructed( sal_False )
-        {}
-    ~WeakMutexStatic()
-        { bDestructed = sal_True; }
-};
-
-inline static Mutex & getWeakMutex() throw()
-{
-    static WeakMutexStatic s_wmstatic;
-    if (s_wmstatic.bDestructed)
-        return *Mutex::getGlobalMutex();
-    else
-        return s_wmstatic.aMutex;
-}
-*/
 
 // due to static Reflection destruction from usr, ther must be a mutex leak (#73272#)
 inline static Mutex & getWeakMutex() SAL_THROW( () )
@@ -222,15 +195,24 @@ void SAL_CALL OWeakObject::acquire() throw()
 // XInterface
 void SAL_CALL OWeakObject::release() throw()
 {
-    if (osl_decrementInterlockedCount( &m_refCount ) == 0)
-    {
-        if (m_pWeakConnectionPoint)
-        {
-            OWeakConnectionPoint * p = m_pWeakConnectionPoint;
+    if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // notify/clear all weak-refs before object's dtor is executed
+        // (which may check weak-refs to this object):
+        if (m_pWeakConnectionPoint != 0) {
+            OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
             m_pWeakConnectionPoint = 0;
-            p->dispose();
+            try {
+                p->dispose();
+            }
+            catch (RuntimeException const& exc) {
+                OSL_ENSURE(
+                    false, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                static_cast<void>(exc);
+            }
             p->release();
         }
+        // destroy object:
         delete this;
     }
 }
