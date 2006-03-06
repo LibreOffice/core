@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:34:54 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "rtl/uri.hxx"
 #include "ucbhelper/content.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/servicedecl.hxx"
 #include "svtools/inettype.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
@@ -105,8 +106,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 public:
     BackendImpl(
         Sequence<Any> const & args,
-        Reference<XComponentContext> const & xComponentContext,
-        OUString const & implName );
+        Reference<XComponentContext> const & xComponentContext );
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -152,9 +152,8 @@ BackendImpl::PackageImpl::PackageImpl(
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName )
-    : PackageRegistryBackend( args, xComponentContext, implName ),
+    Reference<XComponentContext> const & xComponentContext )
+    : PackageRegistryBackend( args, xComponentContext ),
       m_xTypeInfo( new Package::TypeInfo(
                        OUSTR("application/vnd.sun.star.framework-script"),
                        OUString() /* no file filter */,
@@ -201,22 +200,6 @@ BackendImpl::BackendImpl(
         }
 */
     }
-}
-
-//==============================================================================
-OUString SAL_CALL getImplementationName()
-{
-    return OUSTR("com.sun.star.comp.deployment.sfwk.PackageRegistryBackend");
-}
-
-//==============================================================================
-Reference<XInterface> SAL_CALL create(
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xComponentContext )
-    SAL_THROW( (Exception) )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl( args, xComponentContext, getImplementationName() ) );
 }
 
 // XPackageRegistry
@@ -401,6 +384,12 @@ void BackendImpl::PackageImpl::processPackage_(
         m_xNameCntrPkgHandler->removeByName( m_url );
     }
 }
+
+namespace sdecl = comphelper::service_decl;
+extern sdecl::ServiceDecl const serviceDecl(
+    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
+    BACKEND_SERVICE_NAME );
 
 } // namespace sfwk
 } // namespace backend
