@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:41:38 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1841,8 +1841,18 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if (rServiceName.lastIndexOf( C2U(".OLE2Shape") ) == rServiceName.getLength() - 10)
                     throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
 
+                // --> OD 2006-02-22 #b6382898#
+                // the XML import is allowed to create instances of com.sun.star.drawing.OLE2Shape.
+                // Thus, a temporary service name is introduced to make this possible.
+                OUString aTmpServiceName( rServiceName );
+                if ( bShape &&
+                     rServiceName.compareToAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) == 0 )
+                {
+                    aTmpServiceName = OUString::createFromAscii( "com.sun.star.drawing.OLE2Shape" );
+                }
                 //hier den Draw - Service suchen
-                Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
+                Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
+                // <--
                 if(bShape)
                 {
                     nIndex = COM_SUN_STAR__DRAWING_LENGTH;
@@ -1880,10 +1890,25 @@ Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
 Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
                                         throw( RuntimeException )
 {
-    Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
-    Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
-    return SvxFmMSFactory::concatServiceNames(aRet, aOwn);
+    static Sequence< OUString > aServices;
+    if ( aServices.getLength() == 0 )
+    {
+        Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
+        OUString* pRet = aRet.getArray();
+        for ( sal_Int32 i = 0; i < aRet.getLength(); ++i )
+        {
+            if ( pRet[i].compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 )
+            {
+                pRet[i] = pRet[aRet.getLength() - 1];
+                aRet.realloc( aRet.getLength() - 1 ); // <pRet> no longer valid.
+                break;
+            }
+        }
+        Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
+        aServices = SvxFmMSFactory::concatServiceNames(aRet, aOwn);
+    }
 
+    return aServices;
 }
 /* -----------------18.03.99 11:36-------------------
  *
