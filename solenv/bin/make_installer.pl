@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:47:10 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:28:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -507,9 +507,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         $installer::globals::addchildprojects = 0;
         $installer::globals::addsystemintegration = 0;
-        $installer::globals::makedownload = 0;
         $installer::globals::makejds = 0;
         $installer::globals::addlicensefile = 0;
+
+        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::makedownload = 1; }
+        else { $installer::globals::makedownload = 0; }
     }
 
     $installer::globals::fontpackageexists{$$languagestringref} = 0;
@@ -1410,7 +1412,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
 
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::subdir, $allvariableshashref); }
@@ -1438,7 +1440,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
 
             chdir($currentdir); # changing back into start directory
         }
@@ -1467,7 +1469,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $$downloadname ne "" ) { $create_download = 1; }
             if (( $is_success ) && ( $create_download ))
             {
-                $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
+                my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
                 installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             }
         }
@@ -1848,7 +1850,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $$downloadname ne "" ) { $create_download = 1; }
         if (( $is_success ) && ( $create_download ))
         {
-            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
+            my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
             installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
         }
 
