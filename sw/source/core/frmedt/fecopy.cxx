@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:20:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,11 @@
 // --> OD 2005-08-03 #i50824#
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
+#endif
+// <--
+// --> OD 2006-03-01 #b6382898#
+#ifndef _SVDOGRAF_HXX
+#include <svx/svdograf.hxx>
 #endif
 // <--
 #ifndef _UTL_STREAM_WRAPPER_HXX_
@@ -1352,7 +1357,9 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
 }
 
 // --> OD 2005-08-03 #i50824#
-void lcl_RemoveOleObjsFromSdrModel( SdrModel* _pModel )
+// --> OD 2006-03-01 #b6382898#
+// replace method <lcl_RemoveOleObjsFromSdrModel> by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
+void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
 {
     for ( sal_uInt16 nPgNum = 0; nPgNum < _pModel->GetPageCount(); ++nPgNum )
     {
@@ -1361,15 +1368,27 @@ void lcl_RemoveOleObjsFromSdrModel( SdrModel* _pModel )
         SdrObjListIter aIter(*(_pModel->GetPage( nPgNum )));
         while( aIter.IsMore() )
         {
-            SdrObject* pObj = aIter.Next();
-            if ( pObj->ISA(SdrOle2Obj) )
+            SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );
+            if( pOle2Obj )
             {
-                SdrObjList* pParent = pObj->GetObjList();
-                if ( pParent )
-                {
-                    pParent->NbcRemoveObject( pObj->GetOrdNum() );
-                    delete pObj;
-                }
+                // found an ole2 shape
+                SdrObjList* pObjList = pOle2Obj->GetObjList();
+
+                // get its graphic
+                Graphic aGraphic;
+                pOle2Obj->Connect();
+                Graphic* pGraphic = pOle2Obj->GetGraphic();
+                if( pGraphic )
+                    aGraphic = *pGraphic;
+                pOle2Obj->Disconnect();
+
+                // create new graphic shape with the ole graphic and shape size
+                SdrGrafObj* pGraphicObj = new SdrGrafObj( aGraphic, pOle2Obj->GetCurrentBoundRect() );
+                // apply layer of ole2 shape at graphic shape
+                pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
+
+                // replace ole2 shape with the new graphic object and delete the ol2 shape
+                delete pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
             }
         }
     }
@@ -1521,7 +1540,9 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             pView->SetDesignMode( sal_True );
 
         // --> OD 2005-08-03 #i50824#
-        lcl_RemoveOleObjsFromSdrModel( pModel );
+        // --> OD 2006-03-01 #b6382898#
+        // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
+        lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
         // <--
         pView->Paste( *pModel, aPos );
 
