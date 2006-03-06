@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 09:28:51 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:00:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
+    $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
     $jdsexcludefilename ="";
@@ -237,6 +238,7 @@ BEGIN
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "uriproc.uno" );
     @languagepackfeature =();
+    @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis.mlf";
     $langpackfilename = "Langpack.mlf";
