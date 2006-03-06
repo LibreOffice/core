@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:42:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,12 @@ public:
 
     // fuers Speicher von Rechtecken als Control-Ersatz fuker Versionen < 5.0
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
+
+protected:
+    // --> OD 2006-03-01 #b6382898#
+    // overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+    // <--
 };
 
 
