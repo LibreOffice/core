@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:55:04 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,8 +569,11 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     mnPrinterIndependentLayout (1),
     // #97016#
     nDefaultObjectSizeWidth(8000),
-    nDefaultObjectSizeHeight(5000)
+    nDefaultObjectSizeHeight(5000),
 
+    bPreviewNewEffects( TRUE ),
+    bPreviewChangedEffects( FALSE ),
+    bPreviewTransitions( TRUE )
 {
     EnableModify( TRUE );
 }
