@@ -4,9 +4,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:10:31 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,8 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
     {
         strings.push_back( perm->toString() );
     }
-    return Sequence< OUString >( &strings[ 0 ], strings.size() );
+    return Sequence< OUString >(
+        strings.empty() ? 0 : &strings[ 0 ], strings.size() );
 }
 //__________________________________________________________________________________________________
 inline static bool __implies(
