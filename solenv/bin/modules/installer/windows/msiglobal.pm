@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:15:33 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:01:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,23 @@ sub check_ddf_file
 }
 
 ##########################################################################
+# Lines in ddf files must not be longer than 256 characters.
+# Therefore it can be useful to use relative pathes. Then it is
+# necessary to change into temp directory before calling
+# makecab.exe.
+##########################################################################
+
+sub make_relative_ddf_path
+{
+    my ( $sourcepath ) = @_;
+
+    $sourcepath =~ s/\Q$installer::globals::temppath\E//;
+    $sourcepath =~ s/^\\//;
+
+    return $sourcepath;
+}
+
+##########################################################################
 # Generation the list, in which the source of the files is connected
 # with the cabinet destination file. Because more than one file needs
 # to be included into a cab file, this has to be done via ddf files.
@@ -122,7 +139,7 @@ sub check_ddf_file
 
 sub generate_cab_file_list
 {
-    my ($filesref, $installdir, $ddfdir) = @_;
+    my ($filesref, $installdir, $ddfdir, $allvariables) = @_;
 
     my @cabfilelist = ();
 
@@ -146,6 +163,9 @@ sub generate_cab_file_list
 
             if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
 
+            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+
             # all files with the same cabinetfile are directly behind each other in the files collector
 
             my @ddffile = ();
@@ -164,6 +184,8 @@ sub generate_cab_file_list
             {
                 $sourcepath =  $nextfile->{'sourcepath'};
                 if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+                # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
                 $uniquename =  $nextfile->{'uniquename'};
                 my $localdoinclude = 1;
                 my $nextfilestyles = "";
@@ -214,6 +236,9 @@ sub generate_cab_file_list
             my $sourcepath =  $onefile->{'sourcepath'};
             if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
             my $uniquename =  $onefile->{'uniquename'};
+
+            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
 
             if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
 
@@ -1303,16 +1328,28 @@ sub include_cabs_into_msi
 
 sub execute_packaging
 {
-    my ($localpackjobref, $loggingdir) = @_;
+    my ($localpackjobref, $loggingdir, $allvariables) = @_;
 
     installer::logger::include_header_into_logfile("Packaging process");
 
     installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging start");
 
+    my $infoline = "";
     my $from = cwd();
     my $to = $loggingdir;
 
     chdir($to);
+    $infoline = "chdir: $to \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    # if the ddf file contains relative pathes, it is necessary to change into the temp directory
+    if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} )
+    {
+        $to = $installer::globals::temppath;
+        chdir($to);
+        $infoline = "chdir: $to \n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 
     # changing the tmp directory, because makecab.exe generates temporary cab files
     my $origtemppath = "";
@@ -1335,7 +1372,7 @@ sub execute_packaging
         {
             my @ddfoutput = ();
 
-            my $infoline = "Systemcall: $systemcall";
+            $infoline = "Systemcall: $systemcall";
             push( @installer::globals::logfileinfo, $infoline);
 
             open (DDF, "$systemcall");
@@ -1389,6 +1426,8 @@ sub execute_packaging
     $ENV{'TMP'} = $origtemppath;
 
     chdir($from);
+    $infoline = "chdir: $from \n";
+    push( @installer::globals::logfileinfo, $infoline);
 }
 
 ###############################################################
