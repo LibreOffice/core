@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:48:44 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #include "svdglob.hxx"  // StringCache
 #include "svddrgm1.hxx"
 #include "obj3d.hxx"
+#ifndef _SVDOASHP_HXX
+#include "svdoashp.hxx"
+#endif
 
 #define XOR_DRAG_PEN   PEN_DOT
 
@@ -567,20 +570,30 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     }
                 } break;
 
-                default: { // SDRDRAG_MOVE
-                    if (eDragHdl==HDL_GLUE) {
-                        pDragBla=new SdrDragMove(*this);
-                    } else {
-                        if (bFramDrag==TRUE) {
-                            if (eDragHdl==HDL_MOVE) {
-                                if (!IsMoveAllowed()) return FALSE;
+                default:
+                {   // SDRDRAG_MOVE
+                    if ( ( eDragHdl == HDL_MOVE ) && !IsMoveAllowed() )
+                        return FALSE;
+                    else if ( eDragHdl==HDL_GLUE )
+                        pDragBla = new SdrDragMove(*this);
+                    else
+                    {
+                        if ( bFramDrag )
+                        {
+                            if ( eDragHdl == HDL_MOVE )
                                 pDragBla=new SdrDragMove(*this);
-                            } else {
+                            else
+                            {
                                 if (!IsResizeAllowed(TRUE)) return FALSE;
                                 pDragBla=new SdrDragResize(*this);
                             }
-                        } else {
-                            if (eDragHdl==HDL_MOVE && !IsMoveAllowed()) return FALSE;
+                        }
+                        else
+                        {
+                            if ( ( eDragHdl == HDL_MOVE ) && ( GetMarkedObjectCount() == 1 )
+                                && GetMarkedObjectByIndex( 0 )->ISA( SdrObjCustomShape ) )
+                                pDragBla = new SdrDragMove( *this );
+                            else
                             {
                                 bDragSpecial=TRUE;
                                 pDragBla=new SdrDragObjOwn(*this);
