@@ -39,6 +39,13 @@ bool IsSetMsiProp(MSIHANDLE handle, LPCTSTR name)
     return (val == TEXT("1"));
 }
 
+bool IsMsiPropNotEmpty(MSIHANDLE handle, LPCTSTR name)
+{
+    std::wstring val;
+    GetMsiProp(handle, name, val);
+    return (val != TEXT(""));
+}
+
 bool IsAllUserInstallation(MSIHANDLE handle)
 {
     return IsSetMsiProp(handle, TEXT("ALLUSERS"));
