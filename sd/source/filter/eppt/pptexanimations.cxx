@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:52:06 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 09:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,8 +376,10 @@ SvStream& operator<<(SvStream& rOut, AnimationNode& rNode )
     return rOut;
 }
 
-AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContainer ) :
-    mrSolverContainer ( rSolverContainer ), mnCurrentGroup(0)
+AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection ) :
+    mrSolverContainer   ( rSolverContainer ),
+    mrExSoundCollection ( rExSoundCollection ),
+    mnCurrentGroup(0)
 {
 }
 
@@ -590,205 +592,259 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
 
     bool bSkipChildren = false;
 
-    EscherExContainer aContainer( rStrm, nContainerRecType, nInstance );
-    switch( xNode->getType() )
+    Reference< XAnimationNode > xAudioNode;
+    static sal_uInt32 nAudioGroup;
+
     {
-        case AnimationNodeType::CUSTOM :
+        EscherExContainer aContainer( rStrm, nContainerRecType, nInstance );
+        switch( xNode->getType() )
         {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-        }
-        break;
-
-        case AnimationNodeType::PAR :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            sal_Int32 nFlags = nGroupLevel == 2 ? 0x10 : 0;
-            if ( bTakeBackInteractiveSequenceTiming )
-                nFlags |= 0x40;
-            exportAnimEvent( rStrm, xNode, nFlags );
-            exportAnimValue( rStrm, xNode, nGroupLevel == 4 );
-        }
-        break;
-
-        case AnimationNodeType::SEQ :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            sal_Int16 nNodeType = exportAnimPropertySet( rStrm, xNode );
-            sal_Int32 nFlags = 12;
-            if ( ( nGroupLevel == 1 ) && ( nNodeType == ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ) )
-            {
-                nFlags |= 0x20;
-                bTakeBackInteractiveSequenceTimingForChild = sal_True;
-            }
-            exportAnimAction( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, nFlags );
-            exportAnimValue( rStrm, xNode, sal_False );
-        }
-        break;
-
-        case AnimationNodeType::ITERATE :
-        {
-            {
-                EscherExAtom aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
-                AnimationNode aAnim;
-                rtl_zeroMemory( &aAnim, sizeof( aAnim ) );
-                aAnim.mnGroupType = mso_Anim_GroupType_PAR;
-                aAnim.mnNodeType = 1;
-                // attribute Restart
-                switch( xNode->getRestart() )
-                {
-                    default:
-                    case AnimationRestart::DEFAULT : aAnim.mnRestart = 0; break;
-                    case AnimationRestart::ALWAYS  : aAnim.mnRestart = 1; break;
-                    case AnimationRestart::WHEN_NOT_ACTIVE : aAnim.mnRestart = 2; break;
-                    case AnimationRestart::NEVER : aAnim.mnRestart = 3; break;
-                }
-                // attribute Fill
-                switch( xNode->getFill() )
-                {
-                    default:
-                    case AnimationFill::DEFAULT : aAnim.mnFill = 0; break;
-                    case AnimationFill::REMOVE : aAnim.mnFill = 1; break;
-                    case AnimationFill::FREEZE : aAnim.mnFill = 2; break;
-                    case AnimationFill::HOLD : aAnim.mnFill = 3; break;
-                    case AnimationFill::TRANSITION : aAnim.mnFill = 4; break;
-                }
-                rStrm << aAnim;
-            }
-            exportIterate( rStrm, xNode );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-
-/*
-            EscherExContainer aContainer( rStrm, DFF_msofbtAnimGroup, 1 );
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel + 1, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-*/
-        }
-        break;
-
-        case AnimationNodeType::ANIMATE :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-            exportAnimate( rStrm, xNode );
-        }
-        break;
-
-        case AnimationNodeType::SET :
-        {
-            bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
-            if( (nGroupLevel != 4) || !bIsAfterEffectNode )
+            case AnimationNodeType::CUSTOM :
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimateSet( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_SET : AFTEREFFECT_NONE );
                 exportAnimEvent( rStrm, xNode, 0 );
                 exportAnimValue( rStrm, xNode, sal_False );
             }
-            else
+            break;
+
+            case AnimationNodeType::PAR :
             {
-                bSkipChildren = true;
-            }
-        }
-        break;
-
-        case AnimationNodeType::ANIMATEMOTION :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimateMotion( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-        }
-        break;
-
-        case AnimationNodeType::ANIMATECOLOR :
-        {
-            bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
-            if( (nGroupLevel != 4) || !bIsAfterEffectNode )
-            {
-                if( bIsAfterEffectNode )
-                    xNode = createAfterEffectNodeClone( xNode );
-
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimateColor( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_COLOR : AFTEREFFECT_NONE );
-                exportAnimEvent( rStrm, xNode, 0 );
+                sal_Int32 nFlags = nGroupLevel == 2 ? 0x10 : 0;
+                if ( bTakeBackInteractiveSequenceTiming )
+                    nFlags |= 0x40;
+                exportAnimEvent( rStrm, xNode, nFlags );
+                exportAnimValue( rStrm, xNode, nGroupLevel == 4 );
+            }
+            break;
+
+            case AnimationNodeType::SEQ :
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                sal_Int16 nNodeType = exportAnimPropertySet( rStrm, xNode );
+                sal_Int32 nFlags = 12;
+                if ( ( nGroupLevel == 1 ) && ( nNodeType == ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ) )
+                {
+                    nFlags |= 0x20;
+                    bTakeBackInteractiveSequenceTimingForChild = sal_True;
+                }
+                exportAnimAction( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, nFlags );
                 exportAnimValue( rStrm, xNode, sal_False );
             }
-            else
+            break;
+
+            case AnimationNodeType::ITERATE :
             {
-                bSkipChildren = true;
-            }
-        }
-        break;
-
-        case AnimationNodeType::ANIMATETRANSFORM :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimateTransform( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-        }
-        break;
-
-        case AnimationNodeType::TRANSITIONFILTER :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-            exportTransitionFilter( rStrm, xNode );
-        }
-        break;
-
-        case AnimationNodeType::AUDIO :
-        {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
-        }
-        break;
-    }
-
-    if( !bSkipChildren )
-    {
-        // export after effect node if one exists for this node
-        Reference< XAnimationNode > xAfterEffectNode;
-        if( hasAfterEffectNode( xNode, xAfterEffectNode ) )
-        {
-            exportNode( rStrm, xAfterEffectNode, &xNode, DFF_msofbtAnimSubGoup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
-        }
-
-        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
-        if( xEnumerationAccess.is() )
-        {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
-            if( xEnumeration.is() )
-            {
-                while( xEnumeration->hasMoreElements() )
                 {
-                    Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
-                    if( xChildNode.is() )
+                    EscherExAtom aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
+                    AnimationNode aAnim;
+                    rtl_zeroMemory( &aAnim, sizeof( aAnim ) );
+                    aAnim.mnGroupType = mso_Anim_GroupType_PAR;
+                    aAnim.mnNodeType = 1;
+                    // attribute Restart
+                    switch( xNode->getRestart() )
                     {
-                        exportNode( rStrm, xChildNode, &xNode, DFF_msofbtAnimGroup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+                        default:
+                        case AnimationRestart::DEFAULT : aAnim.mnRestart = 0; break;
+                        case AnimationRestart::ALWAYS  : aAnim.mnRestart = 1; break;
+                        case AnimationRestart::WHEN_NOT_ACTIVE : aAnim.mnRestart = 2; break;
+                        case AnimationRestart::NEVER : aAnim.mnRestart = 3; break;
+                    }
+                    // attribute Fill
+                    switch( xNode->getFill() )
+                    {
+                        default:
+                        case AnimationFill::DEFAULT : aAnim.mnFill = 0; break;
+                        case AnimationFill::REMOVE : aAnim.mnFill = 1; break;
+                        case AnimationFill::FREEZE : aAnim.mnFill = 2; break;
+                        case AnimationFill::HOLD : aAnim.mnFill = 3; break;
+                        case AnimationFill::TRANSITION : aAnim.mnFill = 4; break;
+                    }
+                    rStrm << aAnim;
+                }
+                exportIterate( rStrm, xNode );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+
+    /*
+                EscherExContainer aContainer( rStrm, DFF_msofbtAnimGroup, 1 );
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel + 1, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+    */
+            }
+            break;
+
+            case AnimationNodeType::ANIMATE :
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimate( rStrm, xNode );
+            }
+            break;
+
+            case AnimationNodeType::SET :
+            {
+                bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
+                if( (nGroupLevel != 4) || !bIsAfterEffectNode )
+                {
+                    exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                    exportAnimPropertySet( rStrm, xNode );
+                    exportAnimateSet( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_SET : AFTEREFFECT_NONE );
+                    exportAnimEvent( rStrm, xNode, 0 );
+                    exportAnimValue( rStrm, xNode, sal_False );
+                }
+                else
+                {
+                    bSkipChildren = true;
+                }
+            }
+            break;
+
+            case AnimationNodeType::ANIMATEMOTION :
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimateMotion( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+            }
+            break;
+
+            case AnimationNodeType::ANIMATECOLOR :
+            {
+                bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
+                if( (nGroupLevel != 4) || !bIsAfterEffectNode )
+                {
+                    if( bIsAfterEffectNode )
+                        xNode = createAfterEffectNodeClone( xNode );
+
+                    exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                    exportAnimPropertySet( rStrm, xNode );
+                    exportAnimateColor( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_COLOR : AFTEREFFECT_NONE );
+                    exportAnimEvent( rStrm, xNode, 0 );
+                    exportAnimValue( rStrm, xNode, sal_False );
+                }
+                else
+                {
+                    bSkipChildren = true;
+                }
+            }
+            break;
+
+            case AnimationNodeType::ANIMATETRANSFORM :
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimateTransform( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+            }
+            break;
+
+            case AnimationNodeType::TRANSITIONFILTER :
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+                exportTransitionFilter( rStrm, xNode );
+            }
+            break;
+
+            case AnimationNodeType::AUDIO :     // #i58428#
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+
+                Reference< XAudio > xAudio( xNode, UNO_QUERY );
+                if( xAudio.is() )
+                {
+                    Any aAny( xAudio->getSource() );
+                    rtl::OUString aURL;
+
+                    if ( ( aAny >>= aURL ) && ( aURL.getLength() ) )
+                    {
+                        sal_Int32 nU1 = 2;
+                        sal_Int32 nTrigger = 3;
+                        sal_Int32 nU3 = nAudioGroup;
+                        sal_Int32 nBegin = 0;
+                        {
+                            EscherExContainer aAnimEvent( rStrm, DFF_msofbtAnimEvent, 1 );
+                            {
+                                EscherExAtom aAnimTrigger( rStrm, DFF_msofbtAnimTrigger );
+                                rStrm << nU1 << nTrigger << nU3 << nBegin;
+                            }
+                        }
+                        nU1 = 1;
+                        nTrigger = 0xb;
+                        nU3 = 0;
+                        {
+                            EscherExContainer aAnimEvent( rStrm, DFF_msofbtAnimEvent, 2 );
+                            {
+                                EscherExAtom aAnimTrigger( rStrm, DFF_msofbtAnimTrigger );
+                                rStrm << nU1 << nTrigger << nU3 << nBegin;
+                            }
+                        }
+                        EscherExContainer aAnimateTargetElement( rStrm, DFF_msofbtAnimateTargetElement );
+                        {
+                            sal_uInt32 nRefMode = 3;
+                            sal_uInt32 nRefType = 2;
+                            sal_uInt32 nRefId = mrExSoundCollection.GetId( aURL );
+                            sal_Int32 begin = -1;
+                            sal_Int32 end = -1;
+
+                            EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
+                            rStrm << nRefMode << nRefType << nRefId << begin << end;
+                        }
+                    }
+                }
+                exportAnimValue( rStrm, xNode, sal_False );
+            }
+            break;
+        }
+        if( !bSkipChildren )
+        {
+            // export after effect node if one exists for this node
+            Reference< XAnimationNode > xAfterEffectNode;
+            if( hasAfterEffectNode( xNode, xAfterEffectNode ) )
+            {
+                exportNode( rStrm, xAfterEffectNode, &xNode, DFF_msofbtAnimSubGoup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+            }
+
+            Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+            if( xEnumerationAccess.is() )
+            {
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                if( xEnumeration.is() )
+                {
+                    while( xEnumeration->hasMoreElements() )
+                    {
+                        Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                        if( xChildNode.is() )
+                        {
+                            if ( xChildNode->getType() == AnimationNodeType::AUDIO )
+                            {
+                                xAudioNode = xChildNode;
+                                nAudioGroup = mnCurrentGroup;
+                            }
+                            else
+                                exportNode( rStrm, xChildNode, &xNode, DFF_msofbtAnimGroup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+                        }
                     }
                 }
             }
         }
     }
+    if ( xAudioNode.is() )
+        exportNode( rStrm, xAudioNode, &xNode, DFF_msofbtAnimGroup, 1, nGroupLevel, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
 
     if( xNode->getType() == AnimationNodeType::ITERATE )
         aTarget = Any();
@@ -908,9 +964,15 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
         case AnimationNodeType::ANIMATEMOTION :
         case AnimationNodeType::ANIMATECOLOR :
         case AnimationNodeType::ANIMATETRANSFORM :
-        case AnimationNodeType::AUDIO :
         {
             aAnim.mnGroupType = mso_Anim_GroupType_NODE;
+            aAnim.mnNodeType  = mso_Anim_Behaviour_ANIMATION;
+        }
+        break;
+
+        case AnimationNodeType::AUDIO :
+        {
+            aAnim.mnGroupType = mso_Anim_GroupType_MEDIA;
             aAnim.mnNodeType  = mso_Anim_Behaviour_ANIMATION;
         }
         break;
@@ -1289,6 +1351,7 @@ void AnimationExporter::exportAnimAction( SvStream& rStrm, const Reference< XAni
           << nU5;
 
 }
+
 // nFlags Bit 6 = fixInteractiveSequenceTiming (for child)
 // nFlags Bit 5 = fixInteractiveSequenceTiming (for root)
 // nFlags Bit 4 = first node of main sequence -> begin event next has to be replaced to indefinite
