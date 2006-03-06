@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:24:41 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 13:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,6 +288,26 @@ SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 
+// --> OD 2006-03-01 #b6382898#
+uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
+{
 
+    uno::Reference< uno::XInterface > xModel;
 
+    try
+    {
+        if ( GetDoc().GetDocShell() )
+        {
+            xModel = GetDoc().GetDocShell()->GetModel();
+        }
+    }
+    catch( uno::RuntimeException& )
+    {
+        ASSERT( false,
+                "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
+    }
 
+    return xModel;
+}
+
+// <--
