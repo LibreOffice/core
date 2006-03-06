@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:32:47 $
+#   last change: $Author: rt $ $Date: 2006-03-06 14:01:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,13 @@ sub add_root_directories
     push(@{$directorytableref}, $oneline);
 
     my $sourcediraddon = "";
-    if (($installer::globals::addchildprojects) || ($installer::globals::patch) || ($allvariableshashref->{'CHANGETARGETDIR'})) { $sourcediraddon = "\:\."; }
+    if (($installer::globals::addchildprojects) ||
+        ($installer::globals::patch) ||
+        ($installer::globals::languagepack) ||
+        ($allvariableshashref->{'CHANGETARGETDIR'}))
+    {
+        $sourcediraddon = "\:\.";
+    }
 
     if (!($installer::globals::product =~ /ada/i )) # the following directories not for ada products
     {
