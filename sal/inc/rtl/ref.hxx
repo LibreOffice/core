@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ref.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 09:01:10 $
+ *  last change: $Author: rt $ $Date: 2006-03-06 10:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,10 @@ public:
     {
         if (pBody)
             pBody->acquire();
-        if (m_pBody)
-            m_pBody->release();
+        reference_type * const pOld = m_pBody;
         m_pBody = pBody;
+        if (pOld)
+            pOld->release();
         return *this;
     }
 
@@ -154,8 +155,9 @@ public:
     {
         if (m_pBody)
         {
-            m_pBody->release();
+            reference_type * const pOld = m_pBody;
             m_pBody = 0;
+            pOld->release();
         }
         return *this;
     }
