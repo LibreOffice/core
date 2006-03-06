@@ -4,9 +4,9 @@
 #
 #   $RCSfile: logger.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:05:05 $
+#   last change: $Author: rt $ $Date: 2006-03-06 09:29:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,29 @@ sub stoptime
 {
     my $infoline = get_time_string();
     print_message( "$infoline" );
+}
+
+###############################################################
+# Set date string, format: yymmdd
+###############################################################
+
+sub set_installation_date
+{
+    my $datestring = "";
+
+    my @timearray = localtime(time);
+
+    my $day = $timearray[3];
+    my $month = $timearray[4] + 1;
+    my $year = $timearray[5] - 100;
+
+    if ( $year < 10 ) { $year = "0" . $year; }
+    if ( $month < 10 ) { $month = "0" . $month; }
+    if ( $day < 10 ) { $day = "0" . $day; }
+
+    $datestring = $year . $month . $day;
+
+    return $datestring;
 }
 
 ###############################################################
