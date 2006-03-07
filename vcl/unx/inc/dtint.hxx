@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:39:15 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 09:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ enum DtType {
     DtKDE,
     DtGNOME,
     DtSCO,
-    DtIRIX
+    DtIRIX,
+    DtMACOSX
 };
 
 class DtIntegrator
