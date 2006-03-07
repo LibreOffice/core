@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:55:02 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef _MATH_CFGITEM_HXX_
 #define _MATH_CFGITEM_HXX_
 
-#include <stl/vector>
+#include <vector>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
