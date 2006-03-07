@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:41:07 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 09:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #include <cdeint.hxx>
 #endif
 #include <dtint.hxx>
+#ifdef MACOSX
+#include <macosxint.hxx>
+#endif
 #include <saldisp.hxx>
 #include <saldata.hxx>
 #include <wmadaptor.hxx>
@@ -111,6 +114,9 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
         if( pIntegrator->mpDisplay == pDisplay )
             return pIntegrator;
     }
+#ifdef MACOSX
+    return new MACOSXIntegrator();
+#endif
     /*
      *  #i22061# override desktop detection
      *  if environment variable OOO_FORCE_DESKTOP is set
@@ -121,6 +127,7 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
     if( pOverride && *pOverride )
     {
         OString aOver( pOverride );
+
 #if USE_CDE
         if( aOver.equalsIgnoreAsciiCase( "cde" ) )
             return new CDEIntegrator();
