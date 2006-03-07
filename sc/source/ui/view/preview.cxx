@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:16 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,6 +495,7 @@ void __EXPORT ScPreview::KeyInput( const KeyEvent& rKEvt )
         switch(nKey)
         {
             case KEY_ADD:      nSlot = SID_PREVIEW_ZOOMIN;  break;
+            case KEY_ESCAPE:   nSlot = SID_PREVIEW_CLOSE; break;
             case KEY_SUBTRACT: nSlot = SID_PREVIEW_ZOOMOUT; break;
         }
         if(nSlot)
