@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:05:59 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #pragma hdrstop
 
-#include <stl/vector>
+#include <vector>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
