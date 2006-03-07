@@ -53,14 +53,15 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL1VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL1VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL1VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -450,14 +451,15 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL2VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL2VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL2VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -847,14 +849,15 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL3VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL3VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL3VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL3VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1244,14 +1247,15 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL4VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL4VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL4VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL4VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1641,14 +1645,15 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL5VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL5VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL5VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL5VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2038,14 +2043,15 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL6VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL6VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL6VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL6VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2435,14 +2441,15 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL7VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL7VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL7VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL7VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2832,14 +2839,15 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL8VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL8VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL8VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL8VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3229,14 +3237,15 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 
 .IF "$(VERSIONOBJ)"!=""
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL9VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL9VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL9VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL9VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3626,14 +3635,15 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descrip
 
 .IF "$(VERSIONOBJ)"!=""
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL10VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL10VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL10VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL10VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
