@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.162 $
+#   $Revision: 1.163 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:37:20 $
+#   last change: $Author: rt $ $Date: 2006-03-07 17:08:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2643,7 +2643,7 @@ $(MISC)$/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARG
 .ENDIF
 
 VERSIONTMP:=$(mktmp iii)
-$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+$(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
     @+echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
     @+echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
     @+echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
