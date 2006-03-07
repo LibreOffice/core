@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:52:14 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ class HyphenatorDispatcher :
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord>
-            buildHyphWord( const ::com::sun::star::uno::Reference<
+            buildHyphWord( const rtl::OUString rOrigWord,
+                const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
                 INT16 nLang, INT16 nMaxLeading );
 
