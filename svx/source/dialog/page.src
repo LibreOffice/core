@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:45:38 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +575,7 @@ String RID_SVXSTR_PAPER_MONARCH
 };
 String RID_SVXSTR_PAPER_COM675
 {
-    Text = "Env. 6¾" ;
+    Text = "Env. 6Â¾" ;
 };
 String RID_SVXSTR_PAPER_COM9
 {
@@ -669,7 +669,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "; C6" ; PAPERSIZE_C6 ; > ;
         < "; C65" ; PAPERSIZE_C65 ; > ;
         < "; DL" ; PAPERSIZE_DL ; > ;
-        < "; Env. #6¾" ; PAPERSIZE_COM675; > ;
+        < "; Env. #6Â¾" ; PAPERSIZE_COM675; > ;
         < "; Env. Monarch" ; PAPERSIZE_MONARCH; > ;
         < "; Env. #9" ; PAPERSIZE_COM9; > ;
         < "; Env. #10" ; PAPERSIZE_COM10; > ;
@@ -677,7 +677,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "; Env. #12" ; PAPERSIZE_COM12; > ;
         < "; 16 kai" ; PAPERSIZE_KAI16; > ;
         < "; 32 kai" ; PAPERSIZE_KAI32; > ;
-        < "; 32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
+        < "; 32 kai groÃŸ" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ en-US ] =
     {
@@ -768,7 +768,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "; Bildschirm" ; PAPERSIZE_SCREEN ; > ;
         < "; 16 kai" ; PAPERSIZE_KAI16; > ;
         < "; 32 kai" ; PAPERSIZE_KAI32; > ;
-        < "; 32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
+        < "; 32 kai groÃŸ" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ en-US ] =
     {
