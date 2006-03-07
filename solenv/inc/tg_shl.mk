@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:37:49 $
+#   last change: $Author: rt $ $Date: 2006-03-07 17:09:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,14 +126,15 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)
 
 .IF "$(VERSIONOBJ)"!=""
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/$(SHL$(TNR)VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
 SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
 SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
-$(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
-    +$(COPY) $(SOLARENV)$/src$/version.c $@
+$(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL$(TNR)VERSIONOBJ:b).h
+#    +$(COPY) $(SOLARENV)$/src$/version.c $@
+    +$(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL$(TNR)VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL$(TNR)VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
