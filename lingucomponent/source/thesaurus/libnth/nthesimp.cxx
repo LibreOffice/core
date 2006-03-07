@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:02:04 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,6 +396,9 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                      OUString *pStr = aStr.getArray();
                      for (int i=0; i < count; i++) {
                        OUString sTerm(pe->psyns[i],strlen(pe->psyns[i]),aEnc );
+                       sal_uInt16 ct1 = capitalType(sTerm, pCC);
+                       if (CAPTYPE_MIXED == ct1)
+                            ct = ct1;
                        OUString cTerm;
                        switch (ct) {
                        case CAPTYPE_ALLCAP:
