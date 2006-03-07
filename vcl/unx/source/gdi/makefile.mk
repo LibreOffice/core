@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-25 11:41:20 $
+#   last change: $Author: rt $ $Date: 2006-03-07 09:42:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,17 @@ SLOFILES=	\
         $(SLO)$/dtint.obj		\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/xfont.obj		\
-        $(SLO)$/xlfd_attr.obj	\
-        $(SLO)$/xlfd_extd.obj	\
-        $(SLO)$/xlfd_smpl.obj	\
+        $(SLO)$/xlfd_attr.obj		\
+        $(SLO)$/xlfd_extd.obj		\
+        $(SLO)$/xlfd_smpl.obj		\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/pspgraphics.obj
+
+.IF "$(OS)"=="MACOSX"
+SLOFILES +=	\
+        $(SLO)$/macosxint.obj
+.ENDIF # "$(OS)"=="MACOSX"
+
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
