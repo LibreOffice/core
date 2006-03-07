@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:06:19 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 17:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ template <class Queue, class RequestData, class BitmapFactory>
     while ( ! mrQueue.IsEmpty())
     {
         // Determine whether the system is idle.
-        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrView.GetWindow()));
+        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(static_cast< ::Window* >(mrView.GetWindow())));
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
             if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)
