@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:54:29 $
+#   last change: $Author: rt $ $Date: 2006-03-07 17:08:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -176,10 +176,6 @@ OUT2BIN= \
 
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/remove_build.flag \
-    ALLTAR
-
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
@@ -199,7 +195,5 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 # entire package directory if a patch is newer.
 # Changes in this makefile could also make a complete build necessary if
 # configure is affected.
-$(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME) makefile.mk
-    $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/remove_build.flag
+$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : makefile.mk
 
