@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:51:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 10:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ void HyphenatorDispatcher::ClearSvcList()
 
 
 Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
+            const OUString rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
             INT16 nLang, INT16 nMaxLeading )
 {
@@ -170,6 +171,38 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             if (nHyphenationPos > 0)
             {
                 aText = aTmp.makeStringAndClear();
+
+#if OSL_DEBUG_LEVEL > 1
+                {
+                    if (aText != rOrigWord)
+                    {
+                        // both words should only differ by a having a trailing '.'
+                        // character or not...
+                        OUString aShorter, aLonger;
+                        if (aText.getLength() <= rOrigWord.getLength())
+                        {
+                            aShorter = aText;
+                            aLonger  = rOrigWord;
+                        }
+                        else
+                        {
+                            aShorter = rOrigWord;
+                            aLonger  = aText;
+                        }
+                        xub_StrLen nS = aShorter.getLength();
+                        xub_StrLen nL = aLonger.getLength();
+                        if (nS > 0)
+                        {
+                            DBG_ASSERT( (nS + 1 == nL) && aLonger[nL-1] == (sal_Unicode) '.',
+                                "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
+                        }
+                    }
+                }
+#endif
+                //! take care of #i22591#
+                aText = rOrigWord;
+
+                DBG_ASSERT( aText == rOrigWord, "failed to " );
                 xRes = new HyphenatedWord( aText, nLang, nHyphenationPos,
                                 aText, nHyphenationPos );
             }
@@ -322,7 +355,12 @@ Reference< XHyphenatedWord > SAL_CALL
 
         if (xEntry.is())
         {
-            xRes = buildHyphWord( xEntry, nLanguage, nChkMaxLeading );
+            //! because queryDictionaryEntry (in the end DictionaryNeo::getEntry)
+            //! does not distinguish betwee "XYZ" and "XYZ." in order to avoid
+            //! to require them as different entry we have to supply the
+            //! original word here as well so it can be used in th result
+            //! otherwise a strange effect may occur (see #i22591#)
+            xRes = buildHyphWord( rWord, xEntry, nLanguage, nChkMaxLeading );
         }
         else
         {
