@@ -72,6 +72,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin%_EXT%\mozwrapper
 
 ..\%__SRC%\misc\*.tar %_DEST%\bin%_EXT%\*.tar
+..\%__SRC%\misc\macosxrc.txt %_DEST%\bin%_EXT%\macosxrc.txt
 
 mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
