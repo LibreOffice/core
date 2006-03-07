@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 17:17:50 $
+ *  last change: $Author: rt $ $Date: 2006-03-07 14:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,10 +567,6 @@ void SvxSearchDialog::Construct_Impl()
     if(xDispatchProv.is() &&
             (pImpl->xCommand2Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand2URL, sTarget, 0)).is())
     {
-        if(!aSearchComponentFL.IsVisible())
-        {
-            aSearchComponent2PB.SetPosPixel(aSearchComponent1PB.GetPosPixel());
-        }
         bSearchComponent2 = true;
     }
 
@@ -618,6 +614,10 @@ void SvxSearchDialog::Construct_Impl()
         }
         if( aSearchComponent2PB.GetText().Len() )
         {
+            if(!aSearchComponent1PB.IsVisible())
+            {
+                aSearchComponent2PB.SetPosPixel(aSearchComponent1PB.GetPosPixel());
+            }
             aSearchComponentFL.Show();
             aSearchComponent2PB.Show();
         }
