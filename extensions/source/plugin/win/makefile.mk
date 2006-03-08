@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 12:59:58 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:55:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,5 +66,4 @@ SLOFILES =	$(SLO)$/winmgr.obj	\
 
 
 .INCLUDE :  target.mk
-.INCLUDE :  ..$/util$/target.pmk
 
