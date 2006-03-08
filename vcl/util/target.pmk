@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:54:20 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:54:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@ WHOLEPRJ .SETDIR=$(PRJ)$/prj:
     @echo "READY"
 
 ONLYDLL .SETDIR=$(PRJ)$/util: $(SLOFILES)
-    $(RM) ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLSUFFIX).dll
-    dmake debug=t prjpch=t linkinc=t compinc=t ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLSUFFIX).dll
+    $(RM) ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLPOSTFIX).dll
+    dmake debug=t prjpch=t linkinc=t compinc=t ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLPOSTFIX).dll
     @echo "READY"
 
 .IF "$(USE_XPRINT)"!="TRUE"
