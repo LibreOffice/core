@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:27:19 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 08:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,17 +37,19 @@
 #include <stdlib.h>
 #include <rtl/alloc.h>
 
+#include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/data.h>
-#include <bridges/cpp_uno/bridge.hxx>
-#include <bridges/cpp_uno/type_misc.hxx>
+
+#include <bridges/cpp_uno/shared/bridge.hxx>
+#include <bridges/cpp_uno/shared/types.hxx>
+#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
+#include "bridges/cpp_uno/shared/vtables.hxx"
 
 #include "share.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
-namespace CPPU_CURRENT_NAMESPACE
-{
 
 void dummy_can_throw_anything( char const * );
 
@@ -105,7 +107,7 @@ invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
         {
         case 'D': // Double
             if (nr_fpr < FPR_COUNT)
-                pFPR[nr_fpr++] = (double)*pSV++;
+                pFPR[nr_fpr++] = *reinterpret_cast<double *>( pSV++ );
             else
                 *pDS++ = *pSV++;
             break;
@@ -115,13 +117,9 @@ invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
                 // The value in %xmm register is already prepared to
                 // be retrieved as a float. Therefore, we pass the
                 // value verbatim, as a double without conversion.
-                pFPR[nr_fpr++] = *((double *)pSV);
+                pFPR[nr_fpr++] = *reinterpret_cast<double *>( pSV++ );
             else
-            {
-                *((float *)pDS) = *((float *)pSV);
-                pDS++;
-            }
-            pSV++;
+                *pDS++ = *reinterpret_cast<double *>( pSV++ );
             break;
 
         case 'H': // 64-bit Word
@@ -133,26 +131,23 @@ invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
 
         case 'I': // 32-bit Word
             if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *((sal_uInt32 *)pSV);
+                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt32 *>( pSV++ );
             else
-                *pDS++ = *((sal_uInt32 *)pSV);
-            pSV++;
+                *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV++ );
             break;
 
         case 'S': // 16-bit Word
             if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *((sal_uInt16 *)pSV);
+                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt16 *>( pSV++ );
             else
-                *pDS++ = *((sal_uInt16 *)pSV);
-            pSV++;
+                *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV++ );
             break;
 
         case 'B': // Byte
             if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *((sal_uInt8 *)pSV);
+                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt8 *>( pSV++ );
             else
-                *pDS++ = *((sal_uInt8 *)pSV);
-            pSV++;
+                *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV++ );
             break;
 
         default: // Default, assume 64-bit values
@@ -177,7 +172,9 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     if (nr_stack)
         nr_stack = (nr_stack + 1) & ~1;
 
-#if 1
+    bool bReturnsSimpleType = bridges::cpp_uno::shared::isSimpleType( eReturnType );
+
+#if OSL_DEBUG_LEVEL > 1
     // Let's figure out what is really going on here
     fprintf(stderr,"callVirtualMethod() parameters string is %s\n", pPT);
     {
@@ -239,10 +236,15 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         ARG_GPR(3);
         ARG_GPR(2);
         ARG_GPR(1);
-    case 1: a0 = (sal_uInt64) pThis;
+        ARG_GPR(0);
     case 0:;
 #undef ARG_GPR
     }
+
+    if ( bReturnsSimpleType )
+        a0 = (sal_uInt64) pThis;
+    else
+        a1 = (sal_uInt64) pThis;
 
     // Ensure that assignments to SSE registers won't be optimized away
     asm("" ::
@@ -256,44 +258,45 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
     union ReturnValue {
         struct {
-            sal_uInt64 a0;
-            sal_uInt64 a1;
+            sal_uInt64 rax;
+            sal_uInt64 rdx;
         } i;
         struct {
-            double d0;
-            double d1;
+            double xmm0;
+            double xmm1;
         } f;
     };
 
-    ReturnValue retval = ((ReturnValue (*)(sal_uInt64, sal_uInt64, sal_uInt64,
-                                           sal_uInt64, sal_uInt64, sal_uInt64))
-                          pMethod)(a0, a1, a2, a3, a4, a5);
+    typedef ReturnValue (* FunctionCall )( sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64 );
+
+    // Perform the call
+    ReturnValue aRet = ( ( FunctionCall ) pMethod )( a0, a1, a2, a3, a4, a5 );
 
     switch (eReturnType)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *((sal_uInt64 *)pRegisterReturn) = retval.i.a0;
+        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = aRet.i.rax;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
-        *((sal_uInt32 *)pRegisterReturn) = (sal_uInt32)retval.i.a0;
+        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &aRet.i.rax );
         break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *((sal_uInt16 *)pRegisterReturn) = (sal_uInt16)retval.i.a0;
+        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &aRet.i.rax );
         break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-        *((sal_uInt8 *)pRegisterReturn) = (sal_uInt8)retval.i.a0;
+        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &aRet.i.rax );
         break;
     case typelib_TypeClass_FLOAT:
-        *((float *)pRegisterReturn) = (float)retval.f.d0;
+        *reinterpret_cast<float *>( pRegisterReturn ) = *reinterpret_cast<float*>( &aRet.f.xmm0 );
         break;
     case typelib_TypeClass_DOUBLE:
-        *((double *)pRegisterReturn) = retval.f.d0;
+        *reinterpret_cast<double *>( pRegisterReturn ) = *reinterpret_cast<double*>( &aRet.f.xmm0 );
         break;
     }
 }
@@ -301,8 +304,8 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
 //==================================================================================================
 static void cpp_call(
-    cppu_unoInterfaceProxy * pThis,
-    sal_Int32 nVtableCall,
+    bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
+    bridges::cpp_uno::shared::VtableSlot aVtableSlot,
     typelib_TypeDescriptionReference * pReturnTypeRef,
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
@@ -312,7 +315,7 @@ static void cpp_call(
       char * pCppStackStart = pCppStack;
 
     // We need to know parameter types for callVirtualMethod() so generate a signature string
-    char * pParamType       = (char *)__builtin_alloca( nParams + 2 );
+    char * pParamType       = (char *)__builtin_alloca( nParams + 3 );
     char * pPT              = pParamType;
 
     // Return
@@ -324,15 +327,15 @@ static void cpp_call(
 
     if (pReturnTypeDescr)
     {
-        if (cppu_isSimpleType( pReturnTypeDescr ))
+        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
         {
             pCppReturn = pUnoReturn; // direct way for simple types
         }
         else
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack = (cppu_relatesToInterface( pReturnTypeDescr )
-                                                ? alloca( pReturnTypeDescr->nSize )
+            pCppReturn = *(void **)pCppStack = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
+                                                ? __builtin_alloca( pReturnTypeDescr->nSize )
                                                 : pUnoReturn); // direct way
             *pPT++ = 'H';
             pCppStack += sizeof(void *);
@@ -340,7 +343,8 @@ static void cpp_call(
     }
 
     // Push "this" pointer
-    *(void **)pCppStack = pThis->pCppI;
+    void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
+    *(void **)pCppStack = pAdjustedThisPtr;
     *pPT++ = 'H';
     pCppStack += sizeof(void *);
 
@@ -360,10 +364,10 @@ static void cpp_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-        if (!rParam.bOut && cppu_isSimpleType( pParamTypeDescr ))
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
             uno_copyAndConvertData( pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
-                                    &pThis->pBridge->aUno2Cpp );
+                                    pThis->getBridge()->getUno2Cpp() );
 
             switch (pParamTypeDescr->eTypeClass)
             {
@@ -420,11 +424,11 @@ static void cpp_call(
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
             }
             // is in/inout
-            else if (cppu_relatesToInterface( pParamTypeDescr ))
+            else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
             {
                 uno_copyAndConvertData(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pUnoArgs[nPos], pParamTypeDescr, &pThis->pBridge->aUno2Cpp );
+                    pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
@@ -450,7 +454,7 @@ static void cpp_call(
     {
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 7), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
-            pThis->pCppI, nVtableCall,
+            pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr->eTypeClass, pParamType,
             (sal_uInt64 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_uInt64) );
         // NO exception occured...
@@ -468,13 +472,13 @@ static void cpp_call(
                 {
                     uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
                     uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                            &pThis->pBridge->aCpp2Uno );
+                                            pThis->getBridge()->getCpp2Uno() );
                 }
             }
             else // pure out
             {
                 uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                        &pThis->pBridge->aCpp2Uno );
+                                        pThis->getBridge()->getCpp2Uno() );
             }
             // destroy temp cpp param => cpp: every param was constructed
             uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
@@ -485,14 +489,14 @@ static void cpp_call(
         if (pCppReturn && pUnoReturn != pCppReturn)
         {
             uno_copyAndConvertData( pUnoReturn, pCppReturn, pReturnTypeDescr,
-                                    &pThis->pBridge->aCpp2Uno );
+                                    pThis->getBridge()->getCpp2Uno() );
             uno_destructData( pCppReturn, pReturnTypeDescr, cpp_release );
         }
     }
      catch (...)
      {
           // fill uno exception
-        fillUnoException( __cxa_get_globals()->caughtExceptions, *ppUnoExc, &pThis->pBridge->aCpp2Uno );
+        fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
         for ( ; nTempIndizes--; )
@@ -510,12 +514,13 @@ static void cpp_call(
 
 
 //==================================================================================================
-void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException ) throw ()
+    void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
 {
     // is my surrogate
-    cppu_unoInterfaceProxy * pThis = (cppu_unoInterfaceProxy *)pUnoI;
+    bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
+        = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
@@ -526,14 +531,17 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
-        sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        VtableSlot aVtableSlot(
+                getVtableSlot(
+                    reinterpret_cast<
+                    typelib_InterfaceAttributeTypeDescription const * >(
+                        pMemberDescr)));
 
         if (pReturn)
         {
             // dependent dispatch
             cpp_call(
-                pThis, nVtableCall,
+                pThis, aVtableSlot,
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
                 0, 0, // no params
                 pReturn, pArgs, ppException );
@@ -553,8 +561,9 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
 
             // dependent dispatch
+            aVtableSlot.index += 1; // get, then set method
             cpp_call(
-                pThis, nVtableCall +1, // get, then set method
+                pThis, aVtableSlot, // get, then set method
                 pReturnTypeRef,
                 1, &aParam,
                 pReturn, pArgs, ppException );
@@ -570,10 +579,13 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
-        sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        VtableSlot aVtableSlot(
+                getVtableSlot(
+                    reinterpret_cast<
+                    typelib_InterfaceMethodTypeDescription const * >(
+                        pMemberDescr)));
 
-        switch (nVtableCall)
+        switch (aVtableSlot.index)
         {
             // standard calls
         case 1: // acquire uno interface
@@ -591,8 +603,8 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
             if (pTD)
             {
                 uno_Interface * pInterface = 0;
-                (*pThis->pBridge->pUnoEnv->getRegisteredInterface)(
-                    pThis->pBridge->pUnoEnv,
+                (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
+                    pThis->getBridge()->getUnoEnv(),
                     (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
 
                 if (pInterface)
@@ -611,7 +623,7 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         default:
             // dependent dispatch
             cpp_call(
-                pThis, nVtableCall,
+                pThis, aVtableSlot,
                 ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
                 ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
                 ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
@@ -631,6 +643,3 @@ void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     }
     }
 }
-
-}
-
