@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-19 16:16:16 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:59:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ sub sniff_target($)
 {
     my $build_dir = shift;
     my ($dirhandle, $fname);
-    my ($target, $libver, $lang, $dllsuffix) = ( 'unxlngi4.pro', '680', 'en-US', 'li' ); # defaults
+    my ($target, $libver, $lang) = ( 'unxlngi4.pro', '680', 'en-US' ); # defaults
     
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
@@ -92,18 +92,15 @@ sub sniff_target($)
 	    if ($1 eq 'UPD') {
 		$libver = $2;
 	    }
-	    if ($1 eq 'DLLSUFFIX') {
-		$dllsuffix = $2;
-	    }
 	}
 	close ($file);
     }
 
     closedir ($dirhandle);
 
-    print "Sniffed target: $target, $libver, $dllsuffix\n";
+    print "Sniffed target: $target, $libver\n";
 
-    return ($target, $libver, $lang, $dllsuffix);
+    return ($target, $libver, $lang);
 }
 
 sub build_installed_list($)
@@ -344,7 +341,7 @@ substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths";
 -d $OOO_BUILD || die "No such directory $OOO_BUILD";
 -d "$OOO_INSTALL/program/resource" || die "$OOO_INSTALL doesn't look like an OO install";
 
-($TARGET, $LIBVER, $LANG, $DLLSUFFIX) = sniff_target ($OOO_BUILD);
+($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
 evilness ('undo');
 
