@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-03 12:47:32 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:52:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,6 @@ TARGET=util
 GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
-
-# workaround to survive registration of KDE addressbook
-# component in SO environment - #i59674#
-.IF "$(ENABLE_KDE)"=="TRUE" && "$(BUILD_SPECIAL)"!=""
-LD_LIBRARY_PATH!:=$(LD_LIBRARY_PATH):$(KDE_ROOT)$/lib
-.EXPORT : LD_LIBRARY_PATH
-.ENDIF			# "$(ENABLE_KDE)"=="TRUE" && "$(BUILD_SPECIAL)"!=""
 
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"=="4nt"
