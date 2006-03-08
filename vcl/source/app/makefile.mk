@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-10-13 09:36:24 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:54:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ TARGET=app
 .INCLUDE :	sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
-CDEFS+=-DDLLSUFFIX=$(DLLSUFFIX)
+CDEFS+=-DDLLPOSTFIX=$(DLLPOSTFIX)
 
 .IF "$(SYSTEM_NAS)"=="YES"
 CFLAGS+=-I$(NAS_INCLUDES)
