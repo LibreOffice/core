@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:21:13 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 14:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,9 @@ File gid_File_Lib_Basprov
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLSUFFIX,.uno,.dll));
+    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -631,9 +631,9 @@ File gid_File_Lib_Dlgprov
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLSUFFIX,.uno,.dll));
+    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -1045,9 +1045,9 @@ End
 File gid_File_Lib_J
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT6(lib,j,SUPD,DLLSUFFIX,_g,UNXSUFFIX));
+    Name = STRING(CONCAT6(lib,j,SUPD,DLLPOSTFIX,_g,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(j,SUPD,DLLSUFFIX,_g,.dll));
+    Name = STRING(CONCAT5(j,SUPD,DLLPOSTFIX,_g,.dll));
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1467,18 +1467,18 @@ STD_UNO_LIB_FILE( gid_File_Lib_Pk , pk)
 
 File gid_File_Lib_Deployment
 #if defined UNX
-    Name = STRING(CONCAT5(deployment,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT5(deployment,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
 #else
-    Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLSUFFIX,.uno.dll));
+    Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLPOSTFIX,.uno.dll));
 #endif
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 File gid_File_Lib_DeploymentGui
 #if defined UNX
-    Name = STRING(CONCAT5(deploymentgui,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT5(deploymentgui,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
 #else
-    Name = STRING(CONCAT4(deploymentgui,OFFICEUPD,DLLSUFFIX,.uno.dll));
+    Name = STRING(CONCAT4(deploymentgui,OFFICEUPD,DLLPOSTFIX,.uno.dll));
 #endif
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
@@ -1641,7 +1641,7 @@ End
 
 File gid_File_Lib_Salextra
     TXT_FILE_BODY;
-    Name = STRING(CONCAT3(libsalextra_x11osx_,DLLSUFFIX,UNXSUFFIX));
+    Name = STRING(CONCAT3(libsalextra_x11osx_,DLLPOSTFIX,UNXSUFFIX));
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
@@ -1969,7 +1969,7 @@ File gid_File_Lib_Sysdtrans
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT4(libdtransX11,SUPD,DLLSUFFIX,UNXSUFFIX));
+    Name = STRING(CONCAT4(libdtransX11,SUPD,DLLPOSTFIX,UNXSUFFIX));
   #else
     Name = "sysdtrans.dll";
   #endif
