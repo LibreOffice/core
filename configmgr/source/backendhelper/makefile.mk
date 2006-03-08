@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:36:48 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:01:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,5 +71,4 @@ DEF1DES=Configuration: Backend Helper
 # --- Targets ---
 
 .INCLUDE : target.mk
-.INCLUDE :  $(PRJ)$/util$/target.pmk
 
