@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 17:07:48 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:17:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,10 @@ export SAL_ENABLE_FILE_LOCKING
 # working on your system.
 # export SAL_NOOPENGL=true;
 
+sd_platform=`uname -s`
 
 # the following test is needed on Linux PPC with IBM j2sdk142
-if [ `uname -s` = "Linux" -a  "`uname -m`" = "ppc" ] ; then
+if [ $sd_platform = "Linux" -a "`uname -m`" = "ppc" ] ; then
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
 fi
@@ -85,7 +86,6 @@ if [ -x "$sd_prog/sopatchlevel.sh" ]; then
 fi
 
 # set search path for shared libraries
-sd_platform=`uname -s`
 add_moz_lib=
 for moz_lib_path in $MOZILLA_LIBRARY_PATH /usr/lib /usr/lib/mozilla /usr/lib/mozilla-firefox /usr/lib/mozilla-thunderbird /opt/mozilla/lib /opt/MozillaFirefox/lib /opt/MozillaThunderbird/lib; do
     test -f $moz_lib_path/libnss3.so && add_moz_lib=":$moz_lib_path" && break;
