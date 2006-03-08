@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 14:05:59 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 14:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1483,7 +1483,9 @@ File gid_File_Lib_DeploymentGui
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
+#ifndef WITHOUT_MOZILLA
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pl , pl)
+#endif
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Preload, preload)
 
