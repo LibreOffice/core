@@ -1,192 +1,45 @@
-##########################################################################
-# Platform MAKEFILE for Mac OS X and Darwin
-##########################################################################
+#*************************************************************************
+#
+#   OpenOffice.org - a multi-platform office productivity suite
+#
+#   $RCSfile: unxmacxi.mk,v $
+#
+#   $Revision: 1.3 $
+#
+#   last change: $Author: rt $ $Date: 2006-03-08 14:13:14 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
+#
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
+#*************************************************************************
 
-# DARWIN_VERSION holds the Darwin version in the format: 000000. For example,
-# if the Darwin version is 1.3.7, DARWIN_VERSION will be set to 010307.
-DARWIN_VERSION=$(shell -/bin/sh -c "uname -r | sed 's/\./ /g' | xargs printf %2.2i%2.2i%2.2i")  
+#
+# Mac OS X/Intel specific defines
+#
 
-ASM=
-AFLAGS=
-LINKOUTPUT_FILTER=
+PROCESSOR_DEFINES=-DX86
 
-# Definitions that we may need on the compile line.
-# -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
-#  compiling STLport sources too, either internally or externally.
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DX86 -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
-.IF "$(GUIBASE)"=="unx"
-CDEFS+= -DX_LOCALE
-.ENDIF
-
-# Name of library where static data members are initialized
-# STATICLIBNAME=static$(DLLPOSTFIX)
-# STATICLIB=-l$(STATICLIBNAME)
-
-# enable visibility define in "sal/types.h"
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
-.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-
-# MacOS X specific Java compilation/link flags
-SOLAR_JAVA*=TRUE
-.IF "$(SOLAR_JAVA)"!=""
-    JAVADEF=-DSOLAR_JAVA
-    JAVAFLAGSDEBUG=-g
-    JAVA_RUNTIME=-framework JavaVM
-.ENDIF
-
-# architecture dependent flags for the C and C++ compiler that can be changed by
-# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-ARCH_FLAGS*=
-
-# Specify the compiler to use.  NOTE:  MacOS X should always specify
-# c++ for C++ compilation as it does certain C++ specific things
-# behind the scenes for us.
-# CC = C++ compiler to use
-# cc = C compiler to use
-# objc = Objective C compiler to use
-CXX*=g++
-CC*=gcc
-objc=cc
-
-CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(INCLUDE)
-
-# ---------------------------------
-#  Compilation flags
-# ---------------------------------
-# Normal C compilation flags
-CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
-
-# Normal Objective C compilation flags
-#OBJCFLAGS=-no-precomp
-OBJCFLAGS=-fobjc-exceptions
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
-
-# Comp Flags for files that need exceptions enabled (C and C++)
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
-
-# Comp Flags for files that do not need exceptions enabled (C and C++)
-CFLAGS_NO_EXCEPTIONS=-fno-exceptions
-
-# Normal C++ compilation flags
-CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
-PICSWITCH:=-fPIC
-# Other flags
-CFLAGSOBJGUIST=$(PICSWITCH) -fno-common
-CFLAGSOBJCUIST=$(PICSWITCH) -fno-common
-CFLAGSOBJGUIMT=$(PICSWITCH) -fno-common
-CFLAGSOBJCUIMT=$(PICSWITCH) -fno-common
-CFLAGSSLOGUIMT=$(PICSWITCH) -fno-common
-CFLAGSSLOCUIMT=$(PICSWITCH) -fno-common
-CFLAGSPROF=
-
-# Flag for including debugging information in object files
-CFLAGSDEBUG=-g
-CFLAGSDBGUTIL=
-
-# Flag to specify output file to compiler/linker
-CFLAGSOUTOBJ=-o
-
-# ---------------------------------
-#  Optimization flags
-# ---------------------------------
-CFLAGSOPT=-O2 -fno-strict-aliasing
-CFLAGSNOOPT=-O0
-
-# Currently, there is no nas support for OS X...
-CDEFS+= -DNO_AUDIO
-
-STDLIBCPP=-lstdc++
-
-# ---------------------------------
-#  STLport library names
-# ---------------------------------
-LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib/libstlport_gcc.a
-
-# ---------------------------------
-#  Link stage flags
-# ---------------------------------
-# always link with gcc since you may be linking c code and don't want -lstdc++ linked in!
-
-##  ericb 04 mars 2005
-
-LINK*=$(CXX)
-LINKC*=$(CC)
-
-LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
-LINKFLAGSRUNPATH*=-Wl
-LINKFLAGS=$(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH) 
-
-# [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
-.IF "$(GUIBASE)" == "aqua"
-    LINKFLAGS+=-lobjc
-    # Sometimes we still use files that would be in a GUIBASE="unx" specific directory
-    # because they really aren't GUIBASE specific, so we've got to account for that here.
-    INCGUI+= -I$(PRJ)$/unx/inc
-.ENDIF
-
-# Random link flags dealing with different cases of linking
-
-LINKFLAGSAPPGUI=-bind_at_load
-LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
-LINKFLAGSAPPCUI=-bind_at_load
-LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
-LINKFLAGSTACK=
-LINKFLAGSPROF=
-
-# Flag to add debugging information to final products
-LINKFLAGSDEBUG=-g
-LINKFLAGSOPT=
-
-# ---------------------------------
-#  MacOS X shared library specifics
-# ---------------------------------
-# Tag to identify an output file as a MacOS X output file
 DLLPOSTFIX=mxi
-# Tag to identify an output file as a library
-DLLPRE=lib
-# File extension to identify dynamic shared libraries on MacOS X
-DLLPOST=.dylib
 
-# We don't use mapping on MacOS X
-LINKVERSIONMAPFLAG=-Wl,--version-script
-
-SONAME_SWITCH=-Wl,-h
-
-STDLIBCPP=-lstdc++
-
-STDOBJVCL=$(L)$/salmain.o
-STDOBJGUI=
-STDSLOGUI=
-STDOBJCUI=
-STDSLOCUI=
-
-STDLIBGUIST=-lm
-.IF "$(GUIBASE)" == "aqua"
-    STDLIBCUIST=-lpthread CPPRUNTIME -lm
-    STDLIBCUIMT=CPPRUNTIME -lm
-    STDSHLGUIMT=-lpthread CPPRUNTIME -lm
-.ELSE
-    STDLIBCUIST=-lX11 -lpthread CPPRUNTIME -lm
-    STDLIBCUIMT=-lX11 CPPRUNTIME -lm
-    STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm
-.ENDIF
-STDLIBGUIMT=-lpthread CPPRUNTIME -lm
-STDSHLCUIMT=-lpthread CPPRUNTIME -lm
-
-LIBMGR=ar
-LIBFLAGS=-r
-
-IMPLIB=
-IMPLIBFLAGS=
-
-MAPSYM=
-MAPSYMFLAGS=
-
-RC=irc
-RCFLAGS=-fo$@ $(RCFILES)
-RCLINK=
-RCLINKFLAGS=
-RCSETVERSION=
+# Include generic Mac OS X makefile
+.INCLUDE : unxmacx.mk
