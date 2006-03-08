@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 14:28:05 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 14:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,9 @@ extern char *strdup(const char *);
 #endif
 
 #ifdef MACOSX
-#   define  ETIME ETIMEDOUT
+#   ifndef ETIME
+#       define  ETIME ETIMEDOUT
+#   endif
 #   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
@@ -377,7 +379,7 @@ void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion,
     !defined(AIX)     && !defined(HPUX)   && \
     !defined(SOLARIS) && !defined(IRIX)   && !defined(MAC) && \
     !defined(MACOSX)
-#   error "Target plattform not specified !"
+#   error "Target platform not specified!"
 #endif
 
 #if defined(NETBSD)
