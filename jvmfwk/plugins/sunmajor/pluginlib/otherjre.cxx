@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:38:35 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 14:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 #ifdef WNT
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
-        "/bin/classic/jvm.dll"
+        "/bin/classic/jvm.dll",
     "/bin/jrockit/jvm.dll"
 #elif UNX
 #ifdef MACOSX
@@ -80,7 +80,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/jre/bin/classic/libjvm.so", // for IBM Java
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
-        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
+        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so", // for Blackdown PPC
     "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so" // for Java of BEA Systems
 #endif
 #endif
