@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 04:40:41 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:01:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,5 +70,4 @@ SLOFILES=\
 # --- Targets ---
 
 .INCLUDE : target.mk
-.INCLUDE :  $(PRJ)$/util$/target.pmk
 
