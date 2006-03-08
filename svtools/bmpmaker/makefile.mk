@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:55:16 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:58:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -74,17 +72,6 @@ APP1OBJS=   $(OBJ)$/bmp.obj			\
             $(OBJ)$/bmpcore.obj		
             
 APP1BASE=0x10000000
-
-# .IF "$(GUI)"!="UNX"
-# APP1STDLIBS+= svtool.lib
-# .ELSE
-# APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
-# APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
-# .ENDIF
-
-#.IF "$(OS)"=="MACOSX"
-#ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
-#.ENDIF
 
 # --- APP2TARGET --------------------------------------------------
 
