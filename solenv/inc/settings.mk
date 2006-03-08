@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.186 $
+#   $Revision: 1.187 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:21:41 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:00:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -186,12 +186,11 @@ JAVADOC=javadoc -J-Xmx120m
 .ENDIF
 
 #required arguments
-.IF "$(JAVACACHE)" != ""
-JAVAC=$(JAVACOMPILER) --encoding=ISO-8859-15 -O2 -fno-assert -Wno-deprecated -C
-JAVAI=$(JAVAINTERPRETER) -Dgnu.gcj.precompiled.db.path=$(GCJ_DATABASE)
-.ELSE
 JAVAC=$(JAVACOMPILER)
 JAVAI=$(JAVAINTERPRETER)
+.IF "$(JAVACACHE)" != ""
+JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
+JAVAI+=-Dgnu.gcj.precompiled.db.path=$(GCJ_DATABASE)
 .ENDIF
 
 #classpath and response
