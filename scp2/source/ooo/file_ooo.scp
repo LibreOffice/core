@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 09:43:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 14:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@ File gid_File_Bin_MsiPkgchk
 End
 #endif
 
+#ifndef WITHOUT_MOZILLA
+
 #if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Lib_Npsoplugin
         BIN_FILE_BODY;
@@ -183,6 +185,7 @@ File gid_File_Exe_Nsplugin
     Name = "nsplugin.exe";
   #endif
 End
+#endif
 #endif
 
 File gid_File_Bin_Uno
@@ -291,7 +294,7 @@ File gid_File_Rdb_Gengal
     Name = "gengal.rdb";
 End
 
-#ifdef UNX
+#if !defined(WITHOUT_MOZILLA) && defined(UNX)
 
 File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
