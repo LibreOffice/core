@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:43:58 $
+ *  last change: $Author: rt $ $Date: 2006-03-08 13:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 {
     // create variable library name suffixes
     OUString aSUPDString( OUString::valueOf( (sal_Int32)SUPD, 10 ));
-    OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLSUFFIX) );
+    OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLPOSTFIX) );
 
     OUString aLibName;
 
