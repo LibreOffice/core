@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:39:00 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:04:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ TARGET=base
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -66,4 +64,3 @@ EXCEPTIONSFILES=	\
 
 .INCLUDE :  target.mk
 
-.INCLUDE :  $(PRJ)$/util$/target.pmk
