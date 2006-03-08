@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 10:51:42 $
+#   last change: $Author: rt $ $Date: 2006-03-08 08:48:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
-CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
+CFLAGSOPT=-O2 -fno-strict-aliasing		# optimizing for products
 CFLAGSOPT+=-Wuninitialized				# not supported without optimization
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
