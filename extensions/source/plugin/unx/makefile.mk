@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:55:36 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:16:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@ INCPRE+=-I$(SOLARINCDIR)$/mozilla$/nspr
 CDEFS+=-DOJI
 .ENDIF
 
+.IF "$(WITH_MOZILLA)" != "NO"
+
 SLOFILES=\
     $(SLO)$/nppapi.obj		\
     $(SLO)$/sysplug.obj		\
@@ -80,6 +82,7 @@ APP1STDLIBS+=-lXaw -lXt -lXext -lX11 -ldl
 
 APP1DEF=	$(MISC)$/$(TARGET).def
 
+.ENDIF # $(WITH_MOZILLA) != "NO"
 
 # --- Targets ------------------------------------------------------
 
