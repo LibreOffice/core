@@ -66,16 +66,16 @@
 #endif
 
 #ifdef UNX
-    #define LIBNAME(name)                     STRING(CONCAT5(lib,name,OFFICEUPD,DLLSUFFIX,UNXSUFFIX))
-    #define LIBSHORTNAME(name)                STRING(CONCAT4(lib,name,DLLSUFFIX,UNXSUFFIX))
+    #define LIBNAME(name)                     STRING(CONCAT5(lib,name,OFFICEUPD,DLLPOSTFIX,UNXSUFFIX))
+    #define LIBSHORTNAME(name)                STRING(CONCAT4(lib,name,DLLPOSTFIX,UNXSUFFIX))
     #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(name)
     #define PROFILENAME(name)                 STRING(CONCAT2(name,rc))
     #define SPECIAL_NAME(name)                STRING(CONCAT3(lib,name,UNXSUFFIX))
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,UNXSUFFIX))
 #else
-    #define LIBNAME(name)                     STRING(CONCAT4(name,OFFICEUPD,DLLSUFFIX,.dll))
-    #define LIBSHORTNAME(name)                STRING(CONCAT3(name,DLLSUFFIX,.dll))
+    #define LIBNAME(name)                     STRING(CONCAT4(name,OFFICEUPD,DLLPOSTFIX,.dll))
+    #define LIBSHORTNAME(name)                STRING(CONCAT3(name,DLLPOSTFIX,.dll))
     #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
