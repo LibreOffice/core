@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 14:42:19 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:52:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,11 @@ add_cflagscxx="-frtti -fexceptions"
 
 # --- Targets ------------------------------------------------------
 
-ALL : \
-    ALLTAR \
+.INCLUDE :	target.mk
+
+ALLTAR : \
     $(SCRIPTFILES) \
     $(BIN)$/gengal.rdb 
-
-.INCLUDE :	target.mk
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
     +@tr -d "\015" < $(@:f:+".sh") > $@
@@ -110,7 +109,7 @@ $(BIN)$/gengal.rdb : makefile.mk $(UNOUCRRDB)
             -c i18npool.uno$(DLLPOST) \
             -c configmgr2.uno$(DLLPOST) \
             -c servicemgr.uno$(DLLPOST) \
-            -c $(DLLPRE)fwl$(UPD)$(DLLSUFFIX)$(DLLPOST) \
+            -c $(DLLPRE)fwl$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
             -c $(DLLPRE)ucpfile1$(DLLPOST) \
             -c $(DLLPRE)fileacc$(DLLPOST) \
             -c $(DLLPRE)ucb1$(DLLPOST)
