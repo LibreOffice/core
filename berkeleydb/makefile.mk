@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:23:55 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:13:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ PATCH_FILE_NAME=db-4.2.52.patch
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
 LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+.EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 .IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
@@ -75,8 +76,8 @@ CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 LDFLAGS:=-R\''$$$$ORIGIN'\'
-.ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 .EXPORT: LDFLAGS
+.ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
