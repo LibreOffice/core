@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.145 $
+#   $Revision: 1.146 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:05:40 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:59:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.145 $ ';
+    $id_str = ' $Revision: 1.146 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -194,7 +194,6 @@
 
         $deliver_env{'BUILD_SOSL'}++;
         $deliver_env{'COMMON_OUTDIR'}++;
-        $deliver_env{'DLLSUFFIX'}++;
         $deliver_env{'GUI'}++;
         $deliver_env{'INPATH'}++;
         $deliver_env{'OFFENV_PATH'}++;
