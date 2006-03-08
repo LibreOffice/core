@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-05 18:13:35 $
+#   last change: $Author: rt $ $Date: 2006-03-08 13:58:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -232,8 +232,8 @@ APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
 .IF "$(GUI)"!="UNX"
 APP1STDLIBS+= svtool.lib
 .ELSE
-APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
-APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
+APP1STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
+APP1STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
 .ENDIF # UNX
 
 APP1STDLIBS+=	\
@@ -253,8 +253,8 @@ APP2OBJS	=   $(OBJ)$/g2g.obj
 .IF "$(GUI)"!="UNX"
 APP2STDLIBS+= svtool.lib
 .ELSE
-APP2STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
-APP2STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
+APP2STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
+APP2STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
 .ENDIF
 
 APP2STDLIBS+=	$(VCLLIB)		\
