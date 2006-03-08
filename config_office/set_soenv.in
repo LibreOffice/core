@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.92 $
-# Date:        $Date: 2006-02-28 10:41:43 $
+# Version:     $Revision: 1.93 $
+# Date:        $Date: 2006-03-08 14:02:40 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
+my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION, $BOTH,
       $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
@@ -218,11 +218,9 @@ if ( $platform =~ m/solaris/ )
    {  
       if ( $CC =~ "gcc") {
          $outfile        = "SolarisIntelGccEnv.Set";
-         $DLLSUFFIX      = "sogi";
          $OUTPATH        = "unxsogi";
       } else {
          $outfile        = "SolarisIntelEnv.Set";
-         $DLLSUFFIX      = "si";
          $OUTPATH        = "unxsoli4";
       }
       $CPU            = "I";
@@ -236,11 +234,9 @@ if ( $platform =~ m/solaris/ )
    {
       if ( $CC =~ "gcc") {
          $outfile        = "SolarisSparcGccEnv.Set"; 
-         $DLLSUFFIX      = "sogs";
          $OUTPATH        = "unxsogs";
       } else {
          $outfile        = "SolarisSparcEnv.Set"; 
-         $DLLSUFFIX      = "ss";
          $OUTPATH        = "unxsols4";
       }
       $CPU            = "S";
@@ -277,7 +273,6 @@ elsif ( $platform =~ m/netbsd/ )
       $outfile        = "NetBSDIntelEnv.Set"; 
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      $DLLSUFFIX      = "bi";
       $OUTPATH        = "unxbsdi";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
@@ -288,7 +283,6 @@ elsif ( $platform =~ m/netbsd/ )
       $outfile        = "NetBSDSparcEnv.Set"; 
       $CPU            = "S";
       $CPUNAME        = "SPARC";
-      $DLLSUFFIX      = "bs";
       $OUTPATH        = "unxbsds";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
@@ -299,7 +293,6 @@ elsif ( $platform =~ m/netbsd/ )
       $outfile        = "NetBSDPPCEnv.Set"; 
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
-      $DLLSUFFIX      = "bp";
       $OUTPATH        = "unxbsdppc";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
@@ -335,7 +328,6 @@ elsif ( $platform =~ m/freebsd/ )
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $CVER           = "C300";
-      $DLLSUFFIX      = "fi";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GUIENV         = "sal";
@@ -376,7 +368,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxIntelEnv.Set"; 
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      $DLLSUFFIX      = "li";
       
       if ($JDK =~ m/^[Ii][Bb][Mm]/)
       { $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."bin";
@@ -409,7 +400,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxAMDEnv.Set";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $DLLSUFFIX      = "lx";
       $CVER           = "C341";
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
@@ -423,7 +413,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxSparcEnv.Set"; 
       $CPU            = "S";
       $CPUNAME        = "SPARC";
-      $DLLSUFFIX      = "ls";
       $OUTPATH        = "unxlngs";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
@@ -434,7 +423,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxPPCEnv.Set"; 
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
-      $DLLSUFFIX      = "lp";
       $OUTPATH        = "unxlngppc";
 # j2sdk is IBMJava2-ppc-142
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."bin";
@@ -446,7 +434,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxS390Env.Set";
       $CPU            = "3";
       $CPUNAME        = "S390";
-      $DLLSUFFIX      = "l3";
       $OUTPATH        = "unxlngs390";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."client";
@@ -457,7 +444,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxAlphaEnv.Set"; 
       $CPU            = "A";
       $CPUNAME        = "ALPHA_";
-      $DLLSUFFIX      = "la";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
@@ -468,7 +454,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $outfile        = "LinuxARMEnv.Set"; 
       $CPU            = "R";
       $CPUNAME        = "ARM";
-      $DLLSUFFIX      = "lr";
       $OUTPATH        = "unxlngr";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
@@ -487,7 +472,6 @@ elsif ( $platform =~ m/osf1/ )
       $CPU            = "A";
       $CPUNAME        = "ALPHA_";
       $CVER           = "C62";
-      $DLLSUFFIX      = "t64";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GUIENV         = "sal";
@@ -519,7 +503,6 @@ elsif ( $platform =~ m/irix/ )
       $COMPATH        = '@COMPATH@';
       $CPU            = "M";
       $CPUNAME        = "MIPS";
-      $DLLSUFFIX      = "im";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GUIENV         = "sal";
@@ -569,7 +552,6 @@ elsif ( $platform =~ m/cygwin/ )
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
       $CVER           = "C300";
-      $DLLSUFFIX      = "gi";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
@@ -580,7 +562,6 @@ elsif ( $platform =~ m/cygwin/ )
       $COM            = "MSC";
       # COMPATH for MSC is differently used
       $COMPATH        =~ s/\/bin$//i;
-      $DLLSUFFIX      = "mi";
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
@@ -625,7 +606,6 @@ elsif ( $platform =~ m/darwin/ )
           $outfile        = "MacOSXIntelEnv.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
-          $DLLSUFFIX      = "mxi";
           $OUTPATH        = "unxmacxi";
       }
       elsif ($platform =~ m/^powerpc/)
@@ -634,7 +614,6 @@ elsif ( $platform =~ m/darwin/ )
           $outfile        = "MacOSXPPCEnv.Set"; 
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
-          $DLLSUFFIX      = "mxp";
           $OUTPATH        = "unxmacxp";
       }
       $CVER           = "C300";
@@ -658,7 +637,6 @@ elsif ( $platform =~ m/aix/ )
    $outfile        = "aixPPCEnv.Set"; 
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
-   $DLLSUFFIX      = "ap";
    $OUTPATH        = "unxlngppc";
    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
@@ -1617,7 +1595,6 @@ ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
 ToFile( "CVER",              $CVER,              "e" );
-ToFile( "DLLSUFFIX",         $DLLSUFFIX,         "e" );
 ToFile( "GUI",               $GUI,               "e" );
 ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
