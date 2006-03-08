@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:55:58 $
+#   last change: $Author: rt $ $Date: 2006-03-08 14:17:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@ CDEFS+=-DOJI
 
 # --- Types -------------------------------------
 
+.IF "$(WITH_MOZILLA)" != "NO"
+
 #UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
 #INCPRE+=$(UNOUCROUT)
 
@@ -61,7 +63,9 @@ CDEFS+=-DOJI
 SLOFILES =	$(SLO)$/winmgr.obj	\
             $(SLO)$/sysplug.obj
 
+.ENDIF # $(WITH_MOZILLA) != "NO"
 .ENDIF
+
 # ------------------------------------------------------------------
 
 
