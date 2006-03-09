@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:42:55 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:26:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@ void appendUnoName(
         for (std::vector< rtl::OString >::const_iterator i(arguments.begin());
              i != arguments.end(); ++i)
         {
+            if (i != arguments.begin()) {
+                buffer->append(',');
+            }
             RTTypeClass argTypeClass;
             rtl::OString argNucleus;
             sal_Int32 argRank;
