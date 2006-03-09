@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:00:52 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 
 namespace climaker
 {
-
+System::String* mapUnoPolymorphicName(System::String* unoName);
 //------------------------------------------------------------------------------
 static inline ::System::String * to_cts_name(
     OUString const & uno_name )
@@ -155,10 +155,150 @@ void polymorphicStructNameToStructName(::System::String ** sPolyName)
     if ((*sPolyName)->EndsWith(S">") == false)
         return;
 
-    int index = (*sPolyName)->LastIndexOf('<');
+    int index = (*sPolyName)->IndexOf('<');
     OSL_ASSERT(index != -1);
     *sPolyName = (*sPolyName)->Substring(0, index);
 }
+
+
+System::String* mapUnoTypeName(System::String * typeName)
+{
+    ::System::Text::StringBuilder* buf= new System::Text::StringBuilder();
+    ::System::String * sUnoName = ::System::String::Copy(typeName);
+    //determine if the type is a sequence and its dimensions
+    int dims= 0;
+    if (typeName->StartsWith(S"["))//if (usUnoName[0] == '[')
+    {
+        int index= 1;
+        while (true)
+        {
+            if (typeName->get_Chars(index++) == ']')//if (usUnoName[index++] == ']')
+                dims++;
+            if (typeName->get_Chars(index++) != '[')//usUnoName[index++] != '[')
+                break;
+        }
+        sUnoName = sUnoName->Substring(index - 1);//usUnoName = usUnoName.copy(index - 1);
+    }
+    if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoBool)))
+        buf->Append(const_cast<System::String*>(Constants::sBoolean));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoChar)))
+        buf->Append(const_cast<System::String*>(Constants::sChar));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoByte)))
+        buf->Append(const_cast<System::String*>(Constants::sByte));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoShort)))
+        buf->Append(const_cast<System::String*>(Constants::sInt16));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoUShort)))
+        buf->Append(const_cast<System::String*>(Constants::sUInt16));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoLong)))
+        buf->Append(const_cast<System::String*>(Constants::sInt32));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoULong)))
+        buf->Append(const_cast<System::String*>(Constants::sUInt32));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoHyper)))
+        buf->Append(const_cast<System::String*>(Constants::sInt64));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoUHyper)))
+        buf->Append(const_cast<System::String*>(Constants::sUInt64));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoFloat)))
+        buf->Append(const_cast<System::String*>(Constants::sSingle));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoDouble)))
+        buf->Append(const_cast<System::String*>(Constants::sDouble));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoString)))
+        buf->Append(const_cast<System::String*>(Constants::sString));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoVoid)))
+        buf->Append(const_cast<System::String*>(Constants::sVoid));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoType)))
+        buf->Append(const_cast<System::String*>(Constants::sType));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoXInterface)))
+        buf->Append(const_cast<System::String*>(Constants::sObject));
+    else if (sUnoName->Equals(const_cast<System::String*>(Constants::sUnoAny)))
+    {
+        buf->Append(const_cast<System::String*>(Constants::sAny));
+    }
+    else
+    {
+        //put "unoidl." at the beginning
+        buf->Append(const_cast<System::String*>(Constants::sUnoidl));
+        buf->Append(mapUnoPolymorphicName(sUnoName));
+    }
+    // apend []
+    for (;dims--;)
+        buf->Append(const_cast<System::String*>(Constants::sBrackets));
+
+    return buf->ToString();
+}
+
+
+/** For example, there is a uno type
+    com.sun.star.Foo<char, long>.
+    The values in the type list
+    are uno types and are replaced by cli types, such as System.Char,
+    System.Int32, etc.
+
+    Strings can be as complicated as this
+    test.MyStruct<char,test.MyStruct<long, []string>>
+ */
+System::String* mapUnoPolymorphicName(System::String* unoName)
+{
+    int index = unoName->IndexOf('<');
+    if (index == -1)
+        return unoName;
+
+    System::Text::StringBuilder * builder =
+        new System::Text::StringBuilder(unoName->Substring(0, index +1 ));
+
+    //Find the first occurrence of ','
+    //If the parameter is a polymorphic struct then we neede to ignore everything
+    //between the brackets because it can also contain commas
+    //get the type list within < and >
+    int endIndex = unoName->Length - 1;
+    index++;
+    int cur = index;
+    int countParams = 0;
+    while (cur <= endIndex)
+    {
+        System::Char c = unoName->Chars[cur];
+        if (c == ',' || c == '>')
+        {
+            //insert a comma if needed
+            if (countParams != 0)
+                builder->Append(S",");
+            countParams++;
+            System::String * sParam = unoName->Substring(index, cur - index);
+            //skip the comma
+            cur++;
+            //the the index to the beginning of the next param
+            index = cur;
+            builder->Append(mapUnoTypeName(sParam));
+        }
+        else if (c == '<')
+        {
+            cur++;
+            //continue until the matching '>'
+            int numNested = 0;
+            for (;;cur++)
+            {
+                System::Char curChar = unoName->Chars[cur];
+                if (curChar == '<')
+                {
+                    numNested ++;
+                }
+                else if (curChar == '>')
+                {
+                    if (numNested > 0)
+                        numNested--;
+                    else
+                        break;
+                }
+            }
+        }
+        cur++;
+    }
+
+    builder->Append((System::Char) '>');
+    return builder->ToString();
+}
+
+
+
 //______________________________________________________________________________
 Assembly * TypeEmitter::type_resolve(
     ::System::Object * sender, ::System::ResolveEventArgs * args )
@@ -219,8 +359,23 @@ Assembly * TypeEmitter::type_resolve(
 
     if (ret_type == 0)
     {
-        // may call on type_resolve()
-        return ::System::Type::GetType( cts_name, throw_exc );
+        try
+        {
+            // may call on type_resolve()
+            return ::System::Type::GetType( cts_name, throw_exc );
+        }
+        catch (::System::Exception* exc)
+        {
+            //If the type is not found one may have forgotten to specify assemblies with
+            //additional types
+            ::System::Text::StringBuilder * sb = new ::System::Text::StringBuilder();
+            sb->Append(new ::System::String(S"\nThe type "));
+            sb->Append(cts_name);
+            sb->Append(new ::System::String(S" \n could not be found. Did you forget to " \
+                S"specify an additional assembly with the --reference option?\n"));
+            if (throw_exc)
+                throw new ::System::Exception(sb->ToString(), exc);
+        }
     }
     else
     {
@@ -509,9 +664,7 @@ Assembly * TypeEmitter::type_resolve(
             return get_type_RuntimeException();
         }
     }
-
     ::System::String * cts_name = to_cts_name( uno_name );
-
     // if the struct is an instantiated polymorpic struct then we create the simple struct name
     // For example:
     // void func ([in] PolyStruct<boolean> arg);
@@ -535,6 +688,9 @@ Assembly * TypeEmitter::type_resolve(
                 base_type );
 
         //Polymorphic struct, define uno.TypeParametersAttribute
+        //A polymorphic struct cannot have a basetype.
+        //When we create the template of the struct then we have no exact types
+        //and the name does not contain a parameter list
         Sequence< OUString > seq_type_parameters;
         Reference< reflection::XStructTypeDescription> xStructTypeDesc(
             xType, UNO_QUERY);
@@ -575,7 +731,21 @@ Assembly * TypeEmitter::type_resolve(
         Sequence< OUString > seq_member_names( xType->getMemberNames() );
         sal_Int32 members_length = seq_members.getLength();
         OSL_ASSERT( seq_member_names.getLength() == members_length );
-
+        //check if we have a XTypeDescription for every member. If not then the user may
+        //have forgotten to specify additional rdbs with the --extra option.
+        Reference< reflection::XTypeDescription > const * pseq_members =
+                seq_members.getConstArray();
+        OUString const * pseq_member_names =
+            seq_member_names.getConstArray();
+        for (int i = 0; i < members_length; i++)
+        {
+            OUString sType = xType->getName();
+            OUString sMemberName = pseq_member_names[i];
+            if ( ! pseq_members[i].is())
+                throw RuntimeException(OUSTR("Missing type description . Check if you need to " \
+                "specify additional RDBs with the --extra option. Type missing for: ") +  sType +
+                OUSTR("::") + sMemberName,0);
+        }
 
         sal_Int32 all_members_length = 0;
         sal_Int32 member_pos;
@@ -669,10 +839,10 @@ Assembly * TypeEmitter::type_resolve(
 
         // add members
         Emit::FieldBuilder * members[] = new Emit::FieldBuilder * [ members_length ];
-        Reference< reflection::XTypeDescription > const * pseq_members =
-            seq_members.getConstArray();
-        OUString const * pseq_member_names =
-            seq_member_names.getConstArray();
+        //Reference< reflection::XTypeDescription > const * pseq_members =
+        //    seq_members.getConstArray();
+        //OUString const * pseq_member_names =
+        //    seq_member_names.getConstArray();
 
         int curParamIndex = 0; //count the fields which have parameterized types
         for ( member_pos = 0; member_pos < members_length; ++member_pos )
@@ -851,6 +1021,23 @@ Assembly * TypeEmitter::type_resolve(
         m_generated_structs->Add( cts_name, entry );
         ret_type = type_builder->CreateType();
     }
+
+    //In case of an instantiated polymorphic struct we want to return a
+    //uno.PolymorphicType (inherits Type) rather then Type.
+    Reference< reflection::XStructTypeDescription> xStructTypeDesc(
+        xType, UNO_QUERY);
+    if (xStructTypeDesc.is())
+    {
+        Sequence< Reference< reflection::XTypeDescription > > seqTypeArgs = xStructTypeDesc->getTypeArguments();
+        sal_Int32 numTypes = seqTypeArgs.getLength();
+        if (numTypes > 0)
+        {
+            //it is an instantiated polymorphic struct
+            ::System::String * sCliName = mapUnoTypeName(ustring_to_String(xType->getName()));
+            ret_type = ::uno::PolymorphicType::GetType(ret_type, sCliName);
+        }
+    }
+
     return ret_type;
 }
 
@@ -1247,20 +1434,19 @@ Assembly * TypeEmitter::type_resolve(
 //              throw new com.sun.star.uno.DeploymentException("bla", null);
 //          return (XWeak) factory.createInstanceWithContext("service_specifier", ctx);
 //      }
-//      public static XWeak constructor2(XComponentContext ctx, int a, int b)
+//      public static XWeak constructor2(XComponentContext ctx, int a, int b, Any c)
 //      {
 //          XMultiComponentFactory factory = ctx.getServiceManager();
 //          if (factory == null)
 //              throw new com.sun.star.uno.DeploymentException("bla", null);
-//          Any a1;
-//          a1 = new Any( typeof(int), a);
-//          Any a2;
-//          a2 = new Any( typeof(int), b);
-//          Any[] arAny = new Any[2];
-//          arAny[0] = a1;
-//          arAny[1] = a2;
+//          Any[] arAny = new Any[3];
+//          arAny[0] = new Any(typeof(int), a);
+//          arAny[1] = new Any(typeof(int), b);
+//          arAny[2] = new Any(c.Type, c.Value);
 //          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", arAny, ctx);
 //      }
+// Notice that a any parameter is NOT wrapped by another any. Instead the new any is created with the type and value
+// of the parameter.
 
 //      public static XWeak constructor3(XComponentContext ctx, params Any[] c)
 //      {
@@ -1332,9 +1518,25 @@ Assembly * TypeEmitter::type_resolve(
             if (arXParams[iparam]->isRestParameter())
                 arTypeParameters[iparam + 1] = __typeof(::uno::Any[]);
             else
-                    arTypeParameters[iparam + 1] = get_type(arXParams[iparam]->getType());
+                arTypeParameters[iparam + 1] = get_type(arXParams[iparam]->getType());
         }
-
+        //The array arTypeParameters can contain:
+        //System.Type and uno.PolymorphicType.
+        //Passing PolymorphicType to MethodBuilder.DefineMethod will cause a problem.
+        //The exception will read something like no on information for parameter # d
+        //Maybe we need no override another Type method in PolymorphicType ...
+        //Until we have figured this out, we will create another array of System.Type which
+        //we pass on to DefineMethod.
+        ::System::Type * arParamTypes[] = new ::System::Type * [cParams + 1];
+//        arParamTypes[0] = get_type(S"unoidl.com.sun.star.uno.XComponentContext", true);
+        for (int i = 0; i < cParams + 1; i++)
+        {
+            ::uno::PolymorphicType * pT = dynamic_cast<::uno::PolymorphicType *>(arTypeParameters[i]);
+            if (pT)
+                arParamTypes[i] = pT->OriginalType;
+            else
+                arParamTypes[i] = arTypeParameters[i];
+        }
         //define method
         System::String * ctorName;
         if (ctorDes->isDefaultConstructor())
@@ -1346,7 +1548,8 @@ Assembly * TypeEmitter::type_resolve(
             static_cast<MethodAttributes>(MethodAttributes::Public | MethodAttributes::HideBySig |
                                           MethodAttributes::Static),
             retType,
-            arTypeParameters);
+//            arTypeParameters);
+            arParamTypes);
 
         //define UNO exception attribute (exceptions)--------------------------------------
         Emit::CustomAttributeBuilder* attrBuilder = get_service_exception_attribute(ctorDes);
@@ -1410,7 +1613,7 @@ Assembly * TypeEmitter::type_resolve(
         ilGen->Emit(Emit::OpCodes::Brtrue, label1);
         //The string for the exception
         ::System::Text::StringBuilder * strbuilder = new ::System::Text::StringBuilder(256);
-        strbuilder->Append(S"The service unoidl.");
+        strbuilder->Append(S"The service ");
         strbuilder->Append(to_cts_name(xServiceType->getName()));
         strbuilder->Append(S" could not be created. The context failed to supply the service manager.");
 
@@ -1440,7 +1643,7 @@ Assembly * TypeEmitter::type_resolve(
         if (cParams == 0)
         {
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldarg_0);
 
             ::System::Reflection::MethodInfo * methodCreate =
@@ -1451,7 +1654,7 @@ Assembly * TypeEmitter::type_resolve(
         {
             //Service constructor with parameter array
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldarg_1);
             ilGen->Emit(Emit::OpCodes::Ldarg_0);
             ::System::Reflection::MethodInfo * methodCreate =
@@ -1479,25 +1682,82 @@ Assembly * TypeEmitter::type_resolve(
             //Create the Any for every argument, except for the parameter array
             //arLocalAny contains the LocalBuilder for all these parameters.
             //we call the ctor Any(Type, Object)
+            //If the parameter is an Any then the Any is created with Any(param.Type, param.Value);
             ::System::Type * arTypesCtorAny[] = {__typeof(::System::Type),
                                                     __typeof(::System::Object)};
             ::System::Reflection::ConstructorInfo * ctorAny =
-                    typeAny->GetConstructor( arTypesCtorAny);
+                typeAny->GetConstructor( arTypesCtorAny);
+            ::System::Reflection::MethodInfo * methodAnyGetType =
+                typeAny->GetProperty(S"Type")->GetGetMethod();
+            ::System::Reflection::MethodInfo * methodAnyGetValue =
+                typeAny->GetProperty(S"Value")->GetGetMethod();
             for (int i = 0; i < arLocalAny->Length; i ++)
             {
-                ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
-                ilGen->Emit(Emit::OpCodes::Ldtoken, arTypeParameters[i+1]);
+                //check if the parameter is a polymorphic struct
+                ::uno::PolymorphicType *polyType = dynamic_cast<::uno::PolymorphicType*>(arTypeParameters[i+1]);
+                //arTypeParameters[i+1] = polyType->OriginalType;
+                if (polyType)
+                {
+                    //It is a polymorphic struct
+                    //Load the uninitialized local Any on which we will call the ctor
+                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                    // Call PolymorphicType PolymorphicType::GetType(Type t, String polyName)
+                    // Prepare the first parameter
+                    ilGen->Emit(Emit::OpCodes::Ldtoken, polyType->get_OriginalType());
+                    ::System::Type * arTypeParams[] = {__typeof(::System::RuntimeTypeHandle)};
+                    ilGen->Emit(Emit::OpCodes::Call,
+                                __typeof(::System::Type)->GetMethod(
+                                    S"GetTypeFromHandle", arTypeParams));
+                    // Prepare the second parameter
+                    ilGen->Emit(Emit::OpCodes::Ldstr, polyType->get_PolymorphicName());
+                    // Make the actual call
+                    ::System::Type * arTypeParam_GetType[] = {
+                        __typeof(::System::Type), __typeof(::System::String) };
+                    ilGen->Emit(Emit::OpCodes::Call,
+                    __typeof(::uno::PolymorphicType)->GetMethod(new System::String(S"GetType"),
+                        arTypeParam_GetType));
 
-                ::System::Type * arTypeParams[] = {__typeof(::System::RuntimeTypeHandle)};
-                ilGen->Emit(Emit::OpCodes::Call,
-                            __typeof(::System::Type)->GetMethod(
-                                S"GetTypeFromHandle", arTypeParams));
-                ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
-                // if the parameter is a value type then we need to box it, because
-                // the Any ctor takes an Object
-                if (arTypeParameters[i+1]->IsValueType)
-                    ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
-                ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                    //Stack is: localAny, PolymorphicType
+                    //Call Any::Any(Type, Object)
+                    //Prepare the second parameter for the any ctor
+                    ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
+                    // if the parameter is a value type then we need to box it, because
+                    // the Any ctor takes an Object
+                    if (arTypeParameters[i+1]->IsValueType)
+                        ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
+                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                }
+                else if (arTypeParameters[i+1] == typeAny)
+                {
+                    //Create the call new Any(param.Type,param,Value)
+                    //Stack must be Any,Type,Value
+                    //First load the Any which is to be constructed
+                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                    //Load the Type, which is obtained by calling param.Type
+                    ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
+                    ilGen->Emit(Emit::OpCodes::Call, methodAnyGetType);
+                    //Load the Value, which is obtained by calling param.Value
+                    ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
+                    ilGen->Emit(Emit::OpCodes::Call, methodAnyGetValue);
+                    //Call the Any ctor.
+                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                }
+                else
+                {
+                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                    ilGen->Emit(Emit::OpCodes::Ldtoken, arTypeParameters[i+1]);
+
+                    ::System::Type * arTypeParams[] = {__typeof(::System::RuntimeTypeHandle)};
+                    ilGen->Emit(Emit::OpCodes::Call,
+                                __typeof(::System::Type)->GetMethod(
+                                    S"GetTypeFromHandle", arTypeParams));
+                    ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
+                    // if the parameter is a value type then we need to box it, because
+                    // the Any ctor takes an Object
+                    if (arTypeParameters[i+1]->IsValueType)
+                        ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
+                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                }
             }
 
             //Create the Any[] that is passed to the
@@ -1518,7 +1778,7 @@ Assembly * TypeEmitter::type_resolve(
             }
             // call createInstanceWithContextAndArguments
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
             ilGen->Emit(Emit::OpCodes::Ldarg_0);
             ::System::Reflection::MethodInfo * methodCreate =
@@ -1595,7 +1855,7 @@ Assembly * TypeEmitter::type_resolve(
         ilGen->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
 
         strbuilder = new ::System::Text::StringBuilder(256);
-        strbuilder->Append(S"The context (com.sun.star.uno.XComponentContext) failed to supply the service unoidl.");
+        strbuilder->Append(S"The context (com.sun.star.uno.XComponentContext) failed to supply the service ");
         strbuilder->Append(to_cts_name(xServiceType->getName()));
         strbuilder->Append(S".");
         ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
@@ -1848,9 +2108,17 @@ Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
         ::System::Type * element_type = get_type(
             Reference< reflection::XIndirectTypeDescription >(
                 xType, UNO_QUERY_THROW )->getReferencedType() );
-        return get_type(
+        ::System::Type * retType = get_type(
             ::System::String::Concat(
                 element_type->get_FullName(), S"[]" ), true );
+
+        ::uno::PolymorphicType * pt = dynamic_cast<::uno::PolymorphicType *>(element_type);
+        if (pt)
+        {
+            ::System::String * sName = ::System::String::Concat(pt->PolymorphicName, S"[]");
+            retType = ::uno::PolymorphicType::GetType(retType, sName);
+        }
+        return retType;
     }
     case TypeClass_INTERFACE:
         return get_type(
