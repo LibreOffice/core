@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:30:17 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,17 +347,13 @@ const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext, bool bFollowCel
 
 const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
 {
-    if ( bFwd )
-        return pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0;
+    if ( !pFrm->IsLayoutFrm() )
+        return 0;
 
-    const SwFrm *pLower = pFrm->GetLower();
-    if ( pLower )
-        while ( pLower->GetNext() )
-            pLower = pLower->GetNext();
-    return pLower;
+    return bFwd ?
+           static_cast<const SwLayoutFrm*>(pFrm)->Lower() :
+           static_cast<const SwLayoutFrm*>(pFrm)->GetLastLower();
 }
-
-
 
 /*************************************************************************
 |*
@@ -1530,9 +1526,7 @@ SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
             pCorrRow = pRow->GetFollowRow();
         else
         {
-            SwRowFrm* pTmpRow = (SwRowFrm*)pCorrCell->Lower();
-            while ( pTmpRow && pTmpRow->GetNext() )
-                pTmpRow = (SwRowFrm*)pTmpRow->GetNext();
+            SwRowFrm* pTmpRow = static_cast<SwRowFrm*>(pCorrCell->GetLastLower());
 
             if ( pTmpRow && pTmpRow->GetFollowRow() == pRow )
                 pCorrRow = pTmpRow;
@@ -1589,12 +1583,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
             SwTabFrm *pMaster = (SwTabFrm*)pTab->FindMaster();
             if ( pMaster && pMaster->HasFollowFlowLine() )
             {
-                SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
-                while ( pMasterRow->GetNext() )
-                {
-                    pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
-                }
-
+                SwRowFrm* pMasterRow = static_cast<SwRowFrm*>(pMaster->GetLastLower());
                 pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
             }
         }
@@ -1657,11 +1646,7 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
     if ( !bIsInFirstLine )
         return NULL;
 
-    SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
-
-    while ( pMasterRow && pMasterRow->GetNext() )
-        pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
-
+    const SwRowFrm* pMasterRow = static_cast<const SwRowFrm*>(pMaster->GetLastLower());
     return pMasterRow;
 }
 
@@ -1678,4 +1663,15 @@ bool SwFrm::IsInBalancedSection() const
     return bRet;
 }
 
-
+/*
+ * SwLayoutFrm::GetLastLower()
+ */
+const SwFrm* SwLayoutFrm::GetLastLower() const
+{
+    const SwFrm* pLower = Lower();
+    if ( !pLower )
+        return 0;
+    while ( pLower->GetNext() )
+        pLower = pLower->GetNext();
+    return pLower;
+}
