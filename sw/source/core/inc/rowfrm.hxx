@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:54:17 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@ public:
     bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
     void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
     // <-- split table rows
+
+    // --> FME 2006-02-10 #131283# Table row keep feature
+    bool ShouldRowKeepWithNext() const;
+    // <--
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrm)
 };
