@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:08:36 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,14 +373,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     const BOOL bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const USHORT nMin = bLine ? USHORT( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
-    SwFrm *pCol = Lower();
-
     const BOOL bR2L = IsRightToLeft();
-    if( bR2L )
-    {
-        while( pCol->GetNext() )
-            pCol = pCol->GetNext();
-    }
+    SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
     // --> FME 2004-07-16 #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
