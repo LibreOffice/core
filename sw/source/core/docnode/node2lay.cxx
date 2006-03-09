@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node2lay.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:43 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,10 +348,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
                 ASSERT( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
                 ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), FALSE, nStt+1, pNxt );
-                pNxt = pUp->Lower();
-                if( pNxt )
-                    while( pNxt->GetNext() )
-                        pNxt = pNxt->GetNext();
+                pNxt = pUp->GetLastLower();
                 (*pUpperFrms)[x-2] = pNxt;
             }
         }
