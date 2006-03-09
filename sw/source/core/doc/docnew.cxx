@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:16:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,6 +381,7 @@ SwDoc::SwDoc() :
     bIgnoreFirstLineIndentInNumbering   =
     bDoNotJustifyLinesWithManualBreak   =
     bDoNotResetParaAttrsForNumFont      =
+    bTableRowKeep                       =
 
     //
     // COMPATIBILITY FLAGS END
