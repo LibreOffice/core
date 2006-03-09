@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:10:32 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
     case EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS:
         return "a readonly attribute may not have a setter raises clause";
     case EIDL_UNSIGNED_TYPE_ARGUMENT:
-        return "an unsigned integer type cannot be used as a type argument";
+        return "an unsigned type cannot be used as a type argument";
     case EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS:
         return
             "the number of given type arguments does not match the expected"
