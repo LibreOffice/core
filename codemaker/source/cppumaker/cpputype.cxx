@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:42:38 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:26:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2815,12 +2815,13 @@ void StructureType::dumpLightGetCppuType(FileStream & out) {
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
             out << indent()
-                << ("the_buffer.append(::rtl::OUStringToOString(getCppuType< ");
+                << ("the_buffer.append(::rtl::OUStringToOString("
+                    "::cppu::getTypeFavourChar(static_cast< ");
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " >().getTypeName(), RTL_TEXTENCODING_UTF8));\n";
+            out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
             if (i != n - 1) {
                 out << indent() << "the_buffer.append(',');\n";
             }
@@ -2858,12 +2859,13 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
             out << indent()
-                << ("the_buffer.append(::rtl::OUStringToOString(getCppuType< ");
+                << ("the_buffer.append(::rtl::OUStringToOString("
+                    "::cppu::getTypeFavourChar(static_cast< ");
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " >().getTypeName(), RTL_TEXTENCODING_UTF8));\n";
+            out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
             if (i != n - 1) {
                 out << indent() << "the_buffer.append(',');\n";
             }
@@ -2880,15 +2882,14 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
             rtl::OUStringToOString(
                 m_reader.getFieldTypeName(i), RTL_TEXTENCODING_UTF8));
         if ((m_reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0) {
-            out << "getCppuType< ";
+            out << "::cppu::getTypeFavourChar(static_cast< ";
             dumpTypeParameterName(out, type);
-            out << " >()";
         } else {
             out << "::getCppuType(static_cast< ";
             dumpType(out, type);
-            out << " * >(0))";
         }
-        out << ".getTypeLibType()" << (i == fields - 1 ? " };" : ",") << "\n";
+        out << " * >(0)).getTypeLibType()" << (i == fields - 1 ? " };" : ",")
+            << "\n";
     }
     dec();
     if (isPolymorphic()) {
@@ -2945,12 +2946,13 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
             << m_typeName.replace('/', '.') << "<\"));\n";
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
-            out << indent() << "the_buffer.append(getCppuType< ";
+            out << indent()
+                << "the_buffer.append(::cppu::getTypeFavourChar(static_cast< ";
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " >().getTypeName());\n";
+            out << " * >(0)).getTypeName());\n";
             if (i != n - 1) {
                 out << indent()
                     << ("the_buffer.append("
@@ -2983,11 +2985,12 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
                 sal_uInt32 n = static_cast< sal_uInt32 >(parameters.size() - 1);
                 out << indent()
                     << "::com::sun::star::uno::Type const & the_ptype" << n
-                    << " = getCppuType< ";
+                    << " = ::cppu::getTypeFavourChar(static_cast< ";
                 dumpTypeParameterName(out, type);
-                out << " >();\n" << indent() << "::typelib_TypeClass the_pclass"
-                    << n << " = (::typelib_TypeClass) the_ptype"
-                    << n << ".getTypeClass();\n" << indent()
+                out << " * >(0));\n" << indent()
+                    << "::typelib_TypeClass the_pclass" << n
+                    << " = (::typelib_TypeClass) the_ptype" << n
+                    << ".getTypeClass();\n" << indent()
                     << "::rtl::OUString the_pname" << n << "(the_ptype" << n
                     << ".getTypeName());\n";
             }
