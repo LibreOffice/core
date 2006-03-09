@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:01:07 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,47 @@ namespace climaker
 
 //------------------------------------------------------------------------------
 extern bool g_verbose;
+
+__gc struct Constants
+{
+    static const ::System::String * sUnoVoid = S"void";
+    static const ::System::String * sUnoType = S"type";
+    static const ::System::String * sUnoAny =  S"any";
+    static const ::System::String * sUnoBool = S"boolean";
+    static const ::System::String * sUnoByte = S"byte";
+    static const ::System::String * sUnoChar = S"char";
+    static const ::System::String * sUnoShort = S"short";
+    static const ::System::String * sUnoUShort = S"unsigned short";
+    static const ::System::String * sUnoLong = S"long";
+    static const ::System::String * sUnoULong = S"unsigned long";
+    static const ::System::String * sUnoHyper = S"hyper";
+    static const ::System::String * sUnoUHyper = S"unsigned hyper";
+    static const ::System::String * sUnoString = S"string";
+    static const ::System::String * sUnoFloat = S"float";
+    static const ::System::String * sUnoDouble = S"double";
+    static const ::System::String * sUnoXInterface = S"com.sun.star.uno.XInterface";
+    static const ::System::String * sBrackets = S"[]";
+
+    static const System::String* sObject = S"System.Object";
+    static const System::String* sType = S"System.Type";
+    static const System::String* sUnoidl = S"unoidl.";
+    static const System::String* sVoid = S"System.Void";
+    static const System::String* sAny = S"uno.Any";
+    static const System::String* sBoolean = S"System.Boolean";
+    static const System::String* sChar = S"System.Char";
+    static const System::String* sByte = S"System.Byte";
+    static const System::String* sInt16 = S"System.Int16";
+    static const System::String* sUInt16 = S"System.UInt16";
+    static const System::String* sInt32 = S"System.Int32";
+    static const System::String* sUInt32 = S"System.UInt32";
+    static const System::String* sInt64 = S"System.Int64";
+    static const System::String* sUInt64 = S"System.UInt64";
+    static const System::String* sString = S"System.String";
+    static const System::String* sSingle = S"System.Single";
+    static const System::String* sDouble = S"System.Double";
+    static const System::String* sComma = new System::String(S",");
+
+};
 
 //------------------------------------------------------------------------------
 inline ::System::String * ustring_to_String( ::rtl::OUString const & ustr )
