@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:53:33 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,6 +257,23 @@ getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *) {
     }
     return detail::getTypeFromTypeDescriptionReference(
         &::com::sun::star::uno::Sequence< T >::s_pType);
+}
+
+template< typename T > inline ::com::sun::star::uno::Type const &
+getTypeFavourChar(::com::sun::star::uno::Sequence< T > const *) {
+    //TODO  On certain platforms with weak memory models, the following code can
+    // result in some threads observing that td points to garbage:
+    static typelib_TypeDescriptionReference * td = 0;
+    if (td == 0) {
+        ::typelib_static_sequence_type_init(
+            &td,
+            (::cppu::getTypeFavourChar(
+                static_cast<
+                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
+                    0)).
+             getTypeLibType()));
+    }
+    return detail::getTypeFromTypeDescriptionReference(&td);
 }
 
 }
