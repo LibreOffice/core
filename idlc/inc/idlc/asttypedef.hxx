@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asttypedef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:02:35 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@ public:
 
     AstType const * getBaseType() const
         { return m_pBaseType; }
+
+    virtual bool isUnsigned() const
+    { return m_pBaseType != 0 && m_pBaseType->isUnsigned(); }
 
     virtual sal_Bool dump(RegistryKey& rKey);
 private:

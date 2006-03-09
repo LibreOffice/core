@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astbasetype.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:55:03 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,17 @@ public:
         {}
 
     virtual ~AstBaseType() {}
+
+    virtual bool isUnsigned() const {
+        switch (m_exprType) {
+        case ET_ushort:
+        case ET_ulong:
+        case ET_uhyper:
+            return true;
+        default:
+            return false;
+        }
+    }
 
     const ExprType getExprType() const
         { return m_exprType; }

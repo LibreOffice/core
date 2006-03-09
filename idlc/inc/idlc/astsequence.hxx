@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astsequence.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:00:19 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ public:
 
     AstType* getMemberType()
         { return m_pMemberType; }
+
+    virtual bool isUnsigned() const
+    { return m_pMemberType != 0 && m_pMemberType->isUnsigned(); }
 
     virtual const sal_Char* getRelativName() const;
 private:
