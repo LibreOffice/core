@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:02 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2437,21 +2437,12 @@ type_args:
     ;
 
 type_arg:
-    fundamental_type
+    simple_type_spec
     {
-        if ($1 != 0 && $1->getNodeType() == NT_predefined) {
-            switch (static_cast< AstBaseType const * >($1)->getExprType()) {
-            case ET_ushort:
-            case ET_ulong:
-            case ET_uhyper:
-                idlc()->error()->error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
-                break;
-            }
+        if ($1 != 0 && static_cast< AstType const * >($1)->isUnsigned()) {
+            idlc()->error()->error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
         }
-    }
-    | scoped_name opt_type_args
-    {
-        $$ = createNamedType($1, $2);
+        $$ = $1;
     }
     ;
 
@@ -2652,6 +2643,7 @@ sequence_type_spec :
 	{
 		yyerror("sequence declaration");
 		yyerrok;
+        $$ = 0;
 	}
 	;
 
