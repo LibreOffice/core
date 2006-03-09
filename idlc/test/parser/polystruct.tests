@@ -4,9 +4,9 @@
 #
 #   $RCSfile: polystruct.tests,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:18:50 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:49:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -236,3 +236,31 @@ module com { module sun { module star { module uno {
 }; }; }; };
 struct Struct<T> { long member; };
 interface X { void f([in] Struct<unsigned hyper> p); };
+
+
+EXPECT FAILURE "polystruct.tests 43":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<sequence<unsigned short> > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 44":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<sequence<char> > member; };
+
+
+EXPECT FAILURE "polystruct.tests 45":
+struct Struct1<T> { long member; };
+typedef unsigned short td;
+struct Struct2 { Struct1<td> member; };
+
+
+EXPECT FAILURE "polystruct.tests 46":
+struct Struct1<T> { long member; };
+typedef sequence<unsigned short> td;
+struct Struct2 { Struct1<td> member; };
+
+
+EXPECT FAILURE "polystruct.tests 47":
+struct Struct1<T> { long member; };
+typedef unsigned short td;
+struct Struct2 { Struct1<sequence<td> > member; };
