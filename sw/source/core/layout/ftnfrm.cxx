@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:30:46 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -957,9 +957,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
                 {
                     if ( pBody->Lower() && pBody->Lower()->IsColumnFrm() )
                     {
-                        pNxtBoss = (SwFtnBossFrm*)pBody->Lower();
-                        while( pNxtBoss->GetNext() ) // letzte Spalte suchen
-                            pNxtBoss = (SwFtnBossFrm*)pNxtBoss->GetNext();
+                        pNxtBoss = static_cast<SwFtnBossFrm*>(pBody->GetLastLower());
                     }
                 }
             }
@@ -2113,10 +2111,9 @@ void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
 
             SwLayoutFrm* pBody = pPg->FindBodyCont();
             if( pBody->Lower() && pBody->Lower()->IsColumnFrm() )
-            {   // mehrspaltige Seite => letzte Spalte suchen
-                _pOld = (SwFtnBossFrm*)pBody->Lower();
-                while ( _pOld->GetNext() )
-                    _pOld = (SwFtnBossFrm*)_pOld->GetNext();
+            {
+                // mehrspaltige Seite => letzte Spalte suchen
+                _pOld = static_cast<SwFtnBossFrm*>(pBody->GetLastLower());
             }
             else
                 _pOld = pPg; // einspaltige Seite
