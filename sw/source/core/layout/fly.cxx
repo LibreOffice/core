@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 15:33:06 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,10 +596,8 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         SwLayoutFrm *pUpper = pMaster;
         if ( pUpper->Lower()->IsColumnFrm() )
         {
-            pUpper = (SwLayoutFrm*)pUpper->Lower();
-            while ( pUpper->GetNext() ) // sucht die letzte Spalte
-                pUpper = (SwLayoutFrm*)pUpper->GetNext();
-            pUpper = (SwLayoutFrm*)((SwLayoutFrm*)pUpper)->Lower(); // der (Column)BodyFrm
+            pUpper = static_cast<SwLayoutFrm*>(pUpper->GetLastLower());
+            pUpper = static_cast<SwLayoutFrm*>(pUpper->Lower()); // der (Column)BodyFrm
             ASSERT( pUpper && pUpper->IsColBodyFrm(), "Missing ColumnBody" );
         }
         SwFlyFrm *pFoll = pFollow;
@@ -983,9 +981,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 }
                 else if( !Lower()->IsColumnFrm() )
                 {
-                    SwFrm* pFrm = Lower();
-                    while( pFrm->GetNext() )
-                        pFrm = pFrm->GetNext();
+                    SwFrm* pFrm = GetLastLower();
                     if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
                         pFrm->Prepare( PREP_ADJUST_FRM );
                 }
@@ -1573,20 +1569,16 @@ void CalcCntnt( SwLayoutFrm *pLay,
             // --> OD 2006-01-27 #i57765# - do not consider invalid previous
             // frame, if current frame has a column/page break before attribute.
             SwFrm* pTmpPrev = pFrm->FindPrev();
-            const bool bPrevInvalid =
-              ( pFrm->IsFlowFrm()
-                ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
-                    !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() &&
-                    !SwFlowFrm::CastFlowFrm(pFrm)->HasAttrPageBreakBefore( pTmpPrev ) &&
-                    !SwFlowFrm::CastFlowFrm(pFrm)->HasAttrColBreakBefore( pTmpPrev ) )
-                : true ) &&
-              pTmpPrev &&
-              !pTmpPrev->GetValidPosFlag() &&
-              pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
-              pLay->IsAnLower( pTmpPrev ) &&
-              ( pTmpPrev->IsFlowFrm()
-                ? SwFlowFrm::CastFlowFrm(pTmpPrev)->IsKeepFwdMoveAllowed()
-                : true );
+            SwFlowFrm* pTmpPrevFlowFrm = pTmpPrev && pTmpPrev->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pTmpPrev) : 0;
+            SwFlowFrm* pTmpFlowFrm     = pFrm->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pFrm) : 0;
+
+            const bool bPrevInvalid = pTmpPrevFlowFrm && pTmpFlowFrm &&
+                                     !pTmpFlowFrm->IsFollow() &&
+                                     !pTmpFlowFrm->IsJoinLocked() &&
+                                     !pTmpPrev->GetValidPosFlag() &&
+                                      pLay->IsAnLower( pTmpPrev ) &&
+                                      pTmpPrevFlowFrm->IsKeep( *pTmpPrev->GetAttrSet() ) &&
+                                      pTmpPrevFlowFrm->IsKeepFwdMoveAllowed();
             // <--
 
             // format floating screen objects anchored to the frame.
