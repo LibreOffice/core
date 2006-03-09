@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:39:16 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,12 @@ import com.sun.star.test.performance.XPerformanceTest;
 
 import test.testtools.bridgetest.BadConstructorArguments;
 import test.testtools.bridgetest.Constructors;
+import test.testtools.bridgetest.Constructors2;
 import test.testtools.bridgetest.TestDataElements;
 import test.testtools.bridgetest.TestElement;
 import test.testtools.bridgetest.TestEnum;
 import test.testtools.bridgetest.TestPolyStruct;
+import test.testtools.bridgetest.TestPolyStruct2;
 import test.testtools.bridgetest.TestStruct;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
@@ -1191,6 +1193,68 @@ public class TestComponent {
                     new Type("test.testtools.bridgetest.TestPolyStruct<any>"),
                     new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE))),
                 null });
+            Constructors2.create1(
+                context,
+                new TestPolyStruct(Type.LONG),
+                new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)),
+                new TestPolyStruct(new Boolean(true)),
+                new TestPolyStruct(new Byte(Byte.MIN_VALUE)),
+                new TestPolyStruct(new Short(Short.MIN_VALUE)),
+                new TestPolyStruct(new Integer(Integer.MIN_VALUE)),
+                new TestPolyStruct(new Long(Long.MIN_VALUE)),
+                new TestPolyStruct(new Character('X')),
+                new TestPolyStruct("test"),
+                new TestPolyStruct(new Float(0.123f)),
+                new TestPolyStruct(new Double(0.456)),
+                new TestPolyStruct(new com.sun.star.lib.uno.helper.ComponentBase()),
+                new TestPolyStruct(new com.sun.star.lib.uno.helper.ComponentBase()),
+                new TestPolyStruct(TestEnum.TWO),
+                new TestPolyStruct(new TestPolyStruct2(new Character('X'),
+                    new Any(Type.BOOLEAN, Boolean.TRUE))),
+                new TestPolyStruct(new TestPolyStruct2(new TestPolyStruct2(
+                    new Character('X'), new Any(Type.BOOLEAN, Boolean.TRUE)), "test")),
+                new TestPolyStruct2("test", new TestPolyStruct2(new Character('X'),
+                    new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)))),
+                new TestPolyStruct2( new TestPolyStruct2(new Character('X'),
+                    new Any(Type.BOOLEAN, Boolean.TRUE)), new TestPolyStruct(new Character('X'))),
+                new TestPolyStruct(new Type[] { Type.LONG}),
+                new TestPolyStruct(new Any[] { new Any(Type.BOOLEAN, Boolean.TRUE) }),
+                new TestPolyStruct(new boolean[] {true}),
+                new TestPolyStruct(new byte[] {Byte.MIN_VALUE}),
+                new TestPolyStruct(new short[] {Short.MIN_VALUE}),
+                new TestPolyStruct(new int[] {Integer.MIN_VALUE}),
+                new TestPolyStruct(new long[] {Long.MIN_VALUE}),
+                new TestPolyStruct(new char[] {'X'}),
+                new TestPolyStruct(new String[] {"test"}),
+                new TestPolyStruct(new float[] {0.123f}),
+                new TestPolyStruct(new double[] {0.456d}),
+                new TestPolyStruct(new Object[] {new com.sun.star.lib.uno.helper.ComponentBase()}),
+                new TestPolyStruct(new com.sun.star.lang.XComponent[] {new com.sun.star.lib.uno.helper.ComponentBase()}),
+                new TestPolyStruct(new TestEnum[] {TestEnum.TWO}),
+                new TestPolyStruct(new TestPolyStruct2[] {new TestPolyStruct2(
+                    new Character('X'), new Any[] {new Any(Type.BOOLEAN, Boolean.TRUE)})}),
+                new TestPolyStruct(new TestPolyStruct2[] {new TestPolyStruct2(
+                    new TestPolyStruct(new Character('X')), new Any[] {new Any(Type.BOOLEAN, Boolean.TRUE)})}),
+                new TestPolyStruct(new int[][] { new int[] {Integer.MIN_VALUE} }),
+                new TestPolyStruct[]{ new TestPolyStruct(new Integer(Integer.MIN_VALUE))},
+                new TestPolyStruct[]{new TestPolyStruct(new TestPolyStruct2(
+                    new Character('X'), new Any(Type.BOOLEAN, Boolean.TRUE)))},
+                new TestPolyStruct[]{new TestPolyStruct(new TestPolyStruct2(
+                    new TestPolyStruct2(new Character('X'), new Any(Type.BOOLEAN, Boolean.TRUE)), "test"))},
+                new TestPolyStruct2[]{new TestPolyStruct2("test", new TestPolyStruct2(
+                    new Character('X'), new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE))))},
+                new TestPolyStruct2[]{new TestPolyStruct2(new TestPolyStruct2(new Character('X'), new Any(
+                    Type.BOOLEAN, Boolean.TRUE)),new TestPolyStruct(new Character('X')))},
+                new TestPolyStruct[][]{new TestPolyStruct[]{new TestPolyStruct(new Character('X'))}},
+                new TestPolyStruct[][]{new TestPolyStruct[]{
+                    new TestPolyStruct(new TestPolyStruct2(new Character('X'), new Any(Type.BOOLEAN, Boolean.TRUE)))}},
+                new TestPolyStruct[][]{new TestPolyStruct[] {new TestPolyStruct(new TestPolyStruct2(
+                    new TestPolyStruct2(new Character('X'),new Any(Type.BOOLEAN, Boolean.TRUE)), "test"))}},
+                new TestPolyStruct2[][]{new TestPolyStruct2[]{new TestPolyStruct2(
+                    "test", new TestPolyStruct2(new Character('X'),new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE))))}},
+                new TestPolyStruct2[][]{new TestPolyStruct2[]{new TestPolyStruct2(
+                    new TestPolyStruct2(new Character('X'),new Any(Type.BOOLEAN, Boolean.TRUE)),
+                        new TestPolyStruct(new Character('X')))}});
         }
     }
 
