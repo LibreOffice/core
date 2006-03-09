@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 14:00:43 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:47:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,12 @@ if ($installer::globals::languages_defined_in_productlist) { installer::language
 #####################################
 
 if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodinglist($includepatharrayref); }
+
+#####################################################################
+# Including additional inc files for variable settings, if defined
+#####################################################################
+
+if ( $allvariableshashref->{'ADD_INCLUDE_FILES'} ) { installer::worker::add_variables_from_inc_to_hashref($allvariableshashref, $includepatharrayref); }
 
 #####################################
 # Analyzing the setup script
