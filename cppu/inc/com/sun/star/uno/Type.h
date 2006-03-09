@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:53:46 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,6 +448,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
 
     @return type of the given IDL type
 
+    @deprecated
+    Use cppu::UnoType instead (or the internal-only cppu::getTypeFavourChar).
+    Also note that getCppuType< com::sun::star::uno::Sequence< sal_Unicode > >()
+    does not work as expected.
+
     @since UDK 3.2.0
 */
 template< typename T > inline const ::com::sun::star::uno::Type & SAL_CALL
@@ -456,6 +461,11 @@ getCppuType() SAL_THROW(());
 /** Gets the meta type of IDL type char.
 
     @return type of IDL type char
+
+    @deprecated
+    Use cppu::UnoType instead (or the internal-only cppu::getTypeFavourChar).
+    Also note that getCppuType< com::sun::star::uno::Sequence< sal_Unicode > >()
+    does not work as expected.
 
     @since UDK 3.2.0
 */
