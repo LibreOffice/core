@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:25:38 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:43:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,15 @@ REFERENCE_RDB=$(PRJ)$/type_reference$/types.rdb
 
 REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
+UNOTYPE_STATISTICS=$(MISC)$/unotype_statistics.txt
+
+
 # --- Targets ------------------------------------------------------
 
 ALLTAR : $(UCR)$/types.db \
        $(OUT)$/ucrdoc$/types_doc.db \
-       $(REGISTRYCHECKFLAG)
+       $(REGISTRYCHECKFLAG) \
+       $(UNOTYPE_STATISTICS)
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
     +-$(RM) $(REGISTRYCHECKFLAG)
@@ -161,5 +165,10 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
     +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
         && echo > $(REGISTRYCHECKFLAG)
+
+#JSC: new target to prepare some UNO type statistics, the ouput will be later used
+#     for versioning of UNO cli type libraries
+$(UNOTYPE_STATISTICS) : $(REGISTRYCHECKFLAG)
+    +$(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" > $@
 
 .INCLUDE :  target.mk
