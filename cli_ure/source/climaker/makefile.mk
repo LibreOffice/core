@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:14:39 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:52:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ OBJFILES = \
 APP1TARGET = $(TARGET)
 APP1OBJS = $(OBJFILES)
 
+
 APP1STDLIBS = \
     $(CPPUHELPERLIB)		\
     $(CPPULIB)			\
@@ -109,3 +110,5 @@ ALLTAR : $(BIN)$/climaker.exe.config
 
 $(BIN)$/climaker.exe.config : climaker.exe.config
     $(GNUCOPY) -f $? $@
+
+$(OBJFILES): $(BIN)$/cli_basetypes.dll
