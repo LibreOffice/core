@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:47:55 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,9 +264,7 @@ FASTBOOL SwCrsrShell::GotoFooterTxt()
     const SwPageFrm* pFrm = GetCurrFrm()->FindPageFrm();
     if( pFrm )
     {
-        const SwFrm * pLower = pFrm->GetLower();
-        while( pLower->GetNext() )
-            pLower = pLower->GetNext();
+        const SwFrm* pLower = pFrm->GetLastLower();
 
         while( pLower && !pLower->IsFooterFrm() )
             pLower = pLower->GetLower();
