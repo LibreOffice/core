@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:15:52 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:54:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ TARGET = ure
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
+.INCLUDE : $(BIN)$/cliureversion.mk
+
 .IF "$(USE_SHELL)"!="4nt"
 ECHOQUOTE='
 .ELSE
@@ -53,17 +55,12 @@ ECHOQUOTE=
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
-POLICYASSEMBLY = policy.1.0.cli_ure.dll
-
-#!!! Always change version if code has changed. Provide a publisher
-#policy assembly!!!
-ASSEMBLY_VERSION="1.0.2.0"
-
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
+POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_URE_POLICY_ASSEMBLY).dll
 ALLTAR : \
     $(BIN)$/cli_ure.dll \
-    $(OUT)$/bin$/$(POLICYASSEMBLY)	
+    $(POLICY_ASSEMBLY_FILE)
 
 
 CSFILES = \
@@ -73,14 +70,14 @@ CSFILES = \
     uno$/util$/WeakComponentBase.cs	\
     $(ASSEMBLY_ATTRIBUTES)
 
-$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
-    [assembly:System.Reflection.AssemblyVersion( $(ASSEMBLY_VERSION))] \
+    [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
 
-$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll
+$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll $(BIN)$/cliureversion.mk 
     +$(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
@@ -91,12 +88,16 @@ $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll
 
 
 #do not forget to deliver cli_ure.config. It is NOT embedded in the policy file.
-$(OUT)$/bin$/$(POLICYASSEMBLY) : cli_ure.config
-    +$(COPY) cli_ure.config $(OUT)$/bin  
+$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_ure.config
     +$(WRAPCMD) AL.exe -out:$@ \
-            -version:2.0.0.0 \
+            -version:$(CLI_URE_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:cli_ure.config
+            -link:$(BIN)$/cli_ure.config
+
+#Create the config file that is used with the policy assembly
+$(BIN)$/cli_ure.config: cli_ure_config $(BIN)$/cliureversion.mk 
+    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $< $@
 
 
 .ENDIF
