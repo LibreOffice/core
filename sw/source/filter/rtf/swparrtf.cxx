@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 15:58:22 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,6 +427,8 @@ void SwRTFParser::Continue( int nToken )
             // --> OD 2004-06-24 #i27767# - set new compatibility option
             //      'Conder Wrapping mode when positioning object' to <TRUE>
             pDoc->SetConsiderWrapOnObjPos( true );
+            // --> FME 2006-02-10 #131283#
+            pDoc->SetTableRowKeep( true );
 
             //
             // COMPATIBILITY FLAGS END
