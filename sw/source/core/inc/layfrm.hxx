@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:30:05 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,9 @@ public:
         @return true, if <this> is positioned before the layout frame <p>
     */
     bool IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const;
+
+    const SwFrm* GetLastLower() const;
+    inline SwFrm* GetLastLower();
 };
 
 //Um doppelte Implementierung zu sparen wird hier ein bischen gecasted
@@ -204,6 +207,11 @@ inline BOOL SwFrm::IsColBodyFrm() const
 inline BOOL SwFrm::IsPageBodyFrm() const
 {
     return nType == FRMC_BODY && GetUpper()->IsPageFrm();
+}
+
+inline SwFrm* SwLayoutFrm::GetLastLower()
+{
+    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->GetLastLower());
 }
 
 #endif  //_LAYFRM_HXX
