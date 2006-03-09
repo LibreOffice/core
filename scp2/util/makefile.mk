@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:48:14 $
+#   last change: $Author: rt $ $Date: 2006-03-09 14:09:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ SCP1FILES  = installation_ooo.par          \
              file_graphicfilter.par        \
              module_testtool.par           \
              file_testtool.par             \
-             module_lingu.par              \
              file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
@@ -194,7 +193,6 @@ SCP2FILES  = installation_ooo.par          \
              file_graphicfilter.par        \
              module_testtool.par           \
              file_testtool.par             \
-             module_lingu.par              \
              file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
