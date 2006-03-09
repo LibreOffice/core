@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:24:48 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2025,9 +2025,7 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
         if ( mbScrollingAllowed &&
              ( IsPaint() || bAddRect ) )
         {
-            pRow = (SwLayoutFrm*)pTab->Lower();
-            while ( pRow->GetNext() )
-                pRow = (SwLayoutFrm*)pRow->GetNext();
+            pRow = static_cast<SwLayoutFrm*>(pTab->GetLastLower());
             // OD 31.10.2002 #104100# - vertical layout support
             (aScrollRect.*fnRect->fnSetBottom)( (pRow->Frm().*fnRect->fnGetBottom)() );
             //Die Oberkante wird ggf. durch die erste unveraenderte Zeile bestimmt.
