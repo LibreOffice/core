@@ -6,3 +6,5 @@
 ..\%__SRC%\bin\cli_*.pdb %_DEST%\bin%_EXT%\cli_*.pdb
 ..\%__SRC%\bin\cli_*.config %_DEST%\bin%_EXT%\cli_*.config
 ..\%__SRC%\bin\policy*.dll %_DEST%\bin%_EXT%\policy*.dll
+
+..\%__SRC%\bin\cliureversion.mk %_DEST%\bin%_EXT%\cliureversion.mk
