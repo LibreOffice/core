@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:31:34 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@
 #endif
 #ifndef _SWTBLFMT_HXX
 #include <swtblfmt.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
 #endif
 
 #include "tabfrm.hxx"
@@ -252,7 +255,8 @@ void SwTabFrm::RegistFlys()
     {
         SwRowFrm *pRow = (SwRowFrm*)Lower();
         do
-        {   pRow->RegistFlys( pPage );
+        {
+            pRow->RegistFlys( pPage );
             pRow = (SwRowFrm*)pRow->GetNext();
         } while ( pRow );
     }
@@ -306,7 +310,6 @@ SwTwips lcl_GetHeightOfRows( const SwTabFrm& rTabFrm, USHORT nCount )
 /*************************************************************************
 |*  END: local helper functions for repeated headlines
 |*************************************************************************/
-
 
 /*************************************************************************
 |*  START: local helper functions for splitting row frames
@@ -426,12 +429,9 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
                            sal_False );
         // <--
         // TODO: Optimize number of frames which are set to 0 height
-        SwFrm* pTmp = ((SwCellFrm*)pCurrMasterCell)->Lower();
-
         // we have to start with the last lower frame, otherwise
         // the shrink will not shrink the current cell
-        while ( pTmp && pTmp->GetNext() )
-            pTmp = pTmp->GetNext();
+        SwFrm* pTmp = static_cast<SwLayoutFrm*>(pCurrMasterCell)->GetLastLower();
 
         if ( pTmp && pTmp->IsRowFrm() )
         {
@@ -529,9 +529,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
             if ( pTmp )
             {
                 // Find last content
-                SwFrm* pFrm = ((SwCellFrm*)pCurrDestCell)->Lower();
-                while ( pFrm && pFrm->GetNext() )
-                    pFrm = pFrm->GetNext();
+                SwFrm* pFrm = pCurrDestCell->GetLastLower();
                 ::RestoreCntnt( pTmp, (SwCellFrm*)pCurrDestCell, pFrm, true );
             }
         }
@@ -690,9 +688,7 @@ void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
         if ( pCurrMasterCell->Lower() &&
              pCurrMasterCell->Lower()->IsRowFrm() )
         {
-            SwRowFrm* pRowFrm = (SwRowFrm*)pCurrMasterCell->Lower();
-            while ( pRowFrm->GetNext() )
-                pRowFrm = (SwRowFrm*)pRowFrm->GetNext();
+            SwRowFrm* pRowFrm = static_cast<SwRowFrm*>(pCurrMasterCell->GetLastLower());
 
             if ( NULL != pRowFrm->GetPrev() && !pRowFrm->ContainsCntnt() )
             {
@@ -899,9 +895,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
             pFollowFlowLine, "There should be a flowline in the follow" )
 
     // find last row in master
-    SwFrm* pLastLine = Lower();
-    while ( pLastLine->GetNext() )
-        pLastLine = pLastLine->GetNext();
+    SwFrm* pLastLine = GetLastLower();
 
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrm(), which has a different bahavior if
@@ -958,15 +952,14 @@ bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 |*  Letzte Aenderung    MA 03. Sep. 96
 |*
 |*************************************************************************/
-bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
+bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
 {
     bool bRet = true;
 
     SWRECTFN( this )
-    ASSERT( bVert ? nCutPos >= Frm().Left()
-            && nCutPos <= Frm().Left() + Frm().Width() :
-            nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(),
-            "SplitLine out of table." );
+    //ASSERT( bVert ? nCutPos >= Frm().Left() &&
+    //                nCutPos <= Frm().Left() + Frm().Width() :
+    //                nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(), "SplitLine out of table." );
 
     // --> OD 2004-10-14 #i26745# - format row and cell frames of table
     {
@@ -1080,7 +1073,10 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
     {
         pRow = GetFirstNonHeadlineRow();
         if ( pRow )
+        {
             pRow = pRow->GetNext();
+            ++nRowCount;
+        }
     }
 
     //
@@ -1093,8 +1089,31 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
     // We try to split the row if
     // - the attributes of the row are set accordingly and
     // - we are allowed to do so
+    // - the it should not keep with the next row
     //
-    bSplitRowAllowed = bSplitRowAllowed && bTryToSplit;
+    bSplitRowAllowed = bSplitRowAllowed && bTryToSplit &&
+                       ( !bTableRowKeep ||
+                         !static_cast<SwRowFrm*>(pRow)->ShouldRowKeepWithNext() );
+
+    // Adjust pRow according to the keep-with-next attribute:
+    if ( !bSplitRowAllowed && bTableRowKeep )
+    {
+        SwFrm* pTmpRow = pRow->GetPrev();
+        SwFrm* pOldRow = pRow;
+        while ( pTmpRow && static_cast<SwRowFrm*>(pTmpRow)->ShouldRowKeepWithNext() &&
+                nRowCount > nRepeat )
+        {
+            pRow = pTmpRow;
+            --nRowCount;
+            pTmpRow = pTmpRow->GetPrev();
+        }
+
+        // loop prevention
+        if ( nRowCount == nRepeat && !GetIndPrev())
+        {
+            pRow = pOldRow;
+        }
+    }
 
     //
     // If we do not indent to split pRow, we check if we are
@@ -1188,9 +1207,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
     {
         if ( !bSplitRowAllowed )
         {
-            pPrv = pFoll->Lower();
-            while( pPrv && pPrv->GetNext() )
-                pPrv = pPrv->GetNext();
+            pPrv = pFoll->GetLastLower();
         }
 
         while ( pRow )
@@ -1259,9 +1276,7 @@ bool SwTabFrm::Join()
         SwFrm *pRow = pFoll->GetFirstNonHeadlineRow(),
               *pNxt;
 
-        SwFrm *pPrv = Lower();
-        while ( pPrv && pPrv->GetNext() )
-            pPrv = pPrv->GetNext();
+        SwFrm* pPrv = GetLastLower();
 
         while ( pRow )
         {
@@ -1609,7 +1624,7 @@ bool lcl_NoPrev( const SwFrm& rFrm )
 // a table frame and format it to assure keep attribute.
 // method return true, if a next content frame is formatted.
 // Precondition: The given table frame hasn't a follow and isn't a follow.
-bool lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
+SwFrm* lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
 {
     // find next content, table or section
     SwFrm* pNxt = pTabFrm->FindNext();
@@ -1630,17 +1645,15 @@ bool lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
     // format found next frame.
     // if table frame is inside another table, method <SwFrm::MakeAll()> is
     // called to avoid that the superior table frame is formatted.
-    bool bNxtFormatted( false );
     if ( pNxt )
     {
-        bNxtFormatted = true;
         if ( pTabFrm->GetUpper()->IsInTab() )
             pNxt->MakeAll();
         else
             pNxt->Calc();
     }
 
-    return bNxtFormatted;
+    return pNxt;
 }
 
 void SwTabFrm::MakeAll()
@@ -1715,16 +1728,32 @@ void SwTabFrm::MakeAll()
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     // The beloved keep attribute
-    const bool bKeep = IsKeep( *pAttrs );
+    const bool bKeep = IsKeep( pAttrs->GetAttrSet() );
+
     // All rows should keep together
     // OD 2004-05-25 #i21478# - don't split table, if it has to keep with next
     const bool bDontSplit = !IsFollow() &&
                             ( !GetFmt()->GetLayoutSplit().GetValue() || bKeep );
+
     // The number of repeated headlines
     const USHORT nRepeat = GetTable()->GetRowsToRepeat();
+
     // This flag indicates that something we are allowed to try to split the
     // table rows.
     bool bTryToSplit = true;
+
+    // --> FME 2006-02-16 #131283#
+    // Indicates that two individual rows may keep together, based on the keep
+    // attribute set at the first paragraph in the first cell.
+    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->IsTableRowKeep();
+
+    // The Magic Move: Used for the table row keep feature.
+    // If only the last row of the table wants to keep (implicitely by setting
+    // keep for the first paragraph in the first cell), and this table does
+    // not have a next, the last line will be cut. Loop prevention: Only
+    // one try.
+    bool bLastRowHasToMoveToFollow = false;
+    bool bLastRowMoveNoMoreTries = false;
 
     // Join follow table, if this table is not allowed to split:
     if ( bDontSplit )
@@ -1742,6 +1771,18 @@ void SwTabFrm::MakeAll()
     {
         if( GetFollow() && !GetFollow()->IsJoinLocked() &&
             0 == GetFirstNonHeadlineRow() )
+        {
+            if ( HasFollowFlowLine() )
+                RemoveFollowFlowLine();
+            Join();
+        }
+    }
+
+    // Join follow table, if last row of this table should keep:
+    if ( bTableRowKeep && GetFollow() && !GetFollow()->IsJoinLocked() )
+    {
+        const SwRowFrm* pTmpRow = static_cast<const SwRowFrm*>(GetLastLower());
+        if ( pTmpRow && pTmpRow->ShouldRowKeepWithNext() )
         {
             if ( HasFollowFlowLine() )
                 RemoveFollowFlowLine();
@@ -1909,7 +1950,7 @@ void SwTabFrm::MakeAll()
 //                                        if ( !GetNext() )
 //                                            bValidPos = FALSE;
 //                                    }
-                                    if ( lcl_FormatNextCntntForKeep( this ) &&
+                                    if ( 0 != lcl_FormatNextCntntForKeep( this ) &&
                                          !GetNext() )
                                     {
                                         bValidPos = FALSE;
@@ -1971,6 +2012,7 @@ void SwTabFrm::MakeAll()
                             bCalcLowers |= pLayout->Resize(
                                 pLayout->GetBrowseWidthByTabFrm( *this ),
                                 FALSE );
+
                             pAccess= new SwBorderAttrAccess(
                                         SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
@@ -1999,7 +2041,7 @@ void SwTabFrm::MakeAll()
 //                            if ( !GetNext() )
 //                                bValidPos = FALSE;
 //                        }
-                        if ( lcl_FormatNextCntntForKeep( this ) && !GetNext() )
+                        if ( 0 != lcl_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
                             bValidPos = FALSE;
                         }
@@ -2037,7 +2079,11 @@ void SwTabFrm::MakeAll()
             }
         }
 
-        if( nDistanceToUpperPrtBottom >= 0 )
+        // If there is still some space left in the upper, we check if we
+        // can join some rows of the follow.
+        // Setting bLastRowHasToMoveToFollow to true means we want to force
+        // the table to be split! Only skip this if condition once.
+        if( nDistanceToUpperPrtBottom >= 0 && !bLastRowHasToMoveToFollow )
         {
             // OD 23.10.2002 - translate german commentary
             // If there is space left in the upper printing area, join as for trial
@@ -2060,10 +2106,7 @@ void SwTabFrm::MakeAll()
                         {
                             RemoveFollowFlowLine();
                             // invalidate and rebuild last row
-                            SwFrm* pLastLine = Lower();
-                            while ( pLastLine->GetNext() )
-                                pLastLine = pLastLine->GetNext();
-
+                            SwFrm* pLastLine = const_cast<SwFrm*>(GetLastLower());
                             ::SwInvalidateAll( pLastLine, LONG_MAX );
                             SetRebuildLastLine( TRUE );
                             ::lcl_CalcLayout( (SwLayoutFrm*)pLastLine, LONG_MAX );
@@ -2114,21 +2157,51 @@ void SwTabFrm::MakeAll()
                     }
                 }
             }
-            else if ( bKeep && KEEPTAB )
+            else if ( KEEPTAB )
             {
-                // --> OD 2005-09-28 #b6329202#
-                // Consider case that table is inside another table, because
-                // it has to be avoided, that superior table is formatted.
-                // Thus, find next content, table or section and, if a section
-                // is found, get its first content.
-//                SwFrm *pNxt = FindNextCnt();
-//                if( pNxt && pNxt->IsInTab() )
-//                    pNxt = pNxt->FindTabFrm();
-//                if ( pNxt )
-//                    pNxt->Calc();
-                lcl_FormatNextCntntForKeep( this );
-                // <--
+                bool bFormat = false;
+                if ( bKeep )
+                    bFormat = true;
+                else if ( bTableRowKeep && !bLastRowMoveNoMoreTries )
+                {
+                    // We only want to give the last row one chance to move
+                    // to the follow table. Set the flag as early as possible:
+                    bLastRowMoveNoMoreTries = true;
+
+                    // The last line of the table has to be cut off if:
+                    // 1. The table does not want to keep with its next
+                    // 2. The compatibility option is set and the table is allowed to split
+                    // 3. We did not already cut off the last row
+                    // 4. There is not break after attribute set at the table
+                    // 5. There is no break before attribute set behind the table
+                    // 6. The last table row wants to keep with its next.
+                    const SwRowFrm* pLastRow = static_cast<const SwRowFrm*>(GetLastLower());
+                    if ( pLastRow && IsKeep( pAttrs->GetAttrSet(), true ) &&
+                         pLastRow->ShouldRowKeepWithNext() )
+                        bFormat = true;
+                }
+
+                if ( bFormat )
+                {
+                    // --> OD 2005-09-28 #b6329202#
+                    // Consider case that table is inside another table, because
+                    // it has to be avoided, that superior table is formatted.
+                    // Thus, find next content, table or section and, if a section
+                    // is found, get its first content.
+                    const SwFrm* pTmpNxt = lcl_FormatNextCntntForKeep( this );
+                    // <--
+
+                    // The last row wants to keep with the frame behind the table.
+                    // Check if the next frame is on a different page and valid.
+                    // In this case we do a magic trick:
+                    if ( !bKeep && !GetNext() && pTmpNxt && pTmpNxt->IsValid() )
+                    {
+                        bValidPos = FALSE;
+                        bLastRowHasToMoveToFollow = true;
+                    }
+                }
             }
+
             if ( IsValid() )
             {
                 if ( bCalcLowers )
@@ -2166,6 +2239,11 @@ void SwTabFrm::MakeAll()
                 lcl_CalcLayout( (SwLayoutFrm*)Lower(), LONG_MAX );
                 bONECalcLowers = FALSE;
             }
+
+            // It does not make sense to cut off the last line if we are
+            // not moveable:
+            bLastRowHasToMoveToFollow = false;
+
             continue;
         }
 
@@ -2178,13 +2256,18 @@ void SwTabFrm::MakeAll()
                 continue;
         }
 
-        //Der erste Versuch muss natuerlich das Aufspalten der Tabelle sein.
-        //Das funktioniert natuerlich nur dann, wenn die Tabelle mehr als eine
-        //Zeile enthaelt und wenn die Unterkante des Upper unter der ersten
-        //Zeile liegt.
+        //
+        // First try to split the table. Condition:
+        // 1. We have at least one non headline row
+        // 2. If this row wants to keep, we need an additional row
+        // 3. The table is allowed to split or we do not have an pIndPrev:
+        //
         SwFrm* pIndPrev = GetIndPrev();
         const SwRowFrm* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
-        if ( pFirstNonHeadlineRow && ( !bDontSplit || !pIndPrev ) )
+
+        if ( pFirstNonHeadlineRow &&
+             ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() ) &&
+             ( !bDontSplit || !pIndPrev ) )
         {
             // --> FME 2004-06-03 #i29438#
             // Special DoNotSplit case:
@@ -2212,10 +2295,17 @@ void SwTabFrm::MakeAll()
                 ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), nDeadLine );
                 bLowersFormatted = TRUE;
                 aNotify.SetLowersComplete( TRUE );
-                if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
+
+                // One more check if its really necessary to split the table.
+                // 1. The table either has to exceed the deadline or
+                // 2. We explicitly want to cut off the last row.
+                if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 && !bLastRowHasToMoveToFollow )
                 {
                     continue;
                 }
+
+                // Set to false again as early as possible.
+                bLastRowHasToMoveToFollow = false;
 
                 // --> FME 2005-08-03 #i52781#
                 // YaSC - Yet another special case:
@@ -2232,6 +2322,22 @@ void SwTabFrm::MakeAll()
                 // <--
 
                 USHORT nMinNumOfLines = nRepeat;
+
+                if ( bTableRowKeep )
+                {
+                    const SwRowFrm* pTmpRow = pFirstNonHeadlineRow;
+                    while ( pTmpRow && pTmpRow->ShouldRowKeepWithNext() )
+                    {
+                        ++nMinNumOfLines;
+                        pTmpRow = static_cast<const SwRowFrm*>(pTmpRow->GetNext());
+                    }
+                    // Check if all lines want to keep together and we
+                    // have a pIndPrev. In this case we set nDeadLine
+                    // to 0, forcing the table to move forward.
+                    if ( !pTmpRow && pIndPrev )
+                        nDeadLine = 0;
+                }
+
                 if ( !bTryToSplit )
                     ++nMinNumOfLines;
 
@@ -2240,6 +2346,9 @@ void SwTabFrm::MakeAll()
                         (this->*fnRect->fnGetTopMargin)() +
                          lcl_GetHeightOfRows( *this, nMinNumOfLines ) );
 
+                // Some more checks if we want to call the split algorithm or not:
+                // The repeating lines / keeping lines still fit into the upper or
+                // if we do not have an (in)direkt Prev, we split anyway.
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
                 {
                     aNotify.SetLowersComplete( FALSE );
@@ -2251,7 +2360,7 @@ void SwTabFrm::MakeAll()
                     if ( HasFollowFlowLine() )
                         RemoveFollowFlowLine();
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, bTableRowKeep );
                     ASSERT( bTryToSplit || !bSplitError,
                             "We did not try to split, why to we get a split error?" )
                     bTryToSplit = !bSplitError;
@@ -2351,6 +2460,9 @@ void SwTabFrm::MakeAll()
                 }
             }
         }
+
+        // Set to false again as early as possible.
+        bLastRowHasToMoveToFollow = false;
 
         if( IsInSct() && bMovedFwd && bMakePage && GetUpper()->IsColBodyFrm() &&
             GetUpper()->GetUpper()->GetUpper()->IsSctFrm() &&
@@ -3947,9 +4059,7 @@ USHORT lcl_GetBottomLineSize( const SwRowFrm& rRow )
         USHORT nTmpBottomLineSize = 0;
         if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
         {
-            SwFrm* pRow = pCurrLower->Lower();
-            while ( pRow->GetNext() )
-                pRow = pRow->GetNext();
+            const SwFrm* pRow = pCurrLower->GetLastLower();
             nTmpBottomLineSize = lcl_GetBottomLineSize( *(SwRowFrm*)pRow );
         }
         else
@@ -3974,9 +4084,7 @@ USHORT lcl_GetBottomLineDist( const SwRowFrm& rRow )
         USHORT nTmpBottomLineDist = 0;
         if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
         {
-            SwFrm* pRow = pCurrLower->Lower();
-            while ( pRow->GetNext() )
-                pRow = pRow->GetNext();
+            const SwFrm* pRow = pCurrLower->GetLastLower();
             nTmpBottomLineDist = lcl_GetBottomLineDist( *(SwRowFrm*)pRow );
         }
         else
@@ -4437,6 +4545,25 @@ bool SwRowFrm::IsRowSplitAllowed() const
 
 /*************************************************************************
 |*
+|*  SwRowFrm::ShouldRowKeepWithNext()
+|*
+|*************************************************************************/
+bool SwRowFrm::ShouldRowKeepWithNext() const
+{
+    bool bRet = false;
+
+    const SwCellFrm* pCell = static_cast<const SwCellFrm*>(Lower());
+    const SwFrm* pTxt = pCell->Lower();
+
+    if ( pTxt && pTxt->IsTxtFrm() )
+    {
+        bRet = static_cast<const SwTxtFrm*>(pTxt)->GetTxtNode()->GetSwAttrSet().GetKeep().GetValue();
+    }
+    return bRet;
+}
+
+/*************************************************************************
+|*
 |*  SwCellFrm::SwCellFrm(), ~SwCellFrm()
 |*
 |*  Ersterstellung      MA 09. Mar. 93
@@ -4810,7 +4937,8 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             SwFrm *pPre = GetUpper()->Lower();
             while ( pPre != this )
-            {   nWidth -= (pPre->Frm().*fnRect->fnGetWidth)();
+            {
+                nWidth -= (pPre->Frm().*fnRect->fnGetWidth)();
                 pPre = pPre->GetNext();
             }
         }
@@ -5104,14 +5232,11 @@ USHORT SwTabFrm::GetBottomLineSize() const
 
     ASSERT( Lower(), "Warning! Trying to prevent a crash, please inform FME" )
 
-    const SwFrm* pTmp = Lower();
+    const SwFrm* pTmp = GetLastLower();
 
     // --> FME 2005-12-07 #124755# Try to make code robust:
     if ( !pTmp ) return 0;
     // <--
-
-    while ( pTmp->GetNext() )
-        pTmp = pTmp->GetNext();
 
     return static_cast<const SwRowFrm*>(pTmp)->GetBottomLineSize();
 }
@@ -5270,24 +5395,63 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
 {
     SWRECTFN( this )
 
-    const USHORT nRepeat = GetTable()->GetRowsToRepeat();
+    SwRowFrm* pFirstRow = 0;
     SwTwips nTmpHeight = 0;
-    if ( !IsFollow() && nRepeat > 0 )
-        nTmpHeight = lcl_GetHeightOfRows( *this, nRepeat );
 
-    SwFrm* pFirstRow = GetFirstNonHeadlineRow();
-    ASSERT( !IsFollow() || pFirstRow, "FollowTable without Lower" )
+    const bool bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
+
+    if ( bDontSplit )
+    {
+        // Table is not allowed to split: Take the whole height, that's all
+        nTmpHeight = (Frm().*fnRect->fnGetHeight)();
+    }
+    else
+    {
+        pFirstRow = GetFirstNonHeadlineRow();
+        ASSERT( !IsFollow() || pFirstRow, "FollowTable without Lower" )
+
+        // Calculate the height of the headlines:
+        const USHORT nRepeat = GetTable()->GetRowsToRepeat();
+        SwTwips nRepeatHeight = nRepeat ? lcl_GetHeightOfRows( *this, nRepeat ) : 0;
+
+        // Calculate the height of the keeping lines
+        // (headlines + following keeping lines):
+        SwTwips nKeepHeight = nRepeatHeight;
+        if ( GetFmt()->GetDoc()->IsTableRowKeep() )
+        {
+            USHORT nKeepRows = nRepeat;
+
+            // Check how many rows want to keep together
+            while ( pFirstRow && pFirstRow->ShouldRowKeepWithNext() )
+            {
+                ++nKeepRows;
+                pFirstRow = static_cast<SwRowFrm*>(pFirstRow->GetNext());
+            }
+
+            if ( nKeepRows > nRepeat )
+                nKeepHeight = lcl_GetHeightOfRows( *this, nKeepRows );
+        }
+
+        // For master tables, the height of the headlines + the heigth of the
+        // keeping lines (if any) has to be considered. For follow tables, we
+        // only consider the height of the keeping rows without the repeated lines:
+        if ( !IsFollow() )
+        {
+            nTmpHeight = nKeepHeight;
+        }
+        else
+        {
+            nTmpHeight = nKeepHeight - nRepeatHeight;
+        }
+    }
 
     // pFirstRow row is the first non-heading row.
     // nTmpHeight is the height of the heading row if we are a follow.
     if ( pFirstRow )
     {
         const bool bSplittable = static_cast<const SwRowFrm*>(pFirstRow)->IsRowSplitAllowed();
-        const bool bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
 
-        if ( bDontSplit )
-            nTmpHeight = (Frm().*fnRect->fnGetHeight)();
-        else if ( !bSplittable )
+        if ( !bSplittable )
             nTmpHeight += (pFirstRow->Frm().*fnRect->fnGetHeight)();
         // --> FME 2004-11-18 #118411#
         // Optimization: lcl_CalcHeightOfFirstContentLine actually can trigger
@@ -5314,5 +5478,3 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
 
     return nTmpHeight;
 }
-
-
