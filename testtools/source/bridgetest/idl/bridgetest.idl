@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgetest.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:41:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "com/sun/star/lang/IllegalArgumentException.idl"
+#include "com/sun/star/lang/XComponent.idl"
 #include "com/sun/star/uno/XComponentContext.idl"
 #include "com/sun/star/uno/XInterface.idl"
 
@@ -98,6 +99,10 @@ struct TestDataElements : TestElement
 typedef TestDataElements TestData;
 
 struct TestPolyStruct<T> { T member; };
+struct TestPolyStruct2<T,C> {
+    T member1;
+    C member2;
+};
 
 interface XRecursiveCall : com::sun::star::uno::XInterface
 {
@@ -356,6 +361,58 @@ service Constructors: com::sun::star::uno::XInterface {
         raises (BadConstructorArguments);
 
     create2([in] any... args) raises (BadConstructorArguments);
+
+};
+
+service Constructors2: XMultiBase1 {
+
+    create1(
+        [in] TestPolyStruct<type> arg1,
+        [in] TestPolyStruct<any> arg2,
+        [in] TestPolyStruct<boolean> arg3,
+        [in] TestPolyStruct<byte> arg4,
+        [in] TestPolyStruct<short> arg5,
+        [in] TestPolyStruct<long> arg6,
+        [in] TestPolyStruct<hyper> arg7,
+        [in] TestPolyStruct<char> arg8,
+        [in] TestPolyStruct<string> arg9,
+        [in] TestPolyStruct<float> arg10,
+        [in] TestPolyStruct<double> arg11,
+        [in] TestPolyStruct<com::sun::star::uno::XInterface> arg12,
+        [in] TestPolyStruct<com::sun::star::lang::XComponent> arg13,
+        [in] TestPolyStruct<TestEnum> arg14,
+        [in] TestPolyStruct<TestPolyStruct2<char,any> > arg15,
+        [in] TestPolyStruct<TestPolyStruct2<TestPolyStruct2<char,any>,string> > arg16,
+        [in] TestPolyStruct2<string, TestPolyStruct2<char, TestPolyStruct<any> > > arg17,
+        [in] TestPolyStruct2<TestPolyStruct2<char,any>, TestPolyStruct<char> > arg18,
+        [in] TestPolyStruct<sequence<type> > arg19,
+        [in] TestPolyStruct<sequence<any> > arg20,
+        [in] TestPolyStruct<sequence<boolean> > arg21,
+        [in] TestPolyStruct<sequence<byte> > arg22,
+        [in] TestPolyStruct<sequence<short> > arg23,
+        [in] TestPolyStruct<sequence<long> > arg24,
+        [in] TestPolyStruct<sequence<hyper> > arg25,
+        [in] TestPolyStruct<sequence<char> > arg26,
+        [in] TestPolyStruct<sequence<string> > arg27,
+        [in] TestPolyStruct<sequence<float> > arg28,
+        [in] TestPolyStruct<sequence<double> > arg29,
+        [in] TestPolyStruct<sequence<com::sun::star::uno::XInterface> > arg30,
+        [in] TestPolyStruct<sequence<com::sun::star::lang::XComponent> > arg31,
+        [in] TestPolyStruct<sequence<TestEnum> > arg32,
+        [in] TestPolyStruct<sequence<TestPolyStruct2<char, sequence<any> > > > arg33,
+        [in] TestPolyStruct<sequence<TestPolyStruct2<TestPolyStruct<char>, sequence<any> > > > arg34,
+        [in] TestPolyStruct<sequence<sequence<long> > > arg35,
+        [in] sequence<TestPolyStruct<long > > arg36,
+        [in] sequence<TestPolyStruct<TestPolyStruct2<char,any> > > arg37,
+        [in] sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<char,any>,string> > > arg38,
+        [in] sequence<TestPolyStruct2<string, TestPolyStruct2<char, TestPolyStruct<any> > > > arg39,
+        [in] sequence<TestPolyStruct2<TestPolyStruct2<char,any>, TestPolyStruct<char> > > arg40,
+        [in] sequence<sequence<TestPolyStruct< char > > > arg41,
+        [in] sequence<sequence<TestPolyStruct<TestPolyStruct2<char,any> > > >arg42,
+        [in] sequence<sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<char,any>,string> > > > arg43,
+        [in] sequence<sequence<TestPolyStruct2<string, TestPolyStruct2<char, TestPolyStruct<any> > > > > arg44,
+        [in] sequence<sequence<TestPolyStruct2<TestPolyStruct2<char,any>, TestPolyStruct<char> > > > arg45
+        );
 };
 
 /** Extended tests with sequences.
