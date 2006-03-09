@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constructors.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:40:10 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -46,6 +47,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/string.h"
@@ -56,12 +58,14 @@
 #include "test/testtools/bridgetest/TestEnum.hpp"
 #include "test/testtools/bridgetest/TestStruct.hpp"
 #include "test/testtools/bridgetest/TestPolyStruct.hpp"
+#include "test/testtools/bridgetest/TestPolyStruct2.hpp"
+#include "test/testtools/bridgetest/XMultiBase1.hpp"
 #include "uno/lbnames.h"
 
 namespace {
 
-namespace css = com::sun::star;
-
+namespace css = ::com::sun::star;
+namespace ttb = ::test::testtools::bridgetest;
 class Impl: public ::cppu::WeakImplHelper1< css::lang::XInitialization > {
 public:
     Impl() {}
@@ -209,6 +213,246 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     }
 }
 
+
+class Impl2: public ::cppu::WeakImplHelper2<
+    css::lang::XInitialization, ttb::XMultiBase1 >
+{
+public:
+    Impl2(): m_attr1(0.0) {}
+
+private:
+    Impl2(Impl &); // not defined
+    void operator =(Impl &); // not defined
+
+    virtual ~Impl2() {}
+
+    virtual void SAL_CALL initialize(
+        css::uno::Sequence< css::uno::Any > const & arguments)
+        throw (css::uno::Exception);
+
+    //XMultiBase1
+    virtual double SAL_CALL getatt1()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setatt1( double _att1 )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL fn12( const ::rtl::OUString& arg )
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+    double m_attr1;
+};
+
+void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
+    throw (css::uno::Exception)
+{
+    ttb::TestPolyStruct< css::uno::Type > arg0;
+    ttb::TestPolyStruct< css::uno::Any > arg1;
+    css::uno::Any arg1b(sal_True);
+    ttb::TestPolyStruct< ::sal_Bool > arg2;
+    ttb::TestPolyStruct< ::sal_Int8 > arg3;
+    ttb::TestPolyStruct< ::sal_Int16 > arg4;
+    ttb::TestPolyStruct< ::sal_Int32 > arg5;
+    ttb::TestPolyStruct< ::sal_Int64 > arg6;
+    ttb::TestPolyStruct< ::sal_Unicode > arg7;
+    ttb::TestPolyStruct< ::rtl::OUString > arg8;
+    ttb::TestPolyStruct< float > arg9;
+    ttb::TestPolyStruct< double > arg10;
+    ttb::TestPolyStruct<css::uno::Reference<css::uno::XInterface> > arg11;
+    ttb::TestPolyStruct<css::uno::Reference< css::lang::XComponent> > arg12;
+    ttb::TestPolyStruct<ttb::TestEnum>  arg13;
+    ttb::TestPolyStruct<
+          ttb::TestPolyStruct2<sal_Unicode, css::uno::Any> > arg14;
+    ttb::TestPolyStruct< ttb::TestPolyStruct2 <
+        ttb::TestPolyStruct2< sal_Unicode, css::uno::Any >,
+        ::rtl::OUString > > arg15;
+    ttb::TestPolyStruct2< ::rtl::OUString,ttb::TestPolyStruct2 <
+        ::sal_Unicode, ttb::TestPolyStruct < css::uno::Any > > > arg16;
+    ttb::TestPolyStruct2< ttb::TestPolyStruct2<sal_Unicode, css::uno::Any >,
+        ttb::TestPolyStruct<sal_Unicode> > arg17;
+    ttb::TestPolyStruct<css::uno::Sequence< css::uno::Type > > arg18;
+    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Any> > arg19;
+    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Bool > > arg20;
+    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int8 > > arg21;
+    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int16 > > arg22;
+    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int32 > > arg23;
+    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int64 > > arg24;
+//    ttb::TestPolyStruct<css::uno::Sequence<::sal_Unicode> > arg25;
+    ttb::TestPolyStruct<css::uno::Sequence< ::rtl::OUString > > arg26;
+    ttb::TestPolyStruct<css::uno::Sequence<float> > arg27;
+    ttb::TestPolyStruct<css::uno::Sequence<double> > arg28;
+    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Reference<css::uno::XInterface> > > arg29;
+    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Reference<css::lang::XComponent> > > arg30;
+    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestEnum> >  arg31;
+    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestPolyStruct2<
+        ::sal_Unicode, css::uno::Sequence<css::uno::Any> > > > arg32;
+    bool arg32a = false;
+    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestPolyStruct2<
+        ttb::TestPolyStruct< ::sal_Unicode>, css::uno::Sequence<css::uno::Any> > > > arg33;
+    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Sequence< ::sal_Int32> > > arg34;
+    css::uno::Sequence<ttb::TestPolyStruct< ::sal_Int32> > arg35;
+    css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > arg36;
+    css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2<
+        ttb::TestPolyStruct2< ::sal_Unicode,css::uno::Any >, ::rtl::OUString> > > arg37;
+    css::uno::Sequence<ttb::TestPolyStruct2< ::rtl::OUString, ttb::TestPolyStruct2<
+        ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > arg38;
+    css::uno::Sequence<ttb::TestPolyStruct2<ttb::TestPolyStruct2<
+        ::sal_Unicode, css::uno::Any>, ttb::TestPolyStruct< ::sal_Unicode> > > arg39;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct< ::sal_Unicode> > > arg40;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > >arg41;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<
+        ttb::TestPolyStruct2<ttb::TestPolyStruct2<sal_Unicode, css::uno::Any>, ::rtl::OUString> > > > arg42;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
+        ::rtl::OUString, ttb::TestPolyStruct2< ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > > arg43;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
+        ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any>, ttb::TestPolyStruct<
+        ::sal_Unicode> > > > arg44;
+
+    if (!(arguments.getLength() == 45
+          && (arguments[0] >>= arg0) && arg0.member == cppu::UnoType<sal_Int32>::get()
+          && (arguments[1] >>= arg1) && arg1.member == arg1b
+          && (arguments[2] >>= arg2) && arg2.member == sal_True
+          && (arguments[3] >>= arg3) && arg3.member == SAL_MIN_INT8
+          && (arguments[4] >>= arg4) && arg4.member == SAL_MIN_INT16
+          && (arguments[5] >>= arg5) && arg5.member == SAL_MIN_INT32
+          && (arguments[6] >>= arg6) && arg6.member == SAL_MIN_INT64
+          && (arguments[7] >>= arg7) && arg7.member == 'X'
+          && (arguments[8] >>= arg8) && arg8.member.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[9] >>= arg9) && arg9.member == 0.123f
+          && (arguments[10] >>= arg10) && arg10.member == 0.456
+          && (arguments[11] >>= arg11)
+          && (arguments[12] >>= arg12)
+          && (arguments[13] >>= arg13) && arg13.member == ttb::TestEnum_TWO
+          && (arguments[14] >>= arg14) && arg14.member.member1 == 'X' && arg14.member.member2 == arg1b
+          && (arguments[15] >>= arg15) && arg15.member.member1.member1 == 'X'
+          && arg15.member.member1.member2 == arg1b
+          && arg15.member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[16] >>= arg16) && arg16.member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg16.member2.member1 == 'X'
+          && arg16.member2.member2.member == arg1b
+          && (arguments[17] >>= arg17) && arg17.member1.member1 == 'X'
+          && arg17.member1.member2 == arg1b
+          && arg17.member2.member == 'X'
+          && (arguments[18] >>= arg18)  && arg18.member.getLength() == 1
+          && arg18.member[0] == ::cppu::UnoType<sal_Int32>::get()
+          && (arguments[19] >>= arg19) && arg19.member.getLength() == 1
+          && arg19.member[0] == arg1b
+          && (arguments[20] >>= arg20) && arg20.member.getLength() == 1
+          && arg20.member[0] == sal_True
+          && (arguments[21] >>= arg21) && arg21.member.getLength() == 1
+          && arg21.member[0] == SAL_MIN_INT8
+          && (arguments[22] >>= arg22) && arg22.member.getLength() == 1
+          && arg22.member[0] == SAL_MIN_INT16
+          && (arguments[23] >>= arg23) && arg23.member.getLength() == 1
+          && arg23.member[0] == SAL_MIN_INT32
+          && (arguments[24] >>= arg24) && arg24.member.getLength() == 1
+          && arg24.member[0] == SAL_MIN_INT64
+          && (arguments[25].getValueType()
+               == ::cppu::UnoType< ttb::TestPolyStruct< ::cppu::UnoSequenceType<
+              ::cppu::UnoCharType> > >::get())
+          && (static_cast< ttb::TestPolyStruct<css::uno::Sequence<
+              ::sal_Unicode> > const *>(arguments[25].getValue())->member[0]) == 'X'
+          && (arguments[26] >>= arg26) && arg26.member.getLength() == 1
+          && arg26.member[0].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[27] >>= arg27) && arg27.member.getLength() == 1
+          && arg27.member[0] == 0.123f
+          && (arguments[28] >>= arg28) && arg28.member.getLength() == 1
+          && arg28.member[0] == 0.456
+          && (arguments[29] >>= arg29) && arg29.member.getLength() == 1
+          && arg29.member[0] != NULL
+          && (arguments[30] >>= arg30) && arg30.member.getLength() == 1
+          && arg30.member[0] != NULL
+          && (arguments[31] >>= arg31) && arg31.member.getLength() == 1
+          && arg31.member[0] == ttb::TestEnum_TWO
+          && (arguments[32] >>= arg32) && arg32.member.getLength() == 1
+          && arg32.member[0].member1 == 'X'
+          && arg32.member[0].member2.getLength() == 1
+          && (arg32.member[0].member2[0] >>= arg32a) && arg32a == true
+          && (arguments[33] >>= arg33) && arg33.member.getLength() == 1
+          && arg33.member[0].member1.member == 'X'
+          && arg33.member[0].member2.getLength() == 1
+          && arg33.member[0].member2[0] == arg1b
+          && (arguments[34] >>= arg34) && arg34.member.getLength() == 1
+          && arg34.member[0].getLength() == 1 && arg34.member[0][0] == SAL_MIN_INT32
+          && (arguments[35] >>= arg35) && arg35.getLength() == 1
+          && arg35[0].member == SAL_MIN_INT32
+          && (arguments[36] >>= arg36) && arg36.getLength() == 1
+          && arg36[0].member.member1 == 'X'
+          && arg36[0].member.member2 == arg1b
+          && (arguments[37] >>= arg37) && arg37.getLength() == 1
+          && arg37[0].member.member1.member1 == 'X'
+          && arg37[0].member.member1.member2 == arg1b
+          && arg37[0].member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[38] >>= arg38) && arg38.getLength() == 1
+          && arg38[0].member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg38[0].member2.member1 == 'X'
+          && arg38[0].member2.member2.member == arg1b
+          && (arguments[39] >>= arg39) && arg39.getLength() == 1
+          && arg39[0].member1.member1 == 'X'
+          && arg39[0].member1.member2 == arg1b
+          && arg39[0].member2.member == 'X'
+          && (arguments[40] >>= arg40) && arg40.getLength() == 1
+          && arg40[0].getLength() == 1
+          && arg40[0][0].member == 'X'
+          && (arguments[41] >>= arg41) && arg41.getLength() == 1
+          && arg41[0].getLength() == 1
+          && arg41[0][0].member.member1 == 'X'
+          && arg41[0][0].member.member2 == arg1b
+          && (arguments[42] >>= arg42) && arg42.getLength() == 1
+          && arg42[0].getLength() == 1
+          && arg42[0][0].member.member1.member1 == 'X'
+          && arg42[0][0].member.member1.member2 == arg1b
+          && arg42[0][0].member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[43] >>= arg43) && arg43.getLength() == 1
+          && arg43[0].getLength() == 1
+          && arg43[0][0].member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg43[0][0].member2.member1 == 'X'
+          && arg43[0][0].member2.member2.member == arg1b
+          && (arguments[44] >>= arg44) && arg44.getLength() == 1
+          && arg44[0].getLength() == 1
+          && arg44[0][0].member1.member1 == 'X'
+          && arg44[0][0].member1.member2 == arg1b
+          && arg44[0][0].member2.member == 'X'
+            ))
+    {
+        throw ::test::testtools::bridgetest::BadConstructorArguments();
+    }
+
+    //check if interfaces work
+    arg11.member->acquire();
+    arg11.member->release();
+    arg12.member->acquire();
+    arg12.member->release();
+    arg29.member[0]->acquire();
+    arg29.member[0]->release();
+
+}
+
+//XMultiBase1
+double Impl2::getatt1()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_attr1;
+}
+
+void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeException)
+{
+    m_attr1 = _att1;
+}
+
+::sal_Int32 Impl2::fn11( ::sal_Int32 arg )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return 11 * arg;
+}
+
+::rtl::OUString Impl2::fn12( const ::rtl::OUString& arg )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12")) + arg;
+}
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     css::uno::Reference< css::uno::XComponentContext > const &)
     SAL_THROW((css::uno::Exception))
@@ -229,11 +473,32 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() {
     return s;
 }
 
+css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
+    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_THROW((css::uno::Exception))
+{
+    return static_cast< ::cppu::OWeakObject * >(new Impl2);
+}
+
+::rtl::OUString SAL_CALL getImplementationName2() {
+    return ::rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "comp.test.testtools.bridgetest.Constructors2"));
+}
+
+css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames2() {
+    css::uno::Sequence< ::rtl::OUString > s(1);
+    s[0] = ::rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("test.testtools.bridgetest.Constructors2"));
+    return s;
+}
+
 ::cppu::ImplementationEntry entries[] = {
     { &create, &getImplementationName, &getSupportedServiceNames,
       &::cppu::createSingleComponentFactory, 0, 0 },
+    { &create2, &getImplementationName2, &getSupportedServiceNames2,
+      &::cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } };
-
 }
 
 extern "C" void * SAL_CALL component_getFactory(
