@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:54:34 $
+#   last change: $Author: rt $ $Date: 2006-03-09 14:04:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
 #		--assembly-copyright "2003" \
 
 #do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
-$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_types.config
+# iz62624: Add dependency for "$(OUT)$/bin$/cli_types.dll" because climaker locks cliuno.mk.
+$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_types.config $(OUT)$/bin$/cli_types.dll
     +$(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_TYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
