@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:33:09 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,
     // --> FME 2005-08-11 #i53199#
     HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
+    // --> FME 2006-02-10 #131283#
+    HANDLE_TABLE_ROW_KEEP,
     // --> PB 2004-08-20 #i33095#
     HANDLE_LOAD_READONLY
     // <--
@@ -224,6 +226,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> FME 2005-08-11 #i53199#
         { RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         CPPUTYPE_BOOLEAN,           0,   0},
+        // --> FME 2006-02-10 #131283#
+        { RTL_CONSTASCII_STRINGPARAM("TableRowKeep"),               HANDLE_TABLE_ROW_KEEP,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
         // <--
@@ -663,6 +667,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetDoNotResetParaAttrsForNumFont( bTmp );
         }
         break;
+        // --> FME 2006-02-10 #131283#
+        case HANDLE_TABLE_ROW_KEEP:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetTableRowKeep( bTmp );
+        }
+        break;
         // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
@@ -928,6 +939,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
         {
             sal_Bool bTmp = mpDoc->DoNotResetParaAttrsForNumFont();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // --> FME 2006-02-10 #131283#
+        case HANDLE_TABLE_ROW_KEEP :
+        {
+            sal_Bool bTmp = mpDoc->IsTableRowKeep();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
