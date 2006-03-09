@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:11:58 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,6 +529,9 @@ class SwDoc
     // bIgnoreFirstLineIndentInNumbering    def = FALSE, hidden
     // bDoNotJustifyLinesWithManualBreak    def = FALSE, hidden
     // bDoNotResetParaAttrsForNumFont       def = FALSE, hidden
+    //
+    // SO8pp3:
+    // bTableRowKeep                        def = FALSE, hidden
 
     sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
     sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
@@ -539,11 +542,13 @@ class SwDoc
                                                         //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
 
     // non-ui-compatibility flags:
-    sal_Bool    bOldNumbering                   : 1;    // HBRINKM #111955#
+    sal_Bool    bOldNumbering                    : 1;   // HBRINKM #111955#
     sal_Bool    bIgnoreFirstLineIndentInNumbering: 1;   // FME 2005-05-30 #i47448#
     sal_Bool    bDoNotJustifyLinesWithManualBreak: 1;   // FME 2005-06-08 #i49277#
     sal_Bool    bDoNotResetParaAttrsForNumFont   : 1;   // FME 2005-08-11 #i53199#
-    sal_Bool    bDummyNonUIFlag                  : 1;   // use this if necessary
+    sal_Bool    bTableRowKeep                    : 1;   // FME 2006-02-10 #131283#
+    sal_Bool    bDummyNonUIFlag1                 : 1;   // use this if necessary
+    sal_Bool    bDummyNonUIFlag2                 : 1;   // use this if necessary
 
     sal_Bool    bOutlineLevelYieldsOutlineRule  : 1;
 
@@ -2287,6 +2292,17 @@ public:
     inline void SetDoNotResetParaAttrsForNumFont( const sal_Bool _bDoNotResetParaAttrsForNumFont )
     {
         bDoNotResetParaAttrsForNumFont = _bDoNotResetParaAttrsForNumFont;
+    }
+    // <--
+
+    // --> FME 2006-02-10 #131283#
+    inline sal_Bool IsTableRowKeep() const
+    {
+        return bTableRowKeep;
+    }
+    inline void SetTableRowKeep( const sal_Bool _bTableRowKeep )
+    {
+        bTableRowKeep = _bTableRowKeep;
     }
     // <--
 
