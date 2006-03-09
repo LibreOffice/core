@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:30:31 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,26 +235,31 @@ void SwFlowFrm::CheckKeep()
 |*
 |*************************************************************************/
 
-
-BOOL SwFlowFrm::IsKeep( const SwBorderAttrs &rAttrs ) const
+BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck ) const
 {
     // 1. The keep attribute is ignored inside footnotes
     // 2. For compatibility reasons, the keep attribute is
     //    ignored for frames inside table cells
-    BOOL bKeep = !rThis.IsInFtn() &&
-                 ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
-                 rAttrs.GetAttrSet().GetKeep().GetValue();
+    // 3. If bBreakCheck is set to true, this function only checks
+    //    if there are any break after attributes set at rAttrs
+    //    or break before attributes set for the next content (or next table)
+    BOOL bKeep = bBreakCheck ||
+                 (  !rThis.IsInFtn() &&
+                    ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
+                    rAttrs.GetKeep().GetValue() );
 
     // Ignore keep attribute if there are break situations:
     if ( bKeep )
     {
-        switch ( rAttrs.GetAttrSet().GetBreak().GetBreak() )
+        switch ( rAttrs.GetBreak().GetBreak() )
         {
             case SVX_BREAK_COLUMN_AFTER:
             case SVX_BREAK_COLUMN_BOTH:
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
+            {
                 bKeep = FALSE;
+            }
         }
         if ( bKeep )
         {
@@ -594,7 +599,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
             pPre->SetRetouche();
             // --> OD 2004-11-23 #115759# - follow-up of #i26250#
             // invalidate printing area of previous frame, if it's in a table
-            if ( pPre->IsInTab() )
+            if ( pPre->GetUpper()->IsInTab() )
             {
                 pPre->_InvalidatePrt();
             }
@@ -1203,52 +1208,6 @@ BOOL SwFlowFrm::IsPrevObjMove() const
     return FALSE;
 }
 
-/** method to determine, if the current flow frame has a page break before attribute.
-
-    OD 2006-01-27 #i57765#
-    A flow frame has a page break before attribute, if itself has break
-    attribute SVX_BREAK_PAGE_BEFORE or SVX_BREAK_PAGE_BOTH, or its previous
-    flow frame has break attribute SVX_BREAK_PAGE_AFTER or SVX_BREAK_PAGE_BOTH,
-    or a previous flow frame exists and flow frame has a page description.
-    Note: Previous hidden text frames has to be skipped.
-
-    @author OD
-*/
-bool SwFlowFrm::HasAttrPageBreakBefore( const SwFrm* _pProposedPrevFrm ) const
-{
-    bool bHasAttrPageBreakBefore( false );
-
-    const SwAttrSet* pAttrSet( rThis.GetAttrSet() );
-    const SvxBreak eBreak = pAttrSet->GetBreak().GetBreak();
-    if ( eBreak == SVX_BREAK_PAGE_BEFORE ||
-         eBreak == SVX_BREAK_PAGE_BOTH )
-    {
-        bHasAttrPageBreakBefore = true;
-    }
-    else if ( _pProposedPrevFrm )
-    {
-        while ( _pProposedPrevFrm &&
-                _pProposedPrevFrm->IsTxtFrm() &&
-                static_cast<const SwTxtFrm*>(_pProposedPrevFrm)->IsHiddenNow() )
-        {
-            _pProposedPrevFrm = _pProposedPrevFrm->FindPrev();
-        }
-        if ( _pProposedPrevFrm )
-        {
-            const SvxBreak& ePrevBreak =
-                        _pProposedPrevFrm->GetAttrSet()->GetBreak().GetBreak();
-            if ( ePrevBreak == SVX_BREAK_PAGE_AFTER ||
-                 ePrevBreak == SVX_BREAK_PAGE_BOTH  ||
-                 pAttrSet->GetPageDesc().GetPageDesc() )
-            {
-                bHasAttrPageBreakBefore = true;
-            }
-        }
-    }
-
-    return bHasAttrPageBreakBefore;
-}
-
 /*************************************************************************
 |*
 |*  BOOL SwFlowFrm::IsPageBreak()
@@ -1275,9 +1234,10 @@ bool SwFlowFrm::HasAttrPageBreakBefore( const SwFrm* _pProposedPrevFrm ) const
 
 BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 {
+    const SwAttrSet *pSet;
     if ( !IsFollow() && rThis.IsInDocBody() &&
          ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
-         !rThis.GetAttrSet()->GetDoc()->IsBrowseMode() )
+         !(pSet = rThis.GetAttrSet())->GetDoc()->IsBrowseMode() )
     {
         //Vorgaenger ermitteln
         const SwFrm *pPrev = rThis.FindPrev();
@@ -1297,58 +1257,20 @@ BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
                     return FALSE;
             }
 
-            // --> OD 2006-01-27 #i57765#
-            // use new method <HasAttrPageBreakBefore(..)>
-            if ( HasAttrPageBreakBefore( pPrev ) )
-            {
+            const SvxBreak eBreak = pSet->GetBreak().GetBreak();
+            if ( eBreak == SVX_BREAK_PAGE_BEFORE || eBreak == SVX_BREAK_PAGE_BOTH )
                 return TRUE;
+            else
+            {
+                const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
+                if ( ePrB == SVX_BREAK_PAGE_AFTER ||
+                     ePrB == SVX_BREAK_PAGE_BOTH  ||
+                     pSet->GetPageDesc().GetPageDesc() )
+                    return TRUE;
             }
         }
     }
     return FALSE;
-}
-
-/** method to determine, if the current flow frame has a column break before attribute.
-
-    OD 2006-01-27 #i57765#
-    A flow frame has a column break before attribute, if itself has break
-    attribute SVX_BREAK_COLUMN_BEFORE or SVX_BREAK_COLUMN_BOTH, or its previous
-    flow frame has break attribute SVX_BREAK_COLUMN_AFTER or SVX_BREAK_COLUMN_BOTH.
-    Note: Previous hidden text frames has to be skipped.
-
-    @author OD
-*/
-bool SwFlowFrm::HasAttrColBreakBefore( const SwFrm* _pProposedPrevFrm ) const
-{
-    bool bHasAttrColBreakBefore( false );
-
-    const SvxBreak eBreak = rThis.GetAttrSet()->GetBreak().GetBreak();
-    if ( eBreak == SVX_BREAK_COLUMN_BEFORE ||
-         eBreak == SVX_BREAK_COLUMN_BOTH )
-    {
-        bHasAttrColBreakBefore = true;
-    }
-    else if ( _pProposedPrevFrm )
-    {
-        while ( _pProposedPrevFrm &&
-                _pProposedPrevFrm->IsTxtFrm() &&
-                static_cast<const SwTxtFrm*>(_pProposedPrevFrm)->IsHiddenNow() )
-        {
-            _pProposedPrevFrm = _pProposedPrevFrm->FindPrev();
-        }
-        if ( _pProposedPrevFrm )
-        {
-            const SvxBreak& ePrevBreak =
-                            _pProposedPrevFrm->GetAttrSet()->GetBreak().GetBreak();
-            if ( ePrevBreak == SVX_BREAK_COLUMN_AFTER ||
-                 ePrevBreak == SVX_BREAK_COLUMN_BOTH )
-            {
-                bHasAttrColBreakBefore = true;
-            }
-        }
-    }
-
-    return bHasAttrColBreakBefore;
 }
 
 /*************************************************************************
@@ -1371,7 +1293,6 @@ bool SwFlowFrm::HasAttrColBreakBefore( const SwFrm* _pProposedPrevFrm ) const
 |*  Letzte Aenderung    MA 21. Mar. 95
 |*
 |*************************************************************************/
-
 
 BOOL SwFlowFrm::IsColBreak( BOOL bAct ) const
 {
@@ -1397,13 +1318,17 @@ BOOL SwFlowFrm::IsColBreak( BOOL bAct ) const
                         return FALSE;
                 }
 
-                // --> OD 2006-01-27 #i57765#
-                // use new method <HasAttrColBreakBefore(..)>
-                if ( HasAttrColBreakBefore( pPrev ) )
-                {
+                const SvxBreak eBreak = rThis.GetAttrSet()->GetBreak().GetBreak();
+                if ( eBreak == SVX_BREAK_COLUMN_BEFORE ||
+                     eBreak == SVX_BREAK_COLUMN_BOTH )
                     return TRUE;
+                else
+                {
+                    const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
+                    if ( ePrB == SVX_BREAK_COLUMN_AFTER ||
+                         ePrB == SVX_BREAK_COLUMN_BOTH )
+                        return TRUE;
                 }
-                // <--
             }
         }
     }
@@ -1481,11 +1406,8 @@ const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPre
                 static_cast<const SwFtnFrm*>(rThis.FindFtnFrm()->GetPrev());
         if ( pPrevFtnFrm )
         {
-            pPrevFrm = pPrevFtnFrm->Lower();
-            while ( pPrevFrm && pPrevFrm->GetNext() )
-            {
-                pPrevFrm = pPrevFrm->GetNext();
-            }
+            pPrevFrm = pPrevFtnFrm->GetLastLower();
+
             // Skip hidden paragraphs and empty sections
             while ( pPrevFrm &&
                     ( ( pPrevFrm->IsTxtFrm() &&
