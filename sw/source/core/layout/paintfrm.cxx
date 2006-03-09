@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:00:42 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4409,11 +4409,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                     pLastTabFrm = pLastTabFrm->GetFollow();
                 }
                 // determine last row of complete table.
-                SwFrm* pLastRow = pLastTabFrm->GetLower();
-                while ( pLastRow->GetNext() )
-                {
-                    pLastRow = pLastRow->GetNext();
-                }
+                SwFrm* pLastRow = pLastTabFrm->GetLastLower();
                 // return first bottom border cell in last row
                 SwFrm* pTmpFrm = const_cast<SwFrm*>(pLastRow->GetLower());
                 while ( !pTmpFrm->IsCellFrm() ||
