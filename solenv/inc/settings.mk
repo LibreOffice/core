@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.187 $
+#   $Revision: 1.188 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:00:01 $
+#   last change: $Author: rt $ $Date: 2006-03-09 14:01:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -337,8 +337,6 @@ PROFILE=
 
 # can be set on the command line. we shouldn't delete them!
 #profile=
-#REMOTE=
-#remote=
 
 # reset as setting those manually is no lonjger supported
 DBGUTIL=
@@ -398,10 +396,6 @@ nodebug=$(NODEBUG)
 
 .IF "$(hbtoolkit)"!=""
 HBTOOLKIT=$(hbtoolkit)
-.ENDIF
-
-.IF "$(REMOTE)"!=""
-remote=$(REMOTE)
 .ENDIF
 
 .IF "$(PRODUCT)"!=""
@@ -641,7 +635,7 @@ common_build_sign_jar=true
 common_build_srs=true
 .ENDIF			# "$(no_common_build_srs)"==""
 .ELSE			# "$(common_build)"!=""
-COMMON_OUTDIR=$(OUTPATH)
+COMMON_OUTDIR:=$(OUTPATH)
 .ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
@@ -650,44 +644,23 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 
 # --- generate output tree -----------------------------------------
 
-%world.mk :
+# As this is not part of the initial startup makefile we define an infered
+# target instead of using $(OUT)$/inc$/myworld.mk as target name.
+# (See iz62795)
+$(OUT)$/inc$/%world.mk :
     @+$(MKOUT) $(ROUT)
-.IF "$(GUI)"=="UNX"
-    @+echo \# > $(OUT)$/inc$/myworld.mk
-.ELSE			# "$(GUI)"=="UNX"
-    @+echo # > $(OUT)$/inc$/myworld.mk
-.ENDIF			# "$(GUI)"=="UNX"
+    @+echo $(EMQ)# > $@
+
+.INCLUDE : $(OUT)$/inc$/myworld.mk
+
 .IF "$(common_build)"!=""
+$(LOCAL_COMMON_OUT)$/inc$/%world.mk :
     @+$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
-.IF "$(GUI)"=="UNX"
-    @+echo \# > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
-.ELSE			# "$(GUI)"=="UNX"
-    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
-.ENDIF			# "$(GUI)"=="UNX"
+    @+echo $(EMQ)# > $@
+
+.INCLUDE : $(LOCAL_COMMON_OUT)$/inc$/myworld.mk
 .ENDIF			# "$(common_build)"!=""
 
-.INCLUDE .IGNORE : $(OUT)$/inc$/myworld.mk
-.IF "$(common_build)"!=""
-.INCLUDE .IGNORE : {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
-.ENDIF			# "$(common_build)"!=""
-
-# --- ausgabebaum remote erzeugen ----------------------------------
-.IF "$(remote)"!=""
-
-%worldremote.mk :
-    @+$(MKOUT) -r $(ROUT)
-    @+echo # > $(OUT)$/inc$/myworldremote.mk
-.IF "$(common_build)"!=""
-    @+$(MKOUT) -r $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
-    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
-.ENDIF			# "$(common_build)"!=""
-
-.INCLUDE .IGNORE : $(OUT)$/inc$/myworldremote.mk
-.IF "$(common_build)"!=""
-.INCLUDE .IGNORE : {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
-.ENDIF			# "$(common_build)"!=""
-
-.ENDIF			# "$(remote)"!=""
 
 # Misc-Pfad
 .IF "$(UNR)"!=""
@@ -846,22 +819,6 @@ RES=$(OUT)$/res
 BIN=$(PRJ)$/$(OUTPATH).xl$/bin
 .ENDIF
 
-.IF "$(remote)"!=""
-BIN=$(LDBIN)$/remote
-SLO=$(OUT)$/slo$/remote
-OBJ=$(OUT)$/obj$/remote
-RES=$(LDRES)$/remote
-RSLO=$(INPATH)$/slo$/remote
-ROBJ=$(INPATH)$/obj$/remote
-MISC=$(OUT)$/misc$/remote
-#SRSX=$(SRSX)$/remote
-#INCCOMX=$(INCCOMX)$/remote
-LB=$(OUT)$/lib$/remote
-SLB=$(OUT)$/slb$/remote
-REMOTEDEF=REMOTE_APPSERVER
-REMOTELIB=$(SOLARVERSION)$/$(INPATH)$/lib$/remote
-.ENDIF
-
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
 
 .IF "$(common_build)"!=""
@@ -931,15 +888,6 @@ LIB:=$(LB);$(SLB);$(ILIB)
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-DATESTRING:=$(shell date +%d%m%Y)
-.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-#can't override 4nt internal date to use date.exe :-(
-DATESTRING:=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONTH%]==1,0%_MONTH%,%_MONTH%]%_YEAR%)
-.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
-
-
 .IF "$(USE_STLP_DEBUG)" != ""
 SCPCDEFS+=-D_STLP_DEBUG
 .ENDIF
@@ -967,11 +915,7 @@ UNOIDLINC!:=-I$(PRE)$/idl $(UNOIDLINC)
 .ENDIF
 UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)$/inc -I$(PRJ)$/$(INPATH)$/idl -I$(OUT)$/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
-.IF "$(remote)" != ""
-CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME) -D$(REMOTEDEF)
-.ELSE
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
-.ENDIF
 
 .IF "$(USE_STLP_DEBUG)" != ""
 CDEFS+=-D_STLP_DEBUG
@@ -1067,11 +1011,7 @@ RSCUPDVER=$(RSCREVISION)
 RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
-.IF "$(remote)" != ""
-RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -D$(REMOTEDEF) $(JAVADEF)
-.ELSE
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) $(JAVADEF)
-.ENDIF
 
 .IF "$(BUILD_SPECIAL)"!=""
 RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
