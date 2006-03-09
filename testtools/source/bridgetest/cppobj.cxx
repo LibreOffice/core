@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2006-01-26 17:40:24 $
-#*    $Revision: 1.8 $
+#*    last change   $Author: rt $ $Date: 2006-03-09 10:46:10 $
+#*    $Revision: 1.9 $
 #*
 #*    $Logfile: $
 #*
@@ -21,7 +21,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include "cppuhelper/exc_hlp.hxx"
-
+#include "cppuhelper/compbase_ex.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -30,7 +30,9 @@
 #include "com/sun/star/uno/Sequence.hxx"
 
 #include "test/testtools/bridgetest/Constructors.hpp"
+#include "test/testtools/bridgetest/Constructors2.hpp"
 #include "test/testtools/bridgetest/TestPolyStruct.hpp"
+#include "test/testtools/bridgetest/TestPolyStruct2.hpp"
 #include "test/testtools/bridgetest/XBridgeTest2.hpp"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
@@ -437,6 +439,13 @@ public:
     virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
 };
 
+//Dummy class for XComponent implementation
+class Dummy : public WeakComponentImplHelperBase
+{
+public:
+     Dummy(): WeakComponentImplHelperBase(*Mutex::getGlobalMutex()){}
+
+};
 //__________________________________________________________________________________________________
 Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -980,6 +989,110 @@ void Test_Impl::testConstructorsService(
     args[38] <<= TestPolyStruct< Any >(makeAny(true));
     args[39] <<= Reference< XInterface >(0);
     Constructors::create2(context, args);
+
+    Sequence<Type> argSeq1(1); argSeq1[0] = cppu::UnoType<sal_Int32>::get();
+    Sequence<Reference<XInterface> > argSeq2(1); argSeq2[0] = static_cast<XComponent*>(new Dummy());
+    Sequence<Reference<XComponent> > argSeq2a(1); argSeq2a[0] = static_cast<XComponent*>(new Dummy());
+
+    Sequence<TestPolyStruct2<sal_Unicode, Sequence<Any> > > argSeq3(1);
+    argSeq3[0] = TestPolyStruct2<sal_Unicode, Sequence<Any> >('X', arg27);
+    Sequence<TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> > > argSeq4(1);
+    argSeq4[0] = TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> >(
+        TestPolyStruct<sal_Unicode>('X'), arg27);
+    Sequence<Sequence<sal_Int32> > argSeq5(1);
+    argSeq5[0] = Sequence<sal_Int32>(1); argSeq5[0][0] = SAL_MIN_INT32;
+    Sequence<TestPolyStruct<sal_Int32> > argSeq6(1);
+    argSeq6[0] = TestPolyStruct<sal_Int32>(SAL_MIN_INT32);
+    Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> > > argSeq7(1);
+    argSeq7[0] = TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> >(
+        TestPolyStruct2<sal_Unicode, Any>('X', Any(true)));
+    Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > > argSeq8(1);
+    argSeq8[0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
+        TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > argSeq9(1);
+    argSeq9[0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("test")), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+                     'X', TestPolyStruct<Any>(Any(true))));
+    Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> > > argSeq10(1);
+    argSeq10[0] = TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
+        TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), TestPolyStruct<sal_Unicode>('X'));
+    Sequence<Sequence<TestPolyStruct<sal_Unicode > > > argSeq11(1);
+    argSeq11[0] = Sequence<TestPolyStruct<sal_Unicode > >(1);
+    argSeq11[0][0] = TestPolyStruct<sal_Unicode>('X');
+    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> > > > argSeq12(1);
+    argSeq12[0] = Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> > >(1);
+    argSeq12[0][0] = TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> >(
+        TestPolyStruct2<sal_Unicode,Any>('X', Any(true)));
+    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > > > argSeq13(1);
+    argSeq13[0] = Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > >(1);
+    argSeq13[0][0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> >(
+        TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString>(
+            TestPolyStruct2<sal_Unicode,Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    Sequence<Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > > argSeq14(1);
+    argSeq14[0] = Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > >(1);
+    argSeq14[0][0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("test")), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+            'X', TestPolyStruct<Any>(Any(true))));
+    Sequence<Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > > > argSeq15(1);
+    argSeq15[0] = Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > >(1);
+    argSeq15[0][0] = TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> >(
+        TestPolyStruct2<sal_Unicode,Any>('X',Any(true)), TestPolyStruct<sal_Unicode>('X'));
+
+    Constructors2::create1(
+        context,
+        TestPolyStruct<Type>(cppu::UnoType<sal_Int32>::get()),
+        TestPolyStruct<Any>(Any(true)),
+        TestPolyStruct<sal_Bool>(true),
+        TestPolyStruct<sal_Int8>(SAL_MIN_INT8),
+        TestPolyStruct<sal_Int16>(SAL_MIN_INT16),
+        TestPolyStruct<sal_Int32>(SAL_MIN_INT32),
+        TestPolyStruct<sal_Int64>(SAL_MIN_INT64),
+        TestPolyStruct<sal_Unicode>('X'),
+        TestPolyStruct<OUString>(OUString(RTL_CONSTASCII_USTRINGPARAM("test"))),
+        TestPolyStruct<float>(0.123f),
+        TestPolyStruct<double>(0.456),
+        TestPolyStruct<Reference<XInterface> >(static_cast<XBridgeTest2*>(this)),
+        TestPolyStruct<Reference<XComponent> >(static_cast<XComponent*>(new Dummy())),
+        TestPolyStruct<TestEnum>(TestEnum_TWO),
+        TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> >(
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true))),
+        TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
+            TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
+                TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test")))),
+        TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode,TestPolyStruct<Any> > >(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+            TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >('X', TestPolyStruct<Any>(Any(true)))),
+        TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)),
+            TestPolyStruct<sal_Unicode>('X')),
+        TestPolyStruct<Sequence<Type> >(argSeq1),
+        TestPolyStruct<Sequence<Any> >(arg27),
+        TestPolyStruct<Sequence<sal_Bool> >(arg14),
+        TestPolyStruct<Sequence<sal_Int8> >(arg15),
+        TestPolyStruct<Sequence<sal_Int16> >(arg16),
+        TestPolyStruct<Sequence<sal_Int32> >(arg18),
+        TestPolyStruct<Sequence<sal_Int64> >(arg20),
+        TestPolyStruct<Sequence<sal_Unicode> >(arg24),
+        TestPolyStruct<Sequence<OUString> >(arg25),
+        TestPolyStruct<Sequence<float> >(arg22),
+        TestPolyStruct<Sequence<double> >(arg23),
+        TestPolyStruct<Sequence<Reference<XInterface> > >(argSeq2),
+        TestPolyStruct<Sequence<Reference<XComponent> > >(argSeq2a),
+        TestPolyStruct<Sequence<TestEnum> >(arg30),
+        TestPolyStruct<Sequence<TestPolyStruct2<sal_Unicode, Sequence<Any> > > >(argSeq3),
+        TestPolyStruct<Sequence<TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> > > > (argSeq4),
+        TestPolyStruct<Sequence<Sequence<sal_Int32> > >(argSeq5),
+        argSeq6,
+        argSeq7,
+        argSeq8,
+        argSeq9,
+        argSeq10,
+        argSeq11,
+        argSeq12,
+        argSeq13,
+        argSeq14,
+        argSeq15);
 }
 
 // XServiceInfo
