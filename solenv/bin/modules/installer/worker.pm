@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 09:29:15 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:52:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::worker;
 
 use installer::control;
+use installer::converter;
 use installer::existence;
 use installer::exiter;
 use installer::files;
@@ -1963,6 +1964,53 @@ sub get_platform_name
     }
 
     return $platformname;
+}
+
+###########################################################
+# Adding additional variables into the variableshashref,
+# that are defined in include files in the solver. The
+# names of the include files are stored in
+# ADD_INCLUDE_FILES (comma separated list).
+###########################################################
+
+sub add_variables_from_inc_to_hashref
+{
+    my ($allvariables, $includepatharrayref) = @_;
+
+    my $infoline = "";
+    my $includefilelist = "";
+    if ( $allvariables->{'ADD_INCLUDE_FILES'} ) { $includefilelist = $allvariables->{'ADD_INCLUDE_FILES'}; }
+
+    my $includefiles = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$includefilelist, ",");
+
+    for ( my $i = 0; $i <= $#{$includefiles}; $i++ )
+    {
+        my $includefilename = ${$includefiles}[$i];
+        $includefilename =~ s/^\s*//;
+        $includefilename =~ s/\s*$//;
+        $includefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$includefilename, $includepatharrayref, 1);
+        if ( $$includefilenameref eq "" ) { installer::exiter::exit_program("Include file $includefilename not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref"); }
+
+        $infoline = "Including inc file: $$includefilenameref \n";
+        push( @installer::globals::globallogfileinfo, $infoline);
+
+        my $includefile = installer::files::read_file($$includefilenameref);
+
+        for ( my $j = 0; $j <= $#{$includefile}; $j++ )
+        {
+            # Analyzing all "key=value" lines
+            my $oneline = ${$includefile}[$j];
+
+            if ( $oneline =~ /^\s*(\S+)\s*\=\s*(.*?)\s*$/ ) # no white space allowed in key
+            {
+                my $key = $1;
+                my $value = $2;
+                $allvariables->{$key} = $value;
+                $infoline = "Setting of variable: $key = $value\n";
+                push( @installer::globals::globallogfileinfo, $infoline);
+            }
+        }
+    }
 }
 
 1;
