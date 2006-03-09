@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:34:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,12 +609,16 @@ rtl::OString makeClassPathOption(CNodeJava & javaSettings)
         // append all user selected jars to the class path
         rtl::OUString sUser = javaSettings.getUserClassPath();
         if (sUser.getLength() > 0)
-        {
             sBufCP.append(sUser);
-            sBufCP.appendAscii(szSep);
-        }
+
         //append all jar libraries and components to the class path
-        sBufCP.append(getApplicationClassPath());
+        OUString sAppCP = getApplicationClassPath();
+        if (sAppCP.getLength())
+        {
+            if (sUser.getLength())
+                sBufCP.appendAscii(szSep);
+            sBufCP.append(sAppCP);
+        }
 
         sPaths = rtl::OUStringToOString(
             sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
