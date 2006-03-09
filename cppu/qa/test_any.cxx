@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_any.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:43:22 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include "Interface2a.hpp"
 #include "Interface2b.hpp"
 #include "Interface3.hpp"
+#include "Poly.hpp"
 #include "Struct1.hpp"
 #include "Struct2.hpp"
 #include "Struct2a.hpp"
@@ -62,6 +63,7 @@
 #include "cppunit/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
+#include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -233,6 +235,8 @@ public:
 
     void testStruct();
 
+    void testPoly();
+
     void testException();
 
     void testInterface();
@@ -257,6 +261,7 @@ public:
     CPPUNIT_TEST(testSequence);
     CPPUNIT_TEST(testEnum);
     CPPUNIT_TEST(testStruct);
+    CPPUNIT_TEST(testPoly);
     CPPUNIT_TEST(testException);
     CPPUNIT_TEST(testInterface);
     CPPUNIT_TEST(testNull);
@@ -1956,6 +1961,18 @@ void Test::testStruct() {
         css::uno::Reference< Interface1 > b(i);
         CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
     }
+}
+
+void Test::testPoly() {
+    css::uno::Any a;
+    a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
+    CPPUNIT_ASSERT_MESSAGE(
+        "type name",
+        a.getValueType().getTypeName().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("Poly<[]char>")));
+    CPPUNIT_ASSERT_MESSAGE(
+        "constructor",
+        a == css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()));
 }
 
 void Test::testException() {
