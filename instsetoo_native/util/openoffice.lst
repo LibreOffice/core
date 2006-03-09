@@ -178,6 +178,7 @@ OpenOffice_SDK
             LICENSENAME LGPL, SISSL
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
+			CHANGETARGETDIR 1
             DOWNLOADBANNER ooobanner.bmp
             DOWNLOADBITMAP ooobitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
