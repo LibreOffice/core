@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 14:15:24 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_cppuhelper";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.2.0";
+    Version = "${CLI_CPPUHELPER_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -212,11 +212,11 @@ End
 File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
-    Name = "policy.1.0.cli_cppuhelper.dll";
+    Name = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}.dll";
     Dir = gid_Dir_Program;
-    Assemblyname = "policy.1.0.cli_cppuhelper";
+    Assemblyname = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "2.0.0.0";
+    Version = "${CLI_CPPUHELPER_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -257,7 +257,7 @@ File gid_File_Lib_Cli_Types_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_types";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.1.2.0";
+    Version = "${CLI_TYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -269,11 +269,11 @@ End
 File gid_File_Lib_Policy_Cli_Types_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
-    Name = "policy.1.1.cli_types.dll";
+    Name = "${CLI_TYPES_POLICY_ASSEMBLY}.dll";
     Dir = gid_Dir_Program;
-    Assemblyname = "policy.1.1.cli_types";
+    Assemblyname = "${CLI_TYPES_POLICY_ASSEMBLY}";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "2.0.0.0";
+    Version = "${CLI_TYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -296,7 +296,7 @@ End
 
 File gid_File_Lib_Cli_Basetypes
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Name = "cli_basetypes.dll";
     Dir = gid_Dir_Program_Assembly;
 End
@@ -307,14 +307,42 @@ End
 
 File gid_File_Lib_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY);
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
     Name = "cli_basetypes.dll";
     Dir = gid_Dir_Program;
     Assemblyname = "cli_basetypes";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.0.0";
+    Version = "${CLI_BASETYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Basetypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
+    Name = "${CLI_BASETYPES_POLICY_ASSEMBLY}.dll";
+    Dir = gid_Dir_Program;
+    Assemblyname = "${CLI_BASETYPES_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_BASETYPES_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Basetypes_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, PATCH, DONTRENAMEINPATCH);
+    Name = "cli_basetypes.config";
+    Dir = gid_Dir_Program;
+    AssignComponent = gid_File_Lib_Policy_Cli_Basetypes_Assembly;
 End
 
 #endif
@@ -350,7 +378,7 @@ File gid_File_Lib_Cli_Ure_Assembly
     Dir = gid_Dir_Program;
     Assemblyname = "cli_ure";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.0.2.0";
+    Version = "${CLI_URE_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -361,11 +389,11 @@ End
 File gid_File_Lib_Policy_Cli_Ure_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
-    Name = "policy.1.0.cli_ure.dll";
+    Name = "${CLI_URE_POLICY_ASSEMBLY}.dll";
     Dir = gid_Dir_Program;
-    Assemblyname = "policy.1.0.cli_ure";
+    Assemblyname = "${CLI_URE_POLICY_ASSEMBLY}";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "2.0.0.0";
+    Version = "${CLI_URE_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
 End
@@ -2297,7 +2325,7 @@ File gid_File_Lib_Sunjavaplugin
   #else
     Name = "sunjavaplugin.dll";
   #endif
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 #endif
 
