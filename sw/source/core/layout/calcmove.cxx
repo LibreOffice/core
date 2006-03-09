@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:17:12 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1180,7 +1180,7 @@ void SwCntntFrm::MakeAll()
         pNotify->SetBordersJoinedWithPrev();
     }
 
-    const BOOL bKeep = IsKeep( rAttrs );
+    const BOOL bKeep = IsKeep( rAttrs.GetAttrSet() );
 
     SwSaveFtnHeight *pSaveFtn = 0;
     if ( bFtn )
@@ -1978,7 +1978,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
             }
         }
 
-        if ( bRet && !bSplit && pFrm->IsKeep( rAttrs ) )
+        if ( bRet && !bSplit && pFrm->IsKeep( rAttrs.GetAttrSet() ) )
         {
             if( bTstMove )
             {
