@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:07:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,7 @@
 #include <com/sun/star/script/provider/XScriptProviderFactory.idl>
 #endif
 
-module com {
- module sun {
-  module star {
-   module script {
-    module provider {
+module com { module sun { module star { module script { module provider {
 
 /**
     This service is used to create MasterScriptProviders.
@@ -54,7 +50,7 @@ module com {
 */
 service MasterScriptProviderFactory
 {
-  interface XScriptProviderFactory;
+    interface XScriptProviderFactory;
 };
 
 /**
@@ -71,9 +67,6 @@ singleton theMasterScriptProviderFactory
     service MasterScriptProviderFactory;
 };
 
-    };
-   };
-  };
- };
-};
+}; }; }; }; };
+
 #endif
