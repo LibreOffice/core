@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:31:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,15 +757,12 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
             pUp = pPrvSct;
             if( pUp->Lower() && pUp->Lower()->IsColumnFrm() )
             {
-                pUp = (SwLayoutFrm*)pUp->Lower(); // Die erste Spalte
-                while( pUp->GetNext() )
-                    pUp = (SwLayoutFrm*)pUp->GetNext();
-                pUp = (SwLayoutFrm*)pUp->Lower(); // Der Body der letzten Spalte
+                pUp = static_cast<SwLayoutFrm*>(pUp->GetLastLower());
+                // Der Body der letzten Spalte
+                pUp = static_cast<SwLayoutFrm*>(pUp->Lower());
             }
-            pPrv = pUp->Lower(); // damit hinter dem letzten eingefuegt wird
-            if( pPrv )
-                while( pPrv->GetNext() )
-                    pPrv = pPrv->GetNext();
+            // damit hinter dem letzten eingefuegt wird
+            pPrv = pUp->GetLastLower();
             pPrvSct = NULL; // damit nicht gemergt wird
         }
         else
