@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:55 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,8 +562,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         if (sClassPath.match(sClassPathProp, 0) == sal_True)
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
-            sClassPathOption = sClassPath + rtl::OString(sep) +
-                getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
+            OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
+            if (sAddPath.getLength())
+                sClassPathOption = sClassPath + rtl::OString(sep) + sAddPath;
+            else
+                sClassPathOption = sClassPath;
             options[i+1].optionString = (char *) sClassPathOption.getStr();
             options[i+1].extraInfo = arOptions[i].extraInfo;
         }
