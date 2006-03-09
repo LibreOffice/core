@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:16:18 $
+#   last change: $Author: rt $ $Date: 2006-03-09 10:54:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,15 @@ TARGET = unotypes
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
-POLICYASSEMBLY = policy.1.1.cli_types.dll
+.INCLUDE : $(BIN)$/cliureversion.mk
+
+POLICY_ASSEMBLY_FILE=$(BIN)/$(CLI_TYPES_POLICY_ASSEMBLY).dll
 
 ALLTAR : \
     $(OUT)$/bin$/cli_types.dll \
-    $(OUT)$/bin$/$(POLICYASSEMBLY)	
+    $(POLICY_ASSEMBLY_FILE)
+
+
 
 CLIMAKERFLAGS =
 .IF "$(debug)" != ""
@@ -60,11 +64,11 @@ CLIMAKERFLAGS += --verbose
 
 
 #When changing the assembly version then this must also be done in scp2
-$(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
+$(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
     +$(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
                 --keyfile $(BIN)$/cliuno.snk \
-        --assembly-version "1.1.2.0" \
+        --assembly-version $(CLI_TYPES_NEW_VERSION) \
         --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
         --assembly-company "OpenOffice.org" \
         $(SOLARBINDIR)$/types_doc.rdb
@@ -72,13 +76,16 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
 #		--assembly-copyright "2003" \
 
 #do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
-$(OUT)$/bin$/$(POLICYASSEMBLY) : cli_types.config
-    +$(COPY) cli_types.config $(OUT)$/bin  
+$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_types.config
     +$(WRAPCMD) AL.exe -out:$@ \
-            -version:2.0.0.0 \
+            -version:$(CLI_TYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:cli_types.config
-#Version changes
-#incompatible change from 1.0.0.0 -> 1.1.0.0
+            -link:$(BIN)$/cli_types.config
+
+#Create the config file that is used with the policy assembly
+$(BIN)$/cli_types.config: cli_types_config $(BIN)$/cliureversion.mk 
+    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $< $@
+
 
 .ENDIF
