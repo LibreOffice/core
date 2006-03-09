@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,6 @@ protected:
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat )=0;
             BOOL MoveBwd( BOOL &rbReformat );
 
-    BOOL IsKeep( const SwBorderAttrs &rAttrs ) const; //Ist ein Keep zu beruecksichtigen (Breaks!)
-
 public:
     SwFlowFrm( SwFrm &rFrm );
 
@@ -203,38 +201,8 @@ public:
     BOOL IsPageBreak( BOOL bAct ) const;
     BOOL IsColBreak( BOOL bAct ) const;
 
-    /** method to determine, if the current flow frame has a page break before attribute.
-
-        OD 2006-01-27 #i57765#
-        A flow frame has a page break before attribute, if itself has break
-        attribute SVX_BREAK_PAGE_BEFORE or SVX_BREAK_PAGE_BOTH, or its previous
-        flow frame has break attribute SVX_BREAK_PAGE_AFTER or SVX_BREAK_PAGE_BOTH,
-        or a previous flow frame exists and flow frame has a page description.
-        Note: Previous hidden text frames has to be skipped.
-
-        @author OD
-
-        @param _pProposedPrevFrm
-        input parameter - proposed previous frame. Could be a hidden text frame.
-        Could be NULL, if no previous frame exists.
-    */
-    bool HasAttrPageBreakBefore( const SwFrm* _pProposedPrevFrm ) const;
-
-    /** method to determine, if the current flow frame has a column break before attribute.
-
-        OD 2006-01-27 #i57765#
-        A flow frame has a column break before attribute, if itself has break
-        attribute SVX_BREAK_COLUMN_BEFORE or SVX_BREAK_COLUMN_BOTH, or its previous
-        flow frame has break attribute SVX_BREAK_COLUMN_AFTER or SVX_BREAK_COLUMN_BOTH.
-        Note: Previous hidden text frames has to be skipped.
-
-        @author OD
-
-        @param _pProposedPrevFrm
-        input parameter - proposed previous frame. Could be a hidden text frame.
-        Could be NULL, if no previous frame exists.
-    */
-    bool HasAttrColBreakBefore( const SwFrm* _pProposedPrevFrm ) const;
+    //Ist ein Keep zu beruecksichtigen (Breaks!)
+    BOOL IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck = false ) const;
 
     sal_Bool HasLockedFollow() const;
 
