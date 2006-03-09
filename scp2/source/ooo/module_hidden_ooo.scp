@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 13:50:54 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_J,
 	gid_File_Lib_Lks,
 	gid_File_Lib_Lng,
+	gid_File_Lib_Lnth,
 	gid_File_Lib_Offacc,
 	gid_File_Lib_Bindet,
 	gid_File_Lib_Pcr,
