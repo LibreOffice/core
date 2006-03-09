@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:53:34 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,16 @@ struct Struct1 { long member1; };
 struct PolyStruct<if,else> {
     if member1;
     long member2;
+};
+
+struct PolyStruct2<a> {
+    a member1;
+    long member2;
+};
+
+struct PolyStruct3<a,b> {
+    a member1;
+    b member2;
 };
 
 interface XTest {
@@ -317,8 +327,10 @@ service S1: XTest {
         [in] any p14,
         [in] Enum2 p15,
         [in] Struct1 p16,
-        [in] com::sun::star::uno::XInterface p17,
-        [in] com::sun::star::lang::XComponent p18,
+        [in] PolyStruct<char, short> p17,
+        [in] PolyStruct<any, short> p18,
+        [in] com::sun::star::uno::XInterface p19,
+        [in] com::sun::star::lang::XComponent p20,
         [in] Boolean t1,
         [in] Byte t2,
         [in] Short t3,
@@ -390,7 +402,55 @@ service S1: XTest {
         [in] sequence< SequenceEnum > at15,
         [in] sequence< SequenceStruct > at16,
         [in] sequence< SequenceXInterface > at17,
-        [in] sequence< SequenceXComponent > at18);
+        [in] sequence< SequenceXComponent > at18
+         );
+
+    create6(
+        [in] PolyStruct2<type> arg1,
+        [in] PolyStruct2<any> arg2,
+        [in] PolyStruct2<boolean> arg3,
+        [in] PolyStruct2<byte> arg4,
+        [in] PolyStruct2<char> arg5,
+        [in] PolyStruct2<short> arg6,
+        [in] PolyStruct2<long> arg7,
+        [in] PolyStruct2<hyper> arg8,
+        [in] PolyStruct2<string> arg9,
+        [in] PolyStruct2<float> arg10,
+        [in] PolyStruct2<double> arg11,
+        [in] PolyStruct2<com::sun::star::uno::XInterface> arg12,
+        [in] PolyStruct2<com::sun::star::lang::XComponent> arg13,
+        [in] PolyStruct2<PolyStruct<char,any> > arg14,
+        [in] PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > arg15,
+        [in] PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > arg16,
+        [in] PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > arg17,
+        [in] PolyStruct2<sequence<type> > arg101,
+        [in] PolyStruct2<sequence<any> > arg102,
+        [in] PolyStruct2<sequence<boolean> > arg103,
+        [in] PolyStruct2<sequence<byte> > arg104,
+        [in] PolyStruct2<sequence<char> > arg105,
+        [in] PolyStruct2<sequence<short> > arg106,
+        [in] PolyStruct2<sequence<long> > arg107,
+        [in] PolyStruct2<sequence<hyper> > arg108,
+        [in] PolyStruct2<sequence<string> > arg109,
+        [in] PolyStruct2<sequence<float> > arg110,
+        [in] PolyStruct2<sequence<double> > arg111,
+        [in] PolyStruct2<sequence<com::sun::star::uno::XInterface> > arg112,
+        [in] PolyStruct2<sequence<com::sun::star::lang::XComponent> > arg113,
+        [in] PolyStruct2<sequence<PolyStruct<char, sequence<any> > > > arg114,
+        [in] PolyStruct2<sequence<PolyStruct<PolyStruct2<char>, sequence<any> > > > arg115,
+        [in] PolyStruct2<sequence<sequence<char> > > arg201,
+        [in] sequence<PolyStruct2< char > > arg301,
+        [in] sequence<PolyStruct2<PolyStruct<char,any> > > arg302,
+        [in] sequence<PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > > arg303,
+        [in] sequence<PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > > arg304,
+        [in] sequence<PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > > arg305,
+        [in] sequence<sequence<PolyStruct2< char > > > arg401,
+        [in] sequence<sequence<PolyStruct2<PolyStruct<char,any> > > >arg402,
+        [in] sequence<sequence<PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > > > arg403,
+        [in] sequence<sequence<PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > > > arg404,
+        [in] sequence<sequence<PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > > > arg405
+
+        );
 };
 
 service S2: XTest;

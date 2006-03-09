@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker.cs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:52:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,93 +620,101 @@ public sealed class Test
             Any b14 = new Any(22);
             Enum2 b15 = Enum2.VALUE4;
             Struct1 b16 = new Struct1(1);
-            object b17 = new uno.util.WeakComponentBase();
-            ucss.lang.XComponent b18 = (ucss.lang.XComponent) b17;
-            bool b19 = b1;
-            byte b20 = b2;
-            short b21 = b3;
-            ushort b22 = b4;
-            int b23 = b5;
-            uint b24 = b6;
-            long b25 = b7;
-            ulong b26 = b8;
-            float b27 = b9;
-            double b28 = b10;
-            char b29 = b11;
-            string b30 = b12;
-            Type b31 = b13;
-            Any b32 = b14;
-            Enum2 b33 = b15;
-            Struct1 b34 = b16;
-            object b35 = b17;
-            ucss.lang.XComponent b36 = b18;
-            bool[] b37 = new bool[] { false, true };
-            byte[] b38 = new byte[] { (byte) 1, (byte) 2 };
-            short[] b39 = new short[] { (short) 123, (short) 456};
-            ushort[] b40 = new ushort[] { (ushort) 789, (ushort) 101};
-            int[] b41 = new int[] {1, 2, 3};
-            uint[] b42 = new uint[] {4, 5, 6};
-            long[] b43 = new long[] {7,8,9};
-            ulong[] b44 = new ulong[] {123, 4356};
-            float[] b45 = new float[] {2435f,87f};
-            double[] b46 = new double[] {234d,45.2134d};
-            char[] b47 = new char[] {'\u1234', 'A'};
-            string[] b48 = new string[] {"a","bc"};
-            Type[] b49 = new Type[] {typeof(int), typeof(long)};
-            Any[] b50 = new Any[] {new Any(1), new Any("adf")};
-            Enum2[] b51 = new Enum2[] {Enum2.VALUE2};
-            Struct1[] b52 = new Struct1[] {new Struct1(11), new Struct1(22)};
-            object[] b53 = new object[0];
-            ucss.lang.XComponent[] b54 = new ucss.lang.XComponent[]{
+            PolyStruct b17 = new PolyStruct('A', 1);
+            PolyStruct b18 = new PolyStruct(new Any(true), 1);
+            object b19 = new uno.util.WeakComponentBase();
+            ucss.lang.XComponent b20 = (ucss.lang.XComponent) b19;
+            bool b21 = b1;
+            byte b22 = b2;
+            short b23 = b3;
+            ushort b24 = b4;
+            int b25 = b5;
+            uint b26 = b6;
+            long b27 = b7;
+            ulong b28 = b8;
+            float b29 = b9;
+            double b30 = b10;
+            char b31 = b11;
+            string b32 = b12;
+            Type b33 = b13;
+            Any b34 = b14;
+            Enum2 b35 = b15;
+            Struct1 b36 = b16;
+            object b37 = b19;
+            ucss.lang.XComponent b38 = b20;
+            bool[] b39 = new bool[] { false, true };
+            byte[] b40 = new byte[] { (byte) 1, (byte) 2 };
+            short[] b41 = new short[] { (short) 123, (short) 456};
+            ushort[] b42 = new ushort[] { (ushort) 789, (ushort) 101};
+            int[] b43 = new int[] {1, 2, 3};
+            uint[] b44 = new uint[] {4, 5, 6};
+            long[] b45 = new long[] {7,8,9};
+            ulong[] b46 = new ulong[] {123, 4356};
+            float[] b47 = new float[] {2435f,87f};
+            double[] b48 = new double[] {234d,45.2134d};
+            char[] b49 = new char[] {'\u1234', 'A'};
+            string[] b50 = new string[] {"a","bc"};
+            Type[] b51 = new Type[] {typeof(int), typeof(long)};
+            Any[] b52 = new Any[] {new Any(1), new Any("adf")};
+            Enum2[] b53 = new Enum2[] {Enum2.VALUE2};
+            Struct1[] b54 = new Struct1[] {new Struct1(11), new Struct1(22)};
+            object[] b55 = new object[0];
+            ucss.lang.XComponent[] b56 = new ucss.lang.XComponent[]{
                 new uno.util.WeakComponentBase(), new uno.util.WeakComponentBase()};
-            bool[][] b55 = new bool[][] {new bool[]{true,false}, new  bool[] {true}};
-            byte[][] b56 = new byte[][]{new byte[] {(byte) 1}, new byte[]{(byte) 2}};
-            short[][] b57 = new short[][] {new short[]{(short)6, (short)7}, new short[] {(short)9}};
-            ushort[][] b58 = new ushort[][] { new ushort[]{(ushort) 11}};
-            int[][] b59 = new int[][] {new int[]{1}, new int[]{2,3}, new int[]{4,5,6}};
-            uint[][] b60 = new uint[][] {new uint[]{10U}, new uint[]{20U,30U}, new uint[]{40U,50U,60}};
-            long[][] b61 = new long[][] {new long[]{10L}, new long[]{20L,30}, new long[]{40,50,60}};
-            ulong[][] b62 = new ulong[][] { new ulong[]{10L}, new ulong[]{20L, 30L}, new ulong[]{40,50,60}};
-            float[][] b63 = new float[][] {new float[]{10f}, new float[]{20f,30f}, new float[]{40f,50f,60f}};
-            double[][] b64 = new double[][]{new double[]{10d}, new double[]{20d,30d}};
-            char[][] b65 = new char[][] {new char[]{'a'}, new char[]{'b', 'c'}};
-            string[][] b66 = new String[][] {new string[]{"a"}, new string[]{"ad", "lkj"}};
-            Type[][] b67 = new Type[][] {new Type[]{typeof(byte), typeof(long)}, new Type[]{typeof(Any)}};
-            Any[][] b68 = new Any[][] {new Any[]{new Any(1f), new Any(2d)}, new Any[]{new Any(34U)}};
-            Enum2[][] b69 = new Enum2[][] {new Enum2[]{Enum2.VALUE2}};
-            Struct1[][] b70 = new Struct1[][] {new Struct1[]{new Struct1(2), new Struct1(3)}};
-            object[][] b71 =  new Object[0][];
-            ucss.lang.XComponent[][] b72 = new uno.util.WeakComponentBase[0][];
-            bool[][] b73 = b55;
-            byte[][] b74 = b56;
-            short[][] b75 = b57;
-            ushort[][] b76 = b58;
-            int[][] b77 = b59;
-            uint[][] b78 = b60;
-            long[][] b79 = b61;
-            ulong[][] b80 = b62;
-            float[][] b81 = b63;
-            double[][] b82 = b64;
-            char[][] b83 = b65;
-            String[][] b84 = b66;
-            Type[][] b85 =b67;
-            Any[][] b86 = b68;
-            Enum2[][] b87 = b69;
-            Struct1[][] b88 = b70;
-            Object[][] b89 = b71;
-            ucss.lang.XComponent[][] b90 = b72;
+            bool[][] b57 = new bool[][] {new bool[]{true,false}, new  bool[] {true}};
+            byte[][] b58 = new byte[][]{new byte[] {(byte) 1}, new byte[]{(byte) 2}};
+            short[][] b59 = new short[][] {new short[]{(short)6, (short)7}, new short[] {(short)9}};
+            ushort[][] b60 = new ushort[][] { new ushort[]{(ushort) 11}};
+            int[][] b61 = new int[][] {new int[]{1}, new int[]{2,3}, new int[]{4,5,6}};
+            uint[][] b62 = new uint[][] {new uint[]{10U}, new uint[]{20U,30U}, new uint[]{40U,50U,60}};
+            long[][] b63 = new long[][] {new long[]{10L}, new long[]{20L,30}, new long[]{40,50,60}};
+            ulong[][] b64 = new ulong[][] { new ulong[]{10L}, new ulong[]{20L, 30L}, new ulong[]{40,50,60}};
+            float[][] b65 = new float[][] {new float[]{10f}, new float[]{20f,30f}, new float[]{40f,50f,60f}};
+            double[][] b66 = new double[][]{new double[]{10d}, new double[]{20d,30d}};
+            char[][] b67 = new char[][] {new char[]{'a'}, new char[]{'b', 'c'}};
+            string[][] b68 = new String[][] {new string[]{"a"}, new string[]{"ad", "lkj"}};
+            Type[][] b69 = new Type[][] {new Type[]{typeof(byte), typeof(long)}, new Type[]{typeof(Any)}};
+            Any[][] b70 = new Any[][] {new Any[]{new Any(1f), new Any(2d)}, new Any[]{new Any(34U)}};
+            Enum2[][] b71 = new Enum2[][] {new Enum2[]{Enum2.VALUE2}};
+            Struct1[][] b72 = new Struct1[][] {new Struct1[]{new Struct1(2), new Struct1(3)}};
+            object[][] b73 =  new Object[0][];
+            ucss.lang.XComponent[][] b74 = new uno.util.WeakComponentBase[0][];
+            bool[][] b75 = b57;
+            byte[][] b76 = b58;
+            short[][] b77 = b59;
+            ushort[][] b78 = b60;
+            int[][] b79 = b61;
+            uint[][] b80 = b62;
+            long[][] b81 = b63;
+            ulong[][] b82 = b64;
+            float[][] b83 = b65;
+            double[][] b84 = b66;
+            char[][] b85 = b67;
+            String[][] b86 = b68;
+            Type[][] b87 =b69;
+            Any[][] b88 = b70;
+            Enum2[][] b89 = b71;
+            Struct1[][] b90 = b72;
+            Object[][] b91 = b73;
+            ucss.lang.XComponent[][] b92 = b74;
 
             xTest = S1.create5(
                 c,
                 b1, b2, b3, b4, b5, b6, b7 ,b8, b9, b10,
-                b11, b12, b13, b14, b15, b16, b17, b18, b19, b20,
+                b11, b12, b13,
+                b14,
+                b15, b16, b17, b18, b19, b20,
                 b21, b22, b23, b24, b25, b26, b27, b28, b29, b30,
-                b31, b32, b33, b34, b35, b36, b37, b38, b39, b40,
+                b31, b32, b33,
+                b34,
+                b35, b36, b37, b38, b39, b40,
                 b41, b42, b43, b44, b45, b46, b47, b48, b49, b50,
                 b51, b52, b53, b54, b55, b56, b57, b58, b59, b60,
                 b61, b62, b63, b64, b65, b66, b67, b68, b69, b70,
                 b71, b72, b73, b74, b75, b76, b77, b78, b79, b80,
-                b81, b82, b83, b84, b85, b86, b87, b88, b89, b90);
+                b81, b82, b83, b84, b85, b86, b87, b88, b89, b90,
+                b91, b92
+                 );
 
             cobj = (Component) xTest;
             l.assure(cobj.Args[0].Value == c);
@@ -723,7 +731,8 @@ public sealed class Test
             l.assure(b11.Equals(cobj.Args[11].Value));
             l.assure(b12.Equals(cobj.Args[12].Value));
             l.assure(b13.Equals(cobj.Args[13].Value));
-            l.assure(b14.Equals(cobj.Args[14].Value));
+			//Anys are not wrapped by the generated code
+            l.assure(b14.Equals(cobj.Args[14]));
             l.assure(b15.Equals(cobj.Args[15].Value));
             l.assure(b16.Equals(cobj.Args[16].Value));
             l.assure(b17.Equals(cobj.Args[17].Value));
@@ -743,7 +752,8 @@ public sealed class Test
             l.assure(b31.Equals(cobj.Args[31].Value));
             l.assure(b32.Equals(cobj.Args[32].Value));
             l.assure(b33.Equals(cobj.Args[33].Value));
-            l.assure(b34.Equals(cobj.Args[34].Value));
+			//Anys are not wrapped by the generated code
+            l.assure(b34.Equals(cobj.Args[34]));
             l.assure(b35.Equals(cobj.Args[35].Value));
             l.assure(b36.Equals(cobj.Args[36].Value));
             l.assure(b37.Equals(cobj.Args[37].Value));
@@ -800,8 +810,223 @@ public sealed class Test
             l.assure(b88.Equals(cobj.Args[88].Value));
             l.assure(b89.Equals(cobj.Args[89].Value));
             l.assure(b90.Equals(cobj.Args[90].Value));
+            l.assure(b91.Equals(cobj.Args[91].Value));
+            l.assure(b92.Equals(cobj.Args[92].Value));
 
         } catch (Exception) {
+            l.assure(false);
+        }
+
+        //test
+        c = new Context(Context.test_kind.NORMAL);
+        try {
+            
+            PolyStruct2 arg1 = new PolyStruct2(typeof(PolyStruct2), 1);
+            PolyStruct2 arg2 = new PolyStruct2(new Any(true), 1);
+            PolyStruct2 arg3 = new PolyStruct2(true, 1);
+            PolyStruct2 arg4 = new PolyStruct2((Byte)8, 1);
+            PolyStruct2 arg5 = new PolyStruct2('c', 1);
+            PolyStruct2 arg6 = new PolyStruct2((Int16)10, 1);
+            PolyStruct2 arg7 = new PolyStruct2(11, 1);
+            PolyStruct2 arg8 = new PolyStruct2(12L, 1);
+            PolyStruct2 arg9 = new PolyStruct2("Hello", 1);
+            PolyStruct2 arg10 = new PolyStruct2(1.3, 1);
+            PolyStruct2 arg11 = new PolyStruct2(1.3d, 1);
+            PolyStruct2 arg12 = new PolyStruct2(new Object(), 1);
+            PolyStruct2 arg13 = new PolyStruct2(new uno.util.WeakComponentBase(), 1);
+            PolyStruct2 arg14 = new PolyStruct2(
+                new PolyStruct('A', 1), 1);
+            PolyStruct2 arg15 = new PolyStruct2(
+                new PolyStruct(new PolyStruct('A',1),1),1);
+            PolyStruct arg16 = new PolyStruct("Hallo", 1);
+            PolyStruct arg17 = new PolyStruct(
+                new PolyStruct('A',1),1);
+
+            Type[] arType = {typeof(PolyStruct), typeof(PolyStruct2)};
+            PolyStruct2 arg101 = new PolyStruct2(arType,1);
+            PolyStruct2 arg102 = new PolyStruct2(
+                new Any[] {new Any(true)},1);
+            PolyStruct2 arg103 = new PolyStruct2(new bool[]{true}, 1);
+            PolyStruct2 arg104 = new PolyStruct2(new byte[] { (byte) 1}, 1);
+            PolyStruct2 arg105 = new PolyStruct2(new char[] {'\u1234', 'A'}, 1);
+            PolyStruct2 arg106 = new PolyStruct2(new short[] {(short)1}, 1);
+            PolyStruct2 arg107 = new PolyStruct2(new int[] {1}, 1);
+            PolyStruct2 arg108 = new PolyStruct2(new long[] {1}, 1);
+            PolyStruct2 arg109 = new PolyStruct2(new string[]{"Hallo"}, 1);
+            PolyStruct2 arg110 = new PolyStruct2(new float[]{1.3f}, 1);
+            PolyStruct2 arg111 = new PolyStruct2(new double[] {1.3d}, 1);
+            PolyStruct2 arg112 = new PolyStruct2(
+                new Object[] { new Object()}, 1);
+            PolyStruct2 arg113 = new PolyStruct2(
+                new uno.util.WeakComponentBase[] {
+                    new uno.util.WeakComponentBase()}, 1);
+            PolyStruct2 arg114 = new PolyStruct2(
+                new PolyStruct[]{
+                new PolyStruct('A',1)} ,1);
+            PolyStruct2 arg115 = new PolyStruct2(
+                new PolyStruct[] {
+                new PolyStruct( new PolyStruct2('A',1),1)}
+                ,1);
+            PolyStruct2 arg201 = new PolyStruct2(new char[][] { new char[]{'A'},
+                                                            new char[]{'B'}}, 1);
+
+			PolyStruct2[] arg301 = new PolyStruct2[] {new PolyStruct2('A', 1)};
+			PolyStruct2[] arg302 = new PolyStruct2[] {new PolyStruct2(
+				new PolyStruct('A', 1), 1)};
+			PolyStruct2[] arg303 = new PolyStruct2[] {new PolyStruct2(
+				new PolyStruct(new PolyStruct('A',1),1),1)};
+			PolyStruct[] arg304 = new PolyStruct[] {new PolyStruct("Hallo", 1)};
+			PolyStruct[] arg305 = new PolyStruct[] {new PolyStruct(
+				new PolyStruct('A',1),1)};
+
+			PolyStruct2[][] arg401 = new PolyStruct2[][] {new PolyStruct2[] {new PolyStruct2('A', 1)}};
+			PolyStruct2[][] arg402 = new PolyStruct2[][] {new PolyStruct2[] {new PolyStruct2(
+				new PolyStruct('A', 1), 1)}};
+			PolyStruct2[][] arg403 = new PolyStruct2[][] {new PolyStruct2[] {new PolyStruct2(
+				new PolyStruct(new PolyStruct('A',1),1),1)}};
+			PolyStruct[][] arg404 = new PolyStruct[][] {new PolyStruct[] {new PolyStruct("Hallo", 1)}};
+			PolyStruct[][] arg405 = new PolyStruct[][] {new PolyStruct[] {new PolyStruct(
+				new PolyStruct('A',1),1)}};
+
+
+            XTest xTest = S1.create6(c,
+                 arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,
+                 arg11,arg12,arg13,arg14,arg15,arg16,arg17,
+                 arg101,arg102,arg103,arg104,arg105,arg106,arg107,arg108,arg109,arg110,
+                 arg111,arg112,arg113,arg114,arg115,
+                 arg201,
+				arg301, arg302, arg303, arg304, arg305,
+				arg401, arg402, arg403, arg404, arg405);
+            Component cobj = (Component) xTest;
+            l.assure(cobj.Args[0].Value == c);
+			//arg1 - arg17
+            string sType = ((PolymorphicType) cobj.Args[1].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Type>");
+            sType = ((PolymorphicType) cobj.Args[2].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<uno.Any>");
+            sType = ((PolymorphicType) cobj.Args[3].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Boolean>");
+            sType = ((PolymorphicType) cobj.Args[4].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Byte>");
+            sType = ((PolymorphicType) cobj.Args[5].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Char>");
+            sType = ((PolymorphicType) cobj.Args[6].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int16>");
+            sType = ((PolymorphicType) cobj.Args[7].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int32>");
+            sType = ((PolymorphicType) cobj.Args[8].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int64>");
+            sType = ((PolymorphicType) cobj.Args[9].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.String>");
+            sType = ((PolymorphicType) cobj.Args[10].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Single>");
+            sType = ((PolymorphicType) cobj.Args[11].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Double>");
+            sType = ((PolymorphicType) cobj.Args[12].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Object>");
+            sType = ((PolymorphicType) cobj.Args[13].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<unoidl.com.sun.star.lang.XComponent>");
+            sType = ((PolymorphicType) cobj.Args[14].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>>");
+            sType = ((PolymorphicType) cobj.Args[15].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+                      "unoidl.test.cliure.climaker.PolyStruct<" +
+                      "unoidl.test.cliure.climaker.PolyStruct<" +
+                      "System.Char,uno.Any>,System.String>>");
+            sType = ((PolymorphicType) cobj.Args[16].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+                      "System.String,unoidl.test.cliure.climaker.PolyStruct<" +
+                      "System.Char,unoidl.test.cliure.climaker.PolyStruct2<" +
+                      "uno.Any>>>");
+            sType = ((PolymorphicType) cobj.Args[17].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+                      "unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>," +
+                      "unoidl.test.cliure.climaker.PolyStruct2<System.Char>>");
+			//arg101 - arg115
+            sType = ((PolymorphicType) cobj.Args[18].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Type[]>");
+            sType = ((PolymorphicType) cobj.Args[19].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<uno.Any[]>");
+            sType = ((PolymorphicType) cobj.Args[20].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Boolean[]>");
+            sType = ((PolymorphicType) cobj.Args[21].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Byte[]>");
+            sType = ((PolymorphicType) cobj.Args[22].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Char[]>");
+            sType = ((PolymorphicType) cobj.Args[23].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int16[]>");
+            sType = ((PolymorphicType) cobj.Args[24].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int32[]>");
+            sType = ((PolymorphicType) cobj.Args[25].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Int64[]>");
+            sType = ((PolymorphicType) cobj.Args[26].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.String[]>");
+            sType = ((PolymorphicType) cobj.Args[27].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Single[]>");
+            sType = ((PolymorphicType) cobj.Args[28].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Double[]>");
+            sType = ((PolymorphicType) cobj.Args[29].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Object[]>");
+            sType = ((PolymorphicType) cobj.Args[30].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<unoidl.com.sun.star.lang.XComponent[]>");
+            sType = ((PolymorphicType) cobj.Args[31].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+                      "unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any[]>[]>");
+            sType = ((PolymorphicType) cobj.Args[32].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+                                "unoidl.test.cliure.climaker.PolyStruct<" +
+                                "unoidl.test.cliure.climaker.PolyStruct2<" +
+                                "System.Char>,uno.Any[]>[]>");
+			//arg 201
+            sType = ((PolymorphicType) cobj.Args[33].Type).PolymorphicName;
+            l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+                                "System.Char[][]>");
+			//arg 301 - arg305
+			sType = ((PolymorphicType) cobj.Args[34].Type).PolymorphicName;
+			l.assure (sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Char>[]");
+			sType = ((PolymorphicType) cobj.Args[35].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>>[]");
+			sType = ((PolymorphicType) cobj.Args[36].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+				"unoidl.test.cliure.climaker.PolyStruct<" +
+				"unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.Char,uno.Any>,System.String>>[]");
+			sType = ((PolymorphicType) cobj.Args[37].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.String,unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.Char,unoidl.test.cliure.climaker.PolyStruct2<" +
+				"uno.Any>>>[]");
+			sType = ((PolymorphicType) cobj.Args[38].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+				"unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>," +
+				"unoidl.test.cliure.climaker.PolyStruct2<System.Char>>[]");
+			//arg 401 - arg405
+			sType = ((PolymorphicType) cobj.Args[39].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<System.Char>[][]");
+			sType = ((PolymorphicType) cobj.Args[40].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+				"unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>>[][]");
+			sType = ((PolymorphicType) cobj.Args[41].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct2<" +
+				"unoidl.test.cliure.climaker.PolyStruct<" +
+				"unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.Char,uno.Any>,System.String>>[][]");
+			sType = ((PolymorphicType) cobj.Args[42].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.String,unoidl.test.cliure.climaker.PolyStruct<" +
+				"System.Char,unoidl.test.cliure.climaker.PolyStruct2<" +
+				"uno.Any>>>[][]");
+			sType = ((PolymorphicType) cobj.Args[43].Type).PolymorphicName;
+			l.assure( sType == "unoidl.test.cliure.climaker.PolyStruct<" +
+				"unoidl.test.cliure.climaker.PolyStruct<System.Char,uno.Any>," +
+				"unoidl.test.cliure.climaker.PolyStruct2<System.Char>>[][]");
+			
+			
+			
+ 
+        } 
+		catch (Exception) 
+		{
             l.assure(false);
         }
     }
