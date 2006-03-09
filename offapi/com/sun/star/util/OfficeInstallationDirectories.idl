@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeInstallationDirectories.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:51:42 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 10:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 #include <com/sun/star/util/XOfficeInstallationDirectories.idl>
 #endif
 
-//=============================================================================
+//============================================================================
 
 module com {  module sun {  module star {  module  util {
 
-//=============================================================================
+//============================================================================
 
 /** encapsulates access to the current office installation directory and
     office user data directory, provides functionality to create URLs
@@ -68,7 +68,7 @@ service OfficeInstallationDirectories
   interface com::sun::star::util::XOfficeInstallationDirectories;
 };
 
-//=============================================================================
+//============================================================================
 
 /** A singleton that provides access to the current office installation
     directories.
@@ -80,7 +80,7 @@ singleton theOfficeInstallationDirectories
     service com::sun::star::util::OfficeInstallationDirectories;
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
