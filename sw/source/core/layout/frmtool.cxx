@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:53:59 $
+ *  last change: $Author: rt $ $Date: 2006-03-09 14:07:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,14 +239,27 @@ SwFrmNotify::~SwFrmNotify()
             {
                 if ( bInvaKeep )
                 {
-                    //Wenn der Vorgaenger das Attribut fuer Zusammenhalten traegt
-                    //muss er angestossen werden.
-                    // But only if it has a prev.
-                    SwFrm *pPre;
-                    if ( 0 != (pPre = pFrm->FindPrev()) &&
-                         pPre->GetAttrSet()->GetKeep().GetValue() &&
-                         pPre->GetIndPrev() )
-                        pPre->InvalidatePos();
+                    SwFrm *pPre = pFrm->FindPrev();
+                    if ( pPre && pPre->IsFlowFrm() )
+                    {
+                        // 1. pPre wants to keep with me:
+                        bool bInvalidPrePos = SwFlowFrm::CastFlowFrm( pPre )->IsKeep( *pPre->GetAttrSet() ) && pPre->GetIndPrev();
+
+                        // 2. pPre is a table and the last row wants to keep with me:
+                        if ( !bInvalidPrePos && pPre->IsTabFrm() )
+                        {
+                            SwTabFrm* pPreTab = static_cast<SwTabFrm*>(pPre);
+                            if ( pPreTab->GetFmt()->GetDoc()->IsTableRowKeep() )
+                            {
+                                SwRowFrm* pLastRow = static_cast<SwRowFrm*>(pPreTab->GetLastLower());
+                                if ( pLastRow && pLastRow->ShouldRowKeepWithNext() )
+                                    bInvalidPrePos = true;
+                            }
+                        }
+
+                        if ( bInvalidPrePos )
+                            pPre->InvalidatePos();
+                    }
                 }
             }
             else if ( !pFlow->HasFollow() )
