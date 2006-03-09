@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.163 $
+#   $Revision: 1.164 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-07 17:08:59 $
+#   last change: $Author: rt $ $Date: 2006-03-09 14:01:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1693,7 +1693,6 @@ ALLTAR:	\
         $(RESLIBSPLIT7TARGETN)\
         $(COMMONPRJHIDOTHERTARGET) \
         $(PRJHID2TARGET) \
-        $(REMOTE_BUILD)\
         $(LOCALIZE_ME_DEST)\
         last_target
 
@@ -1826,7 +1825,6 @@ ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
                 $(SIGNFOREXPLORER) \
                 $(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
-        $(REMOTE_BUILD)\
         $(LOCALIZE_ME_DEST)\
         last_target
 
@@ -2371,24 +2369,6 @@ $(EXCEPTIONSNOOPTFILES):
 .ENDIF
 .ENDIF
 
-# ----------------------------------
-# - REMOTE_BUILD - build remote vcl -
-# ----------------------------------
-
-.IF "$(REMOTE_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(PRJNAME)"=="vcl"
-.IF "$(REMOTE_BUILD_FLAG)" == ""
-.IF "$(remote)" == ""
-$(REMOTE_BUILD):
-    @+echo --- REMOTE_BUILD ---
-    @dmake $(MFLAGS) $(MAKEFILE) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS)
-    @+echo --- REMOTE_BUILD OVER ---
-.ENDIF          # "$(remote)" == ""
-.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
-.ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(UPDATER)"!=""
-.ENDIF			# "$(REMOTE_BUILD)"!=""
 
 .IF "$(LAZY_DEPS)"!=""
 warn_lazy_deps:
@@ -2697,29 +2677,9 @@ testt:
 # ----------
 
 ALLTAR : ALLDEP \
-        $(REMOTE_DEPEND) \
         $(SUBDIRS)
 
 .INCLUDE : tg_dep.mk
-
-# ----------------------------------
-# - REMOTE_DEPEND - remote vcl dependencies -
-# ----------------------------------
-
-.IF "$(REMOTE_DEPEND)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(PRJNAME)"=="vcl"
-.IF "$(REMOTE_BUILD_FLAG)" == ""
-.IF "$(remote)" == ""
-$(REMOTE_DEPEND):
-    @+echo --- REMOTE_DEPEND ---
-    @dmake $(MFLAGS) $(MAKEFILE) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS)
-    @+echo --- REMOTE_DEPEND OVER ---
-.ENDIF          # "$(remote)" == ""
-.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
-.ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(UPDATER)"!=""
-.ENDIF			# "$(REMOTE_DEPEND)"!=""
 
 .ENDIF			# "$(depend)" == ""
 
