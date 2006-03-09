@@ -104,11 +104,13 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 #i20156 - end
 
-..\%__SRC%\misc\offapi.autodoc %_DEST%\idl%_EXT%\offapi.autodoc
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
 ..\%__SRC%\ucr\types.db %_DEST%\bin%_EXT%\types.rdb
 ..\%__SRC%\ucrdoc\types_doc.db %_DEST%\bin%_EXT%\types_doc.rdb
+
+# i62141
+..\%__SRC%\misc\unotype_statistics.txt %_DEST%\bin%_EXT%\unotype_statistics.txt
 
 ..\com\sun\star\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star
 ..\com\sun\star\auth\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\auth
