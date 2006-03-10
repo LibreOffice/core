@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:44:48 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,22 +889,36 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     // check for after-affect
     Sequence< NamedValue > aUserData( xNode->getUserData() );
-    const NamedValue* pValue = aUserData.getConstArray();
-    sal_Int32 nLength = aUserData.getLength();
+    NamedValue* pValue = aUserData.getArray();
+    NamedValue* pLastValue = pValue;
+    sal_Int32 nLength = aUserData.getLength(), nRemoved = 0;
 
     sal_Bool bAfterEffect = false;
     sal_Int32 nMasterRel = 0;
-    while( nLength-- )
+    for( ; nLength--; pValue++ )
     {
         if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("after-effect") ) )
         {
             pValue->Value >>= bAfterEffect;
+            nRemoved++;
         }
         else if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("master-rel") ) )
         {
             pValue->Value >>= nMasterRel;
+            nRemoved++;
         }
-        pValue++;
+        else
+        {
+            if( nRemoved )
+                *pLastValue = *pValue;
+            pLastValue++;
+        }
+    }
+
+    if( nRemoved )
+    {
+        aUserData.realloc( aUserData.getLength() - nRemoved );
+        xNode->setUserData( aUserData );
     }
 
     // if its an after effect node, add it to the list for
@@ -913,33 +927,6 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     // position, so return false in this case
     if( bAfterEffect )
     {
-        // remove "after-effect" entry and "master-rel" from user data
-        NamedValue* pValue = aUserData.getArray();
-        NamedValue* pLastValue = 0;
-        sal_Int32 nLength = aUserData.getLength(), nRemoved = 0;
-        while( nLength-- )
-        {
-            if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("after-effect") ) )
-            {
-                nRemoved++;
-                continue;
-            }
-            if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("master-rel") ) )
-            {
-                nRemoved++;
-                continue;
-            }
-
-            pLastValue = pValue;
-            pValue++;
-        }
-
-        while( pLastValue && nLength-- )
-            *pLastValue++ = *pValue++;
-
-        aUserData.realloc( aUserData.getLength() - nRemoved );
-        xNode->setUserData( aUserData );
-
         if( nMasterRel != 2 )
         {
             Event aEvent;
