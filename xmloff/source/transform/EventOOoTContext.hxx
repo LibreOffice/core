@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOOoTContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:43:15 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 #ifndef _XMLOFF_EVENTOOOTCONTEXT_HXX
 #define _XMLOFF_EVENTOOOTCONTEXT_HXX
 
-#ifndef _XMLOFF_PERSATTRLISTTCONTEXT_HXX
-#include "PersAttrListTContext.hxx"
+#ifndef _XMLOFF_DEEPTCONTEXT_HXX
+#include "DeepTContext.hxx"
 #endif
 
 class XMLTransformerOOoEventMap_Impl;
 
-class XMLEventOOoTransformerContext : public XMLPersAttrListTContext
+class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
 {
     sal_Bool m_bPersistent;
 
@@ -62,6 +62,10 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
+    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::rtl::OUString& rQName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual sal_Bool IsPersistent() const;
 };
