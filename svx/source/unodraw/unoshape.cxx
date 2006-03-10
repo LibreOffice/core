@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:30:20 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2730,11 +2730,11 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
     if( mpImpl->mpMaster )
     {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
         {
             try
             {
-                setPropertyValue( *pNames++, *pValues++ );
+                setPropertyValue( *pNames, *pValues );
             }
             catch( beans::UnknownPropertyException& e )
             {
@@ -2748,11 +2748,11 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
         uno::Reference< beans::XPropertySet > xSet;
         queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
 
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
         {
             try
             {
-                xSet->setPropertyValue( *pNames++, *pValues++ );
+                xSet->setPropertyValue( *pNames, *pValues );
             }
             catch( beans::UnknownPropertyException& e )
             {
@@ -2790,11 +2790,11 @@ void SvxShape::endSetPropertyValues()
 
     if( mpImpl->mpMaster )
     {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pNames++ )
         {
             try
             {
-                *pValue = getPropertyValue( *pNames++ );
+                *pValue = getPropertyValue( *pNames );
             }
             catch( uno::Exception& )
             {
@@ -2807,11 +2807,11 @@ void SvxShape::endSetPropertyValues()
         uno::Reference< beans::XPropertySet > xSet;
         queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
 
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pNames++ )
         {
             try
             {
-                *pValue = xSet->getPropertyValue( *pNames++ );
+                *pValue = xSet->getPropertyValue( *pNames );
             }
             catch( uno::Exception& )
             {
