@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOOoTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:42:57 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@
 
 #include <hash_map>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -121,13 +122,13 @@ XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
 
 // -----------------------------------------------------------------------------
 
-TYPEINIT1( XMLEventOOoTransformerContext, XMLPersAttrListTContext );
+TYPEINIT1( XMLEventOOoTransformerContext, XMLPersElemContentTContext );
 
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
         sal_Bool bPersistent ) :
-    XMLPersAttrListTContext( rImp, rQName,
+    XMLPersElemContentTContext( rImp, rQName,
         rImp.GetNamespaceMap().GetKeyByAttrName( rQName ), XML_EVENT_LISTENER ),
     m_bPersistent( bPersistent )
 {
@@ -252,7 +253,7 @@ void XMLEventOOoTransformerContext::StartElement(
     }
 
     if( m_bPersistent )
-        XMLPersAttrListTContext::StartElement( xAttrList );
+        XMLPersElemContentTContext::StartElement( xAttrList );
     else
         GetTransformer().GetDocHandler()->startElement( GetExportQName(),
                                                         xAttrList );
@@ -261,9 +262,21 @@ void XMLEventOOoTransformerContext::StartElement(
 void XMLEventOOoTransformerContext::EndElement()
 {
     if( m_bPersistent )
-        XMLPersAttrListTContext::EndElement();
+        XMLPersElemContentTContext::EndElement();
     else
         GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+}
+
+XMLTransformerContext * XMLEventOOoTransformerContext::CreateChildContext(
+                            sal_uInt16 nPrefix,
+                            const OUString& rLocalName,
+                            const OUString& rQName,
+                            const Reference< XAttributeList >& xAttrList )
+{
+    if( m_bPersistent )
+        return XMLEventOOoTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
+    else
+        return XMLTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
 }
 
 sal_Bool XMLEventOOoTransformerContext::IsPersistent() const
