@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:52:06 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,17 @@ namespace sdr
 {
     namespace properties
     {
+        void CustomShapeProperties::UpdateTextFrameStatus()
+        {
+            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextAutoGrowHeightItem& rAutoGrowHeightItem =
+                (SdrTextAutoGrowHeightItem&)rObj.GetMergedItem( SDRATTR_TEXT_AUTOGROWHEIGHT );
+            rObj.bTextFrame = rAutoGrowHeightItem.GetValue() != 0;
+
+            if ( rObj.bTextFrame )
+                rObj.NbcAdjustTextFrameWidthAndHeight();
+        }
+
         SfxItemSet& CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return *(new SfxItemSet(rPool,
@@ -161,9 +172,16 @@ namespace sdr
             // call parent
             TextProperties::ItemChange( nWhich, pNewItem );
         }
+        void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        {
+            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+            UpdateTextFrameStatus();
+        }
         void CustomShapeProperties::ForceDefaultAttributes()
         {
-/* SJ: Following is is no good if creating customshapes leading to objects that are white after loading via xml
+            UpdateTextFrameStatus();
+
+/* SJ: Following is no good if creating customshapes, leading to objects that are white after loading via xml
 
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             sal_Bool bTextFrame(rObj.IsTextFrame());
@@ -227,6 +245,8 @@ namespace sdr
             }
             if ( bRemoveRenderGeometry )
             {
+                UpdateTextFrameStatus();
+
                 // local changes, removing cached objects
                 SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
                 rObj.InvalidateRenderGeometry();
