@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:49 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)p3DObj->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
