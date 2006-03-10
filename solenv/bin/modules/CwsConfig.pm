@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:56:07 $
+#   last change: $Author: rt $ $Date: 2006-03-10 15:59:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -367,8 +367,13 @@ sub read_config
 
     open ($fhandle, $fname) || croak("ERROR: Can't open '$fname': $!");
     while ( <$fhandle> ) {
-        tr/\r\n//d;  # win32 pain
-        s/\#.*//;    # kill comments
+        tr/\r\n//d;   # win32 pain
+        # Issue #i62815#: Scrambled CVS passwords may contain one or more '#'.
+        # Ugly special case needed: still allow in-line (perl style) comments
+        # elsewhere because existing configuration files may depend on them.
+        if ( !/^\s*CVS_PASSWORD/ ) {
+            s/\#.*//; # kill comments
+        }
         /^\s*$/ && next;
 
         if (/\[\s*(\S+)\s*\]/) {
