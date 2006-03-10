@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:52:18 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -856,7 +856,7 @@ void CustomAnimationPane::updateControls()
             //
             // ---
             //
-            USHORT nPos;
+            USHORT nPos = 0xffff;
 
             sal_Int16 nNodeType = pEffect->getNodeType();
             switch( nNodeType )
@@ -864,7 +864,6 @@ void CustomAnimationPane::updateControls()
             case EffectNodeType::ON_CLICK:          nPos = 0; break;
             case EffectNodeType::WITH_PREVIOUS:     nPos = 1; break;
             case EffectNodeType::AFTER_PREVIOUS:    nPos = 2; break;
-            default:                                nPos = 0xffff; break;
             }
 
             mpLBStart->SelectEntryPos( nPos );
@@ -917,6 +916,9 @@ void CustomAnimationPane::updateControls()
         mpFTSpeed->Enable(FALSE);
         mpCBSpeed->Enable(FALSE);
         mpFTChangeOrder->Enable( FALSE );
+        mpLBStart->SetNoSelection();
+        mpCBSpeed->SetNoSelection();
+        mpFLEffect->SetText( maStrModify );
     }
 
     bool bEnableUp = true;
