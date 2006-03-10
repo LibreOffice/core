@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:49:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@ namespace sdr
     {
         class CustomShapeProperties : public TextProperties
         {
+            void UpdateTextFrameStatus();
+
         protected:
             // create a new itemset
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
@@ -69,6 +71,9 @@ namespace sdr
             virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0);
 
         public:
+
+            // set a new StyleSheet and broadcast
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
