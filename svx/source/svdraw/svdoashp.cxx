@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:11:07 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2362,7 +2362,6 @@ FASTBOOL SdrObjCustomShape::BegDrag( SdrDragStat& rDrag ) const
     {
         rDrag.SetEndDragChangesAttributes( sal_True );
         rDrag.SetNoSnap( TRUE );
-        rDrag.SetUser( Clone() );
     }
     else
     {
