@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:44:49 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         }
     }
     ImplWriteLine( "%%BeginProlog" );
-    ImplWriteLine( "%%BeginResource: SDRes" );
+    ImplWriteLine( "%%BeginResource: procset SDRes-Prolog 1.0 0" );
 
 //  BEGIN EPSF
     ImplWriteLine( "/b4_inc_state save def\n/dict_count countdictstack def\n/op_count count 1 sub def\nuserdict begin" );
