@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:19:26 $
+ *  last change: $Author: rt $ $Date: 2006-03-10 16:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,8 +525,25 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 
     const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
     BOOL            bRet = FALSE;
+    bool    bStartPresentation = false;
 
     SetWaitCursor( TRUE );
+
+    SfxItemSet* pSet = rMedium.GetItemSet();
+    if( pSet )
+    {
+        if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+        {
+            pDoc->SetStarDrawPreviewMode( TRUE );
+        }
+
+        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+        {
+            bStartPresentation = true;
+            pDoc->SetStartWithPresentation( true );
+        }
+    }
 
     if( aFilterName == pFilterPowerPoint97 || aFilterName == pFilterPowerPoint97Template)
     {
@@ -575,6 +592,14 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
     }
     SetWaitCursor( FALSE );
+
+    // tell SFX to change viewshell when in preview mode
+    if( IsPreview() || bStartPresentation )
+    {
+        SfxItemSet *pSet = GetMedium()->GetItemSet();
+        if( pSet )
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, bStartPresentation ? 1 : 5 ) );
+    }
 
     return bRet;
 }
