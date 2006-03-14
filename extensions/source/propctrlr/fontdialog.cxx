@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:10:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,13 +274,13 @@ namespace pcr
     //========================================================================
     //------------------------------------------------------------------------
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
-        :SfxTabDialog(_pParent, ModuleRes(RID_TABDLG_FONTDIALOG), &_rCoreSet)
+        :SfxTabDialog(_pParent, PcrRes(RID_TABDLG_FONTDIALOG), &_rCoreSet)
     {
         FreeResource();
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create(); //CHINA001
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "CreateFactory fail!");
-        AddTabPage(TABPAGE_CHARACTERS, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );//CHINA001 AddTabPage(TABPAGE_CHARACTERS, SvxCharNamePage::Create, 0);
-        AddTabPage(TABPAGE_CHARACTERS_EXT, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );//CHINA001 AddTabPage(TABPAGE_CHARACTERS_EXT, SvxCharEffectsPage::Create, 0);
+        AddTabPage(TABPAGE_CHARACTERS, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );
+        AddTabPage(TABPAGE_CHARACTERS_EXT, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
     }
 
     //------------------------------------------------------------------------
