@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,27 +70,6 @@ ModalDialog RID_DLG_TABORDER
         HelpId              = HID_PROP_TABORDER_CONTROLS;
     };
 
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 102 , 100 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 102 , 118 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 102 , 136 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
     PushButton PB_MOVE_UP
     {
         Pos = MAP_APPFONT ( 102 , 14 ) ;
@@ -114,6 +93,26 @@ ModalDialog RID_DLG_TABORDER
         Text [ de ] = "Auto Sortierung" ;
         Text [ en-US ] = "Automatic Sort" ;
     };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 102 , 100 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE;
+    };
 
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 102 , 118 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 102 , 136 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
 };
 
