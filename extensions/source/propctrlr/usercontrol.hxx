@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:19 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,20 +58,43 @@ namespace pcr
 //............................................................................
 
     //========================================================================
-    //= OFormatDescriptionControl
+    //= NumberFormatSampleField
     //========================================================================
-    class OFormatDescriptionControl : public OCommonBehaviourControl, FormattedField
+    class NumberFormatSampleField : public ControlWindow< FormattedField >
     {
-    protected:
-            virtual long                    PreNotify( NotifyEvent& rNEvt );
+    private:
+        typedef ControlWindow< FormattedField > BaseClass;
 
     public:
-                                            OFormatDescriptionControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        NumberFormatSampleField( Window* _pParent, WinBits _nStyle )
+            :BaseClass( _pParent, _nStyle )
+        {
+        }
 
-            virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
-            virtual ::rtl::OUString         GetProperty()const;
+        void SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier );
 
-            virtual void                    SetFormatSupplier(const SvNumberFormatsSupplierObj* pSupplier);
+    protected:
+        virtual long PreNotify( NotifyEvent& rNEvt );
+    };
+
+    //========================================================================
+    //= OFormatSampleControl
+    //========================================================================
+    typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, NumberFormatSampleField > OFormatSampleControl_Base;
+    class OFormatSampleControl : public OFormatSampleControl_Base
+    {
+    public:
+        OFormatSampleControl( Window* pParent, WinBits nWinStyle );
+
+        // XPropertyControl
+        virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& _value ) throw (::com::sun::star::beans::IllegalTypeException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException);
+
+        inline void SetFormatSupplier( const SvNumberFormatsSupplierObj* _pSupplier )
+        {
+            getTypedControlWindow()->SetFormatSupplier( _pSupplier );
+        }
     };
 
     //========================================================================
@@ -86,59 +109,61 @@ namespace pcr
     //========================================================================
     //= OFormattedNumericControl
     //========================================================================
-    class OFormattedNumericControl : public OCommonBehaviourControl, FormattedField
+    typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< FormattedField > > OFormattedNumericControl_Base;
+    class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
-            sal_Int32                       m_nLastDecimalDigits;
-
-    protected:
-            virtual long                    PreNotify( NotifyEvent& rNEvt );
+    private:
+        sal_Int32   m_nLastDecimalDigits;
 
     public:
-                                            OFormattedNumericControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
-                                            ~OFormattedNumericControl();
+        OFormattedNumericControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
 
-            virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
-            virtual ::rtl::OUString         GetProperty()const;
+        // XPropertyControl
+        virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& _value ) throw (::com::sun::star::beans::IllegalTypeException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException);
 
-            virtual void                    SetFormatDescription(const FormatDescription& rDesc);
+        void SetFormatDescription( const FormatDescription& rDesc );
 
-            // make some FormattedField methods available
-            virtual void                    SetDecimalDigits(sal_uInt16 nPrecision) { FormattedField::SetDecimalDigits(nPrecision); m_nLastDecimalDigits = nPrecision; }
-            virtual void                    SetDefaultValue(double dDef) { FormattedField::SetDefaultValue(dDef); }
-            virtual void                    EnableEmptyField(sal_Bool bEnable) { FormattedField::EnableEmptyField(bEnable); }
-            virtual void                    SetThousandsSep(sal_Bool bEnable) { FormattedField::SetThousandsSep(bEnable); }
+        // make some FormattedField methods available
+        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->SetDecimalDigits(nPrecision); m_nLastDecimalDigits = nPrecision; }
+        void SetDefaultValue(double dDef) { getTypedControlWindow()->SetDefaultValue(dDef); }
+        void EnableEmptyField(sal_Bool bEnable) { getTypedControlWindow()->EnableEmptyField(bEnable); }
+        void SetThousandsSep(sal_Bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }
+
+    protected:
+        ~OFormattedNumericControl();
     };
 
     //========================================================================
     //= OFileUrlControl
     //========================================================================
-    typedef ::svt::FileURLBox OFileUrlControl_Base;
-    class OFileUrlControl : public OCommonBehaviourControl, OFileUrlControl_Base
+    typedef CommonBehaviourControl< ::com::sun::star::inspection::XPropertyControl, ControlWindow< ::svt::FileURLBox > > OFileUrlControl_Base;
+    class OFileUrlControl : public OFileUrlControl_Base
     {
-    protected:
-        virtual long                    PreNotify( NotifyEvent& rNEvt );
-
     public:
-        OFileUrlControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        OFileUrlControl( Window* pParent, WinBits nWinStyle );
+
+        // XPropertyControl
+        virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& _value ) throw (::com::sun::star::beans::IllegalTypeException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Type SAL_CALL getValueType() throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
         ~OFileUrlControl();
-
-        virtual void                    SetProperty( const ::rtl::OUString& _rString, sal_Bool bIsUnknown = sal_False );
-        virtual ::rtl::OUString         GetProperty() const;
-
-        void                            SetBaseURL( const String& _rURL ) { OFileUrlControl_Base::SetBaseURL( _rURL ); }
     };
 
     //========================================================================
-    //= TimeDurationInput
+    //= OTimeDurationControl
     //========================================================================
-    class TimeDurationInput : public ONumericControl
+    class OTimeDurationControl : public ONumericControl
     {
     public:
-        TimeDurationInput( ::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
-        ~TimeDurationInput();
+        OTimeDurationControl( ::Window* pParent, WinBits nWinStyle );
+        ~OTimeDurationControl();
 
-    protected:
-        virtual void CustomConvert();
+    private:
+        DECL_LINK( OnCustomConvert, MetricField* );
     };
 
 //............................................................................
