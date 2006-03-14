@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 13:45:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -2850,6 +2853,8 @@ void SAL_CALL SwXTextDocument::render(
 Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     throw( RuntimeException )
 {
+    if ( !pDocShell )
+        throw DisposedException( ::rtl::OUString(), static_cast< XTextDocument* >( this ) );
     SwDoc* pDoc = pDocShell->GetDoc();
     return pDoc->getXForms();
 }
