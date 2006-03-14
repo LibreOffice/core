@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrunodialogs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCRUNODIALOGS_HXX
 #include "pcrunodialogs.hxx"
 #endif
+#ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
+#include "formstrings.hxx"
+#endif
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #include "pcrstrings.hxx"
 #endif
@@ -48,7 +51,7 @@
 
 extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog()
 {
-    static ::pcr::OMultiInstanceAutoRegistration< ::pcr::OTabOrderDialog > aAutoRegistration;
+    ::pcr::OAutoRegistration< ::pcr::OTabOrderDialog > aAutoRegistration;
 }
 
 //........................................................................
@@ -64,8 +67,8 @@ namespace pcr
     //= OTabOrderDialog
     //====================================================================
     //---------------------------------------------------------------------
-    OTabOrderDialog::OTabOrderDialog( const Reference< XMultiServiceFactory >& _rxORB )
-        :OGenericUnoDialog( _rxORB )
+    OTabOrderDialog::OTabOrderDialog( const Reference< XComponentContext >& _rxContext )
+        :OGenericUnoDialog( _rxContext )
     {
         registerProperty( PROPERTY_CONTROLCONTEXT, OWN_PROPERTY_ID_CONTROLCONTEXT,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
@@ -95,19 +98,19 @@ namespace pcr
     }
 
     //---------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OTabOrderDialog::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+    Reference< XInterface > SAL_CALL OTabOrderDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
-        return *( new OTabOrderDialog( _rxFactory ) );
+        return *( new OTabOrderDialog( _rxContext ) );
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException)
     {
-        return getImplementationName_Static();
+        return getImplementationName_static();
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OTabOrderDialog::getImplementationName_Static() throw(RuntimeException)
+    ::rtl::OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
     {
         return ::rtl::OUString::createFromAscii( "org.openoffice.comp.form.ui.OTabOrderDialog" );
     }
@@ -115,11 +118,11 @@ namespace pcr
     //---------------------------------------------------------------------
     ::comphelper::StringSequence SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException)
     {
-        return getSupportedServiceNames_Static();
+        return getSupportedServiceNames_static();
     }
 
     //---------------------------------------------------------------------
-    ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+    ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
         aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.ui.TabOrderDialog" ) );
