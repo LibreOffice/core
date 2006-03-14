@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formbrowsertools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:11:49 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #endif
 
 #include <functional>
+#include <set>
 
 //............................................................................
 namespace pcr
@@ -55,7 +56,7 @@ namespace pcr
 
     ::rtl::OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
 
-
+    //========================================================================
     struct FindPropertyByHandle : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
     {
     private:
@@ -69,13 +70,48 @@ namespace pcr
         }
     };
 
-    struct LessPropertyByHandle : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
+    //========================================================================
+    struct FindPropertyByName : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
     {
-        bool operator()( const ::com::sun::star::beans::Property& _rLHS, const ::com::sun::star::beans::Property& _rRHS ) const
+    private:
+        ::rtl::OUString m_sName;
+
+    public:
+        FindPropertyByName( const ::rtl::OUString& _rName ) : m_sName( _rName ) { }
+        bool operator()( const ::com::sun::star::beans::Property& _rProp ) const
         {
-            return _rLHS.Handle < _rRHS.Handle;
+            return m_sName == _rProp.Name;
         }
     };
+
+    //========================================================================
+    struct PropertyLessByName
+                :public ::std::binary_function  <   ::com::sun::star::beans::Property,
+                                                    ::com::sun::star::beans::Property,
+                                                    bool
+                                                >
+    {
+        bool operator() (::com::sun::star::beans::Property _rLhs, ::com::sun::star::beans::Property _rRhs) const
+        {
+            return _rLhs.Name < _rRhs.Name ? true : false;
+        }
+    };
+
+    //========================================================================
+    struct TypeLessByName
+                :public ::std::binary_function  <   ::com::sun::star::uno::Type,
+                                                    ::com::sun::star::uno::Type,
+                                                    bool
+                                                >
+    {
+        bool operator() (::com::sun::star::uno::Type _rLhs, ::com::sun::star::uno::Type _rRhs) const
+        {
+            return _rLhs.getTypeName() < _rRhs.getTypeName() ? true : false;
+        }
+    };
+
+    //========================================================================
+    typedef ::std::set< ::com::sun::star::beans::Property, PropertyLessByName > PropertyBag;
 
 //............................................................................
 } // namespace pcr
