@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,18 +35,6 @@
 #ifndef SVX_FMPROPBRW_HXX
 #include "fmPropBrw.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
-#include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFX_CHILDWIN_HXX
-#include <sfx2/childwin.hxx>
-#endif
-#ifndef _SFX_OBJITEM_HXX
-#include <sfx2/objitem.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
 #endif
@@ -62,12 +50,20 @@
 #ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#ifndef _SVX_DIALMGR_HXX //autogen
+#include "dialmgr.hxx"
 #endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
+#ifndef _SVX_FMRESIDS_HRC
+#include "fmresids.hrc"
 #endif
+#ifndef _SVX_FMSERVS_HXX
+#include "fmservs.hxx"
+#endif
+#ifndef _SVDPAGV_HXX
+#include "svdpagv.hxx"
+#endif
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -92,39 +88,61 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTOR_HPP_
+#include <com/sun/star/inspection/XObjectInspector.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
+#include <com/sun/star/inspection/XObjectInspectorModel.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
+#include <cppuhelper/component_context.hxx>
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
-#endif
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-#ifndef _SVX_FMSERVS_HXX
-#include "fmservs.hxx"
-#endif
-#ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
-#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
-
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
+#ifndef _SFX_OBJITEM_HXX
+#include <sfx2/objitem.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::inspection;
 
 /*************************************************************************/
 //========================================================================
@@ -264,8 +282,8 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 {
     DBG_CTOR(FmPropBrw,NULL);
 
-    Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
-    SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
+    ::Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
+    SetMinOutputSizePixel(::Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
     SetUniqueId(UID_FORMPROPBROWSER_FRAME);
 
@@ -308,46 +326,14 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
         pMgr->SetFrame( m_xMeAsFrame );
         try
         {
-            Sequence< Any > aArgs(1);
-            aArgs[0] <<= PropertyValue(
-                ::rtl::OUString::createFromAscii("ParentWindow"),
-                0,
-                makeAny(VCLUnoHelper::GetInterface ( this )),
-                PropertyState_DIRECT_VALUE
-            );
-            // create a property browser controller
-            static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.PropertyBrowserController");
-            m_xBrowserController = Reference< XPropertySet >(
-                m_xORB->createInstance(s_sControllerServiceName), UNO_QUERY
-            );
-            if (!m_xBrowserController.is())
-            {
-                ShowServiceNotAvailableError(pParent, s_sControllerServiceName, sal_True);
-            }
-            else
-            {
-                Reference< XController > xAsXController(m_xBrowserController, UNO_QUERY);
-                DBG_ASSERT(xAsXController.is(), "FmPropBrw::FmPropBrw: invalid controller object!");
-                if (!xAsXController.is())
-                {
-                    ::comphelper::disposeComponent(m_xBrowserController);
-                    m_xBrowserController.clear();
-                }
-                else
-                {
-                    xAsXController->attachFrame(m_xMeAsFrame);
-                    m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
-                    DBG_ASSERT(m_xBrowserComponentWindow.is(), "FmPropBrw::FmPropBrw: attached the controller, but have no component window!");
-                }
-            }
         }
         catch (Exception&)
         {
             DBG_ERROR("FmPropBrw::FmPropBrw: could not create/initialize the browser controller!");
             try
             {
-                ::comphelper::disposeComponent(m_xBrowserController);
-                ::comphelper::disposeComponent(m_xBrowserComponentWindow);
+                ::comphelper::disposeComponent( m_xBrowserController );
+                ::comphelper::disposeComponent( m_xBrowserComponentWindow );
             }
             catch(Exception&) { }
             m_xBrowserController.clear();
@@ -372,7 +358,7 @@ void FmPropBrw::Resize()
     {
         try
         {
-            Size aSize( GetOutputSizePixel() );
+            ::Size aSize( GetOutputSizePixel() );
             m_xFrameContainerWindow->setPosSize( 0, 0, aSize.Width(), aSize.Height(), awt::PosSize::POSSIZE );
         }
         catch( const Exception& )
@@ -398,7 +384,9 @@ FmPropBrw::~FmPropBrw()
     try
     {
         if ( m_xBrowserController.is() )
-            m_xBrowserController->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentPage" ) ) ) >>= sCurrentPage;
+        {
+            OSL_VERIFY( m_xBrowserController->getViewData() >>= sCurrentPage );
+        }
 
         if ( !sCurrentPage.getLength() )
             sCurrentPage = m_sLastActivePage;
@@ -416,7 +404,8 @@ void FmPropBrw::implDetachController()
     m_sLastActivePage = getCurrentPage();
 
     implSetNewSelection( InterfaceBag() );
-    if (m_xMeAsFrame.is())
+
+    if ( m_xMeAsFrame.is() )
     {
         try
         {
@@ -430,9 +419,8 @@ void FmPropBrw::implDetachController()
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
     // 96068 - 09.01.2002 - fs@openoffice.org
-    Reference< XController > xAsXController( m_xBrowserController, UNO_QUERY );
-    if ( xAsXController.is() )
-        xAsXController->attachFrame( NULL );
+    if ( m_xBrowserController.is() )
+        m_xBrowserController->attachFrame( NULL );
 
     m_xBrowserController.clear();
     m_xMeAsFrame.clear();
@@ -478,54 +466,21 @@ sal_Bool FmPropBrw::Close()
 }
 
 //-----------------------------------------------------------------------
-namespace
-{
-    struct QueryXPropertySet : public ::std::unary_function< Reference< XInterface >, Reference< XPropertySet > >
-    {
-        Reference< XPropertySet > operator()( const Reference< XInterface >& _rxObject )
-        {
-            return Reference< XPropertySet >( _rxObject, UNO_QUERY );
-        }
-    };
-}
-
-//-----------------------------------------------------------------------
 void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 {
-    if (m_xBrowserController.is())
+    if ( m_xBrowserController.is() )
     {
         try
         {
-            // tell the property browser which document we live in
-            Reference< XModel > xDocumentModel;
-            if ( !_rSelection.empty() )
-            {
-                Reference< XChild > xChild ( *_rSelection.begin(), UNO_QUERY );
-                xDocumentModel = xDocumentModel.query( xChild );
-
-                while( !xDocumentModel.is() && xChild.is() )
-                {
-                    Reference< XInterface > xParent = xChild->getParent();
-                    xDocumentModel = xDocumentModel.query( xParent );
-                    xChild = xChild.query( xParent );
-                }
-            }
-
-            m_xBrowserController->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "ContextDocument" ),
-                makeAny( xDocumentModel )
-            );
+            Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
 
             // tell it the objects to inspect
-            Sequence< Reference< XPropertySet > > aSelection( _rSelection.size() );
-            ::std::transform( _rSelection.begin(), _rSelection.end(), aSelection.getArray(), QueryXPropertySet() );
+            Sequence< Reference< XInterface > > aSelection( _rSelection.size() );
+            ::std::copy( _rSelection.begin(), _rSelection.end(), aSelection.getArray() );
 
-            m_xBrowserController->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "IntrospectedCollection" ),
-                makeAny( aSelection )
-            );
+            xInspector->inspect( aSelection );
         }
-        catch( const PropertyVetoException& )
+        catch( const VetoException& )
         {
             return;
         }
@@ -569,8 +524,8 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
         if( xLayoutConstrains.is() )
         {
-            Size aSize;
-            ::com::sun::star::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
+            ::Size aSize;
+            awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
             aMinSize.Height += 4;
             aMinSize.Width += 4;
             aSize.setHeight( aMinSize.Height );
@@ -610,6 +565,98 @@ IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, NOTINTERESTEDIN )
 }
 
 //-----------------------------------------------------------------------
+void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
+{
+    // the document in which we live
+    Reference< XInterface > xDocument;
+    if ( _pFormShell && _pFormShell->GetObjectShell() )
+        xDocument = _pFormShell->GetObjectShell()->GetModel();
+
+    // the context of the controls in our document
+    Reference< awt::XControlContainer > xControlContext;
+    if ( _pFormShell && _pFormShell->GetFormView() )
+    {
+        SdrPageView* pPageView = _pFormShell->GetFormView()->GetPageViewPvNum(0);
+        xControlContext = pPageView->GetWindow(0)->GetControlContainerRef();
+    }
+
+    // the default parent window for message boxes
+    Reference< XWindow > xParentWindow( VCLUnoHelper::GetInterface ( this ) );
+
+    // our own component context
+    Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
+    Reference< XComponentContext > xOwnContext(
+        xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+        UNO_QUERY_THROW );
+
+    // a ComponentContext for the
+    ::cppu::ContextEntry_Init aHandlerContextInfo[] =
+    {
+        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( xDocument ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( xParentWindow ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ), makeAny( xControlContext ) )
+    };
+    Reference< XComponentContext > xInspectorContext(
+        ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+        xOwnContext ) );
+
+    // create a an object inspector
+    Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
+    const ::rtl::OUString sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.PropertyBrowserController");
+    m_xBrowserController = m_xBrowserController.query(
+        xFactory->createInstanceWithContext( sControllerServiceName, xInspectorContext ) );
+    if ( !m_xBrowserController.is() )
+    {
+        ShowServiceNotAvailableError( GetParent(), sControllerServiceName, sal_True );
+    }
+    else
+    {
+        m_xBrowserController->attachFrame( m_xMeAsFrame );
+        m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
+        DBG_ASSERT( m_xBrowserComponentWindow.is(), "FmPropBrw::impl_createPropertyBrowser_throw: attached the controller, but have no component window!" );
+    }
+}
+
+//-----------------------------------------------------------------------
+void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
+{
+    // the document in which we live
+    Reference< XInterface > xDocument;
+    SfxObjectShell* pObjectShell = _pFormShell ? _pFormShell->GetObjectShell() : NULL;
+    if ( pObjectShell )
+        xDocument = pObjectShell->GetModel();
+    if ( ( xDocument == m_xLastKnownDocument ) && m_xBrowserController.is() )
+        // nothing to do
+        return;
+
+    try
+    {
+        // clean up any previous instances of the object inspector
+        if ( m_xMeAsFrame.is() )
+            m_xMeAsFrame->setComponent( NULL, NULL );
+        else
+            ::comphelper::disposeComponent( m_xBrowserController );
+        m_xBrowserController.clear();
+        m_xBrowserComponentWindow.clear();
+
+        // and create a new one
+        impl_createPropertyBrowser_throw( _pFormShell );
+    }
+    catch( const Exception& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OString sMessage( "FmPropBrw::impl_ensurePropertyBrowser_nothrow: caught an exception!\n" );
+        sMessage += "message:\n";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
+    m_xLastKnownDocument = xDocument;
+}
+
+//-----------------------------------------------------------------------
 void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     try
@@ -624,25 +671,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             if ( pShell )
                 pShell->GetImpl()->getCurrentSelection( aSelection );
 
-            // for some functionality, the property browser needs to know the context of the controls
-            Reference< awt::XControlContainer > xControlContext;
-            if ( pShell && pShell->GetFormView() )
-            {
-                SdrPageView* pPageView = pShell->GetFormView()->GetPageViewPvNum(0);
-                xControlContext = pPageView->GetWindow(0)->GetControlContainerRef();
-            }
-            try
-            {
-                if ( m_xBrowserController.is() )
-                    m_xBrowserController->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ),
-                        makeAny( xControlContext )
-                    );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the control context!" );
-            }
+            impl_ensurePropertyBrowser_nothrow( pShell );
 
             // set the new object to inspect
             implSetNewSelection( aSelection );
@@ -660,7 +689,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
                     try
                     {
                         if ( m_xBrowserController.is() )
-                            m_xBrowserController->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentPage" ) ), makeAny( m_sLastActivePage ) );
+                            m_xBrowserController->restoreViewData( makeAny( m_sLastActivePage ) );
                     }
                     catch( const Exception& )
                     {
