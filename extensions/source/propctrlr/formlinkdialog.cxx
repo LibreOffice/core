@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:52:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ namespace pcr
     //------------------------------------------------------------------------
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XForm >& _rxDetailForm,
         const Reference< XForm >& _rxMasterForm, const Reference< XMultiServiceFactory >& _rxORB )
-        :ModalDialog( _pParent, ModuleRes( RID_DLG_FORMLINKS ) )
+        :ModalDialog( _pParent, PcrRes( RID_DLG_FORMLINKS ) )
         ,m_aExplanation( this, ResId( FT_EXPLANATION  ) )
         ,m_aDetailLabel( this, ResId( FT_DETAIL_LABEL ) )
         ,m_aMasterLabel( this, ResId( FT_MASTER_LABEL ) )
@@ -317,7 +317,7 @@ namespace pcr
         String sDetailType = getFormDataSourceType( m_xDetailForm );
         if ( !sDetailType.Len() )
         {
-            ::svt::OLocalResourceAccess aStringAccess( ModuleRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
+            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
             sDetailType = String( ResId( STR_DETAIL_FORM ) );
         }
         m_aDetailLabel.SetText( sDetailType );
@@ -326,7 +326,7 @@ namespace pcr
         String sMasterType = getFormDataSourceType( m_xMasterForm );
         if ( !sMasterType.Len() )
         {
-            ::svt::OLocalResourceAccess aStringAccess( ModuleRes( RID_DLG_FORMLINKS ), RSC_DIALOG );
+            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_DIALOG );
             sMasterType = String( ResId( STR_MASTER_FORM ) );
         }
         m_aMasterLabel.SetText( sMasterType );
@@ -468,7 +468,7 @@ namespace pcr
         {
             String sErrorMessage;
             {
-                ::svt::OLocalResourceAccess aStringAccess( ModuleRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
+                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 sErrorMessage = String( ResId( ( _rxForm == m_xDetailForm ) ? STR_ERROR_RETRIEVING_MASTER_COLUMNS : STR_ERROR_RETRIEVING_DETAIL_COLUMNS ) );
             }
 
