@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:29:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -785,7 +785,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
                     if ( !mpImpl->mbReadOnly && ImplCheckTextLen( nCharCode ) )    // sonst trotzdem das Zeichen schlucken...
                     {
-                        aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, nCharCode, !IsInsertMode() );
+                        aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), sal_True );
                         bModified = TRUE;
                     }
                 }
