@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlocalid.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,24 +43,3 @@
 #define IMG_MINUS   2
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.172.1  2005/09/05 13:00:14  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2004/11/16 12:06:34  obo
- *  INTEGRATION: CWS eforms2 (1.1.246); FILE MERGED
- *  2004/04/26 11:32:47 fs 1.1.246.1: new ids
- *
- *  Revision 1.1.246.1  2004/04/26 11:32:47  fs
- *  new ids
- *
- *  Revision 1.1  2001/03/21 15:43:45  fs
- *  initial checkin - local ids for this sub project
- *
- *
- *  Revision 1.0 21.03.01 09:46:31  fs
- ************************************************************************/
-
