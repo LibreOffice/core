@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:23:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,9 +178,6 @@ hidspecial HID_FILTER_NAVIGATOR             { HelpID =HID_FILTER_NAVIGATOR      
 hidspecial HID_FILTER_NAVIGATOR_WIN         { HelpID =HID_FILTER_NAVIGATOR_WIN  ;};
 hidspecial HID_PROP_PRINTABLE               { HelpID =HID_PROP_PRINTABLE        ;};
 
-hidspecial HID_FM_DLG_PROP_FORM             { HelpID =HID_FM_DLG_PROP_FORM      ;};
-hidspecial HID_FM_DLG_PROP_CONTROL          { HelpID =HID_FM_DLG_PROP_CONTROL   ;};
-hidspecial HID_FM_DLG_PROP_GRIDCTR          { HelpID =HID_FM_DLG_PROP_GRIDCTR   ;};
 hidspecial HID_FM_PROPDLG_TABCTR            { HelpID =HID_FM_PROPDLG_TABCTR     ;};
 hidspecial HID_FM_PROPDLG_TAB_GENERAL       { HelpID =HID_FM_PROPDLG_TAB_GENERAL;};
 hidspecial HID_FM_PROPDLG_TAB_DATA          { HelpID =HID_FM_PROPDLG_TAB_DATA   ;};
