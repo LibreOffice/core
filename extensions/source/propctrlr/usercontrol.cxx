@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,12 @@
 #include "usercontrol.hxx"
 #endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/inspection/PropertyControlType.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
@@ -55,23 +61,19 @@ namespace pcr
 {
 //............................................................................
 
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::beans::IllegalTypeException;
+    using ::com::sun::star::uno::RuntimeException;
+    /** === end UNO using === **/
+    namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
+
     //==================================================================
-    // class OFormatDescriptionControl
+    // NumberFormatSampleField
     //==================================================================
     //------------------------------------------------------------------
-    OFormatDescriptionControl::OFormatDescriptionControl( Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,FormattedField(pParent, nWinStyle)
-    {
-        SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-        autoSizeWindow();
-    }
-
-    //------------------------------------------------------------------
-    long OFormatDescriptionControl::PreNotify( NotifyEvent& rNEvt )
+    long NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
     {
         // want to handle two keys myself : Del/Backspace should empty the window (setting my prop to "standard" this way)
         if (EVENT_KEYINPUT == rNEvt.GetType())
@@ -80,59 +82,71 @@ namespace pcr
 
             if ((KEY_DELETE == nKey) || (KEY_BACKSPACE == nKey))
             {
-                SetText(String());
-                ModifiedHdl(this);
-                return sal_True;
+                SetText( String() );
+                if ( m_pHelper )
+                    m_pHelper->ModifiedHdl( this );
+                return 1;
             }
         }
 
-        if (OCommonBehaviourControl::handlePreNotify(rNEvt))
-            return sal_True;
-
-        // it wasn't a PropCommonControl event => let our window handle it
-        return FormattedField::PreNotify(rNEvt);
+        return BaseClass::PreNotify( rNEvt );
     }
 
     //------------------------------------------------------------------
-    void OFormatDescriptionControl::SetProperty(const ::rtl::OUString& rString, sal_Bool bIsUnknown)
+    void NumberFormatSampleField::SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier )
     {
-        if (bIsUnknown || (rString == m_sStandardString) || !rString.getLength())
-            // unknown or standard -> no text
-            SetText(String());
-        else
+        if ( pSupplier )
         {
-            // else set the new format key, the text will be reformatted
-            SetValue(1234.56789);
-            SetFormatKey(String(rString).ToInt32());
-        }
-    }
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OFormatDescriptionControl::GetProperty() const
-    {
-        if (!GetText().Len())
-            return m_sStandardString;
-        else
-            return String::CreateFromInt32(GetFormatKey());
-    }
-
-    //------------------------------------------------------------------
-    void OFormatDescriptionControl::SetFormatSupplier(const SvNumberFormatsSupplierObj* pSupplier)
-    {
-        if (pSupplier)
-        {
-            TreatAsNumber(sal_True);
+            TreatAsNumber( sal_True );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            SetFormatter(pFormatter, sal_True);
-            SetValue(1234.56789);
+            SetFormatter( pFormatter, sal_True );
+            SetValue( 1234.56789 );
         }
         else
         {
-            TreatAsNumber(sal_False);
-            SetFormatter(NULL, sal_True);
-            SetText(String());
+            TreatAsNumber( sal_False );
+            SetFormatter( NULL, sal_True );
+            SetText( String() );
         }
+    }
+
+    //==================================================================
+    // OFormatSampleControl
+    //==================================================================
+    //------------------------------------------------------------------
+    OFormatSampleControl::OFormatSampleControl( Window* pParent, WinBits nWinStyle )
+        :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
+    {
+    }
+
+    //------------------------------------------------------------------
+    void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
+    {
+        sal_Int32 nFormatKey = 0;
+        if ( _rValue >>= nFormatKey )
+        {
+            // else set the new format key, the text will be reformatted
+            getTypedControlWindow()->SetValue( 1234.56789 );
+            getTypedControlWindow()->SetFormatKey( nFormatKey );
+        }
+        else
+            getTypedControlWindow()->SetText( String() );
+    }
+
+    //------------------------------------------------------------------
+    Any SAL_CALL OFormatSampleControl::getValue() throw (RuntimeException)
+    {
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() )
+            aPropValue <<= (sal_Int32)getTypedControlWindow()->GetFormatKey();
+        return aPropValue;
+    }
+
+    //------------------------------------------------------------------
+    Type SAL_CALL OFormatSampleControl::getValueType() throw (RuntimeException)
+    {
+        return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
     }
 
     //==================================================================
@@ -140,21 +154,14 @@ namespace pcr
     //==================================================================
     DBG_NAME(OFormattedNumericControl);
     //------------------------------------------------------------------
-    OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,FormattedField(pParent, nWinStyle)
+    OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
+        :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
         DBG_CTOR(OFormattedNumericControl,NULL);
 
-        SetModifyHdl(LINK( this, OFormattedNumericControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OFormattedNumericControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OFormattedNumericControl, LoseFocusHdl));
+        getTypedControlWindow()->TreatAsNumber(sal_True);
 
-        autoSizeWindow();
-
-        TreatAsNumber(sal_True);
-
-        m_nLastDecimalDigits = GetDecimalDigits();
+        m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
     }
 
     //------------------------------------------------------------------
@@ -164,43 +171,28 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long OFormattedNumericControl::PreNotify( NotifyEvent& rNEvt )
+    void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if (OCommonBehaviourControl::handlePreNotify(rNEvt))
-            return sal_True;
-
-        // it wasn't a PropCommonControl event => let our window handle it
-        return FormattedField::PreNotify(rNEvt);
+        double nValue( 0 );
+        if ( _rValue >>= nValue )
+            getTypedControlWindow()->SetValue( nValue );
+        else
+            getTypedControlWindow()->SetText(String());
     }
 
     //------------------------------------------------------------------
-    void OFormattedNumericControl::SetProperty(const ::rtl::OUString& rString, sal_Bool bIsUnknown)
+    Any SAL_CALL OFormattedNumericControl::getValue() throw (RuntimeException)
     {
-        if (bIsUnknown || (rString == m_sStandardString) || !rString.getLength())
-            // unknown or standard -> no text
-            SetText(String());
-        else
-        {
-            SetValue(String(rString).ToDouble());
-        }
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() )
+            aPropValue <<= (double)getTypedControlWindow()->GetValue();
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OFormattedNumericControl::GetProperty() const
+    Type SAL_CALL OFormattedNumericControl::getValueType() throw (RuntimeException)
     {
-        if (!GetText().Len())
-            return m_sStandardString;
-        else
-        {
-            ::rtl::OUString sReturn( ::rtl::math::doubleToUString(
-                const_cast<OFormattedNumericControl*>(this)->GetValue(), rtl_math_StringFormat_F,
-                m_nLastDecimalDigits, '.', sal_True));
-                // always use a '.' (instead of the decimal separator given by m_aUsedInternational) :
-                // when the returned string is interpreted nobody knows about this control or the used
-                // international, so by convention we always use '.' for describing floating point numbers
-                // 27.07.99 - 67901 - FS
-            return sReturn;
-        }
+        return ::getCppuType( static_cast< double* >( NULL ) );
     }
 
     //------------------------------------------------------------------
@@ -210,14 +202,14 @@ namespace pcr
 
         if (rDesc.pSupplier)
         {
-            TreatAsNumber(sal_True);
+            getTypedControlWindow()->TreatAsNumber(sal_True);
 
             SvNumberFormatter* pFormatter = rDesc.pSupplier->GetNumberFormatter();
-            if (pFormatter != GetFormatter())
-                SetFormatter(pFormatter, sal_True);
-            SetFormatKey(rDesc.nKey);
+            if (pFormatter != getTypedControlWindow()->GetFormatter())
+                getTypedControlWindow()->SetFormatter(pFormatter, sal_True);
+            getTypedControlWindow()->SetFormatKey(rDesc.nKey);
 
-            const SvNumberformat* pEntry = GetFormatter()->GetEntry(GetFormatKey());
+            const SvNumberformat* pEntry = getTypedControlWindow()->GetFormatter()->GetEntry(getTypedControlWindow()->GetFormatKey());
             DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
             if ( pEntry )
             {
@@ -228,7 +220,7 @@ namespace pcr
                     case NUMBERFORMAT_SCIENTIFIC:
                     case NUMBERFORMAT_FRACTION:
                     case NUMBERFORMAT_PERCENT:
-                        m_nLastDecimalDigits = GetDecimalDigits();
+                        m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
                         break;
                     case NUMBERFORMAT_DATETIME:
                     case NUMBERFORMAT_DATE:
@@ -246,9 +238,9 @@ namespace pcr
 
         if ( bFallback )
         {
-            TreatAsNumber(sal_False);
-            SetFormatter(NULL, sal_True);
-            SetText(String());
+            getTypedControlWindow()->TreatAsNumber(sal_False);
+            getTypedControlWindow()->SetFormatter(NULL, sal_True);
+            getTypedControlWindow()->SetText(String());
             m_nLastDecimalDigits = 0;
         }
     }
@@ -258,16 +250,9 @@ namespace pcr
     //========================================================================
     //------------------------------------------------------------------
     OFileUrlControl::OFileUrlControl( Window* pParent, WinBits nWinStyle )
-        :OCommonBehaviourControl( this )
-        ,OFileUrlControl_Base( pParent, nWinStyle | WB_DROPDOWN )
+        :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
     {
-        SetModifyHdl( LINK( this, OCommonBehaviourControl, ModifiedHdl ) );
-        SetGetFocusHdl( LINK( this, OCommonBehaviourControl, GetFocusHdl ) );
-        SetLoseFocusHdl( LINK( this, OCommonBehaviourControl, LoseFocusHdl ) );
-
-        autoSizeWindow();
-
-        SetDropDownLineCount( 10 );
+        getTypedControlWindow()->SetDropDownLineCount( 10 );
     }
 
     //------------------------------------------------------------------
@@ -276,63 +261,63 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long OFileUrlControl::PreNotify( NotifyEvent& rNEvt )
+    void SAL_CALL OFileUrlControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if ( OCommonBehaviourControl::handlePreNotify( rNEvt ) )
-            return sal_True;
-
-        // it wasn't a PropCommonControl event => let our window handle it
-        return OFileUrlControl_Base::PreNotify( rNEvt );
+        ::rtl::OUString sURL;
+        if ( _rValue >>= sURL )
+            getTypedControlWindow()->DisplayURL( sURL );
+        else
+            getTypedControlWindow()->SetText( String() );
     }
 
     //------------------------------------------------------------------
-    void OFileUrlControl::SetProperty( const ::rtl::OUString& rString, sal_Bool bIsUnknown )
+    Any SAL_CALL OFileUrlControl::getValue() throw (RuntimeException)
     {
-        if ( bIsUnknown )
-            SetText( String() );
-        else
-            DisplayURL( rString );
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() )
+            aPropValue <<= (::rtl::OUString)getTypedControlWindow()->GetURL();
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OFileUrlControl::GetProperty() const
+    Type SAL_CALL OFileUrlControl::getValueType() throw (RuntimeException)
     {
-        if ( GetText().Len() )
-            return const_cast< OFileUrlControl* >( this )->GetURL();
-        else
-            return String();
+        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
     }
 
     //========================================================================
-    //= TimeDurationInput
+    //= OTimeDurationControl
     //========================================================================
     //------------------------------------------------------------------
-    TimeDurationInput::TimeDurationInput( ::Window* pParent, WinBits nWinStyle )
-        :ONumericControl( pParent, 0, nWinStyle )
+    OTimeDurationControl::OTimeDurationControl( ::Window* pParent, WinBits nWinStyle )
+        :ONumericControl( pParent, nWinStyle )
     {
-        SetUnit( FUNIT_CUSTOM );
-        SetCustomUnitText( String::CreateFromAscii( " ms" ) );
+        getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );
+        getTypedControlWindow()->SetCustomUnitText( String::CreateFromAscii( " ms" ) );
+        getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }
 
     //------------------------------------------------------------------
-    TimeDurationInput::~TimeDurationInput()
+    OTimeDurationControl::~OTimeDurationControl()
     {
     }
 
     //------------------------------------------------------------------
-    void TimeDurationInput::CustomConvert()
+    IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, pField )
     {
         long nMultiplier = 1;
-        if ( GetCurUnitText().EqualsIgnoreCaseAscii( "ms" ) )
+        if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "ms" ) )
             nMultiplier = 1;
-        if ( GetCurUnitText().EqualsIgnoreCaseAscii( "s" ) )
+        if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "s" ) )
             nMultiplier = 1000;
-        else if ( GetCurUnitText().EqualsIgnoreCaseAscii( "m" ) )
+        else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "m" ) )
             nMultiplier = 1000 * 60 * 60;
-        else if ( GetCurUnitText().EqualsIgnoreCaseAscii( "h" ) )
+        else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "h" ) )
             nMultiplier = 1000 * 60 * 60;
 
-        ONumericControl::SetValue( GetLastValue() * nMultiplier );
+        getTypedControlWindow()->SetValue( getTypedControlWindow()->GetLastValue() * nMultiplier );
+
+        return 0L;
     }
 
 //............................................................................
