@@ -18,4 +18,4 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 
 ..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml
 
-
+..\source\propctrlr\pcr.xml %_DEST%\xml%_EXT%\pcr.xml
