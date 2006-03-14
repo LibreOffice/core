@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellbindinghandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:05:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 #endif
 /** === end UNO includes === **/
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #include <memory>
 
 //........................................................................
@@ -54,46 +58,62 @@ namespace pcr
 //........................................................................
 
     class CellBindingHelper;
+    class IPropertyEnumRepresentation;
     //====================================================================
     //= CellBindingPropertyHandler
     //====================================================================
-    class CellBindingPropertyHandler : public PropertyHandler
+    class CellBindingPropertyHandler;
+    typedef HandlerComponentBase< CellBindingPropertyHandler > CellBindingPropertyHandler_Base;
+    class CellBindingPropertyHandler : public CellBindingPropertyHandler_Base
     {
     private:
-        ::std::auto_ptr< CellBindingHelper >    m_pHelper;
+        ::std::auto_ptr< CellBindingHelper >            m_pHelper;
+        ::rtl::Reference< IPropertyEnumRepresentation > m_pCellExchangeConverter;
 
     public:
-        // HandlerFactory
-        inline static IPropertyHandler* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
-        )
-        {
-            return new CellBindingPropertyHandler( _rxORB, _rxIntrospectee, _rxContextDocument, _rxTypeConverter );
-        }
-
-    protected:
         CellBindingPropertyHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
+        static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
         ~CellBindingPropertyHandler();
 
     protected:
-        // IPropertyHandler overriables
-        virtual ::com::sun::star::uno::Any      SAL_CALL getPropertyValue( PropertyId _nPropId, bool _bLazy = true ) const;
-        virtual void                            SAL_CALL setPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue );
-        virtual ::com::sun::star::uno::Any      SAL_CALL getPropertyValueFromStringRep( PropertyId _nPropId, const ::rtl::OUString& _rStringRep ) const;
-        virtual ::rtl::OUString                 SAL_CALL getStringRepFromPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue ) const;
+        // XPropertyHandler overriables
+        virtual ::com::sun::star::uno::Any      SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void                            SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any      SAL_CALL convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any      SAL_CALL convertToControlValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                                SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void                            SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
 
         // PropertyHandler overridables
-        virtual ::std::vector< ::com::sun::star::beans::Property >
-                                                SAL_CALL implDescribeSupportedProperties() const;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
+                                                SAL_CALL doDescribeSupportedProperties() const;
+        virtual void onNewComponent();
+
+    private:
+        /** updates a property (UI) whose state depends on more than one other property
+
+            ->actuatingPropertyChanged is called for certain properties in whose changes
+            we expressed interes (->getActuatingProperty). Now such a property change can
+            result in simple UI updates, for instance another property being enabled or disabled.
+
+            However, it can also result in a more complex change: The current (UI) state might
+            depend on the value of more than one other property. Those dependent properties (their
+            UI, more precisly) are updated in this method.
+
+            @param _nPropid
+                the ->PropertyId of the dependent property whose UI state is to be updated
+
+            @param _rxInspectorUI
+                provides access to the property browser UI. Must not be <NULL/>.
+        */
+        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
     };
 
 //........................................................................
