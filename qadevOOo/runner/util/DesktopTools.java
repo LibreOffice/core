@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:24:30 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 package util;
 
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.WindowDescriptor;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
@@ -60,6 +64,7 @@ import com.sun.star.util.XModifiable;
 import com.sun.star.view.XViewSettingsSupplier;
 import helper.ConfigHelper;
 import java.util.Vector;
+import lib.StatusException;
 
 
 /**
@@ -92,7 +97,7 @@ public class DesktopTools {
         Object oInterface;
 
         try {
-            oInterface = xMSF.createInstance("com.sun.star.frame.Desktop");
+            oInterface = xMSF.createInstance("com.sun.star.comp.framework.Desktop");
         } catch (com.sun.star.uno.Exception e) {
             throw new IllegalArgumentException("Desktop Service not available");
         }
@@ -116,6 +121,11 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      * @return returns an Array of document kinds like ["swriter"]
      */
+    /**
+     * returns an array of all open documents
+     * @param xMSF the XMultiSerivceFactory
+     * @return returns an array of all open documents
+     */
     public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF) {
         Vector components = new Vector();
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
@@ -137,9 +147,16 @@ public class DesktopTools {
     }
 
     /**
-     * returns the kind of the document like "swriter"
-     * @param xComponent the document to check
-     * @return the kind of the document like "swriter"
+     * Returns the document type for the given XComponent of an document
+     * @param xComponent the document to query for its type
+     * @return possible:
+     * <ul>
+     * <li>swriter</li>
+     * <li>scalc</li>
+     * <li>sdraw</li>
+     * <li>smath</li>
+     * </ul>
+     * or <CODE>null</CODE>
      */
     public static String getDocumentType(XComponent xComponent) {
         XServiceInfo sInfo = (XServiceInfo)UnoRuntime.queryInterface(
@@ -165,8 +182,15 @@ public class DesktopTools {
      * Opens a new document of a given kind
      * with arguments
      * @return the XComponent Interface of the document
-     * @param kind the kind of document to open like "swriter"
-     * @param Args some arguments to the new document
+     * @param kind the kind of document to load.<br>
+     * possible:
+     * <ul>
+     * <li>swriter</li>
+     * <li>scalc</li>
+     * <li>sdaw</li>
+     * <li>smath</li>
+     * </ul>
+     * @param Args arguments which passed to the document to load
      * @param xMSF the MultiServiceFactory
      */
     public static XComponent openNewDoc(XMultiServiceFactory xMSF, String kind,
@@ -188,8 +212,8 @@ public class DesktopTools {
      * loads a document of from a given url
      * with arguments
      * @return the XComponent Interface of the document
-     * @param url the URL to load
-     * @param Args the arguments to the document to load
+     * @param url the URL of the document to load.
+     * @param Args arguments which passed to the document to load
      * @param xMSF the MultiServiceFactory
      */
     public static XComponent loadDoc(XMultiServiceFactory xMSF, String url,
@@ -238,6 +262,71 @@ public class DesktopTools {
         } catch (com.sun.star.beans.PropertyVetoException e) {
             System.out.println("Couldn't close document");
         }
+    }
+
+    /**
+     * Creates a floating XWindow with the size of X=500 Y=100 width=400 height=600
+     * @param xMSF the MultiServiceFactory
+     * @throws lib.StatusException if it is not possible to create a floating window a lib.StatusException was thrown
+     * @return a floating XWindow
+     */
+    public static XWindowPeer createFloatingWindow(XMultiServiceFactory xMSF)
+        throws StatusException{
+            return createFloatingWindow(xMSF, 500, 100, 400, 600);
+    }
+     /**
+     * Creates a floating XWindow on the given position and size.
+     * @return a floating XWindow
+     * @param X the X-Postion of the floating XWindow
+     * @param Y the Y-Postion of the floating XWindow
+     * @param width the width of the floating XWindow
+     * @param height the height of the floating XWindow
+     * @param xMSF the MultiServiceFactory
+     * @throws lib.StatusException if it is not possible to create a floating window a lib.StatusException was thrown
+     */
+    public static XWindowPeer createFloatingWindow(XMultiServiceFactory xMSF, int X, int Y, int width, int height)
+        throws StatusException{
+
+        XInterface oObj = null;
+
+        try {
+            oObj = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
+        } catch (com.sun.star.uno.Exception e) {
+            throw new StatusException("Couldn't get toolkit", e);
+        }
+
+        XToolkit tk = (XToolkit) UnoRuntime.queryInterface(
+                                      XToolkit.class, oObj);
+
+    WindowDescriptor descriptor = new com.sun.star.awt.WindowDescriptor();
+
+        descriptor.Type = com.sun.star.awt.WindowClass.TOP;
+        descriptor.WindowServiceName = "modelessdialog";
+        descriptor.ParentIndex =  -1;
+
+    Rectangle bounds = new com.sun.star.awt.Rectangle();
+    bounds.X = X;
+    bounds.Y = Y;
+    bounds.Width = width;
+    bounds.Height = height;
+
+        descriptor.Bounds = bounds;
+        descriptor.WindowAttributes = (com.sun.star.awt.WindowAttribute.BORDER +
+                                      com.sun.star.awt.WindowAttribute.MOVEABLE +
+                                      com.sun.star.awt.WindowAttribute.SIZEABLE +
+                                      com.sun.star.awt.WindowAttribute.CLOSEABLE +
+                                      com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN);
+
+        XWindowPeer xWindow = null;
+
+        try{
+            xWindow = tk.createWindow( descriptor );
+        }catch ( com.sun.star.lang.IllegalArgumentException e){
+            throw new StatusException("Could not create window",  e);
+        }
+
+        return xWindow;
+
     }
 
     /**
