@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringrepresentation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:29:28 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
 #include "stringrepresentation.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#include "enumrepresentation.hxx"
 #endif
 
 /** === begin UNO includes === **/
@@ -82,10 +85,6 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
-#endif
-
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -95,6 +94,7 @@
 #endif
 
 #include <functional>
+#include <algorithm>
 
 //........................................................................
 namespace pcr
@@ -136,24 +136,28 @@ namespace pcr
     //--------------------------------------------------------------------
     namespace
     {
-        struct ConvertIntegerToString : public ::std::unary_function< sal_Int32, String >
+        struct ConvertIntegerFromAndToString
         {
-            String operator()( sal_Int32 _rIntValue ) const
+            ::rtl::OUString operator()( sal_Int32 _rIntValue ) const
             {
-                return String::CreateFromInt32( _rIntValue );
+                return ::rtl::OUString::valueOf( (sal_Int32)_rIntValue );
+            }
+            sal_Int32 operator()( const ::rtl::OUString& _rStringValue ) const
+            {
+                return _rStringValue.toInt32();
             }
         };
 
-        struct StringIdentity : public ::std::unary_function< ::rtl::OUString, String >
+        struct StringIdentity
         {
-            String operator()( ::rtl::OUString _rValue ) const
+            ::rtl::OUString operator()( const ::rtl::OUString& _rValue ) const
             {
                 return _rValue;
             }
         };
 
-        template < class ElementType, class Translator >
-        ::rtl::OUString composeSequenceElements( const Sequence< ElementType >& _rElements, const Translator& _rTranslator )
+        template < class ElementType, class Transformer >
+        ::rtl::OUString composeSequenceElements( const Sequence< ElementType >& _rElements, const Transformer& _rTransformer )
         {
             String sCompose;
 
@@ -163,12 +167,27 @@ namespace pcr
             const ElementType* pElementsEnd = pElements + _rElements.getLength();
             for ( ; pElements != pElementsEnd; ++pElements )
             {
-                sCompose += _rTranslator( *pElements );
+                sCompose += String( _rTransformer( *pElements ) );
                 if ( pElements != pElementsEnd )
                     sCompose += '\n';
             }
 
             return sCompose;
+        }
+
+        template < class ElementType, class Transformer >
+        void splitComposedStringToSequence( const ::rtl::OUString& _rComposed, Sequence< ElementType >& _out_SplitUp, const Transformer& _rTransformer )
+        {
+            _out_SplitUp.realloc( 0 );
+            if ( !_rComposed.getLength() )
+                return;
+            sal_Int32 tokenPos = 0;
+            do
+            {
+                _out_SplitUp.realloc( _out_SplitUp.getLength() + 1 );
+                _out_SplitUp[ _out_SplitUp.getLength() - 1 ] = (ElementType)_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) );
+            }
+            while ( tokenPos != -1 );
         }
     }
 
@@ -185,7 +204,7 @@ namespace pcr
 
         case TypeClass_BOOLEAN:
         {
-            String aEntries( ModuleRes( RID_STR_BOOL ) );
+            String aEntries( PcrRes( RID_STR_BOOL ) );
             sal_Bool bValue = sal_False;
             _rValue >>= bValue;
             _rStringRep = bValue ? aEntries.GetToken( 1 ) : aEntries.GetToken( 0 );
@@ -195,7 +214,8 @@ namespace pcr
         // some sequence types
         case TypeClass_SEQUENCE:
         {
-            Sequence< ::rtl::OUString> aStringValues;
+            Sequence< ::rtl::OUString > aStringValues;
+            Sequence< sal_Int8 > aInt8Values;
             Sequence< sal_uInt16 > aUInt16Values;
             Sequence< sal_Int16 > aInt16Values;
             Sequence< sal_uInt32 > aUInt32Values;
@@ -206,25 +226,30 @@ namespace pcr
             {
                 _rStringRep = composeSequenceElements( aStringValues, StringIdentity() );
             }
+            // byte sequences
+            else if ( _rValue >>= aInt8Values )
+            {
+                _rStringRep = composeSequenceElements( aInt8Values, ConvertIntegerFromAndToString() );
+            }
             // uInt16 sequences
             else if ( _rValue >>= aUInt16Values )
             {
-                _rStringRep = composeSequenceElements( aUInt16Values, ConvertIntegerToString() );
+                _rStringRep = composeSequenceElements( aUInt16Values, ConvertIntegerFromAndToString() );
             }
             // Int16 sequences
             else if ( _rValue >>= aInt16Values )
             {
-                _rStringRep = composeSequenceElements( aInt16Values, ConvertIntegerToString() );
+                _rStringRep = composeSequenceElements( aInt16Values, ConvertIntegerFromAndToString() );
             }
             // uInt32 sequences
             else if ( _rValue >>= aUInt32Values )
             {
-                _rStringRep = composeSequenceElements( aUInt32Values, ConvertIntegerToString() );
+                _rStringRep = composeSequenceElements( aUInt32Values, ConvertIntegerFromAndToString() );
             }
             // Int32 sequences
             else if ( _rValue >>= aInt32Values )
             {
-                _rStringRep = composeSequenceElements( aInt32Values, ConvertIntegerToString() );
+                _rStringRep = composeSequenceElements( aInt32Values, ConvertIntegerFromAndToString() );
             }
             else
                 bCanConvert = false;
@@ -233,6 +258,7 @@ namespace pcr
 
         // some structs
         case TypeClass_STRUCT:
+            OSL_ENSURE( false, "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
             if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
             {
                 // weird enough, the string representation of dates, as used
@@ -294,52 +320,21 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString StringRepresentation::getStringRepFromPropertyValue( const Any& _rValue, sal_Int32 _nPropertyId, const IPropertyInfoService* _pMetaData )
+    ::rtl::OUString StringRepresentation::convertPropertyValueToStringRepresentation( const Any& _rValue )
     {
-        // try the most basic types
-        ::rtl::OUString sReturn = convertSimpleToString( _rValue );
-
-        // try enum properties
-        if ( _pMetaData )
+        ::rtl::OUString sReturn;
+        if ( !convertGenericValueToString( _rValue, sReturn ) )
         {
-            sal_uInt32  nPropertyUIFlags = _pMetaData->getPropertyUIFlags( _nPropertyId );
-            if ( ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0 )
+            sReturn = convertSimpleToString( _rValue );
+        #ifdef DBG_UTIL
+            if ( !sReturn.getLength() && _rValue.hasValue() )
             {
-                sal_Int32 nIntValue = -1;
-                if ( ::cppu::enum2int( nIntValue, _rValue ) )
-                {
-                    if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-                        // enum value starting with 1
-                        --nIntValue;
-
-                    ::std::vector< String > aEnumStrings = _pMetaData->getPropertyEnumRepresentations( _nPropertyId );
-                    if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
-                    {
-                        sReturn = aEnumStrings[ nIntValue ];
-                    }
-                    else
-                        DBG_ERROR( "StringRepresentation::getStringRepFromPropertyValue: could not translate an enum value" );
-                }
-            }
-        }
-
-        if ( ( !sReturn.getLength() && _rValue.hasValue() ) || ( _rValue.getValueTypeClass() == TypeClass_BOOLEAN ) )
-        {
-        #if OSL_DEBUG_LEVEL > 0
-            bool bCanConvert =
-        #endif
-            convertGenericValueToString( _rValue, sReturn );
-
-        #if OSL_DEBUG_LEVEL > 0
-            if ( !bCanConvert )
-            {
-                ::rtl::OString sMessage( "StringRepresentation::getStringRepFromPropertyValue: cannot convert values of type '" );
+                ::rtl::OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
                 sMessage += ::rtl::OString( _rValue.getValueType().getTypeName().getStr(), _rValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "'!" );
                 DBG_ERROR( sMessage.getStr() );
             }
         #endif
-
         }
 
         return sReturn;
@@ -374,7 +369,7 @@ namespace pcr
 
         case TypeClass_BOOLEAN:
         {
-            String sBooleanValues( ModuleRes( RID_STR_BOOL ) );
+            String sBooleanValues( PcrRes( RID_STR_BOOL ) );
             if ( sBooleanValues.GetToken(0) == String( _rStringRep ) )
                 _rValue <<= (sal_Bool)sal_False;
             else
@@ -391,69 +386,44 @@ namespace pcr
             {
                 case TypeClass_STRING:
                 {
-                    sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                    Sequence< ::rtl::OUString> aStringSeq( nEntryCount );
-                    ::rtl::OUString* pStringArray = aStringSeq.getArray();
-
-                    for (sal_Int32 i=0; i<aStringSeq.getLength(); ++i, ++pStringArray)
-                        *pStringArray = aStr.GetToken((sal_uInt16)i, '\n');
-                    _rValue <<= aStringSeq;
-                }
-                break;
-                case TypeClass_UNSIGNED_SHORT:
-                {
-                    sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                    Sequence<sal_uInt16> aSeq( nEntryCount );
-
-                    sal_uInt16* pArray = aSeq.getArray();
-
-                    for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                        *pArray = (sal_uInt16)aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                    _rValue <<= aSeq;
-
+                    Sequence< ::rtl::OUString > aElements;
+                    splitComposedStringToSequence( aStr, aElements, StringIdentity() );
+                    _rValue <<= aElements;
                 }
                 break;
                 case TypeClass_SHORT:
                 {
-                    sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                    Sequence<sal_Int16> aSeq( nEntryCount );
-
-                    sal_Int16* pArray = aSeq.getArray();
-
-                    for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                        *pArray = (sal_Int16)aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                    _rValue <<= aSeq;
-
+                    Sequence< sal_Int16 > aElements;
+                    splitComposedStringToSequence( aStr, aElements, ConvertIntegerFromAndToString() );
+                    _rValue <<= aElements;
+                }
+                break;
+                case TypeClass_UNSIGNED_SHORT:
+                {
+                    Sequence< sal_uInt16 > aElements;
+                    splitComposedStringToSequence( aStr, aElements, ConvertIntegerFromAndToString() );
+                    _rValue <<= aElements;
                 }
                 break;
                 case TypeClass_LONG:
                 {
-                    sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                    Sequence<sal_Int32> aSeq( nEntryCount );
-
-                    sal_Int32* pArray = aSeq.getArray();
-
-                    for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                        *pArray = aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                    _rValue <<= aSeq;
-
+                    Sequence< sal_Int32 > aElements;
+                    splitComposedStringToSequence( aStr, aElements, ConvertIntegerFromAndToString() );
+                    _rValue <<= aElements;
                 }
                 break;
                 case TypeClass_UNSIGNED_LONG:
                 {
-                    sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                    Sequence<sal_uInt32> aSeq( nEntryCount );
-
-                    sal_uInt32* pArray = aSeq.getArray();
-
-                    for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                        *pArray = aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                    _rValue <<= aSeq;
-
+                    Sequence< sal_uInt32 > aElements;
+                    splitComposedStringToSequence( aStr, aElements, ConvertIntegerFromAndToString() );
+                    _rValue <<= aElements;
+                }
+                break;
+                case TypeClass_BYTE:
+                {
+                    Sequence< sal_Int8 > aElements;
+                    splitComposedStringToSequence( aStr, aElements, ConvertIntegerFromAndToString() );
+                    _rValue <<= aElements;
                 }
                 break;
                 default:
@@ -464,6 +434,7 @@ namespace pcr
         break;
 
         case TypeClass_STRUCT:
+            OSL_ENSURE( false, "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
             if ( _rTargetType.equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
             {
                 // weird enough, the string representation of dates, as used
@@ -527,54 +498,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any StringRepresentation::getPropertyValueFromStringRep( const ::rtl::OUString& _rStringRep, const Type& _rTargetType,
-            sal_Int32 _nPropertyId, const IPropertyInfoService* _pMetaData )
+    Any StringRepresentation::convertStringRepresentationToPropertyValue( const ::rtl::OUString& _rStringRep, const Type& _rTargetType )
     {
         Any aReturn;
-
-        // enum properties
-        if ( _pMetaData )
-        {
-            sal_uInt32  nPropertyUIFlags = _pMetaData->getPropertyUIFlags( _nPropertyId );
-            if ( ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0 )
-            {
-                ::std::vector< String > aEnumStrings = _pMetaData->getPropertyEnumRepresentations( _nPropertyId );
-                sal_Int32 nPos = getStringPos( _rStringRep, aEnumStrings );
-                if ( -1 != nPos )
-                {
-                    if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-                        // enum value starting with 1
-                        ++nPos;
-
-                    switch ( _rTargetType.getTypeClass() )
-                    {
-                        case TypeClass_ENUM:
-                            aReturn = ::cppu::int2enum( nPos, _rTargetType );
-                            break;
-
-                        case TypeClass_SHORT:
-                            aReturn <<= (sal_Int16)nPos;
-                            break;
-
-                        case TypeClass_UNSIGNED_SHORT:
-                            aReturn <<= (sal_uInt16)nPos;
-                            break;
-
-                        case TypeClass_UNSIGNED_LONG:
-                            aReturn <<= (sal_uInt32)nPos;
-                            break;
-
-                        default:
-                            aReturn <<= (sal_Int32)nPos;
-                            break;
-                    }
-                }
-                else
-                    DBG_ERROR("OPropertyBrowserController::getPropertyValueFromStringRep: could not translate the enum string!");
-
-                return aReturn;
-            }
-        }
 
         TypeClass ePropertyType = _rTargetType.getTypeClass();
         switch ( ePropertyType )
@@ -607,7 +533,7 @@ namespace pcr
             // could not convert ...
             if ( !bCanConvert && _rStringRep.getLength() )
             {
-                ::rtl::OString sMessage( "StringRepresentation::getPropertyValueFromStringRep: cannot convert into values of type '" );
+                ::rtl::OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
                 sMessage += ::rtl::OString( _rTargetType.getTypeName().getStr(), _rTargetType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "'!" );
                 DBG_ERROR( sMessage.getStr() );
