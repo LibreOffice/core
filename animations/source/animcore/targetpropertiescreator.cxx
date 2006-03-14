@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targetpropertiescreator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:47:23 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 08:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,7 @@ namespace animcore
                         aCurr->first.mnParagraphIndex ) );
             }
 
-            rCurrProps.Properties = ::comphelper::containerToSequence< beans::NamedValue >( aCurr->second );
+            rCurrProps.Properties = ::comphelper::containerToSequence( aCurr->second );
 
             ++aCurr;
         }
