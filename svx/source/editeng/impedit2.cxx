@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:57:43 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
 #include <com/sun/star/text/CharacterCompressionType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -1585,6 +1589,29 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     return aNewSel;
 }
 
+sal_Bool ImpEditEngine::IsInputSequenceChecking( sal_Unicode nChar, const EditSelection& rCurSel ) const
+{
+    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+    if (!pCTLOptions)
+        pCTLOptions = new SvtCTLOptions;
+
+    rtl::OUString aTxt( (const sal_Unicode *) &nChar );
+
+    // get the index that really is first
+    USHORT nFirstPos = rCurSel.Min().GetIndex();
+    USHORT nMaxPos   = rCurSel.Max().GetIndex();
+    if (nMaxPos < nFirstPos)
+        nFirstPos = nMaxPos;
+
+    sal_Bool bIsSequenceChecking =
+        pCTLOptions->IsCTLFontEnabled() &&
+        pCTLOptions->IsCTLSequenceChecking() &&
+        nFirstPos != 0 && /* first char needs not to be checked */
+        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( aTxt, 0 );
+
+    return bIsSequenceChecking;
+}
+
 void ImpEditEngine::InitScriptTypes( USHORT nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
@@ -2395,7 +2422,8 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
 }
 
 
-EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel, xub_Unicode c, BOOL bOverwrite )
+EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
+        xub_Unicode c, BOOL bOverwrite, sal_Bool bIsUserInput )
 {
     DBG_ASSERT( c != '\t', "Tab bei InsertText ?" );
     DBG_ASSERT( c != '\n', "Zeilenumbruch bei InsertText ?" );
@@ -2425,6 +2453,58 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel, xub_Unicode c, 
 
     if ( aPaM.GetNode()->Len() < MAXCHARSINPARA )
     {
+        if (bIsUserInput && IsInputSequenceChecking( c, rCurSel ))
+        {
+            uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = ImplGetInputSequenceChecker();
+            if (!pCTLOptions)
+                pCTLOptions = new SvtCTLOptions;
+
+            if (xISC.is() || pCTLOptions)
+            {
+                xub_StrLen nTmpPos = aPaM.GetIndex();
+                sal_Int16 nCheckMode = pCTLOptions->IsCTLSequenceCheckingRestricted() ?
+                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
+
+                // the text that needs to be checked is only the one
+                // before the current cursor position
+                rtl::OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
+                rtl::OUString aNewText( aOldText );
+                if (pCTLOptions->IsCTLSequenceCheckingTypeAndReplace())
+                {
+                    const xub_StrLen nPrevPos = static_cast< xub_StrLen >( xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode ) );
+
+                    // find position of first character that has changed
+                    sal_Int32 nOldLen = aOldText.getLength();
+                    sal_Int32 nNewLen = aNewText.getLength();
+                    const sal_Unicode *pOldTxt = aOldText.getStr();
+                    const sal_Unicode *pNewTxt = aNewText.getStr();
+                    sal_Int32 nChgPos = 0;
+                    while ( nChgPos < nOldLen && nChgPos < nNewLen &&
+                            pOldTxt[nChgPos] == pNewTxt[nChgPos] )
+                        ++nChgPos;
+
+                    xub_StrLen nChgLen = static_cast< xub_StrLen >( nNewLen - nChgPos );
+                    String aChgText( aNewText.copy( nChgPos ), nChgLen );
+
+                    // select text from first pos to be changed to current pos
+                    EditSelection aSel( EditPaM( aPaM.GetNode(), (USHORT) nChgPos ), aPaM );
+
+                    if (aChgText.Len())
+                        return InsertText( aSel, aChgText ); // implicitly handles undo
+                    else
+                        return aPaM;
+                }
+                else
+                {
+                    // should the character be ignored (i.e. not get inserted) ?
+                    if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, c, nCheckMode ))
+                        return aPaM;    // nothing to be done -> no need for undo
+                }
+            }
+
+            // at this point now we will insert the character 'normally' some lines below...
+        }
+
         if ( IsUndoEnabled() && !IsInUndo() )
         {
             EditUndoInsertChars* pNewUndo = new EditUndoInsertChars( this, CreateEPaM( aPaM ), c );
@@ -2436,7 +2516,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel, xub_Unicode c, 
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         DBG_ASSERT( pPortion, "Blinde Portion in InsertText" );
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
-        aPaM.GetIndex()++;  // macht EditDoc-Methode nicht mehr
+        aPaM.GetIndex()++;   // macht EditDoc-Methode nicht mehr
     }
 
     TextModified();
@@ -2449,6 +2529,8 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel, xub_Unicode c, 
 
 EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rStr )
 {
+    UndoActionStart( EDITUNDO_INSERT );
+
     EditPaM aPaM;
     if ( aCurSel.HasRange() )
         aPaM = ImpDeleteSelection( aCurSel );
@@ -2518,6 +2600,8 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
 
         nStart = nEnd+1;
     }
+
+    UndoActionEnd( EDITUNDO_INSERT );
 
     TextModified();
     return aPaM;
