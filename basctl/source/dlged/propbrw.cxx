@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:16:56 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
+#include <cppuhelper/component_context.hxx>
+#endif
+
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -238,17 +242,25 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     {
         try
         {
-            Sequence< Any > aArgs(1);
-            aArgs[0] <<= PropertyValue(
-                ::rtl::OUString::createFromAscii("ParentWindow"),
-                0,
-                makeAny(VCLUnoHelper::GetInterface ( this )),
-                PropertyState_DIRECT_VALUE
-            );
+            Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
+            Reference< XComponentContext > xOwnContext(
+                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                UNO_QUERY_THROW );
+
+            // a ComponentContext for the
+            ::cppu::ContextEntry_Init aHandlerContextInfo[] =
+            {
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) )
+            };
+            Reference< XComponentContext > xInspectorContext(
+                ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                xOwnContext ) );
+
             // create a property browser controller
-            static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.PropertyBrowserController");
+            Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
+            static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.awt.PropertyBrowserController");
             m_xBrowserController = Reference< XPropertySet >(
-                m_xORB->createInstance(s_sControllerServiceName), UNO_QUERY
+                xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
             );
             if (!m_xBrowserController.is())
             {
