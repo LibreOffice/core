@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlfontdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:07:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,14 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
 #include "fontdialog.hxx"
 #endif
-#ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
-#include "pcrstrings.hxx"
-#endif
+#include "formstrings.hxx"
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
 {
-    static ::pcr::OMultiInstanceAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
+    ::pcr::OAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
 }
 
 //........................................................................
@@ -67,8 +65,8 @@ namespace pcr
     //= OControlFontDialog
     //====================================================================
     //---------------------------------------------------------------------
-    OControlFontDialog::OControlFontDialog(const Reference< XMultiServiceFactory >& _rxORB)
-        :OGenericUnoDialog(_rxORB)
+    OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
+        :OGenericUnoDialog( _rxContext )
         ,m_pFontItems(NULL)
         ,m_pItemPool(NULL)
         ,m_pItemPoolDefaults(NULL)
@@ -97,19 +95,19 @@ namespace pcr
     }
 
     //---------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OControlFontDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+    Reference< XInterface > SAL_CALL OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
-        return *(new OControlFontDialog(_rxFactory));
+        return *( new OControlFontDialog( _rxContext ) );
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OControlFontDialog::getImplementationName() throw(RuntimeException)
     {
-        return getImplementationName_Static();
+        return getImplementationName_static();
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OControlFontDialog::getImplementationName_Static() throw(RuntimeException)
+    ::rtl::OUString OControlFontDialog::getImplementationName_static() throw(RuntimeException)
     {
         return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.OControlFontDialog");
     }
@@ -117,11 +115,11 @@ namespace pcr
     //---------------------------------------------------------------------
     ::comphelper::StringSequence SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException)
     {
-        return getSupportedServiceNames_Static();
+        return getSupportedServiceNames_static();
     }
 
     //---------------------------------------------------------------------
-    ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+    ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
         aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog");
