@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:19 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:58:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
                                             m_xAggregateListBox;
 
-    ::comphelper::AsyncEventNotifier*       m_pItemBroadcaster;
+    ::rtl::Reference< ::comphelper::AsyncEventNotifier >
+                                            m_pItemBroadcaster;
 
 protected:
     // UNO Anbindung
@@ -317,8 +318,7 @@ public:
 
 protected:
     // IEventProcessor
-    virtual void processEvent( const ::comphelper::EventDescription& _rEvent );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > getComponent();
+    virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
 private:
     DECL_LINK( OnTimeout, void* );
