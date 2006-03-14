@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newdatatype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:19:09 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ namespace pcr
     //====================================================================
     //--------------------------------------------------------------------
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const ::rtl::OUString& _rNameBase, const ::std::vector< ::rtl::OUString >& _rProhibitedNames )
-        :ModalDialog( _pParent, ModuleRes( RID_DLG_NEW_DATA_TYPE ) )
+        :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
         ,m_aLabel   ( this, ResId( FT_LABEL  ) )
         ,m_aName    ( this, ResId( ED_NAME   ) )
         ,m_aOK      ( this, ResId( PB_OK     ) )
