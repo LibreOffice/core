@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formbrowsertools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:11:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace pcr
 
     ::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
-        OModuleResourceClient aResourceAccess;
+        PcrClient aResourceAccess;
             // this ensures that we have our resource file loaded
 
         ::rtl::OUString sClassName;
@@ -80,12 +80,12 @@ namespace pcr
             {
                 Reference< XInterface >  xIFace;
                 aUnoObj >>= xIFace;
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_EDIT));
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_EDIT));
                 if (xIFace.is())
                 {   // we have a chance to check if it's a formatted field model
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                     if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
-                        sClassName = String(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
+                        sClassName = String(PcrRes(RID_STR_PROPTITLE_FORMATTED));
                     else if (!xInfo.is())
                     {
                         // couldn't distinguish between formatted and edit with the service name, so try with the properties
@@ -94,7 +94,7 @@ namespace pcr
                         {
                             Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(PROPERTY_FORMATSSUPPLIER))
-                                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
+                                sClassName = String(PcrRes(RID_STR_PROPTITLE_FORMATTED));
                         }
                     }
                 }
@@ -102,44 +102,44 @@ namespace pcr
             break;
 
             case FormComponentType::COMMANDBUTTON:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_PUSHBUTTON)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_PUSHBUTTON)); break;
             case FormComponentType::RADIOBUTTON:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_RADIOBUTTON)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_RADIOBUTTON)); break;
             case FormComponentType::CHECKBOX:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_CHECKBOX)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_CHECKBOX)); break;
             case FormComponentType::LISTBOX:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_LISTBOX)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_LISTBOX)); break;
             case FormComponentType::COMBOBOX:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_COMBOBOX)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_COMBOBOX)); break;
             case FormComponentType::GROUPBOX:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_GROUPBOX)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_GROUPBOX)); break;
             case FormComponentType::IMAGEBUTTON:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
             case FormComponentType::FIXEDTEXT:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FIXEDTEXT)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_FIXEDTEXT)); break;
             case FormComponentType::GRIDCONTROL:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_DBGRID)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_DBGRID)); break;
             case FormComponentType::FILECONTROL:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FILECONTROL)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_FILECONTROL)); break;
 
             case FormComponentType::DATEFIELD:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_DATEFIELD)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_DATEFIELD)); break;
             case FormComponentType::TIMEFIELD:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_TIMEFIELD)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_TIMEFIELD)); break;
             case FormComponentType::NUMERICFIELD:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_NUMERICFIELD)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_NUMERICFIELD)); break;
             case FormComponentType::CURRENCYFIELD:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
             case FormComponentType::PATTERNFIELD:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_PATTERNFIELD)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_PATTERNFIELD)); break;
             case FormComponentType::IMAGECONTROL:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_IMAGECONTROL)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_IMAGECONTROL)); break;
             case FormComponentType::HIDDENCONTROL:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_HIDDENCONTROL)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_HIDDENCONTROL)); break;
 
             case FormComponentType::CONTROL:
             default:
-                sClassName = String(ModuleRes(RID_STR_PROPTITLE_UNKNOWNCONTROL)); break;
+                sClassName = String(PcrRes(RID_STR_PROPTITLE_UNKNOWNCONTROL)); break;
         }
 
         return sClassName;
