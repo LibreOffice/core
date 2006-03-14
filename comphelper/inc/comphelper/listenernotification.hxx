@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:32:20 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #include "comphelper/comphelperdllapi.h"
 #endif
 
+#include <memory>
+
 //........................................................................
 namespace comphelper
 {
@@ -90,6 +92,11 @@ namespace comphelper
         */
         void    disposing( const ::com::sun::star::lang::EventObject& _rEventSource );
 
+        /** clears the container without calling <member scope="com::sun::star::lang">XEventListener::disposing</member>
+            at the listeners
+        */
+        void    clear();
+
         /** determines whether the listener container is currently empty
         */
         inline bool
@@ -99,6 +106,11 @@ namespace comphelper
         */
         inline size_t
                 size() const SAL_THROW(());
+
+        /** creates an iterator for looping through all registered listeners
+        */
+        inline ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper >
+                createIterator();
 
     protected:
                 OListenerContainer( ::osl::Mutex& _rMutex );
@@ -156,6 +168,91 @@ namespace comphelper
     inline size_t OListenerContainer::size() const SAL_THROW(())
     {
         return m_aListeners.getLength();
+    }
+
+    inline ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > OListenerContainer::createIterator()
+    {
+        ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pIterator( new ::cppu::OInterfaceIteratorHelper( m_aListeners ) );
+        return pIterator;
+    }
+
+    //====================================================================
+    //= OSimpleListenerContainer
+    //====================================================================
+    /** helper class for simple notification of the form LISTENER::METHOD( EVENT )
+
+        This class is not threadsafe!
+
+        @param LISTENER
+            the listener class to call, e.g. <type scope="com::sun::star::lang">XEventListener</type>
+        @param EVENT
+            the event type to notify, e.g. <type scope="com::sun::star::lang">EventObject</type>
+    */
+    template< class LISTENER, class EVENT >
+    class OSimpleListenerContainer : protected OListenerContainer
+    {
+    public:
+        typedef LISTENER    ListenerClass;
+        typedef EVENT       EventClass;
+        typedef void ( SAL_CALL LISTENER::*NotificationMethod )( const EventClass& );
+
+    private:
+        NotificationMethod  m_pNotificationMethod;
+
+    public:
+        OSimpleListenerContainer( ::osl::Mutex& _rMutex )
+            :OListenerContainer( _rMutex )
+            ,m_pNotificationMethod( NULL )
+        {
+        }
+
+        inline void addListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
+        {
+            OListenerContainer::addListener( _rxListener.get() );
+        }
+
+        inline void removeListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
+        {
+            OListenerContainer::removeListener( _rxListener.get() );
+        }
+
+        // publish some otherwise hidden base functionality
+        OListenerContainer::disposing;
+        OListenerContainer::clear;
+        OListenerContainer::empty;
+        OListenerContainer::size;
+        OListenerContainer::createIterator;
+
+        /// typed notification
+        bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+
+    protected:
+        virtual bool    implNotify(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
+                            const ::com::sun::star::lang::EventObject& _rEvent
+                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+    };
+
+    //--------------------------------------------------------------------
+    template< class LISTENER, class EVENT >
+    bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
+    {
+        m_pNotificationMethod = _pNotify;
+        bool bRet = OListenerContainer::notify( _rEvent );
+        m_pNotificationMethod = NULL;
+        return bRet;
+    }
+
+    //--------------------------------------------------------------------
+    template< class LISTENER, class EVENT >
+    bool OSimpleListenerContainer< LISTENER, EVENT >::implNotify(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
+            const ::com::sun::star::lang::EventObject& _rEvent )   SAL_THROW( ( ::com::sun::star::uno::Exception ) )
+    {
+        const EventClass& rTypedEvent( static_cast< const EventClass& >( _rEvent ) );
+        ListenerClass* pTypedListener( static_cast< ListenerClass* >( _rxListener.get() ) );
+        (pTypedListener->*m_pNotificationMethod)( rTypedEvent );
+        return true;
     }
 
     //====================================================================
