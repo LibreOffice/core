@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:10 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,19 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
+#include "pcrcomponentcontext.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
+#include "modulepcr.hxx"
 #endif
 
-#ifndef _OSL_INTERLCK_H_
-#include <osl/interlck.h>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -77,10 +80,41 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYHANDLER_HPP_
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _OSL_INTERLCK_H_
+#include <osl/interlck.h>
+#endif
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 #include <memory>
 #include <vector>
 
+namespace com { namespace sun { namespace star {
+    namespace inspection {
+        struct LineDescriptor;
+        class XPropertyControlFactory;
+    }
+} } }
+
+class Window;
 //........................................................................
 namespace pcr
 {
@@ -88,268 +122,97 @@ namespace pcr
 
     typedef sal_Int32   PropertyId;
 
-    struct PropertyUIDescriptor;
-    class IPropertyBrowserUI;
-
-    //====================================================================
-    //= IPropertyHandler
-    //====================================================================
-    /** an instance does the complete property handling necessary for the property
-        controller
-    */
-    class IPropertyHandler : public ::rtl::IReference
-    {
-    public:
-        // ------------ meta data --------------------
-        // TODO:
-        // when we have migrated all the possible code in formcontroller.cxx to usage of this
-        // interface (i.e. when even the generic properties are handled by an instance implementing
-        // this interface), then these meta data are not necessary anymore (since all methods should
-        // return <TRUE/> then).
-        // Until this migration is completed, a property handler is allowed to implement
-        // only parts of the functionality, and leave the rest up to the OPropertyBrowserController.
-
-        /** determine whether <member>describePropertyUI</member>, <member>initializePropertyUI</member>,
-            <member>requestUserInputOnButtonClick</member> and <member>executeButtonClick</member> are supported
-        */
-        virtual bool SAL_CALL
-            supportsUIDescriptor( PropertyId _nPropId ) const = 0;
-
-        /** retrieves the current value of a property given by id
-            @param _nId
-                the id of the property whose value is to be retrieved
-            @param _bLazy
-                If <TRUE/>, the callee must not check whether this property really exists.
-                With passing <FALSE/>, the caller indicates that it's not really sure whether
-                the property actually exists.
-        */
-        virtual ::com::sun::star::uno::Any SAL_CALL
-            getPropertyValue( PropertyId _nPropId, bool _bLazy = true ) const = 0;
-
-        /** sets the value of a property given by id
-        */
-        virtual void SAL_CALL
-            setPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue ) = 0;
-
-        /** translates a string representation of a property value
-        */
-        virtual ::com::sun::star::uno::Any SAL_CALL
-            getPropertyValueFromStringRep( PropertyId _nPropId, const ::rtl::OUString& _rStringRep ) const = 0;
-
-        /** translates a property value into a string representation
-        */
-        virtual ::rtl::OUString SAL_CALL
-            getStringRepFromPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue ) const = 0;
-
-        /// returns the state of a property given by id
-        virtual ::com::sun::star::beans::PropertyState SAL_CALL
-            getPropertyState( PropertyId _nPropId ) const = 0;
-
-        /// registers a listener for notification about property value changes
-        virtual void SAL_CALL
-            startAllPropertyChangeListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) = 0;
-
-        /// revokes a listener for notification about property value changes
-        virtual void SAL_CALL
-            stopAllPropertyChangeListening( ) = 0;
-
-        /** returns the properties which the  handler can handle
-        */
-        virtual ::std::vector< ::com::sun::star::beans::Property > SAL_CALL
-            getSupportedProperties() const = 0;
-
-        /** returns the properties which are to be superseded by this handler
-
-            Besides defining an own set of propertes (see <member>getSupportedProperties</member>),
-            a property handler can also declare that foreign properties (which it is
-            <em>not</em> responsible for) are superseded by its own properties.
-
-            In this case, simply return those properties here.
-
-            The handling is as follows: First, all property handlers are asked for the set of
-            their supported properties. Then all handlers are asked for superseded
-            properties. Only those properties which have at least once been reported as
-            "supported", but <em>not</em> been reported as superseded, are visible in the user
-            interface.
-
-            Note that this requires corporative behavior of all property handlers: If one handler
-            is responsible for property Foo, and supersedes property Bar, and another handler
-            does exactly the opposite, then the result is that none of these properties will be
-            present at the UI.
-        */
-        virtual ::std::vector< ::rtl::OUString > SAL_CALL
-            getSupersededProperties( ) const = 0;
-
-        /** retrieve the actuating properties which this handler is interested in
-
-            In general, properties can be declared as "actuating", that is, when their value
-            changes, the UI for other properties needs to be updated (e.g. enabled or disabled).
-
-            With this method, a handler can declare that it feels responsible for some/all
-            of the depending properties of certain actuating properties.
-
-            Whenever the value of an actuating property changes, all handlers which expressed
-            their interest in this particular actuating properties are called with their
-            <member>actuatingPropertyChanged</member> method.
-        */
-        virtual ::std::vector< ::rtl::OUString > SAL_CALL
-            getActuatingProperties( ) const = 0;
-
-        /** describes the UI to be used to represent the property
-        */
-        virtual void SAL_CALL
-            describePropertyUI( PropertyId _nPropId, PropertyUIDescriptor& /* [out] */ _rDescriptor ) const = 0;
-
-        /** initializes the UI for a property
-
-            This is called when the UI for a property has been newly inserted into the
-            property browser, or when it has been rebuilt.
-
-            @see rebuildPropertyUI
-        */
-        virtual void SAL_CALL
-            initializePropertyUI( PropertyId _nPropId, IPropertyBrowserUI* _pUpdater ) = 0;
-
-        /** called when a browse button belonging to a property UI represenation has been clicked
-
-            When a browse button is clicked, two things happen: First, <member>requestUserInputOnButtonClick</member>
-            is called. The property handler should obtain any data from the user which is needed to execute
-            whatever action is associated with the button This may, for exmample, be a confirmation.
-            However, the action must <em>not</em> be executed.<br/>
-            Second, the data obtained from <member>requestUserInputOnButtonClick</member> is forwarded to
-            <member>executeButtonClick</member>, which then must actually execute the action.
-
-            If a particular button does not require input, handlers may simply return <TRUE/>.
-
-            @param _nPropId
-                The id of the property whose browse button has been clicked
-            @param _bPrimary
-                <TRUE/> if and only if the primary button has been clicked, <FALSE/> otherwise
-            @param _rData
-                The data which later on shall be passed to <member>executeButtonClick</member>.
-
-            @return
-                <TRUE/> if and only if <member>executeButtonClick</member> should be called with the
-                data in <arg>_rData</arg>
-
-            @see describePropertyUI
-            @see executeButtonClick
-        */
-        virtual bool SAL_CALL
-            requestUserInputOnButtonClick( PropertyId _nPropId, bool _bPrimary, ::com::sun::star::uno::Any& _rData ) = 0;
-
-        /** exeute an action associated with a browse button of a particular property
-
-            Handlers are not allowed to raise UI in this method. If UI is needed for executing the action associated
-            with a browse button, use <member>requestUserInputOnButtonClick</member>.
-
-            @see describePropertyUI
-            @see requestUserInputOnButtonClick
-        */
-        virtual void SAL_CALL
-            executeButtonClick( PropertyId _nPropId, bool _bPrimary, const ::com::sun::star::uno::Any& _rData, IPropertyBrowserUI* _pUpdater ) = 0;
-
-        /** updates the UI of dependent properties when the value of a certain actuating property changed
-            @param _nActuatingPropId
-                the id of the actuating property.
-            @param _rNewValue
-                the new value of the property
-            @param _rOldValue
-                the old value of the property
-            @param _pUpdater
-                a callback for updating the property browser UI
-            @param _bFirstTimeInit
-                If <TRUE/>, the method is called for the first-time update of the respective property, that
-                is, when the property browser is just initializing with the properties of the introspected
-                object.
-                If <FALSE/>, there was a real <member scope="com::sun::star::beans">XPropertyChangeListener::propertyChange</member>
-                event which triggered the call.
-
-                In some cases it may be necessary to differentiate between both situations. For instance,
-                if you want to set the value of another property when an actuating property's value changed,
-                you should definately not do this when <arg>_bFirstTimeInit</arg> is <TRUE/>.
-        */
-        virtual void SAL_CALL
-            actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit ) = 0;
-
-    public:
-        virtual ~IPropertyHandler() { };
-    };
-
-    //====================================================================
-    //= HandlerFactory
-    //====================================================================
-    typedef IPropertyHandler* (*HandlerFactory)
-    (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
-    );
-
     //====================================================================
     //= PropertyHandler
     //====================================================================
     class OPropertyInfoService;
+    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::inspection::XPropertyHandler
+                                                >   PropertyHandler_Base;
     /** the base class for property handlers
     */
-    class PropertyHandler : public IPropertyHandler
+    class PropertyHandler : public PropertyHandler_Base
     {
     private:
         /// cache for getSupportedProperties
-        mutable ::std::vector< ::com::sun::star::beans::Property >
+        mutable StlSyntaxSequence< ::com::sun::star::beans::Property >
                                     m_aSupportedProperties;
         mutable bool                m_bSupportedPropertiesAreKnown;
 
+        /// helper which ensures that we can access resources as long as the instance lives
+        PcrClient       m_aEnsureResAccess;
+
+    private:
+        /// the property listener which has been registered
+        PropertyChangeListeners                                                         m_aPropertyListeners;
+
     protected:
-        oslInterlockedCount         m_refCount;
-        /// our introspectee
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                    m_xIntrospectee;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >
-                                    m_xTheListener;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >
-                                    m_xTypeConverter;
-        ::std::auto_ptr< OPropertyInfoService >
-                                    m_pInfoService;
+        mutable ::osl::Mutex                                                            m_aMutex;
+        /// the context in which the instance was created
+        ComponentContext                                                                m_aContext;
+        /// the component we're inspecting
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xComponent;
+        /// info about our component's properties
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xComponentPropertyInfo;
+        /// type converter, needed on various occasions
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >    m_xTypeConverter;
+        /// access to property meta data
+        ::std::auto_ptr< OPropertyInfoService >                                         m_pInfoService;
 
     protected:
         PropertyHandler(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+        );
+        PropertyHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxLegacyFactory
         );
         ~PropertyHandler();
 
-        // default implementations for IPropertyHandler
-        /// always returns <FALSE/>, delegating to the caller's default implementation this way
-        virtual bool SAL_CALL supportsUIDescriptor( PropertyId _nPropId ) const;
-        virtual ::std::vector< ::com::sun::star::beans::Property > SAL_CALL getSupportedProperties() const;
-        virtual ::std::vector< ::rtl::OUString > SAL_CALL getSupersededProperties( ) const;
-        virtual ::std::vector< ::rtl::OUString > SAL_CALL getActuatingProperties( ) const;
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValueFromStringRep( PropertyId _nPropId, const ::rtl::OUString& _rStringRep ) const;
-        virtual ::rtl::OUString SAL_CALL getStringRepFromPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue ) const;
-        virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( PropertyId _nPropId ) const;
-        virtual void SAL_CALL describePropertyUI( PropertyId _nPropId, PropertyUIDescriptor& /* [out] */ _rDescriptor ) const;
-        virtual void SAL_CALL initializePropertyUI( PropertyId _nPropId, IPropertyBrowserUI* _pUpdater );
-        virtual bool SAL_CALL requestUserInputOnButtonClick( PropertyId _nPropId, bool _bPrimary, ::com::sun::star::uno::Any& _rData );
-        virtual void SAL_CALL executeButtonClick( PropertyId _nPropId, bool _bPrimary, const ::com::sun::star::uno::Any& _rData, IPropertyBrowserUI* _pUpdater );
-        virtual void SAL_CALL actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit );
-        virtual void SAL_CALL startAllPropertyChangeListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
-        virtual void SAL_CALL stopAllPropertyChangeListening( );
+        // default implementations for XPropertyHandler
+        virtual void SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getSupportedProperties() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL convertToControlValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, ::com::sun::star::inspection::LineDescriptor& /* [out] */ _rDescriptor, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isComposable( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XComponent
+        DECLARE_XCOMPONENT()
+        virtual void SAL_CALL disposing();
 
         // own overridables
-        virtual ::std::vector< ::com::sun::star::beans::Property >
-                                            SAL_CALL implDescribeSupportedProperties() const = 0;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
+                    SAL_CALL doDescribeSupportedProperties() const = 0;
+
+        /// called when XPropertyHandler::inspect has been called, and we thus have a new component to inspect
+        virtual void onNewComponent();
 
     protected:
         /** fires the change in a property value to our listener (if any)
-            @see startAllPropertyChangeListening
+            @see addPropertyChangeListener
         */
         void    firePropertyChange( const ::rtl::OUString& _rPropName, PropertyId _nPropId,
                     const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue ) SAL_THROW(());
 
+        /** retrieves a window which can be used as parent for dialogs
+        */
+        Window* impl_getDefaultDialogParent_nothrow() const;
+
+        /** retrieves the property id for a given property name
+            @throw com::sun::star::beans::UnknownPropertyException
+                if the property name is not known to our ->m_pInfoService
+        */
+        PropertyId impl_getPropertyId_throw( const ::rtl::OUString& _rPropertyName ) const;
+
         //-------------------------------------------------------------------------------
-        // helper for implementing implDescribeSupportedProperties
+        // helper for implementing doDescribeSupportedProperties
         /** adds a description for the given string property to the given property vector
             Most probably to be called from within getSupportedProperties
         */
@@ -420,23 +283,72 @@ namespace pcr
 
         /** retrieves a property given by handle
 
-            Note that the given property must be returned in getSupportedProperties
+            @return
+                a pointer to the descriptor for the given properties, if it is one of our
+                supported properties, <NULL/> else.
+
+            @see doDescribeSupportedProperties
+            @see impl_getPropertyFromId_throw
         */
         const ::com::sun::star::beans::Property*
-                    getPropertyFromId( PropertyId _nPropId ) const;
+                    impl_getPropertyFromId_nothrow( PropertyId _nPropId ) const;
+
+        /** retrieves a property given by handle
+
+            @throws UnknownPropertyException
+                if the handler does not support a property with the given handle
+
+            @seealso doDescribeSupportedProperties
+            @see impl_getPropertyFromId_nothrow
+        */
+        const ::com::sun::star::beans::Property&
+                    impl_getPropertyFromId_throw( PropertyId _nPropId ) const;
+
+        /** determines whether a given property id is part of our supported properties
+            @see getSupportedProperties
+            @see doDescribeSupportedProperties
+        */
+        inline bool impl_isSupportedProperty_nothrow( PropertyId _nPropId ) const
+        {
+            return impl_getPropertyFromId_nothrow( _nPropId ) != NULL;
+        }
+
+        /** retrieves a property given by name
+
+            @throws UnknownPropertyException
+                if the handler does not support a property with the given name
+
+            @seealso doDescribeSupportedProperties
+        */
+        const ::com::sun::star::beans::Property&
+                    impl_getPropertyFromName_throw( const ::rtl::OUString& _rPropertyName ) const;
 
         /** get the name of a property given by handle
         */
         inline ::rtl::OUString
-                    getPropertyNameFromId( PropertyId _nPropId ) const;
+                    impl_getPropertyNameFromId_nothrow( PropertyId _nPropId ) const;
 
-    protected:
-        // IReference implementqation
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        /** returns the value of the ContextDocument property in the ComponentContext which was used to create
+            this handler.
+        */
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                    impl_getContextDocument_nothrow() const
+        {
+            return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >(
+                m_aContext.getContextValueByAsciiName( "ContextDocument" ), ::com::sun::star::uno::UNO_QUERY );
+        }
+
+        /** marks the context document as modified
+
+            @see impl_getContextDocument_nothrow
+        */
+        void impl_setContextDocumentModified_nothrow() const;
+
+        /// determines whether our component has a given property
+        bool impl_componentHasProperty_throw( const ::rtl::OUString& _rPropName ) const;
 
     private:
-        PropertyHandler();                                     // never implemented
+        PropertyHandler();                                    // never implemented
         PropertyHandler( const PropertyHandler& );            // never implemented
         PropertyHandler& operator=( const PropertyHandler& ); // never implemented
     };
@@ -477,10 +389,112 @@ namespace pcr
         implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::DateTime* >( NULL ) ), _nAttribs );
     }
 
-    inline ::rtl::OUString PropertyHandler::getPropertyNameFromId( PropertyId _nPropId ) const
+    inline ::rtl::OUString PropertyHandler::impl_getPropertyNameFromId_nothrow( PropertyId _nPropId ) const
     {
-        const ::com::sun::star::beans::Property* pProp = getPropertyFromId( _nPropId );
+        const ::com::sun::star::beans::Property* pProp = impl_getPropertyFromId_nothrow( _nPropId );
         return pProp ? pProp->Name : ::rtl::OUString();
+    }
+
+    //====================================================================
+    //= PropertyHandlerComponent
+    //====================================================================
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo
+                                >   PropertyHandlerComponent_Base;
+    /** PropertyHandler implementation which additionally supports XServiceInfo
+    */
+    class PropertyHandlerComponent  :public PropertyHandler
+                                    ,public PropertyHandlerComponent_Base
+    {
+    protected:
+        PropertyHandlerComponent(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+        );
+
+        DECLARE_XINTERFACE()
+        DECLARE_XTYPEPROVIDER()
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+    };
+
+    //====================================================================
+    //= HandlerComponentBase
+    //====================================================================
+    /** a PropertyHandlerComponent implementation which routes XServiceInfo::getImplementationName and
+        XServiceInfo::getSupportedServiceNames to static versions of those methods, which are part of
+        the derived class.
+
+        Additionally, a method <member>Create</member> is provided which takes a component context, and returns a new
+        instance of the derived class. This <member>Create</member> is used to register the implementation
+        of the derived class at the <type>PcrModule</type>.
+
+        Well, every time we're talking about derived class, we in fact mean the template argument of
+        <type>HandlerComponentBase</type>. But usually this equals your derived class:
+        <pre>
+        class MyHandler;
+        typedef HandlerComponentBase< MyHandler > MyHandler_Base;
+        class MyHandler : MyHandler_Base
+        {
+            ...
+        public:
+            static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+            static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        };
+        </pre>
+    */
+    template < class HANDLER >
+    class HandlerComponentBase : public PropertyHandlerComponent
+    {
+    protected:
+        HandlerComponentBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+            :PropertyHandlerComponent( _rxContext )
+        {
+        }
+
+    protected:
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+
+    public:
+        /** registers the implementation of HANDLER at the <type>PcrModule</type>
+        */
+        static void registerImplementation();
+    };
+
+    //--------------------------------------------------------------------
+    template < class HANDLER >
+    ::rtl::OUString SAL_CALL HandlerComponentBase< HANDLER >::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return HANDLER::getImplementationName_static();
+    };
+
+    //--------------------------------------------------------------------
+    template < class HANDLER >
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL HandlerComponentBase< HANDLER >::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return HANDLER::getSupportedServiceNames_static();
+    };
+
+    //--------------------------------------------------------------------
+    template < class HANDLER >
+    void HandlerComponentBase< HANDLER >::registerImplementation()
+    {
+        PcrModule::getInstance().registerImplementation(
+            HANDLER::getImplementationName_static(),
+            HANDLER::getSupportedServiceNames_static(),
+            HANDLER::Create
+        );
+    }
+
+    //--------------------------------------------------------------------
+    template < class HANDLER >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL HandlerComponentBase< HANDLER >::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+    {
+        return *( new HANDLER( _rxContext ) );
     }
 
 //........................................................................
