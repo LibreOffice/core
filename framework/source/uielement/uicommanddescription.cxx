@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:42:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 08:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,9 +537,9 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
     }
 
     // Create cached sequences for fast retrieving
-    m_aCommandImageList       = comphelper::containerToSequence< rtl::OUString >( aImageCommandVector );
-    m_aCommandRotateImageList = comphelper::containerToSequence< rtl::OUString >( aImageRotateVector );
-    m_aCommandMirrorImageList = comphelper::containerToSequence< rtl::OUString >( aImageMirrorVector );
+    m_aCommandImageList       = comphelper::containerToSequence( aImageCommandVector );
+    m_aCommandRotateImageList = comphelper::containerToSequence( aImageRotateVector );
+    m_aCommandMirrorImageList = comphelper::containerToSequence( aImageMirrorVector );
 
     m_bCacheFilled = sal_True;
 
