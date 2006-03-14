@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:00:48 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,7 +632,7 @@ EditSelection& EditSelection::operator = ( const EditPaM& rPaM )
     return *this;
 }
 
-BOOL EditSelection::IsInvalid()
+BOOL EditSelection::IsInvalid() const
 {
     EditPaM aEmptyPaM;
 
