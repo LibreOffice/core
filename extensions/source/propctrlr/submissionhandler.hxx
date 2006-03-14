@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submissionhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:30:15 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,11 @@
 #include <comphelper/propmultiplex.hxx>
 #endif
 
+namespace comphelper
+{
+    class OPropertyChangeMultiplexer;
+}
+
 //........................................................................
 namespace pcr
 {
@@ -65,6 +70,7 @@ namespace pcr
     {
     public:
         SubmissionHelper(
+            osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
@@ -83,53 +89,45 @@ namespace pcr
     //====================================================================
     //= SubmissionPropertyHandler
     //====================================================================
-    class SubmissionPropertyHandler : public PropertyHandler, public ::comphelper::OPropertyChangeListener
+    class SubmissionPropertyHandler;
+    typedef HandlerComponentBase< SubmissionPropertyHandler > EditPropertyHandler_Base;
+    /** a property handler for any virtual string properties
+    */
+    class SubmissionPropertyHandler : public EditPropertyHandler_Base, public ::comphelper::OPropertyChangeListener
     {
     private:
-        ::osl::Mutex                        m_aMutex;
-        ::std::auto_ptr< SubmissionHelper > m_pHelper;
+        ::osl::Mutex                                m_aMutex;
+        ::std::auto_ptr< SubmissionHelper >         m_pHelper;
+        ::comphelper::OPropertyChangeMultiplexer*   m_pPropChangeMultiplexer;
 
     public:
-        // HandlerFactory
-        inline static IPropertyHandler* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
-        )
-        {
-            return new SubmissionPropertyHandler( _rxIntrospectee, _rxContextDocument, _rxTypeConverter );
-        }
-
-    protected:
         SubmissionPropertyHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
+
+        static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+
         ~SubmissionPropertyHandler();
 
     protected:
-        // IPropertyHandler overriables
-        virtual ::com::sun::star::uno::Any  SAL_CALL getPropertyValue( PropertyId _nPropId, bool _bLazy = true ) const;
-        virtual void                        SAL_CALL setPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue );
-
-        virtual ::std::vector< ::rtl::OUString >
-                                            SAL_CALL getActuatingProperties( ) const;
-        virtual ::std::vector< ::rtl::OUString >
-                                            SAL_CALL getSupersededProperties( ) const;
-
-        virtual void                        SAL_CALL describePropertyUI( PropertyId _nPropId, PropertyUIDescriptor& /* [out] */ _rDescriptor ) const;
-        virtual void                        SAL_CALL initializePropertyUI( PropertyId _nPropId, IPropertyBrowserUI* _pUpdater );
-        virtual bool                        SAL_CALL supportsUIDescriptor( PropertyId _nPropId ) const;
-        virtual void                        SAL_CALL actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool );
-
-        virtual ::com::sun::star::uno::Any  SAL_CALL getPropertyValueFromStringRep( PropertyId _nPropId, const ::rtl::OUString& _rStringRep ) const;
-        virtual ::rtl::OUString             SAL_CALL getStringRepFromPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue ) const;
+        // XPropertyHandler overriables
+        virtual ::com::sun::star::uno::Any  SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void                        SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                            SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                            SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void                        SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, ::com::sun::star::inspection::LineDescriptor& /* [out] */ _rDescriptor, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void                        SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any  SAL_CALL convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any  SAL_CALL convertToControlValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
         // PropertyHandler overridables
-        virtual ::std::vector< ::com::sun::star::beans::Property >
-                                            SAL_CALL implDescribeSupportedProperties() const;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
+                                            SAL_CALL doDescribeSupportedProperties() const;
+        virtual void onNewComponent();
+
     private:
         // OPropertyChangeListener
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
