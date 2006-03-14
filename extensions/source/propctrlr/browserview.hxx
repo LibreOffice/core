@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:04:15 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,6 @@ namespace pcr
     public:
         OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
                         Window* pParent, WinBits nBits = 0);
-        OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
-                        Window* pParent, const ResId& rId);
 
         virtual ~OPropertyBrowserView();
 
