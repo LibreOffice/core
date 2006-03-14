@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:37 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,18 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 #define _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 
-#ifndef _SV_TABCTRL_HXX
-#include <vcl/tabctrl.hxx>
-#endif
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
+#endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYCONTROL_HPP_
+#include <com/sun/star/inspection/XPropertyControl.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _SV_TABCTRL_HXX
+#include <vcl/tabctrl.hxx>
 #endif
 
 #include <map>
@@ -50,7 +57,6 @@ namespace pcr
 {
 //............................................................................
 
-    class IBrowserControl;
     class IPropertyLineListener;
     class OBrowserPage;
     struct OLineDescriptor;
@@ -101,25 +107,20 @@ namespace pcr
                 sal_uInt16                  GetCurPage();
                 void                        ClearAll();
 
-                void                        SetPropertyValue(const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
-                ::rtl::OUString             GetPropertyValue(const ::rtl::OUString & rEntryName ) const;
+                void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue );
+                ::com::sun::star::uno::Any  GetPropertyValue(const ::rtl::OUString& rEntryName ) const;
                 sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
-                IBrowserControl*            GetPropertyControl( const ::rtl::OUString& rEntryName );
+                ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+                                            GetPropertyControl( const ::rtl::OUString& rEntryName );
                 void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton = false );
+                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
                 sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
                 void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
-                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND, sal_uInt16 _nPageId = EDITOR_PAGE_CURRENT );
+                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
                 void                        RemoveEntry( const ::rtl::OUString& _rName );
                 void                        ChangeEntry( const OLineDescriptor& );
-
-                void                        SetFirstVisibleEntry(sal_uInt16 nPos);
-                sal_uInt16                  GetFirstVisibleEntry();
-
-                void                        SetSelectedEntry(sal_uInt16 nPos);
-                sal_uInt16                  GetSelectedEntry();
 
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
         Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
