@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncnotification.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:48:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,66 +37,64 @@
 #include <comphelper/asyncnotification.hxx>
 #endif
 
-/** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
-#include <com/sun/star/awt/XControl.hpp>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-/** === end UNO includes === **/
-
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
 #endif
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+#include <deque>
+#include <set>
+#include <functional>
+#include <algorithm>
 
 //........................................................................
 namespace comphelper
 {
 //........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::awt;
-
     //====================================================================
-    //= EventDescription
+    //= AnyEvent
     //====================================================================
     //--------------------------------------------------------------------
-    EventDescription::EventDescription( sal_uInt16 _nType )
+    AnyEvent::AnyEvent()
         :m_refCount( 0 )
-        ,m_nType( _nType )
     {
     }
 
     //--------------------------------------------------------------------
-    EventDescription::EventDescription( const EventDescription& _rSource )
+    AnyEvent::AnyEvent( const AnyEvent& _rSource )
         :m_refCount( 0 )
     {
         *this = _rSource;
     }
 
     //--------------------------------------------------------------------
-    EventDescription& EventDescription::operator=( const EventDescription& _rSource )
+    AnyEvent& AnyEvent::operator=( const AnyEvent& _rSource )
     {
-        m_nType = _rSource.m_nType;
         return *this;
     }
 
     //--------------------------------------------------------------------
-    EventDescription::~EventDescription()
+    AnyEvent::~AnyEvent()
     {
     }
 
     //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL EventDescription::acquire()
+    oslInterlockedCount SAL_CALL AnyEvent::acquire()
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
 
     //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL EventDescription::release()
+    oslInterlockedCount SAL_CALL AnyEvent::release()
     {
         if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
         {
@@ -107,148 +105,200 @@ namespace comphelper
     }
 
     //====================================================================
+    //= ProcessableEvent
+    //====================================================================
+    struct ProcessableEvent
+    {
+        AnyEventRef                         aEvent;
+        ::rtl::Reference< IEventProcessor > xProcessor;
+
+        ProcessableEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
+            :aEvent( _rEvent )
+            ,xProcessor( _xProcessor )
+        {
+        }
+
+        ProcessableEvent( const ProcessableEvent& _rRHS )
+            :aEvent( _rRHS.aEvent )
+            ,xProcessor( _rRHS.xProcessor )
+        {
+        }
+
+        ProcessableEvent& operator=( const ProcessableEvent& _rRHS )
+        {
+            aEvent = _rRHS.aEvent;
+            xProcessor = _rRHS.xProcessor;
+            return *this;
+        }
+    };
+
+    //====================================================================
+    typedef ::std::deque< ProcessableEvent >    EventQueue;
+
+    //====================================================================
+    struct EqualProcessor : public ::std::unary_function< ProcessableEvent, bool >
+    {
+        const ::rtl::Reference< IEventProcessor >&  rProcessor;
+        EqualProcessor( const ::rtl::Reference< IEventProcessor >& _rProcessor ) :rProcessor( _rProcessor ) { }
+
+        bool operator()( const ProcessableEvent& _rEvent )
+        {
+            return _rEvent.xProcessor.get() == rProcessor.get();
+        }
+    };
+
+    //====================================================================
     //= EventNotifierImpl
     //====================================================================
     struct EventNotifierImpl
     {
-        ::osl::Mutex                    aMutex;
-        ::osl::Condition                aCond;
+        ::osl::Mutex        aMutex;
+        oslInterlockedCount m_refCount;
+        ::osl::Condition    aPendingActions;
+        EventQueue          aEvents;
+        ::std::set< ::rtl::Reference< IEventProcessor > >
+                            m_aDeadProcessors;
 
-        AsyncEventNotifier::Events      aEvents;
+        EventNotifierImpl()
+            :m_refCount( 0 )
+        {
+        }
 
-        IEventProcessor*                pEventProcessor;
-        Reference< XComponent >         xComponent;
+    private:
+        EventNotifierImpl( const EventNotifierImpl& );              // never implemented
+        EventNotifierImpl& operator=( const EventNotifierImpl& );   // never implemented
     };
 
     //====================================================================
     //= AsyncEventNotifier
     //====================================================================
     //--------------------------------------------------------------------
-    AsyncEventNotifier::AsyncEventNotifier( IEventProcessor* _pProcessor )
+    AsyncEventNotifier::AsyncEventNotifier()
         :m_pImpl( new EventNotifierImpl )
     {
-        // observe the XComponent belonging to the event processor
-        m_pImpl->pEventProcessor = _pProcessor;
-        if ( m_pImpl->pEventProcessor )
-            m_pImpl->xComponent = m_pImpl->pEventProcessor->getComponent();
-        OSL_ENSURE( m_pImpl->xComponent.is(), "AsyncEventNotifier::AsyncEventNotifier: invalid event processor!" );
-
-        if ( m_pImpl->xComponent.is() )
-        {
-            osl_incrementInterlockedCount( &m_refCount );
-            {
-                Reference< XEventListener > xLocalTemporary( this );
-                m_pImpl->xComponent->addEventListener( xLocalTemporary );
-            }
-            osl_incrementInterlockedCount( &m_refCount );
-        }
     }
 
     //--------------------------------------------------------------------
     AsyncEventNotifier::~AsyncEventNotifier()
     {
-        OSL_ENSURE( m_pImpl->aEvents.empty(), "AsyncEventNotifier::~AsyncEventNotifier: did you dispose me?" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL AsyncEventNotifier::disposing( const EventObject& _rSource ) throw (RuntimeException)
-    {
-        if ( ( _rSource.Source == m_pImpl->xComponent ) && m_pImpl->xComponent.is() )
-        {
-            ::osl::MutexGuard aGuard( m_pImpl->aMutex );
-
-            m_pImpl->xComponent->removeEventListener( static_cast< XEventListener* >( this ) );
-
-            // Event-Queue loeschen
-            Events aEmpty;
-            m_pImpl->aEvents.swap( aEmpty );
-
-            // reset m_pImpl->xComponent. This will cause the "run" method to terminate
-            m_pImpl->xComponent.clear();
-
-            // awake the thread
-            m_pImpl->aCond.set();
-            // and terminate
-            terminate();
-        }
-    }
-
-    //--------------------------------------------------------------------
-    void AsyncEventNotifier::addEvent( const EventDescriptionRef& _rEvent )
+    void AsyncEventNotifier::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
-        m_pImpl->aEvents.push_back( _rEvent );
+
+        // remove all events for this processor
+        ::std::remove_if( m_pImpl->aEvents.begin(), m_pImpl->aEvents.end(), EqualProcessor( _xProcessor ) );
+
+        // and just in case that an event for exactly this processor has just been
+        // popped from the queue, but not yet processed: remember it:
+        m_pImpl->m_aDeadProcessors.insert( _xProcessor );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL AsyncEventNotifier::terminate()
+    {
+        ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+
+        // remember the termination request
+        AsyncEventNotifier_TBASE::terminate();
 
         // awake the thread
-        m_pImpl->aCond.set();
+        m_pImpl->aPendingActions.set();
+    }
+
+    //--------------------------------------------------------------------
+    void AsyncEventNotifier::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
+    {
+        ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+
+        OSL_TRACE( "AsyncEventNotifier(%08X): adding %08X\n", (int)this, (int)_rEvent.get() );
+        // remember this event
+        m_pImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
+
+        // awake the thread
+        m_pImpl->aPendingActions.set();
     }
 
     //--------------------------------------------------------------------
     void AsyncEventNotifier::run()
     {
-        implStarted( );
-        if ( !m_pImpl->pEventProcessor )
-            return;
+        acquire();
 
-        // keep us alive, in case we're disposed in the mid of the following
-        Reference< XInterface > xKeepAlive( *this );
+        // keep us alive, in case we're terminated in the mid of the following
+        ::rtl::Reference< AsyncEventNotifier > xKeepAlive( this );
+
         do
         {
-            ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+            AnyEventRef aNextEvent;
+            ::rtl::Reference< IEventProcessor > xNextProcessor;
+
+            ::osl::ClearableMutexGuard aGuard( m_pImpl->aMutex );
             while ( m_pImpl->aEvents.size() > 0 )
             {
-                // keep a reference to the control, so it cannot be deleted
-                // during processEvent
-                Reference< XComponent > xComponent = m_pImpl->xComponent;
-
-                ::rtl::Reference< EventDescription > pEvent = m_pImpl->aEvents.front();
+                ProcessableEvent aEvent( m_pImpl->aEvents.front() );
+                aNextEvent = aEvent.aEvent;
+                xNextProcessor = aEvent.xProcessor;
                 m_pImpl->aEvents.pop_front();
+
+                OSL_TRACE( "AsyncEventNotifier(%08X): popping %08X\n", (int)this, (int)aNextEvent.get() );
+
+                if ( !aNextEvent.get() )
+                    continue;
+
+                // process the event, but only if it's processor did not die inbetween
+                ::std::set< ::rtl::Reference< IEventProcessor > >::iterator deadPos = m_pImpl->m_aDeadProcessors.find( xNextProcessor );
+                if ( deadPos != m_pImpl->m_aDeadProcessors.end() )
+                {
+                    m_pImpl->m_aDeadProcessors.erase( xNextProcessor );
+                    xNextProcessor.clear();
+                    OSL_TRACE( "AsyncEventNotifier(%08X): removing %08X\n", (int)this, (int)aNextEvent.get() );
+                }
+
+                // if there was a termination request (->terminate), respect it
+                if ( !schedule() )
+                    return;
+
                 {
                     ::comphelper::MutexRelease aReleaseOnce( m_pImpl->aMutex );
-
-                    if ( xComponent.is() && pEvent.get() )
-                        m_pImpl->pEventProcessor->processEvent( *pEvent.get() );
+                    if ( xNextProcessor.get() )
+                        xNextProcessor->processEvent( *aNextEvent.get() );
                 }
-            };
-
-            // if we have been disposed in the above, then we're completely done
-            if( !m_pImpl->xComponent.is() )
-                return;
-
-            m_pImpl->aCond.reset();
-            {
-                ::comphelper::MutexRelease aReleaseOnce( m_pImpl->aMutex );
-                // wait until there's a new event to process
-                m_pImpl->aCond.wait();
             }
+
+            // wait for new events to process
+            aGuard.clear();
+            m_pImpl->aPendingActions.reset();
+            m_pImpl->aPendingActions.wait();
         }
         while ( sal_True );
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL AsyncEventNotifier::kill()
-    {
-        AsyncEventNotifier_TBASE::kill();
-        implTerminated( );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL AsyncEventNotifier::onTerminated()
     {
         AsyncEventNotifier_TBASE::onTerminated();
-        implTerminated( );
-    }
-
-    //--------------------------------------------------------------------
-    void AsyncEventNotifier::implStarted()
-    {
-        acquire();
-    }
-
-    //--------------------------------------------------------------------
-    void AsyncEventNotifier::implTerminated()
-    {
+        // when we were started (->run), we aquired ourself. Release this now
+        // that we were finally terminated
         release();
+    }
+
+    //--------------------------------------------------------------------
+    oslInterlockedCount SAL_CALL AsyncEventNotifier::acquire()
+    {
+        return osl_incrementInterlockedCount( &m_pImpl->m_refCount );
+    }
+
+    //--------------------------------------------------------------------
+    oslInterlockedCount SAL_CALL AsyncEventNotifier::release()
+    {
+        if ( 0 == osl_decrementInterlockedCount( &m_pImpl->m_refCount ) )
+        {
+            delete this;
+            return 0;
+        }
+        return m_pImpl->m_refCount;
     }
 
 //........................................................................
