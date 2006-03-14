@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:21:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:28:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,20 +47,43 @@ using namespace ::com::sun::star::registry;
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
+extern "C" void SAL_CALL createRegistryInfo_FormController();
+extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel();
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog();
 extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog();
+extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler();
+extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_XSDValidationPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_EventHandler();
+extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel();
+extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler();
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL dbi_initializeModule()
+extern "C" void SAL_CALL pcr_initializeModule()
 {
     static sal_Bool s_bInit = sal_False;
     if (!s_bInit)
     {
         createRegistryInfo_OPropertyBrowserController();
+        createRegistryInfo_FormController();
+        createRegistryInfo_DefaultFormComponentInspectorModel();
         createRegistryInfo_OControlFontDialog();
         createRegistryInfo_OTabOrderDialog();
-        ::pcr::OModule::setResourceFilePrefix("pcr");
+        createRegistryInfo_CellBindingPropertyHandler();
+        createRegistryInfo_ButtonNavigationHandler();
+        createRegistryInfo_EditPropertyHandler();
+        createRegistryInfo_FormComponentPropertyHandler();
+        createRegistryInfo_EFormsPropertyHandler();
+        createRegistryInfo_XSDValidationPropertyHandler();
+        createRegistryInfo_EventHandler();
+        createRegistryInfo_GenericPropertyHandler();
+        createRegistryInfo_ObjectInspectorModel();
+        createRegistryInfo_SubmissionPropertyHandler();
         s_bInit = sal_True;
     }
 }
@@ -72,7 +95,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
                 uno_Environment **ppEnv
             )
 {
-    dbi_initializeModule();
+    pcr_initializeModule();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
@@ -85,7 +108,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     if (pRegistryKey)
     try
     {
-        return ::pcr::OModule::writeComponentInfos(
+        return ::pcr::PcrModule::getInstance().writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),
             static_cast<XRegistryKey*>(pRegistryKey));
     }
@@ -106,7 +129,7 @@ extern "C" void* SAL_CALL component_getFactory(
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
-        xRet = ::pcr::OModule::getComponentFactory(
+        xRet = ::pcr::PcrModule::getInstance().getComponentFactory(
             ::rtl::OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }
