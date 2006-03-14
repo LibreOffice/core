@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrcommon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:20:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,21 +43,116 @@
 #include "propresid.hrc"
 #endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
+#include <com/sun/star/util/MeasureUnit.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 //............................................................................
 namespace pcr
 {
 //............................................................................
 
-    //------------------------------------------------------------------------
-    String getStandardString()
+    using namespace ::com::sun::star::util;
+
+    //====================================================================
+    //= file-local helpers
+    //====================================================================
+    namespace
     {
-        static String sStandardString;
-        if (!sStandardString.Len())
+        enum UnitConversionDirection
         {
-            OModuleResourceClient aResourceAccess;
-            sStandardString = String(ModuleRes(RID_STR_STANDARD));
+            FieldUnitToMeasurementUnit,
+            MeasurementUnitToFieldUnit
+        };
+
+        sal_Int16 convertMeasurementUnit( sal_Int16 _nUnit, UnitConversionDirection eDirection, sal_Int16& _rFieldToUNOValueFactor )
+        {
+            static struct _unit_table
+            {
+                FieldUnit eFieldUnit;
+                sal_Int16 nMeasurementUnit;
+                sal_Int16 nFieldToMeasureFactor;
+            } aUnits[] = {
+                { FUNIT_NONE,       -1 },
+                { FUNIT_MM,         MeasureUnit::MM,            1 },    // must precede MM_10TH
+                { FUNIT_MM,         MeasureUnit::MM_10TH,       10 },
+                { FUNIT_100TH_MM,   MeasureUnit::MM_100TH,      1 },
+                { FUNIT_CM,         MeasureUnit::CM,            1 },
+                { FUNIT_M,          MeasureUnit::M,             1 },
+                { FUNIT_KM,         MeasureUnit::KM,            1 },
+                { FUNIT_TWIP,       MeasureUnit::TWIP,          1 },
+                { FUNIT_POINT,      MeasureUnit::POINT,         1 },
+                { FUNIT_PICA,       MeasureUnit::PICA,          1 },
+                { FUNIT_INCH,       MeasureUnit::INCH,          1 },    // must precede INCH_*TH
+                { FUNIT_INCH,       MeasureUnit::INCH_10TH,     10 },
+                { FUNIT_INCH,       MeasureUnit::INCH_100TH,    100 },
+                { FUNIT_INCH,       MeasureUnit::INCH_1000TH,   1000 },
+                { FUNIT_FOOT,       MeasureUnit::FOOT,          1 },
+                { FUNIT_MILE,       MeasureUnit::MILE,          1 },
+            };
+            for ( size_t i = 0; i < sizeof( aUnits ) / sizeof( aUnits[0] ); ++i )
+            {
+                if ( eDirection == FieldUnitToMeasurementUnit )
+                {
+                    if ( ( aUnits[ i ].eFieldUnit == (FieldUnit)_nUnit ) && ( aUnits[ i ].nFieldToMeasureFactor == _rFieldToUNOValueFactor ) )
+                        return aUnits[ i ].nMeasurementUnit;
+                }
+                else
+                {
+                    if ( aUnits[ i ].nMeasurementUnit == _nUnit )
+                    {
+                        _rFieldToUNOValueFactor = aUnits[ i ].nFieldToMeasureFactor;
+                        return (sal_Int16)aUnits[ i ].eFieldUnit;
+                    }
+                }
+            }
+            if ( eDirection == FieldUnitToMeasurementUnit )
+                return -1;
+
+            _rFieldToUNOValueFactor = 1;
+            return (sal_Int16)FUNIT_NONE;
         }
-        return sStandardString;
+    }
+
+    //========================================================================
+    //= HelpIdUrl
+    //========================================================================
+    //------------------------------------------------------------------------
+    sal_uInt32 HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
+    {
+        sal_uInt32 nHelpId = 0;
+        if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
+            nHelpId = _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32();
+        return nHelpId;
+    }
+
+    //------------------------------------------------------------------------
+    ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
+    {
+        ::rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii( "HID:" );
+        aBuffer.append( (sal_Int32)_nHelpId );
+        return aBuffer.makeStringAndClear();
+    }
+    //========================================================================
+    //= MeasurementUnitConversion
+    //========================================================================
+    //------------------------------------------------------------------------
+    sal_Int16 MeasurementUnitConversion::convertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _nUNOToFieldValueFactor )
+    {
+        return convertMeasurementUnit( (sal_Int16)_nFieldUnit, FieldUnitToMeasurementUnit, _nUNOToFieldValueFactor );
+    }
+
+    //------------------------------------------------------------------------
+    FieldUnit MeasurementUnitConversion::convertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor )
+    {
+        return (FieldUnit)convertMeasurementUnit( _nMeasurementUnit, MeasurementUnitToFieldUnit, _rFieldToUNOValueFactor );
     }
 
 //............................................................................
