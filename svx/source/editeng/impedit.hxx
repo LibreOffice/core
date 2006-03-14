@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:35:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #endif
 
 #include <vos/ref.hxx>
@@ -464,7 +468,7 @@ private:
     OutputDevice*       pRefDev;
 
     svtools::ColorConfig*   pColorConfig;
-    SvtCTLOptions*      pCTLOptions;
+    mutable SvtCTLOptions*  pCTLOptions;
 
     SfxItemSet*         pEmptyItemSet;
     EditUndoManager*    pUndoManager;
@@ -499,6 +503,7 @@ private:
         ::com::sun::star::linguistic2::XHyphenator >    xHyphenator;
     SpellInfo*          pSpellInfo;
     mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
+    mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > xISC;
 
     ConvInfo *          pConvInfo;
 
@@ -717,6 +722,7 @@ private:
     void                SetValidPaperSize( const Size& rSz );
 
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
     /** Decorate metafile output with verbose text comments
 
@@ -814,7 +820,7 @@ public:
 
     void            SetText( const String& rText );
     EditPaM         DeleteSelected( EditSelection aEditSelection);
-    EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
+    EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
     EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, BYTE nMode, BYTE nDelMode = DELMODE_SIMPLE );
@@ -975,6 +981,9 @@ public:
     void                SetLanguageAndFont( const ESelection &rESel,
                                 LanguageType nLang, USHORT nLangWhichId,
                                 const Font *pFont,  USHORT nFontWhichId );
+
+    // returns true if input sequence checking should be applied
+    sal_Bool            IsInputSequenceChecking( sal_Unicode nChar, const EditSelection& rCurSel ) const;
 
     //find the next error within the given selection - forward only!
     ::com::sun::star::uno::Reference<
