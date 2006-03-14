@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyBrowserController.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:21:47 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,12 @@
     </listing>
 
     @see com::sun::star::frame::XController
+
+    @deprecated
+        <p>Note that nowadays, this service is only a legacy wrapper using the
+        <type scope="com::sun::star::inspection">ObjectInspector</type> and the
+        <type scope="com::sun::star::form::inspection">DefaultFormComponentInspectorModel</type> services, and knitting them together.</p>
+
 */
 published service PropertyBrowserController
 {
@@ -147,8 +153,3 @@ published service PropertyBrowserController
 }; }; }; };
 
 #endif
-
-/*************************************************************************
- * history:
- ************************************************************************/
-
