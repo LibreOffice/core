@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:18:16 $
+#   last change: $Author: vg $ $Date: 2006-03-14 11:26:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,64 +39,64 @@ PRJNAME=extensions
 TARGET=pcr
 USE_DEFFILE=TRUE
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
-# --- defines ------------------------------------------------------
-
-CDEFS+=-DCOMPMOD_NAMESPACE=pcr
-CDEFS+=-DCOMPMOD_RESPREFIX=pcr
-
-.IF $(DVO_XFORMS) != ""
-CDEFS+=-DDVO_XFORMS
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=    $(SLO)$/controlfontdialog.obj	\
+SLOFILES=           $(SLO)$/controlfontdialog.obj \
                     $(SLO)$/fontdialog.obj	\
                     $(SLO)$/pcrservices.obj	\
                     $(SLO)$/selectlabeldialog.obj	\
-                    $(SLO)$/formcontroller.obj	\
                     $(SLO)$/propcontroller.obj	\
-                    $(SLO)$/modulepcr.obj   \
+                    $(SLO)$/formcontroller.obj	\
+                    $(SLO)$/modulepcr.obj  \
                     $(SLO)$/cellbindinghelper.obj   \
                     $(SLO)$/taborder.obj   \
                     $(SLO)$/pcrunodialogs.obj   \
                     $(SLO)$/unourl.obj   \
                     $(SLO)$/formlinkdialog.obj   \
                     $(SLO)$/listselectiondlg.obj   \
-                    $(SLO)$/propertyhandler.obj   \
-                    $(SLO)$/cellbindinghandler.obj   \
+                    $(SLO)$/browserlistbox.obj	\
                     $(SLO)$/stringrepresentation.obj   \
-                    $(SLO)$/editpropertyhandler.obj   \
-                    $(SLO)$/eformspropertyhandler.obj   \
                     $(SLO)$/eformshelper.obj   \
                     $(SLO)$/xsddatatypes.obj   \
                     $(SLO)$/xsdvalidationhelper.obj \
                     $(SLO)$/pushbuttonnavigation.obj \
-                    $(SLO)$/submissionhandler.obj
-
-SLOFILES=			$(EXCEPTIONSFILES) \
-                    $(SLO)$/browserline.obj	\
-                    $(SLO)$/formmetadata.obj	\
-                    $(SLO)$/formbrowsertools.obj	\
-                    $(SLO)$/standardcontrol.obj	\
-                    $(SLO)$/usercontrol.obj	\
-                    $(SLO)$/commoncontrol.obj	\
+                    $(SLO)$/sqlcommanddesign.obj \
+                    $(SLO)$/composeduiupdate.obj \
+                    $(SLO)$/propertycomposer.obj \
+                    $(SLO)$/pcrcomponentcontext.obj \
+                    $(SLO)$/commoncontrol.obj \
+                    $(SLO)$/standardcontrol.obj \
+                    $(SLO)$/usercontrol.obj \
+                    $(SLO)$/browserline.obj \
+                    $(SLO)$/genericpropertyhandler.obj \
+                    $(SLO)$/buttonnavigationhandler.obj \
+                    $(SLO)$/handlerhelper.obj \
+                    $(SLO)$/propertyhandler.obj \
+                    $(SLO)$/eventhandler.obj \
+                    $(SLO)$/editpropertyhandler.obj \
+                    $(SLO)$/eformspropertyhandler.obj \
+                    $(SLO)$/cellbindinghandler.obj \
+                    $(SLO)$/submissionhandler.obj \
+                    $(SLO)$/xsdvalidationpropertyhandler.obj \
+                    $(SLO)$/formcomponenthandler.obj \
+                    $(SLO)$/formmetadata.obj \
+                    $(SLO)$/defaultforminspection.obj \
+                    $(SLO)$/formbrowsertools.obj \
                     $(SLO)$/browserpage.obj	\
-                    $(SLO)$/browserlistbox.obj	\
                     $(SLO)$/propertyeditor.obj	\
                     $(SLO)$/formstrings.obj	\
                     $(SLO)$/pcrstrings.obj	\
                     $(SLO)$/browserview.obj	\
-                    $(SLO)$/xsdvalidationpropertyhandler.obj \
                     $(SLO)$/pcrcommon.obj	\
                     $(SLO)$/newdatatype.obj \
-                    $(SLO)$/buttonnavigationhandler.obj \
-                    $(SLO)$/propertycomposer.obj \
-
+                    $(SLO)$/propeventtranslation.obj \
+                    $(SLO)$/objectinspectormodel.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			propres.src	 \
