@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformshelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:09:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,12 @@
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
 #endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPEVENTTRANSLATION_HXX
+#include "propeventtranslation.hxx"
+#endif
+#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
+#include "formbrowsertools.hxx"
+#endif
 
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -70,7 +76,6 @@
 
 #include <functional>
 #include <algorithm>
-#include <set>
 
 //........................................................................
 namespace pcr
@@ -107,8 +112,9 @@ namespace pcr
     //= EFormsHelper
     //====================================================================
     //--------------------------------------------------------------------
-    EFormsHelper::EFormsHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
+    EFormsHelper::EFormsHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
+        ,m_aPropertyListeners( _rMutex )
     {
         OSL_ENSURE( _rxControlModel.is(), "EFormsHelper::EFormsHelper: invalid control model!" );
         m_xBindableControl = m_xBindableControl.query( _rxControlModel );
@@ -247,42 +253,85 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::switchBindingListening( bool _bDoListening )
+    void EFormsHelper::impl_switchBindingListening_throw( bool _bDoListening, const Reference< XPropertyChangeListener >& _rxListener )
     {
-        try
-        {
-            Reference< XPropertySet > xProps( m_xBindableControl, UNO_QUERY );
-            if ( !xProps.is() || !m_xBindingListener.is() )
-                return;
+        Reference< XPropertySet > xBindingProps;
+        if ( m_xBindableControl.is() )
+            xBindingProps = xBindingProps.query( m_xBindableControl->getValueBinding() );
+        if ( !xBindingProps.is() )
+            return;
 
-            if ( _bDoListening )
-            {
-                xProps->addPropertyChangeListener( ::rtl::OUString(), m_xBindingListener );
-            }
-            else
-            {
-                xProps->removePropertyChangeListener( ::rtl::OUString(), m_xBindingListener );
-            }
-        }
-        catch( const Exception& )
+        if ( _bDoListening )
         {
-            OSL_ENSURE( sal_False, "EFormsHelper::switchBindingListening: caught an exception!" );
+            xBindingProps->addPropertyChangeListener( ::rtl::OUString(), _rxListener );
+        }
+        else
+        {
+            xBindingProps->removePropertyChangeListener( ::rtl::OUString(), _rxListener );
         }
     }
 
     //--------------------------------------------------------------------
     void EFormsHelper::registerBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
     {
-        switchBindingListening( false );
-        m_xBindingListener = _rxBindingListener;
-        switchBindingListening( true );
+        if ( !_rxBindingListener.is() )
+            return;
+        impl_toggleBindingPropertyListening_throw( true, _rxBindingListener );
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::revokeBindingListener()
+    void EFormsHelper::impl_toggleBindingPropertyListening_throw( bool _bDoListen, const Reference< XPropertyChangeListener >& _rxConcreteListenerOrNull )
     {
-        switchBindingListening( false );
-        m_xBindingListener.clear();
+        if ( !_bDoListen )
+        {
+            ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
+            while ( pListenerIterator->hasMoreElements() )
+            {
+                PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( pListenerIterator->next() );
+                OSL_ENSURE( pTranslator, "EFormsHelper::impl_toggleBindingPropertyListening_throw: invalid listener element in my container!" );
+                if ( !pTranslator )
+                    continue;
+
+                Reference< XPropertyChangeListener > xEventSourceTranslator( pTranslator );
+                if ( _rxConcreteListenerOrNull.is() )
+                {
+                    if ( pTranslator->getDelegator() == _rxConcreteListenerOrNull )
+                    {
+                        impl_switchBindingListening_throw( false, xEventSourceTranslator );
+                        m_aPropertyListeners.removeListener( xEventSourceTranslator );
+                        break;
+                    }
+                }
+                else
+                {
+                    impl_switchBindingListening_throw( false, xEventSourceTranslator );
+                }
+            }
+        }
+        else
+        {
+            if ( _rxConcreteListenerOrNull.is() )
+            {
+                Reference< XPropertyChangeListener > xEventSourceTranslator( new PropertyEventTranslation( _rxConcreteListenerOrNull, m_xBindableControl ) );
+                m_aPropertyListeners.addListener( xEventSourceTranslator );
+                impl_switchBindingListening_throw( true, xEventSourceTranslator );
+            }
+            else
+            {
+                ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
+                while ( pListenerIterator->hasMoreElements() )
+                {
+                    Reference< XPropertyChangeListener > xListener( pListenerIterator->next(), UNO_QUERY );
+                    impl_switchBindingListening_throw( true, xListener );
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void EFormsHelper::revokeBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
+    {
+        impl_toggleBindingPropertyListening_throw( false, _rxBindingListener );
     }
 
     //--------------------------------------------------------------------
@@ -473,7 +522,9 @@ namespace pcr
             Reference< XValueBinding > xBinding( _rxBinding, UNO_QUERY );
             OSL_ENSURE( xBinding.is() || !_rxBinding.is(), "EFormsHelper::setBinding: invalid binding!" );
 
+            impl_toggleBindingPropertyListening_throw( false, NULL );
             m_xBindableControl->setValueBinding( xBinding );
+            impl_toggleBindingPropertyListening_throw( true, NULL );
 
             ::std::set< ::rtl::OUString > aSet;
             firePropertyChanges( xOldBinding, _rxBinding, aSet );
@@ -540,7 +591,7 @@ namespace pcr
                     if ( xBinding.is() )
                     {
                         // find a nice name for it
-                        String sBaseName( ModuleRes( RID_STR_BINDING_UI_NAME ) );
+                        String sBaseName( PcrRes( RID_STR_BINDING_UI_NAME ) );
                         sBaseName += String::CreateFromAscii( " " );
                         String sNewName;
                         sal_Int32 nNumber = 1;
@@ -572,18 +623,6 @@ namespace pcr
     //--------------------------------------------------------------------
     namespace
     {
-        //................................................................
-        struct PropertyLessByName : public ::std::binary_function< Property, Property, bool >
-        {
-            bool operator()( const Property& _rLHS, const Property& _rRHS )
-            {
-                return _rLHS.Name < _rRHS.Name;
-            }
-        };
-
-        //................................................................
-        typedef ::std::set< Property, PropertyLessByName > PropertyBag;
-
         //................................................................
         struct PropertyBagInserter : public ::std::unary_function< Property, void >
         {
@@ -719,9 +758,35 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    void EFormsHelper::firePropertyChange( const ::rtl::OUString& _rName, const Any& _rOldValue, const Any& _rNewValue ) const
+    {
+        if ( m_aPropertyListeners.empty() )
+            return;
+
+        if ( _rOldValue == _rNewValue )
+            return;
+
+        try
+        {
+            PropertyChangeEvent aEvent;
+
+            aEvent.Source = m_xBindableControl.get();
+            aEvent.PropertyName = _rName;
+            aEvent.OldValue = _rOldValue;
+            aEvent.NewValue = _rNewValue;
+
+            const_cast< EFormsHelper* >( this )->m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "EFormsHelper::firePropertyChange: caught an exception!" );
+        }
+    }
+
+    //--------------------------------------------------------------------
     void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< ::rtl::OUString >& _rFilter ) const
     {
-        if ( !m_xBindingListener.is() )
+        if ( m_aPropertyListeners.empty() )
             return;
 
         try
@@ -729,9 +794,6 @@ namespace pcr
             PropertyBag aProperties;
             Reference< XPropertySetInfo > xOldInfo = collectPropertiesGetInfo( _rxOldProps, aProperties );
             Reference< XPropertySetInfo > xNewInfo = collectPropertiesGetInfo( _rxNewProps, aProperties );
-
-            PropertyChangeEvent aEvent;
-            aEvent.Source = m_xBindableControl.get();
 
             for ( PropertyBag::const_iterator aProp = aProperties.begin();
                   aProp != aProperties.end();
@@ -749,14 +811,7 @@ namespace pcr
                 if ( xNewInfo.is() && xNewInfo->hasPropertyByName( aProp->Name ) )
                     aNewValue = _rxNewProps->getPropertyValue( aProp->Name );
 
-                if ( aOldValue != aNewValue )
-                {
-                    aEvent.PropertyName = aProp->Name;
-                    aEvent.PropertyHandle = aProp->Handle;
-                    aEvent.OldValue = aOldValue;
-                    aEvent.NewValue = aNewValue;
-                    m_xBindingListener->propertyChange( aEvent );
-                }
+                firePropertyChange( aProp->Name, aOldValue, aNewValue );
             }
         }
         catch( const Exception& )
