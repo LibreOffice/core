@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:40:09 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,9 +172,9 @@
 #define HID_FILTER_NAVIGATOR_WIN                (HID_FM_OTHER_START +  5)
 
 #define HID_FORM_DLG_START                      (HID_FORMS_START + 400)
-#define HID_FM_DLG_PROP_FORM                    (HID_FORM_DLG_START +   0)
-#define HID_FM_DLG_PROP_CONTROL                 (HID_FORM_DLG_START +   1)
-#define HID_FM_DLG_PROP_GRIDCTR                 (HID_FORM_DLG_START +   2)
+// FREE
+// FREE
+// FREE
 #define HID_FM_PROPDLG_WINDOW                   (HID_FORM_DLG_START +   3)
 #define HID_FM_PROPDLG_CONTAINER                (HID_FORM_DLG_START +   4)
 #define HID_FM_PROPDLG_TABCTR                   (HID_FORM_DLG_START +   5)
