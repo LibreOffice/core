@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:20:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,30 @@
 #ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 #include "standardcontrol.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROLLISTENER_HXX_
-#include "brwcontrollistener.hxx"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
-#include "stringrepresentation.hxx"
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
 #endif
 
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_COLOR_HPP_
+#include <com/sun/star/util/Color.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
+#include <com/sun/star/util/MeasureUnit.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/inspection/PropertyControlType.hpp>
+#endif
+/** === end UNO includes === **/
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -67,12 +81,14 @@
 #include <xtable.hxx>
 #endif
 //==================================================================
-// ugly dependencies for the OMultilineEditControl
 #ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
 #endif
 #ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
@@ -92,6 +108,9 @@
 //==================================================================
 
 #include <memory>
+#include <limits>
+#include <boost/bind.hpp>
+
 //............................................................................
 namespace pcr
 {
@@ -99,141 +118,111 @@ namespace pcr
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::inspection;
 
     //==================================================================
     //= OTimeControl
     //==================================================================
     //------------------------------------------------------------------
-    OTimeControl::OTimeControl(Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,TimeField(pParent, nWinStyle)
+    OTimeControl::OTimeControl( Window* pParent, WinBits nWinStyle )
+        :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
-        SetStrictFormat(sal_True);
-        SetFormat(TIMEF_SEC);
-
-        SetModifyHdl(LINK(this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK(this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK(this, OCommonBehaviourControl, LoseFocusHdl));
-
-        autoSizeWindow();
-
-        EnableEmptyFieldValue(sal_True);
+        getTypedControlWindow()->SetStrictFormat( sal_True );
+        getTypedControlWindow()->SetFormat( TIMEF_SEC );
+        getTypedControlWindow()->EnableEmptyFieldValue( sal_True );
     }
 
     //------------------------------------------------------------------
-    void OTimeControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    void SAL_CALL OTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if (bIsUnknown || (rString == m_sStandardString))
+        util::Time aUNOTime;
+        if ( !( _rValue >>= aUNOTime ) )
         {
-            SetText(String());
-            SetEmptyTime();
+            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetEmptyTime();
         }
         else
         {
-            if (rString.getLength())
-            {
-                sal_uInt32 nTime = rString.toInt32();
-                SetTime( ::Time( nTime ) );
-            }
-            else
-            {
-                SetText(String());
-                SetEmptyTime();
-            }
+            ::Time aTime( aUNOTime.Hours, aUNOTime.Minutes, aUNOTime.Seconds, aUNOTime.HundredthSeconds );
+            getTypedControlWindow()->SetTime( aTime );
         }
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OTimeControl::GetProperty() const
+    Any SAL_CALL OTimeControl::getValue() throw (RuntimeException)
     {
-        if (GetText().Len()>0)
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len()>0 )
         {
-            sal_Int32 nTime = GetTime().GetTime();
-            return ::rtl::OUString::valueOf(nTime);
+            ::Time aTime( getTypedControlWindow()->GetTime() );
+            util::Time aUNOTime( aTime.Get100Sec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
+            aPropValue <<= aUNOTime;
         }
-        else
-            return ::rtl::OUString();
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    long OTimeControl::PreNotify( NotifyEvent& rNEvt )
+    Type SAL_CALL OTimeControl::getValueType() throw (RuntimeException)
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
-
-        return TimeField::PreNotify(rNEvt);
+        return ::getCppuType( static_cast< util::Time* >( NULL ) );
     }
 
     //==================================================================
     //= ODateControl
     //==================================================================
     //------------------------------------------------------------------
-    ODateControl::ODateControl(Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,CalendarField( pParent, nWinStyle | WB_DROPDOWN )
+    ODateControl::ODateControl( Window* pParent, WinBits nWinStyle )
+        :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
-        SetStrictFormat(sal_True);
+        WindowType* pControlWindow = getTypedControlWindow();
+        pControlWindow->SetStrictFormat(sal_True);
 
-        SetModifyHdl(LINK(this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK(this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK(this, OCommonBehaviourControl, LoseFocusHdl));
+        pControlWindow->SetMin( ::Date( 1,1,1600 ) );
+        pControlWindow->SetFirst( ::Date( 1,1,1600 ) );
+        pControlWindow->SetLast( ::Date( 1, 1, 9999 ) );
+        pControlWindow->SetMax( ::Date( 1, 1, 9999 ) );
 
-        SetMin( ::Date( 1,1,1600 ) );
-        SetFirst( ::Date( 1,1,1600 ) );
-        SetLast( ::Date( 1, 1, 9999 ) );
-        SetMax( ::Date( 1, 1, 9999 ) );
-
-        autoSizeWindow();
-
-        SetExtDateFormat(XTDATEF_SYSTEM_SHORT_YYYY);
-        EnableEmptyFieldValue(sal_True);
+        pControlWindow->SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
+        pControlWindow->EnableEmptyFieldValue( sal_True );
     }
 
     //------------------------------------------------------------------
-    void ODateControl::SetProperty(const ::rtl::OUString& rString, sal_Bool bIsUnknown)
+    void SAL_CALL ODateControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if (bIsUnknown || (rString==m_sStandardString))
+        util::Date aUNODate;
+        if ( !( _rValue >>= aUNODate ) )
         {
-            SetText(String());
-            SetEmptyDate();
+            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetEmptyDate();
         }
         else
         {
-            if (rString.getLength())
-            {
-                sal_uInt32 nDate = rString.toInt32();
-                SetDate( ::Date( nDate ) );
-            }
-            else
-            {
-                SetText(String());
-                SetEmptyDate();
-            }
+            ::Date aDate( aUNODate.Day, aUNODate.Month, aUNODate.Year );
+            getTypedControlWindow()->SetDate( aDate );
         }
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ODateControl::GetProperty() const
+    Any SAL_CALL ODateControl::getValue() throw (RuntimeException)
     {
-        if (GetText().Len()>0)
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() > 0 )
         {
-            sal_Int32 nDate = GetDate().GetDate();
-            return ::rtl::OUString::valueOf(nDate);
+            ::Date aDate( getTypedControlWindow()->GetDate() );
+            util::Date aUNODate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
+            aPropValue <<= aUNODate;
         }
-        else return ::rtl::OUString();
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    long ODateControl::PreNotify( NotifyEvent& rNEvt )
+    Type SAL_CALL ODateControl::getValueType() throw (RuntimeException)
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
-
-        return CalendarField::PreNotify(rNEvt);
+        return ::getCppuType( static_cast< util::Date* >( NULL ) );
     }
 
     //==================================================================
@@ -241,233 +230,137 @@ namespace pcr
     //==================================================================
     //------------------------------------------------------------------
     OEditControl::OEditControl(Window* _pParent, sal_Bool _bPW, WinBits _nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,Edit(_pParent, _nWinStyle)
+        :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
     {
         m_bIsPassword = _bPW;
 
-        SetModifyHdl(LINK(this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK(this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK(this, OCommonBehaviourControl, LoseFocusHdl));
-
-        autoSizeWindow();
-
-        if (m_bIsPassword)
-           SetMaxTextLen(1);
+        if ( m_bIsPassword )
+           getTypedControlWindow()->SetMaxTextLen( 1 );
     }
 
     //------------------------------------------------------------------
-    void OEditControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    void SAL_CALL OEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        String aStr;
-
-        if (!bIsUnknown)
-            aStr = rString.getStr();
-
-        if (m_bIsPassword)
-            if (aStr.Len())
-            {
-                sal_Unicode nCharacter = (sal_Unicode)aStr.ToInt32();
-                if (nCharacter)
-                    aStr = String(&nCharacter, 1);
-                else
-                    aStr = String();
-            }
-
-        SetText(aStr);
-    }
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OEditControl::GetProperty() const
-    {
-        String aStr = GetText();
-
-        if (m_bIsPassword)
+        ::rtl::OUString sText;
+        if ( m_bIsPassword )
         {
-            if (aStr.Len())
-                aStr = String::CreateFromInt32((sal_Int32)aStr.GetBuffer()[0]);
-            else
-                aStr = String('0');
+            sal_Int16 nValue = 0;
+            _rValue >>= nValue;
+            if ( nValue )
+            {
+                sal_Unicode nCharacter = nValue;
+                sText = String( &nCharacter, 1 );
+            }
         }
+        else
+            _rValue >>= sText;
 
-        return aStr;
+        getTypedControlWindow()->SetText( sText );
     }
 
     //------------------------------------------------------------------
-    long OEditControl::PreNotify( NotifyEvent& rNEvt )
+    Any SAL_CALL OEditControl::getValue() throw (RuntimeException)
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
+        Any aPropValue;
 
-        return Edit::PreNotify(rNEvt);
+        ::rtl::OUString sText( getTypedControlWindow()->GetText() );
+        if ( m_bIsPassword )
+        {
+            if ( sText.getLength() )
+                aPropValue <<= (sal_Int16)sText.getStr()[0];
+        }
+        else
+            aPropValue <<= sText;
+
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    void OEditControl::modified(Window* _pSource)
+    Type SAL_CALL OEditControl::getValueType() throw (RuntimeException)
     {
-        OCommonBehaviourControl::modified(_pSource);
+        return m_bIsPassword ? ::getCppuType( static_cast< sal_Int16* >( NULL ) ) : ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+    }
+
+    //------------------------------------------------------------------
+    void OEditControl::modified()
+    {
+        OEditControl_Base::modified();
 
         // for pasword controls, we fire a commit for every single change
-        if (m_bIsPassword)
-            commitModified(_pSource);
-    }
-
-    //==================================================================
-    // class OCurrencyControl
-    //==================================================================
-    //------------------------------------------------------------------
-    OCurrencyControl::OCurrencyControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,LongCurrencyField(_pParent, _nWinStyle)
-    {
-        SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-        SetCurrencySymbol(String());
-
-        double nMax = GetMax();
-        nMax = -nMax;
-        BigInt aBigInt(nMax);
-        SetMin(aBigInt);
-
-        SetStrictFormat(sal_True);
-        SetDecimalDigits(_nDigits);
-        EnableEmptyFieldValue(sal_True);
-
-        autoSizeWindow();
+        if ( m_bIsPassword )
+            m_aImplControl.notifyModifiedValue();
     }
 
     //------------------------------------------------------------------
-    static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
+    static long ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
-        for ( sal_uInt16 d = 0; d < nDigits; d++ )
+        for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
-        return n;
+
+        if ( n > ::std::numeric_limits< long >::max() )
+            return ::std::numeric_limits< long >::max();
+        return (long)n;
     }
 
     //------------------------------------------------------------------
-    static double ImplCalcDoubleValue( double nValue, sal_uInt16 nDigits )
+    static double ImplCalcDoubleValue( long nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
-        for ( sal_uInt16 d = 0; d < nDigits; d++ )
+        for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n /= 10;
         return n;
-    }
-
-    //------------------------------------------------------------------
-    void OCurrencyControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
-    {
-        ::rtl::OUString aStr;
-
-        if (bIsUnknown || (rString == m_sStandardString))
-        {
-            SetText(String());
-            SetEmptyFieldValue();
-        }
-        else
-        {
-            if (rString.getLength())
-            {
-                double nValue = ::rtl::math::stringToDouble(rString, '.', ',', NULL, NULL);
-                BigInt aBInt = ImplCalcLongValue(nValue, GetDecimalDigits());
-                SetValue(aBInt);
-            }
-            else
-                SetEmptyFieldValue();
-        }
-    }
-
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OCurrencyControl::GetProperty() const
-    {
-        if (GetText().Len()>0)
-        {
-            BigInt aBInt=GetValue();
-            double nValue = ImplCalcDoubleValue(aBInt, GetDecimalDigits());
-            ::rtl::OUString aBuffer( ::rtl::math::doubleToUString(nValue,
-                        rtl_math_StringFormat_F, GetDecimalDigits(), '.') );
-            return aBuffer;
-        }
-        else
-            return ::rtl::OUString();
-
-    }
-
-    //------------------------------------------------------------------
-    long OCurrencyControl::PreNotify( NotifyEvent& rNEvt )
-    {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
-
-        return LongCurrencyField::PreNotify(rNEvt);
     }
 
     //==================================================================
     // class ODateTimeControl
     //==================================================================
     //------------------------------------------------------------------
-    ODateTimeControl::ODateTimeControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,FormattedField(_pParent, _nWinStyle)
-            ,m_pConverter( new StringRepresentation( NULL ) )
+    ODateTimeControl::ODateTimeControl( Window* _pParent, WinBits _nWinStyle)
+        :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
     {
-        SetModifyHdl( LINK( this, OCommonBehaviourControl, ModifiedHdl ) );
-        SetGetFocusHdl( LINK( this, OCommonBehaviourControl, GetFocusHdl ) );
-        SetLoseFocusHdl( LINK( this, OCommonBehaviourControl, LoseFocusHdl ) );
-
-        EnableEmptyField( sal_True );
-
-        autoSizeWindow();
+        getTypedControlWindow()->EnableEmptyField( sal_True );
 
         // determine a default format
         Locale aSysLocale = SvtSysLocale().GetLocaleData().getLocale();
         LanguageType eSysLanguage = ConvertIsoNamesToLanguage( aSysLocale.Language, aSysLocale.Country );
 
-        SetFormatter( StandardFormatter() );
-        SvNumberFormatter* pFormatter = GetFormatter();
+        getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
+        SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
         ULONG nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
 
-        SetFormatKey( nStandardDateTimeFormat );
+        getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }
 
     //------------------------------------------------------------------
-    void ODateTimeControl::SetProperty( const ::rtl::OUString& _rString, sal_Bool _bIsUnknown )
+    void SAL_CALL ODateTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if ( _bIsUnknown || ( _rString == m_sStandardString ) || !_rString.getLength() )
+        if ( !_rValue.hasValue() )
         {
-            SetText( String() );
+            getTypedControlWindow()->SetText( String() );
         }
         else
         {
-            Any aValue;
             util::DateTime aUNODateTime;
-            OSL_VERIFY(
-                m_pConverter->convertStringToGenericValue( _rString, aValue, ::getCppuType( static_cast< util::DateTime* >( NULL ) ) )
-                &&  ( aValue >>= aUNODateTime )
-            );
+            OSL_VERIFY( _rValue >>= aUNODateTime );
 
             ::DateTime aDateTime;
             ::utl::typeConvert( aUNODateTime, aDateTime );
 
-            double nValue = aDateTime - ::DateTime( *GetFormatter()->GetNullDate() );
-            SetValue( nValue );
+            double nValue = aDateTime - ::DateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );
+            getTypedControlWindow()->SetValue( nValue );
         }
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ODateTimeControl::GetProperty() const
+    Any SAL_CALL ODateTimeControl::getValue() throw (RuntimeException)
     {
-        ::rtl::OUString sValue;
-        if ( GetText().Len() )
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() )
         {
-            double nValue = const_cast< ODateTimeControl* >( this )->GetValue();
+            double nValue = getTypedControlWindow()->GetValue();
 
-            ::DateTime aDateTime( *GetFormatter()->GetNullDate() );
+            ::DateTime aDateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );
 
             // add the "days" part
             double nDays = floor( nValue );
@@ -482,79 +375,342 @@ namespace pcr
             util::DateTime aUNODateTime;
             ::utl::typeConvert( aDateTime, aUNODateTime );
 
-            OSL_VERIFY( m_pConverter->convertGenericValueToString( makeAny( aUNODateTime ), sValue ) );
+            aPropValue <<= aUNODateTime;
         }
-        return sValue;
+        return aPropValue;
+    }
+
+    //------------------------------------------------------------------
+    Type SAL_CALL ODateTimeControl::getValueType() throw (RuntimeException)
+    {
+        return ::getCppuType( static_cast< util::DateTime* >( NULL ) );
+    }
+
+    //========================================================================
+    //= HyperlinkInput
+    //========================================================================
+    //--------------------------------------------------------------------
+    HyperlinkInput::HyperlinkInput( Window* _pParent, WinBits _nWinStyle )
+        :Edit( _pParent, _nWinStyle )
+    {
+        ::svtools::ColorConfig aColorConfig;
+        ::svtools::ColorConfigValue aLinkColor( aColorConfig.GetColorValue( ::svtools::LINKS ) );
+
+        AllSettings aAllSettings( GetSettings() );
+        StyleSettings aStyleSettings( aAllSettings.GetStyleSettings() );
+
+        Font aFieldFont( aStyleSettings.GetFieldFont() );
+        aFieldFont.SetUnderline( UNDERLINE_SINGLE );
+        aFieldFont.SetColor( aLinkColor.nColor );
+        aStyleSettings.SetFieldFont( aFieldFont );
+
+        aStyleSettings.SetFieldTextColor( aLinkColor.nColor );
+
+        aAllSettings.SetStyleSettings( aStyleSettings );
+        SetSettings( aAllSettings );
+    }
+
+    //--------------------------------------------------------------------
+    void HyperlinkInput::MouseMove( const ::MouseEvent& rMEvt )
+    {
+        Edit::MouseMove( rMEvt );
+
+        PointerStyle ePointerStyle( POINTER_TEXT );
+
+        if ( !rMEvt.IsLeaveWindow() )
+        {
+            if ( impl_textHitTest( rMEvt.GetPosPixel() ) )
+                ePointerStyle = POINTER_REFHAND;
+        }
+
+        SetPointer( Pointer( ePointerStyle ) );
+    }
+
+    //--------------------------------------------------------------------
+    void HyperlinkInput::MouseButtonDown( const ::MouseEvent& rMEvt )
+    {
+        Edit::MouseButtonDown( rMEvt );
+
+        if ( impl_textHitTest( rMEvt.GetPosPixel() ) )
+            m_aMouseButtonDownPos = rMEvt.GetPosPixel();
+        else
+            m_aMouseButtonDownPos.X() = m_aMouseButtonDownPos.Y() = -1;
+    }
+
+    //--------------------------------------------------------------------
+    void HyperlinkInput::MouseButtonUp( const ::MouseEvent& rMEvt )
+    {
+        Edit::MouseButtonUp( rMEvt );
+
+        impl_checkEndClick( rMEvt );
+    }
+
+    //--------------------------------------------------------------------
+    bool HyperlinkInput::impl_textHitTest( const Point& _rWindowPos )
+    {
+        xub_StrLen nPos = GetCharPos( _rWindowPos );
+        return ( ( nPos != STRING_LEN ) && ( nPos < GetText().Len() ) );
+    }
+
+    //--------------------------------------------------------------------
+    void HyperlinkInput::impl_checkEndClick( const ::MouseEvent rMEvt )
+    {
+        const MouseSettings& rMouseSettings( GetSettings().GetMouseSettings() );
+        if  (   ( abs( rMEvt.GetPosPixel().X() - m_aMouseButtonDownPos.X() ) < rMouseSettings.GetStartDragWidth() )
+            &&  ( abs( rMEvt.GetPosPixel().Y() - m_aMouseButtonDownPos.Y() ) < rMouseSettings.GetStartDragHeight() )
+            )
+            Application::PostUserEvent( m_aClickHandler );
+    }
+
+    //--------------------------------------------------------------------
+    void HyperlinkInput::Tracking( const TrackingEvent& rTEvt )
+    {
+        Edit::Tracking( rTEvt );
+
+        if ( rTEvt.IsTrackingEnded() )
+            impl_checkEndClick( rTEvt.GetMouseEvent() );
+    }
+
+    //========================================================================
+    //= OHyperlinkControl
+    //========================================================================
+    //--------------------------------------------------------------------
+    OHyperlinkControl::OHyperlinkControl( Window* _pParent, WinBits _nWinStyle )
+        :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, _pParent, _nWinStyle )
+        ,m_aActionListeners( m_aMutex )
+    {
+        getTypedControlWindow()->SetClickHdl( LINK( this, OHyperlinkControl, OnHyperlinkClicked ) );
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL OHyperlinkControl::getValue() throw (RuntimeException)
+    {
+        ::rtl::OUString sText = getTypedControlWindow()->GetText();
+        return makeAny( sText );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OHyperlinkControl::setValue( const Any& _value ) throw (IllegalTypeException, RuntimeException)
+    {
+        ::rtl::OUString sText;
+        _value >>= sText;
+        getTypedControlWindow()->SetText( sText );
+    }
+
+    //--------------------------------------------------------------------
+    Type SAL_CALL OHyperlinkControl::getValueType() throw (RuntimeException)
+    {
+        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException)
+    {
+        if ( listener.is() )
+            m_aActionListeners.addInterface( listener );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException)
+    {
+        m_aActionListeners.removeInterface( listener );
+    }
+
+    //------------------------------------------------------------------
+    void SAL_CALL OHyperlinkControl::disposing()
+    {
+        OHyperlinkControl_Base::disposing();
+
+        EventObject aEvent( *this );
+        m_aActionListeners.disposeAndClear( aEvent );
+    }
+
+    //------------------------------------------------------------------
+    IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, _NotInterestedIn )
+    {
+        ActionEvent aEvent( *this, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "clicked" ) ) );
+        m_aActionListeners.forEach< XActionListener >(
+            boost::bind(
+                &XActionListener::actionPerformed,
+                _1, boost::cref(aEvent) ) );
+
+        return 0;
     }
 
     //==================================================================
     //= ONumericControl
     //==================================================================
     //------------------------------------------------------------------
-    ONumericControl::ONumericControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle )
-            :OCommonBehaviourControl(this)
-            ,MetricField(_pParent, _nWinStyle)
-            ,m_eValueUnit( FUNIT_NONE )
+    ONumericControl::ONumericControl( Window* _pParent, WinBits _nWinStyle )
+        :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
+        ,m_eValueUnit( FUNIT_NONE )
+        ,m_nFieldToUNOValueFactor( 1 )
     {
-        SetDefaultUnit( FUNIT_NONE );
+        getTypedControlWindow()->SetDefaultUnit( FUNIT_NONE );
 
-        SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-        SetDecimalDigits(_nDigits);
-        EnableEmptyFieldValue(sal_True);
-        SetMin(-GetMax());
-        SetStrictFormat(sal_True);
-
-        autoSizeWindow();
+        getTypedControlWindow()->EnableEmptyFieldValue( sal_True );
+        getTypedControlWindow()->SetStrictFormat( sal_True );
+        Optional< double > value( getMaxValue() );
+        value.Value = -value.Value;
+        setMinValue( value );
     }
 
-    //------------------------------------------------------------------
-    void ONumericControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits() throw (RuntimeException)
     {
-        if ( bIsUnknown || ( rString == m_sStandardString ) )
+        return getTypedControlWindow()->GetDecimalDigits();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits ) throw (RuntimeException)
+    {
+        getTypedControlWindow()->SetDecimalDigits( _decimaldigits );
+    }
+
+    //--------------------------------------------------------------------
+    Optional< double > SAL_CALL ONumericControl::getMinValue() throw (RuntimeException)
+    {
+        Optional< double > aReturn( sal_True, 0 );
+
+        long minValue = getTypedControlWindow()->GetMin();
+        if ( minValue == ::std::numeric_limits< long >::min() )
+            aReturn.IsPresent = sal_False;
+        else
+            aReturn.Value = minValue;
+
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue ) throw (RuntimeException)
+    {
+        if ( !_minvalue.IsPresent )
+            getTypedControlWindow()->SetMin( ::std::numeric_limits< long >::min() );
+        else
+            getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) );
+    }
+
+    //--------------------------------------------------------------------
+    Optional< double > SAL_CALL ONumericControl::getMaxValue() throw (RuntimeException)
+    {
+        Optional< double > aReturn( sal_True, 0 );
+
+        long maxValue = getTypedControlWindow()->GetMax();
+        if ( maxValue == ::std::numeric_limits< long >::max() )
+            aReturn.IsPresent = sal_False;
+        else
+            aReturn.Value = maxValue;
+
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue ) throw (RuntimeException)
+    {
+        if ( !_maxvalue.IsPresent )
+            getTypedControlWindow()->SetMax( ::std::numeric_limits< long >::max() );
+        else
+            getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ) );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit() throw (RuntimeException)
+    {
+        return MeasurementUnitConversion::convertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit ) throw (IllegalArgumentException, RuntimeException)
+    {
+        if ( ( _displayunit < MeasureUnit::MM_100TH ) || ( _displayunit > MeasureUnit::PERCENT ) )
+            throw IllegalArgumentException();
+        if  (   ( _displayunit == MeasureUnit::MM_100TH )
+            ||  ( _displayunit == MeasureUnit::MM_10TH )
+            ||  ( _displayunit == MeasureUnit::INCH_1000TH )
+            ||  ( _displayunit == MeasureUnit::INCH_100TH )
+            ||  ( _displayunit == MeasureUnit::INCH_10TH )
+            ||  ( _displayunit == MeasureUnit::PERCENT )
+            )
+            throw IllegalArgumentException();
+
+        sal_Int16 nDummyFactor = 1;
+        FieldUnit eFieldUnit = MeasurementUnitConversion::convertToFieldUnit( _displayunit, nDummyFactor );
+        if ( nDummyFactor != 1 )
+            // everything which survived the checks above should result in a factor of 1, i.e.,
+            // it should have a direct counterpart as FieldUnit
+            throw RuntimeException();
+        getTypedControlWindow()->SetUnit( eFieldUnit );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL ONumericControl::getValueUnit() throw (RuntimeException)
+    {
+        return MeasurementUnitConversion::convertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit ) throw (RuntimeException)
+    {
+        if ( ( _valueunit < MeasureUnit::MM_100TH ) || ( _valueunit > MeasureUnit::PERCENT ) )
+            throw IllegalArgumentException();
+        m_eValueUnit = MeasurementUnitConversion::convertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ONumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
+    {
+        if ( !_rValue.hasValue() )
         {
-            SetText(String());
-            SetEmptyFieldValue();
+            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetEmptyFieldValue();
         }
         else
         {
-            if ( rString.getLength() > 0 )
-            {
-                SetValue( rString.toInt32(), m_eValueUnit );
-            }
-            else
-            {
-                SetEmptyFieldValue();
-            }
+            double nValue( 0 );
+            OSL_VERIFY( _rValue >>= nValue );
+            long nControlValue = impl_apiValueToFieldValue_nothrow( nValue );
+            getTypedControlWindow()->SetValue( nControlValue, m_eValueUnit );
         }
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ONumericControl::GetProperty() const
+    long ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
     {
-        if ( GetText().Len() )
-            return ::rtl::OUString::valueOf( (sal_Int32)( GetValue( m_eValueUnit ) ) );
-        else
-            return ::rtl::OUString();
-
+        long nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->GetDecimalDigits() );
+        nControlValue /= m_nFieldToUNOValueFactor;
+        return nControlValue;
     }
 
     //------------------------------------------------------------------
-    long ONumericControl::PreNotify( NotifyEvent& rNEvt )
+    double ONumericControl::impl_fieldValueToApiValue_nothrow( long _nFieldValue ) const
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
+        double nApiValue = ImplCalcDoubleValue( _nFieldValue, getTypedControlWindow()->GetDecimalDigits() );
+        nApiValue *= m_nFieldToUNOValueFactor;
+        return nApiValue;
+    }
 
-        return MetricField::PreNotify(rNEvt);
+    //------------------------------------------------------------------
+    Any SAL_CALL ONumericControl::getValue() throw (RuntimeException)
+    {
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetText().Len() )
+        {
+            double nValue = impl_fieldValueToApiValue_nothrow( getTypedControlWindow()->GetValue( m_eValueUnit ) );
+            aPropValue <<= nValue;
+        }
+        return aPropValue;
+    }
+
+    //------------------------------------------------------------------
+    Type SAL_CALL ONumericControl::getValueType() throw (RuntimeException)
+    {
+        return ::getCppuType( static_cast< double* >( NULL ) );
     }
 
     //==================================================================
     //= OColorControl
     //==================================================================
-    #define LB_DEFAULT_COUNT 14
+    #define LB_DEFAULT_COUNT 20
     //------------------------------------------------------------------
     String MakeHexStr(sal_uInt32 nVal, sal_uInt32 nLength)
     {
@@ -574,14 +730,8 @@ namespace pcr
 
     //------------------------------------------------------------------
     OColorControl::OColorControl(Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,ColorListBox(pParent, nWinStyle)
+        :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
-        SetSelectHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-
         // initialize the color listbox
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "OColorControl::OColorControl: no doc shell!");
@@ -608,113 +758,99 @@ namespace pcr
                 for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
                 {
                     XColorEntry* pEntry = pColorTbl->Get( i );
-                    InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+                    getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
             }
         }
 
-        SetUpdateMode( sal_False);
-
-        if (m_sStandardString.getLength()>0)
-            InsertEntry(m_sStandardString, 0);
-
-        SetUpdateMode( sal_True );
-        SelectEntryPos(0);
+        getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
     }
 
     //------------------------------------------------------------------
-    void OColorControl::SetCtrSize(const Size& _rSize)
+    void SAL_CALL OColorControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        OCommonBehaviourControl::SetCtrSize(_rSize);
-
-        sal_uInt16 nCount = GetEntryCount();
-        if (nCount>LB_DEFAULT_COUNT)
-            nCount=LB_DEFAULT_COUNT;
-        SetDropDownLineCount(nCount);
-    }
-
-    //------------------------------------------------------------------
-    void OColorControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
-    {
-        if (!bIsUnknown)
+        if ( _rValue.hasValue() )
         {
-            if ((rString.getLength() != 0) && (rString != m_sStandardString))
+            ::com::sun::star::util::Color nColor = COL_TRANSPARENT;
+            if ( _rValue >>= nColor )
             {
-                sal_uInt32 nColor = rString.toInt32();
-                Color aRgbCol((ColorData)nColor);
+                ::Color aRgbCol((ColorData)nColor);
 
-                if (!IsEntrySelected(aRgbCol))
-                {
-                    SelectEntry(aRgbCol);
-                    if (!IsEntrySelected(aRgbCol))
-                    {   // the given color is not part of the list -> insert a new entry with the hex code of the color
-                        String aStr = String::CreateFromAscii("0x");
-                        aStr += MakeHexStr(nColor,8);
-                        InsertEntry(aRgbCol, aStr);
-                        SelectEntry(aRgbCol);
-                    }
+                getTypedControlWindow()->SelectEntry( aRgbCol );
+                if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
+                {   // the given color is not part of the list -> insert a new entry with the hex code of the color
+                    String aStr = String::CreateFromAscii("0x");
+                    aStr += MakeHexStr(nColor,8);
+                    getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
+                    getTypedControlWindow()->SelectEntry( aRgbCol );
                 }
             }
             else
-                SelectEntryPos(0);
-        }
-        else
-            SetNoSelection();
-    }
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OColorControl::GetProperty()const
-    {
-        ::rtl::OUString aResult;
-        if (GetSelectEntryCount()>0)
-        {
-            aResult=GetSelectEntry();
-            if (aResult != m_sStandardString)
             {
-                Color aRgbCol = GetSelectEntryColor();
-                sal_Int32 nColor = aRgbCol.GetColor();
-                aResult = ::rtl::OUString::valueOf(nColor);
+                ::rtl::OUString sNonColorValue;
+                if ( !( _rValue >>= sNonColorValue ) )
+                    throw IllegalTypeException();
+                getTypedControlWindow()->SelectEntry( sNonColorValue );
+                if ( !getTypedControlWindow()->IsEntrySelected( sNonColorValue ) )
+                    getTypedControlWindow()->SetNoSelection();
             }
         }
-        return aResult;
+        else
+            getTypedControlWindow()->SetNoSelection();
     }
 
     //------------------------------------------------------------------
-    sal_Bool OColorControl::HasList()
+    Any SAL_CALL OColorControl::getValue() throw (RuntimeException)
     {
-        return sal_True;
+        Any aPropValue;
+        if ( getTypedControlWindow()->GetSelectEntryCount() > 0 )
+        {
+            ::rtl::OUString sSelectedEntry = getTypedControlWindow()->GetSelectEntry();
+            if ( m_aNonColorEntries.find( sSelectedEntry ) != m_aNonColorEntries.end() )
+                aPropValue <<= sSelectedEntry;
+            else
+            {
+                ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
+                aPropValue <<= (::com::sun::star::util::Color)aRgbCol.GetColor();
+            }
+        }
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    void OColorControl::ClearList()
+    Type SAL_CALL OColorControl::getValueType() throw (RuntimeException)
     {
-        Clear();
+        return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
     }
 
     //------------------------------------------------------------------
-    void OColorControl::InsertCtrEntry( const ::rtl::OUString& _rString, sal_uInt16 _nPos)
+    void SAL_CALL OColorControl::clearList() throw (RuntimeException)
     {
-        InsertEntry(_rString, _nPos);
+        getTypedControlWindow()->Clear();
     }
 
     //------------------------------------------------------------------
-    long OColorControl::PreNotify( NotifyEvent& rNEvt )
+    void SAL_CALL OColorControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
-
-        return ColorListBox::PreNotify(rNEvt);
+        getTypedControlWindow()->InsertEntry( NewEntry, 0 );
+        m_aNonColorEntries.insert( NewEntry );
     }
 
     //------------------------------------------------------------------
-    void OColorControl::modified(Window* _pSource)
+    void SAL_CALL OColorControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        OCommonBehaviourControl::modified(_pSource);
+        getTypedControlWindow()->InsertEntry( NewEntry );
+        m_aNonColorEntries.insert( NewEntry );
+    }
 
-        if (!IsTravelSelect())
+    //------------------------------------------------------------------
+    void OColorControl::modified()
+    {
+        OColorControl_Base::modified();
+
+        if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
-            commitModified(_pSource);
+            m_aImplControl.notifyModifiedValue();
     }
 
     //==================================================================
@@ -722,102 +858,75 @@ namespace pcr
     //==================================================================
     //------------------------------------------------------------------
     OListboxControl::OListboxControl( Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,ListBox(pParent, nWinStyle)
+        :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
     {
-        SetDropDownLineCount( LB_DEFAULT_COUNT );
-
-        SetSelectHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
+        getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
     }
 
     //------------------------------------------------------------------
-    void OListboxControl::SetCtrSize(const Size& rSize)
+    Any SAL_CALL OListboxControl::getValue() throw (RuntimeException)
     {
-        OCommonBehaviourControl::SetCtrSize(rSize);
+        ::rtl::OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
 
-        sal_uInt16 nCount = GetEntryCount() + 1;
-            // +1 is for the rare case where later on, somebody selects a non-existing entry
-            // VCL then implicitly extends the list
-
-        if (nCount>LB_DEFAULT_COUNT)
-            nCount=LB_DEFAULT_COUNT;
-        SetDropDownLineCount(nCount);
+        Any aPropValue;
+        if ( sControlValue.getLength() )
+            aPropValue <<= sControlValue;
+        return aPropValue;
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OListboxControl::GetProperty()const
+    Type SAL_CALL OListboxControl::getValueType() throw (RuntimeException)
     {
-        if (GetSelectEntryCount()>0)
-            return GetSelectEntry();
-        return String();
+        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
     }
 
     //------------------------------------------------------------------
-    void OListboxControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    void SAL_CALL OListboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        if (!bIsUnknown)
-        {
-            String aTmp = rString;
-            if (aTmp != GetSelectEntry())
-                SelectEntry(aTmp);
-
-            if (!IsEntrySelected(aTmp))
-            {
-                if (!rString.getLength())
-                {
-                    SelectEntry(m_sStandardString);
-                }
-                else
-                {
-                    InsertEntry(aTmp, 0);
-                    SelectEntry(aTmp);
-                }
-            }
-        }
+        if ( !_rValue.hasValue() )
+            getTypedControlWindow()->SetNoSelection();
         else
         {
-            SetNoSelection();
+            ::rtl::OUString sSelection;
+            _rValue >>= sSelection;
+
+            if ( !sSelection.equals( getTypedControlWindow()->GetSelectEntry() ) )
+                getTypedControlWindow()->SelectEntry( sSelection );
+
+            if ( !getTypedControlWindow()->IsEntrySelected( sSelection ) )
+            {
+                getTypedControlWindow()->InsertEntry( sSelection, 0 );
+                getTypedControlWindow()->SelectEntry( sSelection );
+            }
         }
     }
 
     //------------------------------------------------------------------
-    sal_Bool OListboxControl::HasList()
+    void SAL_CALL OListboxControl::clearList() throw (RuntimeException)
     {
-        return sal_True;
+        getTypedControlWindow()->Clear();
     }
 
     //------------------------------------------------------------------
-    void OListboxControl::ClearList()
+    void SAL_CALL OListboxControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        Clear();
+        getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
     //------------------------------------------------------------------
-    void OListboxControl::InsertCtrEntry( const ::rtl::OUString& rString,sal_uInt16 nPos)
+    void SAL_CALL OListboxControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        InsertEntry(rString,nPos);
+        getTypedControlWindow()->InsertEntry( NewEntry );
     }
 
     //------------------------------------------------------------------
-    long OListboxControl::PreNotify( NotifyEvent& rNEvt )
+    void OListboxControl::modified()
     {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
+        OListboxControl_Base::modified();
 
-        return ListBox::PreNotify(rNEvt);
-    }
-
-    //------------------------------------------------------------------
-    void OListboxControl::modified(Window* _pSource)
-    {
-        OCommonBehaviourControl::modified(_pSource);
-
-        if (!IsTravelSelect())
+        if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
-            commitModified(_pSource);
+            m_aImplControl.notifyModifiedValue();
     }
 
     //==================================================================
@@ -825,72 +934,51 @@ namespace pcr
     //==================================================================
     //------------------------------------------------------------------
     OComboboxControl::OComboboxControl( Window* pParent, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,ComboBox(pParent,nWinStyle)
+        :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
     {
-        SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
-        SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-        SetDropDownLineCount( LB_DEFAULT_COUNT );
+        getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
     }
 
     //------------------------------------------------------------------
-    void OComboboxControl::SetCtrSize(const Size& rSize)
+    void SAL_CALL OComboboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        OCommonBehaviourControl::SetCtrSize(rSize);
-
-        sal_uInt16 nCount = GetEntryCount();
-        if (nCount > LB_DEFAULT_COUNT)
-            nCount = LB_DEFAULT_COUNT;
-        SetDropDownLineCount(nCount);
+        ::rtl::OUString sText;
+        _rValue >>= sText;
+        getTypedControlWindow()->SetText( sText );
     }
 
     //------------------------------------------------------------------
-    void OComboboxControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    Any SAL_CALL OComboboxControl::getValue() throw (RuntimeException)
     {
-        ::rtl::OUString aStr;
-        if (!bIsUnknown)
-            aStr = rString;
-        SetText(aStr);
+        return makeAny( ::rtl::OUString( getTypedControlWindow()->GetText() ) );
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OComboboxControl::GetProperty() const
+    Type SAL_CALL OComboboxControl::getValueType() throw (RuntimeException)
     {
-        return GetText();
+        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
     }
 
     //------------------------------------------------------------------
-    sal_Bool OComboboxControl::HasList()
+    void SAL_CALL OComboboxControl::clearList() throw (RuntimeException)
     {
-        return sal_True;
+        getTypedControlWindow()->Clear();
     }
 
     //------------------------------------------------------------------
-    void OComboboxControl::ClearList()
+    void SAL_CALL OComboboxControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        Clear();
+        getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
     //------------------------------------------------------------------
-    void OComboboxControl::InsertCtrEntry( const ::rtl::OUString& rString,sal_uInt16 nPos)
+    void SAL_CALL OComboboxControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
-        InsertEntry(rString,nPos);
-    }
-
-    //------------------------------------------------------------------
-    long OComboboxControl::PreNotify( NotifyEvent& rNEvt )
-    {
-        long nResult = OCommonBehaviourControl::handlePreNotify(rNEvt);
-        if (nResult)    // handled
-            return nResult;
-
-        return ComboBox::PreNotify(rNEvt);
+        getTypedControlWindow()->InsertEntry( NewEntry );
     }
 
     //==================================================================
-    //= OMultilineEditControl
+    //= OMultilineFloatingEdit
     //==================================================================
     class OMultilineFloatingEdit : public FloatingWindow
     {
@@ -953,49 +1041,48 @@ namespace pcr
     }
 
     //==================================================================
-    //= OMultilineEditControl
+    //= DropDownEditControl_Base
     //==================================================================
-    #define STD_HEIGHT  100
     //------------------------------------------------------------------
-    OMultilineEditControl::OMultilineEditControl( Window* pParent,sal_Bool bEd, WinBits nWinStyle)
-            :OCommonBehaviourControl(this)
-            ,Edit(pParent,((nWinStyle | WB_DIALOGCONTROL)& (~WB_READONLY| ~WB_DROPDOWN)))
-            ,m_pFloatingEdit(NULL)
-            ,m_pDropdownButton(NULL)
-            ,m_pImplEdit(NULL)
-            ,m_bDropdown(sal_False)
-            ,m_bEdit(bEd)
+    DropDownEditControl::DropDownEditControl( Window* _pParent, WinBits _nStyle )
+        :DropDownEditControl_Base( _pParent, _nStyle )
+        ,m_pFloatingEdit( NULL )
+        ,m_pDropdownButton( NULL )
+        ,m_pImplEdit( NULL )
+        ,m_bDropdown( sal_False )
     {
         SetCompoundControl( TRUE );
 
-        m_pImplEdit = new MultiLineEdit(this,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER| nWinStyle& WB_READONLY);
+        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | _nStyle & WB_READONLY );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
-        if (nWinStyle & WB_DROPDOWN)
+        if ( _nStyle & WB_DROPDOWN )
         {
             m_pDropdownButton = new PushButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
             m_pDropdownButton->SetSymbol(SYMBOL_SPIN_DOWN);
-            m_pDropdownButton->SetClickHdl( LINK( this, OMultilineEditControl, DropDownHdl ) );
+            m_pDropdownButton->SetClickHdl( LINK( this, DropDownEditControl, DropDownHdl ) );
             m_pDropdownButton->Show();
         }
 
         m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
 
-        m_pFloatingEdit->SetPopupModeEndHdl(LINK( this, OMultilineEditControl, ReturnHdl ));
-
-        m_pFloatingEdit->getEdit()->SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl));
-        m_pImplEdit->SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
-        m_pImplEdit->SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl));
-        m_pImplEdit->SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
-
-        autoSizeWindow();
-
-        m_pFloatingEdit->getEdit()->SetReadOnly( nWinStyle & WB_READONLY );
+        m_pFloatingEdit->SetPopupModeEndHdl( LINK( this, DropDownEditControl, ReturnHdl ) );
+        m_pFloatingEdit->getEdit()->SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );
     }
 
     //------------------------------------------------------------------
-    OMultilineEditControl::~OMultilineEditControl()
+    void DropDownEditControl::setControlHelper( ControlHelper& _rControlHelper )
+    {
+        DropDownEditControl_Base::setControlHelper( _rControlHelper );
+        m_pFloatingEdit->getEdit()->SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
+        m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, ControlHelper, GetFocusHdl ) );
+        m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
+        m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, ControlHelper, LoseFocusHdl ) );
+    }
+
+    //------------------------------------------------------------------
+    DropDownEditControl::~DropDownEditControl()
     {
         {
             ::std::auto_ptr<Window> aTemp(m_pFloatingEdit);
@@ -1012,82 +1099,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_Bool OMultilineEditControl::ShowDropDown( sal_Bool bShow )
+    void DropDownEditControl::Resize()
     {
-        if (bShow)
-        {
-            Point aMePos= GetPosPixel();
-            aMePos = GetParent()->OutputToScreenPixel( aMePos );
-            Size aSize=GetSizePixel();
-            Rectangle aRect(aMePos,aSize);
-            aSize.Height() = STD_HEIGHT;
-            m_pFloatingEdit->SetOutputSizePixel(aSize);
-            m_pFloatingEdit->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
-
-            m_pFloatingEdit->Show();
-            m_pFloatingEdit->getEdit()->GrabFocus();
-            m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().Len()));
-            m_bDropdown=sal_True;
-            if (m_bEdit)
-                m_pFloatingEdit->getEdit()->SetText(m_pImplEdit->GetText());
-            m_pImplEdit->SetText(String());
-        }
-        else
-        {
-            m_pFloatingEdit->Hide();
-            m_pFloatingEdit->Invalidate();
-            m_pFloatingEdit->Update();
-
-            String aOutput;
-            String aStr=m_pFloatingEdit->getEdit()->GetText();
-
-            if (aStr.Len()>0)
-            {
-                sal_Int32 nCount = aStr.GetTokenCount('\n');
-
-                String aInput=aStr.GetToken(0,'\n' );
-
-                if (m_bEdit)
-                {
-                    aOutput=aStr;
-                }
-                else
-                {
-                    if (aInput.Len()>0)
-                    {
-                        aOutput+='\"';
-                        aOutput+=aInput;
-                        aOutput+='\"';
-                    }
-
-                    for (sal_Int32 i=1; i<nCount; ++i)
-                    {
-                        aInput = aStr.GetToken((sal_uInt16)i, '\n');
-                        if (aInput.Len()>0)
-                        {
-                            aOutput += ';';
-                            aOutput += '\"';
-                            aOutput += aInput;
-                            aOutput += '\"';
-                        }
-                    }
-                }
-            }
-
-            m_pImplEdit->SetText(aOutput);
-            GetParent()->Invalidate(INVALIDATE_CHILDREN);
-            m_bDropdown=sal_False;
-            m_pImplEdit->GrabFocus();
-        }
-        return m_bDropdown;
-
-    }
-
-
-    //------------------------------------------------------------------
-    void OMultilineEditControl::Resize()
-    {
-        Size aOutSz = GetOutputSizePixel();
+        ::Size aOutSz = GetOutputSizePixel();
 
         if (m_pDropdownButton!=NULL)
         {
@@ -1101,122 +1115,158 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OMultilineEditControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
+    long DropDownEditControl::PreNotify( NotifyEvent& rNEvt )
     {
-        String aStr;
+        long nResult = 1;
 
-        if (!bIsUnknown)
-            aStr=rString.getStr();
-
-        m_pFloatingEdit->getEdit()->SetText(aStr);
-
-        if (m_bEdit)
+        if (rNEvt.GetType() == EVENT_KEYINPUT)
         {
-            SetText(aStr);
-        }
-        else
-        {
-            String aOutput;
+            const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+            sal_uInt16 nKey = aKeyCode.GetCode();
 
-            if (aStr.Len()>0)
+            if ( nKey == KEY_RETURN && !aKeyCode.IsShift() )
             {
-                if (aStr.Len()>0)
+                if ( m_pHelper )
                 {
-                    sal_Int32 nCount = aStr.GetTokenCount('\n');
-
-                    String aInput=aStr.GetToken(0,'\n' );
-                    if (aInput.Len()>0)
-                    {
-                        aOutput+='\"';
-                        aOutput+=aInput;
-                        aOutput+='\"';
-                    }
-
-                    for(sal_Int32 i=1;i<nCount;i++)
-                    {
-                        aInput=aStr.GetToken((sal_uInt16)i,'\n' );
-                        if (aInput.Len()>0)
-                        {
-                            aOutput += ';';
-                            aOutput += '\"';
-                            aOutput += aInput;
-                            aOutput += '\"';
-                        }
-                    }
+                    m_pHelper->LoseFocusHdl( m_pImplEdit );
+                    m_pHelper->activateNextControl();
                 }
             }
-            SetText(aOutput);
-        }
-    }
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OMultilineEditControl::GetProperty() const
-    {
-        if (m_bEdit)
-            return GetText();
-        else
-            return m_pFloatingEdit->getEdit()->GetText();
-    }
-
-    //------------------------------------------------------------------
-    long OMultilineEditControl::PreNotify( NotifyEvent& rNEvt )
-    {
-        long nResult=sal_True;
-
-        sal_uInt16 nSwitch=rNEvt.GetType();
-        if (nSwitch==EVENT_KEYINPUT)
-        {
-            const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
-            sal_uInt16 nKey=aKeyCode.GetCode();
-
-            if (nKey==KEY_RETURN &&!aKeyCode.IsShift())
-            {
-                LoseFocusHdl(m_pImplEdit);
-                if (getListener())
-                    getListener()->TravelLine(this);
-            }
-            else if (nKey==KEY_DOWN && aKeyCode.IsMod2())
+            else if ( nKey == KEY_DOWN && aKeyCode.IsMod2() )
             {
                 Invalidate();
-                ShowDropDown(sal_True);
+                ShowDropDown( sal_True );
             }
-            else if (KEYGROUP_CURSOR==aKeyCode.GetGroup()|| nKey==KEY_HELP
-                    || aKeyCode.GetGroup()==KEYGROUP_FKEYS  || m_bEdit)
+            else if (   KEYGROUP_CURSOR == aKeyCode.GetGroup()
+                    ||  nKey == KEY_HELP
+                    ||  KEYGROUP_FKEYS == aKeyCode.GetGroup()
+                    ||  m_nOperationMode == eMultiLineText
+                    )
             {
-                nResult=Edit::PreNotify(rNEvt);
+                nResult = DropDownEditControl_Base::PreNotify( rNEvt );
             }
-            else if (!m_bEdit)
+            else if ( m_nOperationMode == eStringList )
             {
                 Selection aSel = m_pImplEdit->GetSelection();
-                if (aSel.Min()!=aSel.Max())
+                if ( aSel.Min() != aSel.Max() )
                 {
-                    aSel.Min()=FindPos(aSel.Min());
-                    aSel.Max()=FindPos(aSel.Max());
+                    aSel.Min() = FindPos( aSel.Min() );
+                    aSel.Max() = FindPos( aSel.Max() );
                 }
                 else
                 {
-                    aSel.Min()=FindPos(aSel.Min());
-                    aSel.Max()=aSel.Min();
+                    aSel.Min() = FindPos( aSel.Min() );
+                    aSel.Max() = aSel.Min();
                 }
                 Invalidate();
-                ShowDropDown(sal_True);
+                ShowDropDown( sal_True );
                 m_pFloatingEdit->getEdit()->GrabFocus();
-                m_pFloatingEdit->getEdit()->SetSelection(aSel);
+                m_pFloatingEdit->getEdit()->SetSelection( aSel );
                 Window* pFocusWin = Application::GetFocusWindow();
-                pFocusWin->KeyInput(*rNEvt.GetKeyEvent());
+                pFocusWin->KeyInput( *rNEvt.GetKeyEvent() );
             }
         }
         else
-            nResult=Edit::PreNotify(rNEvt);
+            nResult = DropDownEditControl_Base::PreNotify(rNEvt);
 
         return nResult;
     }
 
     //------------------------------------------------------------------
-    long OMultilineEditControl::FindPos(long nSinglePos)
+    namespace
     {
-        sal_uInt16 nPos=0;
-        sal_uInt16 nDiff=0;
+        //..............................................................
+        StlSyntaxSequence< ::rtl::OUString > lcl_convertMultiLineToList( const String& _rCompsedTextWithLineBreaks )
+        {
+            xub_StrLen nLines( _rCompsedTextWithLineBreaks.GetTokenCount( '\n' ) );
+            StlSyntaxSequence< ::rtl::OUString > aStrings( nLines );
+            StlSyntaxSequence< ::rtl::OUString >::iterator stringItem = aStrings.begin();
+            ::rtl::OUString* pStringItem = aStrings.begin();
+            for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
+                *stringItem = _rCompsedTextWithLineBreaks.GetToken( token, '\n' );
+            return aStrings;
+        }
+
+        String lcl_convertListToMultiLine( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
+        {
+            String sMultiLineText;
+            for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator item = _rStrings.begin();
+                    item != _rStrings.end();
+                )
+            {
+                sMultiLineText += String( *item );
+                if ( ++item != _rStrings.end() )
+                    sMultiLineText += '\n';
+            }
+            return sMultiLineText;
+        }
+
+        //..............................................................
+        String lcl_convertListToDisplayText( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
+        {
+            String sComposed;
+            for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator strings = _rStrings.begin();
+                    strings != _rStrings.end();
+                    ++strings
+                )
+            {
+                if ( strings != _rStrings.begin() )
+                    sComposed += ';';
+                sComposed += '\"';
+                sComposed += String( *strings );
+                sComposed += '\"';
+            }
+            return sComposed;
+        }
+    }
+
+    //------------------------------------------------------------------
+    #define STD_HEIGHT  100
+    sal_Bool DropDownEditControl::ShowDropDown( sal_Bool bShow )
+    {
+        if (bShow)
+        {
+            ::Point aMePos= GetPosPixel();
+            aMePos = GetParent()->OutputToScreenPixel( aMePos );
+            ::Size aSize=GetSizePixel();
+            ::Rectangle aRect(aMePos,aSize);
+            aSize.Height() = STD_HEIGHT;
+            m_pFloatingEdit->SetOutputSizePixel(aSize);
+            m_pFloatingEdit->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
+
+            m_pFloatingEdit->Show();
+            m_pFloatingEdit->getEdit()->GrabFocus();
+            m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().Len()));
+            m_bDropdown=sal_True;
+            if ( m_nOperationMode == eMultiLineText )
+                m_pFloatingEdit->getEdit()->SetText( m_pImplEdit->GetText() );
+            m_pImplEdit->SetText(String());
+        }
+        else
+        {
+            m_pFloatingEdit->Hide();
+            m_pFloatingEdit->Invalidate();
+            m_pFloatingEdit->Update();
+
+            // transfer the text from the floating edit to our own edit
+            String sDisplayText( m_pFloatingEdit->getEdit()->GetText() );
+            if ( m_nOperationMode == eStringList )
+                sDisplayText = lcl_convertListToDisplayText( lcl_convertMultiLineToList( sDisplayText ) );
+
+            m_pImplEdit->SetText( sDisplayText );
+            GetParent()->Invalidate( INVALIDATE_CHILDREN );
+            m_bDropdown = sal_False;
+            m_pImplEdit->GrabFocus();
+        }
+        return m_bDropdown;
+
+    }
+
+    //------------------------------------------------------------------
+    long DropDownEditControl::FindPos(long nSinglePos)
+    {
+        long nPos=0;
+        long nDiff=0;
         String aOutput;
         String aStr=m_pFloatingEdit->getEdit()->GetText();
         String aStr1 = GetText();
@@ -1270,39 +1320,121 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OMultilineEditControl, ReturnHdl, OMultilineFloatingEdit*, pMEd)
+    IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, pMEd)
     {
 
         String aStr = m_pFloatingEdit->getEdit()->GetText();
         String aStr2 = GetText();
         ShowDropDown(sal_False);
 
-        if (aStr!=aStr2 || !m_bEdit)
+        if (aStr!=aStr2 || ( m_nOperationMode == eStringList ) )
         {
-            if (m_bModified)
-                modified(m_pImplEdit);
-            commitModified(m_pImplEdit);
+            if ( m_pHelper )
+                m_pHelper->notifyModifiedValue();
         }
 
         return 0;
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OMultilineEditControl, DropDownHdl, PushButton*, pPb )
+    IMPL_LINK( DropDownEditControl, DropDownHdl, PushButton*, pPb )
     {
         ShowDropDown(!m_bDropdown);
         return 0;
     }
 
     //------------------------------------------------------------------
-    void OMultilineEditControl::modified(Window* _pSource)
+    void DropDownEditControl::SetStringListValue( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
     {
-        if (_pSource == m_pFloatingEdit->getEdit())
-        {   // no listener notification in this case, just the set flag
-            m_bModified = sal_True;
+        SetText( lcl_convertListToDisplayText( _rStrings ) );
+        m_pFloatingEdit->getEdit()->SetText( lcl_convertListToMultiLine( _rStrings ) );
+    }
+
+    //------------------------------------------------------------------
+    StlSyntaxSequence< ::rtl::OUString > DropDownEditControl::GetStringListValue() const
+    {
+        return lcl_convertMultiLineToList( m_pFloatingEdit->getEdit()->GetText() );
+    }
+
+    //------------------------------------------------------------------
+    void DropDownEditControl::SetTextValue( const ::rtl::OUString& _rText )
+    {
+        OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::GetTextValue: illegal call!" );
+
+        m_pFloatingEdit->getEdit()->SetText( _rText );
+        SetText( _rText );
+    }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString DropDownEditControl::GetTextValue() const
+    {
+        OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::GetTextValue: illegal call!" );
+        return GetText();
+    }
+
+    //==================================================================
+    //= OMultilineEditControl
+    //==================================================================
+    //------------------------------------------------------------------
+    OMultilineEditControl::OMultilineEditControl( Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
+        :OMultilineEditControl_Base( _eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField
+                                   , pParent
+                                   , ( nWinStyle | WB_DIALOGCONTROL ) & ( ~WB_READONLY | ~WB_DROPDOWN )
+                                   , false )
+    {
+        getTypedControlWindow()->setOperationMode( _eMode );
+    }
+
+    //------------------------------------------------------------------
+    void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
+    {
+        impl_checkDisposed_throw();
+
+        switch ( getTypedControlWindow()->getOperationMode() )
+        {
+        case eMultiLineText:
+        {
+            ::rtl::OUString sText;
+            if ( !( _rValue >>= sText ) && _rValue.hasValue() )
+                throw IllegalTypeException();
+            getTypedControlWindow()->SetTextValue( sText );
         }
-        else
-            OCommonBehaviourControl::modified(_pSource);
+        break;
+        case eStringList:
+        {
+            Sequence< ::rtl::OUString > aStringLines;
+            if ( !( _rValue >>= aStringLines ) && _rValue.hasValue() )
+                throw IllegalTypeException();
+            getTypedControlWindow()->SetStringListValue( aStringLines );
+        }
+        break;
+        }
+    }
+
+    //------------------------------------------------------------------
+    Any SAL_CALL OMultilineEditControl::getValue() throw (RuntimeException)
+    {
+        impl_checkDisposed_throw();
+
+        Any aValue;
+        switch ( getTypedControlWindow()->getOperationMode() )
+        {
+        case eMultiLineText:
+            aValue <<= getTypedControlWindow()->GetTextValue();
+            break;
+        case eStringList:
+            aValue <<= getTypedControlWindow()->GetStringListValue();
+            break;
+        }
+        return aValue;
+    }
+
+    //------------------------------------------------------------------
+    Type SAL_CALL OMultilineEditControl::getValueType() throw (RuntimeException)
+    {
+        if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
+            return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
     }
 
 //............................................................................
