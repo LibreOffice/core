@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 10:13:57 $
+#   last change: $Author: vg $ $Date: 2006-03-14 11:53:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ SLOFILES=	\
             $(SLO)$/interaction.obj \
             $(SLO)$/instancelocker.obj \
             $(SLO)$/types.obj \
-            $(SLO)$/datetime.obj \
             $(SLO)$/numbers.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/querydeep.obj \
@@ -76,8 +75,9 @@ SLOFILES=	\
             $(SLO)$/mediadescriptor.obj \
             $(SLO)$/locale.obj \
             $(SLO)$/configurationhelper.obj \
+            $(SLO)$/servicedecl.obj \
             $(SLO)$/scopeguard.obj \
-            $(SLO)$/servicedecl.obj
+            $(SLO)$/componentmodule.obj
 
 # --- Targets ----------------------------------
 
