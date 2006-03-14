@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: GenericPropertyHandler.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:05:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_GenericPropertyHandler_idl__
+#define __com_sun_star_inspection_GenericPropertyHandler_idl__
+
+#ifndef __com_sun_star_inspection_XPropertyHandler_idl__
+#include <com/sun/star/inspection/XPropertyHandler.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** implements a general-purpose XPropertyHandler
+
+    The property handler implemented by this service will do an introspection
+    on the provided components, and expose the properties obtained via
+    XIntrospectionAccess::getProperties.
+
+    The handler will automatically determine the best type of property control
+    to represent a certain property, depending on the property type. This includes,
+    for example, list box controls to represent enumeration properties.
+
+    @see XPropertyHandler
+    @see com::sun::star::beans::XIntrospectionAccess
+    @see XPropertyControl
+*/
+service GenericPropertyHandler : XPropertyHandler
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+
