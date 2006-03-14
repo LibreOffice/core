@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:22:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,6 @@
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
-#endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
@@ -226,7 +223,7 @@ namespace frm
     //==================================================================
     //= ItemEvent
     //==================================================================
-    typedef ::comphelper::EventObjectHolder< ItemEvent >    ItemEventDescription;
+    typedef ::comphelper::EventHolder< ItemEvent >    ItemEventDescription;
 
     //==================================================================
     //= OListBoxModel
@@ -1675,13 +1672,12 @@ namespace frm
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( !m_pItemListeners->empty() )
             {
-                if ( !m_pItemBroadcaster )
+                if ( !m_pItemBroadcaster.is() )
                 {
-                    m_pItemBroadcaster = new ::comphelper::AsyncEventNotifier( this );
-                    m_pItemBroadcaster->acquire();
+                    m_pItemBroadcaster.set( new ::comphelper::AsyncEventNotifier );
                     m_pItemBroadcaster->create();
                 }
-                m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent, 0 ) );
+                m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ), this );
             }
         }
 
@@ -1764,9 +1760,9 @@ namespace frm
 
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if ( m_pItemBroadcaster )
+            if ( m_pItemBroadcaster.is() )
             {
-                m_pItemBroadcaster->release();
+                m_pItemBroadcaster->removeEventsForProcessor( this );
                 m_pItemBroadcaster = NULL;
             }
         }
@@ -1775,16 +1771,16 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OListBoxControl::processEvent( const EventDescription& _rEvent )
+    void OListBoxControl::processEvent( const AnyEvent& _rEvent )
     {
+        Reference< XListBox > xKeepAlive( this );
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            if ( OComponentHelper::rBHelper.bDisposed )
+                return;
+        }
         const ItemEventDescription& rItemEvent = static_cast< const ItemEventDescription& >( _rEvent );
         m_pItemListeners->itemStateChanged( rItemEvent.getEventObject() );
-    }
-
-    //------------------------------------------------------------------------------
-    Reference< XComponent > OListBoxControl::getComponent()
-    {
-        return Reference< XComponent >( queryInterface( XComponent::static_type() ), UNO_QUERY );
     }
 
     //------------------------------------------------------------------------------
