@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:15:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,11 @@
 namespace pcr
 {
 //............................................................................
+
+    PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCONTROL,         "DefaultControl" );
+    PCR_CONSTASCII_STRING( PROPERTY_INTROSPECTEDOBJECT,     "IntrospectedObject" );
+    PCR_CONSTASCII_STRING( PROPERTY_CURRENTPAGE,            "CurrentPage" );
+    PCR_CONSTASCII_STRING( PROPERTY_CONTROLCONTEXT,         "ControlContext" );
 
     // properties
     PCR_CONSTASCII_STRING( PROPERTY_CLASSID,                "ClassId" );
@@ -131,6 +136,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,              "EchoChar");
     PCR_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,              "RowHeight");
     PCR_CONSTASCII_STRING( PROPERTY_HELPTEXT,               "HelpText");
+//    PCR_CONSTASCII_STRING( PROPERTY_FONT,                   "Font");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_NAME,              "FontName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_STYLENAME,         "FontStyleName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_FAMILY,            "FontFamily");
