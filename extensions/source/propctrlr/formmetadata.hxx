@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:30 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
 #endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#include "enumrepresentation.hxx"
+#endif
 
 #ifndef _COMPHELPER_COMPOSEDPROPS_HXX_
 #include <comphelper/composedprops.hxx>
@@ -60,7 +63,7 @@ namespace pcr
     class OPropertyInfoService
                 :public IPropertyInfoService
                 ,public ::comphelper::IPropertySetComposerCallback
-                ,public OModuleResourceClient
+                ,public PcrClient
     {
     protected:
         static sal_uInt16               s_nCount;
@@ -69,12 +72,13 @@ namespace pcr
 
     public:
         // IPropertyInfoService
-        virtual sal_Int32               getPropertyId(const String& _rName) const;
-        virtual String                  getPropertyTranslation(sal_Int32 _nId) const;
-        virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
-        virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const;
-        virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
-        virtual ::std::vector< String > getPropertyEnumRepresentations(sal_Int32 _nId) const;
+        virtual sal_Int32                           getPropertyId(const String& _rName) const;
+        virtual String                              getPropertyTranslation(sal_Int32 _nId) const;
+        virtual sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const;
+        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const;
+        virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
+        virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
+        virtual String                              getPropertyName( sal_Int32 _nPropId );
 
         // IPropertySetComposerCallback
         virtual sal_Bool                isComposeable( const ::rtl::OUString& _rPropertyName ) const;
@@ -87,39 +91,48 @@ namespace pcr
     };
 
     //========================================================================
-    //= event description
+    //= DefaultEnumRepresentation
     //========================================================================
-    class EventDisplayDescription
+    /** an implementation of the IPropertyEnumRepresentation
+
+        To be used with properties which, in formmetadata.cxx, are declared as ENUM.
+    */
+    class DefaultEnumRepresentation : public IPropertyEnumRepresentation
     {
+    private:
+        oslInterlockedCount         m_refCount;
+        const IPropertyInfoService& m_rMetaData;
+        ::com::sun::star::uno::Type m_aType;
+        const sal_Int32             m_nPropertyId;
+
     public:
-        ::rtl::OUString sName;
-        String          sDisplayName;
-        sal_Int32       nHelpId;
-        sal_uInt32      nUniqueBrowseId;
-        sal_Int32       nIndex;
+        /** constructs an instance
 
-        EventDisplayDescription( const ::rtl::OUString& _rName )
-            :nIndex( 0 )
-            ,sName( _rName )
-            ,nHelpId( 0 )
-            ,nUniqueBrowseId( 0 )
-            {
-            }
-        EventDisplayDescription( sal_Int32 _nId, const sal_Char* _pAsciiName, USHORT _nDisplayNameResId,
-            sal_Int32 _nHelpId, sal_uInt32 _nUniqueBrowseId )
-            :nIndex( _nId )
-            ,sName( ::rtl::OUString::createFromAscii( _pAsciiName ) )
-            ,sDisplayName( ModuleRes( _nDisplayNameResId ) )
-            ,nHelpId( _nHelpId )
-            ,nUniqueBrowseId( _nUniqueBrowseId )
-            {
-            }
+            @param _rInfo
+                An instance implementing IPropertyInfoService. Must live at least as
+                long as the DefaultEnumRepresentation should live.
+        */
+        DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const ::com::sun::star::uno::Type& _rType, sal_Int32 _nPropertyId );
+
+    protected:
+        ~DefaultEnumRepresentation();
+
+    protected:
+        // IPropertyEnumRepresentation implementqation
+        virtual ::std::vector< ::rtl::OUString >
+                                    SAL_CALL getDescriptions() const;
+        virtual void                SAL_CALL getValueFromDescription( const ::rtl::OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
+        virtual ::rtl::OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
+
+        // IReference implementqation
+        virtual oslInterlockedCount SAL_CALL acquire();
+        virtual oslInterlockedCount SAL_CALL release();
+
+    private:
+        DefaultEnumRepresentation();                                                // never implemented
+        DefaultEnumRepresentation( const DefaultEnumRepresentation& );              // never implemented
+        DefaultEnumRepresentation& operator=( const DefaultEnumRepresentation& );   // never implemented
     };
-
-    //========================================================================
-    //= event helpers
-    //========================================================================
-    EventDisplayDescription* GetEvtTranslation(const ::rtl::OUString& _rName);
 
     //========================================================================
     //= UI flags (for all browseable properties)
@@ -129,9 +142,6 @@ namespace pcr
 #define PROP_FLAG_FORM_VISIBLE      0x00000001  // the property is visible when inspecting a form object
 #define PROP_FLAG_DIALOG_VISIBLE    0x00000002  // the property is visible when inspecting a dialog object
 #define PROP_FLAG_DATA_PROPERTY     0x00000004  // the property is to appear on the "Data" page
-#define PROP_FLAG_ACTUATING         0x00000008  // the property is "actuating" - when it changes,
-                                                //  dependent properties (their UI, more concrete) need
-                                                //  also to be updated
 #define PROP_FLAG_ENUM              0x00000020  // the property is some kind of enum property, i.e. its
                                                 // value is chosen from a fixed list of possible values
 #define PROP_FLAG_ENUM_ONE          0x00000060  // the property is an enum property starting with 1
