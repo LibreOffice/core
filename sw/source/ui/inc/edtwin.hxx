@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:26:43 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ class   SwShadowCursor;
 class   DataChangedEvent;
 class   SvxAutoCorrCfg;
 class   SvxAutoCorrect;
+class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
 
@@ -244,6 +245,8 @@ public:
     BOOL            IsChainMode() const             { return bChainMode; }
 
     void            FlushInBuffer();
+    BOOL            IsInputSequenceChecking( const String &rText, const SwPaM& rCrsr ) const;
+
 
     static  void    SetReplaceQuote(BOOL bOn = TRUE) { bReplaceQuote = bOn; }
     static  BOOL    IsReplaceQuote() { return bReplaceQuote; }
