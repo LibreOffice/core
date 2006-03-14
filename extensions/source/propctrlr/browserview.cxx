@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:52 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,12 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 #include "propertyeditor.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPHELPID_HRC_
-#include "prophelpid.hrc"
+#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
+#include "formhelpid.hrc"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-//#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-//#include "propcontroller.hxx"
-//#endif
 #include <memory>
 
 //............................................................................
@@ -76,24 +73,6 @@ namespace pcr
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
         m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 
-        m_pPropBox->Show();
-    }
-
-    //------------------------------------------------------------------------
-    OPropertyBrowserView::OPropertyBrowserView( const Reference< XMultiServiceFactory >& _rxORB,
-                                 Window* _pParent, const ResId& rId)
-                  :Window(_pParent, rId)
-                  ,m_xORB(_rxORB)
-                  ,m_nActivePage(0)
-    {
-        DBG_CTOR(OPropertyBrowserView,NULL);
-
-        m_pPropBox = new OPropertyEditor( this );
-        m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
-        m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
-
-        Size aSize = GetOutputSizePixel();
-        m_pPropBox->SetPosSizePixel(Point(0,0), aSize);
         m_pPropBox->Show();
     }
 
