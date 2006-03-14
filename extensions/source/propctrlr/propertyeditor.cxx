@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:21 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 #include "propertyeditor.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERPAGE_HXX_
 #include "browserpage.hxx"
 #endif
@@ -46,10 +43,23 @@
 #include "linedescriptor.hxx"
 #endif
 
+/** === begin UNO includes === **/
+/** === end UNO includes === **/
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 //............................................................................
 namespace pcr
 {
 //............................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::inspection::XPropertyControl;
+    using ::com::sun::star::uno::Reference;
+    /** === end UNO using === **/
 
     //==================================================================
     // class OPropertyEditor
@@ -168,8 +178,6 @@ namespace pcr
     //------------------------------------------------------------------
     OBrowserPage* OPropertyEditor::getPage( sal_uInt16& _rPageId )
     {
-        if ( EDITOR_PAGE_CURRENT == _rPageId )
-            _rPageId = m_aTabControl.GetCurPageId();
         return static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( _rPageId ) );
     }
 
@@ -301,19 +309,19 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 nPos, sal_uInt16 _nPageId )
+    sal_uInt16 OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 _nPageId, sal_uInt16 nPos )
     {
         // let the current page handle this
-        sal_uInt16 nEntry = LISTBOX_ENTRY_NOTFOUND;
         OBrowserPage* pPage = getPage( _nPageId );
-        if ( pPage )
-        {
-            nEntry = pPage->getListBox()->InsertEntry( rData, nPos );
+        DBG_ASSERT( pPage, "OPropertyEditor::InsertEntry: don't have such a page!" );
+        if ( !pPage )
+            return LISTBOX_ENTRY_NOTFOUND;
 
-            OSL_ENSURE( m_aPropertyPageIds.find( rData.sName ) == m_aPropertyPageIds.end(),
-                "OPropertyEditor::InsertEntry: property already present in the map!" );
-            m_aPropertyPageIds.insert( MapStringToPageId::value_type( rData.sName, _nPageId ) );
-        }
+        sal_uInt16 nEntry = pPage->getListBox()->InsertEntry( rData, nPos );
+
+        OSL_ENSURE( m_aPropertyPageIds.find( rData.sName ) == m_aPropertyPageIds.end(),
+            "OPropertyEditor::InsertEntry: property already present in the map!" );
+        m_aPropertyPageIds.insert( MapStringToPageId::value_type( rData.sName, _nPageId ) );
 
         return nEntry;
     }
@@ -341,21 +349,21 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue )
+    void OPropertyEditor::SetPropertyValue( const ::rtl::OUString& rEntryName, const Any& _rValue )
     {
         OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            pPage->getListBox()->SetPropertyValue( rEntryName, rValue );
+            pPage->getListBox()->SetPropertyValue( rEntryName, _rValue );
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OPropertyEditor::GetPropertyValue( const ::rtl::OUString& rEntryName ) const
+    Any OPropertyEditor::GetPropertyValue( const ::rtl::OUString& rEntryName ) const
     {
-        ::rtl::OUString aString;
+        Any aValue;
         const OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            aString = pPage->getListBox()->GetPropertyValue( rEntryName );
-        return aString;
+            aValue = pPage->getListBox()->GetPropertyValue( rEntryName );
+        return aValue;
     }
 
     //------------------------------------------------------------------
@@ -395,7 +403,7 @@ namespace pcr
             DBG_ASSERT( m_aHiddenPages.find( _nPageId ) == m_aHiddenPages.end(), "OPropertyEditor::ShowPropertyPage: page already hidden!" );
 
             m_aHiddenPages[ _nPageId ] = HiddenPage( nPagePos, m_aTabControl.GetTabPage( _nPageId ) );
-          m_aTabControl.RemovePage( _nPageId );
+            m_aTabControl.RemovePage( _nPageId );
         }
         else
         {
@@ -403,8 +411,8 @@ namespace pcr
             if ( aPagePos == m_aHiddenPages.end() )
                 return;
 
-          aPagePos->second.pPage->SetSizePixel( m_aTabControl.GetTabPageSizePixel() );
-          m_aTabControl.InsertPage( aPagePos->first, aPagePos->second.pPage->GetText(), aPagePos->second.nPos );
+            aPagePos->second.pPage->SetSizePixel( m_aTabControl.GetTabPageSizePixel() );
+            m_aTabControl.InsertPage( aPagePos->first, aPagePos->second.pPage->GetText(), aPagePos->second.nPos );
             m_aTabControl.SetTabPage( aPagePos->first, aPagePos->second.pPage );
 
             m_aHiddenPages.erase( aPagePos );
@@ -412,13 +420,13 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton )
+    void OPropertyEditor::EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
         for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
-                pPage->getListBox()->EnablePropertyControls( _rEntryName, _bEnableInput, _bEnablePrimaryButton, _bEnableSecondaryButton );
+                pPage->getListBox()->EnablePropertyControls( _rEntryName, _nControls, _bEnable );
         }
     }
 
@@ -435,53 +443,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IBrowserControl* OPropertyEditor::GetPropertyControl(const ::rtl::OUString& rEntryName)
+    Reference< XPropertyControl > OPropertyEditor::GetPropertyControl(const ::rtl::OUString& rEntryName)
     {
+        Reference< XPropertyControl > xControl;
         // let the current page handle this
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
         if (pPage)
-            return pPage->getListBox()->GetPropertyControl(rEntryName);
-        return NULL;
-    }
-
-    //------------------------------------------------------------------
-    void OPropertyEditor::SetFirstVisibleEntry(sal_uInt16 nPos)
-    {
-        // let the current page handle this
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if(pPage)
-            pPage->getListBox()->SetFirstVisibleEntry(nPos);
-    }
-
-    //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::GetFirstVisibleEntry()
-    {
-        // let the current page handle this
-        sal_uInt16 nEntry=LISTBOX_ENTRY_NOTFOUND;
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if(pPage)
-            nEntry=pPage->getListBox()->GetFirstVisibleEntry();
-        return nEntry;
-    }
-
-    //------------------------------------------------------------------
-    void OPropertyEditor::SetSelectedEntry(sal_uInt16 nPos)
-    {
-        // let the current page handle this
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if(pPage)
-            pPage->getListBox()->SetSelectedEntry(nPos);
-    }
-
-    //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::GetSelectedEntry()
-    {
-        sal_uInt16 nEntry=LISTBOX_ENTRY_NOTFOUND;
-        // let the current page handle this
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if(pPage)
-            nEntry=pPage->getListBox()->GetSelectedEntry();
-        return nEntry;
+            xControl = pPage->getListBox()->GetPropertyControl(rEntryName);
+        return xControl;
     }
 
     //------------------------------------------------------------------
@@ -500,9 +469,8 @@ namespace pcr
         sal_Int32 nCurrentId = m_aTabControl.GetCurPageId();
         OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage((sal_uInt16)nCurrentId));
         OBrowserListBox* pListBox = pCurrentPage ? pCurrentPage->getListBox() : NULL;
-        IBrowserControl* pControl = pListBox ? pListBox->GetCurrentPropertyControl() : NULL;
-        if (pControl && pControl->IsModified())
-            pControl->CommitModified();
+        if ( pListBox && pListBox->IsModified() )
+            pListBox->CommitModified();
 
         return 1L;
     }
