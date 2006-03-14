@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editpropertyhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:08:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,14 +43,11 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 #include "formmetadata.hxx"
 #endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
-#include "stringrepresentation.hxx"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPBROWSERUI_HXX
-#include "propbrowserui.hxx"
-#endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORUI_HPP_
+#include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -61,6 +58,12 @@
 #define TEXTTYPE_MULTILINE      1
 #define TEXTTYPE_RICHTEXT       2
 
+//------------------------------------------------------------------------
+extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler()
+{
+    ::pcr::EditPropertyHandler::registerImplementation();
+}
+
 //........................................................................
 namespace pcr
 {
@@ -70,36 +73,57 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
+    using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::inspection;
 
     //====================================================================
     //= EditPropertyHandler
     //====================================================================
+    DBG_NAME( EditPropertyHandler )
     //--------------------------------------------------------------------
-    EditPropertyHandler::EditPropertyHandler( const Reference< XPropertySet >& _rxIntrospectee, const Reference< XTypeConverter >& _rxTypeConverter  )
-        :PropertyHandler( _rxIntrospectee, _rxTypeConverter )
+    EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
+        :EditPropertyHandler_Base( _rxContext )
     {
+        DBG_CTOR( EditPropertyHandler, NULL );
     }
 
     //--------------------------------------------------------------------
     EditPropertyHandler::~EditPropertyHandler( )
     {
+        DBG_DTOR( EditPropertyHandler, NULL );
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EditPropertyHandler::getPropertyValue( PropertyId _nPropId, bool _bLazy ) const
+    ::rtl::OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        Any aReturn;
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EditPropertyHandler" ) );
+    }
 
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported( 1 );
+        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.EditPropertyHandler" ) );
+        return aSupported;
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL EditPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+
+        Any aReturn;
         try
         {
-            switch ( _nPropId )
+            switch ( nPropId )
             {
             case PROPERTY_ID_SHOW_SCROLLBARS:
             {
                 sal_Bool bHasVScroll = sal_False;
-                m_xIntrospectee->getPropertyValue( PROPERTY_VSCROLL ) >>= bHasVScroll;
+                m_xComponent->getPropertyValue( PROPERTY_VSCROLL ) >>= bHasVScroll;
                 sal_Bool bHasHScroll = sal_False;
-                m_xIntrospectee->getPropertyValue( PROPERTY_HSCROLL ) >>= bHasHScroll;
+                m_xComponent->getPropertyValue( PROPERTY_HSCROLL ) >>= bHasHScroll;
 
                 aReturn <<= (sal_Int32)( ( bHasVScroll ? 2 : 0 ) + ( bHasHScroll ? 1 : 0 ) );
             }
@@ -109,13 +133,13 @@ namespace pcr
             {
                 sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
                 sal_Bool bRichText = sal_False;
-                OSL_VERIFY( m_xIntrospectee->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
+                OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
                 if ( bRichText )
                     nTextType = TEXTTYPE_RICHTEXT;
                 else
                 {
                     sal_Bool bMultiLine = sal_False;
-                    OSL_VERIFY( m_xIntrospectee->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
+                    OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
                     if ( bMultiLine )
                         nTextType = TEXTTYPE_MULTILINE;
                     else
@@ -128,6 +152,7 @@ namespace pcr
 
             default:
                 DBG_ERROR( "EditPropertyHandler::getPropertyValue: cannot handle this property!" );
+                break;
             }
         }
         catch( const Exception& )
@@ -139,11 +164,14 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EditPropertyHandler::setPropertyValue( PropertyId _nPropId, const Any& _rValue )
+    void SAL_CALL EditPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+
         try
         {
-            switch ( _nPropId )
+            switch ( nPropId )
             {
             case PROPERTY_ID_SHOW_SCROLLBARS:
             {
@@ -153,8 +181,8 @@ namespace pcr
                 sal_Bool bHasVScroll = 0 != ( nScrollbars & 2 );
                 sal_Bool bHasHScroll = 0 != ( nScrollbars & 1 );
 
-                m_xIntrospectee->setPropertyValue( PROPERTY_VSCROLL, makeAny( (sal_Bool)bHasVScroll ) );
-                m_xIntrospectee->setPropertyValue( PROPERTY_HSCROLL, makeAny( (sal_Bool)bHasHScroll ) );
+                m_xComponent->setPropertyValue( PROPERTY_VSCROLL, makeAny( (sal_Bool)bHasVScroll ) );
+                m_xComponent->setPropertyValue( PROPERTY_HSCROLL, makeAny( (sal_Bool)bHasHScroll ) );
             }
             break;
 
@@ -173,8 +201,8 @@ namespace pcr
                     OSL_ENSURE( sal_False, "EditPropertyHandler::setPropertyValue: invalid text type!" );
                 }
 
-                m_xIntrospectee->setPropertyValue( PROPERTY_MULTILINE, makeAny( bMultiLine ) );
-                m_xIntrospectee->setPropertyValue( PROPERTY_RICHTEXT, makeAny( bRichText ) );
+                m_xComponent->setPropertyValue( PROPERTY_MULTILINE, makeAny( bMultiLine ) );
+                m_xComponent->setPropertyValue( PROPERTY_RICHTEXT, makeAny( bRichText ) );
             }
             break;
 
@@ -193,8 +221,8 @@ namespace pcr
     {
         // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
         Reference< XPropertySetInfo > xPSI;
-        if ( m_xIntrospectee.is() )
-            xPSI = m_xIntrospectee->getPropertySetInfo();
+        if ( m_xComponent.is() )
+            xPSI = m_xComponent->getPropertySetInfo();
 
         return xPSI.is()
             && xPSI->hasPropertyByName( PROPERTY_HSCROLL )
@@ -206,8 +234,8 @@ namespace pcr
     {
         // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
         Reference< XPropertySetInfo > xPSI;
-        if ( m_xIntrospectee.is() )
-            xPSI = m_xIntrospectee->getPropertySetInfo();
+        if ( m_xComponent.is() )
+            xPSI = m_xComponent->getPropertySetInfo();
 
         return xPSI.is()
             && xPSI->hasPropertyByName( PROPERTY_RICHTEXT )
@@ -215,7 +243,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< Property > SAL_CALL EditPropertyHandler::implDescribeSupportedProperties() const
+    Sequence< Property > SAL_CALL EditPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
 
@@ -225,12 +253,15 @@ namespace pcr
         if ( implHaveTextTypeProperty() )
             addInt32PropertyDescription( aProperties, PROPERTY_TEXTTYPE );
 
-        return aProperties;
+        if ( aProperties.empty() )
+            return Sequence< Property >();
+        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) const
+    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
         ::std::vector< ::rtl::OUString > aSuperseded;
         if ( implHaveBothScrollBarProperties() )
         {
@@ -242,40 +273,48 @@ namespace pcr
             aSuperseded.push_back( PROPERTY_RICHTEXT );
             aSuperseded.push_back( PROPERTY_MULTILINE );
         }
-        return aSuperseded;
+        if ( aSuperseded.empty() )
+            return Sequence< ::rtl::OUString >();
+        return Sequence< ::rtl::OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) const
+    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
         ::std::vector< ::rtl::OUString > aInterestingActuatingProps;
         if ( implHaveTextTypeProperty() )
             aInterestingActuatingProps.push_back( PROPERTY_TEXTTYPE );
         aInterestingActuatingProps.push_back( PROPERTY_MULTILINE );
-        return aInterestingActuatingProps;
+        return Sequence< ::rtl::OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool )
+    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
-        switch ( _nActuatingPropId )
+        if ( !_rxInspectorUI.is() )
+            throw NullPointerException();
+
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        switch ( nActuatingPropId )
         {
         case PROPERTY_ID_TEXTTYPE:
         {
             sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-            getPropertyValue( PROPERTY_ID_TEXTTYPE ) >>= nTextType;
+            getPropertyValue( PROPERTY_TEXTTYPE ) >>= nTextType;
 
-            _pUpdater->enablePropertyUI( PROPERTY_WORDBREAK,       nTextType == TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
-            _pUpdater->enablePropertyUI( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( ::rtl::OUString::createFromAscii( "Font" ), nTextType != TEXTTYPE_RICHTEXT );
-            _pUpdater->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
-            _pUpdater->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
+            if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_WORDBREAK ) )
+                _rxInspectorUI->enablePropertyUI( PROPERTY_WORDBREAK,   nTextType == TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
 
-            _pUpdater->showCategory( eData, nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->showCategory( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) ), nTextType != TEXTTYPE_RICHTEXT );
         }
         break;
 
@@ -284,9 +323,9 @@ namespace pcr
             sal_Bool bIsMultiline = sal_False;
             _rNewValue >>= bIsMultiline;
 
-            _pUpdater->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, bIsMultiline );
-            _pUpdater->enablePropertyUI( PROPERTY_ECHO_CHAR, !bIsMultiline );
-            _pUpdater->enablePropertyUI( PROPERTY_LINEEND_FORMAT, bIsMultiline );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, bIsMultiline );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_ECHO_CHAR, !bIsMultiline );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT, bIsMultiline );
         }
         break;
 
