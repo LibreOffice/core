@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modulepcr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:18:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,5 +33,24 @@
  *
  ************************************************************************/
 
-#include "componentmodule.cxx"
+#ifndef EXTENSIONS_PROPCTRLR_MODULEPRC_HXX
+#include "modulepcr.hxx"
+#endif
 
+#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#include <rtl/instance.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/getglobalmutex.hxx>
+#endif
+
+//........................................................................
+namespace pcr
+{
+//........................................................................
+
+    IMPLEMENT_MODULE( PcrModule, "pcr" )
+
+//........................................................................
+} // namespace pcr
+//........................................................................
