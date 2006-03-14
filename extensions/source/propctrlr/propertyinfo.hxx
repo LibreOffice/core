@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyinfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 #include <vector>
 
 //............................................................................
@@ -55,12 +58,15 @@ namespace pcr
     class IPropertyInfoService
     {
     public:
-        virtual sal_Int32               getPropertyId(const String& _rName) const = 0;
-        virtual String                  getPropertyTranslation(sal_Int32 _nId) const = 0;
-        virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const = 0;
-        virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const = 0;
-        virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const = 0;
-        virtual ::std::vector< String > getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
+        virtual sal_Int32                           getPropertyId(const String& _rName) const = 0;
+        virtual String                              getPropertyTranslation(sal_Int32 _nId) const = 0;
+        virtual sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const = 0;
+        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const = 0;
+        virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const = 0;
+        virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
+
+        // this is only temporary, until the UNOization of the property browser is completed
+        virtual String                  getPropertyName( sal_Int32 _nPropId ) = 0;
     };
 
 //............................................................................
