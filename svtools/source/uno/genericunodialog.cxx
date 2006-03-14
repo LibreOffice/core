@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:52 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,21 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _r
         ,m_bCanceled(sal_False)
         ,m_bTitleAmbiguous(sal_True)
         ,m_xORB(_rxORB)
+{
+    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+        &m_sTitle, getCppuType(&m_sTitle));
+    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+        &m_xParent, getCppuType(&m_xParent));
+}
+
+//-------------------------------------------------------------------------
+OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
+        :OPropertyContainer(GetBroadcastHelper())
+        ,m_pDialog(NULL)
+        ,m_bExecuting(sal_False)
+        ,m_bCanceled(sal_False)
+        ,m_bTitleAmbiguous(sal_True)
+        ,m_xORB( _rxContext->getServiceManager(), UNO_QUERY_THROW )
 {
     registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
