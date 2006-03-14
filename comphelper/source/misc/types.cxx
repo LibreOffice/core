@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:53:28 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -81,6 +78,35 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
+
+//-------------------------------------------------------------------------
+sal_Bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
+{
+    return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
+    ( _rLeft.Seconds == _rRight.Seconds) &&
+    ( _rLeft.Minutes == _rRight.Minutes) &&
+    ( _rLeft.Hours == _rRight.Hours) &&
+    ( _rLeft.Day == _rRight.Day) &&
+    ( _rLeft.Month == _rRight.Month) &&
+    ( _rLeft.Year == _rRight.Year) ;
+}
+
+//-------------------------------------------------------------------------
+sal_Bool operator ==(const Date& _rLeft, const Date& _rRight)
+{
+    return ( _rLeft.Day == _rRight.Day) &&
+    ( _rLeft.Month == _rRight.Month) &&
+    ( _rLeft.Year == _rRight.Year) ;
+}
+
+//-------------------------------------------------------------------------
+sal_Bool operator ==(const Time& _rLeft, const Time& _rRight)
+{
+    return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
+    ( _rLeft.Seconds == _rRight.Seconds) &&
+    ( _rLeft.Minutes == _rRight.Minutes) &&
+    ( _rLeft.Hours == _rRight.Hours) ;
+}
 
 //------------------------------------------------------------------------------
 sal_Int32 getINT32(const Any& _rAny)
