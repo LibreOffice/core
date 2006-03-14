@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:57:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
+
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
 
 #include <svxfont.hxx>
 #include <impedit.hxx>
@@ -102,6 +106,9 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #endif
 
 #include <srchdlg.hxx>
@@ -1080,7 +1087,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     }
                     else
                     {
-                        aCurSel = pImpEditEngine->InsertText( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode() );
+                        aCurSel = pImpEditEngine->InsertText( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode(), sal_True );
                     }
                     // AutoComplete ???
                     if ( pImpEditEngine->GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
