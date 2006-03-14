@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:02:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,23 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 #define _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYCONTROL_HPP_
+#include <com/sun/star/inspection/XPropertyControl.hpp>
 #endif
+/** === end UNO includes === **/
+
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROL_HXX_
-#include "brwcontrol.hxx"
-#endif
+
+namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
+{
+    const sal_Int16 CompleteLine = 0x4000;
+} } } } }
 
 //............................................................................
 namespace pcr
@@ -55,92 +60,88 @@ namespace pcr
 //............................................................................
 
     class OBrowserLine;
-    class IBrowserControl;
 
     //========================================================================
     class IButtonClickListener
     {
     public:
-        virtual void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) = 0;
+        virtual void    buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary ) = 0;
     };
-
-#define ENABLED_LINE        ((sal_uInt16)0x0001)
-#define ENABLED_INPUT       ((sal_uInt16)0x0002)
-#define ENABLED_PRIMARY     ((sal_uInt16)0x0004)
-#define ENABLED_SECONDARY   ((sal_uInt16)0x0008)
-#define ENABLED_ALL         ((sal_uInt16)0xFFFF)
 
     //========================================================================
     class OBrowserLine
     {
     private:
-                FixedText               m_aFtTitle;
-                Size                    m_aOutputSize;
-                Point                   m_aLinePos;
-                IBrowserControl*        m_pBrowserControl;
-                PushButton*             m_pBrowseButton;
-                PushButton*             m_pAdditionalBrowseButton;
-                IButtonClickListener*   m_pClickListener;
-                Window*                 m_pTheParent;
-                sal_uInt16              m_nFlags;
-                BrowserControlType      m_eControlType;
-                sal_uInt16              m_nNameWidth;
-                sal_uInt16              m_nEnableFlags;
-                sal_Bool                m_bIndentTitle : 1;
-
-    protected:
-                void                layoutComponents();
+        ::rtl::OUString         m_sEntryName;
+        FixedText               m_aFtTitle;
+        Size                    m_aOutputSize;
+        Point                   m_aLinePos;
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+                                m_xControl;
+        Window*                 m_pControlWindow;
+        PushButton*             m_pBrowseButton;
+        PushButton*             m_pAdditionalBrowseButton;
+        IButtonClickListener*   m_pClickListener;
+        Window*                 m_pTheParent;
+        sal_uInt16              m_nNameWidth;
+        sal_uInt16              m_nEnableFlags;
+        sal_Bool                m_bIndentTitle : 1;
 
     public:
-                OBrowserLine( Window* pParent);
-                ~OBrowserLine();
+                            OBrowserLine( const ::rtl::OUString& _rEntryName, Window* pParent);
+                            ~OBrowserLine();
 
-                void                        setControl(IBrowserControl*);
-                IBrowserControl*            getControl();
+        void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl()
+        {
+            return m_xControl;
+        }
+        inline const Window* getControlWindow() const
+        {
+            return m_pControlWindow;
+        }
 
-                void                        SetKindOfControl(BrowserControlType);
-                BrowserControlType          GetKindOfControl();
+        const ::rtl::OUString&
+                            GetEntryName() const { return m_sEntryName; }
 
-                void                        SetComponentHelpIds( sal_uInt32 _nControlId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
+        void                SetComponentHelpIds( sal_uInt32 _nControlId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
 
-                void                        SetTitle(const String& rString );
-                // #99102# ---------------
-                void                        FullFillTitleString();
-                String                      GetTitle() const;
-                void                        SetTitleWidth(sal_uInt16);
+        void                SetTitle(const String& rString );
+        void                FullFillTitleString();
+        String              GetTitle() const;
+        void                SetTitleWidth(sal_uInt16);
 
-                void                        SetPosPixel(Point aPos);
-                void                        SetPosSizePixel(Point aPos,Size aSize);
-                Size                        GetSizePixel();
-                void                        Show(sal_Bool bFlag=sal_True);
-                void                        Hide();
-                sal_Bool                    IsVisible();
+        void                SetPosPixel(Point aPos);
+        void                SetPosSizePixel(Point aPos,Size aSize);
+        Size                GetSizePixel();
+        void                Show(sal_Bool bFlag=sal_True);
+        void                Hide();
+        sal_Bool            IsVisible();
 
-                Window*                     GetRefWindow();
-                void                        SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
+        Window*             GetRefWindow();
+        void                SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
 
-                sal_Bool                    GrabFocus();
-                void                        ShowBrowseButton( const Image& _rImage, bool _bPrimary );
-                void                        HideBrowseButton( bool _bPrimary );
+        sal_Bool            GrabFocus();
+        void                ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary );
+        void                HideBrowseButton( sal_Bool _bPrimary );
 
-                void                        EnablePropertyControls( bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton );
-                void                        EnablePropertyLine( bool _bEnable );
-                sal_Bool                    IsPropertyInputEnabled( ) const;
+        void                EnablePropertyControls( sal_Int16 _nControls, bool _bEnable );
+        void                EnablePropertyLine( bool _bEnable );
+        sal_Bool            IsPropertyInputEnabled( ) const;
 
-                void                        SetClickListener( IButtonClickListener* _pListener );
-                void                        SetFlags( sal_uInt16 _nFlags );
-                sal_uInt16                  GetFlags();
+        void                SetClickListener( IButtonClickListener* _pListener );
 
-                void                        IndentTitle( sal_Bool _bIndent );
+        void                IndentTitle( sal_Bool _bIndent );
+
     private:
         DECL_LINK( OnButtonClicked, PushButton* );
         DECL_LINK( OnButtonFocus, PushButton* );
 
-        void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );
+        void    implHideBrowseButton( sal_Bool _bPrimary, bool _bReLayout );
         void    implUpdateEnabledDisabled();
-    };
 
-    DECLARE_STL_VECTOR( OBrowserLine*, OBrowserLinesArray );
+        void    impl_layoutComponents();
+    };
 
 //............................................................................
 } // namespace pcr
