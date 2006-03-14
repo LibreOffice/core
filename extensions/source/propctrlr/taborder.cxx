@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:30:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ namespace pcr
     //------------------------------------------------------------------------
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XMultiServiceFactory >& _rxORB )
-        :ModalDialog( _pParent, ModuleRes( RID_DLG_TABORDER ) )
+        :ModalDialog( _pParent, PcrRes( RID_DLG_TABORDER ) )
         ,aPB_OK( this, ResId( PB_OK ) )
         ,aPB_CANCEL( this, ResId( PB_CANCEL ) )
         ,aPB_HELP( this, ResId( PB_HELP ) )
@@ -138,7 +138,7 @@ namespace pcr
         aPB_OK.Disable();
 
         sal_Bool bIsHighContrast = GetDisplayBackground().GetColor().IsDark();
-        pImageList = new ImageList( ModuleRes( bIsHighContrast ? RID_IL_FORMEXPLORER_HC : RID_IL_FORMEXPLORER ) );
+        pImageList = new ImageList( PcrRes( bIsHighContrast ? RID_IL_FORMEXPLORER_HC : RID_IL_FORMEXPLORER ) );
 
 
         if ( m_xModel.is() )
@@ -333,7 +333,7 @@ namespace pcr
         }
 
         // TODO: UNO action (to bracket all the single actions which are being created)
-//        pDrawModel->BegUndo(ModuleRes(RID_STR_UNDO_TABORDER));
+//        pDrawModel->BegUndo(PcrRes(RID_STR_UNDO_TABORDER));
         m_xModel->setControlModels( aSortedControlModelSeq );
 //        pDrawModel->EndUndo();
 
