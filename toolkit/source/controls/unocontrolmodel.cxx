@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:09 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+using ::com::sun::star::awt::FontDescriptor;
 
 struct ImplControlProperty
 {
@@ -169,7 +170,7 @@ DECLARE_TABLE( ImplPropertyTable, ImplControlProperty* );
 
 #define UNOCONTROL_STREAMVERSION    (short)2
 
-static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rFD, sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rValue )
+static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, const Any& rValue )
 {
     // some props are defined with other types than the matching FontDescriptor members have
     // (e.g. FontWidth, FontSlant)
@@ -216,6 +217,48 @@ static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rF
                                                             break;
         default:                                            DBG_ERROR( "FontProperty?!" );
     }
+}
+
+static void lcl_determineChangedFontProperties( const FontDescriptor& _rOld, const FontDescriptor& _rNew,
+    Sequence< sal_Int32 >& _out_rHandles, Sequence< Any >& _out_rOldValues, Sequence< Any >& _out_rNewValues )
+{
+    _out_rHandles.realloc( 16 ); _out_rOldValues.realloc( 16 ); _out_rNewValues.realloc( 16 );
+    sal_Int32* pHandles = _out_rHandles.getArray();
+    Any* pOldValues = _out_rOldValues.getArray();
+    Any* pNewValues = _out_rNewValues.getArray();
+
+#define COMPARE_AND_PUT( member, id ) \
+    if ( _rOld.member != _rNew.member ) \
+    { \
+        *pHandles++ = id; \
+        *pOldValues++ <<= _rOld.member; \
+        *pNewValues++ <<= _rNew.member; \
+    }
+
+#define COMPARE_AND_PUT_CAST( member, id, type ) \
+    if ( _rOld.member != _rNew.member ) \
+    { \
+        *pHandles++ = id; \
+        *pOldValues++ <<= (type)_rOld.member; \
+        *pNewValues++ <<= (type)_rNew.member; \
+    }
+
+    COMPARE_AND_PUT     ( Name,             BASEPROPERTY_FONTDESCRIPTORPART_NAME );
+    COMPARE_AND_PUT     ( StyleName,        BASEPROPERTY_FONTDESCRIPTORPART_STYLENAME );
+    COMPARE_AND_PUT     ( Family,           BASEPROPERTY_FONTDESCRIPTORPART_FAMILY );
+    COMPARE_AND_PUT     ( CharSet,          BASEPROPERTY_FONTDESCRIPTORPART_CHARSET );
+    COMPARE_AND_PUT_CAST( Height,           BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT, float );
+    COMPARE_AND_PUT     ( Weight,           BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT );
+    COMPARE_AND_PUT_CAST( Slant,            BASEPROPERTY_FONTDESCRIPTORPART_SLANT, sal_Int16 );
+    COMPARE_AND_PUT     ( Underline,        BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE );
+    COMPARE_AND_PUT     ( Strikeout,        BASEPROPERTY_FONTDESCRIPTORPART_STRIKEOUT );
+    COMPARE_AND_PUT     ( Width,            BASEPROPERTY_FONTDESCRIPTORPART_WIDTH );
+    COMPARE_AND_PUT     ( Pitch,            BASEPROPERTY_FONTDESCRIPTORPART_PITCH );
+    COMPARE_AND_PUT     ( CharacterWidth,   BASEPROPERTY_FONTDESCRIPTORPART_CHARWIDTH );
+    COMPARE_AND_PUT     ( Orientation,      BASEPROPERTY_FONTDESCRIPTORPART_ORIENTATION );
+    COMPARE_AND_PUT     ( Kerning,          BASEPROPERTY_FONTDESCRIPTORPART_KERNING );
+    COMPARE_AND_PUT     ( WordLineMode,     BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE );
+    COMPARE_AND_PUT     ( Type,             BASEPROPERTY_FONTDESCRIPTORPART_TYPE );
 }
 
 //  ----------------------------------------------------
@@ -1330,17 +1373,30 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        Any aOldSingleValue;
+        getFastPropertyValue( aOldSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
         ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
-        ::com::sun::star::awt::FontDescriptor aFD;
-        pProp->GetValue() >>= aFD;
-        lcl_ImplMergeFontProperty( aFD, (sal_uInt16)nPropId, rValue );
+        FontDescriptor aOldFontDescriptor;
+        pProp->GetValue() >>= aOldFontDescriptor;
 
-        ::com::sun::star::uno::Any aFDValue;
-        aFDValue <<= aFD;
-        nPropId = BASEPROPERTY_FONTDESCRIPTOR;
-        setFastPropertyValues( 1, &nPropId, &aFDValue, 1 );
+        FontDescriptor aNewFontDescriptor( aOldFontDescriptor );
+        lcl_ImplMergeFontProperty( aNewFontDescriptor, (sal_uInt16)nPropId, rValue );
+
+        Any aNewValue;
+        aNewValue <<= aNewFontDescriptor;
+        sal_Int32 nDescriptorId( BASEPROPERTY_FONTDESCRIPTOR );
+        nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
+        setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
+
+        // also fire a propertyChange event for the single property, since with the above
+        // line, only an event for the FontDescriptor property will be fired
+        Any aNewSingleValue;
+        getFastPropertyValue( aNewSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
+        aGuard.clear();
+        fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, sal_False );
        }
     else
         setFastPropertyValues( 1, &nPropId, &rValue, 1 );
