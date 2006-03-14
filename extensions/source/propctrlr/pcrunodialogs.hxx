@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrunodialogs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
 #endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
-#include "componentmodule.hxx"
+#ifndef EXTENSIONS_PROPCTRLR_MODULEPRC_HXX
+#include "modulepcr.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
@@ -64,7 +64,7 @@ namespace pcr
     class OTabOrderDialog
                 :public OTabOrderDialog_DBase
                 ,public OTabOrderDialog_PBase
-                ,public OModuleResourceClient
+                ,public PcrClient
     {
     protected:
         // <properties>
@@ -75,7 +75,7 @@ namespace pcr
         // </properties>
 
     public:
-        OTabOrderDialog( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        OTabOrderDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext );
         ~OTabOrderDialog();
 
         // XTypeProvider
@@ -86,10 +86,10 @@ namespace pcr
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&);
+                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >&);
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
