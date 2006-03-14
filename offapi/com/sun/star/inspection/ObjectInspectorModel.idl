@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ObjectInspectorModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:06:03 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_ObjectInspectorModel_idl__
+#define __com_sun_star_inspection_ObjectInspectorModel_idl__
+
+#ifndef __com_sun_star_inspection_XObjectInspectorModel_idl__
+#include <com/sun/star/inspection/XObjectInspectorModel.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes a default implementation of an ObjectInspectorModel
+
+    This service, which is globally available, simplifies usage of an <type>ObjectInspector</type>.
+
+    The <type>XObjectInspectorModel</type> implemented by this service will not provide any property
+    categories, nor apply any particular order to the properties provided by its handler(s).
+
+    @see ObjectInspector
+    @see XObjectInspectorModel
+    @see XObjectInspectorModel::describeCategories
+    @see XObjectInspectorModel::getPropertyOrderIndex
+*/
+service ObjectInspectorModel : XObjectInspectorModel
+{
+    /** creates a default ObjectInspectorModel, whose one and only handler factory
+        creates a <type>GenericPropertyHandler</type>.
+    */
+    createDefault();
+
+    /** creates a default ObjectInspectorModel, using an externally provided sequence of property handler
+        factories.
+
+        @param handlerFactories
+            a sequence of handler factories, as to be provided in the XObjectInspectorModel::HandlerFactories
+            method.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+
+        @see XObjectInspectorModel::HandlerFactories
+            if the given sequence is empty.
+    */
+    createWithHandlerFactories( [in] sequence< any > handlerFactories )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+
