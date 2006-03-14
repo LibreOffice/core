@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:14:08 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -73,6 +70,7 @@ public:
 
 class FmPropControl;
 class SfxBindings;
+class FmFormShell;
 //========================================================================
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
@@ -83,7 +81,9 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
                     m_xORB;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                     m_xMeAsFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                    m_xLastKnownDocument;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                     m_xBrowserController;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                     m_xBrowserComponentWindow;
@@ -113,5 +113,25 @@ public:
 
 protected:
     virtual void        Resize();
+
+private:
+    /** creates the PropertyBrowser (aka ObjectInspector) and plugs it into our frame
+
+        This method ensures that a new component is created every time the XModel which
+        we're working for changed. This is necessary since this model is part of the
+        ComponentContext we use to create the ObjectInspector.
+    */
+    void    impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell );
+
+    /** creates a property browser
+
+        After this method returns, m_xBrowserController and m_xBrowserComponentWindow are
+        not <NULL/>.
+
+    @precond
+        we don't have an ObjectInspector, yet, i.e. m_xBrowserController and m_xBrowserComponentWindow
+        are <NULL/>.
+    */
+    void    impl_createPropertyBrowser_throw( FmFormShell* _pFormShell );
 };
 #endif //SVX_FMPROPBRW_HXX
