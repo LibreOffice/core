@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:52:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,32 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 #define _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_COMPOSEDUIUPDATE_HXX
+#include "composeduiupdate.hxx"
+#endif
+#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
+#include "formbrowsertools.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
+#include "formmetadata.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
+#include "proplinelistener.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
+#include "browserview.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
+#include "modulepcr.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_PROPERTYINFO_HXX_
+#include "propertyinfo.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
+#include "pcrcomponentcontext.hxx"
+#endif
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
@@ -51,6 +77,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
@@ -63,38 +92,11 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_STLOPS_HXX_
-#include "stlops.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
-#include "proplinelistener.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
-#include "browserview.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
-#include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPERTYINFO_HXX_
-#include "propertyinfo.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
-#include <com/sun/star/script/XTypeConverter.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
-#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -105,34 +107,43 @@
 #ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
-#ifndef _VCL_FLDUNIT_HXX
-#include <vcl/fldunit.hxx>
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYCONTROLFACTORY_HPP_
+#include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTOR_HPP_
+#include <com/sun/star/inspection/XObjectInspector.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORUI_HPP_
+#include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYHANDLER_HPP_
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
-#include "propertyhandler.hxx"
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPBROWSERUI_HXX
-#include "propbrowserui.hxx"
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 
 #include <map>
+#include <hash_map>
 #include <vector>
+#include <memory>
 
 class SvNumberFormatsSupplierObj;
 class Font;
@@ -144,14 +155,8 @@ namespace pcr
 {
 //............................................................................
 
-    class OPropertyListener;
     class OPropertyEditor;
     struct OLineDescriptor;
-
-    // control types
-    const sal_Int16 CONTROL_TYPE_UNKNOWN    =   0;
-    const sal_Int16 CONTROL_TYPE_FORM       =   1;
-    const sal_Int16 CONTROL_TYPE_DIALOG     =   2;
 
 #if OSL_DEBUG_LEVEL > 0
     const char* CheckPropertyBrowserInvariants( const void* pVoid );
@@ -163,116 +168,69 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     // #95343#------------------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::frame::XController
-                                    ,   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
                                     ,   ::com::sun::star::awt::XLayoutConstrains
                                     ,   ::com::sun::star::beans::XPropertyChangeListener
+                                    ,   ::com::sun::star::inspection::XPropertyControlFactory
+                                    ,   ::com::sun::star::inspection::XObjectInspectorUI
+                                    ,   ::com::sun::star::inspection::XObjectInspector
                                     >   OPropertyBrowserController_Base;
-    typedef ::comphelper::OPropertyContainer    OPropertyBrowserController_PropertyBase1;
-
-    class OPropertyBrowserController;
-    typedef ::comphelper::OPropertyArrayUsageHelper< OPropertyBrowserController >
-                                    OPropertyBrowserController_PropertyBase2;
 
     class OPropertyBrowserController
                 :public ::comphelper::OMutexAndBroadcastHelper
                 ,public OPropertyBrowserController_Base
                 ,public IPropertyLineListener
-                ,public IPropertyBrowserUI
-                ,public OModuleResourceClient
-                ,public OPropertyBrowserController_PropertyBase1
-                ,public OPropertyBrowserController_PropertyBase2
+                ,public IPropertyExistenceCheck
     {
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >
-                            m_xTypeConverter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                            m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
-                            m_xView;
-
-        /** if we connect the rowset ourself, we own the connection, and are responsible for it
-        */
-        ::dbtools::SharedConnection
-                            m_xRowsetConnection;
-
-        // <properties>
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                            m_xIntrospecteeAsProperty;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
-                            m_aIntrospectedCollection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                            m_xControlsView;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                            m_xContextDocument;
-        // </properties>
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                            m_xDependentComponent;  // a component which depends on us. Important when suspending the controller
-
-        ::cppu::OInterfaceContainerHelper       m_aDisposeListeners;
+    private:
+        typedef ::std::map< sal_Int32, ::com::sun::star::beans::Property >  OrderedPropertyMap;
+        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+                                                                            InterfaceArray;
 
     protected:
+        ComponentContext                                                    m_aContext;
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xView;
+
+        ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
         // meta data about the properties
-        const OPropertyInfoService*                 m_pPropertyInfo;
-        OPropertyBrowserView*                       m_pView;
+        OPropertyBrowserView*               m_pView;
 
-        ::rtl::OUString     m_sStandard;
-        ::rtl::OUString     m_sPageSelection;
-        ::rtl::OUString     m_sLastValidPageSelection;
+        ::rtl::OUString                     m_sPageSelection;
+        ::rtl::OUString                     m_sLastValidPageSelection;
 
-        typedef ::rtl::Reference< IPropertyHandler >    PropertyHandlerRef;
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
+                                                        PropertyHandlerRef;
         typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
-        typedef ::std::map< sal_Int32, PropertyHandlerRef >
+        typedef ::std::hash_map< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerRepository;
-        typedef ::std::multimap< sal_Int32, PropertyHandlerRef >
+        typedef ::std::hash_multimap< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerMultiRepository;
         PropertyHandlerRepository                       m_aPropertyHandlers;
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
 
-    protected:
-        /// the properties of the current object
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >    m_aObjectProperties;
-        /// the listener types for the current object
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          m_aObjectListenerTypes;
-        /// the event attacher manager for the current object
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager > m_xEventManager;
-        /// quick access to the property states
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >         m_xPropStateAccess;
-        /// quick access to the property states
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xPropValueAccess;
-        /// quick access to the XPropertySetInfo of our introspectee
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xIntrospecteePropertyInfo;
-        /// the parent object (if any) of the introspected object
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xObjectParent;
-        /// the class id of the introspectee - if appliable
-        sal_Int16                                                                           m_nClassId;
+        ::std::auto_ptr< ComposedPropertyUIUpdate >     m_pUIRequestComposer;
+
+        /// our InspectorModel
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >
+                                                        m_xModel;
+        /// the object(s) we're currently inspecting
+        InterfaceArray                                  m_aInspectedObjects;
+        /// the properties of the currently inspected object(s)
+        OrderedPropertyMap                              m_aProperties;
         /// the property we're just committing
-        ::rtl::OUString                                                                     m_sCommittingProperty;
+        ::rtl::OUString                                 m_sCommittingProperty;
 
-        sal_uInt16  m_nGenericPageId;
-        sal_uInt16  m_nDataPageId;
-        sal_uInt16  m_nEventPageId;
+        typedef ::std::hash_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
+        HashString2Int16                                m_aPageIds;
 
-    private:
-        sal_Bool    m_bPropertyListening        : 1;
-        sal_Bool    m_bHasListSource            : 1;
-        sal_Bool    m_bHasCursorSource          : 1;
-        sal_Bool    m_bContainerFocusListening  : 1;
-        sal_Bool    m_bSuspendingDependentComp  : 1;
-        sal_Bool    m_bInspectingSubForm        : 1;
+        bool        m_bContainerFocusListening      : 1;
+        bool        m_bSuspendingPropertyHandlers   : 1;
 
     protected:
-        // good callback candidates:
-
-        /// convert the display string into a property value
-        ::com::sun::star::uno::Any getPropertyValueFromStringRep( const ::rtl::OUString& _rString, const ::com::sun::star::beans::Property& _rProp, sal_Int32 _nPropId );
-        // convert a property value into a display string
-        ::rtl::OUString getStringRepFromPropertyValue( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rValue );
-
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
@@ -292,10 +250,6 @@ namespace pcr
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
-        // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
         // XFocusListener
         virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
@@ -308,280 +262,166 @@ namespace pcr
         virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                        sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
-
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
+        /** XPropertyControlFactory
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool CreateReadOnly ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
     public:
         OPropertyBrowserController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+
+    protected:
         virtual ~OPropertyBrowserController();
 
-        void UpdateUI();
-        void InsertEvents();
-
-        // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire(  ) throw();
-        virtual void SAL_CALL release(  ) throw();
-
+    public:
         // XServiceInfo - static versions
-        static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::rtl::OUString getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
-    #if OSL_DEBUG_LEVEL > 0
-        const char* checkInvariants() const;
-    #endif
+    protected:
+        // IPropertyLineListener
+        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary );
+        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
+
+        // IPropertyExistenceCheck
+        virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& _rName ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XObjectInspectorUI
+        virtual void SAL_CALL enablePropertyUI( const ::rtl::OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL enablePropertyUIElements( const ::rtl::OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rebuildPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL showPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL showCategory( const ::rtl::OUString& _rCategory, ::sal_Bool _bShow ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XObjectInspector
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _inspectormodel ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL inspect( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects ) throw (::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException);
+
+        // XDispatchProvider
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& URL, const ::rtl::OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        // IPropertyLineListener
-        virtual void    Modified(   const String& _rName, const String& _rVal );
-        virtual void    Clicked(    const String& _rName, sal_uInt16 _nFlags, bool _bPrimary );
-        virtual void    Commit(     const String& _rName, const String& _rVal );
-
-        // IPropertyBrowserUI
-        virtual void    enablePropertyUI( const ::rtl::OUString& _rPropertyName, bool _bEnable );
-        virtual void    enablePropertyButtons( const ::rtl::OUString& _rPropertyName, bool _bEnablePrimary, bool _bEnableSecondary );
-        virtual void    rebuildPropertyUI( const ::rtl::OUString& _rPropertyName );
-        virtual void    showPropertyUI( const ::rtl::OUString& _rPropertyName, bool _bRefreshIfExistent );
-        virtual void    hidePropertyUI( const ::rtl::OUString& _rPropertyName );
-        virtual void    showCategory( EPropertyCategory _eCategory, bool _bShow );
-
-        /// start listening for property changes
-        void startPropertyListening();
-        /// stop listening for property changes
-        void stopPropertyListening();
+        void UpdateUI();
 
         void startContainerWindowListening();
         void stopContainerWindowListening();
 
         // stop the inspection
-        void stopIntrospection();
+        void stopInspection( bool _bCommitModified );
 
         sal_Bool haveView() const { return NULL != m_pView; }
 
         OPropertyEditor*    getPropertyBox() { return m_pView->getPropertyBox(); }
-        Window*             getDialogParent();
 
-        // does the inspection of m_xIntrospecteeAsProperty
-        void doInspection( const ::com::sun::star::uno::Any& _rControl );
-            // _rControl is the control the model belongs to. Used for events
+        // does the inspection of the objects as indicated by our model
+        void doInspection();
 
         // bind the browser to m_xIntrospecteeAsProperty
-        void rebindToIntrospectee();
+        void rebindToInspectee( const InterfaceArray& _rObjects );
 
         /** retrieves special property handlers for our introspectee
         */
-        void    getPropertyHandlers( PropertyHandlerArray& _rHandlers );
+        void    getPropertyHandlers( const InterfaceArray& _rObjects, PropertyHandlerArray& _rHandlers );
 
-        /** retrieves the current <type scope="com.sun.star.beans">PropertyState</type>
-            of a virtual property
+        /** called when a property changed, to broadcast any handlers which might have
+            registered for this property
+
+            @param _bFirstTimeInit
+                if set to <FALSE/>, this is a real change in the property value, not just a call
+                for purposes of initialization.
         */
-        ::com::sun::star::beans::PropertyState
-                getVirtualPropertyState( sal_Int32 _nPropId );
+        void    impl_broadcastPropertyChange_nothrow( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bFirstTimeInit ) const;
 
-        /** called to update properties which depend on a given properties's value
-
-        @param _bFirstTimeInit
-            if set to <FALSE/>, this is a real change in the property value, not just a call
-            for purposes of initialization.
+        /** determines whether the given property is an actuating property, that is, at least one
+            handler expressed interest in changes to this property's value.
         */
-        void    actuatingPropertyChanged( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bFirstTimeInit );
-
-        /** updates the state of a property which depends on more than one other property value
-        */
-        void    updateComplexPropertyDependency( const ::rtl::OUString& _rPropertyName );
-
-        /** sets the modified flag of our document
-
-            <p>The document is searched by traveling up the component hierarchy, starting with
-            our introspectee, until we find an XModel. If this XModel supports XModifiable, then
-            we use this to set the flag.</p>
-        */
-        void    setDocumentModified( );
-
-        /** enables the lines for the properties given
-            @param _pPropertyStart
-                iterator pointing to the first property name
-            @param _pPropertyStart
-                iterator pointing behind the last property name
-            @param _bEnable
-                the enable-status of the lines
-        */
-        void    enablePropertyLines( const ::rtl::OUString* _pPropertyStart, const ::rtl::OUString* _pPropertyEnd,
-            sal_Bool _bEnable );
-
-        /** enables the lines for the properties given, if and only if the given property value denotes
-            a non-empty string
-
-            @param _pPropertyStart
-                iterator pointing to the first property name
-            @param _pPropertyStart
-                iterator pointing behind the last property name
-            @param _rStringPropertyValue
-                the value of a string property
-        */
-        void    enablePropertyLinesIfNonEmptyString( const ::rtl::OUString* _pPropertyStart, const ::rtl::OUString* _pPropertyEnd,
-            const ::com::sun::star::uno::Any& _rStringPropertyValue );
-
-        // some property values are faked, and not used in the way they're provided by our inspectee
-        void        fakePropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nPropId );
-
-        /** classifies our introspecty, in case it's a control model, by ClassId
-
-            Note that UNO dialog controls are also classified, though they don't have the ClassId property
-        */
-        void        classifyControlModel( );
-
-        void SetCursorSource( sal_Bool _bConnect, sal_Bool _bInit );
-        void SetListSource(sal_Bool _bInit = sal_False);
-        void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
-
-
-        void        cleanupRowsetConnection();
-        bool        isRowsetConnected( ) const;
-
-        bool        ensureRowsetConnection();
-        bool        ensureRowsetConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rConnection );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    ensureAndGetRowsetConnection();
-
-        /// create an empty top-level frame, which does not belong to the desktop's frame list
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                    createEmptyParentlessTask( ) const;
-
-        /** get the rowset for the object we're inspecting
-
-            If we inspect a form, the rowset is the object itself
-
-            If we're inspecting a form control, the XRowSet interface is looked for at the parent.
-
-            If we're inspectting a grid column, the XRowSet is looked for at the parent of the parent.
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
-                    getRowSet( ) const;
-
-        /** determines whether the given form has a valid data source signature.
-
-            Valid here means that the DataSource property denotes an existing data source, and the
-            Command property is not empty. No check is made whether the value of the Command property
-            denotes an existent object, since this would be way too expensive.
-
-            @param _rxForm
-                the form to check. Must not be <NULL/>.
-        */
-        bool        hasValidDataSourceSignature(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
-                        bool _bAllowEmptyDataSourceName
-                    ) SAL_THROW(());
-
-        sal_uInt32      GetPropertyPos(const ::rtl::OUString& _rPropName);
-        ::rtl::OUString GetPropertyValueStringRep(const ::rtl::OUString& _rPropName);
-
-        /** retrieves the value of the given property
-
-            Note that this method is for "real" properties only, i.e. properties which can be directly
-            obtained at the introspectee's XPropertySet
-
-            If you want to retrieve properties without knowing whether they're real or virtual,
-            use <member>GetAnyPropertyValue</member>.
-
-            @param _bCheckExistence
-                If you are not sure whether the current introspectee actually support the given
-                property, set this to <TRUE/>, to force the (slightly more expensive) existence
-                check for the property.
-        */
-        ::com::sun::star::uno::Any
-                        GetUnoPropertyValue( const ::rtl::OUString& _rPropName, bool _bCheckExistence = false );
-
-        /** retrieves the value of the given property, by asking the appropriate IPropertyHandler,
-            or by directly obtaining the value from the XPropertySet of the introspectee
-        */
-        ::com::sun::star::uno::Any
-                        GetAnyPropertyValue( const ::rtl::OUString& _rPropName );
-
-        inline sal_Bool    haveIntrospecteeProperty( const ::rtl::OUString& _rPropName ) const SAL_THROW((::com::sun::star::uno::RuntimeException))
+        inline bool impl_isActuatingProperty_nothrow( const ::rtl::OUString& _rPropertyName ) const
         {
-            return m_xIntrospecteePropertyInfo.is() && m_xIntrospecteePropertyInfo->hasPropertyByName( _rPropName );
+            return ( m_aDependencyHandlers.find( _rPropertyName ) != m_aDependencyHandlers.end() );
         }
 
-        void selectPageFromProperty();
-        void setPagePropertyFromSelection();
+        sal_uInt32      GetPropertyPos(const ::rtl::OUString& _rPropName);
 
-        // good candidates for (onClicked-)callbacks, again ....
-        void ChangeFontProperty();
-        void ChangeEventProperty(const ::rtl::OUString& rName);
-        void ChangeFormatProperty(const ::rtl::OUString& rName, const ::rtl::OUString& rCurVal);
-        // and again ...
-        void OnImageURLClicked( const String& _rName, const String& _rVal );
+        /** retrieves the value of the given property, by asking the appropriate XPropertyHandler
+            @param  _rPropertyName
+                the name whose handler is to be obtained. Must be the name of a property
+                for which a handler is registered.
+            @throws
+                RuntimeException if there is no handler for the given property
+            @return
+                the value of this property
+        */
+        ::com::sun::star::uno::Any
+                        impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName );
 
-        void SetTables(OLineDescriptor& _rProperty);
-        void SetQueries(OLineDescriptor& _rProperty);
-        void SetFields(OLineDescriptor& _rProperty);
+        /// calls XPropertyHandler::suspend for all our property handlers
+        sal_Bool    suspendPropertyHandlers_nothrow( sal_Bool _bSuspend );
 
-        void doEnterLinkedFormFields();
-        void doDesignSQLCommand( );
-        void executeFilterOrSortDialog( bool _bFilter );
-        void chooseListSelection( const ::rtl::OUString& _rProperty );
+        /** selects a page according to our current view data
+        */
+        void selectPageFromViewData();
+
+        /** updates our view data from the currently active page
+        */
+        void updateViewDataFromActivePage();
 
         /// describes the UI for the given property
-        bool describePropertyLine( sal_Int16 _nControlType, const ::com::sun::star::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor )
+        void describePropertyLine( const ::com::sun::star::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor )
             SAL_THROW((::com::sun::star::uno::Exception));
 
-        /// closes the component denoted by m_xDependentComponent
-        void     closeDependentComponent();
-        /** suspends the component denoted by m_xDependentComponent
+        /** retrieves the position of the property given by name in m_aProperties
+            @return
+                <TRUE/> if and only if the property could be found. In this case, <arg>_pProperty</arg> (if
+                not <NULL/> contains the iterator pointing to this property.
         */
-        sal_Bool suspendDependentComponent();
-        /// called whenever the component denoted by m_xDependentComponent has been closed <em>by an external instance</em>
-        void     dependentComponentClosed();
-
-        /** retrieves the position of the property given by name in m_aObjectProperties, or <NULL/>
-        */
-        const ::com::sun::star::beans::Property*
-            findObjectPropertyByName( const ::rtl::OUString& _rName );
-
-        /** retrieves the position of the property by handle in m_aObjectProperties, or <NULL/>
-        */
-        const ::com::sun::star::beans::Property*
-            findObjectPropertyByHandle( sal_Int32 _nHandle );
-
-        /** get the id of the page at which the given property should appear
-        */
-        sal_uInt16
-            getTargetPageId( const ::rtl::OUString& _rPropertyName );
-
-        sal_Bool        implGetCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
-        ::rtl::OUString implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
-        sal_Int16       implGetInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
-        sal_Int32       implGetInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault);
-        float           implGetFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
-
-        void            implInvalidateItem(
-                            const ::rtl::OUString& _rPropName,
-                            sal_uInt16 _nItemId,
-                            SfxItemSet& _rSet,
-                            sal_Bool _bForceInvalidation = sal_False);
+        bool impl_findObjectProperty_nothrow( const ::rtl::OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = NULL );
 
         sal_Bool Construct(Window* _pParentWin);
 
-        /// determines whether we're inspecting a UNO dialog control or a form control
-        sal_Int16       getControlType() const;
+        /** retrieves the property handler for a given property name
+            @param  _rPropertyName
+                the name whose handler is to be obtained. Must be the name of a property
+                for which a handler is registered.
+            @throws
+                RuntimeException if there is no handler for the given property
+            @return
+                the handler which is responsible for the given property
+        */
+        PropertyHandlerRef
+            impl_getHandlerForProperty_throw( const ::rtl::OUString& _rPropertyName ) const;
 
-        /// determines whether the given name denotes an existent data source
-        bool isValidDataSourceName( const ::rtl::OUString& _rDSName );
+        /** builds up m_aPageIds from InspectorModel::describeCategories, and insert all the
+            respective tab pages into our view
+            @precond
+                m_aPageIds is empty
+            @throws ::com::sun::star::uno::RuntimeException
+                if one of the callees of this method throws this exception
+        */
+        void
+            impl_buildCategories_throw();
 
-        ::rtl::OUString getDocumentURL() const;
-        FieldUnit       getDocumentMeasurementUnit() const;
+        /** retrieves the id of the tab page which represents a given category.
+            @param  _rCategoryName
+                the programmatic name of a category.
+            @return
+                the id of the tab page, or <code>(sal_uInt16)-1</code> if there
+                is no tab page for the given category
+        */
+        sal_uInt16
+            impl_getPageIdForCategory_nothrow( const ::rtl::OUString& _rCategoryName ) const;
+
+        /** adds or removes ourself as XEventListener to/from all our inspectees
+        */
+        void    impl_toggleInspecteeListening_nothrow( bool _bOn );
 
     private:
         DECL_LINK(OnPageActivation, void*);
