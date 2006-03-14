@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ObjectInspector.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:05:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_inspection_ObjectInspector_idl__
+#define __com_sun_star_inspection_ObjectInspector_idl__
+
+#ifndef __com_sun_star_inspection_XObjectInspector_idl__
+#include <com/sun/star/inspection/XObjectInspector.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes an <type scope="com::sun::star::frame">Controller</type> which can be used to
+    browse and modify properties of components.
+
+    <p>The controller can be plugged into an <type scope="com::sun::star::frame">XFrame</type>, and will
+    provide a visual component for inspecting and modifying component properties.<br/>
+    Note that "property" here is a generic term - any aspect of a component can be considered a property,
+    as long as some property handler is able to describe this aspect in a property-like way.</p>
+
+    <p>The basic idea is that one facet of the inspected component is represented by a single line
+    of controls: A label, an input control, and optionally one or two buttons which, when pressed,
+    trigger additional user interaction (e.g. a more sophisticated dialog to enter a property value).</p>
+
+    <p>Additionally, property lines can be grouped into different categories. A usual implementation
+    of such categories would be tab pages, but other implementations are possible, too.</p>
+
+    <p>An <type>ObjectInspector</type> needs one or more property handlers which describe
+    the facets of an inspected component - without such handlers, the inspector window will simply
+    stay empty.</p>
+
+    <p>The property handlers, as well as more information about the layout of the inspector,
+    are provided by a inspector model, which has to be implemented by the user of the inspector.</p>
+
+    <p/>
+
+    <p>Since property handlers might have the need to raise UI, they will be created with a context
+    value named "DialogParentWindow", which contains an XWindow which should be used as parent of
+    any windows to raise.<br/>
+    If the <type scope="com::sun::star::uno">XComponentContext</type> in which the <type>ObjectInspector</type>
+    was created already contains such a value, it is not overwritten. Only if it doesn't, the inspector
+    will add an own value - which contains the inspector's main window - to the context when creating
+    handlers.</p>
+
+    @see XPropertyHandler
+    @see LineDescriptor
+    @see PropertyControlType
+    @see ObjectInspectorModel
+    @see com::sun::star::uno::XComponentContext
+    @see com::sun::star::lang::XMultiComponentFactory
+*/
+service ObjectInspector : XObjectInspector
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+
+
