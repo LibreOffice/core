@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,25 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 #define _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 
+#ifndef _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
+#include "browserline.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
+#include "modulepcr.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
+#endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYCONTROL_HPP_
+#include <com/sun/star/inspection/XPropertyControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYHANDLER_HPP_
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
@@ -48,17 +67,14 @@
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROLLISTENER_HXX_
-#include "brwcontrollistener.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
-#include "browserline.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
-#include "modulepcr.hxx"
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #include <set>
+#include <vector>
+#include <hash_map>
+#include <boost/shared_ptr.hpp>
 
 //............................................................................
 namespace pcr
@@ -67,95 +83,167 @@ namespace pcr
 
     class IPropertyLineListener;
     struct OLineDescriptor;
+    class PropertyControlContext_Impl;
+
+    //========================================================================
+    //= administrative structures for OBrowserListBox
+    //========================================================================
+    typedef ::boost::shared_ptr< OBrowserLine > BrowserLinePointer;
+    struct ListBoxLine
+    {
+        BrowserLinePointer                      pLine;
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
+                                                xHandler;
+
+        ListBoxLine() { }
+        ListBoxLine( BrowserLinePointer _pLine, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler )
+            :pLine( _pLine )
+            ,xHandler( _rxHandler )
+        {
+        }
+    };
+    typedef ::std::hash_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
+    typedef ::std::vector< ListBoxLines::iterator >                                 OrderedListBoxLines;
+
+    //========================================================================
+    //= IControlContext
+    //========================================================================
+    /** non-UNO version of XPropertyControlContext
+    */
+    class SAL_NO_VTABLE IControlContext
+    {
+    public:
+        virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual void SAL_CALL controlValueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual void SAL_CALL activateNextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& CurrentControl ) throw (::com::sun::star::uno::RuntimeException) = 0;
+    };
+
     //========================================================================
     //= OBrowserListBox
     //========================================================================
-    class OBrowserListBox
-                :public Control
-                ,public IBrowserControlListener
-                ,public IButtonClickListener
-                ,public OModuleResourceClient
+    class OBrowserListBox   :public Control
+                            ,public IButtonClickListener
+                            ,public IControlContext
+                            ,public PcrClient
     {
     protected:
         Window                      m_aPlayGround;
         ScrollBar                   m_aVScroll;
-        OBrowserLinesArray          m_aLines;
-        ::rtl::OUString             m_aStandard;
+        ListBoxLines                m_aLines;
+        OrderedListBoxLines         m_aOrderedLines;
         IPropertyLineListener*      m_pLineListener;
         long                        m_nYOffset;
-        sal_uInt16                  m_nSelectedLine;
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+                                    m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
         sal_uInt16                  m_nRowHeight;
         ::std::set< sal_uInt16 >    m_aOutOfDateLines;
         sal_Bool                    m_bIsActive : 1;
         sal_Bool                    m_bUpdate : 1;
+        ::rtl::Reference< PropertyControlContext_Impl >
+                                    m_pControlContextImpl;
 
     protected:
-                void                        PositionLine( sal_uInt16 _nIndex );
-                void                        UpdatePosNSize();
-                void                        UpdatePlayGround();
-                void                        UpdateVScroll();
-                void                        ShowEntry(sal_uInt16 nPos);
-                void                        MoveThumbTo(long nNewThumbPos);
-                void                        Resize();
-
+        void    PositionLine( sal_uInt16 _nIndex );
+        void    UpdatePosNSize();
+        void    UpdatePlayGround();
+        void    UpdateVScroll();
+        void    ShowEntry(sal_uInt16 nPos);
+        void    MoveThumbTo(long nNewThumbPos);
+        void    Resize();
 
     public:
-                                            OBrowserListBox( Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
+                                    OBrowserListBox( Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
 
-                                            ~OBrowserListBox();
+                                    ~OBrowserListBox();
 
-                void                        UpdateAll();
+        void                        UpdateAll();
 
-                void                        Activate(sal_Bool _bActive = sal_True);
+        void                        Activate(sal_Bool _bActive = sal_True);
 
-                sal_uInt16                  CalcVisibleLines();
-                void                        EnableUpdate();
-                void                        DisableUpdate();
-                long                        Notify( NotifyEvent& _rNEvt );
+        sal_uInt16                  CalcVisibleLines();
+        void                        EnableUpdate();
+        void                        DisableUpdate();
+        long                        Notify( NotifyEvent& _rNEvt );
 
-                void                        setListener(IPropertyLineListener* _pPLL);
+        void                        setListener(IPropertyLineListener* _pPLL);
 
-                void                        Clear();
+        void                        Clear();
 
-                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
-                sal_Bool                    RemoveEntry( const ::rtl::OUString& _rName );
-                void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
+        sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
+        sal_Bool                    RemoveEntry( const ::rtl::OUString& _rName );
+        void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
-                void                        SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
-                ::rtl::OUString             GetPropertyValue( const ::rtl::OUString & rEntryName ) const;
-                sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
-                IBrowserControl*            GetPropertyControl( const ::rtl::OUString& rEntryName );
-                IBrowserControl*            GetCurrentPropertyControl();
-                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton = false );
-                void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-                sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
+        void                        SetPropertyValue( const ::rtl::OUString& rEntryName, const ::com::sun::star::uno::Any& rValue );
+        ::com::sun::star::uno::Any  GetPropertyValue( const ::rtl::OUString& rEntryName ) const;
+        sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+                                    GetPropertyControl( const ::rtl::OUString& rEntryName );
+        void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
+        void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+        sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
-                void                        SetFirstVisibleEntry(sal_uInt16 nPos);
-                sal_uInt16                  GetFirstVisibleEntry();
-
-                void                        SetSelectedEntry(sal_uInt16 nPos);
-                sal_uInt16                  GetSelectedEntry();
-
-                // #95343# --------------------------
-                sal_Int32                   GetMinimumWidth();
+        // #95343# --------------------------
+        sal_Int32                   GetMinimumWidth();
 
 
-                sal_Bool    IsModified( ) const;
-                void        CommitModified( );
+        sal_Bool    IsModified( ) const;
+        void        CommitModified( );
 
     protected:
-        DECL_LINK( ScrollHdl, ScrollBar* );
-
-        // IBrowserControlListener
-                void                    Modified    (IBrowserControl* _pControl);
-                void                    GetFocus    (IBrowserControl* _pControl);
-                void                    Commit      (IBrowserControl* _pControl);
-                void                    KeyInput    (IBrowserControl* _pControl, const KeyCode& _rKey);
-                void                    TravelLine  (IBrowserControl* _pControl);
+        // IControlContext
+        virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL controlValueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL activateNextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& CurrentControl ) throw (::com::sun::star::uno::RuntimeException);
 
         // IButtonClickListener
-                void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary );
+        void    buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary );
+
+    private:
+        DECL_LINK( ScrollHdl, ScrollBar* );
+
+        /** retrieves the index of a given control in our line list
+            @param _rxControl
+                The control to lookup. Must denote a control of one of the lines in ->m_aLines
+        */
+        sal_uInt16  impl_getControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl ) const;
+
+        /** retrieves (a reference to) the ->ListBoxLine for a given control
+            @param _rxControl
+                The control to lookup. Must denote a control of one of the lines in ->m_aLines
+        */
+        inline const ListBoxLine&
+                    impl_getControlLine( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl ) const
+        {
+            return m_aOrderedLines[ impl_getControlPos( _rxControl ) ]->second;
+        }
+
+        /** sets the given property value at the given control, after converting it as necessary
+            @param _rLine
+                The line whose at which the value is to be set.
+            @param _rPropertyValue
+                the property value to set. If it's not compatible with the control value,
+                it will be converted, using <member>XPropertyHandler::convertToControlValue</member>
+        */
+        void        impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const ::com::sun::star::uno::Any& _rPropertyValue );
+
+        /** retrieves the value for the given control, as a property value, after converting it as necessary
+            @param _rLine
+                The line whose at which the value is to be set.
+        */
+        ::com::sun::star::uno::Any
+                    impl_getControlAsPropertyValue( const ListBoxLine& _rLine ) const;
+
+        /** retrieves the ->BrowserLinePointer for a given entry name
+            @param  _rEntryName
+                the name whose line is to be looked up
+            @param  _out_rpLine
+                contains, upon return, the found browser line, if any
+            @return
+                <TRUE/> if and only if a non-<NULL/> line for the given entry name could be
+                found.
+        */
+        bool        impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
     };
 
 //............................................................................
