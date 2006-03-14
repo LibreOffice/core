@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:21:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
-#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
@@ -200,8 +197,6 @@
 #ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
 #endif
-
-namespace cssii = ::com::sun::star::i18n::InputSequenceCheckMode;
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
@@ -1650,84 +1645,10 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = aText.Len() - aPos;
-
-    // sequence input checking
-    bool bInputChecked = false;
-    bool bInputCorrected = false;
-
-    // We check only buffers which contain less than MAX_SEQUENCE_CHECK_LEN
-    // characters. This is for performance reasons, because a "copy and paste"
-    // can give us a really big input string.
-    SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-    if ( rCTLOptions.IsCTLFontEnabled() &&
-         rCTLOptions.IsCTLSequenceChecking() && aPos &&
-         rStr.Len() < MAX_SEQUENCE_CHECK_LEN && pBreakIt->xBreak.is() &&
-         ::com::sun::star::i18n::ScriptType::COMPLEX ==
-         pBreakIt->xBreak->getScriptType( rStr, 0 ) )
-    {
-        // generate new sequence input checker if not already done
-        if ( ! pCheckIt )
-            pCheckIt = new SwCheckIt;
-
-        if ( pCheckIt->xCheck.is() )
-        {
-            xub_StrLen nTmpPos = aPos;
-            xub_StrLen nI = 0;
-            xub_Unicode cChar;
-            sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted()? cssii::STRICT : cssii::BASIC;
-            bInputChecked = true;
-
-            if ( rCTLOptions.IsCTLSequenceCheckingTypeAndReplace() )
-            {
-                rtl::OUString aTmpText = aText;
-
-                while ( nI < rStr.Len() )
-                {
-                    cChar = rStr.GetChar( nI++ );
-                    const xub_StrLen nPrevPos = static_cast<xub_StrLen>(pCheckIt->xCheck->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode ));
-
-                    // valid sequence or sequence could be corrected:
-                    if ( nPrevPos != aTmpText.getLength() )
-                    {
-                        bInputCorrected = true;
-                        nTmpPos = nPrevPos + 1;
-                    }
-                }
-
-                aText = aTmpText;
-            }
-            else
-            {
-                while ( nI < rStr.Len() )
-                {
-                    cChar = rStr.GetChar( nI++ );
-                    if ( pCheckIt->xCheck->checkInputSequence( aText, nTmpPos - 1, cChar, nCheckMode ) )
-                    {
-                        // character can be inserted:
-                        aText.Insert( cChar, nTmpPos++ );
-                    }
-                }
-            }
-        }
-    }
-
-    if ( !bInputChecked )
-        aText.Insert( rStr, aPos );
-
+    aText.Insert( rStr, aPos );
     nLen = aText.Len() - aPos - nLen;
     if( !nLen )
-    {
-        // String nicht gewachsen ??
-          if ( bInputCorrected && GetDepends() )
-        {
-            // In case a sequence input correction took place
-            // without affecting the string length, this triggers
-            // a reformatting:
-            SwUpdateAttr aHint( aPos - 1, aPos, 0 );
-            SwModify::Modify( 0, &aHint );
-        }
         return *this;
-    }
     Update( rIdx, nLen );       // um reale Groesse Updaten !
 
     // analog zu Insert(char) in txtedt.cxx:
