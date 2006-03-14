@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DefaultFormComponentInspectorModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:03:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_DefaultFormComponentInspectorModel_idl__
+#define __com_sun_star_form_DefaultFormComponentInspectorModel_idl__
+
+#ifndef __com_sun_star_inspection_XObjectInspectorModel_idl__
+#include <com/sun/star/inspection/XObjectInspectorModel.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module inspection {
+
+//=============================================================================
+
+/** implements a <type scope="com::sun::star::inspection">XObjectInspectorModel</type> for
+    inspecting form components, in particular all components implementing the <type>FormComponent</type>
+    service.
+
+    <p>A <type>DefaultFormComponentInspectorModel</type> provides the following handlers by default:
+    <ul><li><type>ButtonNavigationHandler</type></li>
+        <li><type>CellBindingPropertyHandler</type></li>
+        <li><type>EditPropertyHandler</type></li>
+        <li><type>EventHandler</type></li>
+        <li><type>FormComponentPropertyHandler</type></li>
+        <li><type>SubmissionPropertyHandler</type></li>
+        <li><type>XMLFormsPropertyHandler</type></li>
+        <li><type>XSDValidationPropertyHandler</type></li>
+    </ul></p>
+
+    @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories
+*/
+service DefaultFormComponentInspectorModel
+{
+    interface com::sun::star::inspection::XObjectInspectorModel;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
