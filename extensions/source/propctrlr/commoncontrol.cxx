@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:06:56 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,44 +36,146 @@
 #ifndef _EXTENSIONS_PROPCTRLR_COMMONCONTROL_HXX_
 #include "commoncontrol.hxx"
 #endif
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROLLISTENER_HXX_
-#include "brwcontrollistener.hxx"
-#endif
 #ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 //............................................................................
 namespace pcr
 {
 //............................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::inspection::XPropertyControlContext;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::inspection::XPropertyControl;
+    /** === end UNO using === **/
+
     //==================================================================
-    //= OCommonBehaviourControl
+    //= ControlHelper
     //==================================================================
     //------------------------------------------------------------------
-    OCommonBehaviourControl::OCommonBehaviourControl(Window* _pMeAsWin)
-        :m_pListener(NULL)
-        ,m_bModified(sal_False)
-        ,m_nLine(0)
-        ,m_sStandardString(getStandardString())
-        ,m_pMeAsWindow(_pMeAsWin)
+    ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
+        :m_pControlWindow( _pControlWindow )
+        ,m_nControlType( _nControlType )
+        ,m_rAntiImpl( _rAntiImpl )
+        ,m_pModifyListener( _pModifyListener )
+        ,m_bModified( sal_False )
     {
-        DBG_ASSERT(m_pMeAsWindow != NULL, "OCommonBehaviourControl::OCommonBehaviourControl: invalid window!");
+        DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL ControlHelper::getControlType() throw (RuntimeException)
+    {
+        return m_nControlType;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
+    {
+        return m_xContext;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
+    {
+        m_xContext = _controlcontext;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XWindow > SAL_CALL ControlHelper::getControlWindow() throw (RuntimeException)
+    {
+        return VCLUnoHelper::GetInterface( m_pControlWindow );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
+    {
+        return m_bModified;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
+    {
+        if ( isModified() && m_xContext.is() )
+        {
+            try
+            {
+                m_xContext->controlValueChanged( &m_rAntiImpl );
+                m_bModified = sal_False;
+            }
+            catch( const Exception& e )
+            {
+            #if OSL_DEBUG_LEVEL > 0
+                ::rtl::OString sMessage( "ControlHelper::notifyModifiedValue: caught an exception!\n" );
+                sMessage += "message:\n";
+                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+                OSL_ENSURE( false, sMessage );
+            #else
+                e; // make compiler happy
+            #endif
+            }
+        }
     }
 
     //------------------------------------------------------------------
-    void OCommonBehaviourControl::autoSizeWindow()
+    void SAL_CALL ControlHelper::dispose()
     {
-        ComboBox aComboBox(m_pMeAsWindow, WB_DROPDOWN);
+        DELETEZ( m_pControlWindow );
+    }
+
+    //------------------------------------------------------------------
+    void ControlHelper::autoSizeWindow()
+    {
+        OSL_PRECOND( m_pControlWindow, "ControlHelper::autoSizeWindow: no window!" );
+        if ( !m_pControlWindow )
+            return;
+
+        ComboBox aComboBox(m_pControlWindow, WB_DROPDOWN);
         aComboBox.SetPosSizePixel(Point(0,0), Size(100,100));
-        m_pMeAsWindow->SetSizePixel(aComboBox.GetSizePixel());
+        m_pControlWindow->SetSizePixel(aComboBox.GetSizePixel());
+
+        // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
+        // of the the browser listbox/line?
     }
 
     //------------------------------------------------------------------
-    sal_Bool OCommonBehaviourControl::handlePreNotify(NotifyEvent& rNEvt)
+    void ControlHelper::impl_activateNextControl_nothrow() const
+    {
+        try
+        {
+            if ( m_xContext.is() )
+                m_xContext->activateNextControl( const_cast< XPropertyControl* >( &m_rAntiImpl ) );
+        }
+        catch( const Exception& e )
+        {
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "ControlHelper::impl_activateNextControl_nothrow: caught an exception!\n" );
+            sMessage += "message:\n";
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+            OSL_ENSURE( false, sMessage );
+        #else
+            e; // make compiler happy
+        #endif
+        }
+    }
+
+    //------------------------------------------------------------------
+    bool ControlHelper::handlePreNotify(NotifyEvent& rNEvt)
     {
         if (EVENT_KEYINPUT == rNEvt.GetType())
         {
@@ -82,62 +184,51 @@ namespace pcr
 
             if (nKey == KEY_RETURN && !aKeyCode.IsShift())
             {
-                LoseFocusHdl(m_pMeAsWindow);
-                if (m_pListener != NULL)
-                    m_pListener->TravelLine(this);
-                return sal_True;
+                LoseFocusHdl(m_pControlWindow);
+                impl_activateNextControl_nothrow();
+                return true;
             }
         }
-        return sal_False;
+        return false;
     }
 
     //------------------------------------------------------------------
-    void OCommonBehaviourControl::CommitModified()
+    IMPL_LINK( ControlHelper, ModifiedHdl, Window*, _pWin )
     {
-        if (IsModified() && getListener())
-            getListener()->Commit(this);
-        m_bModified = sal_False;
-    }
-
-    //------------------------------------------------------------------
-    void OCommonBehaviourControl::modified(Window* _pSource)
-    {
-        m_bModified = sal_True;
-        if (m_pListener != NULL)
-            m_pListener->Modified(this);
-    }
-
-    //------------------------------------------------------------------
-    void OCommonBehaviourControl::getFocus(Window* _pSource)
-    {
-        if (m_pListener != NULL)
-            m_pListener->GetFocus(this);
-    }
-
-    //------------------------------------------------------------------
-    void OCommonBehaviourControl::commitModified(Window* _pSource)
-    {
-        CommitModified();
-    }
-
-    //------------------------------------------------------------------
-    IMPL_LINK( OCommonBehaviourControl, ModifiedHdl, Window*, _pWin )
-    {
-        modified(_pWin);
+        if ( m_pModifyListener )
+            m_pModifyListener->modified();
         return 0;
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OCommonBehaviourControl, GetFocusHdl, Window*, _pWin )
+    IMPL_LINK( ControlHelper, GetFocusHdl, Window*, _pWin )
     {
-        getFocus(_pWin);
+        try
+        {
+            if ( m_xContext.is() )
+                m_xContext->focusGained( &m_rAntiImpl );
+        }
+        catch( const Exception& e )
+        {
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "ControlHelper, GetFocusHdl: caught an exception!\n" );
+            sMessage += "message:\n";
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+            OSL_ENSURE( false, sMessage );
+        #else
+            e; // make compiler happy
+        #endif
+        }
         return 0;
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OCommonBehaviourControl, LoseFocusHdl, Window*, _pWin )
+    IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, _pWin )
     {
-        commitModified(_pWin);
+        // TODO/UNOize: should this be outside the default control's implementations? If somebody
+        // has an own control implementation, which does *not* do this - would this be allowed?
+        // If not, then we must move this logic out of here.
+        notifyModifiedValue();
         return 0;
     }
 
