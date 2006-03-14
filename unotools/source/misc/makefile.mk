@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 12:55:28 $
+#   last change: $Author: vg $ $Date: 2006-03-14 11:38:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@ SLOFILES=	$(SLO)$/atom.obj \
             $(SLO)$/datetime.obj \
             $(SLO)$/eventlisteneradapter.obj \
             $(SLO)$/desktopterminationobserver.obj \
-            $(SLO)$/sharedunocomponent.obj
+            $(SLO)$/sharedunocomponent.obj \
+            $(SLO)$/componentresmodule.obj
 
 # --- Targets ----------------------------------
 
