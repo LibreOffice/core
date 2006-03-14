@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:20 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,14 +87,14 @@ namespace pcr
     DBG_NAME(OSelectLabelDialog)
     //------------------------------------------------------------------------
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
-        :ModalDialog(pParent, ModuleRes(RID_DLG_SELECTLABELCONTROL))
+        :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
         ,m_aMainDesc(this, ResId(1))
         ,m_aControlTree(this, ResId(1))
         ,m_aNoAssignment(this, ResId(1))
         ,m_aSeparator(this, ResId(1))
         ,m_aOk(this, ResId(1))
         ,m_aCancel(this, ResId(1))
-        ,m_aModelImages(ModuleRes(RID_IL_FORMEXPLORER))
+        ,m_aModelImages(PcrRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
         ,m_pInitialSelection(NULL)
         ,m_pLastSelected(NULL)
@@ -153,7 +153,7 @@ namespace pcr
 
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
-            SvLBoxEntry* pRoot = m_aControlTree.InsertEntry(ModuleRes(RID_STR_FORMS), aRootImage, aRootImage);
+            SvLBoxEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = NULL;
