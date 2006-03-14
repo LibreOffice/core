@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:33:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ namespace pcr
 
     public:
         XSDValidationHelper(
+            ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
