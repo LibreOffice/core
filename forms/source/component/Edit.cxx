@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:37:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,6 @@
 
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
-#endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
