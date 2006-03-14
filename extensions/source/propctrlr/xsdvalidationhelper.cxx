@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:33:08 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ namespace pcr
     //= XSDValidationHelper
     //====================================================================
     //--------------------------------------------------------------------
-    XSDValidationHelper::XSDValidationHelper( const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
-        :EFormsHelper( _rxIntrospectee, _rxContextDocument )
+    XSDValidationHelper::XSDValidationHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
+        :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
         ,m_bInspectingFormattedField( false )
     {
         try
@@ -284,10 +284,10 @@ namespace pcr
             if ( xBinding.is() )
             {
                 // get the old data type - this is necessary for notifying property changes
-                ::rtl::OUString sDataTypeName;
-                OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sDataTypeName );
+                ::rtl::OUString sOldDataTypeName;
+                OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sOldDataTypeName );
                 Reference< XPropertySet > xOldType;
-                try { xOldType = xOldType.query( getDataType( sDataTypeName ) ); } catch( const Exception& ) { }
+                try { xOldType = xOldType.query( getDataType( sOldDataTypeName ) ); } catch( const Exception& ) { }
 
                 // set the new data type name
                 xBinding->setPropertyValue( PROPERTY_XSD_DATA_TYPE, makeAny( _rName ) );
@@ -298,6 +298,11 @@ namespace pcr
                 // fire any changes in the properties which result from this new type
                 std::set< ::rtl::OUString > aFilter; aFilter.insert( PROPERTY_NAME );
                 firePropertyChanges( xOldType, xNewType, aFilter );
+
+                // fire the change in the Data Type property
+                ::rtl::OUString sNewDataTypeName;
+                OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sNewDataTypeName );
+                firePropertyChange( PROPERTY_XSD_DATA_TYPE, makeAny( sOldDataTypeName ), makeAny( sNewDataTypeName ) );
             }
         }
         catch( const Exception& e )
