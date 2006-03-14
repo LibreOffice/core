@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:01 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #endif
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
@@ -300,7 +297,7 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool _bPostReset )
                     m_xColumnUpdate->updateTime(aTime);
                 else
                 {
-                    starutil::DateTime aDateTime = m_xColumn->getTimestamp();
+                    util::DateTime aDateTime = m_xColumn->getTimestamp();
                     aDateTime.HundredthSeconds = aTime.HundredthSeconds;
                     aDateTime.Seconds = aTime.Seconds;
                     aDateTime.Minutes = aTime.Minutes;
