@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: InteractiveSelectionResult.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:05:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_inspection_InteractiveSelectionResult_idl__
+#define __com_sun_star_inspection_InteractiveSelectionResult_idl__
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes possible results of an interactive selection of a property value
+    in an object inspector
+
+    @see XPropertyHandler::onInteractivePropertySelection
+*/
+enum InteractiveSelectionResult
+{
+    /** The interactive selection of a property value was cancelled.
+    */
+    Cancelled,
+
+    /** The interactive selection of a property value succeeded, and the
+        new property value chosen by the user has already been set at the
+        inspected component.
+    */
+    Success,
+
+    /** The interactive selection of a property value succeeded, a new
+        property value has been obtained, but not yet set at the inspected
+        component.
+
+        <p>In this case, the obtained value is passed to the caller of
+        <member>XPropertyHandler::onInteractivePropertySelection<member>, which is
+        responsible for forwarding this value to the inspected component.</p>
+    */
+    ObtainedValue,
+
+    /** The interactive selection of a property value is still pending.
+
+        <p>This is usually used when this selection involves non-modal user interface.</p>
+    */
+    Pending
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+
