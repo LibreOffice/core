@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformshelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:09:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_EFORMSHELPER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_EFORMSHELPER_HXX
 
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
+#endif
+
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -57,8 +61,14 @@
 #endif
 /** === end UNO includes === **/
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
+#include <comphelper/listenernotification.hxx>
 #endif
 
 #include <vector>
@@ -80,20 +90,21 @@ namespace pcr
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    m_xControlModel;
+                        m_xControlModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XBindableValue >
-                    m_xBindableControl;
+                        m_xBindableControl;
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XFormsSupplier >
-                    m_xDocument;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >
-                    m_xBindingListener;
+                        m_xDocument;
+        PropertyChangeListeners
+                        m_aPropertyListeners;
         MapStringToPropertySet
-                    m_aSubmissionUINames;   // only filled upon request
+                        m_aSubmissionUINames;   // only filled upon request
         MapStringToPropertySet
-                    m_aBindingUINames;      // only filled upon request
+                        m_aBindingUINames;      // only filled upon request
 
     public:
         EFormsHelper(
+            ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
@@ -123,7 +134,9 @@ namespace pcr
         /** revokes the binding listener which has previously been registered
             @see registerBindingListener
         */
-        void    revokeBindingListener();
+        void    revokeBindingListener(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxBindingListener
+                );
 
         /** checks whether it's possible to bind the control model to a given XSD data type
 
@@ -261,12 +274,29 @@ namespace pcr
                     ::std::set< ::rtl::OUString >& _rFilter
                 ) const;
 
+        /** fires a change in a single property, if the property value changed, and if we have a listener
+            interested in property changes
+        */
+        void    firePropertyChange(
+                    const ::rtl::OUString& _rName,
+                    const ::com::sun::star::uno::Any& _rOldValue,
+                    const ::com::sun::star::uno::Any& _rNewValue
+                ) const;
+
     private:
-        void switchBindingListening( bool _bDoListening );
+        void impl_switchBindingListening_throw( bool _bDoListening, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
 
         /// implementation for both <member>createBindingForFormModel</member> and <member>getOrCreateBindingForModel</member>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
             implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
+
+        void
+            impl_toggleBindingPropertyListening_throw( bool _bDoListen, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );
+
+    private:
+        EFormsHelper();                                 // never implemented
+        EFormsHelper( const EFormsHelper& );            // never implemented
+        EFormsHelper& operator=( const EFormsHelper& ); // never implemented
     };
 
 //........................................................................
