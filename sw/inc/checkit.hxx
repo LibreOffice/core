@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:28:13 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,6 @@
 #ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #endif
-
-/*************************************************************************
- * Input strings with length > MAX_SEQUENCE_CHECK_LEN are not checked.
- *************************************************************************/
-
-#define MAX_SEQUENCE_CHECK_LEN 5
 
 /*************************************************************************
  *                      class SwCheckIt
