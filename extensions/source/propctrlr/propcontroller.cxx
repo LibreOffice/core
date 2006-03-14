@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:23:11 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,69 +38,20 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #include "pcrstrings.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
+#include "standardcontrol.hxx"
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
-#include "propertyeditor.hxx"
+#ifndef _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
+#include "linedescriptor.hxx"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
 #include "propresid.hrc"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPHELPID_HRC_
-#include "prophelpid.hrc"
+#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#include "formresid.hrc"
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
-#include <com/sun/star/beans/XIntrospection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCONCEPT_HPP_
-#include <com/sun/star/beans/PropertyConcept.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
-#include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
-#include <com/sun/star/form/XGridColumnFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTIONACCESS_HPP_
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#endif
-
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
+#ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
+#include "propertyeditor.hxx"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
@@ -111,6 +62,53 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 #include "formmetadata.hxx"
 #endif
+#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
+#include "formbrowsertools.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
+#include "propertycomposer.hxx"
+#endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/inspection/PropertyControlType.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
+#include <cppuhelper/component_context.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
+
 #include <algorithm>
 #include <functional>
 
@@ -118,7 +116,7 @@
 // !!! outside the namespace !!!
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController()
 {
-    static ::pcr::OMultiInstanceAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
+    ::pcr::OAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
 }
 
 //............................................................................
@@ -136,6 +134,7 @@ namespace pcr
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::inspection;
     using namespace ::comphelper;
 
 #define THISREF()   static_cast< XController* >(this)
@@ -145,87 +144,24 @@ namespace pcr
     //========================================================================
     DBG_NAME(OPropertyBrowserController)
     //------------------------------------------------------------------------
-    OPropertyBrowserController::OPropertyBrowserController(const Reference< XMultiServiceFactory >& _rxORB)
-            :OPropertyBrowserController_PropertyBase1(m_aBHelper)
-            ,m_xORB(_rxORB)
+    OPropertyBrowserController::OPropertyBrowserController( const Reference< XComponentContext >& _rxContext )
+            :m_aContext(_rxContext)
             ,m_aDisposeListeners(m_aMutex)
-            ,m_pPropertyInfo(NULL)
             ,m_pView(NULL)
-            ,m_bPropertyListening( sal_False )
-            ,m_bHasListSource( sal_False )
-            ,m_bHasCursorSource( sal_False )
-            ,m_nGenericPageId(0)
-            ,m_nDataPageId(0)
-            ,m_nEventPageId(0)
-            ,m_sStandard( getStandardString() )
             ,m_bContainerFocusListening(sal_False)
-            ,m_bSuspendingDependentComp( sal_False )
-            ,m_bInspectingSubForm( sal_False )
+            ,m_bSuspendingPropertyHandlers( false )
     {
         DBG_CTOR(OPropertyBrowserController,NULL);
-
-        if (m_xORB.is())
-        {
-            m_xTypeConverter = Reference< XTypeConverter >(
-                m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
-                UNO_QUERY
-            );
-            DBG_ASSERT(m_xTypeConverter.is(), "OPropertyBrowserController::OPropertyBrowserController: could not instantiate the type converter service!");
-            // TODO: perhaps an exception
-        }
-
-        m_pPropertyInfo = new OPropertyInfoService;
-
-        registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
-            PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED,
-            &m_xIntrospecteeAsProperty, ::getCppuType(&m_xIntrospecteeAsProperty));
-
-        registerProperty(PROPERTY_INTROSPECTEDCOLLECTION, OWN_PROPERTY_ID_INTROSPECTEDCOLLECTION,
-            PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED,
-            &m_aIntrospectedCollection, ::getCppuType(&m_aIntrospectedCollection));
-
-        registerProperty(PROPERTY_CURRENTPAGE, OWN_PROPERTY_ID_CURRENTPAGE,
-            PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
-            &m_sPageSelection, ::getCppuType(&m_sPageSelection));
-
-        registerProperty( PROPERTY_CONTROLCONTEXT, OWN_PROPERTY_ID_CONTROLCONTEXT,
-            PropertyAttribute::TRANSIENT,
-            &m_xControlsView, ::getCppuType( &m_xControlsView ) );
-
-        registerProperty( PROPERTY_CONTEXTDOCUMENT, OWN_PROPERTY_ID_CONTEXTDOCUMENT,
-            PropertyAttribute::TRANSIENT,
-            &m_xContextDocument, ::getCppuType( &m_xContextDocument ) );
     }
 
     //------------------------------------------------------------------------
     OPropertyBrowserController::~OPropertyBrowserController()
     {
-        DELETEZ( m_pPropertyInfo );
-
         // stop listening for property changes
-        stopIntrospection();
+        acquire();
+        stopInspection( true );
         DBG_DTOR(OPropertyBrowserController,NULL);
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    //------------------------------------------------------------------------
-    const char* CheckPropertyBrowserInvariants( const void* pVoid )
-    {
-        return reinterpret_cast< const OPropertyBrowserController* >( pVoid )->checkInvariants();
-    }
-
-    //------------------------------------------------------------------------
-    const char* OPropertyBrowserController::checkInvariants( ) const
-    {
-        if ( m_aIntrospectedCollection.getLength() == 0 )
-            return "nothing to inspect";
-
-        if ( ( m_aIntrospectedCollection.getLength() == 1 ) && ( m_aIntrospectedCollection[0] != m_xIntrospecteeAsProperty ) )
-            return "inconsistent introspectees";
-
-        return NULL;
-    }
-#endif
 
     //------------------------------------------------------------------------
     void OPropertyBrowserController::startContainerWindowListening()
@@ -265,6 +201,64 @@ namespace pcr
         DBG_ASSERT(!m_bContainerFocusListening, "OPropertyBrowserController::stopContainerWindowListening: unable to stop listening (inconsistence)!");
     }
 
+    //--------------------------------------------------------------------
+    Reference< XObjectInspectorModel > SAL_CALL OPropertyBrowserController::getInspectorModel() throw (RuntimeException)
+    {
+        return m_xModel;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OPropertyBrowserController::setInspectorModel( const Reference< XObjectInspectorModel >& _inspectorModel ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( m_xModel == _inspectorModel )
+            return;
+
+        m_xModel = _inspectorModel;
+
+        if ( m_aInspectedObjects.size() )
+            rebindToInspectee( m_aInspectedObjects );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( m_bSuspendingPropertyHandlers || !suspendPropertyHandlers_nothrow( sal_True ) )
+        {   // we already are trying to suspend the component (this is somewhere up the stack)
+            // OR one of our property handlers raised a veto against closing. Well, we *need* to close
+            // it in order to inspect another object.
+            throw VetoException();
+        }
+        rebindToInspectee( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& URL, const ::rtl::OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (RuntimeException)
+    {
+        // we don't have any dispatches at all, right now
+        return Reference< XDispatch >();
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests ) throw (RuntimeException)
+    {
+        Sequence< Reference< XDispatch > > aReturn;
+        sal_Int32 nLen = Requests.getLength();
+        aReturn.realloc( nLen );
+
+                Reference< XDispatch >* pReturn     = aReturn.getArray();
+        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
+        const   DispatchDescriptor*     pDescripts  = Requests.getConstArray();
+
+        for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
+            *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
+
+        return aReturn;
+    }
+
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
@@ -300,32 +294,75 @@ namespace pcr
         }
 
         startContainerWindowListening();
+
+        UpdateUI();
     }
 
     //------------------------------------------------------------------------
-    sal_Bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& xModel ) throw(RuntimeException)
+    sal_Bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel ) throw(RuntimeException)
     {
-        DBG_ERROR("OPropertyBrowserController::attachModel: models not supported!");
-        return sal_False;
+        Reference< XObjectInspectorModel > xModel( _rxModel, UNO_QUERY );
+        if ( !xModel.is() )
+            return false;
+
+        setInspectorModel( xModel );
+        return getInspectorModel() == _rxModel;
+    }
+
+    //------------------------------------------------------------------------
+    sal_Bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( sal_Bool _bSuspend )
+    {
+        PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
+        for (   PropertyHandlerRepository::const_iterator handler = m_aPropertyHandlers.begin();
+                handler != m_aPropertyHandlers.end();
+                ++handler
+            )
+        {
+            if ( ::std::find( aAllHandlers.begin(), aAllHandlers.end(), handler->second ) != aAllHandlers.end() )
+                // already visited this particular handler (m_aPropertyHandlers usually contains
+                // the same handler more than once)
+                continue;
+            aAllHandlers.push_back( handler->second );
+        }
+
+        for ( PropertyHandlerArray::iterator loop = aAllHandlers.begin();
+              loop != aAllHandlers.end();
+              ++loop
+            )
+        {
+            try
+            {
+                if ( !(*loop)->suspend( _bSuspend ) )
+                    if ( _bSuspend )
+                        // if we're not suspending, but reactivating, ignore the error
+                        return sal_False;
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
+            }
+        }
+        return sal_True;
     }
 
     //------------------------------------------------------------------------
     sal_Bool SAL_CALL OPropertyBrowserController::suspend( sal_Bool _bSuspend ) throw(RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( haveView(), "OPropertyBrowserController::suspend: don't have a view anymore!" );
-        OSL_ENSURE( NULL != getPropertyBox(), "OPropertyBrowserController::suspend: don't have a property box anymore!" );
 
         if ( !_bSuspend )
         {   // this means a "suspend" is to be "revoked"
-            if ( m_xDependentComponent.is() )
-                m_xDependentComponent->suspend( sal_False );
-
-            return sal_False;   // we ourself cannot revoke our suspend
+            suspendPropertyHandlers_nothrow( sal_False );
+            // we ourself cannot revoke our suspend
+            return sal_False;
         }
 
-        if ( m_xDependentComponent.is() )
         {
-            if ( !suspendDependentComponent( ) )
+            m_bSuspendingPropertyHandlers = true;
+            sal_Bool bHandlerVeto = !suspendPropertyHandlers_nothrow( sal_True );
+            m_bSuspendingPropertyHandlers = false;
+            if ( bHandlerVeto )
                 return sal_False;
         }
 
@@ -343,14 +380,18 @@ namespace pcr
     //------------------------------------------------------------------------
     Any SAL_CALL OPropertyBrowserController::getViewData(  ) throw(RuntimeException)
     {
-        // have no view data
-        return Any();
+        return makeAny( m_sPageSelection );
     }
 
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::restoreViewData( const Any& Data ) throw(RuntimeException)
     {
-        // have no view data
+        ::rtl::OUString sPageSelection;
+        if ( ( Data >>= sPageSelection ) && sPageSelection.getLength() )
+        {
+            m_sPageSelection = sPageSelection;
+            selectPageFromViewData();
+        }
     }
 
     //------------------------------------------------------------------------
@@ -367,37 +408,15 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Any SAL_CALL OPropertyBrowserController::queryInterface( const Type& _rType ) throw(RuntimeException)
-    {
-        Any aReturn = OPropertyBrowserController_Base::queryInterface(_rType);
-        if (!aReturn.hasValue())
-            aReturn = OPropertyBrowserController_PropertyBase1::queryInterface(_rType);
-        return aReturn;
-    }
-
-    //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::acquire(  ) throw()
-    {
-        OPropertyBrowserController_Base::acquire();
-    }
-
-    //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::release(  ) throw()
-    {
-        OPropertyBrowserController_Base::release();
-    }
-
-    //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::dispose(  ) throw(RuntimeException)
     {
+        // stop inspecting the current object
+        stopInspection( false );
+
         // say our dispose listeners goodbye
         ::com::sun::star::lang::EventObject aEvt;
         aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
         m_aDisposeListeners.disposeAndClear(aEvt);
-
-        // close our dependent component, if necessary
-        if ( m_xDependentComponent.is() )
-            closeDependentComponent();
 
         // don't delete explicitly (this is done by the frame we reside in)
         m_pView = NULL;
@@ -424,7 +443,7 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OPropertyBrowserController::getImplementationName(  ) throw(RuntimeException)
     {
-        return getImplementationName_Static();
+        return getImplementationName_static();
     }
 
     //------------------------------------------------------------------------
@@ -441,38 +460,27 @@ namespace pcr
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
-        return getSupportedServiceNames_Static();
+        return getSupportedServiceNames_static();
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::getImplementationName_Static(  ) throw(RuntimeException)
+    ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.OPropertyBrowserController");
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.ObjectInspector");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.PropertyBrowserController");
+        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.ObjectInspector" );
         return aSupported;
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OPropertyBrowserController::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    Reference< XInterface > SAL_CALL OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
     {
-        return static_cast<XComponent*>(new OPropertyBrowserController(_rxORB));
-    }
-
-    //------------------------------------------------------------------------
-    Sequence< Type > SAL_CALL OPropertyBrowserController::getTypes(  ) throw(RuntimeException)
-    {
-        static ::cppu::OTypeCollection aTypes(
-            ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),
-            ::getCppuType( static_cast< Reference< XMultiPropertySet >* >(NULL) ),
-            ::getCppuType( static_cast< Reference< XFastPropertySet >* >(NULL) ),
-            OPropertyBrowserController_Base::getTypes());
-        return aTypes.getTypes();
+        return *(new OPropertyBrowserController( _rxContext ) );
     }
 
     //------------------------------------------------------------------------
@@ -485,7 +493,7 @@ namespace pcr
 
         if (xContainerWindow.get() == xSourceWindow.get())
         {   // our container window got the focus
-            if (getPropertyBox())
+            if ( getPropertyBox())
                 getPropertyBox()->GrabFocus();
         }
     }
@@ -504,54 +512,29 @@ namespace pcr
             m_xView = NULL;
             m_pView = NULL;
         }
-        else if ( m_xDependentComponent.is() && ( m_xDependentComponent == _rSource.Source ) )
+
+        for (   InterfaceArray::iterator loop = m_aInspectedObjects.begin();
+                loop != m_aInspectedObjects.end();
+                ++loop
+            )
         {
-            m_xDependentComponent = NULL;
-            dependentComponentClosed();
+            if ( *loop == _rSource.Source )
+            {
+                m_aInspectedObjects.erase( loop );
+                break;
+            }
         }
-        else if ( m_xIntrospecteeAsProperty.is() && ( m_xIntrospecteeAsProperty == _rSource.Source ) )
-        {
-            m_xIntrospecteeAsProperty = NULL;
-            rebindToIntrospectee();
-        }
-    }
-
-    //------------------------------------------------------------------------
-    Sequence< sal_Int8 > SAL_CALL OPropertyBrowserController::getImplementationId(  ) throw(RuntimeException)
-    {
-        static ::cppu::OImplementationId aId;
-        return aId.getImplementationId();
-    }
-
-    //------------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL OPropertyBrowserController::getPropertySetInfo(  ) throw(RuntimeException)
-    {
-        return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-    }
-
-    //------------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper& SAL_CALL OPropertyBrowserController::getInfoHelper()
-    {
-        return *getArrayHelper();
-    }
-
-    //------------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper* OPropertyBrowserController::createArrayHelper( ) const
-    {
-        Sequence< Property > aProps;
-        describeProperties(aProps);
-        return new cppu::OPropertyArrayHelper(aProps);
     }
 
     //------------------------------------------------------------------------
     IMPL_LINK(OPropertyBrowserController, OnPageActivation, void*, EMPTYARG)
     {
-        setPagePropertyFromSelection();
+        updateViewDataFromActivePage();
         return 0L;
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::setPagePropertyFromSelection()
+    void OPropertyBrowserController::updateViewDataFromActivePage()
     {
         if (!haveView())
             return;
@@ -560,95 +543,47 @@ namespace pcr
         m_sPageSelection = ::rtl::OUString();
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
-        if ((sal_uInt16)-1 != nCurrentPage)
-            if (nCurrentPage == m_nGenericPageId)
-                m_sPageSelection = ::rtl::OUString::createFromAscii("Generic");
-            else if (nCurrentPage == m_nDataPageId)
-                m_sPageSelection = ::rtl::OUString::createFromAscii("Data");
-            else if (nCurrentPage == m_nEventPageId)
-                m_sPageSelection = ::rtl::OUString::createFromAscii("Events");
-
-        if (sOldSelection != m_sPageSelection)
-        {   // fire the property change
-            Any aOldValue; aOldValue <<= sOldSelection;
-            Any aNewValue; aNewValue <<= m_sPageSelection;
-            sal_Int32 nHandle = OWN_PROPERTY_ID_CURRENTPAGE;
-            fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+        if ( (sal_uInt16)-1 != nCurrentPage )
+        {
+            for (   HashString2Int16::const_iterator pageId = m_aPageIds.begin();
+                    pageId != m_aPageIds.end();
+                    ++pageId
+                )
+            {
+                if ( nCurrentPage == pageId->second )
+                {
+                    m_sPageSelection = pageId->first;
+                    break;
+                }
+            }
         }
-        if ( sOldSelection.getLength() )
+
+        if ( m_sPageSelection.getLength() )
+            m_sLastValidPageSelection = m_sPageSelection;
+        else if ( sOldSelection.getLength() )
             m_sLastValidPageSelection = sOldSelection;
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::selectPageFromProperty()
+    sal_uInt16 OPropertyBrowserController::impl_getPageIdForCategory_nothrow( const ::rtl::OUString& _rCategoryName ) const
     {
-        sal_uInt16 nNewPage = (sal_uInt16)-1;
-        if ( 0 == m_sPageSelection.compareToAscii( "Generic" ) && m_nGenericPageId )
-            nNewPage = m_nGenericPageId;
-        else if ( 0 == m_sPageSelection.compareToAscii( "Data" ) && m_nDataPageId )
-            nNewPage = m_nDataPageId;
-        else if ( 0 == m_sPageSelection.compareToAscii( "Events" ) && m_nEventPageId )
-            nNewPage = m_nEventPageId;
-
-        if (haveView())
-            m_pView->activatePage(nNewPage);
-
-        // just in case ...
-        setPagePropertyFromSelection();
+        sal_uInt16 nPageId = (sal_uInt16)-1;
+        HashString2Int16::const_iterator pagePos = m_aPageIds.find( _rCategoryName );
+        if ( pagePos != m_aPageIds.end() )
+            nPageId = pagePos->second;
+        return nPageId;
     }
 
     //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
+    void OPropertyBrowserController::selectPageFromViewData()
     {
-        if ( OWN_PROPERTY_ID_INTROSPECTEDOBJECT == _nHandle )
-        {
-            if ( m_xDependentComponent.is() )
-                if ( m_bSuspendingDependentComp || !suspendDependentComponent() )
-                {   // we already are trying to suspend the component (this is somewhere up the stack)
-                    // OR our dependent component raised a veto against closing it. Well, we *need* to close
-                    // it in order to inspect another object
-                    throw PropertyVetoException();
-                }
-        }
+        sal_uInt16 nNewPage = impl_getPageIdForCategory_nothrow( m_sPageSelection );
 
-        OPropertyBrowserController_PropertyBase1::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
+        if ( haveView() && ( nNewPage != (sal_uInt16)-1 ) )
+            m_pView->activatePage( nNewPage );
 
-        switch ( _nHandle )
-        {
-            case OWN_PROPERTY_ID_INTROSPECTEDCOLLECTION:
-            {
-                // synchronize this property with IntrospectedObject
-                if ( m_aIntrospectedCollection.getLength() == 0 )
-                {
-                    m_xIntrospecteeAsProperty.clear();
-                }
-                else if ( m_aIntrospectedCollection.getLength() == 1 )
-                {
-                    m_xIntrospecteeAsProperty = m_aIntrospectedCollection[0];
-                }
-                else
-                {
-                    m_xIntrospecteeAsProperty = new ::comphelper::OComposedPropertySet( m_aIntrospectedCollection, m_pPropertyInfo );
-                }
-                // and bind to the new introspectee
-                rebindToIntrospectee();
-            }
-            break;
-
-            case OWN_PROPERTY_ID_INTROSPECTEDOBJECT:
-            {   // it was my introspectee
-                // synchronize this property with IntrospectedCollection
-                m_aIntrospectedCollection.realloc( 1 );
-                m_aIntrospectedCollection[0] = m_xIntrospecteeAsProperty;
-                // and bind to the new introspectee
-                rebindToIntrospectee();
-            }
-            break;
-
-            case OWN_PROPERTY_ID_CURRENTPAGE:
-                selectPageFromProperty();
-                break;
-        }
+        // just in case ...
+        updateViewDataFromActivePage();
     }
 
     //------------------------------------------------------------------------
@@ -657,7 +592,7 @@ namespace pcr
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
         DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");
 
-        m_pView = new OPropertyBrowserView(m_xORB, _pParentWin);
+        m_pView = new OPropertyBrowserView(m_aContext.getLegacyServiceFactory(), _pParentWin);
         m_pView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,
@@ -668,130 +603,168 @@ namespace pcr
         if (xViewAsComp.is())
             xViewAsComp->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
 
-        if (haveView())
+        if ( haveView() )
+        {
             getPropertyBox()->SetLineListener(this);
+            m_pView->Show();
+        }
         return sal_True;
     }
 
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
-        if ( m_xDependentComponent.is() && ( _rEvent.Source == m_xDependentComponent ) )
+        if ( m_sCommittingProperty != _rEvent.PropertyName )
         {
-            if ( PROPERTY_ACTIVECOMMAND == _rEvent.PropertyName )
-            {
-                OSL_ENSURE( _rEvent.NewValue.getValueTypeClass() == TypeClass_STRING,
-                    "OPropertyBrowserController::propertyChange: invalid new value for the ActiveCommand!" );
-                m_xPropValueAccess->setPropertyValue( PROPERTY_COMMAND, _rEvent.NewValue );
-            }
-        }
-        else if ( m_sCommittingProperty != _rEvent.PropertyName )
-        {
-            // this is from our introspectee
-            if ( !haveView() )
-                // nothing to update then
-                return;
-
-            sal_Int32 nPropertyId = m_pPropertyInfo->getPropertyId( _rEvent.PropertyName );
-            if ( nPropertyId != -1 )
-            {
-                PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropertyId );
-                bool bDedicatedHandler = aHandlerPos != m_aPropertyHandlers.end();
-
-                // (possibly) a small innocent change before
-                Any aNewValue( _rEvent.NewValue );
-                fakePropertyValue( aNewValue, nPropertyId );
-                Any aOldValue( _rEvent.OldValue );
-                fakePropertyValue( aOldValue, nPropertyId );
-
+            if ( getPropertyBox() )
                 // forward the new value to the property box, to reflect the change in the UI
-                ::rtl::OUString sNewValue;
-                if ( bDedicatedHandler )
-                    sNewValue = aHandlerPos->second->getStringRepFromPropertyValue( nPropertyId, aNewValue );
-                else
-                    sNewValue = getStringRepFromPropertyValue( nPropertyId, aNewValue );
+                getPropertyBox()->SetPropertyValue( _rEvent.PropertyName, _rEvent.NewValue );
 
-                getPropertyBox()->SetPropertyValue( _rEvent.PropertyName, sNewValue );
-
-                // if it's a actuating property, then update the UI for any dependent
-                // properties
-                bool bIsActuatingProperty = ( m_pPropertyInfo->getPropertyUIFlags( nPropertyId ) & PROP_FLAG_ACTUATING ) != 0;
-                if ( bIsActuatingProperty )
-                    actuatingPropertyChanged( nPropertyId, aNewValue, aOldValue, false );
-            }
+            // if it's a actuating property, then update the UI for any dependent
+            // properties
+            if ( impl_isActuatingProperty_nothrow( _rEvent.PropertyName ) )
+                impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, _rEvent.NewValue, _rEvent.OldValue, false );
         }
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::startPropertyListening()
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool CreateReadOnly ) throw (IllegalArgumentException, RuntimeException)
     {
-        DBG_ASSERT( !m_bPropertyListening, "OPropertyBrowserController::startPropertyListening: already listening!" );
-        if ( !m_bPropertyListening && m_xPropValueAccess.is() )
+        Reference< XPropertyControl > xControl;
+
+        // default winbits: a border only
+        WinBits nWinBits = WB_BORDER;
+        if ( CreateReadOnly )
+            nWinBits |= WB_READONLY;
+
+        switch ( ControlType )
+        {
+            case PropertyControlType::StringListField:
+                xControl = new OMultilineEditControl( getPropertyBox(), eStringList, nWinBits | WB_DROPDOWN | WB_TABSTOP );
+                break;
+
+            case PropertyControlType::MultiLineTextField:
+                xControl = new OMultilineEditControl( getPropertyBox(), eMultiLineText, nWinBits | WB_DROPDOWN | WB_TABSTOP );
+                break;
+
+            case PropertyControlType::ListBox:
+                xControl = new OListboxControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN);
+                break;
+
+            case PropertyControlType::ComboBox:
+                xControl = new OComboboxControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_SORT | WB_DROPDOWN);
+                break;
+
+            case PropertyControlType::TextField:
+                xControl = new OEditControl( getPropertyBox(), sal_False, nWinBits | WB_TABSTOP );
+                break;
+
+            case PropertyControlType::CharacterField:
+                xControl = new OEditControl( getPropertyBox(), sal_True, nWinBits | WB_TABSTOP );
+                break;
+
+            case PropertyControlType::NumericField:
+                xControl = new ONumericControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
+                break;
+
+            case PropertyControlType::DateTimeField:
+                xControl = new ODateTimeControl( getPropertyBox(), nWinBits | WB_TABSTOP );
+                break;
+
+            case PropertyControlType::DateField:
+                xControl = new ODateControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
+                break;
+
+            case PropertyControlType::TimeField:
+                xControl = new OTimeControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
+                break;
+
+            case PropertyControlType::ColorListBox:
+                xControl = new OColorControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN );
+                break;
+
+            case PropertyControlType::HyperlinkField:
+                xControl = new OHyperlinkControl( getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN );
+                break;
+
+            default:
+                throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        }
+
+        return xControl;
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::impl_toggleInspecteeListening_nothrow( bool _bOn )
+    {
+        for (   InterfaceArray::const_iterator loop = m_aInspectedObjects.begin();
+                loop != m_aInspectedObjects.end();
+                ++loop
+            )
         {
             try
             {
-                m_xPropValueAccess->addPropertyChangeListener( ::rtl::OUString(), this );
-                m_bPropertyListening = sal_True;
-                m_sCommittingProperty = ::rtl::OUString();
+                Reference< XComponent > xComp( *loop, UNO_QUERY );
+                if ( xComp.is() )
+                    if ( _bOn )
+                        xComp->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
+                    else
+                        xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
             }
-            catch( const Exception& )
+            catch( const Exception& e )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::startPropertyListening: caught an exception!" );
+            #if OSL_DEBUG_LEVEL > 0
+                ::rtl::OString sMessage( "OPropertyBrowserController::impl_toggleInspecteeListening_nothrow: caught an exception!\n" );
+                sMessage += "message:\n";
+                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+                OSL_ENSURE( false, sMessage );
+            #else
+                e; // make compiler happy
+            #endif
             }
         }
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::stopPropertyListening()
+    void OPropertyBrowserController::stopInspection( bool _bCommitModified )
     {
-        DBG_ASSERT( m_bPropertyListening, "OPropertyBrowserController::stopPropertyListening: not listening currently!" );
-        if ( m_bPropertyListening )
+        if ( haveView() && getPropertyBox() )
         {
-            try
-            {
-                m_bPropertyListening = sal_False;
-                m_xPropValueAccess->removePropertyChangeListener( ::rtl::OUString(), this );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::stopPropertyListening: caught an exception!" );
-            }
+            if ( _bCommitModified && getPropertyBox() )
+                // commit the editor's content
+                getPropertyBox()->CommitModified();
+
+            // hide the property box so that it does not flicker
+            getPropertyBox()->Hide();
+
+            // clear the property box
+            getPropertyBox()->ClearAll();
         }
-    }
 
-    //------------------------------------------------------------------------
-    void OPropertyBrowserController::stopIntrospection()
-    {
-        // stop listening for property changes
-        if ( m_bPropertyListening )
-            stopPropertyListening();
-
-        // destroy the view first. So any pending commits can be done ...
-        if (haveView())
+        // destroy the view first
+        if ( haveView() )
         {
             // remove the pages
-            if (m_nGenericPageId)
-                getPropertyBox()->RemovePage(m_nGenericPageId);
-            if (m_nDataPageId)
-                getPropertyBox()->RemovePage(m_nDataPageId);
-            if (m_nEventPageId)
-                getPropertyBox()->RemovePage(m_nEventPageId);
-            m_nGenericPageId = m_nDataPageId = m_nEventPageId = 0;
+            for (   HashString2Int16::const_iterator erase = m_aPageIds.begin();
+                    erase != m_aPageIds.end();
+                    ++erase
+                )
+                getPropertyBox()->RemovePage( erase->second );
+            clearContainer( m_aPageIds );
         }
 
-        m_aObjectProperties.realloc(0);
-        m_aObjectListenerTypes.realloc(0);
-        m_xEventManager = NULL;
-        m_xPropStateAccess = NULL;
-        m_xPropValueAccess = NULL;
-        m_xIntrospecteePropertyInfo = NULL;
-        m_xObjectParent = NULL;
-        m_nClassId = 0;
+        clearContainer( m_aProperties );
 
-        m_bHasListSource = m_bHasCursorSource =  sal_False;
+        // de-register as dispose-listener from our inspected objects
+        impl_toggleInspecteeListening_nothrow( false );
+
+        // handlers are obsolete, so is our "composer" for their UI requests
+        if ( m_pUIRequestComposer.get() )
+            m_pUIRequestComposer->dispose();
+        m_pUIRequestComposer.reset( NULL );
 
         // clean up the property handlers
-        PropertyHandlerArray aAllHandlers;
+        PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
         for ( PropertyHandlerRepository::const_iterator aHandler = m_aPropertyHandlers.begin();
               aHandler != m_aPropertyHandlers.end();
               ++aHandler
@@ -799,523 +772,186 @@ namespace pcr
             if ( ::std::find( aAllHandlers.begin(), aAllHandlers.end(), aHandler->second ) == aAllHandlers.end() )
                 aAllHandlers.push_back( aHandler->second );
 
-        for ( PropertyHandlerArray::iterator aLoop = aAllHandlers.begin();
-              aLoop != aAllHandlers.end();
-              ++aLoop
+        for ( PropertyHandlerArray::iterator loop = aAllHandlers.begin();
+              loop != aAllHandlers.end();
+              ++loop
             )
-            (*aLoop)->stopAllPropertyChangeListening();
-
-        PropertyHandlerRepository aEmpty;
-        m_aPropertyHandlers.swap( aEmpty );
-
-        // and some heavily form specific stuff, again
-        cleanupRowsetConnection();
-    }
-
-    //------------------------------------------------------------------------
-    Any OPropertyBrowserController::GetAnyPropertyValue( const ::rtl::OUString& _rPropName )
-    {
-        Any aReturn;
-        if ( !_rPropName.getLength() )
-            return aReturn;
-
-        sal_Int32 nPropId = m_pPropertyInfo->getPropertyId( _rPropName );
-
-        // do we have a dedicated handler for this property?
-        PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropId );
-        bool bDedicatedHandler = aHandlerPos != m_aPropertyHandlers.end();
-
-        if ( bDedicatedHandler )
-            aReturn = aHandlerPos->second->getPropertyValue( nPropId );
-        else
-            aReturn = GetUnoPropertyValue( _rPropName );
-        return aReturn;
-    }
-
-    //------------------------------------------------------------------------
-    Any OPropertyBrowserController::GetUnoPropertyValue( const ::rtl::OUString& _rPropName, bool _bCheckExistence )
-    {
-        Any aValue;
-        try
         {
-            if ( _rPropName.getLength() )
+            try
             {
-                if ( m_xPropValueAccess.is() )
-                {
-                    bool bDoGetValue = true;
-                    if ( _bCheckExistence )
-                    {
-                        if ( !haveIntrospecteeProperty( _rPropName ) )
-                            bDoGetValue = false;
-                    }
-
-                    if ( bDoGetValue )
-                    {
-                        aValue = m_xPropValueAccess->getPropertyValue( _rPropName );
-                        fakePropertyValue( aValue, m_pPropertyInfo->getPropertyId( _rPropName ) );
-                    }
-                }
+                (*loop)->removePropertyChangeListener( this );
+                (*loop)->dispose();
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::stopInspection: could not dispose one of the handlers!" );
             }
         }
 
-        catch (Exception&)
-        {
-            DBG_ERROR("OPropertyBrowserController::GetUnoPropertyValue: caught an exception !");
-        }
-
-        return aValue;
+        clearContainer( m_aPropertyHandlers );
+        clearContainer( m_aDependencyHandlers );
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::GetPropertyValueStringRep( const ::rtl::OUString& _rPropName )
+    OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const ::rtl::OUString& _rPropertyName ) const
     {
-        PropertyId nPropertyId = m_pPropertyInfo->getPropertyId( _rPropName );
-
-        // do we have a dedicated handler for this property?
-        PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropertyId );
-        bool bDedicatedHandler = aHandlerPos != m_aPropertyHandlers.end();
-
-        ::rtl::OUString sReturn;
-        if ( bDedicatedHandler )
-            sReturn = aHandlerPos->second->getStringRepFromPropertyValue( nPropertyId, aHandlerPos->second->getPropertyValue( nPropertyId ) );
-        else
-            sReturn = getStringRepFromPropertyValue( nPropertyId, GetUnoPropertyValue( _rPropName ) );
-        return sReturn;
+        PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
+        if ( handlerPos == m_aPropertyHandlers.end() )
+            throw RuntimeException();
+        return handlerPos->second;
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::rebindToIntrospectee()
+    Any OPropertyBrowserController::impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName )
+    {
+        PropertyHandlerRef handler = impl_getHandlerForProperty_throw( _rPropertyName );
+        return handler->getPropertyValue( _rPropertyName );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::rebindToInspectee( const InterfaceArray& _rObjects )
     {
         try
         {
-            if ( m_xDependentComponent.is() )
-                closeDependentComponent();
+            // stop inspecting the old object(s)
+            stopInspection( true );
 
-            if ( haveView() && getPropertyBox() )
-            {
-                // commit the editor's content
-                getPropertyBox()->CommitModified();
-
-                // hide the property box so that it does not flicker
-                getPropertyBox()->Hide();
-
-                // clear the property box
-                getPropertyBox()->ClearAll();
-            }
-
-            // stop inspecting the old object
-            stopIntrospection();
-
-            // TODO: notify the listeners that our object has been reset (to NULL, for the moment)
-            // external instances may want to adjust the title to this new situation
-
-            Reference< XForm > xForm( m_xIntrospecteeAsProperty, UNO_QUERY );
-
-            Any aAdditionalEvents;
-            sal_Int32 nViewHelpId = HID_FM_DLG_PROP_CONTROL;
-            m_bInspectingSubForm = sal_False;
-
-            if (xForm.is())
-            {
-                // check whether we're talking about a sub form here
-                Reference< XChild > xFormAsChild( xForm, UNO_QUERY );
-                Reference< XForm > xFormsParent;
-                if ( xFormAsChild.is() )
-                    xFormsParent = xFormsParent.query( xFormAsChild->getParent() );
-                m_bInspectingSubForm = xFormsParent.is();
-
-                // it's a form. Create a (temporary) form controller for the additional events
-                Reference< XFormController >  xController(m_xORB->createInstance(SERVICE_FORMCONTROLLER), UNO_QUERY);
-                DBG_ASSERT( xController.is(), "OPropertyBrowserController::rebindToIntrospectee: could not instantiate a form controller!" );
-                if ( xController.is() )
-                {
-                    xController->setModel( Reference< XTabControllerModel >( xForm,UNO_QUERY ) );
-                    aAdditionalEvents <<= xController;
-                }
-
-                nViewHelpId = HID_FM_DLG_PROP_FORM;
-            }
-            else
-            {   // perhaps it's a grid column
-                Reference< XGridColumnFactory > xGrid( m_xObjectParent, UNO_QUERY );
-                if ( xGrid.is() )
-                    nViewHelpId = HID_FM_DLG_PROP_GRIDCTR;
-            }
-
-            doInspection( aAdditionalEvents );
-
-            // cleanup any temporaries we created for obtaining the additional events
-            {
-                Reference< XComponent > xComp( aAdditionalEvents, UNO_QUERY );
-                ::comphelper::disposeComponent( xComp );
-            }
-
-            if ( haveView() )
-                m_pView->SetHelpId( nViewHelpId );
+            // inspect the new object(s)
+            m_aInspectedObjects = _rObjects;
+            doInspection();
 
             // update the user interface
-            if ( m_xIntrospecteeAsProperty.is() )
-                UpdateUI();
-
-            // show the property box, again
-            if ( haveView() )
-            {
-                // activate a default page
-                if ( m_nGenericPageId )
-                    getPropertyBox()->SetPage( m_nGenericPageId );
-                else if ( m_nDataPageId )
-                    getPropertyBox()->SetPage( m_nDataPageId );
-                else if ( m_nEventPageId )
-                    getPropertyBox()->SetPage( m_nEventPageId );
-
-                setPagePropertyFromSelection();
-
-                getPropertyBox()->Show();
-
-                // activate the old page
-                if ( !m_sPageSelection.getLength() && m_sLastValidPageSelection.getLength() )
-                    m_sPageSelection = m_sLastValidPageSelection;
-                selectPageFromProperty();
-            }
+            UpdateUI();
         }
 
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::rebindToIntrospectee: caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::rebindToInspectee: caught an exception !");
         }
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::doInspection( const ::com::sun::star::uno::Any& _rControl )
+    void OPropertyBrowserController::doInspection()
     {
-        DBG_CHKTHIS( OPropertyBrowserController, CheckPropertyBrowserInvariants );
         try
         {
             //////////////////////////////////////////////////////////////////////
-            // get the introspection service
-            Reference< XIntrospection > xIntrospection( m_xORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.beans.Introspection" ) ), UNO_QUERY );
-            Reference< XIntrospectionAccess > xIntrospectionAccess;
-            if ( xIntrospection.is() )
-                xIntrospectionAccess = xIntrospection->inspect( makeAny( m_xIntrospecteeAsProperty ) );
-            OSL_ENSURE( xIntrospectionAccess.is() || !m_xIntrospecteeAsProperty.is(), "OPropertyBrowserController::doInspection: no XIntrospectionAccess (some functionality will be missing)!" );
-
-            //////////////////////////////////////////////////////////////////////
-            // the other interfaces to the object or some of it's relatives
-            m_xPropValueAccess = m_xPropValueAccess.query( m_xIntrospecteeAsProperty );
-            m_xPropStateAccess = m_xPropStateAccess.query( m_xPropValueAccess );
-
-            if ( m_xPropValueAccess.is() )
-                m_xIntrospecteePropertyInfo = m_xPropValueAccess->getPropertySetInfo();
-            else
-                m_xIntrospecteePropertyInfo = NULL;
-
-            // determine the parent of the introspectee, or the common parent of all of them (if any)
-            m_xObjectParent = NULL;
-            if ( m_aIntrospectedCollection.getLength() == 1 )
-            {
-                Reference< XChild > xChild( m_xIntrospecteeAsProperty, UNO_QUERY );
-                if ( xChild.is() )
-                    m_xObjectParent = xChild->getParent();
-            }
-            else
-            {
-                const Reference< XPropertySet >* pObject = m_aIntrospectedCollection.getConstArray();
-                const Reference< XPropertySet >* pEnd = pObject + m_aIntrospectedCollection.getLength();
-                bool bFirst = true;
-                while ( pObject != pEnd )
-                {
-                    Reference< XChild > xAsChild( *pObject++, UNO_QUERY );
-                    if ( xAsChild.is() )
-                    {
-                        if ( bFirst )
-                            m_xObjectParent = xAsChild->getParent();
-                        else
-                        {
-                            if ( xAsChild->getParent() != m_xObjectParent.get() )
-                            {
-                                m_xObjectParent = NULL;
-                                break;
-                            }
-                        }
-                    }
-                    bFirst = false;
-                }
-            }
-
-            m_xEventManager = m_xEventManager.query( m_xObjectParent );
-
-            //////////////////////////////////////////////////////////////////////
             // obtain the properties of the object
-            Sequence< Property > aProperties;
-            if ( xIntrospectionAccess.is() )
-                aProperties = xIntrospectionAccess->getProperties( PropertyConcept::ALL );
-            else if ( m_xIntrospecteePropertyInfo.is() )
-            {
-                aProperties = m_xIntrospecteePropertyInfo->getProperties();
-            }
+            ::std::vector< Property > aProperties;
 
-            if ( !m_xIntrospecteeAsProperty.is() )
-                return;
-
-            OSL_ENSURE( aProperties.getLength(), "OPropertyBrowserController::doInspection: no properties found at all!" );
-
-            //////////////////////////////////////////////////////////////////////
-            if ( haveView() )
-            {
-                // add the page for the default properties
-                m_nGenericPageId = getPropertyBox()->AppendPage( String( ModuleRes( RID_STR_PROPPAGE_DEFAULT ) ),
-                        HID_FM_PROPDLG_TAB_GENERAL );
-            }
-
-            // the properties which have special handlers
             PropertyHandlerArray aPropertyHandlers;
-            getPropertyHandlers( aPropertyHandlers );
+            getPropertyHandlers( m_aInspectedObjects, aPropertyHandlers );
 
-            PropertyHandlerArray::const_iterator aHandler;
-            for ( aHandler = aPropertyHandlers.begin();
-                  aHandler != aPropertyHandlers.end();
-                  ++aHandler
-                )
+            PropertyHandlerArray::iterator aHandler( aPropertyHandlers.begin() );
+            while ( aHandler != aPropertyHandlers.end() )
             {
                 DBG_ASSERT( aHandler->get(), "OPropertyBrowserController::doInspection: invalid handler!" );
 
-                ::std::vector< Property > aThisHandlersProperties = (*aHandler)->getSupportedProperties();
-                ::std::vector< Property >::const_iterator pThisHandlersProperties = aThisHandlersProperties.begin();
-                ::std::vector< Property >::const_iterator pThisHandlersPropertiesEnd = aThisHandlersProperties.end();
+                StlSyntaxSequence< Property > aThisHandlersProperties = (*aHandler)->getSupportedProperties();
+
+                if ( aThisHandlersProperties.empty() )
+                {
+                    // this handler doesn't know anything about the current inspectee -> ignore it
+                    (*aHandler)->dispose();
+                    aHandler = aPropertyHandlers.erase( aHandler );
+                    continue;
+                }
 
                 // append these properties to our "all properties" array
-                sal_Int32 nPreviousPropertyCount = aProperties.getLength();
-                aProperties.realloc( nPreviousPropertyCount + aThisHandlersProperties.size() );
-                ::std::copy(
-                    pThisHandlersProperties,
-                    pThisHandlersPropertiesEnd,
-                    aProperties.getArray() + nPreviousPropertyCount
-                );
+                aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
+                for (   StlSyntaxSequence< Property >::const_iterator copyProperty = aThisHandlersProperties.begin();
+                        copyProperty != aThisHandlersProperties.end();
+                        ++copyProperty
+                    )
+                {
+                    ::std::vector< Property >::const_iterator previous = ::std::find_if(
+                        aProperties.begin(),
+                        aProperties.end(),
+                        FindPropertyByName( copyProperty->Name )
+                    );
+                    if ( previous != aProperties.end() )
+                    {
+                        // there already was another (previous) handler which supported this property.
+                        // Don't add it to aProperties, again
+                        continue;
+                    }
+
+                    aProperties.push_back( *copyProperty );
+                }
+
+                // determine the superseded properties
+                StlSyntaxSequence< ::rtl::OUString > aSuperSededByThisHandler = (*aHandler)->getSupersededProperties();
+                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator superseded = aSuperSededByThisHandler.begin();
+                        superseded != aSuperSededByThisHandler.end();
+                        ++superseded
+                    )
+                {
+                    ::std::vector< Property >::iterator existent = ::std::find_if(
+                        aProperties.begin(),
+                        aProperties.end(),
+                        FindPropertyByName( *superseded )
+                    );
+                    if ( existent != aProperties.end() )
+                        // one of the properties superseded by this handler was supported by a previous
+                        // one -> erase
+                        aProperties.erase( existent );
+                }
 
                 // be notified of changes which this handler is responsible for
-                if ( !aThisHandlersProperties.empty() )
-                    (*aHandler)->startAllPropertyChangeListening( this );
+                (*aHandler)->addPropertyChangeListener( this );
 
                 // remember this handler for every of the properties which it is responsible
                 // for
-                for ( pThisHandlersProperties; pThisHandlersProperties != pThisHandlersPropertiesEnd; ++pThisHandlersProperties )
+                for (   ::std::vector< Property >::const_iterator remember = aProperties.begin();
+                        remember != aProperties.end();
+                        ++remember
+                    )
                 {
                     m_aPropertyHandlers.insert( PropertyHandlerRepository::value_type(
-                        m_pPropertyInfo->getPropertyId( pThisHandlersProperties->Name ), *aHandler
+                        remember->Name, *aHandler
                     ) );
+                    // note that this implies that if two handlers support the same property,
+                    // the latter wins
                 }
 
                 // see if the handler expresses interest in any actuating properties
-                ::std::vector< ::rtl::OUString > aInterestingActuations = (*aHandler)->getActuatingProperties();
-
-                for ( ::std::vector< ::rtl::OUString >::const_iterator aLoop = aInterestingActuations.begin();
-                      aLoop != aInterestingActuations.end();
-                      ++aLoop
+                StlSyntaxSequence< ::rtl::OUString > aInterestingActuations = (*aHandler)->getActuatingProperties();
+                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator aLoop = aInterestingActuations.begin();
+                        aLoop != aInterestingActuations.end();
+                        ++aLoop
                     )
                 {
                     m_aDependencyHandlers.insert( PropertyHandlerMultiRepository::value_type(
-                        m_pPropertyInfo->getPropertyId( *aLoop ), *aHandler
-                    ) );
+                        *aLoop, *aHandler ) );
                 }
+
+                ++aHandler;
             }
 
-            // now allow those handlers to filter out properties
-            ::std::set< ::rtl::OUString > aFilteredProperties;
-            for ( aHandler = aPropertyHandlers.begin();
-                  aHandler != aPropertyHandlers.end();
-                  ++aHandler
+            // create a new composer for UI requests coming from the handlers
+            m_pUIRequestComposer.reset( new ComposedPropertyUIUpdate( this, this ) );
+
+            // sort the properties by relative position, as indicated by the model
+            for (   ::std::vector< Property >::const_iterator sourceProps = aProperties.begin();
+                    sourceProps != aProperties.end();
+                    ++sourceProps
                 )
             {
-                ::std::vector< ::rtl::OUString > aSuperSededByThisHandler = (*aHandler)->getSupersededProperties();
-                aFilteredProperties.insert(
-                    aSuperSededByThisHandler.begin(),
-                    aSuperSededByThisHandler.end()
-                );
+                sal_Int32 nRelativePropertyOrder = sourceProps - aProperties.begin();
+                if ( m_xModel.is() )
+                    nRelativePropertyOrder = m_xModel->getPropertyOrderIndex( sourceProps->Name );
+                while ( m_aProperties.find( nRelativePropertyOrder ) != m_aProperties.end() )
+                    ++nRelativePropertyOrder;
+                m_aProperties[ nRelativePropertyOrder ] = *sourceProps;
             }
 
-            // sort them by relative pos, by inserting into a map
-            DECLARE_STL_STDKEY_MAP( sal_Int32, Property, OrderedPropertyMap );
-            OrderedPropertyMap aSortProperties;
-            Property* pSourceProps = aProperties.getArray();
-            Property* pSourcePropsEnd = pSourceProps + aProperties.getLength();
-            for (; pSourceProps < pSourcePropsEnd; ++pSourceProps)
-            {
-                // is this property filtered out?
-                if ( aFilteredProperties.find( pSourceProps->Name ) != aFilteredProperties.end() )
-                    // yes
-                    continue;
-
-                // in (e.g.) findObjectPropertyByHandle we rely on the fact that the property handles are
-                // *our* numbers, not the original numbers of the introspectee, so fake this here
-                pSourceProps->Handle = m_pPropertyInfo->getPropertyId( pSourceProps->Name );
-
-                sal_Int32 nRelativePosition = m_pPropertyInfo->getPropertyPos( pSourceProps->Handle );
-                aSortProperties[ nRelativePosition ] = *pSourceProps;
-            }
-
-            // and copy them into the sequence, now that they're sorted
-            m_aObjectProperties.realloc(aSortProperties.size());
-            ::std::transform(
-                aSortProperties.begin(),
-                aSortProperties.end(),
-                m_aObjectProperties.getArray(),
-                ::std::select2nd< OrderedPropertyMap::value_type >()
-            );
-
-#if OSL_DEBUG_LEVEL > 0
-            {
-                // some consistency checks
-                ::std::set< ::rtl::OUString > aEncounteredNames;
-                ::std::set< sal_Int32       > aEncounteredHandles;
-                const Property* pObjectProperties = m_aObjectProperties.getConstArray();
-                const Property* pObjectPropertiesEnd = pObjectProperties + m_aObjectProperties.getLength();
-                for ( ; pObjectProperties != pObjectPropertiesEnd; ++pObjectProperties )
-                {
-                    if ( aEncounteredNames.find( pObjectProperties->Name ) != aEncounteredNames.end() )
-                    {
-                        ::rtl::OString sMessage( "OPropertyBrowserController::doInspection: property name \"" );
-                        sMessage += ::rtl::OString( pObjectProperties->Name.getStr(), pObjectProperties->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
-                        sMessage += "\"encountered twice!";
-                        OSL_ENSURE( sal_False, sMessage.getStr() );
-                    }
-                    aEncounteredNames.insert( pObjectProperties->Name );
-
-                    if ( aEncounteredHandles.find( pObjectProperties->Handle ) != aEncounteredHandles.end() )
-                    {
-                        ::rtl::OString sMessage( "OPropertyBrowserController::doInspection: property handle \"" );
-                        sMessage += ::rtl::OString::valueOf( (sal_Int32)pObjectProperties->Handle );
-                        sMessage += "\"encountered twice!";
-                        OSL_ENSURE( sal_False, sMessage.getStr() );
-                    }
-                    aEncounteredHandles.insert( pObjectProperties->Handle );
-
-                    OSL_ENSURE( m_pPropertyInfo->getPropertyId( pObjectProperties->Name ) == pObjectProperties->Handle,
-                        "OPropertyBrowserController::doInspection: inconsistence in the property descriptions!" );
-                }
-            }
-#endif
-
-            //////////////////////////////////////////////////////////////////////
-            // get the model and the control listeners
-            Sequence< Type >    aModelListeners;
-            Sequence< Type >    aControlListeners;
-
-            if ( xIntrospectionAccess.is() )
-                aModelListeners = xIntrospectionAccess->getSupportedListeners();
-
-            // if we don't have a control, try to create one (temporarily)
-            Reference< XInterface > xTemporaryControl;
-            Any aControl(_rControl);
-            if (!aControl.hasValue())
-            {
-                try
-                {
-                    ::rtl::OUString sControlService;
-                    if (m_xPropValueAccess.is())
-                        m_xPropValueAccess->getPropertyValue(PROPERTY_DEFAULTCONTROL) >>= sControlService;
-
-                    xTemporaryControl = m_xORB->createInstance(sControlService);
-                    aControl <<= xTemporaryControl;
-                }
-                catch(Exception&)
-                {
-                }
-            }
-
-            // inspect the control for listeners
-            if (aControl.hasValue())
-            {
-                Reference< XIntrospection >  xMVCIntrospection(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-                Reference< XIntrospectionAccess >  xAccess;
-                if( xMVCIntrospection.is() )
-                    xAccess = xMVCIntrospection->inspect(aControl);
-                if (xAccess.is())
-                    aControlListeners = xAccess->getSupportedListeners();
-            }
-            // dispose the temporary control
-            if (xTemporaryControl.is())
-            {
-                ::comphelper::disposeComponent(xTemporaryControl);
-                xTemporaryControl = NULL;
-            }
-
-            // merge the two lists
-            // we use a set for this to avoid duplicates
-            DECLARE_STL_SET( Type, TypeLessByName, TypeBag );
-            TypeBag aListenerCollection;
-
-            // insert the model listeners
-            const Type* pListenerLoop = aModelListeners.getConstArray();
-            const Type* pListenerLoopEnd = pListenerLoop + aModelListeners.getLength();
-            for (; pListenerLoop != pListenerLoopEnd; ++pListenerLoop)
-                aListenerCollection.insert(*pListenerLoop);
-
-            // insert the control listener
-            pListenerLoop = aControlListeners.getConstArray();
-            pListenerLoopEnd = pListenerLoop + aControlListeners.getLength();
-            for (; pListenerLoop != pListenerLoopEnd; ++pListenerLoop)
-                if (aListenerCollection.end() == aListenerCollection.find(*pListenerLoop))
-                    aListenerCollection.insert(*pListenerLoop);
-
-            // now that they're disambiguated, copy these types into our member
-            m_aObjectListenerTypes.realloc(aListenerCollection.size());
-            {
-                Type* aCopyDest = m_aObjectListenerTypes.getArray();
-                for (   ConstTypeBagIterator aCopySource = aListenerCollection.begin();
-                        aCopySource != aListenerCollection.end();
-                        ++aCopySource, ++aCopyDest
-                    )
-                    *aCopyDest = *aCopySource;
-            }
-
-            // retrieve the class id of the introspectee (if applicable)
-            classifyControlModel( );
-
-            // start the listening for property changes
-            startPropertyListening();
+            // be notified when one of our inspectees dies
+            impl_toggleInspecteeListening_nothrow( true );
         }
         catch(Exception&)
         {
             DBG_ERROR("OPropertyBrowserController::doInspection : caught an exception !");
-            return;
         }
-
-        // append the data page for the
-        if (haveView())
-            m_nDataPageId = getPropertyBox()->AppendPage(
-                String(ModuleRes(RID_STR_PROPPAGE_DATA)),
-                HID_FM_PROPDLG_TAB_DATA
-            );
-
-        return;
-    }
-
-    //------------------------------------------------------------------------
-    sal_Int16 OPropertyBrowserController::getControlType() const
-    {
-        sal_Int16 nControlType = CONTROL_TYPE_UNKNOWN;
-
-        if (    haveIntrospecteeProperty( PROPERTY_WIDTH )
-             && haveIntrospecteeProperty( PROPERTY_HEIGHT )
-             && haveIntrospecteeProperty( PROPERTY_POSITIONX )
-             && haveIntrospecteeProperty( PROPERTY_POSITIONY )
-           )
-        {
-            nControlType = CONTROL_TYPE_DIALOG;
-        }
-        else
-        {
-            nControlType = CONTROL_TYPE_FORM;
-        }
-        return nControlType;
-    }
-
-    //------------------------------------------------------------------------
-    void OPropertyBrowserController::setDocumentModified( )
-    {
-        Reference< XModifiable > xModifiable( m_xContextDocument, UNO_QUERY );
-        if ( xModifiable.is() )
-            xModifiable->setModified( sal_True );
     }
 
     //------------------------------------------------------------------------
@@ -1347,27 +983,562 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Window* OPropertyBrowserController::getDialogParent()
+    void OPropertyBrowserController::describePropertyLine( const Property& _rProperty, OLineDescriptor& _rDescriptor ) SAL_THROW((Exception))
     {
-        Window* pParent = m_pView;
-        if ( !pParent )
-            return NULL;
+        try
+        {
+            PropertyHandlerRepository::const_iterator handler = m_aPropertyHandlers.find( _rProperty.Name );
+            if ( handler == m_aPropertyHandlers.end() )
+                throw RuntimeException();   // caught below
 
-        while ( pParent->GetParent() )
-            pParent = pParent->GetParent();
+            handler->second->describePropertyLine( _rProperty.Name, _rDescriptor, this );
 
-        return pParent;
+            //////////////////////////////////////////////////////////////////////
+
+            _rDescriptor.xPropertyHandler = handler->second;
+            _rDescriptor.sName = _rProperty.Name;
+            _rDescriptor.aValue = _rDescriptor.xPropertyHandler->getPropertyValue( _rProperty.Name );
+
+            if ( !_rDescriptor.DisplayName.getLength() )
+            {
+            #ifdef DBG_UTIL
+                ::rtl::OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
+                sMessage += ::rtl::OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
+                sMessage += ::rtl::OString( "'!" );
+                DBG_ASSERT( _rDescriptor.DisplayName.getLength(), sMessage );
+            #endif
+                _rDescriptor.DisplayName = _rProperty.Name;
+            }
+
+            PropertyState   ePropertyState( _rDescriptor.xPropertyHandler->getPropertyState( _rProperty.Name ) );
+            if ( PropertyState_AMBIGUOUS_VALUE == ePropertyState )
+            {
+                _rDescriptor.bUnknownValue = true;
+                _rDescriptor.aValue.clear();
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::describePropertyLine: caught an exception!" );
+        }
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::getDocumentURL() const
+    void OPropertyBrowserController::impl_buildCategories_throw()
     {
-        ::rtl::OUString sURL;
+        OSL_PRECOND( m_aPageIds.empty(), "OPropertyBrowserController::impl_buildCategories_throw: duplicate call!" );
 
-        if ( m_xContextDocument.is() )
-            sURL = m_xContextDocument->getURL();
+        StlSyntaxSequence< PropertyCategoryDescriptor > aCategories;
+        if ( m_xModel.is() )
+            aCategories = m_xModel->describeCategories();
 
-        return sURL;
+        for (   StlSyntaxSequence< PropertyCategoryDescriptor >::const_iterator category = aCategories.begin();
+                category != aCategories.end();
+                ++category
+            )
+        {
+            OSL_ENSURE( m_aPageIds.find( category->ProgrammaticName ) == m_aPageIds.end(),
+                "OPropertyBrowserController::impl_buildCategories_throw: duplicate programmatic name!" );
+
+            m_aPageIds[ category->ProgrammaticName ] =
+                getPropertyBox()->AppendPage( category->UIName, HelpIdUrl::getHelpId( category->HelpURL ) );
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::UpdateUI()
+    {
+        try
+        {
+            if ( !haveView() )
+                // too early, will return later
+                return;
+
+            getPropertyBox()->DisableUpdate();
+
+            sal_Bool bHaveFocus = getPropertyBox()->HasChildPathFocus();
+
+            // create our tab pages
+            impl_buildCategories_throw();
+            // (and allow for pages to be actually unused)
+            ::std::set< sal_uInt16 > aUsedPages;
+
+            // when building the UI below, remember which properties are actuating,
+            // to allow for a initial actuatinPropertyChanged call
+            ::std::vector< ::rtl::OUString > aActuatingProperties;
+            ::std::vector< Any > aActuatingPropertyValues;
+
+            // ask the handlers to describe the property UI, and insert the resulting
+            // entries into our list boxes
+            OrderedPropertyMap::const_iterator property( m_aProperties.begin() );
+            for ( ; property != m_aProperties.end(); ++property )
+            {
+                OLineDescriptor aDescriptor;
+                describePropertyLine( property->second, aDescriptor );
+
+                bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( property->second.Name );
+
+            #if OSL_DEBUG_LEVEL > 0
+                if ( !aDescriptor.Category.getLength() )
+                {
+                    ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
+                    sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
+                    sMessage += "'!";
+                    OSL_ENSURE( false, sMessage );
+                }
+            #endif
+                // finally insert this property control
+                sal_uInt16 nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
+                if ( nTargetPageId == (sal_uInt16)-1 )
+                {
+                    // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
+                    // any category information of its own. In this case, we have a fallback ...
+                    m_aPageIds[ aDescriptor.Category ] =
+                        getPropertyBox()->AppendPage( aDescriptor.Category, 0 );
+                    nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
+                }
+
+                getPropertyBox()->InsertEntry( aDescriptor, nTargetPageId );
+                aUsedPages.insert( nTargetPageId );
+
+                // if it's an actuating property, remember it
+                if ( bIsActuatingProperty )
+                {
+                    aActuatingProperties.push_back( property->second.Name );
+                    aActuatingPropertyValues.push_back( impl_getPropertyValue_throw( property->second.Name ) );
+                }
+            }
+
+            // update any dependencies for the actuating properties which we encountered
+            {
+                ::std::vector< ::rtl::OUString >::const_iterator aProperty = aActuatingProperties.begin();
+                ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
+                for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
+                    impl_broadcastPropertyChange_nothrow( *aProperty, *aPropertyValue, *aPropertyValue, true );
+            }
+
+            // remove any unused pages (which we did not encounter properties for)
+            HashString2Int16 aSurvivingPageIds;
+            for (   HashString2Int16::iterator pageId = m_aPageIds.begin();
+                    pageId != m_aPageIds.end();
+                    ++pageId
+                )
+            {
+                if ( aUsedPages.find( pageId->second ) == aUsedPages.end() )
+                    getPropertyBox()->RemovePage( pageId->second );
+                else
+                    aSurvivingPageIds.insert( *pageId );
+            }
+            m_aPageIds.swap( aSurvivingPageIds );
+
+
+            getPropertyBox()->Show();
+            getPropertyBox()->EnableUpdate();
+            if ( bHaveFocus )
+                getPropertyBox()->GrabFocus();
+
+            // activate the first page
+            if ( !m_aPageIds.empty() )
+            {
+                Sequence< PropertyCategoryDescriptor > aCategories( m_xModel->describeCategories() );
+                if ( aCategories.getLength() )
+                    m_pView->activatePage( m_aPageIds[ aCategories[0].ProgrammaticName ] );
+                else
+                    // allowed: if we default-created the pages ...
+                    m_pView->activatePage( m_aPageIds.begin()->second );
+            }
+
+            // activate the previously active page (if possible)
+            if ( m_sLastValidPageSelection.getLength() )
+                m_sPageSelection = m_sLastValidPageSelection;
+            selectPageFromViewData();
+        }
+        catch( const Exception& e )
+        {
+        #if OSL_DEBUG_LEVEL > 0
+            Any caught( ::cppu::getCaughtException() );
+
+            ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: caught an exception!" );
+            sMessage += "\ntype: ";
+            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
+            sMessage += "\nmessage: ";
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+            OSL_ENSURE( false, sMessage );
+        #else
+            e; // make compiler happy
+        #endif
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::Clicked( const ::rtl::OUString& _rName, sal_Bool _bPrimary )
+    {
+        try
+        {
+            // since the browse buttons do not get the focus when clicked with the mouse,
+            // we need to commit the changes in the current property field
+            getPropertyBox()->CommitModified();
+
+            PropertyHandlerRepository::const_iterator handler = m_aPropertyHandlers.find( _rName );
+            DBG_ASSERT( handler != m_aPropertyHandlers.end(), "OPropertyBrowserController::Clicked: a property without handler? This will crash!" );
+
+            ComposedUIAutoFireGuard aAutoFireGuard( *m_pUIRequestComposer );
+
+            Any aData;
+            InteractiveSelectionResult eResult =
+                handler->second->onInteractivePropertySelection( _rName, _bPrimary, aData,
+                    m_pUIRequestComposer->getUIForPropertyHandler( handler->second ) );
+
+            switch ( eResult )
+            {
+            case InteractiveSelectionResult_Cancelled:
+            case InteractiveSelectionResult_Success:
+                // okay, nothing to do
+                break;
+            case InteractiveSelectionResult_ObtainedValue:
+                handler->second->setPropertyValue( _rName, aData );
+                break;
+            case InteractiveSelectionResult_Pending:
+                // also okay, we expect that the handler has disabled the UI as necessary
+                break;
+            }
+        }
+        catch (Exception&)
+        {
+            DBG_ERROR("OPropertyBrowserController::Clicked : caught an exception !")
+        }
+    }
+
+    //------------------------------------------------------------------------
+    sal_Bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const ::rtl::OUString& _rName ) throw (RuntimeException)
+    {
+        for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
+                search != m_aProperties.end();
+                ++search
+            )
+            if ( search->second.Name == _rName )
+                return true;
+        return false;
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::Commit( const ::rtl::OUString& rName, const Any& _rValue )
+    {
+        try
+        {
+            m_sCommittingProperty = rName;
+
+            bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( rName );
+
+            Any aOldValue;
+            if ( bIsActuatingProperty )
+                aOldValue = impl_getPropertyValue_throw( rName );
+
+            // do we have a dedicated handler for this property, which we can delegate some tasks to?
+            PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
+
+            //////////////////////////////////////////////////////////////////////
+            // set the value
+            handler->setPropertyValue( rName, _rValue );
+
+            //////////////////////////////////////////////////////////////////////
+            // re-retrieve the value
+            Any aNormalizedValue = handler->getPropertyValue( rName );
+
+            // care for any inter-property dependencies
+            if ( bIsActuatingProperty )
+                impl_broadcastPropertyChange_nothrow( rName, aNormalizedValue, aOldValue, false );
+
+            // and display it again. This ensures proper formatting
+            getPropertyBox()->SetPropertyValue( rName, aNormalizedValue );
+        }
+        catch(PropertyVetoException& eVetoException)
+        {
+            InfoBox(m_pView, eVetoException.Message).Execute();
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !")
+        }
+
+        m_sCommittingProperty = ::rtl::OUString();
+    }
+
+    //------------------------------------------------------------------------
+    namespace
+    {
+        Reference< XPropertyHandler > lcl_createHandler( const ComponentContext& _rContext, const Any& _rFactoryDescriptor )
+        {
+            Reference< XPropertyHandler > xHandler;
+
+            ::rtl::OUString sServiceName;
+            Reference< XSingleServiceFactory > xServiceFac;
+            Reference< XSingleComponentFactory > xComponentFac;
+
+            if ( _rFactoryDescriptor >>= sServiceName )
+                _rContext.createComponent( sServiceName, xHandler );
+            else if ( _rFactoryDescriptor >>= xServiceFac )
+                xHandler = xHandler.query( xServiceFac->createInstance() );
+            else if ( _rFactoryDescriptor >>= xComponentFac )
+                xHandler = xHandler.query( xComponentFac->createInstanceWithContext( _rContext.getUNOContext() ) );
+            return xHandler;
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::getPropertyHandlers( const InterfaceArray& _rObjects, PropertyHandlerArray& _rHandlers )
+    {
+        _rHandlers.resize( 0 );
+        if ( _rObjects.empty() )
+            return;
+
+        // create a component context for the handlers, containing some information about where
+        // they live
+        Reference< XComponentContext > xHandlerContext( m_aContext.getUNOContext() );
+
+        // if our own creator did not pass a dialog parent window, use our own view for this
+        Reference< XWindow > xParentWindow( m_aContext.getContextValueByAsciiName( "DialogParentWindow" ), UNO_QUERY );
+        if ( !xParentWindow.is() )
+        {
+            ::cppu::ContextEntry_Init aHandlerContextInfo[] =
+            {
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
+            };
+            xHandlerContext = ::cppu::createComponentContext(
+                aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                m_aContext.getUNOContext() );
+        }
+
+        Sequence< Any > aHandlerFactories;
+        if ( m_xModel.is() )
+            aHandlerFactories = m_xModel->getHandlerFactories();
+
+        const Any* pHandlerFactory = aHandlerFactories.getConstArray();
+        const Any* pHandlerFactoryEnd = aHandlerFactories.getConstArray() + aHandlerFactories.getLength();
+
+        while ( pHandlerFactory != pHandlerFactoryEnd )
+        {
+            if ( _rObjects.size() == 1 )
+            {   // we're inspecting only one object -> one handler
+                Reference< XPropertyHandler > xHandler( lcl_createHandler( m_aContext, *pHandlerFactory ) );
+                if ( xHandler.is() )
+                {
+                    xHandler->inspect( _rObjects[0] );
+                    _rHandlers.push_back( xHandler );
+                }
+            }
+            else
+            {
+                // create a single handler for every single object
+                ::std::vector< Reference< XPropertyHandler > > aSingleHandlers( _rObjects.size() );
+                ::std::vector< Reference< XPropertyHandler > >::iterator pHandler = aSingleHandlers.begin();
+
+                InterfaceArray::const_iterator pObject = _rObjects.begin();
+                InterfaceArray::const_iterator pObjectEnd = _rObjects.end();
+
+                for ( ; pObject != pObjectEnd; ++pObject )
+                {
+                    *pHandler = lcl_createHandler( m_aContext, *pHandlerFactory );
+                    if ( pHandler->is() )
+                    {
+                        (*pHandler)->inspect( *pObject );
+                        ++pHandler;
+                    }
+                }
+                aSingleHandlers.resize( pHandler - aSingleHandlers.begin() );
+
+                // then create a handler which composes information out of those single handlers
+                if ( !aSingleHandlers.empty() )
+                    _rHandlers.push_back( new PropertyComposer( aSingleHandlers ) );
+            }
+
+            ++pHandlerFactory;
+        }
+
+        // note that the handlers will not be used by our caller, if they indicate that there are no
+        // properties they feel responsible for
+    }
+
+    //------------------------------------------------------------------------
+    bool OPropertyBrowserController::impl_findObjectProperty_nothrow( const ::rtl::OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty )
+    {
+        OrderedPropertyMap::const_iterator search = m_aProperties.begin();
+        for ( ; search != m_aProperties.end(); ++search )
+            if ( search->second.Name == _rName )
+                break;
+        if ( _pProperty )
+            *_pProperty = search;
+        return ( search != m_aProperties.end() );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::rebuildPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        OrderedPropertyMap::const_iterator propertyPos;
+        if ( !impl_findObjectProperty_nothrow( _rPropertyName, &propertyPos ) )
+            return;
+
+        OLineDescriptor aDescriptor;
+        bool bSuccess = false;
+        try
+        {
+            describePropertyLine( propertyPos->second, aDescriptor );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+        }
+
+        getPropertyBox()->ChangeEntry( aDescriptor );
+   }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::enablePropertyUI( const ::rtl::OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        if ( !impl_findObjectProperty_nothrow( _rPropertyName ) )
+            return;
+
+        getPropertyBox()->EnablePropertyLine( _rPropertyName, _bEnable );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::enablePropertyUIElements( const ::rtl::OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        if ( !impl_findObjectProperty_nothrow( _rPropertyName ) )
+            return;
+
+        getPropertyBox()->EnablePropertyControls( _rPropertyName, _nElements, _bEnable );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::showPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        // look up the property in our object properties
+        OrderedPropertyMap::const_iterator propertyPos;
+        if ( !impl_findObjectProperty_nothrow( _rPropertyName, &propertyPos ) )
+            return;
+
+        if ( getPropertyBox()->GetPropertyPos( _rPropertyName ) != LISTBOX_ENTRY_NOTFOUND )
+        {
+            rebuildPropertyUI( _rPropertyName );
+            return;
+        }
+
+        OLineDescriptor aDescriptor;
+        describePropertyLine( propertyPos->second, aDescriptor );
+
+        // look for the position to insert the property
+
+        // side note: The methods GetPropertyPos and InsertEntry of the OPropertyEditor work
+        // only on the current page. This implies that it's impossible to use this method here
+        // to show property lines which are *not* on the current page.
+        // This is sufficient for now, but should be changed in the future.
+
+        // by definition, the properties in m_aProperties are in the order in which they appear in the UI
+        // So all we need is a predecessor of pProperty in m_aProperties
+        size_t nPosition = propertyPos->first;
+        sal_uInt16 nUIPos = LISTBOX_ENTRY_NOTFOUND;
+        do
+        {
+            if ( propertyPos != m_aProperties.begin() )
+                --propertyPos;
+            nUIPos = getPropertyBox()->GetPropertyPos( propertyPos->second.Name );
+        }
+        while ( ( nUIPos == LISTBOX_ENTRY_NOTFOUND ) && ( propertyPos != m_aProperties.begin() ) );
+
+        if ( nUIPos == LISTBOX_ENTRY_NOTFOUND )
+            // insert at the very top
+            nUIPos = 0;
+        else
+            // insert right after the predecessor we found
+            ++nUIPos;
+
+        getPropertyBox()->InsertEntry(
+            aDescriptor, impl_getPageIdForCategory_nothrow( aDescriptor.Category ), nUIPos );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        if ( !impl_findObjectProperty_nothrow( _rPropertyName ) )
+            return;
+
+        getPropertyBox()->RemoveEntry( _rPropertyName );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::showCategory( const ::rtl::OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        sal_uInt16 nPageId = impl_getPageIdForCategory_nothrow( _rCategory );
+        OSL_ENSURE( nPageId != (sal_uInt16)-1, "OPropertyBrowserController::showCategory: invalid category!" );
+
+        getPropertyBox()->ShowPropertyPage( nPageId, _bShow );
+    }
+
+    //------------------------------------------------------------------------
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !getPropertyBox() )
+            throw RuntimeException();
+
+        Reference< XPropertyControl > xControl;
+        if ( getPropertyBox() )
+            xControl = getPropertyBox()->GetPropertyControl( _rPropertyName );
+        return xControl;
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::impl_broadcastPropertyChange_nothrow( const ::rtl::OUString& _rPropertyName, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit ) const
+    {
+        // are there one or more handlers which are interested in the actuation?
+        ::std::pair< PropertyHandlerMultiRepository::const_iterator, PropertyHandlerMultiRepository::const_iterator > aInterestedHandlers =
+            m_aDependencyHandlers.equal_range( _rPropertyName );
+        if ( aInterestedHandlers.first == aInterestedHandlers.second )
+            // none of our handlers is interested in this
+            return;
+
+        ComposedUIAutoFireGuard aAutoFireGuard( *m_pUIRequestComposer );
+        try
+        {
+            // collect the responses from all interested handlers
+            PropertyHandlerMultiRepository::const_iterator handler = aInterestedHandlers.first;
+            while ( handler != aInterestedHandlers.second )
+            {
+                handler->second->actuatingPropertyChanged( _rPropertyName, _rNewValue, _rOldValue,
+                    m_pUIRequestComposer->getUIForPropertyHandler( handler->second ),
+                    _bFirstTimeInit );
+                ++handler;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::impl_broadcastPropertyChange_nothrow: caught an exception while calling the handlers!" );
+        }
     }
 
 //............................................................................
