@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:05:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 #include "formmetadata.hxx"
 #endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
-#include "stringrepresentation.hxx"
-#endif
 #ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 #include "pushbuttonnavigation.hxx"
 #endif
@@ -60,6 +57,12 @@
 #include <tools/debug.hxx>
 #endif
 
+//------------------------------------------------------------------------
+extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler()
+{
+    ::pcr::ButtonNavigationHandler::registerImplementation();
+}
+
 //........................................................................
 namespace pcr
 {
@@ -70,97 +73,116 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::frame;
 
     //====================================================================
     //= ButtonNavigationHandler
     //====================================================================
+    DBG_NAME( ButtonNavigationHandler )
     //--------------------------------------------------------------------
-    ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XPropertySet >& _rxIntrospectee, const Reference< XTypeConverter >& _rxTypeConverter  )
-        :PropertyHandler( _rxIntrospectee, _rxTypeConverter )
+    ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XComponentContext >& _rxContext )
+        :ButtonNavigationHandler_Base( _rxContext )
     {
+        DBG_CTOR( ButtonNavigationHandler, NULL );
     }
 
     //--------------------------------------------------------------------
     ButtonNavigationHandler::~ButtonNavigationHandler( )
     {
+        DBG_DTOR( ButtonNavigationHandler, NULL );
     }
 
     //--------------------------------------------------------------------
-    PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( PropertyId _nPropId ) const
+    ::rtl::OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.ButtonNavigationHandler" ) );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported( 1 );
+        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.ButtonNavigationHandler" ) );
+        return aSupported;
+    }
+
+    //--------------------------------------------------------------------
+    PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         PropertyState eState = PropertyState_DIRECT_VALUE;
-
-        OSL_ENSURE( isNavigationCapableButton( m_xIntrospectee ), "ButtonNavigationHandler::getPropertyState: we don't have any SupportedProperties!" );
-
-        switch ( _nPropId )
+        switch ( nPropId )
         {
         case PROPERTY_ID_BUTTONTYPE:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             eState = aHelper.getCurrentButtonTypeState();
         }
         break;
         case PROPERTY_ID_TARGET_URL:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             eState = aHelper.getCurrentTargetURLState();
         }
         break;
 
         default:
             DBG_ERROR( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
+            break;
         }
 
         return eState;
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL ButtonNavigationHandler::getPropertyValue( PropertyId _nPropId, bool _bLazy ) const
+    Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
-        OSL_ENSURE( isNavigationCapableButton( m_xIntrospectee ), "ButtonNavigationHandler::getPropertyValue: we don't have any SupportedProperties!" );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         Any aReturn;
-
-        switch ( _nPropId )
+        switch ( nPropId )
         {
         case PROPERTY_ID_BUTTONTYPE:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             aReturn = aHelper.getCurrentButtonType();
         }
         break;
 
         case PROPERTY_ID_TARGET_URL:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             aReturn = aHelper.getCurrentTargetURL();
         }
         break;
 
         default:
             DBG_ERROR( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
+            break;
         }
 
         return aReturn;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ButtonNavigationHandler::setPropertyValue( PropertyId _nPropId, const Any& _rValue )
+    void SAL_CALL ButtonNavigationHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
-        OSL_ENSURE( isNavigationCapableButton( m_xIntrospectee ), "ButtonNavigationHandler::setPropertyValue: we don't have any SupportedProperties!" );
-
-        switch ( _nPropId )
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        switch ( nPropId )
         {
         case PROPERTY_ID_BUTTONTYPE:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             aHelper.setCurrentButtonType( _rValue );
         }
         break;
 
         case PROPERTY_ID_TARGET_URL:
         {
-            PushButtonNavigation aHelper( m_xIntrospectee );
+            PushButtonNavigation aHelper( m_xComponent );
             aHelper.setCurrentTargetURL( _rValue );
         }
         break;
@@ -183,17 +205,19 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< Property > SAL_CALL ButtonNavigationHandler::implDescribeSupportedProperties() const
+    Sequence< Property > SAL_CALL ButtonNavigationHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
 
-        if ( isNavigationCapableButton( m_xIntrospectee ) )
+        if ( isNavigationCapableButton( m_xComponent ) )
         {
             addStringPropertyDescription( aProperties, PROPERTY_TARGET_URL );
             implAddPropertyDescription( aProperties, PROPERTY_BUTTONTYPE, ::getCppuType( static_cast< FormButtonType* >( NULL ) ) );
         }
 
-        return aProperties;
+        if ( aProperties.empty() )
+            return Sequence< Property >();
+        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
 //........................................................................
