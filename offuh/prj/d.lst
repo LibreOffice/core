@@ -66,6 +66,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony\DIALER
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\text
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xsd
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\inspection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
@@ -242,6 +243,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\text\*.hpp %_DEST%\inc%_EXT%\com\sun\star\text\*.hpp
 ..\%__SRC%\inc\com\sun\star\xsd\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xsd\*.hdl
 ..\%__SRC%\inc\com\sun\star\xsd\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xsd\*.hpp
+..\%__SRC%\inc\com\sun\star\inspection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\inspection\*.hdl
+..\%__SRC%\inc\com\sun\star\inspection\*.hpp %_DEST%\inc%_EXT%\com\sun\star\inspection\*.hpp
 ..\%__SRC%\inc\com\sun\star\ui\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ui\*.hdl
 ..\%__SRC%\inc\com\sun\star\ui\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ui\*.hpp
 ..\%__SRC%\inc\com\sun\star\ui\dialogs\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs\*.hdl
