@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 09:03:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -51,9 +52,16 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#endif
+
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
@@ -292,6 +300,12 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _CHECKIT_HXX
+#include <checkit.hxx>
+#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -322,6 +336,8 @@
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
+using namespace ::com::sun::star;
+
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -819,6 +835,36 @@ void SwEditWin::StopInsFrm()
 }
 
 /*--------------------------------------------------------------------
+ --------------------------------------------------------------------*/
+
+
+BOOL SwEditWin::IsInputSequenceChecking( const String &rText, const SwPaM& rCrsr ) const
+{
+    SwBreakIt *pBreakIt = SwBreakIt::Get();
+    uno::Reference < i18n::XBreakIterator > xBI = pBreakIt->GetBreakIter();
+    SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+
+    long nCTLScriptPos = -1;
+    if (xBI.is())
+    {
+        if (xBI->getScriptType( rText, 0 ) == i18n::ScriptType::COMPLEX)
+            nCTLScriptPos = 0;
+        else
+            nCTLScriptPos = xBI->nextScript( rText, 0, i18n::ScriptType::COMPLEX );
+    }
+
+    xub_StrLen nFirstPos = rCrsr.Start()->nContent.GetIndex();
+    BOOL bIsSequenceChecking =
+        rCTLOptions.IsCTLFontEnabled() &&
+        rCTLOptions.IsCTLSequenceChecking() &&
+        nFirstPos != 0 && /* first char needs not to be checked */
+        (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
+
+    return bIsSequenceChecking;
+}
+
+
+/*--------------------------------------------------------------------
      Beschreibung:  Der Character Buffer wird in das Dokument eingefuegt
  --------------------------------------------------------------------*/
 
@@ -827,6 +873,107 @@ void SwEditWin::FlushInBuffer()
 {
     if ( aInBuffer.Len() )
     {
+        SwWrtShell& rSh = rView.GetWrtShell();
+        SwCheckIt aCheckIt;
+        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = aCheckIt.xCheck;
+        if (IsInputSequenceChecking( aInBuffer, *rSh.GetCrsr() ) && xISC.is())
+        {
+            //
+            // apply (Thai) input sequence checking/correction
+            //
+
+            rSh.Push(); // push current cursor to stack
+
+            // get text from the beginning (i.e left side) of current selection
+            // to the start of the paragraph
+            rSh.NormalizePam();     // make point be the first (left) one
+            if (!rSh.GetCrsr()->HasMark())
+                rSh.GetCrsr()->SetMark();
+            rSh.GetCrsr()->GetMark()->nContent = 0;
+            String aLeftText( rSh.GetCrsr()->GetTxt() );
+
+            SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+
+            xub_StrLen nExpandSelection = 0;
+            if (aLeftText.Len() > 0)
+            {
+                sal_Unicode cChar = '\0';
+
+                xub_StrLen nTmpPos = aLeftText.Len();
+                sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
+                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
+
+                rtl::OUString aOldText( aLeftText );
+                rtl::OUString aNewText( aOldText );
+                if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+                {
+                    for (xub_StrLen k = 0;  k < aInBuffer.Len();  ++k)
+                    {
+                        cChar = aInBuffer.GetChar(k);
+                        const xub_StrLen nPrevPos = static_cast<xub_StrLen>(xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ));
+
+                        // valid sequence or sequence could be corrected:
+                        if (nPrevPos != aNewText.getLength())
+                            nTmpPos = nPrevPos + 1;
+                    }
+
+                    // find position of first character that has changed
+                    sal_Int32 nOldLen = aOldText.getLength();
+                    sal_Int32 nNewLen = aNewText.getLength();
+                    const sal_Unicode *pOldTxt = aOldText.getStr();
+                    const sal_Unicode *pNewTxt = aNewText.getStr();
+                    sal_Int32 nChgPos = 0;
+                    while ( nChgPos < nOldLen && nChgPos < nNewLen &&
+                            pOldTxt[nChgPos] == pNewTxt[nChgPos] )
+                        ++nChgPos;
+
+                    xub_StrLen nChgLen = nNewLen - nChgPos;
+                    String aChgText( aNewText.copy( nChgPos, nChgLen ) );
+
+                    if (aChgText.Len())
+                    {
+                        aInBuffer = aChgText;
+                        nExpandSelection = aLeftText.Len() - nChgPos;
+                    }
+                    else
+                        aInBuffer.Erase();
+                }
+                else
+                {
+                    for (xub_StrLen k = 0;  k < aInBuffer.Len();  ++k)
+                    {
+                        cChar = aInBuffer.GetChar(k);
+                        if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
+                        {
+                            // character can be inserted:
+                            aNewText += rtl::OUString( (sal_Unicode) cChar );
+                            ++nTmpPos;
+                        }
+                    }
+                    aInBuffer = aNewText.copy( aOldText.getLength() );  // copy new text to be inserted to buffer
+                }
+            }
+
+            // at this point now we will insert the buffer text 'normally' some lines below...
+
+            rSh.Pop( FALSE );  // pop old cursor from stack
+
+            if (!aInBuffer.Len())
+                return;
+
+            // if text prior to the original selection needs to be changed
+            // as well, we now expand the selection accordingly.
+            SwPaM &rCrsr = *rSh.GetCrsr();
+            xub_StrLen nCrsrStartPos = rCrsr.Start()->nContent.GetIndex();
+            DBG_ASSERT( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
+            if (nExpandSelection && nCrsrStartPos >= nExpandSelection)
+            {
+                if (!rCrsr.HasMark())
+                    rCrsr.SetMark();
+                rCrsr.Start()->nContent -= nExpandSelection;
+            }
+        }
+
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
                 rView.GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
@@ -843,7 +990,6 @@ void SwEditWin::FlushInBuffer()
         }
         //#21019# apply CTL and CJK language to the text input
         sal_Bool bLang = true;
-        SwWrtShell& rSh = rView.GetWrtShell();
         if(eBufferLanguage != LANGUAGE_DONTKNOW)
         {
             USHORT nWhich = 0;
@@ -2107,7 +2253,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
 
 
-            if( !aKeyEvent.GetRepeat() && pACorr &&
+            BOOL bIsAutoCorrectChar = SvxIsAutoCorrectChar( aCh );
+            if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                     pACfg->IsAutoFmtByInput() &&
                 (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                     ( '*' == aCh || '_' == aCh ) ) ||
@@ -2119,7 +2266,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
                     rSh.UpdateAttr();
             }
-            else if( !aKeyEvent.GetRepeat() && pACorr &&
+            else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                     pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
