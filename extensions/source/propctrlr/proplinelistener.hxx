@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proplinelistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,8 @@ namespace pcr
     class IPropertyLineListener
     {
     public:
-        virtual void    Modified(   const String& _rName, const String& _rVal ) = 0;
-        virtual void    Clicked(    const String& _rName, sal_uInt16 _nFlags, bool _bPrimary ) = 0;
-        virtual void    Commit(     const String& _rName, const String& _rVal ) = 0;
+        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary ) = 0;
+        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
     };
 
 //............................................................................
