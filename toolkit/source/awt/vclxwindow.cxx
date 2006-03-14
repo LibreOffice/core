@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:00:26 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,21 +167,32 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 #define EVENT_MOUSE_ENTERED     2
 #define EVENT_MOUSE_EXITED      3
 
+struct AnyMouseEvent : public ::comphelper::EventHolder< ::com::sun::star::awt::MouseEvent >
+{
+    sal_Int16   nMouseEventType;
+
+    AnyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rEvent, sal_Int16 _nType )
+        :comphelper::EventHolder< ::com::sun::star::awt::MouseEvent >( _rEvent )
+        ,nMouseEventType( _nType )
+    {
+    }
+};
+
 class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
 {
 private:
-    typedef ::comphelper::EventObjectHolder< ::com::sun::star::awt::MouseEvent >
-        MouseEventType;
-    typedef ::std::vector< ::rtl::Reference< ::comphelper::EventDescription > >
+    typedef ::std::vector< ::rtl::Reference< ::comphelper::AnyEvent > >
         EventArray;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-        ComponentReference;
 
 private:
+    oslInterlockedCount                 m_refCount;
     VCLXWindow&                         mrAntiImpl;
     ::vos::IMutex&                      mrMutex;
+    bool                                mbDisposed;
+
 #ifdef THREADED_NOTIFICATION
-    ::comphelper::AsyncEventNotifier*   mpAsyncNotifier;
+    ::rtl::Reference< ::comphelper::AsyncEventNotifier >
+                                        mpAsyncNotifier;
 #else
 #if !defined( SYNCHRON_NOTIFICATION )
     EventArray                          maEvents;
@@ -205,21 +216,42 @@ public:
     */
     void    disposing();
 
+    virtual void SAL_CALL acquire();
+    virtual void SAL_CALL release();
+
 protected:
+    ~VCLXWindowImpl();
+
     // IEventProcessor
-    virtual void processEvent( const ::comphelper::EventDescription& _rEvent );
-    virtual ComponentReference getComponent();
+    virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
 #if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
 private:
     DECL_LINK( OnProcessEvent, void* );
 #endif
+
+private:
+    /** determines whether the instance is already disposed
+        @precond
+            m_aMutex must be acquired
+    */
+    inline bool impl_isDisposed()
+    {
+        return mbDisposed;
+    }
+
+private:
+    VCLXWindowImpl();                                   // never implemented
+    VCLXWindowImpl( const VCLXWindowImpl& );            // never implemented
+    VCLXWindowImpl& operator=( const VCLXWindowImpl& ); // never implemented
 };
 
 //--------------------------------------------------------------------
 VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
     :mrAntiImpl( _rAntiImpl )
+    ,m_refCount( 0 )
     ,mrMutex( _rMutex )
+    ,mbDisposed( false )
 #ifdef THREADED_NOTIFICATION
     ,mpAsyncNotifier( NULL )
 #else
@@ -231,13 +263,18 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
 }
 
 //--------------------------------------------------------------------
+VCLXWindowImpl::~VCLXWindowImpl()
+{
+}
+
+//--------------------------------------------------------------------
 void VCLXWindowImpl::disposing()
 {
     ::vos::OGuard aGuard( mrMutex );
 #ifdef THREADED_NOTIFICATION
-    if ( mpAsyncNotifier )
+    if ( mpAsyncNotifier.is() )
     {
-        mpAsyncNotifier->release();
+        mpAsyncNotifier->removeEventsForProcessor( this );
         mpAsyncNotifier = NULL;
     }
 #else
@@ -247,6 +284,7 @@ void VCLXWindowImpl::disposing()
     mnEventId = 0;
 #endif
 #endif
+    mbDisposed= true;
 }
 
 //--------------------------------------------------------------------
@@ -255,15 +293,14 @@ void VCLXWindowImpl::notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& 
     ::vos::OClearableGuard aGuard( mrMutex );
     if ( mrAntiImpl.GetMouseListeners().getLength() )
     {
-        ::rtl::Reference< ::comphelper::EventDescription > aEvent( new MouseEventType( _rMouseEvent, _nType ) );
+        ::rtl::Reference< ::comphelper::AnyEvent > aEvent( new AnyMouseEvent( _rMouseEvent, _nType ) );
 #ifdef THREADED_NOTIFICATION
-        if ( !mpAsyncNotifier )
+        if ( !mpAsyncNotifier.is() )
         {
-            mpAsyncNotifier = new ::comphelper::AsyncEventNotifier( this );
-            mpAsyncNotifier->acquire();
+            mpAsyncNotifier = new ::comphelper::AsyncEventNotifier;
             mpAsyncNotifier->create();
         }
-        mpAsyncNotifier->addEvent( aEvent );
+        mpAsyncNotifier->addEvent( aEvent, this );
 #else
     #ifdef SYNCHRON_NOTIFICATION
         aGuard.clear();
@@ -311,11 +348,16 @@ IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, NOINTERESTEDIN )
 #endif
 
 //--------------------------------------------------------------------
-void VCLXWindowImpl::processEvent( const ::comphelper::EventDescription& _rEvent )
+void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
 {
-    const MouseEventType aEventDescriptor( static_cast< const MouseEventType& >( _rEvent ) );
-    const ::com::sun::star::awt::MouseEvent& rEvent( aEventDescriptor.getEventObject() );
-    switch ( aEventDescriptor.getEventType() )
+    ::vos::OGuard aGuard( mrMutex );
+    if ( impl_isDisposed() )
+        // while we were waiting for our mutex, another thread disposed us
+        return;
+
+    const AnyMouseEvent& rEventDescriptor( static_cast< const AnyMouseEvent& >( _rEvent ) );
+    const ::com::sun::star::awt::MouseEvent& rEvent( rEventDescriptor.getEventObject() );
+    switch ( rEventDescriptor.nMouseEventType )
     {
     case EVENT_MOUSE_PRESSED:
         mrAntiImpl.GetMouseListeners().mousePressed( rEvent );
@@ -335,9 +377,16 @@ void VCLXWindowImpl::processEvent( const ::comphelper::EventDescription& _rEvent
 }
 
 //--------------------------------------------------------------------
-VCLXWindowImpl::ComponentReference VCLXWindowImpl::getComponent()
+void SAL_CALL VCLXWindowImpl::acquire()
 {
-    return static_cast< ::com::sun::star::awt::XWindow* >( &mrAntiImpl );
+    osl_incrementInterlockedCount( &m_refCount );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL VCLXWindowImpl::release()
+{
+    if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        delete this;
 }
 
 //====================================================================
@@ -421,6 +470,7 @@ VCLXWindow::VCLXWindow()
     DBG_CTOR( VCLXWindow, 0 );
 
     mpImpl = new VCLXWindowImpl( *this, GetMutex() );
+    mpImpl->acquire();
 
     mbDisposing = sal_False;
     mbDesignMode = sal_False;
@@ -437,8 +487,6 @@ VCLXWindow::~VCLXWindow()
         GetWindow()->SetWindowPeer( NULL, NULL );
         GetWindow()->SetAccessible( NULL );
     }
-
-    DELETEZ( mpImpl );
 }
 
 void VCLXWindow::SetWindow( Window* pWindow )
@@ -988,7 +1036,12 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     {
         mbDisposing = sal_True;
 
-        mpImpl->disposing();
+        if ( mpImpl )
+        {
+            mpImpl->disposing();
+            mpImpl->release();
+            mpImpl = NULL;
+        }
 
         ::com::sun::star::lang::EventObject aObj;
         aObj.Source = static_cast< ::cppu::OWeakObject* >( this );
