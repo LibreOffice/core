@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:05:21 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,40 +51,33 @@ namespace pcr
     //====================================================================
     //= ButtonNavigationHandler
     //====================================================================
+    class ButtonNavigationHandler;
+    typedef HandlerComponentBase< ButtonNavigationHandler > ButtonNavigationHandler_Base;
     /** a property handler for any virtual string properties
     */
-    class ButtonNavigationHandler : public PropertyHandler
+    class ButtonNavigationHandler : public ButtonNavigationHandler_Base
     {
     public:
-        // HandlerFactory
-        inline static IPropertyHandler* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
-        )
-        {
-            return new ButtonNavigationHandler( _rxIntrospectee, _rxTypeConverter );
-        }
+        ButtonNavigationHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+        );
+        static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        ~ButtonNavigationHandler();
 
         static bool    isNavigationCapableButton( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponent );
 
     protected:
-        ButtonNavigationHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter
-        );
-        ~ButtonNavigationHandler();
-
-    protected:
-        // IPropertyHandler overriables
-        virtual ::com::sun::star::uno::Any              SAL_CALL getPropertyValue( PropertyId _nPropId, bool _bLazy = true ) const;
-        virtual void                                    SAL_CALL setPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue );
-        virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( PropertyId _nPropId ) const;
+        // XPropertyHandler overriables
+        virtual ::com::sun::star::uno::Any              SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void                                    SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
         // PropertyHandler overridables
-        virtual ::std::vector< ::com::sun::star::beans::Property >
-                                                        SAL_CALL implDescribeSupportedProperties() const;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
+                                                        SAL_CALL doDescribeSupportedProperties() const;
     };
 
 //........................................................................
