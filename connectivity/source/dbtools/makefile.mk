@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 11:37:19 $
+#   last change: $Author: vg $ $Date: 2006-03-14 10:48:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ SHL1STDLIBS=\
     $(SALLIB)					\
     $(UNOTOOLSLIB)				\
     $(JVMACCESSLIB)				\
+    $(UNOTOOLSLIB)	\
     $(COMPHELPERLIB)
 
 # NETBSD: somewhere we have to instantiate the static data members.
