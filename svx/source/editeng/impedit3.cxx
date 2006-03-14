@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:48:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4224,6 +4224,21 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
         }
     }
     return xBI;
+}
+
+Reference < i18n::XExtendedInputSequenceChecker > ImpEditEngine::ImplGetInputSequenceChecker() const
+{
+    if ( !xISC.is() )
+    {
+        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        if ( xI.is() )
+        {
+            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );
+            x >>= xISC;
+        }
+    }
+    return xISC;
 }
 
 Color ImpEditEngine::GetAutoColor() const
