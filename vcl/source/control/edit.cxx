@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:42:11 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1258,7 +1258,7 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
 
 // -----------------------------------------------------------------------
 
-xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
+xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
 {
     xub_StrLen nIndex = STRING_LEN;
     String aText = ImplGetText();
@@ -2623,6 +2623,8 @@ void Edit::SetSubEdit( Edit* pEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
         mpSubEdit->mbIsSubEdit = TRUE;
+
+        mpSubEdit->SetReadOnly( mbReadOnly );
     }
 }
 
@@ -2655,6 +2657,13 @@ xub_StrLen Edit::GetMaxVisChars() const
     long nOutWidth = pW->GetOutputSizePixel().Width();
     long nCharWidth = GetTextWidth( XubString( 'x' ) );
     return nCharWidth ? (xub_StrLen)(nOutWidth/nCharWidth) : 0;
+}
+
+// -----------------------------------------------------------------------
+
+xub_StrLen Edit::GetCharPos( const Point& rWindowPos ) const
+{
+    return ImplGetCharPos( rWindowPos );
 }
 
 // -----------------------------------------------------------------------
