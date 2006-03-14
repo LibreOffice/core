@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:01:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _EDITDOC_HXX
 #define _EDITDOC_HXX
 
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#endif
+
 #include <editattr.hxx>
 #include <edtspell.hxx>
 #include <svxfont.hxx>
@@ -58,6 +62,7 @@
 
 class ImpEditEngine;
 class SvxTabStop;
+class SvtCTLOptions;
 
 DBG_NAMEEX( EE_TextPortion );
 
@@ -660,7 +665,7 @@ public:
     const EditPaM&  Max() const         { return aEndPaM; }
 
     BOOL            HasRange() const    { return aStartPaM != aEndPaM; }
-    BOOL            IsInvalid();
+    BOOL            IsInvalid() const;
     BOOL            DbgIsBuggy( EditDoc& rDoc );
 
     BOOL            Adjust( const ContentList& rNodes );
