@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:53 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 10:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #endif
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
