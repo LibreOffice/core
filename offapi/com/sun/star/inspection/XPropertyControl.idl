@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XPropertyControl.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-14 11:07:41 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_XPropertyControl_idl__
+#define __com_sun_star_inspection_XPropertyControl_idl__
+
+#ifndef __com_sun_star_beans_IllegalTypeException_idl__
+#include <com/sun/star/beans/IllegalTypeException.idl>
+#endif
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+interface XPropertyControlContext;
+
+//-----------------------------------------------------------------------------
+/** defines the interface for a single control in an <type>ObjectInspector</type>
+*/
+interface XPropertyControl
+{
+    /** denotes the type of the control, as one of the <type>PropertyControlType</type>
+        constants
+    */
+    [attribute, readonly] short ControlType;
+
+    /** denotes the current content of the control.
+
+        <p>At every point in time, this value is either <VOID/>, or of the type
+        described by <member>ValueType</member>.</p>
+
+        @throws com::sun::star::beans::IllegalTypeException
+            if an attempt is made to set a value which is not <VOID/> and whose
+            type does not equal <member>ValueType</member>.
+    */
+    [attribute] any Value
+    {
+        set raises ( com::sun::star::beans::IllegalTypeException );
+    };
+
+    /** denotes the value type of the control.
+
+        @see Value
+    */
+    [attribute, readonly] type ValueType;
+
+    /** specifies the context of the control within the <type>ObjectInspector</type>.
+    */
+    [attribute] XPropertyControlContext ControlContext;
+
+    /** determines whether the control content is currently modified
+
+        <p>An <type>XPropertyControl</type> internally manages a flag indicating whether
+        its content is modified. This flag is reset to <FALSE/> every time our
+        <member>ControlContext</member> is notified of our current value. Also, the control
+        implementation must set this flag to <TRUE/> if and only if the user changed the
+        control content.</p>
+
+        @see notifyModifiedValue
+        @see ControlContext
+        @see XPropertyControlContext::controlValueChanged
+    */
+    boolean isModified();
+
+    /** notifies the context in which the control lives of the current control value,
+        if this value is currently modified
+
+        @see isModified
+        @see ControlContext
+        @see XPropertyControlListener::controlValueChanged
+    */
+    void notifyModifiedValue();
+
+    /** denotes the window which is the real UI representation of the property control.
+
+        <p>The <type>ObjectInspector</type> will automatically position and size this control
+        as needed, care for its Z-order, and so on.</p>
+
+        <p>This Window must not be <NULL/>, else the whole control is not usable.</p>
+    */
+    [attribute, readonly] com::sun::star::awt::XWindow ControlWindow;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
