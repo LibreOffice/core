@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:56 $
+ *  last change: $Author: vg $ $Date: 2006-03-14 09:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <textdat2.hxx>
 #include <textundo.hxx>
 #include <textund2.hxx>
+#include <ctloptions.hxx>
 
 #include <tools/isolang.hxx>
 
@@ -73,6 +74,20 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+
+#include <comphelper/processfactory.hxx>
+
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/unohelp.hxx>
 
@@ -83,6 +98,8 @@
 #include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 
 typedef TextView* TextViewPtr;
 SV_DECL_PTRARR( TextViews, TextViewPtr, 0, 1 );
@@ -723,7 +740,50 @@ void TextEngine::ImpRemoveParagraph( ULONG nPara )
     ImpParagraphRemoved( nPara );
 }
 
+uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSequenceChecker() const
+{
+    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
+//    if ( !xISC.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        if ( xI.is() )
+        {
+            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
+            x >>= xISC;
+        }
+    }
+    return xISC;
+}
+
+BOOL TextEngine::IsInputSequenceChecking( sal_Unicode c, const TextSelection& rCurSel ) const
+{
+    uno::Reference< i18n::XBreakIterator > xBI = ((TextEngine *) this)->GetBreakIterator();
+    SvtCTLOptions aCTLOptions;
+
+    rtl::OUString aTxt( (const sal_Unicode *) &c );
+
+    // get the index that really is first
+    USHORT nFirstPos = rCurSel.GetStart().GetIndex();
+    USHORT nMaxPos   = rCurSel.GetEnd().GetIndex();
+    if (nMaxPos < nFirstPos)
+        nFirstPos = nMaxPos;
+
+    sal_Bool bIsSequenceChecking =
+        aCTLOptions.IsCTLFontEnabled() &&
+        aCTLOptions.IsCTLSequenceChecking() &&
+        nFirstPos != 0 && /* first char needs not to be checked */
+        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( aTxt, 0 );
+
+    return bIsSequenceChecking;
+}
+
 TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, BOOL bOverwrite )
+{
+    return ImpInsertText( c, rCurSel, bOverwrite, sal_False );
+}
+
+TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, BOOL bOverwrite, BOOL bIsUserInput )
 {
     DBG_ASSERT( c != '\n', "Zeilenumbruch bei InsertText ?" );
     DBG_ASSERT( c != '\r', "Zeilenumbruch bei InsertText ?" );
@@ -753,6 +813,59 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, 
             ImpDeleteText( aTmpSel );
         }
 
+        if (bIsUserInput && IsInputSequenceChecking( c, rCurSel ))
+        {
+            uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = GetInputSequenceChecker();
+            SvtCTLOptions aCTLOptions;
+
+            if (xISC.is())
+            {
+                xub_StrLen nTmpPos = aPaM.GetIndex();
+                sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
+                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
+
+                // the text that needs to be checked is only the one
+                // before the current cursor position
+                rtl::OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).Copy(0, nTmpPos) );
+                rtl::OUString aNewText( aOldText );
+                if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+                {
+                    const xub_StrLen nPrevPos = static_cast< xub_StrLen >( xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode ) );
+
+                    // find position of first character that has changed
+                    sal_Int32 nOldLen = aOldText.getLength();
+                    sal_Int32 nNewLen = aNewText.getLength();
+                    const sal_Unicode *pOldTxt = aOldText.getStr();
+                    const sal_Unicode *pNewTxt = aNewText.getStr();
+                    sal_Int32 nChgPos = 0;
+                    while ( nChgPos < nOldLen && nChgPos < nNewLen &&
+                            pOldTxt[nChgPos] == pNewTxt[nChgPos] )
+                        ++nChgPos;
+
+                    xub_StrLen nChgLen = static_cast< xub_StrLen >(nNewLen - nChgPos);
+                    String aChgText( aNewText.copy( nChgPos ), nChgLen );
+
+                    // select text from first pos to be changed to current pos
+                    TextSelection aSel( TextPaM( aPaM.GetPara(), (USHORT) nChgPos ), aPaM );
+
+                    if (aChgText.Len())
+                        // ImpInsertText implicitly handles undo...
+                        return ImpInsertText( aSel, aChgText );
+                    else
+                        return aPaM;
+                }
+                else
+                {
+                    // should the character be ignored (i.e. not get inserted) ?
+                    if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, c, nCheckMode ))
+                        return aPaM;    // nothing to be done -> no need for undo
+                }
+            }
+
+            // at this point now we will insert the character 'normally' some lines below...
+        }
+
+
         if ( IsUndoEnabled() && !IsInUndo() )
         {
             TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, c );
@@ -776,8 +889,11 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, 
     return aPaM;
 }
 
+
 TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString& rStr )
 {
+    UndoActionStart( TEXTUNDO_INSERT );
+
     TextPaM aPaM;
 
     if ( rCurSel.HasRange() )
@@ -827,6 +943,8 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
         if ( nStart < nEnd )    // #108611# overflow
             break;
     }
+
+    UndoActionEnd( TEXTUNDO_INSERT );
 
     TextModified();
     return aPaM;
