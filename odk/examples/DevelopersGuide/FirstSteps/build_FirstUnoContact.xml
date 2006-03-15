@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="FirstUnoContact">
 
-    <property name="OFFICE_HOME" value="d:/StarOffice8_m48"/>
-    <property name="OO_SDK_HOME" value="d:/SDK/StarOffice8.EA_SDK"/>
+    <property environment="env"/>
+    <property name="OFFICE_HOME" value="${env.OFFICE_HOME}"/>
+    <property name="OO_SDK_HOME" value="${env.OO_SDK_HOME}"/>
 
     <target name="init">
         <property name="OUTDIR" value="${OO_SDK_HOME}/WINExample.out/class/FirstUnoContact"/>
