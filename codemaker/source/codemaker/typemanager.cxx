@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:10:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _RTL_ALLOC_H_
-#include    <rtl/alloc.h>
-#endif
-
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#include    <codemaker/typemanager.hxx>
-#endif
-
+#include "rtl/alloc.h"
+#include "codemaker/typemanager.hxx"
 #include "registry/reader.hxx"
 #include "registry/version.h"
 
