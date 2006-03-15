@@ -303,7 +303,7 @@ LIBRARY_LINK_FLAGS+=-fPIC
 endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 
-EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
+EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
