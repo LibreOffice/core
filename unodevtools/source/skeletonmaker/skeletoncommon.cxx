@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 18:01:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,17 +33,106 @@
  *
  ************************************************************************/
 
-#include <osl/thread.hxx>
+#include "osl/thread.hxx"
 
-#include <codemaker/commonjava.hxx>
-#include <codemaker/commoncpp.hxx>
+#include "codemaker/commonjava.hxx"
+#include "codemaker/commoncpp.hxx"
+#include "codemaker/generatedtypeset.hxx"
 
 #include "skeletoncommon.hxx"
+
+#include <iostream>
 
 using namespace ::rtl;
 using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {
+
+void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
+{
+    sal_Int32 index = -1;
+#ifdef SAL_UNX
+    index = filename.lastIndexOf('/');
+#else
+    index = filename.lastIndexOf('\\');
+#endif
+    OString shortfilename(filename);
+    if ( index != -1 )
+        shortfilename = filename.copy(index+1);
+
+    o << "/*************************************************************************\n"
+        " *\n"
+        " *  OpenOffice.org - a multi-platform office productivity suite\n"
+        " *\n"
+        " *  $RCSfile: "
+      << shortfilename
+      << ",v $\n"
+        " *\n"
+        " *  $Revision: 1.5 $\n"
+        " *\n"
+        " *  last change: $Author: vg $ $Date: 2006-03-15 09:19:50 $\n"
+        " *\n"
+        " *  The Contents of this file are made available subject to\n"
+        " *  the terms of GNU Lesser General Public License Version 2.1.\n"
+        " *\n"
+        " *\n"
+        " *    GNU Lesser General Public License Version 2.1\n"
+        " *    =============================================\n"
+        " *    Copyright 2005 by Sun Microsystems, Inc.\n"
+        " *    901 San Antonio Road, Palo Alto, CA 94303, USA\n"
+        " *\n"
+        " *    This library is free software; you can redistribute it and/or\n"
+        " *    modify it under the terms of the GNU Lesser General Public\n"
+        " *    License version 2.1, as published by the Free Software Foundation.\n"
+        " *\n"
+        " *    This library is distributed in the hope that it will be useful,\n"
+        " *    but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+        " *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+        " *    Lesser General Public License for more details.\n"
+        " *\n"
+        " *    You should have received a copy of the GNU Lesser General Public\n"
+        " *    License along with this library; if not, write to the Free Software\n"
+        " *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n"
+        " *    MA  02111-1307  USA\n"
+        " *\n"
+        " ************************************************************************/\n\n";
+}
+
+bool getOutputStream(ProgramOptions const & options,
+                     OString const & extension,
+                     std::ostream** ppOutputStream,
+                     OString & targetSourceFileName,
+                     OString & tmpSourceFileName)
+{
+    bool bStandardout = false;
+    if ( options.outputpath.equals("stdout") )
+    {
+        bStandardout = true;
+        *ppOutputStream = &std::cout;
+        return bStandardout;
+    }
+
+    targetSourceFileName = createFileNameFromType(
+        options.outputpath, options.implname.replace('.','/'), extension);
+
+    OString tmpDir = getTempDir(targetSourceFileName);
+    FileStream file;
+    file.createTempFile(tmpDir);
+
+    if( !file.isValid() )
+    {
+        OString message("cannot open ");
+        message += targetSourceFileName + " for writing";
+        throw CannotDumpException(message);
+    } else {
+        tmpSourceFileName = file.getName();
+    }
+    file.close();
+    *ppOutputStream = new std::ofstream(tmpSourceFileName.getStr(),
+                                        std::ios_base::binary);
+
+    return bStandardout;
+}
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
     TypeManager const & manager, OString const & type,
@@ -54,8 +143,8 @@ codemaker::UnoType::Sort decomposeResolveAndCheck(
     codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
         manager, type, resolveTypedefs, allowVoid, allowExtraEntities,
         typeClass, name, rank, arguments);
-    for (std::vector< OString >::iterator i(arguments->begin());
-         i != arguments->end(); ++i)
+    for ( std::vector< OString >::iterator i(arguments->begin());
+          i != arguments->end(); ++i )
     {
         RTTypeClass typeClass2;
         OString name2;
@@ -68,26 +157,37 @@ codemaker::UnoType::Sort decomposeResolveAndCheck(
     return sort;
 }
 
+bool containsAttribute(AttributeInfo& attributes, OString const & attrname)
+{
+    for ( AttributeInfo::const_iterator i(attributes.begin());
+          i != attributes.end(); ++i ) {
+        if ( (*i).first == attrname ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // collect attributes including inherited attributes
 void checkAttributes(TypeManager const & manager,
                      const typereg::Reader& reader,
-                     StringPairHashMap& attributes,
+                     AttributeInfo& attributes,
                      std::hash_set< OString, OStringHash >& propinterfaces)
 {
     OString typeName = codemaker::convertString(reader.getTypeName());
-    if (typeName.equals("com/sun/star/beans/XPropertySet") ||
-        typeName.equals("com/sun/star/beans/XFastPropertySet") ||
-        typeName.equals("com/sun/star/beans/XMultiPropertySet") ||
-        typeName.equals("com/sun/star/beans/XPropertyAccess") )
+    if ( typeName.equals("com/sun/star/beans/XPropertySet") ||
+         typeName.equals("com/sun/star/beans/XFastPropertySet") ||
+//        typeName.equals("com/sun/star/beans/XMultiPropertySet") ||
+         typeName.equals("com/sun/star/beans/XPropertyAccess") )
     {
         propinterfaces.insert(typeName);
     }
 
-    for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
         typereg::Reader supertype(manager.getTypeReader(
                                   codemaker::convertString(
                                       reader.getSuperTypeName(i))));
-        if (!supertype.isValid()) {
+        if ( !supertype.isValid() ) {
             throw CannotDumpException(
                 "Bad type library entity "
                 + codemaker::convertString(reader.getSuperTypeName(i)));
@@ -95,17 +195,19 @@ void checkAttributes(TypeManager const & manager,
         checkAttributes(manager, supertype, attributes, propinterfaces);
     }
 
-    for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+    for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
         OString fieldName(
             codemaker::convertString(reader.getFieldName(i)).
             replace('/', '.'));
-        OString fieldType(
-            codemaker::convertString(reader.getFieldTypeName(i)).
-            replace('/', '.'));
-        attributes.insert(StringPairHashMap::value_type(
-                              fieldName,
-                              std::pair<OString, sal_Int16>(
-                                  fieldType, reader.getFieldFlags(i))));
+
+        if ( !containsAttribute(attributes, fieldName) ) {
+            OString fieldType(
+                codemaker::convertString(reader.getFieldTypeName(i)).
+                replace('/', '.'));
+            attributes.push_back(AttributeInfo::value_type(
+                                     fieldName, std::pair<OString, sal_Int16>(
+                                         fieldType, reader.getFieldFlags(i))));
+        }
     }
 }
 
@@ -113,16 +215,17 @@ void checkType(TypeManager const & manager,
                OString const & type,
                std::hash_set< OString, OStringHash >& interfaceTypes,
                std::hash_set< OString, OStringHash >& serviceTypes,
-               StringPairHashMap& properties)
+               AttributeInfo& properties)
 {
 
     OString binType(type.replace('.', '/'));
     typereg::Reader reader(manager.getTypeReader(binType));
-    if (!reader.isValid()) {
+    if ( !reader.isValid() ) {
         throw CannotDumpException("Bad type library entity " + binType);
     }
 
-    switch (reader.getTypeClass()) {
+    switch ( reader.getTypeClass() )
+    {
     case RT_TYPE_INTERFACE:
     {
         // com/sun/star/lang/XComponent should be also not in the list
@@ -137,19 +240,19 @@ void checkType(TypeManager const & manager,
     }
         break;
     case RT_TYPE_SERVICE:
-        if (serviceTypes.find(binType) == serviceTypes.end()) {
+        if ( serviceTypes.find(binType) == serviceTypes.end() ) {
             serviceTypes.insert(binType);
 
-            if (reader.getSuperTypeCount() > 0) {
+            if ( reader.getSuperTypeCount() > 0 ) {
                 OString supername(codemaker::convertString(
                     reader.getSuperTypeName(0).replace('/', '.')));
-                if (interfaceTypes.find(supername) == interfaceTypes.end()) {
+                if ( interfaceTypes.find(supername) == interfaceTypes.end() ) {
                     interfaceTypes.insert(supername);
 
                     typereg::Reader supertype(manager.getTypeReader(
                                   codemaker::convertString(
                                       reader.getSuperTypeName(0))));
-                    if (!supertype.isValid()) {
+                    if ( !supertype.isValid() ) {
                         throw CannotDumpException(
                             "Bad type library entity "
                             + codemaker::convertString(reader.getSuperTypeName(0)));
@@ -157,14 +260,18 @@ void checkType(TypeManager const & manager,
                 }
 
                 // check if constructors are specified, if yes automatically
-                // support of XInitialization
-                if (reader.getMethodCount() > 1) {
+                // support of XInitialization. We will take care of the default
+                // constructor because in this case XInitialization is not called.
+                if ( reader.getMethodCount() > 1 ||
+                     ( reader.getMethodCount() == 1 &&
+                       reader.getMethodName(0).getLength() > 0 ) )
+                {
                     OString s("com.sun.star.lang.XInitialization");
-                    if (interfaceTypes.find(s) == interfaceTypes.end())
+                    if ( interfaceTypes.find(s) == interfaceTypes.end() )
                         interfaceTypes.insert(s);
                 }
             } else {
-                for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
+                for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
                     OString referenceType(
                         codemaker::convertString(
                             reader.getReferenceTypeName(i)).replace('/', '.'));
@@ -178,7 +285,7 @@ void checkType(TypeManager const & manager,
                     }
                 }
 
-                for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+                for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
                     OString fieldName(
                         codemaker::convertString(reader.getFieldName(i)).
                         replace('/', '.'));
@@ -186,9 +293,9 @@ void checkType(TypeManager const & manager,
                         codemaker::convertString(reader.getFieldTypeName(i)).
                         replace('/', '.'));
 
-                    properties.insert(StringPairHashMap::value_type(fieldName,
-                        std::pair<OString, sal_Int16>(
-                             fieldType, reader.getFieldFlags(i))));
+                    properties.push_back(AttributeInfo::value_type(
+                        fieldName, std::pair<OString, sal_Int16>(
+                            fieldType, reader.getFieldFlags(i))));
                 }
             }
         }
@@ -204,7 +311,7 @@ void checkDefaultInterfaces(
          const std::hash_set< OString, OStringHash >& services,
        const OString & propertyhelper)
 {
-    if (services.empty()) {
+    if ( services.empty() ) {
         if (interfaces.find("com.sun.star.lang.XServiceInfo") != interfaces.end())
             interfaces.erase("com.sun.star.lang.XServiceInfo");
     } else {
@@ -212,7 +319,7 @@ void checkDefaultInterfaces(
             interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
-    if (propertyhelper.equals("_")) {
+    if ( propertyhelper.equals("_") ) {
         if (interfaces.find("com.sun.star.beans.XPropertySet")
             != interfaces.end())
             interfaces.erase("com.sun.star.beans.XPropertySet");
@@ -225,38 +332,82 @@ void checkDefaultInterfaces(
     }
 }
 
+bool checkServiceProperties(TypeManager const & manager,
+                            const typereg::Reader & reader)
+{
+    if ( reader.getFieldCount() > 0 )
+        return true;
+
+    if ( reader.getReferenceCount() > 0 ) {
+        for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
+            if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
+                typereg::Reader refreader(
+                    manager.getTypeReader(
+                        codemaker::convertString(reader.getReferenceTypeName(i))));
+
+                if ( checkServiceProperties(manager, refreader) )
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+
 OString checkPropertyHelper(
+    ProgramOptions const & options,
     TypeManager const & manager,
     const std::hash_set< OString, OStringHash >& services,
-    StringPairHashMap& attributes,
+    const std::hash_set< OString, OStringHash >& interfaces,
+    AttributeInfo& attributes,
     std::hash_set< OString, OStringHash >& propinterfaces)
 {
-    std::hash_set< OString, OStringHash >::const_iterator iter =
-        services.begin();
+    std::hash_set< OString, OStringHash >::const_iterator iter;
+    std::hash_set< OString, OStringHash >::const_iterator end;
+
+    if ( !services.empty() ) {
+        iter = services.begin();
+        end = services.end();
+    } else {
+        iter = interfaces.begin();
+        end = interfaces.end();
+    }
+
     bool oldStyleWithProperties = false;
-    while (iter != services.end()) {
+    while ( iter != end ) {
         typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
 
-        if (reader.getSuperTypeCount() > 0) {
-            typereg::Reader supertype(
-                manager.getTypeReader(
-                    codemaker::convertString(
-                        reader.getSuperTypeName(0))));
-            if (!supertype.isValid()) {
-                throw CannotDumpException(
-                    "Bad type library entity "
-                    + codemaker::convertString(
-                        reader.getSuperTypeName(0)));
+        if ( !services.empty() ) {
+            if ( options.supportpropertysetmixin && reader.getSuperTypeCount() > 0 )
+            {
+                typereg::Reader supertype(
+                    manager.getTypeReader(
+                        codemaker::convertString(
+                            reader.getSuperTypeName(0))));
+                if ( !supertype.isValid() ) {
+                    throw CannotDumpException(
+                        "Bad type library entity "
+                        + codemaker::convertString(
+                            reader.getSuperTypeName(0)));
+                }
+
+                checkAttributes(manager, supertype, attributes, propinterfaces);
+
+                if ( !(attributes.empty() || propinterfaces.empty()) ) {
+                    return OUStringToOString(
+                        supertype.getTypeName().replace('/', '.'),
+                        osl_getThreadTextEncoding());
+                }
+            } else {
+                oldStyleWithProperties = checkServiceProperties(manager, reader);
             }
-
-            checkAttributes(manager, supertype, attributes, propinterfaces);
-
-            if (!(attributes.empty() || propinterfaces.empty()))
-                return OUStringToOString(supertype.getTypeName().replace('/', '.'),
-                                              osl_getThreadTextEncoding());
         } else {
-            if (reader.getFieldCount() > 0)
-                oldStyleWithProperties = true;
+            checkAttributes(manager, reader, attributes, propinterfaces);
+            if ( !(attributes.empty() || propinterfaces.empty()) ) {
+                return OUStringToOString(
+                    reader.getTypeName().replace('/', '.'),
+                    osl_getThreadTextEncoding());
+            }
         }
         iter++;
     }
@@ -264,27 +415,26 @@ OString checkPropertyHelper(
     return (oldStyleWithProperties ? "_" : "");
 }
 
-
 bool checkXComponentSupport(TypeManager const & manager,
                             typereg::Reader const & reader)
 {
     static OUString s(RTL_CONSTASCII_USTRINGPARAM(
                                "com/sun/star/lang/XComponent"));
-    if (reader.getTypeName().equals(s))
+    if ( reader.getTypeName().equals(s) )
         return true;
 
-    for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
         typereg::Reader super(
             manager.getTypeReader(
                 codemaker::convertString(
                     reader.getSuperTypeName(i))));
-        if (!super.isValid()) {
+        if ( !super.isValid() ) {
             throw CannotDumpException(
                 "Bad type library entity "
                 + codemaker::convertString(
                     reader.getSuperTypeName(i)));
         }
-        if (checkXComponentSupport(manager, super))
+        if ( checkXComponentSupport(manager, super) )
             return true;
     }
 
@@ -297,18 +447,18 @@ bool checkXComponentSupport(TypeManager const & manager,
 bool checkXComponentSupport(TypeManager const & manager,
          std::hash_set< OString, OStringHash >& interfaces)
 {
-    if (interfaces.empty())
+    if ( interfaces.empty() )
         return false;
 
     std::hash_set< OString, OStringHash >::const_iterator iter =
         interfaces.begin();
-    while (iter != interfaces.end()) {
-        if ((*iter).equals("com.sun.star.lang.XComponent")) {
+    while ( iter != interfaces.end() ) {
+        if ( (*iter).equals("com.sun.star.lang.XComponent") ) {
             interfaces.erase("com.sun.star.lang.XComponent");
             return true;
         }
         typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
-        if (checkXComponentSupport(manager, reader))
+        if ( checkXComponentSupport(manager, reader) )
             return true;
         iter++;
     }
@@ -324,12 +474,13 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
 
     OUString su(RTL_CONSTASCII_USTRINGPARAM(
                    "com/sun/star/beans/UnknownPropertyException"));
-    if (method < reader.getMethodCount()
-        && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
-        && reader.getMethodName(method) == reader.getFieldName(field))
+    if ( method < reader.getMethodCount()
+         && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
+         && reader.getMethodName(method) == reader.getFieldName(field) )
     {
-        if (reader.getMethodExceptionCount(method) > 0) {
-            for (sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i)
+        if ( reader.getMethodExceptionCount(method) > 0 ) {
+            for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method);
+                  ++i )
             {
                 if (su.equals(reader.getMethodExceptionTypeName(method, i)))
                     getterSupportsUnknown = true;
@@ -337,24 +488,250 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
         }
         method++;
     }
-    if (method < reader.getMethodCount()
-        && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
-        && reader.getMethodName(method) == reader.getFieldName(field))
+    if ( method < reader.getMethodCount()
+         && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
+         && reader.getMethodName(method) == reader.getFieldName(field) )
     {
-        if (reader.getMethodExceptionCount(method) > 0) {
+        if ( reader.getMethodExceptionCount(method) > 0 ) {
             OUString s(RTL_CONSTASCII_USTRINGPARAM(
                            "com/sun/star/beans/PropertyVetoException"));
-            for (sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i)
+            for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method);
+                  ++i )
             {
-                if (s.equals(reader.getMethodExceptionTypeName(method, i)))
+                if ( s.equals(reader.getMethodExceptionTypeName(method, i)) )
                     flags |= RT_ACCESS_CONSTRAINED;
-                if (getterSupportsUnknown &&
-                    su.equals(reader.getMethodExceptionTypeName(method, i)))
+                if ( getterSupportsUnknown &&
+                     su.equals(reader.getMethodExceptionTypeName(method, i)) )
                     flags |= RT_ACCESS_OPTIONAL;
             }
         }
     }
     return flags;
+}
+
+// This function checks if the specified types for paramters and return
+// types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
+// service description
+bool checkAddinType(TypeManager const & manager,
+                    OString const & type, bool & bLastAny,
+                    bool & bHasXPropertySet, bool bIsReturn)
+{
+    RTTypeClass typeClass;
+    OString name;
+    sal_Int32 rank;
+    std::vector< OString > arguments;
+    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
+        manager, type, true, true, true, &typeClass, &name, &rank, &arguments);
+
+    if ( sort == codemaker::UnoType::SORT_LONG ||
+         sort == codemaker::UnoType::SORT_DOUBLE ||
+         sort == codemaker::UnoType::SORT_STRING )
+    {
+        if ( rank == 0 || rank ==2 )
+            return true;
+    }
+    if ( sort == codemaker::UnoType::SORT_ANY )
+    {
+        if ( rank <= 2 ) {
+            if ( rank ==1 ) {
+                if ( bIsReturn )
+                    return false;
+                bLastAny = true;
+            }
+
+            return true;
+        }
+    }
+    if ( sort == codemaker::UnoType::SORT_COMPLEX &&
+         typeClass == RT_TYPE_INTERFACE )
+    {
+        if ( bIsReturn && type.equals("com/sun/star/sheet/XVolatileResult") )
+            return true;
+        if ( !bIsReturn && type.equals("com/sun/star/table/XCellRange") )
+            return true;
+        if ( !bIsReturn && type.equals("com/sun/star/beans/XPropertySet") )
+            if ( bHasXPropertySet ) {
+                return false;
+            } else {
+                bHasXPropertySet = true;
+                return true;
+            }
+    }
+    return false;
+}
+
+void checkAddInTypes(TypeManager const & manager,
+                     typereg::Reader const & reader)
+{
+    OString sType(codemaker::convertString(reader.getTypeName()).replace('/', '.'));
+    bool bLastAny = false;
+    bool bHasXPropertySet = false;
+    for ( sal_uInt16 m = 0; m < reader.getMethodCount(); ++m ) {
+        OString sMethod(codemaker::convertString(reader.getMethodName(m)));
+
+        OString sReturnType(codemaker::convertString(
+                                reader.getMethodReturnTypeName(m)));
+        if ( !checkAddinType(
+                 manager, sReturnType, bLastAny, bHasXPropertySet, true) )
+        {
+            OStringBuffer msg("the return type of the calc add-in function '");
+            msg.append(sType);
+            msg.append(":");
+            msg.append(sMethod);
+            msg.append("' is invalid. Please check your IDL defintion.");
+            throw CannotDumpException(msg.makeStringAndClear());
+        }
+
+        bHasXPropertySet = false;
+        for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
+            bLastAny = false;
+            OString sParamType(codemaker::convertString(
+                                   reader.getMethodParameterTypeName(m, p)));
+            if ( !checkAddinType(manager, sParamType,
+                                bLastAny, bHasXPropertySet, false) ||
+                 bLastAny )
+            {
+                OStringBuffer msg("the type of the ");
+                msg.append((sal_Int32)p+1);
+                msg.append(". parameter of the calc add-in function '");
+                msg.append(sType);
+                msg.append(":");
+                msg.append(sMethod);
+                msg.append("' is invalid.");
+                if ( bLastAny )
+                    msg.append(" The type 'sequence<any>' is allowed as last "
+                               "parameter only.");
+                if ( bHasXPropertySet )
+                    msg.append(" The type 'XPropertySet' is allowed only once.");
+
+                msg.append(" Please check your IDL definition.");
+                throw CannotDumpException(msg.makeStringAndClear());
+            }
+        }
+    }
+}
+
+void generateFunctionParamterMap(std::ostream& o,
+                                 ProgramOptions const & options,
+                                 TypeManager const & manager,
+                                 typereg::Reader const & reader,
+                                 ::codemaker::GeneratedTypeSet & generated,
+                                 bool bFirst)
+{
+    OString sType(codemaker::convertString(reader.getTypeName()));
+    if ( sType.equals("com/sun/star/uno/XInterface") ||
+         sType.equals("com/sun/star/lang/XLocalizable") ||
+         sType.equals("com/sun/star/lang/XServiceInfo") ||
+         // the next three checks becomes obsolete when configuration is used
+         sType.equals("com/sun/star/sheet/XAddIn") ||
+         sType.equals("com/sun/star/sheet/XCompatibilityNames") ||
+         sType.equals("com/sun/star/lang/XServiceName") )
+    {
+        return;
+    }
+
+    // check if the specified add-in functions supports valid types
+    checkAddInTypes(manager, reader);
+
+    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
+        typereg::Reader super(
+            manager.getTypeReader(
+                codemaker::convertString(
+                    reader.getSuperTypeName(i))));
+        if ( !super.isValid() ) {
+            throw CannotDumpException(
+                "Bad type library entity "
+                + codemaker::convertString(
+                    reader.getSuperTypeName(i)));
+        }
+        generateFunctionParamterMap(o, options, manager, super, generated, bFirst);
+    }
+
+    OString type(codemaker::convertString(reader.getTypeName()));
+    if ( generated.contains(type) )
+        return;
+    else
+        generated.add(type);
+
+    for ( sal_uInt16 m = 0; m < reader.getMethodCount(); ++m ) {
+        OString sMethod(codemaker::convertString(reader.getMethodName(m)));
+
+        if ( bFirst ) {
+            if (options.language == 2) {
+                o << "        ParamMap fpm;\n";
+            }
+            else {
+                if ( options.java5 )
+                    o << "        java.util.Hashtable fpm = new java.util.Hashtable"
+                        "< Integer, String >();\n";
+                else
+                    o << "        java.util.Hashtable fpm = "
+                        "new java.util.Hashtable();\n";
+            }
+            bFirst = false;
+        } else
+            if ( options.language == 2 ) {
+                o << "        fpm = ParamMap();\n";
+            }
+            else {
+                if ( options.java5 )
+                    o << "        fpm = new java.util.Hashtable< "
+                        "Integer, String >();\n";
+                else
+                    o << "        fpm = new java.util.Hashtable();\n";
+            }
+
+        for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
+            if ( options.language == 2 ) {
+                o << "        fpm[" << p
+                  << "] = ::rtl::OUString::createFromAscii(\""
+                  << codemaker::convertString(reader.getMethodParameterName(m, p))
+                  << "\");\n";
+            }
+            else {
+                if ( options.java5 )
+                    o << "        fpm.put(" << p << ", \""
+                      << codemaker::convertString(
+                          reader.getMethodParameterName(m, p))
+                      << "\");\n";
+                else
+                    o << "       fpm.put(new Integer(" << p << "), \""
+                      << codemaker::convertString(
+                          reader.getMethodParameterName(m, p))
+                      << "\");\n";
+            }
+        }
+
+        if ( options.language == 2 ) {
+            o << "        m_functionMap[::rtl::OUString::createFromAscii(\""
+              << sMethod << "\")] = fpm;\n\n";
+        }
+        else {
+            o << "        m_functionMap.put(\"" << sMethod << "\", fpm);\n\n";
+        }
+    }
+}
+
+void generateFunctionParameterMap(std::ostream& o,
+         ProgramOptions const & options,
+         TypeManager const & manager,
+         const std::hash_set< OString, OStringHash >& interfaces)
+{
+    ::codemaker::GeneratedTypeSet generated;
+    bool bFirst = true;
+    std::hash_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
+    while ( iter != interfaces.end() ) {
+        typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
+        if (!reader.isValid()) {
+            throw CannotDumpException(
+                "Bad type library entity "
+                + codemaker::convertString(
+                    reader.getTypeName()));
+        }
+
+        generateFunctionParamterMap(o, options, manager, reader, generated, bFirst);
+        iter++;
+    }
 }
 
 }
