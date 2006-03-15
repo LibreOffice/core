@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DisableCommandsTest.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 12:09:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -192,10 +192,11 @@ public class DisableCommandsTest extends java.lang.Object {
      * Wait for user input -> until the user press 'return'
      */
     private static void waitForUserInput() throws java.io.IOException {
-        char c = 'X';
-        do{
-            c = (char) System.in.read();
-        }while ((c != 13) && (c != 10));
+
+        java.io.BufferedReader reader
+            = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
+
+        reader.read();
     }
 
     /**
