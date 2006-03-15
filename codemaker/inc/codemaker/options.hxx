@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:06:49 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:10:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _CODEMAKER_OPTIONS_HXX_
-#define _CODEMAKER_OPTIONS_HXX_
+#ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
+#define INCLUDED_CODEMAKER_OPTIONS_HXX
 
 #include <hash_map>
 
-
-#ifndef _CODEMAKER_GLOBAL_HXX_
+#ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #include <codemaker/global.hxx>
 #endif
 
@@ -107,5 +106,5 @@ protected:
     OptionMap       m_options;
 };
 
-#endif // _CODEMAKER_OPTIONS_HXX_
+#endif // INCLUDED_CODEMAKER_OPTIONS_HXX
 
