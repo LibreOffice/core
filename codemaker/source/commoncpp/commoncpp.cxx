@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:56:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,19 +52,42 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
+rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type)
+{
+    RTTypeClass typeclass = manager.getTypeClass(type);
+    if (typeclass == RT_TYPE_INVALID ||
+        typeclass == RT_TYPE_PUBLISHED)
+        return rtl::OString("_");
+
+    static char* const typeclassPrefix[RT_TYPE_UNION + 1] = {
+        "invalid",    /* RT_TYPE_INVALID, is here only as placeholder */
+        "interface",  /* RT_TYPE_INTERFACE */
+        "module",     /* RT_TYPE_MODULE */
+        "struct",     /* RT_TYPE_STRUCT */
+        "enum",       /* RT_TYPE_ENUM */
+        "exception",  /* RT_TYPE_EXCEPTION */
+        "typedef",    /* RT_TYPE_TYPEDEF */
+        "service",    /* RT_TYPE_SERVICE */
+        "singleton",  /* RT_TYPE_SINGLETON */
+        "object",     /* RT_TYPE_OBJECT */
+        "constants",  /* RT_TYPE_CONSTANTS */
+        "union"       /* RT_TYPE_UNION */
+    };
+
+    return rtl::OString(typeclassPrefix[typeclass]);
+}
+
+rtl::OString scopedCppName(TypeManager const & manager,
+                           rtl::OString const & type, bool bNoNameSpace,
                            bool shortname)
 {
     char c('/');
     sal_Int32 nPos = type.lastIndexOf( c );
     if (nPos == -1) {
         nPos = type.lastIndexOf( '.' );
-        if (nPos == -1) {
-            if (shortname && type.indexOf("::com::sun::star") == 0)
-                return type.replaceAt(0, 16, "css");
-
+        if (nPos == -1)
             return type;
-        }
+
         c = '.';
     }
     if (bNoNameSpace)
@@ -75,6 +98,16 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
     do
     {
         tmpBuf.append("::");
+//         rtl::OString token(type.getToken(0, c, nPos));
+//         rtl::OString prefix;
+//         if (nPos != -1)
+//             prefix = typeToPrefix(manager, type.copy(0, nPos-1));
+//         else
+//             prefix = typeToPrefix(manager, type);
+
+//         tmpBuf.append(translateUnoToCppIdentifier(
+//                           token, prefix, ITM_KEYWORDSONLY));
+
         tmpBuf.append(type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
@@ -89,9 +122,10 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
     return tmpBuf.makeStringAndClear();
 }
 
+
 rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus)
+    rtl::OString const & nucleus, bool shortname)
 {
     rtl::OStringBuffer buf;
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
@@ -104,111 +138,233 @@ rtl::OString translateUnoToCppType(
             buf.append(nucleus);
         }
     } else {
-        rtl::OString const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("void")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Bool")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Int8")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Int16")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_uInt16")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Int32")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_uInt32")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Int64")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_uInt64")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("float")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("double")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::sal_Unicode")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::rtl::OUString")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::com::sun::star::uno::Type")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("::com::sun::star::uno::Any")) };
+        static char* const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
+            "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
+            "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
+            "float", "double", "::sal_Unicode", "::rtl::OUString",
+            "::com::sun::star::uno::Type", "::com::sun::star::uno::Any" };
         buf.append(cppTypes[sort]);
     }
+
+    if (shortname) {
+        rtl::OString s(buf.makeStringAndClear());
+        if (s.indexOf("::com::sun::star") == 0)
+            return s.replaceAt(0, 16, "css");
+        else
+            return s;
+    }
+
     return buf.makeStringAndClear();
 }
 
 rtl::OString translateUnoToCppIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix)
+    rtl::OString const & unoIdentifier, rtl::OString const & prefix,
+    IdentifierTranslationMode transmode, rtl::OString const * forbidden)
 {
-    if (identifier == "and"
-        || identifier == "and_eq"
-        || identifier == "asm"
-        || identifier == "auto"
-        || identifier == "bitand"
-        || identifier == "bitor"
-        || identifier == "bool"
-        || identifier == "break"
-        || identifier == "case"
-        || identifier == "catch"
-        || identifier == "char"
-        || identifier == "class"
-        || identifier == "compl"
-        || identifier == "const"
-        || identifier == "const_cast"
-        || identifier == "continue"
-        || identifier == "default"
-        || identifier == "delete"
-        || identifier == "do"
-        || identifier == "double"
-        || identifier == "dynamic_cast"
-        || identifier == "else"
-        || identifier == "enum"
-        || identifier == "explicit"
-        || identifier == "export"
-        || identifier == "extern"
-        || identifier == "false"
-        || identifier == "float"
-        || identifier == "for"
-        || identifier == "friend"
-        || identifier == "goto"
-        || identifier == "if"
-        || identifier == "inline"
-        || identifier == "int"
-        || identifier == "long"
-        || identifier == "mutable"
-        || identifier == "namespace"
-        || identifier == "new"
-        || identifier == "not"
-        || identifier == "not_eq"
-        || identifier == "operator"
-        || identifier == "or"
-        || identifier == "or_eq"
-        || identifier == "private"
-        || identifier == "protected"
-        || identifier == "public"
-        || identifier == "register"
-        || identifier == "reinterpret_cast"
-        || identifier == "return"
-        || identifier == "short"
-        || identifier == "signed"
-        || identifier == "sizeof"
-        || identifier == "static"
-        || identifier == "static_cast"
-        || identifier == "struct"
-        || identifier == "switch"
-        || identifier == "template"
-        || identifier == "this"
-        || identifier == "throw"
-        || identifier == "true"
-        || identifier == "try"
-        || identifier == "typedef"
-        || identifier == "typeid"
-        || identifier == "typename"
-        || identifier == "union"
-        || identifier == "unsigned"
-        || identifier == "using"
-        || identifier == "virtual"
-        || identifier == "void"
-        || identifier == "volatile"
-        || identifier == "wchar_t"
-        || identifier == "while"
-        || identifier == "xor"
-        || identifier == "xor_eq")
+    if (// Keywords:
+        unoIdentifier == "asm"
+        || unoIdentifier == "auto"
+        || unoIdentifier == "bool"
+        || unoIdentifier == "break"
+        || unoIdentifier == "case"
+        || unoIdentifier == "catch"
+        || unoIdentifier == "char"
+        || unoIdentifier == "class"
+        || unoIdentifier == "const"
+        /* unoIdentifier == "const_cast" */
+        || unoIdentifier == "continue"
+        || unoIdentifier == "default"
+        || unoIdentifier == "delete"
+        || unoIdentifier == "do"
+        || unoIdentifier == "double"
+        /* unoIdentifier == "dynamic_cast" */
+        || unoIdentifier == "else"
+        || unoIdentifier == "enum"
+        || unoIdentifier == "explicit"
+        || unoIdentifier == "export"
+        || unoIdentifier == "extern"
+        || unoIdentifier == "false"
+        || unoIdentifier == "float"
+        || unoIdentifier == "for"
+        || unoIdentifier == "friend"
+        || unoIdentifier == "goto"
+        || unoIdentifier == "if"
+        || unoIdentifier == "inline"
+        || unoIdentifier == "int"
+        || unoIdentifier == "long"
+        || unoIdentifier == "mutable"
+        || unoIdentifier == "namespace"
+        || unoIdentifier == "new"
+        || unoIdentifier == "operator"
+        || unoIdentifier == "private"
+        || unoIdentifier == "protected"
+        || unoIdentifier == "public"
+        || unoIdentifier == "register"
+        /* unoIdentifier == "reinterpret_cast" */
+        || unoIdentifier == "return"
+        || unoIdentifier == "short"
+        || unoIdentifier == "signed"
+        || unoIdentifier == "sizeof"
+        || unoIdentifier == "static"
+        /* unoIdentifier == "static_cast" */
+        || unoIdentifier == "struct"
+        || unoIdentifier == "switch"
+        || unoIdentifier == "template"
+        || unoIdentifier == "this"
+        || unoIdentifier == "throw"
+        || unoIdentifier == "true"
+        || unoIdentifier == "try"
+        || unoIdentifier == "typedef"
+        || unoIdentifier == "typeid"
+        || unoIdentifier == "typename"
+        || unoIdentifier == "union"
+        || unoIdentifier == "unsigned"
+        || unoIdentifier == "using"
+        || unoIdentifier == "virtual"
+        || unoIdentifier == "void"
+        || unoIdentifier == "volatile"
+        /* unoIdentifier == "wchar_t" */
+        || unoIdentifier == "while"
+        // Alternative representations:
+        || unoIdentifier == "and"
+        /* unoIdentifier == "and_eq" */
+        || unoIdentifier == "bitand"
+        || unoIdentifier == "bitor"
+        || unoIdentifier == "compl"
+        || unoIdentifier == "not"
+        /* unoIdentifier == "not_eq" */
+        || unoIdentifier == "or"
+        /* unoIdentifier == "or_eq" */
+        || unoIdentifier == "xor"
+        /* unoIdentifier == "xor_eq" */
+        // Standard macros:
+        || (transmode != ITM_KEYWORDSONLY
+            && (unoIdentifier == "BUFSIZ"
+                || unoIdentifier == "CLOCKS_PER_SEC"
+                || unoIdentifier == "EDOM"
+                || unoIdentifier == "EOF"
+                || unoIdentifier == "ERANGE"
+                || unoIdentifier == "EXIT_FAILURE"
+                || unoIdentifier == "EXIT_SUCCESS"
+                || unoIdentifier == "FILENAME_MAX"
+                || unoIdentifier == "FOPEN_MAX"
+                || unoIdentifier == "HUGE_VAL"
+                || unoIdentifier == "LC_ALL"
+                || unoIdentifier == "LC_COLLATE"
+                || unoIdentifier == "LC_CTYPE"
+                || unoIdentifier == "LC_MONETARY"
+                || unoIdentifier == "LC_NUMERIC"
+                || unoIdentifier == "LC_TIME"
+                || unoIdentifier == "L_tmpnam"
+                || unoIdentifier == "MB_CUR_MAX"
+                || unoIdentifier == "NULL"
+                || unoIdentifier == "RAND_MAX"
+                || unoIdentifier == "SEEK_CUR"
+                || unoIdentifier == "SEEK_END"
+                || unoIdentifier == "SEEK_SET"
+                || unoIdentifier == "SIGABRT"
+                || unoIdentifier == "SIGFPE"
+                || unoIdentifier == "SIGILL"
+                || unoIdentifier == "SIGINT"
+                || unoIdentifier == "SIGSEGV"
+                || unoIdentifier == "SIGTERM"
+                || unoIdentifier == "SIG_DFL"
+                || unoIdentifier == "SIG_ERR"
+                || unoIdentifier == "SIG_IGN"
+                || unoIdentifier == "TMP_MAX"
+                || unoIdentifier == "WCHAR_MAX"
+                || unoIdentifier == "WCHAR_MIN"
+                || unoIdentifier == "WEOF"
+                /* unoIdentifier == "_IOFBF" */
+                /* unoIdentifier == "_IOLBF" */
+                /* unoIdentifier == "_IONBF" */
+                || unoIdentifier == "assert"
+                || unoIdentifier == "errno"
+                || unoIdentifier == "offsetof"
+                || unoIdentifier == "setjmp"
+                || unoIdentifier == "stderr"
+                || unoIdentifier == "stdin"
+                || unoIdentifier == "stdout"
+                /* unoIdentifier == "va_arg" */
+                /* unoIdentifier == "va_end" */
+                /* unoIdentifier == "va_start" */
+                // Standard values:
+                || unoIdentifier == "CHAR_BIT"
+                || unoIdentifier == "CHAR_MAX"
+                || unoIdentifier == "CHAR_MIN"
+                || unoIdentifier == "DBL_DIG"
+                || unoIdentifier == "DBL_EPSILON"
+                || unoIdentifier == "DBL_MANT_DIG"
+                || unoIdentifier == "DBL_MAX"
+                || unoIdentifier == "DBL_MAX_10_EXP"
+                || unoIdentifier == "DBL_MAX_EXP"
+                || unoIdentifier == "DBL_MIN"
+                || unoIdentifier == "DBL_MIN_10_EXP"
+                || unoIdentifier == "DBL_MIN_EXP"
+                || unoIdentifier == "FLT_DIG"
+                || unoIdentifier == "FLT_EPSILON"
+                || unoIdentifier == "FLT_MANT_DIG"
+                || unoIdentifier == "FLT_MAX"
+                || unoIdentifier == "FLT_MAX_10_EXP"
+                || unoIdentifier == "FLT_MAX_EXP"
+                || unoIdentifier == "FLT_MIN"
+                || unoIdentifier == "FLT_MIN_10_EXP"
+                || unoIdentifier == "FLT_MIN_EXP"
+                || unoIdentifier == "FLT_RADIX"
+                || unoIdentifier == "FLT_ROUNDS"
+                || unoIdentifier == "INT_MAX"
+                || unoIdentifier == "INT_MIN"
+                || unoIdentifier == "LDBL_DIG"
+                || unoIdentifier == "LDBL_EPSILON"
+                || unoIdentifier == "LDBL_MANT_DIG"
+                || unoIdentifier == "LDBL_MAX"
+                || unoIdentifier == "LDBL_MAX_10_EXP"
+                || unoIdentifier == "LDBL_MAX_EXP"
+                || unoIdentifier == "LDBL_MIN"
+                || unoIdentifier == "LDBL_MIN_10_EXP"
+                || unoIdentifier == "LDBL_MIN_EXP"
+                || unoIdentifier == "LONG_MAX"
+                || unoIdentifier == "LONG_MIN"
+                || unoIdentifier == "MB_LEN_MAX"
+                || unoIdentifier == "SCHAR_MAX"
+                || unoIdentifier == "SCHAR_MIN"
+                || unoIdentifier == "SHRT_MAX"
+                || unoIdentifier == "SHRT_MIN"
+                || unoIdentifier == "UCHAR_MAX"
+                || unoIdentifier == "UINT_MAX"
+                || unoIdentifier == "ULONG_MAX"
+                || unoIdentifier == "USHRT_MAX"))
+            || (transmode == ITM_GLOBAL
+                && (// Standard types:
+                    /* unoIdentifier == "clock_t" */
+                    /* unoIdentifier == "div_t" */
+                    unoIdentifier == "FILE"
+                    /* unoIdentifier == "fpos_t" */
+                    /* unoIdentifier == "jmp_buf" */
+                    || unoIdentifier == "lconv"
+                    /* unoIdentifier == "ldiv_t" */
+                    /* unoIdentifier == "mbstate_t" */
+                    /* unoIdentifier == "ptrdiff_t" */
+                    /* unoIdentifier == "sig_atomic_t" */
+                    /* unoIdentifier == "size_t" */
+                    /* unoIdentifier == "time_t" */
+                    || unoIdentifier == "tm"
+                    /* unoIdentifier == "va_list" */
+                    /* unoIdentifier == "wctrans_t" */
+                    /* unoIdentifier == "wctype_t" */
+                    /* unoIdentifier == "wint_t" */
+                    // Standard namespaces:
+                    || unoIdentifier == "std"))
+            // Others:
+            || unoIdentifier == "NDEBUG"
+            || forbidden != 0 && unoIdentifier == *forbidden)
     {
         rtl::OStringBuffer buf(prefix);
         buf.append('_');
-        buf.append(identifier);
+        buf.append(unoIdentifier);
         return buf.makeStringAndClear();
     } else {
-        return identifier;
+        return unoIdentifier;
     }
 }
 
