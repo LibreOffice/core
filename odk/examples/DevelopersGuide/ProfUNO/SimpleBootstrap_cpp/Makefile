@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: kz $ $Date: 2006-02-03 17:14:51 $
+#  last change: $Author: vg $ $Date: 2006-03-15 09:29:18 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -102,7 +102,8 @@ endif
 $(OUT_BIN)/$(APP_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP_NAME)$(EXE_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$(BIN_DIR)/unoapploader$(EXE_EXT)) $(subst /,$(PS),$@)
-	touch $@
+# workaround for touch problem under Windows with full qualified paths
+	make -t $@
 
 SimpleBootstrapCppExample : $(OUT_BIN)/$(APP_NAME)$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
