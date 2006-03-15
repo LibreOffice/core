@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 18:06:03 $
+#   last change: $Author: vg $ $Date: 2006-03-15 09:29:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,10 @@ LIBLIST = \
 .ELSE
     LIBLIST += $(DESTDIRLIB)$/stlport_vc6.lib
 .ENDIF
+.ENDIF
+
+.IF "$(OS)"=="LINUX"
+    LIBLIST = $(DESTDIRLIB)$/libsalcpprt.a
 .ENDIF
 
 # note, that inner class files are copied implicitly
