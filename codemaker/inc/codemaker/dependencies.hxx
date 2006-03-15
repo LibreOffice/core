@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dependencies.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:05:48 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_codemaker_dependencies_hxx
-#define INCLUDED_codemaker_dependencies_hxx
+#ifndef INCLUDED_CODEMAKER_DEPENDENCIES_HXX
+#define INCLUDED_CODEMAKER_DEPENDENCIES_HXX
 
+#ifndef _RTL_STRING_HXX_
 #include "rtl/string.hxx"
+#endif
 
 #include <hash_map>
 
@@ -154,4 +156,4 @@ private:
 
 }
 
-#endif
+#endif // INCLUDED_CODEMAKER_DEPENDENCIES_HXX
