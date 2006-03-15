@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:59:24 $
+#   last change: $Author: vg $ $Date: 2006-03-15 09:30:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,10 @@ $(DESTDIRINC)$/% : $(INCOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib
+    +-rm -f $@ >& $(NULLDEV)
+    $(GNUCOPY) $(LIBOUT)$/$(@:f) $@
+
+$(DESTDIRLIB)$/%.a : $(LIBOUT)$/%.a
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(LIBOUT)$/$(@:f) $@
 
