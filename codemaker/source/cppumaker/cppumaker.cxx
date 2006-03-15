@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppumaker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:11:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 
 #include "sal/main.h"
 
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#include <codemaker/typemanager.hxx>
-#endif
+#include "codemaker/typemanager.hxx"
 #include "codemaker/generatedtypeset.hxx"
 
 #include "cppuoptions.hxx"
