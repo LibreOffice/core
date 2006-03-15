@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,9 @@
  *
  ************************************************************************/
 
-#include <codemaker/commonjava.hxx>
+#include "codemaker/commonjava.hxx"
 
+#include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"
 
 #include <iostream>
@@ -48,9 +49,8 @@ void generatePackage(std::ostream & o, const OString & implname)
 {
     short count=0;
     sal_Int32 index = implname.lastIndexOf('.');
-    if (index != -1) {
+    if (index != -1)
         o << "package " << implname.copy(0, index) << ";\n\n";
-    }
 }
 
 void generateImports(std::ostream & o,
@@ -58,6 +58,7 @@ void generateImports(std::ostream & o,
          const OString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
+    o << "import com.sun.star.uno.UnoRuntime;\n";
     o << "import com.sun.star.uno.XComponentContext;\n";
     if (serviceobject) {
         o << "import com.sun.star.lib.uno.helper.Factory;\n";
@@ -87,7 +88,8 @@ void generateImports(std::ostream & o,
 
 //     std::hash_set< OString, OStringHash >::const_iterator iter =
 //                    interfaces.begin();
-//     while (iter != interfaces.end()) {
+//     while (iter != interfaces.end())
+//     {
 //         o << "import " << ((*iter).getStr()) << ";\n";
 //         iter++;
 //     }
@@ -113,60 +115,60 @@ void generateCompFunctions(std::ostream & o, const OString & classname)
 
 void generateXServiceInfoBodies(std::ostream& o)
 {
-    o << "    /* com.sun.star.lang.XServiceInfo */\n";
-    o << "    public java.lang.String getImplementationName() {\n"
+    o << "    // com.sun.star.lang.XServiceInfo:\n";
+    o << "    public String getImplementationName() {\n"
       << "         return m_implementationName;\n    }\n\n";
 
-    o << "    public boolean supportsService( java.lang.String sService ) {\n"
+    o << "    public boolean supportsService( String sService ) {\n"
       << "        int len = m_serviceNames.length;\n\n"
       << "        for( int i=0; i < len; i++) {\n"
       << "            if (sService.equals(m_serviceNames[i]))\n"
       << "                return true;\n"
       << "        }\n        return false;\n    }\n\n";
 
-    o << "    public java.lang.String[] getSupportedServiceNames() {\n"
+    o << "    public String[] getSupportedServiceNames() {\n"
       << "        return m_serviceNames;\n    }\n\n";
 }
 
 void generateXPropertySetBodies(std::ostream& o)
 {
-    o << "    /* com.sun.star.lang.XPropertySet */\n";
+    o << "    // com.sun.star.beans.XPropertySet:\n";
     o << "    public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()\n"
       "    {\n        return m_prophlp.getPropertySetInfo();\n    }\n\n";
 
-    o << "    public void setPropertyValue(java.lang.String aPropertyName, "
-        "java.lang.Object aValue) throws "
+    o << "    public void setPropertyValue(String aPropertyName, "
+        "Object aValue) throws "
         "com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.beans.PropertyVetoException, "
         "com.sun.star.lang.IllegalArgumentException,"
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
         "m_prophlp.setPropertyValue(aPropertyName, aValue);\n    }\n\n";
 
-    o << "    public java.lang.Object getPropertyValue(java.lang.String "
+    o << "    public Object getPropertyValue(String "
         "aPropertyName) throws com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        return "
         "m_prophlp.getPropertyValue(aPropertyName);\n    }\n\n";
 
-    o << "    public void addPropertyChangeListener(java.lang.String aPropertyName"
+    o << "    public void addPropertyChangeListener(String aPropertyName"
         ", com.sun.star.beans.XPropertyChangeListener xListener) throws "
         "com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
         "m_prophlp.addPropertyChangeListener(aPropertyName, xListener);\n    }\n\n";
 
-    o << "    public void removePropertyChangeListener(java.lang.String "
+    o << "    public void removePropertyChangeListener(String "
         "aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener) "
         "throws com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
         "m_prophlp.removePropertyChangeListener(aPropertyName, xListener);\n"
         "    }\n\n";
 
-    o << "    public void addVetoableChangeListener(java.lang.String aPropertyName"
+    o << "    public void addVetoableChangeListener(String aPropertyName"
         ", com.sun.star.beans.XVetoableChangeListener xListener) throws "
         "com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
         "m_prophlp.addVetoableChangeListener(aPropertyName, xListener);\n    }\n\n";
 
-    o << "    public void removeVetoableChangeListener(java.lang.String "
+    o << "    public void removeVetoableChangeListener(String "
         "aPropertyName, com.sun.star.beans.XVetoableChangeListener xListener) "
         "throws com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
@@ -175,16 +177,16 @@ void generateXPropertySetBodies(std::ostream& o)
 
 void generateXFastPropertySetBodies(std::ostream& o)
 {
-    o << "    /* com.sun.star.lang.XFastPropertySet */\n";
+    o << "    // com.sun.star.beans.XFastPropertySet:\n";
 
-    o << "    public void setFastPropertyValue(int nHandle, java.lang.Object "
+    o << "    public void setFastPropertyValue(int nHandle, Object "
         "aValue) throws com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.beans.PropertyVetoException, "
         "com.sun.star.lang.IllegalArgumentException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        "
         "m_prophlp.setFastPropertyValue(nHandle, aValue);\n    }\n\n";
 
-    o << "    public java.lang.Object getFastPropertyValue(int nHandle) throws "
+    o << "    public Object getFastPropertyValue(int nHandle) throws "
         "com.sun.star.beans.UnknownPropertyException, "
         "com.sun.star.lang.WrappedTargetException\n    {\n        return "
         "m_prophlp.getFastPropertyValue(nHandle);\n    }\n\n";
@@ -192,7 +194,7 @@ void generateXFastPropertySetBodies(std::ostream& o)
 
 void generateXPropertyAccessBodies(std::ostream& o)
 {
-    o << "    /* com.sun.star.lang.XPropertyAccess */\n";
+    o << "    // com.sun.star.beans.XPropertyAccess:\n";
 
     o << "    public com.sun.star.beans.PropertyValue[] getPropertyValues()\n"
         " {\n        return m_prophlp.getPropertyValues();\n    }\n\n";
@@ -206,7 +208,8 @@ void generateXPropertyAccessBodies(std::ostream& o)
 }
 
 
-bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute) {
+bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
+{
     bool cast = false;
     sal_uInt16 attributes[9] = {
         /* com::sun::star::beans::PropertyValue::MAYBEVOID */ 1,
@@ -219,13 +222,15 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute) {
         /* com::sun::star::beans::PropertyValue::REMOVEABLE */ 128,
         /* com::sun::star::beans::PropertyValue::OPTIONAL */ 256 };
 
-    for (sal_uInt16 i = 0; i < 9; i++) {
+    for (sal_uInt16 i = 0; i < 9; i++)
+    {
         if (attribute & attributes[i]) {
             if (attributeValue.getLength() > 0) {
                 cast |= true;
                 attributeValue.append("|");
             }
-            switch (attributes[i]) {
+            switch (attributes[i])
+            {
             case 1:
                 attributeValue.append("PropertyAttribute.MAYBEVOID");
                 break;
@@ -266,32 +271,173 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute) {
 
 void registerProperties(std::ostream& o,
                         TypeManager const & manager,
-                        const StringPairHashMap& properties,
+                        const AttributeInfo& properties,
                         const OString& indentation)
 {
     if (!properties.empty()) {
-        StringPairHashMap::const_iterator iter =
-            properties.begin();
         bool cast = false;
         OStringBuffer attributeValue;
-        while (iter != properties.end()) {
-            if (iter->second.second > 0) {
-                cast = checkAttribute(attributeValue, iter->second.second);
+        for (AttributeInfo::const_iterator i(properties.begin());
+             i != properties.end(); ++i)
+        {
+            if (i->second.second > 0) {
+                cast = checkAttribute(attributeValue, i->second.second);
             } else {
                 cast = true;
                 attributeValue.append('0');
             }
 
-            o << indentation << "registerProperty(\"" << iter->first
-              << "\", \"m_" << iter->first << "\",\n"
+            o << indentation << "registerProperty(\"" << i->first
+              << "\", \"m_" << i->first << "\",\n"
               << indentation << "      ";
             if (cast)
                 o << "(short)";
 
             o << attributeValue.makeStringAndClear() << ");\n";
-            iter++;
         }
     }
+}
+
+void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
+{
+    // com.sun.star.lang.XLocalizable:
+    // setLocale
+    o << "    // com.sun.star.lang.XLocalizable:\n"
+        "    public void setLocale(com.sun.star.lang.Locale eLocale)\n    {\n"
+        "        m_locale = eLocale;\n    }\n\n";
+
+    // getLocale
+    o << "    public com.sun.star.lang.Locale getLocale()\n    {\n"
+        "        return m_locale;\n    }\n\n";
+
+    // com.sun.star.sheet.XAddIn:
+    // getProgrammaticFuntionName
+    o << "    // com.sun.star.sheet.XAddIn:\n"
+        "    public String getProgrammaticFuntionName(String "
+        "aDisplayName)\n    {\n"
+        "        try {\n"
+        "            com.sun.star.container.XNameAccess xNAccess =\n"
+        "                (com.sun.star.container.XNameAccess)UnoRuntime."
+        "queryInterface(\n"
+        "                    com.sun.star.container.XNameAccess.class, m_xHAccess);"
+        "\n            String functions[] = xNAccess.getElementNames();\n"
+        "            String sDisplayName = \"\";\n"
+        "            int len = functions.length;\n"
+        "            for (int i=0; i < len; ++i) {\n"
+        "                sDisplayName = com.sun.star.uno.AnyConverter.toString(\n"
+        "                    getAddinProperty(functions[i], \"\", sDISPLAYNAME));\n"
+        "                if (sDisplayName.equals(aDisplayName))\n"
+        "                    return functions[i];\n            }\n"
+        "        }\n        catch ( com.sun.star.uno.RuntimeException e ) {\n"
+        "            throw e;\n        }\n"
+        "        catch ( com.sun.star.uno.Exception e ) {\n        }\n\n"
+        "        return \"\";\n    }\n\n";
+
+    // getDisplayFunctionName
+    o << "    public String getDisplayFunctionName(String "
+        "aProgrammaticName)\n    {\n"
+        "        return getAddinProperty(aProgrammaticName, \"\", sDISPLAYNAME);\n"
+        "    }\n\n";
+
+    // getFunctionDescription
+    o << "    public String getFunctionDescription(String "
+        "aProgrammaticName)\n    {\n"
+        "        return getAddinProperty(aProgrammaticName, \"\", sDESCRIPTION);\n"
+        "    }\n\n";
+
+    // getDisplayArgumentName
+    o << "    public String getDisplayArgumentName(String "
+        "aProgrammaticFunctionName, int nArgument)\n    {\n";
+    if (options.java5) {
+        o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
+            "                                m_functionMap.get(\n"
+            "                                    aProgrammaticFunctionName).get("
+            "nArgument),\n"
+            "                                sDISPLAYNAME);\n    }\n\n";
+    } else {
+        o << "        return getAddinProperty(aProgrammaticFunctionName, (String)\n"
+            "                                ((java.util.Hashtable)m_functionMap."
+            "get(\n                                    aProgrammaticFunctionName))."
+            "get(\n                                        new Integer(nArgument))"
+            ", sDISPLAYNAME);\n    }\n\n";
+    }
+
+    // getArgumentDescription
+    o << "    public String getArgumentDescription(String "
+        "aProgrammaticFunctionName, int nArgument)\n    {\n";
+    if (options.java5) {
+        o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
+            "                                m_functionMap.get(\n"
+            "                                    aProgrammaticFunctionName).get("
+            "nArgument),\n"
+            "                                sDESCRIPTION);\n    }\n\n";
+    } else {
+        o << "        return getAddinProperty(aProgrammaticFunctionName, (String)\n"
+            "                                ((java.util.Hashtable)m_functionMap."
+            "get(\n                                    aProgrammaticFunctionName))."
+            "get(\n                                        new Integer(nArgument))"
+            ", sDESCRIPTION);\n    }\n\n";
+    }
+    // getProgrammaticCategoryName
+    o << "    public String getProgrammaticCategoryName(String "
+        "aProgrammaticFunctionName)\n    {\n"
+        "        return getAddinProperty(aProgrammaticFunctionName, \"\", "
+        "sCATEGORY);\n    }\n\n";
+
+    // getDisplayCategoryName
+    o << "    public String getDisplayCategoryName(String "
+        "aProgrammaticFunctionName)\n    {\n"
+        "        return getAddinProperty(aProgrammaticFunctionName, \"\", "
+        "sCATEGORYDISPLAYNAME);\n    }\n\n";
+}
+
+void generateXCompatibilityNamesBodies(std::ostream& o)
+{
+    o << "    // com.sun.star.sheet.XCompatibilityNames:\n"
+        "    public com.sun.star.sheet.LocalizedName[] getCompatibilityNames("
+        "String aProgrammaticName)\n    {\n"
+        "        com.sun.star.sheet.LocalizedName[] seqLocalizedNames =\n"
+        "            new com.sun.star.sheet.LocalizedName[0];\n\n        try {\n";
+
+    o << "            StringBuffer path = new StringBuffer(aProgrammaticName);\n"
+        "            path.append(\"/CompatibilityName\");\n"
+        "            String hname = path.toString();\n\n";
+
+    o << "            if ( m_xCompAccess.hasByHierarchicalName(hname) ) {\n"
+        "                com.sun.star.container.XNameAccess xNameAccess =\n"
+        "                    (com.sun.star.container.XNameAccess)UnoRuntime."
+        "queryInterface(\n"
+        "                        com.sun.star.container.XNameAccess.class,\n"
+        "                        m_xCompAccess.getByHierarchicalName(hname));\n\n"
+        "                String elems[] = xNameAccess.getElementNames();\n"
+        "                int len = elems.length;\n"
+        "                seqLocalizedNames = new com.sun.star.sheet.LocalizedName"
+        "[len];\n                String sCompatibilityName = \"\";\n\n";
+
+    o << "                for (int i=0; i < len; ++i) {\n"
+        "                    String sLocale = elems[i];\n"
+        "                    sCompatibilityName = com.sun.star.uno.AnyConverter."
+        "toString(\n                        xNameAccess.getByName(sLocale));\n\n"
+        "                    com.sun.star.lang.Locale aLocale = \n"
+        "                        new com.sun.star.lang.Locale();\n\n"
+        "                    String tokens[] = sLocale.split(\"-\");\n"
+        "                    int nToken = tokens.length;\n"
+        "                    if (nToken >= 1) aLocale.Language = tokens[0];\n"
+        "                    if (nToken >= 2) aLocale.Country = tokens[1];\n"
+        "                    if (nToken >= 3)  {\n"
+        "                        StringBuffer buf = \n"
+        "                            new StringBuffer(tokens[2]);\n"
+        "                        for (int t=3; t < nToken; ++t)\n"
+        "                            buf.append(tokens[t]);\n\n"
+        "                        aLocale.Variant = buf.toString();\n"
+        "                    }\n\n"
+        "                    seqLocalizedNames[i].Locale = aLocale;\n"
+        "                    seqLocalizedNames[i].Name = sCompatibilityName;\n"
+        "                }\n        }\n        }\n"
+        "        catch ( com.sun.star.uno.RuntimeException e ) {\n"
+        "            throw e;\n        }\n"
+        "        catch ( com.sun.star.uno.Exception e ) {\n        }\n\n"
+        "        return seqLocalizedNames;\n    }\n\n";
 }
 
 void generateMethodBodies(std::ostream& o,
@@ -304,14 +450,33 @@ void generateMethodBodies(std::ostream& o,
         interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
-        if ( (*iter).equals("com.sun.star.lang.XServiceInfo")) {
-                generateXServiceInfoBodies(o);
+        OString type(*iter);
+        iter++;
+        if (type.equals("com.sun.star.lang.XServiceInfo")) {
+            generateXServiceInfoBodies(o);
         } else {
-            typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
+            if (options.componenttype == 2) {
+                if (type.equals("com.sun.star.lang.XServiceName")) {
+                    o << "    // com.sun.star.lang.XServiceName:\n"
+                        "    public String getServiceName() {\n"
+                        "        return sADDIN_SERVICENAME;\n    }\n";
+                    generated.add(type);
+                    continue;
+                } else if (type.equals("com.sun.star.sheet.XAddIn")) {
+                    generateXAddInBodies(o, options);
+                    generated.add(type);
+                    continue;
+                } else if (type.equals("com.sun.star.sheet.XCompatibilityNames")) {
+                    generateXCompatibilityNamesBodies(o);
+                    generated.add(type);
+                    continue;
+                }
+            }
+
+            typereg::Reader reader(manager.getTypeReader(type.replace('.','/')));
             printMethods(o, options, manager, reader, generated, "_",
                          indentation, true, usepropertymixin);
         }
-        iter++;
     }
 }
 
@@ -321,14 +486,143 @@ static const char* propcomment=
 "        // of the PropertySetMixin helper for further information.\n"
 "        // Ensure that your attributes are initialized correctly!\n";
 
+
+void generateAddinConstructorAndHelper(std::ostream& o,
+         ProgramOptions const & options,
+         TypeManager const & manager, const OString & classname,
+         const std::hash_set< OString, OStringHash >& services,
+         const std::hash_set< OString, OStringHash >& interfaces)
+{
+    // get the one and only add-in service for later use
+    OString sAddinService = (*services.begin()).replace('/', '.');
+
+    // add-in specific fields
+    o << "\n    private static final String sADDIN_SERVICENAME = \""
+      << sAddinService << "\";\n\n";
+    o << "    private static final String sDISPLAYNAME = "
+        "\"DisplayName\";\n"
+        "    private static final String sDESCRIPTION = "
+        "\"Description\";\n"
+        "    private static final String sCATEGORY = \"Category\";\n"
+        "    private static final String sCATEGORYDISPLAYNAME = "
+        "\"CategoryDisplayName\";\n\n";
+
+    o << "    private com.sun.star.lang.Locale m_locale = "
+        "new com.sun.star.lang.Locale();\n"
+        "    private com.sun.star.container.XHierarchicalNameAccess  "
+        "m_xHAccess = null;\n"
+        "    private com.sun.star.container.XHierarchicalNameAccess  "
+        "m_xCompAccess = null;\n";
+    if (options.java5) {
+        o << "    private java.util.Hashtable<\n        String, "
+            "java.util.Hashtable< Integer, String> > m_functionMap = null;\n\n";
+    } else {
+        o << "    private java.util.Hashtable m_functionMap = null;\n\n";
+    }
+    // Constructor
+    o << "\n    public " << classname << "( XComponentContext context )\n    {\n"
+        "        m_xContext = context;\n\n"
+        "        try {\n";
+
+    if (options.java5) {
+        o << "        m_functionMap = new java.util.Hashtable<\n"
+            "            String, java.util.Hashtable< Integer, "
+            "String > >();\n\n";
+    } else {
+        o << "        m_functionMap = new java.util.Hashtable();\n\n";
+    }
+
+    generateFunctionParameterMap(o, options,  manager, interfaces);
+
+    o << "        com.sun.star.lang.XMultiServiceFactory xProvider = \n"
+        "            (com.sun.star.lang.XMultiServiceFactory)UnoRuntime."
+        "queryInterface(\n"
+        "                com.sun.star.lang.XMultiServiceFactory.class,\n"
+        "                m_xContext.getServiceManager().createInstanceWithContext("
+        "\n                    \"com.sun.star.configuration.ConfigurationProvider\""
+        ",\n                    m_xContext));\n\n";
+
+    o << "        String sReadOnlyView = "
+        "\"com.sun.star.configuration.ConfigurationAccess\";\n\n";
+
+    o << "        StringBuffer sPath = new StringBuffer(\n"
+        "             \"/org.openoffice.Office.Sheet.CalcAddIns/AddInInfo/\");\n"
+        "        sPath.append(sADDIN_SERVICENAME);\n"
+        "        sPath.append(\"/AddInFunctions\");\n\n";
+
+    o << "        // create arguments: nodepath\n"
+        "         com.sun.star.beans.PropertyValue aArgument = \n"
+        "             new com.sun.star.beans.PropertyValue();\n"
+        "         aArgument.Name = \"nodepath\";\n"
+        "         aArgument.Value = new com.sun.star.uno.Any(\n"
+        "             com.sun.star.uno.Type.STRING, sPath.toString());\n\n";
+
+    o << "        Object aArguments[] = new Object[1];\n"
+        "        aArguments[0] = new com.sun.star.uno.Any(\n"
+        "            com.sun.star.beans.PropertyValue.class, aArgument);\n\n";
+
+    o << "        // create the default view using default UI locale\n"
+        "         Object xIface = \n"
+        "             xProvider.createInstanceWithArguments(sReadOnlyView, "
+        "aArguments);\n\n";
+
+    o << "        m_xHAccess = (com.sun.star.container.XHierarchicalNameAccess)\n"
+        "             UnoRuntime.queryInterface(\n"
+        "                 com.sun.star.container.XHierarchicalNameAccess.class, "
+        "xIface);\n\n";
+
+    o << "        // extends arguments to create a view for all locales to get "
+        "simple\n        // access to the compatibilityname property\n"
+        "        aArguments = new Object[2];\n"
+        "        aArguments[0] = new com.sun.star.uno.Any(\n"
+        "            com.sun.star.beans.PropertyValue.class, aArgument);\n"
+        "        aArgument.Name = \"locale\";\n"
+        "        aArgument.Value = new com.sun.star.uno.Any(\n"
+        "            com.sun.star.uno.Type.STRING, \"*\");\n"
+        "        aArguments[1] = new com.sun.star.uno.Any(\n"
+        "            com.sun.star.beans.PropertyValue.class, aArgument);\n\n";
+
+    o << "        // create view for all locales\n"
+        "        xIface = xProvider.createInstanceWithArguments(sReadOnlyView, "
+        "aArguments);\n\n"
+        "        m_xCompAccess = (com.sun.star.container.XHierarchicalNameAccess)\n"
+        "            UnoRuntime.queryInterface(\n"
+        "                com.sun.star.container.XHierarchicalNameAccess.class, "
+        "xIface);\n        }\n"
+        "        catch ( com.sun.star.uno.Exception e ) {\n        }\n    }\n\n";
+
+    // add-in helper function
+    o << "    // addin configuration property helper function:\n"
+        "    String getAddinProperty(String funcName, "
+        "String paramName, String propName)\n    {\n"
+        "        try {\n            StringBuffer buf = "
+        "new StringBuffer(funcName);\n\n"
+        "            if (paramName.length() > 0) {\n"
+        "                buf.append(\"/Parameters/\");\n"
+        "                buf.append(paramName);\n            }\n\n";
+
+    o << "            com.sun.star.beans.XPropertySet xPropSet =\n"
+        "                (com.sun.star.beans.XPropertySet)UnoRuntime."
+        "queryInterface(\n"
+        "                    com.sun.star.beans.XPropertySet.class,\n"
+        "                    m_xHAccess.getByHierarchicalName(buf.toString()));\n\n"
+        "            return com.sun.star.uno.AnyConverter.toString(\n"
+        "                xPropSet.getPropertyValue(propName));\n        }\n"
+        "        catch ( com.sun.star.uno.RuntimeException e ) {\n"
+        "            throw e;\n        }\n"
+        "        catch ( com.sun.star.uno.Exception e ) {\n        }\n"
+        "        return \"\";\n    }\n\n";
+}
+
+
 void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
          const OString & classname,
          const std::hash_set< OString, OStringHash >& services,
          const std::hash_set< OString, OStringHash >& interfaces,
-         const StringPairHashMap& properties,
-         const StringPairHashMap& attributes,
+         const AttributeInfo& properties,
+         const AttributeInfo& attributes,
          const OString& propertyhelper, bool supportxcomponent)
 {
     o << "\n\npublic final class " << classname << " extends ";
@@ -342,30 +636,29 @@ void generateClassDefinition(std::ostream& o,
             else
                 o << "WeakBase\n";
         }
-        o << "    implements ";
+        o << "   implements ";
         std::hash_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();
         while (iter != interfaces.end()) {
             o << (*iter);
             iter++;
             if (iter != interfaces.end())
-                o << ",\n               ";
+                o << ",\n              ";
         }
     }
     o << "\n{\n";
 
-    o << "    private final XComponentContext m_context;\n";
+    o << "    private final XComponentContext m_xContext;\n";
 
     // check property helper
-    if (propertyhelper.getLength() > 1) {
+    if (propertyhelper.getLength() > 1)
         o << "    private final PropertySetMixin m_prophlp;\n";
-    }
 
-    o << "    private static final java.lang.String m_implementationName = "
+    o << "    private static final String m_implementationName = "
       << classname << ".class.getName();\n";
 
     if (!services.empty()) {
-        o << "    private static final java.lang.String[] m_serviceNames = {\n";
+        o << "    private static final String[] m_serviceNames = {\n";
         std::hash_set< OString, OStringHash >::const_iterator iter =
             services.begin();
         while (iter != services.end()) {
@@ -374,30 +667,13 @@ void generateClassDefinition(std::ostream& o,
             if (iter != services.end())
                 o << ",\n";
             else
-                o << " };\n";
+                o << " };\n\n";
         }
     }
-    o << "\n    public " << classname << "( XComponentContext context ) {\n"
-      << "        m_context = context;\n";
-    if (propertyhelper.equals("_")) {
-        registerProperties(o, manager, properties, "        ");
-    } else {
-        if (propertyhelper.getLength() > 1) {
-            o << propcomment
-              << "        m_prophlp = new PropertySetMixin(m_context, this,\n"
-              << "            new Type(" << propertyhelper << ".class), null);\n";
-        }
-    }
-    o << "    };\n\n";
 
-    if (!services.empty())
-        generateCompFunctions(o, classname);
-
-    generateMethodBodies(o, options, manager, interfaces,
-                         "    ", propertyhelper.getLength() > 1);
-
+    // attribute/property members
     if (!properties.empty()) {
-        StringPairHashMap::const_iterator iter =
+        AttributeInfo::const_iterator iter =
             properties.begin();
         o << "    // properties\n";
         while (iter != properties.end()) {
@@ -408,18 +684,48 @@ void generateClassDefinition(std::ostream& o,
             iter++;
         }
     } else if (!attributes.empty()) {
-        StringPairHashMap::const_iterator iter =
+        AttributeInfo::const_iterator iter =
             attributes.begin();
         o << "    // attributes\n";
         while (iter != attributes.end()) {
             o << "    private ";
             printType(o, options, manager, iter->second.first.replace('.','/'),
                       false, false);
-            o << " m_" << iter->first << ";\n";
+            o << " m_" << iter->first << " = ";
+            printType(o, options, manager, iter->second.first.replace('.','/'),
+                      false, true);
+            o <<";\n";
             iter++;
         }
     }
 
+    // special handling of calc add-ins
+    if (options.componenttype == 2)
+    {
+        generateAddinConstructorAndHelper(o, options, manager, classname,
+                                          services, interfaces);
+    } else {
+        o << "\n    public " << classname << "( XComponentContext context )\n"
+            "    {\n        m_xContext = context;\n";
+        if (propertyhelper.equals("_")) {
+            registerProperties(o, manager, properties, "        ");
+        } else {
+            if (propertyhelper.getLength() > 1) {
+                o << propcomment
+                  << "        m_prophlp = new PropertySetMixin(m_xContext, this,\n"
+                  << "            new Type(" << propertyhelper
+                  << ".class), null);\n";
+            }
+        }
+        o << "    };\n\n";
+
+    }
+
+    if (!services.empty())
+        generateCompFunctions(o, classname);
+
+    generateMethodBodies(o, options, manager, interfaces,
+                         "    ", propertyhelper.getLength() > 1);
 
     // end of class definition
     o << "}\n";
@@ -432,8 +738,8 @@ void generateSkeleton(ProgramOptions const & options,
 {
     std::hash_set< OString, OStringHash > interfaces;
     std::hash_set< OString, OStringHash > services;
-    StringPairHashMap properties;
-    StringPairHashMap attributes;
+    AttributeInfo properties;
+    AttributeInfo attributes;
     std::hash_set< OString, OStringHash > propinterfaces;
     bool serviceobject = false;
     bool supportxcomponent = false;
@@ -444,41 +750,58 @@ void generateSkeleton(ProgramOptions const & options,
         iter++;
     }
 
+    if (options.componenttype == 2) {
+        if (services.size() != 1) {
+            throw CannotDumpException(
+                "for calc add-in components one and only one service type is "
+                "necessary! Please reference a valid type with the '-t' option.");
+        }
+
+        // add AddIn in suported service list, this service is currently necessary
+        // to identify all calc add-ins and to support the necessary add-in helper
+        // interfaces.
+        // This becomes obsolete in the future when this information is collected
+        // from the configuration
+        checkType(manager, "com.sun.star.sheet.AddIn",
+                  interfaces, services, properties);
+        // special case for XLocalization, it is exlicitly handled and will be
+        // necessary in the future as well
+//         if (interfaces.find("com.sun.star.lang.XLocalizable") ==
+//             interfaces.end())
+//             interfaces.insert("com.sun.star.lang.XLocalizable");
+    }
+
+
     // check if service object or simple UNO object
     if (!services.empty())
         serviceobject = true;
 
-    OString propertyhelper = checkPropertyHelper(manager, services,
-                                                 attributes, propinterfaces);
+    OString propertyhelper = checkPropertyHelper(
+        options, manager, services, interfaces, attributes, propinterfaces);
     checkDefaultInterfaces(interfaces, services, propertyhelper);
+
+    if (options.componenttype == 2) {
+        if (propertyhelper.getLength() > 0)
+            std::cerr << "WARNING: interfaces specifying calc add-in functions "
+                "shouldn't support attributes!\n";
+    }
 
     supportxcomponent = checkXComponentSupport(manager, interfaces);
 
-    OString compFileName(createFileNameFromType(
-                                  options.outputpath,
-                                  options.implname.replace('.','/'),
-                                  ".java"));
-
-    OString tmpDir = getTempDir(compFileName);
-    FileStream file;
-    file.createTempFile(tmpDir);
+    OString compFileName;
     OString tmpFileName;
-
-    if(!file.isValid())
-    {
-        OString message("cannot open ");
-        message += compFileName + " for writing";
-        throw CannotDumpException(message);
-    } else {
-        tmpFileName = file.getName();
-    }
-    file.close();
-    std::ofstream oFile(tmpFileName.getStr(), std::ios_base::binary);
+    std::ostream* pofs = NULL;
+    bool standardout = getOutputStream(options, ".java",
+                                       &pofs, compFileName, tmpFileName);
 
     try {
-        generatePackage(oFile, options.implname);
+        if (!standardout && options.license) {
+            printLicenseHeader(*pofs, compFileName);
+        }
 
-        generateImports(oFile, interfaces, propertyhelper,
+        generatePackage(*pofs, options.implname);
+
+        generateImports(*pofs, interfaces, propertyhelper,
                         serviceobject, supportxcomponent);
 
         OString classname(options.implname);
@@ -486,21 +809,31 @@ void generateSkeleton(ProgramOptions const & options,
         if ((index = classname.lastIndexOf('.')) > 0)
             classname = classname.copy(index+1);
 
-        generateClassDefinition(oFile, options, manager, classname, services,
+        generateClassDefinition(*pofs, options, manager, classname, services,
                                 interfaces, properties, attributes, propertyhelper,
                                 supportxcomponent);
 
-        oFile.close();
-        OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
+        if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
+            ((std::ofstream*)pofs)->close();
+            delete pofs;
+            OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
+        }
     } catch(CannotDumpException& e) {
 
-        std::cout << "ERROR: " << e.m_message.getStr() << "\n";
-        // remove existing type file if something goes wrong to ensure consistency
-        if (fileExists(compFileName))
-            removeTypeFile(compFileName);
+        std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
+        if ( !standardout ) {
+            if (pofs && ((std::ofstream*)pofs)->is_open()) {
+                ((std::ofstream*)pofs)->close();
+                delete pofs;
+            }
+            // remove existing type file if something goes wrong to ensure
+            // consistency
+            if (fileExists(compFileName))
+                removeTypeFile(compFileName);
 
-        // remove tmp file if something goes wrong
-        removeTypeFile(tmpFileName);
+            // remove tmp file if something goes wrong
+            removeTypeFile(tmpFileName);
+        }
     }
 }
 
