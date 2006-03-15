@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:11:49 $
+#  last change: $Author: vg $ $Date: 2006-03-15 09:29:04 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -128,10 +128,14 @@ $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-$(OUT_COMP_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+# NOTE: because of gnu make problems with full qualified paths, the pattern 
+# rules for the component jars and the packages doesn't work proper and we 
+# defined explicit rules
+
+#$(OUT_COMP_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+#	-$(MKDIR) $(subst /,$(PS),$(@D))
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 # rule for component package manifest
 $(OUT_COMP_CLASS)/%/manifest.xml :
@@ -143,23 +147,44 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(OUT_BIN)/%.pkg : $(OUT_COMP_CLASS)/%.jar
+#$(OUT_BIN)/%.uno.pkg : $(OUT_COMP_CLASS)/%.uno.jar $(OUT_COMP_CLASS)/%/META-INF/manifest.xml
+#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+#	-$(MKDIR) $(subst /,$(PS),$(@D))
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE)
-
-$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
-
-$(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE)
+$(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR) $(COMPONENT2_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE)
+$(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR) $(COMPONENT3_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
