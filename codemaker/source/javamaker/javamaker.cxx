@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javamaker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:17:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,8 @@
 
 #include "sal/main.h"
 
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#include <codemaker/typemanager.hxx>
-#endif
+#include "codemaker/typemanager.hxx"
 #include "codemaker/generatedtypeset.hxx"
-
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
