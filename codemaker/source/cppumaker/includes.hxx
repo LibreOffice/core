@@ -4,9 +4,9 @@
  *
  *  $RCSfile: includes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:47:12 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,16 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_codemaker_source_cppumaker_includes_hxx
-#define INCLUDED_codemaker_source_cppumaker_includes_hxx
+#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
+#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX \
+    INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 
+#ifndef INCLUDED_CODEMAKER_DEPENDENCIES_HXX
 #include "codemaker/dependencies.hxx"
-
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
+#endif
 
 class FileStream;
 class TypeManager;
@@ -127,4 +131,4 @@ private:
 
 } }
 
-#endif
+#endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
