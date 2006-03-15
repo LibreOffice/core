@@ -4,9 +4,9 @@
  *
  *  $RCSfile: includes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:46:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,12 +183,12 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
         {
             dumpInclude(out, i->first, m_hpp);
         } else {
-            bool ns = dumpNamespaceOpen(out, i->first, false);
+            bool ns = dumpNamespaceOpen(out, m_manager, i->first, false);
             if (ns) {
                 out << " ";
             }
             out << "class ";
-            dumpTypeIdentifier(out, i->first);
+            dumpTypeIdentifier(out, m_manager, i->first);
             out << ";";
             if (ns) {
                 out << " ";
