@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,29 @@ namespace frm
         }
 
         return aExternalValue;
+    }
+
+    //-----------------------------------------------------------------------------
+    Any OReferenceValueComponent::translateControlValueToValidatableValue( ) const
+    {
+        if ( !m_xAggregateSet.is() )
+            return Any();
+
+        Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
+        sal_Int16 nControlValue = STATE_DONTKNOW;
+        aControlValue >>= nControlValue;
+
+        Any aValidatableValue;
+        switch ( nControlValue )
+        {
+        case STATE_CHECK:
+            aValidatableValue <<= (sal_Bool)sal_True;
+            break;
+        case STATE_NOCHECK:
+            aValidatableValue <<= (sal_Bool)sal_False;
+            break;
+        }
+        return aValidatableValue;
     }
 
 //........................................................................
