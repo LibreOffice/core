@@ -4,9 +4,9 @@
  *
  *  $RCSfile: classfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:17:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_codemaker_source_javamaker_classfile_hxx
-#define INCLUDED_codemaker_source_javamaker_classfile_hxx
+#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
+#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
 
+#ifndef INCLUDED_CODEMAKER_UNOTYPE_HXX
 #include "codemaker/unotype.hxx"
-
+#endif
+#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
+#endif
 
 #include <list>
 #include <map>
@@ -280,4 +283,4 @@ private:
 
 } }
 
-#endif
+#endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
