@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeblob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-25 12:59:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,27 +33,27 @@
  *
  ************************************************************************/
 
-#include <rtl/alloc.h>
-#include <registry/writer.hxx>
+#include "rtl/alloc.h"
+#include "registry/writer.hxx"
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XPublished.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
-#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XModuleTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
-#include <com/sun/star/reflection/XMethodParameter.hpp>
-#include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/reflection/XPublished.hpp"
+#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
+#include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
+#include "com/sun/star/reflection/XServiceTypeDescription2.hpp"
+#include "com/sun/star/reflection/XStructTypeDescription.hpp"
+#include "com/sun/star/reflection/XConstantsTypeDescription.hpp"
+#include "com/sun/star/reflection/XConstantTypeDescription.hpp"
+#include "com/sun/star/reflection/XModuleTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp"
+#include "com/sun/star/reflection/XMethodParameter.hpp"
+#include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
+#include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
+#include "com/sun/star/reflection/XEnumTypeDescription.hpp"
 
-#include <codemaker/generatedtypeset.hxx>
+#include "codemaker/generatedtypeset.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -164,8 +164,7 @@ sal_uInt32 getInheritedMemberCount(
             Sequence< Reference< XTypeDescription> > baseTypes =
                 xIFace->getBaseTypes();
             if ( baseTypes.getLength() > 0)
-                memberCount += getInheritedMemberCount(checkedTypes,
-                                                       baseTypes);
+                memberCount += getInheritedMemberCount(checkedTypes, baseTypes);
 
             memberCount += xIFace->getMembers().getLength();
         }
@@ -179,12 +178,12 @@ void writeMethodData( typereg::Writer& rWriter, sal_uInt32 calculatedMemberOffse
 {
     RTMethodMode methodMode = RT_MODE_TWOWAY;
     if ( xMethod->isOneway() )
-    {
         methodMode = RT_MODE_ONEWAY;
-    }
 
     Sequence< Reference< XMethodParameter > > parameters(xMethod->getParameters());
     Sequence< Reference< XTypeDescription > > exceptions(xMethod->getExceptions());
+
+    OUString name(xMethod->getMemberName());
     sal_uInt16 methodIndex = (sal_uInt16)(xMethod->getPosition()
                                           - calculatedMemberOffset);
     sal_uInt16 paramCount = (sal_uInt16)parameters.getLength();
@@ -198,21 +197,14 @@ void writeMethodData( typereg::Writer& rWriter, sal_uInt32 calculatedMemberOffse
     RTParamMode paramMode = RT_PARAM_IN;
     sal_uInt16 i;
 
-    for ( i=0; i < paramCount; i++)
-    {
+    for ( i=0; i < paramCount; i++) {
         Reference< XMethodParameter > xParam = parameters[i];
         if ( xParam->isIn() && xParam->isOut())
-        {
             paramMode = RT_PARAM_INOUT;
-        } else
-        if ( xParam->isIn() )
-        {
+        else if ( xParam->isIn() )
             paramMode = RT_PARAM_IN;
-        } else
-        if ( xParam->isOut() )
-        {
+        else if ( xParam->isOut() )
             paramMode = RT_PARAM_OUT;
-        }
 
         rWriter.setMethodParameterData(methodIndex,
                                        (sal_uInt16)xParam->getPosition(),
@@ -221,8 +213,7 @@ void writeMethodData( typereg::Writer& rWriter, sal_uInt32 calculatedMemberOffse
                                        getName().replace('.', '/'));
     }
 
-    for (i=0; i < exceptionCount; i++)
-    {
+    for (i=0; i < exceptionCount; i++) {
         rWriter.setMethodExceptionTypeName(
             methodIndex, i, exceptions[i]->getName().replace('.', '/'));
     }
@@ -244,8 +235,7 @@ void writeAttributeMethodData(
                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
                               0, (sal_uInt16)seqExcp.getLength());
 
-        for (sal_Int32 i=0; i < seqExcp.getLength(); i++)
-        {
+        for (sal_Int32 i=0; i < seqExcp.getLength(); i++) {
             rWriter.setMethodExceptionTypeName(
                 methodindex, (sal_uInt16)i,
                 seqExcp[i]->getName().replace('.', '/'));
@@ -352,8 +342,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         sal_uInt16 constCount = 0;
         sal_Int16 i;
 
-        for ( i=0; i < memberCount; i++)
-        {
+        for ( i=0; i < memberCount; i++) {
             if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() )
                 constCount++;
         }
@@ -363,14 +352,11 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                uTypeName.replace('.', '/'),
                                0, constCount, 0, 0);
 
-        if ( 0 < constCount )
-        {
+        if ( 0 < constCount ) {
             Reference< XConstantTypeDescription > xConst;
             sal_uInt16 fieldIndex = 0;
-            for (i=0; i < memberCount; i++)
-            {
-                if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() )
-                {
+            for (i=0; i < memberCount; i++) {
+                if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() ) {
                     xConst = Reference< XConstantTypeDescription >(
                         memberTypes[i], UNO_QUERY);
 
@@ -407,8 +393,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         sal_uInt16 inheritedMemberCount = 0;
         sal_uInt16 i;
 
-        for (i=0; i < memberCount; i++)
-        {
+        for (i=0; i < memberCount; i++) {
             xAttr = Reference< XInterfaceAttributeTypeDescription2 >(
                 memberTypes[i], UNO_QUERY);
             if ( xAttr.is() ) {
@@ -423,8 +408,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         }
 
         // check inherited members count
-        if (baseCount > 0)
-        {
+        if (baseCount > 0) {
             GeneratedTypeSet checkedTypes;
             inheritedMemberCount = (sal_uInt16)getInheritedMemberCount(
                 checkedTypes, baseTypes );
@@ -455,12 +439,10 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         // reset attrCount, used for method index calculation
         attrCount = 0;
         attrmethods = 0;
-        for (i=0; i < memberCount; i++)
-        {
+        for (i=0; i < memberCount; i++) {
             xAttr = Reference< XInterfaceAttributeTypeDescription2 >(
                 memberTypes[i], UNO_QUERY);
-            if ( xAttr.is() )
-            {
+            if ( xAttr.is() ) {
                 ++attrCount;
                 if (xAttr->isReadOnly())
                     fieldAccess = RT_ACCESS_READONLY;
@@ -479,17 +461,18 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
                 writeAttributeMethodData(writer, attrmethods,
                                          RT_MODE_ATTRIBUTE_GET, xAttr);
-                writeAttributeMethodData(writer, attrmethods,
-                                         RT_MODE_ATTRIBUTE_SET, xAttr);
+                if (!xAttr->isReadOnly()) {
+                    writeAttributeMethodData(writer, attrmethods,
+                                            RT_MODE_ATTRIBUTE_SET, xAttr);
+                }
 
                 continue;
             }
 
             xMethod = Reference< XInterfaceMethodTypeDescription >(
                 memberTypes[i], UNO_QUERY);
-            if ( xMethod.is() )
-            {
-                writeMethodData(writer, attrCount+attrmethods+inheritedMemberCount,
+            if ( xMethod.is() ) {
+                writeMethodData(writer, attrCount+inheritedMemberCount-attrmethods,
                                 xMethod);
             }
         }
@@ -520,8 +503,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         sal_uInt16 superCount=0;
         if ( typeParams.getLength() == 0) {
             Reference< XTypeDescription > xSuperType = xStruct->getBaseType();
-            if ( xSuperType.is() )
-            {
+            if ( xSuperType.is() ) {
                 ++superCount;
                 uSuperType = xSuperType->getName().replace('.','/');
             }
@@ -538,8 +520,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         }
 
         sal_uInt16 i=0;
-        for (i=0; i < memberCount; i++)
-        {
+        for (i=0; i < memberCount; i++) {
             RTFieldAccess fieldAccess = RT_ACCESS_READWRITE;
             if (typeParams.getLength() > 0)
                 fieldAccess |= checkParameterizedTypeFlag(
@@ -551,8 +532,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                 RTConstValue());
         }
 
-        for (i=0; i < typeParams.getLength(); i++)
-        {
+        for (i=0; i < typeParams.getLength(); i++) {
             writer.setReferenceData(i, OUString(), RT_REF_TYPE_PARAMETER,
                                     RT_ACCESS_INVALID, typeParams[i]);
         }
@@ -577,8 +557,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         OUString uSuperType;
         sal_uInt16 superCount=0;
         Reference< XTypeDescription > xSuperType = xComp->getBaseType();
-        if ( xSuperType.is() )
-        {
+        if ( xSuperType.is() ) {
             ++superCount;
             uSuperType = xSuperType->getName().replace('.','/');
         }
@@ -593,8 +572,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
             writer.setSuperTypeName(0, uSuperType);
         }
 
-        for (sal_Int16 i=0; i < memberCount; i++)
-        {
+        for (sal_Int16 i=0; i < memberCount; i++) {
             writer.setFieldData(i, OUString(), OUString(), RT_ACCESS_READWRITE,
                                 memberNames[i],
                                 memberTypes[i]->getName().replace('.', '/'),
@@ -623,8 +601,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                0, enumCount, 0, 0);
 
         RTConstValue constValue;
-        for (sal_Int16 i=0; i < enumCount; i++)
-        {
+        for (sal_Int16 i=0; i < enumCount; i++) {
             constValue.m_type = RT_TYPE_INT32;
             constValue.m_value.aLong = enumValues[i];
 
@@ -702,14 +679,14 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                     ->getName().replace('.','/'));
 
             sal_uInt16 j=0;
-            for (i=0; i<methodCount; i++) {
+            for ( i=0; i<methodCount; i++ ) {
                 Reference<XServiceConstructorDescription> xConstructor(
                     constructors[i], UNO_QUERY);
                 Sequence<Reference<XParameter> > parameters;
                 Sequence<Reference<XCompoundTypeDescription> > exceptions;
                 sal_uInt16 parameterCount=0;
                 sal_uInt16 exceptionCount=0;
-                if (!xConstructor->isDefaultConstructor()) {
+                if ( !xConstructor->isDefaultConstructor() ) {
                     parameters = xConstructor->getParameters();
                     parameterCount = (sal_uInt16)parameters.getLength();
                 }
@@ -720,8 +697,8 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                          RTL_CONSTASCII_USTRINGPARAM("void")),
                                      parameterCount, exceptionCount);
 
-                if (!xConstructor->isDefaultConstructor()) {
-                    for (j=0; j<parameterCount; j++) {
+                if ( !xConstructor->isDefaultConstructor() ) {
+                    for ( j=0; j<parameterCount; j++ ) {
                         Reference<XParameter> xParam(parameters[j], UNO_QUERY);
                         RTParamMode paramMode = RT_PARAM_IN;
                         if (xParam->isRestParameter())
@@ -742,7 +719,8 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                     }
                 }
             }
-        } else {
+        } else
+        {
             for (i=0; i<propertyCount; i++) {
                 Reference<XPropertyTypeDescription> xProp(
                     properties[i], UNO_QUERY);
