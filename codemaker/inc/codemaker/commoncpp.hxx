@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncpp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:09:30 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,33 @@
 #ifndef INCLUDED_CODEMAKER_COMMONCPP_HXX
 #define INCLUDED_CODEMAKER_COMMONCPP_HXX
 
+#ifndef INCLUDED_CODEMAKER_CODEMAKER_HXX
 #include "codemaker/codemaker.hxx"
-
+#endif
 
 namespace codemaker { namespace cpp {
 
-rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace=false,
+rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type);
+
+rtl::OString scopedCppName(TypeManager const & manager,
+                           rtl::OString const & type, bool bNoNameSpace=false,
                            bool shortname=false);
 
 rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus);
+    rtl::OString const & nucleus, bool shortname);
+
+enum IdentifierTranslationMode {
+    ITM_GLOBAL,
+    ITM_NONGLOBAL,
+    ITM_KEYWORDSONLY
+};
 
 rtl::OString translateUnoToCppIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix);
+    rtl::OString const & identifier, rtl::OString const & prefix,
+    IdentifierTranslationMode transmode = ITM_GLOBAL,
+    rtl::OString const * forbidden = 0);
 
 } }
 
-#endif
+#endif // INCLUDED_CODEMAKER_COMMONCPP_HXX
