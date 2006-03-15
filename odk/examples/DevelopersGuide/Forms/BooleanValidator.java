@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BooleanValidator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:27:43 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -44,22 +44,24 @@
  */
 public class BooleanValidator extends ControlValidator
 {
-    private boolean m_preventChecked;
+    private boolean                         m_preventChecked;
+    private com.sun.star.uno.AnyConverter   m_converter;
 
     /** Creates a new instance of BooleanValidator */
     public BooleanValidator( boolean preventChecked )
     {
         m_preventChecked = preventChecked;
+        m_converter = new com.sun.star.uno.AnyConverter();
     }
 
     public String explainInvalid( Object Value )
     {
         try
         {
-            short value = ((Short)Value).shortValue();
-            if ( value == 2 )
+            if ( m_converter.isVoid( Value ) )
                 return "'indetermined' is not an allowed state";
-            if ( m_preventChecked && ( value == 1 ) )
+            boolean value = ((Boolean)Value).booleanValue();
+            if ( m_preventChecked && ( value == true ) )
                 return "no no no. Don't check it.";
         }
         catch( java.lang.Exception e )
@@ -73,10 +75,11 @@ public class BooleanValidator extends ControlValidator
     {
         try
         {
-            short value = ((Short)Value).shortValue();
-            if ( value == 2 )
+            if ( m_converter.isVoid( Value ) )
                 return false;
-            if ( m_preventChecked && ( value == 1 ) )
+
+            boolean value = ((Boolean)Value).booleanValue();
+            if ( m_preventChecked && ( value == true ) )
                 return false;
             return true;
         }
