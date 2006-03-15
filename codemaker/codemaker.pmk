@@ -4,9 +4,9 @@
 #
 #   $RCSfile: codemaker.pmk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 17:09:12 $
+#   last change: $Author: vg $ $Date: 2006-03-15 09:08:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,18 @@
 #*************************************************************************
 
 .IF "$(GUI)"=="WNT"
-CODEMAKERLIB=codemaker.lib
-COMMONCPPLIB=commoncpp.lib
-COMMONJAVALIB=commonjava.lib
+CODEMAKERLIBDEPN=codemaker.lib
+COMMONCPPLIBDEPN=commoncpp.lib
+COMMONJAVALIBDEPN=commonjava.lib
+CODEMAKERLIBST=codemaker.lib
+COMMONCPPLIBST=commoncpp.lib
+COMMONJAVALIBST=commonjava.lib
 .ELSE
-CODEMAKERLIB=-lcodemaker
-COMMONCPPLIB=-lcommoncpp
-COMMONJAVALIB=-lcommonjava
+CODEMAKERLIBDEPN=libcodemaker.a
+COMMONCPPLIBDEPN=libcommoncpp.a
+COMMONJAVALIBDEPN=libcommonjava.a
+CODEMAKERLIBST=-lcodemaker
+COMMONCPPLIBST=-lcommoncpp
+COMMONJAVALIBST=-lcommonjava
 .ENDIF
 
