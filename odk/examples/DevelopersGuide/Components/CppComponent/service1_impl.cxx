@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service1_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:13:37 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -111,7 +111,7 @@ public:
 Any MyService1Impl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
-    if (type.equals( ::getCppuType( (Reference< XInterface > const *)0 ) ))
+    if (type.equals(::cppu::UnoType< Reference< XInterface > >::get()))
     {
         // return XInterface interface
         // (resolve ambiguity by casting to lang::XTypeProvider)
@@ -119,24 +119,21 @@ Any MyService1Impl::queryInterface( Type const & type )
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(
-            ::getCppuType( (Reference< lang::XTypeProvider > const *)0 ) ))
+    if (type.equals(::cppu::UnoType< Reference< lang::XTypeProvider > >::get()))
     {
         // return XInterface interface
         Reference< XInterface > x(
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(
-            ::getCppuType( (Reference< lang::XServiceInfo > const *)0 ) ))
+    if (type.equals(::cppu::UnoType< Reference< lang::XServiceInfo > >::get()))
     {
         // return XServiceInfo interface
         Reference< lang::XServiceInfo > x(
             static_cast< lang::XServiceInfo * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(
-            ::getCppuType( (Reference< ::my_module::XSomething > const *)0 ) ))
+    if (type.equals(::cppu::UnoType< Reference< ::my_module::XSomething > >::get()))
     {
         // return sample interface
         Reference< ::my_module::XSomething > x(
@@ -169,9 +166,9 @@ Sequence< Type > MyService1Impl::getTypes()
     throw (RuntimeException)
 {
     Sequence< Type > seq( 3 );
-    seq[ 0 ] = ::getCppuType( (Reference< lang::XTypeProvider > const *)0 );
-    seq[ 1 ] = ::getCppuType( (Reference< lang::XServiceInfo > const *)0 );
-    seq[ 2 ] = ::getCppuType( (Reference< ::my_module::XSomething > const *)0 );
+    seq[ 0 ] = ::cppu::UnoType< Reference< lang::XTypeProvider > >::get();
+    seq[ 1 ] = ::cppu::UnoType< Reference< lang::XServiceInfo > >::get();
+    seq[ 2 ] = ::cppu::UnoType< Reference< ::my_module::XSomething > >::get();
     return seq;
 }
 Sequence< sal_Int8 > MyService1Impl::getImplementationId()
