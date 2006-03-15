@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonjava.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,15 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _UNO_DEVTOOLS_SKELETONJAVA_HXX_
-#define _UNO_DEVTOOLS_SKELETONJAVA_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
+#define INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
 
 #include <fstream>
 
-#ifndef _CODEMAKER_GENERATEDTYPESET_HXX_
-#include <codemaker/generatedtypeset.hxx>
+#ifndef INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX
+#include "codemaker/generatedtypeset.hxx"
 #endif
-#ifndef _UNO_DEVTOOLS_SKELETONCOMMON_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 #include "skeletoncommon.hxx"
 #endif
 
@@ -124,5 +124,5 @@ void generateSkeleton(ProgramOptions const & options, TypeManager const & manage
 
 } }
 
-#endif // _UNO_DEVTOOLS_SKELETONJAVA_HXX_
+#endif // INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
 
