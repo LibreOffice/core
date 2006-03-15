@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:22:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -94,7 +94,7 @@ namespace skeleton
 
 //------------------------------------------------------------------------------
 #define DECL_PROP1IMPL(varname, type) \
-pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type*>(NULL)),
+pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::cppu::UnoType< type >::get(),
 //------------------------------------------------------------------------------
 #define DECL_PROP0(varname, type)   \
     DECL_PROP1IMPL(varname, type) 0)

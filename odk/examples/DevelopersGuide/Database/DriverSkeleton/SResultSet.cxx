@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:20:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -133,9 +133,10 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
-    OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    OTypeCollection aTypes(
+        ::cppu::UnoType< Reference< ::com::sun::star::beans::XMultiPropertySet > >::get(),
+        ::cppu::UnoType< Reference< ::com::sun::star::beans::XFastPropertySet > >::get(),
+        ::cppu::UnoType< Reference< ::com::sun::star::beans::XPropertySet > >::get());
 
     return concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
