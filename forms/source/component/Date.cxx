@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:57:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,15 +318,22 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
 }
 
 //------------------------------------------------------------------------------
-Any ODateModel::translateControlValueToExternalValue( ) const
+void ODateModel::impl_translateControlValueToUNODate( Any& _rUNOValue ) const
 {
-    Any aExternalValue( getControlValue() );
-    if ( aExternalValue.hasValue() )
+    _rUNOValue = getControlValue();
+    if ( _rUNOValue.hasValue() )
     {
         sal_Int32 nDate = 0;
-        OSL_VERIFY( aExternalValue >>= nDate );
-        aExternalValue <<= DBTypeConversion::toDate( nDate );
+        OSL_VERIFY( _rUNOValue >>= nDate );
+        _rUNOValue <<= DBTypeConversion::toDate( nDate );
     }
+}
+
+//------------------------------------------------------------------------------
+Any ODateModel::translateControlValueToExternalValue( ) const
+{
+    Any aExternalValue;
+    impl_translateControlValueToUNODate( aExternalValue );
     return aExternalValue;
 }
 
@@ -348,6 +355,14 @@ Any ODateModel::translateExternalValueToControlValue( ) const
         }
     }
     return aControlValue;
+}
+
+//------------------------------------------------------------------------------
+Any ODateModel::translateControlValueToValidatableValue( ) const
+{
+    Any aValidatableValue;
+    impl_translateControlValueToUNODate( aValidatableValue );
+    return aValidatableValue;
 }
 
 //------------------------------------------------------------------------------
