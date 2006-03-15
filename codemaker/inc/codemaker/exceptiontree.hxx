@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exceptiontree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:06:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_codemaker_exceptiontree_hxx
-#define INCLUDED_codemaker_exceptiontree_hxx
+#ifndef INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
+#define INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
 
+#ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #include "codemaker/global.hxx"
+#endif
+#ifndef _RTL_STRING_HXX_
 #include "rtl/string.hxx"
+#endif
 
 #include <vector>
 
