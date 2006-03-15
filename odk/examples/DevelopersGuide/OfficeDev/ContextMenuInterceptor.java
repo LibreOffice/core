@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextMenuInterceptor.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 12:08:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -110,10 +110,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
 
                     System.out.println( "\n ... all context menus of the created document frame contains now a 'Help' entry with the\n     submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' to remove the context menu interceptor and finish the example!");
 
-                    char c = 'X';
-                    do{
-                        c = (char) System.in.read();
-                    }while ((c != 13) && (c != 10));
+                    java.io.BufferedReader reader
+                        = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
+                    reader.read();
 
                     xContextMenuInterception.releaseContextMenuInterceptor(
                         xContextMenuInterceptor );
