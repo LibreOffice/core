@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _UNODEVTOOLS_OPTIONS_HXX_
-#define _UNODEVTOOLS_OPTIONS_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_OPTIONS_HXX
+#define INCLUDED_UNODEVTOOLS_OPTIONS_HXX
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -57,4 +57,4 @@ sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
 
 } // end of namespace unodevtools
 
-#endif // _UNODEVTOOLS_OPTIONS_HXX_
+#endif // INCLUDED_UNODEVTOOLS_OPTIONS_HXX
