@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:19:41 $
+#   last change: $Author: vg $ $Date: 2006-03-15 09:30:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,24 +47,14 @@ LIBSALCPPRT=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)$(COMID)"=="SOLARISC52"
-LINK=cc
-LINKFLAGS=
-LINKFLAGSAPP=
-STDLIB= -lX11 -ldl -lc -lm
-.ENDIF          # "$(OS)$(COMID)"=="SOLARISC52"
-
 .IF "$(COM)"=="GCC"
-#LINK=gcc
 LINK=$(CC)
-LINKFLAGS=
-LINKFLAGSAPP=
-  .IF "$(OS)"=="FREEBSD"
-  STDLIB= -lX11 -lc -lm
-  .ELSE
-  STDLIB= -lX11 -ldl -lc -lm
-.ENDIF # "$(OS)"=="FREEBSD"
-.ENDIF          # "$(OS)$(COMID)"=="GCC"
+.ENDIF
+
+.IF "$(OS)"!="FREEBSD"
+STDLIB= -ldl
+.ENDIF
+
 
 APP1NOSAL=TRUE
 
