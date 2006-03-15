@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 18:02:14 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,51 +32,88 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _UNO_DEVTOOLS_SKELETONCOMMON_HXX_
-#define _UNO_DEVTOOLS_SKELETONCOMMON_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
+#define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 
 #ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
+#include "rtl/string.hxx"
 #endif
-#ifndef _REGISTRY_READER_HXX_
-#include <registry/reader.hxx>
+#ifndef INCLUDED_registry_reader_hxx
+#include "registry/reader.hxx"
 #endif
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#include <codemaker/typemanager.hxx>
+#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+#include "codemaker/typemanager.hxx"
 #endif
-#ifndef _CODEMAKER_UNOTYPE_HXX_
-#include <codemaker/unotype.hxx>
+#ifndef INCLUDED_CODEMAKER_UNOTYPE_HXX
+#include "codemaker/unotype.hxx"
 #endif
 
+#include <fstream>
 #include <hash_set>
 #include <hash_map>
-
-// #ifndef _UNO_DEVTOOLS_SKELETONMAKER_HXX_
-// #include "skeletonmaker.hxx"
-// #endif
 
 namespace skeletonmaker {
 
 struct ProgramOptions {
-    ProgramOptions(): java5(true), all(false), dump(false),
-                      shortnames(false), language(1) {}
+    ProgramOptions(): java5(true), all(false), dump(false), license(false),
+                      shortnames(false), supportpropertysetmixin(false),
+                      language(1), componenttype(1) {}
 
     bool java5;
     bool all;
     bool dump;
+    bool license;
     bool shortnames;
+    bool supportpropertysetmixin;
     // language specifier - is extendable
     // 1 = Java
     // 2 = C++
     short language;
+    // component type
+    // 1 = default UNO component - is extendable
+    // 2 = calc add-in
+    // 3 = add-on
+    short componenttype;
     rtl::OString outputpath;
     rtl::OString implname;
 };
 
-typedef ::std::hash_map< ::rtl::OString,
-                         std::pair< rtl::OString, sal_Int16 >,
-                         rtl::OStringHash > StringPairHashMap;
+// typedef ::std::hash_map< ::rtl::OString,
+//                          ::std::pair< rtl::OString, sal_Int16 >,
+//                          rtl::OStringHash > StringPairHashMap;
 
+typedef ::std::vector< ::std::pair< rtl::OString,
+                     ::std::pair< rtl::OString, sal_Int16 > > > AttributeInfo;
+
+/**
+   print the standard OpenOffice.org license header
+
+   @param o specifies the output stream
+   @param filename specifies the source file name
+*/
+void printLicenseHeader(std::ostream& o, rtl::OString const & filename);
+
+/**
+   create dependent on the output path, the implementation name and the
+   extension a new output file. If output path is equal "stdout" the tool
+   generates the output to standard out.
+
+   @param options the program options including the output path and the
+                  implementation name
+   @param extension specifies the file extensions (e.g. .cxx or .java)
+   @param ppOutputStream out parameter returning the output stream
+   @param targetSourceFileName out parameter returning the generated file name
+                               constructed on base of the output path, the
+                               implementation name and the extension
+   @param tmpSourceFileName out parameter returning the temporary file name based
+                            on the output path and a generated temporary file name.
+   @return true if output is generated to standard out or else false
+*/
+bool getOutputStream(ProgramOptions const & options,
+                     rtl::OString const & extension,
+                     std::ostream** ppOutputStream,
+                     rtl::OString & targetSourceFileName,
+                     rtl::OString & tmpSourceFileName);
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
     TypeManager const & manager, rtl::OString const & type,
@@ -88,30 +125,57 @@ void checkType(TypeManager const & manager,
                rtl::OString const & type,
                std::hash_set< rtl::OString, rtl::OStringHash >& interfaceTypes,
                std::hash_set< rtl::OString, rtl::OStringHash >& serviceTypes,
-               StringPairHashMap& properties);
+               AttributeInfo& properties);
 
 void checkDefaultInterfaces(
-         std::hash_set< rtl::OString, rtl::OStringHash >& interfaces,
-         const std::hash_set< rtl::OString, rtl::OStringHash >& services,
-         const rtl::OString & propertyhelper);
+    std::hash_set< rtl::OString, rtl::OStringHash >& interfaces,
+    const std::hash_set< rtl::OString, rtl::OStringHash >& services,
+    const rtl::OString & propertyhelper);
 
-rtl::OString checkPropertyHelper(TypeManager const & manager,
-         const std::hash_set< rtl::OString, rtl::OStringHash >& services,
-         StringPairHashMap& attributes,
-         std::hash_set< rtl::OString, rtl::OStringHash >& propinterfaces);
+rtl::OString checkPropertyHelper(
+    ProgramOptions const & options, TypeManager const & manager,
+    const std::hash_set< rtl::OString, rtl::OStringHash >& services,
+    const std::hash_set< rtl::OString, rtl::OStringHash >& interfaces,
+    AttributeInfo& attributes,
+    std::hash_set< rtl::OString, rtl::OStringHash >& propinterfaces);
 
-bool checkXComponentSupport(TypeManager const & manager,
-                            typereg::Reader const & reader);
+/**
+   checks whether the return and parameters types are valid and allowed
+   calc add-in type. The function throws a CannotDumpException with an
+   detailed error description which type is wrong
 
-// if XComponent is directly specified, return true and remove it from the
-// supported interfaces list
+   @param manager a type manager
+   @param reader a registry type reader of an interface defining
+                 calc add-in functions
+*/
+void checkAddInTypes(TypeManager const & manager,
+                     typereg::Reader const & reader);
+
+
+/**
+   checks if XComponent have to be supported, if yes it removes it from the
+   supported interfaces list becuase it becmoes implmented by the appropriate
+   helper
+
+   @param manager a type manager
+   @param interfaces a list of interfaces which should be implemented
+
+   @return true if XComponent have to be supported
+*/
 bool checkXComponentSupport(TypeManager const & manager,
          std::hash_set< rtl::OString, rtl::OStringHash >& interfaces);
+
 
 sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
                                         sal_uInt16 field, sal_uInt16 method);
 
+
+void generateFunctionParameterMap(std::ostream& o,
+         ProgramOptions const & options,
+         TypeManager const & manager,
+         const std::hash_set< ::rtl::OString, ::rtl::OStringHash >& interfaces);
+
 }
 
-#endif // _UNO_DEVTOOLS_SKELETONCOMMON_HXX_
+#endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 
