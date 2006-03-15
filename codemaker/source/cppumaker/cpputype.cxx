@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:26:41 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #include "includes.hxx"
 
 using namespace rtl;
+using namespace codemaker::cpp;
 
 namespace {
 
@@ -66,216 +67,6 @@ rtl::OString translateSimpleUnoType(rtl::OString const & unoType) {
         "::com::sun::star::uno::Type", "::com::sun::star::uno::Any",
         rtl::OString() };
     return trans[codemaker::UnoType::getSort(unoType)];
-}
-
-rtl::OString translateIdentifier(
-    rtl::OString const & unoIdentifier, rtl::OString const & prefix,
-    bool global, rtl::OString const * forbidden = 0)
-{
-    if (// Keywords:
-        unoIdentifier == "asm"
-        || unoIdentifier == "auto"
-        || unoIdentifier == "bool"
-        || unoIdentifier == "break"
-        || unoIdentifier == "case"
-        || unoIdentifier == "catch"
-        || unoIdentifier == "char"
-        || unoIdentifier == "class"
-        || unoIdentifier == "const"
-        /* unoIdentifier == "const_cast" */
-        || unoIdentifier == "continue"
-        || unoIdentifier == "default"
-        || unoIdentifier == "delete"
-        || unoIdentifier == "do"
-        || unoIdentifier == "double"
-        /* unoIdentifier == "dynamic_cast" */
-        || unoIdentifier == "else"
-        || unoIdentifier == "enum"
-        || unoIdentifier == "explicit"
-        || unoIdentifier == "export"
-        || unoIdentifier == "extern"
-        || unoIdentifier == "false"
-        || unoIdentifier == "float"
-        || unoIdentifier == "for"
-        || unoIdentifier == "friend"
-        || unoIdentifier == "goto"
-        || unoIdentifier == "if"
-        || unoIdentifier == "inline"
-        || unoIdentifier == "int"
-        || unoIdentifier == "long"
-        || unoIdentifier == "mutable"
-        || unoIdentifier == "namespace"
-        || unoIdentifier == "new"
-        || unoIdentifier == "operator"
-        || unoIdentifier == "private"
-        || unoIdentifier == "protected"
-        || unoIdentifier == "public"
-        || unoIdentifier == "register"
-        /* unoIdentifier == "reinterpret_cast" */
-        || unoIdentifier == "return"
-        || unoIdentifier == "short"
-        || unoIdentifier == "signed"
-        || unoIdentifier == "sizeof"
-        || unoIdentifier == "static"
-        /* unoIdentifier == "static_cast" */
-        || unoIdentifier == "struct"
-        || unoIdentifier == "switch"
-        || unoIdentifier == "template"
-        || unoIdentifier == "this"
-        || unoIdentifier == "throw"
-        || unoIdentifier == "true"
-        || unoIdentifier == "try"
-        || unoIdentifier == "typedef"
-        || unoIdentifier == "typeid"
-        || unoIdentifier == "typename"
-        || unoIdentifier == "union"
-        || unoIdentifier == "unsigned"
-        || unoIdentifier == "using"
-        || unoIdentifier == "virtual"
-        || unoIdentifier == "void"
-        || unoIdentifier == "volatile"
-        /* unoIdentifier == "wchar_t" */
-        || unoIdentifier == "while"
-        // Alternative representations:
-        || unoIdentifier == "and"
-        /* unoIdentifier == "and_eq" */
-        || unoIdentifier == "bitand"
-        || unoIdentifier == "bitor"
-        || unoIdentifier == "compl"
-        || unoIdentifier == "not"
-        /* unoIdentifier == "not_eq" */
-        || unoIdentifier == "or"
-        /* unoIdentifier == "or_eq" */
-        || unoIdentifier == "xor"
-        /* unoIdentifier == "xor_eq" */
-        // Standard macros:
-        || unoIdentifier == "BUFSIZ"
-        || unoIdentifier == "CLOCKS_PER_SEC"
-        || unoIdentifier == "EDOM"
-        || unoIdentifier == "EOF"
-        || unoIdentifier == "ERANGE"
-        || unoIdentifier == "EXIT_FAILURE"
-        || unoIdentifier == "EXIT_SUCCESS"
-        || unoIdentifier == "FILENAME_MAX"
-        || unoIdentifier == "FOPEN_MAX"
-        || unoIdentifier == "HUGE_VAL"
-        || unoIdentifier == "LC_ALL"
-        || unoIdentifier == "LC_COLLATE"
-        || unoIdentifier == "LC_CTYPE"
-        || unoIdentifier == "LC_MONETARY"
-        || unoIdentifier == "LC_NUMERIC"
-        || unoIdentifier == "LC_TIME"
-        || unoIdentifier == "L_tmpnam"
-        || unoIdentifier == "MB_CUR_MAX"
-        || unoIdentifier == "NULL"
-        || unoIdentifier == "RAND_MAX"
-        || unoIdentifier == "SEEK_CUR"
-        || unoIdentifier == "SEEK_END"
-        || unoIdentifier == "SEEK_SET"
-        || unoIdentifier == "SIGABRT"
-        || unoIdentifier == "SIGFPE"
-        || unoIdentifier == "SIGILL"
-        || unoIdentifier == "SIGINT"
-        || unoIdentifier == "SIGSEGV"
-        || unoIdentifier == "SIGTERM"
-        || unoIdentifier == "SIG_DFL"
-        || unoIdentifier == "SIG_ERR"
-        || unoIdentifier == "SIG_IGN"
-        || unoIdentifier == "TMP_MAX"
-        || unoIdentifier == "WCHAR_MAX"
-        || unoIdentifier == "WCHAR_MIN"
-        || unoIdentifier == "WEOF"
-        /* unoIdentifier == "_IOFBF" */
-        /* unoIdentifier == "_IOLBF" */
-        /* unoIdentifier == "_IONBF" */
-        || unoIdentifier == "assert"
-        || unoIdentifier == "errno"
-        || unoIdentifier == "offsetof"
-        || unoIdentifier == "setjmp"
-        || unoIdentifier == "stderr"
-        || unoIdentifier == "stdin"
-        || unoIdentifier == "stdout"
-        /* unoIdentifier == "va_arg" */
-        /* unoIdentifier == "va_end" */
-        /* unoIdentifier == "va_start" */
-        // Standard values:
-        || unoIdentifier == "CHAR_BIT"
-        || unoIdentifier == "CHAR_MAX"
-        || unoIdentifier == "CHAR_MIN"
-        || unoIdentifier == "DBL_DIG"
-        || unoIdentifier == "DBL_EPSILON"
-        || unoIdentifier == "DBL_MANT_DIG"
-        || unoIdentifier == "DBL_MAX"
-        || unoIdentifier == "DBL_MAX_10_EXP"
-        || unoIdentifier == "DBL_MAX_EXP"
-        || unoIdentifier == "DBL_MIN"
-        || unoIdentifier == "DBL_MIN_10_EXP"
-        || unoIdentifier == "DBL_MIN_EXP"
-        || unoIdentifier == "FLT_DIG"
-        || unoIdentifier == "FLT_EPSILON"
-        || unoIdentifier == "FLT_MANT_DIG"
-        || unoIdentifier == "FLT_MAX"
-        || unoIdentifier == "FLT_MAX_10_EXP"
-        || unoIdentifier == "FLT_MAX_EXP"
-        || unoIdentifier == "FLT_MIN"
-        || unoIdentifier == "FLT_MIN_10_EXP"
-        || unoIdentifier == "FLT_MIN_EXP"
-        || unoIdentifier == "FLT_RADIX"
-        || unoIdentifier == "FLT_ROUNDS"
-        || unoIdentifier == "INT_MAX"
-        || unoIdentifier == "INT_MIN"
-        || unoIdentifier == "LDBL_DIG"
-        || unoIdentifier == "LDBL_EPSILON"
-        || unoIdentifier == "LDBL_MANT_DIG"
-        || unoIdentifier == "LDBL_MAX"
-        || unoIdentifier == "LDBL_MAX_10_EXP"
-        || unoIdentifier == "LDBL_MAX_EXP"
-        || unoIdentifier == "LDBL_MIN"
-        || unoIdentifier == "LDBL_MIN_10_EXP"
-        || unoIdentifier == "LDBL_MIN_EXP"
-        || unoIdentifier == "LONG_MAX"
-        || unoIdentifier == "LONG_MIN"
-        || unoIdentifier == "MB_LEN_MAX"
-        || unoIdentifier == "SCHAR_MAX"
-        || unoIdentifier == "SCHAR_MIN"
-        || unoIdentifier == "SHRT_MAX"
-        || unoIdentifier == "SHRT_MIN"
-        || unoIdentifier == "UCHAR_MAX"
-        || unoIdentifier == "UINT_MAX"
-        || unoIdentifier == "ULONG_MAX"
-        || unoIdentifier == "USHRT_MAX"
-        || (global
-            && (// Standard types:
-                /* unoIdentifier == "clock_t" */
-                /* unoIdentifier == "div_t" */
-                unoIdentifier == "FILE"
-                /* unoIdentifier == "fpos_t" */
-                /* unoIdentifier == "jmp_buf" */
-                || unoIdentifier == "lconv"
-                /* unoIdentifier == "ldiv_t" */
-                /* unoIdentifier == "mbstate_t" */
-                /* unoIdentifier == "ptrdiff_t" */
-                /* unoIdentifier == "sig_atomic_t" */
-                /* unoIdentifier == "size_t" */
-                /* unoIdentifier == "time_t" */
-                || unoIdentifier == "tm"
-                /* unoIdentifier == "va_list" */
-                /* unoIdentifier == "wctrans_t" */
-                /* unoIdentifier == "wctype_t" */
-                /* unoIdentifier == "wint_t" */
-                // Standard namespaces:
-                || unoIdentifier == "std"))
-        // Others:
-        || unoIdentifier == "NDEBUG"
-        || forbidden != 0 && unoIdentifier == *forbidden)
-    {
-        rtl::OStringBuffer buf(prefix);
-        buf.append('_');
-        buf.append(unoIdentifier);
-        return buf.makeStringAndClear();
-    } else {
-        return unoIdentifier;
-    }
 }
 
 }
@@ -369,7 +160,8 @@ void CppuType::dumpGetCppuTypePreamble(FileStream & out) {
         out << indent()
             << "static inline ::com::sun::star::uno::Type const & get() {\n";
     } else {
-        if (codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false)) {
+        if (codemaker::cppumaker::dumpNamespaceOpen(out, m_typeMgr,
+                                                    m_typeName, false)) {
             out << "\n\n";
         }
         out << ("inline ::com::sun::star::uno::Type const &"
@@ -605,7 +397,7 @@ void CppuType::dumpInitializer(
                         {
                             typereg::Reader reader(m_typeMgr.getTypeReader(t));
                             OSL_ASSERT(reader.isValid());
-                            out << scopedName(rtl::OString(), t) << "_"
+                            out << scopedCppName(m_typeMgr, t) << "_"
                                 << rtl::OUStringToOString(
                                     reader.getFieldName(0),
                                     RTL_TEXTENCODING_UTF8);
@@ -919,8 +711,11 @@ void CppuType::dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag)
     }
 }
 
-bool CppuType::isGlobal() const {
-    return m_typeName.indexOf('/') < 0;
+IdentifierTranslationMode CppuType::isGlobal() const {
+    if ( m_typeName.indexOf('/') < 0 )
+        return ITM_GLOBAL;
+    else
+        return ITM_NONGLOBAL;
 }
 
 sal_uInt32 CppuType::getMemberCount()
@@ -1098,9 +893,10 @@ void CppuType::dumpType(FileStream& o, const OString& type,
     {
         case RT_TYPE_INTERFACE:
             if (bNative)
-                o << scopedName(m_typeName, relType);
+                o << scopedCppName(m_typeMgr, relType);
             else
-                o << "::com::sun::star::uno::Reference< " << scopedName(m_typeName, relType) << " >";
+                o << "::com::sun::star::uno::Reference< "
+                  << scopedCppName(m_typeMgr, relType) << " >";
             break;
         case RT_TYPE_INVALID:
             {
@@ -1109,7 +905,8 @@ void CppuType::dumpType(FileStream& o, const OString& type,
                 {
                     o << tmp;
                 } else
-                    throw CannotDumpException("Unknown type '" + relType + "', incomplete type library.");
+                    throw CannotDumpException("Unknown type '" + relType +
+                                              "', incomplete type library.");
             }
             break;
         case RT_TYPE_STRUCT:
@@ -1117,7 +914,7 @@ void CppuType::dumpType(FileStream& o, const OString& type,
         case RT_TYPE_TYPEDEF:
         case RT_TYPE_EXCEPTION:
             {
-                o << scopedName(m_typeName, relType);
+                o << scopedCppName(m_typeMgr, relType);
                 if (!args.empty()) {
                     o << "< ";
                     for (std::vector< rtl::OString >::iterator i(args.begin());
@@ -1464,7 +1261,7 @@ sal_Bool InterfaceType::dumpHFile(
     o << ("\nnamespace com { namespace sun { namespace star { namespace uno {\n"
           "class Type;\n} } } }\n\n");
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
     dumpDeclaration(o);
@@ -1480,22 +1277,117 @@ sal_Bool InterfaceType::dumpHFile(
     return sal_True;
 }
 
+
+/* collects all base interface of a given interface.
+ */
+void collectBases(TypeManager const & manager,
+                  typereg::Reader const & reader,
+                  StringSet & bases)
+{
+    for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i)
+    {
+        OString supertype = rtl::OUStringToOString(
+            reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8);
+
+        if ( ! supertype.equals("com/sun/star/uno/XInterface") ) {
+            bases.insert(supertype);
+
+            typereg::Reader super(manager.getTypeReader(supertype));
+            collectBases(manager, super, bases);
+        }
+    }
+}
+
+/* collects ambiguous base interfaces by firstly collecting all bases
+   from the direct parents and secondly build an intersection of this
+   collected base sets.
+ */
+StringSet collectAmbiguousBases(TypeManager const & manager,
+                           typereg::Reader const & reader)
+{
+    std::vector< StringSet > basesets;
+    for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i)
+    {
+        OString superType = rtl::OUStringToOString(
+            reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8);
+
+        typereg::Reader super(manager.getTypeReader(superType));
+        StringSet bases;
+        collectBases(manager, super, bases);
+        basesets.push_back(bases);
+    }
+
+    StringSet ambiguousbases;
+    long index=1;
+    long length = static_cast< long >(basesets.size());
+    for (std::vector<StringSet>::const_iterator iter(basesets.begin());
+             iter != basesets.end(); ++iter)
+    {
+        for (long i=index; i < length; ++i)
+        {
+            std::set_intersection((*iter).begin(), (*iter).end(),
+                                  basesets[i].begin(), basesets[i].end(),
+                                  std::inserter(
+                                      ambiguousbases, ambiguousbases.begin()),
+                                  LessString());
+        }
+        ++index;
+    }
+    return ambiguousbases;
+}
+
+/* dump the re-declaration of ambiguous base interfaces. It simply declares all
+   ambiguous methods and attribute methods again to avoid ambiguity.
+ */
+void InterfaceType::dumpAmbiguousBaseInterfaces(FileStream& o)
+{
+    StringSet ambiguousBases = collectAmbiguousBases(m_typeMgr, m_reader);
+
+    if (ambiguousBases.size() > 0)
+        o << indent() << "// begin re-declaration of ambiguous base "
+            "interfaces";
+
+    for (StringSet::const_iterator i(ambiguousBases.begin());
+             i != ambiguousBases.end(); ++i)
+    {
+        typereg::Reader ambiguousreader(m_typeMgr.getTypeReader(*i));
+        if (ambiguousreader.isValid()) {
+            InterfaceType iType(ambiguousreader, *i, m_typeMgr);
+
+            o << "\n" << indent() << "// disambiguate "
+              << iType.m_typeName.replace('/', '.') << ":";
+            iType.inc();
+            iType.dumpAttributes(o);
+            iType.dumpMethods(o);
+        }
+    }
+
+    if (ambiguousBases.size() > 0)
+        o << indent() << "// end re-declaration of ambiguous base "
+            "interfaces\n";
+}
+
+
 sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
+//     rtl::OString cppName(translateUnoToCppIdentifier(
+//                              m_name, "interface", ITM_KEYWORDSONLY, &m_name));
+
+//  o << "\nclass SAL_NO_VTABLE " << cppName;
     o << "\nclass SAL_NO_VTABLE " << m_name;
 
     for (sal_Int16 i = 0; i < m_reader.getSuperTypeCount(); ++i) {
         o << (i == 0 ? " :" : ",") << " public "
-          << scopedName(
-              m_typeName,
-              rtl::OUStringToOString(
-                  m_reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8));
+          << scopedCppName(m_typeMgr, rtl::OUStringToOString(
+                            m_reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8));
     }
 
     o << "\n{\npublic:\n";
 
     inc();
+
+    dumpAmbiguousBaseInterfaces(o);
 
     dumpAttributes(o);
     dumpMethods(o);
@@ -1523,8 +1415,11 @@ sal_Bool InterfaceType::dumpHxxFile(
 
     dumpGetCppuType(o);
 
+//     rtl::OString cppName(translateUnoToCppIdentifier(
+//                              m_name, "interface", ITM_KEYWORDSONLY, &m_name));
+
     o << "\n::com::sun::star::uno::Type const & "
-      << scopedName(rtl::OString(), m_typeName)
+      << scopedCppName(m_typeMgr, m_typeName)
       << "::static_type(void *) {\n";
     inc();
     o << indent() << "return ::getCppuType(static_cast< ";
@@ -1647,6 +1542,8 @@ void InterfaceType::dumpMethods(FileStream& o)
             }
 
             dumpType(o, paramType, bConst, bRef);
+//          o << " " << translateUnoToCppIdentifier(
+//                 paramName, "param", ITM_KEYWORDSONLY, NULL);
             o << " " << paramName;
 
             if (j+1 < (sal_uInt16)paramCount) o << ", ";
@@ -2262,8 +2159,7 @@ void InterfaceType::dumpExceptionSpecification(
                     out << ", ";
                 }
                 first = false;
-                out << scopedName(
-                    m_typeName,
+                out << scopedCppName(m_typeMgr,
                     rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8));
             }
         }
@@ -2402,7 +2298,7 @@ sal_Bool ConstantsType::dumpHFile(
     includes.dump(o, 0);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, true)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, true)) {
         o << "\n";
     }
     o << "\n";
@@ -2537,7 +2433,7 @@ sal_Bool StructureType::dumpHFile(
     includes.dump(o, 0);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
 
@@ -2581,7 +2477,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
         OSL_ASSERT(base.getLength() > 0); //TODO
     }
     if (base.getLength() > 0) {
-        o << ": public " << scopedName(m_typeName, base);
+        o << ": public " << scopedCppName(m_typeMgr, base);
     }
     o << " {\n";
     inc();
@@ -2634,7 +2530,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
                 && type != "hyper" && type != "unsigned hyper")
             {
                 OSL_ASSERT(!parameterized);
-                o << " CPPU_GCC3_ALIGN(" << scopedName(m_typeName, base) << ")";
+                o << " CPPU_GCC3_ALIGN(" << scopedCppName(m_typeMgr, base) << ")";
             }
             o << ";\n";
         }
@@ -2661,7 +2557,7 @@ sal_Bool StructureType::dumpHxxFile(
     includes.dump(o, &m_typeName);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
     o << "\n";
@@ -2679,7 +2575,7 @@ sal_Bool StructureType::dumpHxxFile(
     sal_Bool first = sal_True;
     if (superType.getLength() > 0)
     {
-        o << indent() << ": " << scopedName(m_typeName, superType) << "()\n";
+        o << indent() << ": " << scopedCppName(m_typeMgr, superType) << "()\n";
         first = sal_False;
     }
 
@@ -2756,7 +2652,7 @@ sal_Bool StructureType::dumpHxxFile(
         sal_Bool first = sal_True;
         if (superType.getLength() > 0)
         {
-            o << indent() << ": " << scopedName(m_typeName, superType) << "(";
+            o << indent() << ": " << scopedCppName(m_typeMgr, superType) << "(";
             dumpSuperMember(o, superType, sal_False);
             o << ")\n";
             first = sal_False;
@@ -3246,7 +3142,7 @@ sal_Bool ExceptionType::dumpHFile(
     includes.dump(o, 0);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
 
@@ -3279,7 +3175,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
     if (superType.getLength() > 0)
-                    o << " : public " << scopedName(m_typeName, superType);
+                    o << " : public " << scopedCppName(m_typeMgr, superType);
 
     o << "\n{\npublic:\n";
     inc();
@@ -3345,7 +3241,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
         if (i == 0 && superType.getLength() &&
             !fieldType.equals("double") && !fieldType.equals("hyper") && !fieldType.equals("unsigned hyper"))
         {
-            o << " CPPU_GCC3_ALIGN( " << scopedName(m_typeName, superType) << " )";
+            o << " CPPU_GCC3_ALIGN( " << scopedCppName(m_typeMgr, superType) << " )";
         }
         o << ";\n";
     }
@@ -3368,7 +3264,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     includes.dump(o, &m_typeName);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
     o << "\n";
@@ -3383,7 +3279,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     sal_Bool first = sal_True;
     if (superType.getLength() > 0)
     {
-        o << indent() << ": " << scopedName(m_typeName, superType) << "()\n";
+        o << indent() << ": " << scopedCppName(m_typeMgr, superType) << "()\n";
         first = sal_False;
     }
 
@@ -3460,7 +3356,7 @@ sal_Bool ExceptionType::dumpHxxFile(
         sal_Bool first = sal_True;
         if (superType.getLength() > 0)
         {
-            o << indent() << ": " << scopedName(m_typeName, superType) << "(";
+            o << indent() << ": " << scopedCppName(m_typeMgr, superType) << "(";
             dumpSuperMember(o, superType, sal_False);
             o << ")\n";
             first = sal_False;
@@ -3504,7 +3400,7 @@ sal_Bool ExceptionType::dumpHxxFile(
       << " const & the_other)";
     first = true;
     if (superType.getLength() > 0) {
-        o << ": " << scopedName(m_typeName, superType) << "(the_other)";
+        o << ": " << scopedCppName(m_typeMgr, superType) << "(the_other)";
         first = false;
     }
     for (sal_uInt16 i = 0; i < fieldCount; ++i) {
@@ -3523,7 +3419,7 @@ sal_Bool ExceptionType::dumpHxxFile(
       << ("//TODO: Just like its implicitly-defined counterpart, this function"
           " definition is not exception-safe\n");
     if (superType.getLength() > 0) {
-        o << indent() << scopedName(m_typeName, superType)
+        o << indent() << scopedCppName(m_typeMgr, superType)
           << "::operator =(the_other);\n";
     }
     for (sal_uInt16 i = 0; i < fieldCount; ++i) {
@@ -3628,7 +3524,7 @@ sal_Bool EnumType::dumpHFile(
     includes.dump(o, 0);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
 
@@ -3718,7 +3614,7 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     o << indent() << "typelib_static_enum_type_init( &the_type,\n";
     inc(31);
     o << indent() << "\"" << m_typeName.replace('/', '.') << "\",\n"
-      << indent() << scopedName(OString(), m_typeName) << "_"
+      << indent() << scopedCppName(m_typeMgr, m_typeName) << "_"
       << rtl::OUStringToOString(m_reader.getFieldName(0), RTL_TEXTENCODING_UTF8)
       << " );\n";
     dec(31);
@@ -3779,7 +3675,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << "\n" << indent() << "typelib_typedescription_newEnum( &pTD,\n";
     inc();
     o << indent() << "sTypeName.pData,\n"
-      << indent() << "(sal_Int32)" << scopedName("", m_typeName, sal_False)
+      << indent() << "(sal_Int32)" << scopedCppName(m_typeMgr, m_typeName, sal_False)
       << "_"
       << rtl::OUStringToOString(m_reader.getFieldName(0), RTL_TEXTENCODING_UTF8)
       << ",\n"
@@ -3831,7 +3727,7 @@ sal_Bool TypeDefType::dumpHFile(
     includes.dump(o, 0);
     o << "\n";
 
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
 
@@ -3981,12 +3877,13 @@ sal_Bool ServiceType::dumpHxxFile(
             }
         }
     }
-    rtl::OString cppName(translateIdentifier(m_name, "service", isGlobal()));
+    rtl::OString cppName(translateUnoToCppIdentifier(
+                             m_name, "service", isGlobal()));
     rtl::OString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
     includes.dump(o, 0);
     o << "\n";
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
     o << "\nclass " << cppName << " {\n";
@@ -3997,13 +3894,14 @@ sal_Bool ServiceType::dumpHxxFile(
             rtl::OUStringToOString(
                 m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
         rtl::OString fullBaseName(baseName.replace('/', '.'));
-        rtl::OString scopedBaseName(scopedName(rtl::OString(), baseName));
+        rtl::OString scopedBaseName(scopedCppName(m_typeMgr, baseName));
         o << "public:\n";
         for (sal_uInt16 i = 0; i < ctors; ++i) {
             if (isDefaultConstructor(i)) {
                 o << indent() << "static ::com::sun::star::uno::Reference< "
                   << scopedBaseName << " > "
-                  << translateIdentifier("create", "method", false, &cppName)
+                  << translateUnoToCppIdentifier(
+                      "create", "method", ITM_NONGLOBAL, &cppName)
                   << ("(::com::sun::star::uno::Reference<"
                       " ::com::sun::star::uno::XComponentContext > const &"
                       " the_context) {\n");
@@ -4064,10 +3962,10 @@ sal_Bool ServiceType::dumpHxxFile(
             } else {
                 o << indent() << "static ::com::sun::star::uno::Reference< "
                   << scopedBaseName << " > "
-                  << translateIdentifier(
+                  << translateUnoToCppIdentifier(
                       rtl::OUStringToOString(
                           m_reader.getMethodName(i), RTL_TEXTENCODING_UTF8),
-                      "method", false, &cppName)
+                      "method", ITM_NONGLOBAL, &cppName)
                   << ("(::com::sun::star::uno::Reference<"
                       " ::com::sun::star::uno::XComponentContext > const &"
                       " the_context");
@@ -4089,11 +3987,11 @@ sal_Bool ServiceType::dumpHxxFile(
                     bool byRef = passByReference(type);
                     dumpType(o, type, byRef, byRef);
                     o << " "
-                      << translateIdentifier(
+                      << translateUnoToCppIdentifier(
                           rtl::OUStringToOString(
                               m_reader.getMethodParameterName(i, j),
                               RTL_TEXTENCODING_UTF8),
-                          "param", false);
+                          "param", ITM_NONGLOBAL);
                 }
                 o << ") {\n";
                 inc();
@@ -4118,11 +4016,11 @@ sal_Bool ServiceType::dumpHxxFile(
                     for (sal_uInt16 j = 0; j < params; ++j) {
                         o << indent() << "the_arguments[" << j << "] ";
                         rtl::OString param(
-                            translateIdentifier(
+                            translateUnoToCppIdentifier(
                                 rtl::OUStringToOString(
                                     m_reader.getMethodParameterName(i, j),
                                     RTL_TEXTENCODING_UTF8),
-                                "param", false));
+                                "param", ITM_NONGLOBAL));
                         sal_Int32 rank;
                         if (codemaker::UnoType::getSort(
                                 codemaker::UnoType::decompose(
@@ -4171,11 +4069,11 @@ sal_Bool ServiceType::dumpHxxFile(
                       "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
                   << fullName << "\")), ";
                 if (rest) {
-                    o << translateIdentifier(
+                    o << translateUnoToCppIdentifier(
                         rtl::OUStringToOString(
                             m_reader.getMethodParameterName(i, 0),
                             RTL_TEXTENCODING_UTF8),
-                        "param", false);
+                        "param", ITM_NONGLOBAL);
                 } else if (params == 0) {
                     o << ("::com::sun::star::uno::Sequence<"
                           " ::com::sun::star::uno::Any >()");
@@ -4288,13 +4186,14 @@ sal_Bool SingletonType::dumpHxxFile(
     FileStream & o, codemaker::cppumaker::Includes & includes)
     throw (CannotDumpException)
 {
-    rtl::OString cppName(translateIdentifier(m_name, "singleton", isGlobal()));
+    rtl::OString cppName(translateUnoToCppIdentifier(
+                             m_name, "singleton", isGlobal()));
     rtl::OString fullName(m_typeName.replace('/', '.'));
     rtl::OString baseName(
         rtl::OUStringToOString(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
     rtl::OString fullBaseName(baseName.replace('/', '.'));
-    rtl::OString scopedBaseName(scopedName(rtl::OString(), baseName));
+    rtl::OString scopedBaseName(scopedCppName(m_typeMgr, baseName));
     rtl::OString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
     //TODO: Decide whether the types added to includes should rather be added to
@@ -4307,14 +4206,14 @@ sal_Bool SingletonType::dumpHxxFile(
     includes.addRtlUstringHxx();
     includes.dump(o, 0);
     o << "\n";
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
+    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeMgr, m_typeName, false)) {
         o << "\n";
     }
     o << "\nclass " << cppName << " {\npublic:\n";
     inc();
     o << indent() << "static ::com::sun::star::uno::Reference< "
       << scopedBaseName << " > "
-      << translateIdentifier("get", "method", false, &cppName)
+      << translateUnoToCppIdentifier("get", "method", ITM_NONGLOBAL, &cppName)
       << ("(::com::sun::star::uno::Reference<"
           " ::com::sun::star::uno::XComponentContext > const & context) {\n");
     inc();
@@ -4616,6 +4515,7 @@ bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
 //*************************************************************************
 // scopedName
 //*************************************************************************
+/*
 OString scopedName(const OString& scope, const OString& type,
                    sal_Bool bNoNameSpace)
 {
@@ -4631,8 +4531,15 @@ OString scopedName(const OString& scope, const OString& type,
     do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(0, '/', nPos));
+        OString token(type.getToken(0, '/', nPos));
+        if (nPos != -1)
+            tmpBuf.append(translateUnoToCppIndentifier(
+                              token, "module", ITM_KEYWORDSONLY));
+        else
+            tmpBuf.append(translateUnoToCppIndentifier(
+                              token, "interface", ITM_KEYWORDSONLY));
     } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
+*/
