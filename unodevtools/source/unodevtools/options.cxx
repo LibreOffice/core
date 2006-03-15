@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-25 12:25:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,11 @@
 
 #include <stdio.h>
 
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/process.h>
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/process.h"
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -73,22 +73,20 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
     if (aArg.getLength() < aOpt.getLength())
         return sal_False;
 
-    if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) ))
-    {
+    if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) )) {
         // take next argument
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
-        if (*pnIndex >= (sal_Int32)rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
+        if (*pnIndex >= (sal_Int32)rtl_getAppCommandArgCount() ||
+            pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
             buf.appendAscii( pOpt );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" given!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
-        }
-        else
-        {
+        } else {
 #if OSL_DEBUG_LEVEL > 1
             out( "\n> identified option -" );
             out( pOpt );
@@ -99,9 +97,7 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
             ++(*pnIndex);
             return sal_True;
         }
-    }
-      else if (aArg.indexOf(aOpt) == 1)
-    {
+    } else if (aArg.indexOf(aOpt) == 1) {
         *pValue = aArg.copy(1 + aOpt.getLength());
 #if OSL_DEBUG_LEVEL > 1
         out( "\n> identified option -" );
