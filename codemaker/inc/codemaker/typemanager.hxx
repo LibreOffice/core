@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:07:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,19 @@
  *
  ************************************************************************/
 
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#define _CODEMAKER_TYPEMANAGER_HXX_
+#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+#define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 
+#ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #include "codemaker/global.hxx"
+#endif
 
+#ifndef _REGISTRY_REGISTRY_HXX_
 #include "registry/registry.hxx"
+#endif
+#ifndef INCLUDED_registry_types_h
 #include "registry/types.h"
+#endif
 
 #include <hash_map>
 #include <list>
@@ -189,4 +195,4 @@ protected:
     RegistryTypeManagerImpl* m_pImpl;
 };
 
-#endif // _CODEMAKER_TYPEMANAGER_HXX_
+#endif // INCLUDED_CODEMAKER_TYPEMANAGER_HXX
