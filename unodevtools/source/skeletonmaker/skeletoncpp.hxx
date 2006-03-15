@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncpp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,15 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _UNO_DEVTOOLS_SKELETONCPP_HXX_
-#define _UNO_DEVTOOLS_SKELETONCPP_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
+#define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 
 #include <fstream>
 
-#ifndef _CODEMAKER_GENERATEDTYPESET_HXX_
-#include <codemaker/generatedtypeset.hxx>
+#ifndef INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX
+#include "codemaker/generatedtypeset.hxx"
 #endif
-#ifndef _UNO_DEVTOOLS_SKELETONCOMMON_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 #include "skeletoncommon.hxx"
 #endif
 
@@ -52,18 +52,18 @@ namespace skeletonmaker { namespace cpp {
 // 2 = reference (includes css::uno::Reference for interfaces)
 // 4 = const reference  (includes css::uno::Reference for interfaces)
 // 8 = default construction for example for return types, means "return <type>();"
+// 16 = default member initialization in a constructor
 void printType(std::ostream & o,
                ProgramOptions const & options, TypeManager const & manager,
                codemaker::UnoType::Sort sort, RTTypeClass typeClass,
                rtl::OString const & name, sal_Int32 rank,
                std::vector< rtl::OString > const & arguments,
-               short referenceType, bool shortname=false,
-               bool defaultvalue=false);
+               short referenceType, bool defaultvalue=false);
 
 void printType(std::ostream & o,
                ProgramOptions const & options, TypeManager const & manager,
                rtl::OString const & type, short referenceType,
-               bool shortname=false, bool defaultvalue=false);
+               bool defaultvalue=false);
 
 
 bool printConstructorParameters(std::ostream & o,
@@ -86,16 +86,14 @@ void printMethodParameters(std::ostream & o,
                            TypeManager const & manager,
                            typereg::Reader const & reader,
                            sal_uInt16 method, bool previous,
-                           bool withtype,
-                           bool shortname=false);
+                           bool withtype);
 
 
 void printExceptionSpecification(std::ostream & o,
                                  ProgramOptions const & options,
                                  TypeManager const & manager,
                                  typereg::Reader const & reader,
-                                 sal_uInt16 method,
-                                 bool shortname=false);
+                                 sal_uInt16 method);
 
 
 void printMethods(std::ostream & o,
@@ -105,8 +103,8 @@ void printMethods(std::ostream & o,
                   rtl::OString const & delegate,
                   rtl::OString const & classname=rtl::OString(),
                   rtl::OString const & indentation=rtl::OString(),
-                  bool shortname=false, bool defaultvalue=false,
-                  bool usepropertymixin=false);
+                  bool defaultvalue=false,
+                  rtl::OString const & propertyhelper=rtl::OString());
 
 
 void printConstructionMethods(std::ostream & o,
@@ -146,7 +144,12 @@ void generateSkeleton(ProgramOptions const & options,
                       std::vector< rtl::OString > const & types,
                       rtl::OString const & delegate);
 
+void generateCalcAddin(ProgramOptions const & options,
+                       TypeManager const & manager,
+                       std::vector< rtl::OString > const & types,
+                       rtl::OString const & delegate);
+
 } }
 
-#endif // _UNO_DEVTOOLS_SKELETONCPP_HXX_
+#endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 
