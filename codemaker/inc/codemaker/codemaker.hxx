@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codemaker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:05:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,18 @@
 #ifndef INCLUDED_CODEMAKER_CODEMAKER_HXX
 #define INCLUDED_CODEMAKER_CODEMAKER_HXX
 
+#ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
-
+#endif
+#ifndef INCLUDED_CODEMAKER_UNOTYPES_HXX
 #include "codemaker/unotype.hxx"
-
+#endif
+#ifndef INCLUDED_registry_types_h
 #include "registry/types.h"
+#endif
+#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
+#endif
 
 #include <vector>
 
@@ -63,4 +69,4 @@ codemaker::UnoType::Sort decomposeAndResolve(
 
 }
 
-#endif
+#endif // INCLUDED_CODEMAKER_CODEMAKER_HXX
