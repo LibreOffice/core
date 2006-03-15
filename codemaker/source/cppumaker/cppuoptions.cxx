@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:11:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 #include <stdio.h>
 #include <string.h>
+
 #include "cppuoptions.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
@@ -330,8 +331,13 @@ OString CppuOptions::prepareHelp()
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
-    help += "    -L         = getCppuType function with a known leak.\n";
-    help += "    -C         = getCppuType function keeps comprehensive type information.\n";
+    help += "    -L         = UNO type functions are generated lightweight, that means only\n";
+    help += "                 the name and typeclass are given and everything else is retrieved\n";
+    help += "                 from the type library dynamically. The default is that UNO type\n";
+    help += "                 functions provides enough type information for boostrapping C++.\n";
+    help += "                 '-L' should be the default for external components.\n";
+    help += "    -C         = UNO type functions are generated comprehensive that means all\n";
+    help += "                 necessary information is available for bridging the type in UNO.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
     help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
