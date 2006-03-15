@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:18:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUMAKER_CPPUOPTIONS_HXX_
-#define _CPPUMAKER_CPPUOPTIONS_HXX_
+#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVAOPTIONS_HXX
+#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVAOPTIONS_HXX
 
-#include    <codemaker/options.hxx>
+#ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
+#include "codemaker/options.hxx"
+#endif
 
 class JavaOptions : public Options
 {
@@ -56,4 +58,4 @@ public:
 protected:
 };
 
-#endif // _CPPUMAKER_CPPUOPTIONS_HXX_
+#endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVAOPTIONS_HXX
