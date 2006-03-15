@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jsc $ $Date: 2005-10-19 08:53:44 $
+#   last change: $Author: vg $ $Date: 2006-03-15 09:19:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,10 @@ APP1OBJS = $(OBJ)$/skeletonmaker.obj \
     $(OBJ)$/javacompskeleton.obj \
     $(OBJ)$/cppcompskeleton.obj
 
+APP1DEPN= $(OUT)$/lib$/$(UNODEVTOOLSLIBDEPN) $(SOLARLIBDIR)$/$(CODEMAKERLIBDEPN) \
+    $(SOLARLIBDIR)$/$(COMMONCPPLIBDEPN) $(SOLARLIBDIR)$/$(COMMONJAVALIBDEPN)
 APP1STDLIBS = $(REGLIB) $(SALLIB) $(SALHELPERLIB) $(CPPULIB) $(CPPUHELPERLIB) \
-    $(UNODEVTOOLSLIB) $(CODEMAKERLIB) $(COMMONCPPLIB) $(COMMONJAVALIB)
+    $(UNODEVTOOLSLIBST) $(CODEMAKERLIBST) $(COMMONCPPLIBST) $(COMMONJAVALIBST)
 
 OBJFILES = $(APP1OBJS)
 
