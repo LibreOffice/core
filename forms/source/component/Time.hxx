@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:15 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@ protected:
                             translateExternalValueToControlValue( ) const;
 
     virtual ::com::sun::star::uno::Any
+                            translateControlValueToValidatableValue( ) const;
+
+    virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
@@ -111,6 +114,13 @@ protected:
 
 protected:
     DECLARE_XCLONEABLE();
+
+private:
+    /** translates the control value (the VCL-internal integer representation of a date) into
+        a UNO-Date.
+    */
+    void                    impl_translateControlValueToUNOTime(
+                                ::com::sun::star::uno::Any& _rUNOValue ) const;
 };
 
 //==================================================================
