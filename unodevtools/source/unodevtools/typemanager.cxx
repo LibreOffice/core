@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-19 08:55:39 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:22:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,12 @@
 
 #include "unodevtools/typemanager.hxx"
 
-#include <rtl/alloc.h>
-#include <registry/reader.hxx>
-#include <cppuhelper/bootstrap.hxx>
+#include "rtl/alloc.h"
+#include "registry/reader.hxx"
+#include "cppuhelper/bootstrap.hxx"
 
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include "com/sun/star/container/XSet.hpp"
+#include "com/sun/star/reflection/XTypeDescription.hpp"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -143,7 +143,8 @@ sal_Bool UnoTypeManager::init(
 
         std::vector< OUString >::const_iterator iter = registries.begin();
         int i = 0;
-        while (iter != registries.end()) {
+        while ( iter != registries.end() )
+        {
             Reference< XSimpleRegistry > xReg(
                 xServiceManager->createInstanceWithContext(
                     OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -188,11 +189,11 @@ OString UnoTypeManager::getTypeName(RegistryKey& rTypeKey) const
 {
     OString typeName = OUStringToOString(rTypeKey.getName(), RTL_TEXTENCODING_UTF8);
     static OString sBase("/UCR");
-    if (typeName.indexOf(sBase) == 0)
+    if (typeName.indexOf(sBase) == 0) {
         typeName = typeName.copy(typeName.indexOf('/', 1) + 1);
-    else
+    } else {
         typeName = typeName.copy(1);
-
+    }
     return typeName;
 }
 
@@ -209,14 +210,10 @@ typereg::Reader UnoTypeManager::getTypeReader(
     sal_uInt32 blobsize = 0;
 
     if ( (pBlob = getTypeBlob(m_pImpl->m_tdmgr, name, &blobsize)) != NULL )
-    {
         reader = typereg::Reader(pBlob, blobsize, sal_True, TYPEREG_VERSION_1);
-    }
 
     if ( pBlob )
-    {
         rtl_freeMemory(pBlob);
-    }
 
     return reader;
 }
@@ -225,16 +222,13 @@ typereg::Reader UnoTypeManager::getTypeReader(RegistryKey& rTypeKey) const
 {
     typereg::Reader reader;
 
-    if (rTypeKey.isValid())
-    {
+    if (rTypeKey.isValid()) {
         RegValueType    valueType;
         sal_uInt32      valueSize;
 
-        if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize))
-        {
+        if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize)) {
             sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-            if (!rTypeKey.getValue(OUString(), pBuffer))
-            {
+            if ( !rTypeKey.getValue(OUString(), pBuffer) ) {
                 reader = typereg::Reader(
                     pBuffer, valueSize, true, TYPEREG_VERSION_1);
             }
@@ -247,18 +241,15 @@ typereg::Reader UnoTypeManager::getTypeReader(RegistryKey& rTypeKey) const
 
 RTTypeClass UnoTypeManager::getTypeClass(const OString& name) const
 {
-    if (m_pImpl->m_t2TypeClass.count(name) > 0)
-    {
+    if ( m_pImpl->m_t2TypeClass.count(name) > 0 ) {
         return m_pImpl->m_t2TypeClass[name];
-    } else
-    {
+    } else {
         Reference< XTypeDescription > xTD;
         Any a = m_pImpl->m_tdmgr->getByHierarchicalName(
             OStringToOUString(name, RTL_TEXTENCODING_UTF8));
         a >>= xTD;
 
-        if ( xTD.is())
-        {
+        if ( xTD.is() ) {
             RTTypeClass tc = mapTypeClass(xTD->getTypeClass());
             if (tc != RT_TYPE_INVALID)
                 m_pImpl->m_t2TypeClass[name] = tc;
@@ -273,21 +264,16 @@ RTTypeClass UnoTypeManager::getTypeClass(RegistryKey& rTypeKey) const
 {
     OString name = getTypeName(rTypeKey);
 
-    if (m_pImpl->m_t2TypeClass.count(name) > 0)
-    {
+    if ( m_pImpl->m_t2TypeClass.count(name) > 0 ) {
         return m_pImpl->m_t2TypeClass[name];
-    } else
-    {
-        if (rTypeKey.isValid())
-        {
+    } else {
+        if ( rTypeKey.isValid() ) {
             RegValueType    valueType;
             sal_uInt32      valueSize;
 
-            if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize))
-            {
+            if ( !rTypeKey.getValueInfo(OUString(), &valueType, &valueSize) ) {
                 sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-                if (!rTypeKey.getValue(OUString(), pBuffer))
-                {
+                if ( !rTypeKey.getValue(OUString(), pBuffer) ) {
                     typereg::Reader reader(
                         pBuffer, valueSize, false, TYPEREG_VERSION_1);
 
