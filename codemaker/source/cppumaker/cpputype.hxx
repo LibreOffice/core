@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:46:47 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,16 +33,30 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUMAKER_CPPUTYPE_HXX_
-#define _CPPUMAKER_CPPUTYPE_HXX_
+#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
+#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 
+#ifndef INCLUDED_CODEMAKER_DEPENDENCIES_HXX
 #include "codemaker/dependencies.hxx"
+#endif
+#ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
 #include "codemaker/options.hxx"
+#endif
+#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 #include "codemaker/typemanager.hxx"
-
+#endif
+#ifndef INCLUDED_CODEMAKER_COMMONCPP_HXX
+#include "codemaker/commoncpp.hxx"
+#endif
+#ifndef INCLUDED_regisry_reader_hxx
 #include "registry/reader.hxx"
+#endif
+#ifndef INCLUDED_registry_types_h
 #include "registry/types.h"
+#endif
+#ifndef _RTL_STRING_HXX_
 #include "rtl/string.hxx"
+#endif
 
 namespace rtl { class OUString; }
 namespace codemaker {
@@ -115,7 +129,7 @@ protected:
     ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False) const;
     void    dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag);
 
-    bool isGlobal() const;
+    codemaker::cpp::IdentifierTranslationMode isGlobal() const;
 
     virtual void addSpecialDependencies() {}
 
@@ -175,6 +189,8 @@ public:
     sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+
+    void InterfaceType::dumpAmbiguousBaseInterfaces(FileStream& o);
 
     void        dumpAttributes(FileStream& o);
     void        dumpMethods(FileStream& o);
@@ -408,8 +424,8 @@ bool produceType(RegistryKey& typeName, bool bIsExtraType,
  * scoping of this type, e.g. com:.sun::star::uno::XInterface. If the scope of
  * the type is equal scope, the relativ name will be used.
  */
-::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type,
-                   sal_Bool bNoNameSpace=sal_False);
+// ::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type,
+//                 sal_Bool bNoNameSpace=sal_False);
 
-#endif // _CPPUMAKER_CPPUTYPE_HXX_
+#endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 
