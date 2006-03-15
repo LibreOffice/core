@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonjava.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:05:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,9 @@
 #ifndef INCLUDED_CODEMAKER_COMMONJAVA_HXX
 #define INCLUDED_CODEMAKER_COMMONJAVA_HXX
 
+#ifndef INCLUDED_CODEMAKER_CODEMAKER_HXX
 #include "codemaker/codemaker.hxx"
-
+#endif
 
 namespace codemaker { namespace java {
 
@@ -50,4 +51,4 @@ rtl::OString translateUnoToJavaIdentifier(
 
 } }
 
-#endif
+#endif // INCLUDED_CODEMAKER_COMMONJAVA_HXX
