@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:25 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _UNODEVTOOLS_TYPEMANAGER_HXX_
-#define _UNODEVTOOLS_TYPEMANAGER_HXX_
+#ifndef INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
+#define INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
 
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include <registry/registry.hxx>
 #endif
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
+#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 #include <codemaker/typemanager.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
