@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:06:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-15 09:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CODEMAKER_GLOBAL_HXX_
-#define _CODEMAKER_GLOBAL_HXX_
+#ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
+#define INCLUDED_CODEMAKER_GLOBAL_HXX
 
 #include <list>
 #include <vector>
@@ -42,9 +42,15 @@
 
 #include <stdio.h>
 
+#ifndef _OSL_FILE_HXX_
 #include "osl/file.hxx"
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
+#endif
+#ifndef _RTL_STRBUF_HXX_
 #include "rtl/strbuf.hxx"
+#endif
 
 struct EqualString
 {
@@ -155,5 +161,5 @@ public:
 };
 
 
-#endif // _CODEMAKER_GLOBAL_HXX_
+#endif // INCLUDED_CODEMAKER_GLOBAL_HXX
 
