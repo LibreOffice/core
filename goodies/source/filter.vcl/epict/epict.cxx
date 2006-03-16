@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:06:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ enum PictDrawingMethod {
 
 
 struct PictPattern {
-    ULONG nLo, nHi;
+    sal_uInt32 nLo, nHi;
 };
 
 
@@ -967,7 +967,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         nDstRowBytes = nWidth * 4;
 
         // Opcode und BaseAddr (?) schreiben:
-        *pPict << (USHORT)0x009a << (ULONG)0x000000ff;
+        *pPict << (USHORT)0x009a << (sal_uInt32)0x000000ff;
 
         // Normalerweise wollen wir den Packing-Type 4 (Run length encoding
         // for 32-Bit Pixels) erzeugen. Wenn aber RowBytes<8 gilt, sind die Daten
@@ -988,16 +988,16 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                << (USHORT)nWidth                // X2-Position der Bitmap in der Quelle
                << (USHORT)0x0000                // Version
                << (USHORT)nPackType             // Packing type
-               << (ULONG) 0x00000000            // Packing size (?)
-               << (ULONG) 0x00480000            // H-Res
-               << (ULONG) 0x00480000            // V-Res
+               << (sal_uInt32) 0x00000000            // Packing size (?)
+               << (sal_uInt32) 0x00480000            // H-Res
+               << (sal_uInt32) 0x00480000            // V-Res
                << (USHORT)0x0010                // Pixel type (?)
                << (USHORT)0x0020                // Pixel size: 32 bit
                << (USHORT)0x0004                // CmpCount: 4 Komponenten
                << (USHORT)0x0008                // CmpSize: 8 Bits
-               << (ULONG) 0x00000000            // PlaneBytes (?)
-               << (ULONG) 0x00000000            // (?)
-               << (ULONG) 0x00000000;           // (?)
+               << (sal_uInt32) 0x00000000            // PlaneBytes (?)
+               << (sal_uInt32) 0x00000000            // (?)
+               << (sal_uInt32) 0x00000000;           // (?)
 
         // Source-Rectangle schreiben:
         *pPict << (USHORT)0x0000                // Y1-Position auf der Bitmap
@@ -1174,20 +1174,20 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                << (USHORT)nWidth                // X2-Position der Bitmap in der Quelle
                << (USHORT)0x0000                // Version
                << (USHORT)nPackType             // Packing type
-               << (ULONG) 0x00000000            // Packing size (?)
-               << (ULONG) 0x00480000            // H-Res
-               << (ULONG) 0x00480000            // V-Res
+               << (sal_uInt32) 0x00000000            // Packing size (?)
+               << (sal_uInt32) 0x00480000            // H-Res
+               << (sal_uInt32) 0x00480000            // V-Res
                << (USHORT)0x0000                // Pixel type (?)
                << (USHORT)nBitsPerPixel         // Pixel size
                << (USHORT)0x0001                // CmpCount: 1 Komponente
                << (USHORT)nBitsPerPixel         // CmpSize
-               << (ULONG) 0x00000000            // PlaneBytes (?)
-               << (ULONG) 0x00000000            // (?)
-               << (ULONG) 0x00000000;           // (?)
+               << (sal_uInt32) 0x00000000            // PlaneBytes (?)
+               << (sal_uInt32) 0x00000000            // (?)
+               << (sal_uInt32) 0x00000000;           // (?)
 
         // Palette lesen und schreiben:
         nColTabSize = pAcc->GetPaletteEntryCount();
-        *pPict << (ULONG)0 << (USHORT)0x8000 << (USHORT)( nColTabSize - 1 );
+        *pPict << (sal_uInt32)0 << (USHORT)0x8000 << (USHORT)( nColTabSize - 1 );
 
         for ( i = 0; i < nColTabSize; i++ )
         {
@@ -2129,7 +2129,7 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     Rectangle   aRect( aPoint, aSize );
 
     // 512 Bytes "Muell" am Anfang:
-    for (i=0;i<128;i++) *pPict << (ULONG)0;
+    for (i=0;i<128;i++) *pPict << (sal_uInt32)0;
 
     // Lo-16-Bits der Groesse der Datei ohne die 512 Bytes Muell:
     *pPict << (USHORT)0; // wird spaeter durch UpdateHeader() berichtigt
@@ -2138,16 +2138,16 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     WriteRectangle( aRect );
 
     // Version 2:
-    *pPict << (ULONG)0x001102ff;
+    *pPict << (sal_uInt32)0x001102ff;
 
     // Extended-Version-2-Header:
     *pPict << (USHORT)0x0c00                            // Opcode
            << (USHORT)0xfffe                            // Version (?)
            << (USHORT)0x0000                            // Reserved
-           << (ULONG) 0x00480000                        // hRes
-           << (ULONG) 0x00480000;
+           << (sal_uInt32) 0x00480000                        // hRes
+           << (sal_uInt32) 0x00480000;
     WriteRectangle( aRect );
-    *pPict << (ULONG)0x00000000;                        // Reserved
+    *pPict << (sal_uInt32)0x00000000;                        // Reserved
 
     // viele Import-Filter verlangen die Angabe eines
     // Clipping-Bereichs am Anfang
