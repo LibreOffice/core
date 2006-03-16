@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pstm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:32:20 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
     if( nVer & PERSIST_LIST_DBGUTIL )
         nObjLen = rStm.ReadLen( &nObjPos );
 
-    ULONG nCount;
+    sal_uInt32 nCount;
     rStm >> nCount;
     for( ULONG n = 0; n < nCount && rStm.GetError() == SVSTREAM_OK; n++ )
     {
