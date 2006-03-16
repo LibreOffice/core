@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:54:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
     if( pIndices )
     {
         SvXMLStyleIndex_Impl aIndex( nFamily, rName );
-        sal_uInt32 nPos = 0;
+        ULONG nPos = 0;
         if( pIndices->Seek_Entry( &aIndex, &nPos ) )
             pStyle = pIndices->GetObject( nPos )->GetStyle();
     }
