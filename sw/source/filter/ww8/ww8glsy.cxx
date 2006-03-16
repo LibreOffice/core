@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
         SvStream &rStrm, const WW8Fib &rFib)
 {
     WW8PLCF aPlc( &rTableStrm, rFib.fcPlcfsed, rFib.lcbPlcfsed, 12 );
-    long start,ende;
+    WW8_CP start,ende;
     void *pData;
     aPlc.Get(start,ende,pData);
     UINT32 nPo = SVBT32ToLong((BYTE *)pData+2);
