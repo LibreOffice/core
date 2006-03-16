@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:08:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:39:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ public:
     void WritePc(SwWW8Writer& rWrt);
     void SetParaBreak();
     bool IsUnicode() const  { return bIsUni; }
-    ULONG Fc2Cp( ULONG nFc ) const;
+    WW8_CP Fc2Cp( ULONG nFc ) const;
 };
 
 class wwFont
@@ -618,7 +618,7 @@ public:
 
     ULONG ReplaceCr( BYTE nChar );
 
-    ULONG Fc2Cp( ULONG nFc ) const          { return pPiece->Fc2Cp( nFc ); }
+    WW8_CP Fc2Cp( ULONG nFc ) const          { return pPiece->Fc2Cp( nFc ); }
 
             // einige z.T. static halb-interne Funktions-Deklarationen
 
@@ -687,7 +687,7 @@ public:
     USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
 
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
-    bool MiserableRTLFrmFmtHack(long &rLeft, long &rRight,
+    bool MiserableRTLFrmFmtHack(SwTwips &rLeft, SwTwips &rRight,
         const sw::Frame &rFrmFmt);
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
@@ -740,9 +740,9 @@ protected:
     WW8_WrPlcSubDoc();
     virtual ~WW8_WrPlcSubDoc();
 
-    bool WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp, long& rCount);
-    void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, long& rTxtStt,
-        long& rTxtCnt, long& rRefStt, long& rRefCnt ) const;
+    bool WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp, WW8_CP& rCount);
+    void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, WW8_FC& rTxtStt,
+        sal_Int32& rTxtCnt, WW8_FC& rRefStt, sal_Int32& rRefCnt ) const;
 
     virtual const SvULongs* GetShapeIdArr() const;
 };
