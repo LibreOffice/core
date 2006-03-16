@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:24:55 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 11:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ import java.net.URL;
 import java.util.*;
 
 import org.w3c.dom.*;
-import com.sun.xml.tree.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
 import com.jclark.xsl.sax.*;
@@ -246,7 +245,10 @@ public class HelpIndexer {
                     in.setEncoding("UTF8");
                     Document docResolved = null;
                     try {
-                        docResolved = XmlDocument.createXmlDocument(in, false);
+                        DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+                        dFactory.setValidating(false);
+                        DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
+                        docResolved = dBuilder.parse(in);
                     } catch (Exception e) {
                         if (docResolved == null)
                             System.err.println("Nullpointer");
