@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:33:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2308,7 +2308,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
 
 
 sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uInt32& )
+        SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
 {
     if(!bDocChgdInDragging)
     {
@@ -2348,7 +2348,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
 
 
 sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uInt32& )
+        SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
 {
     if(!bDocChgdInDragging)
     {
