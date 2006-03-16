@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 17:54:12 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ private:
     Rectangle       maPrevRect;
     Rectangle       maNextRect;
     String          maDayOfWeekText;
-    long            mnDayOfWeekAry[7];
+    sal_Int32       mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
     Date            maFirstDate;
