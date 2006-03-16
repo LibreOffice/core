@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:48:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void    SwStdFontConfig::Commit()
         else
         {
             if(nDefaultFontHeight[nProp - DEF_FONT_COUNT] > 0)
-                pValues[nProp] <<= TWIP_TO_MM100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
+                pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]));
         }
     }
     PutProperties(aNames, aValues);
