@@ -58,9 +58,8 @@
     <property file="../inc/antbuild.properties"/>
 
     <path id="classpath">
-        <pathelement location="${solar.jar}/parser.jar"/>
-        <pathelement location="${solar.jar}/jaxp.jar"/>
-        <pathelement location="${solar.jar}/xerces.jar"/>
+        <pathelement location="${solar.jar}/xml-apis.jar"/>
+        <pathelement location="${solar.jar}/xercesImpl.jar"/>
         <pathelement location="${solar.jar}/unoil.jar"/>
         <pathelement location="${solar.jar}/ridl.jar"/>
         <pathelement location="${solar.jar}/jurt.jar"/>
@@ -96,7 +95,7 @@
                 <attribute name="Specification-Vendor" value="OpenOffice.org"/>
                 <attribute name="Specification-Version" value="0.6.0"/>
                 <attribute name="Implementation-Version" value="#IMPL-VERSION#"/>
-                <attribute name="Class-Path" value="jaxp.jar parser.jar"/>
+                <attribute name="Class-Path" value="xml-apis.jar xercesImpl.jar"/>
             </manifest>
          </jar>
     </target>
