@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1739,7 +1739,7 @@ void WW8_WrPlcPostIt::Append( WW8_CP nCp, const SwPostItField& rPostIt )
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
-    long& rCount)
+    WW8_CP& rCount)
 {
     bool bRet = false;
     USHORT nLen = aCntnt.Count();
@@ -1826,7 +1826,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
         // CR ans Ende ( sonst mault WW )
         rWrt.WriteStringAsPara( aEmptyStr );
 
-        ULONG nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        WW8_CP nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         pTxtPos->Append( nCpEnd );
         rCount = nCpEnd - nCpStart;
         if (rCount)
@@ -1836,7 +1836,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
 }
 
 void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
-    long& rTxtStart, long& rTxtCount, long& rRefStart, long& rRefCount ) const
+    WW8_FC& rTxtStart, sal_Int32& rTxtCount, WW8_FC& rRefStart, sal_Int32& rRefCount ) const
 {
     typedef ::std::vector<String>::iterator myiter;
 
