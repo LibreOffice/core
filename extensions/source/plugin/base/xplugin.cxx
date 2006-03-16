@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:52:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ void PluginDisposer::onShot()
     {
         if( m_pPlugin->isDisposable() )
         {
-            sal_uInt32 nEvent;
+            ULONG nEvent;
             Application::PostUserEvent( nEvent, LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
         }
     }
