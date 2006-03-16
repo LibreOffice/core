@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:56:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1723,7 +1723,7 @@ void SVTXRoadmap::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
+    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
 }
 
 
@@ -1739,7 +1739,7 @@ void SVTXRoadmap::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, s
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*) ProducerData.getConstArray(), Offset, Scansize );
+    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
     ImplUpdateImage( sal_True );
 }
 
