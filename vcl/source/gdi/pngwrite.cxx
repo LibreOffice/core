@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:09:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,8 +268,8 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
    /* png signature is always an array of 8 bytes */
     sal_uInt16 nOldMode = rOStm.GetNumberFormatInt();
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    rOStm << (ULONG)0x89504e47;
-    rOStm << (ULONG)0x0d0a1a0a;
+    rOStm << static_cast<sal_uInt32>(0x89504e47);
+    rOStm << static_cast<sal_uInt32>(0x0d0a1a0a);
 
     std::vector< vcl::PNGWriter::ChunkData >::iterator aBeg( maChunkSeq.begin() );
     std::vector< vcl::PNGWriter::ChunkData >::iterator aEnd( maChunkSeq.end() );
