@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 *************************************************************************/
 ULONG ReadClipboardFormat( SvStream & rStm )
 {
-    ULONG nFormat = 0;
+    sal_uInt32 nFormat = 0;
     INT32 nLen = 0;
     rStm >> nLen;
     if( rStm.IsEof() )

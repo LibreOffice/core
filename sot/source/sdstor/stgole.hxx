@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgole.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:00 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ public:
 
 class StgOleStream : public StgInternalStream
 {
-    ULONG nFlags;
+    sal_uInt32 nFlags;
 public:
     StgOleStream( BaseStorage&, BOOL );
-    ULONG& GetFlags() { return nFlags; }
+    sal_uInt32& GetFlags() { return nFlags; }
     BOOL Load();
     BOOL Store();
 };
