@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:18:50 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ namespace connectivity
                                 DBFType db_typ;                         /* Dateityp                     */
                                 BYTE    db_aedat[3];                    /* Datum der letzen Aenderung   */
                                                                         /* JJ MM TT                     */
-                                ULONG   db_anz;                         /* Anzahl der Saetze            */
+                                sal_uInt32   db_anz;                         /* Anzahl der Saetze            */
                                 USHORT  db_kopf;                        /* laenge Kopfsatz-Struktur     */
                                 USHORT  db_slng;                        /* laenge der Daten-Saetze      */
                                 BYTE    db_frei[20];                    /* reserviert                   */
