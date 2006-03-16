@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:07 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 14:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #endif
 
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+
 #include <vcl/timer.hxx>
 
 #include "misc.hxx"
@@ -89,7 +93,8 @@ class LngSvcMgr :
         com::sun::star::linguistic2::XAvailableLocales,
         com::sun::star::lang::XComponent,
         com::sun::star::lang::XServiceInfo
-    >
+    >,
+    private utl::ConfigItem
 {
     ::cppu::OInterfaceContainerHelper                   aEvtListeners;
 
@@ -133,15 +138,22 @@ class LngSvcMgr :
     void    GetAvailableHyphSvcs_Impl();
     void    GetAvailableThesSvcs_Impl();
     void    GetListenerHelper_Impl();
-    void    GetSpellCheckerDsp_Impl();
-    void    GetHyphenatorDsp_Impl();
-    void    GetThesaurusDsp_Impl();
+    void    GetSpellCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
+    void    GetHyphenatorDsp_Impl( sal_Bool bSetSvcList = sal_True );
+    void    GetThesaurusDsp_Impl( sal_Bool bSetSvcList = sal_True );
 
     void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
     BOOL    SaveCfgSvcs( const String &rServiceName );
+
+    void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
+                    const SvcInfoArray &rAvailSvcs );
+
+    // utl::ConfigItem (to allow for listening of changes of relevant properties)
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Commit();
 
 public:
     LngSvcMgr();
