@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:21:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ private:
     USHORT          nTargetDivisor;
 
     ULONG nMetafileHeaderPos;
-    ULONG nMaxRecordSize; // in Worten
+    sal_uInt32 nMaxRecordSize; // in Worten
     ULONG nActRecordPos;
 
     // Aktuelle Attribute im Quell-Metafile:
@@ -145,7 +145,7 @@ private:
     void WriteRectangle(const Rectangle & rRect);
     void WriteColor(const Color & rColor);
 
-    void WriteRecordHeader(ULONG nSizeWords, USHORT nType);
+    void WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType);
         // nSizeWords ist die Groesse des gesammten Records in Anzahl Worte.
         // Wenn nSizeWords unbekannt ist, dann 0 einsetzen (siehe UpdateRecordHeader()).
 
@@ -188,7 +188,7 @@ private:
     void WMFRecord_SetTextColor(const Color & rColor);
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
-    void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, ULONG nROP = 0UL );
+    void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, sal_uInt32 nROP = 0UL );
     void WMFRecord_TextOut(const Point & rPoint, const String & rString);
     void WMFRecord_EndOfFile();
     void WMFRecord_IntersectClipRect( const Rectangle& rRect);
