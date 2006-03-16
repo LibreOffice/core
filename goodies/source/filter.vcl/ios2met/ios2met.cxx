@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:58:26 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
 struct OSPalette {
     OSPalette * pSucc;
-    ULONG * p0RGB; // Darf auch NULL sein!
+    sal_uInt32 * p0RGB; // Darf auch NULL sein!
     USHORT nSize;
 };
 
@@ -243,7 +243,7 @@ struct OSArea {
 struct OSPath
 {
     OSPath*     pSucc;
-    ULONG       nID;
+    sal_uInt32  nID;
     PolyPolygon aPPoly;
     BOOL        bClosed;
     BOOL        bStroke;
@@ -266,7 +266,7 @@ struct OSBitmap {
 
     // Waehrend des Lesens der Bitmap benoetigt:
     SvStream * pBMP; // Zeiger auf temporaere Windows-BMP-Datei oder NULL
-    ULONG nWidth, nHeight;
+    sal_uInt32 nWidth, nHeight;
     USHORT nBitsPerPixel;
     ULONG nMapPos;
     OSBitmap(){} ~OSBitmap(){}
@@ -381,10 +381,10 @@ private:
     void SetRasterOp(RasterOp eROP);
 
     void SetPalette0RGB(USHORT nIndex, ULONG nCol);
-    ULONG GetPalette0RGB(ULONG nIndex);
+    sal_uInt32 GetPalette0RGB(sal_uInt32 nIndex);
         // Holt Farbe aus der Palette, oder, wenn nicht vorhanden,
         // interpretiert nIndex als direkten RGB-Wert.
-    Color GetPaletteColor(ULONG nIndex);
+    Color GetPaletteColor(sal_uInt32 nIndex);
 
 
     BOOL        IsLineInfo();
@@ -720,12 +720,12 @@ void OS2METReader::SetPalette0RGB(USHORT nIndex, ULONG nCol)
         pPaletteStack->nSize=0;
     }
     if (pPaletteStack->p0RGB==NULL || nIndex>=pPaletteStack->nSize) {
-        ULONG * pOld0RGB=pPaletteStack->p0RGB;
+        sal_uInt32 * pOld0RGB=pPaletteStack->p0RGB;
         USHORT i,nOldSize=pPaletteStack->nSize;
         if (pOld0RGB==NULL) nOldSize=0;
         pPaletteStack->nSize=2*(nIndex+1);
         if (pPaletteStack->nSize<256) pPaletteStack->nSize=256;
-        pPaletteStack->p0RGB = new ULONG[pPaletteStack->nSize];
+        pPaletteStack->p0RGB = new sal_uInt32[pPaletteStack->nSize];
         for (i=0; i<pPaletteStack->nSize; i++) {
             if (i<nOldSize) pPaletteStack->p0RGB[i]=pOld0RGB[i];
             else if (i==0) pPaletteStack->p0RGB[i]=0x00ffffff;
@@ -736,14 +736,14 @@ void OS2METReader::SetPalette0RGB(USHORT nIndex, ULONG nCol)
     pPaletteStack->p0RGB[nIndex]=nCol;
 }
 
-ULONG OS2METReader::GetPalette0RGB(ULONG nIndex)
+sal_uInt32 OS2METReader::GetPalette0RGB(sal_uInt32 nIndex)
 {
     if (pPaletteStack!=NULL && pPaletteStack->p0RGB!=NULL &&
         pPaletteStack->nSize>nIndex) nIndex=pPaletteStack->p0RGB[nIndex];
     return nIndex;
 }
 
-Color OS2METReader::GetPaletteColor(ULONG nIndex)
+Color OS2METReader::GetPaletteColor(sal_uInt32 nIndex)
 {
     nIndex=GetPalette0RGB(nIndex);
     return Color((((USHORT)(nIndex>>8))&0xff00)>>8,
@@ -935,7 +935,7 @@ void OS2METReader::ReadBitBlt()
 {
     Point aP1,aP2;
     Size aSize;
-    ULONG nID;
+    sal_uInt32 nID;
     OSBitmap * pB;
     long nt;
 
@@ -1078,7 +1078,7 @@ void OS2METReader::ReadFullArc(BOOL bGivenPos, USHORT nOrderSize)
     Point aCenter;
     long nP,nQ,nR,nS;
     Rectangle aRect;
-    ULONG nMul; USHORT nMulS;
+    sal_uInt32 nMul; USHORT nMulS;
 
     if (bGivenPos) {
         aCenter=ReadPoint();
@@ -1126,7 +1126,7 @@ void OS2METReader::ReadPartialArc(BOOL bGivenPos, USHORT nOrderSize)
     Point aP0, aCenter,aPStart,aPEnd;
     long nP,nQ,nR,nS,nStart, nSweep;
     Rectangle aRect;
-    ULONG nMul; USHORT nMulS;
+    sal_uInt32 nMul; USHORT nMulS;
     double fStart, fEnd;
 
     if (bGivenPos) {
@@ -1172,7 +1172,7 @@ void OS2METReader::ReadPartialArc(BOOL bGivenPos, USHORT nOrderSize)
 
 void OS2METReader::ReadPolygons()
 {
-    ULONG i,j,nNumPolys, nNumPoints;
+    sal_uInt32 i,j,nNumPolys, nNumPoints;
     PolyPolygon aPolyPoly;
     Polygon aPoly;
     Point aPoint;
@@ -1533,7 +1533,7 @@ void OS2METReader::ReadOrder(USHORT nOrderID, USHORT nOrderLen)
         }
         case GOrdFilPth:
         {
-            ULONG   nID;
+            sal_uInt32 nID;
             UINT16  nDummy;
             OSPath* p = pPathList;
 
@@ -1586,7 +1586,7 @@ void OS2METReader::ReadOrder(USHORT nOrderID, USHORT nOrderLen)
 
         case GOrdOutPth:
         {
-            ULONG   nID;
+            sal_uInt32 nID;
             USHORT  i,nC;
             OSPath* p=pPathList;
             pOS2MET->SeekRel(2);
@@ -1611,7 +1611,7 @@ void OS2METReader::ReadOrder(USHORT nOrderID, USHORT nOrderLen)
             break;
         }
         case GOrdSClPth: {  OOODEBUG("GOrdSClPth",0);
-            ULONG nID;
+            sal_uInt32 nID;
             OSPath * p=pPathList;
             pOS2MET->SeekRel(2);
             *pOS2MET >> nID;
@@ -2208,10 +2208,10 @@ void OS2METReader::ReadImageData(USHORT nDataID, USHORT nDataLen)
                     return;
                 }
                 // Schreibe (Windows-)BITMAPINFOHEADER:
-                *(p->pBMP) << ((ULONG)40) << p->nWidth << p->nHeight;
+                *(p->pBMP) << ((sal_uInt32)40) << p->nWidth << p->nHeight;
                 *(p->pBMP) << ((USHORT)1) << p->nBitsPerPixel;
-                *(p->pBMP) << ((ULONG)0) << ((ULONG)0) << ((ULONG)0) << ((ULONG)0);
-                *(p->pBMP) << ((ULONG)0) << ((ULONG)0);
+                *(p->pBMP) << ((sal_uInt32)0) << ((sal_uInt32)0) << ((sal_uInt32)0) << ((sal_uInt32)0);
+                *(p->pBMP) << ((sal_uInt32)0) << ((sal_uInt32)0);
                 // Schreibe Farbtabelle:
                 if (p->nBitsPerPixel<=8) {
                     USHORT i, nColTabSize=1<<(p->nBitsPerPixel);
