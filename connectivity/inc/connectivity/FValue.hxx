@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:35:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,7 @@ namespace connectivity
         }
     };
 
-#define SQL_NO_PARAMETER (ULONG_MAX)
+#define SQL_NO_PARAMETER (SAL_MAX_UINT32)
     class OAssignValues : public OValueRefVector
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
