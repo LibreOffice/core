@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 19:58:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ public:
     void Replace( const SwIndex& rStart, xub_Unicode cCh );
     void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
     void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
-                    const ::com::sun::star::uno::Sequence<long>& rOffsets );
+                    const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     // virtuelle Methoden aus dem CntntNode
     virtual SwCntntFrm *MakeFrm();
