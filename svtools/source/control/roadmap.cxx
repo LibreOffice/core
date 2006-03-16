@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:04:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,7 +663,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Int32 ORoadmap::PreNotify( NotifyEvent& _rNEvt )
+    long ORoadmap::PreNotify( NotifyEvent& _rNEvt )
     {
         // capture KeyEvents for taskpane cycling
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )
