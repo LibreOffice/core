@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:05:01 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,6 @@ inline static void SwapUShort( sal_uInt16& r )
     {   r = SWAPSHORT(r);   }
 inline static void SwapShort( short& r )
     {   r = SWAPSHORT(r);   }
-inline static void SwapInt( int& r )
-    {   r = SWAPSHORT(r);   }
-inline static void SwapUInt( unsigned int& r )
-    {   r = SWAPSHORT(r);   }
 inline static void SwapLong( long& r )
     {   r = SWAPLONG(r);   }
 inline static void SwapULong( sal_uInt32& r )
@@ -152,7 +148,7 @@ int tmp = eIOMode; \
 if( (tmp == STREAM_IO_READ) && sizeof(datatype)<=nBufFree) \
 {\
     for (int i = 0; i < sizeof(datatype); i++)\
-        ((char *)&r)[i] = pBufPos[i];\
+        ((char *)&value)[i] = pBufPos[i];\
     nBufActualPos += sizeof(datatype);\
     pBufPos += sizeof(datatype);\
     nBufFree -= sizeof(datatype);\
@@ -1212,11 +1208,9 @@ SvStream& SvStream::operator>> ( sal_uInt32& r )
 SvStream& SvStream::operator >> ( long& r )
 {
 #if(SAL_TYPES_SIZEOFLONG != 4)
-    unsigned int tmp = r;
-    READNUMBER_WITHOUT_SWAP(long,tmp)
+    int tmp = r;
+    *this >> tmp;
     r = tmp;
-    if( bSwap )
-        SwapLong(r);
 #else
     READNUMBER_WITHOUT_SWAP(long,r)
     if( bSwap )
@@ -1355,9 +1349,7 @@ SvStream& SvStream::operator<< ( long v )
 {
 #if(SAL_TYPES_SIZEOFLONG != 4)
     int tmp = v;
-    if( bSwap )
-        SwapInt(tmp);
-    WRITENUMBER_WITHOUT_SWAP(int,tmp)
+    *this << tmp;
 #else
     if( bSwap )
         SwapLong(v);
