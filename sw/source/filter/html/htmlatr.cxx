@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:21:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2857,7 +2857,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 }
 
 
-ULONG SwHTMLWriter::ToPixel( ULONG nVal ) const
+sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal ) const
 {
     if( Application::GetDefaultDevice() && nVal )
     {
