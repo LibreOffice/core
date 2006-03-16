@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:26:39 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -693,7 +693,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     pNextNumRuleInfo = 0;
 
-    sal_uInt32 nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
+    ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
     sal_Bool bDone = sal_False;
     sal_Bool bTable = sal_False;
@@ -768,7 +768,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 bStartValue = sal_True;
                 if( rInfo.GetDepth() > 1 )
                 {
-                    sal_uInt32 nPos =
+                    ULONG nPos =
                         rWrt.pCurPam->GetPoint()->nNode.GetIndex() + 1;
                     do
                     {
