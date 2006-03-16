@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:04:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1093,7 +1093,7 @@ public:
     void UnlockExpFlds()                { if( nLockExpFld ) --nLockExpFld; }
     sal_Bool IsExpFldsLocked() const        { return 0 != nLockExpFld; }
     SwDocUpdtFld& GetUpdtFlds() const   { return *pUpdtFlds; }
-    sal_Bool SetFieldsDirty( sal_Bool b, const SwNode* pChk = 0, sal_uInt32 nLen = 0 );
+    sal_Bool SetFieldsDirty( sal_Bool b, const SwNode* pChk = 0, ULONG nLen = 0 );
 
     void SetFixFields( sal_Bool bOnlyTimeDate = sal_False,
                         const DateTime* pNewDateTime = 0 );
@@ -1123,7 +1123,7 @@ public:
         // eine erzeugte Liste aller Felder mit uebergegeben werden.
         // (ist die Adresse != 0, und der Pointer == 0 wird eine neue
         // Liste returnt.)
-    void FldsToCalc( SwCalc& rCalc, sal_uInt32 nLastNd = ULONG_MAX,
+    void FldsToCalc( SwCalc& rCalc, ULONG nLastNd = ULONG_MAX,
                     sal_uInt16 nLastCntnt = USHRT_MAX );
     void FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld );
     void FldsToExpand( SwHash**& ppTbl, sal_uInt16& rTblSize,
@@ -1561,7 +1561,7 @@ public:
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
                                             sal_Bool bExpand = sal_False );
-    const SwTOXBaseSection* InsertTableOf( sal_uInt32 nSttNd, sal_uInt32 nEndNd,
+    const SwTOXBaseSection* InsertTableOf( ULONG nSttNd, ULONG nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0                                          );
     const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
@@ -1872,7 +1872,7 @@ public:
     //Einfuegen einer Beschriftung - falls ein FlyFormat erzeugt wird, so
     // returne dieses.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
-                    const sal_Bool bBefore, const sal_uInt16 nId, const sal_uInt32 nIdx,
+                    const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nIdx,
                     const String& rCharacterStyle,
                     const sal_Bool bCpyBrd = sal_True );
     SwFlyFrmFmt* InsertDrawLabel(
