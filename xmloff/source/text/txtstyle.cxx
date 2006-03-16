@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 17:37:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
     if( nOutlineLevel != -1 )
     {
         OUStringBuffer sTmp;
-                    sTmp.append( (sal_Int32)nOutlineLevel+1L );
+                    sTmp.append( static_cast<sal_Int32>(nOutlineLevel+1L) );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                             XML_DEFAULT_OUTLINE_LEVEL,
                             sTmp.makeStringAndClear() );
