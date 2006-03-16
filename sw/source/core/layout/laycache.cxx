@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:16:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,9 +278,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
-                            aIo.GetStream() << nNdIdx;
+                            aIo.GetStream() << static_cast<sal_uInt32>(nNdIdx);
                             if( bFollow )
-                                aIo.GetStream() << (ULONG)((SwTxtFrm*)pTmp)->GetOfst();
+                                aIo.GetStream() << static_cast<sal_uInt32>(((SwTxtFrm*)pTmp)->GetOfst());
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
                             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
@@ -319,8 +319,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
                                 aIo.OpenFlagRec( 0, 8 );
                                 nNdIdx -= nStartOfContent;
-                                aIo.GetStream() << nNdIdx
-                                                << nOfst;
+                                aIo.GetStream() << static_cast<sal_uInt32>(nNdIdx)
+                                                << static_cast<sal_uInt32>(nOfst);
                                 aIo.CloseFlagRec();
                                 /* Close Table Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
@@ -374,15 +374,15 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                     ::GetUserCall(pAnchoredObj->GetDrawObj());
                             if( pC )
                             {
-                                ULONG nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
+                                sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
                                 USHORT nPageNum = pPage->GetPhyPageNum();
                                 /* Open Fly Record */
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
                                 aIo.OpenFlagRec( 0, 0 );
                                 aIo.CloseFlagRec();
                                 SwRect &rRct = pFly->Frm();
-                                long nX = rRct.Left() - pPage->Frm().Left();
-                                long nY = rRct.Top() - pPage->Frm().Top();
+                                sal_Int32 nX = rRct.Left() - pPage->Frm().Left();
+                                sal_Int32 nY = rRct.Top() - pPage->Frm().Top();
                                 aIo.GetStream() << nPageNum << nOrdNum
                                                 << nX << nY << rRct.Width()
                                                 << rRct.Height();
