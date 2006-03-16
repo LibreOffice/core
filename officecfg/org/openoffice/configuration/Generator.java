@@ -18,7 +18,7 @@ public class Generator {
     public Generator() throws Exception
     {
         // set the driver for xt
-        System.setProperty("com.jclark.xsl.sax.parser", "com.sun.xml.parser.Parser");
+        System.setProperty("com.jclark.xsl.sax.parser", "org.apache.xerces.parsers.SAXParser");
     }
 
     /**
