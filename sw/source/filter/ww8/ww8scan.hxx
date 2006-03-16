@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:48:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,10 +199,10 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
 struct WW8FieldDesc
 {
     long nLen;              // Gesamtlaenge ( zum Text ueberlesen )
-    WW8_CP nSCode;           // Anfang Befehlscode
-    long nLCode;            // Laenge
+    WW8_CP nSCode;          // Anfang Befehlscode
+    WW8_CP nLCode;          // Laenge
     WW8_CP nSRes;           // Anfang Ergebnis
-    long nLRes;             // Laenge ( == 0, falls kein Ergebnis )
+    WW8_CP nLRes;           // Laenge ( == 0, falls kein Ergebnis )
     USHORT nId;             // WW-Id fuer Felder
     BYTE nOpt;              // WW-Flags ( z.B.: vom User geaendert )
     BYTE bCodeNest:1;       // Befehl rekursiv verwendet
@@ -244,18 +244,18 @@ public:
     bool SeekPos(long nPos);            // geht ueber FC- bzw. CP-Wert
                                         // bzw. naechste groesseren Wert
     bool SeekPosExact(long nPos);
-    long Where() const
-        { return ( nIdx >= nIMax ) ? LONG_MAX : pPLCF_PosArray[nIdx]; }
-    bool Get(long& rStart, void*& rpValue) const;
-    bool GetData(long nIdx, long& rPos, void*& rpValue) const;
+    INT32 Where() const
+        { return ( nIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nIdx]; }
+    bool Get(WW8_CP& rStart, void*& rpValue) const;
+    bool GetData(long nIdx, WW8_CP& rPos, void*& rpValue) const;
 
     const void* GetData( long nInIdx ) const
     {
         return ( nInIdx >= nIMax ) ? 0
             : (const void*)&pPLCF_Contents[nInIdx * nStru];
     }
-    long GetPos( long nInIdx ) const
-        { return ( nInIdx >= nIMax ) ? LONG_MAX : pPLCF_PosArray[nInIdx]; }
+    INT32 GetPos( long nInIdx ) const
+        { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
 
     WW8PLCFspecial& operator ++( int ) { nIdx++; return *this; }
     WW8PLCFspecial& operator --( int ) { nIdx--; return *this; }
@@ -323,8 +323,8 @@ public:
     void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return nIMax; }
     bool SeekPos(long nPos);
-    long Where() const;
-    bool Get(long& rStart, long& rEnd, void*& rpValue) const;
+    INT32 Where() const;
+    bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
 
     const void* GetData( long nInIdx ) const
@@ -363,8 +363,8 @@ public:
     void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return rPLCF.nIMax; }
     bool SeekPos(long nPos);
-    long Where() const;
-    bool Get(long& rStart, long& rEnd, void*& rpValue) const;
+    INT32 Where() const;
+    bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     WW8PLCFpcd_Iter& operator ++( int )
     {
         if( nIdx < rPLCF.nIMax )
@@ -402,9 +402,9 @@ public:
     virtual ULONG GetIdx2() const;
     virtual void SetIdx2( ULONG nIdx );
     virtual bool SeekPos(WW8_CP nCpPos) = 0;
-    virtual long Where() = 0;
+    virtual WW8_FC Where() = 0;
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual long GetNoSprms( long& rStart, long&, long& rLen );
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
     virtual WW8PLCFx& operator ++( int ) = 0;
     virtual USHORT GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
@@ -435,7 +435,7 @@ public:
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
+    virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
 
@@ -460,12 +460,12 @@ public:
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
-    virtual long GetNoSprms( long& rStart, long&, long& rLen );
+    virtual WW8_FC Where();
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
     virtual WW8PLCFx& operator ++( int );
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
-    void AktPieceFc2Cp(long& rStartPos, long& rEndPos,
+    void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
@@ -529,7 +529,7 @@ public:
         bool SeekPos(WW8_FC nFc);
         WW8_FC Where() const
         {
-            return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : LONG_MAX;
+            return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : WW8_FC_MAX;
         }
         WW8Fkp& operator ++( int )
         {
@@ -537,14 +537,14 @@ public:
                 mnIdx++;
             return *this;
         }
-        BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen ) const;
+        BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen ) const;
         sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
 
         /*
             liefert einen echten Pointer auf das Sprm vom Typ nId,
             falls ein solches im Fkp drin ist.
         */
-        BYTE* GetLenAndIStdAndSprms(long& rLen) const;
+        BYTE* GetLenAndIStdAndSprms(sal_Int32& rLen) const;
 
         /*
             ruft GetLenAndIStdAndSprms() auf...
@@ -593,7 +593,7 @@ public:
     virtual void SetIdx( ULONG nIdx );
     virtual bool SeekPos(WW8_FC nFcPos);
     virtual WW8_FC Where();
-    BYTE* GetSprmsAndPos( WW8_FC& rStart, WW8_FC& rEnd, long& rLen );
+    BYTE* GetSprmsAndPos( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen );
     virtual WW8PLCFx& operator ++( int );
     virtual USHORT GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
@@ -656,7 +656,7 @@ public:
     virtual void SetIdx( ULONG nIdx );
     long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
+    virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
     const BYTE* HasSprm( USHORT nId ) const;
@@ -684,7 +684,7 @@ public:
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
+    virtual WW8_FC Where();
 
     // liefert Reference Descriptoren
     const void* GetData( long nIdx = -1 ) const
@@ -714,7 +714,7 @@ public:
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
+    virtual WW8_FC Where();
     virtual void GetSprms(WW8PLCFxDesc* p);
     virtual WW8PLCFx& operator ++( int );
     bool StartPosIsFieldStart();
@@ -746,12 +746,12 @@ public:
     virtual ULONG GetIdx2() const;
     virtual void SetIdx2( ULONG nIdx );
     virtual bool SeekPos(WW8_CP nCpPos);
-    virtual long Where();
-    virtual long GetNoSprms( long& rStart, long& rEnd, long& rLen );
+    virtual WW8_FC Where();
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen );
     virtual WW8PLCFx& operator ++( int );
     const String* GetName() const;
     WW8_CP GetStartPos() const
-        { return ( nIsEnd ) ? LONG_MAX : pBook[0]->Where(); }
+        { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
     long GetLen() const;
     bool GetIsEnd() const { return nIsEnd ? true : false; }
     long GetHandle() const;
@@ -799,32 +799,32 @@ struct WW8PLCFxDesc
     const BYTE* pMemPos;// wo liegen die Sprm(s)
     long nOrigSprmsLen;
 
-    long nStartPos;
-    long nEndPos;
+    WW8_CP nStartPos;
+    WW8_CP nEndPos;
 
-    long nOrigStartPos;
-    long nOrigEndPos;   // The ending character position of a paragraph is
-                        // always one before the end reported in the FKP,
-                        // also a character run that ends on the same location
-                        // as the paragraph mark is adjusted to end just before
-                        // the paragraph mark so as to handle their close
-                        // first. The value being used to determing where the
-                        // properties end is in nEndPos, but the original
-                        // unadjusted end character position is important as
-                        // it can be used as the beginning cp of the next set
-                        // of properties
+    WW8_CP nOrigStartPos;
+    WW8_CP nOrigEndPos;   // The ending character position of a paragraph is
+                          // always one before the end reported in the FKP,
+                          // also a character run that ends on the same location
+                          // as the paragraph mark is adjusted to end just before
+                          // the paragraph mark so as to handle their close
+                          // first. The value being used to determing where the
+                          // properties end is in nEndPos, but the original
+                          // unadjusted end character position is important as
+                          // it can be used as the beginning cp of the next set
+                          // of properties
 
-    long nCp2OrIdx;     // wo liegen die NoSprm(s)
-    long nSprmsLen;     // wie viele Bytes fuer weitere Sprms / Laenge Fussnote
-    long nCpOfs;        // fuer Offset Header .. Footnote
-    bool bFirstSprm;    // fuer Erkennung erster Sprm einer Gruppe
-    bool bRealLineEnd;  // false bei Pap-Piece-Ende
+    WW8_CP nCp2OrIdx;     // wo liegen die NoSprm(s)
+    sal_Int32 nSprmsLen;  // wie viele Bytes fuer weitere Sprms / Laenge Fussnote
+    long nCpOfs;          // fuer Offset Header .. Footnote
+    bool bFirstSprm;      // fuer Erkennung erster Sprm einer Gruppe
+    bool bRealLineEnd;    // false bei Pap-Piece-Ende
     void Save( WW8PLCFxSave1& rSave ) const;
     void Restore( const WW8PLCFxSave1& rSave );
-    //With nStartPos set to LONG_MAX then in the case of a pap or chp
+    //With nStartPos set to WW8_CP_MAX then in the case of a pap or chp
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
-    WW8PLCFxDesc() : pIdStk(0), nStartPos(LONG_MAX) {}
+    WW8PLCFxDesc() : pIdStk(0), nStartPos(WW8_CP_MAX) {}
     void ReduceByOffset();
 };
 
@@ -839,7 +839,7 @@ private:
     wwSprmParser maSprmParser;
     long nCpO;                      // Origin Cp -- the basis for nNewCp
 
-    long nLineEnd;                  // zeigt *hinter* das <CR>
+    WW8_CP nLineEnd;                // zeigt *hinter* das <CR>
     long nLastWhereIdxCp;           // last result of WhereIdx()
     USHORT nPLCF;                   // so viele PLCFe werden verwaltet
     short nManType;
@@ -875,7 +875,7 @@ public:
         Where fragt, an welcher naechsten Position sich irgendein
         Attr aendert...
     */
-    long Where() const;
+    WW8_CP Where() const;
 
     bool Get(WW8PLCFManResult* pResult) const;
     WW8PLCFMan& operator ++( int );
