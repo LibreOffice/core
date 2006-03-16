@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ SwAuthorFieldType::SwAuthorFieldType()
 {
 }
 
-String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
+String SwAuthorFieldType::Expand(ULONG nFmt) const
 {
     String sRet;
     SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
@@ -558,7 +558,7 @@ SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-String SwFileNameFieldType::Expand(sal_uInt32 nFmt) const
+String SwFileNameFieldType::Expand(ULONG nFmt) const
 {
     String aRet;
     const SwDocShell* pDShell = pDoc->GetDocShell();
@@ -743,7 +743,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-String SwTemplNameFieldType::Expand(sal_uInt32 nFmt) const
+String SwTemplNameFieldType::Expand(ULONG nFmt) const
 {
     ASSERT(nFmt >= FF_BEGIN && nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
