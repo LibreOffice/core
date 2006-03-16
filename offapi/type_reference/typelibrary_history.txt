@@ -75,7 +75,12 @@
   com.sun.star.lang.XMultiServiceFactory because this interface was missing but 
   is substantial for text documents and was implemented from the beginning.
 
-  
-
-
-
+03/15/06 (JSC): TaskID=i63172
+  update the reference type library with the released version of OOo2.0.2 
+  (OOB680m5). This type library doesn't contain the already inserted singletons:
+    - com.sun.star.script.browse.theBrowseNodeFactory
+    - com.sun.star.script.provider.theMasterScriptProviderFactory
+    - com.sun.star.util.theOfficeInstallationDirectories
+  This of course is accepted to have a 1:1 relation between the reference and 
+  OOo2.0.2. With the next update we get in sync and depending versioning processes
+  won't be affected.
