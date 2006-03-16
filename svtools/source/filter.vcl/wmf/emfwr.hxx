@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:21:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,19 @@ private:
     ULONG               mnRecordPos;
     BOOL                mbRecordOpen;
     BOOL                mbLineChanged;
-    ULONG               mnLineHandle;
+    sal_uInt32          mnLineHandle;
     BOOL                mbFillChanged;
-    ULONG               mnFillHandle;
+    sal_uInt32          mnFillHandle;
     BOOL                mbTextChanged;
-    ULONG               mnTextHandle;
+    sal_uInt32          mnTextHandle;
 
-    void                ImplBeginRecord( ULONG nType );
+    void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
 
     ULONG               ImplAcquireHandle();
     void                ImplReleaseHandle( ULONG nHandle );
 
-    BOOL                ImplPrepareHandleSelect( ULONG& rHandle, ULONG nSelectType );
+    BOOL                ImplPrepareHandleSelect( sal_uInt32& rHandle, ULONG nSelectType );
     void                ImplCheckLineAttr();
     void                ImplCheckFillAttr();
     void                ImplCheckTextAttr();
