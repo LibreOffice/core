@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ DBG_NAME(SfxRangeItem);
 #include "rngitem.hxx"
 #include "rngitem.cxx"
 
-#define NUMTYPE ULONG
+#define NUMTYPE sal_uInt32
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
 #include "rngitem.hxx"
