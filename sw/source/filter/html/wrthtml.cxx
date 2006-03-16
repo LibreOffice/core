@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:48:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ __EXPORT SwHTMLWriter::~SwHTMLWriter()
     delete pNumRuleInfo;
 }
 
-sal_uInt32 SwHTMLWriter::WriteStream()
+ULONG SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -631,7 +631,7 @@ const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uInt32 nIndex )
+sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwSectionNode *pSectNd =
@@ -647,7 +647,7 @@ sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uInt32 nInd
     return bRet;
 }
 
-sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uInt32 nIndex )
+sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -1011,8 +1011,8 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    sal_uInt32 nIdx = pCurPam->GetPoint()->nNode.GetIndex();
-    sal_uInt32 nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
+    ULONG nIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    ULONG nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
 
     SwTxtNode *pTxtNd = 0;
     while( nIdx<=nEndIdx &&
@@ -1086,7 +1086,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     //{
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
-        sal_uInt32 nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
+        ULONG nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
         while( nNodeIdx < pDoc->GetNodes().Count() )
         {
@@ -1469,8 +1469,8 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uInt32 nStt,
-                            sal_uInt32 nEnd, sal_Bool bSaveNum,
+HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, ULONG nStt,
+                            ULONG nEnd, sal_Bool bSaveNum,
                                 const SwFrmFmt *pFrmFmt )
     : rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ), pOldEnd( rWrt.GetEndPaM() ),
