@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-09 10:10:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,9 +289,9 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
     rtl::OUString arg4 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-g"));
-    arg4 = arg4 + rtl::OUString::valueOf(rSize.Width());
+    arg4 = arg4 + rtl::OUString::valueOf(static_cast<sal_Int32>(rSize.Width()));
     arg4 = arg4 + rtl::OUString::valueOf(sal_Unicode('x'));
-    arg4 = arg4 + rtl::OUString::valueOf(rSize.Height());
+    arg4 = arg4 + rtl::OUString::valueOf(static_cast<sal_Int32>(rSize.Height()));
     rtl::OUString arg5 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
     rtl::OUString arg6 =
