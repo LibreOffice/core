@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:09:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2516,7 +2516,7 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
 }
 
 // Returnwert: true for no Sonderzeichen
-bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
+bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 {
     // Unicode-Flag neu setzen und notfalls File-Pos korrigieren
     // merke: Seek kostet nicht viel, da inline geprueft wird,
@@ -2566,7 +2566,7 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
 
         if (pStrm->GetError())
         {
-            rPos = LONG_MAX-10;     // -> eof or other error
+            rPos = WW8_CP_MAX-10;     // -> eof or other error
             sPlainCharsBuf.ReleaseBufferAccess( 0 );
             return true;
         }
@@ -2649,7 +2649,7 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
 }
 
 // Returnwert: true for para end
-bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
+bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
     long nCpOfs)
 {
     long nEnd = ( nNextAttr < nTextEnd ) ? nNextAttr : nTextEnd;
@@ -2840,7 +2840,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 if (pTest && pTest->SeekPosExact(nPosCp+1+nCpOfs) &&
                     pTest->Where() == nPosCp+1+nCpOfs)
                 {
-                    long nPos;
+                    WW8_FC nPos;
                     void *pData;
                     pTest->Get(nPos, pData);
                     sal_uInt32 nData = SVBT32ToLong(*(SVBT32*)pData);
@@ -2920,7 +2920,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     }
 }
 
-long SwWW8ImplReader::ReadTextAttr(long& rTxtPos, bool& rbStartLine)
+long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
 {
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
@@ -3018,7 +3018,7 @@ long SwWW8ImplReader::ReadTextAttr(long& rTxtPos, bool& rbStartLine)
     return nNext;
 }
 
-void SwWW8ImplReader::ReadAttrs(long& rNext, long& rTxtPos, bool& rbStartLine)
+void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine)
 {
     if( rTxtPos >= rNext )
     {           // Stehen Attribute an ?
@@ -3210,7 +3210,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             // the plcf will already be sitting on the correct location
             // if it is there.
             WW8PLCFxDesc aTemp;
-            aTemp.nStartPos = aTemp.nEndPos = LONG_MAX;
+            aTemp.nStartPos = aTemp.nEndPos = WW8_CP_MAX;
             if (pPlcxMan->GetSepPLCF())
                 pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
@@ -4863,7 +4863,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
             // wasn't successful. Thus, continue in this case.
             // Note: Ask MM for initialization of <nStartCp> and <nEndCp>.
             // Note: Ask MM about assertions in method <rReader.GetTxbxTextSttEndCp(..)>.
-            long nStartCp, nEndCp;
+            WW8_CP nStartCp, nEndCp;
             if ( rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
                             static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
                             static_cast<sal_uInt16>(nOLEId & 0xFFFF)) )
