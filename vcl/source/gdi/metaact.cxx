@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:04:36 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,7 +573,7 @@ IMPL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
-                                          long nHorzRound, long nVertRound ) :
+                                          sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
     MetaAction  ( META_ROUNDRECT_ACTION ),
     maRect      ( rRect ),
     mnHorzRound ( nHorzRound ),
@@ -1426,7 +1426,7 @@ sal_Bool MetaTextArrayAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    const ULONG nAryLen = mpDXAry ? mnLen : 0;
+    const sal_uInt32 nAryLen = mpDXAry ? mnLen : 0;
 
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maStartPt;
@@ -1451,7 +1451,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    ULONG nAryLen;
+    sal_uInt32 nAryLen;
 
     delete[] mpDXAry;
 
@@ -1465,7 +1465,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     if( nAryLen )
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
-        const ULONG nIntAryLen( Max(nAryLen, static_cast<ULONG>(mnLen)) );
+        const ULONG nIntAryLen( Max(nAryLen, static_cast<sal_uInt32>(mnLen)) );
         mpDXAry = new sal_Int32[ nIntAryLen ];
 
         ULONG i;
@@ -1495,7 +1495,7 @@ IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, ULONG nWidth,
+MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const XubString& rStr,
                                               USHORT nIndex, USHORT nLen ) :
     MetaAction  ( META_STRETCHTEXT_ACTION ),
@@ -1747,8 +1747,8 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
     rOStm << maPos;
     rOStm << mnWidth;
-    rOStm << (ULONG)meStrikeout;
-    rOStm << (ULONG)meUnderline;
+    rOStm << static_cast<sal_uInt32>(meStrikeout);
+    rOStm << static_cast<sal_uInt32>(meUnderline);
 }
 
 // ------------------------------------------------------------------------
@@ -1757,7 +1757,7 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
-    ULONG nTemp;
+    sal_uInt32 nTemp;
     rIStm >> maPos;
     rIStm >> mnWidth;
     rIStm >> nTemp;
@@ -3886,7 +3886,7 @@ void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 // ========================================================================
 
-MetaCommentAction::MetaCommentAction( long nValue ) :
+MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
     MetaAction  ( META_COMMENT_ACTION ),
     mnValue     ( nValue )
 {
@@ -3905,7 +3905,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const ByteString& rComment, long nValue, const BYTE* pData, ULONG nDataSize ) :
+MetaCommentAction::MetaCommentAction( const ByteString& rComment, sal_Int32 nValue, const BYTE* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     maComment   ( rComment ),
     mnValue     ( nValue )
@@ -3915,7 +3915,7 @@ MetaCommentAction::MetaCommentAction( const ByteString& rComment, long nValue, c
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const BYTE* pData, ULONG nDataSize ) :
+MetaCommentAction::MetaCommentAction( const BYTE* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     mnValue     ( 0L )
 {
@@ -3932,7 +3932,7 @@ MetaCommentAction::~MetaCommentAction()
 
 // ------------------------------------------------------------------------
 
-void MetaCommentAction::ImplInitDynamicData( const BYTE* pData, ULONG nDataSize )
+void MetaCommentAction::ImplInitDynamicData( const BYTE* pData, sal_uInt32 nDataSize )
 {
     if ( nDataSize && pData )
     {
@@ -4009,7 +4009,7 @@ IMPL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaLayoutModeAction::MetaLayoutModeAction( ULONG nLayoutMode ) :
+MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
     mnLayoutMode( nLayoutMode )
 {
