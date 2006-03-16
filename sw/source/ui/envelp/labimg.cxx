@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:29:53 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,12 +447,12 @@ void    SwLabCfgItem::Commit()
             case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
             case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",
             case  4: pValues[nProp] <<= aItem.nRows;            break;// "Format/Row",
-            case  5: pValues[nProp] <<= TWIP_TO_MM100(aItem.lHDist);break;// "Format/HorizontalDistance",
-            case  6: pValues[nProp] <<= TWIP_TO_MM100(aItem.lVDist);break;// "Format/VerticalDistance",
-            case  7: pValues[nProp] <<= TWIP_TO_MM100(aItem.lWidth);            break;// "Format/Width",
-            case  8: pValues[nProp] <<= TWIP_TO_MM100(aItem.lHeight);           break;// "Format/Height",
-            case  9: pValues[nProp] <<= TWIP_TO_MM100(aItem.lLeft);         break;// "Format/LeftMargin",
-            case 10: pValues[nProp] <<= TWIP_TO_MM100(aItem.lUpper);            break;// "Format/TopMargin",
+            case  5: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lHDist));break;// "Format/HorizontalDistance",
+            case  6: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lVDist));break;// "Format/VerticalDistance",
+            case  7: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lWidth));            break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lHeight));           break;// "Format/Height",
+            case  9: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lLeft));         break;// "Format/LeftMargin",
+            case 10: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lUpper));            break;// "Format/TopMargin",
             case 11: pValues[nProp].setValue(&aItem.bSynchron, rType); break;// "Option/Synchronize",
             case 12: pValues[nProp].setValue(&aItem.bPage, rType); break;// "Option/Page",
             case 13: pValues[nProp] <<= aItem.nCol;     break;// "Option/Column",
