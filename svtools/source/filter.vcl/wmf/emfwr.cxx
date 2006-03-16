@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:20:44 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ void EMFWriter::ImplReleaseHandle( ULONG nHandle )
 
 // -----------------------------------------------------------------------------
 
-void EMFWriter::ImplBeginRecord( ULONG nType )
+void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 {
     DBG_ASSERT( !mbRecordOpen, "Another record is already opened!" );
 
@@ -290,7 +290,7 @@ void EMFWriter::ImplEndRecord()
 
 // -----------------------------------------------------------------------------
 
-BOOL EMFWriter::ImplPrepareHandleSelect( ULONG& rHandle, ULONG nSelectType )
+BOOL EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, ULONG nSelectType )
 {
     if( rHandle != HANDLE_INVALID )
     {
@@ -328,8 +328,8 @@ void EMFWriter::ImplCheckLineAttr()
 {
     if( mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT ) )
     {
-        ULONG nStyle = maVDev.IsLineColor() ? 0 : 5;
-        ULONG nWidth = 0, nHeight = 0;
+        sal_uInt32 nStyle = maVDev.IsLineColor() ? 0 : 5;
+        sal_uInt32 nWidth = 0, nHeight = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEPEN );
         (*mpStm) << mnLineHandle << nStyle << nWidth << nHeight;
@@ -348,8 +348,8 @@ void EMFWriter::ImplCheckFillAttr()
 {
     if( mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT ) )
     {
-        ULONG nStyle = maVDev.IsFillColor() ? 0 : 1;
-        ULONG nPatternStyle = 0;
+        sal_uInt32 nStyle = maVDev.IsFillColor() ? 0 : 1;
+        sal_uInt32 nPatternStyle = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
         (*mpStm) << mnFillHandle << nStyle;
