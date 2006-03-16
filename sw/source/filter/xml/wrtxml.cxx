@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:08:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,17 +533,17 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     return 0;
 }
 
-sal_uInt32 SwXMLWriter::WriteStorage()
+ULONG SwXMLWriter::WriteStorage()
 {
     return _Write();
 }
 
-sal_uInt32 SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+ULONG SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     return _Write( &aTargetMedium );
 }
 
-sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+ULONG SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     return IsStgWriter()
