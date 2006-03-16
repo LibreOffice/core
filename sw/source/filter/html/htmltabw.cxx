@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:46:08 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,7 +389,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sal_Bool bHead = sal_False;
     if( pSttNd )
     {
-        sal_uInt32 nNdPos = pSttNd->GetIndex()+1;
+        ULONG nNdPos = pSttNd->GetIndex()+1;
 
         // Art der Zelle (TD/TH) bestimmen
         SwNode* pNd;
