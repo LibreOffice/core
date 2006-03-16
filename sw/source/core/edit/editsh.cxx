@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 16:51:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,8 +960,8 @@ void SwEditShell::SetNumberingRestart()
         else
             MakeFindRange(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, pCrsr); //extra content
         SwPosition* pSttPos = pCrsr->Start(), *pEndPos = pCrsr->End();
-        sal_uInt32 nCurrNd = pSttPos->nNode.GetIndex();
-        sal_uInt32 nEndNd = pEndPos->nNode.GetIndex();
+        ULONG nCurrNd = pSttPos->nNode.GetIndex();
+        ULONG nEndNd = pEndPos->nNode.GetIndex();
         if( nCurrNd <= nEndNd )
         {
             SwCntntFrm* pCntFrm;
