@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:16:48 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:25:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1708,7 +1708,7 @@ public:
     virtual void Repeat( SwUndoIter& rUndoIter );
 
     void AddChanges( const SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
-                     ::com::sun::star::uno::Sequence <long>& rOffsets );
+                     ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
     BOOL HasData() const {return 0 != pData; }
 };
 
