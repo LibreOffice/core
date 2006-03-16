@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:20:49 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:40:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,9 +555,9 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     aRes.pMemPos = 0;
     aRes.nEndPos = rStartCp;
 
-    while (pPap->HasFkp() && rStartCp != LONG_MAX)
+    while (pPap->HasFkp() && rStartCp != WW8_CP_MAX)
     {
-        if (pPap->Where() != LONG_MAX)
+        if (pPap->Where() != WW8_CP_MAX)
         {
             const BYTE* pB = pPap->HasSprm(TabRowSprm(nLevel));
             if (pB && *pB == 1)
@@ -581,7 +581,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         //Seek to our next block of properties
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
-            aRes.nEndPos = LONG_MAX;
+            aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);
         }
         pPap->GetSprms(&aRes);
@@ -1993,7 +1993,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
-            aRes.nEndPos = LONG_MAX;
+            aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);
         }
         pPap->GetSprms(&aRes);
@@ -2001,8 +2001,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
         //Are we at the end of available properties
         if (
-             !pPap->HasFkp() || pPap->Where() == LONG_MAX ||
-             aRes.nStartPos == LONG_MAX
+             !pPap->HasFkp() || pPap->Where() == WW8_CP_MAX ||
+             aRes.nStartPos == WW8_CP_MAX
            )
         {
             bOk = false;
@@ -2034,7 +2034,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         pIo->pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
-            aRes.nEndPos = LONG_MAX;
+            aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);
         }
         pPap->GetSprms(&aRes);
