@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
-        sal_Int32 *pTwipHeight=0, sal_Int32 *pTwipWidth=0 )
+        long *pTwipHeight=0, long *pTwipWidth=0 )
 {
     if( nWidth > 0 && nHeight > 0 )
     {
