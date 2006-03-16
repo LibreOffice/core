@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gifread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:34:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ class GIFReader : public GraphicReader
     BitmapWriteAccess*  pAcc1;
     long                nYAcc;
     long                nLastPos;
-    ULONG               nLogWidth100;
-    ULONG               nLogHeight100;
+    sal_uInt32          nLogWidth100;
+    sal_uInt32          nLogHeight100;
     USHORT              nTimer;
     USHORT              nGlobalWidth;           // maximale Bildbreite aus Header
     USHORT              nGlobalHeight;          // maximale Bildhoehe aus Header
