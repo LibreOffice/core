@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:21:01 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,7 +1128,7 @@ ULONG CalcDiff( const Point &rPt1, const Point &rPt2 )
 {
     //Jetzt die Entfernung zwischen den beiden Punkten berechnen.
     //'Delta' X^2 + 'Delta'Y^2 = 'Entfernung'^2
-    ULONG dX = Max( rPt1.X(), rPt2.X() ) -
+    sal_uInt32 dX = Max( rPt1.X(), rPt2.X() ) -
                Min( rPt1.X(), rPt2.X() ),
           dY = Max( rPt1.Y(), rPt2.Y() ) -
                Min( rPt1.Y(), rPt2.Y() );
