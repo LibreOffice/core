@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:30:55 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,15 @@ void OTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
     _rxIn >> m_sComposedName;
     _rxIn >> m_aTableName;
     _rxIn >> m_aWinName;
-    _rxIn >> m_aPosition.X();
-    _rxIn >> m_aPosition.Y();
-    _rxIn >> m_aSize.Width();
-    _rxIn >> m_aSize.Height();
+    sal_Int32 ns32Temp;
+    _rxIn >> ns32Temp;
+    m_aPosition.X() = ns32Temp;
+    _rxIn >> ns32Temp;
+    m_aPosition.Y() = ns32Temp;
+    _rxIn >> ns32Temp;
+    m_aSize.Width() = ns32Temp;
+    _rxIn >> ns32Temp;
+    m_aSize.Height() = ns32Temp;
     _rxIn >> m_bShowAll;
 }
 //------------------------------------------------------------------------------
@@ -118,10 +123,10 @@ void OTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
     _rxOut << m_sComposedName;
     _rxOut << m_aTableName;
     _rxOut << m_aWinName;
-    _rxOut << m_aPosition.X();
-    _rxOut << m_aPosition.Y();
-    _rxOut << m_aSize.Width();
-    _rxOut << m_aSize.Height();
+    _rxOut << static_cast<sal_Int32>(m_aPosition.X());
+    _rxOut << static_cast<sal_Int32>(m_aPosition.Y());
+    _rxOut << static_cast<sal_Int32>(m_aSize.Width());
+    _rxOut << static_cast<sal_Int32>(m_aSize.Height());
     _rxOut << m_bShowAll;
 }
 // -----------------------------------------------------------------------------
