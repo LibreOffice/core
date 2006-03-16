@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1839,8 +1839,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
 
-    sal_uInt32 nCurrNd = pSttPos->nNode.GetIndex();
-    sal_uInt32 nEndNd = pEndPos->nNode.GetIndex();
+    ULONG nCurrNd = pSttPos->nNode.GetIndex();
+    ULONG nEndNd = pEndPos->nNode.GetIndex();
 
     if( nCurrNd <= nEndNd )
     {
@@ -2366,7 +2366,7 @@ sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
 
     /* #i9185# This whould lead to a segmentation fault if not catched
        above. */
-    sal_uInt32 nNextNd = rEnd.nNode.GetIndex() + 1;
+    ULONG nNextNd = rEnd.nNode.GetIndex() + 1;
     SwTableNode* pTblNd = aNodes[ nNextNd ]->GetTableNode();
 
     if( pTblNd && pNd->IsCntntNode() )
