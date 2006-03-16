@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:21:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ struct _UndoTransliterate_Data
     String sText;
     _UndoTransliterate_Data* pNext;
     SwHistory* pHistory;
-    Sequence <long>* pOffsets;
+    Sequence <sal_Int32>* pOffsets;
     ULONG nNdIdx;
     xub_StrLen nStart, nLen;
 
@@ -452,7 +452,7 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
 
 void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                     xub_StrLen nStart, xub_StrLen nLen,
-                     ::com::sun::star::uno::Sequence <long>& rOffsets )
+                     ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
@@ -464,17 +464,17 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
         pData = pNew;
     pLastData = pNew;
 
-    const long* pOffsets = rOffsets.getConstArray();
+    const sal_Int32* pOffsets = rOffsets.getConstArray();
     // where did we need less memory ?
     // check for 1-1 mappings:
     BOOL bOneToOne = TRUE;
-    const long* p = pOffsets;
+    const sal_Int32* p = pOffsets;
     for( long n = 0; n < nOffsLen; ++n, ++p )
         if( *p != ( nStart + n ))
         {
             // create the Offset array
-            pNew->pOffsets = new Sequence <long> ( nLen );
-            long* pIdx = pNew->pOffsets->getArray();
+            pNew->pOffsets = new Sequence <sal_Int32> ( nLen );
+            sal_Int32* pIdx = pNew->pOffsets->getArray();
             p = pOffsets;
             long nMyOff, nNewVal = nStart;
             for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
@@ -528,12 +528,12 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
     SwTxtNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTxtNode();
     if( pTNd )
     {
-        Sequence <long> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
+        Sequence <sal_Int32> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
         if( pOffsets )
             aOffsets = *pOffsets;
         else
         {
-            long* p = aOffsets.getArray();
+            sal_Int32* p = aOffsets.getArray();
             for( xub_StrLen n = 0; n < nLen; ++n, ++p )
                 *p = n + nStart;
         }
