@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:24:07 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,7 +435,7 @@ public:
 
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
-    virtual BOOL            HasUIFeature( ULONG nFeature );
+    virtual BOOL            HasUIFeature( sal_uInt32 nFeature );
     virtual void            ShowCursor( FASTBOOL bOn = TRUE );
     virtual ErrCode         DoVerb( long nVerb );
 
