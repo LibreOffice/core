@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:21:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ void WMFWriter::WriteColor(const Color & rColor)
 }
 
 
-void WMFWriter::WriteRecordHeader(ULONG nSizeWords, USHORT nType)
+void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
 {
     nActRecordPos=pWMF->Tell();
     if (nSizeWords>nMaxRecordSize) nMaxRecordSize=nSizeWords;
@@ -363,7 +363,8 @@ void WMFWriter::WriteRecordHeader(ULONG nSizeWords, USHORT nType)
 
 void WMFWriter::UpdateRecordHeader()
 {
-    ULONG nPos,nSize;
+    ULONG nPos;
+    sal_uInt32 nSize;
 
     nPos=pWMF->Tell(); nSize=nPos-nActRecordPos;
     if ((nSize & 1)!=0) {
@@ -879,7 +880,7 @@ void WMFWriter::WMFRecord_SetWindowOrg(const Point & rPoint)
 
 
 void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
-                                      const Bitmap & rBitmap, ULONG nROP )
+                                      const Bitmap & rBitmap, sal_uInt32 nROP )
 {
     ULONG nPosAnf,nPosEnd;
 
@@ -1708,20 +1709,21 @@ void WMFWriter::WriteHeader( const GDIMetaFile & rMTF, BOOL bPlaceable )
     }
 
     nMetafileHeaderPos=pWMF->Tell();
-    *pWMF << (USHORT)0x0001           // Typ: Datei
-          << (USHORT)0x0009           // Headerlaenge in Worten
-          << (USHORT)0x0300           // Version als BCD-Zahl
-          << (ULONG) 0x00000000       // Dateilaenge (ohne 1. Header), wird spaeter durch UpdateHeader() berichtigt
-          << (USHORT)MAXOBJECTHANDLES // Maximalezahl der gleichzeitigen Objekte
-          << (ULONG) 0x00000000       // Maximale Record-laenge, wird spaeter durch UpdateHeader() berichtigt
-          << (USHORT)0x0000;          // Reserved
+    *pWMF << (sal_uInt16)0x0001           // Typ: Datei
+          << (sal_uInt16)0x0009           // Headerlaenge in Worten
+          << (sal_uInt16)0x0300           // Version als BCD-Zahl
+          << (sal_uInt32) 0x00000000      // Dateilaenge (ohne 1. Header), wird spaeter durch UpdateHeader() berichtigt
+          << (sal_uInt16)MAXOBJECTHANDLES // Maximalezahl der gleichzeitigen Objekte
+          << (sal_uInt32) 0x00000000      // Maximale Record-laenge, wird spaeter durch UpdateHeader() berichtigt
+          << (sal_uInt16)0x0000;          // Reserved
 }
 
 // ------------------------------------------------------------------------
 
 void WMFWriter::UpdateHeader()
 {
-    ULONG nPos,nFileSize;
+    ULONG nPos;
+    sal_uInt32 nFileSize;
 
     nPos=pWMF->Tell();                 // Endposition = Gesammtgroesse der Datei
     nFileSize=nPos-nMetafileHeaderPos; // Groesse des 1. Headers abziehen
