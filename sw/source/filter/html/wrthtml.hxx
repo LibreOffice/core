@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:48:45 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ class SwHTMLWriter : public Writer
     void CollectLinkTargets();
 
 protected:
-    sal_uInt32 WriteStream();
+    ULONG WriteStream();
 
 public:
 #if defined(MAC) || defined(UNX)
@@ -366,7 +366,7 @@ public:
     void OutHyperlinkHRefValue( const String& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    sal_Bool OutFlyFrm( sal_uInt32 nNdIdx, xub_StrLen nCntntIdx,
+    sal_Bool OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
     void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
                     const SdrObject *pSdrObj );
@@ -562,7 +562,7 @@ struct HTMLSaveData
     sal_Bool bOldOutFlyFrame : 1;
     const SwFlyFrmFmt* pOldFlyFmt;
 
-    HTMLSaveData( SwHTMLWriter&, sal_uInt32 nStt, sal_uInt32 nEnd,
+    HTMLSaveData( SwHTMLWriter&, ULONG nStt, ULONG nEnd,
                   sal_Bool bSaveNum=sal_True,
                      const SwFrmFmt *pFrmFmt=0  );
     ~HTMLSaveData();
