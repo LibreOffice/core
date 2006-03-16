@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:07:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1366,7 +1366,7 @@ void WinSalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
+void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                    PCONSTSALPOINT* pPtAry )
 {
     UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
@@ -1507,7 +1507,7 @@ sal_Bool WinSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAr
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
