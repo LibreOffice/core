@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:47:21 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ void SwLayoutViewConfig::Commit()
             case 11: pValues[nProp] <<= (sal_Int32)rParent.GetZoom(); break;// "Zoom/Value",
             case 12: pValues[nProp] <<= (sal_Int32)rParent.GetZoomType(); break;// "Zoom/Type",
             case 13: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
-            case 14: pValues[nProp] <<= TWIP_TO_MM100(rParent.GetDefTab()); break;// "Other/TabStop",
+            case 14: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(rParent.GetDefTab())); break;// "Other/TabStop",
             case 15: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
         }
         if(nProp < 8 || nProp == 10)
