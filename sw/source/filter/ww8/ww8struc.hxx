@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:23:07 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,9 @@ struct Word2CHPX
 typedef sal_Int16 WW8_PN;
 typedef sal_Int32 WW8_FC;
 typedef sal_Int32 WW8_CP;
+
+const WW8_FC WW8_FC_MAX = SAL_MAX_INT32;
+const WW8_CP WW8_CP_MAX = SAL_MAX_INT32;
 
 // STD: STyle Definition
 //   The STD contains the entire definition of a style.
