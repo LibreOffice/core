@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcss1.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,13 +92,13 @@ protected:
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 public:
-    SwCSS1Parser( SwDoc *pDoc, ULONG aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
     virtual ~SwCSS1Parser();
 
     virtual BOOL ParseStyleSheet( const String& rIn );
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
-    virtual ULONG GetFontHeight( USHORT nSize ) const;
+    virtual sal_uInt32 GetFontHeight( USHORT nSize ) const;
 
     // Die aktuelle Font-Liste holen (auch 0 ist erlaubt)
     virtual const FontList *GetFontList() const;
