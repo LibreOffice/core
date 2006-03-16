@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:47:46 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,7 +681,7 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
     return sParams;
 }
 
-short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
+short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
     USHORT &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
@@ -1007,7 +1007,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
             aF.nSCode, aF.nLCode, eTextCharSet );
         pStrm->Seek( nOldPos );
 
-        if (aStr.Search('.')>=0 || aStr.Search('/')>=0) //#124725# field codes which contain '/' or '.' are not displayed in WinWord
+        //#124725# field codes which contain '/' or '.' are not displayed in WinWord
+        if (aStr.Search('.') != STRING_NOTFOUND || aStr.Search('/') != STRING_NOTFOUND)
             return aF.nLen;
         else
             return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
