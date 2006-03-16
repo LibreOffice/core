@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:06:41 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
     else if( pPolyPoly->Count() )
     {
         USHORT              nCount = pPolyPoly->Count();
-        ULONG*              pPointAry = new ULONG[nCount];
+        sal_uInt32*         pPointAry = new sal_uInt32[nCount];
         PCONSTSALPOINT*     pPointAryAry = new PCONSTSALPOINT[nCount];
         USHORT              i = 0;
         do
