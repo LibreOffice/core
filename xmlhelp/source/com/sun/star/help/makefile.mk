@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-16 12:42:15 $
+#   last change: $Author: vg $ $Date: 2006-03-16 11:17:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
+JARFILES 		= xml-apis.jar xercesImpl.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
 EXTRAJARFILES 	= 
 
 .IF "$(SYSTEM_DB)" == "YES"
