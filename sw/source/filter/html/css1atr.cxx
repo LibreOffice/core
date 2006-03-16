@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:40:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2220,7 +2220,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
 //-----------------------------------------------------------------------
 
 void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
-                                          ULONG nFrmOpts,
+                                          sal_uInt32 nFrmOpts,
                                           const SdrObject *pSdrObj,
                                           const SfxItemSet *pItemSet )
 {
