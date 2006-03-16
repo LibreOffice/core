@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:50:28 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:52:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
             if( ZCOMPRESS == aHeader.nCompression )
             {
                 ZCodec  aCodec;
-                ULONG   nCodedSize, nUncodedSize;
+                sal_uInt32 nCodedSize, nUncodedSize;
                 ULONG   nCodedPos;
 
                 // read coding information
@@ -692,7 +692,7 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
     DIBInfoHeader   aHeader;
     ULONG           nImageSizePos;
     ULONG           nEndPos;
-    ULONG           nCompression = 0;
+    sal_uInt32      nCompression = 0;
     BOOL            bRet = FALSE;
 
     aHeader.nSize = DIBINFOHEADERSIZE;
@@ -776,7 +776,7 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
         ZCodec          aCodec;
         SvMemoryStream  aMemStm( aHeader.nSizeImage + 4096, 65535 );
         ULONG           nCodedPos = rOStm.Tell(), nLastPos;
-        ULONG           nCodedSize, nUncodedSize;
+        sal_uInt32      nCodedSize, nUncodedSize;
 
         // write uncoded data palette
         if( aHeader.nColsUsed )
