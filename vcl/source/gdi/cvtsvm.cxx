@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:56:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1079,8 +1079,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     Point   aStartPt;
                     long    nWidth;
-                    ULONG   nStrikeout;
-                    ULONG   nUnderline;
+                    sal_uInt32 nStrikeout;
+                    sal_uInt32 nUnderline;
                     INT32   nFollowingActionCount;
 
                     rIStm >> aStartPt >> nWidth >> nStrikeout >> nUnderline >> nFollowingActionCount;
@@ -1114,8 +1114,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_COMMENT_COMMENT ):
                 {
                     ByteString  aComment;
-                    long        nValue;
-                    ULONG       nDataSize;
+                    sal_Int32   nValue;
+                    sal_uInt32  nDataSize;
                     BYTE*       pData;
                     INT32       nFollowingActionCount;
 
@@ -2079,7 +2079,9 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.SeekRel( 4 );
 
                 // write data
-                rOStm << rStartPt << nWidth << (ULONG) eStrikeout << (ULONG) eUnderline;
+                rOStm << rStartPt << nWidth <<
+                    static_cast<sal_uInt32>(eStrikeout) <<
+                    static_cast<sal_uInt32>(eUnderline);
                 rOStm << (INT32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
@@ -2098,7 +2100,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction*    pA = (MetaCommentAction*) pAction;
-                const ULONG                 nDataSize = pA->GetDataSize();
+                const sal_uInt32            nDataSize = pA->GetDataSize();
                 ULONG                       nOldPos, nNewPos;
 
                 // write RefPoint comment
