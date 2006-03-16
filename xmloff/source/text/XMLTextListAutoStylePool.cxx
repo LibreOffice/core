@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:22:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    sal_uInt32 nPos;
+    ULONG nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
         const sal_uInt32 nCount = pPool->Count();
