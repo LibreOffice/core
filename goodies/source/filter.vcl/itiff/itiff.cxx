@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:52 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ ULONG TIFFReader::ReadIntData()
 
 double TIFFReader::ReadDoubleData()
 {
-    ULONG   nulong;
+    sal_uInt32 nulong;
     double  nd;
 
     if ( nDataType == 5 )
@@ -1061,12 +1061,8 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
 {
     USHORT  i, nNumTags, nTagType;
     ULONG   nMaxPos;
-    ULONG   nFirstIfd, nDataLen, nPos;
-    ULONG*  pDummy = new ULONG; delete pDummy;  // damit unter OS/2
-                                                // das richtige (Tools-)new
-                                                // verwendet wird, da es sonst
-                                                // in dieser DLL nur Vector-news
-                                                // gibt;
+    ULONG   nPos;
+    sal_uInt32 nFirstIfd, nDataLen;
     bStatus = TRUE;
 
     pCallback    = pcallback;
@@ -1090,7 +1086,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
 
     if ( bStatus )
     {
-        ULONG nOffset = nFirstIfd;
+        sal_uInt32 nOffset = nFirstIfd;
 
         // calculate length of TIFF file
         do
