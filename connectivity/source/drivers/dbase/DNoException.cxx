@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:03:41 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 return sal_False;
             }
 
-            ULONG nLength;
+            sal_uInt32 nLength;
             (*m_pMemoStream) >> nLength;
 
             if (m_aMemoHeader.db_typ == MemodBaseIV)
