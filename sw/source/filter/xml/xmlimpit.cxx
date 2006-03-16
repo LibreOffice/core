@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:22:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,7 +788,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         }
                         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                         {
-                            long nPrc = 50;
+                            sal_Int32 nPrc = 50;
                             if( rUnitConverter.convertPercent( nPrc, aToken ) )
                             {
                                 if( !bHori )
