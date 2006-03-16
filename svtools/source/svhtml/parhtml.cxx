@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:48:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:06:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ HTMLOption::HTMLOption( USHORT nTok, const String& rToken,
         "HTMLOption: unbekanntes Token" );
 }
 
-ULONG HTMLOption::GetNumber() const
+sal_uInt32 HTMLOption::GetNumber() const
 {
     DBG_ASSERT( (nToken>=HTML_OPTION_NUMBER_START &&
                  nToken<HTML_OPTION_NUMBER_END) ||
