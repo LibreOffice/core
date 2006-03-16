@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:42:59 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -610,7 +610,7 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
 void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                                      const String& rAlternateTxt,
                                      ByteString &rEndTags,
-                                     ULONG nFrmOpts )
+                                     sal_uInt32 nFrmOpts )
 {
     ByteString sOut;
     const SfxPoolItem* pItem;
@@ -881,7 +881,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
 Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                        const String &rGrfName, const String& rAlternateTxt,
-                       const Size &rRealSize, ULONG nFrmOpts,
+                       const Size &rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType,
                        const ImageMap *pAltImgMap )
 {
