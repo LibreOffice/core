@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:48:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,7 +992,7 @@ WW8PLCFx& WW8PLCFx_PCDAttrs::operator ++( int )
 
 WW8_CP WW8PLCFx_PCDAttrs::Where()
 {
-    return ( pPcd ) ? pPcd->Where() : LONG_MAX;
+    return ( pPcd ) ? pPcd->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
@@ -1003,7 +1003,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
     if ( !pPcdI || !pPcdI->Get(p->nStartPos, p->nEndPos, pData) )
     {
         // PLCF fully processed
-        p->nStartPos = p->nEndPos = LONG_MAX;
+        p->nStartPos = p->nEndPos = WW8_CP_MAX;
         p->pMemPos = 0;
         p->nSprmsLen = 0;
         return;
@@ -1018,7 +1018,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         if( nSprmIdx >= nGrpprls )
         {
             // Invalid Index
-            p->nStartPos = p->nEndPos = LONG_MAX;
+            p->nStartPos = p->nEndPos = WW8_CP_MAX;
             p->pMemPos = 0;
             p->nSprmsLen = 0;
             return;
@@ -1190,17 +1190,17 @@ bool WW8PLCFx_PCD::SeekPos(WW8_CP nCpPos)
 
 WW8_CP WW8PLCFx_PCD::Where()
 {
-    return pPcdI ? pPcdI->Where() : LONG_MAX;
+    return pPcdI ? pPcdI->Where() : WW8_CP_MAX;
 }
 
-long WW8PLCFx_PCD::GetNoSprms( long& rStart, long& rEnd, long& rLen )
+long WW8PLCFx_PCD::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
     void* pData;
     rLen = 0;
 
     if ( !pPcdI || !pPcdI->Get(rStart, rEnd, pData) )
     {
-        rStart = rEnd = LONG_MAX;
+        rStart = rEnd = WW8_CP_MAX;
         return -1;
     }
     return pPcdI->GetIdx();
@@ -1223,7 +1223,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
         ASSERT( !this, "AktPieceStartCp2Fc() with false Cp found (1)" );
-        return LONG_MAX;
+        return WW8_FC_MAX;
     }
 
     ASSERT( nCp >= nCpStart && nCp < nCpEnd,
@@ -1243,11 +1243,11 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 }
 
 
-void WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos,
+void WW8PLCFx_PCD::AktPieceFc2Cp( WW8_CP& rStartPos, WW8_CP& rEndPos,
     const WW8ScannerBase *pSBase )
 {
     //No point going anywhere with this
-    if ((rStartPos == LONG_MAX) && (rEndPos == LONG_MAX))
+    if ((rStartPos == WW8_CP_MAX) && (rEndPos == WW8_CP_MAX))
         return;
 
     rStartPos = pSBase->WW8Fc2Cp( rStartPos );
@@ -1261,7 +1261,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
         ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
-        return LONG_MAX;
+        return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
     INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
@@ -1501,8 +1501,8 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
 
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
-    WW8_CP nFallBackCpEnd = LONG_MAX;
-    if( nFcPos == LONG_MAX )
+    WW8_CP nFallBackCpEnd = WW8_CP_MAX;
+    if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
     bool bIsUnicode = false;
@@ -1513,7 +1513,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         for (pPieceIter->SetIdx(0);
             pPieceIter->GetIdx() < pPieceIter->GetIMax();(*pPieceIter)++)
         {
-            long nCpStart, nCpEnd;
+            WW8_CP nCpStart, nCpEnd;
             void* pData;
             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
             {   // ausserhalb PLCFfpcd ?
@@ -1568,8 +1568,8 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 {
     if( pTestFlag )
         *pTestFlag = true;
-    if( LONG_MAX == nCpPos )
-        return LONG_MAX;
+    if( WW8_CP_MAX == nCpPos )
+        return WW8_CP_MAX;
 
     bool bIsUnicode;
     if( !pIsUnicode )
@@ -1578,7 +1578,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     if( pPieceIter )
     {   // Complex File
         if( pNextPieceCp )
-            *pNextPieceCp = LONG_MAX;
+            *pNextPieceCp = WW8_CP_MAX;
 
         if( !pPieceIter->SeekPos( nCpPos ) )
         {
@@ -1586,9 +1586,9 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
                 *pTestFlag = false;
             else
                 ASSERT( !this, "Falscher CP an WW8Cp2Fc() uebergeben" );
-            return LONG_MAX;
+            return WW8_FC_MAX;
         }
-        long nCpStart, nCpEnd;
+        WW8_CP nCpStart, nCpEnd;
         void* pData;
         if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
         {
@@ -1596,7 +1596,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
                 *pTestFlag = false;
             else
                 ASSERT( !this, "PLCFfpcd-Get ging schief" );
-            return LONG_MAX;
+            return WW8_FC_MAX;
         }
         if( pNextPieceCp )
             *pNextPieceCp = nCpEnd;
@@ -1655,7 +1655,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     pStr->Seek( nClxPos );
     nLeft = nClxLen;
     pPieceGrpprls = new BYTE*[nGrpprl + 1];
-    memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * 4 );
+    memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(BYTE *) );
     nPieceGrpprls = nGrpprl;
     INT16 nAktGrpprl = 0;                       // lies Grpprls ein
     while( 1 )
@@ -1866,7 +1866,7 @@ WW8ScannerBase::~WW8ScannerBase()
 static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 {
     void* pData;
-    long nP;
+    WW8_CP nP;
 
     if (!rPLCF.Get(nP, pData))              // Ende des PLCFspecial ?
         return false;
@@ -2217,16 +2217,16 @@ bool WW8PLCFspecial::SeekPosExact(long nP)
     return false;
 }
 
-bool WW8PLCFspecial::Get(long& rPos, void*& rpValue) const
+bool WW8PLCFspecial::Get(WW8_CP& rPos, void*& rpValue) const
 {
     return GetData( nIdx, rPos, rpValue );
 }
 
-bool WW8PLCFspecial::GetData(long nInIdx, long& rPos, void*& rpValue) const
+bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 {
     if ( nInIdx >= nIMax )
     {
-        rPos = LONG_MAX;
+        rPos = WW8_CP_MAX;
         return false;
     }
     rPos = pPLCF_PosArray[nInIdx];
@@ -2366,11 +2366,11 @@ bool WW8PLCF::SeekPos(long nPos)
     return false;
 }
 
-bool WW8PLCF::Get(long& rStart, long& rEnd, void*& rpValue) const
+bool WW8PLCF::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
 {
     if ( nIdx >= nIMax )
     {
-        rStart = rEnd = LONG_MAX;
+        rStart = rEnd = WW8_CP_MAX;
         return false;
     }
     rStart = pPLCF_PosArray[ nIdx ];
@@ -2379,10 +2379,10 @@ bool WW8PLCF::Get(long& rStart, long& rEnd, void*& rpValue) const
     return true;
 }
 
-long WW8PLCF::Where() const
+INT32 WW8PLCF::Where() const
 {
     if ( nIdx >= nIMax )
-        return LONG_MAX;
+        return SAL_MAX_INT32;
 
     return pPLCF_PosArray[nIdx];
 }
@@ -2453,11 +2453,11 @@ bool WW8PLCFpcd_Iter::SeekPos(long nPos)
     return false;
 }
 
-bool WW8PLCFpcd_Iter::Get(long& rStart, long& rEnd, void*& rpValue) const
+bool WW8PLCFpcd_Iter::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
 {
     if( nIdx >= rPLCF.nIMax )
     {
-        rStart = rEnd = LONG_MAX;
+        rStart = rEnd = WW8_CP_MAX;
         return false;
     }
     rStart = rPLCF.pPLCF_PosArray[nIdx];
@@ -2466,10 +2466,10 @@ bool WW8PLCFpcd_Iter::Get(long& rStart, long& rEnd, void*& rpValue) const
     return true;
 }
 
-long WW8PLCFpcd_Iter::Where() const
+INT32 WW8PLCFpcd_Iter::Where() const
 {
     if ( nIdx >= rPLCF.nIMax )
-        return LONG_MAX;
+        return SAL_MAX_INT32;
 
     return rPLCF.pPLCF_PosArray[nIdx];
 }
@@ -2701,14 +2701,14 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
     return false;
 }
 
-BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, long& rLen)
+BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
     const
 {
     rLen = 0;
 
     if (mnIdx >= mnIMax)
     {
-        rStart = LONG_MAX;
+        rStart = WW8_FC_MAX;
         return 0;
     }
 
@@ -2729,7 +2729,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx(sal_uInt8 nI)
     return false;
 }
 
-BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(long& rLen) const
+BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
 {
     rLen = maEntries[mnIdx].mnLen;
     return maEntries[mnIdx].mpData;
@@ -2740,7 +2740,7 @@ const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
     if (mnIdx >= mnIMax)
         return 0;
 
-    long nLen;
+    sal_Int32 nLen;
     BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
 
     WW8SprmIter aIter(pSprms, nLen, maSprmParser);
@@ -2753,7 +2753,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
     if (mnIdx >= mnIMax)
        return false;
 
-    long nLen;
+    sal_Int32 nLen;
     BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
 
     WW8SprmIter aIter(pSprms, nLen, maSprmParser);
@@ -2771,17 +2771,17 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
     ASSERT( !this, "Falsches GetSprms gerufen" );
-    p->nStartPos = p->nEndPos = LONG_MAX;
+    p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
     return;
 }
 
-long WW8PLCFx::GetNoSprms( long& rStart, long& rEnd, long& rLen )
+long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
     ASSERT( !this, "Falsches GetNoSprms gerufen" );
-    rStart = rEnd = LONG_MAX;
+    rStart = rEnd = WW8_CP_MAX;
     rLen = 0;
     return 0;
 }
@@ -2810,7 +2810,7 @@ public:
 //-----------------------------------------
 bool WW8PLCFx_Fc_FKP::NewFkp()
 {
-    long nPLCFStart, nPLCFEnd;
+    WW8_CP nPLCFStart, nPLCFEnd;
     void* pPage;
 
     static const int WW8FkpSizeTabVer2[ PLCF_END ] =
@@ -2947,7 +2947,7 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     bool bRet = pPLCF->SeekPos(nFcPos);
 
     // make FKP invalid?
-    long nPLCFStart, nPLCFEnd;
+    WW8_CP nPLCFStart, nPLCFEnd;
     void* pPage;
     if( pFkp && pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
     {
@@ -2966,20 +2966,20 @@ WW8_FC WW8PLCFx_Fc_FKP::Where()
     if( !pFkp )
     {
         if( !NewFkp() )
-            return LONG_MAX;
+            return WW8_FC_MAX;
     }
     WW8_FC nP = pFkp->Where();
-    if( nP != LONG_MAX )
+    if( nP != WW8_FC_MAX )
         return nP;
 
     pFkp = 0;                   // FKP beendet -> hole neuen
     return Where();                     // am einfachsten rekursiv
 }
 
-BYTE* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, long& rLen)
+BYTE* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
 {
     rLen = 0;                               // Default
-    rStart = rEnd = LONG_MAX;
+    rStart = rEnd = WW8_FC_MAX;
 
     if( !pFkp )     // Fkp not there ?
     {
@@ -2988,7 +2988,7 @@ BYTE* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, long& rLen)
     }
 
     BYTE* pPos = pFkp->Get( rStart, rEnd, rLen );
-    if( rStart == LONG_MAX )    //Not found
+    if( rStart == WW8_FC_MAX )    //Not found
         return 0;
     return pPos;
 }
@@ -3002,7 +3002,7 @@ WW8PLCFx& WW8PLCFx_Fc_FKP::operator ++( int )
     }
 
     (*pFkp)++;
-    if( pFkp->Where() == LONG_MAX )
+    if( pFkp->Where() == WW8_FC_MAX )
         NewFkp();
 
     return *this;
@@ -3207,7 +3207,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         {
             p->bRealLineEnd = (ePLCF == PAP);
 
-            if ( ((ePLCF == PAP ) || (ePLCF == CHP)) && (nOrigCp != LONG_MAX) )
+            if ( ((ePLCF == PAP ) || (ePLCF == CHP)) && (nOrigCp != WW8_CP_MAX) )
             {
                 bool bIsUnicode=false;
                 /*
@@ -3242,7 +3242,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 FC of the piece, the end of the paragraph that contains the
                 character is at the FKP FC minus 1.
                 */
-                long nCpStart, nCpEnd;
+                WW8_CP nCpStart, nCpEnd;
                 void* pData;
                 pPieceIter->Get(nCpStart, nCpEnd, pData);
 
@@ -3356,11 +3356,11 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 
     if( GetPCDIdx() >= GetPCDIMax() )           // End of PLCF
     {
-        nAttrStart = nAttrEnd = LONG_MAX;
+        nAttrStart = nAttrEnd = WW8_CP_MAX;
         return *this;
     }
 
-    long nFkpLen;                               // Fkp-Eintrag
+    sal_Int32 nFkpLen;                               // Fkp-Eintrag
     // Fkp-Eintrag holen
     WW8PLCFx_Fc_FKP::GetSprmsAndPos(nAttrStart, nAttrEnd, nFkpLen);
 
@@ -3419,7 +3419,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     p->bRealLineEnd = false;
     if (!pPLCF->Get( p->nStartPos, p->nEndPos, pData ))
     {
-        p->nStartPos = p->nEndPos = LONG_MAX;       // PLCF fertig abgearbeitet
+        p->nStartPos = p->nEndPos = WW8_CP_MAX;       // PLCF fertig abgearbeitet
         p->pMemPos = 0;
         p->nSprmsLen = 0;
     }
@@ -3428,7 +3428,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
         long nPo =  SVBT32ToLong( (BYTE*)pData+2 );
         if (nPo == -1L)
         {
-            p->nStartPos = p->nEndPos = LONG_MAX;       // Sepx empty
+            p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
             p->pMemPos = 0;
             p->nSprmsLen = 0;
         }
@@ -3584,12 +3584,12 @@ bool WW8PLCFx_SubDoc::SeekPos( WW8_CP nCpPos )
 
 WW8_CP WW8PLCFx_SubDoc::Where()
 {
-    return ( pRef ) ? pRef->Where() : LONG_MAX;
+    return ( pRef ) ? pRef->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 {
-    p->nStartPos = p->nEndPos = LONG_MAX;
+    p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
@@ -3600,10 +3600,10 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     ULONG nNr = pRef->GetIdx();
 
     void *pData;
-    long nFoo;
+    WW8_CP nFoo;
     if (!pRef->Get(p->nStartPos, nFoo, pData))
     {
-        p->nEndPos = p->nStartPos = LONG_MAX;
+        p->nEndPos = p->nStartPos = WW8_CP_MAX;
         return;
     }
 
@@ -3616,7 +3616,7 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 
     if (!pTxt->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
     {
-        p->nEndPos = p->nStartPos = LONG_MAX;
+        p->nEndPos = p->nStartPos = WW8_CP_MAX;
         p->nSprmsLen = 0;
         return;
     }
@@ -3702,13 +3702,13 @@ bool WW8PLCFx_FLD::SeekPos(WW8_CP nCpPos)
 
 WW8_CP WW8PLCFx_FLD::Where()
 {
-    return pPLCF ? pPLCF->Where() : LONG_MAX;
+    return pPLCF ? pPLCF->Where() : WW8_CP_MAX;
 }
 
 bool WW8PLCFx_FLD::StartPosIsFieldStart()
 {
     void* pData;
-    long nTest;
+    sal_Int32 nTest;
     if (
          (!pPLCF || !pPLCF->Get(nTest, pData) ||
          ((((BYTE*)pData)[0] & 0x1f) != 0x13))
@@ -3728,7 +3728,7 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
         (*pPLCF)++;
 
         void* pData;
-        long nTest;
+        sal_Int32 nTest;
         if ( pPLCF->Get(nTest, pData) && ((((BYTE*)pData)[0] & 0x1f) == 0x15) )
             bRet = true;
 
@@ -3740,24 +3740,24 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
 
 void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 {
-    p->nStartPos = p->nEndPos = LONG_MAX;
+    p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
 
     if (!pPLCF)
     {
-        p->nStartPos = LONG_MAX;                    // Es gibt keine Felder
+        p->nStartPos = WW8_CP_MAX;                    // Es gibt keine Felder
         return;
     }
 
     long n = pPLCF->GetIdx();
 
-    long nP;
+    sal_Int32 nP;
     void *pData;
     if (!pPLCF->Get(nP, pData))             // Ende des PLCFspecial ?
     {
-        p->nStartPos = LONG_MAX;            // PLCF fertig abgearbeitet
+        p->nStartPos = WW8_CP_MAX;            // PLCF fertig abgearbeitet
         return;
     }
 
@@ -3766,7 +3766,7 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
     (*pPLCF)++;
     if (!pPLCF->Get(nP, pData))             // Ende des PLCFspecial ?
     {
-        p->nStartPos = LONG_MAX;            // PLCF fertig abgearbeitet
+        p->nStartPos = WW8_CP_MAX;            // PLCF fertig abgearbeitet
         return;
     }
 
@@ -4008,15 +4008,15 @@ WW8_CP WW8PLCFx_Book::Where()
     return pBook[nIsEnd]->Where();
 }
 
-long WW8PLCFx_Book::GetNoSprms( long& rStart, long& rEnd, long& rLen )
+long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
     void* pData;
-    rEnd = LONG_MAX;
+    rEnd = WW8_CP_MAX;
     rLen = 0;
 
     if (!pBook[0] || !pBook[1] || !nIMax || (pBook[nIsEnd]->GetIdx()) >= nIMax)
     {
-        rStart = rEnd = LONG_MAX;
+        rStart = rEnd = WW8_CP_MAX;
         return -1;
     }
 
@@ -4207,7 +4207,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 
     if ( (&rDesc == pPap) && rDesc.bRealLineEnd )
     {
-        if ( pPap->nEndPos != LONG_MAX )    // Para adjust
+        if ( pPap->nEndPos != WW8_CP_MAX )    // Para adjust
         {
             nLineEnd = pPap->nEndPos;// nLineEnd zeigt *hinter* das <CR>
             pPap->nEndPos--;        // Absatzende um 1 Zeichen verkuerzen
@@ -4233,10 +4233,10 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 
 void WW8PLCFxDesc::ReduceByOffset()
 {
-    ASSERT((LONG_MAX == nStartPos) || (nStartPos <= nEndPos),
+    ASSERT((WW8_CP_MAX == nStartPos) || (nStartPos <= nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
-    if( nStartPos != LONG_MAX )
+    if( nStartPos != WW8_CP_MAX )
     {
         /*
         ##516##,##517##
@@ -4249,7 +4249,7 @@ void WW8PLCFxDesc::ReduceByOffset()
         else
             nStartPos -= nCpOfs;
     }
-    if( nEndPos   != LONG_MAX )
+    if( nEndPos != WW8_CP_MAX )
     {
         ASSERT(nCpOfs <= nEndPos,
             "oh oh, so much for the subdocument piece theory");
@@ -4272,7 +4272,7 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
     rDesc.nCp2OrIdx = rDesc.pPLCFx->GetNoSprms(rDesc.nStartPos, rDesc.nEndPos,
         rDesc.nSprmsLen);
 
-    ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
+    ASSERT((WW8_CP_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
     rDesc.ReduceByOffset();
@@ -4310,7 +4310,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
 
     nLastWhereIdxCp = 0;
     memset( aD, 0, sizeof( aD ) );
-    nLineEnd = LONG_MAX;
+    nLineEnd = WW8_CP_MAX;
     nManType = nType;
     USHORT i;
 
@@ -4447,7 +4447,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
         if ((p == pChp) || (p == pPap))
             p->nStartPos = p->nEndPos = nStartCp;
         else
-            p->nStartPos = p->nEndPos = LONG_MAX;
+            p->nStartPos = p->nEndPos = WW8_CP_MAX;
     }
 
     // initialisieren der Member-Vars High-Level
@@ -4456,7 +4456,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
 
         if( !p->pPLCFx )
         {
-            p->nStartPos = p->nEndPos = LONG_MAX;
+            p->nStartPos = p->nEndPos = WW8_CP_MAX;
             continue;
         }
 
@@ -4471,7 +4471,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
                 p->nSprmsLen = 0;
                 p->nStartPos = nTemp;
                 if (!(*p->pPLCFx).SeekPos(p->nStartPos))
-                    p->nEndPos = p->nStartPos = LONG_MAX;
+                    p->nEndPos = p->nStartPos = WW8_CP_MAX;
                 else
                     GetNewSprms( *p );
             }
@@ -4505,7 +4505,7 @@ USHORT WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
         pD = &aD[i];
         if (pD != pPcdA)
         {
-            if( (pD->nEndPos < nNext) && (pD->nStartPos == LONG_MAX) )
+            if( (pD->nEndPos < nNext) && (pD->nStartPos == WW8_CP_MAX) )
             {
                 // sonst ist Anfang = Ende
                 nNext = pD->nEndPos;
@@ -4720,7 +4720,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nSprmsLen = 0;
         }
         if (p->nSprmsLen < maSprmParser.MinSprmLen())
-            p->nStartPos = LONG_MAX;    // es folgen Enden
+            p->nStartPos = WW8_CP_MAX;    // es folgen Enden
     }
     else
     {
@@ -4743,7 +4743,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 */
                 if (!(*p->pPLCFx).SeekPos(p->nStartPos))
                 {
-                    p->nEndPos = LONG_MAX;
+                    p->nEndPos = WW8_CP_MAX;
                     p->pPLCFx->SetDirty(true);
                 }
                 if (!p->pPLCFx->GetDirty() || pPcd)
@@ -4774,7 +4774,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 the pap and chps.
                 */
                 if (pPcd && ((p->nStartPos > pPcd->nStartPos) ||
-                    (pPcd->nStartPos == LONG_MAX)) &&
+                    (pPcd->nStartPos == WW8_CP_MAX)) &&
                     (pPcd->nEndPos != p->nStartPos))
                 {
                     pPcd->nEndPos = p->nStartPos;
@@ -5002,7 +5002,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
             aD.nCpOfs = rSave.nCpOfs = nCpOfs;
             if (!(pPLCFx->SeekPos(aD.nStartPos)))
             {
-                aD.nEndPos = LONG_MAX;
+                aD.nEndPos = WW8_CP_MAX;
                 pPLCFx->SetDirty(true);
             }
             pPLCFx->GetSprms(&aD);
@@ -5026,7 +5026,7 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             nCpOfs = aD.nCpOfs = rSave.nCpOfs;
             if (!(pPLCFx->SeekPos(aD.nStartPos)))
             {
-                aD.nEndPos = LONG_MAX;
+                aD.nEndPos = WW8_CP_MAX;
                 pPLCFx->SetDirty(true);
             }
             pPLCFx->GetSprms(&aD);
