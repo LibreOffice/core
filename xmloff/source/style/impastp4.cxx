@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:43:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:19:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Bool bAsFamily )
 {
     // store family in a list if not already stored
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
     if( !maFamilyList.Seek_Entry( pFamily, &nPos ) )
         maFamilyList.Insert( pFamily );
@@ -126,7 +126,7 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 {
     SvXMLAutoStylePoolNamesP_Impl *pNames = 0;
 
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
         pNames = maFamilyList.GetObject( nPos )->mpNameList;
@@ -196,7 +196,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 sal_Bool bCache)
 {
     sal_Bool bRet(sal_False);
-    sal_uInt32 nPos;
+    ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTmp( nFamily );
@@ -244,7 +244,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
 OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
                                          const OUString& rParent )
 {
-    sal_uInt32 nPos;
+    ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTmp( nFamily );
@@ -276,7 +276,7 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
@@ -303,7 +303,7 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 {
     OUString sName;
 
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
@@ -345,7 +345,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     sal_uInt32 nCount = 0;
 
     // Get list of parents for current family (nFamily)
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
