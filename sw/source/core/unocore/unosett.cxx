@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:24:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,7 +1098,8 @@ void SwXLineNumberingProperties::setPropertyValue(
                 {
                     INT32 nVal;
                     aValue >>= nVal;
-                    aInfo.SetPosFromLeft(Min(MM100_TO_TWIP(nVal), sal_Int32(0xffff)));
+                    aInfo.SetPosFromLeft(Min(static_cast<sal_Int32>(MM100_TO_TWIP(nVal)),
+                        sal_Int32(0xffff)));
                 }
                 break;
                 case WID_INTERVAL   :
@@ -1217,7 +1218,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     sal_uInt32 nPos = rInfo.GetPosFromLeft();
                     if(USHRT_MAX == nPos)
                         nPos = 0;
-                    aRet <<= TWIP_TO_MM100(nPos);
+                    aRet <<= static_cast < sal_Int32 >(TWIP_TO_MM100(nPos));
                 }
                 break;
                 case WID_INTERVAL   :
@@ -2633,7 +2634,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
     switch(pMap->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            aRet <<= TWIP_TO_MM100(nSepLineWidth);
+            aRet <<= static_cast < sal_Int32 >(TWIP_TO_MM100(nSepLineWidth));
         break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= nSepLineColor;
