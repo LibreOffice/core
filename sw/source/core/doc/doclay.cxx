@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:04:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1330,7 +1330,7 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
 
 
 SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
-            const sal_Bool bBefore, const sal_uInt16 nId, const sal_uInt32 nNdIdx,
+            const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nNdIdx,
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
@@ -1383,7 +1383,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             {
                 SwStartNode *pSttNd = GetNodes()[nNdIdx]->GetStartNode();
                 ASSERT( pSttNd, "Kein StartNode in InsertLabel." );
-                sal_uInt32 nNode;
+                ULONG nNode;
                 if( bBefore )
                 {
                     nNode = pSttNd->GetIndex();
