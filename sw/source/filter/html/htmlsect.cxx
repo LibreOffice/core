@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:45:39 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
     const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
 
-    sal_uInt32 nPrvNxtIdx;
+    ULONG nPrvNxtIdx;
     if( bHeader )
     {
         nPrvNxtIdx = pDoc->GetNodes()[rCntntStIdx]->EndOfSectionIndex()-1;
@@ -855,7 +855,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 /*  */
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
-                                      sal_uInt32 nDestIdx,
+                                      ULONG nDestIdx,
                                       sal_Bool bFmtBreak )
 {
     SwCntntNode* pDestCntntNd =
