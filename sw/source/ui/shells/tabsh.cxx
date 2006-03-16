@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:51:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -882,7 +882,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                     if( pItem && 0 != ((SvxNumberInfoItem*)pItem)->GetDelCount() )
                     {
-                        const ULONG* pDelArr = ((SvxNumberInfoItem*)
+                        const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)
                                                         pItem)->GetDelArray();
 
                         for ( USHORT i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
