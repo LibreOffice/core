@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:36:56 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,9 +616,9 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
 
     // write bitmap stream header
     aConverter << 'B' << 'M';
-    aConverter << (ULONG) 0;
-    aConverter << (ULONG) 0;
-    aConverter << (ULONG) 60;
+    aConverter << (sal_uInt32) 0;
+    aConverter << (sal_uInt32) 0;
+    aConverter << (sal_uInt32) 60;
 
     // write BITMAPINFOHEADER
     aConverter << (UINT32)40;
@@ -779,7 +779,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             if( eType == FrameStyle_BW )
             {
                 aConverter.Seek( 10 );
-                aConverter << (ULONG)64;
+                aConverter << (sal_uInt32)64;
                 aConverter.Seek( 28 );
                 aConverter << (UINT16) 1;
                 aConverter.Seek( 54 );
@@ -793,7 +793,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             else if( eType == FrameStyle_Gray )
             {
                  aConverter.Seek( 10 );
-                 aConverter << (ULONG)1084;
+                 aConverter << (sal_uInt32)1084;
                 aConverter.Seek( 28 );
                 aConverter << (UINT16) 8;
                 aConverter.Seek( 54 );
@@ -879,7 +879,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
     int nPos = aConverter.Tell();
 
     aConverter.Seek( 2 );
-    aConverter << (ULONG) nPos+1;
+    aConverter << (sal_uInt32) nPos+1;
     aConverter.Seek( 0 );
 
     rBitmap.unlock();
