@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:17:50 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,7 +879,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
         {
             //Jetzt die Entfernung zwischen den beiden Punkten berechnen.
             //'Delta' X^2 + 'Delta'Y^2 = 'Entfernung'^2
-            ULONG dX = Max( pCnt->Frm().Left(), rPt.X() ) -
+            sal_uInt32 dX = Max( pCnt->Frm().Left(), rPt.X() ) -
                        Min( pCnt->Frm().Left(), rPt.X() ),
                   dY = Max( pCnt->Frm().Top(), rPt.Y() ) -
                        Min( pCnt->Frm().Top(), rPt.Y() );
