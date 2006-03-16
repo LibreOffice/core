@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFontAutoStylePool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:26 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    sal_uInt32 nPos;
+    ULONG nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sName = pPool->GetObject( nPos )->GetName();
@@ -249,7 +249,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    sal_uInt32 nPos;
+    ULONG nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sName = pPool->GetObject( nPos )->GetName();
