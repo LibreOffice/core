@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:31:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
 
 {
     // die ersten 4 Bytes als Mini-Header lesen
-    ULONG nHeader;
+    sal_uInt32 nHeader;
     *pStream >> nHeader;
 
     // k"onnte es sich um einen extended-Record handeln?
@@ -836,7 +836,7 @@ UINT32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
         *_pStream << _nContentCount;
         if ( SFX_REC_TYPE_VARSIZE_RELOC == _nPreTag ||
              SFX_REC_TYPE_MIXTAGS_RELOC == _nPreTag )
-            *_pStream << nContentOfsPos - ( _pStream->Tell() + sizeof(UINT32) );
+            *_pStream << static_cast<UINT32>(nContentOfsPos - ( _pStream->Tell() + sizeof(UINT32) ));
         else
             *_pStream << nContentOfsPos;
 
