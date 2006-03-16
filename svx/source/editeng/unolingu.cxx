@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 14:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,11 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include <stl/map>
+#include <stl/set>
+#include <stl/vector>
+#include <stl/slist>
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -300,6 +305,13 @@ void SvxLinguConfigUpdate::UpdateAll()
 
     if (IsNeedUpdateAll())
     {
+        typedef const OUString const_OUstring_t;
+        typedef Sequence< OUString > Sequence_OUString_t;
+        typedef std::vector< const_OUstring_t > const_OUString_vector_t;
+        typedef std::set< const_OUstring_t > const_OUString_set_t;
+        std::vector< const_OUString_vector_t > aVector;
+        typedef std::map< const_OUstring_t, Sequence_OUString_t > list_entry_map_t;
+
         RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - updating..." );
 
         DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
@@ -311,15 +323,19 @@ void SvxLinguConfigUpdate::UpdateAll()
 
         SvtLinguConfig aCfg;
 
-        const sal_Char * apServices[3]      =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
-        const sal_Char * apActiveLists[3]    =  { "ServiceManager/ThesaurusList",      "ServiceManager/SpellCheckerList",         "ServiceManager/HyphenatorList" };
+        const sal_Char * apServices[3]       =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
+        const sal_Char * apCurLists[3]       =  { "ServiceManager/ThesaurusList",      "ServiceManager/SpellCheckerList",         "ServiceManager/HyphenatorList" };
         const sal_Char * apLastFoundLists[3] =  { "ServiceManager/LastFoundThesauri",  "ServiceManager/LastFoundSpellCheckers",   "ServiceManager/LastFoundHyphenators" };
+
+        // usage of indices as above: O = thesaurus, 1 = spellchecker, 2 = hyphenator
+        std::vector< list_entry_map_t > aLastFoundSvcs(3);
+        std::vector< list_entry_map_t > aCurSvcs(3);
 
         for (int k = 0;  k < 3;  ++k)
         {
-            OUString aService( A2OU( (sal_Char *)apServices[k]) );
-            OUString aActiveList( A2OU( (sal_Char *) apActiveLists[k]) );
-            OUString aLastFoundList( A2OU( (sal_Char *) apLastFoundLists[k]) );
+            OUString aService( A2OU( apServices[k] ) );
+            OUString aActiveList( A2OU( apCurLists[k] ) );
+            OUString aLastFoundList( A2OU( apLastFoundLists[k] ) );
             INT32 i;
 
             //
@@ -336,7 +352,8 @@ void SvxLinguConfigUpdate::UpdateAll()
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, aLocale ));
                 aCfgSvcs = lcl_RemoveMissingEntries( aCfgSvcs, aAvailSvcs );
-                xLngSvcMgr->setConfiguredServices( aService, aLocale, aCfgSvcs );
+
+                aCurSvcs[k][ pNodeName[i] ] = aCfgSvcs;
             }
 
             //
@@ -355,11 +372,11 @@ void SvxLinguConfigUpdate::UpdateAll()
                 Sequence< OUString > aNewSvcs =
                         lcl_GetNewEntries( aLastFoundSvcs, aAvailSvcs );
 
-                Sequence< OUString > aCfgSvcs(
-                        xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ));
+                OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+                                            SvxLocaleToLanguage( pAvailLocale[i] ) ) );
+                Sequence< OUString > aCfgSvcs( aCurSvcs[k][ aCfgLocaleStr ] );
 
-                // merge services list (previously configured to be
-                // listed first).
+                // merge services list (previously configured to be listed first).
                 aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
 
                 // there is at most one Hyphenator per language allowed
@@ -367,7 +384,7 @@ void SvxLinguConfigUpdate::UpdateAll()
                 if (k == 2 && aCfgSvcs.getLength() > 1)
                     aCfgSvcs.realloc(1);
 
-                xLngSvcMgr->setConfiguredServices( aService, pAvailLocale[i], aCfgSvcs );
+                aCurSvcs[k][ aCfgLocaleStr ] = aCfgSvcs;
             }
 
             //
@@ -388,30 +405,73 @@ void SvxLinguConfigUpdate::UpdateAll()
                     OUString aImplName( pSvcImplName[j] );
                 }
 #endif
-                // build value to be written back to configuration
-                Any aCfgAny;
-                aCfgAny <<= aSvcImplNames;
-                DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
                 OUString aCfgLocaleStr( ConvertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
-                pValue->Value = aCfgAny;
-                pValue->Name  = aLastFoundList;
-                pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
-                pValue->Name += aCfgLocaleStr;
-                pValue++;
+                aLastFoundSvcs[k][ aCfgLocaleStr ] = aSvcImplNames;
             }
-            // change, add new or replace existing entries.
-            BOOL bRes = aCfg.ReplaceSetProperties( aLastFoundList, aValues );
-            DBG_ASSERT( bRes, "failed to set LastFound list" );
         }
 
-        nNeedUpdating = 0;
+        //
+        // write new data back to configuration
+        //
+        for (int k = 0;  k < 3;  ++k)
+        {
+            for (int i = 0;  i < 2;  ++i)
+            {
+                const sal_Char *pSubNodeName = (i == 0) ? apCurLists[k] : apLastFoundLists[k];
+                OUString aSubNodeName( A2OU(pSubNodeName) );
 
+                list_entry_map_t &rCurMap = (i == 0) ? aCurSvcs[k] : aLastFoundSvcs[k];
+                list_entry_map_t::const_iterator aIt( rCurMap.begin() );
+                sal_Int32 nVals = static_cast< sal_Int32 >( rCurMap.size() );
+                Sequence< PropertyValue > aNewValues( nVals );
+                PropertyValue *pNewValue = aNewValues.getArray();
+                while (aIt != rCurMap.end())
+                {
+                    OUString aCfgEntryName( aSubNodeName );
+                    aCfgEntryName += OUString::valueOf( (sal_Unicode) '/' );
+                    aCfgEntryName += (*aIt).first;
+
+#if OSL_DEBUG_LEVEL > 1
+                    Sequence< OUString > aSvcImplNames( (*aIt).second );
+                    INT32 nSvcs = aSvcImplNames.getLength();
+                    const OUString *pSvcImplName = aSvcImplNames.getConstArray();
+                    for (INT32 j = 0;  j < nSvcs;  ++j)
+                    {
+                        OUString aImplName( pSvcImplName[j] );
+                    }
+#endif
+                    pNewValue->Name  = aCfgEntryName;
+                    pNewValue->Value <<= (*aIt).second;
+                    ++pNewValue;
+                    ++aIt;
+                }
+                DBG_ASSERT( pNewValue - aNewValues.getArray() == nVals,
+                        "possible mismatch of sequence size and property number" );
+
+                {
+                    RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - ReplaceSetProperties" );
+                    // add new or replace existing entries.
+                    BOOL bRes = aCfg.ReplaceSetProperties( aSubNodeName, aNewValues );
+                    DBG_ASSERT( bRes, "failed to set new configuration values" );
+                }
+            }
+        }
         DBG_ASSERT( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
         Any aAny;
         aAny <<= nCurrentDataFilesChangedCheckValue;
         aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
+
+        //! Note 1: the new values are commited when the 'aCfg' object
+        //!     gets destroyed.
+        //! Note 2: the new settings in the configuration get applied
+        //!     because the 'LngSvcMgr' (in linguistic/source/lngsvcmgr.hxx)
+        //!     listens to the configuration for changes of the relevant
+        //!     properties and then applies the new settings.
+
+        // nothing needs to be done anymore
+        nNeedUpdating = 0;
     }
 }
 
