@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:44:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,10 +213,10 @@ private:
     void METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap);
     void METBeginArea(BOOL bBoundaryLine);
     void METEndArea();
-    void METBeginPath(ULONG nPathId);
+    void METBeginPath(sal_uInt32 nPathId);
     void METEndPath();
-    void METFillPath(ULONG nPathId);
-    void METOutlinePath(ULONG nPathId);
+    void METFillPath(sal_uInt32 nPathId);
+    void METOutlinePath(sal_uInt32 nPathId);
     void METCloseFigure();
     void METMove(Point aPt);
     void METLine(Point aPt1, Point aPt2);
@@ -224,7 +224,7 @@ private:
     void METLine(const PolyPolygon & rPolyPolygon);
     void METLineAtCurPos(Point aPt);
     void METBox(BOOL bFill, BOOL bBoundary,
-                Rectangle aRect, ULONG nHAxis, ULONG nVAxis);
+                Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
     void METArc(Point aP0, Point aP1, Point aP2);
     void METArcAtCurPos(Point aP1, Point aP2);
     void METFullArc(Point aCenter, double fMultiplier);
@@ -555,7 +555,8 @@ void METWriter::WriteColorAttributeTable(ULONG nFieldId, BitmapPalette* pPalette
 void METWriter::WriteImageObject(const Bitmap & rBitmap)
 {
     SvMemoryStream aTemp(0x00010000,0x00010000);
-    ULONG nWidth,nHeight,nResX,nResY,nBytesPerLine,i,j,nNumColors,ny,nLines;
+    sal_uInt32 nWidth,nHeight,nResX,nResY;
+    ULONG nBytesPerLine,i,j,nNumColors,ny,nLines;
     ULONG nActColMapId;
     USHORT nBitsPerPixel;
     BYTE nbyte, * pBuf;
@@ -863,12 +864,12 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     Size aUnitsPerDecimeter=OutputDevice::LogicToLogic(Size(10,10),MapMode(MAP_CM),aPictureMapMode);
     *pMET << (BYTE)0xf6 << (BYTE)0x28 << (BYTE)0x40 << (BYTE)0x00
           << (BYTE)0x05 << (BYTE)0x01
-          << (ULONG)(aUnitsPerDecimeter.Width())
-          << (ULONG)(aUnitsPerDecimeter.Height())
-          << (ULONG)0
-          << (ULONG)0 << (ULONG)aPictureRect.GetWidth()
-          << (ULONG)0 << (ULONG)aPictureRect.GetHeight()
-          << (ULONG)0 << (ULONG)0;
+          << (sal_uInt32)(aUnitsPerDecimeter.Width())
+          << (sal_uInt32)(aUnitsPerDecimeter.Height())
+          << (sal_uInt32)0
+          << (sal_uInt32)0 << (sal_uInt32)aPictureRect.GetWidth()
+          << (sal_uInt32)0 << (sal_uInt32)aPictureRect.GetHeight()
+          << (sal_uInt32)0 << (sal_uInt32)0;
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -895,8 +896,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  6-n       M11, M12, M21, M22, M41, M42   Matrix elements
     *pMET << (BYTE)0x21 << (BYTE)0x1c << (BYTE)0x07 << (BYTE)0xcc
           << (BYTE)0x0c << (BYTE)0x8f
-          << (ULONG)0x00010000 << (ULONG)0x00000000 << (ULONG)0x00000000
-          << (ULONG)0x00010000 << (ULONG)0x00000000 << (ULONG)0x00000000;
+          << (sal_uInt32)0x00010000 << (sal_uInt32)0x00000000 << (sal_uInt32)0x00000000
+          << (sal_uInt32)0x00010000 << (sal_uInt32)0x00000000 << (sal_uInt32)0x00000000;
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -1148,9 +1149,9 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap)
     *pMET << (BYTE)0x02 << (BYTE)0x00 << (BYTE)0x00 << (BYTE)0x00;
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
     WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
-    *pMET << (ULONG)0 << (ULONG)0
-          << (ULONG)(rBitmap.GetSizePixel().Width())
-          << (ULONG)(rBitmap.GetSizePixel().Height());
+    *pMET << (sal_uInt32)0 << (sal_uInt32)0
+          << (sal_uInt32)(rBitmap.GetSizePixel().Width())
+          << (sal_uInt32)(rBitmap.GetSizePixel().Height());
 }
 
 void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
@@ -1228,7 +1229,7 @@ void METWriter::METEndArea()
 }
 
 
-void METWriter::METBeginPath(ULONG nPathId)
+void METWriter::METBeginPath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
     *pMET << (BYTE)0xd0 << (BYTE)6 << (USHORT) 0 << nPathId;
@@ -1242,7 +1243,7 @@ void METWriter::METEndPath()
 }
 
 
-void METWriter::METFillPath(ULONG nPathId)
+void METWriter::METFillPath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
     *pMET << (BYTE)0xd7 << (BYTE)6
@@ -1250,7 +1251,7 @@ void METWriter::METFillPath(ULONG nPathId)
 }
 
 
-void METWriter::METOutlinePath(ULONG nPathId)
+void METWriter::METOutlinePath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
     *pMET << (BYTE)0xd4 << (BYTE)6
@@ -1325,7 +1326,7 @@ void METWriter::METLineAtCurPos(Point aPt)
 
 
 void METWriter::METBox(BOOL bFill, BOOL bBoundary,
-                       Rectangle aRect, ULONG nHAxis, ULONG nVAxis)
+                       Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis)
 {
     BYTE nFlags=0;
     if (bFill)     nFlags|=0x40;
@@ -2411,7 +2412,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
         *pMET << (BYTE)0x0c << (BYTE)0x02 << (BYTE)0x84 << (BYTE)0x00;
         WriteFieldId(nId);
         *pMET << (BYTE)0x07 << (BYTE)0x22 << (BYTE)0x10;
-        *pMET << (ULONG)nId;
+        *pMET << (sal_uInt32)nId;
         nId++;
     }
 
@@ -2449,10 +2450,10 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     nNumberOfDataFields++;
 
     // Nun schreiben wir zunaechst den Kopf des Segments:
-    *pMET << (BYTE)0x70 << (BYTE)0x0e << (ULONG)0;
+    *pMET << (BYTE)0x70 << (BYTE)0x0e << (sal_uInt32)0;
     *pMET << (BYTE)0x70 << (BYTE)0x10; // Flags
     *pMET << (USHORT)0; // Lo-Wort der Laenge der Segementdaten (Big Endian)
-    *pMET << (ULONG)0;  // Reserved
+    *pMET << (sal_uInt32)0;  // Reserved
     *pMET << (USHORT)0; // Hi-Wort der Laenge der Segementdaten (Big Endian) (Ohh Ohh OS2)
     // Anmerkung: die richtige Daten-Laenge schreiben wir weiter unten nochmal
 
