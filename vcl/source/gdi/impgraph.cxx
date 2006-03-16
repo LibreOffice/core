@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:52:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,8 +100,8 @@
 #define SYS_OS2METAFILE             0x00000005
 #define SYS_MACMETAFILE             0x00000006
 
-#define GRAPHIC_FORMAT_50           COMPAT_FORMAT( 'G', 'R', 'F', '5' )
-#define NATIVE_FORMAT_50            COMPAT_FORMAT( 'N', 'A', 'T', '5' )
+#define GRAPHIC_FORMAT_50           static_cast<sal_uInt32>(COMPAT_FORMAT( 'G', 'R', 'F', '5' ))
+#define NATIVE_FORMAT_50            static_cast<sal_uInt32>(COMPAT_FORMAT( 'N', 'A', 'T', '5' ))
 
 // ---------------
 // - ImpSwapFile -
@@ -904,7 +904,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
     MapMode         aMapMode;
     Size            aSize;
     const ULONG     nStartPos = rIStm.Tell();
-    ULONG           nId;
+    sal_uInt32      nId;
     ULONG           nHeaderLen;
     long            nType;
     long            nLen;
@@ -1486,7 +1486,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
     if( !rIStm.GetError() )
     {
         const ULONG nStmPos1 = rIStm.Tell();
-        ULONG       nTmp;
+        sal_uInt32 nTmp;
 
         if ( !rImpGraphic.mbSwapUnderway )
             rImpGraphic.ImplClear();
