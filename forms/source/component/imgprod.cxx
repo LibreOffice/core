@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgprod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ public:
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_uInt32* pRead ) const;
-    virtual ErrCode     WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_uInt32* pWritten );
+    virtual ErrCode     ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_Size* pRead ) const;
+    virtual ErrCode     WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_Size* pWritten );
     virtual ErrCode     Flush() const;
     virtual ErrCode     SetSize( sal_uInt32 nSize );
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
@@ -119,7 +119,7 @@ ImgProdLockBytes::~ImgProdLockBytes()
 
 // ------------------------------------------------------------------------
 
-ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_uInt32* pRead ) const
+ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_Size* pRead ) const
 {
     if( GetStream() )
     {
@@ -150,7 +150,7 @@ ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCo
 
 // ------------------------------------------------------------------------
 
-ErrCode ImgProdLockBytes::WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_uInt32* pWritten )
+ErrCode ImgProdLockBytes::WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_Size* pWritten )
 {
     if( GetStream() )
         return SvLockBytes::WriteAt( nPos, pBuffer, nCount, pWritten );
