@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:50:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:38:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,14 +570,14 @@ bool RTLDrawingsHack(long &rLeft, long nWidth,
     return bRet;
 }
 
-bool SwWW8Writer::MiserableRTLFrmFmtHack(long &rLeft, long &rRight,
+bool SwWW8Writer::MiserableRTLFrmFmtHack(SwTwips &rLeft, SwTwips &rRight,
     const sw::Frame &rFrmFmt)
 {
     //Require nasty bidi swap
     if (FRMDIR_HORI_RIGHT_TOP != pDoc->GetTextDirection(rFrmFmt.GetPosition()))
         return false;
 
-    long nWidth = rRight - rLeft;
+    SwTwips nWidth = rRight - rLeft;
     SwTwips nPageLeft, nPageRight;
     SwTwips nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
 
@@ -703,8 +703,8 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             // spid
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
 
-            sal_Int32 nLeft = aRect.Left() + nThick;
-            sal_Int32 nRight = aRect.Right() - nThick;
+            SwTwips nLeft = aRect.Left() + nThick;
+            SwTwips nRight = aRect.Right() - nThick;
 
             //Nasty swap for bidi if neccessary
             rWrt.MiserableRTLFrmFmtHack(nLeft, nRight, rFrmFmt);
@@ -857,13 +857,13 @@ bool WW8_WrPlcTxtBoxes::WriteTxt(SwWW8Writer& rWrt)
 {
     bool bRet = false;
     rWrt.bInWriteEscher = true;
-    long& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
+    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
 
     bRet = WriteGenericTxt( rWrt, nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     WW8Fib& rFib = *rWrt.pFib;
-    long nMyOffset = rFib.ccpText + rFib.ccpFtn + rFib.ccpHdr + rFib.ccpAtn
+    WW8_CP nMyOffset = rFib.ccpText + rFib.ccpFtn + rFib.ccpHdr + rFib.ccpAtn
                             + rFib.ccpEdn;
     if( TXT_TXTBOX == nTyp )
         rWrt.pFldTxtBxs->Finish( nCP, nMyOffset );
@@ -2084,7 +2084,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
         DrawObjPointerVector aSorted;
         MakeZOrderArrAndFollowIds(pSdrObjs->GetObjArr(), aSorted);
 
-        ULONG nShapeId=0;
+        sal_uInt32 nShapeId=0;
         DrawObjPointerIter aEnd = aSorted.end();
         for (DrawObjPointerIter aIter = aSorted.begin(); aIter != aEnd; ++aIter)
         {
