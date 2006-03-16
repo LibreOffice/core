@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:01:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -967,7 +967,7 @@ BOOL SvNumberFormatter::Save( SvStream& rStream ) const
                 pEntry->GetNewStandardDefined() ||
                 (pTable->GetCurKey() % SV_COUNTRY_LANGUAGE_OFFSET == 0) )
         {
-            rStream << pTable->GetCurKey()
+            rStream << static_cast<sal_uInt32>(pTable->GetCurKey())
                     << (USHORT) LANGUAGE_SYSTEM
                     << (USHORT) pEntry->GetLanguage();
             pEntry->Save(rStream, aHdr);
