@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:14:43 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 16:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <svtools/ctloptions.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
