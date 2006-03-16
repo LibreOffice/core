@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:26:12 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,7 +720,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 pColumn->SetWidthOpt( (sal_uInt16)nColAbsWidth, sal_False );
             }
 
-            sal_uInt32 nExpPos = 0;
+            ULONG nExpPos = 0;
             if( rExpCols.Seek_Entry( pColumn, &nExpPos ) )
             {
                 pColumn->SetStyleName(
