@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:18 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,12 +643,12 @@ BOOL SwScanner::NextWord()
                 pBreakIt->xBreak->getScriptType( rText, nBegin );
 
         XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
-        const long nScriptEnd = nBegin +
+        const sal_Int32 nScriptEnd = nBegin +
             pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
-        const long nEnd = Min( aBound.endPos, nScriptEnd );
+        const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
 
         // restrict word start to last script change position
-        long nScriptBegin = 0;
+        sal_Int32 nScriptBegin = 0;
         if ( aBound.startPos < nBegin )
         {
             // search from nBegin backwards until the next script change
@@ -668,9 +668,9 @@ BOOL SwScanner::NextWord()
                 pBreakIt->xBreak->getScriptType( rText, aBound.startPos );
         XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                          static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
-        const long nScriptEnd = aBound.startPos +
+        const sal_Int32 nScriptEnd = aBound.startPos +
             pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
-        const long nEnd = Min( aBound.endPos, nScriptEnd );
+        const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
         nBegin = (xub_StrLen)aBound.startPos;
         nLen = (xub_StrLen)(nEnd - nBegin);
     }
@@ -1458,7 +1458,7 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
             }
             xub_StrLen nLen = nEndPos - nStart;
 
-            Sequence <long> aOffsets;
+            Sequence <sal_Int32> aOffsets;
             String sChgd( rTrans.transliterate( aText, nLang, nStart, nLen,
                                                     &aOffsets ));
             if( !aText.Equals( sChgd, nStart, nLen ) )
@@ -1476,12 +1476,12 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
 
 void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
-                                const Sequence<long>& rOffsets )
+                                const Sequence<sal_Int32>& rOffsets )
 {
     aText.Replace( nPos, nLen, rText );
 
     xub_StrLen nTLen = rText.Len();
-    const long* pOffsets = rOffsets.getConstArray();
+    const sal_Int32* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
     xub_StrLen nI, nMyOff;
     for( nI = 0, nMyOff = nPos; nI < nTLen; ++nI, ++nMyOff )
