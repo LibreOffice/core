@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:30:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -952,7 +952,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     aSave.Restore(this);
 }
 
-bool SwWW8ImplReader::GetTxbxTextSttEndCp(long& rStartCp, long& rEndCp,
+bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     USHORT nTxBxS, USHORT nSequence)
 {
     // rasch den TextBox-PLCF greifen
@@ -1087,7 +1087,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     rbEraseTextObj = false;
 
     String aString;
-    long nStartCp, nEndCp;
+    WW8_CP nStartCp, nEndCp;
     bool bContainsGraphics = false;
     bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
         nSequence ) && GetTxbxText( aString, nStartCp, nEndCp );
@@ -1489,7 +1489,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
 void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
 {
     pPF->SeekPos( nGrafAnchorCp );
-    long nStartFc;
+    WW8_FC nStartFc;
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) )
     {
@@ -2610,7 +2610,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     //Normal case of Word 8+ version stuff
     pPF->SeekPos( nGrafAnchorCp );
 
-    long nStartFc;
+    WW8_FC nStartFc;
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) ){
         ASSERT( !this, "+Wo ist die Grafik (2) ?" );
