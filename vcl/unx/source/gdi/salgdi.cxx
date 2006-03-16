@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:46:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -827,8 +827,8 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyPolygon( ULONG         nPoly,
-                                   const ULONG     *pPoints,
+void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
+                                   const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
     if( nBrushColor_ != 0xFFFFFFFF )
@@ -890,7 +890,7 @@ sal_Bool X11SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAr
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                                 const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
     return sal_False;
