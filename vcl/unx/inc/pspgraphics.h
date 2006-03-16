@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:32:52 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,8 +151,8 @@ public:
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual void            drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void            drawPolyPolygon( ULONG nPoly,
-                                             const ULONG* pPoints,
+    virtual void            drawPolyPolygon( sal_uInt32 nPoly,
+                                             const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
     virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
@@ -160,8 +160,8 @@ public:
     virtual sal_Bool        drawPolygonBezier( ULONG nPoints,
                                                const SalPoint* pPtAry,
                                                const BYTE* pFlgAry );
-    virtual sal_Bool        drawPolyPolygonBezier( ULONG nPoly,
-                                                   const ULONG* pPoints,
+    virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
+                                                   const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const BYTE* const* pFlgAry );
     virtual void            copyArea( long nDestX,
