@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:19:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ public:
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
     void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,
-        const String* pStr = NULL, sal_uInt32 nMergeAct = 0, sal_uInt32 nMergeCnt = 0 );
+        const String* pStr = NULL, ULONG nMergeAct = 0, ULONG nMergeCnt = 0 );
 
     //All about fields.
     void UpdateFlds(sal_Bool bCloseDB = sal_False);
