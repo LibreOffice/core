@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:41:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
     ASSERT( i<nPageDescs, "Seitenvorlage nicht gefunden" );
 }
 
-SwCSS1Parser::SwCSS1Parser( SwDoc *pD, ULONG aFHeights[7], const String& rBaseURL, BOOL bNewDoc ) :
+SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, BOOL bNewDoc ) :
     SvxCSS1Parser( pD->GetAttrPool(), rBaseURL, MM50/2,
                    (USHORT*)&aItemIds, sizeof(aItemIds) / sizeof(USHORT) ),
     nDropCapCnt( 0 ), bIsNewDoc( bNewDoc ), pDoc( pD ),
@@ -1213,7 +1213,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     return TRUE;
 }
 
-ULONG SwCSS1Parser::GetFontHeight( USHORT nSize ) const
+sal_uInt32 SwCSS1Parser::GetFontHeight( USHORT nSize ) const
 {
     return aFontHeights[ nSize>6 ? 6 : nSize ];
 }
