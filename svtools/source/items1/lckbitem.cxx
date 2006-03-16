@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lckbitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:55 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT nVersion ) const
 {
-    ULONG nSize = 0;
+    sal_uInt32 nSize = 0;
     ULONG nActRead = 0;
     sal_Char cTmpBuf[MAX_BUF];
     SvMemoryStream aNewStream;
@@ -142,7 +142,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT nVersion ) cons
 SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT nItemVersion ) const
 {
     SvStream aLockBytesStream( _xVal );
-    ULONG nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
     aLockBytesStream.Seek( 0L );
 
     rStream << nSize;

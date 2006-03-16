@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,7 +738,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_STARTPOOL_4 );
         rStream >> pImp->nMajorVer >> pImp->nMinorVer;
     }
-    ULONG nAttribSize;
+    sal_uInt32 nAttribSize;
     int bOwnPool = TRUE;
     UniString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
@@ -771,7 +771,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     ULONG nStartPos = rStream.Tell();
     rStream.SeekRel( nAttribSize );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_SIZES );
-    ULONG nSizeTableLen;
+    sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
     sal_Char *pBuf = new sal_Char[nSizeTableLen];
     rStream.Read( pBuf, nSizeTableLen );
@@ -783,7 +783,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     {
         // Version-Map finden (letztes ULONG der Size-Table gibt Pos an)
         rStream.Seek( nEndOfSizes - sizeof(ULONG) );
-        ULONG nVersionMapPos;
+        sal_uInt32 nVersionMapPos;
         rStream >> nVersionMapPos;
         rStream.Seek( nVersionMapPos );
 
@@ -831,7 +831,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         USHORT nRef, nCount, nVersion;
-        ULONG nAttrSize;
+        sal_uInt32 nAttrSize;
         rStream >> nVersion >> nCount;
 
         SfxPoolItemArray_Impl **ppArr = 0;
@@ -978,7 +978,8 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         USHORT nMappedWhich = GetWhich(nSlot, FALSE);
         int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
-        ULONG nSize, nPos = nLastPos;
+        ULONG nPos = nLastPos;
+        sal_uInt32 nSize;
         USHORT nVersion;
         rStream >> nVersion;
 
@@ -1671,7 +1672,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
     {
         // bDirekt bzw. nicht IsPoolable() => Item direkt laden
         USHORT nVersion;
-        ULONG  nLen;
+        sal_uInt32 nLen;
         rStream >> nVersion >> nLen;
         ULONG nStart = rStream.Tell();
 

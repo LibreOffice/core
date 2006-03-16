@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cintitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:42 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,7 @@ CntUInt32Item::CntUInt32Item(USHORT nWhich, SvStream & rStream) :
     SfxPoolItem(nWhich)
 {
     DBG_CTOR(CntUInt32Item, 0);
-    ULONG nTheValue = 0;
+    sal_uInt32 nTheValue = 0;
     rStream >> nTheValue;
     m_nValue = nTheValue;
 }
@@ -546,7 +546,7 @@ SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, USHORT) const
 SvStream & CntUInt32Item::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
-    rStream << ULONG(m_nValue);
+    rStream << static_cast<sal_uInt32>(m_nValue);
     return rStream;
 }
 
