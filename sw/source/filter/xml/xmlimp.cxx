@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:11:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -827,7 +827,7 @@ void SwXMLImport::endDocument( void )
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pCurrNd;
-            sal_uInt32 nNodeIdx = pPos->nNode.GetIndex();
+            ULONG nNodeIdx = pPos->nNode.GetIndex();
             pDoc = pPaM->GetDoc();
 
             DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
