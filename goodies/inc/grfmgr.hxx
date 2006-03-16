@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:39:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ private:
     long            mnDummy1;
     long            mnDummy2;
     double          mfGamma;
-    ULONG           mnMirrFlags;
+    sal_uInt32      mnMirrFlags;
     long            mnLeftCrop;
     long            mnTopCrop;
     long            mnRightCrop;
