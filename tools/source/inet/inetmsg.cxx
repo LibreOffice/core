@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:23:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,11 +170,11 @@ ULONG INetMessage::SetHeaderField (
  */
 SvStream& INetMessage::operator<< (SvStream& rStrm) const
 {
-    rStrm << m_nDocSize;
+    rStrm << static_cast<sal_uInt32>(m_nDocSize);
     rStrm.WriteByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
     ULONG i, n = m_aHeaderList.Count();
-    rStrm << n;
+    rStrm << static_cast<sal_uInt32>(n);
 
     for (i = 0; i < n; i++)
         rStrm << *((HEADERFIELD *)(m_aHeaderList.GetObject(i)));
@@ -192,12 +192,16 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     m_xDocLB.Clear();
     ListCleanup_Impl();
 
+    sal_uInt32 nTemp;
+
     // Copy.
-    rStrm >> m_nDocSize;
+    rStrm >> nTemp;
+    m_nDocSize = nTemp;
     rStrm.ReadByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
     ULONG i, n = 0;
-    rStrm >> n;
+    rStrm >> nTemp;
+    n = nTemp;
 
     for (i = 0; i < n; i++)
     {
@@ -935,7 +939,7 @@ SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
     INetMessage::operator<< (rStrm);
 
     for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        rStrm << m_nIndex[i];
+        rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
     return rStrm;
 }
@@ -947,8 +951,12 @@ SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
 {
     INetMessage::operator>> (rStrm);
 
+    sal_uInt32 nTemp;
     for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        rStrm >> m_nIndex[i];
+    {
+        rStrm >> nTemp;
+        m_nIndex[i] = nTemp;
+    }
 
     return rStrm;
 }
@@ -1618,14 +1626,14 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
     INetRFC822Message::operator<< (rStrm);
 
     for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        rStrm << m_nIndex[i];
+        rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
 #ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
     rStrm << m_aBoundary;
 #else
     rStrm.WriteByteString (m_aBoundary);
 #endif
-    rStrm << nNumChildren;
+    rStrm << static_cast<sal_uInt32>(nNumChildren);
 
     return rStrm;
 }
@@ -1637,15 +1645,20 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
 {
     INetRFC822Message::operator>> (rStrm);
 
+    sal_uInt32 nTemp;
     for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        rStrm >> m_nIndex[i];
+    {
+        rStrm >> nTemp;
+        m_nIndex[i] = nTemp;
+    }
 
 #ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
     rStrm >> m_aBoundary;
 #else
     rStrm.ReadByteString (m_aBoundary);
 #endif
-    rStrm >> nNumChildren;
+    rStrm >> nTemp;
+    nNumChildren = nTemp;
 
     return rStrm;
 }
