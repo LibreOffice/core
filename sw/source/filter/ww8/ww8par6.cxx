@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:22:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,7 +985,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
             pWkb->Where() == nTxtPos)
     {
         void* pData;
-        long nTest;
+        WW8_CP nTest;
         pWkb->Get(nTest, pData);
         String sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
         mrReader.ConvertFFileName(sSectionName, sSectionName);
