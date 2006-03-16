@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:27:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1025,7 +1025,7 @@ void SwXTextCursor::GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttr
     SwPaM *_pStartCrsr = &rPam;
     do
     {
-        sal_uInt32 nSttNd = _pStartCrsr->GetMark()->nNode.GetIndex(),
+        ULONG nSttNd = _pStartCrsr->GetMark()->nNode.GetIndex(),
                     nEndNd = _pStartCrsr->GetPoint()->nNode.GetIndex();
             xub_StrLen nSttCnt = _pStartCrsr->GetMark()->nContent.GetIndex(),
                     nEndCnt = _pStartCrsr->GetPoint()->nContent.GetIndex();
@@ -1045,7 +1045,7 @@ void SwXTextCursor::GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttr
 
             // beim 1.Node traegt der Node die Werte in den GetSet ein (Initial)
             // alle weiteren Nodes werden zum GetSet zu gemergt
-            for( sal_uInt32 n = nSttNd; n <= nEndNd; ++n )
+            for( ULONG n = nSttNd; n <= nEndNd; ++n )
             {
                 SwNode* pNd = rPam.GetDoc()->GetNodes()[ n ];
                 switch( pNd->GetNodeType() )
