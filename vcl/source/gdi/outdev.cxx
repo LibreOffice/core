@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2005-11-18 20:03:48 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,17 +271,17 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
 void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPoly )
 {
-    ULONG               aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
     PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
     BYTE*               aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
-    ULONG*              pPointAry;
+    sal_uInt32*         pPointAry;
     PCONSTSALPOINT*     pPointAryAry;
     const BYTE**        pFlagAryAry;
     USHORT              i = 0, j = 0, last = 0;
     BOOL                bHaveBezier = sal_False;
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
-        pPointAry       = new ULONG[nPoly];
+        pPointAry       = new sal_uInt32[nPoly];
         pPointAryAry    = new PCONSTSALPOINT[nPoly];
         pFlagAryAry     = new const BYTE*[nPoly];
     }
