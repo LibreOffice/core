@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:01:12 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -840,7 +840,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             XubString aName, aParent, aFollow;
             String aHelpFile;
             USHORT nFamily, nMask,nCount;
-            ULONG nHelpId;
+            sal_uInt32 nHelpId;
             rStream.ReadByteString(aName, eEnc );
             rStream.ReadByteString(aParent, eEnc );
             rStream.ReadByteString(aFollow, eEnc );
@@ -933,7 +933,7 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
         XubString aName, aParent, aFollow;
         String aHelpFile;
         USHORT nFamily, nMask,nCount;
-        ULONG nHelpId;
+        sal_uInt32 nHelpId;
         rStream.ReadByteString(aName, eEnc );
         rStream.ReadByteString(aParent, eEnc );
         rStream.ReadByteString(aFollow, eEnc );
@@ -1082,7 +1082,7 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
 
                 // Globale Teile speichern
                 String aHelpFile;
-                ULONG nHelpId = p->GetHelpId( aHelpFile );
+                sal_uInt32 nHelpId = p->GetHelpId( aHelpFile );
                 USHORT nFamily = p->GetFamily();
                 String sFamily( (sal_Unicode)nFamily );
 
