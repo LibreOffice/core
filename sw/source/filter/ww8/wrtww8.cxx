@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:08:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,7 +722,8 @@ bool WW8_WrPlcFld::Write(SwWW8Writer& rWrt)
     if( WW8_WrPlc1::Count() <= 1 )
         return false;
 
-    long *pfc, *plc;
+    WW8_FC *pfc;
+    sal_Int32 *plc;
     switch (nTxtTyp)
     {
         case TXT_MAINTEXT:
@@ -1304,7 +1305,7 @@ void WW8_WrPct::SetParaBreak()
     pPcts->GetObject( pPcts->Count() - 1)->SetStatus();
 }
 
-ULONG WW8_WrPct::Fc2Cp( ULONG nFc ) const
+WW8_CP WW8_WrPct::Fc2Cp( ULONG nFc ) const
 {
     ASSERT( nFc >= (ULONG)nOldFc, "FilePos liegt vorm letzten Piece" );
     ASSERT( pPcts->Count(), "Fc2Cp noch kein Piece vorhanden" );
