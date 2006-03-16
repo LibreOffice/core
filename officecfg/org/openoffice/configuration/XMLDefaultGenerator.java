@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLDefaultGenerator.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:43:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 11:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,10 @@ package org.openoffice.configuration;
 
 import org.xml.sax.*;
 import org.w3c.dom.*;
-import com.sun.xml.tree.XmlDocument;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.SAXParser;
-import com.sun.xml.tree.*;
 import java.util.*;
 import java.io.*;
 import com.jclark.xsl.sax.Driver;
@@ -65,7 +63,7 @@ public class XMLDefaultGenerator {
     public XMLDefaultGenerator(String sourceFile) throws Exception
     {
         // set the driver for xt
-        System.setProperty("com.jclark.xsl.sax.parser", "com.sun.xml.parser.Parser");
+        System.setProperty("com.jclark.xsl.sax.parser", "org.apache.xerces.parsers.SAXParser");
         evaluateSchema(sourceFile);
     }
 
