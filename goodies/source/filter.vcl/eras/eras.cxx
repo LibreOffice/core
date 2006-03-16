@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:46:00 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ BOOL RASWriter::ImplWriteHeader()
     {
         *mpOStm << (UINT32)0x59a66a95 << (UINT32)mnWidth << (UINT32)mnHeight
             << (UINT32)mnDepth
-            << (UINT32) ( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight
+            << (UINT32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
             << (UINT32)2;
 
         if ( mnDepth > 8 )

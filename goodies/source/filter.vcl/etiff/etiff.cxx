@@ -4,9 +4,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:46:28 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ private:
     void                ImplWritePalette();
     BOOL                ImplWriteBody();
     void                ImplWriteTag( UINT16 TagID, UINT16 DataType, UINT32 NumberOfItems, UINT32 Value);
-    void                ImplWriteResolution( ULONG nStreamPos, ULONG nResolutionUnit );
+    void                ImplWriteResolution( ULONG nStreamPos, sal_uInt32 nResolutionUnit );
     void                StartCompression();
     void                Compress( BYTE nSrc );
     void                EndCompression();
@@ -332,7 +332,7 @@ void TIFFWriter::ImplWritePalette()
     USHORT i;
     ULONG nCurrentPos = mpOStm->Tell();
     mpOStm->Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
-    *mpOStm << nCurrentPos - mnStreamOfs;   // to the palette colors
+    *mpOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);  // to the palette colors
     mpOStm->Seek( nCurrentPos );
 
     for ( i = 0; i < mnColors; i++ )
@@ -362,7 +362,7 @@ BOOL TIFFWriter::ImplWriteBody()
 
     ULONG nGfxBegin = mpOStm->Tell();
     mpOStm->Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
-    *mpOStm << nGfxBegin - mnStreamOfs;     // to the bitmap data
+    *mpOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);        // to the bitmap data
     mpOStm->Seek( nGfxBegin );
 
     StartCompression();
@@ -454,7 +454,7 @@ BOOL TIFFWriter::ImplWriteBody()
     {
         ULONG nGfxEnd = mpOStm->Tell();
         mpOStm->Seek( mnStripByteCountPos + 8 );
-        *mpOStm << ( nGfxEnd - nGfxBegin );     // mnStripByteCountPos needs the size of the compression data
+        *mpOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
         mpOStm->Seek( nGfxEnd );
     }
     return mbStatus;
@@ -462,13 +462,13 @@ BOOL TIFFWriter::ImplWriteBody()
 
 // ------------------------------------------------------------------------
 
-void TIFFWriter::ImplWriteResolution( ULONG nStreamPos, ULONG nResolutionUnit )
+void TIFFWriter::ImplWriteResolution( ULONG nStreamPos, sal_uInt32 nResolutionUnit )
 {
     ULONG nCurrentPos = mpOStm->Tell();
     mpOStm->Seek( nStreamPos + 8 );
     *mpOStm << (UINT32)nCurrentPos - mnStreamOfs;
     mpOStm->Seek( nCurrentPos );
-    *mpOStm << (ULONG)1;
+    *mpOStm << (UINT32)1;
     *mpOStm << nResolutionUnit;
 }
 
