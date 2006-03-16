@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numhead.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ SvNumWriteHeader::~SvNumWriteHeader()
 ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
-    ULONG nDataSize;
+    sal_uInt32 nDataSize;
     rStream >> nDataSize;
     ULONG nDataPos = rStream.Tell();
     nEntryEnd = nDataPos;
@@ -131,7 +131,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     {
         DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
     }
-    ULONG nSizeTableLen;
+    sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
     pBuf = new char[nSizeTableLen];
     rStream.Read( pBuf, nSizeTableLen );
@@ -157,7 +157,7 @@ ImpSvNumMultipleReadHeader::~ImpSvNumMultipleReadHeader()
 // static
 void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
 {
-    ULONG nDataSize;
+    sal_uInt32 nDataSize;
     rStream >> nDataSize;
     rStream.SeekRel( nDataSize );
     USHORT nID;
@@ -166,7 +166,7 @@ void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
     {
         DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
     }
-    ULONG nSizeTableLen;
+    sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
     rStream.SeekRel( nSizeTableLen );
 }
@@ -186,7 +186,7 @@ void ImpSvNumMultipleReadHeader::EndEntry()
 void ImpSvNumMultipleReadHeader::StartEntry()
 {
     ULONG nPos = rStream.Tell();
-    ULONG nEntrySize;
+    sal_uInt32 nEntrySize;
     (*pMemStream) >> nEntrySize;
 
     nEntryEnd = nPos + nEntrySize;
@@ -227,7 +227,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     ULONG nDataEnd = rStream.Tell();
 
     rStream << (USHORT) SV_NUMID_SIZES;
-    rStream << aMemStream.Tell();
+    rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
     if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
@@ -245,7 +245,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 void ImpSvNumMultipleWriteHeader::EndEntry()
 {
     ULONG nPos = rStream.Tell();
-    aMemStream << nPos - nEntryStart;
+    aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
 }
 
 //#pragma SEG_FUNCDEF(numhead_0e)
