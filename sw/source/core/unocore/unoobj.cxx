@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:15:45 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,7 +844,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
     sal_Bool bError = sal_False;
     FOREACHUNOPAM_START(&rPam)
 
-        sal_uInt32 nSttNd = PUNOPAM->GetMark()->nNode.GetIndex(),
+        ULONG nSttNd = PUNOPAM->GetMark()->nNode.GetIndex(),
               nEndNd = PUNOPAM->GetPoint()->nNode.GetIndex();
         xub_StrLen nSttCnt = PUNOPAM->GetMark()->nContent.GetIndex(),
                 nEndCnt = PUNOPAM->GetPoint()->nContent.GetIndex();
@@ -862,7 +862,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
         }
 
         const SwNodes& rNds = rPam.GetDoc()->GetNodes();
-        for( sal_uInt32 n = nSttNd; n <= nEndNd; ++n )
+        for( ULONG n = nSttNd; n <= nEndNd; ++n )
         {
             const SwTxtNode* pNd = rNds[ n ]->GetTxtNode();
             if( pNd )
