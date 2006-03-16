@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 13:44:51 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:40:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -584,7 +584,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 }
 // <--
 
-sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
+ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -878,7 +878,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
     }
 
     rDoc.AddLink(); // prevent deletion
-    sal_uInt32 nRet = 0;
+    ULONG nRet = 0;
 
     // save redline mode into import info property set
     Any aAny;
