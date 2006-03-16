@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:07:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2903,7 +2903,7 @@ ULONG MA_FASTCALL SqRt( BigInt nX )
             nOldErg = nErg;
         }
     }
-    return nErg >= BigInt((ULONG)ULONG_MAX) ? ULONG_MAX : (ULONG)nErg;
+    return nErg >= BigInt(SAL_MAX_UINT32) ? ULONG_MAX : (ULONG)nErg;
 }
 
 /*************************************************************************
