@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:25:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ struct HTMLControl
 {
     // die Form, zu der das Control gehoert
     Reference< container::XIndexContainer > xFormComps;
-    sal_uInt32 nNdIdx;              // der Node, in dem es verankert ist
+    ULONG nNdIdx;                   // der Node, in dem es verankert ist
     xub_StrLen nCount;              // wie viele Controls sind in dem Node
 
     HTMLControl( const Reference< container::XIndexContainer > & rForm,
