@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:34:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,8 +384,8 @@ void PspGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolyPolygon( ULONG            nPoly,
-                                   const ULONG     *pPoints,
+void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
+                                   const sal_uInt32   *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
@@ -403,8 +403,8 @@ sal_Bool PspGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
     return sal_True;
 }
 
-sal_Bool PspGraphics::drawPolyPolygonBezier( ULONG nPoly,
-                                             const ULONG* pPoints,
+sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
+                                             const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry,
                                              const BYTE* const* pFlgAry )
 {
