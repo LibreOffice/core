@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:58:33 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
 
 // ------------------------------------------------------------------------
 
-GfxLink::GfxLink( BYTE* pBuf, ULONG nSize, GfxLinkType nType, BOOL bOwns ) :
+GfxLink::GfxLink( BYTE* pBuf, sal_uInt32 nSize, GfxLinkType nType, BOOL bOwns ) :
     mpImpData( new ImpGfxLink )
 {
     meType = nType;
@@ -177,7 +177,7 @@ BOOL GfxLink::IsNative() const
 
 // ------------------------------------------------------------------------
 
-ULONG GfxLink::GetDataSize() const
+sal_uInt32 GfxLink::GetDataSize() const
 {
     return mnBufSize;
 }
@@ -355,8 +355,8 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 {
     Size            aSize;
     MapMode         aMapMode;
-    ULONG           nSize;
-    ULONG           nUserId;
+    sal_uInt32      nSize;
+    sal_uInt32      nUserId;
     UINT16          nType;
     BYTE*           pBuf;
     bool            bMapAndSizeValid( false );
