@@ -24,8 +24,6 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\common\xt.jar %_DEST%\bin%_EXT%\xt.jar
-..\common\jaxp.jar %_DEST%\bin%_EXT%\jaxp.jar
-..\common\parser.jar %_DEST%\bin%_EXT%\parser.jar
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
 ..\audio\rtufiles\lib\audio\*.h %_DEST%\inc%_EXT%\audio\*
