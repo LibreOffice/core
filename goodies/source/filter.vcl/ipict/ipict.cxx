@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:45:44 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 13:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ Size PictReader::ReadSize()
 
 Color PictReader::ReadColor()
 {
-    ULONG nCol;
+    sal_uInt32 nCol;
     Color aCol;
 
     *pPict >> nCol;
@@ -635,7 +635,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     USHORT              ny, nx, nColTabSize;
     USHORT              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
                         nPixelSize, nCmpCount, nCmpSize;
-    ULONG               nPackSize, nPlaneBytes, nHRes, nVRes;
+    sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
     BYTE                nDat, nRed, nGreen, nBlue, nDummy;
     ULONG               i, nDataSize = 0;
 
@@ -1778,7 +1778,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     default: // 0x00a2 bis 0xffff (zumeist Reserved)
         if      (nOpcode<=0x00af) { *pPict >> nUSHORT; nDataSize=2+nUSHORT; }
         else if (nOpcode<=0x00cf) { nDataSize=0; }
-        else if (nOpcode<=0x00fe) { *pPict >> nDataSize; nDataSize+=4; }
+        else if (nOpcode<=0x00fe) { sal_uInt32 nTemp; *pPict >> nTemp ; nDataSize = nTemp; nDataSize+=4; }
         else if (nOpcode==0x00ff) { nDataSize=2; } // OpEndPic
         else if (nOpcode<=0x01ff) { nDataSize=2; }
         else if (nOpcode<=0x0bfe) { nDataSize=4; }
@@ -1787,7 +1787,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else if (nOpcode<=0x7eff) { nDataSize=24; }
         else if (nOpcode<=0x7fff) { nDataSize=254; }
         else if (nOpcode<=0x80ff) { nDataSize=0; }
-        else                      { *pPict >> nDataSize; nDataSize+=4; }
+        else                      { sal_uInt32 nTemp; *pPict >> nTemp ; nDataSize = nTemp; nDataSize+=4; }
     }
 
     if (nDataSize==0xffffffff) {
