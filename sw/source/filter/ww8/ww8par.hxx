@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:47:25 $
+ *  last change: $Author: vg $ $Date: 2006-03-16 12:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1101,15 +1101,15 @@ private:
     bool AddTextToParagraph(const String& sAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
-    bool ReadPlainChars(long& rPos, long nEnd, long nCpOfs);
-    bool ReadChars(long& rPos, long nNextAttr, long nTextEnd, long nCpOfs);
+    bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
+    bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
 
     void ProcessAktCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
         bool bCallProcessSpecial);
-    long ReadTextAttr(long& rTxtPos, bool& rbStartLine);
-    void ReadAttrs(long& rNext, long& rTxtPos, bool& rbStartLine);
+    long ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine);
+    void ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine);
     void CloseAttrEnds();
     bool ReadText(long nStartCp, long nTextLen, short nType);
 
@@ -1273,7 +1273,7 @@ private:
     void InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl );
     void InsertTxbxAttrs(long nStartCp, long nEndCp, bool bONLYnPicLocFc);
 
-    bool GetTxbxTextSttEndCp(long& rStartCp, long& rEndCp, USHORT nTxBxS,
+    bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, USHORT nTxBxS,
         USHORT nSequence);
     bool GetTxbxText(String& rString, long StartCp, long nEndCp);
     SwFrmFmt* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
@@ -1496,7 +1496,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, String& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, String& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
-    short GetTimeDatePara(String& rStr, ULONG& rFormat, USHORT &rLang,
+    short GetTimeDatePara(String& rStr, sal_uInt32& rFormat, USHORT &rLang,
         int nWhichDefault, bool bHijri = false);
     bool ForceFieldLanguage(SwField &rFld, USHORT nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
