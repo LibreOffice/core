@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cow_wrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-01-25 16:14:25 $
+ *  last change: $Author: thb $ $Date: 2006-03-17 16:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,7 @@ cow_wrapper_client::~cow_wrapper_client()
 cow_wrapper_client& cow_wrapper_client::operator=( const cow_wrapper_client& rSrc )
 {
     maImpl = rSrc.maImpl;
+    return *this;
 }
 void cow_wrapper_client::modify( int nVal )
 {
@@ -173,7 +174,6 @@ void cow_wrapper_client::queryUnmodified() const
         }
 
     public:
-        typedef T  element_type;
         typedef T  value_type;
         typedef T* pointer;
 
