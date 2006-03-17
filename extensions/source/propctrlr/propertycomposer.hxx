@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycomposer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:29:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-17 09:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,7 @@ namespace pcr
         }
 
     private:
+        class MethodGuard;
         friend class MethodGuard;
         class MethodGuard : public ::osl::MutexGuard
         {

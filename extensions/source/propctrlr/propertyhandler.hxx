@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:30:45 $
+ *  last change: $Author: vg $ $Date: 2006-03-17 09:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,14 +470,14 @@ namespace pcr
     ::rtl::OUString SAL_CALL HandlerComponentBase< HANDLER >::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return HANDLER::getImplementationName_static();
-    };
+    }
 
     //--------------------------------------------------------------------
     template < class HANDLER >
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL HandlerComponentBase< HANDLER >::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return HANDLER::getSupportedServiceNames_static();
-    };
+    }
 
     //--------------------------------------------------------------------
     template < class HANDLER >

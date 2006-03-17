@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:19:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-17 09:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,7 +281,7 @@ namespace pcr
             pControlWindow->SetLoseFocusHdl( LINK( &m_aImplControl, ControlHelper, LoseFocusHdl ) );
         }
         m_aImplControl.autoSizeWindow();
-    };
+    }
 
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
