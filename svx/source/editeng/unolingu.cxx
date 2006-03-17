@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 14:08:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-17 08:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,12 +305,12 @@ void SvxLinguConfigUpdate::UpdateAll()
 
     if (IsNeedUpdateAll())
     {
-        typedef const OUString const_OUstring_t;
+        typedef OUString OUstring_t;
         typedef Sequence< OUString > Sequence_OUString_t;
-        typedef std::vector< const_OUstring_t > const_OUString_vector_t;
-        typedef std::set< const_OUstring_t > const_OUString_set_t;
-        std::vector< const_OUString_vector_t > aVector;
-        typedef std::map< const_OUstring_t, Sequence_OUString_t > list_entry_map_t;
+        typedef std::vector< OUstring_t > OUString_vector_t;
+        typedef std::set< OUstring_t > OUString_set_t;
+        std::vector< OUString_vector_t > aVector;
+        typedef std::map< OUstring_t, Sequence_OUString_t > list_entry_map_t;
 
         RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - updating..." );
 
