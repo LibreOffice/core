@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:13:07 $
+ *  last change: $Author: vg $ $Date: 2006-03-17 08:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::inspection;
+using ::com::sun::star::awt::XWindow;
 
 /*************************************************************************/
 //========================================================================
