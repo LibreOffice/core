@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-16 11:10:58 $
+#   last change: $Author: vg $ $Date: 2006-03-17 14:25:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -494,14 +494,14 @@ sub set_classpath_for_install_sdk
 
     # The variable CLASSPATH has to contain:
     # $installsdk/classes:$installsdk/classes/setupsdk.jar:
-    # $installsdk/classes/xercesImpl.jar:$installsdk/classes/xml-apis.jar:
+    # $installsdk/classes/parser.jar:$installsdk/classes/jaxp.jar:
     # $installsdk/classes/ldapjdk.jar:$directory
 
     my @additional_classpath = ();
     push(@additional_classpath, "$installsdk\/classes");
     push(@additional_classpath, "$installsdk\/installsdk.jar");
-    push(@additional_classpath, "$installsdk\/classes\/xml-apis.jar");
-    push(@additional_classpath, "$installsdk\/classes\/xercesImpl.jar");
+    push(@additional_classpath, "$installsdk\/classes\/parser.jar");
+    push(@additional_classpath, "$installsdk\/classes\/jaxp.jar");
     push(@additional_classpath, "$directory");
 
     my $newclasspathstring = "";
