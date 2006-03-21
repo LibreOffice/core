@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:09:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,6 +429,8 @@ void SwRTFParser::Continue( int nToken )
             pDoc->SetConsiderWrapOnObjPos( true );
             // --> FME 2006-02-10 #131283#
             pDoc->SetTableRowKeep( true );
+            // --> FME 2006-03-01 #i3952#
+            pDoc->SetIgnoreTabsAndBlanksForLineCalculation( true );
 
             //
             // COMPATIBILITY FLAGS END
