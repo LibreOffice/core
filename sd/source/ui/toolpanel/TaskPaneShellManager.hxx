@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:33:50 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,29 @@
 #ifndef SD_TOOLPANEL_TASK_PANE_SHELL_MANAGER_HXX
 #define SD_TOOLPANEL_TASK_PANE_SHELL_MANAGER_HXX
 
-#include <list>
-#include <vector>
+#include "ShellFactory.hxx"
+#include "ViewShellManager.hxx"
+#include <map>
 
+class FrameView;
 class SfxShell;
+class VclWindowEvent;
+class Window;
 
 namespace sd {
 class ViewShell;
-class ViewShellManager;
 }
 
 namespace sd { namespace toolpanel {
 
+/** The TaskPaneShellManager implements the ViewShellManager::ShellFactory
+    interface.  However, it does not create or delete shells.  It only
+    gives the ViewShellManager access to the sub shells of the
+    TaskPaneViewShell.  Life time control of the sub shells is managed by
+    the sub shells themselves.
+*/
 class TaskPaneShellManager
+    : public ShellFactory<SfxShell>
 {
 public:
     /** Create a shell manager that manages the stacked shells for the given
@@ -57,9 +67,33 @@ public:
     TaskPaneShellManager (
         ViewShellManager& rViewShellManager,
         const ViewShell& rViewShell);
+    ~TaskPaneShellManager (void);
 
-    void AddSubShell (SfxShell* pShell);
-    void RemoveSubShell (SfxShell* pShell);
+    /** Return the requested sub shell.
+        @param nId
+            The id of the requested sub shell.
+        @return
+            When there is no sub shell currently registered under the given
+            id then NULL is returned.
+    */
+    virtual SfxShell* CreateShell (
+        ShellId nId,
+        ::Window* pParentWindow,
+        FrameView* pFrameView = NULL);
+
+    virtual void ReleaseShell (SfxShell* pShell);
+
+    /** Add a sub shell to the set of sub shells managed by the
+        TaskPaneShellManager.  Only shells added by this method are returned
+        by CreateShell().
+    */
+    void AddSubShell (ShellId nId, SfxShell* pShell, ::Window* pWindow);
+
+    /** Remove the given shell from the set of sub shells managed by the
+        TaskPaneShellManager.  Following calls to CreateShell() will return
+        NULL when this shell is requested.
+    */
+    void RemoveSubShell (const SfxShell* pShell);
 
     /** Move the given sub-shell to the top of the local shell stack.
         Furthermore move the view shell whose sub-shells this class manages
@@ -67,20 +101,22 @@ public:
     */
     void MoveToTop (SfxShell* pShell);
 
-    void GetLowerShellList (::std::vector<SfxShell*>& rShellList) const;
-    void GetUpperShellList (::std::vector<SfxShell*>& rShellList) const;
+    DECL_LINK(WindowCallback,VclWindowEvent*);
 
 private:
-    /** The shell stack contains the shells from the task pane manager that
-        will be stacked on the ViewShellBase object with the next calls to
-        Get(Lower|Upper)ShellList().  The top element is front().
-    */
-    typedef ::std::list<SfxShell*> ShellStack;
-    ShellStack maShellStack;
     ViewShellManager& mrViewShellManager;
 
     /// The view shell whose sub-shells this class manages.
     const ViewShell& mrViewShell;
+
+    class ShellDescriptor { public:
+        SfxShell* mpShell;
+        ::Window* mpWindow;
+        ShellDescriptor(void) : mpShell(NULL),mpWindow(NULL){}
+        ShellDescriptor(SfxShell*pShell,::Window*pWindow) : mpShell(pShell),mpWindow(pWindow){}
+    };
+    typedef ::std::map<ShellId,ShellDescriptor> SubShells;
+    SubShells maSubShells;
 };
 
 } } // end of namespace ::sd::toolpanel
