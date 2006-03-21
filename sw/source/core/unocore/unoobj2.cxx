@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:30:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,13 +922,22 @@ IMPL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
     ASSERT( pThis != NULL, "no reference?" );
     ASSERT( pArg != NULL, "no reference?" );
 
+    // --> FME 2006-03-07 #126177# Tell the SwXTextCursor that the user event
+    // has been executed. It is not necessary to remove the user event in
+    // ~SwXTextCursor
+    pThis->DoNotRemoveUserEvent();
+    // <--
+
     SwUnoCrsr* pCursor = pThis->GetCrsr();
     if( pCursor != NULL )
     {
         pCursor->Remove( pThis );
         delete pCursor;
     }
-    delete pArg;
+
+    // --> FME 2006-03-07 #126177#
+    //delete pArg;
+    // <--
 
     return 0;
 }
@@ -940,13 +949,24 @@ void    SwXTextCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     // if the cursor leaves its designated section, it becomes invalid
     if( ( pOld != NULL ) && ( pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION ) )
     {
+        // --> FME 2006-03-07 #126177# We don't need to create a reference
+        // to the SwXTextCursor to prevent its deletion. If the destructor
+        // of the SwXTextCursor is called before the user event is executed,
+        // the user event will be removed. This is necessary, because an other
+        // thread might be currently waiting in ~SwXTextCursor. In this case
+        // the pRef = new ... stuff did not work!
+
         // create reference to this object to prevent deletion before
         // the STATIC_LINK is executed. The link will delete the
         // reference.
-        Reference<XInterface>* pRef =
-            new Reference<XInterface>( static_cast<XServiceInfo*>( this ) );
-        Application::PostUserEvent(
-            STATIC_LINK( this, SwXTextCursor, RemoveCursor_Impl ), pRef );
+        //Reference<XInterface>* pRef =
+            //new Reference<XInterface>( static_cast<XServiceInfo*>( this ) );
+
+        mbRemoveUserEvent = true;
+        // <--
+
+        mnUserEventId = Application::PostUserEvent(
+                        STATIC_LINK( this, SwXTextCursor, RemoveCursor_Impl ), this );
     }
 
     if(!GetRegisteredIn())
