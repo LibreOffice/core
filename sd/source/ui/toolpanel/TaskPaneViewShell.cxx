@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:45:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #include "TitleToolBox.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "FrameView.hxx"
-#include "ObjectBarManager.hxx"
 #include "Window.hxx"
 #include "PaneDockingWindow.hxx"
 #include "AccessibleTaskPane.hxx"
+#include "DrawSubController.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
 #include "glob.hrc"
@@ -294,7 +294,7 @@ TaskPaneViewShell::TaskPaneViewShell (
       mpTaskPane(NULL),
       mpTitleToolBox(NULL),
       mbIsInitialized(false),
-      mpSubShellManager(NULL),
+      mpSubShellManager(),
       mnMenuId(0)
 {
     meShellType = ST_TASK_PANE;
@@ -354,6 +354,12 @@ TaskPaneViewShell::TaskPaneViewShell (
         mpContentWindow->Hide();
         mpContentWindow->Show();
     }
+
+    // Register the shell manager as factory at the ViewShellManager.
+    mpSubShellManager.reset (new TaskPaneShellManager(
+        GetViewShellBase().GetViewShellManager(),
+        *this));
+    GetViewShellBase().GetViewShellManager().AddSubShellFactory(this, mpSubShellManager);
 }
 
 
@@ -361,6 +367,7 @@ TaskPaneViewShell::TaskPaneViewShell (
 
 TaskPaneViewShell::~TaskPaneViewShell (void)
 {
+    GetViewShellBase().GetViewShellManager().RemoveSubShellFactory(this, mpSubShellManager);
 }
 
 
@@ -578,31 +585,8 @@ void TaskPaneViewShell::GetState (SfxItemSet& rItemSet)
 
 
 
-void TaskPaneViewShell::GetLowerShellList (
-    ::std::vector<SfxShell*>& rShellList) const
-{
-    GetObjectBarManager().GetLowerShellList (rShellList);
-    GetSubShellManager().GetLowerShellList (rShellList);
-}
-
-
-
-
-void TaskPaneViewShell::GetUpperShellList (
-    ::std::vector<SfxShell*>& rShellList) const
-{
-    GetObjectBarManager().GetUpperShellList (rShellList);
-    GetSubShellManager().GetUpperShellList (rShellList);
-}
-
-
-
 TaskPaneShellManager& TaskPaneViewShell::GetSubShellManager (void) const
 {
-    if (mpSubShellManager.get() == NULL)
-        mpSubShellManager.reset (new TaskPaneShellManager(
-            GetViewShellBase().GetViewShellManager(),
-            *this));
     return *mpSubShellManager.get();
 }
 
@@ -665,6 +649,15 @@ void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
     return xAccessible;
 }
 
+
+
+
+::std::auto_ptr<DrawSubController> TaskPaneViewShell::CreateSubController (void)
+{
+    // This view shell is not designed to be the main view shell and thus
+    // does not support a UNO controller.
+    return ::std::auto_ptr<DrawSubController>();
+}
 
 
 
