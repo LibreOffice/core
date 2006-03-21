@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:37:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,11 +195,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_BASE_HXX
-#include "ViewShellBase.hxx"
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 
 // #97016#
@@ -839,7 +836,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             ******************************************************************/
             if( dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) || dynamic_cast< FuConstructBezierPolygon* >( GetCurrentFunction().get() ) )
             {
-                GetObjectBarManager().SelectionHasChanged(pDrView);//context has changed
+                // Tell the tool bar manager about the context change.
+                GetViewShellBase().GetToolBarManager().SelectionHasChanged(*this,*pDrView);
             }
 
             Invalidate(SID_BEZIER_EDIT);
