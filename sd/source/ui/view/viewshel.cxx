@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:44:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
+#include "ShellFactory.hxx"
 #include "DrawController.hxx"
 #include "LayerTabBar.hxx"
 
@@ -116,17 +114,12 @@
 #include "FrameView.hxx"
 #endif
 #include "optsitem.hxx"
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
-#include "DrawObjectBar.hxx"
-#include "ImpressObjectBar.hxx"
 #include "BezierObjectBar.hxx"
-#include "GluePointsObjectBar.hxx"
 #include "TextObjectBar.hxx"
 #include "GraphicObjectBar.hxx"
 #include "MediaObjectBar.hxx"
 #include "ViewShellManager.hxx"
+#include "FormShellManager.hxx"
 #include <svx/fmshell.hxx>
 #include "ViewTabBar.hxx"
 #include <svx/dialogs.hrc>
@@ -155,8 +148,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace {
+
 class ViewShellObjectBarFactory
-    : public ::sd::ObjectBarManager::ObjectBarFactory
+    : public ::sd::ShellFactory<SfxShell>
 {
 public:
     ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
@@ -173,7 +167,9 @@ private:
     typedef ::std::map< ::sd::ShellId,SfxShell*> ShellCache;
     ShellCache maShellCache;
 };
-}
+
+
+} // end of anonymous namespace
 
 
 namespace sd {
@@ -227,9 +223,7 @@ ViewShell::ViewShell (
       nPrintedHandoutPageNum(1),
       maAllWindowRectangle(),
       meShellType(ST_NONE),
-      mpController(NULL),
       mpParentWindow(pParentWindow),
-      mpObjectBarManager(NULL),
       mpWindowUpdater (new ::sd::WindowUpdater()),
       mpImpl(new Implementation(*this))
 {
@@ -264,9 +258,7 @@ ViewShell::ViewShell(
       nPrintedHandoutPageNum(1),
       maAllWindowRectangle(),
       meShellType(ST_NONE),
-      mpController(NULL),
       mpParentWindow(pParentWindow),
-      mpObjectBarManager(NULL),
       mpWindowUpdater (new ::sd::WindowUpdater()),
       mpImpl(new Implementation(*this)),
       mpLayerTabBar(NULL)
@@ -288,17 +280,6 @@ ViewShell::~ViewShell()
     if (IsMainViewShell())
         pViewShell->SetWindow (NULL);
 
-    // The sub shell manager will be destroyed in a short time.
-    // Disable the switching of object bars now anyway just in case
-    // the object bars would access invalid data when switched.
-    GetObjectBarManager().DisableObjectBarSwitching();
-
-    // Tell the controller that it must not access the dying view shell
-    // anymore.  This puts it into a semi-disposed state.  We can not
-    // dispose the controller because we do not own it.  The frame does.
-    if (IsMainViewShell() && mpController.is())
-        mpController->DetachFromViewShell();
-
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
     mpContentWindow->SetViewShell(NULL);
@@ -313,6 +294,10 @@ ViewShell::~ViewShell()
     delete pZoomList;
 
     mpLayerTabBar.reset();
+
+    if (mpImpl->mpSubShellFactory.get() != NULL)
+        GetViewShellBase().GetViewShellManager().RemoveSubShellFactory(
+            this,mpImpl->mpSubShellFactory);
 }
 
 
@@ -379,21 +364,18 @@ void ViewShell::Construct(void)
     if (pSpellDialog != NULL)
         pSpellDialog->InvalidateSpellDialog();
 
-    // Set up the object bar manager.
-    mpObjectBarManager = ::std::auto_ptr<ObjectBarManager> (
-        new ObjectBarManager (*this));
-    GetObjectBarManager().RegisterDefaultFactory (
-        ::std::auto_ptr<ObjectBarManager::ObjectBarFactory>(
-            new ViewShellObjectBarFactory(*this)));
-    GetObjectBarManager().Clear ();
+    // Register the sub shell factory.
+    mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
+    GetViewShellBase().GetViewShellManager().AddSubShellFactory(this,mpImpl->mpSubShellFactory);
 }
 
 
 
 
-void ViewShell::Init (void)
+void ViewShell::Init (bool bIsMainViewShell)
 {
     mpImpl->mbIsInitialized = true;
+    SetIsMainViewShell(bIsMainViewShell);
 }
 
 
@@ -410,12 +392,7 @@ void ViewShell::Exit (void)
 
     Deactivate (TRUE);
 
-    SetIsMainViewShell (false);
-
-    // Enable object bar switching so that Clear() deactivates every object
-    // bar cleanly.
-    GetObjectBarManager().EnableObjectBarSwitching();
-    GetObjectBarManager().Clear();
+    SetIsMainViewShell(false);
 }
 
 
@@ -622,6 +599,16 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
 void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
+    // We have to lock tool bar updates while the mouse button is pressed in
+    // order to prevent the shape under the mouse to be moved (this happens
+    // when the number of docked tool bars changes as result of a changed
+    // selection;  this changes the window size and thus the mouse position
+    // in model coordinates: with respect to model coordinates the mouse
+    // moves.)
+    OSL_ASSERT(mpImpl->mpUpdateLockForMouse.expired());
+    mpImpl->mpUpdateLockForMouse = ViewShell::Implementation::ToolBarManagerLock::Create(
+        GetViewShellBase().GetToolBarManager());
+
     if ( pWin && !pWin->HasFocus() )
     {
         pWin->GrabFocus();
@@ -651,6 +638,17 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
+    if (rMEvt.IsLeaveWindow())
+    {
+        if ( ! mpImpl->mpUpdateLockForMouse.expired())
+        {
+            ::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
+                mpImpl->mpUpdateLockForMouse);
+            if (pLock.get() != NULL)
+                pLock->Release();
+        }
+    }
+
     if ( pWin )
     {
         SetActiveWindow(pWin);
@@ -660,6 +658,9 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
+    Point aPosition = pWin->OutputToAbsoluteScreenPixel(rMEvt.GetPosPixel());
+    //    if (saMousePosition != aPosition)
+    {
     if(mpSlideShow)
     {
         mpSlideShow->mouseMove(rMEvt);
@@ -667,6 +668,7 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     else if(HasCurrentFunction())
     {
         GetCurrentFunction()->MouseMove(rMEvt);
+    }
     }
 }
 
@@ -694,6 +696,14 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     else if(HasCurrentFunction())
     {
         GetCurrentFunction()->MouseButtonUp(rMEvt);
+    }
+
+    if ( ! mpImpl->mpUpdateLockForMouse.expired())
+    {
+        ::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
+            mpImpl->mpUpdateLockForMouse);
+        if (pLock.get() != NULL)
+            pLock->Release();
     }
 }
 
@@ -929,10 +939,9 @@ SvBorder ViewShell::GetBorder (bool bOuterResize)
 void ViewShell::ArrangeGUIElements (void)
 {
     bool bVisible = mpContentWindow->IsVisible();
-    static bool bFunctionIsRunning = false;
-    if (bFunctionIsRunning)
+    if (mpImpl->mbArrangeActive)
         return;
-    bFunctionIsRunning = true;
+    mpImpl->mbArrangeActive = true;
 
     // Calculate border for in-place editing.
     long nLeft = aViewPos.X();
@@ -1009,32 +1018,12 @@ void ViewShell::ArrangeGUIElements (void)
         && mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
     if ( ! bSlideShowActive)
     {
-        // der Sfx darf immer nur das erste Fenster setzen
-        //        SetActiveWindow(mpContentWindow.get());
-        // Sfx loest ein Resize fuer die Gesamtgroesse aus; bei aktiven
-        // Splittern darf dann nicht der minimale Zoom neu berechnet
-        // werden. Falls kein Splitter aktiv ist, wird die Berechnung am
-        // Ende der Methode nachgeholt
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
 
-        if (IsMainViewShell())
-        {
-            // For the center pane the border is passed to the
-            // ViewShellBase so that it can place it inside or outside a
-            // fixed rectangle and calculate the size of the content window
-            // accordingly.
-            //            SetActiveWindow (mpContentWindow.get());
-        }
-        else
-        {
-            // For panes other than the center pane we set the size of the
-            // content window directly by subtracting the border from the
-            // box of the parent window.
-            mpContentWindow->SetPosSizePixel(
-                Point(nLeft,nTop),
-                Size(nRight-nLeft+1,nBottom-nTop+1));
-        }
+        mpContentWindow->SetPosSizePixel(
+            Point(nLeft,nTop),
+            Size(nRight-nLeft,nBottom-nTop));
     }
 
     // Windows in the center and rulers at the left and top side.
@@ -1049,7 +1038,8 @@ void ViewShell::ArrangeGUIElements (void)
     }
 
     UpdateScrollBars();
-    bFunctionIsRunning = false;
+
+    mpImpl->mbArrangeActive = false;
 }
 
 
@@ -1087,8 +1077,7 @@ USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 {
     USHORT nResult = TRUE;
 
-    FmFormShell* pFormShell = static_cast<FmFormShell*>(
-        GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
     if (pFormShell != NULL)
         nResult = pFormShell->PrepareClose (bUI, bForBrowsing);
 
@@ -1367,31 +1356,9 @@ ViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 
 
 
-/** The implementation has to change in order to take care of at least
-    one current/main/default window per ViewShell object.  Of these
-    there will usually be more than one for every ViewShellBase object.
-*/
-/*::Window* ViewShell::GetWindow (void) const
-{
-    OSL_ASSERT(GetViewShell()!=NULL);
-    //    return GetViewShell()->GetWindow();
-    return const_cast<ViewShell*>(this)->GetActiveWindow();
-}
-
-*/
-
-
 ViewShellBase& ViewShell::GetViewShellBase (void) const
 {
     return *static_cast<ViewShellBase*>(GetViewShell());
-}
-
-
-
-
-DrawController* ViewShell::GetController (void)
-{
-    return mpController.get();
 }
 
 
@@ -1404,35 +1371,6 @@ ViewShell::ShellType ViewShell::GetShellType (void) const
 
 
 
-/*
-IMPL_LINK(ViewShell, FrameWindowEventListener,  VclSimpleEvent*, pEvent )
-{
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
-    {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-        switch (pWindowEvent->GetId())
-        {
-            //            case VCLEVENT_WINDOW_SHOW:
-            //            case VCLEVENT_WINDOW_ACTIVATE:
-            case VCLEVENT_WINDOW_RESIZE:
-            {
-                if ( ! GetViewFrame()->GetFrame()->IsInPlace())
-                {
-                    // Forward the event only when in in-place mode
-                    // which is handled differently (InnerResize from
-                    // the ViewShellBase class is forwarded).
-                    ::Window* pWindow = pWindowEvent->GetWindow();
-                    if (pWindow != NULL)
-                        Resize (Point(),
-                            pWindow->GetOutputSizePixel());
-                }
-            }
-            break;
-        }
-    }
-    return 0;
-}
-*/
 
 DrawDocShell* ViewShell::GetDocSh (void) const
 {
@@ -1532,6 +1470,9 @@ void ViewShell::SetSlideShow(sd::Slideshow* pSlideShow)
     mpSlideShow = pSlideShow;
 }
 
+
+
+
 bool ViewShell::IsMainViewShell (void) const
 {
     return GetViewShellBase().GetMainViewShell() == this;
@@ -1555,31 +1496,6 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
         }
     }
 }
-
-
-
-
-ObjectBarManager& ViewShell::GetObjectBarManager (void) const
-{
-    return *mpObjectBarManager.get();
-}
-
-
-
-
-void ViewShell::GetLowerShellList (::std::vector<SfxShell*>& rShellList) const
-{
-    mpObjectBarManager->GetLowerShellList (rShellList);
-}
-
-
-
-
-void ViewShell::GetUpperShellList (::std::vector<SfxShell*>& rShellList) const
-{
-    mpObjectBarManager->GetUpperShellList (rShellList);
-}
-
 
 
 
@@ -1688,29 +1604,13 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
         ::sd::View* pView = mrViewShell.GetView();
         switch (nId)
         {
-            case RID_DRAW_OBJ_TOOLBOX:
-                if (mrViewShell.GetShellType() == ::sd::ViewShell::ST_DRAW)
-                    pShell = new ::sd::DrawObjectBar(&mrViewShell, pView);
-                else
-                    pShell = new ::sd::ImpressObjectBar(&mrViewShell, pView);
-                break;
-
             case RID_BEZIER_TOOLBOX:
                 pShell = new ::sd::BezierObjectBar(&mrViewShell, pView);
-                break;
-
-            case RID_GLUEPOINTS_TOOLBOX:
-                pShell = new ::sd::GluePointsObjectBar(&mrViewShell, pView);
                 break;
 
             case RID_DRAW_TEXT_TOOLBOX:
                 pShell = new ::sd::TextObjectBar(
                     &mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
-                break;
-
-            case RID_FORMLAYER_TOOLBOX:
-                pShell = new FmFormShell(
-                    &mrViewShell.GetViewShellBase(), pView);
                 break;
 
             case RID_DRAW_GRAF_TOOLBOX:
@@ -1735,7 +1635,6 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
                 pShell = NULL;
                 break;
         }
-        maShellCache[nId] = pShell;
     }
     else
         pShell = aI->second;
@@ -1748,8 +1647,8 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
 void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 {
-    // The shell remains in the shell cache until the ViewShell that owns
-    // this factory is destroyed.
+    if (pShell != NULL)
+        delete pShell;
 }
 
 } // end of anonymous namespace
