@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:57:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ class SbModule;
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
@@ -125,7 +125,9 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 
-    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::msDrawingObjectToolBar);
 }
 
 /*************************************************************************
