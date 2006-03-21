@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:40:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,26 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
 }
 
 /*************************************************************************
+ * Local helper function. Returns true if there are only blanks
+ * in [nStt, nEnd[
+ *************************************************************************/
+
+bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nEnd )
+{
+    bool bBlankOnly = true;
+    while ( nStt < nEnd )
+    {
+        const xub_Unicode cChar = rTxt.GetChar( nStt++ );
+        if ( ' ' != cChar && 0x3000 != cChar )
+        {
+            bBlankOnly = false;
+            break;
+        }
+    }
+    return bBlankOnly;
+}
+
+/*************************************************************************
  *                    SwLineLayout::CalcLine()
  *
  * Aus FormatLine() ausgelagert.
@@ -334,6 +354,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         nFlyHeight = 0;
         nFlyDescent = 0;
     }
+
+    // --> FME 2006-03-01 #i3952#
+    const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
+            rInf.GetTxtFrm()->GetNode()->GetDoc()->IgnoreTabsAndBlanksForLineCalculation();
+
+    bool bHasBlankPortion = false;
+    bool bHasOnlyBlankPortions = true;
+    // <--
 
     if( pPortion )
     {
@@ -359,6 +387,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 DBG_LOOP;
                 ASSERT( POR_LIN != pPos->GetWhichPor(),
                         "SwLineLayout::CalcLine: don't use SwLinePortions !" );
+
                 // Null-Portions werden eliminiert. Sie koennen entstehen,
                 // wenn zwei FlyFrms ueberlappen.
                 if( !pPos->Compress() )
@@ -377,17 +406,36 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     continue;
                 }
 
+                const xub_StrLen nPorSttIdx = rInf.GetLineStart() + nLineLength;
+                nLineLength += pPos->GetLen();
+                AddPrtWidth( pPos->Width() );
+
+                // --> FME 2006-03-01 #i3952#
+                if ( bIgnoreBlanksAndTabsForLineHeightCalculation )
+                {
+                    if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
+                            ( pPos->IsTextPortion() &&
+                              lcl_HasOnlyBlanks( rInf.GetTxt(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) )
+                    {
+                        pLast = pPos;
+                        pPos = pPos->GetPortion();
+                        bHasBlankPortion = true;
+                        continue;
+                    }
+                }
+                // <--
+
+                bHasOnlyBlankPortions = false;
+
                 // Es gab Attributwechsel: Laengen und Masse aufaddieren;
                 // bzw.Maxima bilden.
 
-                nLineLength += pPos->GetLen();
-
                 KSHORT nPosHeight = pPos->Height();
                 KSHORT nPosAscent = pPos->GetAscent();
-                AddPrtWidth( pPos->Width() );
 
                 ASSERT( nPosHeight >= nPosAscent,
                         "SwLineLayout::CalcLine: bad ascent or height" );
+
                 if( pPos->IsHangingPortion() )
                 {
                     SetHanging( sal_True );
@@ -399,6 +447,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 if ( !pPos->IsBreakPortion() || !Height() )
                 {
                     bOnlyPostIts &= pPos->IsPostItsPortion();
+
                     if( bTmpDummy && !nLineLength )
                     {
                         if( pPos->IsFlyPortion() )
@@ -456,6 +505,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 }
                 else if( pPos->GetLen() )
                     bTmpDummy = sal_False;
+
                 if( !HasCntnt() && !pPos->InNumberGrp() )
                 {
                     if ( pPos->InExpGrp() )
@@ -468,12 +518,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                              pPos->GetLen() )
                         SetCntnt( sal_True );
                 }
+
                 bTmpDummy = bTmpDummy && !HasCntnt() &&
                             ( !pPos->Width() || pPos->IsFlyPortion() );
 
                 pLast = pPos;
                 pPos = pPos->GetPortion();
             }
+
             if( pFlyCnt )
             {
                 if( pFlyCnt->Height() == Height() )
@@ -489,6 +541,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     pFlyCnt->SetAscent( nAscent );
                 }
             }
+
             if( bTmpDummy && nFlyHeight )
             {
                 nAscent = nFlyAscent;
@@ -499,7 +552,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             }
             else if( nMaxDescent > Height() - nAscent )
                 Height( nMaxDescent + nAscent );
-            if( bOnlyPostIts )
+
+            if( bOnlyPostIts && !( bHasBlankPortion && bHasOnlyBlankPortions ) )
             {
                 Height( rInf.GetFont()->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
                 nAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), *rInf.GetOut() );
@@ -507,7 +561,29 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         }
     }
     else
+    {
         SetCntnt( !bTmpDummy );
+
+        // --> FME 2006-03-01 #i3952#
+        if ( bIgnoreBlanksAndTabsForLineHeightCalculation &&
+             lcl_HasOnlyBlanks( rInf.GetTxt(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
+        {
+            bHasBlankPortion = true;
+        }
+        // <--
+    }
+
+    // --> FME 2006-03-01 #i3952#
+    if ( bHasBlankPortion && bHasOnlyBlankPortions )
+    {
+        USHORT nTmpAscent = GetAscent();
+        USHORT nTmpHeight = Height();
+        rLine.GetAttrHandler().GetDefaultAscentAndHeight( rInf.GetVsh(), *rInf.GetOut(), nTmpAscent, nTmpHeight );
+        SetAscent( nTmpAscent );
+        Height( nTmpHeight );
+    }
+    // <--
+
     // Robust:
     if( nLineWidth < Width() )
         Width( nLineWidth );
