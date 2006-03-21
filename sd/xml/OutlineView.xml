@@ -4,7 +4,7 @@
     <module-name>sd</module-name>
     <component-description>
         <author>Christian Lippka</author>
-        <name>SdUnoOutlineView</name>
+        <name>DrawController_OutlineView</name>
         <description>
 This componend integrates an outline view to a presentation
     document into the desktop.
@@ -12,6 +12,6 @@ This componend integrates an outline view to a presentation
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com::sun::star::presentation::OutlineView</supported-service>
+        <supported-service>com::sun::star::drawing::DrawingDocumentDrawView</supported-service>
     </component-description>
 </module-description>
