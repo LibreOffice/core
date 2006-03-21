@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:52:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,8 +260,8 @@ OutlineView::OutlineView (
 
     Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().AddEventListener( aLink,
-        tools::EventMultiplexer::ET_CURRENT_PAGE
-        | tools::EventMultiplexer::ET_PAGE_ORDER);
+        tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | tools::EventMultiplexerEvent::EID_PAGE_ORDER);
 }
 
 /*************************************************************************
@@ -1484,7 +1484,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
 /** selects the paragraph for the given page at the outliner view*/
 void OutlineView::SetActualPage( SdPage* pActual )
 {
-    if( pActual && mnIgnoreCurrentPageChangesLevel==0)
+    if( pActual && mnIgnoreCurrentPageChangesLevel==0 && !bFirstPaint)
     {
         // if we found a paragraph, select its text at the outliner view
         Paragraph* pPara = GetParagraphForPage( pOutliner, pActual );
