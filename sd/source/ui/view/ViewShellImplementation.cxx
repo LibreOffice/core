@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:56:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "Window.hxx"
 #include "optsitem.hxx"
 #include "DrawDocShell.hxx"
+#include "DrawController.hxx"
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
 #include "TaskPaneViewShell.hxx"
@@ -63,13 +64,58 @@
 #include "undo/undoobjects.hxx"
 
 
+namespace {
+
+class ImpUndoDeleteWarning : public ModalDialog
+{
+private:
+    FixedImage      maImage;
+    FixedText       maWarningFT;
+    CheckBox        maDisableCB;
+    OKButton        maYesBtn;
+    CancelButton    maNoBtn;
+
+public:
+    ImpUndoDeleteWarning(Window* pParent);
+    BOOL IsWarningDisabled() const { return maDisableCB.IsChecked(); }
+};
+
+ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
+:   ModalDialog(pParent, SdResId(RID_UNDO_DELETE_WARNING)),
+    maImage(this, SdResId(IMG_UNDO_DELETE_WARNING)),
+    maWarningFT(this, SdResId(FT_UNDO_DELETE_WARNING)),
+    maDisableCB(this, SdResId(CB_UNDO_DELETE_DISABLE)),
+    maYesBtn(this, SdResId(BTN_UNDO_DELETE_YES)),
+    maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
+{
+    FreeResource();
+
+    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
+    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
+
+    maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
+    maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
+    maImage.SetImage(WarningBox::GetStandardImage());
+
+    // #93721# Set focus to YES-Button
+    maYesBtn.GrabFocus();
+}
+
+} // end of anonymous namespace
+
+
+
+
 namespace sd {
 
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)
     : mbIsShowingUIControls(false),
       mbIsMainViewShell(false),
-      mrViewShell (rViewShell),
-      mbIsInitialized(false)
+      mbIsInitialized(false),
+      mbArrangeActive(false),
+      mpUpdateLockForMouse(),
+      mrViewShell(rViewShell),
+      mpSubShellFactory()
 {
 }
 
@@ -78,6 +124,12 @@ ViewShell::Implementation::Implementation (ViewShell& rViewShell)
 
 ViewShell::Implementation::~Implementation (void)
 {
+    if ( ! mpUpdateLockForMouse.expired())
+    {
+        ::boost::shared_ptr<ToolBarManagerLock> pLock(mpUpdateLockForMouse);
+        if (pLock.get() != NULL)
+            pLock->Release();
+    }
 }
 
 
@@ -323,5 +375,70 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
 }
 
 
+
+
+//===== ToolBarManagerLock ====================================================
+
+class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
+    void operator() (ToolBarManagerLock* pObject) { delete pObject; }
+};
+
+::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock>
+    ViewShell::Implementation::ToolBarManagerLock::Create (
+        ::sd::ToolBarManager& rManager)
+{
+    ::boost::shared_ptr<ToolBarManagerLock> pLock (
+        new ViewShell::Implementation::ToolBarManagerLock(rManager),
+        ViewShell::Implementation::ToolBarManagerLock::Deleter());
+    pLock->mpSelf = pLock;
+    return pLock;
+}
+
+
+
+
+ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (ToolBarManager& rManager)
+    : mpLock(new ToolBarManager::UpdateLock(rManager)),
+      maTimer()
+{
+    // Start a timer that will unlock the ToolBarManager update lock when
+    // that is not done explicitly by calling Release().
+    maTimer.SetTimeoutHdl(LINK(this,ToolBarManagerLock,TimeoutCallback));
+    maTimer.SetTimeout(100);
+    maTimer.Start();
+}
+
+
+
+
+IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,pTimer)
+{
+    // If possible then release the lock now.  Otherwise start the timer
+    // and try again later.
+    if (Application::IsUICaptured())
+        maTimer.Start();
+    else
+        mpSelf.reset();
+    return 0;
+}
+
+
+
+
+void ViewShell::Implementation::ToolBarManagerLock::Release (void)
+{
+    // If possible then release the lock now.  Otherwise try again when the
+    // timer expires.
+    if ( ! Application::IsUICaptured())
+        mpSelf.reset();
+}
+
+
+
+
+ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock (void)
+{
+    mpLock.reset();
+}
 
 } // end of namespace sd
