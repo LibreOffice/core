@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:12:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,16 +706,19 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             const SwFrm* pOldAnchorFrm = pContact->GetAnchorFrm( pObj );
             const SwFrm* pNewAnchorFrm = pOldAnchorFrm;
 
-            xub_StrLen nIndx = STRING_NOTFOUND;
-            SwTxtNode* pTxtNode(0);
-            RndStdIds eOldAnchorType = pContact->GetAnchorId();
+            // --> OD 2006-03-01 #i54336#
+            // Instead of only keeping the index position for an as-character
+            // anchored object the complete <SwPosition> is kept, because the
+            // anchor index position could be moved, if the object again is
+            // anchored as character.
+//            xub_StrLen nIndx = STRING_NOTFOUND;
+            const SwPosition* pOldAsCharAnchorPos( 0L );
+            const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == FLY_IN_CNTNT )
             {
-                const SwPosition& pPos = pContact->GetCntntAnchor();
-                pTxtNode = pPos.nNode.GetNode().GetTxtNode();
-                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                nIndx = pPos.nContent.GetIndex();
+                pOldAsCharAnchorPos = new SwPosition( pContact->GetCntntAnchor() );
             }
+            // <--
 
             if ( _bSameOnly )
                 _eAnchorType = eOldAnchorType;
@@ -882,19 +885,26 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
             }
 
-            if ( pNewAnchorFrm && STRING_NOTFOUND != nIndx )
+            // --> OD 2006-03-01 #i54336#
+            if ( pNewAnchorFrm && pOldAsCharAnchorPos )
             {
                 //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
                 //werden. Leider reisst dies neben den Frms auch noch das Format mit
                 //in sein Grab. Um dass zu unterbinden loesen wir vorher die
                 //Verbindung zwischen Attribut und Format.
+                const xub_StrLen nIndx( pOldAsCharAnchorPos->nContent.GetIndex() );
+                SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
+                ASSERT( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
+                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                 SwTxtAttr* pHnt = pTxtNode->GetTxtAttr( nIndx, RES_TXTATR_FLYCNT );
                 ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
 
                 //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
                 //werden.
                 pTxtNode->Delete( RES_TXTATR_FLYCNT, nIndx, nIndx );
+                delete pOldAsCharAnchorPos;
             }
+            // <--
         }
     }
 
