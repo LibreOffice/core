@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:33:32 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,6 @@ SFX_DECL_TYPE(13);
 
 SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_BEZIER_TOOLBOX) );
 }
 
 TYPEINIT1(BezierObjectBar, ::SfxShell);
