@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:19:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include "ViewShellManager.hxx"
 #endif
 #include "FrameView.hxx"
+#include "EventMultiplexer.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -83,6 +84,8 @@ Listener::Listener (SlideSorterController& rController)
       mbListeningToController (false),
       mbListeningToFrame (false)
 {
+    ViewShellBase& rBase (mrController.GetViewShell().GetViewShellBase());
+
     StartListening (*mrController.GetModel().GetDocument());
     mbListeningToDocument = true;
 
@@ -106,9 +109,7 @@ Listener::Listener (SlideSorterController& rController)
     if ( ! mrController.GetViewShell().IsMainViewShell())
     {
         // Listen to changes of certain properties.
-        Reference<frame::XFrame> xFrame (
-            mrController.GetViewShell().GetViewShellBase().GetFrame()
-            ->GetTopFrame()->GetFrameInterface(),
+        Reference<frame::XFrame> xFrame (rBase.GetFrame()->GetTopFrame()->GetFrameInterface(),
             uno::UNO_QUERY);
         mxFrameWeak = xFrame;
         if (xFrame.is())
@@ -122,7 +123,26 @@ Listener::Listener (SlideSorterController& rController)
         // Connect to the current controller.
         ConnectToController ();
     }
+
+    // Listen for hints of the MainViewShell as well.  If that is not yet
+    // present then the EventMultiplexer will tell us when it is available.
+    ViewShell* pMainViewShell = rBase.GetMainViewShell();
+    if (pMainViewShell != NULL
+        && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
+    {
+        StartListening (*pMainViewShell);
+    }
+
+    Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+    rBase.GetEventMultiplexer().AddEventListener(
+        aLink,
+        tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
+        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
 }
+
+
 
 
 Listener::~Listener (void)
@@ -130,6 +150,9 @@ Listener::~Listener (void)
     DBG_ASSERT( !mbListeningToDocument && !mbListeningToUNODocument && !mbListeningToFrame,
         "sd::Listener::~Listener(), disposing() was not called, ask DBO!" );
 }
+
+
+
 
 void Listener::ReleaseListeners (void)
 {
@@ -170,6 +193,14 @@ void Listener::ReleaseListeners (void)
     }
 
     DisconnectFromController ();
+
+    Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+    mrController.GetViewShell().GetViewShellBase().GetEventMultiplexer().RemoveEventListener(
+        aLink,
+        tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
+        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
 }
 
 
@@ -218,16 +249,6 @@ void Listener::ConnectToController (void)
             mxControllerWeak = xController;
             mbListeningToController = true;
         }
-
-
-        // Listen for hints at the view shell in the center pane as well.
-        ViewShell* pMainViewShell = rShell.GetViewShellBase().GetMainViewShell();
-        if (pMainViewShell != NULL)
-            StartListening (*pMainViewShell);
-        else
-        {
-            DBG_ASSERT(false,"sls::Listener::ConnectToController: main view shell is not present");
-        }
     }
 }
 
@@ -266,10 +287,6 @@ void Listener::DisconnectFromController (void)
                 ::rtl::OUStringToOString(aEvent.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
-
-        // Stop listening for hints at the view shell in the center pane.
-        EndListening (
-            *mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
 
         mbListeningToController = false;
         mxControllerWeak = Reference<frame::XController>();
@@ -327,6 +344,78 @@ void Listener::Notify (
                 break;
         }
     }
+}
+
+
+
+
+IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent*, pEvent)
+{
+    switch (pEvent->meEventId)
+    {
+        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+        {
+            ViewShell* pMainViewShell
+                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell();
+            if (pMainViewShell != NULL)
+                EndListening(*pMainViewShell);
+        }
+        break;
+
+
+        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        {
+            ViewShell* pMainViewShell
+                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell();
+            if (pMainViewShell != NULL
+                && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
+            {
+                StartListening (*pMainViewShell);
+            }
+        }
+        break;
+
+
+        case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
+        {
+            ConnectToController();
+            mrController.GetPageSelector().UpdateAllPages();
+
+            // When there is a new controller then the edit mode may have
+            // changed at the same time.
+            Reference<frame::XController> xController (mxControllerWeak);
+            Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+            bool bIsMasterPageMode = false;
+            if (xSet != NULL)
+            {
+                try
+                {
+                    Any aValue (xSet->getPropertyValue(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
+                    aValue >>= bIsMasterPageMode;
+                }
+                catch (beans::UnknownPropertyException e)
+                {
+                    // When the property is not supported then the master
+                    // page mode is not supported, too.
+                    bIsMasterPageMode = false;
+                }
+            }
+            mrController.ChangeEditMode (
+                bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+        }
+        break;
+
+
+        case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
+            DisconnectFromController();
+            break;
+
+        default:
+            break;
+    }
+
+    return 0;
 }
 
 
@@ -501,8 +590,6 @@ void Listener::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
 
 
 
