@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:18:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,11 +107,11 @@
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
 #endif
-#ifndef _SD_UNODRAWVIEW_HXX
-#include "SdUnoDrawView.hxx"
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
+#include <com/sun/star/drawing/XDrawView.hpp>
 #endif
 
 #pragma hdrstop
@@ -891,19 +891,19 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             // things to be done.  Especially writing the view data to the
             // frame view (see bug #107803#).
             USHORT nSdPgNum = (nPgNum - 1) / 2;
-            SdUnoDrawView* pUnoDrawView = static_cast<SdUnoDrawView*>(
-                pDrViewSh->GetController());
-            if (pUnoDrawView != NULL)
+            uno::Reference<drawing::XDrawView> xController (
+                pDrViewSh->GetViewShellBase().GetController(), uno::UNO_QUERY);
+            if (xController.is())
             {
                 ::com::sun::star::uno::Reference<
                       ::com::sun::star::drawing::XDrawPage> xDrawPage (
                           pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
-                pUnoDrawView->setCurrentPage (xDrawPage);
+                xController->setCurrentPage (xDrawPage);
             }
             else
             {
                 // As a fall back switch to the page via the core.
-                DBG_ASSERT (pUnoDrawView!=NULL,
+                DBG_ASSERT (xController.is(),
                     "DrawDocShell::GotoBookmark: can't switch page via API");
                 pDrViewSh->SwitchPage(nSdPgNum);
             }
