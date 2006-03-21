@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:21:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -870,7 +870,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     // If pPrevNodeNum is set, we know that pTxtNd and pPrevTxtNd
                     // belong to the same NumRule:
                     const USHORT nMyLevel = pTxtNd->GetLevel() + 1;
-                    USHORT nPreviousLevel = pPrevTxtNd->IsTxtNode() ?
+                    USHORT nPreviousLevel = pPrevTxtNd && pPrevTxtNd->IsTxtNode() ?
                         static_cast<SwTxtNode *>(pPrevTxtNd)->GetLevel() + 1 :
                         0;
 
