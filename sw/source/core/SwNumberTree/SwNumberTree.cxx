@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:41:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,6 +463,11 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 
         pDest->mChildren.insert(mChildren.begin(), mChildren.end());
         mChildren.clear();
+        // --> OD 2006-03-08 #131436#
+        // <stl::set.clear()> destroys all existing iterators.
+        // Thus, <mItLastValid> is also destroyed and reset becomes necessary
+        mItLastValid = mChildren.end();
+        // <--
     }
 
     ASSERT (mChildren.empty(), "MoveChildren failed!");
