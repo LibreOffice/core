@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:53:55 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include "SdUnoSlideView.hxx"
 #include "PaneManager.hxx"
 #include "DrawDocShell.hxx"
-#include "ObjectBarManager.hxx"
+#include "ViewShellManager.hxx"
 
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -80,35 +80,9 @@ using namespace ::com::sun::star;
 
 namespace sd { namespace slidesorter {
 
-namespace {
-const ULONG gnSlideSorterToolbarFeature = 0x11;
-}
 
-SFX_IMPL_INTERFACE(
-    SlideSorterViewShell,
-    SfxShell,
-    SdResId(STR_SLIDESORTERVIEWSHELL))
+SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell, SdResId(STR_SLIDESORTERVIEWSHELL))
 {
-    SFX_FEATURED_OBJECTBAR_REGISTRATION(
-        SFX_OBJECTBAR_APPLICATION
-        | SFX_VISIBILITY_DESKTOP
-        | SFX_VISIBILITY_STANDARD
-        | SFX_VISIBILITY_CLIENT
-        | SFX_VISIBILITY_VIEWER
-        | SFX_VISIBILITY_READONLYDOC,
-        SdResId(RID_DRAW_VIEWER_TOOLBOX),
-        gnSlideSorterToolbarFeature);
-    SFX_FEATURED_OBJECTBAR_REGISTRATION(
-        SFX_OBJECTBAR_TOOLS
-        | SFX_VISIBILITY_STANDARD
-        | SFX_VISIBILITY_FULLSCREEN
-        | SFX_VISIBILITY_SERVER,
-        SdResId(RID_SLIDE_TOOLBOX),
-        gnSlideSorterToolbarFeature);
-    SFX_FEATURED_OBJECTBAR_REGISTRATION(
-        SFX_OBJECTBAR_OBJECT,
-        SdResId(RID_SLIDE_OBJ_TOOLBOX),
-        gnSlideSorterToolbarFeature);
 }
 
 
@@ -191,15 +165,16 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
 
 
 
-void SlideSorterViewShell::Init (void)
+void SlideSorterViewShell::Init (bool bIsMainViewShell)
 {
+    ViewShell::Init(bIsMainViewShell);
+
     CreateModelViewController ();
     mpView = mpSlideSorterView.get();
 
     // Set view pointer of base class.
     SetupControls (GetParentWindow());
 
-    ViewShell::Init ();
     SetupListeners ();
 
     // For accessibility we have to shortly hide the content window.  This
@@ -243,23 +218,20 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
 
 
 
-DrawController* SlideSorterViewShell::GetController (void)
+::std::auto_ptr<DrawSubController> SlideSorterViewShell::CreateSubController (void)
 {
-    if ( !mpController.is() && IsMainViewShell())
+    ::std::auto_ptr<DrawSubController> pController;
+
+    if (IsMainViewShell())
     {
-        // Create uno controller for the main view shell.  For the ones
-        // displayed in the non-center panes we may later introduce
-        // sub-controllers.
-        DrawController* pController = new SdUnoSlideView (
-            GetViewShellBase(),
+        // Create uno controller for the main view shell.
+        ViewShellBase& rBase (GetViewShellBase());
+        pController.reset(new SdUnoSlideView (
+            rBase.GetDrawController(),
             *this,
-            *GetView());
-        mpController = ::comphelper::ImplementationReference<
-        DrawController,
-            ::com::sun::star::uno::XInterface,
-            ::com::sun::star::uno::XWeak> (pController);
+            *GetView()));
     }
-    return mpController.get();
+    return pController;
 }
 
 
@@ -343,7 +315,7 @@ controller::SlideSorterController* SlideSorterViewShell::CreateController (void)
 
 SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
 {
-    SfxShell* pObjectBar = GetObjectBarManager().GetTopObjectBar();
+    SfxShell* pObjectBar = GetViewShellBase().GetViewShellManager().GetTopShell();
     if (pObjectBar != NULL)
     {
         // When it exists then return the undo manager of the currently
@@ -740,26 +712,6 @@ void SlideSorterViewShell::WriteFrameViewData()
             if (pFrameView->GetSelectedPage() >= mpSlideSorterModel->GetPageCount())
                 pFrameView->SetSelectedPage(mpSlideSorterModel->GetPageCount()-1);
         }
-    }
-}
-
-
-
-
-BOOL SlideSorterViewShell::HasUIFeature (ULONG nFeature)
-{
-    switch (nFeature)
-    {
-        case gnSlideSorterToolbarFeature:
-            // Return true only when this is a main view.
-            if (IsMainViewShell())
-                return TRUE;
-            else
-                return FALSE;
-
-        default:
-            // Unknown features are not supported.
-            return FALSE;
     }
 }
 
