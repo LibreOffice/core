@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:18:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     // get current controller and initialize listeners
     try
     {
-        mxView = Reference< XDrawView >::query( static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
-/*      mxView = Reference< XDrawView >::query( mxModel->getCurrentController() );*/
+        mxView = Reference< XDrawView >::query(mrBase.GetController());
         addListener();
     }
     catch( Exception& e )
@@ -391,11 +390,12 @@ void CustomAnimationPane::addListener()
     Link aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer().AddEventListener (
         aLink,
-        tools::EventMultiplexer::ET_DISPOSING
-        | tools::EventMultiplexer::ET_CURRENT_PAGE
-        | tools::EventMultiplexer::ET_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexer::ET_MAIN_VIEW
-        | tools::EventMultiplexer::ET_TEXT_EDIT);
+        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
+        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_DISPOSING
+        | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT);
 }
 
 void CustomAnimationPane::removeListener()
@@ -427,8 +427,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             // the event.
             if (mrBase.GetMainViewShell() != NULL)
             {
-                mxView = Reference< XDrawView >::query(
-                    static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
+                mxView = Reference<XDrawView>::query(mrBase.GetDrawController());
                 onSelectionChanged();
                 onChangeCurrentPage();
             }
