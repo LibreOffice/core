@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:04:36 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,49 +36,34 @@
 #ifndef SD_UNO_OUTLINE_VIEW_HXX
 #define SD_UNO_OUTLINE_VIEW_HXX
 
-#ifndef SD_DRAW_CONTROLLER_HXX
-#include "DrawController.hxx"
+#ifndef SD_DRAW_SUB_CONTROLLER_HXX
+#include "DrawSubController.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
+#include <com/sun/star/lang/EventObject.hpp>
 #endif
 
 class SdPage;
 
 namespace sd {
 
+class DrawController;
 class OutlineViewShell;
 class View;
 
 
-/**
- * This class implements the view component for a SdOutlineViewShell
- */
+/** This class implements the OutlineViewShell specific part of the controller.
+*/
 class SdUnoOutlineView
-    : public DrawController
+    : public DrawSubController
 {
 public:
-    enum properties
-    {
-        PROPERTY__BEGIN = DrawController::PROPERTY__END,
-        PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
-        PROPERTY__END
-    };
     SdUnoOutlineView (
-        ViewShellBase& rBase,
+        DrawController& rController,
         OutlineViewShell& rViewShell,
         View& rView) throw();
-    virtual ~SdUnoOutlineView() throw();
-
-    virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
-
-    // XComponent
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
-
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    virtual ~SdUnoOutlineView (void) throw();
 
     // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -89,9 +74,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getCurrentPage(  ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void FillPropertyTable (
-        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
-
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         ::com::sun::star::uno::Any & rConvertedValue,
         ::com::sun::star::uno::Any & rOldValue,
@@ -112,14 +94,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage> mxCurrentPage;
-
-    /** This is a shortcut for accessing the view shell data member of
-        the base class casted to the correct class.
-        @return
-            The returned pointer may be NULL.
-    */
-    OutlineViewShell* GetDrawViewShell (void) const;
+    DrawController& mrController;
+    OutlineViewShell& mrOutlineViewShell;
+    sd::View& mrView;
 };
 
 } // end of namespace sd
