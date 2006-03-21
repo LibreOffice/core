@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:43:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ MasterPagesSelector::~MasterPagesSelector (void)
     Clear();
     mpPageSet.reset();
     if (GetShellManager() != NULL)
-        GetShellManager()->RemoveSubShell (this);
+        GetShellManager()->RemoveSubShell(this);
 }
 
 
@@ -173,8 +173,6 @@ MasterPagesSelector::~MasterPagesSelector (void)
 
 void MasterPagesSelector::LateInit (void)
 {
-    if (GetShellManager() != NULL)
-        GetShellManager()->AddSubShell (this);
 }
 
 
