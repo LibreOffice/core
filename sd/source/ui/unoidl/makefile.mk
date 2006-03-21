@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 06:47:56 $
+#   last change: $Author: obo $ $Date: 2006-03-21 17:35:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ TARGET=unoidl
 ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
 LIBTARGET = NO
+PRJINC=..$/slidesorter
 
 # --- Settings -----------------------------------------------------
 
