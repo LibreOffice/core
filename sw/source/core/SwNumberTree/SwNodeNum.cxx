@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:33:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,3 +340,59 @@ const SwNumFmt * SwNodeNum::GetNumFmt() const
 
     return pResult;
 }
+
+// --> OD 2006-03-07 #131436#
+void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
+{
+    SwNodeNum* pRootNode = rNodeNum.GetParent()
+                           ? dynamic_cast<SwNodeNum*>(rNodeNum.GetRoot())
+                           : &rNodeNum;
+    if ( !pRootNode )
+    {
+        // no root node -> nothing do.
+        return;
+    }
+
+    // unregister all number tree node entries, which correspond to a text node,
+    // about the deletion of the number tree root node.
+    _UnregisterMeAndChildrenDueToRootDelete( *pRootNode );
+}
+
+void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
+{
+    const bool bIsPhantom( rNodeNum.IsPhantom() );
+    tSwNumberTreeChildren::size_type nAllowedChildCount( 0 );
+    bool bDone( false );
+    while ( !bDone &&
+            rNodeNum.GetChildCount() > nAllowedChildCount )
+    {
+        SwNodeNum* pChildNode( dynamic_cast<SwNodeNum*>((*rNodeNum.mChildren.begin())) );
+        if ( !pChildNode )
+        {
+            ASSERT( false,
+                    "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
+            ++nAllowedChildCount;
+            continue;
+        }
+
+        // Unregistering the last child of a phantom will destroy the phantom.
+        // Thus <rNodeNum> will be destroyed and access on <rNodeNum> has to
+        // be suppressed.
+        if ( bIsPhantom && rNodeNum.GetChildCount() == 1 )
+        {
+            bDone = true;
+        }
+
+        _UnregisterMeAndChildrenDueToRootDelete( *pChildNode );
+    }
+
+    if ( !bIsPhantom )
+    {
+        SwTxtNode* pTxtNode( rNodeNum.GetTxtNode() );
+        if ( pTxtNode )
+        {
+            pTxtNode->UnregisterNumber();
+        }
+    }
+}
+// <--
