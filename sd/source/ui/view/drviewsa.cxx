@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:57:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,13 +138,11 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #include "SdUnoDrawView.hxx"
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
+#include "ToolBarManager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -317,12 +315,6 @@ DrawViewShell::~DrawViewShell()
         }
     }
 
-    // Umschaltung der ObjectBarShells unterdruecken, sonst versucht die
-    // sterbende Funktion eventuell die ObjectBars zu wechseln. Die
-    // entsprechende Shell ist aber schon vom SFX vom Dispatcher-Stack
-    // genommen worden.
-    GetObjectBarManager().DisableObjectBarSwitching();
-
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
@@ -348,10 +340,6 @@ DrawViewShell::~DrawViewShell()
 
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
-    // Disable the switching of objects bars. It is enabled in Init() when
-    // there is a fully functional view shell.
-    GetObjectBarManager().DisableObjectBarSwitching();
-
     pFrameView->Connect();
 
     SfxViewShell* pViewShell = GetViewShell();
@@ -529,50 +517,37 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
 
 
-void DrawViewShell::Init (void)
+void DrawViewShell::Init (bool bIsMainViewShell)
 {
-    ViewShell::Init ();
+    ViewShell::Init(bIsMainViewShell);
 
     StartListening (*GetDocSh());
-
-    // Now that the controller that is used by at least the FormShell we can
-    // allow the switching of object bars and switch to the default object
-    // bar.
-    ObjectBarManager& rObjectBarManager (GetObjectBarManager());
-    rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_OBJ_TOOLBOX);
-    rObjectBarManager.EnableObjectBarSwitching();
-    rObjectBarManager.SwitchObjectBar (
-        rObjectBarManager.GetDefaultObjectBarId());
-
-    // Determine whether to show the master view toolbar.  The master page
-    // mode has to be active and the shell must not be a handout view.
-    if (IsMainViewShell() && eEditMode==EM_MASTERPAGE && GetShellType()!=ViewShell::ST_HANDOUT)
-        GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
-    else
-        GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
 }
 
 
 
 
-DrawController* DrawViewShell::GetController (void)
+::std::auto_ptr<DrawSubController> DrawViewShell::CreateSubController (void)
 {
-    if ( ! mpController.is() && IsMainViewShell())
+    ::std::auto_ptr<DrawSubController> pResult;
+
+    if (IsMainViewShell())
     {
         // Create uno controller for the main view shell.  For the ones
         // displayed in the non-center panes we may later introduce
         // sub-controllers.
-        DrawController* pController = new SdUnoDrawView (
-            GetViewShellBase(),
+        ViewShellBase& rBase (GetViewShellBase());
+        pResult.reset(new SdUnoDrawView (
+            rBase.GetDrawController(),
             *this,
-            *GetView());
-        mpController = ::comphelper::ImplementationReference<
-        DrawController,
-            ::com::sun::star::uno::XInterface,
-            ::com::sun::star::uno::XWeak> (pController);
+            *GetView()));
     }
-    return mpController.get();
+
+    return pResult;
 }
+
+
+
 
 /*************************************************************************
 |*
