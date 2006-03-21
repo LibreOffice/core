@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:23:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,6 +532,7 @@ class SwDoc
     //
     // SO8pp3:
     // bTableRowKeep                        def = FALSE, hidden
+    // bIgnoreTabsAndBlanksForLineCalculation   def = FALSE, hidden
 
     sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
     sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
@@ -547,6 +548,7 @@ class SwDoc
     sal_Bool    bDoNotJustifyLinesWithManualBreak: 1;   // FME 2005-06-08 #i49277#
     sal_Bool    bDoNotResetParaAttrsForNumFont   : 1;   // FME 2005-08-11 #i53199#
     sal_Bool    bTableRowKeep                    : 1;   // FME 2006-02-10 #131283#
+    sal_Bool    bIgnoreTabsAndBlanksForLineCalculation : 1; // FME 2006-03-01 #i3952#
     sal_Bool    bDummyNonUIFlag1                 : 1;   // use this if necessary
     sal_Bool    bDummyNonUIFlag2                 : 1;   // use this if necessary
 
@@ -2303,6 +2305,17 @@ public:
     inline void SetTableRowKeep( const sal_Bool _bTableRowKeep )
     {
         bTableRowKeep = _bTableRowKeep;
+    }
+    // <--
+
+    // --> FME 2006-03-01 #i3952#
+    inline sal_Bool IgnoreTabsAndBlanksForLineCalculation() const
+    {
+        return bIgnoreTabsAndBlanksForLineCalculation;
+    }
+    inline void SetIgnoreTabsAndBlanksForLineCalculation( const sal_Bool bNew )
+    {
+        bIgnoreTabsAndBlanksForLineCalculation = bNew;
     }
     // <--
 
