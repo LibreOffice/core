@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:55:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,11 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 
 #ifndef _SVX3DITEMS_HXX
@@ -124,7 +127,9 @@ FunctionReference FuConstruct3dObject::Create( ViewShell* pViewSh, ::sd::Window*
 void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
-    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::msDrawingObjectToolBar);
 }
 
 /*************************************************************************
