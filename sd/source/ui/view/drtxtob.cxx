@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:21:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,12 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
+#endif
 #ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
 #endif
@@ -134,19 +140,11 @@ namespace sd {
 |*
 \************************************************************************/
 
-#define FEATURE_DRAW_TEXT_OBJECTBAR     1L
-#define FEATURE_GRAPHIC_TEXT_OBJECTBAR  2L
-
 SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
 {
-//    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_DRAW_TEXT_TOOLBOX) );
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_DRAW_TEXT_TOOLBOX),
-                                         FEATURE_DRAW_TEXT_OBJECTBAR );
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_GRAPHIC_TEXT_TOOLBOX),
-                                         FEATURE_GRAPHIC_TEXT_OBJECTBAR );
 }
 
 TYPEINIT1( TextObjectBar, SfxShell );
@@ -199,6 +197,10 @@ TextObjectBar::~TextObjectBar()
 {
     SetRepeatTarget(NULL);
 }
+
+
+
+
 
 /*************************************************************************
 |*
@@ -610,31 +612,5 @@ void TextObjectBar::Command( const CommandEvent& rCEvt )
 {
 }
 
-/*************************************************************************
-|*
-|* Unterstuetzte Features erfragen
-|*
-\************************************************************************/
-
-BOOL TextObjectBar::HasUIFeature( ULONG nFeature )
-{
-    BOOL bRet = FALSE;
-    DocumentType eDocType = pViewShell->GetDoc()->GetDocumentType();
-
-    if (nFeature == FEATURE_DRAW_TEXT_OBJECTBAR &&
-        eDocType == DOCUMENT_TYPE_IMPRESS)
-    {
-        // Impress-Objektleiste
-        bRet = TRUE;
-    }
-    else if (nFeature == FEATURE_GRAPHIC_TEXT_OBJECTBAR &&
-             eDocType == DOCUMENT_TYPE_DRAW)
-    {
-        // Draw-Objektleiste
-        bRet = TRUE;
-    }
-
-    return bRet;
-}
 
 } // end of namespace sd
