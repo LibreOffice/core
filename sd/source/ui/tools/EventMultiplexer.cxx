@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:05:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,6 @@ class SdDrawDocument;
 
 namespace sd { namespace tools {
 
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_DISPOSING             (0x0001);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_EDIT_VIEW_SELECTION   (0x0002);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_SLIDE_SORTER_SELECTION(0x0004);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_CURRENT_PAGE          (0x0008);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_MAIN_VIEW             (0x0010);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_VIEW                  (0x0020);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_EDIT_MODE             (0x0040);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_PAGE_ORDER            (0x0080);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ET_TEXT_EDIT             (0x0100);
-
-const EventMultiplexer::EventTypeSet EventMultiplexer::ETS_EMPTY_SET (0x00000000);
-const EventMultiplexer::EventTypeSet EventMultiplexer::ETS_FULL_SET (0xffffffff);
-
-
 typedef cppu::WeakComponentImplHelper3<
     ::com::sun::star::beans::XPropertyChangeListener,
     ::com::sun::star::frame::XFrameActionListener,
@@ -96,15 +82,13 @@ public:
 
     void AddEventListener (
         Link& rCallback,
-        EventTypeSet aEventTypes);
+        EventMultiplexerEvent::EventId aEventTypes);
 
     void RemoveEventListener (
         Link& rCallback,
-        EventTypeSet aEventTypes);
+        EventMultiplexerEvent::EventId aEventTypes);
 
-    void CallListeners (
-        EventType eType,
-        EventMultiplexerEvent& rEvent);
+    void CallListeners (EventMultiplexerEvent& rEvent);
 
     ViewShellBase& GetViewShellBase() const { return mrBase; }
 
@@ -144,7 +128,7 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link,EventTypeSet> ListenerDescriptor;
+    typedef ::std::pair<Link,EventMultiplexerEvent::EventId> ListenerDescriptor;
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
@@ -161,17 +145,17 @@ private:
         ::com::sun::star::frame::XFrame> mxFrameWeak;
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
-
     SdDrawDocument* mpDocument;
+
+    static const ::rtl::OUString msCurrentPagePropertyName;
+    static const ::rtl::OUString msEditModePropertyName;
 
     void ReleaseListeners (void);
 
     void ConnectToController (void);
     void DisconnectFromController (void);
 
-    void CallListeners (
-        EventType eType,
-        EventMultiplexerEvent::EventId eId);
+    void CallListeners (EventMultiplexerEvent::EventId eId, void* pUserData=NULL);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
@@ -184,6 +168,10 @@ private:
 };
 
 
+const ::rtl::OUString EventMultiplexer::Implementation::msCurrentPagePropertyName (
+    RTL_CONSTASCII_USTRINGPARAM("CurrentPage"));
+const ::rtl::OUString EventMultiplexer::Implementation::msEditModePropertyName (
+    RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
 
 
 //===== EventMultiplexer ======================================================
@@ -222,7 +210,7 @@ EventMultiplexer::~EventMultiplexer (void)
 
 void EventMultiplexer::AddEventListener (
     Link& rCallback,
-    EventTypeSet aEventTypes)
+    EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->AddEventListener (rCallback, aEventTypes);
 }
@@ -232,7 +220,7 @@ void EventMultiplexer::AddEventListener (
 
 void EventMultiplexer::RemoveEventListener (
     Link& rCallback,
-    EventTypeSet aEventTypes)
+    EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->RemoveEventListener (rCallback, aEventTypes);
 }
@@ -242,26 +230,8 @@ void EventMultiplexer::RemoveEventListener (
 
 void EventMultiplexer::MultiplexEvent( EventMultiplexerEvent::EventId eEventId, void* pUserData )
 {
-    EventType eEventType = ETS_FULL_SET;
-
-    switch( eEventId )
-    {
-    case EventMultiplexerEvent::EID_DISPOSING:              eEventType = ET_DISPOSING; break;
-    case EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:    eEventType = ET_EDIT_VIEW_SELECTION; break;
-    case EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION: eEventType = ET_SLIDE_SORTER_SELECTION; break;
-    case EventMultiplexerEvent::EID_CURRENT_PAGE:           eEventType = ET_CURRENT_PAGE; break;
-    case EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:      eEventType = ET_MAIN_VIEW; break;
-    case EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:        eEventType = ET_MAIN_VIEW; break;
-    case EventMultiplexerEvent::EID_VIEW_REMOVED:           eEventType = ET_VIEW; break;
-    case EventMultiplexerEvent::EID_VIEW_ADDED:             eEventType = ET_VIEW; break;
-    case EventMultiplexerEvent::EID_EDIT_MODE:              eEventType = ET_EDIT_MODE; break;
-    case EventMultiplexerEvent::EID_PAGE_ORDER:             eEventType = ET_PAGE_ORDER; break;
-    case EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT:        eEventType = ET_TEXT_EDIT; break;
-    case EventMultiplexerEvent::EID_END_TEXT_EDIT:          eEventType = ET_TEXT_EDIT; break;
-    }
-
     EventMultiplexerEvent aEvent (mpImpl->GetViewShellBase(), eEventId, pUserData);
-    mpImpl->CallListeners( eEventType, aEvent );
+    mpImpl->CallListeners(aEvent);
 }
 
 
@@ -353,7 +323,7 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
 
 void EventMultiplexer::Implementation::AddEventListener (
     Link& rCallback,
-    EventTypeSet aEventTypes)
+    EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
     ListenerList::const_iterator iEnd (maListeners.end());
@@ -376,7 +346,7 @@ void EventMultiplexer::Implementation::AddEventListener (
 
 void EventMultiplexer::Implementation::RemoveEventListener (
     Link& rCallback,
-    EventTypeSet aEventTypes)
+    EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
     ListenerList::const_iterator iEnd (maListeners.end());
@@ -388,7 +358,7 @@ void EventMultiplexer::Implementation::RemoveEventListener (
         // Update the event type set.
         iListener->second &= ~aEventTypes;
         // When no events remain in the set then remove the listener.
-        if (iListener->second == ETS_EMPTY_SET)
+        if (iListener->second == EID_EMPTY_SET)
             maListeners.erase (iListener);
     }
 }
@@ -424,23 +394,25 @@ void EventMultiplexer::Implementation::ConnectToController (void)
 
         // Listen to changes of certain properties.
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-        try
+        if (xSet.is())
         {
-            if (xSet.is())
-            {
-                xSet->addPropertyChangeListener (
-                    String::CreateFromAscii("CurrentPage"),
-                    this);
-                xSet->addPropertyChangeListener (
-                    String::CreateFromAscii("IsMasterPageMode"),
-                    this);
-            }
-        }
-        catch (beans::UnknownPropertyException aEvent)
-        {
-            OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                ::rtl::OUStringToOString(aEvent.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+                try
+                {
+                    xSet->addPropertyChangeListener(msCurrentPagePropertyName, this);
+                }
+                catch (beans::UnknownPropertyException)
+                {
+                    OSL_TRACE("EventMultiplexer::ConnectToController: CurrentPage unknown");
+                }
+
+                try
+                {
+                    xSet->addPropertyChangeListener(msEditModePropertyName, this);
+                }
+                catch (beans::UnknownPropertyException)
+                {
+                    OSL_TRACE("EventMultiplexer::ConnectToController: IsMasterPageMode unknown");
+                }
         }
 
         // Listen for selection change events.
@@ -468,31 +440,26 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         Reference<frame::XController> xController = mxControllerWeak;
 
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-        try
+        // Remove the property listener.
+        if (xSet.is())
         {
-            // Remove the property listener.
-            if (xSet.is())
+            try
             {
-                xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("CurrentPage"),
-                    this);
-                xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("IsMasterPageMode"),
-                    this);
+                xSet->removePropertyChangeListener(msCurrentPagePropertyName, this);
+            }
+            catch (beans::UnknownPropertyException aEvent)
+            {
+                OSL_TRACE ("DisconnectFromController: CurrentPage unknown");
             }
 
-            // Remove the dispose listener.
-            Reference<XComponent> xComponent (xController, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->removeEventListener (
-                    Reference<lang::XEventListener>(
-                        static_cast<XWeak*>(this), UNO_QUERY));
-        }
-        catch (beans::UnknownPropertyException aEvent)
-        {
-            OSL_TRACE ("caught exception in destructor of SlideSorterController: %s",
-                ::rtl::OUStringToOString(aEvent.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            try
+            {
+                xSet->removePropertyChangeListener(msEditModePropertyName, this);
+            }
+            catch (beans::UnknownPropertyException aEvent)
+            {
+                OSL_TRACE ("DisconnectFromController: IsMasterPageMode unknown");
+            }
         }
 
         // Remove selection change listener.
@@ -505,9 +472,10 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         // Remove listener for disposing events.
         Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
+        {
             xComponent->removeEventListener (
-                Reference<lang::XEventListener>(
-                    static_cast<XWeak*>(this), UNO_QUERY));
+                Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
+        }
     }
 }
 
@@ -541,22 +509,13 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 {
     ThrowIfDisposed();
 
-    static const ::rtl::OUString sCurrentPagePropertyName (
-        RTL_CONSTASCII_USTRINGPARAM("CurrentPage"));
-    static const ::rtl::OUString sEditModePropertyName (
-        RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
-
-    if (rEvent.PropertyName.equals (sCurrentPagePropertyName))
+    if (rEvent.PropertyName.equals(msCurrentPagePropertyName))
     {
-        CallListeners (
-            ET_CURRENT_PAGE,
-            EventMultiplexerEvent::EID_CURRENT_PAGE);
+        CallListeners(EventMultiplexerEvent::EID_CURRENT_PAGE);
     }
-    else if (rEvent.PropertyName.equals (sEditModePropertyName))
+    else if (rEvent.PropertyName.equals(msEditModePropertyName))
     {
-        CallListeners (
-            ET_EDIT_MODE,
-            EventMultiplexerEvent::EID_EDIT_MODE);
+        CallListeners(EventMultiplexerEvent::EID_EDIT_MODE);
     }
 }
 
@@ -575,11 +534,19 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
         {
             case frame::FrameAction_COMPONENT_DETACHING:
                 DisconnectFromController();
+                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
                 break;
 
             case frame::FrameAction_COMPONENT_REATTACHED:
+                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
+                DisconnectFromController();
+                ConnectToController();
+                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_ATTACHED);
+                break;
+
             case frame::FrameAction_COMPONENT_ATTACHED:
                 ConnectToController();
+                CallListeners (EventMultiplexerEvent::EID_CONTROLLER_ATTACHED);
                 break;
 
             default:
@@ -596,9 +563,7 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     const lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CallListeners (
-        ET_EDIT_VIEW_SELECTION,
-        EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
+    CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
 }
 
 
@@ -606,9 +571,7 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
 
 void SAL_CALL EventMultiplexer::Implementation::disposing (void)
 {
-    CallListeners (
-        ET_DISPOSING,
-        EventMultiplexerEvent::EID_DISPOSING);
+    CallListeners (EventMultiplexerEvent::EID_DISPOSING);
     ReleaseListeners();
 }
 
@@ -641,15 +604,11 @@ void EventMultiplexer::Implementation::Notify (
         {
             case HINT_MODELCLEARED:
             case HINT_PAGEORDERCHG:
-                CallListeners (
-                    ET_PAGE_ORDER,
-                    EventMultiplexerEvent::EID_PAGE_ORDER);
+                CallListeners (EventMultiplexerEvent::EID_PAGE_ORDER);
                 break;
 
             case HINT_SWITCHTOPAGE:
-                CallListeners (
-                    ET_CURRENT_PAGE,
-                    EventMultiplexerEvent::EID_CURRENT_PAGE);
+                CallListeners (EventMultiplexerEvent::EID_CURRENT_PAGE);
                 break;
         }
     }
@@ -665,25 +624,23 @@ void EventMultiplexer::Implementation::Notify (
 
 
 void EventMultiplexer::Implementation::CallListeners (
-    EventType eType,
-    EventMultiplexerEvent::EventId eId)
+    EventMultiplexerEvent::EventId eId,
+    void* pUserData)
 {
-    EventMultiplexerEvent aEvent (mrBase, eId, NULL);
-    CallListeners( eType, aEvent );
+    EventMultiplexerEvent aEvent (mrBase, eId, pUserData);
+    CallListeners(aEvent);
 }
 
 
 
 
-void EventMultiplexer::Implementation::CallListeners (
-    EventType eType,
-    EventMultiplexerEvent& rEvent)
+void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
     ListenerList::const_iterator iListener (maListeners.begin());
     ListenerList::const_iterator iListenerEnd (maListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
-        if ((iListener->second && eType) != 0)
+        if ((iListener->second && rEvent.meEventId) != 0)
             iListener->first.Call(&rEvent);
     }
 }
@@ -699,13 +656,12 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
     switch (pEvent->meEventId)
     {
         case PaneManagerEvent::EID_VIEW_SHELL_ADDED:
-            CallListeners (
-                ET_VIEW,
-                EventMultiplexerEvent::EID_VIEW_ADDED);
+            CallListeners (EventMultiplexerEvent::EID_VIEW_ADDED);
 
             if (pEvent->mePane == PaneManager::PT_CENTER)
-                CallListeners (ET_MAIN_VIEW,
-                    EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+                CallListeners (
+                    EventMultiplexerEvent::EID_MAIN_VIEW_ADDED,
+                    pEvent->mpShell);
 
             // Add selection change listener at slide sorter.
             if (pEvent->mpShell != NULL
@@ -722,11 +678,8 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
 
         case PaneManagerEvent::EID_VIEW_SHELL_REMOVED:
             if (pEvent->mePane == PaneManager::PT_CENTER)
-                CallListeners (ET_MAIN_VIEW,
-                    EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
-            CallListeners (
-                ET_VIEW,
-                EventMultiplexerEvent::EID_VIEW_REMOVED);
+                CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
+            CallListeners (EventMultiplexerEvent::EID_VIEW_REMOVED);
 
             // Remove selection change listener from slide sorter.
             if (pEvent->mpShell != NULL
@@ -742,6 +695,8 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
             break;
 
         case PaneManagerEvent::EID_PANE_MANAGER_DYING:
+            CallListeners (EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
+
             // Stop listening for view switches.
             mrBase.GetPaneManager().RemoveEventListener (
                 LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
@@ -758,8 +713,7 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
 IMPL_LINK(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener,
     void*, pEvent)
 {
-    CallListeners (ET_SLIDE_SORTER_SELECTION,
-        EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
+    CallListeners (EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
     return 0;
 }
 
