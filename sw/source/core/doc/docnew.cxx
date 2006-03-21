@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:04:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,6 +382,7 @@ SwDoc::SwDoc() :
     bDoNotJustifyLinesWithManualBreak   =
     bDoNotResetParaAttrsForNumFont      =
     bTableRowKeep                       =
+    bIgnoreTabsAndBlanksForLineCalculation =
 
     //
     // COMPATIBILITY FLAGS END
@@ -919,15 +920,6 @@ void SwDoc::ClearDoc()
     // loesche der Nodes geloescht werden.
     pBookmarkTbl->DeleteAndDestroy( 0, pBookmarkTbl->Count() );
     pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
-    pOutlineRule = NULL;
-    pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
-    pOutlineRule = new SwNumRule( String::CreateFromAscii(
-                                      SwNumRule::GetOutlineRuleName() ),
-                                  OUTLINE_RULE );
-    AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
-    // <--
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
@@ -949,6 +941,21 @@ void SwDoc::ClearDoc()
 
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
+
+    // --> OD 2006-02-28 #i62440#
+    // destruction of numbering rules and creation of new outline rule
+    // *after* the document nodes are deleted.
+    pOutlineRule = NULL;
+    pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
+    // creation of new outline numbering rule
+    pOutlineRule = new SwNumRule( String::CreateFromAscii(
+                                      SwNumRule::GetOutlineRuleName() ),
+                                  OUTLINE_RULE );
+    AddNumRule(pOutlineRule);
+    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
+    // <--
+    // <--
 
     //remove the dummy pagedec from the array and delete all the old ones
     aPageDescs.Remove( nDummyPgDsc );
