@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,15 @@ public:
     GraphicViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
     virtual ~GraphicViewShellBase (void);
 
-    /** We delete the ViewTabBar that is not needed for Draw.
-    */
-    virtual void LateInit (void);
-
     /** Callback function for general slot calls.
     */
     virtual void Execute (SfxRequest& rRequest);
+
+protected:
+    /** The ViewTabBar is not supported so this factory method always
+        returns <NULL/>.
+    */
+    virtual ViewTabBar* CreateViewTabBar (void);
 };
 
 } // end of namespace sd
