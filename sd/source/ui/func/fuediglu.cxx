@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:58:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,12 +50,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_VIEW_SHELL_HXX
-#include "ViewShell.hxx"
-#endif
-#ifndef SD_VIEW_HXX
-#include "View.hxx"
-#endif
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
@@ -63,8 +57,17 @@
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 
 namespace sd {
@@ -100,7 +103,9 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
     pView->SetInsGluePointMode(FALSE);
-    pViewShell->GetObjectBarManager().ActivateObjectBar(RID_GLUEPOINTS_TOOLBOX);//todo: would be better to call just 'GetObjectBarManager().SelectionHasChanged(pView)' but this is not possible currently because the Gluepoint mode is not correctly detectable(SDRCONTEXT_GLUEPOINTEDIT is not sufficient); the view context design needs a cleanup first; than we could maybe introduce a methhod ObjectBarManager::ContextChanged( ... )
+    pViewShell->GetViewShellBase().GetToolBarManager().AddToolBar(
+        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::msGluePointsToolBar);
 }
 
 /*************************************************************************
