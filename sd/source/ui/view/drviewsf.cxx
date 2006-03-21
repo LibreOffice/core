@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:12:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,11 +122,11 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
+#endif
+#ifndef SD_FORM_SHELL_MANAGER_HXX
+#include "FormShellManager.hxx"
 #endif
 #include "cfgids.hxx"
 
@@ -279,8 +279,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
         if (pFormShell != NULL)
         {
             UINT16 nState = 0;
