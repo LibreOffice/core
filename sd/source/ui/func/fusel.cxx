@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:13:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
@@ -130,8 +133,8 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 #include "pgjump.hxx"
 #include <svx/globl3d.hxx>
@@ -1195,7 +1198,7 @@ void FuSelection::SelectionHasChanged()
     }
 
     // Activate the right tool bar for the current context of the view.
-    pViewShell->GetObjectBarManager().SelectionHasChanged (pView);
+    pViewShell->GetViewShellBase().GetToolBarManager().SelectionHasChanged(*pViewShell, *pView);
 }
 
 
