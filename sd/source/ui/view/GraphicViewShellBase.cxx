@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:59:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,10 @@ GraphicViewShellBase::GraphicViewShellBase (
 
 
 
-void GraphicViewShellBase::LateInit (void)
+ViewTabBar* GraphicViewShellBase::CreateViewTabBar (void)
 {
-    ViewShellBase::LateInit();
-    // Turn the ViewTabBar off again.  It is not needed for Draw.
-    mpViewTabBar.reset();
+    // The ViewTabBar is not supported.
+    return NULL;
 }
 
 
@@ -123,11 +122,21 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
     switch (nSlotId)
     {
+        case SID_LEFT_PANE_IMPRESS:
+        case SID_RIGHT_PANE:
+        case SID_NOTES_WINDOW:
+        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        case SID_DIAMODE:
+        case SID_OUTLINEMODE:
+        case SID_NOTESMODE:
+        case SID_HANDOUTMODE:
         case SID_TASK_PANE:
-            // Since there is no tool panel in Draw we ignore this call.
+            // Prevent some Impress-only slots from being executed.
             rRequest.Cancel();
             break;
 
+        case SID_SWITCH_SHELL:
+        case SID_LEFT_PANE_DRAW:
         default:
             // The remaining requests are forwarded to out base class.
             ViewShellBase::Execute (rRequest);
