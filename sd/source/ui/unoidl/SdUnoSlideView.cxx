@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:46:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,53 +35,17 @@
 
 #include "SdUnoSlideView.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include "SlideSorterViewShell.hxx"
+#include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "model/SlideSorterModel.hxx"
+#include "model/SlsPageDescriptor.hxx"
+#include "sdpage.hxx"
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _SVX_UNOSHAPE_HXX
-#include <svx/unoshape.hxx>
-#endif
-
-#include <svx/svdobj.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
-
-#ifndef SD_WINDOW_HXX
-#include "Window.hxx"
-#endif
-#ifndef SD_VIEW_HXX
-#include "View.hxx"
-#endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
-#endif
-#include "unohelp.hxx"
-#include "unopage.hxx"
-#include "unomodel.hxx"
-#include "drawdoc.hxx"
-/*
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
-#include "GraphicViewShell.hxx"
-#endif
-#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
-#include "PresentationViewShell.hxx"
-#endif
-#ifndef SD_PREVIEW_VIEW_SHELL_HXX
-#include "PreviewViewShell.hxx"
-#endif
-*/
-using namespace ::rtl;
-using namespace ::vos;
-using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -89,34 +53,149 @@ namespace sd {
 
 
 SdUnoSlideView::SdUnoSlideView (
-    ViewShellBase& rBase,
-    ViewShell& rViewShell,
+    DrawController& rController,
+    slidesorter::SlideSorterViewShell& rViewShell,
     View& rView) throw()
-    : DrawController(rBase, rViewShell, rView)
+    : DrawSubController(),
+      mrController(rController),
+      mrSlideSorterViewShell(rViewShell),
+      mrView(rView)
 {
 }
 
-SdUnoSlideView::~SdUnoSlideView() throw()
+
+
+
+SdUnoSlideView::~SdUnoSlideView (void) throw()
 {
 }
 
 
 
 
-// XTypeProvider
+//===== XSelectionSupplier ====================================================
 
-IMPLEMENT_GET_IMPLEMENTATION_ID(SdUnoSlideView);
-
-
-
-
-// XServiceInfo
-
-sal_Char pImplSdUnoSlideViewService[sizeof("com.sun.star.presentation.SlidesView")] = "com.sun.star.presentation.SlidesView";
-
-OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw(RuntimeException)
+sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
+      throw(lang::IllegalArgumentException, RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdUnoSlideView" ) );
+    bool bOk = true;
+
+    slidesorter::controller::SlideSorterController& rSlideSorterController
+        = mrSlideSorterViewShell.GetSlideSorterController();
+    slidesorter::controller::PageSelector& rSelector (rSlideSorterController.GetPageSelector());
+    rSelector.DeselectAllPages();
+    Sequence<Reference<drawing::XDrawPage> > xPages;
+    aSelection >>= xPages;
+    const sal_uInt32 nCount = xPages.getLength();
+    for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+        Reference<beans::XPropertySet> xSet (xPages[nIndex], UNO_QUERY);
+        if (xSet.is())
+        {
+            try
+            {
+                Any aNumber = xSet->getPropertyValue(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number")));
+                sal_Int32 nPageNumber;
+                aNumber >>= nPageNumber;
+                nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
+                rSelector.SelectPage(nPageNumber);
+            }
+            catch(RuntimeException e)
+            {
+            }
+        }
+    }
+    rSlideSorterController.MakeSelectionVisible();
+
+    return bOk;
+}
+
+
+
+
+Any SAL_CALL SdUnoSlideView::getSelection (void)
+      throw(RuntimeException)
+{
+    Any aResult;
+
+    slidesorter::controller::SlideSorterController& rSlideSorterController
+        = mrSlideSorterViewShell.GetSlideSorterController();
+    slidesorter::model::SlideSorterModel::Enumeration aSelectedPages (
+        rSlideSorterController.GetModel().GetSelectedPagesEnumeration());
+    int nSelectedPageCount (rSlideSorterController.GetPageSelector().GetSelectedPageCount());
+
+    Sequence<Reference<XInterface> > aPages(nSelectedPageCount);
+    int nIndex = 0;
+    while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
+    {
+        slidesorter::model::PageDescriptor& rDescriptor (aSelectedPages.GetNextElement());
+        aPages[nIndex++] = rDescriptor.GetPage()->getUnoPage();
+    }
+    aResult <<= aPages;
+
+    return aResult;
+}
+
+
+
+
+//===== XDraw View ============================================================
+
+void SAL_CALL SdUnoSlideView::setCurrentPage (
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+}
+
+
+
+
+::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
+    SdUnoSlideView::getCurrentPage (void)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return Reference<drawing::XDrawPage>();
+}
+
+
+
+void SdUnoSlideView::FillPropertyTable (
+    ::std::vector< ::com::sun::star::beans::Property>& rProperties)
+{
+    /* no additional properties */
+}
+
+
+
+
+sal_Bool SAL_CALL SdUnoSlideView::convertFastPropertyValue(
+    ::com::sun::star::uno::Any & rConvertedValue,
+    ::com::sun::star::uno::Any & rOldValue,
+    sal_Int32 nHandle,
+    const ::com::sun::star::uno::Any& rValue )
+    throw (::com::sun::star::lang::IllegalArgumentException)
+{
+    return sal_False;
+}
+
+
+
+
+void SAL_CALL SdUnoSlideView::setFastPropertyValue_NoBroadcast(
+    sal_Int32 nHandle,
+    const ::com::sun::star::uno::Any& rValue )
+    throw (::com::sun::star::uno::Exception)
+{
+}
+
+
+
+
+void SAL_CALL SdUnoSlideView::getFastPropertyValue(
+    ::com::sun::star::uno::Any& rValue,
+    sal_Int32 nHandle ) const
+{
 }
 
 
