@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:40:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,9 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-
-#include "ViewShellBase.hxx"
+#ifndef SD_VIEW_SHELL_MANAGER_HXX
+#include "ViewShellManager.hxx"
+#endif
 
 using namespace com::sun::star;
 
