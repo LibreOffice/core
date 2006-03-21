@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:09:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 16:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
     // --> FME 2006-02-10 #131283#
     HANDLE_TABLE_ROW_KEEP,
+    // --> FME 2006-03-01 #i3952#
+    HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,
     // --> PB 2004-08-20 #i33095#
     HANDLE_LOAD_READONLY
     // <--
@@ -228,6 +230,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> FME 2006-02-10 #131283#
         { RTL_CONSTASCII_STRINGPARAM("TableRowKeep"),               HANDLE_TABLE_ROW_KEEP,         CPPUTYPE_BOOLEAN,           0,   0},
+        // FME 2006-03-01 #i3952#
+        { RTL_CONSTASCII_STRINGPARAM("IgnoreTabsAndBlanksForLineCalculation"),   HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
         // <--
@@ -674,6 +678,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetTableRowKeep( bTmp );
         }
         break;
+        // --> FME 2006-03-01 #i3952#
+        case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetIgnoreTabsAndBlanksForLineCalculation( bTmp );
+        }
+        break;
         // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
@@ -949,6 +960,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
+        // --> FME 2006-03-01 #i3952#
+        case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
+        {
+            sal_Bool bTmp = mpDoc->IgnoreTabsAndBlanksForLineCalculation();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
         // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
@@ -956,7 +974,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bReadonly, ::getBooleanCppuType() );
         }
         break;
-        // <--
+
         default:
             throw UnknownPropertyException();
     }
