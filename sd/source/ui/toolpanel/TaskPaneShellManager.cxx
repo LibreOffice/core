@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:33:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 
 #include "ViewShellManager.hxx"
 #include <osl/diagnose.h>
+#include <vcl/window.hxx>
+
 #include <algorithm>
 
 namespace sd { namespace toolpanel {
@@ -44,36 +46,84 @@ namespace sd { namespace toolpanel {
 TaskPaneShellManager::TaskPaneShellManager (
     ViewShellManager& rViewShellManager,
     const ViewShell& rViewShell)
-    : maShellStack(),
-      mrViewShellManager(rViewShellManager),
-      mrViewShell(rViewShell)
+    : mrViewShellManager(rViewShellManager),
+      mrViewShell(rViewShell),
+      maSubShells()
 {
 }
 
 
 
 
-void TaskPaneShellManager::AddSubShell (SfxShell* pShell)
+TaskPaneShellManager::~TaskPaneShellManager (void)
 {
-    ViewShellManager::UpdateLock aLocker (mrViewShellManager);
-
-    maShellStack.push_back(pShell);
+    while ( ! maSubShells.empty())
+        RemoveSubShell(maSubShells.begin()->second.mpShell);
 }
 
 
 
 
-void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
+SfxShell* TaskPaneShellManager::CreateShell (
+    ShellId nId,
+    ::Window* pParentWindow,
+    FrameView* pFrameView)
 {
-    ShellStack::iterator aFoundShell (::std::find (
-        maShellStack.begin(),
-        maShellStack.end(),
-        pShell));
-    if (aFoundShell != maShellStack.end())
+    SubShells::const_iterator iShell (maSubShells.find(nId));
+    if (iShell != maSubShells.end())
+        return iShell->second.mpShell;
+    else
+        return NULL;
+}
+
+
+
+
+void TaskPaneShellManager::ReleaseShell (SfxShell* pShell)
+{
+    // Nothing to do.
+}
+
+
+
+
+void TaskPaneShellManager::AddSubShell (
+    ShellId nId,
+    SfxShell* pShell,
+    ::Window* pWindow)
+{
+    if (pShell != NULL)
     {
-        ViewShellManager::UpdateLock aLocker (mrViewShellManager);
+        maSubShells[nId] = ShellDescriptor(pShell,pWindow);
+        if (pWindow != NULL)
+        {
+            pWindow->AddEventListener(LINK(this,TaskPaneShellManager,WindowCallback));
+            if (pWindow->IsReallyVisible())
+                mrViewShellManager.ActivateSubShell(mrViewShell, nId);
+        }
+        else
+            mrViewShellManager.ActivateSubShell(mrViewShell, nId);
+    }
+}
 
-        maShellStack.erase(aFoundShell);
+
+
+
+void TaskPaneShellManager::RemoveSubShell (const SfxShell* pShell)
+{
+    if (pShell != NULL)
+    {
+        SubShells::iterator iShell;
+        for (iShell=maSubShells.begin(); iShell!=maSubShells.end(); ++iShell)
+            if (iShell->second.mpShell == pShell)
+            {
+                if (iShell->second.mpWindow != NULL)
+                    iShell->second.mpWindow->RemoveEventListener(
+                        LINK(this,TaskPaneShellManager,WindowCallback));
+                mrViewShellManager.DeactivateSubShell(mrViewShell,iShell->first);
+                maSubShells.erase(iShell);
+                break;
+            }
     }
 }
 
@@ -82,42 +132,48 @@ void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
 
 void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
 {
-    ViewShellManager::UpdateLock aLocker (mrViewShellManager);
+    SubShells::const_iterator iShell;
+    for (iShell=maSubShells.begin(); iShell!=maSubShells.end(); ++iShell)
+        if (iShell->second.mpShell == pShell)
+        {
+            ViewShellManager::UpdateLock aLocker (mrViewShellManager);
+            mrViewShellManager.MoveSubShellToTop(mrViewShell,iShell->first);
+            mrViewShellManager.MoveToTop(mrViewShell);
+            break;
+        }
+}
 
-    if (maShellStack.empty() || maShellStack.back()!=pShell)
+
+
+
+IMPL_LINK(TaskPaneShellManager, WindowCallback, VclWindowEvent*, pEvent)
+{
+    if (pEvent != NULL)
     {
-        // Tell the ViewShellManager to rebuild the stack at least from the
-        // current position of the shell.
-        mrViewShellManager.InvalidateShellStack(pShell);
+        SubShells::const_iterator iShell;
+        ::Window* pWindow = pEvent->GetWindow();
+        for (iShell=maSubShells.begin(); iShell!=maSubShells.end(); ++iShell)
+            if (iShell->second.mpWindow == pWindow)
+                break;
+        if (iShell != maSubShells.end())
+            switch (pEvent->GetId())
+            {
+                case VCLEVENT_WINDOW_SHOW:
+                    mrViewShellManager.ActivateSubShell(mrViewShell,iShell->first);
+                    break;
 
-        // Move the given shell to the top of the local stack.
-        RemoveSubShell (pShell);
-        AddSubShell (pShell);
+                case VCLEVENT_WINDOW_HIDE:
+                    // Do not activate the sub shell.  This leads to
+                    // problems with shapes currently being in text edit
+                    // mode: Deactivating the shell leads to leaving the
+                    // text editing mode.
+                    // mrViewShellManager.DeactivateSubShell(mrViewShell,iShell->first);
+                    break;
+            }
     }
 
-    // Move the view shell to the top of the view shell stack.  This has to
-    // be done even when the sub shell has not been moved.
-    mrViewShellManager.MoveToTop (&mrViewShell);
+    return 0;
 }
-
-
-
-
-void TaskPaneShellManager::GetLowerShellList (::std::vector<SfxShell*>& rShellList) const
-{
-    // No sub shells below the shell yet.
-}
-
-
-
-
-void TaskPaneShellManager::GetUpperShellList (::std::vector<SfxShell*>& rShellList) const
-{
-    ShellStack::const_iterator iShell;
-    for (iShell=maShellStack.begin(); iShell!=maShellStack.end(); ++iShell)
-        rShellList.push_back (*iShell);
-}
-
 
 
 } } // end of namespace ::sd::toolpanel
