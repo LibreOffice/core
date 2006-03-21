@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:51:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ public:
 
     virtual ~DrawViewShell (void);
 
-    virtual void Init (void);
+    virtual void Init (bool bIsMainViewShell);
 
     virtual void    Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
@@ -311,7 +311,6 @@ public:
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
-    //af    SdUnoDrawView*  GetController() const { return pController; }
     bool IsLayerModeActive (void) const;
 
     USHORT*         GetSlotArray() const { return pSlotArray; }
@@ -388,7 +387,7 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
-    virtual DrawController* GetController (void);
+    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
     DrawView*   GetDrawView() const { return pDrView; }
 
