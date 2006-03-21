@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:14:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,71 +36,80 @@
 #ifndef SD_UNO_SLIDE_VIEW_HXX
 #define SD_UNO_SLIDE_VIEW_HXX
 
-#ifndef SD_DRAW_CONTROLLER_HXX
-#include "DrawController.hxx"
+#ifndef SD_DRAW_SUB_CONTROLLER_HXX
+#include "DrawSubController.hxx"
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
-#include <com/sun/star/drawing/XDrawView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 
-#ifndef _SFX_SFXBASECONTROLLER_HXX_
-#include <sfx2/sfxbasecontroller.hxx>
-#endif
+namespace sd { namespace slidesorter {
+class SlideSorterViewShell;
+} }
 
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#include <cppuhelper/propshlp.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX
-#include <cppuhelper/proptypehlp.hxx>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
-#endif
-
-#ifndef _SVX_UNOSHAPE_HXX
-#include <svx/unoshape.hxx>
-#endif
-
+namespace sd { namespace slidesorter { namespace controller {
+class PageSelector;
+} } }
 
 namespace sd {
 
-class ViewShellBase;
+class DrawController;
 class SlideViewShell;
 class View;
 
 
-/**
- * This class implements the view component for a SdOutlineViewShell
+/** This class implements the SlideSorterViewShell specific part of the
+    controller.
  */
 class SdUnoSlideView
-    : public DrawController
+    : public DrawSubController
 {
 public:
     SdUnoSlideView (
-        ViewShellBase& rBase,
-        ViewShell& rViewShell,
+        DrawController& rController,
+        slidesorter::SlideSorterViewShell& rViewShell,
         View& rView) throw();
-    virtual ~SdUnoSlideView() throw();
+    virtual ~SdUnoSlideView (void) throw();
 
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+    // XSelectionSupplier
+    virtual sal_Bool SAL_CALL select (const ::com::sun::star::uno::Any& aSelection)
+        throw(::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection (void)
+        throw(::com::sun::star::uno::RuntimeException);
+
+
+    // XDrawView
+    virtual void SAL_CALL setCurrentPage (
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
+        getCurrentPage (void)
         throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    sal_Bool            mbDisposing;
+    DrawController& mrController;
+    slidesorter::SlideSorterViewShell& mrSlideSorterViewShell;
+    sd::View& mrView;
 
-    Rectangle           maLastVisArea;
+    virtual void FillPropertyTable (
+        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        ::com::sun::star::uno::Any & rConvertedValue,
+        ::com::sun::star::uno::Any & rOldValue,
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::uno::Exception);
+    virtual void SAL_CALL getFastPropertyValue(
+        ::com::sun::star::uno::Any& rValue,
+        sal_Int32 nHandle ) const;
+
 };
 
 } // end of namespace sd
