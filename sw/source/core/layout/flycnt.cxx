@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:27:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,11 @@
 #include <objectformattertxtfrm.hxx>
 #endif
 // <--
+// --> OD 2006-03-06 #125892#
+#ifndef _HANDLEANCHORNODECHG_HXX
+#include <HandleAnchorNodeChg.hxx>
+#endif
+// <--
 
 /*************************************************************************
 |*
@@ -178,20 +183,50 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         //Richtung. Wenn der neue Anker nicht gefunden wird koennen wir uns
         //immer noch vom Node einen Frame besorgen. Die Change, dass dies dann
         //der richtige ist, ist gut.
-        const FASTBOOL bNext = aOldIdx < aNewIdx;
-        while ( pCntnt && aOldIdx != aNewIdx )
+        const bool bNext = aOldIdx < aNewIdx;
+        // --> OD 2006-02-28 #125892#
+        // consider the case that at found anchor frame candidate already a
+        // fly frame of the given fly format is registered.
+        // --> OD 2006-03-15 #133407# - consider, that <pCntnt> is the already
+        // the new anchor frame.
+        bool bFound( aOldIdx == aNewIdx );
+        // <--
+        while ( pCntnt && !bFound )
         {
             do
-            {   if ( bNext )
+            {
+                if ( bNext )
                     pCntnt = pCntnt->GetNextCntntFrm();
                 else
                     pCntnt = pCntnt->GetPrevCntntFrm();
             } while ( pCntnt &&
-                      !(bBodyFtn == (pCntnt->IsInDocBody() ||
-                                     pCntnt->IsInFtn())) );
-            if (pCntnt)
+                      !( bBodyFtn == ( pCntnt->IsInDocBody() ||
+                                       pCntnt->IsInFtn() ) ) );
+            if ( pCntnt )
                 aOldIdx = *pCntnt->GetNode();
+
+            // --> OD 2006-02-28 #125892#
+            // check, if at found anchor frame candidate already a fly frame
+            // of the given fly frame format is registered.
+            bFound = aOldIdx == aNewIdx;
+            if ( bFound && pCntnt->GetDrawObjs() )
+            {
+                SwFrmFmt* pMyFlyFrmFmt( &GetFrmFmt() );
+                SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
+                for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
+                {
+                    SwFlyFrm* pFlyFrm = dynamic_cast<SwFlyFrm*>(rObjs[i]);
+                    if ( pFlyFrm &&
+                         &(pFlyFrm->GetFrmFmt()) == pMyFlyFrmFmt )
+                    {
+                        bFound = false;
+                        break;
+                    }
+                }
+            }
+            // <--
         }
+        // <--
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
@@ -1343,7 +1378,17 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             pPos->nNode = *pCnt->GetNode();
             pPos->nContent.Assign( pCnt->GetNode(), 0 );
         }
-        pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
+
+        // --> OD 2006-02-27 #125892#
+        // handle change of anchor node:
+        // if count of the anchor frame also change, the fly frames have to be
+        // re-created. Thus, delete all fly frames except the <this> before the
+        // anchor attribute is change and re-create them afterwards.
+        {
+            SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFmt, aAnch, this );
+            pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
+        }
+        // <--
     }
     // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
     else if ( pPage && pPage != GetPageFrm() )
