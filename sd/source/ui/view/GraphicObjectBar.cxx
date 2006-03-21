@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:58:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ SFX_DECL_TYPE( 13 );
 
 SFX_IMPL_INTERFACE( GraphicObjectBar, SfxShell, SdResId( STR_GRAFOBJECTBARSHELL ) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId( RID_DRAW_GRAF_TOOLBOX ) );
 }
 
 // -----------------------------------------------------------------------------
