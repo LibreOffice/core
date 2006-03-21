@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:15:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,11 @@
 #endif
 
 #include <svtools/lstner.hxx>
+#include <tools/link.hxx>
+
+namespace sd { namespace tools {
+class EventMultiplexerEvent;
+} }
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -169,6 +174,8 @@ private:
     */
     void ThrowIfDisposed (void)
         throw (::com::sun::star::lang::DisposedException);
+
+    DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
