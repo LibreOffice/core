@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,36 +43,40 @@
 #endif
 #include <memory>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
+class FmFormShell;
 class SfxShell;
+class SfxUndoManager;
 
 namespace sd {
 
 class ViewShell;
 class ViewShellBase;
 
-/** The sub-shell manager has the responsibility to maintain the sub shells
-    stacked on a ViewShellBase object.  They form a two level hierarchy.  On
-    the first level there are the view shells which are managed directly by
-    this class.  On the second level there are the object bars wrapped into
-    an SfxShell.  They are managed by ObjectBarManager objects, one for each
-    view shell.
+/** The ViewShellManager has the responsibility to manage the view shells
+    and sub shells on the SFX shell stack.  They form a two level hierarchy
+    (the underlying ViewShellBase, the only true SfxViewShell descendant,
+    forms a third level.)  On the first level there are the view shells
+    (what formely was called view shell, anyway; nowadays they are derived
+    from SfxShell.)  On the second level there are sub shells (also derived
+    from SfxShell) that usually are tool bars.
 
-    <p>View shell management consists of maintaining the correct order of
-    all stacked shells.  Those that belong to the view shell that currently
-    has the focus have to be top-most to be considered first by the slot call
-    dispatcher.  Object bars have to be on top of their view shells so that
-    the associated functions are called first.</p>
+    <p>On the SFX shell stack the regular sub shells are placed above their
+    view shells.  The FormShell is a special case.  With the SetFormShell()
+    method it can be placed directly above or below one of the view
+    shells.</p>
 
-    <p>This class uses pointers to the ::sd::ViewShell class instead of its
-    ::SfxShell base class because it needs access to the object bar manager
-    of the ViewShell class so that that manager can be instructed to
-    activate or deactivate its object bars.</p>
+    <p>Shells managed by this class are created by factories.  On factory
+    for the view shells.  For the sub shells there is one factory for every
+    view shell.  Factories are set via the Set(View,Sub)ShellFactory()
+    methods.  The FormShell is managed with the factory of its view
+    shell.</p>
 */
 class ViewShellManager
 {
 public:
-    typedef ShellFactory<ViewShell> ViewShellFactory;
+    typedef ::boost::shared_ptr<ShellFactory<SfxShell> > SharedShellFactory;
 
     ViewShellManager (ViewShellBase& rBase);
 
@@ -94,14 +98,16 @@ public:
         @param pFactory
             The factory object that is called to create a new shell instance.
     */
-    void RegisterDefaultFactory (::std::auto_ptr<ViewShellFactory> pFactory);
+    void SetViewShellFactory (const SharedShellFactory& rpFactory);
 
-    /** Register a factory that is called to create a shell for the
-        specified id.  This takes precedence over the default factory.
+    /** Set the factory for sub shells of the specified view shell.
     */
-    void RegisterFactory (
-        ShellId nId,
-        ::std::auto_ptr<ViewShellFactory> pFactory);
+    void AddSubShellFactory (
+        ViewShell* pViewShell,
+        const SharedShellFactory& rpFactory);
+    void RemoveSubShellFactory (
+        ViewShell* pViewShell,
+        const SharedShellFactory& rpFactory);
 
     /** Create a new (or possibly recycle an existing) instance of a view
         shell that is specified by the given id.  When called multiple times
@@ -127,6 +133,52 @@ public:
     */
     void DeactivateViewShell (const ViewShell* pShell);
 
+    /** Associate the form shell with a view shell and their relative
+        position.  This method does not change the shell stack, it just
+        stores the given values for the next shell stack update.
+        @param pParentShell
+            The view shell of the form shell.
+        @param pFormShell
+            The form shell.
+        @param bAbove
+            When <TRUE/> then the form shell will be placed directly above
+            pViewShell on the SFX shell stack.  Otherwise the form shell is
+            placed directly below the view shell.
+    */
+    void SetFormShell (const ViewShell* pParentShell, FmFormShell* pFormShell, bool bAbove);
+
+    /** Activate the specified shell as sub shell for the given view shell.
+        The sub shell factory associated with the view shell is used to
+        create the sub shell.
+        @param rParentShell
+            The new sub shell will be placed above this view shell.
+        @param nId
+            This id is used only with the factory registered for the parent
+            view shell.
+    */
+    void ActivateSubShell (const ViewShell& rParentShell, ShellId nId);
+
+    /** Deactivate the specified sub shell.
+    */
+    void DeactivateSubShell (const ViewShell& rParentShell, ShellId nId);
+
+    /** Deactivate all sub shells of the given view shell.
+    */
+    void DeactivateAllSubShells (const ViewShell& rParentShell);
+
+    /** Move the specified sub shells to the top position among the sub
+        shells of the parent view shell.  The rest of the SFX shell stack
+        does not change (but the all shells above the sub shells have to be
+        taken once off the stack and are then moved back on again.)
+    */
+    void MoveSubShellToTop (const ViewShell& rParentShell, ShellId nId);
+
+    /** Send all sub shells of the specified view shell an Invalidate()
+        call.  This does not modify the shell stack.
+    */
+    void InvalidateAllSubShells (
+        ViewShell* pViewShell);
+
     /** Call this method to when a 'secondary' shell is moved to or from the
         stack, e.g. an object bar.  As a result a pending
         TakeShellsFromStack() is executed and at the next UnlockUpdate() to
@@ -148,7 +200,7 @@ public:
         @param nId
             The id of the shell to move to the top.
     */
-    void MoveToTop (const ViewShell* pShell);
+    void MoveToTop (const ViewShell& rShell);
 
     /** Return the first, i.e. top most, view shell that has been activated
         under the given id.
@@ -158,48 +210,46 @@ public:
             When the specified shell is currently not active then NULL is
             returned.
     */
-    ViewShell* GetShell (ShellId nId);
+    SfxShell* GetShell (ShellId nId) const;
+
+    /** Return the top-most shell on the SFX shell stack regardless of
+        whether that is a view shell or a sub shell.
+    */
+    SfxShell* GetTopShell (void) const;
 
     /** Return the id of the given shell.
     */
-    ShellId GetShellId (const ViewShell* pShell);
+    ShellId GetShellId (const SfxShell* pShell) const;
 
-    /** Return the ViewShellBase for which objects of this class manage the
-        stacked view shells.
+    /** Replace the references to one SfxUndoManager to that of another at all
+        shells on the SFX shell stack.  Call this method when an undo
+        manager is about to be destroyed.
+        @param pManager
+            The undo manager to be replaced.
+        @param pReplacement
+            The undo manager that replaces pManager.
     */
-    ViewShellBase& GetViewShellBase (void) const;
-
-    /** Use one of the registered factories to create the requested view
-        shell.
-        @return
-            When a view shell of the requested type can not be created,
-            e.g. because no factory for it has been registered, NULL is
-            returned.
-            The returned view shell can be destroyed by the caller.
-    */
-    ViewShell* CreateViewShell (
-        ShellId nShellId,
-        ::Window* pParentWindow,
-        FrameView* pFrameView);
-
-    class Implementation;
+    void ReplaceUndoManager (SfxUndoManager* pManager, SfxUndoManager* pReplacement);
 
     /** Use this class to safely lock updates of the view shell stack.
     */
     class UpdateLock
     {
     public:
-        explicit UpdateLock (ViewShellManager& rManager);
-        explicit UpdateLock (Implementation& rManagerImplementation);
-        ~UpdateLock (void);
+        UpdateLock (ViewShellManager& rManager) : mrManager(rManager) {mrManager.LockUpdate();}
+        ~UpdateLock (void) {mrManager.UnlockUpdate();};
     private:
-        ViewShellManager::Implementation& mrManagerImplementation;
+        ViewShellManager& mrManager;
     };
     friend class UpdateLock;
 
 private:
+    class Implementation;
     ::std::auto_ptr<ViewShellManager::Implementation> mpImpl;
     bool mbValid;
+
+    void LockUpdate (void);
+    void UnlockUpdate (void);
 };
 
 
