@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,12 @@ class EventMultiplexer;
 
 namespace sd {
 
+class DrawController;
 class DrawDocShell;
 class FormShellManager;
 class PaneManager;
 class PrintManager;
+class ToolBarManager;
 class UpdateLockManager;
 class ViewShell;
 class ViewShellManager;
@@ -138,12 +140,6 @@ public:
     */
     virtual void GetState (SfxItemSet& rSet);
 
-    /** Make sure that the given controller is known and used by the frame.
-        @param pController
-            The new controller.  Usually that of the main view shell.
-    */
-    void UpdateController (SfxBaseController* pController);
-
     SvBorder GetBorder (bool bOuterResize);
     virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
     virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize);
@@ -213,12 +209,6 @@ public:
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
-    /** Arrange GUI elements of the pane which shows the given view shell.
-        @return
-            The returned border contains the controls placed by the method.
-    */
-    SvBorder ArrangeGUIElements (const Point& rOrigin, const Size& rSize);
-
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)
     */
@@ -262,17 +252,30 @@ public:
     */
     tools::EventMultiplexer& GetEventMultiplexer (void);
 
-    /* returns the complete area of the current view relative to the frame window */
-    inline const Rectangle& getClientRectangle() const;
+    /** returns the complete area of the current view relative to the frame
+        window
+    */
+    const Rectangle& getClientRectangle() const;
 
     UpdateLockManager& GetUpdateLockManager (void) const;
 
+    ToolBarManager& GetToolBarManager (void) const;
+
+    FormShellManager& GetFormShellManager (void) const;
+
+    DrawController& GetDrawController (void) const;
+
 protected:
     osl::Mutex maMutex;
-    /** The view tab bar is the control for switching between different
-        views in one pane.
+
+    /** Factory method for creating the ViewTabBar member that allows
+        derived classes to have no ViewTabBar.
+        @return
+            When the ViewTabBar is supported then a new instance of that
+            class is returned.  Otherwise it returns <NULL/>.
     */
-    ::std::auto_ptr<ViewTabBar> mpViewTabBar;
+    virtual ViewTabBar* CreateViewTabBar (void);
+
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
         const TypeId& rBCType,
         const SfxHint& rHint,
@@ -293,17 +296,7 @@ private:
 
     ::std::auto_ptr<tools::EventMultiplexer> mpEventMultiplexer;
 
-    // contains the complete area of the current view relative to the frame window
-    Rectangle maClientArea;
-
     ::std::auto_ptr<UpdateLockManager> mpUpdateLockManager;
-
-    /** Common code of OuterResizePixel() and InnerResizePixel().
-    */
-    void ResizePixel (
-        const Point& rOrigin,
-        const Size& rSize,
-        bool bOuterResize);
 
     /** Determine from the properties of the document shell the initial type
         of the view shell in the center pane.  We use this method to avoid
@@ -318,12 +311,6 @@ private:
     */
     DECL_LINK(WindowEventHandler,VclWindowEvent*);
 };
-
-
-inline const Rectangle& ViewShellBase::getClientRectangle() const
-{
-    return maClientArea;
-}
 
 } // end of namespace sd
 
