@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:51:16 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -950,6 +950,20 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             else
                 rFnt.GetTox()--;
             break;
+    }
+}
+
+// Takes the default font and calculated the ascent and height
+void SwAttrHandler::GetDefaultAscentAndHeight( ViewShell* pShell, OutputDevice& rOut,
+                                               USHORT& nAscent, USHORT& nHeight ) const
+{
+    ASSERT( pFnt, "No font available for GetDefaultAscentAndHeight" )
+
+    if ( pFnt )
+    {
+        SwFont aFont( *pFnt );
+        nHeight = aFont.GetHeight( pShell, rOut );
+        nAscent = aFont.GetAscent( pShell, rOut );
     }
 }
 
