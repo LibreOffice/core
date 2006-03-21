@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:31:50 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ public:
     */
     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
-    virtual DrawController* GetController (void);
+    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the
@@ -189,6 +189,7 @@ private:
     SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;
     BOOL            bPastePossible;
+    bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
