@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:30:04 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,8 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition&
     xParentText(xParent),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
     pLastSortOptions(0),
-    eType(eSet)
+    eType(eSet),
+    mbRemoveUserEvent( false )
 {
     SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(rPos, sal_False);
     if(pMark)
@@ -995,7 +996,8 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent,
     xParentText(xParent),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
     pLastSortOptions(0),
-    eType(eSet)
+    eType(eSet),
+    mbRemoveUserEvent( false )
 {
     SwUnoCrsr* pUnoCrsr = pSourceCrsr->GetDoc()->CreateUnoCrsr(*pSourceCrsr->GetPoint(), sal_False);
     if(pSourceCrsr->HasMark())
@@ -1012,6 +1014,17 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent,
 SwXTextCursor::~SwXTextCursor()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // --> FME 2006-03-07 #126177# A user event has been posted in order
+    // to delete the SwUnoCursor. Remove the user event if the SwXTextCursor
+    // is destroyed before the user event could be handled.
+    if ( mbRemoveUserEvent )
+    {
+        mbRemoveUserEvent = false;
+        Application::RemoveUserEvent( mnUserEventId );
+    }
+    // <--
+
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     delete pUnoCrsr;
     delete pLastSortOptions;
