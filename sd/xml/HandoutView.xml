@@ -4,7 +4,7 @@
     <module-name>sd</module-name>
     <component-description>
         <author>Christian Lippka</author>
-        <name>SdUnoDrawView</name>
+        <name>DrawController_HandoutView</name>
         <description>
     This componend integrates a view to a handout page inside a presentation
     document into the desktop
@@ -13,6 +13,5 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com::sun::star::drawing::DrawingDocumentDrawView</supported-service>
-        <supported-service>com::sun::star::presentation::HandoutView</supported-service>
     </component-description>
 </module-description>
