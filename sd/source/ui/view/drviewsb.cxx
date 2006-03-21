@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:52:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,11 +125,11 @@
 #endif
 #include "unmodpg.hxx"
 #include "undolayer.hxx"
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
+#endif
+#ifndef SD_FORM_SHELL_MANAGER_HXX
+#include "FormShellManager.hxx"
 #endif
 #include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx" //CHINA001
@@ -905,8 +905,7 @@ void DrawViewShell::ModifyLayer (
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
         // Call Invalidate at the form shell.
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
         if (pFormShell != NULL)
             pFormShell->Invalidate();
     }
