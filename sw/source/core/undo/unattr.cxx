@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,8 +527,10 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     }
 
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
-    if( FLY_IN_CNTNT == rOldAnch.GetAnchorId() &&
-        FLY_IN_CNTNT != aNewAnchor.GetAnchorId() )
+    // --> OD 2006-03-13 #i54336#
+    // Consider case, that as-character anchored object has moved its anchor position.
+    if ( FLY_IN_CNTNT == rOldAnch.GetAnchorId() )
+    // <--
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
         //werden. Leider reisst dies neben den Frms auch noch das Format mit
