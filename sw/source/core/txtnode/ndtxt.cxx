@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:37:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2144,9 +2144,21 @@ SwTxtNode& SwTxtNode::Erase(const SwIndex &rIdx, xub_StrLen nCount,
             continue;
         }
 
-        if( *pHtEndIdx >= nEndIdx && !(
-            !(INS_EMPTYEXPAND & nMode) && *pHtEndIdx == nEndIdx &&
-            (nWhich == RES_TXTATR_TOXMARK || nWhich == RES_TXTATR_REFMARK)) )
+        // Delete the hint if:
+        // 1. The hint ends before the deletion end position or
+        // 2. The hint ends at the deletion end position and
+        //    we are not in empty expand mode and
+        //    the hint is a [toxmark|refmark|ruby] text attribute
+        if( *pHtEndIdx >= nEndIdx &&
+            !(
+                *pHtEndIdx == nEndIdx &&
+                !(INS_EMPTYEXPAND & nMode)  &&
+                (nWhich == RES_TXTATR_TOXMARK || nWhich == RES_TXTATR_REFMARK ||
+                 // --> FME 2006-03-03 #i62668# Ruby text attribute has to be treated
+                 // just like toxmark and refmarks
+                 nWhich == RES_TXTATR_CJK_RUBY) )
+                 // <--
+             )
             continue;
 
         pSwpHints->DeleteAtPos(i);
