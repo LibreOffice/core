@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:07:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,13 +92,12 @@ namespace sd {
 
 class Client;
 class DrawDocShell;
-class DrawController;
+class DrawSubController;
 class FrameView;
 class FuPoor;
 class FuSearch;
 class Slideshow;
 class LayerTabBar;
-class ObjectBarManager;
 class View;
 class ViewShellBase;
 class ViewTabBar;
@@ -176,10 +175,13 @@ public:
         after the creation of the new object is finished.  This
         includes registration as listener at event broadcasters.
 
-        Derived classes should call this method at the end of their
+        Derived classes should call this method at the head of their
         Init() methods.
+        @param bIsMainViewShell
+            This flag tells the Init() method whether the new ViewShell will
+            be the main view shell.
     */
-    virtual void Init (void);
+    virtual void Init (bool bIsMainViewShell);
 
     /** The Exit() method has to be called before the destructor so that the
         view shell is still a valid object and can safely call methods that
@@ -260,26 +262,6 @@ public:
         updates the previews in the slide sorter.
     */
      virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
-
-    ObjectBarManager& GetObjectBarManager (void) const;
-
-    /** Get a list of sub shells by appending them to the end of the given
-        list of shells.  This is restricted to the object bars that are
-        placed BELOW the called shell.  This method is typically called to
-        gather all shells that are to be taken from or pushed on the stack
-        of sub-shells.
-    */
-    virtual void GetLowerShellList (
-        ::std::vector<SfxShell*>& rShellList) const;
-
-    /** Get a list of sub shells by appending them to the end of the given
-        list of shells.  This is restricted to the object bars that are
-        placed ABOVE the called shell.  This method is typically called to
-        gather all shells that are to be taken from or pushed on the stack
-        of sub-shells.
-    */
-    virtual void GetUpperShellList (
-        ::std::vector<SfxShell*>& rShellList) const;
 
     void    DrawMarkRect(const Rectangle& rRect) const;
     void    DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
@@ -447,14 +429,10 @@ public:
     */
     void SetIsMainViewShell (bool bIsMainViewShell);
 
-    /** Return an object that implements the necessary UNO interfaces to act
-        as a controller for the ViewShellBase object.  The controller is
-        created if it does not exist.  It is owned by the caller.
-        @return
-            Returns NULL when the controller does not yet exist and can not
-            be created.
+    /** Return an sub controller that implements the view shell specific
+        part of the DrawController.
     */
-    virtual DrawController* GetController (void);
+    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void) = 0;
 
     /** Return the type of the shell.
     */
@@ -524,6 +502,8 @@ public:
     virtual void ShowUIControls (bool bVisible = true);
     BOOL IsPageFlipMode(void) const;
 
+    class Implementation;
+
 protected:
     /** must be called in the beginning of each subclass d'tor.
         disposes and clears both current and old function. */
@@ -588,16 +568,6 @@ protected:
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;
 
-    /** Main controller of the view shell.  During the switching from one
-        stacked shell to another this pointer may be NULL.
-    */
-    ::comphelper::ImplementationReference<
-        DrawController,
-        ::com::sun::star::uno::XInterface,
-        ::com::sun::star::uno::XWeak>
-            mpController;
-
-    class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
 
     // #96090# Support methods for centralized UNDO/REDO
@@ -658,7 +628,6 @@ protected:
 
 private:
     ::Window* mpParentWindow;
-    ::std::auto_ptr<ObjectBarManager> mpObjectBarManager;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit langugage used to display digits in text
         shapes.
