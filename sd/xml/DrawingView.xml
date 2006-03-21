@@ -4,7 +4,7 @@
     <module-name>sd</module-name>
     <component-description>
         <author>Christian Lippka</author>
-        <name>SdUnoDrawView</name>
+        <name>DrawController_DrawView</name>
         <description>
 specifies a document which consists of multiple pages
     with drawings.
