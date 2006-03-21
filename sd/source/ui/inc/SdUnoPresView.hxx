@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoPresView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:58 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,35 +40,21 @@
 
 namespace sd {
 
-/**
- * This class implements the view component for a SdPresViewShell or SdPreviewViewShell
- */
+/** The sub controller for the slide show (or preview?)  It formerly reduced
+    the property set inherited from SdUnoDrawView to just 'CurrentPage'.
+    Now that we have to always support the whole set, we can as well try to
+    do that as best as we can.  Therefore the inherited functionality is
+    provided as is.
+*/
 class SdUnoPresView
     : public SdUnoDrawView
 {
 public:
     SdUnoPresView (
-        ViewShellBase& rBase,
-        ViewShell& rViewShell,
+        DrawController& rController,
+        DrawViewShell& rViewShell,
         View& rView) throw();
-    virtual ~SdUnoPresView() throw();
-
-    // XTypeProvider
-    //    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    /**
-     * This method must return the name to index table. This table contains all property
-     * names and types of this object.
-     */
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual ~SdUnoPresView (void) throw();
 };
 
 } // end of namespace sd
