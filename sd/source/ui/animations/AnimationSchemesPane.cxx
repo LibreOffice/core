@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPane.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:31:16 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,9 +373,10 @@ void AnimationSchemesPane::addListener()
     Link aLink( LINK(this,AnimationSchemesPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer().AddEventListener(
         aLink,
-        tools::EventMultiplexer::ET_CURRENT_PAGE
-        | tools::EventMultiplexer::ET_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexer::ET_MAIN_VIEW);
+        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
+        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
 }
 
 void AnimationSchemesPane::removeListener()
