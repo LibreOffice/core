@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:16:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,6 @@ public:
     /** On activation the preview is turned off.
     */
     virtual void Activate (BOOL IsMDIActivate);
-
-    virtual DrawController* GetController (void);
 
 protected:
     virtual Size    GetOptimalSizePixel() const;
