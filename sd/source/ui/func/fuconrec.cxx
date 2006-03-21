@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:56:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:17:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,8 +115,11 @@
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 // #109583#
 #ifndef _SVX_WRITINGMODEITEM_HXX
@@ -169,7 +172,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::msDrawingObjectToolBar);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
