@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:40:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "AllMasterPagesSelector.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "taskpane/TitledControl.hxx"
+#include "../TaskPaneShellManager.hxx"
 
 #include "DrawViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -70,6 +71,10 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         *pDrawViewShell));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
+    GetShellManager()->AddSubShell(
+        HID_SD_TASK_PANE_PREVIEW_CURRENT,
+        pSelector.get(),
+        pSelector->GetWindow());
     pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
@@ -82,6 +87,10 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
+    GetShellManager()->AddSubShell(
+        HID_SD_TASK_PANE_PREVIEW_RECENT,
+        pSelector.get(),
+        pSelector->GetWindow());
     pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
@@ -95,6 +104,10 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         *pDrawViewShell));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
+    GetShellManager()->AddSubShell(
+        HID_SD_TASK_PANE_PREVIEW_ALL,
+        pSelector.get(),
+        pSelector->GetWindow());
     pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
