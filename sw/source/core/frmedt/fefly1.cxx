@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:47:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,11 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+// --> OD 2006-03-06 #125892#
+#ifndef _HANDLEANCHORNODECHG_HXX
+#include <HandleAnchorNodeChg.hxx>
+#endif
+// <--
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -655,19 +660,29 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 if( bMoveIt )
                 {
                     StartAllAction();
-                    rFmt.GetDoc()->SetAttr(aAnch, rFmt );
+                    // --> OD 2006-02-28 #125892#
+                    // handle change of anchor node:
+                    // if count of the anchor frame also change, the fly frames have to be
+                    // re-created. Thus, delete all fly frames except the <this> before the
+                    // anchor attribute is change and re-create them afterwards.
+                    {
+                        SwHandleAnchorNodeChg* pHandleAnchorNodeChg( 0L );
+                        SwFlyFrmFmt* pFlyFrmFmt( dynamic_cast<SwFlyFrmFmt*>(&rFmt) );
+                        if ( pFlyFrmFmt )
+                        {
+                            pHandleAnchorNodeChg =
+                                new SwHandleAnchorNodeChg( *pFlyFrmFmt, aAnch );
+                        }
+                        rFmt.GetDoc()->SetAttr( aAnch, rFmt );
+                        delete pHandleAnchorNodeChg;
+                    }
+                    // <--
                     // --> OD 2004-06-24 #i28701# - no call of method
                     // <CheckCharRectAndTopOfLine()> for to-character anchored
                     // Writer fly frame needed. This method call can cause a
                     // format of the anchor frame, which is no longer intended.
                     // Instead clear the anchor character rectangle and
                     // the top of line values for all to-character anchored objects.
-//                    if ( nAnchorId == FLY_AUTO_CNTNT &&
-//                         bFlyFrame && pFly->IsFlyAtCntFrm() )
-//                    {
-//                        // OD 11.11.2003 #i22341#
-//                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
-//                    }
                     pAnchoredObj->ClearCharRectAndTopOfLine();
                     // <--
                     EndAllAction();
