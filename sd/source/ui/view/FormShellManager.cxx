@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:57:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,37 @@
 #include "ViewShell.hxx"
 #include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
-#include "ObjectBarManager.hxx"
+#include "ViewShellManager.hxx"
 #include "Window.hxx"
 #include <svx/fmshell.hxx>
 
 namespace sd {
 
+namespace {
+
+/** This factory is responsible for creating and deleting the FmFormShell.
+*/
+class FormShellManagerFactory
+    : public ::sd::ShellFactory<SfxShell>
+{
+public:
+    FormShellManagerFactory (ViewShell& rViewShell, FormShellManager& rManager);
+    virtual FmFormShell* CreateShell (ShellId nId, ::Window* pParentWindow, FrameView* pFrameView);
+    virtual void ReleaseShell (SfxShell* pShell);
+
+private:
+    ::sd::ViewShell& mrViewShell;
+    FormShellManager& mrFormShellManager;
+};
+
+} // end of anonymous namespace
+
 
 FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
-      meStackPosition(SP_UNKNOWN)
+      mpFormShell(NULL),
+      mbFormShellAboveViewShell(false),
+      mpSubShellFactory()
 {
     // Register at the PaneManager to be informed about changes in the
     // center pane.
@@ -65,6 +86,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
 
 FormShellManager::~FormShellManager (void)
 {
+    SetFormShell(NULL);
     UnregisterAtCenterPane();
 
     // Unregister at the PaneManager.
@@ -73,6 +95,66 @@ FormShellManager::~FormShellManager (void)
             this,
             FormShellManager,
             PaneManagerEventHandler));
+
+    if (mpSubShellFactory.get() != NULL)
+    {
+        ViewShell* pShell = mrBase.GetMainViewShell();
+        if (pShell != NULL)
+            mrBase.GetViewShellManager().RemoveSubShellFactory(pShell,mpSubShellFactory);
+    }
+}
+
+
+
+
+void FormShellManager::SetFormShell (FmFormShell* pFormShell)
+{
+    if (mpFormShell != pFormShell)
+    {
+        // Disconnect from the old form shell.
+        if (mpFormShell != NULL)
+        {
+            mpFormShell->SetControlActivationHandler(Link());
+            EndListening(*mpFormShell);
+            mpFormShell->SetView(NULL);
+        }
+
+        mpFormShell = pFormShell;
+
+        // Connect to the new form shell.
+        if (mpFormShell != NULL)
+        {
+            mpFormShell->SetControlActivationHandler(
+                LINK(
+                    this,
+                    FormShellManager,
+                    FormControlActivated));
+            StartListening(*mpFormShell);
+
+            ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+            if (pMainViewShell != NULL)
+            {
+                // Prevent setting the view twice at the FmFormShell.
+                FmFormView* pFormView = static_cast<FmFormView*>(pMainViewShell->GetView());
+                if (mpFormShell->GetFormView() != pFormView)
+                    mpFormShell->SetView(pFormView);
+            }
+        }
+
+        // Tell the ViewShellManager where on the stack to place the form shell.
+        mrBase.GetViewShellManager().SetFormShell(
+            mrBase.GetMainViewShell(),
+            mpFormShell,
+            mbFormShellAboveViewShell);
+    }
+}
+
+
+
+
+FmFormShell* FormShellManager::GetFormShell (void)
+{
+    return mpFormShell;
 }
 
 
@@ -84,6 +166,11 @@ void FormShellManager::RegisterAtCenterPane (void)
     {
         ViewShell* pShell = mrBase.GetMainViewShell();
         if (pShell == NULL)
+            break;
+
+        // No form shell for the slide sorter.  Besides that it is not
+        // necessary, using both together results in crashes.
+        if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
             break;
 
         ::Window* pWindow = pShell->GetActiveWindow();
@@ -98,23 +185,11 @@ void FormShellManager::RegisterAtCenterPane (void)
                 FormShellManager,
                 WindowEventHandler));
 
-        // Register at the form shell to get informed when to move the shell
-        // to the top of the shell stack.
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
-        if (pFormShell == NULL)
-            break;
-        pFormShell->SetControlActivationHandler(
-            LINK(
-                this,
-                FormShellManager,
-                FormControlActivated));
-
-        // Move the form shell to the correct position.
-        if (meStackPosition == SP_ABOVE_VIEW_SHELL)
-            pShell->GetObjectBarManager().MoveToTop(RID_FORMLAYER_TOOLBOX);
-        else
-            pShell->GetObjectBarManager().MoveBelowShell(RID_FORMLAYER_TOOLBOX);
+        // Create a shell factory and with it activate the form shell.
+        OSL_ASSERT(mpSubShellFactory.get()==NULL);
+        mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
+        mrBase.GetViewShellManager().AddSubShellFactory(pShell,mpSubShellFactory);
+        mrBase.GetViewShellManager().ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
     }
     while (false);
 }
@@ -142,11 +217,12 @@ void FormShellManager::UnregisterAtCenterPane (void)
                 WindowEventHandler));
 
         // Unregister form at the form shell.
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
-        if (pFormShell == NULL)
-            break;
-        pFormShell->SetControlActivationHandler(Link());
+        SetFormShell(NULL);
+
+        // Deactivate the form shell and destroy the shell factory.
+        mrBase.GetViewShellManager().DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
+        mrBase.GetViewShellManager().RemoveSubShellFactory(pShell, mpSubShellFactory);
+        mpSubShellFactory.reset();
     }
     while (false);
 }
@@ -160,10 +236,12 @@ IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
     // slot calls the form shell is moved to the top of the object bar shell
     // stack.
     ViewShell* pShell = mrBase.GetMainViewShell();
-    if (pShell!=NULL && meStackPosition!=SP_ABOVE_VIEW_SHELL)
+    if (pShell!=NULL && !mbFormShellAboveViewShell)
     {
-        pShell->GetObjectBarManager().MoveToTop (RID_FORMLAYER_TOOLBOX);
-        meStackPosition = SP_ABOVE_VIEW_SHELL;
+        mbFormShellAboveViewShell = true;
+
+        ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
+        mrBase.GetViewShellManager().SetFormShell(pShell,mpFormShell,mbFormShellAboveViewShell);
     }
 
     return 0;
@@ -209,19 +287,22 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
                 // the form shell is moved to the bottom of the object bar
                 // stack.
                 ViewShell* pShell = mrBase.GetMainViewShell();
-                if (pShell!=NULL && meStackPosition!=SP_BELOW_VIEW_SHELL)
+                if (pShell!=NULL && mbFormShellAboveViewShell)
                 {
-                    pShell->GetObjectBarManager().MoveBelowShell (
-                        RID_FORMLAYER_TOOLBOX);
-                    meStackPosition = SP_BELOW_VIEW_SHELL;
+                    mbFormShellAboveViewShell = false;
+                    ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
+                    mrBase.GetViewShellManager().SetFormShell(
+                        pShell,
+                        mpFormShell,
+                        mbFormShellAboveViewShell);
                 }
             }
             break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
                 // We follow the sloppy focus policy.  Losing the focus is
-                // ignored.  We wait for the window gets the focus again or
-                // the form shell is focused.  The later, however, is
+                // ignored.  We wait for the focus to be placed either in
+                // the window or the form shell.  The later, however, is
                 // notified over the FormControlActivated handler, not this
                 // one.
                 break;
@@ -231,5 +312,81 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
     return 0;
 }
 
+
+
+
+void FormShellManager::SFX_NOTIFY(
+        SfxBroadcaster& rBC,
+        const TypeId& rBCType,
+        const SfxHint& rHint,
+        const TypeId& rHintType)
+{
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint!=NULL && pSimpleHint->GetId()==SFX_HINT_DYING)
+    {
+        // If all goes well this listener is called after the
+        // FormShellManager was notified about the dying form shell by the
+        // FormShellManagerFactory.
+        OSL_ASSERT(mpFormShell==NULL);
+        if (mpFormShell != NULL)
+        {
+            mpFormShell = NULL;
+            mrBase.GetViewShellManager().SetFormShell(
+                mrBase.GetMainViewShell(),
+                NULL,
+                false);
+        }
+    }
+}
+
+
+
+
+
+//===== FormShellManagerFactory ===============================================
+
+namespace {
+
+FormShellManagerFactory::FormShellManagerFactory (
+    ::sd::ViewShell& rViewShell,
+    FormShellManager& rManager)
+    : mrViewShell(rViewShell),
+      mrFormShellManager(rManager)
+{
+}
+
+
+
+
+FmFormShell* FormShellManagerFactory::CreateShell (
+    ::sd::ShellId nId,
+    ::Window* pParentWindow,
+    ::sd::FrameView* pFrameView)
+{
+    FmFormShell* pShell = NULL;
+
+    ::sd::View* pView = mrViewShell.GetView();
+    if (nId == RID_FORMLAYER_TOOLBOX)
+    {
+        pShell = new FmFormShell(&mrViewShell.GetViewShellBase(), pView);
+        mrFormShellManager.SetFormShell(pShell);
+    }
+
+    return pShell;
+}
+
+
+
+
+void FormShellManagerFactory::ReleaseShell (SfxShell* pShell)
+{
+    if (pShell != NULL)
+    {
+        mrFormShellManager.SetFormShell(NULL);
+        delete pShell;
+    }
+}
+
+} // end of anonymous namespace
 
 } // end of namespace sd
