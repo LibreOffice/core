@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:30:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void PresentationViewShell::FinishInitialization (
     SfxRequest& rRequest,
     USHORT nPageNumber)
 {
-    DrawViewShell::Init();
+    DrawViewShell::Init(true);
 
     // Use the frame view that comes form the view shell that initiated our
     // creation.
