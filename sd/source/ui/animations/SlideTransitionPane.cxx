@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:24:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1142,9 +1142,10 @@ void SlideTransitionPane::addListener()
     Link aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer().AddEventListener (
         aLink,
-        tools::EventMultiplexer::ET_CURRENT_PAGE
-        | tools::EventMultiplexer::ET_EDIT_VIEW_SELECTION
-        | tools::EventMultiplexer::ET_MAIN_VIEW);
+        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
+        | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
 }
 
 void SlideTransitionPane::removeListener()
@@ -1178,8 +1179,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             // the event.
             if (mrBase.GetMainViewShell() != NULL)
             {
-                mxView = Reference<drawing::XDrawView>::query(
-                    static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
+                mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
                 onSelectionChanged();
                 onChangeCurrentPage();
             }
