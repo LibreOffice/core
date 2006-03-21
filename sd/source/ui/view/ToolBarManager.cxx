@@ -1,0 +1,1661 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ToolBarManager.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:40:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "ToolBarManager.hxx"
+
+#include "DrawViewShell.hxx"
+#include "EventMultiplexer.hxx"
+#include "PaneManager.hxx"
+#include "ViewShellBase.hxx"
+#include "ViewShellManager.hxx"
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
+#endif
+
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svtools/eitem.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/extrusionbar.hxx>
+#include <svx/fontworkbar.hxx>
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#include <tools/link.hxx>
+
+#include <map>
+#include <vector>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+#undef VERBOSE
+
+#undef OUSTRING // Remove definition made in the SFX
+#define OUSTRING(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+
+namespace {
+
+using namespace sd;
+
+
+/** Lock of the frame::XLayoutManager.
+*/
+class LayouterLock
+{
+public:
+    LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
+        : mxLayouter(rxLayouter) { if (mxLayouter.is()) { mxLayouter->lock(); } }
+    ~LayouterLock (void) { if (mxLayouter.is()) { mxLayouter->unlock(); } }
+private:
+    Reference<frame::XLayoutManager> mxLayouter;
+};
+
+
+typedef ::std::vector<rtl::OUString> NameList;
+
+/** Store a list of tool bars for each of the tool bar groups.  From
+    this the list of requested tool bars is built.
+*/
+class ToolBarList
+{
+public:
+    ToolBarList (void);
+
+    void ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup);
+    void AddToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const ::rtl::OUString& rsName);
+    bool RemoveToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const ::rtl::OUString& rsName);
+
+    void GetToolBarsToActivate (NameList& rToolBars) const;
+    void GetToolBarsToDeactivate (NameList& rToolBars) const;
+
+    void MarkToolBarAsActive (const ::rtl::OUString& rsName);
+    void MarkToolBarAsNotActive (const ::rtl::OUString& rsName);
+    void MarkAllToolBarsAsNotActive (void);
+
+private:
+    typedef ::std::map<sd::ToolBarManager::ToolBarGroup,NameList> Groups;
+    Groups maGroups;
+    NameList maActiveToolBars;
+
+    void MakeRequestedToolBarList (NameList& rToolBars) const;
+};
+
+
+
+
+/** Manage tool bars that are implemented as sub shells of a view shell.
+    The typical procedure of updating the sub shells of a view shell is to
+    rebuild a list of sub shells that the caller would like to have active.
+    The methods ClearGroup(), AddShellId(), and RemoveShellId() allow the
+    caller to do that.  A final call to UpdateShells() activates the
+    requested shells that are not active and deactivates the active shells
+    that are not requested.
+
+    This is done by maintainging two lists.  Oone (the current list)
+    reflects the current state.  The other (the requested list) contains the
+    currently requested shells.  UpdateShells() makes the requested
+    list the current list and clears the current list.
+
+    Each shell belongs to one group.  Different groups can be modified
+    seperately.
+*/
+class ToolBarShellList
+{
+public:
+    /** Create a new object with an empty current list and an empty
+        requested list.
+    */
+    ToolBarShellList (void);
+
+    /** Remove all shells from a group.  Calling this method should normally
+        not be necessary because after the construction or after a call to
+        UpdateShells() the requested list is empty.
+        @param eGroup
+            The group to clear. Shells in other groups are not modified.
+    */
+    void ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup);
+
+    /** Add a shell.  When the specified shell has alreadt been requested
+        for another group then it is moved to this group.
+        @param eGroup
+            The group to which to add the shell.
+        @param nId
+            The id of the shell to add.
+    */
+    void AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
+
+    /** Remove a shell.  This is done only when the specified shell is a
+        member of the specified group.  If it has been requested for another
+        group or if it has not been requested then this call is ignored.
+        @param eGroup
+            The group from which to remove the shell.
+        @param nId
+            The id of the shell to remove.
+        @return
+            Returns whether the shell is removed.
+    */
+    bool RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
+
+    /** The requested list is made the current list by activating  all
+        shells in the requested list and by deactivating the shells in the
+        current list that are not in the requested list.
+        @param pMainViewShell
+            The shells that are activated or deactivated are sub shells of
+            this view shell.
+        @param rManager
+            This ViewShellManager is used to activate or deactivate shells.
+    */
+    void UpdateShells (ViewShell* pMainViewShell, ViewShellManager& rManager);
+
+private:
+    class ShellDescriptor
+    {public:
+        ShellDescriptor (ShellId nId,sd::ToolBarManager::ToolBarGroup eGroup);
+        ShellId mnId;
+        sd::ToolBarManager::ToolBarGroup meGroup;
+        friend bool operator<(const ShellDescriptor& r1, const ShellDescriptor& r2)
+        { return r1.mnId < r2.mnId; }
+    };
+
+    /** The requested list of tool bar shells that will be active after the
+        next call to UpdateShells().
+    */
+    typedef ::std::set<ShellDescriptor> GroupedShellList;
+    GroupedShellList maNewList;
+
+    /** The list of tool bar shells that are currently on the shell stack.
+        Using a GroupedShellList is not strictly necessary but it makes
+        things easier and does not waste too much memory.
+    */
+    GroupedShellList maCurrentList;
+};
+
+
+
+
+/** This class concentrates the knowledge about when to show what tool bars
+    in one place.
+*/
+class ToolBarRules
+{
+public:
+    ToolBarRules (
+        ::sd::ToolBarManager& rToolBarManager,
+        ::sd::ViewShellManager& rViewShellManager);
+
+    /** This method calls MainViewShellChanged() and SelectionHasChanged()
+        for the current main view shell and its view.
+    */
+    void Update (ViewShellBase& rBase);
+
+    /** Reset all tool bars in all groups and add tool bars and tool bar
+        shells to the TBG_PERMANENT group for the specified ViewShell type.
+    */
+    void MainViewShellChanged (ViewShell::ShellType nShellType);
+
+    /** Reset all tool bars in all groups and add tool bars and tool bar
+        shells to the TBG_PERMANENT group for the specified ViewShell.
+    */
+    void MainViewShellChanged (const ViewShell& rMainViewShell);
+
+    /** Reset all tool bars in the TBG_FUNCTION group and add tool bars and tool bar
+        shells to this group for the current selection.
+    */
+    void SelectionHasChanged (
+        const ::sd::ViewShell& rViewShell,
+        const SdrView& rView);
+
+    /** Add a tool bar for the specified tool bar shell.
+    */
+    void SubShellAdded (
+        ::sd::ToolBarManager::ToolBarGroup eGroup,
+        sd::ShellId nShellId);
+
+    /** Remove a tool bar for the specified tool bar shell.
+    */
+    void SubShellRemoved (
+        ::sd::ToolBarManager::ToolBarGroup eGroup,
+        sd::ShellId nShellId);
+
+private:
+    ToolBarManager& mrToolBarManager;
+    ViewShellManager& mrViewShellManager;
+};
+
+} // end of anonymous namespace
+
+
+
+
+namespace sd {
+
+//===== ToolBarManager::Implementation ========================================
+
+class ToolBarManager::Implementation
+{
+public:
+    /** This constructor takes three arguments even though the PaneManager
+        and the ToolBarManager could be taken from the ViewShellBase.  This
+        is so to state explicitly which information has to be present when
+        this constructor is called.  The ViewShellBase may not have been
+        fully initialized at this point and must not be asked for this values.
+    */
+    Implementation (
+        ViewShellBase& rBase,
+        sd::tools::EventMultiplexer& rMultiplexer,
+        PaneManager& rPaneManager,
+        ViewShellManager& rViewShellManager,
+        ToolBarManager& rToolBarManager);
+    ~Implementation (void);
+
+    void SetValid (bool bValid);
+
+    void ResetToolBars (ToolBarGroup eGroup);
+    void ResetAllToolBars (void);
+    void AddToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
+    void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
+    void RemoveToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
+    void RemoveToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
+
+    void PreUpdate (void);
+    void PostUpdate (void);
+    void Update (void);
+
+    class UpdateLock
+    {
+    public:
+        UpdateLock (Implementation& rImplementation)
+            : mrImplementation(rImplementation) { mrImplementation.LockUpdate();  }
+        ~UpdateLock (void) { mrImplementation.UnlockUpdate(); }
+    private:
+        Implementation& mrImplementation;
+    };
+
+    void LockViewShellManager (void);
+    bool IsUpdateLocked (void) const;
+    void LockUpdate (void);
+    void UnlockUpdate (void);
+
+    ToolBarRules& GetToolBarRules (void);
+
+private:
+    const static ::rtl::OUString msToolBarResourcePrefix;
+
+    mutable ::osl::Mutex maMutex;
+    ViewShellBase& mrBase;
+    sd::tools::EventMultiplexer& mrEventMultiplexer;
+    bool mbIsValid;
+    ToolBarList maToolBarList;
+    ToolBarShellList maToolBarShellList;
+    Reference<frame::XLayoutManager> mxLayouter;
+    sal_Int32 mnLockCount;
+    bool mbPreUpdatePending;
+    bool mbPostUpdatePending;
+    ::std::auto_ptr<LayouterLock> mpLayouterLock;
+    ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
+    ULONG mnPendingUpdateCall;
+    ULONG mnPendingSetValidCall;
+    ToolBarRules maToolBarRules;
+
+    ::rtl::OUString GetToolBarResourceName (const ::rtl::OUString& rsBaseName) const;
+    bool CheckPlugInMode (const ::rtl::OUString& rsName) const;
+
+    DECL_LINK(UpdateCallback,bool*);
+    DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent*);
+    DECL_LINK(SetValidCallback,void*);
+};
+
+
+
+//===== ToolBarManager ========================================================
+
+const ::rtl::OUString ToolBarManager::msToolBar(OUSTRING("toolbar"));
+const ::rtl::OUString ToolBarManager::msOptionsToolBar(OUSTRING("optionsbar"));
+const ::rtl::OUString ToolBarManager::msCommonTaskToolBar(OUSTRING("commontaskbar"));
+const ::rtl::OUString ToolBarManager::msViewerToolBar(OUSTRING("viewerbar"));
+const ::rtl::OUString ToolBarManager::msSlideSorterToolBar(OUSTRING("slideviewtoolbar"));
+const ::rtl::OUString ToolBarManager::msSlideSorterObjectBar(OUSTRING("slideviewobjectbar"));
+const ::rtl::OUString ToolBarManager::msOutlineToolBar(OUSTRING("outlinetoolbar"));
+const ::rtl::OUString ToolBarManager::msMasterViewToolBar(OUSTRING("masterviewtoolbar"));
+const ::rtl::OUString ToolBarManager::msDrawingObjectToolBar(OUSTRING("drawingobjectbar"));
+const ::rtl::OUString ToolBarManager::msGluePointsToolBar(OUSTRING("gluepointsobjectbar"));
+const ::rtl::OUString ToolBarManager::msTextObjectBar(OUSTRING("textobjectbar"));
+const ::rtl::OUString ToolBarManager::msBezierObjectBar(OUSTRING("bezierobjectbar"));
+const ::rtl::OUString ToolBarManager::msGraphicObjectBar(OUSTRING("graphicobjectbar"));
+const ::rtl::OUString ToolBarManager::msMediaObjectBar(OUSTRING("mediaobjectbar"));
+
+
+::std::auto_ptr<ToolBarManager> ToolBarManager::Create (
+    ViewShellBase& rBase,
+    sd::tools::EventMultiplexer& rMultiplexer,
+    PaneManager& rPaneManager,
+    ViewShellManager& rViewShellManager)
+{
+    ::std::auto_ptr<ToolBarManager> pManager (new ToolBarManager());
+    pManager->mpImpl.reset(
+        new Implementation(rBase,rMultiplexer,rPaneManager,rViewShellManager,*pManager));
+    return pManager;
+}
+
+
+
+
+ToolBarManager::ToolBarManager (void)
+        : mpImpl()
+{
+}
+
+
+
+
+ToolBarManager::~ToolBarManager (void)
+{
+}
+
+
+
+
+void ToolBarManager::Shutdown (void)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl.reset();
+}
+
+
+
+
+void ToolBarManager::SetValid (bool bValid)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->SetValid(bValid);
+}
+
+
+
+
+void ToolBarManager::ResetToolBars (ToolBarGroup eGroup)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->ResetToolBars(eGroup);
+    }
+}
+
+
+
+
+void ToolBarManager::ResetAllToolBars (void)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->ResetAllToolBars();
+    }
+}
+
+
+
+
+void ToolBarManager::AddToolBar (
+    ToolBarGroup eGroup,
+    const ::rtl::OUString& rsToolBarName)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->AddToolBar(eGroup,rsToolBarName);
+    }
+}
+
+
+
+
+void ToolBarManager::AddToolBarShell (
+    ToolBarGroup eGroup,
+    ShellId nToolBarId)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->AddToolBarShell(eGroup,nToolBarId);
+    }
+}
+
+
+
+
+void ToolBarManager::RemoveToolBar (
+    ToolBarGroup eGroup,
+    const ::rtl::OUString& rsToolBarName)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->RemoveToolBar(eGroup,rsToolBarName);
+    }
+}
+
+
+
+
+void ToolBarManager::RemoveToolBarShell (
+    ToolBarGroup eGroup,
+    ShellId nToolBarId)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->RemoveToolBarShell(eGroup,nToolBarId);
+    }
+}
+
+
+
+
+void ToolBarManager::SetToolBar (
+    ToolBarGroup eGroup,
+    const ::rtl::OUString& rsToolBarName)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->ResetToolBars(eGroup);
+        mpImpl->AddToolBar(eGroup,rsToolBarName);
+    }
+}
+
+
+
+
+void ToolBarManager::SetToolBarShell (
+    ToolBarGroup eGroup,
+    ShellId nToolBarId)
+{
+    if (mpImpl.get() != NULL)
+    {
+        UpdateLock aLock (*this);
+        mpImpl->ResetToolBars(eGroup);
+        mpImpl->AddToolBarShell(eGroup,nToolBarId);
+    }
+}
+
+
+
+
+void ToolBarManager::PreUpdate (void)
+{
+    if (mpImpl.get()!=NULL)
+        mpImpl->PreUpdate();
+}
+
+
+
+
+void ToolBarManager::Update (void)
+{
+    if (mpImpl.get()!=NULL)
+        mpImpl->Update();
+}
+
+
+
+
+void ToolBarManager::LockViewShellManager (void)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->LockViewShellManager();
+}
+
+
+
+
+bool ToolBarManager::IsUpdateLocked (void) const
+{
+    if (mpImpl.get() != NULL)
+        return mpImpl->IsUpdateLocked();
+    else
+        return false;
+}
+
+
+
+
+void ToolBarManager::LockUpdate (void)
+{
+    if (mpImpl.get()!=NULL)
+        mpImpl->LockUpdate();
+}
+
+
+
+
+void ToolBarManager::UnlockUpdate (void)
+{
+    if (mpImpl.get()!=NULL)
+        mpImpl->UnlockUpdate();
+}
+
+
+
+
+void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->GetToolBarRules().MainViewShellChanged(nShellType);
+}
+
+
+
+
+void ToolBarManager::MainViewShellChanged (const ViewShell& rMainViewShell)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->GetToolBarRules().MainViewShellChanged(rMainViewShell);
+}
+
+
+
+
+void ToolBarManager::SelectionHasChanged (
+    const ViewShell& rViewShell,
+    const SdrView& rView)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->GetToolBarRules().SelectionHasChanged(rViewShell,rView);
+}
+
+
+
+
+//===== ToolBarManager::Implementation =======================================
+
+const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix(
+    OUSTRING("private:resource/toolbar/"));
+
+ToolBarManager::Implementation::Implementation (
+    ViewShellBase& rBase,
+    sd::tools::EventMultiplexer& rMultiplexer,
+    PaneManager& rPaneManager,
+    ViewShellManager& rViewShellManager,
+    ToolBarManager& rToolBarManager)
+    : maMutex(),
+      mrBase(rBase),
+      mrEventMultiplexer(rMultiplexer),
+      mbIsValid(false),
+      maToolBarList(),
+      maToolBarShellList(),
+      mxLayouter(NULL),
+      mnLockCount(0),
+      mbPreUpdatePending(false),
+      mbPostUpdatePending(false),
+      mpLayouterLock(),
+      mpViewShellManagerLock(),
+      mnPendingUpdateCall(0),
+      mnPendingSetValidCall(0),
+      maToolBarRules(rToolBarManager,rViewShellManager)
+{
+    Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    mrEventMultiplexer.AddEventListener(
+        aLink,
+        tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
+        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
+}
+
+
+
+
+/** The order of statements is important.
+    First unregister listeners, which may post user events.
+    Then remove pending user events.
+*/
+ToolBarManager::Implementation::~Implementation (void)
+{
+    // Unregister at broadcasters.
+    Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    mrEventMultiplexer.RemoveEventListener(aLink);
+
+    // Abort pending user calls.
+    if (mnPendingUpdateCall != 0)
+        Application::RemoveUserEvent(mnPendingUpdateCall);
+    if (mnPendingSetValidCall != 0)
+        Application::RemoveUserEvent(mnPendingSetValidCall);
+}
+
+
+
+
+void ToolBarManager::Implementation::SetValid (bool bValid)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if (mbIsValid != bValid)
+    {
+        UpdateLock aUpdateLock (*this);
+
+        mbIsValid = bValid;
+        if (mbIsValid)
+        {
+            Reference<frame::XFrame> xFrame;
+            if (mrBase.GetViewFrame() != NULL && mrBase.GetViewFrame()->GetFrame())
+                xFrame = mrBase.GetViewFrame()->GetFrame()->GetFrameInterface();
+            try
+            {
+                Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);
+                Any aValue (xFrameProperties->getPropertyValue(OUSTRING("LayoutManager")));
+                aValue >>= mxLayouter;
+            }
+            catch (RuntimeException aException)
+            {
+            }
+
+            GetToolBarRules().Update(mrBase);
+        }
+        else
+        {
+            ResetAllToolBars();
+            mxLayouter = NULL;
+        }
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    maToolBarList.ClearGroup(eGroup);
+    maToolBarShellList.ClearGroup(eGroup);
+
+    mbPreUpdatePending = true;
+}
+
+
+
+
+void ToolBarManager::Implementation::ResetAllToolBars (void)
+{
+#ifdef VERBOSE
+    OSL_TRACE("resetting all tool bars");
+#endif
+    for (int i=TBG__FIRST; i<=TBG__LAST; ++i)
+        ResetToolBars((ToolBarGroup)i);
+}
+
+
+
+
+void ToolBarManager::Implementation::AddToolBar (
+    ToolBarGroup eGroup,
+    const ::rtl::OUString& rsToolBarName)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if (CheckPlugInMode(rsToolBarName))
+    {
+        maToolBarList.AddToolBar(eGroup,rsToolBarName);
+
+        mbPostUpdatePending = true;
+        if (mnLockCount == 0)
+            PostUpdate();
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::RemoveToolBar (
+    ToolBarGroup eGroup,
+    const ::rtl::OUString& rsToolBarName)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if (maToolBarList.RemoveToolBar(eGroup,rsToolBarName))
+    {
+        mbPreUpdatePending = true;
+        if (mnLockCount == 0)
+            PreUpdate();
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::AddToolBarShell (
+    ToolBarGroup eGroup,
+    ShellId nToolBarId)
+{
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+    if (pMainViewShell != NULL)
+    {
+        maToolBarShellList.AddShellId(eGroup,nToolBarId);
+        GetToolBarRules().SubShellAdded(eGroup, nToolBarId);
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::RemoveToolBarShell (
+    ToolBarGroup eGroup,
+    ShellId nToolBarId)
+{
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+    if (pMainViewShell != NULL)
+    {
+        GetToolBarRules().SubShellRemoved(eGroup, nToolBarId);
+        maToolBarShellList.RemoveShellId(eGroup,nToolBarId);
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::PreUpdate (void)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if (mbIsValid
+        && mbPreUpdatePending
+        && mxLayouter.is())
+    {
+        mbPreUpdatePending = false;
+
+#ifdef VERBOSE
+        OSL_TRACE("ToolBarManager::PreUpdate [");
+#endif
+
+        // Get the list of tool bars that are not used anymore and are to be
+        // deactivated.
+        NameList aToolBars;
+        maToolBarList.GetToolBarsToDeactivate(aToolBars);
+
+        // Turn off the tool bars.
+        NameList::const_iterator iToolBar;
+        for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
+        {
+            ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
+#ifdef VERBOSE
+            OSL_TRACE("    turning off tool bar %s",
+                ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+            mxLayouter->destroyElement(sFullName);
+            maToolBarList.MarkToolBarAsNotActive(*iToolBar);
+        }
+
+#ifdef VERBOSE
+        OSL_TRACE("ToolBarManager::PreUpdate ]");
+#endif
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::PostUpdate (void)
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if (mbIsValid
+        && mbPostUpdatePending
+        && mxLayouter.is())
+    {
+        mbPostUpdatePending = false;
+
+        // Create the list of requested tool bars.
+        NameList aToolBars;
+        maToolBarList.GetToolBarsToActivate(aToolBars);
+
+#ifdef VERBOSE
+        OSL_TRACE("ToolBarManager::PostUpdate [");
+#endif
+
+        // Turn on the tool bars that are visible in the new context.
+        NameList::const_iterator iToolBar;
+        for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
+        {
+            ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
+#ifdef VERBOSE
+            OSL_TRACE("    turning on tool bar %s",
+                ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+            mxLayouter->requestElement(sFullName);
+            maToolBarList.MarkToolBarAsActive(*iToolBar);
+        }
+
+#ifdef VERBOSE
+        OSL_TRACE("ToolBarManager::PostUpdate ]");
+#endif
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::LockViewShellManager (void)
+{
+    if (mpViewShellManagerLock.get() == NULL)
+        mpViewShellManagerLock.reset(
+            new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
+}
+
+
+
+
+bool ToolBarManager::Implementation::IsUpdateLocked (void) const
+{
+    return mnLockCount;
+}
+
+
+
+
+void ToolBarManager::Implementation::LockUpdate (void)
+{
+#ifdef VERBOSE
+    OSL_TRACE("LockUpdate %d", mnLockCount);
+#endif
+    ::osl::MutexGuard aGuard(maMutex);
+
+    DBG_ASSERT(mnLockCount<100, "ToolBarManager lock count unusually high");
+    if (mnLockCount == 0)
+    {
+        OSL_ASSERT(mpViewShellManagerLock.get()==NULL);
+        mpLayouterLock.reset(new LayouterLock(mxLayouter));
+    }
+    ++mnLockCount;
+}
+
+
+
+
+void ToolBarManager::Implementation::UnlockUpdate (void)
+{
+#ifdef VERBOSE
+    OSL_TRACE("UnlockUpdate %d", mnLockCount);
+#endif
+    ::osl::MutexGuard aGuard(maMutex);
+
+    OSL_ASSERT(mnLockCount>0);
+    --mnLockCount;
+    if (mnLockCount == 0)
+    {
+        Update();
+    }
+}
+
+
+
+
+void ToolBarManager::Implementation::Update (void)
+{
+    // When the lock is released and there are pending changes to the set of
+    // tool bars then update this set now.
+    if (mnLockCount == 0)
+    {
+        // During ceation of ViewShellBase we may have the situation that
+        // the controller has already been created and attached to the frame
+        // but that the ToolBarManager has not yet completed its
+        // initialization (by initializing the mxLayouter member.)  We do
+        // this here so that we do not have to wait for the next Update()
+        // call to show the tool bars.
+        if (mnPendingSetValidCall != 0)
+        {
+            Application::RemoveUserEvent(mnPendingSetValidCall);
+            mnPendingSetValidCall = 0;
+            SetValid(true);
+        }
+
+        if (mbIsValid && mxLayouter.is() && (mbPreUpdatePending || mbPostUpdatePending))
+        {
+            // 1) Release UNO tool bars that are not longer used.  Do this
+            // now so that they are not updated when the SFX shell stack is
+            // modified.
+            if (mbPreUpdatePending)
+                PreUpdate();
+
+            // 2) Update the requested shells that represent tool bar
+            // functionality. Those that are not used anymore are
+            // deactivated now.  Those that are missing are activated in the
+            // next step together with the view shells.
+            if (mpViewShellManagerLock.get() == NULL)
+                mpViewShellManagerLock.reset(
+                    new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
+            maToolBarShellList.UpdateShells(
+                mrBase.GetMainViewShell(),
+                mrBase.GetViewShellManager());
+
+            // 3) Unlock the ViewShellManager::UpdateLock.  This updates the
+            // shell stack.  We have to be carfull here.  The deletion of
+            // the lock may end in a synchronous call to LockUpdate(). When
+            // at this time the lock has been deleted but the auto_ptr has
+            // not yet been reset then the lock is deleted a second time.
+            ViewShellManager::UpdateLock* pLock = mpViewShellManagerLock.release();
+            delete pLock;
+
+            // 4) Make the UNO tool bars visible.  The outstanding call to
+            // PostUpdate() is done via PostUserEvent() so that it is
+            // guaranteed to be executed when the SFX shell stack has been
+            // updated (under the assumption that our lock to the
+            // ViewShellManager was the only one open.  If that is not the
+            // case then all should still be well but not as fast.)  Note
+            // that the lock count may have been increased since entering
+            // this method.  In that case one of the next UnlockUpdate()
+            // calls will post the UpdateCallback.
+            if (mnPendingUpdateCall==0 && mnLockCount==0)
+            {
+                mnPendingUpdateCall = Application::PostUserEvent(
+                    LINK(this,ToolBarManager::Implementation,UpdateCallback));
+            }
+        }
+        else
+        {
+            mpViewShellManagerLock.reset();
+            mpLayouterLock.reset();
+        }
+    }
+}
+
+
+
+
+ToolBarRules& ToolBarManager::Implementation::GetToolBarRules (void)
+{
+    return maToolBarRules;
+}
+
+
+
+
+IMPL_LINK(ToolBarManager::Implementation,UpdateCallback,bool*,pValid)
+{
+    mnPendingUpdateCall = 0;
+    if (mnLockCount == 0)
+    {
+        if (mbPreUpdatePending)
+            PreUpdate();
+        if (mbPostUpdatePending)
+            PostUpdate();
+        if (mbIsValid && mnLockCount==0 && mxLayouter.is())
+            mpLayouterLock.reset();
+    }
+    return 0;
+}
+
+
+
+
+IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
+    sd::tools::EventMultiplexerEvent*,pEvent)
+{
+    if (pEvent != NULL)
+    {
+        switch (pEvent->meEventId)
+        {
+            case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
+                if (mnPendingSetValidCall == 0)
+                    mnPendingSetValidCall
+                        = Application::PostUserEvent(LINK(this,Implementation,SetValidCallback));
+                break;
+
+            case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
+                SetValid(false);
+                break;
+
+            case tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING:
+                SetValid(false);
+                break;
+        }
+    }
+    return 0;
+}
+
+
+
+
+IMPL_LINK(ToolBarManager::Implementation, SetValidCallback,void*,pDummy)
+{
+    mnPendingSetValidCall = 0;
+    SetValid(true);
+    return 0;
+}
+
+
+
+
+
+::rtl::OUString ToolBarManager::Implementation::GetToolBarResourceName (
+    const ::rtl::OUString& rsBaseName) const
+{
+    ::rtl::OUString sToolBarName (msToolBarResourcePrefix);
+    sToolBarName += rsBaseName;
+    return sToolBarName;
+}
+
+
+
+
+bool ToolBarManager::Implementation::CheckPlugInMode (const ::rtl::OUString& rsName) const
+{
+    bool bValid (false);
+
+    // Determine the plug in mode.
+    bool bIsPlugInMode (false);
+    do
+    {
+        SfxObjectShell* pObjectShell = mrBase.GetObjectShell();
+        if (pObjectShell == NULL)
+            break;
+
+        SfxMedium* pMedium = pObjectShell->GetMedium();
+        if (pMedium == NULL)
+            break;
+
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(),pViewOnlyItem,SfxBoolItem,SID_VIEWONLY,sal_False);
+        if (pViewOnlyItem == NULL)
+            break;
+
+        bIsPlugInMode = pViewOnlyItem->GetValue();
+    }
+    while (false);
+
+    if (rsName.equals(msViewerToolBar))
+        bValid = bIsPlugInMode;
+    else
+        bValid = ! bIsPlugInMode;
+
+    return bValid;
+}
+
+
+
+
+} // end of namespace sd
+
+
+
+
+namespace {
+
+using namespace ::sd;
+
+//===== ToolBarRules ==========================================================
+
+ToolBarRules::ToolBarRules (
+    ::sd::ToolBarManager& rToolBarManager,
+    ::sd::ViewShellManager& rViewShellManager)
+    : mrToolBarManager(rToolBarManager),
+      mrViewShellManager(rViewShellManager)
+{
+}
+
+
+
+
+void ToolBarRules::Update (ViewShellBase& rBase)
+{
+    ViewShell* pMainViewShell = rBase.GetMainViewShell();
+    if (pMainViewShell != NULL)
+    {
+        MainViewShellChanged(pMainViewShell->GetShellType());
+        if (pMainViewShell->GetView())
+            SelectionHasChanged (*pMainViewShell, *pMainViewShell->GetView());
+    }
+    else
+        MainViewShellChanged(ViewShell::ST_NONE);
+}
+
+
+
+
+void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
+{
+    ::sd::ToolBarManager::UpdateLock aToolBarManagerLock (mrToolBarManager);
+    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mrViewShellManager);
+
+    mrToolBarManager.ResetAllToolBars();
+
+    switch(nShellType)
+    {
+        case ::sd::ViewShell::ST_IMPRESS:
+        case ::sd::ViewShell::ST_NOTES:
+        case ::sd::ViewShell::ST_HANDOUT:
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msOptionsToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msCommonTaskToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msViewerToolBar);
+            break;
+
+        case ::sd::ViewShell::ST_DRAW:
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msOptionsToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msViewerToolBar);
+            break;
+
+        case ViewShell::ST_OUTLINE:
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msOutlineToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msViewerToolBar);
+            mrToolBarManager.AddToolBarShell(
+                ToolBarManager::TBG_PERMANENT, RID_DRAW_TEXT_TOOLBOX);
+            break;
+
+        case ViewShell::ST_SLIDE_SORTER:
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msViewerToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msSlideSorterToolBar);
+            mrToolBarManager.AddToolBar(
+                ToolBarManager::TBG_PERMANENT,
+                ToolBarManager::msSlideSorterObjectBar);
+            break;
+
+        case ViewShell::ST_NONE:
+        case ViewShell::ST_PRESENTATION:
+        case ViewShell::ST_TASK_PANE:
+        default:
+            break;
+    }
+}
+
+
+
+
+void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
+{
+    ::sd::ToolBarManager::UpdateLock aToolBarManagerLock (mrToolBarManager);
+    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mrViewShellManager);
+
+    MainViewShellChanged(rMainViewShell.GetShellType());
+    switch(rMainViewShell.GetShellType())
+    {
+        case ::sd::ViewShell::ST_IMPRESS:
+        case ::sd::ViewShell::ST_DRAW:
+        case ::sd::ViewShell::ST_NOTES:
+            const DrawViewShell* pDrawViewShell
+                = dynamic_cast<const DrawViewShell*>(&rMainViewShell);
+            if (pDrawViewShell != NULL)
+                if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                    mrToolBarManager.AddToolBar(
+                        ToolBarManager::TBG_MASTER_MODE,
+                        ToolBarManager::msMasterViewToolBar);
+            break;
+    }
+}
+
+
+
+
+void ToolBarRules::SelectionHasChanged (
+    const ::sd::ViewShell& rViewShell,
+    const SdrView& rView)
+{
+    ::sd::ToolBarManager::UpdateLock aLock (mrToolBarManager);
+    mrToolBarManager.LockViewShellManager();
+
+    switch (rView.GetContext())
+    {
+        case SDRCONTEXT_GRAPHIC:
+            mrToolBarManager.SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_GRAF_TOOLBOX);
+            break;
+
+        case SDRCONTEXT_MEDIA:
+            mrToolBarManager.SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_MEDIA_TOOLBOX);
+            break;
+
+        case SDRCONTEXT_TEXTEDIT:
+            mrToolBarManager.SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_TEXT_TOOLBOX);
+            break;
+
+        case SDRCONTEXT_STANDARD:
+        default:
+            switch(rViewShell.GetShellType())
+            {
+                case ::sd::ViewShell::ST_IMPRESS:
+                case ::sd::ViewShell::ST_DRAW:
+                case ::sd::ViewShell::ST_NOTES:
+                case ::sd::ViewShell::ST_HANDOUT:
+                    mrToolBarManager.SetToolBar(
+                        ToolBarManager::TBG_FUNCTION,
+                        ToolBarManager::msDrawingObjectToolBar);
+                    break;
+            }
+            break;
+    }
+
+    SdrView* pView = &const_cast<SdrView&>(rView);
+    // Check if the extrusion tool bar and the fontwork tool bar have to
+    // be activated.
+    if (svx::checkForSelectedCustomShapes(pView, true /* bOnlyExtruded */ ))
+        mrToolBarManager.AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_SVX_EXTRUSION_BAR);
+    sal_uInt32 nCheckStatus = 0;
+    if (svx::checkForSelectedFontWork(pView, nCheckStatus))
+        mrToolBarManager.AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_SVX_FONTWORK_BAR);
+
+    // Switch on additional context-sensitive tool bars.
+    if (rView.GetContext() == SDRCONTEXT_POINTEDIT)
+        mrToolBarManager.AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_BEZIER_TOOLBOX);
+}
+
+
+
+
+void ToolBarRules::SubShellAdded (
+    ::sd::ToolBarManager::ToolBarGroup eGroup,
+    sd::ShellId nShellId)
+{
+    // For some tool bar shells (those defined in sd) we have to add the
+    // actual tool bar here.
+    switch (nShellId)
+    {
+        case RID_DRAW_GRAF_TOOLBOX:
+            mrToolBarManager.AddToolBar(eGroup, ToolBarManager::msGraphicObjectBar);
+            break;
+
+        case RID_DRAW_MEDIA_TOOLBOX:
+            mrToolBarManager.AddToolBar(eGroup, ToolBarManager::msMediaObjectBar);
+            break;
+
+        case RID_DRAW_TEXT_TOOLBOX:
+            mrToolBarManager.AddToolBar(eGroup, ToolBarManager::msTextObjectBar);
+            break;
+
+        case RID_BEZIER_TOOLBOX:
+            mrToolBarManager.AddToolBar(eGroup, ToolBarManager::msBezierObjectBar);
+            break;
+    }
+}
+
+
+
+
+void ToolBarRules::SubShellRemoved (
+    ::sd::ToolBarManager::ToolBarGroup eGroup,
+    sd::ShellId nShellId)
+{
+    // For some tool bar shells (those defined in sd) we have to add the
+    // actual tool bar here.
+    switch (nShellId)
+    {
+        case RID_DRAW_GRAF_TOOLBOX:
+            mrToolBarManager.RemoveToolBar(eGroup, ToolBarManager::msGraphicObjectBar);
+            break;
+
+        case RID_DRAW_MEDIA_TOOLBOX:
+            mrToolBarManager.RemoveToolBar(eGroup, ToolBarManager::msMediaObjectBar);
+            break;
+
+        case RID_DRAW_TEXT_TOOLBOX:
+            mrToolBarManager.RemoveToolBar(eGroup, ToolBarManager::msTextObjectBar);
+            break;
+
+        case RID_BEZIER_TOOLBOX:
+            mrToolBarManager.RemoveToolBar(eGroup, ToolBarManager::msBezierObjectBar);
+            break;
+    }
+}
+
+
+
+
+//===== ToolBarList ===========================================================
+
+ToolBarList::ToolBarList (void)
+    : maGroups(),
+      maActiveToolBars()
+{
+}
+
+
+
+
+void ToolBarList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
+{
+    Groups::iterator iGroup (maGroups.find(eGroup));
+    if (iGroup != maGroups.end())
+    {
+        if ( ! iGroup->second.empty())
+        {
+            iGroup->second.clear();
+        }
+    }
+}
+
+
+
+
+void ToolBarList::AddToolBar (
+    sd::ToolBarManager::ToolBarGroup eGroup,
+    const ::rtl::OUString& rsName)
+{
+    Groups::iterator iGroup (maGroups.find(eGroup));
+    if (iGroup == maGroups.end())
+        iGroup = maGroups.insert(Groups::value_type(eGroup,NameList())).first;
+
+    if (iGroup != maGroups.end())
+    {
+        NameList::const_iterator iBar (
+            ::std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
+        if (iBar == iGroup->second.end())
+        {
+            iGroup->second.push_back(rsName);
+        }
+    }
+}
+
+
+
+
+bool ToolBarList::RemoveToolBar (
+    sd::ToolBarManager::ToolBarGroup eGroup,
+    const ::rtl::OUString& rsName)
+{
+    Groups::iterator iGroup (maGroups.find(eGroup));
+    if (iGroup != maGroups.end())
+    {
+        NameList::iterator iBar (
+            ::std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
+        if (iBar != iGroup->second.end())
+        {
+            iGroup->second.erase(iBar);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+
+void ToolBarList::MakeRequestedToolBarList (NameList& rRequestedToolBars) const
+{
+    for (int i=sd::ToolBarManager::TBG__FIRST; i<=sd::ToolBarManager::TBG__LAST; ++i)
+    {
+        ::sd::ToolBarManager::ToolBarGroup eGroup = (::sd::ToolBarManager::ToolBarGroup)i;
+        Groups::const_iterator iGroup (maGroups.find(eGroup));
+        if (iGroup != maGroups.end())
+            ::std::copy(
+                iGroup->second.begin(),
+                iGroup->second.end(),
+                ::std::inserter(rRequestedToolBars,rRequestedToolBars.end()));
+    }
+}
+
+
+
+
+void ToolBarList::GetToolBarsToActivate (NameList& rToolBars) const
+{
+    NameList aRequestedToolBars;
+    MakeRequestedToolBarList(aRequestedToolBars);
+
+    NameList::const_iterator iToolBar;
+    for (iToolBar=aRequestedToolBars.begin(); iToolBar!=aRequestedToolBars.end(); ++iToolBar)
+    {
+        if (::std::find(maActiveToolBars.begin(),maActiveToolBars.end(),*iToolBar)
+            == maActiveToolBars.end())
+        {
+            rToolBars.push_back(*iToolBar);
+        }
+    }
+}
+
+
+
+
+void ToolBarList::GetToolBarsToDeactivate (NameList& rToolBars) const
+{
+    NameList aRequestedToolBars;
+    MakeRequestedToolBarList(aRequestedToolBars);
+
+    NameList::const_iterator iToolBar;
+    for (iToolBar=maActiveToolBars.begin(); iToolBar!=maActiveToolBars.end(); ++iToolBar)
+    {
+        if (::std::find(aRequestedToolBars.begin(),aRequestedToolBars.end(),*iToolBar)
+            == aRequestedToolBars.end())
+        {
+            rToolBars.push_back(*iToolBar);
+        }
+    }
+}
+
+
+
+
+void ToolBarList::MarkToolBarAsActive (const ::rtl::OUString& rsName)
+{
+    maActiveToolBars.push_back(rsName);
+}
+
+
+
+
+void ToolBarList::MarkToolBarAsNotActive (const ::rtl::OUString& rsName)
+{
+    maActiveToolBars.erase(
+        ::std::find(maActiveToolBars.begin(),maActiveToolBars.end(), rsName));
+}
+
+
+
+
+void ToolBarList::MarkAllToolBarsAsNotActive (void)
+{
+    maActiveToolBars.clear();
+}
+
+
+
+
+//===== ToolBarShellList ======================================================
+
+ToolBarShellList::ShellDescriptor::ShellDescriptor (
+    ShellId nId,
+    sd::ToolBarManager::ToolBarGroup eGroup)
+    : mnId(nId),
+      meGroup(eGroup)
+{
+}
+
+
+
+
+ToolBarShellList::ToolBarShellList (void)
+    : maCurrentList(),
+      maNewList()
+{
+}
+
+
+
+
+void ToolBarShellList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
+{
+    // In every loop we erase the first member of the specified group.
+    // Because that invalidates the iterator another loop is started after
+    // that.  The loop is left only when no member of the group is found and
+    // no element is erased
+    bool bLoop;
+    do
+    {
+        bLoop = false;
+
+        GroupedShellList::iterator iDescriptor;
+        for (iDescriptor=maNewList.begin(); iDescriptor!=maNewList.end(); ++iDescriptor)
+            if (iDescriptor->meGroup == eGroup)
+            {
+                maNewList.erase(iDescriptor);
+                // Erasing the descriptor invalidated the iterator so we
+                // have to exit the for loop and start anew to search for
+                // further elements of the group.
+                bLoop = true;
+                break;
+            }
+    }
+    while (bLoop);
+}
+
+
+
+
+void ToolBarShellList::AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId)
+{
+    // Make sure that the shell is not added twice (and possibly in
+    // different groups.)
+    ShellDescriptor aDescriptor (nId,eGroup);
+    GroupedShellList::iterator iDescriptor (maNewList.find(aDescriptor));
+    if (iDescriptor != maNewList.end())
+    {
+        // The shell is already requested.
+        if (iDescriptor->meGroup != eGroup)
+        {
+            // It is now being requested for another group.
+            // (Is this an error?)
+            // Move it to that group.
+            maNewList.erase(iDescriptor);
+            maNewList.insert(aDescriptor);
+        }
+        // else nothing to do.
+    }
+    else
+        maNewList.insert(aDescriptor);
+}
+
+
+
+
+bool ToolBarShellList::RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId)
+{
+    bool bRemoved (false);
+
+    GroupedShellList::iterator iDescriptor (maNewList.find(ShellDescriptor(nId,eGroup)));
+    if (iDescriptor != maNewList.end())
+    {
+        if (iDescriptor->meGroup == eGroup)
+        {
+            maNewList.erase(iDescriptor);
+            bRemoved = true;
+        }
+    }
+
+    return bRemoved;
+}
+
+
+
+
+void ToolBarShellList::UpdateShells (
+    ViewShell* pMainViewShell,
+    ViewShellManager& rManager)
+{
+    if (pMainViewShell != NULL)
+    {
+        GroupedShellList aList;
+
+        // Deactivate shells that are in maCurrentList, but not in
+        // maNewList.
+        ::std::set_difference(maCurrentList.begin(), maCurrentList.end(),
+            maNewList.begin(), maNewList.end(),
+            std::insert_iterator<GroupedShellList>(aList,aList.begin()));
+        for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
+        {
+#ifdef VERBOSE
+            OSL_TRACE("deactivating tool bar shell %d", iShell->mnId);
+#endif
+            rManager.DeactivateSubShell(*pMainViewShell, iShell->mnId);
+        }
+
+        // Activate shells that are in maNewList, but not in
+        // maCurrentList.
+        aList.clear();
+        ::std::set_difference(maNewList.begin(), maNewList.end(),
+            maCurrentList.begin(), maCurrentList.end(),
+            std::insert_iterator<GroupedShellList>(aList,aList.begin()));
+        for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
+        {
+#ifdef VERBOSE
+            OSL_TRACE("activating tool bar shell %d", iShell->mnId);
+#endif
+            rManager.ActivateSubShell(*pMainViewShell, iShell->mnId);
+        }
+
+        // The maNewList now refelects the current state and thus is made
+        // maCurrentList.
+        maNewList.swap(maCurrentList);
+        maNewList.clear();
+    }
+}
+
+
+
+} // end of anonymous namespace
