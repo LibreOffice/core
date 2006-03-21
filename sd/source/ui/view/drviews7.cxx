@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:36:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,14 +153,14 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #ifndef _SDFORMATCLIPBOARD_HXX
 #include "formatclipboard.hxx"
 #endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_MANAGER_HXX
+#include "ViewShellManager.hxx"
 #endif
 #include "LayerTabBar.hxx"
 #include "fupoor.hxx"
@@ -1078,7 +1078,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText aktiv
-    if (GetObjectBarManager().GetTopObjectBarId() == RID_DRAW_TEXT_TOOLBOX)
+    if (GetViewShellBase().GetViewShellManager().GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
     {
         USHORT nCurrentSId = SID_ATTR_CHAR;
 
