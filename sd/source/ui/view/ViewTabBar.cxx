@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:04:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,6 @@ ViewTabBar::ViewTabBar (ViewShellBase& rViewShellBase, Window* pParent)
     : TabControl (pParent),
       mrViewShellBase (rViewShellBase)
 {
-    //  SetMaxPageWidth(150);
-    //    SetHelpId( HID_SD_TABBAR_PAGES );
-
     // Add tabs for the views that can be displayed in the center pane.
     InsertPage (VTBE_EDIT_VIEW,
         String (SdResId (STR_DRAW_MODE)));
@@ -94,8 +91,6 @@ ViewTabBar::ViewTabBar (ViewShellBase& rViewShellBase, Window* pParent)
         String (SdResId (STR_HANDOUT_MODE)));
     InsertPage (VTBE_SLIDE_VIEW,
         String (SdResId (STR_SLIDE_MODE)));
-    //    InsertPage (VTBE_OLD_SLIDE_VIEW,
-    //        String (SdResId (STR_SLIDE_MODE)));
 
     // Set one new tab page for all tab entries.  We need it only to
     // determine the height of the tab bar.
@@ -112,7 +107,6 @@ ViewTabBar::ViewTabBar (ViewShellBase& rViewShellBase, Window* pParent)
     // Set help texts.
     SetHelpId (VTBE_EDIT_VIEW, HID_SD_BTN_DRAW);
     SetHelpId (VTBE_SLIDE_VIEW, HID_SD_BTN_SLIDE);
-    //    SetHelpId (VTBE_OLD_SLIDE_VIEW, HID_SD_BTN_SLIDE);
     SetHelpId (VTBE_OUTLINE_VIEW, HID_SD_BTN_OUTLINE);
     SetHelpId (VTBE_NOTES_VIEW, HID_SD_BTN_NOTES);
     SetHelpId (VTBE_HANDOUT_VIEW, HID_SD_BTN_HANDOUT);
