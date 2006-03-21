@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:27:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
     /** Late initialization that has to be called after a new instance has
         completed its construction.
     */
-    virtual void Init (void);
+    virtual void Init (bool bIsMainViewShell);
 
     /** Return a slide sorter that is currently displayed in one of the
         panes that belong to the given ViewShellBase object.
@@ -130,13 +130,6 @@ public:
 
     virtual void ReadFrameViewData (FrameView* pView);
     virtual void WriteFrameViewData (void);
-
-    /** The UI features are used for selective display of tool bars
-        depending on whether the slide sorter is the main view or not.
-        @param nFeature
-            Valid values are defined (and used) in the implementation file.
-    */
-    virtual BOOL HasUIFeature (ULONG nFeature);
 
     /** Set the zoom factor.  The given value is clipped against an upper
         bound.
@@ -221,7 +214,7 @@ public:
     */
     void RemoveSelectionChangeListener (const Link& rListener);
 
-    virtual DrawController* GetController (void);
+    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
     /** Create an accessible object representing the specified window.
         @param pWindow
