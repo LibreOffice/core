@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:10:34 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,11 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2006-03-06 #125892#
+#ifndef _HANDLEANCHORNODECHG_HXX
+#include <HandleAnchorNodeChg.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -3083,7 +3088,71 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
     return bReturn;
 }
 
+// --> OD 2006-02-28 #125892#
+SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
+                                              const SwFmtAnchor& _rNewAnchorFmt,
+                                              SwFlyFrm* _pKeepThisFlyFrm )
+    : mrFlyFrmFmt( _rFlyFrmFmt ),
+      mbAnchorNodeChanged( false )
+{
+    const RndStdIds nNewAnchorType( _rNewAnchorFmt.GetAnchorId() );
+    if ( ( nNewAnchorType == FLY_AT_CNTNT ||
+           nNewAnchorType == FLY_AUTO_CNTNT ) &&
+         _rNewAnchorFmt.GetCntntAnchor() &&
+         _rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode() )
+    {
+        const SwFmtAnchor& aOldAnchorFmt( _rFlyFrmFmt.GetAnchor() );
+        if ( aOldAnchorFmt.GetAnchorId() == nNewAnchorType &&
+             aOldAnchorFmt.GetCntntAnchor() &&
+             aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode() &&
+             aOldAnchorFmt.GetCntntAnchor()->nNode !=
+                                    _rNewAnchorFmt.GetCntntAnchor()->nNode )
+        {
+            // determine 'old' number of anchor frames
+            sal_uInt32 nOldNumOfAnchFrm( 0L );
+            SwClientIter aOldIter( *(aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( aOldIter.First( TYPE(SwFrm) ); aOldIter(); aOldIter.Next() )
+            {
+                ++nOldNumOfAnchFrm;
+            }
+            // determine 'new' number of anchor frames
+            sal_uInt32 nNewNumOfAnchFrm( 0L );
+            SwClientIter aNewIter( *(_rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( aNewIter.First( TYPE(SwFrm) ); aNewIter(); aNewIter.Next() )
+            {
+                ++nNewNumOfAnchFrm;
+            }
+            if ( nOldNumOfAnchFrm != nNewNumOfAnchFrm )
+            {
+                // delete existing fly frames except <_pKeepThisFlyFrm>
+                SwClientIter aIter( mrFlyFrmFmt );
+                SwClient* pLast = aIter.GoStart();
+                if ( pLast )
+                {
+                    do {
+                        SwFrm* pFrm( dynamic_cast<SwFrm*>(pLast) );
+                        if ( pFrm && pFrm != _pKeepThisFlyFrm )
+                        {
+                            pFrm->Cut();
+                            delete pFrm;
+                        }
+                    } while( 0 != ( pLast = aIter++ ));
+                }
+                // indicate, that re-creation of fly frames necessary
+                mbAnchorNodeChanged = true;
+            }
+        }
+    }
+}
 
+SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
+{
+    if ( mbAnchorNodeChanged )
+    {
+        mrFlyFrmFmt.MakeFrms();
+    }
+}
+// <--
 //  class SwDrawFrmFmt
 //  Implementierung teilweise inline im hxx
 
