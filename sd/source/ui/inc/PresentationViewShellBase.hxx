@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:12:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,12 @@ public:
     PresentationViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
     virtual ~PresentationViewShellBase (void);
 
-    /** We delete the ViewTabBar that is not needed for the presentation.
+protected:
+
+    /** The ViewTabBar is not supported so this factory method always
+        returns <NULL/>.
     */
-    virtual void LateInit (void);
+    virtual ViewTabBar* CreateViewTabBar (void);
 };
 
 } // end of namespace sd
