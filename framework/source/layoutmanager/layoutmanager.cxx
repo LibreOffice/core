@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:35:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3145,7 +3145,37 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         m_bDoLayout = sal_False;
     }
 
-    doLayout();
+    if ( bSetVisible )
+        doLayout();
+    else
+    {
+        // Set docking area window size to zero
+        ReadGuard aReadLock( m_aLock );
+        Reference< css::awt::XWindow > xTopDockingWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP];
+        Reference< css::awt::XWindow > xLeftDockingWindow   = m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT];
+        Reference< css::awt::XWindow > xRightDockingWindow  = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
+        Reference< css::awt::XWindow > xBottomDockingWindow = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
+        aReadLock.unlock();
+
+        try
+        {
+            if ( xTopDockingWindow.is() )
+                xTopDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+            if ( xLeftDockingWindow.is() )
+                xLeftDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+            if ( xRightDockingWindow.is() )
+                xRightDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+            if ( xBottomDockingWindow.is() )
+                xBottomDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+
+            WriteGuard aWriteLock( m_aLock );
+            m_aDockingArea = css::awt::Rectangle();
+            aWriteLock.unlock();
+        }
+        catch ( Exception& )
+        {
+        }
+    }
 
     // notify listeners
     css::uno::Any a;
