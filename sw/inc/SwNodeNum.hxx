@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:20:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
     tSwNumTreeNumber mnStart;
     bool mbRestart;
 
+    // --> OD 2006-03-07 #131436#
+    static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
+    // <--
 protected:
     void SetTxtNode(SwTxtNode * pTxtNode);
     SwTxtNode * GetTxtNode() const;
@@ -105,6 +108,17 @@ public:
     {
         return mnStart;
     }
+    // <--
+
+    // --> OD 2006-03-07 #131436#
+    // The number tree root node is deleted, when the corresponding numbering
+    // rule is deleted. In this situation the number tree should be empty -
+    // still registered text nodes aren't allowed. But it is possible, that
+    // text nodes of the undo nodes array are still registered. These will be
+    // unregistered.
+    // Text nodes of the document nodes array aren't allowed to be registered
+    // in this situation - this will be asserted.
+    static void HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum );
     // <--
 };
 
