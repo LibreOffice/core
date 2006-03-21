@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:18:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,10 +191,6 @@
 
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
-
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
 #endif
 
 #ifndef SD_FRAME_VIEW_HXX
