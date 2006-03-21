@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:17:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,6 +617,9 @@ SwNumRule::~SwNumRule()
     for(aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
     {
         delete (*aIt).first;
+        // --> OD 2006-03-07 #131436#
+        SwNodeNum::HandleNumberTreeRootNodeDelete( *((*aIt).second) );
+        // <--
         delete (*aIt).second;
     }
 
