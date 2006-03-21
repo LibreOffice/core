@@ -1,87 +1,68 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: SdUnoDrawView.hxx,v $
+ *
+ *  $Revision: 1.13 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:25:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 #ifndef SD_UNO_DRAW_VIEW_HXX
 #define SD_UNO_DRAW_VIEW_HXX
 
-#ifndef SD_DRAW_CONTROLLER_HXX
-#include "DrawController.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
-#include <com/sun/star/drawing/XDrawView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XLAYER_HPP_
-#include <com/sun/star/drawing/XLayer.hpp>
-#endif
-
-#ifndef _SFX_SFXBASECONTROLLER_HXX_
-#include <sfx2/sfxbasecontroller.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#include <cppuhelper/propshlp.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX
-#include <cppuhelper/proptypehlp.hxx>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
-#endif
-
-#ifndef _SVX_UNOSHAPE_HXX
-#include <svx/unoshape.hxx>
+#ifndef SD_DRAW_SUB_CONTROLLER_HXX
+#include "DrawSubController.hxx"
 #endif
 
 class SdXImpressDocument;
 class SdPage;
 
+namespace com { namespace sun { namespace star { namespace drawing {
+class XLayer;
+} } } }
+
 namespace sd {
 
+class DrawController;
 class DrawViewShell;
 
-/**
- * This class implements the view component for a SdDrawViewShell
- */
+/** This class implements the DrawViewShell specific part of the controller.
+*/
 class SdUnoDrawView
-    : public DrawController
+    : public DrawSubController
 {
 public:
-    enum properties
-    {
-        // Start with enum ids where those of the base class end.
-        PROPERTY__BEGIN = DrawController::PROPERTY__END,
-        PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
-        PROPERTY_MASTERPAGEMODE,
-        PROPERTY_LAYERMODE,
-        PROPERTY_ACTIVE_LAYER,
-        PROPERTY_ZOOMTYPE,
-        PROPERTY_ZOOMVALUE,
-        PROPERTY_VIEWOFFSET,
-        PROPERTY__END
-    };
-
     SdUnoDrawView (
-        ViewShellBase& rBase,
-        ViewShell& rViewShell,
+        DrawController& rController,
+        DrawViewShell& rViewShell,
         View& rView) throw();
     virtual ~SdUnoDrawView (void) throw();
-
-    virtual void FireChangeEditMode (bool bMasterPageMode) throw();
-    virtual void FireChangeLayerMode (bool bLayerMode) throw();
-    virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
-
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -90,10 +71,6 @@ public:
     // XDrawView
     virtual void SAL_CALL setCurrentPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getCurrentPage(  ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    virtual void FillPropertyTable (
-        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
 
     /**
      * Converted the value rValue and return the result in rConvertedValue and the
@@ -129,6 +106,7 @@ protected:
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
 
+protected:
     sal_Bool getMasterPageMode(void) const throw();
     void setMasterPageMode(sal_Bool MasterPageMode_) throw();
     sal_Bool getLayerMode(void) const throw();
@@ -156,16 +134,11 @@ protected:
     void SetZoomType( sal_Int16 nType );
 
 private:
-    bool mbOldMasterPageMode;
-    bool mbOldLayerMode;
-    SdPage* mpCurrentPage;
+    DrawController& mrController;
+    DrawViewShell& mrDrawViewShell;
+    sd::View& mrView;
 
-    /** This is a shortcut for accessing the view shell data member of
-        the base class casted to the correct class.
-        @return
-            The returned pointer may be NULL.
-    */
-    DrawViewShell* GetDrawViewShell (void) const;
+    SdXImpressDocument* SdUnoDrawView::GetModel (void) const throw();
 };
 
 } // end of namespace sd
