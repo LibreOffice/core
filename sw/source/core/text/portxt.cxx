@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-06 18:20:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,12 +432,16 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         // - Footnote portions with fake line start (i.e., not at beginning of line)
         //   should keep together with the text portion.
         // - TabPortions not at beginning of line should keep together with the
-        //   text portion.
+        //   text portion, if they are not followed by a blank
+        //   (work around different definition of tab stop character - breaking or
+        //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() ) ||
                   ( rInf.GetVsh()->IsTabCompat() && rInf.GetLast() &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
-                    aGuess.BreakPos() == rInf.GetIdx() ) )
+                    aGuess.BreakPos() == rInf.GetIdx()  &&
+                    CH_BLANK != rInf.GetChar( rInf.GetIdx() ) &&
+                    0x3000 != rInf.GetChar( rInf.GetIdx() ) ) )
             BreakUnderflow( rInf );
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
