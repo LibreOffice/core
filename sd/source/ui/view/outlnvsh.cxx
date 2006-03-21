@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:52:36 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,9 +179,6 @@
 #include "SdUnoOutlineView.hxx"
 #include "SpellDialogChildWindow.hxx"
 
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 #include "AccessibleOutlineView.hxx"
 #endif
@@ -189,7 +186,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#include "UpdateLockManager.hxx"
+#include "ViewShellManager.hxx"
+#include "DrawController.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -262,10 +260,6 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
 
     SetZoom(69);
 
-    // Activate the object bar.
-    GetObjectBarManager().EnableObjectBarSwitching();
-    GetObjectBarManager().SwitchObjectBar (RID_DRAW_TEXT_TOOLBOX);
-
     // Einstellungen der FrameView uebernehmen
     ReadFrameViewData(pFrameView);
 
@@ -290,23 +284,23 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
 
 
 
-DrawController* OutlineViewShell::GetController (void)
+::std::auto_ptr<DrawSubController> OutlineViewShell::CreateSubController (void)
 {
-    if ( ! mpController.is() && IsMainViewShell())
+    ::std::auto_ptr<DrawSubController> pResult;
+
+    if (IsMainViewShell())
     {
         // Create uno controller for the main view shell.  For the ones
         // displayed in the non-center panes we may later introduce
         // sub-controllers.
-        DrawController* pController = new SdUnoOutlineView (
-            GetViewShellBase(),
+        ViewShellBase& rBase (GetViewShellBase());
+        pResult.reset(new SdUnoOutlineView (
+            rBase.GetDrawController(),
             *this,
-            *GetView());
-        mpController = ::comphelper::ImplementationReference<
-        DrawController,
-            ::com::sun::star::uno::XInterface,
-            ::com::sun::star::uno::XWeak> (pController);
+            *GetView()));
     }
-    return mpController.get();
+
+    return pResult;
 }
 
 
@@ -327,7 +321,9 @@ OutlineViewShell::OutlineViewShell (
       pOlView(NULL),
       pLastPage( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE)
+      bPastePossible(false),
+      mbInitialized(false)
+
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -337,10 +333,6 @@ OutlineViewShell::OutlineViewShell (
     pFrameView->Connect();
 
     Construct(GetDocSh());
-
-    // Editierfunktion starten
-    SfxRequest aReq( SID_EDIT_OUTLINER, 0, GetDoc()->GetItemPool() );
-    FuPermanent( aReq );
 }
 
 
@@ -358,7 +350,9 @@ OutlineViewShell::OutlineViewShell (
       pOlView(NULL),
       pLastPage( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE)
+      bPastePossible(FALSE),
+      mbInitialized(false)
+
 {
     pFrameView = new FrameView(GetDoc());
     pFrameView->Connect();
@@ -375,11 +369,6 @@ OutlineViewShell::OutlineViewShell (
 OutlineViewShell::~OutlineViewShell()
 {
     DisposeFunctions();
-
-    // The sub shell manager will be destroyed in a short time.
-    // Disable the switching of object bars now anyway just in case
-    // the object bars would access invalid data when switched.
-    GetObjectBarManager().DisableObjectBarSwitching();
 
     delete pOlView;
 
@@ -523,18 +512,22 @@ void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 \************************************************************************/
 void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 {
-    ViewShell::Activate( bIsMDIActivate );
-    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
+    if ( ! mbInitialized)
     {
-        pOlView->SetLinks();
-        pOlView->ConnectToApplication();
+        mbInitialized = true;
+        SfxRequest aRequest (SID_EDIT_OUTLINER, 0, GetDoc()->GetItemPool());
+        FuPermanent (aRequest);
+    }
 
-        if( bIsMDIActivate )
-        {
-            OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-            ::Outliner* pOutl = pOutlinerView->GetOutliner();
-            pOutl->UpdateFields();
-        }
+    ViewShell::Activate( bIsMDIActivate );
+    pOlView->SetLinks();
+    pOlView->ConnectToApplication();
+
+    if( bIsMDIActivate )
+    {
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+        ::Outliner* pOutl = pOutlinerView->GetOutliner();
+        pOutl->UpdateFields();
     }
 }
 
@@ -545,10 +538,7 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 \************************************************************************/
 void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 {
-    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
-    {
-        pOlView->DisconnectFromApplication();
-    }
+    pOlView->DisconnectFromApplication();
 
     // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
     // to function properly
@@ -1451,10 +1441,7 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 
     USHORT nPage = pFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
-    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
-    {
-        pOlView->SetActualPage(pLastPage);
-    }
+    pOlView->SetActualPage(pLastPage);
 }
 
 
@@ -2277,10 +2264,7 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    if (mpController.is() != NULL)
-    {
-        mpController->FireVisAreaChanged( rRect );
-    }
+    GetViewShellBase().GetDrawController().FireVisAreaChanged(rRect);
 }
 
 /** If there is a valid controller then create a new instance of
@@ -2344,21 +2328,16 @@ void OutlineViewShell::GetState (SfxItemSet& rSet)
 
 void OutlineViewShell::SetCurrentPage (SdPage* pPage)
 {
-    SdUnoOutlineView* pController (
-        static_cast<SdUnoOutlineView*>(GetController()));
-
     // Adapt the selection of the model.
     for (USHORT i=0; i<GetDoc()->GetSdPageCount(PK_STANDARD); i++)
         GetDoc()->SetSelected(
             GetDoc()->GetSdPage(i, PK_STANDARD),
             FALSE);
     GetDoc()->SetSelected (pPage, TRUE);
-    if (pController != NULL)
-        pController->FireSelectionChangeListener();
 
-    // Tell the controller to notify its listeners.
-    if (pController != NULL)
-        pController->FireSwitchCurrentPage (pPage);
+    DrawController& rController(GetViewShellBase().GetDrawController());
+    rController.FireSelectionChangeListener();
+    rController.FireSwitchCurrentPage (pPage);
 
     pOlView->SetActualPage(pPage);
 }
