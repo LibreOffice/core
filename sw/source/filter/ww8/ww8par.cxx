@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:40:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1640,6 +1640,10 @@ void SwWW8ImplReader::ImportDop()
 
     // --> FME 2006-02-10 #131283#
     rDoc.SetTableRowKeep( true );
+    // <--
+
+    // --> FME 2006-03-01 #i3952#
+    rDoc.SetIgnoreTabsAndBlanksForLineCalculation( true );
     // <--
 
     //
