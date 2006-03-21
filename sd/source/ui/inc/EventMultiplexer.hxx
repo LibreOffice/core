@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:04:32 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,20 +54,74 @@ namespace sd { namespace tools {
 class EventMultiplexerEvent
 {
 public:
-    enum EventId {
-        EID_DISPOSING = 1,
-        EID_EDIT_VIEW_SELECTION,
-        EID_SLIDE_SORTER_SELECTION,
-        EID_CURRENT_PAGE,
-        EID_MAIN_VIEW_REMOVED,
-        EID_MAIN_VIEW_ADDED,
-        EID_VIEW_REMOVED,
-        EID_VIEW_ADDED,
-        EID_EDIT_MODE,
-        EID_PAGE_ORDER,
-        EID_BEGIN_TEXT_EDIT,
-        EID_END_TEXT_EDIT
-    };
+    typedef sal_uInt32 EventId;
+    /** The EventMultiplexer itself is being disposed.  Called for a live
+        EventMultiplexer.  Removing a listener as response is not necessary,
+        though.
+    */
+    static const EventId EID_DISPOSING              = 0x0001;
+
+    /** The selection in the center pane has changed.
+    */
+    static const EventId EID_EDIT_VIEW_SELECTION    = 0x0002;
+
+    /** The selection in the slide sorter has changed, regardless of whether
+        the slide sorter is displayed in the left pane or the center pane.
+    */
+    static const EventId EID_SLIDE_SORTER_SELECTION = 0x0004;
+
+    /** The current page has changed.
+    */
+    static const EventId EID_CURRENT_PAGE           = 0x0008;
+
+    /** The current MainViewShell (the ViewShell displayed in the center
+        pane) has been removed.
+    */
+    static const EventId EID_MAIN_VIEW_REMOVED      = 0x0010;
+
+    /** A new ViewShell has been made the MainViewShell.
+    */
+    static const EventId EID_MAIN_VIEW_ADDED        = 0x0020;
+
+    /** A ViewShell has been removed from one of the panes.  Note that for
+        the ViewShell in the center pane bth this event type and
+        EID_MAIN_VIEW_REMOVED is broadcasted.
+    */
+    static const EventId EID_VIEW_REMOVED           = 0x0040;
+
+    /** A new ViewShell is being displayed in one of the panes.  Note that
+        for the ViewShell in the center pane both this event type and
+        EID_MAIN_VIEW_ADDED is broadcasted.
+    */
+    static const EventId EID_VIEW_ADDED             = 0x0080;
+
+    /** The PaneManager is being destroyed.
+    */
+    static const EventId EID_PANE_MANAGER_DYING     = 0x0100;
+
+    /** The edit mode of the ViewShell in the center pane has been modified.
+    */
+    static const EventId EID_EDIT_MODE              = 0x0200;
+
+    /** One or more pages have been inserted into or deleted from the model.
+    */
+    static const EventId EID_PAGE_ORDER             = 0x0400;
+
+    /** Text editing in one of the shapes in the MainViewShell has started.
+    */
+    static const EventId EID_BEGIN_TEXT_EDIT        = 0x0800;
+
+    /** Text editing in one of the shapes in the MainViewShell has ended.
+    */
+    static const EventId EID_END_TEXT_EDIT          = 0x1000;
+
+    /** A UNO controller has been attached to the UNO frame.
+    */
+    static const EventId EID_CONTROLLER_ATTACHED    = 0x2000;
+
+    /** A UNO controller has been detached to the UNO frame.
+    */
+    static const EventId EID_CONTROLLER_DETACHED    = 0x4000;
 
     const ViewShellBase& mrBase;
     EventId meEventId;
@@ -79,63 +133,72 @@ public:
         void* pUserData);
 };
 
-/** This convenience class joins multiple event broadcaster and forwards
-    events to listeners.  It thus takes the burden from the listeners to
-    register at all these broadcasters with their different boradcasting
-    techniques and event types.
 
-    When a listener is registered it can specify the types of events it
+/** This convenience class makes it easy to listen to various events that
+    originally are broadcasted via different channels.
+
+    There is usually one EventMultiplexer instance per ViewShellBase().
+    Call the laters GetEventMultiplexer() method to get access to that
+    instance.
+
+    When a listener is registered it can specify the events it
     wants to be informed of.  This can be done with code like the following:
 
     mrViewShellBase.GetEventMultiplexer().AddEventListener (
         LINK(this,MasterPagesSelector,EventMultiplexerListener),
-        tools::EventMultiplexer::ET_MAIN_VIEW
-        | tools::EventMultiplexer::ET_EDIT_MODE);
-
-    Here mrViewShellBase is an instance of the ViewShellBase class.  The
-    listener will be called when the main view is switched or its edit mode
-    changes.  The later is not possible for all types of ViewShell but then
-    these events will not be sent.
+        tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
 */
 class EventMultiplexer
 {
 public:
-    /** The event types are internally converted to bits in a sal_uInt32 so
-        there may be not more than 32 of them.
+    /** Create new EventMultiplexer for the given ViewShellBase object.
     */
-    typedef sal_uInt32 EventType;
-    typedef sal_uInt32 EventTypeSet;
-    static const EventTypeSet ET_DISPOSING;
-    static const EventTypeSet ET_EDIT_VIEW_SELECTION;
-    static const EventTypeSet ET_SLIDE_SORTER_SELECTION;
-    static const EventTypeSet ET_CURRENT_PAGE;
-    static const EventTypeSet ET_MAIN_VIEW;
-    static const EventTypeSet ET_VIEW;
-    static const EventTypeSet ET_EDIT_MODE;
-    static const EventTypeSet ET_PAGE_ORDER;
-    static const EventTypeSet ET_TEXT_EDIT;
-
-    static const EventTypeSet ETS_EMPTY_SET;
-    static const EventTypeSet ETS_FULL_SET;
-
     EventMultiplexer (ViewShellBase& rBase);
     ~EventMultiplexer (void);
 
-    /** Add an event listener that will be informed about the event types
-        specified in rEventTypes.
+    /** Some constants that make it easier to remove a listener for all
+        event types at once.
+    */
+    static const EventMultiplexerEvent::EventId EID_FULL_SET = 0xffffffff;
+    static const EventMultiplexerEvent::EventId EID_EMPTY_SET = 0x00000000;
+
+    /** Add an event listener that will be informed about the specified
+        event types.
+        @param rCallback
+            The callback to call as soon as one of the event specified by
+            aEventTypeSet is received by the EventMultiplexer.
+        @param aEventTypeSet
+            A, possibly empty, set of event types that the listener wants to
+            be informed about.
     */
     void AddEventListener (
         Link& rCallback,
-        EventTypeSet aEventTypeSet = ETS_FULL_SET);
+        EventMultiplexerEvent::EventId aEventTypeSet);
 
+    /** Remove an event listener for the specified event types.
+        @param aEventTypeSet
+            The listener will not be called anymore for any of the event
+            types in this set.  Use EID_FULL_SET, the default value, to
+            remove the listener for all event types it has been registered
+            for.
+    */
     void RemoveEventListener (
         Link& rCallback,
-        EventTypeSet aEventTypeSet = ETS_FULL_SET);
+        EventMultiplexerEvent::EventId aEventTypeSet = EID_FULL_SET);
 
+    /** This method is used for out-of-line events.  An event of the
+        specified type will be sent to all listeners that are registered for
+        that type.
+        @param eEventId
+            The type of the event.
+        @param pUserData
+            Some data sent to the listeners along with the event.
+    */
     void MultiplexEvent(
         EventMultiplexerEvent::EventId eEventId,
-        void* pUserData = 0
-        );
+        void* pUserData = 0);
+
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
