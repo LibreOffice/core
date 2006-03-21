@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:09:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1466,7 +1466,11 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
                pFrm->IsRowFrm() || pFrm->IsCellFrm() ) )
         // <--
         {
-            bRet |= !pFrm->IsValid();
+            // --> FME 2006-02-23 #130744# An invalid locked table frame will
+            // not be calculated => It will not become valid =>
+            // Loop in lcl_CalcLayout(). Therefore we do not consider them for bRet.
+            bRet |= !pFrm->IsValid() && ( !pFrm->IsTabFrm() || !static_cast<SwTabFrm*>(pFrm)->IsJoinLocked() );
+            // <--
             pFrm->Calc();
             if( ((SwLayoutFrm*)pFrm)->Lower() )
                 bRet |= lcl_InnerCalcLayout( ((SwLayoutFrm*)pFrm)->Lower(), nBottom);
