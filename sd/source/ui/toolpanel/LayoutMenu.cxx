@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:05:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,13 +254,15 @@ LayoutMenu::LayoutMenu (
     SetExtraSpacing(2);
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     SetPool (&rDocumentShell.GetDoc()->GetPool());
-
+    SetName(String(RTL_CONSTASCII_USTRINGPARAM("LayoutMenu")));
     InvalidateContent();
 
     Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer().AddEventListener(aEventListenerLink,
-        ::sd::tools::EventMultiplexer::ET_CURRENT_PAGE
-        | ::sd::tools::EventMultiplexer::ET_VIEW);
+        ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
+        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
@@ -270,6 +272,9 @@ LayoutMenu::LayoutMenu (
         aStateChangeLink,
         mrBase.GetController()->getFrame(),
         ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
+
+    // Add this new object as shell to the shell factory.
+    GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
 
 
@@ -277,6 +282,10 @@ LayoutMenu::LayoutMenu (
 
 LayoutMenu::~LayoutMenu (void)
 {
+    // Tell the shell factory that this object is no longer available.
+    if (GetShellManager() != NULL)
+        GetShellManager()->RemoveSubShell(this);
+
     Reference<lang::XComponent> xComponent (mxListener, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
