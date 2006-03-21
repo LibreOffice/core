@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,16 @@
 #define SD_VIEW_SHELL_IMPLEMENTATION_HXX
 
 #include "ViewShell.hxx"
+#include "ViewShellManager.hxx"
+#include "ToolBarManager.hxx"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <memory>
 
 namespace sd {
+
+class DrawController;
 
 /** This class contains (will contain) the implementation of methods that
     have not be accessible from the outside.
@@ -50,6 +58,57 @@ public:
     bool mbIsMainViewShell;
     /// Set to true when the ViewShell::Init() method has been called.
     bool mbIsInitialized;
+    /** Set to true while ViewShell::ArrangeGUIElements() is being
+        executed.  It is used as guard against recursive execution.
+    */
+    bool mbArrangeActive;
+
+    /** Remember a link to the sub shell factory, so that it can be
+        unregistered at the ViewShellManager when a ViewShell is deleted.
+    */
+    ViewShellManager::SharedShellFactory mpSubShellFactory;
+
+    /** This update lock for the ToolBarManager exists in order to avoid
+        problems with tool bars being displayed while the mouse button is
+        pressed.  Whith docked tool bars this can lead to a size change of
+        the view.  This would change the relative mouse coordinates and thus
+        interpret every mouse click as move command.
+    */
+    class ToolBarManagerLock
+    {
+    public:
+        /** Create a new instance.  This allows the mpSelf member to be set
+            automatically.
+        */
+        static ::boost::shared_ptr<ToolBarManagerLock> Create (::sd::ToolBarManager& rManager);
+        /** Release the lock.  When the UI is captured
+            (Application::IsUICaptured() returns <TRUE/>) then the lock is
+            released later asynchronously.
+        */
+        void Release (void);
+        DECL_LINK(TimeoutCallback,Timer*);
+    private:
+        ::std::auto_ptr<sd::ToolBarManager::UpdateLock> mpLock;
+        /** The timer is used both as a safe guard to unlock the update lock
+            when Release() is not called explicitly.  It is also used to
+            defer the release of the lock to a time when the UI is not
+            captured.
+        */
+        Timer maTimer;
+        /** The shared_ptr to this allows the ToolBarManagerLock to control
+            its own lifetime.  This, of course, does work only when no one
+            holds another shared_ptr longer than only temporary.
+        */
+        ::boost::shared_ptr<ToolBarManagerLock> mpSelf;
+        ToolBarManagerLock (::sd::ToolBarManager& rManager);
+        ~ToolBarManagerLock (void);
+
+        class Deleter;
+        friend class Deleter;
+    };
+    // The member is not an auto_ptr because it takes over its own life time
+    // control.
+    ::boost::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
     Implementation (ViewShell& rViewShell);
     ~Implementation (void);
