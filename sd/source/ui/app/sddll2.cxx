@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:24:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,15 +136,6 @@
 #include "diactrl.hxx"
 #include "gluectrl.hxx"
 #include "tbx_ww.hxx"
-#ifndef SD_TEXT_OBJECT_BAR_HXX
-#include "TextObjectBar.hxx"
-#endif
-#ifndef SD_BEZIER_OBJECT_BAR_HXX
-#include "BezierObjectBar.hxx"
-#endif
-#ifndef SD_IMPRESS_OBJECT_BAR_HXX
-#include "ImpressObjectBar.hxx"
-#endif
 #ifndef SD_ANIMATION_CHILD_WINDOW_HXX
 #include "AnimationChildWindow.hxx"
 #endif
