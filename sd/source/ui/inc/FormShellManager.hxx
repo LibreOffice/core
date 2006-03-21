@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:04:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,10 @@
 #ifndef SD_FORM_SHELL_MANAGER_HXX
 #define SD_FORM_SHELL_MANAGER_HXX
 
+#include <ViewShellManager.hxx>
+
 #include <tools/link.hxx>
+#include <svtools/lstner.hxx>
 
 class VclWindowEvent;
 class FmFormShell;
@@ -47,25 +50,58 @@ class PaneManagerEvent;
 class ViewShell;
 class ViewShellBase;
 
-/** This simple class is responsible for putting the form shell at the top
-    or the bottom of the shell stack maintained by the ObjectBarManager.
+/** This simple class is responsible for putting the form shell above or
+    below the main view shell on the shell stack maintained by the ObjectBarManager.
 
-    The form shell is moved to the top of the shell stack when it is
+    The form shell is moved above the view shell when the form shell is
     activated, i.e. the FormControlActivated handler is called.
 
-    It is moved to the bottom of the shell stack when the main window of the
-    view shell displayed in the center pane is focused.
+    It is moved below the view shell when the main window of the
+    main view shell is focused.
+
+    The form shell is created and destroyed by the ViewShellManager by using
+    a factory object provided by the FormShellManager.
 */
 class FormShellManager
+    : public SfxListener
 {
 public:
     FormShellManager (ViewShellBase& rBase);
-    ~FormShellManager (void);
+    virtual ~FormShellManager (void);
+
+    /** Typically called by a ShellFactory.  It tells the
+        FormShellManager which form shell to manage.
+        @param pFormShell
+            This may be <NULL/> to disconnect the ViewShellManager from the
+            form shell.
+    */
+    void SetFormShell (FmFormShell* pFormShell);
+
+    /** Return the form shell last set with SetFormShell().
+        @return
+            The result may be <NULL/> when the SetFormShell() method has not
+            yet been called or was last called with <NULL/>.
+    */
+    FmFormShell* GetFormShell (void);
 
 private:
     ViewShellBase& mrBase;
 
-    enum StackPosition {SP_BELOW_VIEW_SHELL, SP_ABOVE_VIEW_SHELL, SP_UNKNOWN};
+    /** Ownership of the form shell lies with the ViewShellManager.  This
+        reference is kept so that the FormShellManager can detect when a new
+        form shell is passed to SetFormShell().
+    */
+    FmFormShell* mpFormShell;
+
+    /** Remember whether the form shell is currently above or below the main
+        view shell.
+    */
+    bool mbFormShellAboveViewShell;
+
+    /** The factory is remembered so that it removed from the
+        ViewShellManager when the FormShellManager is destroyed.
+    */
+    ViewShellManager::SharedShellFactory mpSubShellFactory;
 
     /** Register at window of center pane and at the form shell that
         represents the form tool bar.  The former informs this manager about
@@ -78,12 +114,6 @@ private:
         RegisterAtCenterPane().
     */
     void UnregisterAtCenterPane (void);
-
-    /** Remember whether the form shell is currently at the top of the shell
-        stack or below the view shell.  Until one of the event handlers is
-        called the stack position is unknown.
-    */
-    StackPosition meStackPosition;
 
     /** This call back is called by the application window (among others)
         when the window gets the focus.  In this case the form shell is
@@ -101,6 +131,17 @@ private:
         In this case the form shell is moved to the top of the shell stack.
     */
     DECL_LINK(FormControlActivated, FmFormShell*);
+
+    /** This method is called by the form shell when that is destroyed.  It
+        acts as a last resort against referencing a dead form shell.  With
+        the factory working properly this method should not be necessary
+        (and may be removed in the future.)
+    */
+    virtual void SFX_NOTIFY(
+        SfxBroadcaster& rBC,
+        const TypeId& rBCType,
+        const SfxHint& rHint,
+        const TypeId& rHintType);
 };
 
 } // end of namespace sd
