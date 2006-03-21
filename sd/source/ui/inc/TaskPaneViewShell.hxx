@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:17:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@
 #ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
 #endif
+
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class PopupMenu;
 
@@ -116,11 +118,6 @@ public:
 
     virtual void ArrangeGUIElements (void);
 
-    virtual void GetLowerShellList (
-        ::std::vector<SfxShell*>& rShellList) const;
-    virtual void GetUpperShellList (
-        ::std::vector<SfxShell*>& rShellList) const;
-
     TaskPaneShellManager& GetSubShellManager (void) const;
 
     /** Called when a mouse button has been pressed but not yet
@@ -140,6 +137,8 @@ public:
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
+    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
+
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
@@ -151,7 +150,7 @@ private:
 
     bool mbIsInitialized;
 
-    mutable ::std::auto_ptr<TaskPaneShellManager> mpSubShellManager;
+    ::boost::shared_ptr<TaskPaneShellManager> mpSubShellManager;
 
     /** The id of the menu in the menu bar/tool box of the parent docking
         window.
