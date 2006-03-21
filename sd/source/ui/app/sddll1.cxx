@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,11 @@
 #ifndef SD_BEZIER_OBJECT_BAR_HXX
 #include "BezierObjectBar.hxx"
 #endif
-#ifndef SD_GLUE_POINTS_OBJECT_BAR_HXX
-#include "GluePointsObjectBar.hxx"
-#endif
 #ifndef SD_GRAPHIC_OBJECT_BAR_HXX
 #include "GraphicObjectBar.hxx"
 #endif
 #ifndef SD_MEDIA_OBJECT_BAR_HXX
 #include "MediaObjectBar.hxx"
-#endif
-#ifndef SD_DRAW_OBJECT_BAR_HXX
-#include "DrawObjectBar.hxx"
-#endif
-#ifndef SD_IMPRESS_OBJECT_BAR_HXX
-#include "ImpressObjectBar.hxx"
 #endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
@@ -168,14 +159,9 @@ void SdDLL::RegisterInterfaces()
     ::sd::GraphicViewShell::RegisterInterface(pMod);
 
     // Impress ObjectShells
-    ::sd::ImpressObjectBar::RegisterInterface(pMod);
     ::sd::BezierObjectBar::RegisterInterface(pMod);
-    ::sd::GluePointsObjectBar::RegisterInterface(pMod);
     ::sd::TextObjectBar::RegisterInterface(pMod);
     ::sd::GraphicObjectBar::RegisterInterface(pMod);
-
-    // Draw ObjectShell
-    ::sd::DrawObjectBar::RegisterInterface(pMod);
 
     // Media ObjectShell
     ::sd::MediaObjectBar::RegisterInterface(pMod);
