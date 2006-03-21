@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #include <memory>
 #include <vector>
@@ -73,12 +73,11 @@ class SdXImpressDocument;
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper5  <
+typedef ::cppu::ImplInheritanceHelper4 <
     SfxBaseController,
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawView,
-    ::com::sun::star::awt::XWindow,
     ::com::sun::star::view::XSelectionChangeListener
     > DrawControllerInterfaceBase;
 
@@ -100,11 +99,11 @@ class ViewShellBase;
 class ViewShell;
 class View;
 
-/** The DrawController is the base class of the specialzed controllers that
-    represent the center pane of the Multi Pane GUI.
 
-    At the moment the side panes do not have controllers.
-
+/** The DrawController is the UNO controller for Impress and Draw.  It
+    relies objects that implement the DrawSubController interface for view
+    specific behaviour.  The life time of the DrawController is roughly that
+    of ViewShellBase.
 */
 class DrawController
     : public DrawControllerInterfaceBase,
@@ -116,30 +115,55 @@ public:
     {
         PROPERTY__BEGIN = 0,
         PROPERTY_WORKAREA = PROPERTY__BEGIN,
+        PROPERTY_CURRENTPAGE,
+        PROPERTY_MASTERPAGEMODE,
+        PROPERTY_LAYERMODE,
+        PROPERTY_ACTIVE_LAYER,
+        PROPERTY_ZOOMTYPE,
+        PROPERTY_ZOOMVALUE,
+        PROPERTY_VIEWOFFSET,
         PROPERTY__END
     };
 
-    DrawController (
-        ViewShellBase& rBase,
-        ViewShell& rViewShell,
-        View& rView) throw();
+    /** Create a new DrawController object for the given ViewShellBase.
+    */
+    DrawController (ViewShellBase& rBase) throw();
+
     virtual ~DrawController (void) throw();
 
-    /** Call this method when the ViewShell that was given to the
-        constructor is destroyed.  The controller is owned by the frame and
-        is disposed by it and as a result may live longer than the view
-        shell.  As a result both mpViewShell and mpView are set to NULL.
+    /** Replace the currently used sub controller with the given one.  This
+        new sub controller is used from now on for the view (that is the
+        main view shell to be precise) specific tasks.  Call this method
+        with a suitable sub controller whenever the view shell in the center
+        pane is exchanged.
+        @param pSubController
+            The ViewShell specific sub controller or NULL when (temporarily
+            while switching to another one) there is no ViewShell displayed
+            in the center pane.
     */
-    void DetachFromViewShell (void);
+    void SetSubController (::std::auto_ptr<DrawSubController> pSubController);
 
     ::com::sun::star::awt::Rectangle GetVisArea (void) const;
 
-    virtual void FireVisAreaChanged (const Rectangle& rVisArea) throw();
-
-    /** Call this method to tell the sub-controller that the selection
-        has changed.
+    /** Call this method when the VisArea has changed.
     */
-    virtual void FireSelectionChangeListener (void) throw();
+    void FireVisAreaChanged (const Rectangle& rVisArea) throw();
+
+    /** Call this method when the selection has changed.
+    */
+    void FireSelectionChangeListener (void) throw();
+
+    /** Call this method when the edit mode has changed.
+    */
+    void FireChangeEditMode (bool bMasterPageMode) throw();
+
+    /** Call this method when the layer mode has changed.
+    */
+    void FireChangeLayerMode (bool bLayerMode) throw();
+
+    /** Call this method when there is a new current page.
+    */
+    void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -163,25 +187,6 @@ public:
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XWindow
-    virtual void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setFocus(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 
     // XDrawView
@@ -209,44 +214,10 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /** The pointer to the view may be NULL.  See documentation of
-        mpViewShell.
-    */
-    View* mpView;
-
-    /** The view shell may be NULL.  This is the case e.g. when the view in
-        the center pane is switched and the old view shell is destroyed.
-        The controller is owned by the frame and remains alive.
-    */
-    ViewShell* mpViewShell;
-
-    /** The shell type is stored here in an extra member instead of taking
-        it every time it is used from the view shell because when the view
-        shell is detached from the controller we still need to access the
-        shell type in order to give the same answer to questions of
-        supported services.  The list of supported services must not change
-        during the lifetime of an uno object.
-    */
-    ViewShell::ShellType meViewShellType;
-
-    Rectangle maLastVisArea;
-
     /** This method must return the name to index table. This table
         contains all property names and types of this object.
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    /** Send an event to all relevant property listeners that a
-        property has changed its value.  The fire() method of the
-        OPropertySetHelper is wrapped by this method to handle
-        exceptions thrown by called listeners.
-    */
-    void FirePropertyChange (
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue);
-
-    SdXImpressDocument* GetModel (void) const throw();
 
     virtual void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);
@@ -259,16 +230,19 @@ protected:
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
 
-    /**
-     * Converted the value rValue and return the result in rConvertedValue and the
-     * old value in rOldValue. A IllegalArgumentException is thrown.
-     * The method is not implemented in this class. After this call the vetoable
-     * listeners are notified.
-     *
-     * @param rConvertedValue the converted value. Only set if return is true.
-     * @param rOldValue the old value. Only set if return is true.
-     * @param nHandle the handle of the proberty.
-     * @return true if the value converted.
+    /** Convert the value rValue and return the result in rConvertedValue and the
+        old value in rOldValue.
+        After this call the vetoable listeners are notified.
+
+        @param rConvertedValue
+            The converted value. Only set if return is true.
+        @param rOldValue
+            The old value. Only set if return is true.
+        @param nHandle
+            The handle of the proberty.
+        @return
+            <TRUE/> if the value is converted successfully.
+        @throws IllegalArgumentException
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         ::com::sun::star::uno::Any & rConvertedValue,
@@ -277,10 +251,8 @@ protected:
         const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::lang::IllegalArgumentException);
 
-    /**
-     * The same as setFastProperyValue, but no exception is thrown and nHandle
-     * is always valid. You must not broadcast the changes in this method.<BR>
-     * <B>You type is correct you need't test it.</B>
+    /** The same as setFastProperyValue, but no exception is thrown and nHandle
+        is always valid. You must not broadcast the changes in this method.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
@@ -296,15 +268,31 @@ protected:
 private:
     ViewShellBase& mrBase;
 
-    /** This flag indicates that an object is either disposing or has
-        already been disposed.
+    Rectangle maLastVisArea;
+    SdPage* mpCurrentPage;
+    bool mbMasterPageMode;
+    bool mbLayerMode;
+
+    /** This flag indicates whether the called DrawController is being
+        disposed or already has been disposed.
     */
     bool mbDisposing;
 
     ::std::auto_ptr< ::cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
-        GetWindow (void);
+    /** The current sub controller.  May be NULL.
+    */
+    ::std::auto_ptr<DrawSubController> mpSubController;
+
+    /** Send an event to all relevant property listeners that a
+        property has changed its value.  The fire() method of the
+        OPropertySetHelper is wrapped by this method to handle
+        exceptions thrown by called listeners.
+    */
+    void FirePropertyChange (
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rNewValue,
+        const ::com::sun::star::uno::Any& rOldValue);
 };
 
 } // end of namespace sd
