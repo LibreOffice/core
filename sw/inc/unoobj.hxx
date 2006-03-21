@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:02 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 15:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,6 +423,13 @@ class SwXTextCursor : public SwXTextCursor_Base,
 
     CursorType                  eType;
 
+    // --> FME 2006-03-07 #126177# We need to track if the RemoveCursor_Impl
+    // user event has been posted. In this case we have to remove the user
+    // event in ~SwXTextCursor().
+    ULONG mnUserEventId;
+    bool mbRemoveUserEvent;
+    // <--
+
     void    DeleteAndInsert(const String& rText);
 
     DECL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
@@ -570,6 +577,10 @@ public:
     static sal_Bool     convertSortProperties(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor,
                             SwSortOptions& rSortOpt);
+
+    // --> FME 2006-03-07 #126177#
+    void DoNotRemoveUserEvent() { mbRemoveUserEvent = false; }
+    // <--
 };
 /*-----------------20.03.98 07:47-------------------
 
