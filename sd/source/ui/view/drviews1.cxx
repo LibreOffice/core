@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:57:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #include "DrawViewShell.hxx"
 #include "ViewShellImplementation.hxx"
+
+#include "DrawController.hxx"
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -148,9 +150,10 @@
 #include "AnimationChildWindow.hxx"
 #endif
 #include "SdUnoDrawView.hxx"
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
+#include "FormShellManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -159,7 +162,6 @@
 #endif
 #include "LayerTabBar.hxx"
 #include "ViewShellManager.hxx"
-#include "UpdateLockManager.hxx"
 #include "ViewShellHint.hxx"
 
 #include <sfx2/request.hxx>
@@ -169,33 +171,13 @@
 #pragma optimize ( "", off )
 #endif
 
-namespace {
-static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
-    ::rtl::OUString::createFromAscii("masterviewtoolbar"));
-}
-
 using namespace com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Activate(), beim ersten Aufruf wird eine Shell fuer den Object Bar erzeugt
-|*
-\************************************************************************/
-
 void DrawViewShell::Activate(BOOL bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
-
-    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
-    {
-        // When no object bars are active then activate some.
-        ObjectBarManager& rObjectBarManager (GetObjectBarManager());
-        if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
-            rObjectBarManager.SwitchObjectBar (
-                rObjectBarManager.GetDefaultObjectBarId());
-    }
 }
 
 void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
@@ -227,10 +209,6 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 
 void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
-    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
-    {
-    }
-
     ViewShell::Deactivate(bIsMDIActivate);
 }
 
@@ -242,8 +220,6 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 
 void DrawViewShell::SelectionHasChanged (void)
 {
-    ObjectBarManager & rObjectBarManager = GetObjectBarManager();
-
     // Um die Performance zu steigern wird jetzt die komplette
     // Shell invalidiert statt alle Slots einzeln
     Invalidate();
@@ -351,19 +327,18 @@ void DrawViewShell::SelectionHasChanged (void)
     }
     else
     {
-        GetObjectBarManager().SelectionHasChanged (pDrView);
+        GetViewShellBase().GetToolBarManager().SelectionHasChanged(*this,*pDrView);
     }
 
     // #96124# Invalidate for every subshell
-    rObjectBarManager.InvalidateAllObjectBars();
+    GetViewShellBase().GetViewShellManager().InvalidateAllSubShells(this);
 
     if( SFX_APP()->GetHelpPI() )
         SetHelpIdBySelection();
 
     pDrView->UpdateSelectionClipboard( FALSE );
 
-    if (GetController() != NULL)
-        GetController()->FireSelectionChangeListener();
+    GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 }
 
 
@@ -450,13 +425,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         USHORT nActualPageNum = 0;
 
-        SdUnoDrawView* pController =
-            static_cast<SdUnoDrawView*>(GetController());
-        if (pController != NULL)
-        {
-            pController->FireChangeEditMode (eEMode == EM_MASTERPAGE);
-            pController->FireChangeLayerMode (bIsLayerModeActive);
-        }
+        GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EM_MASTERPAGE);
+        GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
 
         if ( pDrView->IsTextEdit() )
         {
@@ -489,7 +459,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             && IsMainViewShell()
             && ! bShowMasterViewToolbar)
         {
-            GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+            GetViewShellBase().GetToolBarManager().ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
         }
 
         if (eEditMode == EM_PAGE)
@@ -562,7 +532,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             && IsMainViewShell()
             && bShowMasterViewToolbar)
         {
-            GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+            GetViewShellBase().GetToolBarManager().SetToolBar(
+                ToolBarManager::TBG_MASTER_MODE,
+                ToolBarManager::msMasterViewToolBar);
         }
 
         if ( ! mbIsLayerModeActive)
@@ -962,6 +934,8 @@ BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
     if ( !GetDocSh()->IsUIActive() )
     {
+        ToolBarManager::UpdateLock aLock (GetViewShellBase().GetToolBarManager());
+
         bActivated = ViewShell::ActivateObject(pObj, nVerb);
 
         OSL_ASSERT(GetViewShell()!=NULL);
@@ -1162,10 +1136,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
             pDrView->HideAllPages();
             pDrView->ShowPage(pActualPage, Point(0, 0));
-            SdUnoDrawView* pController =
-                static_cast<SdUnoDrawView*>(GetController());
-            if (pController != NULL)
-                pController->FireSwitchCurrentPage (pActualPage);
+            GetViewShellBase().GetDrawController().FireSwitchCurrentPage(pActualPage);
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1234,10 +1205,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             USHORT nNum = pMaster->GetPageNum();
             pDrView->ShowMasterPagePgNum(nNum, Point(0, 0));
 
-            SdUnoDrawView* pController =
-                static_cast<SdUnoDrawView*>(GetController());
-            if (pController != NULL)
-                pController->FireSwitchCurrentPage (pMaster);
+            GetViewShellBase().GetDrawController().FireSwitchCurrentPage(pMaster);
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1329,8 +1297,7 @@ BOOL DrawViewShell::IsSwitchPageAllowed() const
 {
     bool bOK = true;
 
-    FmFormShell* pFormShell = static_cast<FmFormShell*>(
-        GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
     if (pFormShell!=NULL && !pFormShell->PrepareClose (FALSE))
         bOK = false;
 
