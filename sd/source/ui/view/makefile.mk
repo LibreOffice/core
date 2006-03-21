@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-01 18:40:36 $
+#   last change: $Author: obo $ $Date: 2006-03-21 17:46:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,11 @@ EXCEPTIONSFILES=				\
         $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
         $(SLO)$/viewshe2.obj \
-        $(SLO)$/ObjectBarManager.obj	\
         $(SLO)$/PaneManager.obj			\
+        $(SLO)$/ToolBarManager.obj		\
         $(SLO)$/UpdateLockManager.obj	\
-        $(SLO)$/ViewShellBase.obj
+        $(SLO)$/ViewShellBase.obj		\
+        $(SLO)$/ViewShellManager.obj
 
 EXCEPTIONSNOOPTFILES=\
         $(SLO)$/drviews5.obj\
@@ -115,7 +116,6 @@ SLOFILES =	\
         $(SLO)$/showview.obj \
         $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
-        $(SLO)$/drglueob.obj	\
         $(SLO)$/drtxtob.obj	\
         $(SLO)$/drtxtob1.obj	\
         $(SLO)$/sdruler.obj	\
@@ -123,13 +123,10 @@ SLOFILES =	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
-        $(SLO)$/DrawObjectBar.obj				\
         $(SLO)$/FormShellManager.obj			\
         $(SLO)$/GraphicObjectBar.obj			\
         $(SLO)$/GraphicViewShellBase.obj		\
-        $(SLO)$/ImpressObjectBar.obj			\
         $(SLO)$/MediaObjectBar.obj				\
-        $(SLO)$/ObjectBarManager.obj			\
         $(SLO)$/Outliner.obj					\
         $(SLO)$/OutlinerIterator.obj			\
         $(SLO)$/OutlineViewShellBase.obj		\
@@ -137,12 +134,12 @@ SLOFILES =	\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
         $(SLO)$/PrintManager.obj				\
+        $(SLO)$/ToolBarManager.obj				\
         $(SLO)$/UpdateLockManager.obj			\
         $(SLO)$/ViewClipboard.obj				\
         $(SLO)$/ViewShellBase.obj				\
         $(SLO)$/ViewShellImplementation.obj		\
         $(SLO)$/ViewShellManager.obj			\
-        $(SLO)$/ViewShellCache.obj				\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj
