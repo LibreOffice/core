@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:30:59 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,9 @@
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
@@ -141,8 +144,8 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
+#ifndef SD_TOOL_BAR_MANAGER_HXX
+#include "ToolBarManager.hxx"
 #endif
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
@@ -270,7 +273,9 @@ void FuText::disposing()
 \************************************************************************/
 void FuText::DoExecute( SfxRequest& rReq )
 {
-    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_TEXT_TOOLBOX);
+    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBarShell(
+        ToolBarManager::TBG_FUNCTION,
+        RID_DRAW_TEXT_TOOLBOX);
 
     pView->SetCurrentObj(OBJ_TEXT);
     pView->SetEditMode(SDREDITMODE_EDIT);
