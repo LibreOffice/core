@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:27:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-21 17:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
+#include <svx/eeitem.hxx>
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
@@ -114,13 +115,14 @@
 #ifndef SD_UNO_DRAW_VIEW_HXX
 #include "SdUnoDrawView.hxx"
 #endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#ifndef SD_FORM_SHELL_MANAGER_HXX
+#include "FormShellManager.hxx"
+#endif
 #include "LayerDialogContent.hxx"
+#include "DrawController.hxx"
 
 namespace sd {
 
@@ -690,8 +692,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
 
 void DrawViewShell::HidePage(SdrPageView* pPV)
 {
-    FmFormShell* pFormShell = static_cast<FmFormShell*>(
-        GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
     if (pFormShell != NULL)
         pFormShell->PrepareClose (FALSE);
 }
@@ -785,9 +786,8 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    DrawController* pController = GetController();
-    if (pController != NULL)
-        pController->FireVisAreaChanged (rRect);
+    DrawController& rController = GetViewShellBase().GetDrawController();
+    rController.FireVisAreaChanged (rRect);
 }
 
 
