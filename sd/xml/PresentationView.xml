@@ -4,7 +4,7 @@
     <module-name>sd</module-name>
     <component-description>
         <author>Christian Lippka</author>
-        <name>SdUnoPresView</name>
+        <name>DrawController_PresentationView</name>
         <description>
 This componend integrates a view to a slide show of a presentation
     document into the desktop.
@@ -12,6 +12,6 @@ This componend integrates a view to a slide show of a presentation
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com::sun::star::presentation::PresentationView</supported-service>
+        <supported-service>com::sun::star::drawing::DrawingDocumentDrawView</supported-service>
     </component-description>
 </module-description>
