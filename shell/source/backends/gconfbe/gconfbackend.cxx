@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:46:33 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,9 @@
 
 #include "gconfbackend.hxx"
 
-#ifndef GCONFCOMMONLAYER_HXX_
-#include "gconfcommonlayer.hxx"
-#endif
-
-#ifndef GCONFINETLAYER_HXX_
-#include "gconfinetlayer.hxx"
-#endif
-
-#ifndef GCONFVCLLAYER_HXX_
-#include "gconfvcllayer.hxx"
-#endif
+#ifndef GCONFLAYER_HXX_
+#include "gconflayer.hxx"
+#endif // GCONFLAYER_HXX_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_COMPONENTCHANGEEVENT_HPP_
 #include <com/sun/star/configuration/backend/ComponentChangeEvent.hpp>
@@ -72,6 +64,493 @@
 #endif
 
 #include <stdio.h>
+
+#ifdef ENABLE_LOCKDOWN
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue SetupConfigurationValuesList[] =
+{
+    {
+        SETTING_WRITER_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/writer_default_document_format",
+        "org.openoffice.Setup/Office/Factories/com.sun.star.text.TextDocument/ooSetupFactoryDefaultFilter",
+        "string",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_IMPRESS_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/impress_default_document_format",
+        "org.openoffice.Setup/Office/Factories/com.sun.star.presentation.PresentationDocument/ooSetupFactoryDefaultFilter",
+        "string",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_CALC_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/calc_default_document_format",
+        "org.openoffice.Setup/Office/Factories/com.sun.star.sheet.SpreadsheetDocument/ooSetupFactoryDefaultFilter",
+        "string",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+};
+#endif // ENABLE_LOCKDOWN
+
+#ifdef ENABLE_LOCKDOWN
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue RecoveryConfigurationValuesList[] =
+{
+    {
+        SETTING_AUTO_SAVE,
+        GCONF_AUTO_SAVE_KEY,
+        "org.openoffice.Office.Recovery/AutoSave/Enabled",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_AUTO_SAVE_INTERVAL,
+        "/apps/openoffice/auto_save_interval",
+        "org.openoffice.Office.Recovery/AutoSave/TimeIntervall",
+        "int",
+        sal_False,
+        sal_False,
+        SETTING_AUTO_SAVE
+    },
+};
+#endif // ENABLE_LOCKDOWN
+
+/*
+ * This should be in a different backend actually, but this has to wait ..
+ */
+
+#ifdef ENABLE_LOCKDOWN
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue UserProfileConfigurationValuesList[] =
+{
+    {
+        SETTING_USER_GIVENNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy, needed for getTimestamp
+        "org.openoffice.UserProfile/Data/givenname",
+        "string",
+        sal_False,
+        sal_True,
+        SETTING_USER_GIVENNAME
+    },
+
+    {
+        SETTING_USER_SURNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy, needed for getTimestamp
+        "org.openoffice.UserProfile/Data/sn",
+        "string",
+        sal_False,
+        sal_True,
+        SETTING_USER_SURNAME
+    },
+};
+#endif // ENABLE_LOCKDOWN
+
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue VCLConfigurationValuesList[] =
+{
+    {
+        SETTING_ENABLE_ACCESSIBILITY,
+        "/desktop/gnome/interface/accessibility",
+        "org.openoffice.VCL/Settings/Accessibility/EnableATToolSupport",
+        "string",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+#ifdef ENABLE_LOCKDOWN
+
+    {
+        SETTING_DISABLE_PRINTING,
+        "/desktop/gnome/lockdown/disable_printing",
+        "org.openoffice.VCL/Settings/DesktopManagement/DisablePrinting",
+        "string",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+#endif // ENABLE_LOCKDOWN
+
+};
+
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue InetConfigurationValuesList[] =
+{
+    {
+        SETTING_PROXY_MODE,
+        GCONF_PROXY_MODE_KEY,
+        "org.openoffice.Inet/Settings/ooInetProxyType",
+        "int",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_PROXY_HTTP_HOST,
+        "/system/http_proxy/host",
+        "org.openoffice.Inet/Settings/ooInetHTTPProxyName",
+        "string",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_HTTP_PORT,
+        "/system/http_proxy/port",
+        "org.openoffice.Inet/Settings/ooInetHTTPProxyPort",
+        "int",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_FTP_HOST,
+        "/system/proxy/ftp_host",
+        "org.openoffice.Inet/Settings/ooInetFTPProxyName",
+        "string",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_FTP_PORT,
+        "/system/proxy/ftp_port",
+        "org.openoffice.Inet/Settings/ooInetFTPProxyPort",
+        "int",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+};
+
+// each entry should have an identifying ConfigurationSetting
+static const ConfigurationValue CommonConfigurationValuesList[] =
+{
+    {
+        SETTING_MAILER_PROGRAM,
+        "/desktop/gnome/url-handlers/mailto/command",
+        "org.openoffice.Office.Common/ExternalMailer/Program",
+        "string",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+/*
+ * This should be in a different backend actually, but this has to wait ..
+ */
+
+    {
+        SETTING_WORK_DIRECTORY,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy, needed for getTimestamp
+        "org.openoffice.Office.Common/Path/Current/Work",
+        "string",
+        sal_False,
+        sal_True,
+        SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
+    },
+
+#ifdef ENABLE_LOCKDOWN
+
+    {
+        SETTING_USE_SYSTEM_FILE_DIALOG,
+        "/apps/openoffice/use_system_file_dialog",
+        "org.openoffice.Office.Common/Misc/UseSystemFileDialog",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_DISABLE_UI_CUSTOMIZATION,
+        "/apps/openoffice/lockdown/disable_ui_customization",
+        "org.openoffice.Office.Common/Misc/DisableUICustomization",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_PRINTING_MODIFIES_DOCUMENT,
+        "/apps/openoffice/printing_modifies_doc",
+        "org.openoffice.Office.Common/Print/PrintingModifiesDocument",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_ICONS_IN_MENUS,
+        "/apps/openoffice/show_menu_icons",
+        "org.openoffice.Office.Common/View/Menu/ShowIconsInMenues",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_INACTIVE_MENUITEMS,
+        "/apps/openoffice/show_menu_inactive_items",
+        "org.openoffice.Office.Common/View/Menu/DontHideDisabledEntry",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_FONT_PREVIEW,
+        "/apps/openoffice/show_font_preview",
+        "org.openoffice.Office.Common/Font/View/ShowFontBoxWYSIWYG",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_FONT_HISTORY,
+        "/apps/openoffice/show_font_history",
+        "org.openoffice.Office.Common/Font/View/History",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_ENABLE_OPENGL,
+        "/apps/openoffice/use_opengl",
+        "org.openoffice.Office.Common/_3D_Engine/OpenGL",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_OPTIMIZE_OPENGL,
+        "/apps/openoffice/optimize_opengl",
+        "org.openoffice.Office.Common/_3D_Engine/OpenGL_Faster",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USE_SYSTEM_FONT,
+        "/apps/openoffice/use_system_font",
+        "org.openoffice.Office.Common/Accessibility/IsSystemFont",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USE_FONT_ANTI_ALIASING,
+        "/apps/openoffice/use_font_anti_aliasing",
+        "org.openoffice.Office.Common/View/FontAntiAliasing/Enabled",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_FONT_ANTI_ALIASING_MIN_PIXEL,
+        "/apps/openoffice/font_anti_aliasing_min_pixel",
+        "org.openoffice.Office.Common/View/FontAntiAliasing/MinPixelHeight",
+        "short",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_CREATE_PDF,
+        "/apps/openoffice/lockdown/warn_info_create_pdf",
+        "org.openoffice.Office.Common/Security/Scripting/WarnCreatePDF",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_PRINT_DOC,
+        "/apps/openoffice/lockdown/warn_info_printing",
+        "org.openoffice.Office.Common/Security/Scripting/WarnPrintDoc",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_SAVEORSEND_DOC,
+        "/apps/openoffice/lockdown/warn_info_saving",
+        "org.openoffice.Office.Common/Security/Scripting/WarnSaveOrSendDoc",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_SIGN_DOC,
+        "/apps/openoffice/lockdown/warn_info_signing",
+        "org.openoffice.Office.Common/Security/Scripting/WarnSignDoc",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_REMOVE_PERSONAL_INFO,
+        "/apps/openoffice/lockdown/remove_personal_info_on_save",
+        "org.openoffice.Office.Common/Security/Scripting/RemovePersonalInfoOnSaving",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_RECOMMEND_PASSWORD,
+        "/apps/openoffice/lockdown/recommend_password_on_save",
+        "org.openoffice.Office.Common/Security/Scripting/RecommendPasswordProtection",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_UNDO_STEPS,
+        "/apps/openoffice/undo_steps",
+        "org.openoffice.Office.Common/Undo/Steps",
+        "int",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SYMBOL_SET,
+        "/apps/openoffice/icon_size",
+        "org.openoffice.Office.Common/Misc/SymbolSet",
+        "short",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_MACRO_SECURITY_LEVEL,
+        "/apps/openoffice/lockdown/macro_security_level",
+        "org.openoffice.Office.Common/Security/Scripting/MacroSecurityLevel",
+        "int",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_CREATE_BACKUP,
+        "/apps/openoffice/create_backup",
+        "org.openoffice.Office.Common/Save/Document/CreateBackup",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_ALIEN_FORMAT,
+        "/apps/openoffice/warn_alien_format",
+        "org.openoffice.Office.Common/Save/Document/WarnAlienFormat",
+        "boolean",
+        sal_False,
+        sal_False,
+        SETTINGS_LAST
+    },
+
+#endif // ENABLE_LOCKDOWN
+
+};
+
+#ifdef ENABLE_LOCKDOWN
+static const char * SetupPreloadValuesList[] =
+{
+    "/apps/openoffice",
+    NULL
+};
+#endif // ENABLE_LOCKDOWN
+
+#ifdef ENABLE_LOCKDOWN
+static const char * RecoveryPreloadValuesList[] =
+{
+    "/apps/openoffice",
+    NULL
+};
+#endif // ENABLE_LOCKDOWN
+
+#ifdef ENABLE_LOCKDOWN
+static const char * UserProfilePreloadValuesList[] =
+{
+    NULL
+};
+#endif // ENABLE_LOCKDOWN
+
+static const char * VCLPreloadValuesList[] =
+{
+    "/desktop/gnome/interface",
+#ifdef ENABLE_LOCKDOWN
+    "/desktop/gnome/lockdown",
+#endif // ENABLE_LOCKDOWN
+    NULL
+};
+
+static const char * InetPreloadValuesList[] =
+{
+    "/system/proxy",
+    "/system/http_proxy/host",
+    NULL
+};
+
+static const char * CommonPreloadValuesList[] =
+{
+    "/desktop/gnome/url-handlers/mailto",
+#ifdef ENABLE_LOCKDOWN
+    "/apps/openoffice/lockdown",
+    "/apps/openoffice",
+#endif // ENABLE_LOCKDOWN
+    NULL
+};
 
 //==============================================================================
 
@@ -167,16 +646,49 @@ uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
 
     if( aComponent.equalsAscii("org.openoffice.Office.Common" ) )
     {
-        xLayer = new GconfCommonLayer(m_xContext);
+        xLayer = new GconfLayer( m_xContext,
+                                 CommonConfigurationValuesList,
+                                 G_N_ELEMENTS( CommonConfigurationValuesList ),
+                                 CommonPreloadValuesList );
     }
     else if( aComponent.equalsAscii("org.openoffice.Inet" ) )
     {
-        xLayer = new GconfInetLayer(m_xContext);
+        xLayer = new GconfLayer( m_xContext,
+                                 InetConfigurationValuesList,
+                                 G_N_ELEMENTS( InetConfigurationValuesList ),
+                                 InetPreloadValuesList );
     }
     else if( aComponent.equalsAscii("org.openoffice.VCL" ) )
     {
-        xLayer = new GconfVCLLayer(m_xContext);
+        xLayer = new GconfLayer( m_xContext,
+                                 VCLConfigurationValuesList,
+                                 G_N_ELEMENTS( VCLConfigurationValuesList ),
+                                 VCLPreloadValuesList );
     }
+
+#ifdef ENABLE_LOCKDOWN
+    else if( aComponent.equalsAscii("org.openoffice.UserProfile" ) )
+    {
+        xLayer = new GconfLayer( m_xContext,
+                                 UserProfileConfigurationValuesList,
+                                 G_N_ELEMENTS( UserProfileConfigurationValuesList ),
+                                 UserProfilePreloadValuesList );
+    }
+    else if( aComponent.equalsAscii("org.openoffice.Office.Recovery" ) )
+    {
+        xLayer = new GconfLayer( m_xContext,
+                                 RecoveryConfigurationValuesList,
+                                 G_N_ELEMENTS( RecoveryConfigurationValuesList ),
+                                 RecoveryPreloadValuesList );
+    }
+    else if( aComponent.equalsAscii("org.openoffice.Setup" ) )
+    {
+        xLayer = new GconfLayer( m_xContext,
+                                 SetupConfigurationValuesList,
+                                 G_N_ELEMENTS( SetupConfigurationValuesList ),
+                                 SetupPreloadValuesList );
+    }
+#endif // ENABLE_LOCKDOWN
 
     return xLayer;
 }
@@ -434,13 +946,29 @@ uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getBackendServiceNames(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
 {
-    uno::Sequence<rtl::OUString> aSupportedComponentsList(3) ;
+#ifdef ENABLE_LOCKDOWN
+    const sal_Int32 nComponents = 6;
+#else
+    const sal_Int32 nComponents = 3;
+#endif // ENABLE_LOCKDOWN
+
+    uno::Sequence<rtl::OUString> aSupportedComponentsList(nComponents) ;
+
     aSupportedComponentsList[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.VCL")) ;
     aSupportedComponentsList[1] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
     aSupportedComponentsList[2] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
+
+#ifdef ENABLE_LOCKDOWN
+    aSupportedComponentsList[3] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")) ;
+    aSupportedComponentsList[4] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")) ;
+    aSupportedComponentsList[5] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")) ;
+#endif // ENABLE_LOCKDOWN
 
     return aSupportedComponentsList ;
 }
