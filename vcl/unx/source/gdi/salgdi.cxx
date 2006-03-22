@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:57:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,7 +513,7 @@ USHORT X11SalGraphics::GetBitCount() // const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-long X11SalGraphics::GetGraphicsWidth()
+long X11SalGraphics::GetGraphicsWidth() const
 {
     if( m_pFrame )
         return m_pFrame->maGeometry.nWidth;
