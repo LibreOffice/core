@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:20:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2613,6 +2613,20 @@ void Desktop::OpenClients()
                     aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
                 else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
                     aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+            }
+
+            // check for printing disabled
+            if( ( aRequest.aPrintList.getLength() || aRequest.aPrintToList.getLength() )
+                && Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
+            {
+                aRequest.aPrintList = rtl::OUString();
+                aRequest.aPrintToList = rtl::OUString();
+                ResMgr* pDtResMgr = GetDesktopResManager();
+                if( pDtResMgr )
+                {
+                    ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, pDtResMgr ) );
+                    aBox.Execute();
+                }
             }
 
             // Process request
