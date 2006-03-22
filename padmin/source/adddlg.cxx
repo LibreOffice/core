@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:40:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,19 +171,16 @@ void APChooseDriverPage::updateDrivers()
         delete (String*)m_aDriverBox.GetEntryData( k );
     m_aDriverBox.Clear();
 
-    String aPathList = ::psp::getPrinterPath();
-    int nTokens = aPathList.GetTokenCount( ':' );
-    for( int i = 0; i < nTokens; i++ )
+    std::list< rtl::OUString > aPathList;
+    psp::getPrinterPathList( aPathList, PSPRINT_PPDDIR );
+    for( std::list<rtl::OUString>::const_iterator path_it = aPathList.begin();
+         path_it != aPathList.end(); ++path_it )
     {
-        String aPath( aPathList.GetToken( i, ':' ) );
-        if( aPath.GetChar( aPath.Len() ) != '/' )
-            aPath.AppendAscii( "/" );
-        aPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( PSPRINT_PPDDIR ) ) );
-        if( access( ByteString( aPath, aEncoding ).GetBuffer(), F_OK ) )
+        if( access( OUStringToOString( *path_it, aEncoding ).getStr(), F_OK ) )
             continue;
 
         ::std::list< String > aFiles;
-        FindFiles( aPath, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD" ) ) );
+        FindFiles( *path_it, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD" ) ) );
 
         for( ::std::list< String >::const_iterator it = aFiles.begin(); it != aFiles.end(); ++it )
         {
@@ -290,16 +287,9 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         rPIManager.removePrinter( *it );
                 }
 
-                ::std::list< String > aDirs;
-                String aPathList( ::psp::getPrinterPath() );
-                int nTokens = aPathList.GetTokenCount( ':' );
-                for( int n = 0; n < nTokens; n++ )
-                {
-                    String aPath = aPathList.GetToken( n, ':' );
-                    aPath.AppendAscii( "/"PSPRINT_PPDDIR );
-                    aDirs.push_back( aPath );
-                }
-                ::std::list< String >::iterator dir;
+                ::std::list< rtl::OUString > aDirs;
+                psp::getPrinterPathList( aDirs, PSPRINT_PPDDIR );
+                ::std::list< rtl::OUString >::iterator dir;
 
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
