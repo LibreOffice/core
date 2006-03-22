@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:59:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ protected:
                                 BYTE nFlag, BOOL bShrFmla );
                                             //      -> excform.cxx
 
-    void                    EndSheet( void );
+    virtual void            EndSheet( void );
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
@@ -267,7 +267,7 @@ protected:
     virtual void            PostDocLoad( void );
 
 public:
-                            ImportExcel( XclImpRootData& rImpData );
+                            ImportExcel( XclImpRootData& rImpData, SvStream& rStrm );
 
     virtual                 ~ImportExcel( void );
 
