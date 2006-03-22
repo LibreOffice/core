@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:48:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,13 @@ void StgPage::SetPage( short nOff, INT32 nVal )
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.
 
+INT32 lcl_GetPageCount( ULONG nFileSize, short nPageSize )
+{
+//    return (nFileSize >= 512) ? (nFileSize - 512) / nPageSize : 0;
+    // #i61980# reallife: last page may be incomplete, return number of *started* pages
+    return (nFileSize >= 512) ? (nFileSize - 512 + nPageSize - 1) / nPageSize : 0;
+}
+
 StgCache::StgCache()
 {
     nRef = 0;
@@ -141,7 +148,7 @@ void StgCache::SetPhysPageSize( short n )
     nPageSize = n;
     ULONG nPos = pStrm->Tell();
     ULONG nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
-    nPages = ( nFileSize >= 512 ) ? ( nFileSize - 512 ) / nPageSize : 0;
+    nPages = lcl_GetPageCount( nFileSize, nPageSize );
     pStrm->Seek( nPos );
 }
 
@@ -402,7 +409,7 @@ BOOL StgCache::Open( const String& rName, StreamMode nMode )
     if( pFileStrm->IsOpen() )
     {
         ULONG nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
-        nPages = ( nFileSize >= 512 ) ? ( nFileSize - 512 ) / nPageSize : 0;
+        nPages = lcl_GetPageCount( nFileSize, nPageSize );
         pStrm->Seek( 0L );
     }
     else
