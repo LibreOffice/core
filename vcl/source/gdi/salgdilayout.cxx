@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:56:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ SalGraphics::~SalGraphics()
 
 // ----------------------------------------------------------------------------
 
-void SalGraphics::mirror( long& x, const OutputDevice *pOutDev )
+void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -172,14 +172,17 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev )
 
             // mirror this window back
             long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            x = devX + (x - pOutDevRef->GetOutOffXPixel());
+            if( bBack )
+                x = x - devX + pOutDevRef->GetOutOffXPixel();
+            else
+                x = devX + (x - pOutDevRef->GetOutOffXPixel());
         }
         else
             x = w-1-x;
     }
 }
 
-void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev )
+void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -199,7 +202,10 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev )
 
             // mirror this window back
             long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            x = devX + (x - pOutDevRef->GetOutOffXPixel());
+            if( bBack )
+                x = x - devX + pOutDevRef->GetOutOffXPixel();
+            else
+                x = devX + (x - pOutDevRef->GetOutOffXPixel());
         }
         else
             x = w-nWidth-x;
@@ -207,7 +213,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev )
     }
 }
 
-BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev )
+BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -229,12 +235,25 @@ BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
 
             // mirror this window back
             long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+            if( bBack )
             {
-                //long x = w-1-pPtAry[i].mnX;
-                //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
-                pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
-                pPtAry2[j].mnY = pPtAry[i].mnY;
+                for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+                {
+                    //long x = w-1-pPtAry[i].mnX;
+                    //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                    pPtAry2[j].mnX = pOutDevRef->GetOutOffXPixel() + (pPtAry[i].mnX - devX);
+                    pPtAry2[j].mnY = pPtAry[i].mnY;
+                }
+            }
+            else
+            {
+                for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+                {
+                    //long x = w-1-pPtAry[i].mnX;
+                    //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                    pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
+                    pPtAry2[j].mnY = pPtAry[i].mnY;
+                }
             }
         }
         else
@@ -251,7 +270,7 @@ BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         return FALSE;
 }
 
-void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev )
+void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack ) const
 {
     // mirror the bounding rect and move Region by resulting offset
     Rectangle aRect( rRgn.GetBoundRect() );
@@ -259,8 +278,18 @@ void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev )
     long x      = aRect.Left();
     long x_org = x;
 
-    mirror( x, nWidth, pOutDev );
+    mirror( x, nWidth, pOutDev, bBack );
     rRgn.Move( x - x_org, 0 );
+}
+
+void SalGraphics::mirror( Rectangle& rRect, const OutputDevice *pOutDev, bool bBack ) const
+{
+    long nWidth = rRect.GetWidth();
+    long x      = rRect.Left();
+    long x_org = x;
+
+    mirror( x, nWidth, pOutDev, bBack );
+    rRect.Move( x - x_org, 0 );
 }
 
 // ----------------------------------------------------------------------------
@@ -494,6 +523,38 @@ BOOL SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, co
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rControlHandle, rIsInside );
 }
 
+void SalGraphics::mirror( ControlType nType, ControlPart nPart, const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+{
+    if( rVal.getOptionalVal() )
+    {
+        switch( nType )
+        {
+            case CTRL_SCROLLBAR:
+            {
+                ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(rVal.getOptionalVal());
+                mirror(pScVal->maThumbRect,pOutDev,bBack);
+                mirror(pScVal->maButton1Rect,pOutDev,bBack);
+                mirror(pScVal->maButton2Rect,pOutDev,bBack);
+            }
+            break;
+            case CTRL_SPINBOX:
+            case CTRL_SPINBUTTONS:
+            {
+                SpinbuttonValue* pSpVal = reinterpret_cast<SpinbuttonValue*>(rVal.getOptionalVal());
+                mirror(pSpVal->maUpperRect,pOutDev,bBack);
+                mirror(pSpVal->maLowerRect,pOutDev,bBack);
+            }
+            break;
+            case CTRL_TOOLBAR:
+            {
+                ToolbarValue* pTVal = reinterpret_cast<ToolbarValue*>(rVal.getOptionalVal());
+                mirror(pTVal->maGripRect,pOutDev,bBack);
+            }
+            break;
+        }
+    }
+}
+
 BOOL SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
                                                 OUString aCaption, const OutputDevice *pOutDev )
@@ -502,7 +563,10 @@ BOOL SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        return drawNativeControl( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+        mirror( nType, nPart, aValue, pOutDev );
+        BOOL bRet = drawNativeControl( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+        mirror( nType, nPart, aValue, pOutDev, true );
+        return bRet;
     }
     else
         return drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
@@ -516,7 +580,10 @@ BOOL SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, c
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        return drawNativeControlText( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+        mirror( nType, nPart, aValue, pOutDev );
+        BOOL bRet = drawNativeControlText( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+        mirror( nType, nPart, aValue, pOutDev, true );
+        return bRet;
     }
     else
         return drawNativeControlText( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
@@ -530,15 +597,20 @@ BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
+        mirror( nType, nPart, aValue, pOutDev );
         if( getNativeControlRegion( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion ) )
         {
-            mirror( rNativeBoundingRegion, pOutDev );
-            mirror( rNativeContentRegion, pOutDev );
+            mirror( rNativeBoundingRegion, pOutDev, true );
+            mirror( rNativeContentRegion, pOutDev, true );
+            mirror( nType, nPart, aValue, pOutDev, true );
             return TRUE;
         }
         else
+        {
+            mirror( nType, nPart, aValue, pOutDev, true );
             return FALSE;
+        }
     }
     else
         return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption,
