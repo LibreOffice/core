@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:07:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1713,10 +1713,17 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
 // -----------------------------------------------------------------------
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
-    long nNumerator      = aImplNumeratorAry[eUnitSource] *             \
+    long nNumerator      = 1;       \
+    long nDenominator    = 1;       \
+    DBG_ASSERT( eUnitSource < MAP_LASTENUMDUMMY, "Invalid source map unit");    \
+    DBG_ASSERT( eUnitDest < MAP_LASTENUMDUMMY, "Invalid destination map unit"); \
+    if( (eUnitSource < MAP_LASTENUMDUMMY) && (eUnitDest < MAP_LASTENUMDUMMY) )  \
+    {   \
+        nNumerator   = aImplNumeratorAry[eUnitSource] *             \
                            aImplDenominatorAry[eUnitDest];              \
-    long nDenominator    = aImplNumeratorAry[eUnitDest] *               \
+        nDenominator     = aImplNumeratorAry[eUnitDest] *               \
                            aImplDenominatorAry[eUnitSource];            \
+    } \
     if ( eUnitSource == MAP_PIXEL )                                     \
         nDenominator *= 72;                                             \
     else if( eUnitDest == MAP_PIXEL )                                   \
