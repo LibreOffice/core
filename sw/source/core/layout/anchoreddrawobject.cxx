@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:12:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:24:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,10 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
     // <--
     mbNotYetAttachedToAnchorFrame( true ),
     // --> OD 2004-08-09 #i28749#
-    mbNotYetPositioned( true )
+    mbNotYetPositioned( true ),
+    // <--
+    // --> OD 2006-03-17 #i62875#
+    mbCaptureAfterLayoutDirChange( false )
     // <--
 {
 }
@@ -275,6 +278,39 @@ SwAnchoredDrawObject::~SwAnchoredDrawObject()
     delete mpLastObjRect;
     // <--
 }
+
+// --> OD 2006-03-17 #i62875#
+void SwAnchoredDrawObject::UpdateLayoutDir()
+{
+    SwFrmFmt::tLayoutDir nOldLayoutDir( GetFrmFmt().GetLayoutDir() );
+
+    SwAnchoredObject::UpdateLayoutDir();
+
+    if ( !NotYetPositioned() &&
+         GetFrmFmt().GetLayoutDir() != nOldLayoutDir &&
+         GetFrmFmt().GetDoc()->DoNotCaptureDrawObjsOnPage() &&
+         !IsOutsidePage() )
+    {
+        mbCaptureAfterLayoutDirChange = true;
+    }
+}
+// <--
+
+// --> OD 2006-03-17 #i62875#
+const bool SwAnchoredDrawObject::IsOutsidePage() const
+{
+    bool bOutsidePage( false );
+
+    if ( !NotYetPositioned() && GetPageFrm() )
+    {
+        SwRect aTmpRect( GetObjRect() );
+        bOutsidePage =
+            ( aTmpRect.Intersection( GetPageFrm()->Frm() ) != GetObjRect() );
+    }
+
+    return bOutsidePage;
+}
+// <--
 
 // =============================================================================
 // OD 2004-03-25 #i26791# - implementation of pure virtual method declared in
@@ -335,55 +371,80 @@ void SwAnchoredDrawObject::MakeObjPos()
     // <--
 
     // indicate that positioning is in progress
-    SwObjPositioningInProgress aObjPosInProgress( *this );
-
-    // determine relative position of drawing object and set it
-    switch ( pDrawContact->GetAnchorId() )
     {
-        case FLY_IN_CNTNT:
+        SwObjPositioningInProgress aObjPosInProgress( *this );
+
+        // determine relative position of drawing object and set it
+        switch ( pDrawContact->GetAnchorId() )
         {
-            // indicate that position will be valid after positioning is performed
-            mbValidPos = true;
-            // nothing to do, because as-character anchored objects are positioned
-            // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
+            case FLY_IN_CNTNT:
+            {
+                // indicate that position will be valid after positioning is performed
+                mbValidPos = true;
+                // nothing to do, because as-character anchored objects are positioned
+                // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
+            }
+            break;
+            case FLY_AT_CNTNT:
+            case FLY_AUTO_CNTNT:
+            {
+                // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+                // helper method <_MakeObjPosAnchoredAtPara()>
+                _MakeObjPosAnchoredAtPara();
+            }
+            break;
+            case FLY_PAGE:
+            case FLY_AT_FLY:
+            {
+                // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+                // helper method <_MakeObjPosAnchoredAtLayout()>
+                _MakeObjPosAnchoredAtLayout();
+            }
+            break;
+            default:
+            {
+                ASSERT( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+            }
         }
-        break;
-        case FLY_AT_CNTNT:
-        case FLY_AUTO_CNTNT:
+
+        // keep, current object rectangle
+        // --> OD 2004-09-29 #i34748# - use new method <SetLastObjRect(..)>
+        SetLastObjRect( GetObjRect().SVRect() );
+        // <--
+
+        // Assure for 'master' drawing object, that it's registered at the correct page.
+        // Perform check not for as-character anchored drawing objects and only if
+        // the anchor frame is valid.
+        if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
+             !pDrawContact->ObjAnchoredAsChar() &&
+             GetAnchorFrm()->IsValid() )
         {
-            // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
-            // helper method <_MakeObjPosAnchoredAtPara()>
-            _MakeObjPosAnchoredAtPara();
-        }
-        break;
-        case FLY_PAGE:
-        case FLY_AT_FLY:
-        {
-            // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
-            // helper method <_MakeObjPosAnchoredAtLayout()>
-            _MakeObjPosAnchoredAtLayout();
-        }
-        break;
-        default:
-        {
-            ASSERT( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+            pDrawContact->ChkPage();
         }
     }
 
-    // keep, current object rectangle
-    // --> OD 2004-09-29 #i34748# - use new method <SetLastObjRect(..)>
-    SetLastObjRect( GetObjRect().SVRect() );
+    // --> OD 2006-03-17 #i62875#
+    if ( mbCaptureAfterLayoutDirChange &&
+         GetPageFrm() )
+    {
+        SwRect aPageRect( GetPageFrm()->Frm() );
+        SwRect aObjRect( GetObjRect() );
+        if ( aObjRect.Right() >= aPageRect.Right() + 10 )
+        {
+            Size aSize( aPageRect.Right() - aObjRect.Right(), 0 );
+            DrawObj()->Move( aSize );
+            aObjRect = GetObjRect();
+        }
+
+        if ( aObjRect.Left() + 10 <= aPageRect.Left() )
+        {
+            Size aSize( aPageRect.Left() - aObjRect.Left(), 0 );
+            DrawObj()->Move( aSize );
+        }
+
+        mbCaptureAfterLayoutDirChange = false;
+    }
     // <--
-
-    // Assure for 'master' drawing object, that it's registered at the correct page.
-    // Perform check not for as-character anchored drawing objects and only if
-    // the anchor frame is valid.
-    if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
-         !pDrawContact->ObjAnchoredAsChar() &&
-         GetAnchorFrm()->IsValid() )
-    {
-        pDrawContact->ChkPage();
-    }
 }
 
 /** method for the intrinsic positioning of a at-paragraph|at-character
