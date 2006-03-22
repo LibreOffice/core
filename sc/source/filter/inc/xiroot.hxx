@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:00:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,7 @@ struct XclImpRootData : public XclRootData
     XclImpTabViewSettRef mxTabViewSett;     /// View settings for current sheet.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, SvStream& rBookStrm,
-                            ScDocument& rDoc, CharSet eCharSet );
+                            SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet );
     virtual             ~XclImpRootData();
 };
 
