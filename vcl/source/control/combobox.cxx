@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:45:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,8 +650,6 @@ void ComboBox::Resize()
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move(-aPoint.X(), -aPoint.Y());
 
-            // use the themes drop down size for the button
-            aOutSz.Width() = aContent.GetBoundRect().Left();
             mpBtn->SetPosSizePixel( aContent.GetBoundRect().Left(), nTop, aContent.GetBoundRect().getWidth(), (nBottom-nTop) );
 
             // adjust the size of the edit field
@@ -666,7 +664,11 @@ void ComboBox::Resize()
                 mpSubEdit->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
             }
             else
+            {
+                // use the themes drop down size for the button
+                aOutSz.Width() -= aContent.GetBoundRect().getWidth();
                 mpSubEdit->SetSizePixel( aOutSz );
+            }
         }
         else
         {
