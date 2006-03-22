@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:39:36 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,25 +632,18 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 {
     FtFontInfo* pFontInfo = NULL;
 
-    if( ImplFTSFontData::CheckFontData( *rFSD.mpFontData ) )
-    {
-        // we have a native freetype font
-        ImplFTSFontData* pFD = static_cast<ImplFTSFontData*>(rFSD.mpFontData);
-        pFontInfo = pFD->GetFtFontInfo();
-    }
-    else
-    {
-        // we need to find a FontInfo matching to the font id
-        int nFontId = rFSD.mpFontData->GetFontId();
-        FontList::iterator it = maFontList.find( nFontId );
-        if( it != maFontList.end() )
-            pFontInfo = it->second;
-    }
+    // find a FontInfo matching to the font id
+    int nFontId = reinterpret_cast<int>( rFSD.mpFontData );
+    FontList::iterator it = maFontList.find( nFontId );
+    if( it != maFontList.end() )
+        pFontInfo = it->second;
 
-    if( pFontInfo )
-        return new FreetypeServerFont( rFSD, pFontInfo );
+    if( !pFontInfo )
+        return NULL;
 
-    return NULL;
+    FreetypeServerFont* pNew = new FreetypeServerFont( rFSD, pFontInfo );
+
+    return pNew;
 }
 
 // =======================================================================
@@ -807,8 +800,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT;
 
-    mbArtItalic = (rFSD.meItalic != ITALIC_NONE && rFSD.mpFontData->GetSlant() == ITALIC_NONE);
-    mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && rFSD.mpFontData->GetWeight() <= WEIGHT_MEDIUM);
+    mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
+    mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
 
     static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
     static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
