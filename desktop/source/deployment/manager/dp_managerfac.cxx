@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_managerfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:20:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,9 @@ public:
 
 //==============================================================================
 namespace sdecl = comphelper::service_decl;
+sdecl::class_<PackageManagerFactoryImpl> servicePMFI;
 extern sdecl::ServiceDecl const serviceDecl(
-    sdecl::class_<PackageManagerFactoryImpl>(),
+    servicePMFI,
     // a private one:
     "com.sun.star.comp.deployment.PackageManagerFactory",
     "com.sun.star.comp.deployment.PackageManagerFactory" );
