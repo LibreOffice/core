@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:47:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1754,7 +1754,10 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
                 const SfxPoolItem* pItem;
                 SfxItemSet aSet( *rSet.GetPool(), SID_PRINTDOC, SID_PRINTDOC );
                 GetSlotState( SID_PRINTDOC, SfxViewShell::GetInterface(), &aSet );
-                if( SFX_ITEM_SET == aSet.GetItemState( SID_PRINTDOC,
+                if( SFX_ITEM_DISABLED == aSet.GetItemState( SID_PRINTDOC,
+                        FALSE, &pItem ))
+                    rSet.DisableItem( nWhich );
+                else if( SFX_ITEM_SET == aSet.GetItemState( SID_PRINTDOC,
                         FALSE, &pItem ))
                 {
                     ((SfxPoolItem*)pItem)->SetWhich( FN_PRINT_PAGEPREVIEW );
