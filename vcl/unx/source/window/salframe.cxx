@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:23:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3115,10 +3115,6 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     aPEvt.mnBoundY          = maPaintRegion.Top();
     aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
     aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
-
-    // --- RTL --- (mirror paint rect)
-    if( Application::GetSettings().GetLayoutRTL() )
-        aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
      CallCallback( SALEVENT_PAINT, &aPEvt );
     maPaintRegion = Rectangle();
