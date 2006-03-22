@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:54:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ struct SalShlData
 {
     HINSTANCE               mhInst;                 // Instance of SAL-DLL
     UINT                    mnWheelScrollLines;     // WheelScrollLines
+    UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
     WIN_BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
