@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.213 $
+ *  $Revision: 1.214 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:08:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,11 +242,15 @@ static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
 
 void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
 {
+    // the currently selected logical font is no longer needed
     if ( mpFontEntry )
     {
         mpFontCache->Release( mpFontEntry );
         mpFontEntry = NULL;
     }
+
+    mbInitFont = true;
+    mbNewFont = true;
 
     if ( bNewFontLists )
     {
@@ -260,6 +264,10 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
             delete mpGetDevSizeList;
             mpGetDevSizeList = NULL;
         }
+
+        // release all physically selected fonts on this device
+    if( ImplGetGraphics() )
+         mpGraphics->ReleaseFonts();
     }
 
     if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
@@ -305,9 +313,6 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
             }
         }
     }
-
-    mbInitFont = true;
-    mbNewFont = true;
 
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
@@ -1579,9 +1584,7 @@ ImplDevFontListData::~ImplDevFontListData()
     {
         ImplFontData* pFace = mpFirst;
         mpFirst = pFace->GetNextFace();
-#ifdef WIN32
         delete pFace;
-#endif
     }
 }
 
