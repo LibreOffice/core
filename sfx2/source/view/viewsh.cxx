@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 16:00:32 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             {
                 BOOL bEnabled = pImp->bCanPrint && !pImp->nPrinterLocks;
+                bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
                     SfxPrinter *pPrinter = GetPrinter(FALSE);
