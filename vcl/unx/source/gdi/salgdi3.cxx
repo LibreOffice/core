@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:03:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,19 +590,22 @@ X11SalGraphics::SelectFont()
 
 bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-    bFontVertical_      = pEntry->mbVertical;
-
 #ifdef HDU_DEBUG
-    ByteString aReqName( pEntry->maName, RTL_TEXTENCODING_UTF8 );
-    ByteString aUseName( "UNKNOWN" );
-    if( pEntry->mpFontData )
+    ByteString aReqName( "NULL" );
+    if( pEntry )
+        aReqName = ByteString( pEntry->maName, RTL_TEXTENCODING_UTF8 );
+    ByteString aUseName( "NULL" );
+    if( pEntry && pEntry->mpFontData )
         aUseName = ByteString( pEntry->mpFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
     fprintf( stderr, "SetFont(lvl=%d,\"%s\", %d*%d, naa=%d,b=%d,i=%d) => \"%s\"\n",
-        nFallbackLevel, aReqName.GetBuffer(), pEntry->mnWidth, pEntry->mnHeight,
-        pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic,
+        nFallbackLevel, aReqName.GetBuffer(),
+    !pEntry?-1:pEntry->mnWidth, !pEntry?-1:pEntry->mnHeight,
+        !pEntry?-1:pEntry->mbNonAntialiased,
+    !pEntry?-1:pEntry->meWeight, !pEntry?-1:pEntry->meItalic,
         aUseName.GetBuffer() );
 #endif
 
+    // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
         mXFont[i] = NULL; // ->ReleaseRef()
@@ -615,6 +618,13 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
         }
     }
 
+    // return early if there is no new font
+    if( !pEntry )
+    return false;
+
+    bFontVertical_ = pEntry->mbVertical;
+
+    // return early if this is not a valid font for this graphics
     if( !pEntry->mpFontData )
         return false;
 
