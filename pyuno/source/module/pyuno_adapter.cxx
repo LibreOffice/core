@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_adapter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:51:33 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,11 +214,20 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
     }
 
+    RuntimeCargo *cargo = 0;
+    try
+    {
     PyThreadAttach guard( mInterpreter );
     {
         // convert parameters to python args
         // TODO: Out parameter
         Runtime runtime;
+        cargo = runtime.getImpl()->cargo;
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logCall( cargo, "try     uno->py[0x",
+                     (sal_Int64) mWrappedObject.get(), aFunctionName, aParams );
+        }
 
         sal_Int32 size = aParams.getLength();
         PyRef argsTuple(PyTuple_New( size ), SAL_NO_ACQUIRE );
@@ -251,9 +260,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
             throw IllegalArgumentException( buf.makeStringAndClear(), Reference< XInterface > (),0 );
         }
 
-        PYUNO_DEBUG_2( "entering python method %s\n" , (char*)TO_ASCII(aFunctionName) );
         PyRef pyRet( PyObject_CallObject( method.get(), argsTuple.get() ), SAL_NO_ACQUIRE );
-        PYUNO_DEBUG_3( "leaving python method %s %d\n" , (char*)TO_ASCII(aFunctionName) , pyRet.is() );
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( pyRet.is() )
         {
@@ -307,8 +314,57 @@ Any Adapter::invoke( const OUString &aFunctionName,
                 // else { sequence is a return value !}
             }
         }
+
+        // log the reply, if desired
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logReply( cargo, "success uno->py[0x" ,
+                     (sal_Int64) mWrappedObject.get(), aFunctionName, ret, aOutParam );
+        }
     }
-    PYUNO_DEBUG_1( "leaving Adapter::invoke normally\n" );
+
+    }
+    catch(InvocationTargetException & e )
+    {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException(
+                cargo, "except  uno->py[0x" ,
+                (sal_Int64) mWrappedObject.get(), aFunctionName,
+                e.TargetException.getValue(),e.TargetException.getValueType() );
+        }
+        throw;
+    }
+    catch( RuntimeException & e )
+    {
+        if( cargo && isLog( cargo, LogLevel::CALL ) )
+        {
+            logException(
+                cargo, "except  uno->py[0x" ,
+                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+        }
+        throw;
+    }
+    catch( CannotConvertException & e )
+    {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException(
+                cargo, "except  uno->py[0x" ,
+                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+        }
+        throw;
+    }
+    catch(  IllegalArgumentException & e )
+    {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException(
+                cargo,  "except  uno->py[0x" ,
+                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+        }
+        throw;
+    }
     return ret;
 }
 
