@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:37:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,11 +108,20 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     CheckBox CB_FIXEDWIDTH
     {
-        Pos = MAP_APPFONT( 12, 66 );
+        Pos = MAP_APPFONT( 12, 80 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
         Text [ de ] = "Feste Spalten~breite";
         Text [ en-US ] = "Fixed column ~width";
+    };
+    CheckBox CB_SAVESHOWN
+    {
+        Pos = MAP_APPFONT( 12, 66 );
+        Size = MAP_APPFONT( 172, 10 );
+        TabStop = TRUE;
+        Hide = TRUE;
+        Text [ de ] = "Zellinhalt wie ~angezeigt";
+        Text [ en-US ] = "Save cell content as ~shown";
     };
     OKButton BTN_OK
     {
