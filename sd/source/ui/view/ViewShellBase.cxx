@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 09:59:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 08:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,6 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
-#endif
 #ifndef SD_SLIDE_SORTER_VIEW_SHELL_HXX
 #include "SlideSorterViewShell.hxx"
 #endif
@@ -108,8 +105,9 @@
 #include "TaskPaneViewShell.hxx"
 #endif
 #include "FormShellManager.hxx"
+#include "ToolBarManager.hxx"
 #include "Window.hxx"
-#include <sfx2/msg.hxx>
+
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
@@ -135,6 +133,8 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #endif
 
+#include <rtl/ref.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -148,14 +148,15 @@ using namespace sd;
 
 namespace {
 class ViewShellFactory
-    : public ::sd::ShellFactory< ::sd::ViewShell>
+    : public ShellFactory<SfxShell>
 {
 public:
     ViewShellFactory (::sd::ViewShellBase& rBase, SfxViewFrame* pViewFrame);
-    virtual ::sd::ViewShell* CreateShell (::sd::ShellId nId,
+    virtual SfxShell* CreateShell (
+        ::sd::ShellId nId,
         ::Window* pParentWindow,
         ::sd::FrameView* pFrameView);
-    virtual void ReleaseShell (::sd::ViewShell* pShell);
+    virtual void ReleaseShell (SfxShell* pShell);
 private:
     ::sd::ViewShellBase& mrBase;
     SfxViewFrame* mpViewFrame;
@@ -174,9 +175,38 @@ namespace sd {
 class ViewShellBase::Implementation
 {
 public:
+    ::std::auto_ptr<ToolBarManager> mpToolBarManager;
+
+    /** Main controller of the view shell.  During the switching from one
+        stacked shell to another this pointer may be NULL.
+    */
+    ::rtl::Reference<DrawController> mpController;
+
+    /** The view tab bar is the control for switching between different
+        views in one pane.
+    */
+    ::std::auto_ptr<ViewTabBar> mpViewTabBar;
+
+    // contains the complete area of the current view relative to the frame window
+    Rectangle maClientArea;
+
     Implementation (ViewShellBase& rBase);
 
     void ProcessRestoreEditingViewSlot ();
+
+    /** Show or hide the ViewTabBar.
+        @param bShow
+            When <TRUE/> then the ViewTabBar is shown, otherwise it is hidden.
+    */
+    void ShowViewTabBar (bool bShow);
+
+    /** Common code of ViewShellBase::OuterResizePixel() and
+        ViewShellBase::InnerResizePixel().
+    */
+    void ResizePixel (
+        const Point& rOrigin,
+        const Size& rSize,
+        bool bOuterResize);
 
 private:
     ViewShellBase& mrBase;
@@ -186,6 +216,12 @@ private:
         alive.
     */
     ::boost::shared_ptr<slidesorter::cache::PageCacheManager> mpPageCacheManager;
+
+    /** Arrange GUI elements of the pane which shows the given view shell.
+        @return
+            The returned border contains the controls placed by the method.
+    */
+    SvBorder ArrangeGUIElements (const Point& rOrigin, const Size& rSize);
 };
 
 
@@ -250,7 +286,6 @@ ViewShellBase::ViewShellBase (
         | SFX_VIEW_CAN_PRINT
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
-      mpViewTabBar (NULL),
       mpImpl(new Implementation(*this)),
       mpViewShellManager (NULL),
       mpPaneManager (NULL),
@@ -279,16 +314,17 @@ ViewShellBase::ViewShellBase (
 
     // Now that this new object has (almost) finished its construction
     // we can pass it as argument to the SubShellManager constructor.
-    GetViewShellManager().RegisterDefaultFactory (
-        ::std::auto_ptr<ViewShellManager::ViewShellFactory>(
+    GetViewShellManager().SetViewShellFactory (
+        ViewShellManager::SharedShellFactory(
             new ViewShellFactory(*this, pFrame)));
 }
 
 
 
 
-/** Call reset() on some of the auto pointers to destroy the pointed-to
-    objects in the correct order.
+/** In this destructor the order in which some of the members are destroyed
+    (and/or being prepared to being destroyed) is important.  Change it only
+    when you know what you are doing.
 */
 ViewShellBase::~ViewShellBase (void)
 {
@@ -302,12 +338,14 @@ ViewShellBase::~ViewShellBase (void)
         pShell->GetActiveWindow()->GetParent()->Hide();
     }
 
-    if (mpViewTabBar.get() != NULL)
+    if (mpImpl->mpViewTabBar.get() != NULL)
     {
-        mpViewTabBar->RemoveEventListener(LINK(this,ViewShellBase,WindowEventHandler));
-        mpViewTabBar.reset();
+        mpImpl->mpViewTabBar->RemoveEventListener(LINK(this,ViewShellBase,WindowEventHandler));
+        mpImpl->mpViewTabBar.reset();
     }
 
+    mpUpdateLockManager->Disable();
+    mpImpl->mpToolBarManager->Shutdown();
     mpPaneManager->Shutdown();
     mpViewShellManager->Shutdown();
 
@@ -332,29 +370,28 @@ void ViewShellBase::LateInit (void)
     StartListening(*GetViewFrame(),TRUE);
     StartListening(*GetDocShell(),TRUE);
 
-    if ( ! GetDocShell()->IsPreview())
+    mpImpl->mpViewTabBar.reset(CreateViewTabBar());
+    if (mpImpl->mpViewTabBar.get() != NULL)
     {
-        mpViewTabBar.reset (new ViewTabBar(*this, &GetFrame()->GetWindow()));
-        mpViewTabBar->AddEventListener(LINK(this,ViewShellBase,WindowEventHandler));
-        mpViewTabBar->Show();
+        mpImpl->mpViewTabBar->AddEventListener(LINK(this,ViewShellBase,WindowEventHandler));
+        mpImpl->mpViewTabBar->Show();
     }
-    // else when the view shell is used to display a preview of the document
-    // then do not show the tab bar.
 
-    mpFormShellManager = ::std::auto_ptr<FormShellManager>(
-        new FormShellManager (*this));
+    mpFormShellManager = ::std::auto_ptr<FormShellManager>(new FormShellManager(*this));
 
     mpEventMultiplexer.reset (new tools::EventMultiplexer (*this));
+
+    mpImpl->mpToolBarManager = ToolBarManager::Create(
+        *this,
+        *mpEventMultiplexer,
+        *mpPaneManager,
+        *mpViewShellManager);
 
     // Initialize the pane manager.  This switches synchronously to the
     // default main view shell.
     mpPaneManager->LateInit();
 
-    // Make sure that an instance of the controller exists.  We don't have
-    // to call UpdateController() here because the registration at the frame
-    // is called automatically.
-    if (GetMainViewShell() != NULL)
-        GetMainViewShell()->GetController();
+    UpdateBorder();
 
     // Remember the type of the current main view shell in the frame view.
     ViewShell* pViewShell = GetMainViewShell();
@@ -419,52 +456,6 @@ void ViewShellBase::GetMenuState (SfxItemSet& rSet)
 
 
 
-void ViewShellBase::UpdateController (SfxBaseController* pController)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    do
-    {
-        if (pController == NULL)
-            break;
-
-        Reference <frame::XController> xController (pController);
-        if ( ! xController.is())
-            break;
-
-        Reference <awt::XWindow> xWindow(
-            GetFrame()->GetFrame()->GetWindow().GetComponentInterface(),
-            UNO_QUERY );
-        if ( ! xWindow.is())
-            break;
-
-        Reference <frame::XFrame> xFrame (
-            GetFrame()->GetFrame()->GetFrameInterface());
-        if ( ! xFrame.is())
-            break;
-
-        SfxObjectShell* pObjectShellold = GetObjectShell();
-        if (pObjectShellold == NULL)
-            break;
-
-        SetController (pController);
-        xFrame->setComponent (xWindow, xController);
-        xController->attachFrame (xFrame);
-        SfxObjectShell* pObjectShell = GetObjectShell();
-        Reference <frame::XModel> xModel (pObjectShell->GetModel());
-        if (xModel.is())
-        {
-            xController->attachModel (xModel);
-            xModel->connectController (xController);
-            xModel->setCurrentController (xController);
-        }
-    }
-    while (false);
-}
-
-
-
-
 DrawDocShell* ViewShellBase::GetDocShell (void) const
 {
     return mpDocShell;
@@ -475,6 +466,17 @@ DrawDocShell* ViewShellBase::GetDocShell (void) const
 SdDrawDocument* ViewShellBase::GetDocument (void) const
 {
     return mpDocument;
+}
+
+
+
+
+ViewTabBar* ViewShellBase::CreateViewTabBar (void)
+{
+    if ( ! GetDocShell()->IsPreview())
+        return new ViewTabBar(*this, &GetFrame()->GetWindow());
+    else
+        return NULL;
 }
 
 
@@ -555,56 +557,15 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
             Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
     }
 
-    ResizePixel (rOrigin, rSize, false);
+    mpImpl->ResizePixel(rOrigin, rSize, false);
 }
+
 
 
 
 void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
 {
-    ResizePixel (rOrigin, rSize, true);
-}
-
-
-
-
-void ViewShellBase::ResizePixel (
-    const Point& rOrigin,
-    const Size &rSize,
-    bool bOuterResize)
-{
-    // Forward the call to both the base class and the main stacked sub
-    // shell only when main sub shell exists.
-    ViewShell* pMainViewShell
-        = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
-    if (pMainViewShell != NULL)
-    {
-        //Rectangle aModelRectangle (GetWindow()->PixelToLogic(
-        //    Rectangle(rOrigin, rSize)));
-        SetWindow (pMainViewShell->GetActiveWindow());
-        if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
-            mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
-        SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
-        aBorder += GetBorder(bOuterResize);
-        SetBorderPixel (aBorder);
-
-
-        SvBorder aBaseBorder (ArrangeGUIElements(rOrigin, rSize));
-        maClientArea = Rectangle(
-            Point (rOrigin.X()+aBaseBorder.Left(),
-                rOrigin.Y()+aBaseBorder.Top()),
-            Size (rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
-                rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom()));
-
-        pMainViewShell->Resize( maClientArea.TopLeft(), maClientArea.GetSize() );
-    }
-    else
-    {
-        // We have to set a border at all times so when the main view shell
-        // is not yet ready we simply set an empty border.
-        SetBorderPixel (SvBorder());
-        maClientArea = Rectangle( rOrigin, rSize );;
-    }
+    mpImpl->ResizePixel (rOrigin, rSize, true);
 }
 
 
@@ -613,6 +574,14 @@ void ViewShellBase::ResizePixel (
 void ViewShellBase::Rearrange (void)
 {
     OSL_ASSERT(GetViewFrame()!=NULL);
+
+    // There is a bug in the communication between embedded objects and the
+    // framework::LayoutManager that leads to missing resize updates.  The
+    // following workaround enforces such an update by cycling the border to
+    // zero and back to the current value.
+    SetBorderPixel(SvBorder());
+    UpdateBorder(true);
+
     GetViewFrame()->Resize(TRUE);
 }
 
@@ -715,6 +684,8 @@ void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 
 void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 {
+    mpImpl->ShowViewTabBar(false);
+
     ViewShell* pViewShell = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
     if ( pViewShell )
         pViewShell->UIActivating( pClient );
@@ -722,9 +693,14 @@ void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
     SfxViewShell::UIActivating( pClient );
 }
 
+
+
+
 void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
 {
     SfxViewShell::UIDeactivated( pClient );
+
+    mpImpl->ShowViewTabBar(true);
 
     ViewShell* pViewShell = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
     if ( pViewShell )
@@ -732,28 +708,13 @@ void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
 }
 
 
+
+
 SvBorder ViewShellBase::GetBorder (bool bOuterResize)
 {
     int nTop = 0;
-    if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
-        nTop = mpViewTabBar->GetHeight();
-    return SvBorder(0,nTop,0,0);
-}
-
-
-
-
-SvBorder ViewShellBase::ArrangeGUIElements (
-    const Point& rOrigin,
-    const Size& rSize)
-{
-    int nTop =  0;
-    if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
-    {
-        nTop =  mpViewTabBar->GetHeight();
-        mpViewTabBar->SetPosSizePixel (rOrigin, Size(rSize.Width(),nTop));
-    }
-
+    if (mpImpl->mpViewTabBar.get()!=NULL && mpImpl->mpViewTabBar->IsVisible())
+        nTop = mpImpl->mpViewTabBar->GetHeight();
     return SvBorder(0,nTop,0,0);
 }
 
@@ -937,6 +898,7 @@ void ViewShellBase::Activate (BOOL bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
     GetPaneManager().InitPanes ();
+    GetToolBarManager().Update();
 }
 
 
@@ -1040,20 +1002,18 @@ void ViewShellBase::SetBusyState (bool bBusy)
 
 void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 {
+    SvBorder aCurrentBorder (GetBorderPixel());
+    bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
+    SvBorder aBorder (GetBorder(bOuterResize));
+
     ViewShell* pMainViewShell = GetMainViewShell();
     if (pMainViewShell != NULL)
+        aBorder += pMainViewShell->GetBorder(bOuterResize);
+
+    if (bForce || (aBorder != aCurrentBorder))
     {
-        SvBorder aCurrentBorder (GetBorderPixel());
-
-        bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
-        SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
-        aBorder += GetBorder(bOuterResize);
-
-        if (bForce || (aBorder != aCurrentBorder))
-        {
-            SetBorderPixel (aBorder);
-            InvalidateBorder();
-        }
+        SetBorderPixel (aBorder);
+        InvalidateBorder();
     }
 }
 
@@ -1062,8 +1022,8 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 
 void ViewShellBase::ShowUIControls (bool bVisible)
 {
-    if (mpViewTabBar.get() != NULL)
-        mpViewTabBar->Show (bVisible);
+    if (mpImpl->mpViewTabBar.get() != NULL)
+        mpImpl->mpViewTabBar->Show(bVisible);
 
     ViewShell* pMainViewShell = GetMainViewShell();
     if (pMainViewShell != NULL)
@@ -1185,6 +1145,14 @@ tools::EventMultiplexer& ViewShellBase::GetEventMultiplexer (void)
 
 
 
+const Rectangle& ViewShellBase::getClientRectangle (void) const
+{
+    return mpImpl->maClientArea;
+}
+
+
+
+
 UpdateLockManager& ViewShellBase::GetUpdateLockManager (void) const
 {
     return *mpUpdateLockManager;
@@ -1193,10 +1161,38 @@ UpdateLockManager& ViewShellBase::GetUpdateLockManager (void) const
 
 
 
+ToolBarManager& ViewShellBase::GetToolBarManager (void) const
+{
+    return *mpImpl->mpToolBarManager;
+}
+
+
+
+
+FormShellManager& ViewShellBase::GetFormShellManager (void) const
+{
+    return *mpFormShellManager;
+}
+
+
+
+
+DrawController& ViewShellBase::GetDrawController (void) const
+{
+    return *mpImpl->mpController;
+}
+
+
+
+
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
-    : mrBase(rBase),
+    : mpToolBarManager(),
+      mpController(new DrawController(rBase)),
+      mpViewTabBar (NULL),
+      maClientArea(),
+      mrBase(rBase),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())
 {
 }
@@ -1267,10 +1263,91 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                     // This is sad but still leaves us in a valid state.  Therefore,
                     // this exception is silently ignored.
                 }
+                catch (beans::UnknownPropertyException aException)
+                {
+                    DBG_ASSERT(false,"CurrentPage property unknown");
+                }
             }
         }
     }
 }
+
+
+
+
+void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
+{
+    if (mpViewTabBar.get()!=NULL
+        && (mpViewTabBar->IsVisible()==TRUE) != bShow)
+    {
+        mpViewTabBar->Show(bShow ? TRUE : FALSE);
+        mrBase.Rearrange();
+    }
+}
+
+
+
+
+void ViewShellBase::Implementation::ResizePixel (
+    const Point& rOrigin,
+    const Size &rSize,
+    bool bOuterResize)
+{
+    // Forward the call to both the base class and the main stacked sub
+    // shell only when main sub shell exists.
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+
+    if (pMainViewShell != NULL)
+    {
+        // Set the ViewTabBar temporarily to full size so that, when asked
+        // later, it can return its true height.
+        mrBase.SetWindow (pMainViewShell->GetActiveWindow());
+        if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
+            mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
+
+        // Calculate and set the border before the controls are placed.
+        SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
+        aBorder += mrBase.GetBorder(bOuterResize);
+        if (mrBase.GetBorderPixel() != aBorder)
+            mrBase.SetBorderPixel(aBorder);
+
+        // Calculate the client area, i.e. the area that the view shell has
+        // for placing its controls and content window..
+        SvBorder aBaseBorder (ArrangeGUIElements(rOrigin, rSize));
+        maClientArea = Rectangle(
+            Point (rOrigin.X()+aBaseBorder.Left(),
+                rOrigin.Y()+aBaseBorder.Top()),
+            Size (rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
+                rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom()));
+
+        pMainViewShell->Resize( maClientArea.TopLeft(), maClientArea.GetSize() );
+    }
+    else
+    {
+        // We have to set a border at all times so when the main view shell
+        // is not yet ready we simply set an empty border.
+        mrBase.SetBorderPixel(SvBorder());
+        maClientArea = Rectangle( rOrigin, rSize );;
+    }
+}
+
+
+
+
+SvBorder ViewShellBase::Implementation::ArrangeGUIElements (
+    const Point& rOrigin,
+    const Size& rSize)
+{
+    int nTop =  0;
+    if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
+    {
+        nTop = mpViewTabBar->GetHeight();
+        mpViewTabBar->SetPosSizePixel (rOrigin, Size(rSize.Width(),nTop));
+    }
+
+    return SvBorder(0,nTop,0,0);
+}
+
 
 
 } // end of namespace sd
@@ -1293,7 +1370,7 @@ ViewShellFactory::ViewShellFactory (
 
 
 
-::sd::ViewShell* ViewShellFactory::CreateShell (
+SfxShell* ViewShellFactory::CreateShell (
     ::sd::ShellId nId,
     ::Window* pParentWindow,
     ::sd::FrameView* pFrameView)
@@ -1347,14 +1424,6 @@ ViewShellFactory::ViewShellFactory (
                 pFrameView);
             break;
 
-        case ViewShell::ST_SLIDE:
-            pNewShell = new SlideViewShell (
-                mpViewFrame,
-                mrBase,
-                pParentWindow,
-                pFrameView);
-            break;
-
         case ViewShell::ST_SLIDE_SORTER:
             pNewShell = new ::sd::slidesorter::SlideSorterViewShell (
                 mpViewFrame,
@@ -1390,7 +1459,7 @@ ViewShellFactory::ViewShellFactory (
 
 
 
-void ViewShellFactory::ReleaseShell (::sd::ViewShell* pShell)
+void ViewShellFactory::ReleaseShell (SfxShell* pShell)
 {
     delete pShell;
 }
