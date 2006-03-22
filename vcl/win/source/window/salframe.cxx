@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:25:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3983,10 +3983,6 @@ static void ImplHandlePaintMsg( HWND hWnd )
                 aPEvt.mnBoundWidth      = aUpdateRect.right-aUpdateRect.left;
                 aPEvt.mnBoundHeight     = aUpdateRect.bottom-aUpdateRect.top;
 
-                // --- RTL --- (mirror paint rect)
-                if( Application::GetSettings().GetLayoutRTL() )
-                    aPEvt.mnBoundX = pFrame->maGeometry.nWidth-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
-
                 pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
             }
             else
@@ -4026,10 +4022,6 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
             aPEvt.mnBoundY          = pRect->top;
             aPEvt.mnBoundWidth      = pRect->right-pRect->left;
             aPEvt.mnBoundHeight     = pRect->bottom-pRect->top;
-
-            // --- RTL --- (mirror paint rect)
-            if( Application::GetSettings().GetLayoutRTL() )
-                aPEvt.mnBoundX = pFrame->maGeometry.nWidth-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
             pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
         }
