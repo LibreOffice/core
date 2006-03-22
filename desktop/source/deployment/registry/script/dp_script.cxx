@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:23:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,8 +394,9 @@ void BackendImpl::PackageImpl::processPackage_(
 } // anon namespace
 
 namespace sdecl = comphelper::service_decl;
+sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
 extern sdecl::ServiceDecl const serviceDecl(
-    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    serviceBI,
     "com.sun.star.comp.deployment.script.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
