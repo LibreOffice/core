@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_python.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-21 09:20:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,15 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     Value = "$ORIGIN";
 #else
   #ifdef UNX
-    Value = CONCAT7($ORIGIN/python-core-,PYVERSION,
+    Value = CONCAT9($ORIGIN/python-core-,PYVERSION,
 		   /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-dynload $ORIGIN/python-core-,PYVERSION,
-		   /lib/lib-tk $ORIGIN);
+		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
+		   /lib/site-packages $ORIGIN);
   #else
-    Value = STRING(CONCAT3($ORIGIN/python-core-,PYVERSION,/lib $ORIGIN));
+    Value = STRING(CONCAT5($ORIGIN/python-core-,PYVERSION,
+                   /lib $ORIGIN/python-core-,PYVERSION,
+		   /lib/site-packages $ORIGIN));
   #endif
 #endif
 End
