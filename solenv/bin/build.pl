@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.146 $
+#   $Revision: 1.147 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:59:02 $
+#   last change: $Author: obo $ $Date: 2006-03-22 09:00:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.146 $ ';
+    $id_str = ' $Revision: 1.147 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -2157,7 +2157,7 @@ sub read_ssolar_vars {
     if ( $^O eq 'MSWin32' ) {
         $tmp_file = $ENV{TEMP} . "\\solar.env.$$.tmp";
     } else {
-        $setsolar = '/net/jumbo.germany/cvs/buildenv/etools/setsolar.pl' if ! -e $setsolar;
+        $setsolar = '/net/jumbo2.germany/buildenv/r/etools/setsolar.pl' if ! -e $setsolar;
         $tmp_file = $ENV{HOME} . "/.solar.env.$$.tmp";
     };
     print_error('There is no setsolar found') if !-e $setsolar;
@@ -2166,7 +2166,13 @@ sub read_ssolar_vars {
         $pro = "-pro";
         $platform = $`;
     };
-    my $param = "-$ENV{WORK_STAMP} $pro $platform";
+
+    my ($verswitch, $source_root, $cwsname);
+    $verswitch = "-ver $ENV{UPDMINOR}" if (defined $ENV{UPDMINOR});
+    $source_root = '-sourceroot' if (defined $ENV{SOURCE_ROOT_USED});
+    $cws_name = "-cwsname $ENV{CWS_WORK_STAMP}" if (defined $ENV{CWS_WORK_STAMP});
+
+    my $param = "-$ENV{WORK_STAMP} $verswitch $source_root $cws_name $pro $platform";
     my $ss_comando = "$perl $setsolar -file $tmp_file $param $nul";
     $entries_file = '/CVS/Entries';
     if (system($ss_comando)) {
