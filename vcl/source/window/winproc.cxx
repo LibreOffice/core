@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:13:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2415,6 +2415,15 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_PAINT:
             {
             SalPaintEvent* pPaintEvt = (SalPaintEvent*)pEvent;
+
+            if( Application::GetSettings().GetLayoutRTL() )
+            {
+                // --- RTL --- (mirror paint rect)
+                Window* pWin = (Window*)pInst;
+                SalFrame* pSalFrame = pWin->ImplGetWindowImpl()->mpFrame;
+                pPaintEvt->mnBoundX = pFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
+            }
+
             Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
                                   Size( pPaintEvt->mnBoundWidth, pPaintEvt->mnBoundHeight ) );
             ImplHandlePaint( pWindow, aBoundRect );
