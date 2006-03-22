@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:46:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3479,7 +3479,7 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID_SETUP:          rPageSett.ReadSetup( rStrm );           break;
             case EXC_ID_BITMAP:         rPageSett.ReadBitmap( rStrm );          break;
 
-            case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( rStrm );      break;
+            case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( rStrm, true );break;
             case EXC_ID_SCL:            rTabViewSett.ReadScl( rStrm );          break;
         }
 
