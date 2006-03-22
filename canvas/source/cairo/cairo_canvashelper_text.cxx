@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper_text.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:35:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ namespace cairocanvas
         aSystemGraphicsData.hDrawable = pSurface->getPixmap();
         aSystemGraphicsData.pRenderFormat = pSurface->getRenderFormat();
 
-        return new VirtualDevice( &aSystemGraphicsData, 24 );
+        return new VirtualDevice( &aSystemGraphicsData, pSurface->getDepth() );
     }
 
     static bool
