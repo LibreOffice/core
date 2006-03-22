@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.200 $
+ *  $Revision: 1.201 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:46:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,13 @@
 #endif
 
 #include <algorithm>
+
+#ifndef Button6
+# define Button6 6
+#endif
+#ifndef Button7
+# define Button7 7
+#endif
 
 using namespace vcl_sal;
 using namespace vcl;
@@ -2615,8 +2622,17 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 : SALEVENT_MOUSEBUTTONUP;
         }
         else if( pEvent->xbutton.button == Button4 ||
-            pEvent->xbutton.button == Button5 )
+                 pEvent->xbutton.button == Button5 ||
+                 pEvent->xbutton.button == Button6 ||
+                 pEvent->xbutton.button == Button7 )
         {
+            const bool bIncrement(
+                pEvent->xbutton.button == Button4 ||
+                pEvent->xbutton.button == Button6 );
+            const bool bHoriz(
+                pEvent->xbutton.button == Button6 ||
+                pEvent->xbutton.button == Button7 );
+
             if( pEvent->type == ButtonRelease )
                 return 0;
 
@@ -2633,13 +2649,11 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             aWheelEvt.mnTime        = pEvent->xbutton.time;
             aWheelEvt.mnX           = pEvent->xbutton.x;
             aWheelEvt.mnY           = pEvent->xbutton.y;
-            aWheelEvt.mnDelta       =
-                pEvent->xbutton.button == Button4 ? 120 : -120;
-            aWheelEvt.mnNotchDelta  =
-                pEvent->xbutton.button == Button4 ? 1 : -1;
+            aWheelEvt.mnDelta       = bIncrement ? 120 : -120;
+            aWheelEvt.mnNotchDelta  = bIncrement ? 1 : -1;
             aWheelEvt.mnScrollLines = nLines;
             aWheelEvt.mnCode        = sal_GetCode( pEvent->xbutton.state );
-            aWheelEvt.mbHorz        = FALSE;
+            aWheelEvt.mbHorz        = bHoriz;
 
             nEvent = SALEVENT_WHEELMOUSE;
 
