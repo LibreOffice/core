@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 15:51:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1384,6 +1384,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
     CharSet eCharSet      = rAsciiOpt.eCharSet;
     BOOL bFixedWidth      = rAsciiOpt.bFixedWidth;
+    BOOL bSaveAsShown     = rAsciiOpt.bSaveAsShown;
 
     CharSet eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
@@ -1536,24 +1537,43 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     {
                         sal_uInt32 nFormat;
                         aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-                        if ( bFixedWidth )
+                        if ( bFixedWidth || bSaveAsShown )
                         {
+                            Color* pDummy;
+                            ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                            bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
+                        }
+                        else
+                        {
+                            ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
+                            bString = FALSE;
+                        }
+                    }
+                    else
+                    {
+                        if ( bSaveAsShown )
+                        {
+                            sal_uInt32 nFormat;
+                            aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
                             Color* pDummy;
                             ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
                         }
                         else
-                            ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
-                        bString = FALSE;
-                    }
-                    else
-                    {
-                        ((ScFormulaCell*)pCell)->GetString( aString );
+                            ((ScFormulaCell*)pCell)->GetString( aString );
                         bString = TRUE;
                     }
                 }
                 break;
             case CELLTYPE_STRING :
-                ((ScStringCell*)pCell)->GetString( aString );
+                if ( bSaveAsShown )
+                {
+                    sal_uInt32 nFormat;
+                    aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                    Color* pDummy;
+                    ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                }
+                else
+                    ((ScStringCell*)pCell)->GetString( aString );
                 bString = TRUE;
                 break;
             case CELLTYPE_EDIT :
@@ -1570,14 +1590,17 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 {
                     sal_uInt32 nFormat;
                     aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-                    if ( bFixedWidth )
+                    if ( bFixedWidth || bSaveAsShown )
                     {
                         Color* pDummy;
                         ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                        bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                     }
                     else
+                    {
                         ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
-                    bString = FALSE;
+                        bString = FALSE;
+                    }
                 }
                 break;
             default:
@@ -1597,10 +1620,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         }
         else
         {
-            if (!bString && cStrDelim != 0)
-                bString = (aString.GetChar(0) == cStrDelim);
-            if (!bString && cDelim != 0)
-                bString = (aString.Search( cDelim) != STRING_NOTFOUND);
+            if (!bString && cStrDelim != 0 && aString.Len() > 0)
+            {
+                sal_Unicode c = aString.GetChar(0);
+                bString = (c == cStrDelim || c == ' ' ||
+                        aString.GetChar( aString.Len()-1) == ' ' ||
+                        aString.Search( cStrDelim) != STRING_NOTFOUND);
+                if (!bString && cDelim != 0)
+                    bString = (aString.Search( cDelim) != STRING_NOTFOUND);
+            }
             if ( bString )
             {
                 if ( cStrDelim != 0 ) //@ BugId 55355
