@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 16:00:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,10 @@ enum SwDocumentSettingsPropertyHandles
     // --> FME 2006-03-01 #i3952#
     HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,
     // --> PB 2004-08-20 #i33095#
-    HANDLE_LOAD_READONLY
+    HANDLE_LOAD_READONLY,
+    // <--
+    // --> OD 2006-03-14 #i62875#
+    HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE
     // <--
 };
 
@@ -234,6 +237,9 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("IgnoreTabsAndBlanksForLineCalculation"),   HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
+        // <--
+        // --> OD 2006-03-14 #i62875#
+        { RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage"),   HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, CPPUTYPE_BOOLEAN, 0, 0},
         // <--
 
 /*
@@ -694,6 +700,15 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        // --> OD 2006-03-14 #i62875#
+        case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetDoNotCaptureDrawObjsOnPage( bTmp );
+        }
+        break;
+        // <--
+
         default:
             throw UnknownPropertyException();
     }
@@ -974,7 +989,15 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bReadonly, ::getBooleanCppuType() );
         }
         break;
-
+        // <--
+        // --> OD 2006-03-14 #i62875#
+        case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
+        {
+            sal_Bool bTmp = mpDoc->DoNotCaptureDrawObjsOnPage();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // <--
         default:
             throw UnknownPropertyException();
     }
