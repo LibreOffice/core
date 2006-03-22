@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:56:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,6 +381,9 @@ SwDoc::SwDoc() :
     bIgnoreFirstLineIndentInNumbering   =
     bDoNotJustifyLinesWithManualBreak   =
     bDoNotResetParaAttrsForNumFont      =
+    // --> OD 2006-03-14 #i62875#
+    mbDoNotCaptureDrawObjsOnPage        =
+    // <--
     bTableRowKeep                       =
     bIgnoreTabsAndBlanksForLineCalculation =
 
