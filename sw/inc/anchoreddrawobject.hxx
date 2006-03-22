@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:11:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,14 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // drawing object hasn't been positioned yet. Once, it's positioned the
         // boolean changes its state.
         bool mbNotYetPositioned;
+
+        // --> OD 2006-03-17 #i62875#
+        // boolean, indicating that after change of layout direction the
+        // anchored drawing object has to be captured on the page, if it exceeds
+        // the left or right page margin.
+        // Needed for compatibility option <DoNotCaptureDrawObjsOnPage>
+        bool mbCaptureAfterLayoutDirChange;
+        // <--
 
         /** method for the intrinsic positioning of a at-paragraph|at-character
             anchored drawing object
@@ -198,11 +206,20 @@ class SwAnchoredDrawObject : public SwAnchoredObject
                                        const SwRect& _rRect,
                                        PrepareHint _eHint );
 
-    // --> OD 2005-08-16 #i53320#
+        // --> OD 2005-08-16 #i53320#
         inline bool NotYetPositioned() const
         {
             return mbNotYetPositioned;
         }
+        // <--
+
+        // --> OD 2006-03-17 #i62875#
+        // change of layout direction needs to be tracked
+        // for setting <mbCaptureAfterLayoutDirChange>.
+        virtual void UpdateLayoutDir();
+        // <--
+        // --> OD 2006-03-17 #i62875#
+        const bool IsOutsidePage() const;
         // <--
 };
 
