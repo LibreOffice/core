@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 13:30:34 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,10 +844,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     mbUserCallActive( false ),
     // Note: value of <meEventTypeOfCurrentUserCall> isn't of relevance, because
     //       <mbUserCallActive> is FALSE.
-    meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY ),
-    // <--
-    // --> OD 2006-01-23 #124157#
-    mbConnectedToLayout( false )
+    meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
     // <--
 {
     // clear vector containing 'virtual' drawing objects.
@@ -1682,24 +1679,25 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         else
             DisconnectFromLayout();
     }
-    // --> OD 2006-01-23 #124157#
-    // no further notifications, if not connected to the Writer layout
-    else if ( mbConnectedToLayout )
+    // --> OD 2006-03-17 #i62875# - revised fix for issue #124157#
+    // no further notification, if not connected to Writer layout
+    else if ( maAnchoredDrawObj.GetAnchorFrm() &&
+              maAnchoredDrawObj.GetDrawObj()->GetUserCall() )
     {
         // --> OD 2004-07-01 #i28701# - on change of wrapping style, hell|heaven layer,
         // or wrapping style influence an update of the <SwSortedObjs> list,
         // the drawing object is registered in, has to be performed. This is triggered
         // by the 1st parameter of method call <_InvalidateObjs(..)>.
         if ( RES_SURROUND == nWhich ||
-                  RES_OPAQUE == nWhich ||
-                  RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
-                  ( RES_ATTRSET_CHG == nWhich &&
-                    ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_SURROUND, FALSE ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_OPAQUE, FALSE ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
+             RES_OPAQUE == nWhich ||
+             RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
+             ( RES_ATTRSET_CHG == nWhich &&
+               ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                           RES_SURROUND, FALSE ) ||
+                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                           RES_OPAQUE, FALSE ) ||
+                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                           RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
             NotifyBackgrdOfAllVirtObjs( 0L );
@@ -1851,11 +1849,6 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // OD 10.10.2003 #112299#
     mbDisconnectInProgress = false;
-
-    // --> OD 2006-01-23 #124157#
-    // Now the drawing object is disconnected from the Writer layout
-    mbConnectedToLayout = false;
-    // <--
 }
 
 // OD 26.06.2003 #108784# - method to remove 'master' drawing object
@@ -2124,10 +2117,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     {
         // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
         _InvalidateObjs();
-        // --> OD 2006-01-23 #124157#
-        // Now the drawing object is connected to the Writer layout
-        mbConnectedToLayout = true;
-        // <--
     }
 }
 
