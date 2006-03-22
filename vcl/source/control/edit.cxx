@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 16:49:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,13 +1012,16 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
             mnXOffset = 0;
             maText = ImplGetValidString( rText );
 
+            // #i54929# recalculate mnXOffset before ImplSetSelection,
+            // else cursor ends up in wrong position
+            ImplAlign();
+
             if ( pNewSelection )
                 ImplSetSelection( *pNewSelection, FALSE );
 
             if ( mnXOffset && !pNewSelection )
                 maSelection.Max() = 0;
 
-            ImplAlign();
             Invalidate();
         }
         else
@@ -1108,9 +1111,27 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
             if( !aClipRgn.IsNull() )
             {
                 // transform clipping region to border window's coordinate system
-                Point aBorderOffs;
-                aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
-                aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+                if( IsRTLEnabled() != pBorder->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL() )
+                {
+                    // need to mirror in case border is not RTL but edit is (or vice versa)
+
+                    // mirror
+                    Rectangle aBounds( aClipRgn.GetBoundRect() );
+                    int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
+                    aClipRgn.Move( xNew - aBounds.Left(), 0 );
+
+                    // move offset of border window
+                    Point aBorderOffs;
+                    aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
+                    aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+                }
+                else
+                {
+                    // normal case
+                    Point aBorderOffs;
+                    aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
+                    aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+                }
 
                 Region oldRgn( pBorder->GetClipRegion() );
                 pBorder->SetClipRegion( aClipRgn );
