@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:01:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ public:
     void                Initialize();
 
     /** Reads a WINDOW2 record. */
-    void                ReadWindow2( XclImpStream& rStrm );
+    void                ReadWindow2( XclImpStream& rStrm, bool bChart );
     /** Reads an SCL record. */
     void                ReadScl( XclImpStream& rStrm );
     /** Reads a PANE record. */
