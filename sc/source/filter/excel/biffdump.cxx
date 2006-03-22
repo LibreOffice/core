@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:24:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SOT_STORINFO_HXX
+#include <sot/storinfo.hxx>
+#endif
 
 #include <string.h>
 #include <stdlib.h>
@@ -78,8 +81,6 @@
 
 #define GETSTR(s)       ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
-static ByteString       aDefaultName;
-
 static const sal_Char*  __pHexPrefix = "0x";
 static const sal_Char*  __pBinPrefix = "0b";
 static const sal_Char*  pU = "UNKNOWN ";
@@ -95,14 +96,122 @@ UINT8*                  Biff8RecDumper::pCharVal = NULL;
 
 static const UINT16     nLevelInc = 1;
 
-
 static UINT16           nXFCount = 0;
 
 static UINT16           nSXLISize[2] = {0, 0};      // array size for SXLI records [rows/cols]
 static UINT16           nSXLIIndex = 0;             // current index for SXLI records
 
-Biff8RecDumper          __aDummyBiff8RecDumperInstance();
+// ============================================================================
 
+namespace {
+
+// decimal --------------------------------------------------------------------
+
+inline void lclAppendDec( ByteString& rStr, sal_uInt8 nData )
+{
+    rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, sal_Int8 nData )
+{
+    rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, sal_uInt16 nData )
+{
+    rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, sal_Int16 nData )
+{
+    rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, sal_uInt32 nData )
+{
+    rStr.Append( ByteString::CreateFromInt64( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, sal_Int32 nData )
+{
+    rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, double fData )
+{
+    rStr.Append( ByteString( ::rtl::math::doubleToString( fData, rtl_math_StringFormat_G, 15, '.', true ) ) );
+}
+
+// hexadecimal ----------------------------------------------------------------
+
+void lclAppendHex( ByteString& rStr, sal_uInt8 nData, bool bPrefix = true )
+{
+    static const sal_Char spcHexDigits[] = "0123456789ABCDEF";
+    static const ByteString saPrefix( "0x" );
+
+    if( bPrefix )
+        rStr.Append( saPrefix );
+    rStr.Append( spcHexDigits[ (nData >> 4) & 0x0F ] ).Append( spcHexDigits[ nData & 0x0F ] );
+}
+
+inline void lclAppendHex( ByteString& rStr, sal_Int8 nData, bool bPrefix = true )
+{
+    lclAppendHex( rStr, static_cast< sal_uInt8 >( nData ), bPrefix );
+}
+
+void lclAppendHex( ByteString& rStr, sal_uInt16 nData, bool bPrefix = true )
+{
+    lclAppendHex( rStr, static_cast< sal_uInt8 >( nData >> 8 ), bPrefix );
+    lclAppendHex( rStr, static_cast< sal_uInt8 >( nData ), false );
+}
+
+inline void lclAppendHex( ByteString& rStr, sal_Int16 nData, bool bPrefix = true )
+{
+    lclAppendHex( rStr, static_cast< sal_uInt16 >( nData ), bPrefix );
+}
+
+void lclAppendHex( ByteString& rStr, sal_uInt32 nData, bool bPrefix = true )
+{
+    lclAppendHex( rStr, static_cast< sal_uInt16 >( nData >> 16 ), bPrefix );
+    lclAppendHex( rStr, static_cast< sal_uInt16 >( nData ), false );
+}
+
+inline void lclAppendHex( ByteString& rStr, sal_Int32 nData, bool bPrefix = true )
+{
+    lclAppendHex( rStr, static_cast< sal_uInt32 >( nData ), bPrefix );
+}
+
+inline void lclAppendHex( ByteString& rStr, double fData, bool bPrefix = true )
+{
+    const sal_uInt32* pnData = reinterpret_cast< const sal_uInt32* >( &fData );
+    lclAppendHex( rStr, pnData[ 0 ], bPrefix );
+    lclAppendHex( rStr, pnData[ 1 ], false );
+}
+
+// others ---------------------------------------------------------------------
+
+void lclAppendGuid( ByteString& rStr, const XclGuid& rGuid )
+{
+    lclAppendHex( rStr, SVBT32ToLong( rGuid.mpnData ), false );
+    rStr.Append( '-' );
+    lclAppendHex( rStr, SVBT16ToShort( rGuid.mpnData + 4 ), false );
+    rStr.Append( '-' );
+    lclAppendHex( rStr, SVBT16ToShort( rGuid.mpnData + 6 ), false );
+    rStr.Append( '-' );
+    lclAppendHex( rStr, rGuid.mpnData[ 8 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 9 ], false );
+    rStr.Append( '-' );
+    lclAppendHex( rStr, rGuid.mpnData[ 10 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 11 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 12 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 13 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 14 ], false );
+    lclAppendHex( rStr, rGuid.mpnData[ 15 ], false );
+}
+
+} // namespace
+
+// ============================================================================
 
 static void __AddHexNibble( ByteString& r, UINT8 nVal )
 {
@@ -353,6 +462,70 @@ static void lcl_AddEnum(
 }
 
 
+namespace {
+
+void lclDumpString( SvStream& rOutStrm, const ByteString& rData )
+{
+    ByteString aOutStr;
+    xub_StrLen nIdx = 0;
+    for( ; (nIdx < rData.Len()) && (aOutStr.Len() < 80); ++nIdx )
+    {
+        sal_Char cChar = rData.GetChar( nIdx );
+        if( 32 <= cChar )
+            aOutStr.Append( cChar );
+        else
+        {
+            aOutStr.Append( '<' );
+            __AddHex( aOutStr, static_cast< sal_uInt8 >( cChar ) );
+            aOutStr.Append( '>' );
+        }
+    }
+    rOutStrm << aOutStr.GetBuffer();
+    if( nIdx < rData.Len() )
+        rOutStrm << "<...>";
+}
+
+void lclDumpStringValue( SvStream& rOutStrm, const ByteString& rName, const ByteString& rData )
+{
+    rOutStrm << rName.GetBuffer() << "='";
+    lclDumpString( rOutStrm, rData );
+    rOutStrm << '\'';
+}
+
+void lclDumpString( SvStream& rOutStrm, const String& rData )
+{
+    ByteString aOutStr;
+    xub_StrLen nIdx = 0;
+    for( ; (nIdx < rData.Len()) && (aOutStr.Len() < 80); ++nIdx )
+    {
+        sal_Unicode cChar = rData.GetChar( nIdx );
+        if( (32 <= cChar) && (cChar <= 255) )
+            aOutStr.Append( static_cast< sal_Char >( cChar ) );
+        else
+        {
+            aOutStr.Append( '<' );
+            if( cChar < 256 )
+                __AddHex( aOutStr, static_cast< sal_uInt8 >( cChar ) );
+            else
+                __AddHex( aOutStr, static_cast< sal_uInt16 >( cChar ) );
+            aOutStr.Append( '>' );
+        }
+    }
+    rOutStrm << aOutStr.GetBuffer();
+    if( nIdx < rData.Len() )
+        rOutStrm << "<...>";
+}
+
+void lclDumpStringValue( SvStream& rOutStrm, const ByteString& rName, const String& rData )
+{
+    rOutStrm << rName.GetBuffer() << "='";
+    lclDumpString( rOutStrm, rData );
+    rOutStrm << '\'';
+}
+
+} // namespace
+
+
 IdRangeList::~IdRangeList()
 {
     Clear();
@@ -372,8 +545,140 @@ void IdRangeList::Clear( void )
     List::Clear();
 }
 
+// ============================================================================
+//
+//  H E L P E R   O B J E C T S
+//
+// ============================================================================
 
+namespace {
 
+// ----------------------------------------------------------------------------
+
+class XclDumpStreamHeader
+{
+public:
+    explicit            XclDumpStreamHeader( SvStream& rInStrm, SvStream& rOutStrm, const String& rStrmName, const String& rStrmPath );
+                        ~XclDumpStreamHeader();
+    inline ULONG        GetStreamLen() const { return mnStrmLen; }
+
+private:
+    SvStream&           mrOutStrm;
+    String              maStrmName;
+    String              maStrmPath;
+    ByteString          maSeparator;
+    ULONG               mnStrmLen;
+};
+
+XclDumpStreamHeader::XclDumpStreamHeader( SvStream& rInStrm, SvStream& rOutStrm, const String& rStrmName, const String& rStrmPath ) :
+    mrOutStrm( rOutStrm ),
+    maStrmName( rStrmName ),
+    maStrmPath( rStrmPath ),
+    mnStrmLen( 0 )
+{
+    maSeparator.Assign( '+' ).Expand( 78, '-' );
+
+    rInStrm.Seek( STREAM_SEEK_TO_END );
+    mnStrmLen = rInStrm.Tell();
+    rInStrm.Seek( STREAM_SEEK_TO_BEGIN );
+
+    ByteString aLine;
+    lclAppendDec( aLine, mnStrmLen );
+
+    mrOutStrm << maSeparator.GetBuffer() << "\n";
+    mrOutStrm << "| STREAM-BEGIN\n";
+    mrOutStrm << "|   ";
+    lclDumpStringValue( mrOutStrm, "stream-name", maStrmName );
+    mrOutStrm << "\n|   ";
+    lclDumpStringValue( mrOutStrm, "stream-path", maStrmPath );
+    mrOutStrm << "\n|   stream-len=" << aLine.GetBuffer() << "\n";
+    mrOutStrm << "|\n\n";
+}
+
+XclDumpStreamHeader::~XclDumpStreamHeader()
+{
+    mrOutStrm << "|\n";
+    mrOutStrm << "|   ";
+    lclDumpStringValue( mrOutStrm, "stream-name", maStrmName );
+    mrOutStrm << "\n|   ";
+    lclDumpStringValue( mrOutStrm, "stream-path", maStrmPath );
+    mrOutStrm << "\n";
+    mrOutStrm << "| STREAM-END\n";
+    mrOutStrm << maSeparator.GetBuffer() << "\n\n";
+}
+
+// ----------------------------------------------------------------------------
+
+class XclDumpStorageHeader
+{
+public:
+    explicit            XclDumpStorageHeader( SotStorage& rInStrg, SvStream& rOutStrm, const String& rStrgPath );
+                        ~XclDumpStorageHeader();
+
+private:
+    SvStream&           mrOutStrm;
+    String              maStrgName;
+    String              maStrgPath;
+    ByteString          maSeparator;
+};
+
+XclDumpStorageHeader::XclDumpStorageHeader( SotStorage& rInStrg, SvStream& rOutStrm, const String& rStrgPath ) :
+    mrOutStrm( rOutStrm ),
+    maStrgName( rInStrg.GetName() ),
+    maStrgPath( rStrgPath )
+{
+    maSeparator.Assign( "++" ).Expand( 78, '=' );
+
+    mrOutStrm << maSeparator.GetBuffer() << "\n";
+    mrOutStrm << "|| STORAGE-BEGIN\n";
+    mrOutStrm << "||   ";
+    lclDumpStringValue( mrOutStrm, "storage-name", maStrgName );
+    mrOutStrm << "\n||   ";
+    lclDumpStringValue( mrOutStrm, "storage-path", maStrgPath );
+    mrOutStrm << "\n";
+
+    SvStorageInfoList aInfoList;
+    rInStrg.FillInfoList( &aInfoList );
+    ByteString aLine;
+    lclAppendDec( aLine, aInfoList.Count() );
+    mrOutStrm << "||   directory-size=" << aLine.GetBuffer() << "\n";
+
+    for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+    {
+        SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
+        mrOutStrm << "||     type=";
+        if( rInfo.IsStream() )
+            mrOutStrm << "stream   ";
+        else if( rInfo.IsStorage() )
+            mrOutStrm << "storage  ";
+        else
+            mrOutStrm << "unknown  ";
+        lclDumpStringValue( mrOutStrm, "name", rInfo.GetName() );
+        mrOutStrm << "\n";
+    }
+
+    mrOutStrm << "||\n\n";
+}
+
+XclDumpStorageHeader::~XclDumpStorageHeader()
+{
+    mrOutStrm << "||\n";
+    mrOutStrm << "||   ";
+    lclDumpStringValue( mrOutStrm, "storage-name", maStrgName );
+    mrOutStrm << "\n||   ";
+    lclDumpStringValue( mrOutStrm, "storage-path", maStrgPath );
+    mrOutStrm << "\n";
+    mrOutStrm << "|| STORAGE-END\n";
+    mrOutStrm << maSeparator.GetBuffer() << "\n\n";
+}
+
+// ----------------------------------------------------------------------------
+
+}
+
+// ============================================================================
+//
+// ============================================================================
 
 void Biff8RecDumper::Print( const ByteString& r )
 {
@@ -1163,9 +1468,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     rIn.PopPosition();
                 }
                 ADDTEXT( "name=" );
-                maNames.push_back( ByteStringRef( new ByteString ) );
-                ByteString& rName = *maNames.back();
-                AddUNICODEString( t, rIn, false, nNameLen, &rName );
+                ByteString aName;
+                AddUNICODEString( t, rIn, false, nNameLen, &aName );
                 if( bBuiltIn )
                 {
                     static const sal_Char* const ppcNames[] = {
@@ -1174,8 +1478,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         "Auto_Activate", "Auto_Deactivate", "Sheet_Title", "_FilterDatabase" };
                     lcl_AddEnum( t, nBuiltIn, ppcNames, STATIC_TABLE_SIZE( ppcNames ) );
                     if( (0 <= nBuiltIn) && (nBuiltIn < STATIC_TABLE_SIZE( ppcNames )) )
-                        rName.Assign( ppcNames[ nBuiltIn ] );
+                        aName.Assign( ppcNames[ nBuiltIn ] );
                 }
+                maNames.push_back( aName );
                 PRINT();
 
                 if( nFmlaSize && (rIn.GetRecLeft() > 0) )
@@ -2551,7 +2856,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "Stream ID: " );
                 __AddHex( t, nStrId );
                 PRINT();
-                DumpPivotCache( nStrId );
+                DumpRecordStream( OpenStorage( EXC_STORAGE_PTCACHE ), ScfTools::GetHexStr( nStrId ), EMPTY_STRING );
             }
             break;
             case 0x00D8:        // SXNUMGROUP - numerical grouping in pivot cache field
@@ -5130,55 +5435,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 }
 
 
-void Biff8RecDumper::DumpSubStream( SotStorageRef xStrg, const String& rStrmName )
-{
-    ByteString sOutput;
-
-    SotStorageStreamRef xSvStrm = OpenStream( xStrg, rStrmName );
-    if( !xSvStrm.Is() ) return;
-
-    xSvStrm->Seek( STREAM_SEEK_TO_END );
-    if( xSvStrm->Tell() == STREAM_SEEK_TO_END ) return;
-
-    sOutput = "-- substream dump --";
-    Print( sOutput );
-    sOutput = "Stream name: ";
-    sOutput += ByteString( rStrmName, RTL_TEXTENCODING_ASCII_US );
-    Print( sOutput );
-
-    XclImpStream* pOldStream = pIn;
-    pIn = new XclImpStream( *xSvStrm, GetRoot() );
-    XclImpStream& rIn = *pIn;
-    if( pOldStream )
-        rIn.CopyDecrypterFrom( *pOldStream );
-
-    // -- dump from here --
-    UINT16  nId;
-    BOOL bLoop = TRUE;
-
-    while( bLoop && rIn.StartNextRecord() )
-    {
-        nId = rIn.GetRecId();
-        if( HasModeDump( nId ) )
-            RecDump( TRUE );
-
-        bLoop = (nId != 0x000A);
-    }
-
-    sOutput = "-- end of stream --\n";
-    Print( sOutput );
-    delete pIn;
-    pIn = pOldStream;
-}
-
-
-void Biff8RecDumper::DumpPivotCache( const UINT16 nStrId )
-{
-    SotStorageRef xStrg = OpenStorage( EXC_STORAGE_PTCACHE );
-    DumpSubStream( xStrg, ScfTools::GetHexStr( nStrId ) );
-}
-
-
 static const sal_Char* GetBlipType( UINT8 n )
 {
     switch ( n )
@@ -5348,6 +5604,25 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen, bool bDumpOffset )
 
             n -= pIn->GetRecPos() - nP;
             nL = 0;     // loop to MsofbtBLIP
+        }
+        else if ( nR == 0xF00F && 0x10 <= n && 0x10 <= nL )
+        {   // ChildAnchor
+            ULONG nP = pIn->GetRecPos();
+            sal_Int32 n32;
+
+            aT.Assign( "    pos1=" );
+            *pIn >> n32;    lclAppendDec( aT, n32 );
+            aT.Append( "  pos2=" );
+            *pIn >> n32;    lclAppendDec( aT, n32 );
+            aT.Append( "  pos3=" );
+            *pIn >> n32;    lclAppendDec( aT, n32 );
+            aT.Append( "  pos4=" );
+            *pIn >> n32;    lclAppendDec( aT, n32 );
+            Print( aT );
+
+            ULONG nC = pIn->GetRecPos() - nP;
+            n -= nC;
+            nL -= nC;
         }
         else if ( nR == 0xF010 && 0x12 <= n && 0x12 <= nL )
         {   // ClientAnchor
@@ -5724,86 +5999,6 @@ void Biff8RecDumper::ContDump( const ULONG nL )
         n -= nInL;
 
         pIn->Read( pB, nInL );
-
-        // als Hex-Codes
-        nTmp = nInL;
-        p = pB;
-        nCharCnt = 0;
-        while( nTmp )
-        {
-            if( nCharCnt == nLineLen / 2 )
-                aT += ' ';
-
-            nCharCnt++;
-
-            aT += ' ';
-            __AddPureHex( aT, *p );
-            p++;
-
-            nTmp--;
-        }
-
-        if( bPart )
-            aT += GetBlanks( ( UINT16 ) ( ( nLineLen - nInL ) * 3 ) );
-
-        // als chars
-
-        aT += "    ";
-        if( nInL < 9 )
-            aT += ' ';
-
-        nTmp = nInL;
-        p = pB;
-        nCharCnt = 0;
-        while( nTmp )
-        {
-            if( nCharCnt == nLineLen / 2 )
-                aT += ' ';
-
-            nCharCnt++;
-
-            if( IsPrintable( *p ) )
-                aT += static_cast< sal_Char >( *p );
-            else
-                aT += '.';
-
-            p++;
-
-            nTmp--;
-        }
-
-        Print( aT );
-        aT.Erase();
-        aT += pLevelPre;
-
-        nC--;
-    }
-
-    delete[] pB;
-}
-
-
-void Biff8RecDumper::ContDumpStream( SvStream& rStrm, const ULONG nL )
-{
-    UINT32          nC = nMaxBodyLines;
-    UINT32          n = nL;
-    UINT32          nInL, nTmp;
-    UINT8*          pB = new UINT8[ nL ];
-    UINT8*          p;
-    const UINT16    nLineLen = 16;
-    UINT16          nCharCnt;
-    BOOL            bPart;
-    ByteString      aT;
-
-    aT += pLevelPre;
-
-    while( n && nC )
-    {
-        bPart = n < nLineLen;
-        nInL = bPart? n : nLineLen;
-        n -= nInL;
-
-        rStrm.Read( pB, nInL );
 
         // als Hex-Codes
         nTmp = nInL;
@@ -6800,7 +6995,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += aOperand;
                 pIn->Ignore( 2 );
                 if( (0 < nNameIdx) && (nNameIdx <= maNames.size()) )
-                    aOperand = *(maNames[ nNameIdx - 1 ]);
+                    aOperand = maNames[ nNameIdx - 1 ];
                 else
                     aOperand.Insert( "NAME(", 0 ).Append( ')' );
                 aStack.PushOperand( aOperand, nOp );
@@ -7025,7 +7220,57 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 }
 
 
+// ============================================================================
+//
+//  S T R E A M   C O N T E N T S
+//
+// ============================================================================
 
+void Biff8RecDumper::DumpBinary( SvStream& rInStrm, ULONG nSize )
+{
+    ULONG nStrmPos = rInStrm.Tell();
+    rInStrm.Seek( STREAM_SEEK_TO_END );
+    ULONG nStrmLen = rInStrm.Tell();
+    rInStrm.Seek( nStrmPos );
+    ULONG nDumpEnd = (nSize == STREAM_SEEK_TO_END) ? nStrmLen : ::std::min( nStrmPos + nSize, nStrmLen );
+
+    const ULONG LINE_SIZE = 16;
+    sal_uInt8 pnData[ LINE_SIZE ];
+
+    while( rInStrm.Tell() < nDumpEnd )
+    {
+        ByteString aBinLine;
+        ByteString aTextLine;
+
+        ULONG nLineLen = ::std::min( nDumpEnd - rInStrm.Tell(), LINE_SIZE );
+        rInStrm.Read( pnData, nLineLen );
+
+        for( sal_uInt8 *pnByte = pnData, *pnEnd = pnData + nLineLen; pnByte != pnEnd; ++pnByte )
+        {
+            if( pnByte - pnData == LINE_SIZE / 2 )
+            {
+                aBinLine.Append( ' ' );
+                aTextLine.Append( ' ' );
+            }
+            __AddPureHex( aBinLine, *pnByte );
+            aBinLine.Append( ' ' );
+            aTextLine.Append( static_cast< sal_Char >( IsPrintable( *pnByte ) ? *pnByte : '.' ) );
+        }
+
+        aBinLine.Expand( LINE_SIZE * 3 + 3, ' ' );
+        (*pDumpStream) << aBinLine.GetBuffer() << aTextLine.GetBuffer() << "\n";
+    }
+}
+
+// ============================================================================
+//
+//  F O R M   C O N T R O L S
+//
+// ============================================================================
+
+namespace {
+
+// little helpers -------------------------------------------------------------
 
 /** Import from bytestream. */
 SvStream& operator>>( SvStream& rStrm, XclGuid& rGuid )
@@ -7034,76 +7279,368 @@ SvStream& operator>>( SvStream& rStrm, XclGuid& rGuid )
     return rStrm;
 }
 
-/** Output as text. */
+/** Output guid into text stream. */
 SvStream& operator<<( SvStream& rStrm, const XclGuid& rGuid )
 {
     ByteString aOut;
-    __AddPureHex( aOut, SVBT32ToLong( rGuid.mpnData ) );
-    aOut.Append( '-' );
-    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpnData + 4 ) );
-    aOut.Append( '-' );
-    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpnData + 6 ) );
-    aOut.Append( '-' );
-    __AddPureHex( aOut, rGuid.mpnData[ 8 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 9 ] );
-    aOut.Append( '-' );
-    __AddPureHex( aOut, rGuid.mpnData[ 10 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 11 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 12 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 13 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 14 ] );
-    __AddPureHex( aOut, rGuid.mpnData[ 15 ] );
+    lclAppendGuid( aOut, rGuid );
     return rStrm << aOut.GetBuffer();
 }
+
+void lclAlignStream( SvStream& rInStrm, ULONG nStartPos, ULONG nDataWidth )
+{
+    rInStrm.SeekRel( nDataWidth - 1 - (rInStrm.Tell() - nStartPos + nDataWidth - 1) % nDataWidth );
+}
+
+// control types --------------------------------------------------------------
+
+const sal_uInt16 EXC_CTRL_PAGE          = 0x0007;
+const sal_uInt16 EXC_CTRL_IMAGE         = 0x000C;
+const sal_uInt16 EXC_CTRL_FRAME         = 0x000E;
+const sal_uInt16 EXC_CTRL_SPINBUTTON    = 0x0010;
+const sal_uInt16 EXC_CTRL_PUSHBUTTON    = 0x0011;
+const sal_uInt16 EXC_CTRL_TABSTRIP      = 0x0012;
+const sal_uInt16 EXC_CTRL_LABEL         = 0x0015;
+const sal_uInt16 EXC_CTRL_TEXTBOX       = 0x0017;
+const sal_uInt16 EXC_CTRL_LISTBOX       = 0x0018;
+const sal_uInt16 EXC_CTRL_COMBOBOX      = 0x0019;
+const sal_uInt16 EXC_CTRL_CHECKBOX      = 0x001A;
+const sal_uInt16 EXC_CTRL_OPTIONBUTTON  = 0x001B;
+const sal_uInt16 EXC_CTRL_TOGGLEBUTTON  = 0x001C;
+const sal_uInt16 EXC_CTRL_SCROLLBAR     = 0x002F;
+const sal_uInt16 EXC_CTRL_MULTIPAGE     = 0x0039;
+const sal_uInt16 EXC_CTRL_REFEDIT       = 0x8000;
+const sal_uInt16 EXC_CTRL_FONTDATA      = 0xFFF0;   // internal use only
+const sal_uInt16 EXC_CTRL_USERFORM      = 0xFFF1;   // internal use only
+const sal_uInt16 EXC_CTRL_ADDDATA       = 0xFFF2;   // internal use only
+const sal_uInt16 EXC_CTRL_FRAMECHILD    = 0xFFF3;   // internal use only
+const sal_uInt16 EXC_CTRL_UNKNOWN       = 0xFFFF;   // internal use only
+
+const sal_uInt16 EXC_CTRL_RECORD_ID     = 0x0000;
+const sal_uInt16 EXC_CTRL_CLIENT_ID     = 0x0200;
+const sal_uInt16 EXC_CTRL_CONTAINER_ID  = 0x0400;
+
+// control names --------------------------------------------------------------
+
+struct XclDumpControlInfo
+{
+    sal_uInt16          mnType;
+    const sal_Char*     mpcName;
+    sal_uInt16          mnId;
+};
+
+static const XclDumpControlInfo spControlInfos[] =
+{
+    { EXC_CTRL_PAGE,            "Page",         EXC_CTRL_CONTAINER_ID },
+    { EXC_CTRL_IMAGE,           "Image",        EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_FRAME,           "Frame",        EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_SPINBUTTON,      "Spin",         EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_PUSHBUTTON,      "PushButton",   EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_TABSTRIP,        "TabStrip",     EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_LABEL,           "Label",        EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_TEXTBOX,         "TextBox",      EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_LISTBOX,         "ListBox",      EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_COMBOBOX,        "ComboBox",     EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_CHECKBOX,        "CheckBox",     EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_OPTIONBUTTON,    "OptionButton", EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_TOGGLEBUTTON,    "ToggleButton", EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_SCROLLBAR,       "ScrollBar",    EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_MULTIPAGE,       "MultiPage",    EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_REFEDIT,         "RefEdit",      EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_FONTDATA,        "FontData",     EXC_CTRL_CLIENT_ID    },
+    { EXC_CTRL_USERFORM,        "UserForm",     EXC_CTRL_CONTAINER_ID },
+    { EXC_CTRL_ADDDATA,         "AddData",      EXC_CTRL_RECORD_ID    },
+    { EXC_CTRL_FRAMECHILD,      "FrameChild",   EXC_CTRL_RECORD_ID    }
+};
+
+typedef ::std::map< sal_uInt16, const XclDumpControlInfo* > XclDumpControlInfoMap;
+typedef ScfRef< XclDumpControlInfoMap >                     XclDumpControlInfoMapRef;
+
+XclDumpControlInfoMapRef lclCreateControlInfoMap()
+{
+    XclDumpControlInfoMapRef xMap( new XclDumpControlInfoMap );
+    for( const XclDumpControlInfo *pIt = spControlInfos, *pEnd = STATIC_TABLE_END( spControlInfos ); pIt != pEnd; ++pIt )
+        (*xMap)[ pIt->mnType ] = pIt;
+    return xMap;
+}
+
+const XclDumpControlInfoMap& lclGetControlInfoMap()
+{
+    static const XclDumpControlInfoMapRef sxMap = lclCreateControlInfoMap();
+    return *sxMap;
+}
+
+void lclAppendControlType( ByteString& rStr, sal_uInt16 nCtrlType )
+{
+    const XclDumpControlInfoMap& rMap = lclGetControlInfoMap();
+    XclDumpControlInfoMap::const_iterator aIt = rMap.find( nCtrlType );
+    rStr.Append( (aIt == rMap.end()) ? "*UNKNOWN*" : aIt->second->mpcName );
+}
+
+void lclDumpControlType( SvStream& rOutStrm, sal_uInt16 nCtrlType )
+{
+    ByteString aTitle( "type=" );
+    lclAppendHex( aTitle, nCtrlType );
+    aTitle.Append( " (" );
+    lclAppendControlType( aTitle, nCtrlType );
+    aTitle.Append( ')' );
+    rOutStrm << aTitle.GetBuffer();
+}
+
+sal_uInt16 lclDumpControlHeader( SvStream& rInStrm, SvStream& rOutStrm, sal_uInt16 nCtrlType )
+{
+    lclDumpControlType( rOutStrm, nCtrlType );
+    sal_uInt16 nId, nSize;
+    rInStrm >> nId >> nSize;
+    ByteString aLine( "  id=" );    lclAppendHex( aLine, nId );
+    const XclDumpControlInfoMap& rMap = lclGetControlInfoMap();
+    XclDumpControlInfoMap::const_iterator aIt = rMap.find( nCtrlType );
+    bool bValid = (aIt != rMap.end()) && (aIt->second->mnId == nId);
+    aLine.Append( bValid ? " (valid)" : " (invalid)" );
+    aLine.Append( "  size=" );      lclAppendHex( aLine, nSize );
+    rOutStrm << aLine.GetBuffer() << "\n";
+    return nSize;
+}
+
+// control GUIDs --------------------------------------------------------------
+
+struct XclDumpControlGuid
+{
+    sal_uInt16          mnType;
+    sal_uInt32          mnGuidData1;
+    sal_uInt16          mnGuidData2;
+    sal_uInt16          mnGuidData3;
+    sal_uInt8           mnGuidData41;
+    sal_uInt8           mnGuidData42;
+    sal_uInt8           mnGuidData43;
+    sal_uInt8           mnGuidData44;
+    sal_uInt8           mnGuidData45;
+    sal_uInt8           mnGuidData46;
+    sal_uInt8           mnGuidData47;
+    sal_uInt8           mnGuidData48;
+};
+
+static const XclDumpControlGuid spControlGuids[] =
+{
+    { EXC_CTRL_PUSHBUTTON,      0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77, 0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 },
+    { EXC_CTRL_TOGGLEBUTTON,    0x8BD21D60, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_CHECKBOX,        0x8BD21D40, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_OPTIONBUTTON,    0x8BD21D50, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_LABEL,           0x978C9E23, 0xD4B0, 0x11CE, 0xBF, 0x2D, 0x00, 0xAA, 0x00, 0x3F, 0x40, 0xD0 },
+    { EXC_CTRL_TEXTBOX,         0x8BD21D10, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_LISTBOX,         0x8BD21D20, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_COMBOBOX,        0x8BD21D30, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
+    { EXC_CTRL_SPINBUTTON,      0x79176FB0, 0xB7F2, 0x11CE, 0x97, 0xEF, 0x00, 0xAA, 0x00, 0x6D, 0x27, 0x76 },
+    { EXC_CTRL_SCROLLBAR,       0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D },
+    { EXC_CTRL_IMAGE,           0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 }
+};
+
+typedef ::std::map< XclGuid, sal_uInt16 >   XclDumpControlGuidMap;
+typedef ScfRef< XclDumpControlGuidMap >     XclDumpControlGuidMapRef;
+
+XclDumpControlGuidMapRef lclCreateControlGuidMap()
+{
+    XclDumpControlGuidMapRef xMap( new XclDumpControlGuidMap );
+    for( const XclDumpControlGuid *pIt = spControlGuids, *pEnd = STATIC_TABLE_END( spControlGuids ); pIt != pEnd; ++pIt )
+    {
+        XclGuid aGuid( pIt->mnGuidData1, pIt->mnGuidData2, pIt->mnGuidData3,
+            pIt->mnGuidData41, pIt->mnGuidData42, pIt->mnGuidData43, pIt->mnGuidData44,
+            pIt->mnGuidData45, pIt->mnGuidData46, pIt->mnGuidData47, pIt->mnGuidData48 );
+        (*xMap)[ aGuid ] = pIt->mnType;
+    }
+    return xMap;
+}
+
+const XclDumpControlGuidMap& lclGetControlGuidMap()
+{
+    static const XclDumpControlGuidMapRef sxMap = lclCreateControlGuidMap();
+    return *sxMap;
+}
+
+sal_uInt16 lclDumpControlGuid( SvStream& rInStrm, SvStream& rOutStrm )
+{
+    XclGuid aGuid;
+    rInStrm >> aGuid;
+    const XclDumpControlGuidMap& rMap = lclGetControlGuidMap();
+    XclDumpControlGuidMap::const_iterator aIt = rMap.find( aGuid );
+    sal_uInt16 nCtrlType = (aIt == rMap.end()) ? EXC_CTRL_UNKNOWN : aIt->second;
+    rOutStrm << "guid=" << aGuid;
+    return nCtrlType;
+};
+
+// other guids ----------------------------------------------------------------
+
+static const XclGuid saStdFontGuid( 0x0BE35203, 0x8F91, 0x11CE, 0x9D, 0xE3, 0x00, 0xAA, 0x00, 0x4B, 0xB8, 0x51 );
+static const XclGuid saStdPicGuid(  0x0BE35204, 0x8F91, 0x11CE, 0x9D, 0xE3, 0x00, 0xAA, 0x00, 0x4B, 0xB8, 0x51 );\
+
+// ----------------------------------------------------------------------------
+
+} // namespace
 
 // *** yet some other ugly macros for the specials of form control dumping ***
 
 // align the instream
-#define EXC_CTRLDUMP_ALIGN_INSTRM( val ) rInStrm.SeekRel( (val)-1-(rInStrm.Tell()-nStartPos+(val)-1)%(val) )
+#define EXC_CTRLDUMP_ALIGN_INSTRM( val ) lclAlignStream( rInStrm, nStartPos, val )
 // push the string to outstream
 #define EXC_CTRLDUMP_PRINT() { if( t.Len() ) { rOutStrm << t.GetBuffer() << '\n'; t.Erase(); } }
-#define EXC_CTRLDUMP_PRINTC() { if( t.Len() > 60 ) EXC_CTRLDUMP_PRINT(); }
 
 // implementation, don't use
-#define IMPL_EXC_CTRLDUMP_VALUE( type, func, text ) { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( type ) ); type n; rInStrm >> n; t += "  " text "="; func( t, n ); EXC_CTRLDUMP_PRINTC(); }
-#define IMPL_EXC_CTRLDUMP_VAR( var, mask, func, text ) { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( var ) ); rInStrm >> var; var &= (mask); t += "  " text "="; func( t, var ); EXC_CTRLDUMP_PRINTC(); }
+#define IMPL_EXC_CTRLDUMP_PLAIN_VALUE( type, func, text )    { type n; rInStrm >> n; t.Append( "  " text "=" ); func( t, n ); EXC_CTRLDUMP_PRINT(); }
+#define IMPL_EXC_CTRLDUMP_VALUE( type, func, text )          { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( type ) ); IMPL_EXC_CTRLDUMP_PLAIN_VALUE( type, func, text ); }
+#define IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, mask, func, text ) { rInStrm >> var; var &= (mask); t.Append( "  " text "=" ); func( t, var ); EXC_CTRLDUMP_PRINT(); }
+#define IMPL_EXC_CTRLDUMP_VAR( var, mask, func, text )       { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( var ) ); IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, mask, func, text ); }
 
-// read a value from stream
-#define EXC_CTRLDUMP_HEX4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt32, __AddHex, text )
-#define EXC_CTRLDUMP_DEC4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int32,  __AddDec, text )
-#define EXC_CTRLDUMP_HEX2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt16, __AddHex, text )
-#define EXC_CTRLDUMP_DEC2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int16,  __AddDec, text )
-#define EXC_CTRLDUMP_HEX1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt8,  __AddHex, text )
-#define EXC_CTRLDUMP_DEC1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int8,   __AddDec, text )
-// read a value from stream into existing variable
-#define EXC_CTRLDUMP_HEXVAR( var, text ) IMPL_EXC_CTRLDUMP_VAR( var, ~0, __AddHex, text )
-#define EXC_CTRLDUMP_DECVAR( var, text ) IMPL_EXC_CTRLDUMP_VAR( var, ~0, __AddDec, text )
-#define EXC_CTRLDUMP_HEXVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, __AddHex, text )
-#define EXC_CTRLDUMP_DECVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, __AddDec, text )
+// read a value from stream (no stream alignment)
+#define EXC_CTRLDUMP_PLAIN_HEX4( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_uInt32, lclAppendHex, text )
+#define EXC_CTRLDUMP_PLAIN_DEC4( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_Int32,  lclAppendDec, text )
+#define EXC_CTRLDUMP_PLAIN_HEX2( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_uInt16, lclAppendHex, text )
+#define EXC_CTRLDUMP_PLAIN_DEC2( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_Int16,  lclAppendDec, text )
+#define EXC_CTRLDUMP_PLAIN_HEX1( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_uInt8,  lclAppendHex, text )
+#define EXC_CTRLDUMP_PLAIN_DEC1( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_Int8,   lclAppendDec, text )
+// read a value from stream (with stream alignment)
+#define EXC_CTRLDUMP_HEX4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt32, lclAppendHex, text )
+#define EXC_CTRLDUMP_DEC4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int32,  lclAppendDec, text )
+#define EXC_CTRLDUMP_HEX2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt16, lclAppendHex, text )
+#define EXC_CTRLDUMP_DEC2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int16,  lclAppendDec, text )
+#define EXC_CTRLDUMP_HEX1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt8,  lclAppendHex, text )
+#define EXC_CTRLDUMP_DEC1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int8,   lclAppendDec, text )
+// read a value from stream into existing variable (no stream alignment)
+#define EXC_CTRLDUMP_PLAIN_HEXVAR( var, text )           IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, ~0,   lclAppendHex, text )
+#define EXC_CTRLDUMP_PLAIN_DECVAR( var, text )           IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, ~0,   lclAppendDec, text )
+#define EXC_CTRLDUMP_PLAIN_HEXVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, mask, lclAppendHex, text )
+#define EXC_CTRLDUMP_PLAIN_DECVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_PLAIN_VAR( var, mask, lclAppendDec, text )
+// read a value from stream into existing variable (with stream alignment)
+#define EXC_CTRLDUMP_HEXVAR( var, text )           IMPL_EXC_CTRLDUMP_VAR( var, ~0,   lclAppendHex, text )
+#define EXC_CTRLDUMP_DECVAR( var, text )           IMPL_EXC_CTRLDUMP_VAR( var, ~0,   lclAppendDec, text )
+#define EXC_CTRLDUMP_HEXVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, lclAppendHex, text )
+#define EXC_CTRLDUMP_DECVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, lclAppendDec, text )
+// read flag fields
+#define EXC_CTRLDUMP_PLAIN_STARTOPTFLAG( text, doread, defaults )\
+{                                                           \
+    nFlags = defaults;                                      \
+    t.Append( "  " text );                                  \
+    if( doread )                                            \
+        rInStrm >> nFlags;                                  \
+    else                                                    \
+        t.Append( "-defaulted" );                           \
+    t.Append( '=' );                                        \
+    lclAppendHex( t, nFlags );                              \
+}
+#define EXC_CTRLDUMP_STARTOPTFLAG( text, doread, defaults ) { if( doread ) { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( nFlags ) ); } EXC_CTRLDUMP_PLAIN_STARTOPTFLAG( text, doread, defaults ) }
+#define EXC_CTRLDUMP_PLAIN_STARTFLAG( text )                EXC_CTRLDUMP_PLAIN_STARTOPTFLAG( text, true, 0 )
+#define EXC_CTRLDUMP_STARTFLAG( text )                      EXC_CTRLDUMP_STARTOPTFLAG( text, true, 0 )
+#define EXC_CTRLDUMP_ADDFLAG( flag, text )                  { if( nFlags & (flag) ) t.Append( " " text ); }
+#define EXC_CTRLDUMP_ADDFLAGVALUE( start, width, text )     { sal_uInt32 nValue; ::extract_value( nValue, nFlags, start, width ); t.Append( " " text "=" ); lclAppendDec( t, nValue ); }
+#define EXC_CTRLDUMP_ENDFLAG( reserved )                    { if( nFlags & (reserved) ) { t.Append( " ?" ); lclAppendHex( t, static_cast< sal_uInt32 >( nFlags & (reserved) ) ); } EXC_CTRLDUMP_PRINT(); }
+// read coordinates
+#define EXC_CTRLDUMP_COORD2( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); EXC_CTRLDUMP_DEC2( text "-x" ); EXC_CTRLDUMP_DEC2( text "-y" ); }
+#define EXC_CTRLDUMP_COORD4( text ) { EXC_CTRLDUMP_DEC4( text "-x" ); EXC_CTRLDUMP_DEC4( text "-y" ); }
+#define EXC_CTRLDUMP_SIZE4( text )  { EXC_CTRLDUMP_DEC4( text "-width" ); EXC_CTRLDUMP_DEC4( text "-height" ); }
+// read guid
+#define EXC_CTRLDUMP_PLAIN_GUID( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( XclGuid, lclAppendGuid, text )
+#define EXC_CTRLDUMP_GUID( text )       { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); EXC_CTRLDUMP_PLAIN_GUID( text ); }
+// read control type
+#define EXC_CTRLDUMP_CTRLTYPE( var, text )                  \
+{                                                           \
+    EXC_CTRLDUMP_ALIGN_INSTRM( 2 );                         \
+    rInStrm >> var;                                         \
+    t.Assign( "  " text "=" ); lclAppendHex( t, var );      \
+    t.Append( " (" ); lclAppendControlType( t, var );       \
+    t.Append( ')' );                                        \
+    EXC_CTRLDUMP_PRINT();                                   \
+}
+// read character array, add to string, but do not print
+#define EXC_CTRLDUMP_RAWSTRING( var )                       \
+{                                                           \
+    t.Append( "='" );                                       \
+    if( var )                                               \
+    {                                                       \
+        EXC_CTRLDUMP_ALIGN_INSTRM( 4 );                     \
+        ULONG nNextPos = rInStrm.Tell() + (var);            \
+        if( var > 128 ) var = 128;                          \
+        sal_Char pc[ 129 ];                                 \
+        rInStrm.Read( pc, var ); pc[ var ] = '\0';          \
+        t.Append( pc );                                     \
+        rInStrm.Seek( nNextPos );                           \
+    }                                                       \
+    t.Append( '\'' );                                       \
+}
 // read a string
 #define EXC_CTRLDUMP_STRING( var, text )                    \
+{                                                           \
+    t.Append( "  " text );                                  \
+    EXC_CTRLDUMP_RAWSTRING( var );                          \
+    EXC_CTRLDUMP_PRINT();                                   \
+}
+// read an array of strings
+#define EXC_CTRLDUMP_STRINGARRAY( total, count, text )      \
+{                                                           \
+    ULONG nNextPos = rInStrm.Tell() + (total);              \
+    for( sal_uInt32 nIdx = 0; (nIdx < (count)) && (rInStrm.Tell() < nNextPos); ++nIdx )\
+    {                                                       \
+        EXC_CTRLDUMP_ALIGN_INSTRM( 4 );                     \
+        sal_uInt32 nLen;                                    \
+        rInStrm >> nLen;                                    \
+        nLen &= 0x7FFFFFFF;                                 \
+        t.Append( "  " text "[" );                          \
+        lclAppendDec( t, nIdx + 1 );                        \
+        t.Append( ']' );                                    \
+        EXC_CTRLDUMP_RAWSTRING( nLen );                     \
+    }                                                       \
+    EXC_CTRLDUMP_PRINT();                                   \
+    rInStrm.Seek( nNextPos );                               \
+}
+// read embedded font data
+#define EXC_CTRLDUMP_FONT( var, text )                      \
 if( var )                                                   \
 {                                                           \
-    EXC_CTRLDUMP_ALIGN_INSTRM( 4 );                         \
-    if( var > 128 ) var = 128;                              \
-    sal_Char* p = new sal_Char[ var + 1 ];                  \
-    rInStrm.Read( p, var ); p[ var ] = '\0';                \
-    t.Append( "  " text "='" ).Append( p ).Append( '\'' );  \
-    delete [] p;                                            \
-    EXC_CTRLDUMP_PRINTC();                                  \
+    EXC_CTRLDUMP_PRINT();                                   \
+    XclGuid aGuid; rInStrm >> aGuid;                        \
+    rOutStrm << "embedded-font-guid=" << aGuid;             \
+    if( aGuid == saStdFontGuid )                            \
+    {                                                       \
+        rOutStrm << " (StdFont)\n";                         \
+        EXC_CTRLDUMP_PLAIN_HEX1( "unknown1" );              \
+        EXC_CTRLDUMP_PLAIN_DEC1( "script-type" );           \
+        EXC_CTRLDUMP_PLAIN_HEX1( "unknown2" );              \
+        sal_uInt8 nFlags;                                   \
+        EXC_CTRLDUMP_PLAIN_STARTFLAG( "font-style-flags" ); \
+        EXC_CTRLDUMP_ADDFLAG( 0x02, "italic" );             \
+        EXC_CTRLDUMP_ADDFLAG( 0x04, "underline" );          \
+        EXC_CTRLDUMP_ADDFLAG( 0x08, "strikeout" );          \
+        EXC_CTRLDUMP_ENDFLAG( 0xF1 );                       \
+        EXC_CTRLDUMP_PLAIN_DEC2( "font-weight" );           \
+        EXC_CTRLDUMP_PLAIN_DEC4( "font-size" );             \
+/* font-size := pt*10000 + (1-((pt+1)%3))*2500 */           \
+        sal_uInt8 nLen;                                     \
+        EXC_CTRLDUMP_PLAIN_DECVAR( nLen, "font-name-len" ); \
+        sal_Char* p = new sal_Char[ nLen + 1 ];             \
+        rInStrm.Read( p, nLen ); p[ nLen ] = '\0';          \
+        t.Append( "  font-name='" ).Append( p ).Append( '\'' );\
+        delete [] p;                                        \
+        EXC_CTRLDUMP_PRINT();                               \
+    }                                                       \
+    else                                                    \
+        rOutStrm << " (*UNKNOWN*)\n";                       \
 }
-// ignore image data
+// read image data
 #define EXC_CTRLDUMP_IMAGE( var, text )                     \
 if( var )                                                   \
 {                                                           \
     EXC_CTRLDUMP_PRINT();                                   \
-    rInStrm.SeekRel( 20 );                                  \
-    sal_uInt32 nLen; rInStrm >> nLen;                       \
-    rInStrm.SeekRel( nLen );                                \
-    nExtSize += 24 + nLen;                                  \
-    t.Append( text "-ignore=" );                            \
-    __AddDec( t, static_cast< sal_uInt32 >( 24 + nLen ) );  \
-    EXC_CTRLDUMP_PRINT();                                   \
+    XclGuid aGuid; rInStrm >> aGuid;                        \
+    rOutStrm << "embedded-" text "-guid=" << aGuid;         \
+    if( aGuid == saStdPicGuid )                             \
+    {                                                       \
+        rOutStrm << " (StdPict)\n";                         \
+        EXC_CTRLDUMP_PLAIN_HEX2( "u1" );                    \
+        EXC_CTRLDUMP_PLAIN_HEX2( "u2" );                    \
+        sal_uInt32 nLen;                                    \
+        EXC_CTRLDUMP_PLAIN_DECVAR( nLen, text "-len" );     \
+        rInStrm.SeekRel( nLen );                            \
+    }                                                       \
+    else                                                    \
+        rOutStrm << " (*UNKNOWN*)\n";                       \
 }
 // hex dump remaining or unknown data
 #define EXC_CTRLDUMP_REMAINING( nextpos )                   \
@@ -7111,558 +7648,866 @@ if( var )                                                   \
     EXC_CTRLDUMP_ALIGN_INSTRM( 4 );                         \
     if( rInStrm.Tell() < (nextpos) )                        \
     {                                                       \
-        rOutStrm << "  unknown data:";                      \
-        ContDumpStream( rInStrm, ::std::min< ULONG >( (nextpos) - rInStrm.Tell(), 1024 ) );\
-        rOutStrm << '\n';                                   \
+        rOutStrm << "  unknown-data=\n";                    \
+        DumpBinary( rInStrm, ::std::min< ULONG >( (nextpos) - rInStrm.Tell(), 1024 ) );\
     }                                                       \
     rInStrm.Seek( nextpos );                                \
 }
-// read flag fields
-#define EXC_CTRLDUMP_STARTFLAG( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); rInStrm >> __nFlags; t += "  " text "="; __AddHex( t, __nFlags ); }
-#define EXC_CTRLDUMP_ADDFLAG( flag, text ) { if( __nFlags & (flag) ) t += " -" text; EXC_CTRLDUMP_PRINTC(); }
-#define EXC_CTRLDUMP_ENDFLAG( reserved ) EXC_CTRLDUMP_ADDFLAG( reserved, "!unknown!" )
-// read coordinates
-#define EXC_CTRLDUMP_COORD( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); EXC_CTRLDUMP_DEC2( text "-x" ); EXC_CTRLDUMP_DEC2( "y" ); }
-#define EXC_CTRLDUMP_SIZE() { EXC_CTRLDUMP_DEC4( "width" ); EXC_CTRLDUMP_DEC4( "height" ); }
 
 // *** macros end ***
 
-namespace {
-
-enum XclDumpControlType
+void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlType )
 {
-    EXC_CTRL_PUSHBUTTON,
-    EXC_CTRL_TOGGLEBUTTON,
-    EXC_CTRL_CHECKBOX,
-    EXC_CTRL_OPTIONBUTTON,
-    EXC_CTRL_LABEL,
-    EXC_CTRL_EDIT,
-    EXC_CTRL_LISTBOX,
-    EXC_CTRL_COMBOBOX,
-    EXC_CTRL_SPIN,
-    EXC_CTRL_SCROLLBAR,
-    EXC_CTRL_IMAGE,
-    EXC_CTRL_UNKNOWN
-};
-
-XclDumpControlType lclReadControlGuid( SvStream& rInStrm, SvStream& rOutStrm )
-{
-    static const XclGuid aPushButtonGuid(   0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77, 0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
-    static const XclGuid aToggleButtonGuid( 0x8BD21D60, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aCheckBoxGuid(     0x8BD21D40, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aOptionButtonGuid( 0x8BD21D50, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aLabelGuid(        0x978C9E23, 0xD4B0, 0x11CE, 0xBF, 0x2D, 0x00, 0xAA, 0x00, 0x3F, 0x40, 0xD0 );
-    static const XclGuid aEditGuid(         0x8BD21D10, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aListBoxGuid(      0x8BD21D20, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aComboBoxGuid(     0x8BD21D30, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
-    static const XclGuid aSpinGuid(         0x79176FB0, 0xB7F2, 0x11CE, 0x97, 0xEF, 0x00, 0xAA, 0x00, 0x6D, 0x27, 0x76 );
-    static const XclGuid aScrollBarGuid(    0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D );
-    static const XclGuid aImageGuid(        0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 );
-
-    XclDumpControlType eCtrlType = EXC_CTRL_UNKNOWN;
-    XclGuid aGuid;
-    rInStrm >> aGuid;
-    rOutStrm << "guid=" << aGuid << " (";
-    if( aGuid == aPushButtonGuid )
-    {
-        eCtrlType = EXC_CTRL_PUSHBUTTON;
-        rOutStrm << "PushButton";
-    }
-    else if( aGuid == aToggleButtonGuid )
-    {
-        eCtrlType = EXC_CTRL_TOGGLEBUTTON;
-        rOutStrm << "ToggleButton";
-    }
-    else if( aGuid == aCheckBoxGuid )
-    {
-        eCtrlType = EXC_CTRL_CHECKBOX;
-        rOutStrm << "CheckBox";
-    }
-    else if( aGuid == aOptionButtonGuid )
-    {
-        eCtrlType = EXC_CTRL_OPTIONBUTTON;
-        rOutStrm << "RadioButton";
-    }
-    else if( aGuid == aLabelGuid )
-    {
-        eCtrlType = EXC_CTRL_LABEL;
-        rOutStrm << "Label";
-    }
-    else if( aGuid == aEditGuid )
-    {
-        eCtrlType = EXC_CTRL_EDIT;
-        rOutStrm << "Edit";
-    }
-    else if( aGuid == aListBoxGuid )
-    {
-        eCtrlType = EXC_CTRL_LISTBOX;
-        rOutStrm << "ListBox";
-    }
-    else if( aGuid == aComboBoxGuid )
-    {
-        eCtrlType = EXC_CTRL_COMBOBOX;
-        rOutStrm << "ComboBox";
-    }
-    else if( aGuid == aSpinGuid )
-    {
-        eCtrlType = EXC_CTRL_SPIN;
-        rOutStrm << "Spin";
-    }
-    else if( aGuid == aScrollBarGuid )
-    {
-        eCtrlType = EXC_CTRL_SCROLLBAR;
-        rOutStrm << "ScrollBar";
-    }
-    else if( aGuid == aImageGuid )
-    {
-        eCtrlType = EXC_CTRL_IMAGE;
-        rOutStrm << "Image";
-    }
-    else
-    {
-        eCtrlType = EXC_CTRL_UNKNOWN;
-        rOutStrm << "*UNKNOWN*";
-    }
-    rOutStrm << ")";
-
-    return eCtrlType;
-};
-
-} // namespace
-
-void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
-{
-    if( !pDumpStream ) return;
-    rInStrm.Seek( STREAM_SEEK_TO_END );
-    ULONG nInSize = rInStrm.Tell();
-    rInStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    if( nInSize == ~0UL ) return;
-
     SvStream& rOutStrm = *pDumpStream;
 
-    ByteString aStrmLen;
-    rOutStrm << "\n\n\n-- Ctls stream dump --   stream-len=0x";
-    __AddHex( aStrmLen, nInSize );
-    rOutStrm << aStrmLen.GetBuffer() << "=";
-    aStrmLen.Erase();
-    __AddDec( aStrmLen, nInSize );
-    rOutStrm << aStrmLen.GetBuffer() << "\n";
+    sal_uInt16 nSize = lclDumpControlHeader( rInStrm, rOutStrm, nCtrlType );
+    if( nSize > 0 )
+    {
+        ULONG nStartPos = rInStrm.Tell();   // for stream alignment macro
+        ByteString t;                       // "t" needed for macros
+        sal_uInt32 nFlags = 0;              // "nFlags" needed for macros
 
-    XclDumpControlType eCtrlType = EXC_CTRL_UNKNOWN;
+        bool bHasFontData = false;
+        sal_uInt32 nNameLen = 0;
+        sal_uInt32 nCaptionLen = 0;
+        sal_uInt32 nValueLen = 0;
+        sal_uInt32 nGroupNameLen = 0;
+        sal_uInt32 nTagLen = 0;
+        sal_uInt32 nTipLen = 0;
+        sal_uInt32 nCtrlSrcLen = 0;
+        sal_uInt16 nPic = 0;
+        sal_uInt16 nIcon = 0;
+        sal_uInt16 nFont = 0;
+
+        switch( nCtrlType )
+        {
+            case EXC_CTRL_PUSHBUTTON:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "picpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "accel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "notakefocus" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFF800 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x0004, 0x0000001B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
+
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD2( "picpos" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "accel" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE4( "size" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+                bHasFontData = true;
+            }
+            break;
+
+            case EXC_CTRL_TOGGLEBUTTON:
+            case EXC_CTRL_CHECKBOX:
+            case EXC_CTRL_OPTIONBUTTON:
+            case EXC_CTRL_TEXTBOX:
+            case EXC_CTRL_LISTBOX:
+            case EXC_CTRL_COMBOBOX:
+            case EXC_CTRL_REFEDIT:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "maxlen" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000010, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000020, "scrollbars" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "style" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000080, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "passwordchar" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "listwidth" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "boundcol" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "textcol" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "colcount" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00004000, "listrows" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "colwidth?" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00010000, "matchentry" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00020000, "liststyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00040000, "showdropbtn" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00100000, "dropbtnstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "multistate" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "value" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01000000, "picpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02000000, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04000000, "specialeff" );
+                EXC_CTRLDUMP_ADDFLAG( 0x08000000, "icon" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x20000000, "accel" );
+                EXC_CTRLDUMP_ENDFLAG( 0x40080000 ); // 0x80000000 always set?
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                EXC_CTRLDUMP_STARTFLAG( "2nd-content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "groupname" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFFE );
+                sal_uInt32 nCtrlFlags2 = nFlags;
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x00000001, 0x2C80081B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "colheads" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "intheight" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "matchreq" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "align" );
+                EXC_CTRLDUMP_ADDFLAGVALUE( 15, 4, "ime-mode" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00080000, "dragbehav" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00100000, "enterkeybehav" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "enterfieldbehav" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "tabkeybehav" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04000000, "selmargin" );
+                EXC_CTRLDUMP_ADDFLAG( 0x08000000, "autowordsel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                EXC_CTRLDUMP_ADDFLAG( 0x20000000, "hidesel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x40000000, "autotab" );
+                EXC_CTRLDUMP_ADDFLAG( 0x80000000, "multiline" );
+                EXC_CTRLDUMP_ENDFLAG( 0x030043F1 );
+
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x00000004 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_DEC4( "maxlen" );
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "borderstyle" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC1( "scrollbars" );
+                if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC1( "style" );
+                if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX2( "passwordchar" );
+                if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_DEC4( "listwidth" );
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC2( "boundcol" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC2( "textcol" );
+                if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC2( "colcount" );
+                if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC2( "listrows" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC2( "colwidth?" );
+                if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_DEC1( "matchentry" );
+                if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_DEC1( "liststyle" );
+                if( nCtrlFlags & 0x00040000 ) EXC_CTRLDUMP_DEC1( "showdropbtn" );
+                if( nCtrlFlags & 0x00100000 ) EXC_CTRLDUMP_DEC1( "dropbtnstyle" );
+                if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_DEC1( "multistate" );
+                if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_DECVARMASK( nValueLen, 0x7FFFFFFF, "value-len" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x01000000 ) EXC_CTRLDUMP_COORD2( "picpos" );
+                if( nCtrlFlags & 0x02000000 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x04000000 ) EXC_CTRLDUMP_DEC4( "specialeff" );
+                if( nCtrlFlags & 0x08000000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+                if( nCtrlFlags & 0x10000000 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x20000000 ) EXC_CTRLDUMP_HEX1( "accel" );
+                if( nCtrlFlags2 & 0x00000001 ) EXC_CTRLDUMP_DECVARMASK( nGroupNameLen, 0x7FFFFFFF, "groupname-len" );
+
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_SIZE4( "size" );
+                if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_STRING( nValueLen, "value" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                if( nCtrlFlags2 & 0x00000001 ) EXC_CTRLDUMP_STRING( nGroupNameLen, "groupname" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+                bHasFontData = true;
+            }
+            break;
+
+            case EXC_CTRL_LABEL:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "picpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "specialeff" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0800, "accel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x1000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFE000 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x0004, 0x0080001B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF0 ); // 0x00000001 always set?
+
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD2( "picpos" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "borderstyle" );
+                if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_HEX2( "specialeff" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "accel" );
+                if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE4( "size" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+                bHasFontData = true;
+            }
+            break;
+
+            case EXC_CTRL_SPINBUTTON:
+            case EXC_CTRL_SCROLLBAR:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000010, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "unknown1" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "unknown2" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "unknown3" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000020, "min" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "max" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000080, "value" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "step" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "page-step" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "orient" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00004000, "prop-thumb" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "delay" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00010000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFE0000 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x00000001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x00000004, 0x0000001B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                EXC_CTRLDUMP_ENDFLAG( 0xEFFFFFF1 );
+
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC4( "min" );
+                if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC4( "max" );
+                if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC4( "value" );
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_HEX4( "unknown1" );
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX4( "unknown2" );
+                if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_HEX4( "unknown3" );
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC4( "step" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC4( "page-step" );
+                if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC4( "orient" );
+                if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC4( "prop-thumb" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC4( "delay" );
+                if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+
+                if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_SIZE4( "size" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+            }
+            break;
+
+            case EXC_CTRL_IMAGE:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "autosize" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "picsizemode" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "speceffect" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0800, "picalign" );
+                EXC_CTRLDUMP_ADDFLAG( 0x1000, "pictiling" );
+                EXC_CTRLDUMP_ADDFLAG( 0x2000, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x4000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFF8003 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_HEX1( "borderstyle" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC1( "picsizemode" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX1( "speceffect" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX1( "picalign" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x2000, 0x0000001B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFF5 );
+
+                if( nCtrlFlags & 0x4000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+
+                if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_SIZE4( "size" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+            }
+            break;
+
+            case EXC_CTRL_TABSTRIP:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "selected-tab" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000010, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000020, "caption-arr-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "taborientation" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "tabstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "multirow" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "fixed-width" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "fixed-height" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "infotip-arr-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00020000, "id-arr-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00040000, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00080000, "last-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "unknown-arr-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "tab-count" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "shortcut-arr-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01000000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFE116088 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                sal_uInt32 nTabCount = 0;
+                sal_uInt32 nInfoArrLen = 0;
+                sal_uInt32 nIdArrLen = 0;
+                sal_uInt32 nUnknownArrLen = 0;
+                sal_uInt32 nShortArrLen = 0;
+
+                if( nCtrlFlags & 0x00000001 ) EXC_CTRLDUMP_DEC4( "selected-tab" );      // size ok?
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x00000004 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_HEXVAR( nCaptionLen, "caption-arr-len" );
+                if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );          // size ok?
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_DEC4( "taborientation" );    // size ok?
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_DEC4( "tabstyle" );          // size ok?
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC4( "fixed-width" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC4( "fixed-height" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_HEXVAR( nTipLen, "infotip-arr-len" );
+                if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_HEXVAR( nIdArrLen, "id-arr-len" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x00040000, 0x0000001B );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFFD );
+
+                if( nCtrlFlags & 0x00080000 ) EXC_CTRLDUMP_DEC4( "last-id" );
+                if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_HEXVAR( nUnknownArrLen, "unknown-arr-len" );
+                if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_DECVAR( nTabCount, "tab-count" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_HEXVAR( nShortArrLen, "shortcut-arr-len" );
+                if( nCtrlFlags & 0x01000000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_SIZE4( "size" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_STRINGARRAY( nCaptionLen, nTabCount, "caption" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_STRINGARRAY( nTipLen, nTabCount, "infotip" );
+                if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_STRINGARRAY( nIdArrLen, nTabCount, "id" );
+                if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_STRINGARRAY( nUnknownArrLen, nTabCount, "unknown" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_STRINGARRAY( nShortArrLen, nTabCount, "shortcut" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+                bHasFontData = true;
+            }
+            break;
+
+            case EXC_CTRL_USERFORM:
+            case EXC_CTRL_FRAME:
+            case EXC_CTRL_MULTIPAGE:
+            case EXC_CTRL_PAGE:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "last-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000080, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "scrollbars" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "scrollsize" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "scrollpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "icon" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00010000, "cycle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00020000, "speceffect" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00040000, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00080000, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00100000, "font" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "zoom" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "picalign" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01000000, "pictiling" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02000000, "picsizemode" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04000000, "typeinfover" );
+                EXC_CTRLDUMP_ADDFLAG( 0x08000000, "drawbuffer" );
+                EXC_CTRLDUMP_ENDFLAG( 0xF0006031 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x00000004 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_DEC4( "last-id" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x00000040, 0x00000002 );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFFD );
+
+                if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_HEX1( "borderstyle" );
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX1( "scrollbars" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+                if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_DEC1( "cycle" );
+                if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_HEX1( "speceffect" );
+                if( nCtrlFlags & 0x00040000 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x00080000 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x00100000 ) EXC_CTRLDUMP_HEXVAR( nFont, "font" );
+                if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
+                if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_DEC4( "zoom" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_HEX1( "picalign" );
+                if( nCtrlFlags & 0x02000000 ) EXC_CTRLDUMP_DEC1( "picsizemode" );
+                if( nCtrlFlags & 0x04000000 ) EXC_CTRLDUMP_DEC4( "typeinfover" );
+                if( nCtrlFlags & 0x08000000 ) EXC_CTRLDUMP_DEC4( "drawbuffer" );
+
+                if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_SIZE4( "size" );
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_SIZE4( "scrollsize" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_COORD4( "scrollpos" );
+                if( nCtrlFlags & 0x00080000 ) EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                EXC_CTRLDUMP_FONT( nFont, "font" );
+                EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
+                EXC_CTRLDUMP_IMAGE( nPic, "pic" );
+            }
+            break;
+
+            case EXC_CTRL_FONTDATA:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01, "font-name" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02, "font-style" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04, "font-size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10, "language-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x40, "align" );
+                EXC_CTRLDUMP_ADDFLAG( 0x80, "font-weight" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFF08 ); // 0x20 always set?
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nNameLen, 0x7FFFFFFF, "font-name-len" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "font-style-flags", nCtrlFlags & 0x0002, 0x40000000 );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "bold" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "italic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "underline" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "strikeout" );
+                EXC_CTRLDUMP_ADDFLAG( 0x2000, "sunken" );
+                EXC_CTRLDUMP_ENDFLAG( 0xBFFFDFF0 ); // 0x40000000 always set?
+
+                if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_DEC4( "font-size" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX2( "language-id" );
+                if( nCtrlFlags & 0x0040 )
+                {
+                    EXC_CTRLDUMP_ALIGN_INSTRM( 2 );
+                    sal_uInt16 nAlign; rInStrm >> nAlign;
+                    t += "  align="; lclAppendDec( t, nAlign );
+                    switch( nAlign )
+                    {
+                        case 1: t += "=left";   break;
+                        case 2: t += "=right";  break;
+                        case 3: t += "=center"; break;
+                        default: t += "=!unknown!";
+                    }
+                    EXC_CTRLDUMP_PRINT();
+                }
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC2( "font-weight" );
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_STRING( nNameLen, "font-name" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+            }
+            break;
+
+            case EXC_CTRL_ADDDATA:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "guid1" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "guid2" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "guid4" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "unknown1" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFB4 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_HEX4( "unknown1" );
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_GUID( "guid1" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_GUID( "guid2" );
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_GUID( "guid4" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+            }
+            break;
+
+            case EXC_CTRL_FRAMECHILD:
+            {
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "name-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "tag-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "storage-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "helpcontext-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "substream-len" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "tabpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "type" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "pos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0800, "tiptext" );
+                EXC_CTRLDUMP_ADDFLAG( 0x2000, "ctrl-source" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFD600 );
+                sal_uInt32 nCtrlFlags = nFlags;
+
+                sal_uInt32 nStorageId = 0;
+                sal_uInt32 nSubStrmLen = 0;
+                sal_uInt16 nChildType = EXC_CTRL_UNKNOWN;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nNameLen, 0x7FFFFFFF, "name-len" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_DECVARMASK( nTagLen, 0x7FFFFFFF, "tag-len" );
+                if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_PLAIN_DECVAR( nStorageId, "storage-id" );
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_PLAIN_DEC4( "helpcontext-id" );
+
+                EXC_CTRLDUMP_STARTOPTFLAG( "option-flags", nCtrlFlags & 0x0010, 0x00000033 );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "tabstop" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "visible" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00040000, "container" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFBFFFC );
+
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_HEXVAR( nSubStrmLen, "substream-len" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC2( "tabpos" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_CTRLTYPE( nChildType, "type" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_DECVARMASK( nTipLen, 0x7FFFFFFF, "infotip-len" );
+                if( nCtrlFlags & 0x2000 ) EXC_CTRLDUMP_DECVARMASK( nCtrlSrcLen, 0x7FFFFFFF, "ctrl-source-len" );
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_STRING( nNameLen, "name" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_STRING( nTagLen, "tag" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_COORD4( "pos" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_STRING( nTipLen, "infotip" );
+                if( nCtrlFlags & 0x2000 ) EXC_CTRLDUMP_STRING( nCtrlSrcLen, "ctrl-source" );
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+
+                if( (nCtrlFlags & 0x0080) && (nChildType != EXC_CTRL_UNKNOWN) )
+                {
+                    if( (nFlags & 0x00040000) && (nStorageId > 0) )
+                        maCtrlStorages.push_back( XclDumpCtrlPortion( nStorageId, nChildType ) );
+                    if( (nCtrlFlags & 0x0020) && (nSubStrmLen > 0) )
+                        maCtrlPortions.push_back( XclDumpCtrlPortion( nSubStrmLen, nChildType ) );
+                }
+            }
+            break;
+
+            default:
+                EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
+        }
+
+        // font data
+        if( bHasFontData )
+            DumpControlContents( rInStrm, EXC_CTRL_FONTDATA );
+    }
+}
+
+// ============================================================================
+//
+//  S T R E A M S
+//
+// ============================================================================
+
+void Biff8RecDumper::DumpBinaryStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath )
+{
+    SotStorageStreamRef xInStrm = OpenStream( xStrg, rStrmName );
+    if( !xInStrm || !pDumpStream ) return;
+
+    XclDumpStreamHeader aStrmHeader( *xInStrm, *pDumpStream, rStrmName, rStrgPath );
+    DumpBinary( *xInStrm );
+    (*pDumpStream) << "\n";
+}
+
+void Biff8RecDumper::DumpTextStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath )
+{
+    SotStorageStreamRef xInStrm = OpenStream( xStrg, rStrmName );
+    if( !xInStrm || !pDumpStream ) return;
+
+    XclDumpStreamHeader aStrmHeader( *xInStrm, *pDumpStream, rStrmName, rStrgPath );
+    while( xInStrm->Tell() < aStrmHeader.GetStreamLen() )
+    {
+        ByteString aLine;
+        xInStrm->ReadLine( aLine );
+        lclDumpString( *pDumpStream, aLine );
+        (*pDumpStream) << "\n";
+    }
+    (*pDumpStream) << "\n";
+}
+
+void Biff8RecDumper::DumpRecordStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath )
+{
+    SotStorageStreamRef xInStrm = OpenStream( xStrg, rStrmName );
+    if( !xInStrm || !pDumpStream ) return;
+
+    XclDumpStreamHeader aStrmHeader( *xInStrm, *pDumpStream, rStrmName, rStrgPath );
+
+    XclImpStream* pOldStream = pIn;
+    pIn = new XclImpStream( *xInStrm, GetRoot() );
+    XclImpStream& rIn = *pIn;
+    if( pOldStream )
+        rIn.CopyDecrypterFrom( *pOldStream );
+
+    // -- dump from here --
+    UINT16  nId;
+    BOOL bLoop = TRUE;
+
+    while( bLoop && rIn.StartNextRecord() )
+    {
+        nId = rIn.GetRecId();
+        if( HasModeDump( nId ) )
+            RecDump( TRUE );
+
+        bLoop = (nId != 0x000A);
+    }
+
+    delete pIn;
+    pIn = pOldStream;
+}
+
+void Biff8RecDumper::DumpCtlsStream()
+{
+    SotStorageStreamRef xInStrm = OpenStream( EXC_STREAM_CTLS );
+    if( !xInStrm || !pDumpStream ) return;
+
+    SvStream& rInStrm = *xInStrm;
+    SvStream& rOutStrm = *pDumpStream;
+    XclDumpStreamHeader aStrmHeader( rInStrm, rOutStrm, EXC_STREAM_CTLS, EMPTY_STRING );
 
     for( StrmPortionMap::const_iterator aIt = maCtlsPosMap.begin(), aEnd = maCtlsPosMap.end(); aIt != aEnd; ++aIt )
     {
         ULONG nCtrlPos = static_cast< ULONG >( aIt->first );
         ULONG nCtrlEnd = nCtrlPos + static_cast< ULONG >( aIt->second );
-        if( nCtrlEnd <= nInSize )
+        if( nCtrlEnd <= aStrmHeader.GetStreamLen() )
         {
+            // stream position
             ULONG nStartPos = nCtrlPos;     // for stream alignment macro
-            ULONG nExtSize = 0;
             rInStrm.Seek( nStartPos );
 
-            ByteString t;           // "t" needed for macros
-            sal_uInt32 __nFlags;    // "__nFlags" needed for macros
-
-            // stream position
-            t.Append( "\npos=" );
-            __AddHex( t, aIt->first );
-            t.Append( "  len=" );
-            __AddHex( t, aIt->second );
-            t.Append( "  " );
-            rOutStrm << t.GetBuffer();
+            ByteString t( "\npos=" );   __AddHex( t, aIt->first );
+            t.Append( "  len=" );       __AddHex( t, aIt->second );
+            rOutStrm << t.GetBuffer() << "  ";
 
             // control type
-            XclDumpControlType eCtrlType = lclReadControlGuid( rInStrm, rOutStrm );
+            sal_uInt16 nCtrlType = lclDumpControlGuid( rInStrm, rOutStrm );
             rOutStrm << "\n";
-            if( eCtrlType != EXC_CTRL_UNKNOWN )
-            {
-                // header
-                sal_uInt16 nId, nSize;
-                rInStrm >> nId >> nSize;
-                t = "id="; __AddHex( t, nId ); t.Append( "  size=" ); __AddHex( t, nSize );
-                if( nId == 0x0200 )
-                    t.Append( "   (valid header)" );
-                EXC_CTRLDUMP_PRINT();
 
-                // control data
-                nStartPos = rInStrm.Tell();   // for stream alignment macro
-                bool bHasFontData = false;
-                if( nId == 0x0200 )
-                {
-                    sal_uInt32 nCaptionLen = 0;
-                    sal_uInt32 nValueLen = 0;
-                    sal_uInt32 nGroupNameLen = 0;
-                    sal_uInt16 nPic = 0;
-                    sal_uInt16 nIcon = 0;
+            // control contents
+            if( nCtrlType != EXC_CTRL_UNKNOWN )
+                DumpControlContents( rInStrm, nCtrlType );
 
-                    switch( eCtrlType )
-                    {
-                        case EXC_CTRL_PUSHBUTTON:
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0010, "picpos" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0080, "pic" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0100, "accel" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0200, "notakefocus" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0400, "icon" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xFFFFF800 );
-                            sal_uInt32 nCtrlFlags = __nFlags;
-
-                            if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
-                            if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
-                            if( nCtrlFlags & 0x0004 )
-                            {
-                                EXC_CTRLDUMP_STARTFLAG( "option-flags" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
-                                EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
-                            }
-                            if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
-                            if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "picpos" );
-                            if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
-                            if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
-                            if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "accel" );
-                            if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
-                            EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
-                            if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE();
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-                            EXC_CTRLDUMP_IMAGE( nPic, "pic" );
-                            EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
-                            bHasFontData = true;
-                        }
-                        break;
-
-                        case EXC_CTRL_TOGGLEBUTTON:
-                        case EXC_CTRL_CHECKBOX:
-                        case EXC_CTRL_OPTIONBUTTON:
-                        case EXC_CTRL_EDIT:
-                        case EXC_CTRL_LISTBOX:
-                        case EXC_CTRL_COMBOBOX:
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000001, "option" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000004, "forecolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000008, "maxlen" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000010, "borderstyle" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000020, "scrollbars" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000040, "style" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000080, "mouseptr" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000100, "size" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000200, "password" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000400, "listwidth" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000800, "boundcol" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00001000, "textcol" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00002000, "colcount" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00004000, "listrows" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00008000, "colwidth?" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00010000, "matchentry" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00020000, "liststyle" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00040000, "showdropbtn" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00100000, "dropbtnstyle" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00200000, "multistate" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00400000, "value" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00800000, "caption" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x01000000, "pos" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x02000000, "bordercolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x04000000, "specialeff" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x08000000, "icon" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x10000000, "pic" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x20000000, "accel" );
-                            EXC_CTRLDUMP_ENDFLAG( 0x40080000 ); // 0x80000000 always set?
-                            sal_uInt32 nCtrlFlags = __nFlags;
-
-                            EXC_CTRLDUMP_STARTFLAG( "2nd-content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000001, "groupname" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFFE );
-                            sal_uInt32 nCtrlFlags2 = __nFlags;
-
-                            if( nCtrlFlags & 0x00000001 )
-                            {
-                                EXC_CTRLDUMP_STARTFLAG( "option-flags" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "colheads" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "intheight" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "matchreq" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "align" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00080000, "dragbehav" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00100000, "enterkeybehav" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "enterfieldbehav" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "tabkeybehav" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x04000000, "selmargin" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x08000000, "autowordsel" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x20000000, "hidesel" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x40000000, "autotab" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x80000000, "multiline" );
-                                EXC_CTRLDUMP_ENDFLAG( 0x0307C3F1 );
-                            }
-                            if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
-                            if( nCtrlFlags & 0x00000004 ) EXC_CTRLDUMP_HEX4( "forecolor" );
-                            if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_DEC4( "maxlen" );
-                            if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "borderstyle" );
-                            if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC1( "scrollbars" );
-                            if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC1( "style" );
-                            if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
-                            if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX1( "password" );
-                            if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_DEC4( "listwidth" );
-                            if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC2( "boundcol" );
-                            if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC2( "textcol" );
-                            if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC2( "colcount" );
-                            if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC2( "listrows" );
-                            if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC2( "colwidth?" );
-                            if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_DEC1( "matchentry" );
-                            if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_DEC1( "liststyle" );
-                            if( nCtrlFlags & 0x00040000 ) EXC_CTRLDUMP_DEC1( "showdropbtn" );
-                            if( nCtrlFlags & 0x00100000 ) EXC_CTRLDUMP_DEC1( "dropbtnstyle" );
-                            if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_DEC1( "multistate" );
-                            if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_DECVARMASK( nValueLen, 0x7FFFFFFF, "value-len" );
-                            if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
-                            if( nCtrlFlags & 0x01000000 ) EXC_CTRLDUMP_COORD( "pos" );
-                            if( nCtrlFlags & 0x02000000 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
-                            if( nCtrlFlags & 0x04000000 ) EXC_CTRLDUMP_DEC4( "specialeff" );
-                            if( nCtrlFlags & 0x08000000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
-                            if( nCtrlFlags & 0x10000000 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
-                            if( nCtrlFlags & 0x20000000 ) EXC_CTRLDUMP_HEX1( "accel" );
-                            if( nCtrlFlags2 & 0x00000001 ) EXC_CTRLDUMP_DECVARMASK( nGroupNameLen, 0x7FFFFFFF, "groupname-len" );
-                            if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_SIZE();
-                            EXC_CTRLDUMP_STRING( nValueLen, "value" );
-                            EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
-                            EXC_CTRLDUMP_STRING( nGroupNameLen, "groupname" );
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-                            EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
-                            EXC_CTRLDUMP_IMAGE( nPic, "pic" );
-                            bHasFontData = true;
-                        }
-                        break;
-
-                        case EXC_CTRL_LABEL:
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0010, "pos" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0080, "bordercolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0100, "borderstyle" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0200, "specialeff" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0800, "accel" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x1000, "icon" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xFFFFE000 );
-                            sal_uInt32 nCtrlFlags = __nFlags;
-
-                            if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
-                            if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
-                            if( nCtrlFlags & 0x0004 )
-                            {
-                                EXC_CTRLDUMP_STARTFLAG( "option-flags" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
-                                EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF0 ); // 0x00000001 always set?
-                            }
-                            if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
-                            if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "pos" );
-                            if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
-                            if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
-                            if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "borderstyle" );
-                            if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_HEX2( "specialeff" );
-                            if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
-                            if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "accel" );
-                            if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
-                            EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
-                            if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE();
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-                            EXC_CTRLDUMP_IMAGE( nPic, "pic" );
-                            EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
-                            bHasFontData = true;
-                        }
-                        break;
-
-                        case EXC_CTRL_SPIN:
-                        case EXC_CTRL_SCROLLBAR:
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000001, "forecolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000004, "option" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000008, "size" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000010, "mouseptr" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000100, "unknown1" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000200, "unknown2" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000400, "unknown3" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000020, "min" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000040, "max" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000080, "value" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00000800, "step" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00001000, "page-step" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00002000, "orient" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00004000, "prop-thumb" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00008000, "delay" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x00010000, "icon" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xFFFE0000 );
-                            sal_uInt32 nCtrlFlags = __nFlags;
-
-                            if( nCtrlFlags & 0x00000001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
-                            if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
-                            if( nCtrlFlags & 0x00000004 )
-                            {
-                                EXC_CTRLDUMP_STARTFLAG( "option-flags" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
-                                EXC_CTRLDUMP_ENDFLAG( 0xEFFFFFF1 );
-                            }
-                            if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
-                            if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC4( "min" );
-                            if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC4( "max" );
-                            if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC4( "value" );
-                            if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_HEX4( "unknown1" );
-                            if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX4( "unknown2" );
-                            if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_HEX4( "unknown3" );
-                            if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC4( "step" );
-                            if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC4( "page-step" );
-                            if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC4( "orient" );
-                            if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC4( "prop-thumb" );
-                            if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC4( "delay" );
-                            if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
-                            if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_SIZE();
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-                            EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
-                        }
-                        break;
-
-                        case EXC_CTRL_IMAGE:
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0004, "autosize" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0008, "bordercolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0010, "backcolor" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0020, "borderstyle" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0080, "picsizemode" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0100, "speceffect" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0200, "size" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0800, "picalign" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x1000, "pictiling" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x2000, "option" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x4000, "icon" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xFFFF8003 );
-                            sal_uInt32 nCtrlFlags = __nFlags;
-
-                            if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
-                            if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX4( "backcolor" );
-                            if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_HEX1( "borderstyle" );
-                            if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
-                            if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC1( "picsizemode" );
-                            if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX1( "speceffect" );
-                            if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEXVAR( nPic, "pic" );
-                            if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "picalign" );
-                            if( nCtrlFlags & 0x2000 )
-                            {
-                                EXC_CTRLDUMP_STARTFLAG( "option-flags" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
-                                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "opaque" );
-                                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFF5 );
-                            }
-                            if( nCtrlFlags & 0x4000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
-                            if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_SIZE();
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-                            EXC_CTRLDUMP_IMAGE( nPic, "pic" );
-                            EXC_CTRLDUMP_IMAGE( nIcon, "icon" );
-                        }
-                        break;
-                    }
-                    EXC_CTRLDUMP_PRINT();
-                }
-
-                // remaining unknown data
-                EXC_CTRLDUMP_REMAINING( nStartPos + nSize + nExtSize );
-
-                // font data
-                if( bHasFontData )
-                {
-                    rInStrm >> nId >> nSize;
-                    t = "id="; __AddHex( t, nId ); t += "  size="; __AddHex( t, nSize );
-                    if( nId == 0x0200 )
-                        t.Append( "   (valid header)" );
-                    EXC_CTRLDUMP_PRINT();
-
-                    nStartPos = rInStrm.Tell();     // for stream alignment macro
-                    if( nId == 0x0200 )
-                    {
-                        EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x01, "fontname" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x02, "fontstyle" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x04, "fontsize" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x10, "language-id" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x40, "align" );
-                        EXC_CTRLDUMP_ADDFLAG( 0x80, "fontweight" );
-                        EXC_CTRLDUMP_ENDFLAG( 0xFFFFFF08 ); // 0x20 always set?
-                        sal_uInt32 nCtrlFlags = __nFlags;
-                        sal_uInt32 nFontLen = 0;
-
-                        if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nFontLen, 0x7FFFFFFF, "fontname-len" );
-                        if( nCtrlFlags & 0x0002 )
-                        {
-                            EXC_CTRLDUMP_STARTFLAG( "fontstyle-flags" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0001, "bold" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0002, "italic" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0004, "underline" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x0008, "strikeout" );
-                            EXC_CTRLDUMP_ADDFLAG( 0x2000, "sunken" );
-                            EXC_CTRLDUMP_ENDFLAG( 0xBFFFDFF0 ); // 0x40000000 always set?
-                        }
-                        if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_DEC4( "fontsize" );
-                        if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX2( "language-id" );
-                        if( nCtrlFlags & 0x0040 )
-                        {
-                            EXC_CTRLDUMP_ALIGN_INSTRM( 2 );
-                            sal_uInt16 nAlign; rInStrm >> nAlign;
-                            t += "  align="; __AddDec( t, nAlign );
-                            switch( nAlign )
-                            {
-                                case 1: t += "=left";   break;
-                                case 2: t += "=right";  break;
-                                case 3: t += "=center"; break;
-                                default: t += "=!unknown!";
-                            }
-                            EXC_CTRLDUMP_PRINTC();
-                        }
-                        if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC2( "fontweight" );
-                        EXC_CTRLDUMP_STRING( nFontLen, "font" );
-                        EXC_CTRLDUMP_PRINT();
-                    }
-                }
-            }
             // remaining unknown data
             EXC_CTRLDUMP_REMAINING( nCtrlEnd );
+            rOutStrm << "\n";
         }
     }
-
-    rOutStrm << "\n-- end of stream --\n";
 }
 
+void Biff8RecDumper::DumpControlFrameStream( SotStorageRef xInStrg, sal_uInt16 nCtrlType, const String& rStrgPath )
+{
+    static const String saStrmName( sal_Unicode( 'f' ) );
+
+    SotStorageStreamRef xInStrm = OpenStream( xInStrg, saStrmName );
+    if( !xInStrm || !pDumpStream ) return;
+
+    SvStream& rInStrm = *xInStrm;
+    SvStream& rOutStrm = *pDumpStream;
+    XclDumpStreamHeader aStrmHeader( rInStrm, rOutStrm, saStrmName, rStrgPath );
+
+    if( aStrmHeader.GetStreamLen() > 0 )
+    {
+        ByteString t;               // "t" needed for macros
+        sal_uInt32 nFlags = 0;      // "nFlags" needed for macros
+
+        rOutStrm << "header-record\n";
+        DumpControlContents( rInStrm, nCtrlType );
+        rOutStrm << "\n";
+
+        if( nCtrlType == EXC_CTRL_USERFORM )
+        {
+            rOutStrm << "add-records\n";
+            sal_uInt16 nAddCount;
+            EXC_CTRLDUMP_PLAIN_DECVAR( nAddCount, "count" );
+            EXC_CTRLDUMP_PRINT();
+            rOutStrm << "\n";
+
+            for( sal_uInt16 nAdd = 0; (nAdd < nAddCount) && (rInStrm.Tell() < aStrmHeader.GetStreamLen()); ++nAdd )
+            {
+                DumpControlContents( rInStrm, EXC_CTRL_ADDDATA );
+                rOutStrm << "\n";
+            }
+        }
+
+        rOutStrm << "children-records\n";
+        sal_uInt32 nRecCount, nTotalSize;
+        EXC_CTRLDUMP_PLAIN_DECVAR( nRecCount, "count" );
+        EXC_CTRLDUMP_PLAIN_HEXVAR( nTotalSize, "total-size" );
+        if( nTotalSize > 0 )
+        {
+            EXC_CTRLDUMP_PLAIN_HEX4( "header-unknown" );
+            rOutStrm << "\n";
+
+            for( sal_uInt32 nRec = 0; (nRec < nRecCount) && (rInStrm.Tell() < aStrmHeader.GetStreamLen()); ++nRec )
+            {
+                DumpControlContents( rInStrm, EXC_CTRL_FRAMECHILD );
+                rOutStrm << "\n";
+            }
+        }
+        else
+            rOutStrm << "\n";
+
+        if( rInStrm.Tell() < aStrmHeader.GetStreamLen() )
+        {
+            rOutStrm << "remaining=\n";
+            DumpBinary( rInStrm );
+            rOutStrm << "\n";
+        }
+    }
+}
+
+void Biff8RecDumper::DumpControlObjectsStream( SotStorageRef xInStrg, const String& rStrgPath )
+{
+    static const String saStrmName( sal_Unicode( 'o' ) );
+
+    SotStorageStreamRef xInStrm = OpenStream( xInStrg, saStrmName );
+    if( !xInStrm || !pDumpStream ) return;
+
+    SvStream& rInStrm = *xInStrm;
+    SvStream& rOutStrm = *pDumpStream;
+    XclDumpStreamHeader aStrmHeader( rInStrm, rOutStrm, saStrmName, rStrgPath );
+
+    if( aStrmHeader.GetStreamLen() > 0 )
+    {
+        ULONG nStrmPos = 0;
+        for( XclDumpCtrlPortionVec::const_iterator aIt = maCtrlPortions.begin(), aEnd = maCtrlPortions.end(); aIt != aEnd; ++aIt )
+        {
+            rInStrm.Seek( nStrmPos );
+            DumpControlContents( rInStrm, aIt->second );
+            rOutStrm << "\n";
+            nStrmPos += aIt->first;
+        }
+
+        if( rInStrm.Tell() < aStrmHeader.GetStreamLen() )
+        {
+            rOutStrm << "remaining=\n";
+            DumpBinary( rInStrm );
+            rOutStrm << "\n";
+        }
+    }
+}
+
+// ============================================================================
+//
+//  S T O R A G E S
+//
+// ============================================================================
+
+void Biff8RecDumper::DumpAnyStorage( SotStorageRef xParentStrg, const String& rStrgName, const String& rStrgPath )
+{
+    SotStorageRef xInStrg = OpenStorage( xParentStrg, rStrgName );
+    if( !xInStrg || !pDumpStream ) return;
+
+    XclDumpStorageHeader aStrgHeader( *xInStrg, *pDumpStream, rStrgPath );
+}
+
+void Biff8RecDumper::DumpUserFormStorage( SotStorageRef xParentStrg, const String& rStrgName, sal_uInt16 nCtrlType, const String& rStrgPath )
+{
+    SotStorageRef xInStrg = OpenStorage( xParentStrg, rStrgName );
+    if( !xInStrg || !pDumpStream ) return;
+
+    XclDumpStorageHeader aStrgHeader( *xInStrg, *pDumpStream, rStrgPath );
+
+    // streams
+    maCtrlStorages.clear();
+    maCtrlPortions.clear();
+    DumpControlFrameStream( xInStrg, nCtrlType, rStrgPath );
+    DumpControlObjectsStream( xInStrg, rStrgPath );
+    DumpTextStream( xInStrg, CREATE_STRING( "\003VBFrame" ), rStrgPath );
+
+    // frame substorages
+    XclDumpCtrlPortionVec aCtrlStorages( maCtrlStorages );  // make local copy, maCtrlStorages is reused in loop
+    for( XclDumpCtrlPortionVec::const_iterator aIt = aCtrlStorages.begin(), aEnd = aCtrlStorages.end(); aIt != aEnd; ++aIt )
+    {
+        sal_uInt32 nStorageId = aIt->first;
+        String aSubName( sal_Unicode( 'i' ) );
+        if( nStorageId < 10 )
+            aSubName.Append( sal_Unicode( '0' ) );
+        aSubName.Append( String::CreateFromInt32( static_cast< sal_Int32 >( nStorageId ) ) );
+
+        String aPath( rStrgPath );
+        aPath.Append( sal_Unicode( '/' ) ).Append( rStrgName );
+
+        DumpUserFormStorage( xInStrg, aSubName, aIt->second, aPath );
+    }
+}
+
+void Biff8RecDumper::DumpVbaProjectStorage()
+{
+    SotStorageRef xInStrg = OpenStorage( EXC_STORAGE_VBA_PROJECT );
+    if( !xInStrg || !pDumpStream ) return;
+
+    XclDumpStorageHeader aStrgHeader( *xInStrg, *pDumpStream, EMPTY_STRING );
+    // PROJECT substream
+    DumpTextStream( xInStrg, CREATE_STRING( "PROJECT" ), EXC_STORAGE_VBA_PROJECT );
+    // VBA storage
+    DumpAnyStorage( xInStrg, EXC_STORAGE_VBA, EXC_STORAGE_VBA_PROJECT );
+    // user forms
+    SvStorageInfoList aInfoList;
+    xInStrg->FillInfoList( &aInfoList );
+    for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+    {
+        SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
+        if( rInfo.IsStorage() && (rInfo.GetName() != EXC_STORAGE_VBA) )
+            DumpUserFormStorage( xInStrg, rInfo.GetName(), EXC_CTRL_USERFORM, EXC_STORAGE_VBA_PROJECT );
+    }
+}
+
+// ============================================================================
+//
+// ============================================================================
 
 const sal_Char* Biff8RecDumper::GetBlanks( const UINT16 nNumOfBlanks )
 {
@@ -8707,7 +9552,7 @@ BOOL Biff8RecDumper::CreateOutStream( const UINT32 n )
         DELANDNULL( pDumpStream );
     }
 
-    if( pOutName )
+    if( !bSkip && pOutName )
     {
         pOutName->EraseLeadingChars( ' ' );
         pOutName->EraseTrailingChars( ' ' );
@@ -8948,6 +9793,8 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
     }
     else if( pDumpStream && !bSkip )
     {
+        SvStream& rOutStrm = *pDumpStream;
+
         if( bExportBookStream && pOutName )
         {
             ByteString aBookOutName( *pOutName, 0, pOutName->Len() - 4 );
@@ -8971,48 +9818,51 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         }
 
         if( pTitle )
-            *pDumpStream << pTitle->GetBuffer();
+            rOutStrm << pTitle->GetBuffer();
 
         pIn = &r;
         r.StoreGlobalPosition();
 
-        ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar(
+        ::std::auto_ptr< XclDumpStorageHeader > xStrgHerader;
+        SotStorageRef xRootStrg = GetRootStorage();
+        if( xRootStrg.Is() )
+            xStrgHerader.reset( new XclDumpStorageHeader( *xRootStrg, rOutStrm, EMPTY_STRING ) );
+
+        ::std::auto_ptr< ScfProgressBar > xProgress( new ScfProgressBar(
             GetDocShell(), String( RTL_CONSTASCII_USTRINGPARAM( "Dumper" ) ) ) );
-        sal_Int32 nStreamSeg = pProgress->AddSegment( r.GetSvStreamSize() );
-        pProgress->ActivateSegment( nStreamSeg );
+        sal_Int32 nStreamSeg = xProgress->AddSegment( r.GetSvStreamSize() );
+        xProgress->ActivateSegment( nStreamSeg );
 
         while( r.StartNextRecord() )
         {
-            pProgress->ProgressAbs( r.GetSvStreamPos() );
-
+            xProgress->ProgressAbs( r.GetSvStreamPos() );
             if( HasModeDump( r.GetRecId() ) )
                 RecDump();
         }
 
-        *pDumpStream << '\n';
+        rOutStrm << "\n\n";
 
         pIn = NULL;
-        pProgress.reset();
+        xProgress.reset();
 
         r.SeekGlobalPosition();
 
         // dump substreams
-        if( GetRootStorage().Is() )
+        if( xRootStrg.Is() )
         {
             pIn = NULL;
             bool bOldEncr = bEncrypted;
             bEncrypted = false;
-            DumpSubStream( GetRootStorage(), EXC_STREAM_USERNAMES );
+            DumpRecordStream( xRootStrg, EXC_STREAM_USERNAMES, EMPTY_STRING );
 
             pIn = &r;
             bEncrypted = bOldEncr;
-            DumpSubStream( GetRootStorage(), EXC_STREAM_REVLOG );
+            DumpRecordStream( xRootStrg, EXC_STREAM_REVLOG, EMPTY_STRING );
 
             pIn = NULL;
 
-            SotStorageStreamRef xCtlsStrm = OpenStream( EXC_STREAM_CTLS );
-            if( xCtlsStrm.Is() && !maCtlsPosMap.empty() )
-                ControlsDump( *xCtlsStrm );
+            DumpCtlsStream();
+            DumpVbaProjectStorage();
         }
     }
 
