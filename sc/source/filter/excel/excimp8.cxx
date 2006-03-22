@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:56:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,8 @@ using namespace com::sun::star;
 
 
 
-ImportExcel8::ImportExcel8( XclImpRootData& rImpData ) :
-    ImportExcel( rImpData )
+ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
+    ImportExcel( rImpData, rStrm )
 {
     delete pFormConv;
 
@@ -208,19 +208,6 @@ void ImportExcel8::Note( void )
 {
     GetObjectManager().ReadNote( maStrm );
     pLastFormCell = NULL;
-}
-
-
-void ImportExcel8::Cont( void )
-{
-    if( bObjSection )
-        GetObjectManager().ReadMsoDrawing( aIn );
-}
-
-
-void ImportExcel8::Obj()
-{
-    GetObjectManager().ReadObj( maStrm );
 }
 
 
@@ -294,23 +281,6 @@ void ImportExcel8::Cellmerging( void )
 }
 
 
-void ImportExcel8::Msodrawinggroup( void )
-{
-    GetObjectManager().ReadMsoDrawingGroup( maStrm );
-}
-
-
-void ImportExcel8::Msodrawing( void )
-{
-    GetObjectManager().ReadMsoDrawing( maStrm );
-}
-
-
-void ImportExcel8::Msodrawingselection( void )
-{
-    GetObjectManager().ReadMsoDrawingSelection( maStrm );
-}
-
 void ImportExcel8::Labelsst( void )
 {
     XclAddress aXclPos;
@@ -329,12 +299,6 @@ void ImportExcel8::Labelsst( void )
     }
 
     pLastFormCell = NULL;
-}
-
-
-void ImportExcel8::Txo( void )
-{
-    GetObjectManager().ReadTxo( maStrm );
 }
 
 
@@ -441,11 +405,6 @@ void ImportExcel8::PostDocLoad( void )
 
     // building pivot tables
     GetPivotTableManager().Apply();
-}
-
-
-void ImportExcel8::EndAllChartObjects( void )
-{
 }
 
 
