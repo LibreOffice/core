@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:59:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ class ImportExcel8 : public ImportExcel
     protected:
         ExcScenarioList         aScenList;
 
-        BOOL                    bObjSection;
         BOOL                    bHasBasic;
 
         void                    RecString( void );              // 0x07
@@ -82,8 +81,6 @@ class ImportExcel8 : public ImportExcel
         void                    Iteration( void );              // 0x11
         void                    Note( void );                   // 0x1C
         void                    WinProtection(  void );         // 0x19
-        void                    Cont( void );                   // 0x3C
-        void                    Obj( void );                    // 0x5D
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B
         void                    AutoFilterInfo( void );         // 0x9D
@@ -92,22 +89,17 @@ class ImportExcel8 : public ImportExcel
         void                    Scenario( void );               // 0xAF
         void                    ReadBasic( void );              // 0xD3
         void                    Cellmerging( void );            // 0xE5     geraten...
-        void                    Msodrawinggroup( void );        // 0xEB
-        void                    Msodrawing( void );             // 0xEC
-        void                    Msodrawingselection( void );    // 0xED
         void                    Labelsst( void );               // 0xFD
 
-        void                    Txo( void );                    // 0x01B6
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
         void                    Dimensions( void );             // 0x0200
 
-        void                    EndSheet( void );
-        virtual void            EndAllChartObjects( void );     // -> excobj.cxx
+        virtual void            EndSheet( void );
         virtual void            PostDocLoad( void );
 
     public:
-                                ImportExcel8( XclImpRootData& rImpData );
+                                ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
         virtual                 ~ImportExcel8( void );
 
         virtual FltError        Read( void );
