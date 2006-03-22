@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:35:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,10 @@ void SwAnchoredObject::ChgAnchorFrm( SwFrm* _pNewAnchorFrm )
 {
     mpAnchorFrm = _pNewAnchorFrm;
 
-    ObjectAttachedToAnchorFrame();
+    if ( mpAnchorFrm )
+    {
+        ObjectAttachedToAnchorFrame();
+    }
 }
 
 /** determine anchor frame containing the anchor position
