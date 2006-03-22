@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:59:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,10 @@ public:
 class Biff8RecDumper : public XclImpRoot
 {
 protected:
-    typedef ScfRef< ByteString >                    ByteStringRef;
-    typedef ::std::vector< ByteStringRef >          ByteStringVec;
+    typedef ::std::vector< ByteString >             ByteStringVec;
     typedef ::std::map< sal_uInt32, sal_uInt32 >    StrmPortionMap;
+    typedef ::std::pair< sal_uInt32, sal_uInt16 >   XclDumpCtrlPortion;
+    typedef ::std::vector< XclDumpCtrlPortion >     XclDumpCtrlPortionVec;
 
 
     static const sal_Char*      pLevelPreString;
@@ -168,6 +169,8 @@ protected:
     XclImpStream*               pIn;
 
     StrmPortionMap              maCtlsPosMap;       /// Control data in 'Ctls' stream.
+    XclDumpCtrlPortionVec       maCtrlStorages;
+    XclDumpCtrlPortionVec       maCtrlPortions;
     ByteStringVec               maNames;            /// Defined names.
 
     UINT32                      nMaxBodyLines;
@@ -211,17 +214,31 @@ protected:
 
     void                        Print( const ByteString& rStr );
     void                        Print( const sal_Char* pStr );
-    void                        DumpSubStream( SotStorageRef xStrg, const String& rStrmName );
-    void                        DumpPivotCache( const UINT16 nStrId );
+
     UINT16                      DumpXF( XclImpStream& rIn, const sal_Char* pPre );
     void                        DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre );
     void                        RecDump( BOOL bSubStream = FALSE );
     void                        EscherDump( const ULONG nL, bool bDumpOffset );
     void                        ObjDump( const ULONG nL );
     void                        ContDump( const ULONG nL );
-    void                        ContDumpStream( SvStream& rStrm, const ULONG nL );
     void                        FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT );
-    void                        ControlsDump( SvStream& rIn );
+
+    void                        DumpBinary( SvStream& rInStrm, ULONG nSize = STREAM_SEEK_TO_END );
+
+    void                        DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlType );
+    void                        DumpControlContainer( SvStream& rInStrm, sal_uInt16 nCtrlType );
+
+    void                        DumpBinaryStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath );
+    void                        DumpTextStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath );
+    void                        DumpRecordStream( SotStorageRef xStrg, const String& rStrmName, const String& rStrgPath );
+    void                        DumpCtlsStream();
+    void                        DumpControlFrameStream( SotStorageRef xInStrg, sal_uInt16 nCtrlType, const String& rStrgPath );
+    void                        DumpControlObjectsStream( SotStorageRef xInStrg, const String& rStrgPath );
+
+    void                        DumpAnyStorage( SotStorageRef xParentStrg, const String& rStrgName, const String& rStrgPath );
+    void                        DumpUserFormStorage( SotStorageRef xParentStrg, const String& rStrgName, sal_uInt16 nCtrlType, const String& rStrgPath );
+    void                        DumpVbaProjectStorage();
+
     void                        PreDumpDecrypted( ULONG nL );
     static const sal_Char*      GetBlanks( const UINT16 nNumOfBlanks );
     static BOOL                 IsLineEnd( const sal_Char c, sal_Char& rNext, SvStream& rIn, INT32& rLeft );
