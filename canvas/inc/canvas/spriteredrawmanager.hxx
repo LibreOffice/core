@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:41:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ namespace canvas
         class SpriteInfo
         {
         public:
+            ~SpriteInfo() {}
+
             /** Create sprite info
 
                 @param rRef
@@ -153,7 +155,7 @@ namespace canvas
             }
 
             const Sprite::Reference&    getSprite() const { return mpSprite; }
-            const ::basegfx::B2DRange&  getUpdateArea() const { return maTrueUpdateArea; }
+            ::basegfx::B2DRange         getUpdateArea() const { return maTrueUpdateArea; }
             bool                        needsUpdate() const { return mbNeedsUpdate; }
             bool                        isPureMove() const { return mbIsPureMove; }
 

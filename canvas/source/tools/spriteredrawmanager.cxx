@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:55:15 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ namespace canvas
         // now, calc the _true_ update area, by merging all sprite's
         // true update areas into one rectangle
         ::basegfx::B2DRange aTrueArea( aBegin->second.getUpdateArea() );
-        ::std::for_each( ++rUpdateArea.maComponentList.begin(),
+        ::std::for_each( aBegin,
                          aEnd,
                          ::boost::bind( ::basegfx::B2DRangeExpander(aTrueArea),
                                         ::boost::bind( &SpriteInfo::getUpdateArea,
