@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 11:12:44 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,12 @@ public class FileHelper extends Object
         File aFile = new File(sSource);
 
         try {
-            absPath = "file://" + sSource.replace('\\','/');
-
+           absPath = aFile.toURL().toString();
+           // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6351751
+           if (absPath.substring(0, 5) == "file:" && absPath.substring(5, 7) != "//")
+               absPath = "file://" + absPath.substring(5, absPath.length());
+           if (absPath.charAt(absPath.length()-1) == '/')
+               absPath = absPath.substring(0, absPath.length()-1);
         } catch (Exception e)
         {
             e.printStackTrace();
