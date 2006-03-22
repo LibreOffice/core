@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unohelper.py,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:54:48 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:53:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@ import os
 import sys
 
 from com.sun.star.lang import XTypeProvider, XSingleComponentFactory, XServiceInfo
-from com.sun.star.uno import RuntimeException
+from com.sun.star.uno import RuntimeException, XCurrentContext
 from com.sun.star.beans.MethodConcept import ALL as METHOD_CONCEPT_ALL
 from com.sun.star.beans.PropertyConcept import ALL as PROPERTY_CONCEPT_ALL
 
@@ -259,7 +259,24 @@ class Base(XTypeProvider):
 	  return _unohelper_getHandle( self )[0]
       def getImplementationId(self):
 	  return _unohelper_getHandle( self )[1]
-	  
+
+class CurrentContext(XCurrentContext, Base ):
+    """a current context implementation, which first does a lookup in the given
+       hashmap and if the key cannot be found, it delegates to the predecessor
+       if available
+    """
+    def __init__( self, oldContext, hashMap ):
+        self.hashMap = hashMap
+        self.oldContext = oldContext
+
+    def getValueByName( self, name ):
+        if name in self.hashMap:
+            return self.hashMap[name]
+        elif self.oldContext != None:
+            return self.oldContext.getValueByName( name )
+        else:
+            return None
+        
 # -------------------------------------------------
 # implementation details
 # -------------------------------------------------
