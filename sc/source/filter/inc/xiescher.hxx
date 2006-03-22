@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:00:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ public:
     /** Returns the internal name for a form control. */
     inline const String& GetControlName() const { return maCtrlName; }
     /** Returns the position in Ctrl stream for additional form control data. */
-    inline ULONG        GetCtlsStreamPos() const { return mnCtlsStrmPos; }
+    inline sal_Size      GetCtlsStreamPos() const { return mnCtlsStrmPos; }
 
     /** Sets form control specific properties. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
@@ -337,7 +337,7 @@ private:
 private:
     String              maStorageName;  /// Name of the OLE storage for this object.
     String              maCtrlName;     /// Internal name of a form control.
-    ULONG               mnCtlsStrmPos;  /// Position in 'Ctls' stream for controls.
+    sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for controls.
     bool                mbAsSymbol;     /// true = Show as symbol.
     bool                mbLinked;       /// true = Linked; false = Embedded.
     bool                mbControl;      /// true = Form control, false = OLE object.
@@ -439,8 +439,10 @@ public:
 
     /** Initializes the internal progress bar with the passed size and starts it. */
     void                StartProgressBar( sal_uInt32 nProgressSize );
-    /** Processes the Escher stream, converts all objects. */
-    void                ProcessEscherStream( SvStream& rEscherStrm );
+    /** Processes the leading drawing group container in the Escher stream. */
+    void                ProcessDrawingGroup( SvStream& rEscherStrm );
+    /** Processes a drawing container for a sheet in the Escher stream, converts all objects. */
+    void                ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos );
     /** Processes a chart from an Excel chart sheet, converts it to a chart object. */
     void                ProcessTabChart( const XclImpChartObj& rChartObj );
 
@@ -525,15 +527,8 @@ public:
 
     /** Reads the MSODRAWINGGROUP record. */
     void                ReadMsoDrawingGroup( XclImpStream& rStrm );
-    /** Reads the MSODRAWING record. */
+    /** Reads the MSODRAWING or MSODRAWINGSELECTION record. */
     void                ReadMsoDrawing( XclImpStream& rStrm );
-    /** Reads the MSODRAWINGSELECTION record. */
-    void                ReadMsoDrawingSelection( XclImpStream& rStrm );
-
-    /** Reads the OBJ record. */
-    void                ReadObj( XclImpStream& rStrm );
-    /** Reads the TXO record. */
-    void                ReadTxo( XclImpStream& rStrm );
     /** Reads the NOTE record. */
     void                ReadNote( XclImpStream& rStrm );
 
@@ -567,24 +562,27 @@ public:
 private:
     /** Reads contents of an Escher record and append data to internal Escher stream. */
     void                ReadEscherRecord( XclImpStream& rStrm );
-    /** Reads a complete chart substream (BOF/EOF block) for an embedded chart object.
-        @descr  The passed stream must be located in the BOF record of the chart substream. */
-    void                ReadChartSubStream( XclImpStream& rStrm, XclImpChartObj& rChartObj );
+    /** Reads the OBJ record. */
+    void                ReadObj( XclImpStream& rStrm );
+    /** Reads the TXO record. */
+    void                ReadTxo( XclImpStream& rStrm );
 
     /** Returns the size of the progress bar shown while processing all objects. */
     sal_uInt32          GetProgressSize() const;
 
     // ------------------------------------------------------------------------
 private:
-    typedef ::std::map< ULONG, XclImpDrawObjRef >       XclImpObjMap;
+    typedef ::std::vector< sal_Size >                   StreamPosVec;
+    typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
     typedef ::std::map< XclObjId, XclImpDrawObjRef >    XclImpObjMapById;
-    typedef ::std::map< ULONG, XclImpTxoDataRef >       XclImpTxoMap;
+    typedef ::std::map< sal_Size, XclImpTxoDataRef >    XclImpTxoMap;
     typedef ScfRef< XclImpChartObj >                    XclImpChartObjRef;
     typedef ::std::list< XclImpChartObjRef >            XclImpChartObjList;
     typedef ScfRef< XclImpDffManager >                  XclImpDffMgrRef;
     typedef ::std::vector< XclObjId >                   XclObjIdVec;
 
     SvMemoryStream      maEscherStrm;       /// Copy of Escher stream in memory.
+    StreamPosVec        maTabStrmPos;       /// Start positions of Escher data for sheets.
     XclImpObjMap        maObjMap;           /// Maps drawing objects to Escher stream position.
     XclImpObjMapById    maObjMapId;         /// Maps drawing objects to sheet index and object ID.
     XclImpTxoMap        maTxoMap;           /// Maps TXO textbox data to sheet index and object ID.
