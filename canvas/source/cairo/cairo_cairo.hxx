@@ -37,6 +37,7 @@ namespace cairo {
               mpDisplay( NULL ),
               mhDrawable( 0 ),
               mpSysData( NULL ),
+              mpRenderFormat( NULL ),
               mbFreePixmap( false ),
               mnRefCount( 1 )
         {
@@ -76,6 +77,11 @@ namespace cairo {
         {
             return mpRenderFormat;
         }
+
+        // use only for surfaces made on X Drawables
+        void Resize( int width, int height );
+
+        int getDepth();
     };
 }
 
