@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiimoptdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:41:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aFtFont     ( this, ScResId( FT_FONT ) ),
         aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) )
+        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
+        aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -224,6 +225,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbFixed.Show();
         aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
         aCbFixed.Check( FALSE );
+        aCbShown.Show();
+        aCbShown.Check( TRUE );
     }
     else
     {
@@ -234,6 +237,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdFieldSep.Hide();
         aEdTextSep.Hide();
         aCbFixed.Hide();
+        aCbShown.Hide();
         aLbFont.GrabFocus();
         aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
@@ -267,6 +271,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.nFieldSepCode = GetCodeFromCombo( aEdFieldSep );
         rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
         rOptions.bFixedWidth = aCbFixed.IsChecked();
+        rOptions.bSaveAsShown = aCbShown.IsChecked();
     }
 }
 
@@ -309,6 +314,7 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
         aEdFieldSep.Enable( bEnable );
         aFtTextSep.Enable( bEnable );
         aEdTextSep.Enable( bEnable );
+        aCbShown.Enable( bEnable );
     }
     return 0;
 }
