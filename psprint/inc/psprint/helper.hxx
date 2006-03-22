@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:44:22 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ namespace osl { class File; }
 namespace psp {
 typedef int fontID;
 
-const rtl::OUString& getPrinterPath();
 void getPrinterPathList( std::list< rtl::OUString >& rPathList, const char* pSubDir );
 const rtl::OUString& getFontPath();
 
