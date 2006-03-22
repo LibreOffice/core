@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:57:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ USHORT PspGraphics::GetBitCount()
     return m_pPrinterGfx->GetBitCount();
 }
 
-long PspGraphics::GetGraphicsWidth()
+long PspGraphics::GetGraphicsWidth() const
 {
     return 0;
 }
