@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:50:44 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,46 +128,61 @@ void XclImpTabViewSettings::Initialize()
     maData.SetDefaults();
 }
 
-void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm )
+void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
 {
-    sal_uInt16 nFlags;
-    rStrm >> nFlags >> maData.maFirstXclPos;
-
-    maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
-    maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
-    maData.mbMirrored       = ::get_flag( nFlags, EXC_WIN2_MIRRORED );
-    maData.mbFrozenPanes    = ::get_flag( nFlags, EXC_WIN2_FROZEN );
-    maData.mbPageMode       = ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
-    maData.mbDefGridColor   = ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
-    maData.mbShowFormulas   = ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
-    maData.mbShowGrid       = ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
-    maData.mbShowHeadings   = ::get_flag( nFlags, EXC_WIN2_SHOWHEADINGS );
-    maData.mbShowZeros      = ::get_flag( nFlags, EXC_WIN2_SHOWZEROS );
-    maData.mbShowOutline    = ::get_flag( nFlags, EXC_WIN2_SHOWOUTLINE );
-
-    switch( GetBiff() )
+    if( GetBiff() == EXC_BIFF2 )
     {
-        case EXC_BIFF3:
-        case EXC_BIFF4:
-        case EXC_BIFF5:
-            rStrm >> maData.maGridColor;
-        break;
-        case EXC_BIFF8:
-        {
-            sal_uInt16 nGridColorIdx;
-            rStrm >> nGridColorIdx;
-            // zoom data not included in chart sheets
-            if( rStrm.GetRecLeft() >= 6 )
-            {
-                rStrm.Ignore( 2 );
-                rStrm >> maData.mnPageZoom >> maData.mnNormalZoom;
-            }
+        maData.mbShowFormulas   = rStrm.ReaduInt8() != 0;
+        maData.mbShowGrid       = rStrm.ReaduInt8() != 0;
+        maData.mbShowHeadings   = rStrm.ReaduInt8() != 0;
+        maData.mbFrozenPanes    = rStrm.ReaduInt8() != 0;
+        maData.mbShowZeros      = rStrm.ReaduInt8() != 0;
+        rStrm >> maData.maFirstXclPos;
+        maData.mbDefGridColor   = rStrm.ReaduInt8() != 0;
+        rStrm >> maData.maGridColor;
+    }
+    else
+    {
+        sal_uInt16 nFlags;
+        rStrm >> nFlags >> maData.maFirstXclPos;
 
-            if( !maData.mbDefGridColor )
-                maData.maGridColor = GetPalette().GetColor( nGridColorIdx );
+        maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
+        maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
+        // #i59590# real life: Excel ignores mirror flag in chart sheets
+        maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
+        maData.mbFrozenPanes    = ::get_flag( nFlags, EXC_WIN2_FROZEN );
+        maData.mbPageMode       = ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
+        maData.mbDefGridColor   = ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
+        maData.mbShowFormulas   = ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
+        maData.mbShowGrid       = ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
+        maData.mbShowHeadings   = ::get_flag( nFlags, EXC_WIN2_SHOWHEADINGS );
+        maData.mbShowZeros      = ::get_flag( nFlags, EXC_WIN2_SHOWZEROS );
+        maData.mbShowOutline    = ::get_flag( nFlags, EXC_WIN2_SHOWOUTLINE );
+
+        switch( GetBiff() )
+        {
+            case EXC_BIFF3:
+            case EXC_BIFF4:
+            case EXC_BIFF5:
+                rStrm >> maData.maGridColor;
+            break;
+            case EXC_BIFF8:
+            {
+                sal_uInt16 nGridColorIdx;
+                rStrm >> nGridColorIdx;
+                // zoom data not included in chart sheets
+                if( rStrm.GetRecLeft() >= 6 )
+                {
+                    rStrm.Ignore( 2 );
+                    rStrm >> maData.mnPageZoom >> maData.mnNormalZoom;
+                }
+
+                if( !maData.mbDefGridColor )
+                    maData.maGridColor = GetPalette().GetColor( nGridColorIdx );
+            }
+            break;
+            default:    DBG_ERROR_BIFF();
         }
-        break;
-        default:    DBG_ERROR_BIFF();
     }
 }
 
