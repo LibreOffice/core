@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:53:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,13 +129,11 @@ XclDebugObjCounter::~XclDebugObjCounter()
 
 // ----------------------------------------------------------------------------
 
-XclRootData::XclRootData( XclBiff eBiff,
-        SfxMedium& rMedium, SotStorageRef xRootStrg, SvStream& rBookStrm,
-        ScDocument& rDoc, CharSet eCharSet, bool bExport ) :
+XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
+        SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet, bool bExport ) :
     meBiff( eBiff ),
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
-    mrBookStrm( rBookStrm ),
     mrDoc( rDoc ),
     meCharSet( eCharSet ),
     meSysLang( Application::GetSettings().GetLanguage() ),
