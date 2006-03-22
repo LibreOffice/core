@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:52:59 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,36 @@
 
 namespace pyuno
 {
+
+//--------------------------------------------------
+// Logging API - implementation can be found in pyuno_util
+//--------------------------------------------------
+struct RuntimeCargo;
+namespace LogLevel
+{
+// when you add a loglevel, extend the log function !
+static const sal_Int32 NONE = 0;
+static const sal_Int32 CALL = 1;
+static const sal_Int32 ARGS = 2;
+}
+
+bool isLog( RuntimeCargo *cargo, sal_Int32 loglevel );
+void log( RuntimeCargo *cargo, sal_Int32 level, const rtl::OUString &logString );
+void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
+void logCall( RuntimeCargo *cargo, const char *intro,
+              sal_Int64 ptr, const rtl::OUString & aFunctionName,
+              const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
+void logReply( RuntimeCargo *cargo, const char *intro,
+              sal_Int64 ptr, const rtl::OUString & aFunctionName,
+              const com::sun::star::uno::Any &returnValue,
+              const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
+void logException( RuntimeCargo *cargo, const char *intro,
+                   sal_Int64 ptr, const rtl::OUString &aFunctionName,
+                   const void * data, const com::sun::star::uno::Type & type );
+static const sal_Int32 VAL2STR_MODE_DEEP = 0;
+static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
+rtl::OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW( () );
+//--------------------------------------------------
 
 typedef ::std::hash_map
 <
@@ -182,6 +212,8 @@ struct RuntimeCargo
     ExceptionClassMap exceptionMap;
     ClassSet interfaceSet;
     PyRef2Adapter mappedObjects;
+    FILE *logFile;
+    sal_Int32 logLevel;
 
     PyRef getUnoModule();
 };
@@ -263,16 +295,6 @@ public:
 
  */
 void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object );
-
-#ifdef PYUNO_DEBUG
-#define PYUNO_DEBUG_1( msg ) fprintf( stdout, msg )
-#define PYUNO_DEBUG_2( msg, arg1 ) fprintf( stdout, msg ,  arg1 )
-#define PYUNO_DEBUG_3( msg, arg1 , arg2 ) fprintf( stdout, msg, arg1, arg2 )
-#else
-#define PYUNO_DEBUG_1(msg) ((void)0)
-#define PYUNO_DEBUG_2(msg,arg1) ((void)0)
-#define PYUNO_DEBUG_3(msg,arg2,arg3) ((void)0)
-#endif
 
 }
 
