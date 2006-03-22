@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:39:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5424,7 +5424,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                                                  nEmphYOff,
                                                  nEmphWidth,
                                                  nEmphMark,
-                                                 nEmphHeight,
+                                                 m_pReferenceDevice->ImplDevicePixelToLogicWidth(nEmphHeight),
                                                  m_pReferenceDevice->mpFontEntry->mnOrientation );
         if ( bEmphPolyLine )
         {
@@ -6775,9 +6775,16 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
         {
             default:
             case PDFWriter::joinMiter:
-            aLine.append( " 0 j " );
-            m_aPages.back().appendMappedLength( rInfo.m_fMiterLimit, aLine );
-            aLine.append( " M" );
+            {
+                double fLimit = rInfo.m_fMiterLimit;
+                if( rInfo.m_fLineWidth < rInfo.m_fMiterLimit )
+                    fLimit = fLimit / rInfo.m_fLineWidth;
+                if( fLimit < 1.0 )
+                    fLimit = 1.0;
+                aLine.append( " 0 j " );
+                appendDouble( fLimit, aLine );
+                aLine.append( " M" );
+            }
             break;
             case PDFWriter::joinRound:  aLine.append( " 1 j" );break;
             case PDFWriter::joinBevel:  aLine.append( " 2 j" );break;
