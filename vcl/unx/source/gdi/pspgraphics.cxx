@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:41:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,7 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 
 PspGraphics::~PspGraphics()
 {
+    ReleaseFonts();
 }
 
 void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
@@ -766,9 +767,24 @@ ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-    sal_Bool bVertical = pEntry->mbVertical;
+    // release all fonts that are to be overridden
+    for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
+    {
+        if( m_pServerFont[i] != NULL )
+        {
+            // old server side font is no longer referenced
+            GlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
+            m_pServerFont[i] = NULL;
+        }
+    }
+
+    // return early if there is no new font
+    if( !pEntry )
+        return 0;
+
     sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->GetFontId() : 0;
 
+    // determine which font attributes need to be emulated
     bool bArtItalic = false;
     bool bArtBold = false;
     if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
@@ -786,16 +802,6 @@ USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 
     // also set the serverside font for layouting
     m_bFontVertical = pEntry->mbVertical;
-    for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-    {
-        if( m_pServerFont[i] != NULL )
-        {
-            // old server side font is no longer referenced
-            GlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
-            m_pServerFont[i] = NULL;
-        }
-    }
-
     if( pEntry->mpFontData )
     {
         // requesting a font provided by builtin rasterizer
@@ -807,8 +813,6 @@ USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
             else
                 GlyphCache::GetInstance().UncacheFont( *pServerFont );
         }
-        else
-            m_pServerFont[ nFallbackLevel ] = pServerFont;
     }
 
     // set the printer font
