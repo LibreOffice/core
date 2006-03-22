@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:58:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ public:
     // get the depth of the device
     virtual USHORT          GetBitCount();
     // get the width of the device
-    virtual long            GetGraphicsWidth();
+    virtual long            GetGraphicsWidth() const;
 
     // set the clip region to empty
     virtual void            ResetClipRegion();
