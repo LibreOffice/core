@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:54:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,14 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#include <time.h>
 #include <osl/thread.h>
 
 #include <typelib/typedescription.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/time.h>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
@@ -120,5 +122,121 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
     }
     return object;
 }
+
+
+//------------------------------------------------------------------------------------
+// Logging
+//------------------------------------------------------------------------------------
+
+bool isLog( RuntimeCargo * cargo, sal_Int32 loglevel )
+{
+    return cargo && cargo->logFile && loglevel <= cargo->logLevel;
+}
+
+void log( RuntimeCargo * cargo, sal_Int32 level, const rtl::OUString &logString )
+{
+    log( cargo, level, OUStringToOString( logString, osl_getThreadTextEncoding() ).getStr() );
+}
+
+void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
+{
+    if( isLog( cargo, level ) )
+    {
+        static const char *strLevel[] = { "NONE", "CALL", "ARGS" };
+
+        TimeValue systemTime;
+        TimeValue localTime;
+        oslDateTime localDateTime;
+
+        osl_getSystemTime( &systemTime );
+        osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
+        osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+
+        fprintf( cargo->logFile,
+                 "%4i-%02i-%02i %02i:%02i:%02i,%03i [%s,tid %i]: %s\n",
+                 localDateTime.Year,
+                 localDateTime.Month,
+                 localDateTime.Day,
+                 localDateTime.Hours,
+                 localDateTime.Minutes,
+                 localDateTime.Seconds,
+                 localDateTime.NanoSeconds/1000000,
+                 strLevel[level],
+                 (sal_Int32) osl_getThreadIdentifier( 0),
+                 str );
+    }
+}
+
+void logException( RuntimeCargo *cargo, const char *intro,
+                   sal_Int64 ptr, const rtl::OUString &aFunctionName,
+                   const void * data, const com::sun::star::uno::Type & type )
+{
+    if( isLog( cargo, LogLevel::CALL ) )
+    {
+        rtl::OUStringBuffer buf( 128 );
+        buf.appendAscii( intro );
+        buf.append( ptr , 16);
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+        buf.append( aFunctionName );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+        buf.append(
+            val2str( data, type.getTypeLibType(), VAL2STR_MODE_SHALLOW ) );
+        log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+    }
+
+}
+
+void logReply(
+    RuntimeCargo *cargo,
+    const char *intro,
+    sal_Int64 ptr,
+    const rtl::OUString & aFunctionName,
+    const Any &returnValue,
+    const Sequence< Any > & aParams )
+{
+    rtl::OUStringBuffer buf( 128 );
+    buf.appendAscii( intro );
+    buf.append( (sal_Int64) ptr, 16);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+    buf.append( aFunctionName );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("()=") );
+    if( isLog( cargo, LogLevel::ARGS ) )
+    {
+        buf.append(
+            val2str( returnValue.getValue(), returnValue.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
+        for( int i = 0; i < aParams.getLength() ; i ++ )
+        {
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", " ) );
+            buf.append(
+                val2str( aParams[i].getValue(), aParams[i].getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
+        }
+    }
+    log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+
+}
+
+void logCall( RuntimeCargo *cargo, const char *intro,
+          sal_Int64 ptr, const rtl::OUString & aFunctionName, const Sequence< Any > & aParams )
+{
+    rtl::OUStringBuffer buf( 128 );
+    buf.appendAscii( intro );
+    buf.append( (sal_Int64) ptr, 16);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+    buf.append( aFunctionName );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("(") );
+    if( isLog( cargo, LogLevel::ARGS ) )
+    {
+        for( int i = 0; i < aParams.getLength() ; i ++ )
+        {
+            if( i > 0 )
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", " ) );
+            buf.append(
+                val2str( aParams[i].getValue(), aParams[i].getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
+        }
+    }
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
+    log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+}
+
 
 }
