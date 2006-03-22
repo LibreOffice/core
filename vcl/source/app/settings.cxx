@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:28:08 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1024,6 +1024,7 @@ ImplMiscData::ImplMiscData()
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = 1930;
     mnEnableATT                 = ~0;
+    mnDisablePrinting           = ~0;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? TRUE : FALSE;
 }
@@ -1035,6 +1036,7 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = rData.mnTwoDigitYearStart;
     mnEnableATT                 = rData.mnEnableATT;
+    mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
 
@@ -1108,12 +1110,28 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
 
     if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) &&
          (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
+         (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
          (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
         return TRUE;
     else
         return FALSE;
 }
 
+// -----------------------------------------------------------------------
+
+BOOL MiscSettings::GetDisablePrinting() const
+{
+    if( mpData->mnDisablePrinting == (USHORT)~0 )
+    {
+        rtl::OUString aEnable =
+            vcl::SettingsConfigItem::get()->
+            getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
+                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ) );
+        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+    }
+
+    return (BOOL)mpData->mnDisablePrinting;
+}
 // -----------------------------------------------------------------------
 
 BOOL MiscSettings::GetEnableATToolSupport() const
@@ -1174,6 +1192,20 @@ BOOL MiscSettings::GetEnableATToolSupport() const
     }
 
     return (BOOL)mpData->mnEnableATT;
+}
+
+// -----------------------------------------------------------------------
+
+void MiscSettings::SetDisablePrinting( BOOL bEnable )
+{
+    if ( bEnable != mpData->mnDisablePrinting )
+    {
+        vcl::SettingsConfigItem::get()->
+            setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
+                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ),
+                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+        mpData->mnDisablePrinting = bEnable ? 1 : 0;
+    }
 }
 
 // -----------------------------------------------------------------------
