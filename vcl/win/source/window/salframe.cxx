@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:13:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,19 @@
 #include <vector>
 
 #include <time.h>
+
+// The following defines are newly added in Longhorn
+#ifndef WM_MOUSEHWHEEL
+# define WM_MOUSEHWHEEL            0x020E
+#endif
+#ifndef SPI_GETWHEELSCROLLCHARS
+# define SPI_GETWHEELSCROLLCHARS   0x006C
+#endif
+#ifndef SPI_SETWHEELSCROLLCHARS
+# define SPI_SETWHEELSCROLLCHARS   0x006D
+#endif
+
+
 
 #if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString( char *s) { OutputDebugString( s ); }
@@ -802,6 +815,38 @@ static UINT ImplSalGetWheelScrollLines()
 
 // -----------------------------------------------------------------------
 
+static UINT ImplSalGetWheelScrollChars()
+{
+    UINT nScrChars = 0;
+    if( !SystemParametersInfo( SPI_GETWHEELSCROLLCHARS, 0, &nScrChars, 0 ) )
+    {
+        // Depending on Windows version, use proper default or 1 (when
+        // driver emulates hscroll)
+        OSVERSIONINFO aOSVersion;
+        rtl_zeroMemory( &aOSVersion, sizeof(OSVERSIONINFO) );
+        aOSVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        GetVersionEx( &aOSVersion );
+
+        if( VER_PLATFORM_WIN32_NT == aOSVersion.dwPlatformId &&
+            aOSVersion.dwMajorVersion < 6 )
+        {
+            // Windows 2000 & WinXP : emulating driver, use step size
+            // of 1
+            return 1;
+        }
+        else
+        {
+            // Longhorn or above: use proper default value of 3
+            return 3;
+        }
+    }
+
+    // system settings successfully read
+    return nScrChars;
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplSalCalcBorder( const WinSalFrame* pFrame,
                                int& rLeft, int& rTop, int& rRight, int& rBottom )
 {
@@ -977,6 +1022,8 @@ WinSalFrame::WinSalFrame()
             aSalShlData.mnWheelMsgId = RegisterWindowMessage( MSH_MOUSEWHEEL );
         if ( !aSalShlData.mnWheelScrollLines )
             aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
+        if ( !aSalShlData.mnWheelScrollChars )
+            aSalShlData.mnWheelScrollChars = ImplSalGetWheelScrollChars();
     }
 
     // insert frame in framelist
@@ -3296,8 +3343,12 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleWheelMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
+    DBG_ASSERT( nMsg == WM_MOUSEWHEEL ||
+                nMsg == WM_MOUSEHWHEEL,
+                "ImplHandleWheelMsg() called with no wheel mouse event" );
+
     ImplSalYieldMutexAcquireWithWait();
 
     long        nRet = 0;
@@ -3317,11 +3368,20 @@ static long ImplHandleWheelMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
         aWheelEvt.mnCode        = 0;
         aWheelEvt.mnDelta       = (short)HIWORD( wParam );
         aWheelEvt.mnNotchDelta  = aWheelEvt.mnDelta/WHEEL_DELTA;
-        if ( aSalShlData.mnWheelScrollLines == WHEEL_PAGESCROLL )
-            aWheelEvt.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+
+        if( nMsg == WM_MOUSEWHEEL )
+        {
+            if ( aSalShlData.mnWheelScrollLines == WHEEL_PAGESCROLL )
+                aWheelEvt.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+            else
+                aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollLines;
+            aWheelEvt.mbHorz        = FALSE;
+        }
         else
-            aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollLines;
-        aWheelEvt.mbHorz        = FALSE;
+        {
+            aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollChars;
+            aWheelEvt.mbHorz        = TRUE;
+        }
 
         if ( nWinModCode & MK_SHIFT )
             aWheelEvt.mnCode |= KEY_SHIFT;
@@ -4277,6 +4337,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( wParam == SPI_SETWHEELSCROLLLINES )
             aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
+        else if( wParam == SPI_SETWHEELSCROLLCHARS )
+            aSalShlData.mnWheelScrollChars = ImplSalGetWheelScrollChars();
     }
 
     if ( WM_SYSCOLORCHANGE == nMsg && GetSalData()->mhDitherPal )
@@ -5591,12 +5653,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_MOUSEWHEEL:
+            // FALLTHROUGH intended
+        case WM_MOUSEHWHEEL:
             // Gegen Rekursion absichern, falls wir vom IE oder dem externen
             // Fenster die Message wieder zurueckbekommen
             if ( !bInWheelMsg )
             {
                 bInWheelMsg++;
-                rDef = !ImplHandleWheelMsg( hWnd, wParam, lParam );
+                rDef = !ImplHandleWheelMsg( hWnd, nMsg, wParam, lParam );
                 // Wenn wir die Message nicht ausgewertet haben, schauen wir
                 // noch einmal nach, ob dort ein geplugtes Fenster steht,
                 // welches wir dann benachrichtigen
@@ -5880,7 +5944,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             if ( GetKeyState( VK_CONTROL ) & 0x8000 )
                 nKeyState |= MK_CONTROL;
             // Mutex handling is inside from this call
-            rDef = !ImplHandleWheelMsg( hWnd, MAKEWPARAM( nKeyState, (WORD)wParam ), lParam );
+            rDef = !ImplHandleWheelMsg( hWnd,
+                                        WM_MOUSEWHEEL,
+                                        MAKEWPARAM( nKeyState, (WORD)wParam ),
+                                        lParam );
             if ( rDef )
             {
                 HWND hWheelWnd = ::GetFocus();
