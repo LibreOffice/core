@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:40:22 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1964,10 +1964,6 @@ gboolean GtkSalFrame::signalExpose( GtkWidget* pWidget, GdkEventExpose* pEvent, 
     aEvent.mnBoundHeight    = pEvent->area.height;
 
     GTK_YIELD_GRAB();
-
-    // --- RTL --- (mirror paint pos)
-    if( Application::GetSettings().GetLayoutRTL() )
-        aEvent.mnBoundX = pThis->maGeometry.nWidth-aEvent.mnBoundWidth-aEvent.mnBoundX;
 
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
