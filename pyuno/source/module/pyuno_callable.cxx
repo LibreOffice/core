@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_callable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:51:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,13 +92,14 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     PyObject* python_params;
     Any ret_value;
     int num_params_in;
-
+    RuntimeCargo *cargo = 0;
     me = (PyUNO_callable*) self;
 
     PyRef ret;
     try
     {
         Runtime runtime;
+        cargo = runtime.getImpl()->cargo;
         any_params = runtime.pyObject2Any (args, me->members->mode);
 
         if (any_params.getValueTypeClass () == com::sun::star::uno::TypeClass_SEQUENCE)
@@ -112,14 +113,27 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
         }
 
         {
-            PyThreadDetach antiguard;
-            PYUNO_DEBUG_2( "entering invoke %s\n",
-                    OUStringToOString( me->members->methodName,RTL_TEXTENCODING_ASCII_US).getStr() );
+            PyThreadDetach antiguard; //pyhton free zone
+
+            // do some logging if desired ...
+            if( isLog( cargo, LogLevel::CALL ) )
+            {
+                logCall( cargo, "try     py->uno[0x", (sal_Int64) me->members->xInvocation.get(),
+                         me->members->methodName, aParams );
+            }
+
+            // do the call
             ret_value = me->members->xInvocation->invoke (
                 me->members->methodName, aParams, aOutParamIndex, aOutParam);
-            PYUNO_DEBUG_2( "leaving invoke %s\n",
-                    OUStringToOString( me->members->methodName,RTL_TEXTENCODING_ASCII_US).getStr() );
+
+            // log the reply, if desired
+            if( isLog( cargo, LogLevel::CALL ) )
+            {
+                logReply( cargo, "success py->uno[0x", (sal_Int64) me->members->xInvocation.get(),
+                          me->members->methodName, ret_value, aOutParam);
+            }
         }
+
 
         PyRef temp = runtime.any2PyObject (ret_value);
         if( aOutParam.getLength() )
@@ -149,18 +163,39 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     }
     catch( com::sun::star::reflection::InvocationTargetException & e )
     {
+
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException( cargo, "except  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+                          me->members->methodName, e.TargetException.getValue(), e.TargetException.getValueTypeRef());
+        }
         raisePyExceptionWithAny( e.TargetException );
     }
     catch( com::sun::star::script::CannotConvertException &e )
     {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+        }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
     catch( com::sun::star::lang::IllegalArgumentException &e )
     {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+        }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
     catch (::com::sun::star::uno::RuntimeException &e)
     {
+        if( cargo && isLog( cargo, LogLevel::CALL ) )
+        {
+            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+        }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
 
