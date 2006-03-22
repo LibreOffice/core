@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:18:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1223,7 +1223,7 @@ BOOL Window::HandleScrollCommand( const CommandEvent& rCmd,
             {
                 const CommandWheelData* pData = rCmd.GetWheelData();
 
-                if ( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) && !pData->IsHorz() )
+                if ( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) )
                 {
                     ULONG nScrollLines = pData->GetScrollLines();
                     long nLines;
@@ -1238,7 +1238,10 @@ BOOL Window::HandleScrollCommand( const CommandEvent& rCmd,
                         nLines = pData->GetNotchDelta() * (long)nScrollLines;
                     if ( nLines )
                     {
-                        ImplHandleScroll( NULL, 0L, pVScrl, nLines );
+                        ImplHandleScroll( NULL,
+                                          0L,
+                                          pData->IsHorz() ? pHScrl : pVScrl,
+                                          nLines );
                         bRet = TRUE;
                     }
                 }
