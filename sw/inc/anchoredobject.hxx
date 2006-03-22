@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:02:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,10 +420,12 @@ class SwAnchoredObject
             OD 2004-07-27 #i31698#
             method has typically to be called, if the anchored object gets its
             anchor frame assigned and if the anchor frame changes its layout direction
+            OD 2006-03-17 #i62875#
+            made virtual, because it's needed to be overloaded by <SwAnchoredDrawObject>
 
             @author OD
         */
-        void UpdateLayoutDir();
+        virtual void UpdateLayoutDir();
 
         /** method to determine object area inclusive its spacing
 
