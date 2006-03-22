@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:24:58 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ void ImpSvMEdit::Resize()
     Size aTextWindowSz( aSz );
     aTextWindowSz.Width() -= maTextWindowOffset.X();
     aTextWindowSz.Height() -= maTextWindowOffset.Y();
-    mpTextWindow->SetPosSizePixel( maTextWindowOffset, aTextWindowSz );
+    Point aTextWindowPos( maTextWindowOffset );
 
     if ( !mpHScrollBar )
         mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
@@ -467,10 +467,15 @@ void ImpSvMEdit::Resize()
     if ( mpVScrollBar )
     {
         if( Application::GetSettings().GetLayoutRTL() )
+        {
             mpVScrollBar->SetPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
+            aTextWindowPos.X() += nSBWidth;
+        }
         else
             mpVScrollBar->SetPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
     }
+
+    mpTextWindow->SetPosSizePixel( aTextWindowPos, aTextWindowSz );
 
     if ( mpScrollBox )
         mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
