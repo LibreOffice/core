@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:33:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,48 @@ BOOL Window::HitTestNativeControl( ControlType nType,
             return FALSE;
 
     ImplInitSalControlHandle();
-    return( mpGraphics->HitTestNativeControl(nType, nPart, rControlRegion, aPos, *ImplGetWinData()->mpSalControlHandle, rIsInside, this ) );
+
+    Point aWinOffs;
+    aWinOffs = OutputToScreenPixel( aWinOffs );
+    Region screenRegion( rControlRegion );
+    screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
+
+    return( mpGraphics->HitTestNativeControl(nType, nPart, screenRegion, OutputToScreenPixel( aPos ), *ImplGetWinData()->mpSalControlHandle, rIsInside, this ) );
 }
 
 // -----------------------------------------------------------------------
+
+void Window::ImplMoveControlValue( ControlType nType, ControlPart nPart, const ImplControlValue& aValue, const Point& rDelta ) const
+{
+    if( aValue.getOptionalVal() )
+    {
+        switch( nType )
+        {
+            case CTRL_SCROLLBAR:
+            {
+                ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(aValue.getOptionalVal());
+                pScVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
+                pScVal->maButton1Rect.Move( rDelta.X(), rDelta.Y() );
+                pScVal->maButton2Rect.Move( rDelta.X(), rDelta.Y() );
+            }
+            break;
+            case CTRL_SPINBOX:
+            case CTRL_SPINBUTTONS:
+            {
+                SpinbuttonValue* pSpVal = reinterpret_cast<SpinbuttonValue*>(aValue.getOptionalVal());
+                pSpVal->maUpperRect.Move( rDelta.X(), rDelta.Y() );
+                pSpVal->maLowerRect.Move( rDelta.X(), rDelta.Y() );
+            }
+            break;
+            case CTRL_TOOLBAR:
+            {
+                ToolbarValue* pTVal = reinterpret_cast<ToolbarValue*>(aValue.getOptionalVal());
+                pTVal->maGripRect.Move( rDelta.X(), rDelta.Y() );
+            }
+            break;
+        }
+    }
+}
 
 BOOL Window::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
@@ -162,12 +200,20 @@ BOOL Window::DrawNativeControl( ControlType nType,
     Region screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
+    // do so for ImplControlValue members, also
+    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
+
     Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
     if( aTestRegion == rControlRegion )
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
 
-    return( mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this ) );
+    BOOL bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this );
+
+    // transform back ImplControlValue members
+    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+
+    return bRet;
 }
 
 
@@ -206,8 +252,14 @@ BOOL Window::DrawNativeControlText(ControlType nType,
     aWinOffs = OutputToScreenPixel( aWinOffs );
     Region screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
+    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
 
-    return( mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this ) );
+    BOOL bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this );
+
+    // transform back ImplControlValue members
+    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+
+    return bRet;
 }
 
 
@@ -230,9 +282,28 @@ BOOL Window::GetNativeControlRegion(  ControlType nType,
             return FALSE;
 
     ImplInitSalControlHandle();
-    return( mpGraphics->GetNativeControlRegion(nType, nPart, rControlRegion, nState, aValue,
+
+    // Convert the coordinates from relative to Window-absolute, so we draw
+    // in the correct place in platform code
+    Point aWinOffs;
+    aWinOffs = OutputToScreenPixel( aWinOffs );
+    Region screenRegion( rControlRegion );
+    screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
+    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
+
+    BOOL bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, aValue,
                                 *ImplGetWinData()->mpSalControlHandle, aCaption, rNativeBoundingRegion,
-                                rNativeContentRegion, this ) );
+                                rNativeContentRegion, this );
+    if( bRet )
+    {
+        // transform back native regions
+        rNativeBoundingRegion.Move( -aWinOffs.X(), -aWinOffs.Y() );
+        rNativeContentRegion.Move( -aWinOffs.X(), -aWinOffs.Y() );
+    }
+    // transform back ImplControlValue members
+    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+
+    return bRet;
 }
 
 
