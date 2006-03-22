@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:57:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,10 +151,10 @@ FltError ImportTyp::Read()
 }
 
 
-ImportExcel::ImportExcel( XclImpRootData& rImpData ):
+ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ImportTyp( &rImpData.mrDoc, rImpData.meCharSet ),
     XclImpRoot( rImpData ),
-    maStrm( rImpData.mrBookStrm, GetRoot() ),
+    maStrm( rStrm, GetRoot() ),
     aIn( maStrm )
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
