@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:08:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1924,6 +1924,9 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
+    if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
+        return;
+
     // object already disposed?
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
