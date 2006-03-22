@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:50:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,7 +409,7 @@ bool XclImpStream::StartNextRecord()
     do
     {
         mbValidRec = ReadNextRawRecHeader();
-        bIsZeroRec = !mnRawRecId && !mnRawRecSize;
+        bIsZeroRec = (mnRawRecId == 0) && (mnRawRecSize == 0);
         if( bIsZeroRec ) --nZeroRecCount;
         mnNextRecPos = mrStrm.Tell() + mnRawRecSize;
     }
@@ -1011,7 +1011,7 @@ void XclImpStream::RestorePosition( const XclImpStreamPos& rPos )
 bool XclImpStream::ReadNextRawRecHeader()
 {
     mrStrm.Seek( mnNextRecPos );
-    bool bRet = (mnNextRecPos < mnStreamSize);
+    bool bRet = (mnNextRecPos + 4 <= mnStreamSize);
     if( bRet )
         mrStrm >> mnRawRecId >> mnRawRecSize;
     return bRet;
