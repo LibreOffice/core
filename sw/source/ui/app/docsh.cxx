@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:48:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,6 +495,15 @@ BOOL SwDocShell::Save()
     SwWait aWait( *this, TRUE );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
+    // --> OD 2006-03-17 #i62875#
+    // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
+    if ( pWrtShell && pDoc &&
+         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         docfunc::AllDrawObjsOnPage( *pDoc ) )
+    {
+        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+    }
+    // <--
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
@@ -610,6 +619,15 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     CalcLayoutForOLEObjects();  // format for OLE objets
+    // --> OD 2006-03-17 #i62875#
+    // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
+    if ( pWrtShell && pDoc &&
+         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         docfunc::AllDrawObjsOnPage( *pDoc ) )
+    {
+        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+    }
+    // <--
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
@@ -623,7 +641,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             // normal doc shell, therefore, SfxInplaceObject::SaveAs
             // will set the wrong class id.
             SvGlobalName aClassName;
-            ULONG nClipFormat;
             String aAppName, aLongUserName, aUserName;
             SfxObjectShellRef xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
@@ -778,6 +795,15 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     CalcLayoutForOLEObjects();  // format for OLE objets
+    // --> OD 2006-03-17 #i62875#
+    // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
+    if ( pWrtShell && pDoc &&
+         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         docfunc::AllDrawObjsOnPage( *pDoc ) )
+    {
+        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+    }
+    // <--
 
     if( xWriter->IsStgWriter() &&
         ( xWriter->IsSw3Writer() ||
@@ -848,7 +874,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         if( bRet && nMyType != nSaveType )
         {
             SvGlobalName aClassName;
-            ULONG nClipFormat;
             String aAppName, aLongUserName, aUserName;
             SfxObjectShellRef xDocSh;
             switch( nSaveType )
