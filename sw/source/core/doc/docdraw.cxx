@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:11:55 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,12 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
+// --> OD 2006-03-14 #i62875#
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+// <--
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -1018,3 +1024,95 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
     return(0);
 }
+
+// --> OD 2006-03-14 #i62875#
+namespace docfunc
+{
+    bool ExistsDrawObjs( SwDoc& p_rDoc )
+    {
+        bool bExistsDrawObjs( false );
+
+        if ( p_rDoc.GetDrawModel() &&
+             p_rDoc.GetDrawModel()->GetPage( 0 ) )
+        {
+            const SdrPage& rSdrPage( *(p_rDoc.GetDrawModel()->GetPage( 0 )) );
+
+            SdrObjListIter aIter( rSdrPage, IM_FLAT );
+            while( aIter.IsMore() )
+            {
+                SdrObject* pObj( aIter.Next() );
+                if ( !dynamic_cast<SwVirtFlyDrawObj*>(pObj) &&
+                     !dynamic_cast<SwFlyDrawObj*>(pObj) )
+                {
+                    bExistsDrawObjs = true;
+                    break;
+                }
+            }
+        }
+
+        return bExistsDrawObjs;
+    }
+
+    bool AllDrawObjsOnPage( SwDoc& p_rDoc )
+    {
+        bool bAllDrawObjsOnPage( true );
+
+        if ( p_rDoc.GetDrawModel() &&
+             p_rDoc.GetDrawModel()->GetPage( 0 ) )
+        {
+            const SdrPage& rSdrPage( *(p_rDoc.GetDrawModel()->GetPage( 0 )) );
+
+            SdrObjListIter aIter( rSdrPage, IM_FLAT );
+            while( aIter.IsMore() )
+            {
+                SdrObject* pObj( aIter.Next() );
+                if ( !dynamic_cast<SwVirtFlyDrawObj*>(pObj) &&
+                     !dynamic_cast<SwFlyDrawObj*>(pObj) )
+                {
+                    SwDrawContact* pDrawContact =
+                            dynamic_cast<SwDrawContact*>(::GetUserCall( pObj ));
+                    if ( pDrawContact )
+                    {
+                        SwAnchoredDrawObject* pAnchoredDrawObj =
+                            dynamic_cast<SwAnchoredDrawObject*>(pDrawContact->GetAnchoredObj( pObj ));
+
+                        // error handling
+                        {
+                            if ( !pAnchoredDrawObj )
+                            {
+                                ASSERT( false,
+                                        "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
+                                bAllDrawObjsOnPage = false;
+                                break;
+                            }
+                        }
+
+                        if ( pAnchoredDrawObj->NotYetPositioned() )
+                        {
+                            // The drawing object isn't yet layouted.
+                            // Thus, it isn't known, if all drawing objects are on page.
+                            bAllDrawObjsOnPage = false;
+                            break;
+                        }
+                        else if ( pAnchoredDrawObj->IsOutsidePage() )
+                        {
+                            bAllDrawObjsOnPage = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // contact object of drawing object doesn't exists.
+                        // Thus, the drawing object isn't yet positioned.
+                        // Thus, it isn't known, if all drawing objects are on page.
+                        bAllDrawObjsOnPage = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return bAllDrawObjsOnPage;
+    }
+}
+// <--
