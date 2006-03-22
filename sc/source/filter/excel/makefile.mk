@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:58:26 $
+#   last change: $Author: obo $ $Date: 2006-03-22 12:00:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ SLOFILES =	\
         $(SLO)$/xiview.obj					\
         $(SLO)$/xladdress.obj				\
         $(SLO)$/xlchart.obj					\
+        $(SLO)$/xldumper.obj				\
         $(SLO)$/xlescher.obj				\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlocx.obj					\
