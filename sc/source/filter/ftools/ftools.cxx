@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:54:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,6 @@
 #include "ftools.hxx"
 #endif
 
-#include <sot/storage.hxx>
-
 #ifndef _COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -53,6 +51,9 @@
 #endif
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
+#endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
 #endif
 
 #include <math.h>
