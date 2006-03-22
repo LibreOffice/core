@@ -4,9 +4,9 @@
 #
 #   $RCSfile: impl.py,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:26:21 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:42:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import sys
 
 from com.sun.star.io import XOutputStream, XInputStream, typeOfXOutputStream, typeOfXInputStream
 from com.sun.star.lang import XTypeProvider, typeOfXTypeProvider, XEventListener
+from com.sun.star.uno import XCurrentContext
 
 class SequenceOutputStream( unohelper.Base, XOutputStream ):
       def __init__( self ):
@@ -179,6 +180,17 @@ class TestHelperCase( unittest.TestCase ):
             smgr.dispose()
             self.failUnless( not listener.disposingCalled )
             
+      def testCurrentContext( self ):
+            oldContext = uno.getCurrentContext()
+            try:
+                  uno.setCurrentContext(
+                        unohelper.CurrentContext( oldContext,{"My42":42}) )
+                  self.failUnless( 42 == uno.getCurrentContext().getValueByName( "My42" ) )
+                  self.failUnless( None == uno.getCurrentContext().getValueByName( "My43" ) )
+            finally:
+                  uno.setCurrentContext( oldContext )
+          
+            
 
 def suite( ctx ):
     suite = unittest.TestSuite()
@@ -186,5 +198,6 @@ def suite( ctx ):
     suite.addTest(TestHelperCase( "testUrlHelper" ))
     suite.addTest(TestHelperCase( "testInspect" ))
     suite.addTest(TestHelperCase( "testListener" ) )
+    suite.addTest(TestHelperCase( "testCurrentContext" ) )
     return suite
                                            
