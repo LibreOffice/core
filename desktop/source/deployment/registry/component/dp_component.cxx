@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:22:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1296,8 +1296,9 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
 } // anon namespace
 
 namespace sdecl = comphelper::service_decl;
+sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
 extern sdecl::ServiceDecl const serviceDecl(
-    sdecl::class_<BackendImpl, sdecl::with_args<true> >(),
+    serviceBI,
     "com.sun.star.comp.deployment.component.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
