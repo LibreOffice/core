@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:01:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1275,6 +1275,8 @@ void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat
 {
     XclNumFmt& rNumFmt = maFmtMap[ nXclNumFmt ];
     rNumFmt.maFormat = rFormat;
+    // #i62053# rFormat may be an empty string, meOffset must be initialized
+    rNumFmt.meOffset = NF_NUMBER_STANDARD;
     rNumFmt.meLanguage = LANGUAGE_SYSTEM;
 }
 
