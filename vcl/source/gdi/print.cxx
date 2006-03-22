@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 16:02:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -872,11 +872,11 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
                 mpGetDevSizeList = NULL;
             }
             // clean up font list
-            mpFontList->Clear();
+            delete mpFontCache;
             delete mpFontList;
+            mpFontCache = NULL;
             mpFontList = NULL;
 
-            delete mpFontCache;
             mbInitFont = TRUE;
             mbNewFont = TRUE;
             mpInfoPrinter = NULL;
@@ -915,8 +915,10 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
                 delete mpGetDevSizeList;
                 mpGetDevSizeList = NULL;
             }
-            delete mpFontList;
             delete mpFontCache;
+            delete mpFontList;
+            mpFontCache = NULL;
+            mpFontList = NULL;
             mbInitFont = TRUE;
             mbNewFont = TRUE;
             mpInfoPrinter = NULL;
