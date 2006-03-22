@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:42:04 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,8 @@ X11SalGraphics::X11SalGraphics()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalGraphics::~X11SalGraphics()
 {
+    ReleaseFonts();
+
     Display *pDisplay = GetXDisplay();
 
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
