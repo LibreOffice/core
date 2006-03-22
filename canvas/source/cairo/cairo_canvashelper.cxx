@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:46 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,12 +570,13 @@ namespace cairocanvas
     {
     switch( aOperation ) {
     case Fill:
+        /* TODO: multitexturing */
         if( pTextures ) {
-        ::com::sun::star::rendering::Texture aTexture ( (*pTextures)[nPolygonIndex] );
+        const ::com::sun::star::rendering::Texture& aTexture ( (*pTextures)[0] );
         if( aTexture.Bitmap.is() ) {
             unsigned char* data;
             bool bHasAlpha;
-            Surface* pSurface = surfaceFromXBitmap( (*pTextures)[nPolygonIndex].Bitmap, pDevice, data, bHasAlpha );
+            Surface* pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
 
             if( pSurface ) {
             cairo_pattern_t* pPattern;
@@ -714,6 +715,10 @@ namespace cairocanvas
                     const uno::Sequence< rendering::Texture >* pTextures,
                     SpriteCanvas* pDevice )
     {
+        if( pTextures )
+            CHECK_AND_THROW( pTextures->getLength(),
+                             "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
+
     bool bOpToDo = false;
     Matrix aOrigMatrix, aIdentityMatrix;
     double nX, nY, nBX, nBY, nPX, nPY, nAX, nAY;
@@ -1065,9 +1070,9 @@ namespace cairocanvas
                                                                     bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
                     Cairo* pCairo = pScaledSurface->getCairo();
 
-                    cairo_set_source_surface( pCairo, pSurface->mpSurface, 0, 0 );
-//                  cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
+                    // cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
                     cairo_scale( pCairo, dWidth/rSize.Width, dHeight/rSize.Height );
+                    cairo_set_source_surface( pCairo, pSurface->mpSurface, 0, 0 );
                     cairo_paint( pCairo );
 
                     cairo_destroy( pCairo );
