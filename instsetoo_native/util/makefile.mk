@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 10:55:10 $
+#   last change: $Author: obo $ $Date: 2006-03-22 11:02:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,11 @@ ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE):s/ODK//"
+ALLTAR : openoffice
+.ELSE
 ALLTAR : openoffice sdkoo_en-US ure_en-US
+.ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
