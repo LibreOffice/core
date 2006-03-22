@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:39:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ struct XclGuid
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 );
 inline bool operator!=( const XclGuid& rCmp1, const XclGuid& rCmp2 ) { return !(rCmp1 == rCmp2); }
+bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 );
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );
