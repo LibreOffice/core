@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:47:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,12 +742,17 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     }
 
     // create xrender Picture for font foreground
+    bool bDeleteSrc = false;
+    Pixmap aSrcPixmap;
+    Pixmap aSrcPicture;
+
     static Pixmap aPixmap;
     static Picture aSrc = 0;
+    static unsigned nDepth;
     if( !aSrc )
     {
         int iDummy;
-        unsigned uDummy, nDepth;
+        unsigned uDummy;
         XLIB_Window wDummy;
         XGetGeometry( pDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
             &uDummy, &uDummy, &uDummy, &nDepth );
@@ -760,6 +765,22 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #else
         aSrc = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
 #endif
+        aSrcPicture = aSrc;
+        aSrcPixmap = aPixmap;
+    } else if( pVisualFormat && pVisualFormat->depth != nDepth ) {
+        aSrcPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, pVisualFormat->depth );
+
+        XRenderPictureAttributes aAttr;
+        aAttr.repeat = true;
+#ifdef XRENDER_LINK
+        aSrcPicture = XRenderCreatePicture ( pDisplay, aSrcPixmap, pVisualFormat, CPRepeat, &aAttr );
+#else
+        aSrcPicture = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aSrcPixmap, pVisualFormat, CPRepeat, &aAttr );
+#endif
+        bDeleteSrc = true;
+    } else {
+        aSrcPicture = aSrc;
+        aSrcPixmap = aPixmap;
     }
 
     // set font foreground
@@ -767,8 +788,8 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     XGCValues aGCVal;
     XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
     aGCVal.clip_mask = None;
-    GC tmpGC = XCreateGC( pDisplay, aPixmap, GCForeground | GCClipMask, &aGCVal );
-    XDrawPoint( pDisplay, aPixmap, tmpGC, 0, 0 );
+    GC tmpGC = XCreateGC( pDisplay, aSrcPixmap, GCForeground | GCClipMask, &aGCVal );
+    XDrawPoint( pDisplay, aSrcPixmap, tmpGC, 0, 0 );
     XFreeGC( pDisplay, tmpGC );
 
     // notify xrender of target drawable
@@ -810,10 +831,10 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
              aRenderAry[ i ] = aX11GlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
 #ifdef XRENDER_LINK
         XRenderCompositeString32 ( pDisplay, PictOpOver,
-            aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+            aSrcPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
 #else
         (*aX11GlyphPeer.pXRenderCompositeString32)( pDisplay, PictOpOver,
-            aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+            aSrcPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
 #endif
     }
 
@@ -823,6 +844,16 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #else
     (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
 #endif
+
+    if( bDeleteSrc ) {
+        XFreePixmap( pDisplay, aSrcPixmap );
+
+#ifdef XRENDER_LINK
+        XRenderFreePicture ( pDisplay, aSrcPicture );
+#else
+        (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aSrcPicture );
+#endif
+    }
 }
 
 //--------------------------------------------------------------------------
