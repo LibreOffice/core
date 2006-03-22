@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:15:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -826,15 +826,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
             returnVal = TRUE;
         }
-        if ( (nType==CTRL_SPINBOX) && ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)) )
-        {
-            rNativeBoundingRegion = NWGetSpinButtonRect( nType, nPart, rControlRegion.GetBoundRect(),
-            nState, aValue, rControlHandle, aCaption );
-            rNativeContentRegion = rNativeBoundingRegion;
-
-            returnVal = TRUE;
-        }
-        if ( (nType==CTRL_COMBOBOX) && (nPart==PART_BUTTON_DOWN) )
+        if ( (nType==CTRL_COMBOBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
         {
             rNativeBoundingRegion = NWGetComboBoxButtonRect( nType, nPart, rControlRegion.GetBoundRect(), nState,
             aValue, rControlHandle, aCaption );
@@ -842,7 +834,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
             returnVal = TRUE;
         }
-        if ( (nType==CTRL_SPINBOX) && ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)) )
+        if ( (nType==CTRL_SPINBOX) && ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
         {
 
             rNativeBoundingRegion = NWGetSpinButtonRect( nType, nPart, rControlRegion.GetBoundRect(), nState,
@@ -1256,6 +1248,13 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     gint            vShim = 0;
     gint            hShim = 0;
     gint            x,y,w,h;
+
+    // make controlvalue rectangles relative to area
+    thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
+    button11BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
+    button22BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
+    button12BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
+    button21BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
 
     NWEnsureGTKButton();
     NWEnsureGTKScrollbars();
@@ -1874,10 +1873,17 @@ static Rectangle NWGetSpinButtonRect(   ControlType         nType,
         buttonRect.setY( aAreaRect.Top() );
         buttonRect.Bottom() = buttonRect.Top() + (aAreaRect.GetHeight() / 2);
     }
-    else
+    else if( nPart == PART_BUTTON_DOWN )
     {
         buttonRect.setY( aAreaRect.Top() + (aAreaRect.GetHeight() / 2) );
         buttonRect.Bottom() = aAreaRect.Bottom(); // cover area completely
+    }
+    else
+    {
+        buttonRect.Right()  = buttonRect.Left()-1;
+        buttonRect.Left()   = aAreaRect.Left();
+        buttonRect.Top()    = aAreaRect.Top();
+        buttonRect.Bottom() = aAreaRect.Bottom();
     }
 
     return( buttonRect );
@@ -1960,7 +1966,7 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     NWSetWidgetState( gComboWidget, nState, stateType );
     NWSetWidgetState( gArrowWidget, nState, stateType );
 
-    buttonRect = NWGetComboBoxButtonRect( nType, nPart, pixmapRect, nState, aValue, rControlHandle, aCaption );
+    buttonRect = NWGetComboBoxButtonRect( nType, PART_BUTTON_DOWN, pixmapRect, nState, aValue, rControlHandle, aCaption );
     if( nPart == PART_BUTTON_DOWN )
         buttonRect.Left() += 1;
 
@@ -2017,6 +2023,7 @@ static Rectangle NWGetComboBoxButtonRect(   ControlType         nType,
 {
     Rectangle   aButtonRect;
     gint        nArrowWidth;
+    gint        nButtonWidth;
     gint        nFocusWidth;
     gint        nFocusPad;
 
@@ -2027,11 +2034,32 @@ static Rectangle NWGetComboBoxButtonRect(   ControlType         nType,
                                     "focus-padding",    &nFocusPad, NULL );
 
     nArrowWidth = MIN_ARROW_SIZE + (GTK_MISC(gArrowWidget)->xpad * 2);
-    aButtonRect.SetSize( Size( nArrowWidth + ((BTN_CHILD_SPACING + gDropdownWidget->style->xthickness) * 2)
-                               + (2 * (nFocusWidth+nFocusPad)),
-                               aAreaRect.GetHeight() ) );
-    aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - aButtonRect.GetWidth(),
-                        aAreaRect.Top() ) );
+    nButtonWidth = nArrowWidth +
+                   ((BTN_CHILD_SPACING + gDropdownWidget->style->xthickness) * 2)
+                   + (2 * (nFocusWidth+nFocusPad));
+    if( nPart == PART_BUTTON_DOWN )
+    {
+        aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
+        aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
+                                   aAreaRect.Top() ) );
+    }
+    else if( nPart == PART_SUB_EDIT )
+    {
+        NWEnsureGTKCombo();
+
+
+        gint adjust_x = GTK_CONTAINER(gComboWidget)->border_width +
+                        nFocusWidth +
+                        nFocusPad;
+        gint adjust_y = adjust_x + gComboWidget->style->ythickness;
+        adjust_x     += gComboWidget->style->xthickness;
+        aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
+                                   aAreaRect.GetHeight() - 2 * adjust_y ) );
+        Point aEditPos = aAreaRect.TopLeft();
+        aEditPos.X() += adjust_x;
+        aEditPos.Y() += adjust_y;
+        aButtonRect.SetPos( aEditPos );
+    }
 
     return( aButtonRect );
 }
@@ -2326,8 +2354,8 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         ToolbarValue* pVal = (ToolbarValue*)aValue.getOptionalVal();
         if( pVal )
         {
-            g_x = rControlRectangle.Left() + pVal->maGripRect.Left();
-            g_y = rControlRectangle.Top()  + pVal->maGripRect.Top();
+            g_x = pVal->maGripRect.Left();
+            g_y = pVal->maGripRect.Top();
             g_w = pVal->maGripRect.GetWidth();
             g_h = pVal->maGripRect.GetHeight();
         }
@@ -3080,8 +3108,6 @@ BOOL GtkSalGraphics::NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRe
     // Copy the background of the screen into a composite pixmap
     XCopyArea( GetXDisplay(), GDK_DRAWABLE_XID(pPixmap), GetDrawable(), SelectFont(),
                0, 0, dstRect.GetWidth(), dstRect.GetHeight(), dstRect.Left(), dstRect.Top() );
-
-    X11SalGraphics::YieldGraphicsExpose( GetXDisplay(), NULL, GetDrawable() );
 
     return( TRUE );
 }
