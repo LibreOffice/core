@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:43:33 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,9 +774,7 @@ WinSalGraphics::WinSalGraphics()
 WinSalGraphics::~WinSalGraphics()
 {
     // free obsolete GDI objekts
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        if( mhFonts[ i ] )
-            DeleteFont( mhFonts[ i ] );
+        ReleaseFonts();
 
     if ( mhPen )
     {
