@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recently_used_file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:55:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #endif
 
 #include <sys/file.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <unistd.h>
 
@@ -97,8 +99,11 @@ recently_used_file::recently_used_file() :
         file_ = fopen(tmp.getStr(), "r+");
 
         /* create if not exist */
-        if (NULL == file_)
+        if (NULL == file_) {
+            mode_t umask_ = umask(S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
             file_ = fopen(tmp.getStr(), "w+");
+            umask(umask_);
+        }
 
         if (NULL == file_)
             throw "I/O error opening ~/.recently-used";
