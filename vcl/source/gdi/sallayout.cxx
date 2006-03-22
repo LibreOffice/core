@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:09:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,10 +974,11 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         pNewGlyphWidths[ i ] = 0;
 
     bool bRTL;
-    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRTL ); )
+    for( int nCharPos = i = -1; rArgs.GetNextPos( &nCharPos, &bRTL ); )
     {
         n = nCharPos - rArgs.mnMinCharPos;
-        i = pLogCluster[ n ];
+        if( pLogCluster[ n ] >= 0 )
+            i = pLogCluster[ n ];
         if( i >= 0 )
         {
             long nDelta = rArgs.mpDXArray[ n ] ;
