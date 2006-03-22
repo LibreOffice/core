@@ -4,9 +4,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:54:32 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:52:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,23 @@ def fileUrlToSystemPath( url ):
 def absolutize( path, relativeUrl ):
     "returns an absolute file url from the given urls"
     return pyuno.absolutize( path, relativeUrl )
+
+def getCurrentContext():
+    """Returns the currently valid current context.
+       see http://udk.openoffice.org/common/man/concept/uno_contexts.html#current_context
+       for an explanation on the current context concept
+    """
+    return pyuno.getCurrentContext()
+
+def setCurrentContext( newContext ):
+    """Sets newContext as new uno current context. The newContext must
+    implement the XCurrentContext interface. The implemenation should
+    handle the desired properties and delegate unknown properties to the
+    old context. Ensure to reset the old one when you leave your stack ...
+    see http://udk.openoffice.org/common/man/concept/uno_contexts.html#current_context
+    """
+    return pyuno.setCurrentContext( newContext )
+
         
 class Enum:
     "Represents a UNO idl enum, use an instance of this class to explicitly pass a boolean to UNO" 
