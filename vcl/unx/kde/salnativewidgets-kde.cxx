@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:11:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -732,16 +732,11 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
             ToolbarValue *pValue = static_cast< ToolbarValue * >( aValue.getOptionalVal() );
 
             QRect qThumbRect = region2QRect( pValue->maGripRect );
+            qThumbRect.moveBy( -qWidgetPos.x(), -qWidgetPos.y() );
             if ( bIsHorizontal )
-            {
                 qThumbRect.addCoords( 0, 2, 0, -3 );    // make the thumb a bit nicer
-                qRect.setWidth( qThumbRect.width() );   // draw just the thumb part
-            }
             else
-            {
                 qThumbRect.addCoords( 2, 0, -3, 0 );    // make the thumb a bit nicer
-                qRect.setHeight( qThumbRect.height() ); // draw just the thumb part
-            }
 
             if ( kapp->style().inherits( "HighColorStyle" ) ||
                  kapp->style().inherits( "HighContrastStyle" ) ||
@@ -1235,11 +1230,13 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     nType/nPart combination.
 */
 BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
-                                           const Region& rControlRegion, const Point& aPos,
+                                           const Region& rControlRegion, const Point& rPos,
                                            SalControlHandle& rControlHandle, BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
+    // make position relative to rControlRegion
+    Point aPos = rPos - rControlRegion.GetBoundRect().TopLeft();
     rIsInside = FALSE;
 
     BOOL bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
@@ -1576,12 +1573,14 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect.setLeft( kapp->style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget,
                 QStyle::SC_ComboBoxEditField ).right() + 1 );
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = TRUE;
             break;
 
         case PART_SUB_EDIT:
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxEditField );
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = TRUE;
             break;
         }
@@ -1596,11 +1595,20 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetUp );
             bReturn = TRUE;
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
         case PART_BUTTON_DOWN:
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetDown );
+            bReturn = TRUE;
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
+            break;
+
+        case PART_SUB_EDIT:
+            qRect = kapp->style().querySubControlMetrics(
+                QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetEditField );
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = TRUE;
             break;
         }
@@ -1641,6 +1649,8 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             }
             }
 
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
+
             bReturn = TRUE;
             break;
 
@@ -1659,6 +1669,8 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect.setTop( kapp->style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
+
+            qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
 
             bReturn = TRUE;
             break;
