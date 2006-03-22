@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:50:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,10 +180,15 @@ WinSalVirtualDevice::WinSalVirtualDevice()
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {
+    // remove VirDev from list of virtual devices
     SalData* pSalData = GetSalData();
+    WinSalVirtualDevice** ppVirDev = &pSalData->mpFirstVD;
+    for(; (*ppVirDev != this) && *ppVirDev; ppVirDev = &(*ppVirDev)->mpNext );
+    if( *ppVirDev )
+        *ppVirDev = mpNext;
 
     // destroy saved DC
-    if ( mpGraphics->mhDefPal )
+    if( mpGraphics->mhDefPal )
         SelectPalette( mpGraphics->mhDC, mpGraphics->mhDefPal, TRUE );
     ImplSalDeInitGraphics( mpGraphics );
     if( mhDefBmp )
@@ -193,18 +198,7 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     if( mhBmp )
         DeleteBitmap( mhBmp );
     delete mpGraphics;
-
-    // remove VirDev from VirDevList
-    if ( this == pSalData->mpFirstVD )
-        pSalData->mpFirstVD = mpNext;
-    else
-    {
-        WinSalVirtualDevice* pTempVD = pSalData->mpFirstVD;
-        while ( pTempVD->mpNext != this )
-            pTempVD = pTempVD->mpNext;
-
-        pTempVD->mpNext = mpNext;
-    }
+    mpGraphics = NULL;
 }
 
 // -----------------------------------------------------------------------
