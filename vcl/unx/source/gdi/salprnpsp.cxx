@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 15:04:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
+#endif
 #ifndef _SV_JOBSET_H
 #include <jobset.h>
 #endif
@@ -1183,6 +1186,9 @@ IMPL_STATIC_LINK( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, pDummy )
 
 void vcl_sal::PrinterUpdate::update()
 {
+    if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
+        return;
+
     if( ! static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
     {
         // #i45389# start background printer detection
