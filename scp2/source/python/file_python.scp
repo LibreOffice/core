@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:57:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,13 @@ File gid_File_Py_Unohelper
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "unohelper.py";
+    Styles = (PACKED);
+End
+
+File gid_File_Py_Officehelper
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "officehelper.py";
     Styles = (PACKED);
 End
 
