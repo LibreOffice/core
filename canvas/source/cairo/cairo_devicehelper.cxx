@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:35:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,34 +310,39 @@ namespace cairocanvas
     {
         OSL_TRACE("set device size %d x %d", rSize.getX(), rSize.getY() );
 
-        maSize = rSize;
-
         if( mpWindowSurface )
         {
-            mpWindowSurface->Unref();
-        }
-        mpWindowSurface = new Surface( mpSysData,
-                                       mpOutputWindow->GetOutOffXPixel(), mpOutputWindow->GetOutOffYPixel(),
-                                       maSize.getX(), maSize.getY() );
+            mpWindowSurface->Resize( rSize.getX() + mpOutputWindow->GetOutOffXPixel(), rSize.getY() + mpOutputWindow->GetOutOffYPixel() );
+        } else
+            mpWindowSurface = new Surface( mpSysData,
+                                           mpOutputWindow->GetOutOffXPixel(), mpOutputWindow->GetOutOffYPixel(),
+                                           rSize.getX(), rSize.getY() );
 
-        if( mpBufferSurface )
+        if( mpBufferSurface && maSize != rSize )
         {
                 mpBufferSurface->Unref();
+                mpBufferSurface = NULL;
         }
-        mpBufferSurface = mpWindowSurface->getSimilar( CAIRO_CONTENT_COLOR, maSize.getX(), maSize.getY() );
+        if( !mpBufferSurface )
+            mpBufferSurface = mpWindowSurface->getSimilar( CAIRO_CONTENT_COLOR, rSize.getX(), rSize.getY() );
 
-        if( mpBufferCairo )
+        if( mpBufferCairo && maSize != rSize )
         {
             cairo_destroy( mpBufferCairo );
+            mpBufferCairo = NULL;
         }
-        mpBufferCairo = mpBufferSurface->getCairo();
+        if( !mpBufferCairo )
+            mpBufferCairo = mpBufferSurface->getCairo();
+
+        if( maSize != rSize )
+            maSize = rSize;
 
         mpSpriteCanvas->setSizePixel( maSize );
     }
 
     const ::basegfx::B2ISize& DeviceHelper::getSizePixel()
     {
-    return maSize;
+        return maSize;
     }
 
     void DeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
