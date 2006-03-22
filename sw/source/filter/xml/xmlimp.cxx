@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:44:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1162,6 +1162,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bDoNotResetParaAttrsForNumFont    = false;
     // --> PB 2004-08-23 #i33095#
     bool bLoadReadonly = false;
+    // --> OD 2006-03-14 #i62875#
+    bool bDoNotCaptureDrawObjsOnPage( false );
+    // <--
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1234,6 +1237,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // --> PB 2004-08-23 #i33095#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
                     bLoadReadonly = true;
+                // --> OD 2006-03-14 #i62875#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage")) )
+                    bDoNotCaptureDrawObjsOnPage = true;
+                // <--
             }
             catch( Exception& )
             {
@@ -1359,6 +1366,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
+    }
+    // <--
+
+    // --> OD 2006-03-14 #i62875#
+    // This flag has to be set for all documents < SO8
+    if ( !bDoNotCaptureDrawObjsOnPage && !bConsiderWrapOnObjPos )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotCaptureDrawObjsOnPage") ), makeAny( true ) );
     }
     // <--
 
