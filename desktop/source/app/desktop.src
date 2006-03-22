@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:23:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,14 @@ ModalDialog DLG_CMDLINEHELP
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
+};
+
+ErrorBox EBX_ERR_PRINTDISABLED
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] = "Das Drucken ist deaktiviert. Es können keine Dokumente gedruckt werden.";
+    Message [ en-US ] = "Printing is disabled. No documents can be printed.";
 };
 
 InfoBox INFOBOX_EXPIRED
