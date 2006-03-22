@@ -6,8 +6,8 @@
 namespace cairo
 {
 
-#include <cairo/cairo-xlib.h>
-#include <cairo/cairo-xlib-xrender.h>
+#include <cairo-xlib.h>
+#include <cairo-xlib-xrender.h>
 
     Surface::Surface( const void* pSysData, int x, int y, int width, int height )
         : mnRefCount( 1 ),
@@ -73,5 +73,20 @@ namespace cairo
                                                                                pFormat, width, height ) );
         } else
             return new Surface( mpSysData, mpDisplay, 0, NULL, cairo_surface_create_similar( mpSurface, aContent, width, height ) );
+    }
+
+    void
+    Surface::Resize( int width, int height )
+    {
+        cairo_xlib_surface_set_size( mpSurface, width, height );
+    }
+
+    int
+    Surface::getDepth()
+    {
+        if( mpRenderFormat )
+            return ( ( XRenderPictFormat * ) mpRenderFormat )->depth;
+
+        return -1;
     }
 }
