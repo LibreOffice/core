@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:40:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1024,6 +1024,13 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // <--
 
     rDoc.PropagateOutlineRule();
+
+    // --> OD 2006-03-14 #i62875#
+    if ( rDoc.DoNotCaptureDrawObjsOnPage() && !docfunc::ExistsDrawObjs( rDoc ) )
+    {
+        rDoc.SetDoNotCaptureDrawObjsOnPage( sal_False );
+    }
+    // <--
 
     // --> OD 2006-02-22 #b6382898#
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
