@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:27:15 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:43:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,9 @@ REGCOMP=$(WRAPCMD) regcomp
 PYTHON=$(WRAPCMD) python
 
 .IF "$(GUI)"!="WNT"
-REGCOMP_ENV=\
-    setenv FOO file://$(shell pwd)$/$(DLLDEST)
+TEST_ENV=\
+    setenv FOO file://$(shell pwd)$/$(DLLDEST) && \
+        setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
 .ELSE # "$(GUI)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
 .IF "$(USE_SHELL)" == "tcsh"
@@ -71,10 +72,12 @@ REGCOMP_ENV=\
 ##REGCOMP=guw.pl -env `which regcomp.exe`
 
 CWD_TMP=$(strip $(shell $(WRAPCMD) echo `pwd`))
-REGCOMP_ENV=setenv FOO file:///$(strip $(subst,\,/ $(CWD_TMP)/$(DLLDEST)))
+TEST_ENV=setenv FOO file:///$(strip $(subst,\,/ $(CWD_TMP)/$(DLLDEST))) && \
+        setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
 .ELSE
 CWD_TMP=$(strip $(shell echo import os;print os.getcwd() | $(PYTHON)))
-REGCOMP_ENV=set FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST)))
+TEST_ENV=set FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
+        set UNO_TYPES=pyuno_regcomp.rdb && set UNO_SERVICES=pyuno_regcomp.rdb
 .ENDIF "$(USE_SHELL)" == "tcsh"
 
 .ENDIF  # "$(GUI)"!="WNT"
@@ -114,9 +117,9 @@ doc .PHONY:
     @echo start test with  dmake runtest
 
 runtest : ALL
-    +cd $(DLLDEST) && python main.py -env:UNO_TYPES=pyuno_regcomp.rdb -env:UNO_SERVICES=pyuno_regcomp.rdb
-    +cd $(DLLDEST) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
+    +cd $(DLLDEST) && $(TEST_ENV) && python main.py 
+    +cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
-    +cd $(DLLDEST) && $(REGCOMP_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
+    +cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
             -l com.sun.star.loader.Python -c vnd.sun.star.expand:$(DOLLAR_SIGN)FOO/samplecomponent.py
 
