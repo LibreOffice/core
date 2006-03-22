@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:03:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,6 @@ struct XclRootData
     XclBiff             meBiff;         /// Current BIFF version.
     SfxMedium&          mrMedium;       /// The medium to import from.
     SotStorageRef       mxRootStrg;     /// The root OLE storage of imported/exported file.
-    SvStream&           mrBookStrm;     /// The workbook stream of imported/exported file.
     ScDocument&         mrDoc;          /// The source or destination document.
     String              maDocUrl;       /// Document URL of imported/exported file.
     String              maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
@@ -119,8 +118,8 @@ struct XclRootData
     bool                mbHasPassw;     /// true = Password already querried.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, SvStream& rBookStrm,
-                            ScDocument& rDoc, CharSet eCharSet, bool bExport );
+                            SotStorageRef xRootStrg, ScDocument& rDoc,
+                            CharSet eCharSet, bool bExport );
     virtual             ~XclRootData();
 };
 
@@ -188,8 +187,6 @@ public:
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
     inline SotStorageRef GetRootStorage() const { return mrData.mxRootStrg; }
-    /** Returns the main import/export stream in the Excel file. */
-    inline SvStream&    GetBookStream() const { return mrData.mrBookStrm; }
     /** Returns true, if the document contains a VBA storage. */
     bool                HasVbaStorage() const;
 
