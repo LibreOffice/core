@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:51:16 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:48:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ void PyUNO_del (PyObject* self)
 
 
 
-static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRef ) SAL_THROW( () )
+OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef , sal_Int32 mode ) SAL_THROW( () )
 {
     OSL_ASSERT( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
@@ -100,37 +100,40 @@ static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRe
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
         buf.append( (sal_Int64)*(void **)pVal, 16 );
-        buf.appendAscii( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
-        Reference< XServiceInfo > serviceInfo( r, UNO_QUERY);
-        Reference< XTypeProvider > typeProvider(r,UNO_QUERY);
-        if( serviceInfo.is() )
+        if( VAL2STR_MODE_DEEP == mode )
         {
-            buf.appendAscii("implementationName=" );
-            buf.append(serviceInfo->getImplementationName() );
-            buf.appendAscii(", supportedServices={" );
-            Sequence< OUString > seq = serviceInfo->getSupportedServiceNames();
-            for( int i = 0 ; i < seq.getLength() ; i ++ )
+            buf.appendAscii( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
+            Reference< XServiceInfo > serviceInfo( r, UNO_QUERY);
+            Reference< XTypeProvider > typeProvider(r,UNO_QUERY);
+            if( serviceInfo.is() )
             {
-                buf.append( seq[i] );
-                if( i +1 != seq.getLength() )
-                    buf.appendAscii( "," );
+                buf.appendAscii("implementationName=" );
+                buf.append(serviceInfo->getImplementationName() );
+                buf.appendAscii(", supportedServices={" );
+                Sequence< OUString > seq = serviceInfo->getSupportedServiceNames();
+                for( int i = 0 ; i < seq.getLength() ; i ++ )
+                {
+                    buf.append( seq[i] );
+                    if( i +1 != seq.getLength() )
+                        buf.appendAscii( "," );
+                }
+                buf.appendAscii("}");
             }
-            buf.appendAscii("}");
-        }
 
-        if( typeProvider.is() )
-        {
-            buf.appendAscii(", supportedInterfaces={" );
-            Sequence< Type > seq (typeProvider->getTypes());
-            for( int i = 0 ; i < seq.getLength() ; i ++ )
+            if( typeProvider.is() )
             {
-                buf.append(seq[i].getTypeName());
-                if( i +1 != seq.getLength() )
-                    buf.appendAscii( "," );
+                buf.appendAscii(", supportedInterfaces={" );
+                Sequence< Type > seq (typeProvider->getTypes());
+                for( int i = 0 ; i < seq.getLength() ; i ++ )
+                {
+                    buf.append(seq[i].getTypeName());
+                    if( i +1 != seq.getLength() )
+                        buf.appendAscii( "," );
+                }
+                buf.appendAscii("}");
             }
-            buf.appendAscii("}");
+            buf.appendAscii( "}" );
         }
-        buf.appendAscii( "}" );
 
         break;
     }
@@ -158,7 +161,7 @@ static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRe
 
         if (pCompType->pBaseTypeDescription)
         {
-            buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef ) );
+            buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef,mode ) );
             if (nDescr)
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
         }
@@ -173,7 +176,7 @@ static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRe
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
             typelib_TypeDescription * pMemberType = 0;
             TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
-            buf.append( val2str( (char *)pVal + pMemberOffsets[nPos], pMemberType->pWeakRef ) );
+            buf.append( val2str( (char *)pVal + pMemberOffsets[nPos], pMemberType->pWeakRef, mode ) );
             TYPELIB_DANGER_RELEASE( pMemberType );
             if (nPos < (nDescr -1))
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
@@ -202,7 +205,7 @@ static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRe
             char * pElements = pSequence->elements;
             for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
             {
-                buf.append( val2str( pElements + (nElementSize * nPos), pElementTypeDescr->pWeakRef ) );
+                buf.append( val2str( pElements + (nElementSize * nPos), pElementTypeDescr->pWeakRef, mode ) );
                 if (nPos < (nElements -1))
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
             }
@@ -219,7 +222,8 @@ static OUString val2str( void * pVal, typelib_TypeDescriptionReference * pTypeRe
     case typelib_TypeClass_ANY:
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
         buf.append( val2str( ((uno_Any *)pVal)->pData,
-                             ((uno_Any *)pVal)->pType ) );
+                             ((uno_Any *)pVal)->pType ,
+                             mode) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
         break;
     case typelib_TypeClass_TYPE:
@@ -465,9 +469,8 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             member_list = PyList_New (oo_member_list.getLength ());
             for (int i = 0; i < oo_member_list.getLength (); i++)
             {
-                Any a;
-                a <<= oo_member_list [i];
-                PyList_SetItem (member_list, i, runtime.any2PyObject (a).get());
+                // setitem steals a reference
+                PyList_SetItem (member_list, i, ustring2PyString(oo_member_list[i]).getAcquired() );
             }
             return member_list;
         }
