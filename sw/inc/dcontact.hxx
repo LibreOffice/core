@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:18:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,15 +427,10 @@ class SwDrawContact : public SwContact
         // from layout is in progress
         bool mbDisconnectInProgress : 1;
 
-        // --> OD 2006-01-23 #124157# - boolean indicating that drawing object
-        // is connected to the Writer layout as an anchored object.
-        bool mbConnectedToLayout : 1;
-        // <--
-
         // --> OD 2006-01-18 #129959#
         // Needed data for handling of nested <SdrObjUserCall> events in
         // method <_Changed(..)>
-        bool mbUserCallActive;
+        bool mbUserCallActive : 1;
         // event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
         // Note: value only valid, if <mbUserCallActive> is TRUE.
         SdrUserCallType meEventTypeOfCurrentUserCall;
