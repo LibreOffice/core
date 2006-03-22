@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:50:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,7 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
     rValue.maUpperRect = rUpperRect;
     rValue.maLowerRect = rLowerRect;
 
-    // convert rectangles to screen coordinates
-    Point aPt = pWin->OutputToScreenPixel( rValue.maUpperRect.TopLeft() );
-    rValue.maUpperRect.SetPos( aPt );
-    aPt = pWin->OutputToScreenPixel( rValue.maLowerRect.TopLeft() );
-    rValue.maLowerRect.SetPos( aPt );
+    Point aPointerPos = pWin->GetPointerPosPixel();
 
     ControlState nState = CTRL_STATE_ENABLED;
     if ( bUpperIn )
@@ -78,7 +74,7 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
         nState &= ~CTRL_STATE_ENABLED;
     if ( pWin->HasFocus() )
         nState |= CTRL_STATE_FOCUSED;
-    if( pWin->IsMouseOver() && rUpperRect.IsInside( pWin->GetPointerPosPixel() ) )
+    if( pWin->IsMouseOver() && rUpperRect.IsInside( aPointerPos ) )
         nState |= CTRL_STATE_ROLLOVER;
     rValue.mnUpperState = nState;
 
@@ -90,8 +86,8 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
     if ( pWin->HasFocus() )
         nState |= CTRL_STATE_FOCUSED;
     // for overlapping spins: highlight only one
-    if( pWin->IsMouseOver() && rLowerRect.IsInside( pWin->GetPointerPosPixel() ) &&
-                              !rUpperRect.IsInside( pWin->GetPointerPosPixel() ) )
+    if( pWin->IsMouseOver() && rLowerRect.IsInside( aPointerPos ) &&
+                              !rUpperRect.IsInside( aPointerPos ) )
         nState |= CTRL_STATE_ROLLOVER;
     rValue.mnLowerState = nState;
 
@@ -128,7 +124,7 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
             aClipRect.Union( rSpinbuttonValue.maUpperRect );
 
             // convert from screen space to borderwin space
-            aClipRect.SetPos( pBorder->ScreenToOutputPixel(aClipRect.TopLeft()) );
+            aClipRect.SetPos( pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())) );
 
             Region oldRgn( pBorder->GetClipRegion() );
             pBorder->SetClipRegion( Region( aClipRect ) );
@@ -773,13 +769,38 @@ void SpinField::Resize()
         if ( GetStyle() & (WB_SPIN|WB_DROPDOWN) )
         {
             ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
-            if ( maUpperRect.IsEmpty() )
+
+            ImplControlValue aControlValue;
+            Point aPoint;
+            Region aContent, aBound;
+
+            // use the full extent of the control
+            Window *pBorder = GetWindow( WINDOW_BORDER );
+            Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+
+            // adjust position and size of the edit field
+            if ( GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
+                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
             {
-                DBG_ASSERT( !maDropDownRect.IsEmpty(), "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
-                aSize.Width() = maDropDownRect.Left();
+                // convert back from border space to local coordinates
+                aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
+                aContent.Move(-aPoint.X(), -aPoint.Y());
+
+                // use the themes drop down size
+                Rectangle aContentRect = aContent.GetBoundRect();
+                mpEdit->SetPosPixel( aContentRect.TopLeft() );
+                aSize = aContentRect.GetSize();
             }
             else
-                aSize.Width() = maUpperRect.Left();
+            {
+                if ( maUpperRect.IsEmpty() )
+                {
+                    DBG_ASSERT( !maDropDownRect.IsEmpty(), "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
+                    aSize.Width() = maDropDownRect.Left();
+                }
+                else
+                    aSize.Width() = maUpperRect.Left();
+            }
         }
 
         mpEdit->SetSizePixel( aSize );
