@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:42:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,13 @@ namespace objectpositioning
             SwContact* mpContact;
             // frame format
             const SwFrmFmt* mpFrmFmt;
+            // --> OD 2006-03-15 #i62875#
+            bool mbFollowTextFlow;
+            // <--
+            // --> OD 2006-03-15 #i62875#
+            // for compatibility option <DoNotCaptureDrawObjsOnPage>
+            bool mbDoNotCaptureAnchoredObj;
+            // <--
 
             /** determine information about object
 
@@ -90,17 +97,52 @@ namespace objectpositioning
             */
             void _GetInfoAboutObj();
 
+            // --> OD 2006-03-15 #i62875#
+            SwTwips _ImplAdjustVertRelPos( const SwTwips _nTopOfAnch,
+                                           const bool _bVert,
+                                           const SwFrm&  _rPageAlignLayFrm,
+                                           const SwTwips _nProposedRelPosY,
+                                           const bool _bFollowTextFlow,
+                                           const bool _bCheckBottom = true ) const;
+            SwTwips _ImplAdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
+                                           const SwTwips _nProposedRelPosX ) const;
+            // <--
+
         protected:
             SwAnchoredObjectPosition( SdrObject& _rDrawObj );
             ~SwAnchoredObjectPosition();
 
          // accessors for object and its corresponding data/information
-            SdrObject& GetObject() const;
-            bool IsObjFly() const;
-            SwAnchoredObject& GetAnchoredObj() const;
-            SwFrm& GetAnchorFrm() const;
-            SwContact& GetContact() const;
-            const SwFrmFmt& GetFrmFmt() const;
+            inline SdrObject& GetObject() const
+            {
+                return mrDrawObj;
+            }
+            inline bool IsObjFly() const
+            {
+                return mbIsObjFly;
+            }
+            inline SwAnchoredObject& GetAnchoredObj() const
+            {
+                return *mpAnchoredObj;
+            }
+            inline SwFrm& GetAnchorFrm() const
+            {
+                return *mpAnchorFrm;
+            }
+            inline SwContact& GetContact() const
+            {
+                return *mpContact;
+            }
+            inline const SwFrmFmt& GetFrmFmt() const
+            {
+                return *mpFrmFmt;
+            }
+            // --> OD 2006-03-15 #i62875#
+            inline const bool DoesObjFollowsTextFlow() const
+            {
+                return mbFollowTextFlow;
+            }
+            // <--
 
          // virtual methods providing data for to character anchored objects.
             virtual bool IsAnchoredToChar() const;
@@ -145,6 +187,9 @@ namespace objectpositioning
 
                 OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
                 OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
+                OD 2006-03-15 #i62875# - made inline, intrinsic actions moved
+                to private method <_ImplAdjustVertRelPos>, which is only
+                called, if <mbDoNotCaptureAnchoredObj> not set.
 
                 @param _nTopOfAnch
                 input parameter - 'vertical' position, at which the relative
@@ -173,12 +218,21 @@ namespace objectpositioning
 
                 @author OD
             */
-            SwTwips _AdjustVertRelPos( const SwTwips _nTopOfAnch,
-                                       const bool _bVert,
-                                       const SwFrm&  _rPageAlignLayFrm,
-                                       const SwTwips _nProposedRelPosY,
-                                       const bool _bFollowTextFlow,
-                                       const bool _bCheckBottom = true ) const;
+            inline SwTwips _AdjustVertRelPos( const SwTwips _nTopOfAnch,
+                                              const bool _bVert,
+                                              const SwFrm&  _rPageAlignLayFrm,
+                                              const SwTwips _nProposedRelPosY,
+                                              const bool _bFollowTextFlow,
+                                              const bool _bCheckBottom = true ) const
+            {
+                return !mbDoNotCaptureAnchoredObj
+                       ? _ImplAdjustVertRelPos( _nTopOfAnch, _bVert,
+                                                _rPageAlignLayFrm,
+                                                _nProposedRelPosY,
+                                                _bFollowTextFlow,
+                                                _bCheckBottom )
+                       : _nProposedRelPosY;
+            }
 
         // *********************************************************************
             /** calculate relative horizontal position
@@ -233,6 +287,10 @@ namespace objectpositioning
             /** adjust calculated horizontal in order to keep object inside
                 'page' alignment layout frame for object type position TO_CNTNT
 
+                OD 2006-03-15 #i62875# - made inline, intrinsic actions moved
+                to private method <_ImplAdjustHoriRelPos>, which is only
+                called, if <mbDoNotCaptureAnchoredObj> not set.
+
                 @author OD
 
                 @param _rPageAlignLayFrm
@@ -245,8 +303,13 @@ namespace objectpositioning
 
                 @return adjusted relative horizontal position in SwTwips.
             */
-            SwTwips _AdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
-                                       const SwTwips _nProposedRelPosX ) const;
+            inline SwTwips _AdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
+                                              const SwTwips _nProposedRelPosX ) const
+            {
+                return !mbDoNotCaptureAnchoredObj
+                       ? _ImplAdjustHoriRelPos( _rPageAlignLayFrm, _nProposedRelPosX )
+                       : _nProposedRelPosX;
+            }
 
         // *********************************************************************
             /** toggle given horizontal orientation and relative alignment
