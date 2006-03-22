@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:19:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,9 @@ void ServiceImpl::trigger( OUString const & event ) throw (RuntimeException)
 }
 
 namespace sdecl = comphelper::service_decl;
+sdecl::class_<ServiceImpl, sdecl::with_args<true> > serviceSI;
 sdecl::ServiceDecl const serviceDecl(
-    sdecl::class_<ServiceImpl, sdecl::with_args<true> >(),
+    serviceSI,
     "com.sun.star.comp.deployment.ui.PackageManagerDialog",
     "com.sun.star.deployment.ui.PackageManagerDialog" );
 
