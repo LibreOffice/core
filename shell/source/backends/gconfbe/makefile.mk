@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:47:59 $
+#   last change: $Author: obo $ $Date: 2006-03-22 09:39:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,14 @@ INCPRE=$(UNOUCROUT)
 
 .INCLUDE : settings.mk
 
-UNIXTEXT=$(MISC)/$(TARGET)1-ucd.txt
-
 # no "lib" prefix
 DLLPRE =
+UCDSRCEXT = txt
+
+.IF "$(ENABLE_LOCKDOWN)" == "YES"
+CFLAGS+=-DENABLE_LOCKDOWN
+UCDSRCEXT != lockdown
+.ENDIF
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
@@ -75,9 +79,7 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
 SLOFILES=\
     $(SLO)$/gconfbecdef.obj \
     $(SLO)$/gconfbackend.obj \
-    $(SLO)$/gconfvcllayer.obj \
-    $(SLO)$/gconfinetlayer.obj \
-    $(SLO)$/gconfcommonlayer.obj
+    $(SLO)$/gconflayer.obj
         
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
@@ -101,3 +103,9 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ---
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/$(TARGET)1-ucd.txt
+
+$(MISC)/$(TARGET)1-ucd.txt : $$(@:b).$(UCDSRCEXT)
+    cat $< | tr -d "\015" > $@
+
