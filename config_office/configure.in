@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-02-28 16:41:29 $
+dnl * Date: $Date: 2006-03-22 09:25:04 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.159 $ )
+AC_REVISION( $Revision: 1.160 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -33,6 +33,9 @@ AC_ARG_ENABLE(libart,
 AC_ARG_ENABLE(openldap,
 [  --enable-openldap       Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
+],,)
+AC_ARG_ENABLE(lockdown,
+[  --enable-lockdown       Enables the gconf integration work in OOo
 ],,)
 AC_ARG_ENABLE(libsn,
 [  --enable-libsn          Enables the use of libstartup-notification
@@ -4070,6 +4073,19 @@ fi
 AC_SUBST(KDE_CFLAGS)
 AC_SUBST(KDE_LIBS)
 AC_SUBST(MOC)
+
+dnl ===================================================================
+dnl Test for the enabling the lockdown pieces
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable the lockdown pieces])
+ENABLE_LOCKDOWN=""
+if test -n "$enable_lockdown" && test "$enable_lockdown" != "no"; then
+  ENABLE_LOCKDOWN=YES
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_LOCKDOWN)
 
 dnl ===================================================================
 dnl Test for the presence of libstartup-notification
