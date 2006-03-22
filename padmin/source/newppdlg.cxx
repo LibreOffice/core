@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:25:44 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,16 +195,9 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     else if( pButton == &m_aOKBtn )
     {
         // copy the files
-        ::std::list< String > aToDirs;
-        String aPathList( ::psp::getPrinterPath() );
-        int nTokens = aPathList.GetTokenCount( ':' );
-        for( int n = 0; n < nTokens; n++ )
-        {
-            String aPath = aPathList.GetToken( n, ':' );
-            aPath.AppendAscii( "/"PSPRINT_PPDDIR );
-            aToDirs.push_back( aPath );
-        }
-        ::std::list< String >::iterator writeDir = aToDirs.begin();
+        ::std::list< rtl::OUString > aToDirs;
+        psp::getPrinterPathList( aToDirs, PSPRINT_PPDDIR );
+        ::std::list< rtl::OUString >::iterator writeDir = aToDirs.begin();
 
         for( int i = 0; i < m_aDriverLB.GetSelectEntryCount(); i++ )
         {
