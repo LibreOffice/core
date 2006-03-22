@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:57:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,8 @@ FltError ImportExcel::Read( void )
                 case Z_Biff5T:
                 case Z_Biff5Pre:
                 case Z_Biff5C:
-                    EndSheet();
+                    rNumFmtBfr.CreateScFormats();
+                    Eof();
                 break;
             };
             eAkt = Z_Ende;
@@ -258,7 +259,7 @@ FltError ImportExcel::Read( void )
                     case 0x08:  Row25(); break;         // ROW          [ 2  5]
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
-                        EndSheet();
+                        Eof();
                         eAkt = Z_Ende;
                         break;
                     case 0x14:
@@ -286,6 +287,7 @@ FltError ImportExcel::Read( void )
                         break;
                     case EXC_ID2_FONT:  rFontBfr.ReadFont( maStrm );    break;
                     case EXC_ID_EFONT:  rFontBfr.ReadEfont( maStrm );   break;
+                    case 0x3E:  rTabViewSett.ReadWindow2( maStrm, false );break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x43:  rXFBfr.ReadXF( maStrm );                break;
@@ -302,7 +304,7 @@ FltError ImportExcel::Read( void )
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
-                        EndSheet();
+                        Eof();
                         eAkt = Z_Ende;
                         break;
                     case 0x14:
@@ -344,7 +346,7 @@ FltError ImportExcel::Read( void )
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
-                    case 0x023E: rTabViewSett.ReadWindow2( maStrm );    break;
+                    case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
                     case 0x0243: rXFBfr.ReadXF( maStrm );               break;
                     case 0x0293: rXFBfr.ReadStyle( maStrm );            break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
@@ -359,7 +361,7 @@ FltError ImportExcel::Read( void )
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
-                        EndSheet();
+                        Eof();
                         eAkt = Z_Ende;
                         break;
                     case 0x12:  Protect(); break;       // SHEET PROTECTION
@@ -403,7 +405,7 @@ FltError ImportExcel::Read( void )
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
-                    case 0x023E: rTabViewSett.ReadWindow2( maStrm );    break;
+                    case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                     case 0x041E: rNumFmtBfr.ReadFormat( maStrm );       break;
@@ -536,8 +538,7 @@ FltError ImportExcel::Read( void )
                 switch( nOpcode )
                 {
                     case 0x0A:                          // EOF          [ 2345]
-                        EndSheet();
-                        IncCurrScTab();
+                        Eof();
                         eAkt = Z_Biff4E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -548,7 +549,7 @@ FltError ImportExcel::Read( void )
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
-                    case 0x023E: rTabViewSett.ReadWindow2( maStrm );    break;
+                    case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                 }
@@ -656,9 +657,8 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5T;
                         break;
                     case 0x0A:                          // EOF          [ 2345]
-                        EndSheet();
+                        Eof();
                         eAkt = Z_Biff5E;
-                        IncCurrScTab();
                         break;
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
@@ -774,8 +774,7 @@ FltError ImportExcel::Read( void )
                     case 0x06:  Formula25(); break;     // FORMULA      [ 2  5]
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
-                        EndSheet();
-                        IncCurrScTab();
+                        Eof();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -889,7 +888,7 @@ FltError ImportExcel::Read( void )
                         case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                         case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                         case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                        case 0x023E: rTabViewSett.ReadWindow2( maStrm );    break;
+                        case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
                         case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5]
                     }
                 }
@@ -1006,8 +1005,6 @@ FltError ImportExcel8::Read( void )
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
-    bObjSection = FALSE;
-
     while( eAkt != EXC_STATE_END )
     {
         aIn.StartNextRecord();
@@ -1020,7 +1017,7 @@ FltError ImportExcel8::Read( void )
                 case EXC_STATE_SHEET_PRE:
                 case EXC_STATE_SHEET_INIT:
                 case EXC_STATE_SHEET:
-                    EndSheet();
+                    Eof();
                 break;
             };
             eAkt = EXC_STATE_END;
@@ -1029,17 +1026,6 @@ FltError ImportExcel8::Read( void )
 
         if( eAkt != EXC_STATE_SHEET_PRE && eAkt != EXC_STATE_GLOBALS_PRE )
             pProgress->ProgressAbs( aIn.GetSvStreamPos() );
-
-        if( nRecId != EXC_ID_CONT )
-        {
-            aIn.ResetRecord( true );            // enable internal CONTINUE handling
-            bObjSection =
-                (nRecId == 0x005D) ||           // OBJ
-                (nRecId == 0x00EB) ||           // MSODRAWINGGROUP
-                (nRecId == 0x00EC) ||           // MSODRAWING
-                (nRecId == 0x00ED) ||           // MSODRAWINGSELECTION
-                (nRecId == 0x01B6);             // TXO
-        }
 
         /*  #i39464# Ignore records between USERSVIEWBEGIN and USERSVIEWEND
             completely (user specific view settings). Otherwise view settings
@@ -1080,10 +1066,21 @@ FltError ImportExcel8::Read( void )
             {
                 switch( nRecId )
                 {
-                    case 0x0A:                          // EOF          [ 2345   ]
-                        eAkt = EXC_STATE_GLOBALS;
-                        aIn.SeekGlobalPosition();          // und zurueck an alte Position
-                        break;
+                    case EXC_ID_EOF:
+                    case EXC_ID_EXTSST:
+                        /*  #i56376# evil hack: if EOF for globals is missing,
+                            simulate it. This hack works only for the bugdoc
+                            given in the issue, where the sheet substreams
+                            start directly after the EXTSST record. A future
+                            implementation should be more robust against
+                            missing EOFs. */
+                        if( (nRecId == EXC_ID_EOF) ||
+                            ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
+                        {
+                            eAkt = EXC_STATE_GLOBALS;
+                            aIn.SeekGlobalPosition();
+                        }
+                    break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
                     case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
@@ -1131,7 +1128,6 @@ FltError ImportExcel8::Read( void )
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0xD3:  ReadBasic(); break;
                     case 0xDE:  Olesize(); break;
-                    case 0xEB:  Msodrawinggroup(); break;
                     case 0x01BA: Codename( TRUE ); break;
 
                     case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
@@ -1150,6 +1146,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_XCT:            rLinkMgr.ReadXct( maStrm );         break;
                     case EXC_ID_CRN:            rLinkMgr.ReadCrn( maStrm );         break;
                     case EXC_ID_EXTERNNAME:     rLinkMgr.ReadExternname( maStrm );  break;
+
+                    case EXC_ID_MSODRAWINGGROUP:rObjMgr.ReadMsoDrawingGroup( maStrm ); break;
 
                     case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
                     case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
@@ -1186,8 +1184,7 @@ FltError ImportExcel8::Read( void )
                             break;
                             case Biff8C:    // chart sheet
                                 rObjMgr.ReadTabChart( maStrm );
-                                EndSheet();
-                                IncCurrScTab();
+                                Eof();
                                 GetTracer().TraceChartOnlySheet();
                             break;
                             case Biff8W:    // workbook
@@ -1217,7 +1214,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID4_BOF:
                     case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );      break;
 
-                    case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( maStrm );     break;
+                    case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( maStrm, false );break;
                     case EXC_ID_SCL:            rTabViewSett.ReadScl( maStrm );         break;
                     case EXC_ID_PANE:           rTabViewSett.ReadPane( maStrm );        break;
                     case EXC_ID_SELECTION:      rTabViewSett.ReadSelection( maStrm );   break;
@@ -1299,7 +1296,6 @@ FltError ImportExcel8::Read( void )
                         case 0x0206:
                         case 0x0406:    Formula25();            break;  // FORMULA      [ 2  5   ]
                         case 0x001C:    Note();                 break;  // NOTE         [ 2345   ]
-                        case 0x005D:    if( bWithDrawLayer ) Obj(); break;  // OBJ      [ 2345   ]
                         case 0x007E:
                         case 0x027E:    Rk();                   break;  // RK           [    5   ]
                         case 0x00AE:    Scenman();              break;  // SCENMAN
@@ -1308,10 +1304,7 @@ FltError ImportExcel8::Read( void )
                         case 0x00BE:    Mulblank();             break;  // MULBLANK     [    5   ]
                         case 0x00D6:    Rstring();              break;  // RSTRING      [    5   ]
                         case 0x00E5:    Cellmerging();          break;  // CELLMERGING
-                        case 0x00EC:    Msodrawing();           break;  // MSODRAWING
-                        case 0x00ED:    Msodrawingselection();  break;  // MSODRAWINGSELECTION
                         case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
-                        case 0x01B6:    Txo();                  break;  // TXO
                         case 0x0201:    Blank34();              break;  // BLANK        [  34    ]
                         case 0x0203:    Number34();             break;  // NUMBER       [  34    ]
                         case 0x0204:    Label();                break;  // LABEL        [  34    ]
@@ -1319,6 +1312,8 @@ FltError ImportExcel8::Read( void )
                         case 0x0236:    TableOp();              break;  // TABLE
                         case 0x0021:    Array25();              break;  // ARRAY        [ 2  5   ]
                         case 0x0221:    Array34();              break;  // ARRAY        [  34    ]
+
+                        case EXC_ID_MSODRAWING:     rObjMgr.ReadMsoDrawing( maStrm );       break;
 
                         case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );   break;
                         case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm ); break;
@@ -1349,7 +1344,6 @@ FltError ImportExcel8::Read( void )
                     switch( nRecId )
                     {
                         case 0x0007:    RecString();            break;  // STRING       [ 2345   ]
-                        case 0x003C:    Cont();                 break;  // CONTINUE
                         case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
 
                         case EXC_ID_SXVIEW:         rPTableMgr.ReadSxview( maStrm );    break;
@@ -1366,8 +1360,6 @@ FltError ImportExcel8::Read( void )
                             Bof5();
                             DBG_ASSERT( pExcRoot->eDateiTyp == Biff8C, "unknown BOF" );
                             XclTools::SkipSubStream( maStrm );
-                            // still in Escher objects
-                            bObjSection = TRUE;
                         }
                         break;
                         default:        bFound = FALSE;
@@ -1382,9 +1374,8 @@ FltError ImportExcel8::Read( void )
                     {
                         case 0x000A:                            // EOF          [ 2345   ]
                         {
-                            EndSheet();
+                            Eof();
                             eAkt = EXC_STATE_BEFORE_SHEET;
-                            IncCurrScTab();
                         }
                         break;
                         default:    bFound = FALSE;
