@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <rtl/uuid.h>
 #include <rtl/bootstrap.hxx>
 
+#include <uno/current_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include "pyuno_impl.hxx"
@@ -637,6 +638,85 @@ static PyObject * invoke ( PyObject *self, PyObject * args )
     return ret;
 }
 
+static PyObject *getCurrentContext( PyObject * self, PyObject * args )
+{
+    PyRef ret;
+    try
+    {
+        Runtime runtime;
+        ret = runtime.any2PyObject(
+            makeAny( com::sun::star::uno::getCurrentContext() ) );
+    }
+    catch( com::sun::star::script::CannotConvertException & e)
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( com::sun::star::lang::IllegalArgumentException & e)
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( com::sun::star::uno::Exception & e )
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( RuntimeException & e )
+    {
+        raisePyExceptionWithAny( makeAny(e) );
+    }
+    return ret.getAcquired();
+}
+
+static PyObject *setCurrentContext( PyObject * self, PyObject * args )
+{
+    PyRef ret;
+    try
+    {
+        if( PyTuple_Check( args ) && PyTuple_Size( args ) == 1 )
+        {
+
+            Runtime runtime;
+            Any a = runtime.pyObject2Any( PyTuple_GetItem( args, 0 ) );
+
+            Reference< com::sun::star::uno::XCurrentContext > context;
+
+            if( a.hasValue() && (a >>= context) || ! a.hasValue() )
+            {
+                ret = com::sun::star::uno::setCurrentContext( context ) ? Py_True : Py_False;
+            }
+            else
+            {
+                OStringBuffer buf;
+                buf.append( "uno.setCurrentContext expects an XComponentContext implementation, got " );
+                buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 0) ) ) );
+                PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+            }
+        }
+        else
+        {
+            OStringBuffer buf;
+            buf.append( "uno.setCurrentContext expects exactly one argument (the current Context)\n" );
+            PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+        }
+    }
+    catch( com::sun::star::script::CannotConvertException & e)
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( com::sun::star::lang::IllegalArgumentException & e)
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( com::sun::star::uno::Exception & e )
+    {
+        raisePyExceptionWithAny( makeAny( e ) );
+    }
+    catch( RuntimeException & e )
+    {
+        raisePyExceptionWithAny( makeAny(e) );
+    }
+    return ret.getAcquired();
+}
+
 }
 
 using namespace pyuno;
@@ -656,6 +736,8 @@ static struct PyMethodDef PyUNOModule_methods [] =
     {"absolutize",absolutize,2},
     {"isInterface",isInterface,1},
     {"invoke",invoke, 2},
+    {"setCurrentContext",setCurrentContext,1},
+    {"getCurrentContext",getCurrentContext,1},
     {NULL, NULL}
 };
 
