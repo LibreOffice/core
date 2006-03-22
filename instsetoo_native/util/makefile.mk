@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:52:58 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:55:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ LOCALPYFILES= \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
     $(BIN)$/pythonscript.py \
+    $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py
 
 # PKGFORMAT taken from environment. See possible
