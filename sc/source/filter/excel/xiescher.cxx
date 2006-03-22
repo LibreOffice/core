@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:08:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,6 @@ XclImpTxoData::XclImpTxoData( const XclImpRoot& rRoot ) :
 
 void XclImpTxoData::ReadTxo( XclImpStream& rStrm )
 {
-    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
     mxString.reset();
 
     // Step 1: TXO record
@@ -268,36 +267,27 @@ void XclImpTxoData::ReadTxo( XclImpStream& rStrm )
     bool bValid = true;
     if( maData.mnTextLen > 0 )
     {
-        bValid = rStrm.GetNextRecId() == EXC_ID_CONT;
+        bValid = (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord();
         DBG_ASSERT( bValid, "XclImpTxoData::ReadTxo - missing CONTINUE record" );
         if( bValid )
-        {
-            rStrm.StartNextRecord();
-            rStrm.ResetRecord( false );
             mxString.reset( new XclImpString( rStrm.ReadUniString( maData.mnTextLen ) ) );
-        }
     }
 
     // Step 3: Second CONTINUE with formatting runs
     if( maData.mnFormatSize > 0 )
     {
-        bValid = rStrm.GetNextRecId() == EXC_ID_CONT;
+        bValid = (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord();
         DBG_ASSERT( bValid, "XclImpTxoData::ReadTxo - missing CONTINUE record" );
-        if( bValid )
+        if( bValid && mxString.is() )
         {
-            rStrm.StartNextRecord();
-            rStrm.ResetRecord( false );
-            if( mxString.is() )
+            // number of formatting runs, each takes 8 bytes, but ignore last run
+            sal_uInt16 nFormatRuns = maData.mnFormatSize / 8 - 1;
+            for( sal_uInt16 nRun = 0; nRun < nFormatRuns; ++nRun )
             {
-                // number of formatting runs, each takes 8 bytes, but ignore last run
-                sal_uInt16 nFormatRuns = maData.mnFormatSize / 8 - 1;
-                for( sal_uInt16 nRun = 0; nRun < nFormatRuns; ++nRun )
-                {
-                    sal_uInt16 nChar, nFont;
-                    rStrm >> nChar >> nFont;
-                    rStrm.Ignore( 4 );
-                    mxString->AppendFormat( nChar, nFont );
-                }
+                sal_uInt16 nChar, nFont;
+                rStrm >> nChar >> nFont;
+                rStrm.Ignore( 4 );
+                mxString->AppendFormat( nChar, nFont );
             }
         }
     }
@@ -1097,7 +1087,7 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
         if( IsControl() )
         {
-            mnCtlsStrmPos = static_cast< ULONG >( nStorageId );
+            mnCtlsStrmPos = static_cast< sal_Size >( nStorageId );
             nStorageId = 0;
 
             if( aUserName.EqualsAscii( "Forms.HTML:Hidden.1" ) )
@@ -1293,27 +1283,26 @@ void XclImpDffManager::StartProgressBar( sal_uInt32 nProgressSize )
     mxProgress->Activate();
 }
 
-void XclImpDffManager::ProcessEscherStream( SvStream& rEscherStrm )
+void XclImpDffManager::ProcessDrawingGroup( SvStream& rEscherStrm )
 {
-    rEscherStrm.Seek( STREAM_SEEK_TO_END );
-    ULONG nStrmSize = rEscherStrm.Tell();
     rEscherStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    while( rEscherStrm.Tell() < nStrmSize )
-    {
-        DffRecordHeader aHeader;
-        rEscherStrm >> aHeader;
-        switch( aHeader.nRecType )
-        {
-            case DFF_msofbtDggContainer:
-                ProcessDggContainer( rEscherStrm, aHeader );
-            break;
-            case DFF_msofbtDgContainer:
-                ProcessDgContainer( rEscherStrm, aHeader );
-            break;
-            default:
-                aHeader.SeekToEndOfRecord( rEscherStrm );
-        }
-    }
+    DffRecordHeader aHeader;
+    rEscherStrm >> aHeader;
+    if( aHeader.nRecType == DFF_msofbtDggContainer )
+        ProcessDggContainer( rEscherStrm, aHeader );
+    else
+        DBG_ERRORFILE( "XclImpDffManager::ProcessDrawingGroup - unexpected record" );
+}
+
+void XclImpDffManager::ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos )
+{
+    rEscherStrm.Seek( nStrmPos );
+    DffRecordHeader aHeader;
+    rEscherStrm >> aHeader;
+    if( aHeader.nRecType == DFF_msofbtDgContainer )
+        ProcessDgContainer( rEscherStrm, aHeader );
+    else
+        DBG_ERRORFILE( "XclImpDffManager::ProcessDrawing - unexpected record" );
 }
 
 void XclImpDffManager::ProcessTabChart( const XclImpChartObj& rChartObj )
@@ -1367,12 +1356,24 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
     if( !xDrawObj || !xDrawObj->IsValid() || bGlobalPageGroup )
         return 0;   // simply return, xSdrObj will be destroyed
 
+    /*  Pass pointer to top-level object back to caller. If the processed
+        object is embedded in a group, the pointer is already set to the
+        top-level parent object. */
+    XclImpDrawObjBase** ppTopLevelObj = reinterpret_cast< XclImpDrawObjBase** >( pClientData );
+    bool bIsTopLevel = !ppTopLevelObj || !*ppTopLevelObj;
+    if( ppTopLevelObj && bIsTopLevel )
+        *ppTopLevelObj = xDrawObj.get();
+
     // #119010# connectors don't have to be area objects
     if( dynamic_cast< SdrEdgeObj* >( xSdrObj.get() ) )
         xDrawObj->SetAreaObj( false );
 
-    // check for valid size for all objects (#i30816# objects embedded in groups)
-    if( !xDrawObj->IsValidSize( rAnchorRect ) )
+    /*  Check for valid size for all objects. Needed to ignore lots of invisible
+        phantom objects from deleted rows or columns (for performance reasons).
+        #i30816# Include objects embedded in groups.
+        #i58780# Ignore group shapes, size is not initialized. */
+    bool bEmbeddedGroup = !bIsTopLevel && dynamic_cast< SdrObjGroup* >( xSdrObj.get() );
+    if( !bEmbeddedGroup && !xDrawObj->IsValidSize( rAnchorRect ) )
         return 0;   // simply return, xSdrObj will be destroyed
 
     // set shape information from Escher stream
@@ -1437,16 +1438,6 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
     if( xSdrObj.get() )
         maSolverCont.InsertSdrObjectInfo( *xDrawObj, xSdrObj.get() );
 
-    // pass the pointer to the processed draw object back to caller
-    if( pClientData )
-    {
-        XclImpDrawObjBase** ppDrawObj = reinterpret_cast< XclImpDrawObjBase** >( pClientData );
-        /*  If a group object is processed, the pointer is already set to the
-            group parent object. */
-        if( !*ppDrawObj )
-            *ppDrawObj = xDrawObj.get();
-    }
-
     return xSdrObj.release();
 }
 
@@ -1495,7 +1486,7 @@ void XclImpDffManager::ProcessDggContainer( SvStream& rEscherStrm, const DffReco
 
 void XclImpDffManager::ProcessDgContainer( SvStream& rEscherStrm, const DffRecordHeader& rDgHeader )
 {
-    ULONG nEndPos = rDgHeader.GetRecEndFilePos();
+    sal_Size nEndPos = rDgHeader.GetRecEndFilePos();
     while( rEscherStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
@@ -1523,7 +1514,7 @@ void XclImpDffManager::ProcessDgContainer( SvStream& rEscherStrm, const DffRecor
 
 void XclImpDffManager::ProcessShGrContainer( SvStream& rEscherStrm, const DffRecordHeader& rShGrHeader )
 {
-    ULONG nEndPos = rShGrHeader.GetRecEndFilePos();
+    sal_Size nEndPos = rShGrHeader.GetRecEndFilePos();
     while( rEscherStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
@@ -1730,6 +1721,7 @@ XclImpObjectManager::~XclImpObjectManager()
 
 void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 {
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
     // Excel continues this record with MSODRAWINGGROUP and CONTINUE records, hmm.
     rStrm.ResetRecord( true, EXC_ID_MSODRAWINGGROUP );
     ReadEscherRecord( rStrm );
@@ -1737,81 +1729,52 @@ void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadMsoDrawing( XclImpStream& rStrm )
 {
-    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    // disable internal CONTINUE handling
+    rStrm.ResetRecord( false );
+    /*  #i60510# real life: MSODRAWINGSELECTION record may contain garbage -
+        this makes it impossible to process the Escher stream in one run.
+        Store stream start position for every sheet separately, will be used
+        to seek the stream to these positions later, whrn processing the next
+        sheet. */
+    size_t nTabIdx = static_cast< size_t >( GetCurrScTab() );
+    if( nTabIdx >= maTabStrmPos.size() )
+    {
+        maTabStrmPos.resize( nTabIdx, STREAM_SEEK_TO_END );
+        maTabStrmPos.push_back( maEscherStrm.Tell() );
+    }
+    // read leading MSODRAWING record
     ReadEscherRecord( rStrm );
-}
 
-void XclImpObjectManager::ReadMsoDrawingSelection( XclImpStream& rStrm )
-{
-    ReadEscherRecord( rStrm );
-}
-
-void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
-{
-    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
-
-    XclImpDrawObjRef xDrawObj;
+    // read following drawing records, but do not start following unrelated record
     bool bLoop = true;
-    while( bLoop && (rStrm.GetRecLeft() >= 4) )
+    while( bLoop ) switch( rStrm.GetNextRecId() )
     {
-        sal_uInt16 nSubRecId, nSubRecSize;
-        rStrm >> nSubRecId >> nSubRecSize;
-        rStrm.PushPosition();
-
-        switch( nSubRecId )
-        {
-            case EXC_ID_OBJ_FTEND:
-                bLoop = false;
-            break;
-            case EXC_ID_OBJ_FTCMO:
-                DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj - multiple FTCMO subrecords" );
-                xDrawObj = XclImpDrawObjBase::ReadObjCmo( rStrm );
-                bLoop = xDrawObj.is();
-            break;
-            default:
-                DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj - missing leading FTCMO subrecord" );
-                if( xDrawObj.is() )
-                    xDrawObj->ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
-        }
-
-        rStrm.PopPosition();
-        // sometimes the last subrecord has an invalid length -> min()
-        rStrm.Ignore( ::std::min< sal_uInt32 >( nSubRecSize, rStrm.GetRecLeft() ) );
+        case EXC_ID_MSODRAWING:
+        case EXC_ID_MSODRAWINGSEL:
+        case EXC_ID_CONT:
+            rStrm.StartNextRecord();
+            ReadEscherRecord( rStrm );
+        break;
+        case EXC_ID_OBJ:
+            rStrm.StartNextRecord();
+            ReadObj( rStrm );
+        break;
+        case EXC_ID_TXO:
+            rStrm.StartNextRecord();
+            ReadTxo( rStrm );
+        break;
+        default:
+            bLoop = false;
     }
 
-    // try to read the chart substream
-    if( XclImpChartObj* pChartObj = dynamic_cast< XclImpChartObj* >( xDrawObj.get() ) )
-    {
-        bool bChartSubStrm = (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord();
-        DBG_ASSERT( bChartSubStrm, "XclImpObjectManager::ReadObj - missing chart substream" );
-        if( bChartSubStrm )
-        {
-            sal_uInt16 nBofType;
-            rStrm.Ignore( 2 );
-            rStrm >> nBofType;
-            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpObjectManager::ReadObj - no chart BOF record" );
-            // try to read the substream anyway
-            pChartObj->ReadChartSubStream( rStrm );
-        }
-    }
-
-    // store the new object in the internal containers
-    if( xDrawObj.is() )
-    {
-        maObjMap[ maEscherStrm.Tell() ] = xDrawObj;
-        maObjMapId[ xDrawObj->GetObjId() ] = xDrawObj;
-    }
-}
-
-void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
-{
-    XclImpTxoDataRef xTxo( new XclImpTxoData( GetRoot() ) );
-    xTxo->ReadTxo( rStrm );
-    maTxoMap[ maEscherStrm.Tell() ] = xTxo;
+    // re-enable internal CONTINUE handling
+    rStrm.ResetRecord( true );
 }
 
 void XclImpObjectManager::ReadNote( XclImpStream& rStrm )
 {
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
     XclAddress aXclPos;
     sal_uInt16 nFlags, nObjId;
     rStrm >> aXclPos >> nFlags >> nObjId;
@@ -1828,6 +1791,7 @@ void XclImpObjectManager::ReadNote( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadTabChart( XclImpStream& rStrm )
 {
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
     XclImpChartObjRef xChartObj( new XclImpChartObj( GetRoot(), true ) );
     xChartObj->ReadChartSubStream( rStrm );
     maTabCharts.push_back( xChartObj );
@@ -1892,21 +1856,31 @@ void XclImpObjectManager::ConvertObjects()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::ConvertObjects" );
 
-    // process list of identifiers of invalid objects
-    for( XclObjIdVec::const_iterator aVIt = maInvalidObjs.begin(), aVEnd = maInvalidObjs.end(); aVIt != aVEnd; ++aVIt )
-        if( XclImpDrawObjBase* pDrawObj = FindDrawObj( *aVIt ).get() )
-            pDrawObj->SetInvalid();
-
-    sal_uInt32 nProgressSize = GetProgressSize();
-    if( nProgressSize > 0 )
+    // do nothing if the document does not contain a drawing layer
+    if( GetDoc().GetDrawLayer() )
     {
-        XclImpDffManager& rDffManager = GetDffManager();
-        rDffManager.StartProgressBar( nProgressSize );
-        // process the Escher stream, this inserts the objects into the drawing layer
-        rDffManager.ProcessEscherStream( maEscherStrm );
-        // chart sheets
-        for( XclImpChartObjList::const_iterator aLIt = maTabCharts.begin(), aLEnd = maTabCharts.end(); aLIt != aLEnd; ++aLIt )
-            rDffManager.ProcessTabChart( **aLIt );
+        // process list of identifiers of invalid objects
+        for( XclObjIdVec::const_iterator aVIt = maInvalidObjs.begin(), aVEnd = maInvalidObjs.end(); aVIt != aVEnd; ++aVIt )
+            if( XclImpDrawObjBase* pDrawObj = FindDrawObj( *aVIt ).get() )
+                pDrawObj->SetInvalid();
+
+        // get progress bar size for all valid objects
+        sal_uInt32 nProgressSize = GetProgressSize();
+        if( nProgressSize > 0 )
+        {
+            XclImpDffManager& rDffManager = GetDffManager();
+            rDffManager.StartProgressBar( nProgressSize );
+            // process the global container, contains pictures
+            if( !maTabStrmPos.empty() && (maTabStrmPos.front() > 0) )
+                rDffManager.ProcessDrawingGroup( maEscherStrm );
+            // process the sheet records, this inserts the objects into the drawing layer
+            for( StreamPosVec::const_iterator aPIt = maTabStrmPos.begin(), aPEnd = maTabStrmPos.end(); aPIt != aPEnd; ++aPIt )
+                if( *aPIt != STREAM_SEEK_TO_END )
+                    rDffManager.ProcessDrawing( maEscherStrm, *aPIt );
+            // chart sheets
+            for( XclImpChartObjList::const_iterator aLIt = maTabCharts.begin(), aLEnd = maTabCharts.end(); aLIt != aLEnd; ++aLIt )
+                rDffManager.ProcessTabChart( **aLIt );
+        }
     }
 }
 
@@ -1935,9 +1909,69 @@ void XclImpObjectManager::ReadEscherRecord( XclImpStream& rStrm )
     }
 }
 
-void XclImpObjectManager::ReadChartSubStream( XclImpStream& rStrm, XclImpChartObj& rChartObj )
+void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
 {
-    rChartObj.ReadChartSubStream( rStrm );
+    XclImpDrawObjRef xDrawObj;
+    bool bLoop = true;
+    while( bLoop && (rStrm.GetRecLeft() >= 4) )
+    {
+        sal_uInt16 nSubRecId, nSubRecSize;
+        rStrm >> nSubRecId >> nSubRecSize;
+        rStrm.PushPosition();
+
+        switch( nSubRecId )
+        {
+            case EXC_ID_OBJ_FTEND:
+                bLoop = false;
+            break;
+            case EXC_ID_OBJ_FTCMO:
+                DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj - multiple FTCMO subrecords" );
+                xDrawObj = XclImpDrawObjBase::ReadObjCmo( rStrm );
+                bLoop = xDrawObj.is();
+            break;
+            default:
+                DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj - missing leading FTCMO subrecord" );
+                if( xDrawObj.is() )
+                    xDrawObj->ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
+        }
+
+        rStrm.PopPosition();
+        // sometimes the last subrecord has an invalid length -> min()
+        rStrm.Ignore( ::std::min< sal_uInt32 >( nSubRecSize, rStrm.GetRecLeft() ) );
+    }
+
+    // try to read the chart substream
+    if( XclImpChartObj* pChartObj = dynamic_cast< XclImpChartObj* >( xDrawObj.get() ) )
+    {
+        bool bChartSubStrm = (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord();
+        DBG_ASSERT( bChartSubStrm, "XclImpObjectManager::ReadObj - missing chart substream" );
+        if( bChartSubStrm )
+        {
+            rStrm.ResetRecord( true );
+            sal_uInt16 nBofType;
+            rStrm.Ignore( 2 );
+            rStrm >> nBofType;
+            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpObjectManager::ReadObj - no chart BOF record" );
+            // try to read the substream anyway
+            pChartObj->ReadChartSubStream( rStrm );
+            // #90118# be able to read following CONTINUE record as MSODRAWING
+            rStrm.ResetRecord( false );
+        }
+    }
+
+    // store the new object in the internal containers
+    if( xDrawObj.is() )
+    {
+        maObjMap[ maEscherStrm.Tell() ] = xDrawObj;
+        maObjMapId[ xDrawObj->GetObjId() ] = xDrawObj;
+    }
+}
+
+void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
+{
+    XclImpTxoDataRef xTxo( new XclImpTxoData( GetRoot() ) );
+    xTxo->ReadTxo( rStrm );
+    maTxoMap[ maEscherStrm.Tell() ] = xTxo;
 }
 
 sal_uInt32 XclImpObjectManager::GetProgressSize() const
