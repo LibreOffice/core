@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:46:47 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 09:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,28 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
+
+/** Structure containing the mapping between OOffice and Gconf keys.
+    AlOO specifies whether the key is protected, if key is protected it
+    can not be over riden in subsequent higher layers
+*/
+struct keyMapping
+{
+    keyMapping(){};
+    rtl::OUString mOOName;
+    rtl::OUString mOOType;
+    rtl::OUString mGconfName;
+    sal_Bool mbProtected;
+};
+
+typedef keyMapping KeyMappingInfo;
+typedef std::multimap<rtl::OUString, KeyMappingInfo> KeyMappingTable;
+
+/*Time Stamp mapping table used to store timestamps of updated components
+  when a notification is recieved. It is needed as you cannot access gconf key
+  timestamps via the Gconf api */
+
+typedef std::multimap<rtl::OUString, rtl::OUString>  TSMappingTable;
 
 //------------------------------------------------------------------------------
 
@@ -213,6 +235,11 @@ class GconfBackend : public BackendBase {
 
         /** Mutex for reOOurces protection */
         osl::Mutex mMutex ;
+
+        KeyMappingTable mKeyMap;
+
+        /** List of component TimeStamps */
+        TSMappingTable mTSMap;
 
         static GconfBackend* mInstance;
 
