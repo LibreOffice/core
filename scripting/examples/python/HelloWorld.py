@@ -6,9 +6,8 @@ def HelloWorldPython( ):
     model = XSCRIPTCONTEXT.getDocument()
 #get the XText interface
     text = model.Text
-#create an XTextCursor
-    cursor = text.createTextCursor()
-#and insert the string
-    text.insertString( cursor, "Hello World (in Python)", 0 )
+#create an XTextRange at the end of the document
+    tRange = text.End
+#and set the string
+    tRange.String = "Hello World (in Python)"
     return None
-
