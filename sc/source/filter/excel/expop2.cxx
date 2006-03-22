@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:57:15 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:00:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@
 #endif
 
 
-ExportBiff5::ExportBiff5( XclExpRootData& rExpData ):
-    ExportTyp( rExpData.mrBookStrm, &rExpData.mrDoc, rExpData.meCharSet ),
+ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
+    ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meCharSet ),
     XclExpRoot( rExpData )
 {
     // nur Teil der Root-Daten gebraucht
@@ -134,8 +134,8 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( XclExpRootData& rExpData ) :
-    ExportBiff5( rExpData )
+ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
+    ExportBiff5( rExpData, rStrm )
 {
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->pEscher = new XclEscher( GetDoc().GetTableCount(), *pExcRoot );
