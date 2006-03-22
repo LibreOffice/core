@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:33 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,11 @@
  *
  ************************************************************************/
 #include <osl/thread.h>
+#include <osl/module.h>
+#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 #include <locale.h>
 
 #include <typelib/typedescription.hxx>
@@ -138,6 +141,69 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
     return dict;
 }
 
+static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
+{
+    *pLevel = LogLevel::NONE;
+    *ppFile = 0;
+    OUString fileName;
+    osl_getModuleURLFromAddress(
+        (void*)readLoggingConfig, (rtl_uString **) &fileName );
+    fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
+    fileName += OUString::createFromAscii(  SAL_CONFIGFILE("pyuno") );
+    rtl::Bootstrap bootstrapHandle( fileName );
+
+    OUString str;
+    if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGLEVEL" ), str ) )
+    {
+        if( str.equalsAscii( "NONE" ) )
+            *pLevel = LogLevel::NONE;
+        else if( str.equalsAscii( "CALL" ) )
+            *pLevel = LogLevel::CALL;
+        else if( str.equalsAscii( "ARGS" ) )
+            *pLevel = LogLevel::ARGS;
+        else
+        {
+            fprintf( stderr, "unknown loglevel %s\n",
+                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+    if( *pLevel > LogLevel::NONE )
+    {
+        *ppFile = stdout;
+        if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGTARGET" ), str ) )
+        {
+            if( str.equalsAscii( "stdout" ) )
+                *ppFile = stdout;
+            else if( str.equalsAscii( "stderr" ) )
+                *ppFile = stderr;
+            else
+            {
+                oslProcessInfo data;
+                data.Size = sizeof( data );
+                osl_getProcessInfo(
+                    0 , osl_Process_IDENTIFIER , &data );
+                osl_getSystemPathFromFileURL( str.pData, &str.pData);
+                OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
+                o += ".";
+                o += OString::valueOf( (sal_Int32)data.Ident );
+
+                *ppFile = fopen( o.getStr() , "w" );
+                if ( *ppFile )
+                {
+                    // do not buffer (useful if e.g. analyzing a crash)
+                    setvbuf( *ppFile, 0, _IONBF, 0 );
+                }
+                else
+                {
+                    fprintf( stderr, "couldn't create file %s\n",
+                             OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+                }
+            }
+        }
+    }
+}
+
 /*-------------------------------------------------------------------
  RuntimeImpl implementations
  *-------------------------------------------------------------------*/
@@ -150,10 +216,12 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
             OUString( RTL_CONSTASCII_USTRINGPARAM( "cannot instantiate pyuno::RuntimeImpl" ) ),
             Reference< XInterface > () );
     me->cargo = 0;
-
     // must use a different struct here, as the PyObject_NEW macro
     // makes C++ unusable
     RuntimeCargo *c = new RuntimeCargo();
+    readLoggingConfig( &(c->logLevel) , &(c->logFile) );
+    log( c, LogLevel::CALL, "Instantiating pyuno bridge" );
+
     c->valid = 1;
     c->xContext = ctx;
     c->xInvocation = Reference< XSingleServiceFactory > (
@@ -221,6 +289,8 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 void  stRuntimeImpl::del(PyObject* self)
 {
     RuntimeImpl *me = reinterpret_cast< RuntimeImpl * > ( self );
+    if( me->cargo->logFile )
+        fclose( me->cargo->logFile );
     delete me->cargo;
     PyMem_DEL (self);
 }
@@ -874,11 +944,28 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 
 
 static const char * g_NUMERICID = "pyuno.lcNumeric";
+static ::std::vector< rtl::OString > g_localeList;
+
+static const char *ensureUnlimitedLifetime( const char *str )
+{
+    int size = g_localeList.size();
+    int i;
+    for( i = 0 ; i < size ; i ++ )
+    {
+        if( 0 == strcmp( g_localeList[i].getStr(), str ) )
+            break;
+    }
+    if( i == size )
+    {
+        g_localeList.push_back( str );
+    }
+    return g_localeList[i].getStr();
+}
+
 
 PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
     throw ( com::sun::star::uno::RuntimeException )
 {
-    PYUNO_DEBUG_1( "PyThreadAttach ctor\n" );
     tstate = PyThreadState_New( interp );
     if( !tstate  )
         throw RuntimeException(
@@ -886,15 +973,17 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
             Reference< XInterface > () );
     PyEval_AcquireThread( tstate);
     // set LC_NUMERIC to "C"
+    const char * oldLocale =
+        ensureUnlimitedLifetime( setlocale( LC_NUMERIC, 0 )  );
+    setlocale( LC_NUMERIC, "C" );
     PyRef locale( // python requires C locale
-        PyLong_FromVoidPtr( setlocale( LC_NUMERIC, "C") ), SAL_NO_ACQUIRE);
+        PyLong_FromVoidPtr( (void*)oldLocale ), SAL_NO_ACQUIRE);
     PyDict_SetItemString(
         PyThreadState_GetDict(), g_NUMERICID, locale.get() );
 }
 
 PyThreadAttach::~PyThreadAttach()
 {
-    PYUNO_DEBUG_1( "PyThreadAttach dtor\n" );
     PyObject *value =
         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
     if( value )
@@ -907,7 +996,6 @@ PyThreadAttach::~PyThreadAttach()
 
 PyThreadDetach::PyThreadDetach() throw ( com::sun::star::uno::RuntimeException )
 {
-    PYUNO_DEBUG_1( "PyThreadDeattach ctor\n" );
     tstate = PyThreadState_Get();
     PyObject *value =
         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
@@ -921,21 +1009,13 @@ PyThreadDetach::PyThreadDetach() throw ( com::sun::star::uno::RuntimeException )
     */
 PyThreadDetach::~PyThreadDetach()
 {
-    PYUNO_DEBUG_1( "PyThreadDeattach dtor\n" );
     PyEval_AcquireThread( tstate );
-    PyObject *value =
-        PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
-    if( value )
-    {
-        // python requires C LC_NUMERIC locale
-        setlocale( LC_NUMERIC, "C" );
-    }
-    else
-    {
-        // we don't expect the locale to be set in the stack layer above,
-        // so no reason to change anything
-    }
+//     PyObject *value =
+//         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
 
+    // python requires C LC_NUMERIC locale,
+    // always set even when it is already "C"
+    setlocale( LC_NUMERIC, "C" );
 }
 
 
