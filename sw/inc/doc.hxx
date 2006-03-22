@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:54:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,6 +530,13 @@ class SwDoc
     // bDoNotJustifyLinesWithManualBreak    def = FALSE, hidden
     // bDoNotResetParaAttrsForNumFont       def = FALSE, hidden
     //
+    // SO8pp3
+    // mbDoNotCaptureDrawObjsOnPage         def = FALSE, hidden
+    // - Relevant for drawing objects, which don't follow the text flow, but
+    //   whose position is outside the page area:
+    //   FALSE: Such drawing objects are captured on the page area of its anchor.
+    //   TRUE: Such drawing objects can leave the page area, they aren't captured.
+    //
     // SO8pp3:
     // bTableRowKeep                        def = FALSE, hidden
     // bIgnoreTabsAndBlanksForLineCalculation   def = FALSE, hidden
@@ -549,8 +556,8 @@ class SwDoc
     sal_Bool    bDoNotResetParaAttrsForNumFont   : 1;   // FME 2005-08-11 #i53199#
     sal_Bool    bTableRowKeep                    : 1;   // FME 2006-02-10 #131283#
     sal_Bool    bIgnoreTabsAndBlanksForLineCalculation : 1; // FME 2006-03-01 #i3952#
+    sal_Bool    mbDoNotCaptureDrawObjsOnPage     : 1;   // OD 2006-03-14 #i62875#
     sal_Bool    bDummyNonUIFlag1                 : 1;   // use this if necessary
-    sal_Bool    bDummyNonUIFlag2                 : 1;   // use this if necessary
 
     sal_Bool    bOutlineLevelYieldsOutlineRule  : 1;
 
@@ -2297,6 +2304,17 @@ public:
     }
     // <--
 
+    // --> OD 2006-03-14 #i62875#
+    inline sal_Bool DoNotCaptureDrawObjsOnPage() const
+    {
+        return mbDoNotCaptureDrawObjsOnPage;
+    }
+    inline void SetDoNotCaptureDrawObjsOnPage( const sal_Bool _bDoNotCaptureDrawObjsOnPage )
+    {
+        mbDoNotCaptureDrawObjsOnPage = _bDoNotCaptureDrawObjsOnPage;
+    }
+    // <--
+
     // --> FME 2006-02-10 #131283#
     inline sal_Bool IsTableRowKeep() const
     {
@@ -2529,5 +2547,32 @@ inline void SwDoc::SetOLEPrtNotifyPending( sal_Bool bSet )
         bAllOLENotify = sal_False;
 }
 
+// --> OD 2006-03-14 #i62875#
+// namespace <docfunc> for functions and procedures working on a Writer document.
+namespace docfunc
+{
+    /** method to check, if given Writer document contains at least one drawing object
 
+        OD 2006-03-17 #i62875#
+
+        @author OD
+
+        @param p_rDoc
+        input parameter - reference to the Writer document, which is investigated.
+    */
+    bool ExistsDrawObjs( SwDoc& p_rDoc );
+
+    /** method to check, if given Writer document contains only drawing objects,
+        which are completely on its page.
+
+        OD 2006-03-17 #i62875#
+
+        @author OD
+
+        @param p_rDoc
+        input parameter - reference to the Writer document, which is investigated.
+    */
+    bool AllDrawObjsOnPage( SwDoc& p_rDoc );
+}
+// <--
 #endif  //_DOC_HXX
