@@ -5,9 +5,9 @@
 #
 #   $RCSfile: python.sh,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 09:21:32 $
+#   last change: $Author: obo $ $Date: 2006-03-22 10:53:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ case $sd_platform in
     ;;
 esac
 
-PYTHONPATH="$sd_prog":"$sd_prog/python-core-%%PYVERSION%%/lib":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk":"$PYTHONPATH"
+PYTHONPATH="$sd_prog":"$sd_prog/python-core-%%PYVERSION%%/lib":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk":"$sd_prog/python-core-%%PYVERSION%%/lib/site-packages":"$PYTHONPATH"
 export PYTHONPATH
 
 PYTHONHOME="$sd_prog"/python-core-%%PYVERSION%%
