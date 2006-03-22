@@ -62,6 +62,7 @@ class Logger(LogLevel):
             "] " +
             msg +
             "\n" )
+        self.target.flush()
 
 log = Logger( getLogTarget() )
 
@@ -119,6 +120,11 @@ def hasChanged( oldDate, newDate ):
            newDate.Seconds > oldDate.Seconds or \
            newDate.HundredthSeconds > oldDate.HundredthSeconds
 
+def ensureCodeEndsWithLinefeed( code ):
+    if not code.endswith( "\n" ):
+        code = code + "\n"
+    return code
+
 class ScriptContext(unohelper.Base):
     def __init__( self, ctx, doc ):
         self.ctx = ctx
@@ -140,31 +146,31 @@ class ScriptContext(unohelper.Base):
 # does not fit together with script
 # engine lifetime management
 #----------------------------------
-g_scriptContext = ScriptContext( uno.getComponentContext(), None )
-g_modules = {}
-def getModuleByUrl( url, sfa ):
-    entry =  g_modules.get(url)
-    load = True
-    lastRead = sfa.getDateTimeModified( url )
-    if entry:
-        if hasChanged( entry.lastRead, lastRead ):
-            log.isDebugLevel() and log.debug("file " + url + " has changed, reloading")
-        else:
-            load = False
-            
-    if load:
-        log.isDebugLevel() and log.debug( "opening >" + url + "<" )
-
-        code = readTextFromStream( sfa.openFileRead( url ) )
+#g_scriptContext = ScriptContext( uno.getComponentContext(), None )
+#g_modules = {}
+#def getModuleByUrl( url, sfa ):
+#    entry =  g_modules.get(url)
+#    load = True
+#    lastRead = sfa.getDateTimeModified( url )
+#    if entry:
+#        if hasChanged( entry.lastRead, lastRead ):
+#            log.isDebugLevel() and log.debug("file " + url + " has changed, reloading")
+#        else:
+#            load = False
+#            
+#    if load:
+#        log.isDebugLevel() and log.debug( "opening >" + url + "<" )
+#
+#        code = readTextFromStream( sfa.openFileRead( url ) )
             
         # execute the module
-        entry = ModuleEntry( lastRead, imp.new_module("ooo_script_framework") )
-        entry.module.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = g_scriptContext
-        entry.module.__file__ = url
-        exec code in entry.module.__dict__
-        g_modules[ url ] = entry
-        log.isDebugLevel() and log.debug( "mapped " + url + " to " + str( entry.module ) )
-    return entry.module
+#        entry = ModuleEntry( lastRead, imp.new_module("ooo_script_framework") )
+#        entry.module.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = g_scriptContext
+#        entry.module.__file__ = url
+#        exec code in entry.module.__dict__
+#        g_modules[ url ] = entry
+#        log.isDebugLevel() and log.debug( "mapped " + url + " to " + str( entry.module ) )
+#    return entry.module
 
 class ProviderContext:
     def __init__( self, storageType, sfa, uriHelper, scriptContext ):
@@ -248,6 +254,7 @@ class ProviderContext:
             log.isDebugLevel() and log.debug( "opening >" + url + "<" )
             
             code = readTextFromStream( self.sfa.openFileRead( url ) )
+            code = ensureCodeEndsWithLinefeed( code )
             
             # execute the module
             entry = ModuleEntry( lastRead, imp.new_module("ooo_script_framework") )
@@ -319,6 +326,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 "ScriptBindingLibrary.MacroEditor?location=application")
 
             code = readTextFromStream(self.provCtx.sfa.openFileRead(self.uri))
+            code = ensureCodeEndsWithLinefeed( code )
             self.editor.getControl("EditorTextField").setText(code)
 
             self.editor.getControl("RunButton").setActionCommand("Run")
@@ -334,6 +342,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
         try:
             if event.ActionCommand == "Run":
                 code = self.editor.getControl("EditorTextField").getText()
+                code = ensureCodeEndsWithLinefeed( code )
                 mod = imp.new_module("ooo_script_framework")
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
                 exec code in mod.__dict__
