@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_migration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:20:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,8 +245,9 @@ void MigrationImpl::CommandEnvironmentImpl::handle(
 }
 
 namespace sdecl = comphelper::service_decl;
+sdecl::class_<MigrationImpl, sdecl::with_args<true> > serviceMI;
 extern sdecl::ServiceDecl const serviceDecl(
-    sdecl::class_<MigrationImpl, sdecl::with_args<true> >(),
+    serviceMI,
     // a private one (config entry):
     "com.sun.star.comp.deployment.migration.Migration_2_0",
     "com.sun.star.comp.deployment.migration.Migration_2_0" );
