@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 11:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,12 @@
 #include "filter.hxx"
 #endif
 
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+#ifndef SC_XLDUMPER_HXX
+#include "xldumper.hxx"
+#endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
@@ -89,6 +95,13 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     // check the passed Calc document
     DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
+
+#if SCF_INCL_DUMPER
+    {
+        ::scf::xls::dump::Dumper aDumper( rMedium, pDocument->GetDocumentShell() );
+        aDumper.Dump();
+    }
+#endif
 
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
@@ -160,7 +173,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     {
         pBookStrm->SetBufferSize( 0x8000 );     // still needed?
 
-        XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pBookStrm, *pDocument, RTL_TEXTENCODING_MS_1252 );
+        XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pDocument, RTL_TEXTENCODING_MS_1252 );
         ::std::auto_ptr< ImportExcel > xFilter;
         switch( eBiff )
         {
@@ -168,10 +181,10 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
             case EXC_BIFF3:
             case EXC_BIFF4:
             case EXC_BIFF5:
-                xFilter.reset( new ImportExcel( aImpData ) );
+                xFilter.reset( new ImportExcel( aImpData, *pBookStrm ) );
             break;
             case EXC_BIFF8:
-                xFilter.reset( new ImportExcel8( aImpData ) );
+                xFilter.reset( new ImportExcel8( aImpData, *pBookStrm ) );
             break;
             default:    DBG_ERROR_BIFF();
         }
@@ -231,15 +244,15 @@ FltError ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
 
     FltError eRet = eERR_UNKN_BIFF;
-    XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *xStrgStrm, *pDocument, eNach );
+    XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *pDocument, eNach );
     if ( bBiff8 )
     {
-        ExportBiff8 aFilter( aExpData );
+        ExportBiff8 aFilter( aExpData, *xStrgStrm );
         eRet = aFilter.Write();
     }
     else
     {
-        ExportBiff5 aFilter( aExpData );
+        ExportBiff5 aFilter( aExpData, *xStrgStrm );
         eRet = aFilter.Write();
     }
 
