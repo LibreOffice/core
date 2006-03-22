@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:17:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@
 #endif
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
-#include <fmtfollowtextflow.hxx>
 #endif
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
@@ -222,14 +219,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     const bool bNoSurround = rSurround.GetSurround() == SURROUND_NONE;
     const bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
 
-    // OD 30.09.2003 #i18732# - determine, if object has to follow the text flow
-    const bool bFollowTextFlow = rFrmFmt.GetFollowTextFlow().GetValue();
-
     // OD 29.10.2003 #110978# - new class <SwEnvironmentOfAnchoredObject>
-    SwEnvironmentOfAnchoredObject aEnvOfObj( bFollowTextFlow );
+    SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow() );
 
     // OD 30.09.2003 #i18732# - grow only, if object has to follow the text flow
-    const bool bGrow = bFollowTextFlow &&
+    const bool bGrow = DoesObjFollowsTextFlow() &&
                        ( !GetAnchorFrm().IsInTab() ||
                          !rFrmFmt.GetFrmSize().GetHeightPercent() );
 
@@ -432,7 +426,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // the frame, the object is oriented at.
             // OD 2004-05-21 #i28701# - correction: adjust relative position,
             // only if the floating screen object has to follow the text flow.
-            if ( bFollowTextFlow && pOrientFrm != &rAnchorTxtFrm )
+            if ( DoesObjFollowsTextFlow() && pOrientFrm != &rAnchorTxtFrm )
             {
                 // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
@@ -449,10 +443,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 const SwLayoutFrm& rVertEnvironLayFrm =
                     aEnvOfObj.GetVertEnvironmentLayoutFrm(
                                             *(pOrientFrm->GetUpper()) );
-                const bool bCheckBottom = !bFollowTextFlow;
+                const bool bCheckBottom = !DoesObjFollowsTextFlow();
                 nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                               rVertEnvironLayFrm, nRelPosY,
-                                              bFollowTextFlow, bCheckBottom );
+                                              DoesObjFollowsTextFlow(),
+                                              bCheckBottom );
             }
             // <--
             // keep calculated relative vertical position - needed for filters
@@ -630,10 +625,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 // --> OD 2004-07-22 #i31805# - do not check, if bottom of
                 // anchored object would fit into environment layout frame, if
                 // anchored object has to follow the text flow.
-                const bool bCheckBottom = !bFollowTextFlow;
+                const bool bCheckBottom = !DoesObjFollowsTextFlow();
                 nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                               rVertEnvironLayFrm, nRelPosY,
-                                              bFollowTextFlow, bCheckBottom );
+                                              DoesObjFollowsTextFlow(),
+                                              bCheckBottom );
                 // <--
                 if ( bVert )
                     aRelPos.X() = nRelPosY;
@@ -670,11 +666,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // --> OD 2004-08-20 - do not check, if bottom of
                         // anchored object would fit into environment layout
                         // frame, if anchored object has to follow the text flow.
-                        const bool bCheckBottom = !bFollowTextFlow;
+                        const bool bCheckBottom = !DoesObjFollowsTextFlow();
                         nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                          rVertEnvironLayFrm,
                                                          nTmpRelPosY,
-                                                         bFollowTextFlow,
+                                                         DoesObjFollowsTextFlow(),
                                                          bCheckBottom );
                         // <--
                         if ( bVert )
@@ -697,7 +693,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // --> OD 2004-10-04 #i26495# - floating screen objects,
                         // which are anchored inside a table, doesn't follow
                         // the text flow.
-                        if ( bFollowTextFlow &&
+                        if ( DoesObjFollowsTextFlow() &&
                              !( aVert.GetRelationOrient() == REL_PG_FRAME ||
                                 aVert.GetRelationOrient() == REL_PG_PRTAREA ) &&
                              !GetAnchorFrm().IsInTab() )
@@ -763,7 +759,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                             nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                           rVertEnvironLayFrm,
                                                           nRelPosY,
-                                                          bFollowTextFlow );
+                                                          DoesObjFollowsTextFlow() );
                             if( bVert )
                                 aRelPos.X() = nRelPosY;
                             else
@@ -842,7 +838,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // <--
         }
 
-        if ( bFollowTextFlow &&
+        if ( DoesObjFollowsTextFlow() &&
              !( aVert.GetRelationOrient() == REL_PG_FRAME ||
                 aVert.GetRelationOrient() == REL_PG_PRTAREA ) )
         {
@@ -877,7 +873,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                      rVertEnvironLayFrm,
                                                      nTmpRelPosY,
-                                                     bFollowTextFlow,
+                                                     DoesObjFollowsTextFlow(),
                                                      false );
                     if ( bVert )
                     {
@@ -1026,7 +1022,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         // determine frame, horizontal position is oriented at.
         // OD 2004-05-21 #i28701# - If floating screen object doesn't follow
         // the text flow, its horizontal position is oriented at <pOrientFrm>.
-        const SwFrm* pHoriOrientFrm = bFollowTextFlow
+        const SwFrm* pHoriOrientFrm = DoesObjFollowsTextFlow()
                                       ? &_GetHoriVirtualAnchor( *mpVertPosOrientFrm )
                                       : pOrientFrm;
 
