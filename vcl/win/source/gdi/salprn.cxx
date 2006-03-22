@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:27:53 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,6 +466,10 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             if ( !OpenPrinterA( (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(), &hPrn, NULL ) )
                 return FALSE;
 
+                // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
+                if( hPrn == HGDI_ERROR )
+            return FALSE;
+
             long nSysJobSize = DocumentPropertiesA( 0, hPrn,
                                                     (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
                                                     NULL, NULL, 0 );
@@ -519,6 +523,9 @@ static BOOL ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     HANDLE hPrn;
 // !!! UNICODE - NT Optimierung !!!
     if ( !OpenPrinterA( (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(), &hPrn, NULL ) )
+        return FALSE;
+        // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
+        if( hPrn == HGDI_ERROR )
         return FALSE;
 
     LONG            nRet;
@@ -631,7 +638,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     {
         ULONG nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
-        if ( nCount && (nCount != ((ULONG)-1)) )
+        if ( nCount && (nCount != GDI_ERROR) )
         {
             WORD* pBins = new WORD[nCount];
             memset( (BYTE*)pBins, 0, nCount*sizeof(WORD) );
@@ -725,7 +732,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     {
         ULONG nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
-        if ( nCount && (nCount != ((ULONG)-1)) )
+        if ( nCount && (nCount != GDI_ERROR) )
         {
             WORD* pBins = new WORD[nCount];
             memset( pBins, 0, nCount*sizeof(WORD) );
@@ -777,13 +784,13 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 ULONG   nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
                 POINT*  pPaperSizes = NULL;
                 DWORD   nLandscapeAngle = ImplDeviceCaps( pPrinter, DC_ORIENTATION, NULL, pSetupData );
-                if ( nPaperCount && (nPaperCount != ((ULONG)-1)) )
+                if ( nPaperCount && (nPaperCount != GDI_ERROR) )
                 {
                     pPapers = new WORD[nPaperCount];
                     memset( pPapers, 0, nPaperCount*sizeof(WORD) );
                     ImplDeviceCaps( pPrinter, DC_PAPERS, (LPTSTR)pPapers, pSetupData );
                 }
-                if ( nPaperSizeCount && (nPaperSizeCount != ((ULONG)-1)) )
+                if ( nPaperSizeCount && (nPaperSizeCount != GDI_ERROR) )
                 {
                     pPaperSizes = new POINT[nPaperSizeCount];
                     memset( pPaperSizes, 0, nPaperSizeCount*sizeof(POINT) );
@@ -991,7 +998,7 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     m_aPaperFormats.clear();
 
     DWORD nCount = ImplDeviceCaps( this, DC_PAPERSIZE, NULL, pSetupData );
-    if( nCount == (DWORD)-1 )
+    if( nCount == GDI_ERROR )
         nCount = 0;
 
     POINT* pPaperSizes = NULL;
@@ -1048,7 +1055,7 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
     int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
 
-    if( nRet != -1 )
+    if( nRet != GDI_ERROR )
         return nRet * 10;
     else
         return 900; // guess
@@ -1115,7 +1122,7 @@ BOOL WinSalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
 ULONG WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 {
     DWORD nRet = ImplDeviceCaps( this, DC_BINS, NULL, pSetupData );
-    if ( nRet && (nRet != ((ULONG)-1)) )
+    if ( nRet && (nRet != GDI_ERROR) )
         return nRet;
     else
         return 0;
@@ -1129,11 +1136,11 @@ XubString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, UL
     XubString aPaperBinName;
 
     DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, NULL, pSetupData );
-    if ( (nPaperBin < nBins) && (nBins != ((ULONG)-1)) )
+    if ( (nPaperBin < nBins) && (nBins != GDI_ERROR) )
     {
         char* pBuffer = new char[nBins*24];
         DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, pBuffer, pSetupData );
-        if ( nRet && (nRet != ((ULONG)-1)) )
+        if ( nRet && (nRet != GDI_ERROR) )
             aPaperBinName = ImplSalGetUniString( (const char*)(pBuffer + (nPaperBin*24)) );
         delete [] pBuffer;
     }
@@ -1153,17 +1160,17 @@ ULONG WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, USHORT
             return TRUE;
         case PRINTER_CAPABILITIES_COPIES:
             nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
-            if ( nRet && (nRet != ((ULONG)-1)) )
+            if ( nRet && (nRet != GDI_ERROR) )
                 return nRet;
             return 0;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
             if ( aSalShlData.mbW40 )
             {
                 nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
-                if ( nRet && (nRet != ((ULONG)-1)) )
+                if ( nRet && (nRet != GDI_ERROR) )
                 {
                     nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
-                    if ( nRet && (nRet != ((ULONG)-1)) )
+                    if ( nRet && (nRet != GDI_ERROR) )
                          return nRet;
                 }
             }
@@ -1171,20 +1178,20 @@ ULONG WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, USHORT
 
         case PRINTER_CAPABILITIES_SETORIENTATION:
             nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
-            if ( nRet && (nRet != ((ULONG)-1)) )
+            if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
 
         case PRINTER_CAPABILITIES_SETPAPERBIN:
             nRet = ImplDeviceCaps( this, DC_BINS, NULL, pSetupData );
-            if ( nRet && (nRet != ((ULONG)-1)) )
+            if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
 
         case PRINTER_CAPABILITIES_SETPAPERSIZE:
         case PRINTER_CAPABILITIES_SETPAPER:
             nRet = ImplDeviceCaps( this, DC_PAPERS, NULL, pSetupData );
-            if ( nRet && (nRet != ((ULONG)-1)) )
+            if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
     }
