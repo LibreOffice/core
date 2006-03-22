@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:54:58 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 15:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,6 +724,34 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
     if ( !mpGraphics )
         return;
 
+    // release the fonts of the physically released graphics device
+    if( bRelease )
+    {
+        mpGraphics->ReleaseFonts();
+
+        mbNewFont = true;
+        mbInitFont = true;
+
+        if ( mpFontEntry )
+        {
+            mpFontCache->Release( mpFontEntry );
+            mpFontEntry = NULL;
+        }
+
+        if ( mpGetDevFontList )
+    {
+            delete mpGetDevFontList;
+            mpGetDevFontList = NULL;
+        }
+
+        if ( mpGetDevSizeList )
+        {
+            delete mpGetDevSizeList;
+            mpGetDevSizeList = NULL;
+        }
+    }
+
+
     ImplSVData* pSVData = ImplGetSVData();
     if ( meOutDevType == OUTDEV_WINDOW )
     {
@@ -794,17 +822,6 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
     mpGraphics      = NULL;
     mpPrevGraphics  = NULL;
     mpNextGraphics  = NULL;
-
-    if ( mpGetDevFontList )
-    {
-        delete mpGetDevFontList;
-        mpGetDevFontList = NULL;
-    }
-    if ( mpGetDevSizeList )
-    {
-        delete mpGetDevSizeList;
-        mpGetDevSizeList = NULL;
-    }
 }
 
 // -----------------------------------------------------------------------
