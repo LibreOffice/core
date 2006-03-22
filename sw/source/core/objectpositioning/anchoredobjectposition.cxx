@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:18:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,11 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
+// --> OD 2006-03-15 #i62875#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+// <--
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
@@ -97,7 +102,11 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
       mbIsObjFly( false ),
       mpAnchoredObj( 0 ),
       mpAnchorFrm( 0 ),
-      mpContact( 0 )
+      mpContact( 0 ),
+      // --> OD 2006-03-15 #i62875#
+      mbFollowTextFlow( false ),
+      mbDoNotCaptureAnchoredObj( false )
+      // <--
 {
 #if OSL_DEBUG_LEVEL > 1
     // assert, if object isn't of excepted type
@@ -116,8 +125,8 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 /** determine information about object
 
     OD 30.07.2003 #110978#
-    member <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm> and
-    <mpContact> are set
+    members <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm>, <mpContact>,
+    <mbFollowTextFlow> and <mbDoNotCaptureAnchoredObj> are set
 
     @author OD
 */
@@ -158,44 +167,27 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
         ASSERT( mpFrmFmt,
                 "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format." );
     }
+
+    // --> OD 2006-03-15 #i62875#
+    // determine attribute value of <Follow-Text-Flow>
+    {
+        mbFollowTextFlow = mpFrmFmt->GetFollowTextFlow().GetValue();
+    }
+
+    // determine, if anchored object has not to be captured on the page.
+    // the following conditions must be hold to *not* capture it:
+    // - corresponding document compatibility flag is set
+    // - it's a drawing object
+    // - it doesn't follow the text flow
+    {
+        mbDoNotCaptureAnchoredObj = !mbIsObjFly && !mbFollowTextFlow &&
+                                    mpFrmFmt->GetDoc()->DoNotCaptureDrawObjsOnPage();
+    }
+    // <--
 }
 
 SwAnchoredObjectPosition::~SwAnchoredObjectPosition()
 {}
-
-// **************************************************************************
-// accessors for object and its corresponding data/information
-// **************************************************************************
-SdrObject& SwAnchoredObjectPosition::GetObject() const
-{
-    return mrDrawObj;
-}
-
-bool SwAnchoredObjectPosition::IsObjFly() const
-{
-    return mbIsObjFly;
-}
-
-// OD 2004-03-23 #i26791#
-SwAnchoredObject& SwAnchoredObjectPosition::GetAnchoredObj() const
-{
-    return *mpAnchoredObj;
-}
-
-SwFrm& SwAnchoredObjectPosition::GetAnchorFrm() const
-{
-    return *mpAnchorFrm;
-}
-
-SwContact& SwAnchoredObjectPosition::GetContact() const
-{
-    return *mpContact;
-}
-
-const SwFrmFmt& SwAnchoredObjectPosition::GetFrmFmt() const
-{
-    return *mpFrmFmt;
-}
 
 bool SwAnchoredObjectPosition::IsAnchoredToChar() const
 {
@@ -455,15 +447,16 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
     OD 2004-07-01 #i28701# - parameter <_nTopOfAnch> and <_bVert> added
     OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
     OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
+    OD 2006-03-15 #i62875# - method now private and renamed.
 
     @author OD
 */
-SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
-                                                     const bool _bVert,
-                                                     const SwFrm&  _rPageAlignLayFrm,
-                                                     const SwTwips _nProposedRelPosY,
-                                                     const bool _bFollowTextFlow,
-                                                     const bool _bCheckBottom ) const
+SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips _nTopOfAnch,
+                                                         const bool _bVert,
+                                                         const SwFrm&  _rPageAlignLayFrm,
+                                                         const SwTwips _nProposedRelPosY,
+                                                         const bool _bFollowTextFlow,
+                                                         const bool _bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = _nProposedRelPosY;
 
@@ -542,9 +535,11 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
 /** adjust calculated horizontal in order to keep object inside
     'page' alignment layout frame.
 
+    OD 2006-03-15 #i62875# - method now private and renamed.
+
     @author OD
 */
-SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPos(
+SwTwips SwAnchoredObjectPosition::_ImplAdjustHoriRelPos(
                                         const SwFrm&  _rPageAlignLayFrm,
                                         const SwTwips _nProposedRelPosX ) const
 {
