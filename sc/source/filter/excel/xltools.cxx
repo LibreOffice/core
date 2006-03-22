@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:53:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 12:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include <algorithm>
 #include <math.h>
 
+#ifndef INCLUDED_SAL_MATHCONF_H
+#include <sal/mathconf.h>
+#endif
 #ifndef _SV_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
 #endif
@@ -86,7 +89,7 @@
 
 XclGuid::XclGuid()
 {
-    memset( mpnData, 0, 16 );
+    ::std::fill( mpnData, STATIC_TABLE_END( mpnData ), 0 );
 }
 
 XclGuid::XclGuid(
@@ -110,7 +113,16 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return memcmp( rCmp1.mpnData, rCmp2.mpnData, 16 ) == 0;
+    return ::std::lexicographical_compare_3way(
+        rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ),
+        rCmp2.mpnData, STATIC_TABLE_END( rCmp2.mpnData ) ) == 0;
+}
+
+bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
+{
+    return ::std::lexicographical_compare(
+        rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ),
+        rCmp2.mpnData, STATIC_TABLE_END( rCmp2.mpnData ) );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
@@ -142,18 +154,18 @@ const XclGuid XclTools::maGuidFileMoniker(
 
 double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
-    double fVal;
+    double fVal = 0.0;
 
     if( ::get_flag( nRKValue, EXC_RK_INTFLAG ) )
-        fVal = nRKValue >> 2;
+    {
+        sal_Int32 nTemp = nRKValue >> 2;
+        ::set_flag< sal_Int32 >( nTemp, 0xE0000000, nRKValue < 0 );
+        fVal = nTemp;
+    }
     else
     {
-        // create a Little-Endian buffer
-        SVBT64 pBuffer;
-        pBuffer[ 0 ] = pBuffer[ 1 ] = pBuffer[ 2 ] = pBuffer[ 3 ] = 0;
-        LongToSVBT32( nRKValue & EXC_RK_VALUEMASK, pBuffer + 4 );
-        // create the double from buffer
-        fVal = SVBT64ToDouble( pBuffer );
+        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fVal );
+        pDouble->w32_parts.msw = nRKValue & EXC_RK_VALUEMASK;
     }
 
     if( ::get_flag( nRKValue, EXC_RK_100FLAG ) )
