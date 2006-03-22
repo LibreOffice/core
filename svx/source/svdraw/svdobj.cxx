@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:01:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-22 10:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <vcl/metaact.hxx>   // fuer TakeContour
 #include <vcl/cvtsvm.hxx>
@@ -1260,14 +1261,33 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
 //BFS09            SvtGraphicStroke aStroke( XOutCreatePolygonBezier( aPolyPoly[0] ),
 //BFS09                                      XOutCreatePolygonBezier( aStartPoly ),
 //BFS09                                      XOutCreatePolygonBezier( aEndPoly ),
+            SvtGraphicStroke::JoinType eJoin;
+            double fMiterLength = rLineParameters.GetLineWidth();
+            switch( rLineParameters.GetLineJoint() )
+            {
+                case XLINEJOINT_NONE: eJoin = SvtGraphicStroke::joinNone;break;
+                case XLINEJOINT_MIDDLE:
+                case XLINEJOINT_MITER:
+                {
+                    eJoin = SvtGraphicStroke::joinMiter;
+                    // assume GetLinejointMiterMinimumAngle returns degrees (currently returns 15.0)
+                    double fSin = rtl::math::sin( M_PI * rLineParameters.GetLinejointMiterMinimumAngle() / 360.0 );
+                    if( ! rtl::math::isNan( fSin ) )
+                        fMiterLength /= fSin;
+                }
+                break;
+                case XLINEJOINT_BEVEL: eJoin = SvtGraphicStroke::joinBevel;break;
+                default:
+                case XLINEJOINT_ROUND: eJoin = SvtGraphicStroke::joinRound;break;
+            }
             SvtGraphicStroke aStroke( static_cast<Polygon>(aPolyPoly[0].getB2DPolygon()),
                                       Polygon(aStartPoly.getB2DPolygon()),
                                       Polygon(aEndPoly.getB2DPolygon()),
                                       nTransparence / 100.0,
                                       rLineParameters.GetLineWidth(),
                                       SvtGraphicStroke::capButt,
-                                      SvtGraphicStroke::joinRound,
-                                      rLineParameters.GetLinejointMiterMinimumAngle(),
+                                      eJoin,
+                                      fMiterLength,
 //BFS06                                      rLineParameters.GetLineStyle() == XLINE_DASH ? rLineParameters.GetDotDash() : SvtGraphicStroke::DashArray() );
                                       rLineParameters.IsLineStyleSolid() ? SvtGraphicStroke::DashArray() : rLineParameters.GetDotDash() );
 
