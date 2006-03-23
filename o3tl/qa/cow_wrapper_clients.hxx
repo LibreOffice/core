@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cow_wrapper_clients.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-01-25 16:17:38 $
+ *  last change: $Author: thb $ $Date: 2006-03-23 15:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,35 @@ public:
 
 private:
     o3tl::cow_wrapper< cow_wrapper_client2_impl > maImpl;
+};
+
+/** test MT-safe cow_wrapper - basically the same as
+    cow_wrapper_client2, only with different refcounting policy
+ */
+class cow_wrapper_client3
+{
+public:
+    cow_wrapper_client3();
+    explicit cow_wrapper_client3( int nVal );
+    ~cow_wrapper_client3();
+
+    cow_wrapper_client3( const cow_wrapper_client3& );
+    cow_wrapper_client3& operator=( const cow_wrapper_client3& );
+
+    void modify( int nVal );
+    int  queryUnmodified() const;
+
+    void makeUnique();
+    bool is_unique() const;
+    oslInterlockedCount use_count() const;
+    void swap( cow_wrapper_client3& r );
+
+    bool operator==( const cow_wrapper_client3& rRHS ) const;
+    bool operator!=( const cow_wrapper_client3& rRHS ) const;
+    bool operator<( const cow_wrapper_client3& rRHS ) const;
+
+private:
+    o3tl::cow_wrapper< cow_wrapper_client2_impl, o3tl::ThreadSafeRefCountingPolicy > maImpl;
 };
 
 } // namespace o3tltests

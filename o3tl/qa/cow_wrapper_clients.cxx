@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cow_wrapper_clients.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-02-01 10:55:36 $
+ *  last change: $Author: thb $ $Date: 2006-03-23 15:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,73 @@ bool cow_wrapper_client2::operator!=( const cow_wrapper_client2& rRHS ) const
     return maImpl != rRHS.maImpl;
 }
 bool cow_wrapper_client2::operator<( const cow_wrapper_client2& rRHS ) const
+{
+    return maImpl < rRHS.maImpl;
+}
+
+// ---------------------------------------------------------------------------
+
+cow_wrapper_client3::cow_wrapper_client3() : maImpl()
+{
+}
+
+cow_wrapper_client3::cow_wrapper_client3( int nVal ) :
+    maImpl( cow_wrapper_client2_impl(nVal) )
+{
+}
+
+cow_wrapper_client3::~cow_wrapper_client3()
+{
+}
+
+cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) :
+    maImpl(rSrc.maImpl)
+{
+}
+
+cow_wrapper_client3& cow_wrapper_client3::operator=( const cow_wrapper_client3& rSrc )
+{
+    maImpl = rSrc.maImpl;
+
+    return *this;
+}
+
+void cow_wrapper_client3::modify( int nVal )
+{
+    maImpl->setValue( nVal );
+}
+
+int  cow_wrapper_client3::queryUnmodified() const
+{
+    return maImpl->getValue();
+}
+
+void cow_wrapper_client3::makeUnique()
+{
+    maImpl.make_unique();
+}
+bool cow_wrapper_client3::is_unique() const
+{
+    return maImpl.is_unique();
+}
+oslInterlockedCount cow_wrapper_client3::use_count() const
+{
+    return maImpl.use_count();
+}
+void cow_wrapper_client3::swap( cow_wrapper_client3& r )
+{
+    o3tl::swap(maImpl, r.maImpl);
+}
+
+bool cow_wrapper_client3::operator==( const cow_wrapper_client3& rRHS ) const
+{
+    return maImpl == rRHS.maImpl;
+}
+bool cow_wrapper_client3::operator!=( const cow_wrapper_client3& rRHS ) const
+{
+    return maImpl != rRHS.maImpl;
+}
+bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
 {
     return maImpl < rRHS.maImpl;
 }

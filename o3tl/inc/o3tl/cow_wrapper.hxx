@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cow_wrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-03-17 16:50:18 $
+ *  last change: $Author: thb $ $Date: 2006-03-23 15:25:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,31 @@
 
 namespace o3tl
 {
+    /** Thread-unsafe refcounting
+
+        This is the default locking policy for cow_wrapper. No
+        locking/guarding against concurrent access is performed
+        whatsoever.
+     */
+    struct UnsafeRefCountingPolicy
+    {
+        typedef sal_uInt32 ref_count_t;
+        static ref_count_t incrementCount( ref_count_t& rCount ) { return ++rCount; }
+        static ref_count_t decrementCount( ref_count_t& rCount ) { return --rCount; }
+    };
+
+    /** Thread-safe refcounting
+
+        Use this to have the cow_wrapper refcounting mechanisms employ
+        the thread-safe oslInterlockedCount .
+     */
+    struct ThreadSafeRefCountingPolicy
+    {
+        typedef oslInterlockedCount ref_count_t;
+        static ref_count_t incrementCount( ref_count_t& rCount ) { return osl_incrementInterlockedCount(&rCount); }
+        static ref_count_t decrementCount( ref_count_t& rCount ) { return osl_decrementInterlockedCount(&rCount); }
+    };
+
     /** Copy-on-write wrapper.
 
         This template provides copy-on-write semantics for the wrapped
@@ -70,10 +95,13 @@ namespace o3tl
         thread-safe per se, because cow_wrapper has no way of
         syncronizing the potentially many different cow_wrapper
         instances, that reference a single shared value_type
-        instance. Accessing a thread-safe pointee through multiple
-        cow_wrapper instances might be thread-safe, if the individual
-        pointee methods are thread-safe, <em>including</em> pointee's
-        copy constructor. Any wrapped object that needs external
+        instance. That said, when passing
+        <code>ThreadSafeRefCountingPolicy</code> as the
+        <code>MTPolicy</code> parameter, accessing a thread-safe
+        pointee through multiple cow_wrapper instances might be
+        thread-safe, if the individual pointee methods are
+        thread-safe, <em>including</em> pointee's copy
+        constructor. Any wrapped object that needs external
         synchronisation (e.g. via an external mutex, which arbitrates
         access to object methods, and can be held across multiple
         object method calls) cannot easily be dealt with in a
@@ -144,9 +172,9 @@ void cow_wrapper_client::queryUnmodified() const
 }
         </pre>
      */
-    template<typename T> class cow_wrapper
+    template<typename T, class MTPolicy=UnsafeRefCountingPolicy> class cow_wrapper
     {
-        /** shared value object - gets copied before cow_wrapper hands
+        /** shared value object - gets cloned before cow_wrapper hands
             out a non-const reference to it
          */
         struct impl_t : private boost::noncopyable
@@ -163,19 +191,20 @@ void cow_wrapper_client::queryUnmodified() const
             {
             }
 
-            T                   m_value;
-            oslInterlockedCount m_ref_count;
+            T                              m_value;
+            typename MTPolicy::ref_count_t m_ref_count;
         };
 
         void release()
         {
-            if( osl_decrementInterlockedCount(&m_pimpl->m_ref_count) == 0 )
+            if( MTPolicy::decrementCount(m_pimpl->m_ref_count) == 0 )
                 boost::checked_delete(m_pimpl), m_pimpl=0;
         }
 
     public:
-        typedef T  value_type;
-        typedef T* pointer;
+        typedef T        value_type;
+        typedef T*       pointer;
+        typedef MTPolicy mt_policy;
 
         /** Default-construct wrapped type instance
          */
@@ -196,7 +225,7 @@ void cow_wrapper_client::queryUnmodified() const
         explicit cow_wrapper( const cow_wrapper& rSrc ) : // nothrow
             m_pimpl( rSrc.m_pimpl )
         {
-            osl_incrementInterlockedCount( &m_pimpl->m_ref_count );
+            MTPolicy::incrementCount( m_pimpl->m_ref_count );
         }
 
         ~cow_wrapper() // nothrow, if ~T does not throw
@@ -208,7 +237,7 @@ void cow_wrapper_client::queryUnmodified() const
         cow_wrapper& operator=( const cow_wrapper& rSrc ) // nothrow
         {
             // this already guards against self-assignment
-            osl_incrementInterlockedCount( &rSrc.m_pimpl->m_ref_count );
+            MTPolicy::incrementCount( rSrc.m_pimpl->m_ref_count );
 
             release();
             m_pimpl = rSrc.m_pimpl;
@@ -236,7 +265,7 @@ void cow_wrapper_client::queryUnmodified() const
         }
 
         /// return number of shared instances (1 for unique object)
-        oslInterlockedCount use_count() const // nothrow
+        typename MTPolicy::ref_count_t use_count() const // nothrow
         {
             return m_pimpl->m_ref_count;
         }
@@ -265,32 +294,32 @@ void cow_wrapper_client::queryUnmodified() const
     };
 
 
-    template<class A, class B> inline bool operator==( const cow_wrapper<A>& a,
-                                                       const cow_wrapper<B>& b )
+    template<class A, class B, class P> inline bool operator==( const cow_wrapper<A,P>& a,
+                                                                const cow_wrapper<B,P>& b )
     {
         return *a == *b;
     }
 
-    template<class A, class B> inline bool operator!=( const cow_wrapper<A>& a,
-                                                       const cow_wrapper<B>& b )
+    template<class A, class B, class P> inline bool operator!=( const cow_wrapper<A,P>& a,
+                                                                const cow_wrapper<B,P>& b )
     {
         return *a != *b;
     }
 
-    template<class A, class B> inline bool operator<( const cow_wrapper<A>& a,
-                                                      const cow_wrapper<B>& b )
+    template<class A, class B, class P> inline bool operator<( const cow_wrapper<A,P>& a,
+                                                               const cow_wrapper<B,P>& b )
     {
         return *a < *b;
     }
 
-    template<class T> inline void swap( cow_wrapper<T>& a,
-                                        cow_wrapper<T>& b )
+    template<class T, class P> inline void swap( cow_wrapper<T,P>& a,
+                                                 cow_wrapper<T,P>& b )
     {
         a.swap(b);
     }
 
     // to enable boost::mem_fn on cow_wrapper
-    template<class T> inline T * get_pointer( const cow_wrapper<T>& r )
+    template<class T, class P> inline T * get_pointer( const cow_wrapper<T,P>& r )
     {
         return r.get();
     }
