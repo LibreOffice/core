@@ -190,7 +190,11 @@ HRESULT CSOActiveX::Cleanup()
                                      pDispDocumentCloser );
         if ( SUCCEEDED( hr ) && pDispDocumentCloser )
         {
-            hr = ExecuteFunc( pDispDocumentCloser, L"initialize", &CComVariant( mpDispFrame ), 1, &dummyResult );
+            SAFEARRAY FAR* pInitFrame = SafeArrayCreateVector( VT_VARIANT, 0, 1 );
+            long nInitInd = 0;
+            CComVariant pFrameVariant( mpDispFrame );
+            SafeArrayPutElement( pInitFrame, &nInitInd, &pFrameVariant );
+            hr = ExecuteFunc( pDispDocumentCloser, L"initialize", &CComVariant( pInitFrame ), 1, &dummyResult );
             if( SUCCEEDED( hr ) )
             {
                 // the following call will let the closing happen
