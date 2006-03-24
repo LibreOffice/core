@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:58:29 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1064,7 +1064,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
             if ( bHasMacros )
             {
                 AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
-                if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
                     && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
                 {
                     WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
@@ -1086,7 +1086,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
         {
             // no signing in alien formats!
             AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
-            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+            if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
               && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
             {
                 WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
@@ -1181,8 +1181,10 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 {
     sal_Bool bSetModifiedTRUE = sal_False;
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
+    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
+        && !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ))
     {
+        pImp->nFlagsInProgress |= SFX_LOADED_MAINDOCUMENT;
         ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
         pImp->bImportDone = sal_True;
         if( !IsAbortingImport() )
@@ -1199,53 +1201,56 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             SetModified( sal_False );
 
         CheckMacrosOnLoading_Impl();
+
+        bHasName = sal_True; // the document is loaded, so the name should already available
+        GetTitle( SFX_TITLE_DETECT );
+        InitOwnModel_Impl();
+        pImp->nFlagsInProgress &= ~SFX_LOADED_MAINDOCUMENT;
     }
 
-    if( ( nFlags & SFX_LOADED_IMAGES ) && !(pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+    if( ( nFlags & SFX_LOADED_IMAGES ) && !(pImp->nLoadedFlags & SFX_LOADED_IMAGES )
+        && !(pImp->nFlagsInProgress & SFX_LOADED_IMAGES ))
     {
+        pImp->nFlagsInProgress |= SFX_LOADED_IMAGES;
         SfxDocumentInfo& rInfo = GetDocInfo();
         SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
             rInfo.GetReloadDelay() * 1000, rInfo.IsReloadEnabled() );
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
-    }
-
-    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
-    {
-        GetTitle( SFX_TITLE_DETECT );
-        InitOwnModel_Impl();
+        pImp->nFlagsInProgress &= ~SFX_LOADED_IMAGES;
     }
 
     pImp->nLoadedFlags |= nFlags;
 
-    /*SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-    pImp->bHidden = sal_False;
-    if ( pHiddenItem )
-        pImp->bHidden = pHiddenItem->GetValue();*/
-
-    if ( bSetModifiedTRUE )
-        SetModified( sal_True );
-    else
-        SetModified( sal_False );
-
-    if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+    if ( !pImp->nFlagsInProgress )
     {
-        // closing the streams on loading should be under control of SFX!
-        // if a readonly medium has storage then it's stream is already based on temporary file
-        DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
-        if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
-            // don't lock file opened read only
-            pMedium->CloseInStream();
+        // in case of reentrance calls the first called FinishedLoading() call on the stack
+        // should do the notification, in result the notification is done when all the FinishedLoading() calls are finished
+
+        if ( bSetModifiedTRUE )
+            SetModified( sal_True );
+        else
+            SetModified( sal_False );
+
+        if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+        {
+            // closing the streams on loading should be under control of SFX!
+            // if a readonly medium has storage then it's stream is already based on temporary file
+            DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
+            if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
+                // don't lock file opened read only
+                pMedium->CloseInStream();
+        }
+
+        pImp->bInitialized = sal_True;
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
+
+        // Title is not available until loading has finished
+        Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
+        if ( pImp->nEventId )
+            PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
     }
-
-    pImp->bInitialized = sal_True;
-    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
-
-    // Title is not available until loading has finished
-    Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
-    if ( pImp->nEventId )
-        PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
 }
 
 //-------------------------------------------------------------------------
