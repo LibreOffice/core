@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:21:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,26 +176,32 @@ bool LanguageSelection::prepareLanguage()
 
     // fallback: set en-US as default Western locale if no Western locale is set
     OUString usWesternName = OUString::createFromAscii("DefaultLocale");
-    Reference< XPropertySet > xProp(getConfigAccess(
-        "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-    OUString usValue;
-    xProp->getPropertyValue(usWesternName) >>= usValue;
-    if (usValue.getLength() == 0)
+    try
     {
-        // there is no western document language selected
-        // if the selected locale is a western locale, this
-        // will become the default western docuemnt language
-        // otherwise, fall back to en-US
-        OUString usDefault = OUString::createFromAscii("en-US");
-        try
+        Reference< XPropertySet > xProp(getConfigAccess(
+            "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
+        OUString usValue;
+        xProp->getPropertyValue(usWesternName) >>= usValue;
+        if (usValue.getLength() == 0)
         {
-            xProp->setPropertyValue(usWesternName, makeAny(usDefault));
-            Reference< XChangesBatch >(xProp,UNO_QUERY_THROW)->commitChanges();
+            // there is no western document language selected
+            // if the selected locale is a western locale, this
+            // will become the default western docuemnt language
+            // otherwise, fall back to en-US
+            OUString usDefault = OUString::createFromAscii("en-US");
+            try
+            {
+                xProp->setPropertyValue(usWesternName, makeAny(usDefault));
+                Reference< XChangesBatch >(xProp,UNO_QUERY_THROW)->commitChanges();
+            }
+            catch ( PropertyVetoException )
+            {
+                // we are not allowed to change this
+            }
         }
-        catch ( PropertyVetoException )
-        {
-            // we are not allowed to change this
-        }
+    }
+    catch ( Exception& )
+    {
     }
 
     return bSuccess;
@@ -212,36 +218,42 @@ void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
     LanguageType ltUILocale = ConvertIsoStringToLanguage(usUILocale);
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(ltUILocale);
 
-    Reference< XPropertySet > xProp(getConfigAccess(
-        "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-    OUString usName = OUString::createFromAscii("DefaultLocale");
-    switch (nScriptType)
+    try
     {
-        case SCRIPTTYPE_ASIAN:
-            usName = OUString::createFromAscii("DefaultLocale_CJK");
-            break;
-        case SCRIPTTYPE_COMPLEX:
-            usName = OUString::createFromAscii("DefaultLocale_CTL");
-            break;
+        Reference< XPropertySet > xProp(getConfigAccess(
+                                            "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
+        OUString usName = OUString::createFromAscii("DefaultLocale");
+        switch (nScriptType)
+        {
+            case SCRIPTTYPE_ASIAN:
+                usName = OUString::createFromAscii("DefaultLocale_CJK");
+                break;
+            case SCRIPTTYPE_COMPLEX:
+                usName = OUString::createFromAscii("DefaultLocale_CTL");
+                break;
+        }
+        OUString usValue;
+        xProp->getPropertyValue(usName) >>= usValue;
+        if (usValue.getLength() == 0)
+        {
+            // there is no document language set, for the script type selected
+            // in the UI
+            // covert the LanguageType we've got from the LanguageTable back to
+            // an iso string and store it
+            OUString usDefault = ConvertLanguageToIsoString(ltUILocale);
+            try
+            {
+                xProp->setPropertyValue(usName, makeAny(usDefault));
+                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+            }
+            catch ( PropertyVetoException )
+            {
+                // we are not allowed to change this
+            }
+        }
     }
-    OUString usValue;
-    xProp->getPropertyValue(usName) >>= usValue;
-    if (usValue.getLength() == 0)
+    catch ( Exception& )
     {
-        // there is no document language set, for the script type selected
-        // in the UI
-        // covert the LanguageType we've got from the LanguageTable back to
-        // an iso string and store it
-        OUString usDefault = ConvertLanguageToIsoString(ltUILocale);
-        try
-        {
-            xProp->setPropertyValue(usName, makeAny(usDefault));
-            Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-        }
-        catch ( PropertyVetoException )
-        {
-            // we are not allowed to change this
-        }
     }
 }
 
