@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:11:44 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #endif
 
 
@@ -1251,11 +1255,24 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     sal_Bool bStorageBasedSource = IsPackageStorageFormat_Impl( *pMedium );
     sal_Bool bStorageBasedTarget = IsPackageStorageFormat_Impl( rMedium );
+    sal_Bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
 
     sal_Bool bNeedsDisconnectionOnFail = sal_False;
 
     sal_Bool bStoreToSameLocation = sal_False;
+
+    // the detection whether the script is changed should be done before saving
+    sal_Bool bTryToPreservScriptSignature = sal_False;
+    if ( bOwnSource && bOwnTarget
+      && ( pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
+        || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+        || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_INVALID ) )
+    {
+        // the checking of the library modified state iterates over the libraries, should be done only when required
+        bTryToPreservScriptSignature = !( ( pImp->pDialogLibContainer && pImp->pDialogLibContainer->isContainerModified() )
+                                        || ( pImp->pBasicLibContainer && pImp->pBasicLibContainer->isContainerModified() ) );
+    }
 
     // use UCB for case sensitive/insensitive file name comparison
     if ( pMedium
@@ -1584,12 +1601,100 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             bOk = SaveChildren( TRUE );
     }
 
+    uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
+    sal_Bool bScriptSignatureIsCopied = sal_False;
+    if ( bOk && bTryToPreservScriptSignature )
+    {
+        // if the scripting code was not changed and it is signed the signature should be preserved
+        // unfortunately at this point we have only information whether the basic code has changed or not
+        // so the only way is to check the signature if the basic was not changed
+        try
+        {
+            xDDSigns = uno::Reference< security::XDocumentDigitalSignatures >(
+                comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ),
+                    uno::UNO_QUERY_THROW );
+
+            ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
+
+            if ( aScriptSignName.getLength() )
+            {
+                uno::Reference< embed::XStorage > xMetaInf = GetStorage()->openStorageElement(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                            embed::ElementModes::READ );
+                uno::Reference< embed::XStorage > xTargetMetaInf = rMedium.GetStorage()->openStorageElement(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                            embed::ElementModes::WRITE );
+
+                if ( xMetaInf.is() && xTargetMetaInf.is() )
+                {
+                    xMetaInf->copyElementTo( aScriptSignName, xTargetMetaInf, aScriptSignName );
+                    uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
+                    if ( xTransact.is() )
+                        xTransact->commit();
+                    bScriptSignatureIsCopied = sal_True;
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+
     if ( bOk )
     {
         // transfer data to its destinated location
         // the medium commits the storage or the stream it is based on
         RegisterTransfer( rMedium );
         bOk = rMedium.Commit();
+
+        if ( bOk && bScriptSignatureIsCopied )
+        {
+            // if the script signature was copied it should be checked now
+            // usually it should be ok, so no additional actions will be done
+            // but if for any reasong ( f.e. binshell change ) it is broken it should be removed here
+            // in result the behaviour will work in optimized way in most cases, means in case of signed basic scripts
+            OSL_ENSURE( !bScriptSignatureIsCopied || xDDSigns.is(), "The signing could not be done without the service!\n" );
+            if ( xDDSigns.is() )
+            {
+                try
+                {
+                    bOk = sal_False;
+                    ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aInfos =
+                        xDDSigns->verifyScriptingContentSignatures( rMedium.GetLastCommitReadStorage_Impl(),
+                                                                    uno::Reference< io::XInputStream >() );
+                    sal_uInt16 nState = ImplCheckSignaturesInformation( aInfos );
+                    if ( nState == SIGNATURESTATE_SIGNATURES_OK || nState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+                    {
+                        rMedium.SetCachedSignatureState_Impl( nState );
+                        bOk = sal_True;
+                    }
+                    else
+                    {
+                        // the signature is broken, remove it
+                        rMedium.SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES );
+                        uno::Reference< embed::XStorage > xTargetMetaInf = rMedium.GetStorage()->openStorageElement(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                            embed::ElementModes::WRITE );
+
+                        if ( xTargetMetaInf.is() )
+                        {
+                            xTargetMetaInf->removeElement( xDDSigns->getScriptingContentSignatureDefaultStreamName() );
+                            uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
+                            if ( xTransact.is() )
+                                xTransact->commit();
+
+                            bOk = rMedium.Commit();
+                        }
+                    }
+                }
+                catch( uno::Exception )
+                {
+                    OSL_ENSURE( sal_False, "This exception must not happen!" );
+                }
+            }
+        }
 
         if ( bOk )
         {
@@ -1620,18 +1725,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // in case the document storage was connected to backup temporarely it must be disconnected now
             if ( bNeedsDisconnectionOnFail )
                 ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
-
-            if ( !bCopyTo )
-            {
-                // if commit is failed the objectshell must be based on the storage that contains all the changes
-                // so just do not switch
-                // the problem is that the old medium must be preserved but the new storage must be used
-                // for it.
-                if ( IsPackageStorageFormat_Impl(rMedium) )
-                    rMedium.MoveStorageTo_Impl( pMedium );
-                else
-                    rMedium.MoveTempTo_Impl( pMedium );
-            }
         }
     }
 
@@ -1963,8 +2056,12 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
             // before the title regenerated the document must loose the signatures
             pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
-            pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            pImp->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
+            OSL_ENSURE( pImp->nScriptingSignatureState != SIGNATURESTATE_SIGNATURES_BROKEN, "The signature must not be broken at this place" );
             pImp->bSignatureErrorIsShown = sal_False;
+
+            // TODO/LATER: in future the medium must control own signature state, not the document
+            pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
 
             // Titel neu setzen
             if ( pNewMed->GetName().Len() && SFX_CREATE_MODE_EMBEDDED != eCreateMode )
