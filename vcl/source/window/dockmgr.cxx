@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:12:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,9 +381,8 @@ DockingManager::~DockingManager()
     for(; p != mDockingWindows.end(); ++p )
     {
         delete (*p);
-        // HDU: no erasing needed as the vector will be destructed immediately
-        // p = mDockingWindows.erase( p );
     }
+    mDockingWindows.clear();
 }
 
 ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window *pWindow )
