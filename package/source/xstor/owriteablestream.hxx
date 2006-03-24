@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-23 11:01:45 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,8 @@ public:
 
     sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
     sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
+
+    sal_Bool HasWriteOwner_Impl() { return ( m_pAntiImpl != NULL ); }
 
     void InsertIntoPackageFolder(
             const ::rtl::OUString& aName,
