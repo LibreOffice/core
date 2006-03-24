@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-03 09:03:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@
 
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
-
+#include <convert.hxx>
 
 using namespace ::com::sun::star;
 
@@ -123,48 +123,6 @@ public:
 //------------------------------------------------------
 // TODO: probably later those common functions should be moved
 //       to a separate helper library.
-
-//------------------------------------------------------
-uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
-{
-    // TODO: must be removed and used from another library
-
-    uno::Sequence< sal_Int8 > aResult( 16 );
-    aResult[0] = (sal_Int8)( n1 >> 24 );
-    aResult[1] = (sal_Int8)( ( n1 << 8 ) >> 24 );
-    aResult[2] = (sal_Int8)( ( n1 << 16 ) >> 24 );
-    aResult[3] = (sal_Int8)( ( n1 << 24 ) >> 24 );
-    aResult[4] = (sal_Int8)( n2 >> 8 );
-    aResult[5] = (sal_Int8)( ( n2 << 8 ) >> 8 );
-    aResult[6] = (sal_Int8)( n3 >> 8 );
-    aResult[7] = (sal_Int8)( ( n3 << 8 ) >> 8 );
-    aResult[8] = b8;
-    aResult[9] = b9;
-    aResult[10] = b10;
-    aResult[11] = b11;
-    aResult[12] = b12;
-    aResult[13] = b13;
-    aResult[14] = b14;
-    aResult[15] = b15;
-
-    return aResult;
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
-{
-    // TODO/LATER: move this method and other methods like this to a standalone library
-    if ( aClassID1.getLength() != aClassID2.getLength() )
-        return sal_False;
-
-    for ( sal_Int32 nInd = 0; nInd < aClassID1.getLength(); nInd++ )
-        if ( aClassID1[nInd] != aClassID2[nInd] )
-            return sal_False;
-
-    return sal_True;
-}
 
 //-----------------------------------------------
 sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
