@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:27:10 $
+#   last change: $Author: obo $ $Date: 2006-03-24 13:48:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=vcl
 TARGET=win
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
@@ -84,18 +85,10 @@ SLOFILES= \
             $(SLO)$/toolbox.obj 	\
             $(SLO)$/toolbox2.obj	\
             $(SLO)$/window.obj		\
+            $(SLO)$/winproc.obj 	\
             $(SLO)$/window2.obj 	\
             $(SLO)$/window3.obj		\
-            $(SLO)$/winproc.obj 	\
             $(SLO)$/wrkwin.obj
-
-EXCEPTIONSFILES=					\
-            $(SLO)$/window.obj		\
-            $(SLO)$/winproc.obj		\
-            $(SLO)$/syswin.obj		\
-            $(SLO)$/dndevdis.obj	\
-            $(SLO)$/dndlcon.obj		\
-            $(SLO)$/javachild.obj	
 
 # --- Targets ------------------------------------------------------
 
