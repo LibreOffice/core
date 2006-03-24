@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:10:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,7 +805,7 @@ End
 #endif
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Fps_Office, fps_office.uno )
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Fpicker, fpicker.uno )
 
 #ifdef UNX
 
