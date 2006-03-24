@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:58:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ struct SfxObjectShell_Impl
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
     sal_uInt16              nLoadedFlags;
+    sal_uInt16              nFlagsInProgress;
     String              aMark;
     Size                aViewSize;          // wird leider vom Writer beim
     sal_Bool                bInFrame;           // HTML-Import gebraucht
@@ -191,6 +192,7 @@ struct SfxObjectShell_Impl
         bImportDone ( sal_False),
         pReloadTimer ( 0),
         nLoadedFlags ( SFX_LOADED_MAINDOCUMENT ),
+        nFlagsInProgress( 0 ),
         pMarkData( 0 ),
         bInFrame( sal_False ),
         bModalMode( sal_False ),
