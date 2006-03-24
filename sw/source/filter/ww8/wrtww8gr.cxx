@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:50:46 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 12:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -219,31 +221,47 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
         if (pRet)
         {
-            SwOLEObj &rSObj = pOLENd->GetOLEObj();
-            comphelper::EmbeddedObjectContainer aCnt( pDoc->GetDocStorage() );
-
-            SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rSObj.GetOleRef() ) );
-            DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
-            if ( pGraphicStream && !pGraphicStream->GetError() )
+            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+            if ( xObj.is() )
             {
-                Graphic aGr1;
-                GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                String aEmptyStr;
-                if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                SvStream* pGraphicStream = NULL;
+                comphelper::EmbeddedObjectContainer aCnt( pDoc->GetDocStorage() );
+                try
                 {
-                    Graphic aGr2;
-                    delete pGraphicStream;
+                    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbedPersist > xPersist(
+                            xObj,
+                            ::com::sun::star::uno::UNO_QUERY_THROW );
+
+                    // it makes no sence to search the object in the container by reference since the object was created
+                    // outside of the container and was not inserted there, only the name makes sence
                     pGraphicStream =
-                            ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                    if( pGF->ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                            ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {}
+
+                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                if ( pGraphicStream && !pGraphicStream->GetError() )
+                {
+                    Graphic aGr1;
+                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+                    String aEmptyStr;
+                    if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
-                        if ( aGr1 == aGr2 )
-                            bGraphicNeeded = false;
+                        Graphic aGr2;
+                        delete pGraphicStream;
+                        pGraphicStream =
+                                ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
+                        if( pGF->ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        {
+                            if ( aGr1 == aGr2 )
+                                bGraphicNeeded = false;
+                        }
                     }
                 }
+                else
+                    delete pGraphicStream;
             }
-            else
-                delete pGraphicStream;
 
             delete pRet;
         }
