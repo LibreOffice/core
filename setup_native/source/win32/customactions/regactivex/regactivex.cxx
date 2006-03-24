@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:20:02 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,8 +331,9 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
         {
             BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
 
-            wchar_t* rm = NULL;
-            if ( GetMsiProp( hMSI, L"REMOVE", &rm ) && rm && UnicodeEquals( rm, L"ALL" ) )
+            // the following condition is checked by installation itself
+            // wchar_t* rm = NULL;
+            // if ( GetMsiProp( hMSI, L"REMOVE", &rm ) && rm && UnicodeEquals( rm, L"ALL" ) )
             {
                 UnregisterActiveXNative( pActiveXPath,
                                         CHART_COMPONENT
@@ -344,8 +345,8 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
                                         bInstallForAllUser );
             }
 
-            if ( rm )
-                free( rm );
+            // if ( rm )
+            //  free( rm );
 
             free( pActiveXPath );
         }
