@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-03 09:03:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,11 +67,12 @@
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
 
-#include "olecomponent.hxx"
-#include "olewrapclient.hxx"
-#include "advisesink.hxx"
-#include "oleembobj.hxx"
-#include "mtnotification.hxx"
+#include <olecomponent.hxx>
+#include <olewrapclient.hxx>
+#include <advisesink.hxx>
+#include <oleembobj.hxx>
+#include <mtnotification.hxx>
+#include <convert.hxx>
 
 using namespace ::com::sun::star;
 
@@ -181,11 +182,6 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 
     return aResult;
 }
-
-//----------------------------------------------
-uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
 //----------------------------------------------
 HRESULT OpenIStorageFromURL_Impl( const ::rtl::OUString& aURL, IStorage** ppIStorage )
@@ -1624,8 +1620,6 @@ void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEv
         m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ),
                                                 xListener );
 }
-
-sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
 
 sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
