@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:28:20 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,9 @@ class Desktop : public Application
             BE_UNO_SERVICE_CONFIG_MISSING,
             BE_PATHINFO_MISSING,
             BE_USERINSTALL_FAILED,
-            BE_LANGUAGE_MISSING
+            BE_LANGUAGE_MISSING,
+            BE_USERINSTALL_NOTENOUGHDISKSPACE,
+            BE_USERINSTALL_NOWRITEACCESS
         };
         enum BootstrapStatus
         {
