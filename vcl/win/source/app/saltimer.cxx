@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:04:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
                 ImplSalStartTimer( 10, TRUE );
         }
     }
-    // #120661# exception should not be caught in user32
-    // see also SalFrameWndProcW/A
-    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
 }
