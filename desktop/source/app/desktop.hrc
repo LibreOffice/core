@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:48:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@
 #define STR_CONFIG_ERR_RIGHTS_MISSING       (RID_DESKTOP_STRING_START+184)
 #define STR_CONFIG_ERR_ACCESS_GENERAL       (RID_DESKTOP_STRING_START+187)
 #define STR_CONFIG_ERR_NO_WRITE_ACCESS      (RID_DESKTOP_STRING_START+188)
+
+#define STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE (RID_DESKTOP_STRING_START+189)
+#define STR_BOOSTRAP_ERR_NOACCESSRIGHTS     (RID_DESKTOP_STRING_START+190)
 
 #define STR_TITLE_USERDATALOCKED            (RID_DESKTOP_STRING_START+206)
 #define STR_TITLE_EXPIRED                   (RID_DESKTOP_STRING_START+207)
