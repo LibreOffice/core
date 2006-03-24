@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:15:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2033,7 +2033,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
           || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
         {
             if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                WarningBox( NULL, SfxResId( RID_WARNING_MACROSDISABLED ) ).Execute();
+                WarningBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) ).Execute();
                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
             return;
         }
