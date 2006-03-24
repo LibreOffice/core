@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:34:22 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,11 @@ namespace desktop {
                     err = copy_recursive(newSrcUnqPath, newDstUnqPath);
                 }
                 aDir.close();
-                if( next != FileBase::E_NOENT ) err = FileBase::E_INVAL;
+
+                if ( err != osl::FileBase::E_None )
+                    return err;
+                if( next != FileBase::E_NOENT )
+                    err = FileBase::E_INVAL;
             }
         }
         else
@@ -286,7 +290,15 @@ namespace desktop {
             rc = copy_recursive(
                     aBasePath + OUString::createFromAscii(pszSrcList[i]),
                     aUserPath + OUString::createFromAscii(pszDstList[i]));
-            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST))
+            {
+                if ( rc == FileBase::E_NOSPC )
+                    return UserInstall::E_NoDiskSpace;
+                else if ( rc == FileBase::E_ACCES )
+                    return UserInstall::E_NoWriteAccess;
+                else
+                    return UserInstall::E_Creation;
+            }
         }
         try
         {
