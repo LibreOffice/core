@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:22:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,10 @@
 #define RID_XMLSECDLG_MACROWARN                 (RID_SFX_APP_START + 188)
 #define RID_XMLSEC_DOCUMENTSIGNED               (RID_SFX_APP_START + 189)
 #define RID_XMLSEC_INFO_WRONGDOCFORMAT          (RID_SFX_APP_START + 190)
+
+/* obsolete
 #define RID_WARNING_MACROSDISABLED              (RID_SFX_APP_START + 191)
+*/
 
 #define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
 #define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
