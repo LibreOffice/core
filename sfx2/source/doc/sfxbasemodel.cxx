@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:41:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2527,6 +2527,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 {
                     // some further initializations for templates
                     SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
+                    pMedium->CreateTempFile();
                 }
 
                 // templates are never readonly
@@ -2712,6 +2713,26 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+        {
+            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            {
+                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True, sal_True );
+
+                if ( pMetaFile )
+                {
+                    SvMemoryStream aMemStm( 65535, 65535 );
+                    aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+
+                    pMetaFile->Write( aMemStm );
+                    delete pMetaFile;
+                    aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
+                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                }
+            }
+            else
+                throw UNSUPPORTEDFLAVOREXCEPTION();
+        }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
@@ -2849,7 +2870,7 @@ SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 7 : 5;
+    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
     SEQUENCE< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
@@ -2858,36 +2879,51 @@ SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
     aFlavorSeq[0].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[1].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
-    aFlavorSeq[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) );
+    aFlavorSeq[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" ) );
     aFlavorSeq[1].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[2].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
-    aFlavorSeq[2].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
+    aFlavorSeq[2].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
     aFlavorSeq[2].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[3].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) );
-    aFlavorSeq[3].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Object Descriptor (XML)" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
+    aFlavorSeq[3].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
     aFlavorSeq[3].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[4].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"" ) );
-    aFlavorSeq[4].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Embed Source (XML)" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) );
+    aFlavorSeq[4].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Object Descriptor (XML)" ) );
     aFlavorSeq[4].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    if ( nSuppFlavors == 7 )
-    {
-        aFlavorSeq[5].MimeType =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
-        aFlavorSeq[5].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
-        aFlavorSeq[5].DataType = getCppuType( (const sal_uInt64*) 0 );
+    aFlavorSeq[5].MimeType =
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"" ) );
+    aFlavorSeq[5].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Embed Source (XML)" ) );
+    aFlavorSeq[5].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-        aFlavorSeq[6].MimeType =
+    aFlavorSeq[6].MimeType =
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) );
+    aFlavorSeq[6].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) );
+    aFlavorSeq[6].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+
+    aFlavorSeq[7].MimeType =
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
+    aFlavorSeq[7].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) );
+    aFlavorSeq[7].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+
+    if ( nSuppFlavors == 10 )
+    {
+        aFlavorSeq[8].MimeType =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
+        aFlavorSeq[8].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
+        aFlavorSeq[8].DataType = getCppuType( (const sal_uInt64*) 0 );
+
+        aFlavorSeq[9].MimeType =
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
-        aFlavorSeq[6].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
-        aFlavorSeq[6].DataType = getCppuType( (const sal_uInt64*) 0 );
+        aFlavorSeq[9].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
+        aFlavorSeq[9].DataType = getCppuType( (const sal_uInt64*) 0 );
     }
 
     return aFlavorSeq;
@@ -2907,6 +2943,11 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
         throw DISPOSEDEXCEPTION();
 
     if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
@@ -2933,6 +2974,16 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
             return sal_True;
     }
     else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
