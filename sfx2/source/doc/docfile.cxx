@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:11:29 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,11 @@ public:
     sal_Bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
+    // the following member is changed and makes sence only during saving
+    // TODO/LATER: in future the signature state should be controlled by the medium not by the document
+    //             in this case the member will hold this information
+    sal_uInt16      m_nSignatureState;
+
     SfxPoolCancelManager_Impl* GetCancelManager();
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
@@ -448,7 +453,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bAllowDefaultIntHdl( sal_False ),
     m_bRemoveBackup( sal_False ),
     bStorageBasedOnInStream( sal_False ),
-    m_bSalvageMode( sal_False )
+    m_bSalvageMode( sal_False ),
+    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )
 {
     aDoneLink.CreateMutex();
 }
@@ -3479,6 +3485,18 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
         }
     }
     return bChanges;
+}
+
+//----------------------------------------------------------------
+sal_uInt16 SfxMedium::GetCachedSignatureState_Impl()
+{
+    return pImp->m_nSignatureState;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::SetCachedSignatureState_Impl( sal_uInt16 nState )
+{
+    pImp->m_nSignatureState = nState;
 }
 
 //----------------------------------------------------------------
