@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:43:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -930,17 +930,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                                            sal_False,   // bReadOnly
                                            sal_True );  // bLocalesMode
     }
-    if (!pConfig->is())
-    {
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("Could not open configuration file \"");
-        sMsg.append     (sPath                                 );
-        sMsg.appendAscii("\"."                                 );
-        throw css::document::CorruptedFilterConfigurationException(
-                MESSAGE_CORRUPTED_FILTERCONFIG,
-                css::uno::Reference< css::uno::XInterface >(),
-                sMsg.makeStringAndClear());
-    }
 
     // Start listening for changes on that configuration access.
     // We must not control the lifetime of this listener. Itself
@@ -1013,6 +1002,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     css::uno::Reference< css::uno::XInterface > xCfg;
+
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
@@ -1042,16 +1032,22 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONACCESS, lParams.getAsConstList());
         else
             xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS, lParams.getAsConstList());
+
+        // If configuration could not be opened ... but factory method does not throwed an exception
+        // trigger throwing of our own CorruptedFilterConfigurationException.
+        // Let message empty. The normal exception text show enough informations to the user.
+        if (! xCfg.is())
+            throw css::uno::Exception(
+                    _FILTER_CONFIG_FROM_ASCII_("Got NULL reference on opening configuration file ... but no exception."),
+                    css::uno::Reference< css::uno::XInterface >());
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
-    catch(const css::uno::Exception& exAny)
-        {
-            throw css::document::CorruptedFilterConfigurationException(
+    catch(const css::uno::Exception& ex)
+    {
+        throw css::document::CorruptedFilterConfigurationException(
                 MESSAGE_CORRUPTED_FILTERCONFIG,
                 css::uno::Reference< css::uno::XInterface >(),
-                exAny.Message);
-        }
+                ex.Message);
+    }
 
     return xCfg;
     // <- SAFE
@@ -1565,18 +1561,30 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             break;
     }
 
-    css::uno::Any aVal = xConfig->getByName(sSetName);
     css::uno::Reference< css::container::XNameAccess > xSet;
-    if (!(aVal >>= xSet) || !xSet.is())
+    css::uno::Sequence< ::rtl::OUString >              lItems;
+
+    try
     {
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("could not open config set \"");
-        sMsg.append     (sSetName                      );
-        sMsg.appendAscii("\""                          );
+        css::uno::Any aVal = xConfig->getByName(sSetName);
+        if (!(aVal >>= xSet) || !xSet.is())
+        {
+            ::rtl::OUStringBuffer sMsg(256);
+            sMsg.appendAscii("Could not open configuration set \"");
+            sMsg.append     (sSetName                             );
+            sMsg.appendAscii("\"."                                );
+            throw css::uno::Exception(
+                    sMsg.makeStringAndClear(),
+                    css::uno::Reference< css::uno::XInterface >());
+        }
+        lItems = xSet->getElementNames();
+    }
+    catch(const css::uno::Exception& ex)
+    {
         throw css::document::CorruptedFilterConfigurationException(
                 MESSAGE_CORRUPTED_FILTERCONFIG,
                 css::uno::Reference< css::uno::XInterface >(),
-                sMsg.makeStringAndClear());
+                ex.Message);
     }
 
     // get names of all existing sub items of this set
@@ -1585,9 +1593,8 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     // But dont update optimized structures like e.g. hash
     // for mapping extensions to its types!
 
-    const css::uno::Sequence< ::rtl::OUString > lItems = xSet->getElementNames();
-    const ::rtl::OUString*                      pItems = lItems.getConstArray();
-          sal_Int32                             c      = lItems.getLength();
+    const ::rtl::OUString* pItems = lItems.getConstArray();
+          sal_Int32        c      = lItems.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
         CacheItemList::iterator pItem = pCache->find(pItems[i]);
@@ -1597,7 +1604,17 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             case E_READ_STANDARD :
             case E_READ_ALL      :
             {
-                (*pCache)[pItems[i]] = impl_loadItem(xSet, eType, pItems[i], eOption);
+                try
+                {
+                    (*pCache)[pItems[i]] = impl_loadItem(xSet, eType, pItems[i], eOption);
+                }
+                catch(const css::uno::Exception& ex)
+                {
+                    throw css::document::CorruptedFilterConfigurationException(
+                            MESSAGE_CORRUPTED_FILTERCONFIG,
+                            css::uno::Reference< css::uno::XInterface >(),
+                            ex.Message);
+                }
             }
             break;
 
@@ -1615,8 +1632,18 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                     throw css::uno::Exception(sMsg.makeStringAndClear()                    ,
                                               css::uno::Reference< css::uno::XInterface >());
                 }
-                CacheItem aItem = impl_loadItem(xSet, eType, pItems[i], eOption);
-                pItem->second.update(aItem);
+                try
+                {
+                    CacheItem aItem = impl_loadItem(xSet, eType, pItems[i], eOption);
+                    pItem->second.update(aItem);
+                }
+                catch(const css::uno::Exception& ex)
+                {
+                    throw css::document::CorruptedFilterConfigurationException(
+                            MESSAGE_CORRUPTED_FILTERCONFIG,
+                            css::uno::Reference< css::uno::XInterface >(),
+                            ex.Message);
+                }
             }
             break;
         }
