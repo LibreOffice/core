@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:45:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2387,6 +2387,27 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 }
 
 // ------------------------------------------------------------------------
+static int impl_isFolder( const OUString& rPath )
+{
+    try
+    {
+        ::ucb::Content aContent(
+            rPath, star::uno::Reference< star::ucb::XCommandEnvironment >() );
+        if ( aContent.isFolder() )
+            return 1;
+
+        return 0;
+    }
+    catch ( star::ucb::ContentCreationException const & )
+    {
+    }
+    catch ( star::ucb::InteractiveAugmentedIOException const & )
+    {
+    }
+
+    return -1;
+}
+
 void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
 {
     if ( !_rPath.Len() )
@@ -2396,29 +2417,24 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
     // and take it as filename and the rest of the path should be
     // the folder
 
-    ::rtl::OUString sPath;
-    ::rtl::OUString sFileName;
-
     INetURLObject aObj( _rPath );
-    try
-    {
-        ::ucb::Content aContent(
-            _rPath, star::uno::Reference< star::ucb::XCommandEnvironment >() );
-        if ( !aContent.isFolder() )
-        {
-            sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
-            aObj.removeSegment();
-            mpImp->setFileName( sFileName );
-        }
-    }
-    catch ( star::ucb::ContentCreationException const & )
-    {
-    }
-    catch ( star::ucb::InteractiveAugmentedIOException const & )
-    {
-    }
 
-    mpImp->displayFolder( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    ::rtl::OUString sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+    aObj.removeSegment();
+    ::rtl::OUString sPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
+
+    int nIsFolder = impl_isFolder( _rPath );
+    if ( nIsFolder == 0 ||
+         ( nIsFolder == -1 && impl_isFolder( sPath ) == 1 ) )
+    {
+        mpImp->setFileName( sFileName );
+        mpImp->displayFolder( sPath );
+    }
+    else
+    {
+        INetURLObject aObjPathName( _rPath );
+        mpImp->displayFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
 }
 
 // ------------------------------------------------------------------------
