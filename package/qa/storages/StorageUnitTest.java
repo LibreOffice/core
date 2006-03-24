@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageUnitTest.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:13:33 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,10 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteRegressionTest_i27773",
                                 "ExecuteRegressionTest_i46848",
                                 "ExecuteRegressionTest_i55821",
+                                "ExecuteRegressionTest_i35095",
+                                "ExecuteRegressionTest_i49755",
+                                "ExecuteRegressionTest_i59886",
+                                "ExecuteRegressionTest_i61909",
                                 "ExecuteRegressionTest_125919"};
     }
 
@@ -245,6 +249,30 @@ public class StorageUnitTest  extends ComplexTestCase
     {
         StorageTest aTest = new RegressionTest_i55821( m_xMSF, m_xStorageFactory, log );
         assure( "RegressionTest_i55821 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i35095()
+    {
+        StorageTest aTest = new RegressionTest_i35095( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i35095 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i49755()
+    {
+        StorageTest aTest = new RegressionTest_i49755( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i49755 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i59886()
+    {
+        StorageTest aTest = new RegressionTest_i59886( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i59886 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i61909()
+    {
+        StorageTest aTest = new RegressionTest_i61909( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i61909 failed!", aTest.test() );
     }
 
     public void ExecuteRegressionTest_125919()
