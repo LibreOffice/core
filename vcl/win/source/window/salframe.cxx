@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:44:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>
+
+#include <com/sun/star/uno/Exception.hdl>
 
 #include <time.h>
 
@@ -5966,8 +5968,7 @@ LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     {
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-    // #112221# exception should not be caught in user32
-    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
     if ( bDef )
@@ -5983,10 +5984,10 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     {
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-    // #112221# exception should not be caught in user32
-    __except(UnhandledExceptionFilter(GetExceptionInformation())) // #112221#
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+
     if ( bDef )
         nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
