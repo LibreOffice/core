@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:02:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1177,8 +1177,20 @@ sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& r
 
 void SdrOle2Obj::PaintGraphic_Impl( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive ) const
 {
-    Graphic* pGr = GetGraphic();
-    OutputDevice* pOutDev=rOut.GetOutDev();
+    OutputDevice* pOutDev = rOut.GetOutDev();
+    OSL_ENSURE( pOutDev, "The device must be provided!\n" );
+    if ( !pOutDev )
+        return;
+
+    // In case High Contrast mode is requested try to get a graphical representation in this mode
+    // if it is not possible the replacement image should be used
+    Graphic* pGr = NULL;
+    if ( ( pOutDev->GetDrawMode() & DRAWMODE_SETTINGSFILL ) && xObjRef.is() )
+        pGr = xObjRef.GetHCGraphic();
+
+    if ( !pGr )
+        pGr = GetGraphic();
+
     if ( pGr && pGr->GetType() != GRAPHIC_NONE )
     {
         if( IsEmptyPresObj() )
@@ -1346,41 +1358,49 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     {
         OSL_ASSERT( pModel );
         sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
-        if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) && svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
+
+        // the client is required to get access to scaling
+        SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( pModel->GetPersist(), xObjRef.GetObject() );
+        if ( pClient )
         {
-            // server wants to resize itself (f.e. Chart wants to recalculate the layout)
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
-            Rectangle aVisArea = OutputDevice::LogicToLogic( aRect, pModel->GetScaleUnit(), aMapUnit);
-            awt::Size aSz;
-            aSz.Width = aVisArea.GetSize().Width();
-            aSz.Height = aVisArea.GetSize().Height();
-            xObjRef->setVisualAreaSize( GetAspect(), aSz );
-
-            try
+            if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) && svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
             {
-                aSz = xObjRef->getVisualAreaSize( GetAspect() );
+                // server wants to resize itself (f.e. Chart wants to recalculate the layout)
+                // the scaling should not change, but it might exist already and must be used in calculations
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
+                Size aVisSize( (long)( Fraction( aRect.GetWidth() ) / pClient->GetScaleWidth() ),
+                                (long)( Fraction( aRect.GetHeight() ) / pClient->GetScaleHeight() ) );
+
+                aVisSize = OutputDevice::LogicToLogic( aVisSize, pModel->GetScaleUnit(), aMapUnit);
+                awt::Size aSz;
+                aSz.Width = aVisSize.Width();
+                aSz.Height = aVisSize.Height();
+                xObjRef->setVisualAreaSize( GetAspect(), aSz );
+
+                try
+                {
+                    aSz = xObjRef->getVisualAreaSize( GetAspect() );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {}
+
+                Rectangle aAcceptedVisArea;
+                aAcceptedVisArea.SetSize( Size( (long)( Fraction( aSz.Width ) * pClient->GetScaleWidth() ),
+                                                (long)( Fraction( aSz.Height ) * pClient->GetScaleHeight() ) ) );
+                //Rectangle aAcceptedVisArea(rIPRef->GetVisArea());
+                if (aVisSize != aAcceptedVisArea.GetSize())
+                {
+                    // server changed VisArea to its liking
+                    MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
+                    aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
+                }
+
+                xObjRef.UpdateReplacement();
             }
-            catch( embed::NoVisualAreaSizeException& )
-            {}
-
-            Rectangle aAcceptedVisArea;
-            aAcceptedVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
-            //Rectangle aAcceptedVisArea(rIPRef->GetVisArea());
-            if (aVisArea.GetSize() != aAcceptedVisArea.GetSize())
+            else
             {
-                // server changed VisArea to its liking
-                MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
-                aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
-            }
+                // change object scaling
 
-            xObjRef.UpdateReplacement();
-        }
-        else
-        {
-            // change object scaling
-            SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( pModel->GetPersist(), xObjRef.GetObject() );
-            if ( pClient && xObjRef.is() )
-            {
                 // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
                 // If we don't cache it for own objects also we must load the object here
                 awt::Size aObjSize;
