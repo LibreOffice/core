@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 18:46:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     String STR_RECOVERY_INPROGRESS
     {
         Text[ de ] = "%PRODUCTNAME %PRODUCTVERSION beginnt jetzt mit der Wiederherstellung Ihrer Dokumente. Dieses kann abhängig von der Größe der Dokumente einige Zeit in Anspruch nehmen.\n\nEs wurde ein Fehlerbericht erstellt, der uns bei der Identifizierung des Problems in %PRODUCTNAME hilft. Betätigen Sie die 'Weiter' Schaltfläche, um zum Fehlerbericht-Programm zu gelangen oder 'Abbrechen' um diesen Schritt zu überspringen";
-        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recovers your documents. Depending on the size of the documents this process can take some time.\n\nA report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recover your documents. Depending on the size of the documents this process can take some time.\n\nA report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
     };
     String STR_RECOVERYONLY_DESCR
     {
@@ -695,4 +695,3 @@ ModalDialog RID_SVX_MDLG_ERR_REP_PREVIEW
         DefButton = TRUE;
     };
 };
-
