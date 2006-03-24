@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:17:50 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 12:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1135,13 +1135,22 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         // The reason for #114233# is gone, so i remove it again
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
-        if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
+
+        Graphic* pGraphic = NULL;
+           if ( pOut && ( pOut->GetDrawMode() & DRAWMODE_SETTINGSFILL ) )
+            pGraphic = pOLENd->GetHCGraphic();
+
+        // when it is not possible to get HC-representation, the original image should be used
+        if ( !pGraphic )
+               pGraphic = pOLENd->GetGraphic();
+
+        if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
         {
-            pOLENd->GetGraphic()->Draw( pOut, aPosition, aSize );
+            pGraphic->Draw( pOut, aPosition, aSize );
 
             // shade the representation if the object is activated outplace
-            if ( pOLENd->GetOLEObj().GetOleRef().is()
-                && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
+            uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+            if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
             {
                 ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
             }
