@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:54:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,8 +885,7 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     {
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-    // #112221# exception should not be caught in user32
-    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
     if ( bDef )
@@ -905,8 +904,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     {
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-    // #112221# exception should not be caught in user32
-    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
     if ( bDef )
@@ -1110,3 +1108,21 @@ SalSession* WinSalInstance::CreateSalSession()
 {
     return NULL;
 }
+
+// -----------------------------------------------------------------------
+int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo)
+{
+    // Decide if an exception is a c++ (mostly UNO) exception or a process violation.
+    // Depending on this information we pass process violations directly to our signal handler ...
+    // and c++ (UNO) exceptions are sended to the following code on the current stack.
+    // Problem behind: user32.dll sometime consumes exceptions/process violations .-)
+    // see also #112221#
+
+    static DWORD EXCEPTION_MSC_CPP_EXCEPTION = 0xE06D7363;
+
+    if (pExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_MSC_CPP_EXCEPTION)
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
