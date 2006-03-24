@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 09:36:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,6 +425,8 @@ void DeInitVCL()
         delete pSVData->mpDefaultWin;
         pSVData->mpDefaultWin = NULL;
     }
+
+    pSVData->maAppData.mxMSF.clear();
 
     if( pSVData->mpApp )
         // call deinit to deinitialize application class
