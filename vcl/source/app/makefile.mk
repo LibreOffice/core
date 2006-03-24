@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:54:22 $
+#   last change: $Author: obo $ $Date: 2006-03-24 13:47:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=vcl
 TARGET=app
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
@@ -72,16 +73,6 @@ SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/vclevent.obj	\
             $(SLO)$/i18nhelp.obj	\
             $(SLO)$/salvtables.obj	\
-            $(SLO)$/session.obj
-
-EXCEPTIONSFILES=					\
-            $(SLO)$/svapp.obj		\
-            $(SLO)$/svdata.obj		\
-            $(SLO)$/dndhelp.obj 	\
-            $(SLO)$/unohelp.obj 	\
-            $(SLO)$/unohelp2.obj    \
-            $(SLO)$/i18nhelp.obj 	\
-            $(SLO)$/svmain.obj		\
             $(SLO)$/session.obj
 
 # --- Targets ------------------------------------------------------
