@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:32:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 12:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,8 +196,14 @@ void Client::ViewChanged()
             Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
             Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
-            if( Application::GetDefaultDevice()->LogicToPixel( aScaledSize, aMap100 ) !=
-                Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) )
+
+            // react to the change if the difference is bigger than one pixel
+            Size aPixelDiff =
+                Application::GetDefaultDevice()->LogicToPixel(
+                    Size( aLogicRect.GetWidth() - aScaledSize.Width(),
+                          aLogicRect.GetHeight() - aScaledSize.Height() ),
+                    aMap100 );
+            if( aPixelDiff.Width() || aPixelDiff.Height() )
             {
                 pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
                 pSdrOle2Obj->BroadcastObjectChange();
