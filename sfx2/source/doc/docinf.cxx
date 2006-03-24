@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:58:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:15:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1671,6 +1671,16 @@ void SfxDocumentInfo::DeleteUserData( BOOL bUseAuthor )
         aCreated.SetName( SvtUserOptions().GetFullName() );
     SetCreated( aCreated );
     SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
+    SetChanged( aInvalid );
+    SetPrinted( aInvalid );
+    SetTime( 0L );
+    SetDocumentNumber( 1 );
+}
+
+void SfxDocumentInfo::DeleteUserDataCompletely()
+{
+    SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
+    SetCreated( aInvalid );
     SetChanged( aInvalid );
     SetPrinted( aInvalid );
     SetTime( 0L );
