@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:49:04 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,4 +271,16 @@ String STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE
 {
     Text [ de ] = "Der Pfad-Manager ist nicht verfügbar.\n";
     Text [ en-US ] = "The path manager is not available.\n";
+};
+
+String STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE
+{
+    Text [ en-US ] = "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n";
+    Text [ de ] = "Die %PRODUCTNAME Benutzerinstallation konnte nicht abgeschlossen werden, da nicht genügend freier Speicherplatz zur Verfügung steht. Bitte stellen Sie mehr freien Speicher im folgenden Pfad zur Verfügung und starten Sie %PRODUCTNAME neu:\n\n";
+};
+
+String STR_BOOSTRAP_ERR_NOACCESSRIGHTS
+{
+    Text [ en-US ] = "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n";
+    Text [ de ] = "Die %PRODUCTNAME Benutzerinstallation konnte aufgrund fehlender Zugriffsrechte nicht durchgeführt werden. Bitte stellen Sie sicher, dass sie Zugriffsrechte für den folgenden Pfad besitzen und starten Sie %PRODUCTNAME neu:\n\n";
 };
