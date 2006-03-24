@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 13:54:03 $
+#   last change: $Author: obo $ $Date: 2006-03-24 12:55:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ SLOFILES =	\
         $(SLO)$/writerwordglue.obj
 
 EXCEPTIONSFILES = \
+        $(SLO)$/wrtww8gr.obj \
         $(SLO)$/ww8par2.obj \
         $(SLO)$/ww8par3.obj \
         $(SLO)$/ww8par5.obj \
