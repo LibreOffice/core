@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:48:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,27 +451,6 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     return aDiagnosticMessage.makeStringAndClear();
 }
 
-void FatalErrorExit(OUString const & aMessage)
-{
-    OUString aProductKey = ::utl::Bootstrap::getProductKey();
-
-    if (!aProductKey.getLength())
-    {
-        ::vos::OStartupInfo aInfo;
-        aInfo.getExecutableFile( aProductKey );
-
-        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
-        if ( lastIndex > 0 )
-            aProductKey = aProductKey.copy( lastIndex+1 );
-    }
-
-    ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-    aBootstrapFailedBox.SetText( aProductKey );
-    aBootstrapFailedBox.Execute();
-
-    _exit( ExitHelper::E_FATAL_ERROR );
-}
-
 void FatalError(OUString const & aMessage)
 {
     OUString aProductKey = ::utl::Bootstrap::getProductKey();
@@ -489,6 +468,12 @@ void FatalError(OUString const & aMessage)
     ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
     aBootstrapFailedBox.SetText( aProductKey );
     aBootstrapFailedBox.Execute();
+}
+
+void FatalErrorExit(OUString const & aMessage)
+{
+    FatalError(aMessage);
+    _exit( ExitHelper::E_FATAL_ERROR );
 }
 
 static bool ShouldSuppressUI(CommandLineArgs* pCmdLine)
@@ -1095,8 +1080,39 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         aMessage = MakeStartupErrorMessage(
             aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
-     }
-     return;
+    }
+    else if (( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE ) ||
+             ( aBootstrapError == BE_USERINSTALL_NOWRITEACCESS      ))
+    {
+        OUString       aUserInstallationURL;
+        OUString       aUserInstallationPath;
+        OUString       aMessage;
+        OUString       aErrorMsg;
+        OUStringBuffer aDiagnosticMessage( 100 );
+
+        utl::Bootstrap::locateUserInstallation( aUserInstallationURL );
+
+        if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
+            aErrorMsg = GetMsgString(
+                STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE,
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "User installation could not be completed due to insufficient free disk space." )) );
+        else
+            aErrorMsg = GetMsgString(
+                STR_BOOSTRAP_ERR_NOACCESSRIGHTS,
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "User installation could not be processed due to missing access rights." )) );
+
+        osl::File::getSystemPathFromFileURL( aUserInstallationURL, aUserInstallationPath );
+
+        aDiagnosticMessage.append( aErrorMsg );
+        aDiagnosticMessage.append( aUserInstallationPath );
+        aMessage = MakeStartupErrorMessage(
+            aDiagnosticMessage.makeStringAndClear() );
+        FatalError(aMessage);
+    }
+
+    return;
 }
 
 
@@ -1398,7 +1414,12 @@ void Desktop::Main()
         if ( instErr_fin != UserInstall::E_None)
         {
             OSL_ENSURE(sal_False, "userinstall failed");
-            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+            if ( instErr_fin == UserInstall::E_NoDiskSpace )
+                HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
+            else if ( instErr_fin == UserInstall::E_NoWriteAccess )
+                HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
+            else
+                HandleBootstrapErrors( BE_USERINSTALL_FAILED );
             return;
         }
         // refresh path information
@@ -1755,8 +1776,19 @@ void Desktop::Main()
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
+        // We show an ErrorBox here ... On the other side we know also, that users ignore such messages
+        // and may be try to open documents. But then the same office instance will be used for loading
+        // new documents. That must be prevented. Because this office shutdown and shouldnt be used further.
+        // => forward all pipe requests to dev/null
+        OfficeIPCThread::BlockAllRequests();
+
+        // Show the error to the user.
+        // TODO: Clarify with VCL, if this is legal code .-)
+        // Because we show an ErrorBox after Execute().
         FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
+
         // dont kill the office here! Terminate it in the right way. It shouldnt be a problem ...
+        // and we have to do some further work (e.g. removing temp. directories)
     }
 
     Resource::SetResManager( NULL );
