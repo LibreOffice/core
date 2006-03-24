@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ownview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:44:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:09:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include "ownview.hxx"
+#include <convert.hxx>
 
 
 using namespace ::com::sun::star;
@@ -108,7 +109,6 @@ using namespace ::com::sun::star;
 ::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 ::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
-sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
 uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw ( uno::Exception );
 
 //========================================================
