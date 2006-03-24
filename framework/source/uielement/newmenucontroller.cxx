@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:01:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -671,17 +674,25 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
 
 IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
 {
+/*  i62706: Don't catch all exceptions. We hide all problems here and are not able
+            to handle them on higher levels.
     try
     {
+*/
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
+/*
     }
-    catch ( Exception& )
+    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
+    {
+        throw exFilters;
+    }
+    catch (const Exception& )
     {
     }
-
+*/
     delete pNewDocument;
     return 0;
 }
