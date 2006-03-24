@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:08:17 $
+#   last change: $Author: obo $ $Date: 2006-03-24 13:49:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..$/..$/..
 
 PRJNAME=vcl
 TARGET=salwin
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -51,10 +52,10 @@ CFLAGS += -DWINVER=0x0400
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/salframe.obj	\
-            $(SLO)$/salmenu.obj     \
+SLOFILES=   \
+            $(SLO)$/salframe.obj   \
+            $(SLO)$/salmenu.obj    \
             $(SLO)$/salobj.obj
-            
 
 # --- Targets ------------------------------------------------------
 
