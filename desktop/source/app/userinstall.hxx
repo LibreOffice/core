@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:34:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ public:
         E_SetupFailed,          // external setup did not run correctly
         E_Configuration,        // error while accessing configuration
         E_License,              // License not accepted
+        E_NoDiskSpace,          // not enough disk space
+        E_NoWriteAccess,        // no write access
         E_Unknown               // unknown error
     };
 
