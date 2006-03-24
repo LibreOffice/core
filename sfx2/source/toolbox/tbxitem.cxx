@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:20:20 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
 #include <com/sun/star/frame/status/Visibility.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
@@ -194,8 +197,6 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, TRUE);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
-//SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
-//SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
 
 static Window* GetTopMostParentSystemWindow( Window* pWindow )
 {
@@ -861,83 +862,6 @@ throw (::com::sun::star::uno::RuntimeException)
 ::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& xFrame, const ::rtl::OUString& rSubToolBarResName )
 {
     ::Size  aToolboxSize;
-/*
-    static WeakReference< XNameAccess >         xWeakPersistentWindowStateSupplier;
-    static WeakReference< XModuleManager >      xWeakModuleManager;
-
-    Reference< XMultiServiceFactory >   xServiceManager = getServiceManager();
-    Reference< XNameAccess >            xPersistentWindowStateSupplier;
-    Reference< XModuleManager >         xModuleManager;
-    rtl::OUString                       aModuleIdentifier;
-
-    xPersistentWindowStateSupplier = xWeakPersistentWindowStateSupplier;
-    if ( !xPersistentWindowStateSupplier.is() )
-    {
-        xPersistentWindowStateSupplier = Reference< XNameAccess >(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.WindowStateConfiguration" ))),
-            UNO_QUERY );
-        xWeakPersistentWindowStateSupplier = xPersistentWindowStateSupplier;
-    }
-
-    xModuleManager = xWeakModuleManager;
-    if ( !xModuleManager.is() )
-    {
-        xModuleManager = Reference< XModuleManager >(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" ))),
-            UNO_QUERY );
-        xWeakModuleManager = xModuleManager;
-    }
-
-    try
-    {
-        aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
-    }
-    catch ( Exception& )
-    {
-    }
-
-    if ( aModuleIdentifier.getLength() > 0 && xPersistentWindowStateSupplier.is() )
-    {
-        Reference< XNameAccess > xPersistentWindowState;
-
-        // Retrieve persistent window state reference for our new module
-        try
-        {
-            if ( xPersistentWindowStateSupplier.is() )
-                xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= xPersistentWindowState;
-            if ( xPersistentWindowState.is() )
-            {
-                Any a;
-                com::sun::star::awt::Size aSize;
-                Sequence< PropertyValue > aWindowState;
-
-                a = xPersistentWindowState->getByName( rSubToolBarResName );
-                if ( a >>= aWindowState )
-                {
-                    for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
-                    {
-                        if ( aWindowState[n].Name.equalsAscii( "Size" ))
-                        {
-                            if ( aWindowState[n].Value >>= aSize )
-                            {
-                                aToolboxSize.setWidth( aSize.Width );
-                                aToolboxSize.setHeight( aSize.Height );
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        catch ( NoSuchElementException& )
-        {
-        }
-    }
-*/
     return aToolboxSize;
 }
 
@@ -1968,17 +1892,25 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
 
 IMPL_STATIC_LINK( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
+/*  i62706: Don't catch all exceptions. We hide all problems here and are not able
+            to handle them on higher levels.
     try
     {
+*/
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+/*
+}
+    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
+    {
+        throw exFilters;
     }
-    catch ( Exception& )
+    catch (const Exception& )
     {
     }
-
+*/
     delete pExecuteInfo;
     return 0;
 }
@@ -1988,155 +1920,3 @@ IMPL_STATIC_LINK( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExe
 void SfxAppToolBoxControl_Impl::Click( )
 {
 }
-
-//--------------------------------------------------------------------
-/*
-SfxAddonsToolBoxControl_Impl::SfxAddonsToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
-    : SfxToolBoxControl( nSlotId, nId, rBox )
-    , bBigImages( FALSE )
-    , pMenu( 0 )
-{
-    rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
-
-    // Determine the current background color of the menus
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
-}
-
-SfxAddonsToolBoxControl_Impl::~SfxAddonsToolBoxControl_Impl()
-{
-    delete pMenu;
-}
-
-void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pSVMenu )
-{
-    framework::AddonsOptions    aAddonOptions;
-
-    Reference<com::sun::star::frame::XFrame> aXFrame( getFrameInterface() );
-    USHORT nCount = pSVMenu->GetItemCount();
-    for ( USHORT nPos = 0; nPos < nCount; nPos++ )
-    {
-        USHORT nId = pSVMenu->GetItemId( nPos );
-        if ( pSVMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
-        {
-            if ( m_bShowMenuImages )
-            {
-                sal_Bool        bImageSet = sal_False;
-                ::rtl::OUString aImageId;
-
-                ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nId );
-
-                if ( pMenuAttributes )
-                    aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
-
-                if ( aImageId.getLength() > 0 )
-                {
-                    Image aImage = GetImage( aXFrame, aImageId, FALSE, m_bWasHiContrastMode );
-                    if ( !!aImage )
-                    {
-                        bImageSet = sal_True;
-                        pSVMenu->SetItemImage( nId, aImage );
-                    }
-                }
-
-                if ( !bImageSet )
-                {
-                    rtl::OUString aMenuItemCommand = pSVMenu->GetItemCommand( nId );
-                    Image aImage = GetImage( aXFrame, aMenuItemCommand, FALSE, m_bWasHiContrastMode );
-                    if ( !aImage )
-                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, m_bWasHiContrastMode );
-
-                    pSVMenu->SetItemImage( nId, aImage );
-                }
-            }
-            else
-                pSVMenu->SetItemImage( nId, Image() );
-
-            // Go recursive through the sub-menus
-            PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
-            if ( pPopup )
-                RefreshMenuImages( pPopup );
-        }
-    }
-}
-
-void SfxAddonsToolBoxControl_Impl::StateChanged
-(
-    USHORT              nSlotId,
-    SfxItemState        eState,
-    const SfxPoolItem*  pState
-)
-{
-    SfxToolBoxControl::StateChanged( nSlotId, eState, pState );
-}
-
-//--------------------------------------------------------------------
-
-void SfxAddonsToolBoxControl_Impl::Select( BOOL bMod1 )
-{
-    SfxApplication* pApp = SFX_APP();
-    ToolBox& rBox = GetToolBox();
-    ::Rectangle aRect(  rBox.GetItemRect( GetId() ) );
-
-    USHORT nId = GetId();
-    BOOL bNew = FALSE;
-
-    if ( !pMenu )
-    {
-        Reference< com::sun::star::frame::XFrame > aXFrame( getFrameInterface() );
-        pMenu = framework::AddonMenuManager::CreateAddonMenu( aXFrame );
-        RefreshMenuImages( pMenu );
-    }
-
-    if( pMenu )
-    {
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
-        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
-
-        if (( bIsHiContrastMode != m_bWasHiContrastMode ) ||
-            ( bShowMenuImages   != m_bShowMenuImages    )    )
-        {
-            m_bWasHiContrastMode = bIsHiContrastMode;
-            m_bShowMenuImages    = bShowMenuImages;
-            RefreshMenuImages( pMenu );
-        }
-
-        rBox.SetItemDown( GetId(), TRUE );
-        pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_DOWN );
-        rBox.SetItemDown( GetId(), FALSE );
-    }
-}
-
-//--------------------------------------------------------------------
-
-void SfxAddonsToolBoxControl_Impl::Click( )
-{
-    SfxToolBoxControl::Click();
-}
-
-SfxReloadToolBoxControl_Impl::SfxReloadToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
-  : SfxToolBoxControl( nSlotId, nId, rBox )
-{
-}
-
-void SfxReloadToolBoxControl_Impl::Select( USHORT nModifier )
-{
-    URL                            aTargetURL;
-    Reference< XDispatch >         xDispatch;
-    Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
-
-    if ( xDispatchProvider.is() )
-    {
-        aTargetURL.Complete = m_aCommandURL;
-        getURLTransformer()->parseStrict( aTargetURL );
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Reload" ));
-        aArgs[0].Value = makeAny( sal_Bool( TRUE ));
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aTargetURL, aArgs );
-    }
-}*/
