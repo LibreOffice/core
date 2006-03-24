@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:15:55 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int3
 void SAL_CALL ZipOutputStream::rawCloseEntry(  )
     throw(IOException, RuntimeException)
 {
-    if ( pCurrentEntry->nMethod == DEFLATED )
+    if ( pCurrentEntry->nMethod == DEFLATED && ( pCurrentEntry->nFlag & 8 ) )
         writeEXT(*pCurrentEntry);
     pCurrentEntry = NULL;
 }
