@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:49:32 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 12:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@ public:
 
     virtual Size GetTwipSize() const;
     Graphic* GetGraphic();
+    Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
     void GetNewReplacement();
 
     virtual BOOL SavePersistentData();
