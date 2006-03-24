@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 19:18:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1339,15 +1339,6 @@ WarningBox RID_XMLSEC_WARNING_BROKENSIGNATURE
     Title [ en-US ] = "Invalid Document Signature" ;
     Message [ de ] = "Der digital signierte Dokumentinhalt und/oder die Makros stimmen nicht mit der aktuellen Dokumentsignatur überein.\n\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen.\n\nDas Ausführen von Makros ist für dieses Dokument deaktiviert.\n " ;
     Message [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
-};
-
-WarningBox RID_WARNING_MACROSDISABLED
-{
-//    HelpId = HID_WARNING_MACROSDISABLED;
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ de ] = "Dieses Dokument enthält Makros.\nDas Ausführen dieses Makros wird gemäß der aktuellen Makro-Sicherheitseinstellungen  unterbunden. Deshalb könnten einige Funktionen nicht verfügbar sein." ;
-    Message [ en-US ] = "This document contains macros.\nExecution of this macros is disabled due to the current macro security setting. Therefore, some functionality may not be available." ;
 };
 
 QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
