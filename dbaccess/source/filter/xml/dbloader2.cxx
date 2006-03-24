@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:15:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,21 +227,32 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
     try
     {
         ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-        ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
+        Reference< XInputStream > xInStream = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")), Reference< XInputStream >() );
 
-        if ( sTemp.getLength() )
+        Reference<XPropertySet> xProp;
+        if ( xInStream.is() )
         {
-            INetURLObject aURL(sTemp);
-            Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,m_xServiceFactory),UNO_QUERY);
-            if ( xProp.is() )
+            xProp.set(::comphelper::OStorageHelper::GetStorageFromInputStream(xInStream,m_xServiceFactory),UNO_QUERY);
+        }
+        else
+        {
+            ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
+
+            if ( sTemp.getLength() )
             {
-                ::rtl::OUString sMediaType;
-                xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
-                if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) )
-                    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
-                ::comphelper::disposeComponent(xProp);
+                INetURLObject aURL(sTemp);
+                xProp.set(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,m_xServiceFactory),UNO_QUERY);
             }
-        } // if ( sTemp.getLength() )
+        }
+
+        if ( xProp.is() )
+        {
+            ::rtl::OUString sMediaType;
+            xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
+            if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) )
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
+            ::comphelper::disposeComponent(xProp);
+        }
     } catch(Exception&){}
     return ::rtl::OUString();
 }
