@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:07:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -730,8 +730,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                                     ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
                                                     aDispatchArgs );
 
+                // the scripting signature might be preserved
+                // pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
                 pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
-                pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
                 pImp->bSignatureErrorIsShown = sal_False;
 
                 // merge aDispatchArgs to the request
@@ -1490,10 +1491,49 @@ void SfxObjectShell::StateView_Impl(SfxItemSet &rSet)
 {
 }
 
+sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
+{
+    sal_Bool bCertValid = sal_True;
+    sal_uInt16 nResult = SIGNATURESTATE_NOSIGNATURES;
+    int nInfos = aInfos.getLength();
+    if( nInfos )
+    {
+        //These errors of certificates are allowed
+        sal_Int32 nNonErrors = security::CertificateValidity::VALID |
+                               security::CertificateValidity::UNKNOWN_REVOKATION;
+        //Build a  mask to filter out the allowed errors
+        sal_Int32 nMask = ~nNonErrors;
+
+        nResult = SIGNATURESTATE_SIGNATURES_OK;
+        for ( int n = 0; n < nInfos; n++ )
+        {
+            if ( bCertValid )
+            {
+                sal_Int32 nCertStat = aInfos[n].CertificateStatus;
+                // "subtract" the allowed error flags from the result
+                sal_Int32 nErrors = ( nCertStat & nMask );
+                bCertValid = nErrors > 0 ? sal_False : sal_True;
+            }
+
+            if ( !aInfos[n].SignatureIsValid )
+            {
+                nResult = SIGNATURESTATE_SIGNATURES_BROKEN;
+                break; // we know enough
+            }
+        }
+    }
+
+    if ( nResult == SIGNATURESTATE_SIGNATURES_OK && !bCertValid )
+        nResult = SIGNATURESTATE_SIGNATURES_NOTVALIDATED;
+
+    // this code must not check whether the document is modified
+    // it should only check the provided info
+
+    return nResult;
+}
 
 sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 {
-    bool bCertValid = true;
     sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
 
     if ( *pState == SIGNATURESTATE_UNKNOWN )
@@ -1517,33 +1557,7 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
                         aInfos = xD->verifyDocumentContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
                                                                         uno::Reference< io::XInputStream >() );
 
-                    int nInfos = aInfos.getLength();
-                    if( nInfos )
-                    {
-                        //These errors of certificates are allowed
-                        sal_Int32 nNonErrors = security::CertificateValidity::VALID |
-                                               security::CertificateValidity::UNKNOWN_REVOKATION;
-                        //Build a  mask to filter out the allowed errors
-                        sal_Int32 nMask = ~nNonErrors;
-
-                        *pState = SIGNATURESTATE_SIGNATURES_OK;
-                        for ( int n = 0; n < nInfos; n++ )
-                        {
-                            if ( bCertValid )
-                            {
-                                sal_Int32 nCertStat = aInfos[n].CertificateStatus;
-                                // "subtract" the allowed error flags from the result
-                                sal_Int32 nErrors = ( nCertStat & nMask );
-                                bCertValid = nErrors > 0 ? false : true;
-                            }
-
-                            if ( !aInfos[n].SignatureIsValid )
-                            {
-                                *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
-                                break; // we know enough
-                            }
-                        }
-                    }
+                    *pState = ImplCheckSignaturesInformation( aInfos );
                 }
             }
             catch( com::sun::star::uno::Exception& )
@@ -1552,12 +1566,10 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
         }
     }
 
-    if ( *pState == SIGNATURESTATE_SIGNATURES_OK )
+    if ( *pState == SIGNATURESTATE_SIGNATURES_OK || *pState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
     {
         if ( IsModified() )
             *pState = SIGNATURESTATE_SIGNATURES_INVALID;
-        if ( !bCertValid )
-            *pState = SIGNATURESTATE_SIGNATURES_NOTVALIDATED;
     }
 
     return (sal_uInt16)*pState;
