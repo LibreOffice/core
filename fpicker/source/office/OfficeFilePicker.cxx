@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:39:08 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 12:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,7 +504,9 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
-    getDialog()->SetFileCallback( NULL );
+    // the execution of the dialog yields, so it is possible the at this point the window or the dialog is closed
+    if ( getDialog() )
+        getDialog()->SetFileCallback( NULL );
 
     return nRet;
 }
