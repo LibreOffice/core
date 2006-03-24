@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:29:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -743,18 +743,49 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
             }
         }
-        else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
+        else if ( pElement->m_pStream->HasCachedPassword()
+             && ( pElement->m_pStream->IsModified() || pElement->m_pStream->HasWriteOwner_Impl() ) )
         {
-            uno::Reference< io::XStream > xSubStr =
-                                        xDest->openEncryptedStreamElement( aName,
-                                            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
-                                            pElement->m_pStream->GetCachedPassword() );
-            OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+            ::rtl::OUString aCommonPass;
+            sal_Bool bHasCommonPass = sal_False;
+            try
+            {
+                aCommonPass = GetCommonRootPass();
+                bHasCommonPass = sal_True;
+            }
+            catch( packages::NoEncryptionException& )
+            {}
 
-            pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedPassword() );
+            if ( bHasCommonPass && pElement->m_pStream->GetCachedPassword().equals( aCommonPass ) )
+            {
+                // If the stream can be opened with the common storage password
+                // it must be stored with the common storage password as well
+                uno::Reference< io::XStream > xDestStream =
+                                            xDest->openStreamElement( aName,
+                                                embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+
+                pElement->m_pStream->CopyInternallyTo_Impl( xDestStream );
+
+                uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
+                xProps->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                    uno::Any( (sal_Bool) sal_True ) );
+            }
+            else
+            {
+                // the stream is already opened for writing or was changed
+                uno::Reference< io::XStream > xSubStr =
+                                            xDest->openEncryptedStreamElement( aName,
+                                                embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
+                                                pElement->m_pStream->GetCachedPassword() );
+                OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+
+                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedPassword() );
+            }
         }
         else
         {
+            // the stream is not opened at all, so it can be just opened for reading
             try
             {
                 // If the stream can be opened with the common storage password
