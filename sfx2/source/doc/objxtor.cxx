@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:06:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,12 +713,14 @@ void SfxObjectShell::InitBasicManager_Impl
     pBasicCont->acquire();  // Hold via UNO
     Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
     pImp->pBasicLibContainer = pBasicCont;
+    sal_Bool bBasicModified = pImp->pBasicLibContainer->isContainerModified();
 
     // Dialog container
     SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( xStorage );
     pDialogCont->acquire(); // Hold via UNO
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
     pImp->pDialogLibContainer = pDialogCont;
+    sal_Bool bDialogModified = pImp->pDialogLibContainer->isContainerModified();
 
     LibraryContainerInfo* pInfo = new LibraryContainerInfo
         ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
@@ -763,6 +765,8 @@ void SfxObjectShell::InitBasicManager_Impl
 
     // Modify-Flag wird bei MakeVariable gesetzt
     pBas->SetModified( bWasModified );
+    pImp->pBasicLibContainer->setContainerModified( bBasicModified );
+    pImp->pDialogLibContainer->setContainerModified( bDialogModified );
 }
 
 //--------------------------------------------------------------------
