@@ -859,6 +859,109 @@ public class TestHelper  {
         return xSubStream;
     }
 
+    public boolean compareRawMethodsOnEncrStream( XStorage xStorage, String sStreamName )
+    {
+
+        XStorageRawAccess xRawStorage;
+        try
+        {
+            xRawStorage = (XStorageRawAccess) UnoRuntime.queryInterface( XStorageRawAccess.class, xStorage );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't get raw access to the storage, exception : " + e + "!" );
+            return false;
+        }
+
+        if ( xRawStorage == null )
+        {
+            Error( "Can't get raw access to the storage!" );
+            return false;
+        }
+
+        XInputStream xHeadRawStream = null;
+        try
+        {
+            xHeadRawStream = xRawStorage.getRawEncrStreamElement( sStreamName );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't open encrypted stream '" + sStreamName + "' in raw mode with header, exception : " + e + "!" );
+        }
+
+        XInputStream xPlainRawStream = null;
+        try
+        {
+            xPlainRawStream = xRawStorage.getPlainRawStreamElement( sStreamName );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't open encrypted stream '" + sStreamName + "' in raw mode with header, exception : " + e + "!" );
+        }
+
+        if ( xHeadRawStream == null || xPlainRawStream == null )
+        {
+            Error( "Can't open encrypted stream '" + sStreamName + "' in raw modes!" );
+            return false;
+        }
+
+        try
+        {
+            byte pData[][] = new byte[1][22];
+            if ( xHeadRawStream.readBytes( pData, 22 ) != 22 )
+            {
+                Error( "Can't read header of encrypted stream '" + sStreamName + "' raw representations!" );
+                return false;
+            }
+
+            if ( pData[0][0] != 0x4d || pData[0][1] != 0x47 || pData[0][2] != 0x02 || pData[0][3] != 0x05 )
+            {
+                Error( "No signature in the header of encrypted stream '" + sStreamName + "' raw representations!" );
+                return false;
+            }
+
+            int nVariableHeaderLength =
+                        ( pData[0][14] + pData[0][15] * 0x100 ) // salt length
+                        + ( pData[0][16] + pData[0][17] * 0x100 ) // iv length
+                        + ( pData[0][18] + pData[0][19] * 0x100 ) // digest length
+                        + ( pData[0][20] + pData[0][21] * 0x100 ); // mediatype length
+
+            xHeadRawStream.skipBytes( nVariableHeaderLength );
+
+            byte pRawData1[][] = new byte[1][32000];
+            byte pRawData2[][] = new byte[1][32000];
+            int nRead1 = 0;
+            int nRead2 = 0;
+
+            do
+            {
+                nRead1 = xHeadRawStream.readBytes( pRawData1, 32000 );
+                nRead2 = xPlainRawStream.readBytes( pRawData2, 32000 );
+
+                if ( nRead1 != nRead2 )
+                {
+                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size!" );
+                    return false;
+                }
+
+                for ( int nInd = 0; nInd < nRead1; nInd++ )
+                    if ( pRawData1[0][nInd] != pRawData2[0][nInd] )
+                    {
+                        Error( "The encrypted stream '" + sStreamName + "' raw representations have different data!" );
+                        return false;
+                    }
+            }
+            while( nRead1 == 32000 );
+        }
+        catch ( Exception e )
+        {
+            Error( "Can't compare stream '" + sStreamName + "' raw representations, exception : " + e + "!" );
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean cantOpenStorage( XStorage xStorage, String sName )
     {
         // try to open an opened substorage, open call must fail
