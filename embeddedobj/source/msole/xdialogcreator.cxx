@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdialogcreator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:34 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,9 @@
 
 #include "platform.h"
 #include <confighelper.hxx>
-#include "xdialogcreator.hxx"
-#include "oleembobj.hxx"
+#include <xdialogcreator.hxx>
+#include <oleembobj.hxx>
+#include <convert.hxx>
 
 
 #ifdef WNT
@@ -94,12 +95,6 @@ typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);
 
 
 using namespace ::com::sun::star;
-
-uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
-
-sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
 
 //-------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_Int8 >& aClassID )
