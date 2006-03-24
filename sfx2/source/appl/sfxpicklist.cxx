@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:57:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,11 +405,16 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             case SFX_EVENT_CREATEDOC:
             {
-                BOOL bModifiedState = pDocSh->IsModified();
+                sal_Bool bAllowModif = pDocSh->IsEnableSetModified();
+                if ( bAllowModif )
+                    pDocSh->EnableSetModified( sal_False );
+
                 SfxDocumentInfo &rInfo = pDocSh->GetDocInfo();
                 rInfo.SetCreated( SvtUserOptions().GetFullName() );
                 pDocSh->Broadcast( SfxDocumentInfoHint( &rInfo ) );
-                pDocSh->SetModified(bModifiedState);
+
+                if ( bAllowModif )
+                    pDocSh->EnableSetModified( bAllowModif );
             }
             break;
 
