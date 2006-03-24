@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:45:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-24 13:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,11 @@ using namespace ::com::sun::star::uno;
 
 GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
+    return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
+}
+
+GDIMetaFile* SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
+{
     // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
     // werden, sonst wird u.U. der Printer abgeschossen !
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
@@ -134,6 +139,10 @@ GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
+
+    // adjust the output device if HC-metafile is requested
+    if ( bHighContrast )
+        aDevice.SetDrawMode( aDevice.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
@@ -458,7 +467,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
     // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
     if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
-        rDocInfo.DeleteUserData( rDocInfo.IsUseUserData() );
+        rDocInfo.DeleteUserDataCompletely();
 
     Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
 }
