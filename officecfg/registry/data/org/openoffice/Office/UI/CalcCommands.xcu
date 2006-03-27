@@ -1430,6 +1430,12 @@
                     <value xml:lang="en-US">To ~Cell</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SendMailDocAsFormat" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Dokument als Microsoft Excel-Anhang…</value>
+                    <value xml:lang="en-US">Document as Microsoft Excel Attachment…</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">
