@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:11:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1194,15 +1194,15 @@ String STR_SWBG_FOOTER
     Text [ x-comment ] = " ";
 };
  //Ende: Strings fuer Gallery/Hintergrund
-String STR_NAME_GROUP_LABEL
+String STR_NAME_SHAPE_LABEL
 {
     Text [ de ] = "Name";
     Text [ en-US ] = "Name";
 };
-String STR_NAME_GROUP_DIALOG
+String STR_NAME_SHAPE_DIALOG
 {
-    Text [ de ] = "Gruppe benennen" ;
-    Text [ en-US ] = "Name group";
+    Text [ de ] = "Objekt benennen" ;
+    Text [ en-US ] = "Name Object";
 };
 
 
