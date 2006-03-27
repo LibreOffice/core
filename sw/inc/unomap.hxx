@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:15:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@
 #define WID_DOC_BASIC_LIBRARIES                 1014
 #define WID_DOC_RUNTIME_UID                     1015
 #define WID_DOC_LOCK_UPDATES                    1016
+#define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
 
 //MailMerge
