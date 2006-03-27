@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:04:15 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         delete pOld;
     }
-    InvalidateTextWidth();      // in both cases
+    InvalidateTextWidth(NULL, NULL, FALSE);     // in both cases
 }
 
 //------------------------------------------------------------------------
@@ -358,7 +358,7 @@ void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
     ScAddress aAdrFrom( 0,    0,        nTab );
     ScAddress aAdrTo  ( MAXCOL, MAXROW, nTab );
-    InvalidateTextWidth( &aAdrFrom, &aAdrTo );
+    InvalidateTextWidth( &aAdrFrom, &aAdrTo, FALSE );
 }
 
 //------------------------------------------------------------------------
@@ -436,17 +436,16 @@ BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
 
 //------------------------------------------------------------------------
 
-void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom,
-                                      const ScAddress* pAdrTo,
-                                      BOOL bBroadcast )
+void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
+                                      BOOL bNumFormatChanged )
 {
-    bBroadcast = (bBroadcast && GetDocOptions().IsCalcAsShown() && !IsImportingXML());
+    BOOL bBroadcast = (bNumFormatChanged && GetDocOptions().IsCalcAsShown() && !IsImportingXML());
     if ( pAdrFrom && !pAdrTo )
     {
         const SCTAB nTab = pAdrFrom->Tab();
 
         if ( pTab[nTab] )
-            pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bBroadcast );
+            pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
     }
     else
     {
@@ -455,7 +454,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom,
 
         for ( SCTAB nTab=nTabStart; nTab<=nTabEnd; nTab++ )
             if ( pTab[nTab] )
-                pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bBroadcast );
+                pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
     }
 }
 
