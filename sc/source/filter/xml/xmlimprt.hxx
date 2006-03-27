@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:07:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,6 +788,8 @@ class ScXMLImport: public SvXMLImport
     sal_Bool                bRemoveLastChar;
     sal_Bool                bNullDateSetted;
     sal_Bool                bSelfImportingXMLSet;
+    sal_Bool                bLatinDefaultStyle;     // latin-only number format in default style?
+    sal_Bool                bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
 
 
 protected:
@@ -833,6 +835,8 @@ public:
 
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     sal_Bool IsStylesOnlyMode() const { return !bLoadDoc; }
+
+    sal_Bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
 
 //  SvI18NMap& GetI18NMap() { return *pI18NMap; }
 
@@ -972,6 +976,7 @@ private:
     void SetStyleToRanges();
 
     void SetDefaultNotes();
+    void ExamineDefaultStyle();
 public:
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
         const sal_Int16 nCellType, const rtl::OUString* pCurrency);
