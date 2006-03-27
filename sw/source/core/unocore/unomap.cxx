@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:45:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1598,6 +1598,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_APPLY_FORM_DESIGN_MODE),        WID_DOC_APPLY_FORM_DESIGN_MODE,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_RUNTIME_UID), WID_DOC_RUNTIME_UID,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_LOCK_UPDATES),        WID_DOC_LOCK_UPDATES,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
+                    { SW_PROP_NMID(UNO_NAME_HAS_VALID_SIGNATURES),  WID_DOC_HAS_VALID_SIGNATURES, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NMID(UNO_NAME_BUILDID), WID_DOC_BUILDID, CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0},
                     {0,0,0,0,0}
                 };
