@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:23:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,8 @@ private:
     utl::SearchParam*   pSearchParam;
     utl::TextSearch*    pSearchText;
 
+    mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName
+
     // SortierParameter um den Stackbedarf von Quicksort zu Minimieren
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
@@ -228,6 +230,8 @@ public:
 
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
+
+    const String&   GetUpperName() const;
 
     const String&   GetPageStyle() const                    { return aPageStyle; }
     void            SetPageStyle( const String& rName );
@@ -713,10 +717,10 @@ private:
                             SCCOL nCol, SCROW nAttrRow1, SCROW nAttrRow2, SCSIZE nArrY,
                             const ScPatternAttr* pPattern, const SfxItemSet* pCondSet ) const;
 
-    // Idleberechnung der OutputDevice-Zelltextbreite
-    void            InvalidateTextWidth( const ScAddress* pAdrFrom = NULL,
-                                         const ScAddress* pAdrTo   = NULL,
-                                         BOOL bBroadcast = FALSE );
+    // idle calculation of OutputDevice text width for cell
+    // also invalidates script type, broadcasts for "calc as shown"
+    void        InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
+                                     BOOL bNumFormatChanged, BOOL bBroadcast );
 };
 
 
