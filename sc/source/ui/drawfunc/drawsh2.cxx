@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:10:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,11 +211,13 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     BOOL bCanRename = FALSE;
     if ( nMarkCount == 1 )
     {
-        UINT16 nObjType = rMarkList.GetMark( 0 )->GetObj()->GetObjIdentifier();
-        if ( nObjType == OBJ_OLE2 || nObjType == OBJ_GRAF || nObjType == OBJ_GRUP )
-            bCanRename = TRUE;
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        SdrLayerID nLayerID = pObj->GetLayer();
+        if ( nLayerID != SC_LAYER_INTERN )
+            bCanRename = TRUE;                          // #i51351# anything except internal objects can be renamed
 
         // #91929#; don't show original size entry if not possible
+        UINT16 nObjType = pObj->GetObjIdentifier();
         if ( nObjType == OBJ_OLE2 )
         {
             SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetObj());
@@ -226,8 +228,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
         else if ( nObjType == OBJ_CAPTION )
         {
-            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
-            if( pObj && pObj->GetLayer() == SC_LAYER_INTERN)
+            if ( nLayerID == SC_LAYER_INTERN )
             {
                 // SdrCaptionObj() Notes cannot be cut/copy in isolation from
                 // their cells.
