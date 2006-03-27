@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:26:08 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -868,6 +868,11 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
     BOOL bEditCell = aTester.NeedsObject();
     if ( bEditCell )
     {
+        // #i61702# With bLoseContent set, the content of rEngine isn't restored
+        // (used in loading XML, where after the removeActionLock call the API obejct's
+        // EditEngine isn't accessed again.
+        sal_Bool bLoseContent = pDoc->IsImportingXML();
+
         sal_Bool bUpdateMode(rEngine.GetUpdateMode());
         if (bUpdateMode)
             rEngine.SetUpdateMode(sal_False);
@@ -885,8 +890,11 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             const SfxItemSet& rOld = rEngine.GetParaAttribs( i );
             if ( rOld.Count() )
             {
-                pRememberItem = new ScMyRememberItem(rEngine.GetParaAttribs(i), i);
-                aRememberItems.push_back(pRememberItem);
+                if ( !bLoseContent )
+                {
+                    pRememberItem = new ScMyRememberItem(rEngine.GetParaAttribs(i), i);
+                    aRememberItems.push_back(pRememberItem);
+                }
                 rEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
             }
         }
@@ -911,7 +919,8 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             }
         }
 
-        if (bUpdateMode)
+        // #i61702# if the content isn't accessed, there's no need to set the UpdateMode again
+        if ( bUpdateMode && !bLoseContent )
             rEngine.SetUpdateMode(sal_True);
     }
     else
@@ -1074,9 +1083,11 @@ BOOL ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
-    // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
+    BOOL bImportingXML = pDoc->IsImportingXML();
+    // Cell formats can still be set if the range isn't editable only because of matrix formulas.
+    // #i62483# When loading XML, the check can be skipped altogether.
     BOOL bOnlyNotBecauseOfMatrix;
-    if ( !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
+    if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
         if (!bApi)
@@ -1111,7 +1122,6 @@ BOOL ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 
     // While loading XML it is not neccessary to ask HasAttrib. It needs too much time.
     USHORT nExtFlags = 0;
-    BOOL bImportingXML = pDoc->IsImportingXML();
     if ( !bImportingXML )
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
     pDoc->ApplySelectionPattern( rPattern, rMark );
@@ -1136,9 +1146,11 @@ BOOL ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
-    // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
+    BOOL bImportingXML = pDoc->IsImportingXML();
+    // Cell formats can still be set if the range isn't editable only because of matrix formulas.
+    // #i62483# When loading XML, the check can be skipped altogether.
     BOOL bOnlyNotBecauseOfMatrix;
-    if ( !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
+    if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
         if (!bApi)
@@ -3557,9 +3569,16 @@ BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
             new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges ) );
     }
 
-    pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
+    // #i55926# While loading XML, formula cells only have a single string token,
+    // so CompileNameFormula would never find any name (index) tokens, and would
+    // unnecessarily loop through all cells.
+    BOOL bCompile = !pDoc->IsImportingXML();
+
+    if ( bCompile )
+        pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
     pDoc->SetRangeName( new ScRangeName( rNewRanges ) );
-    pDoc->CompileNameFormula( FALSE );  // CompileFormulaString
+    if ( bCompile )
+        pDoc->CompileNameFormula( FALSE );  // CompileFormulaString
 
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
