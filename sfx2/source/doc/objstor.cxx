@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:16:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2577,6 +2577,14 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         SetError( ERRCODE_IO_INVALIDPARAMETER );
         return sal_False;
     }
+
+    SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
+    if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
+    {
+        if ( pMedium->TryDirectTransfer( aURL.GetMainURL( INetURLObject::NO_DECODE ), *aParams ) )
+            return sal_True;
+    }
+    aParams->ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
 
     pImp->bPasswd = aParams && SFX_ITEM_SET == aParams->GetItemState(SID_PASSWORD);
 
