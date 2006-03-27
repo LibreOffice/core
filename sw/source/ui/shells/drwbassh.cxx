@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:49:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,11 @@
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
+// --> OD 2006-03-09 #i51726#
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+// <--
 
 #include <doc.hxx>
 #include <shells.hrc>
@@ -654,7 +659,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_FRAME_TO_BOTTOM:
             pSh->SelectionToBottom( bBottomParam );
             break;
-        case FN_NAME_GROUP:
+        // --> OD 2006-03-09 #i51726# - renamed FN_NAME_GROUP to FN_NAME_SHAPE
+        case FN_NAME_SHAPE:
+        // <--
         {
             bDone = TRUE;
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -662,16 +669,18 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             String sName;
-            String sDesc(SW_RES( STR_NAME_GROUP_LABEL ) );
-            DBG_ASSERT(pObj->ISA(SdrObjGroup),
-                "Object is not a group, graphic or OLE shape")
+            String sDesc(SW_RES( STR_NAME_SHAPE_LABEL ) );
+            // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
+//            DBG_ASSERT(pObj->ISA(SdrObjGroup),
+//                "Object is not a group, graphic or OLE shape")
+            // <--
             sName = pObj->GetName();
             //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, sName, sDesc, ResId(RID_SVXDLG_NAME) );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->SetText(SW_RESSTR(STR_NAME_GROUP_DIALOG));
+            pDlg->SetText(SW_RESSTR(STR_NAME_SHAPE_DIALOG));
             // #100286# -------------
             pDlg->SetEditHelpId( HID_FORMAT_NAME_OBJECT_NAME );
             pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -723,17 +732,30 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     {
         nRet = 1;
         SdrModel* pModel = rSh.GetDoc()->GetDrawModel();
-        SdrPage* pPage = pModel->GetPage(0);
-        sal_uInt32 nCount = pPage->GetObjCount();
-        for( sal_uInt32 i=0; i< nCount; i++ )
+        // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
+        // consider also drawing objects inside group objects
+//        SdrPage* pPage = pModel->GetPage(0);
+//        sal_uInt32 nCount = pPage->GetObjCount();
+//        for( sal_uInt32 i=0; i< nCount; i++ )
+//        {
+//            SdrObject* pTemp = pPage->GetObj(i);
+//            if(pObj != pTemp && pTemp->ISA(SdrObjGroup) && pTemp->GetName() == sNewName)
+//            {
+//                nRet = 0;
+//                break;
+//            }
+//        }
+        SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
+        while( aIter.IsMore() )
         {
-            SdrObject* pTemp = pPage->GetObj(i);
-            if(pObj != pTemp && pTemp->ISA(SdrObjGroup) && pTemp->GetName() == sNewName)
+            SdrObject* pTempObj = aIter.Next();
+            if ( pObj != pTempObj && pTempObj->GetName() == sNewName )
             {
                 nRet = 0;
                 break;
             }
         }
+        // <--
     }
     return nRet;
 }
@@ -806,18 +828,26 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.Put(aEnumItem);
                 }
                 break;
-            case FN_NAME_GROUP :
+            // --> OD 2006-03-09 #i51726# - renamed FN_NAME_GROUP to FN_NAME_SHAPE
+            case FN_NAME_SHAPE :
+            // <--
             {
-                BOOL bDisable = TRUE;
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                if( rMarkList.GetMarkCount() == 1 )
+                // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
+//                BOOL bDisable = TRUE;
+//                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+//                if( rMarkList.GetMarkCount() == 1 )
+//                {
+//                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+//                    if(pObj->ISA(SdrObjGroup))
+//                        bDisable = FALSE;
+//                }
+//                if(bDisable)
+//                    rSet.DisableItem( nWhich );
+                if ( pSdrView->GetMarkedObjectList().GetMarkCount() != 1 )
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-                    if(pObj->ISA(SdrObjGroup))
-                        bDisable = FALSE;
-                }
-                if(bDisable)
                     rSet.DisableItem( nWhich );
+                }
+                // <--
             }
             break;
         }
