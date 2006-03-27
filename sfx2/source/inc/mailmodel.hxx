@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:06:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,13 @@
 #ifndef INCLUDED_SFX_MAILMODEL_HXX
 #define INCLUDED_SFX_MAILMODEL_HXX
 
-#include "objsh.hxx"
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
 
 // class SfxMailModel_Impl -----------------------------------------------
 
 class AddressList_Impl;
-class SfxBindings;
 
 class SfxMailModel_Impl
 {
@@ -78,7 +79,6 @@ private:
     AddressList_Impl*   mpToList;
     AddressList_Impl*   mpCcList;
     AddressList_Impl*   mpBccList;
-    SfxBindings*        mpBindings;
     String              maFromAddress;
     String              maSubject;
     MailPriority        mePriority;
@@ -87,8 +87,7 @@ private:
 
     void                ClearList( AddressList_Impl* pList );
     void                MakeValueList( AddressList_Impl* pList, String& rValueList );
-    SaveResult          SaveDocument( String& rFileName, String& rType );
-    SaveResult          SaveDocAsPDF( String& rFileName, String& rType );
+    SaveResult          SaveDocumentAsFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType, rtl::OUString& rFileNamePath );
 
     DECL_LINK( DoneHdl, void* );
 
@@ -100,7 +99,7 @@ public:
         SEND_MAIL_ERROR
     };
 
-    SfxMailModel_Impl( SfxBindings* pBinds );
+    SfxMailModel_Impl();
     ~SfxMailModel_Impl();
 
     void                AddAddress( const String& rAddress, AddressRole eRole );
@@ -108,11 +107,9 @@ public:
     void                SetSubject( const String& rSubject )        { maSubject = rSubject; }
     void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
 
-    SendMailResult      Send( MailDocType );
+    SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType );
 };
 
 BOOL CreateFromAddress_Impl( String& rFrom );
 
 #endif // INCLUDED_SFX_MAILMODEL_HXX
-
-
