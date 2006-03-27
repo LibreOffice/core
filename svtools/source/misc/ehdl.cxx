@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:15:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,12 +411,8 @@ BOOL SfxErrorHandler::GetErrorString(
             USHORT nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
-
-            String aErrorRepl(aErrorString.GetString());
-            if(aErrorRepl.Len())
-                aErrorRepl += (nFlags & ERRCODE_MSG_QUERY) ? '?' : '.';
-
-            rStr.SearchAndReplace(String::CreateFromAscii( "$(ERROR)" ),aErrorRepl);
+            rStr.SearchAndReplace(
+                String::CreateFromAscii("$(ERROR)"), aErrorString.GetString());
             bRet = TRUE;
         }
         else
