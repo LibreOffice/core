@@ -4,9 +4,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:50:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,32 +83,32 @@ Resource RID_SW_ERRHDL
      // Import-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR )
     {
-        Text [ de ] = "Formatfehler in der Datei entdeckt" ;
-        Text [ en-US ] = "File format error found" ;
+        Text [ de ] = "Formatfehler in der Datei entdeckt." ;
+        Text [ en-US ] = "File format error found." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
     {
-        Text [ de ] = "Fehler beim Lesen der Datei " ;
-        Text [ en-US ] = "Error reading file " ;
+        Text [ de ] = "Fehler beim Lesen der Datei." ;
+        Text [ en-US ] = "Error reading file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
     {
-        Text [ de ] = "Fehler in der Eingabedatei" ;
-        Text [ en-US ] = "Input file error" ;
+        Text [ de ] = "Fehler in der Eingabedatei." ;
+        Text [ en-US ] = "Input file error." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
     {
-        Text [ de ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei" ;
-        Text [ en-US ] = "This is not a %PRODUCTNAME Writer file" ;
+        Text [ de ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei." ;
+        Text [ en-US ] = "This is not a %PRODUCTNAME Writer file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
     {
-        Text [ de ] = "Unerwartetes Dateiende" ;
-        Text [ en-US ] = "Unexpected end of file" ;
+        Text [ de ] = "Unerwartetes Dateiende." ;
+        Text [ en-US ] = "Unexpected end of file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
@@ -119,8 +119,8 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
     {
-        Text [ de ] = "Die Datei ist keine WinWord6-Datei" ;
-        Text [ en-US ] = "This is not a WinWord6 file" ;
+        Text [ de ] = "Die Datei ist keine WinWord6-Datei." ;
+        Text [ en-US ] = "This is not a WinWord6 file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
@@ -129,224 +129,224 @@ Resource RID_SW_ERRHDL
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
-        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord." ;
         Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
     {
-        Text [ de ] = "Fehler beim Schreiben der Temporärdatei" ;
-        Text [ en-US ] = "Error writing temporary file" ;
+        Text [ de ] = "Fehler beim Schreiben der Temporärdatei." ;
+        Text [ en-US ] = "Error writing temporary file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
     {
-        Text [ de ] = "Einfügebereich in Ini-Datei zu groß" ;
-        Text [ en-US ] = "Inserted section in ini file too large" ;
+        Text [ de ] = "Einfügebereich in Ini-Datei zu groß." ;
+        Text [ en-US ] = "Inserted section in ini file too large." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
     {
-        Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col)" ;
+        Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
     {
-        Text [ de ] = "Datei wurde von einer neueren Version geschrieben" ;
-        Text [ en-US ] = "File has been written in a newer version" ;
+        Text [ de ] = "Datei wurde von einer neueren Version geschrieben." ;
+        Text [ en-US ] = "File has been written in a newer version." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
     {
-        Text [ de ] = "Die Datei ist keine WinWord97-Datei" ;
-        Text [ en-US ] = "This is not a WinWord97 file";
+        Text [ de ] = "Die Datei ist keine WinWord97-Datei." ;
+        Text [ en-US ] = "This is not a WinWord97 file.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
-        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
     };
      // Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
     {
-        Text [ de ] = "Fehler beim Schreiben der Datei " ;
-        Text [ en-US ] = "Error writing file " ;
+        Text [ de ] = "Fehler beim Schreiben der Datei." ;
+        Text [ en-US ] = "Error writing file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
     {
-        Text [ de ] = "Das Autotextdokument hat falsche Version" ;
-        Text [ en-US ] = "Wrong AutoText document version" ;
+        Text [ de ] = "Das Autotextdokument hat falsche Version." ;
+        Text [ en-US ] = "Wrong AutoText document version." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
     {
-        Text [ de ] = "Das Dokument kann nicht angelegt werden" ;
-        Text [ en-US ] = "The document cannot be created" ;
+        Text [ de ] = "Das Dokument kann nicht angelegt werden." ;
+        Text [ en-US ] = "The document cannot be created." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
     {
-        Text [ de ] = "Fehler beim Lesen der Temporärdatei" ;
-        Text [ en-US ] = "Error reading temporary file" ;
+        Text [ de ] = "Fehler beim Lesen der Temporärdatei." ;
+        Text [ en-US ] = "Error reading temporary file." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
     {
-        Text [ de ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe" ;
-        Text [ en-US ] = "The document exceeds the allowed 3.1/4.0 text document size" ;
+        Text [ de ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe." ;
+        Text [ en-US ] = "The document exceeds the allowed 3.1/4.0 text document size." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
     {
-        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
-        Text [ en-US ] = "Error in writing sub-document $(ARG1)";
+        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)." ;
+        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
     };
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
     {
-        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
-        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat." ;
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
     {
-        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
-        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat." ;
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
     {
-        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
-        Text [ en-US ] = "Insufficient memory" ;
+        Text [ de ] = "Nicht genügend Speicher vorhanden." ;
+        Text [ en-US ] = "Insufficient memory." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
     {
-        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
-        Text [ en-US ] = "Insufficient memory" ;
+        Text [ de ] = "Nicht genügend Speicher vorhanden." ;
+        Text [ en-US ] = "Insufficient memory." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
     {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
-        Text [ en-US ] = "Not enough disk space" ;
+        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium." ;
+        Text [ en-US ] = "Not enough disk space." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
     {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
-        Text [ en-US ] = "Not enough disk space" ;
+        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium." ;
+        Text [ en-US ] = "Not enough disk space." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
     {
-        Text [ de ] = "Unbekannter Fehler im W4W-Filter" ;
-        Text [ en-US ] = "Unknown error in W4W filter" ;
+        Text [ de ] = "Unbekannter Fehler im W4W-Filter." ;
+        Text [ en-US ] = "Unknown error in W4W filter." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
     {
-        Text [ de ] = "Unbekannter Fehler im W4W-Filter" ;
-        Text [ en-US ] = "Unknown error in W4W filter" ;
+        Text [ de ] = "Unbekannter Fehler im W4W-Filter." ;
+        Text [ en-US ] = "Unknown error in W4W filter." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
     {
-        Text [ de ] = "Fehler beim Laden des Konverters" ;
-        Text [ en-US ] = "Error loading converter" ;
+        Text [ de ] = "Fehler beim Laden des Konverters." ;
+        Text [ en-US ] = "Error loading converter." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
     {
-        Text [ de ] = "Fehler beim Laden des Konverters" ;
-        Text [ en-US ] = "Error loading converter" ;
+        Text [ de ] = "Fehler beim Laden des Konverters." ;
+        Text [ en-US ] = "Error loading converter." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
     {
-        Text [ de ] = "$(ARG1) hat sich geändert" ;
-        Text [ en-US ] = "$(ARG1) has changed" ;
+        Text [ de ] = "$(ARG1) hat sich geändert." ;
+        Text [ en-US ] = "$(ARG1) has changed." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
     {
-        Text [ de ] = "$(ARG1) existiert nicht" ;
-        Text [ en-US ] = "$(ARG1) does not exist" ;
+        Text [ de ] = "$(ARG1) existiert nicht." ;
+        Text [ en-US ] = "$(ARG1) does not exist." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zellen k�nnen nicht mehr geteilt werden : Zellen k�nnen nicht mehr geteilt werden */
-        Text [ de ] = "Zellen können nicht mehr geteilt werden" ;
-        Text [ en-US ] = "Cells cannot be further split" ;
+        Text [ de ] = "Zellen können nicht mehr geteilt werden." ;
+        Text [ en-US ] = "Cells cannot be further split." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
         /* ### ACHTUNG: Neuer Text in Resource? weitere Spalten k�nnen nicht eingef�gt werden : weitere Spalten k�nnen nicht eingef�gt werden */
-        Text [ de ] = "weitere Spalten können nicht eingefügt werden" ;
-        Text [ en-US ] = "Additional columns cannot be inserted" ;
+        Text [ de ] = "weitere Spalten können nicht eingefügt werden." ;
+        Text [ en-US ] = "Additional columns cannot be inserted." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
     {
-        Text [ de ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden" ;
-        Text [ en-US ] = "The structure of a linked table cannot be modified" ;
+        Text [ de ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden." ;
+        Text [ en-US ] = "The structure of a linked table cannot be modified." ;
         Text [ x-comment ] = " ";
     };
      // -------------------- Warnings -----------------------------------
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
     {
-        Text [ de ] = "Es konnten keine Zeichnungen geladen werden" ;
-        Text [ en-US ] = "No drawings could be read" ;
+        Text [ de ] = "Es konnten keine Zeichnungen geladen werden." ;
+        Text [ en-US ] = "No drawings could be read." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
     {
-        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord." ;
         Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
     {
-        Text [ de ] = "Es konnten nicht alle Attribute gelesen werden" ;
-        Text [ en-US ] = "Not all attributes could be read" ;
+        Text [ de ] = "Es konnten nicht alle Attribute gelesen werden." ;
+        Text [ en-US ] = "Not all attributes could be read." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
     {
-        Text [ de ] = "Es konnten nicht alle Attribute geschrieben werden" ;
-        Text [ en-US ] = "Not all attributes could be recorded" ;
+        Text [ de ] = "Es konnten nicht alle Attribute geschrieben werden." ;
+        Text [ en-US ] = "Not all attributes could be recorded." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken �bernommen werden : Einige OLE-Objekte konnten nur als Grafiken �bernommen werden */
-        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
-        Text [ en-US ] = "Some OLE objects could only be loaded as graphics" ;
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden." ;
+        Text [ en-US ] = "Some OLE objects could only be loaded as graphics." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken �bernommen werden : Einige OLE-Objekte konnten nur als Grafiken �bernommen werden */
-        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
-        Text [ en-US ] = "Some OLE objects could only be saved as graphics" ;
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden." ;
+        Text [ en-US ] = "Some OLE objects could only be saved as graphics." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollst�ndig geladen werden : Dokument konnte nicht vollst�ndig geladen werden */
-        Text [ de ] = "Dokument konnte nicht vollständig geladen werden" ;
-        Text [ en-US ] = "Document could not be completely loaded" ;
+        Text [ de ] = "Dokument konnte nicht vollständig geladen werden." ;
+        Text [ en-US ] = "Document could not be completely loaded." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollst�ndig gespeichert werden : Dokument konnte nicht vollst�ndig gespeichert werden */
-        Text [ de ] = "Dokument konnte nicht vollständig gespeichert werden" ;
-        Text [ en-US ] = "Document could not be completely saved" ;
+        Text [ de ] = "Dokument konnte nicht vollständig gespeichert werden." ;
+        Text [ en-US ] = "Document could not be completely saved." ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
@@ -357,13 +357,13 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
     {
-        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
-        Text [ en-US ] = "Error in writing sub-document $(ARG1)";
+        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)." ;
+        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
     {
-        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
     };
 };
 
