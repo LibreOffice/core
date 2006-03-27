@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:02:22 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_SFX_MAILMODELAPI_HXX
-#define INCLUDED_SFX_MAILMODELAPI_HXX
+#ifndef INCLUDED_SFX_MAILMODEL_HXX
+#define INCLUDED_SFX_MAILMODEL_HXX
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -41,13 +41,10 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
+
 #ifndef INCLUDED_SFX2_DLLAPI_H
 #include "sfx2/dllapi.h"
 #endif
-
 
 // class SfxMailModel_Impl -----------------------------------------------
 
@@ -90,8 +87,6 @@ private:
     AddressList_Impl*   mpToList;
     AddressList_Impl*   mpCcList;
     AddressList_Impl*   mpBccList;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xCurrentFrame;
-
     String              maFromAddress;
     String              maSubject;
     MailPriority        mePriority;
@@ -100,12 +95,10 @@ private:
 
     void                ClearList( AddressList_Impl* pList );
     void                MakeValueList( AddressList_Impl* pList, String& rValueList );
-    SaveResult          SaveDocument( const ::rtl::OUString& _sAttachmentTitle
-                                    , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
-                                    , String& rFileName);
-    SaveResult          SaveDocAsPDF( const ::rtl::OUString& _sAttachmentTitle
-                                    , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
-                                    , String& rFileName);
+    SaveResult          SaveDocumentAsFormat( const rtl::OUString& aSaveFileName,
+                                              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
+                                              const rtl::OUString& rType,
+                                              rtl::OUString& rFileNamePath );
 
     DECL_LINK( DoneHdl, void* );
 
@@ -117,35 +110,37 @@ public:
         SEND_MAIL_ERROR
     };
 
-    SfxMailModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+    SfxMailModel();
     ~SfxMailModel();
 
     void                AddAddress( const String& rAddress, AddressRole eRole );
-    void                SetFromAddress( const String& rAddress )            { maFromAddress = rAddress; }
-    void                SetSubject( const String& rSubject )                { maSubject = rSubject; }
-    void                SetPriority( MailPriority ePrio )                   { mePriority = ePrio; }
+    void                SetFromAddress( const String& rAddress )    { maFromAddress = rAddress; }
+    void                SetSubject( const String& rSubject )        { maSubject = rSubject; }
+    void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
 
     /** attaches a document to the current attachment list, can be called more than once.
     *   at the moment there will be a dialog for export executed for every model which is going to be attached.
     *
-    * \param _eMailDocType
+    * \param sDocumentType
         The doc type to export. PDF will be at the moment only a direct export (no dialog).
-    * \param _xModel
+    * \param xModel
         The current model to attach
-    * \param _sAttachmentTitle
+    * \param sAttachmentTitle
         The title which will be used as attachment title
     * \return @see error code
     */
-    SendMailResult      AttachDocument(   MailDocType _eMailDocType
-                                        , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
-                                        , const ::rtl::OUString& _sAttachmentTitle = ::rtl::OUString());
+    SendMailResult      AttachDocument( const ::rtl::OUString& sDocumentType,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
+                                        const ::rtl::OUString& sAttachmentTitle );
 
-    sal_Int32           GetCount() const { return maAttachedDocuments.size();  }
-    sal_Bool            IsEmpty() const  { return maAttachedDocuments.empty(); }
+    SendMailResult      SaveAndSend( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+                                     const rtl::OUString& rType );
+    SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 
-    SendMailResult      Send( );
+    sal_Int32           GetCount() const;
+    sal_Bool            IsEmpty() const;
 };
 
-#endif // INCLUDED_SFX_MAILMODELAPI_HXX
+BOOL CreateFromAddress_Impl( String& rFrom );
 
-
+#endif // INCLUDED_SFX_MAILMODEL_HXX
