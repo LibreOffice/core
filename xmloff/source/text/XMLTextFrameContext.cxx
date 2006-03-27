@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:20:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:04:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1394,7 +1394,9 @@ XMLTextFrameContext::XMLTextFrameContext(
     m_xAttrList( new SvXMLAttributeList( xAttrList ) ),
     m_eDefaultAnchorType( eATyp ),
     m_pHyperlink( 0 ),
-    m_bHasName( sal_False ),
+    // --> OD 2006-03-10 #i51726#
+    m_HasAutomaticStyleWithoutParentStyle( sal_False ),
+    // <--
     m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1405,13 +1407,28 @@ XMLTextFrameContext::XMLTextFrameContext(
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if( XML_NAMESPACE_DRAW == nPrefix &&
-            IsXMLToken( aLocalName, XML_NAME ) )
+        // --> OD 2006-03-10 #i51726#
+        // New distinguish attribute between Writer objects and Draw objects is:
+        // Draw objects have an automatic style without a parent style
+        if ( XML_NAMESPACE_DRAW == nPrefix &&
+             IsXMLToken( aLocalName, XML_STYLE_NAME ) )
         {
-            m_bHasName = xAttrList->getValueByIndex(i).getLength() != 0;
+            OUString aStyleName = xAttrList->getValueByIndex( i );
+            if( aStyleName.getLength() )
+            {
+                UniReference < XMLTextImportHelper > xTxtImport =
+                                                    GetImport().GetTextImport();
+                XMLPropStyleContext* pStyle( 0L );
+                pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
+                if ( pStyle && !pStyle->GetParentName().getLength() )
+                {
+                    m_HasAutomaticStyleWithoutParentStyle = sal_True;
+                }
+            }
         }
-        else if( XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( aLocalName, XML_ANCHOR_TYPE ) )
+        // <--
+        else if ( XML_NAMESPACE_TEXT == nPrefix &&
+                  IsXMLToken( aLocalName, XML_ANCHOR_TYPE ) )
         {
             TextContentAnchorType eNew;
             if( XMLAnchorTypePropHdl::convert( xAttrList->getValueByIndex(i),
@@ -1483,8 +1500,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
             if( USHRT_MAX != nFrameType )
             {
-                if( (XML_TEXT_FRAME_TEXTBOX == nFrameType || XML_TEXT_FRAME_GRAPHIC == nFrameType )
-                    && !m_bHasName )
+                // --> OD 2006-03-10 #i51726#
+                if ( ( XML_TEXT_FRAME_TEXTBOX == nFrameType ||
+                       XML_TEXT_FRAME_GRAPHIC == nFrameType ) &&
+                     m_HasAutomaticStyleWithoutParentStyle )
+                // <--
                 {
                     Reference < XShapes > xShapes;
                     pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
