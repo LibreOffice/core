@@ -1657,6 +1657,12 @@
                     <value xml:lang="en-US">Close Master View</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SendMailDocAsFormat" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Dokument als Microsoft PowerPoint-Anhang…</value>
+                    <value xml:lang="en-US">Document as Microsoft PowerPoint Attachment…</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ModifyMenu" oor:op="replace">
