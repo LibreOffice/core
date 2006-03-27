@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:29:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@
 #include <xmloff/xmlerror.hxx>
 #endif
 
+#include <svtools/zforlist.hxx>
+#include <svtools/zformat.hxx>
+#include <svtools/languageoptions.hxx>
+
 #include "xmlimprt.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
@@ -82,6 +86,8 @@
 #ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
 #include "ViewSettingsSequenceDefines.hxx"
 #endif
+
+#include "patattr.hxx"
 
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
@@ -1542,6 +1548,8 @@ ScXMLImport::ScXMLImport(
     nSolarMutexLocked(0),
     pScUnoGuard(NULL),
     bSelfImportingXMLSet(sal_False),
+    bLatinDefaultStyle(sal_False),
+    bFromWrapper(sal_False),
     nProgressCount(0)
 
 //  pParaItemMapper( 0 ),
@@ -1819,6 +1827,47 @@ ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
 void ScXMLImport::InsertStyles()
 {
     GetStyles()->CopyStylesToDoc(sal_True);
+
+    // if content is going to be loaded with the same import, set bLatinDefaultStyle flag now
+    if ( getImportFlags() & IMPORT_CONTENT )
+        ExamineDefaultStyle();
+}
+
+void ScXMLImport::ExamineDefaultStyle()
+{
+    if (pDoc)
+    {
+        // #i62435# after inserting the styles, check if the default style has a latin-script-only
+        // number format (then, value cells can be pre-initialized with western script type)
+
+        const ScPatternAttr* pDefPattern = pDoc->GetDefPattern();
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        if ( pFormatter && pDefPattern )
+        {
+            sal_uInt32 nKey = pDefPattern->GetNumberFormat(pFormatter);
+            const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
+            if ( pFormat && pFormat->IsStandard() )
+            {
+                // The standard format is all-latin if the decimal separator dosen't
+                // have a different script type
+
+                String aDecSep;
+                LanguageType nFormatLang = pFormat->GetLanguage();
+                if ( nFormatLang == LANGUAGE_SYSTEM )
+                    aDecSep = ScGlobal::pLocaleData->getNumDecimalSep();
+                else
+                {
+                    LocaleDataWrapper aLocaleData( pDoc->GetServiceManager(),
+                            SvNumberFormatter::ConvertLanguageToLocale( nFormatLang ) );
+                    aDecSep = aLocaleData.getNumDecimalSep();
+                }
+
+                BYTE nScript = pDoc->GetStringScriptType( aDecSep );
+                if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
+                    bLatinDefaultStyle = sal_True;
+            }
+        }
+    }
 }
 
 void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps)
@@ -2276,6 +2325,8 @@ void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Refer
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
+    bFromWrapper = pDoc->IsXMLFromWrapper();    // UnlockSolarMutex below still works normally
+
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
@@ -2322,6 +2373,13 @@ void SAL_CALL ScXMLImport::startDocument(void)
         ScModelObj::getImplementation(GetModel())->BeforeXMLLoading();
         bSelfImportingXMLSet = sal_True;
     }
+
+    // if content and styles are loaded with separate imports,
+    // set bLatinDefaultStyle flag at the start of the content import
+    sal_uInt16 nFlags = getImportFlags();
+    if ( ( nFlags & IMPORT_CONTENT ) && !( nFlags & IMPORT_STYLES ) )
+        ExamineDefaultStyle();
+
     UnlockSolarMutex();
 }
 
@@ -2571,6 +2629,14 @@ void ScXMLImport::DisposingModel()
 
 void ScXMLImport::LockSolarMutex()
 {
+    // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
+    // so there's no need to allocate (and later delete) the ScUnoGuard.
+    if (bFromWrapper)
+    {
+        DBG_TESTSOLARMUTEX();
+        return;
+    }
+
     if (nSolarMutexLocked == 0)
     {
         DBG_ASSERT(!pScUnoGuard, "Solar Mutex is locked");
