@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:09:08 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ Resource RID_ERRHDLSC
     };
     String SCERR_IMPORT_INTERNAL & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Interner Importfehler" ;
+        Text [ de ] = "Interner Importfehler." ;
         Text [ en-US ] = "Internal import error." ;
         Text [ x-comment ] = " ";
     };
@@ -120,14 +120,14 @@ Resource RID_ERRHDLSC
     };
     String SCERR_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
         Text [ x-comment ] = "; shou; should be the same text like in the writer";
     };
     String SCERR_IMPORT_FORMAT_ROWCOL & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col)" ;
+        Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
         Text [ x-comment ] = "; shou; should be the same text like in the writer";
     };
 
@@ -223,8 +223,8 @@ Resource RID_ERRHDLSC
     };
     String SCWARN_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt." ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
         Text [ x-comment ] = "; shou; should be the same text like in the writer";
     };
 };
