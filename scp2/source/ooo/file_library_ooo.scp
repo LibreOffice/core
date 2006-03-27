@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:23:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2151,7 +2151,7 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Utl , utl)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Uui, uui )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Uui, uui )
 
 File gid_File_Lib_Uuresolver
     TXT_FILE_BODY;
