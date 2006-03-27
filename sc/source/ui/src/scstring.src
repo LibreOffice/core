@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:09:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,7 @@ String SCSTR_RENAMETAB
 String SCSTR_RENAMEOBJECT
 {
     Text [ de ] = "Objekt benennen" ;
-    Text [ en-US ] = "Name object";
+    Text [ en-US ] = "Name Object";
 };
 String STR_INSERTGRAPHIC
 {
