@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,7 @@ private:
     // Doc (per Filter o.ae.) inserted wird, erst bei CompileAll / CalcAfterLoad
     BOOL                bInsertingFromOtherDoc;
     BOOL                bImportingXML;      // special handling of formula text
+    BOOL                bXMLFromWrapper;    // distinguish ScXMLImportWrapper from external component
     BOOL                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
     // wenn temporaer keine Listener auf/abgebaut werden sollen
     BOOL                bNoListening;
@@ -1352,9 +1353,7 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     BOOL            IsLoadingDone() const { return bLoadingDone; }
     void            InvalidateTextWidth( const String& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
-    void            InvalidateTextWidth( const ScAddress* pAdrFrom = NULL,
-                                         const ScAddress* pAdrTo   = NULL,
-                                         BOOL bBroadcast = FALSE );
+    void            InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo, BOOL bNumFormatChanged );
 
     BOOL            IdleCalcTextWidth();
     BOOL            IdleCheckLinks();
@@ -1391,6 +1390,8 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     BOOL            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
     void            SetImportingXML( BOOL bVal );
     BOOL            IsImportingXML() const { return bImportingXML; }
+    void            SetXMLFromWrapper( BOOL bVal );
+    BOOL            IsXMLFromWrapper() const { return bXMLFromWrapper; }
     void            SetCalcingAfterLoad( BOOL bVal ) { bCalcingAfterLoad = bVal; }
     BOOL            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
     void            SetNoListening( BOOL bVal ) { bNoListening = bVal; }
