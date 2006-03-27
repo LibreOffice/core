@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:23:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,14 +166,11 @@ BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 {
     String aUpperName = rName;
     ScGlobal::pCharClass->toUpper(aUpperName);
-    String aCompName;
 
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i])
         {
-            pTab[i]->GetName( aCompName );
-            ScGlobal::pCharClass->toUpper(aCompName);
-            if (aUpperName == aCompName)
+            if ( pTab[i]->GetUpperName() == aUpperName )
             {
                 rTab = i;
                 return TRUE;
