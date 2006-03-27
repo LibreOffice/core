@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:37:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,23 @@ void SvXMLExport::_InitCtor()
         mxEventListener.set( new SvXMLExportEventListener(this));
         xModel->addEventListener(mxEventListener);
     }
+
+    // --> OD 2006-03-10 #i51726# - determine model type
+    _DetermineModelType();
+    // <--
 }
+
+// --> OD 2006-03-14 #i51726#
+void SvXMLExport::_DetermineModelType()
+{
+    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
+
+    if ( xModel.is() )
+    {
+        meModelType = SvtModuleOptions::ClassifyFactoryByModel( xModel );
+    }
+}
+// <--
 
 // #110680#
 SvXMLExport::SvXMLExport(
@@ -672,6 +688,10 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         {
         }
     }
+
+    // --> OD 2006-03-10 #i51726# - determine model type
+    _DetermineModelType();
+    // <--
 }
 
 // XInitialize
@@ -2132,6 +2152,9 @@ XMLErrors* SvXMLExport::GetErrors()
 void SvXMLExport::DisposingModel()
 {
     xModel.clear();
+    // --> OD 2006-03-13 #i51726#
+    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;;
+    // <--
     mxEventListener.clear();
 }
 
