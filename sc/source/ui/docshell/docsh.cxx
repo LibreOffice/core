@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:10:46 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,6 +637,11 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
 
     BeforeXMLLoading();
 
+    // #i62677# BeforeXMLLoading is also called from ScXMLImport::startDocument when invoked
+    // from an external component. The XMLFromWrapper flag is only set here, when called
+    // through ScDocShell.
+    aDocument.SetXMLFromWrapper( TRUE );
+
     ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
 
     sal_Bool bRet(sal_False);
@@ -649,6 +654,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
     if ( nError )
         pMedium->SetError( nError );
 
+    aDocument.SetXMLFromWrapper( FALSE );
     AfterXMLLoading(bRet);
 
     //! row heights...
