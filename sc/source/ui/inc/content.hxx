@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:16:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ class ScContentTree : public SvTreeListBox
     void    ClearType(USHORT nType);
     void    ClearAll();
     void    InsertContent( USHORT nType, const String& rValue );
-    void    GetDrawNames( USHORT nType, USHORT nId );
+    void    GetDrawNames( USHORT nType );
 
     void    GetTableNames();
     void    GetAreaNames();
@@ -105,10 +105,12 @@ class ScContentTree : public SvTreeListBox
     void    GetLinkNames();
     void    GetGraphicNames();
     void    GetOleNames();
-    void    GetGroupNames();
+    void    GetDrawingNames();
     void    GetNoteStrings();
 
-    BOOL    DrawNamesChanged( USHORT nType, USHORT nId );
+    static bool IsPartOfType( USHORT nContentType, USHORT nObjIdentifier );
+
+    BOOL    DrawNamesChanged( USHORT nType );
     BOOL    NoteStringsChanged();
 
     ScAddress GetNotePos( ULONG nIndex );
