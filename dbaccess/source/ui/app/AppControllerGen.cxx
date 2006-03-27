@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:30:44 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -635,16 +635,18 @@ void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::E
     {
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aIter = aCompoments.begin();
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aEnd = aCompoments.end();
-        SfxMailModel aSendMail(m_xCurrentFrame);
+        ::rtl::OUString aDocTypeString;
+        SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
         for (; aIter != aEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++aIter)
         {
             Reference< XModel > xModel(aIter->second,UNO_QUERY);
 
-            eResult = aSendMail.AttachDocument(SfxMailModel::TYPE_SELF,xModel,aIter->first);
+            // Send document as e-Mail using stored/default type
+            eResult = aSendMail.AttachDocument(aDocTypeString,xModel,aIter->first);
         }
         if ( !aSendMail.IsEmpty() )
-            aSendMail.Send();
+            aSendMail.Send( m_xCurrentFrame );
     }
 }
 // -----------------------------------------------------------------------------
