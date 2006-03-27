@@ -22,6 +22,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
                     <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:helpid="6672" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SendMailDocAsFormat" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
