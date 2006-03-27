@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:57:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,17 @@ class ScShapeObj : public ::cppu::OWeakObject,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
+    // cached pointers to avoid repeated queryAggregation calls:
+    ::com::sun::star::beans::XPropertySet*                                  pShapePropertySet;
+    ::com::sun::star::beans::XPropertyState*                                pShapePropertyState;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
     BOOL                                                                    bIsTextShape;
 
     SdrObject* GetSdrObject() const throw();
+
+    void                    GetShapePropertySet();
+    void                    GetShapePropertyState();
 
 public:
     static const SvEventDescription* GetSupportedMacroItems();
