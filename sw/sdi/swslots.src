@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:58:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1748,7 +1748,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     Slotname [ de ] = "Diagramme aktualisieren";
     Slotname [ en-US ] = "Update Charts";
 };
-SfxSlotInfo FN_NAME_GROUP
+SfxSlotInfo FN_NAME_SHAPE
 {
     Slotname [ de ] = "Objekt benennen";
     Slotname [ en-US ] = "Name Object";
