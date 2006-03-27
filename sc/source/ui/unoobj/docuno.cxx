@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:38:36 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,35 +111,36 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
 {
     static SfxItemPropertyMap aDocOptPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),   0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_AREALINKS),    0,  &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
-        {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),  0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),  0,  &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_DDELINKS),     0,  &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   0,  &getCppuType((sal_Int16*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES), 0,  &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),   0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),  0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),    0,  &getCppuType((sal_Int32*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),  0,  &getCppuType((double*)0),                                 0},
-        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS), 0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),   0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES),  0,  &getCppuType((uno::Reference<sheet::XNamedRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_DATABASERNG),  0,  &getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_NULLDATE),     0,  &getCppuType((util::Date*)0),                             0},
-        {MAP_CHAR_LEN(SC_UNO_ROWLABELRNG),  0,  &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_SHEETLINKS),   0,  &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),   0,  &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN("BuildId"),           0,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),        0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_AREALINKS),         0, &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
+        {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
+        {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_DDELINKS),          0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
+        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),        0, &getCppuType((sal_Int16*)0),                              0},
+        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),         0, &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES),      0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),        0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),       0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),         0, &getCppuType((sal_Int32*)0),                              0},
+        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),       0, &getCppuType((double*)0),                                 0},
+        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS),      0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),        0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES),       0, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_DATABASERNG),       0, &getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0), 0},
+        {MAP_CHAR_LEN(SC_UNO_NULLDATE),          0, &getCppuType((util::Date*)0),                             0},
+        {MAP_CHAR_LEN(SC_UNO_ROWLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_SHEETLINKS),        0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
+        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),       0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),       0, &getCppuType((sal_Int16*)0),                              0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED),      0, &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_HASVALIDSIGNATURES),0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
 
         {0,0,0,0}
     };
@@ -1462,6 +1463,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
             aRet <<= getRuntimeUID();
+        }
+        else if ( aString.EqualsAscii( SC_UNO_HASVALIDSIGNATURES ) )
+        {
+            aRet <<= hasValidSignatures();
         }
         else if ( aString.EqualsAscii( "BuildId" ) )
         {
