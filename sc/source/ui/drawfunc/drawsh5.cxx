@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:53:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,9 +532,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if ( rMarkList.GetMarkCount() == 1 )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
-                    UINT16 nObjType = pObj->GetObjIdentifier();
-                    if ( nObjType == OBJ_OLE2 || nObjType == OBJ_GRAF || nObjType == OBJ_GRUP )
+                    if ( pObj->GetLayer() != SC_LAYER_INTERN )
                     {
+                        UINT16 nObjType = pObj->GetObjIdentifier();
+
                         // PersistName is used to identify object in Undo
                         String aPersistName;
                         if ( nObjType == OBJ_OLE2 )
@@ -582,6 +583,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                                 new ScUndoRenameObject( pDocSh, aPersistName, aOldName, aNewName ) );
                                 }
 
+                                // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                                pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
                                 pDocSh->SetDrawModified();
                             }
                         }
