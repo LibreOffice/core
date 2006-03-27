@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:43:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     {
         const SfxPoolItem* pItem = NULL;
         pEditAttrs = new SfxItemSet( pEngine->GetAttribs(
-                                        ESelection(0,0,0,pEngine->GetTextLen(0)) ) );
+                                        ESelection(0,0,0,pEngine->GetTextLen(0)), EditEngineAttribs_OnlyHard ) );
         const SfxItemSet& rEditDefaults = pEngine->GetDefaults();
 
         for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
