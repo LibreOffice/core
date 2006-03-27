@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:38:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
 #endif
+#include <svtools/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -917,6 +918,10 @@ void ScXMLTableRowCellContext::EndElement()
                 {
                     if (xLockable.is())
                         xLockable->removeActionLock();
+
+                    // #i61702# The formatted text content of xBaseCell / xLockable is invalidated,
+                    // so it can't be used after calling removeActionLock (getString always uses the document).
+
                     if (CellExists(aCellPos) && ((nCellsRepeated > 1) || (nRepeatedRows > 1)))
                     {
                         if (!xBaseCell.is())
@@ -1064,8 +1069,12 @@ void ScXMLTableRowCellContext::EndElement()
                                                 else
                                                     bDoIncrement = sal_False;
                                             }
+                                            // #i56027# This is about setting simple text, not edit cells,
+                                            // so ProgressBarIncrement must be called with bEditCell = FALSE.
+                                            // Formatted text that is put into the cell by the child context
+                                            // is handled below (bIsEmpty is TRUE then).
                                             if (bDoIncrement || bHasTextImport)
-                                                rXMLImport.ProgressBarIncrement(sal_True);
+                                                rXMLImport.ProgressBarIncrement(sal_False);
                                         }
                                         break;
                                     case util::NumberFormat::NUMBER:
@@ -1093,9 +1102,18 @@ void ScXMLTableRowCellContext::EndElement()
                                                 // test - bypass the API
                                                 // xCell->setValue(fValue);
                                                 LockSolarMutex();
-                                                rXMLImport.GetDocument()->SetValue(
+
+                                                // #i62435# Initialize the value cell's script type
+                                                // if the default style's number format is latin-only.
+                                                // If the cell uses a different format, the script type
+                                                // will be reset when the style is applied.
+
+                                                ScBaseCell* pNewCell = new ScValueCell(fValue);
+                                                if ( rXMLImport.IsLatinDefaultStyle() )
+                                                    pNewCell->SetScriptType( SCRIPTTYPE_LATIN );
+                                                rXMLImport.GetDocument()->PutCell(
                                                     aCurrentPos.Column, aCurrentPos.Row, aCurrentPos.Sheet,
-                                                    fValue );
+                                                    pNewCell );
                                             }
                                             rXMLImport.ProgressBarIncrement(sal_False);
                                         }
@@ -1126,8 +1144,11 @@ void ScXMLTableRowCellContext::EndElement()
                     }
                     else
                     {
+                        // #i56027# If the child context put formatted text into the cell,
+                        // bIsEmpty is TRUE and ProgressBarIncrement has to be called
+                        // with bEditCell = TRUE.
                         if (bHasTextImport)
-                            rXMLImport.ProgressBarIncrement(sal_False);
+                            rXMLImport.ProgressBarIncrement(sal_True);
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
