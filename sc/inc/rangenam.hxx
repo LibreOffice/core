@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:04 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ class ScRangeData : public DataObject
 #endif
 private:
     String          aName;
+    String          aUpperName;         // #i62977# for faster searching (aName is never modified after ctor)
     ScTokenArray*   pCode;
     ScAddress       aPos;
     RangeType       eType;
@@ -126,6 +127,7 @@ public:
 
     void            GetName( String& rName ) const  { rName = aName; }
     const String&   GetName( void ) const           { return aName; }
+    const String&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
     void            SetIndex( USHORT nInd )         { nIndex = nInd; }
@@ -217,6 +219,8 @@ public:
     BOOL                    Load( SvStream& rStream, USHORT nVer );
     BOOL                    Store( SvStream& rStream ) const;
     BOOL                    SearchName( const String& rName, USHORT& rPos ) const;
+                            // SearchNameUpper must be called with an upper-case search string
+    BOOL                    SearchNameUpper( const String& rUpperName, USHORT& rPos ) const;
     void                    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
