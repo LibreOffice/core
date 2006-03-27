@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:51:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,15 +608,31 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // -------------------------------
     // export shapes name if he has one
+    // --> OD 2006-03-13 #i51726#
+    // Export of the shape name for text documents only if the OpenDocument
+    // file format is written - exceptions are group shapes.
+    // Note: Writer documents in OpenOffice.org file format doesn't contain
+    //       any names for shapes, except for group shapes.
     // -------------------------------
     {
-        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
-        if( xNamed.is() )
+        // --> OD 2006-03-10 #i51726#
+        if ( ( GetExport().GetModelType() != SvtModuleOptions::E_WRITER &&
+               GetExport().GetModelType() != SvtModuleOptions::E_WRITERWEB &&
+               GetExport().GetModelType() != SvtModuleOptions::E_WRITERGLOBAL ) ||
+             ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 ||
+             aShapeInfo.meShapeType == XmlShapeTypeDrawGroupShape ||
+             ( aShapeInfo.meShapeType == XmlShapeTypeDrawCustomShape &&
+               aShapeInfo.xCustomShapeReplacement.is() ) )
         {
-            const OUString aName( xNamed->getName() );
-            if( aName.getLength() )
-                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
+            uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+            if( xNamed.is() )
+            {
+                const OUString aName( xNamed->getName() );
+                if( aName.getLength() )
+                    rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
+            }
         }
+        // <--
     }
 
     // ------------------
