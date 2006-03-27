@@ -5839,7 +5839,7 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem NameGroup FN_NAME_GROUP
+SfxVoidItem NameGroup FN_NAME_SHAPE
 ()
 [
     /* flags: */
