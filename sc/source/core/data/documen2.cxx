@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,6 +348,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bNoSetDirty( FALSE ),
         bInsertingFromOtherDoc( FALSE ),
         bImportingXML( FALSE ),
+        bXMLFromWrapper( FALSE ),
         bCalcingAfterLoad( FALSE ),
         bNoListening( FALSE ),
         bLoadingDone( TRUE ),
