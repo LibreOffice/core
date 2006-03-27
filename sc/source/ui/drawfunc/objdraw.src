@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:01:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1334,6 +1334,7 @@ Menu RID_POPUP_DRAW
         MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
         MN_DRWTXTATTR // Text...
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1341,7 +1342,6 @@ Menu RID_POPUP_DRAW
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1399,6 +1399,7 @@ Menu RID_POPUP_GRAPHIC
         MN_DRWTXTATTR
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1406,7 +1407,6 @@ Menu RID_POPUP_GRAPHIC
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1423,6 +1423,7 @@ Menu RID_POPUP_MEDIA
     ItemList =
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1430,7 +1431,6 @@ Menu RID_POPUP_MEDIA
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1478,13 +1478,13 @@ Menu RID_POPUP_OLE
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1502,13 +1502,13 @@ Menu RID_POPUP_CHART
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
-        MN_RENAME_OBJECT
         MenuItem
         {
             Identifier = SID_OPENDLG_MODCHART ;
