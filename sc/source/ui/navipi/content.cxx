@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:16:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,13 +629,13 @@ void ScContentTree::Refresh( USHORT nType )
         if (!NoteStringsChanged())
             return;
     if ( nType == SC_CONTENT_GRAPHIC )
-        if (!DrawNamesChanged(SC_CONTENT_GRAPHIC, OBJ_GRAF))
+        if (!DrawNamesChanged(SC_CONTENT_GRAPHIC))
             return;
     if ( nType == SC_CONTENT_OLEOBJECT )
-        if (!DrawNamesChanged(SC_CONTENT_OLEOBJECT, OBJ_OLE2))
+        if (!DrawNamesChanged(SC_CONTENT_OLEOBJECT))
             return;
     if ( nType == SC_CONTENT_DRAWING )
-        if (!DrawNamesChanged(SC_CONTENT_DRAWING, OBJ_GRUP))
+        if (!DrawNamesChanged(SC_CONTENT_DRAWING))
             return;
 
     SetUpdateMode(FALSE);
@@ -653,7 +653,7 @@ void ScContentTree::Refresh( USHORT nType )
     if ( !nType || nType == SC_CONTENT_OLEOBJECT )
         GetOleNames();
     if ( !nType || nType == SC_CONTENT_DRAWING )
-        GetGroupNames();
+        GetDrawingNames();
     if ( !nType || nType == SC_CONTENT_NOTE )
         GetNoteStrings();
     if ( !nType || nType == SC_CONTENT_AREALINK )
@@ -751,7 +751,27 @@ void ScContentTree::GetDbNames()
     }
 }
 
-void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
+bool ScContentTree::IsPartOfType( USHORT nContentType, USHORT nObjIdentifier )  // static
+{
+    bool bRet = false;
+    switch ( nContentType )
+    {
+        case SC_CONTENT_GRAPHIC:
+            bRet = ( nObjIdentifier == OBJ_GRAF );
+            break;
+        case SC_CONTENT_OLEOBJECT:
+            bRet = ( nObjIdentifier == OBJ_OLE2 );
+            break;
+        case SC_CONTENT_DRAWING:
+            bRet = ( nObjIdentifier != OBJ_GRAF && nObjIdentifier != OBJ_OLE2 );    // everything else
+            break;
+        default:
+            DBG_ERROR("unknown content type");
+    }
+    return bRet;
+}
+
+void ScContentTree::GetDrawNames( USHORT nType )
 {
     if ( nRootType && nRootType != nType )              // ausgeblendet ?
         return;
@@ -778,7 +798,7 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == nId )
+                    if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
                     {
                         String aName = ScDrawLayer::GetVisibleName( pObject );
                         if (aName.Len())
@@ -794,17 +814,17 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
 
 void ScContentTree::GetGraphicNames()
 {
-    GetDrawNames( SC_CONTENT_GRAPHIC, OBJ_GRAF );
+    GetDrawNames( SC_CONTENT_GRAPHIC );
 }
 
 void ScContentTree::GetOleNames()
 {
-    GetDrawNames( SC_CONTENT_OLEOBJECT, OBJ_OLE2 );
+    GetDrawNames( SC_CONTENT_OLEOBJECT );
 }
 
-void ScContentTree::GetGroupNames()
+void ScContentTree::GetDrawingNames()
 {
-    GetDrawNames( SC_CONTENT_DRAWING, OBJ_GRUP );
+    GetDrawNames( SC_CONTENT_DRAWING );
 }
 
 void ScContentTree::GetLinkNames()
@@ -963,7 +983,7 @@ BOOL ScContentTree::NoteStringsChanged()
     return !bEqual;
 }
 
-BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
+BOOL ScContentTree::DrawNamesChanged( USHORT nType )
 {
     ScDocument* pDoc = GetSourceDocument();
     if (!pDoc)
@@ -994,7 +1014,7 @@ BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
                 SdrObject* pObject = aIter.Next();
                 while (pObject && bEqual)
                 {
-                    if ( pObject->GetObjIdentifier() == nId )
+                    if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
                     {
                         if ( !pEntry )
                             bEqual = FALSE;
