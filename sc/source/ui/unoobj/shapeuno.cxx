@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,10 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 
 //------------------------------------------------------------------------
 
-ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
-    : pImplementationId(NULL),
+ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
+      pShapePropertySet(NULL),
+      pShapePropertyState(NULL),
+      pImplementationId(NULL),
       bIsTextShape(FALSE)
 {
     comphelper::increment( m_refCount );
@@ -168,20 +170,32 @@ void SAL_CALL ScShapeObj::release() throw()
     OWeakObject::release();
 }
 
-uno::Reference<beans::XPropertySet> lcl_GetPropertySet( const uno::Reference<uno::XAggregation>& xAgg )
+void ScShapeObj::GetShapePropertySet()
 {
-    uno::Reference<beans::XPropertySet> xRet;
-    if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertySet>*) 0) ) >>= xRet;
-    return xRet;
+    // #i61908# Store the result of queryAggregation in a member.
+    // The reference in mxShapeAgg is kept for this object's lifetime, so the pointer is always valid.
+
+    if (!pShapePropertySet)
+    {
+        uno::Reference<beans::XPropertySet> xProp;
+        if ( mxShapeAgg.is() )
+            mxShapeAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertySet>*) 0) ) >>= xProp;
+        pShapePropertySet = xProp.get();
+    }
 }
 
-uno::Reference<beans::XPropertyState> lcl_GetPropertyState( const uno::Reference<uno::XAggregation>& xAgg )
+void ScShapeObj::GetShapePropertyState()
 {
-    uno::Reference<beans::XPropertyState> xRet;
-    if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertyState>*) 0) ) >>= xRet;
-    return xRet;
+    // #i61908# Store the result of queryAggregation in a member.
+    // The reference in mxShapeAgg is kept for this object's lifetime, so the pointer is always valid.
+
+    if (!pShapePropertyState)
+    {
+        uno::Reference<beans::XPropertyState> xState;
+        if ( mxShapeAgg.is() )
+            mxShapeAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertyState>*) 0) ) >>= xState;
+        pShapePropertyState = xState.get();
+    }
 }
 
 uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
@@ -223,16 +237,19 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    //  mix own and aggregated properties:
-    uno::Reference<beans::XPropertySetInfo> xRet;
-    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-    if ( xAggProp.is() )
+    // #i61527# cache property set info for this object
+    if ( !mxPropSetInfo.is() )
     {
-        uno::Reference<beans::XPropertySetInfo> xAggInfo(xAggProp->getPropertySetInfo());
-        const uno::Sequence<beans::Property> aPropSeq(xAggInfo->getProperties());
-        xRet.set(new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq ));
+        //  mix own and aggregated properties:
+        GetShapePropertySet();
+        if (pShapePropertySet)
+        {
+            uno::Reference<beans::XPropertySetInfo> xAggInfo(pShapePropertySet->getPropertySetInfo());
+            const uno::Sequence<beans::Property> aPropSeq(xAggInfo->getProperties());
+            mxPropSetInfo.set(new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq ));
+        }
     }
-    return xRet;
+    return mxPropSetInfo;
 }
 
 ScDocument* lcl_GetDocument( SdrObject* pObj )
@@ -630,9 +647,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     }
     else
     {
-        uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-        if ( xAggProp.is() )
-            xAggProp->setPropertyValue( aPropertyName, aValue );
+        GetShapePropertySet();
+        if (pShapePropertySet)
+            pShapePropertySet->setPropertyValue( aPropertyName, aValue );
     }
 }
 
@@ -811,9 +828,9 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
     }
     else
     {
-        uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-        if ( xAggProp.is() )
-            aAny = xAggProp->getPropertyValue( aPropertyName );
+        GetShapePropertySet();
+        if (pShapePropertySet)
+            aAny = pShapePropertySet->getPropertyValue( aPropertyName );
     }
 
     return aAny;
@@ -826,9 +843,9 @@ void SAL_CALL ScShapeObj::addPropertyChangeListener( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-    if ( xAggProp.is() )
-        xAggProp->addPropertyChangeListener( aPropertyName, aListener );
+    GetShapePropertySet();
+    if (pShapePropertySet)
+        pShapePropertySet->addPropertyChangeListener( aPropertyName, aListener );
 }
 
 void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPropertyName,
@@ -838,9 +855,9 @@ void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPr
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-    if ( xAggProp.is() )
-        xAggProp->removePropertyChangeListener( aPropertyName, aListener );
+    GetShapePropertySet();
+    if (pShapePropertySet)
+        pShapePropertySet->removePropertyChangeListener( aPropertyName, aListener );
 }
 
 void SAL_CALL ScShapeObj::addVetoableChangeListener( const rtl::OUString& aPropertyName,
@@ -850,9 +867,9 @@ void SAL_CALL ScShapeObj::addVetoableChangeListener( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-    if ( xAggProp.is() )
-        xAggProp->addVetoableChangeListener( aPropertyName, aListener );
+    GetShapePropertySet();
+    if (pShapePropertySet)
+        pShapePropertySet->addVetoableChangeListener( aPropertyName, aListener );
 }
 
 void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPropertyName,
@@ -862,9 +879,9 @@ void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPr
 {
     ScUnoGuard aGuard;
 
-    uno::Reference<beans::XPropertySet> xAggProp(lcl_GetPropertySet(mxShapeAgg));
-    if ( xAggProp.is() )
-        xAggProp->removeVetoableChangeListener( aPropertyName, aListener );
+    GetShapePropertySet();
+    if (pShapePropertySet)
+        pShapePropertySet->removeVetoableChangeListener( aPropertyName, aListener );
 }
 
 //  XPropertyState
@@ -894,9 +911,9 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString&
     }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
-        if ( xAggState.is() )
-            eRet = xAggState->getPropertyState( aPropertyName );
+        GetShapePropertyState();
+        if (pShapePropertyState)
+            eRet = pShapePropertyState->getPropertyState( aPropertyName );
     }
 
     return eRet;
@@ -943,9 +960,9 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
     }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
-        if ( xAggState.is() )
-            xAggState->setPropertyToDefault( aPropertyName );
+        GetShapePropertyState();
+        if (pShapePropertyState)
+            pShapePropertyState->setPropertyToDefault( aPropertyName );
     }
 }
 
@@ -965,9 +982,9 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
     }
     else
     {
-        uno::Reference<beans::XPropertyState> xAggState(lcl_GetPropertyState(mxShapeAgg));
-        if ( xAggState.is() )
-            aAny = xAggState->getPropertyDefault( aPropertyName );
+        GetShapePropertyState();
+        if (pShapePropertyState)
+            aAny = pShapePropertyState->getPropertyDefault( aPropertyName );
     }
 
     return aAny;
