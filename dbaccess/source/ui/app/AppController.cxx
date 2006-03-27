@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:40:35 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1278,9 +1278,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case SID_MAIL_SENDDOC:
                 {
-                    SfxMailModel aSendMail(m_xCurrentFrame);
-                    if ( aSendMail.AttachDocument(SfxMailModel::TYPE_SELF,getModel()) == SfxMailModel::SEND_MAIL_OK )
-                        aSendMail.Send();
+                    SfxMailModel aSendMail;
+                    if ( aSendMail.AttachDocument(rtl::OUString(),getModel(), rtl::OUString()) == SfxMailModel::SEND_MAIL_OK )
+                        aSendMail.Send(m_xCurrentFrame);
                 }
                 break;
             case SID_DB_APP_SENDREPORTASMAIL:
