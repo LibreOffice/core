@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:42:07 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -102,7 +105,7 @@
 #include "sfxlocal.hrc"
 #include "sfxbasecontroller.hxx"
 #include "topfrm.hxx"
-#include "mailmodel.hxx"
+#include "mailmodelapi.hxx"
 #include "event.hxx"
 #include "appdata.hxx"
 #include "fcontnr.hxx"
@@ -162,6 +165,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
         case SID_MAIL_SENDDOCASPDF:
         case SID_MAIL_SENDDOC:
+        case SID_MAIL_SENDDOCASFORMAT:
         {
             SfxObjectShell* pDoc = GetObjectShell();
             if ( pDoc && pDoc->QueryHiddenInformation(
@@ -174,7 +178,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             else
             {
-                SfxMailModel_Impl   aModel( &GetViewFrame()->GetBindings() );
+                SfxMailModel  aModel;
+                rtl::OUString aDocType;
 
                 SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, FALSE );
                 if ( pMailSubject )
@@ -188,16 +193,54 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                     if ( aRecipient.Search( aMailToStr ) == 0 )
                         aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
-                    aModel.AddAddress( aRecipient, SfxMailModel_Impl::ROLE_TO );
+                    aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
+                }
+                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, FALSE );
+                if ( pMailDocType )
+                    aDocType = pMailDocType->GetValue();
+
+                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+                SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
+                if ( nId == SID_MAIL_SENDDOCASPDF )
+                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
+                else if ( nId == SID_MAIL_SENDDOC )
+                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
+                else
+                {
+                    rtl::OUString aModuleName;
+                    if ( aDocType.getLength() == 0 )
+                    {
+                        // MS Document format as default for SID_MAIL_SENDDOCASFORMAT
+                        uno::Reference< lang::XMultiServiceFactory > xSMGR( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+                        uno::Reference< frame::XModuleManager > xModuleManager(
+                            xSMGR->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.frame.ModuleManager" ))), uno::UNO_QUERY );
+                        try
+                        {
+                            aModuleName = xModuleManager->identify( xFrame );
+                        }
+                        catch ( uno::RuntimeException& )
+                        {
+                            throw;
+                        }
+                        catch ( uno::Exception& )
+                        {
+                        }
+
+                        if ( aModuleName.equalsAscii( "com.sun.star.text.TextDocument" ))
+                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
+                        else if ( aModuleName.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
+                        else if ( aModuleName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                        else if ( aModuleName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                    }
+
+                    eResult = aModel.SaveAndSend( xFrame, aDocType );
                 }
 
-                SfxMailModel_Impl::SendMailResult eResult = SfxMailModel_Impl::SEND_MAIL_ERROR;
-                if ( nId == SID_MAIL_SENDDOCASPDF )
-                    eResult = aModel.Send( SfxMailModel_Impl::TYPE_ASPDF );
-                else
-                    eResult = aModel.Send( SfxMailModel_Impl::TYPE_SELF );
-
-                if ( eResult == SfxMailModel_Impl::SEND_MAIL_ERROR )
+                if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
                 {
                     InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
                     aBox.Execute();
@@ -317,6 +360,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             // Mail-Funktionen
             case SID_MAIL_SENDDOCASPDF:
             case SID_MAIL_SENDDOC:
+            case SID_MAIL_SENDDOCASFORMAT:
             {
                 BOOL bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
                 if ( !bEnable )
