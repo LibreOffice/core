@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:28:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,7 @@ static const String sComponentData  = String::CreateFromAscii( "ComponentData" )
 static const String sComponentContext = String::CreateFromAscii( "ComponentContext" );
 static const String sDocumentBaseURL = String::CreateFromAscii( "DocumentBaseURL" );
 static const String sHierarchicalDocumentName = String::CreateFromAscii( "HierarchicalDocumentName" );
+static const String sCopyStreamIfPossible = String::CreateFromAscii( "CopyStreamIfPossible" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -869,6 +870,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
                 }
+                else if ( aName == sCopyStreamIfPossible )
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for CopyStreamIfPossible" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
+                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
@@ -1048,6 +1057,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1170,6 +1181,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_DOC_BASEURL )
                         continue;
                     if ( nId == SID_DOC_HIERARCHICALNAME )
+                        continue;
+                    if ( nId == SID_COPY_STREAM_IF_POSSIBLE )
                         continue;
 
                     // used only internally
@@ -1497,6 +1510,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = sHierarchicalDocumentName;
                 pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sCopyStreamIfPossible;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
         }
     }
