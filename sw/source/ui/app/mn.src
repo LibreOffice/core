@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:59:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,11 +305,11 @@
         Text [ en-US ] = "Te~xt..." ; \
     };
 
-#define MN_NAME_GROUP \
+#define MN_NAME_SHAPE \
     MenuItem\
     {\
-        Identifier = FN_NAME_GROUP ; \
-        HelpID = FN_NAME_GROUP ; \
+        Identifier = FN_NAME_SHAPE ; \
+        HelpID = FN_NAME_SHAPE ; \
         Text [ de ] = "Obje~kt benennen..." ; \
         Text [ en-US ] = "~Name Object..." ; \
     };
@@ -755,7 +755,7 @@ Menu MN_DRAW_POPUPMENU
         {
             ITEM_FORMAT_ATTR_TRANSFORM
         };
-        MN_NAME_GROUP
+        MN_NAME_SHAPE
         SEPARATOR ;
         MN_DRAW5
         MN_WRAP_DRAW
@@ -780,7 +780,7 @@ Menu MN_DRAWFORM_POPUPMENU
         {
             ITEM_FORMAT_ATTR_TRANSFORM
         };
-        MN_NAME_GROUP
+        MN_NAME_SHAPE
         MN_FORM
         SEPARATOR ;
         MN_DRAW6
@@ -1043,7 +1043,7 @@ Menu MN_MEDIA_POPUPMENU
         {
             ITEM_FORMAT_ATTR_TRANSFORM
         };
-        MN_NAME_GROUP
+        MN_NAME_SHAPE
         SEPARATOR ;
         MN_DRAW6
         MN_WRAP_DRAW
