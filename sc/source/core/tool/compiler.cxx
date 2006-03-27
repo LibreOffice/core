@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1068,11 +1068,13 @@ BOOL ScCompiler::IsMacro( const String& rName )
     return TRUE;
 }
 
-BOOL ScCompiler::IsNamedRange( const String& rName )
+BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
+    // IsNamedRange is called only from NextNewToken, with an upper-case string
+
     USHORT n;
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    if (pRangeName->SearchName( rName, n ) )
+    if (pRangeName->SearchNameUpper( rUpperName, n ) )
     {
         ScRangeData* pData = (*pRangeName)[n];
         ScRawToken aToken;
