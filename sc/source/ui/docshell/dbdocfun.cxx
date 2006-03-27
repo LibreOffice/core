@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:44:45 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,17 @@ BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL b
                                     rRange.aStart.Col(), rRange.aStart.Row(),
                                     rRange.aEnd.Col(), rRange.aEnd.Row() );
 
-    pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
+    // #i55926# While loading XML, formula cells only have a single string token,
+    // so CompileDBFormula would never find any name (index) tokens, and would
+    // unnecessarily loop through all cells.
+    BOOL bCompile = !pDoc->IsImportingXML();
+
+    if ( bCompile )
+        pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
     BOOL bOk = pDocColl->Insert( pNew );
-    pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
+    if ( bCompile )
+        pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
+
     if (!bOk)
     {
         delete pNew;
