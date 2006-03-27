@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:05:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,10 +148,27 @@ inline int StrCmp( const String* pStr1, const String* pStr2 )
     return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : FALSE ) : ( pStr2 ? FALSE : TRUE ) );
 }
 
+inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+{
+    // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
+    // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
+    // so it's enough to compare just the pointers (Count just because it's even faster).
+
+    if ( rSet1.Count() != rSet2.Count() )
+        return false;
+
+    SfxItemArray pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxItemArray pItems2 = rSet2.GetItems_Impl();
+
+    return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
+}
+
 int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
-    return ( SfxSetItem::operator==(rCmp) &&
-             StrCmp( GetStyleName(), ((const ScPatternAttr&)rCmp).GetStyleName() ) );
+    // #i62090# Use quick comparison between ScPatternAttr's ItemSets
+
+    return ( EqualPatternSets( GetItemSet(), static_cast<const ScPatternAttr&>(rCmp).GetItemSet() ) &&
+             StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
 SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT nVersion ) const
