@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:24:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,14 @@ void ScTable::SetName( const String& rNewName )
     if( rNewName == aMd )
         bIsOlk = bOderSo = TRUE;
     aName = rNewName;
+    aUpperName.Erase();         // invalidated if the name is changed
+}
+
+const String& ScTable::GetUpperName() const
+{
+    if ( !aUpperName.Len() && aName.Len() )
+        aUpperName = ScGlobal::pCharClass->upper( aName );
+    return aUpperName;
 }
 
 void ScTable::SetVisible( BOOL bVis )
