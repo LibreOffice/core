@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:56:59 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2294,6 +2294,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_BUILDID:
             aAny <<= maBuildId;
+        break;
+        case WID_DOC_HAS_VALID_SIGNATURES:
+            aAny <<= hasValidSignatures();
         break;
 
         default:
