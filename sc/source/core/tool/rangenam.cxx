@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:48:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           RangeType nType,
                           BOOL bEnglish ) :
                 aName       ( rName ),
+                aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
@@ -111,6 +112,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScAddress& rAddress,
                           RangeType nType ) :
                 aName       ( rName ),
+                aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
@@ -145,6 +147,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const String& rName,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
+                aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
                 aPos        ( rTarget ),
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
@@ -164,6 +167,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     aName   (rScRangeData.aName),
+    aUpperName  (rScRangeData.aUpperName),
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (rScRangeData.pDoc),
@@ -753,14 +757,14 @@ short ScRangeName::Compare(DataObject* pKey1, DataObject* pKey2) const
     return (short) i1 - (short) i2;
 }
 
-BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
+BOOL ScRangeName::SearchNameUpper( const String& rUpperName, USHORT& rIndex ) const
 {
+    // SearchNameUpper must be called with an upper-case search string
+
     USHORT i = 0;
     while (i < nCount)
     {
-        String aName;
-        ((*this)[i])->GetName( aName );
-        if ( ScGlobal::pTransliteration->isEqual( aName, rName ) )
+        if ( ((*this)[i])->GetUpperName() == rUpperName )
         {
             rIndex = i;
             return TRUE;
@@ -768,6 +772,14 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
         i++;
     }
     return FALSE;
+}
+
+BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
+{
+    if ( nCount > 0 )
+        return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex );
+    else
+        return FALSE;
 }
 
 BOOL ScRangeName::Load( SvStream& rStream, USHORT nVer )
