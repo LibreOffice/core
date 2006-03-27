@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:59:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible, "IsBackgroundObjects
 SD_CONSTASCII_ACTION( sUNO_Prop_UserDefinedAttributes, "UserDefinedAttributes" );
 SD_CONSTASCII_ACTION( sUNO_Prop_BookmarkURL,            "BookmarkURL" );
 SD_CONSTASCII_ACTION( sUNO_Prop_RuntimeUID,             "RuntimeUID" );
+SD_CONSTASCII_ACTION( sUNO_Prop_HasValidSignatures,     "HasValidSignatures" );
 
 // view settings
 SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );
