@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so3res.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:53:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,215 +41,215 @@ Resource RID_SO_ERROR_HANDLER
 {
     String ERRCODE_SO_GENERALERROR&S_MAX
     {
-        Text [ de ] = "Allgemeiner OLE Fehler" ;
-        Text [ en-US ] = "General OLE error" ;
+        Text [ de ] = "Allgemeiner OLE Fehler." ;
+        Text [ en-US ] = "General OLE error." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_CANT_BINDTOSOURCE&S_MAX
     {
          // ### ACHTUNG: Neuer Text in Resource? Die Verbindung zum Objekt kann nicht hergestellt werden : Die Verbindung zum Objekt kann nicht hergestellt werden.
-        Text [ de ] = "Die Verbindung zum Objekt kann nicht hergestellt werden" ;
+        Text [ de ] = "Die Verbindung zum Objekt kann nicht hergestellt werden." ;
         Text [ en-US ] = "The connection to the object cannot be established." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOCACHE_UPDATED&S_MAX
     {
-        Text [ de ] = "Die Daten im Cache wurden nicht aktualisiert" ;
-        Text [ en-US ] = "No cache files were updated" ;
+        Text [ de ] = "Die Daten im Cache wurden nicht aktualisiert." ;
+        Text [ en-US ] = "No cache files were updated." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_SOMECACHES_NOTUPDATED&S_MAX
     {
-        Text [ de ] = "Einige Daten im Cache wurden nicht aktualisiert" ;
-        Text [ en-US ] = "Some cache files were not updated" ;
+        Text [ de ] = "Einige Daten im Cache wurden nicht aktualisiert." ;
+        Text [ en-US ] = "Some cache files were not updated." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_UNAVAILABLE&S_MAX
     {
-        Text [ de ] = "Der Status des Objektes kann nicht in vertretbarer Zeit ermittelt werden" ;
-        Text [ en-US ] = "Status of object cannot be determined in a timely manner" ;
+        Text [ de ] = "Der Status des Objektes kann nicht in vertretbarer Zeit ermittelt werden." ;
+        Text [ en-US ] = "Status of object cannot be determined in a timely manner." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_E_CLASSDIFF&S_MAX
     {
-        Text [ de ] = "Die Quelle der OLE-Verbindung wurde konvertiert" ;
-        Text [ en-US ] = "Source of the OLE link has been converted" ;
+        Text [ de ] = "Die Quelle der OLE-Verbindung wurde konvertiert." ;
+        Text [ en-US ] = "Source of the OLE link has been converted." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_OBJECT&S_MAX
     {
-        Text [ de ] = "Das Objekt konnte nicht gefunden werden" ;
+        Text [ de ] = "Das Objekt konnte nicht gefunden werden." ;
         Text [ en-US ] = "The object could not be found." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_EXCEEDED_DEADLINE&S_MAX
     {
-        Text [ de ] = "Die Operation konnte im vorgegebenen Zeitraum nicht abgeschlossen werden" ;
+        Text [ de ] = "Die Operation konnte im vorgegebenen Zeitraum nicht abgeschlossen werden." ;
         Text [ en-US ] = "The process could not be completed within the specified time period." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CONNECT_MANUALLY&S_MAX
     {
-        Text [ de ] = "OLE konnte sich nicht mit einem Ger√§t im Netzwerk (Server) verbinden" ;
-        Text [ en-US ] = "OLE could not connect to a network device (server)" ;
+        Text [ de ] = "OLE konnte sich nicht mit einem Ger√§t im Netzwerk (Server) verbinden." ;
+        Text [ en-US ] = "OLE could not connect to a network device (server)." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_INTERMEDIATE_INTERFACE_NOT_SUPPORTED&S_MAX
     {
-        Text [ de ] = "Das gefundene Objekt unterst√ºtzt nicht die gew√ºnschten Funktionen" ;
-        Text [ en-US ] = "The object found does not support the interface required for the desired operation" ;
+        Text [ de ] = "Das gefundene Objekt unterst√ºtzt nicht die gew√ºnschten Funktionen." ;
+        Text [ en-US ] = "The object found does not support the interface required for the desired operation." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NO_INTERFACE&S_MAX
     {
-        Text [ de ] = "Die Schnittstelle wird nicht unterst√ºtzt" ;
-        Text [ en-US ] = "Interface not supported" ;
+        Text [ de ] = "Die Schnittstelle wird nicht unterst√ºtzt." ;
+        Text [ en-US ] = "Interface not supported." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_OUT_OF_MEMORY&S_MAX
     {
-        Text [ de ] = "Zu wenig Speicher" ;
-        Text [ en-US ] = "Insufficient memory" ;
+        Text [ de ] = "Zu wenig Speicher." ;
+        Text [ en-US ] = "Insufficient memory." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_SYNTAX&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname konnte nicht verarbeitet werden" ;
+        Text [ de ] = "Der Verbindungsname konnte nicht verarbeitet werden." ;
         Text [ en-US ] = "The connection name could not be processed." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_REDUCED_TO_SELF&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname konnte nicht weiter reduziert werden" ;
-        Text [ en-US ] = "The connection name could not be reduced further" ;
+        Text [ de ] = "Der Verbindungsname konnte nicht weiter reduziert werden." ;
+        Text [ en-US ] = "The connection name could not be reduced further." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_INVERSE&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname hat keine umgekehrte Darstellung" ;
+        Text [ de ] = "Der Verbindungsname hat keine umgekehrte Darstellung." ;
         Text [ en-US ] = "The connection name has no inverse." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_PREFIX&S_MAX
     {
-        Text [ de ] = "Es existiert kein gemeinsamer Prefix" ;
-        Text [ en-US ] = "No common prefix exists" ;
+        Text [ de ] = "Es existiert kein gemeinsamer Prefix." ;
+        Text [ en-US ] = "No common prefix exists." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_HIM&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname ist im anderen enthalten" ;
+        Text [ de ] = "Der Verbindungsname ist im anderen enthalten." ;
         Text [ en-US ] = "The connection name is contained in the other one." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_US&S_MAX
     {
-        Text [ de ] = "Die Verbindungsnamen sind gleich" ;
+        Text [ de ] = "Die Verbindungsnamen sind gleich." ;
         Text [ en-US ] = "The connection names (the receiver and the other moniker) are identical." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_ME&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname ist im anderen enthalten" ;
+        Text [ de ] = "Der Verbindungsname ist im anderen enthalten." ;
         Text [ en-US ] = "The connection name is contained in the other one." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NOT_BINDABLE&S_MAX
     {
          // ### ACHTUNG: Neuer Text in Resource? Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen : Der Verbindungsname kann nicht verbunden werden. Es handelt sich um einen relativen Namen
-        Text [ de ] = "Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen" ;
+        Text [ de ] = "Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen." ;
         Text [ en-US ] = "The connection name cannot be connected. This is a relative name." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOT_IMPLEMENTED&S_MAX
     {
-        Text [ de ] = "Die Funktion ist nicht implementiert" ;
-        Text [ en-US ] = "Operation not implemented" ;
+        Text [ de ] = "Die Funktion ist nicht implementiert." ;
+        Text [ en-US ] = "Operation not implemented." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_STORAGE&S_MAX
     {
-        Text [ de ] = "Kein Storage" ;
-        Text [ en-US ] = "No storage" ;
+        Text [ de ] = "Kein Storage." ;
+        Text [ en-US ] = "No storage." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_FALSE&S_MAX
     {
-        Text [ de ] = "Falsch" ;
-        Text [ en-US ] = "False" ;
+        Text [ de ] = "Falsch." ;
+        Text [ en-US ] = "False." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NEED_GENERIC&S_MAX
     {
-        Text [ de ] = "Moniker k√∂nnen nur generisch zusammengesetzt werden" ;
-        Text [ en-US ] = "Monikers must be composed generically" ;
+        Text [ de ] = "Moniker k√∂nnen nur generisch zusammengesetzt werden." ;
+        Text [ en-US ] = "Monikers must be composed generically." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_PENDING&S_MAX
     {
-        Text [ de ] = "Die Daten sind zur Zeit nicht verf√ºgbar" ;
-        Text [ en-US ] = "Data not available at this time" ;
+        Text [ de ] = "Die Daten sind zur Zeit nicht verf√ºgbar." ;
+        Text [ en-US ] = "Data not available at this time." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOT_INPLACEACTIVE & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Objekt wurde nicht InPlace aktiviert : Objetkt wurde nicht InPlace aktiviert */
-        Text [ de ] = "Objekt wurde nicht InPlace aktiviert" ;
-        Text [ en-US ] = "Object could not be activated InPlace" ;
+        Text [ de ] = "Objekt wurde nicht InPlace aktiviert." ;
+        Text [ en-US ] = "Object could not be activated InPlace." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_LINDEX & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Index : Ung≥ltiger Index */
-        Text [ de ] = "Ung√ºltiger Index" ;
-        Text [ en-US ] = "Invalid index" ;
+        Text [ de ] = "Ung√ºltiger Index." ;
+        Text [ en-US ] = "Invalid index." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt kann die Aktion im momentanen Zustand nicht ausf¸hren : Das Objekt kann die Aktion im momentanen Zustand nicht ausf≥hren */
-        Text [ de ] = "Das Objekt kann die Aktion im momentanen Zustand nicht ausf√ºhren" ;
+        Text [ de ] = "Das Objekt kann die Aktion im momentanen Zustand nicht ausf√ºhren." ;
         Text [ en-US ] = "The action cannot be executed in the object's current state." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Bei der Aktivierung wurde ein ung¸ltiges Fenster ist ¸bergeben : Bei der Aktivierung wurde ein ung≥ltiges Fenster ist ≥bergeben */
-        Text [ de ] = "Bei der Aktivierung wurde ein ung√ºltiges Fenster √ºbergeben" ;
+        Text [ de ] = "Bei der Aktivierung wurde ein ung√ºltiges Fenster √ºbergeben." ;
         Text [ en-US ] = "An invalid window was passed when activated." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOVERBS & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterst¸tzt keine Aktionen : Das Objekt unterst≥tzt keine Aktionen */
-        Text [ de ] = "Das Objekt unterst√ºtzt keine Aktionen" ;
-        Text [ en-US ] = "The object does not support any actions" ;
+        Text [ de ] = "Das Objekt unterst√ºtzt keine Aktionen." ;
+        Text [ en-US ] = "The object does not support any actions." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_INVALIDVERB & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelˆst : Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel˜st */
-        Text [ de ] = "Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel√∂st" ;
+        Text [ de ] = "Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel√∂st." ;
         Text [ en-US ] = "The action is not defined. The default action will be executed." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CONNECT & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Eine Verkn¸pfung auf das Netzwerk konnte nicht wieder hergestellt werden : Eine Verkn≥pfung auf das Netzwerk, die nicht wieder hergestellt werden konnte */
-        Text [ de ] = "Eine Verkn√ºpfung auf das Netzwerk konnte nicht wieder hergestellt werden" ;
+        Text [ de ] = "Eine Verkn√ºpfung auf das Netzwerk konnte nicht wieder hergestellt werden." ;
         Text [ en-US ] = "A link to the network could not be re-established." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOTIMPL & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterst¸tzt diese Aktion nicht : Das Objekt unterst≥tzt diese Aktion nicht */
-        Text [ de ] = "Das Objekt unterst√ºtzt diese Aktion nicht" ;
-        Text [ en-US ] = "Object does not support this action" ;
+        Text [ de ] = "Das Objekt unterst√ºtzt diese Aktion nicht." ;
+        Text [ en-US ] = "Object does not support this action." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CANTOPENFILE & S_MAX
     {
-        Text [ de ] = "Die angegebene Datei konnte nicht ge√∂ffnet werden" ;
+        Text [ de ] = "Die angegebene Datei konnte nicht ge√∂ffnet werden." ;
         Text [ en-US ] = "The specified file could not be opened." ;
         Text [ x-comment ] = " ";
     };
