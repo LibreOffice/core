@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:14:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1674,6 +1674,73 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     return bResult;
 }
 
+//------------------------------------------------------------------
+sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& aTargetSet )
+{
+    if ( GetError() )
+        return sal_False;
+
+    // if the document had no password it should be stored without password
+    // if the document had password it should be stored with the same password
+    // otherwise the stream copying can not be done
+    SFX_ITEMSET_ARG( &aTargetSet, pNewPassItem, SfxStringItem, SID_PASSWORD, sal_False );
+    SFX_ITEMSET_ARG( GetItemSet(), pOldPassItem, SfxStringItem, SID_PASSWORD, sal_False );
+    if ( ( !pNewPassItem && !pOldPassItem )
+      || ( pNewPassItem && pOldPassItem && pNewPassItem->GetValue().Equals( pOldPassItem->GetValue() ) ) )
+    {
+        // the filter must be the same
+        SFX_ITEMSET_ARG( &aTargetSet, pNewFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SFX_ITEMSET_ARG( GetItemSet(), pOldFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        if ( pNewFilterItem && pOldFilterItem && pNewFilterItem->GetValue().Equals( pOldFilterItem->GetValue() ) )
+        {
+            // get the input stream and copy it
+            // in case of success return true
+            uno::Reference< io::XInputStream > xInStream = GetInputStream();
+
+            ResetError();
+            if ( xInStream.is() )
+            {
+                try
+                {
+                    uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
+                    sal_Int64 nPos = 0;
+                    if ( xSeek.is() )
+                    {
+                        nPos = xSeek->getPosition();
+                        xSeek->seek( 0 );
+                    }
+
+                    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+                    ::ucb::Content aTargetContent( aURL, xEnv );
+
+                    InsertCommandArgument aInsertArg;
+                    aInsertArg.Data = xInStream;
+                       SFX_ITEMSET_ARG( &aTargetSet, pRename, SfxBoolItem, SID_RENAME, sal_False );
+                       SFX_ITEMSET_ARG( &aTargetSet, pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+                       if ( pOverWrite && !pOverWrite->GetValue() // argument says: never overwrite
+                         || pRename && pRename->GetValue() ) // argument says: rename file
+                        aInsertArg.ReplaceExisting = sal_False;
+                       else
+                        aInsertArg.ReplaceExisting = sal_True; // default is overwrite existing files
+
+                    Any aCmdArg;
+                    aCmdArg <<= aInsertArg;
+                    aTargetContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                                                    aCmdArg );
+
+                    if ( xSeek.is() )
+                        xSeek->seek( nPos );
+
+                    return sal_True;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+        }
+    }
+
+    return sal_False;
+}
 
 //------------------------------------------------------------------
 void SfxMedium::Transfer_Impl()
