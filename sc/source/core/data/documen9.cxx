@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:23:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,6 +974,11 @@ void ScDocument::SetImportingXML( BOOL bVal )
                 SetLayoutRTL( nTab, TRUE );             // includes mirroring; bImportingXML must be cleared first
             }
     }
+}
+
+void ScDocument::SetXMLFromWrapper( BOOL bVal )
+{
+    bXMLFromWrapper = bVal;
 }
 
 vos::ORef<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
