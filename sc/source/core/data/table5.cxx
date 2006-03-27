@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:31:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ void ScTable::SetPageStyle( const String& rName )
                 const USHORT nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
-                    InvalidateTextWidth();
+                    InvalidateTextWidth(NULL, NULL, FALSE, FALSE);
             }
 
             if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
@@ -341,12 +341,11 @@ void ScTable::SetPageStyle( const String& rName )
 void ScTable::PageStyleModified( const String& rNewName )
 {
     aPageStyle = rNewName;
-    InvalidateTextWidth();          // man weiss nicht mehr, was vorher drinstand...
+    InvalidateTextWidth(NULL, NULL, FALSE, FALSE);      // don't know what was in the style before
 }
 
-void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
-                                   const ScAddress* pAdrTo,
-                                   BOOL bBroadcast )
+void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
+                                   BOOL bNumFormatChanged, BOOL bBroadcast )
 {
     if ( pAdrFrom && !pAdrTo )
     {
@@ -354,7 +353,8 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
         if ( pCell )
         {
             pCell->SetTextWidth( TEXTWIDTH_DIRTY );
-            pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+            if ( bNumFormatChanged )
+                pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
             if ( bBroadcast )
             {   // nur bei CalcAsShown
                 switch ( pCell->GetCellType() )
@@ -387,7 +387,8 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
             while ( aIter.Next( nRow, pCell ) )
             {
                 pCell->SetTextWidth( TEXTWIDTH_DIRTY );
-                pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+                if ( bNumFormatChanged )
+                    pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
                 if ( bBroadcast )
                 {   // nur bei CalcAsShown
                     switch ( pCell->GetCellType() )
