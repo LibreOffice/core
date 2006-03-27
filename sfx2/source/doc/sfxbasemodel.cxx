@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:17:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3398,6 +3398,13 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
             aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
 
         TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
+
+        SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
+        if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
+            throw ILLEGALARGUMENTIOEXCEPTION(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!") ),
+                    uno::Reference< uno::XInterface >() );
+
         sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
 
         uno::Reference < task::XInteractionHandler > xHandler;
@@ -3766,6 +3773,14 @@ rtl::OUString SfxBaseModel::getRuntimeUID() const
     OSL_ENSURE( m_pData->m_sRuntimeUID.getLength() > 0,
                 "SfxBaseModel::getRuntimeUID - ID is empty!" );
     return m_pData->m_sRuntimeUID;
+}
+
+sal_Bool SfxBaseModel::hasValidSignatures() const
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pData->m_pObjectShell.Is() )
+        return ( m_pData->m_pObjectShell->ImplGetSignatureState( sal_False ) == SIGNATURESTATE_SIGNATURES_OK );
+    return sal_False;
 }
 
 static void GetCommandFromSequence( rtl::OUString& rCommand, sal_Int32& nIndex, const uno::Sequence< beans::PropertyValue >& rSeqPropValue )
