@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:47:41 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 10:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -558,7 +558,10 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 for( sal_uInt32 i=0; i< nCount; i++ )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                    // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
+//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                    if ( pTemp->GetName().Len() )
+                    // <--
                         nMemberCount++;
                 }
             }
@@ -897,7 +900,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 for( sal_uInt32 i=0; i< nCount; i++ )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                    // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
+//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                    if ( pTemp->GetName().Len() )
+                    // <--
                     {
                         SwContact* pContact = (SwContact*)pTemp->GetUserCall();
                         long nYPos = 0;
@@ -3085,7 +3091,10 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 for( sal_uInt32 i=0; i< nCount; i++ )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName() == pCnt->GetName())
+                    // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
+//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName() == pCnt->GetName())
+                    if ( pTemp->GetName() == pCnt->GetName() )
+                    // <--
                     {
                         SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
                         if( pPV )
