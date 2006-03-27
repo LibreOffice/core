@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:38:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1433,6 +1433,7 @@ ScCellRangesBase::~ScCellRangesBase()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 
     ForgetCurrentAttrs();
+    ForgetMarkData();
 
     delete pValueListener;
 
@@ -1445,10 +1446,16 @@ void ScCellRangesBase::ForgetCurrentAttrs()
     delete pCurrentFlat;
     delete pCurrentDeep;
     delete pCurrentDataSet;
-    delete pMarkData;
     pCurrentFlat = NULL;
     pCurrentDeep = NULL;
     pCurrentDataSet = NULL;
+
+    // #i62483# pMarkData can remain unchanged, is deleted only if the range changes (RefChanged)
+}
+
+void ScCellRangesBase::ForgetMarkData()
+{
+    delete pMarkData;
     pMarkData = NULL;
 }
 
@@ -1599,6 +1606,7 @@ void ScCellRangesBase::RefChanged()
     }
 
     ForgetCurrentAttrs();
+    ForgetMarkData();
 }
 
 ScDocument* ScCellRangesBase::GetDocument() const
