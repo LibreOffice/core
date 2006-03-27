@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:20:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,16 +1498,7 @@ UUIInteractionHandler::executeErrorDialog(
     if (rContext.getLength() != 0 && rMessage.getLength() != 0)
         aText.appendAscii(RTL_CONSTASCII_STRINGPARAM(":\n"));
             //TODO! must be internationalized
-    if (rMessage.getLength() != 0)
-    {
-        aText.append(rMessage);
-        aText.append(
-                  static_cast< sal_Unicode >(
-                      eClassification
-                              == star::task::InteractionClassification_QUERY ?
-                          '?' : '.'));
-            //TODO! must be internationalized
-    }
+    aText.append(rMessage);
 
     std::auto_ptr< MessBox > xBox;
     try
