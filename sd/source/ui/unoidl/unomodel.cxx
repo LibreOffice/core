@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:44:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-27 09:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,7 @@ const sal_Int32 WID_MODEL_DSGNMODE  = 7;
 const sal_Int32 WID_MODEL_BASICLIBS = 8;
 const sal_Int32 WID_MODEL_RUNTIMEUID = 9;
 const sal_Int32 WID_MODEL_BUILDID = 10;
+const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
@@ -296,6 +297,7 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
         { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
         { MAP_CHAR_LEN("BasicLibraries"),               WID_MODEL_BASICLIBS,&::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const rtl::OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
+        { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0 }
     };
 
@@ -1469,6 +1471,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         case WID_MODEL_BUILDID:
             return uno::Any( maBuildId );
+        case WID_MODEL_HASVALIDSIGNATURES:
+            aAny <<= hasValidSignatures();
+            break;
         default:
             throw beans::UnknownPropertyException();
             break;
