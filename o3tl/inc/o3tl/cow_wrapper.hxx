@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cow_wrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-03-23 15:25:00 $
+ *  last change: $Author: thb $ $Date: 2006-03-28 23:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@ namespace o3tl
     struct UnsafeRefCountingPolicy
     {
         typedef sal_uInt32 ref_count_t;
-        static ref_count_t incrementCount( ref_count_t& rCount ) { return ++rCount; }
-        static ref_count_t decrementCount( ref_count_t& rCount ) { return --rCount; }
+        static void incrementCount( ref_count_t& rCount ) { ++rCount; }
+        static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
     };
 
     /** Thread-safe refcounting
@@ -66,8 +66,14 @@ namespace o3tl
     struct ThreadSafeRefCountingPolicy
     {
         typedef oslInterlockedCount ref_count_t;
-        static ref_count_t incrementCount( ref_count_t& rCount ) { return osl_incrementInterlockedCount(&rCount); }
-        static ref_count_t decrementCount( ref_count_t& rCount ) { return osl_decrementInterlockedCount(&rCount); }
+        static void incrementCount( ref_count_t& rCount ) { osl_incrementInterlockedCount(&rCount); }
+        static bool decrementCount( ref_count_t& rCount )
+        {
+            if( rCount == 1 ) // caller is already the only/last reference
+                return false;
+            else
+                return osl_decrementInterlockedCount(&rCount) != 0;
+        }
     };
 
     /** Copy-on-write wrapper.
@@ -197,7 +203,7 @@ void cow_wrapper_client::queryUnmodified() const
 
         void release()
         {
-            if( MTPolicy::decrementCount(m_pimpl->m_ref_count) == 0 )
+            if( !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
                 boost::checked_delete(m_pimpl), m_pimpl=0;
         }
 
