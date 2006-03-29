@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:45:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,6 @@
 #endif
 #ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
-#ifndef DBAUI_TABLEDESCRIPTIONWINDOW_HXX
-#include "TableDescWin.hxx"
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
