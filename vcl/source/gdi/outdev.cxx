@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:17:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,14 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
     while ( bRegionRect )
     {
+        // #i59315# Limit coordinates passed to sal layer to actual
+        // outdev dimensions - everything else bears the risk of
+        // overflowing internal coordinates (e.g. the 16 bit wire
+        // format of X11).
+        nX = ::std::max<long>(0,nX);
+        nY = ::std::max<long>(0,nY);
+        nWidth  = ::std::min<long>(pOutDev->GetOutputWidthPixel(), nWidth);
+        nHeight = ::std::min<long>(pOutDev->GetOutputHeightPixel(), nHeight);
         if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
             bClipRegion = FALSE;
         DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
