@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
 #include "MColumnAlias.hxx"
+#endif
+#ifndef CONNECITIVITY_MOZAB_ERROR_RESOURCE_HXX
+#include "MErrorResource.hxx"
 #endif
 #include <connectivity/FValue.hxx>
 #ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
@@ -166,7 +169,7 @@ namespace connectivity
         };
 
         //
-        class MQuery
+        class MQuery : public ErrorResourceAccess
         {
             /*
              * A query resultset with a maximum limit of
@@ -222,7 +225,6 @@ namespace connectivity
             MQueryExpression                m_aExpr;
             ::std::map< ::rtl::OUString,
                         ::rtl::OUString>    m_aColumnAliasMap;
-            mutable ::rtl::OUString         m_aErrorString;
             mutable sal_Bool                m_aErrorOccurred;
             ::com::sun::star::mozilla::MozillaProductType m_Product;
             ::rtl::OUString                               m_Profile;
@@ -285,10 +287,6 @@ namespace connectivity
 
             sal_Bool                        errorOccurred() const   //
                                             { return m_aErrorOccurred; };
-
-            const ::rtl::OUString&           getErrorString() const //
-                                            { return m_aErrorString; };
-
 
         public:
             MQuery();                                                       //
