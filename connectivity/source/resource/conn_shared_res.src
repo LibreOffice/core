@@ -1,0 +1,128 @@
+﻿/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: conn_shared_res.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:20:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef CONNECTIVITY_SHARED_RES_HRC
+#include "conn_shared_res.hrc"
+#endif
+
+String STR_NO_MOZIILA_ADDRESSBOOK
+{
+    Text [ de ] = "Es existiert kein Mozilla-Adreßbuch.";
+    Text [ en-US ] = "No Mozilla Addressbook Directories Exist.";
+};
+
+String STR_NO_THUNDERBIRD_ADDRESSBOOK
+{
+    Text [ de ] = "Es existiert kein Thunderbird-Adreßbuch.";
+    Text [ en-US ] = "No Thunderbird Addressbook Directories Exist.";
+};
+
+String STR_NO_OUTLOOKEXPRESS_ADDRESSBOOK
+{
+    Text [ de ] = "Es existiert kein Outlook-Express-Adreßbuch.";
+    Text [ en-US ] = "No Outlook Express Addressbook Exists.";
+};
+
+String STR_NO_OUTLOOK_ADDRESSBOOK
+{
+    Text [ de ] = "Es existiert kein Outlook-Adreßbuch.";
+    Text [ en-US ] = "No Outlook (MAPI) Addressbook Exists.";
+};
+
+String STR_COULDNOTCONNECT_TO_LDAP
+{
+    Text [ de ] = "Die Verbindung zum LDAP-Server konnte nicht hergestellt werden.";
+    Text [ en-US ] = "Unable to connect to LDAP Server.";
+};
+
+String STR_NO_TABLE_CREATION_SUPPORT
+{
+    Text [ de ] = "Für diese Art Adreßbuch können keine Tabellen angelegt werden.";
+    Text [ en-US ] = "Creating tables is not supported for this kind of address books.";
+};
+
+String STR_MOZILLA_IS_RUNNING
+{
+    Text [ de ] = "Neue Adreßbücher können nicht angelegt werden, solange Mozilla läuft.";
+    Text [ en-US ] = "Cannot create new address books while Mozilla is running.";
+};
+
+String STR_COULD_NOT_RETRIEVE_AB_ENTRY
+{
+    Text [ de ] = "Ein Adreßbucheintrag konnte nicht abgefragt werden, ein unbekannter Fehler trat auf.";
+    Text [ en-US ] = "An address book entry could not be retrieved, an unknown error occured.";
+};
+
+String STR_COULD_NOT_GET_DIRECTORY_NAME
+{
+    Text [ de ] = "Ein Adreßbuch-Verzeichnis konnte nicht abgefragt werden, ein unbekannter Fehler trat auf.";
+    Text [ en-US ] = "An address book directory name could not be retrieved, an unknown error occured.";
+};
+
+String STR_TIMEOUT_WAITING
+{
+    Text [ de ] = "Zeitüberschreitung während des Wartens auf das Ergebnis.";
+    Text [ en-US ] = "Timed out while waiting for the result.";
+};
+
+String STR_ERR_EXECUTING_QUERY
+{
+    Text [ de ] = "Ein unbekannter Fehler trat bei Ausführen der Abfrage auf.";
+    Text [ en-US ] = "An error occured while executing the query.";
+};
+
+String STR_MOZILLA_IS_RUNNIG_NO_CHANGES
+{
+    Text [ de ] = "Sie können keine Änderungen machen, solange Mozilla läuft.";
+    Text [ en-US ] = "You can't make any changes to mozilla address book when mozilla is running.";
+};
+
+String STR_FOREIGN_PROCESS_CHANGED_AB
+{
+    Text [ de ] = "Das Mozilla-Adreßbuch wurde von einem anderen Prozess geändert, eigene Änderungen sind in dieser Situation nicht möglich.";
+    Text [ en-US ] = "Mozilla Address Book has been changed out of this process, we can't modify it in this condition.";
+};
+
+String STR_CANT_FIND_ROW
+{
+    Text [ de ] = "Die angeforderte Zeile wurde nicht gefunden.";
+    Text [ en-US ] = "Can't find the requested row.";
+};
+
+String STR_CANT_FIND_CARD_FOR_ROW
+{
+    Text [ de ] = "Die Karte für die angeforderte Zeile wurde nicht gefunden.";
+    Text [ en-US ] = "Can't find the card for the requested row.";
+};
