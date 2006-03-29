@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #ifndef _CONNECTIVITY_RESOURCE_HRC_
 #include "Resource.hrc"
-#endif
-#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
-#include "ModuleContext.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADO_ADRIVER_HXX_
 #include "ado/ADriver.hxx"
@@ -107,8 +104,6 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
                          m_nEngineType(0),
                          m_pCatalog(NULL)
 {
-    ModuleContext::AddRef();
-
     osl_incrementInterlockedCount( &m_refCount );
 
     IClassFactory2* pIUnknown   = NULL;
@@ -148,7 +143,6 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
 {
-    ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)
