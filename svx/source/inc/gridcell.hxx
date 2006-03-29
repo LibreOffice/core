@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:23:29 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,6 @@ private:
     sal_uInt16              m_nId;
     sal_Int16               m_nFieldPos;
     sal_Int16               m_nAlign;                       // wird mit TXT_ALIGN_LEFT .... angegeben
-    sal_Bool                m_bRequired : 1;
     sal_Bool                m_bReadOnly : 1;
     sal_Bool                m_bAutoValue : 1;
     sal_Bool                m_bInSave : 1;
@@ -156,7 +155,6 @@ public:
         ,m_bDateTime(sal_False)
         ,m_nAlign(::com::sun::star::awt::TextAlign::LEFT)
         ,m_nFieldPos(-1)
-        ,m_bRequired(sal_False)
         ,m_bReadOnly(sal_False)
         ,m_bAutoValue(sal_False)
         ,m_bInSave(sal_False)
@@ -174,7 +172,6 @@ public:
 
 
     sal_uInt16  GetId() const {return m_nId;}
-    sal_Bool    IsRequired() const {return m_bRequired;}
     sal_Bool    IsReadOnly() const {return m_bReadOnly;}
     sal_Bool    IsAutoValue() const {return m_bAutoValue;}
     sal_Bool    IsUpdating() const {return m_bInSave;}
@@ -338,9 +335,9 @@ public:
 
     void  ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground);
 
-protected:
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
+protected:
     void    invalidatedController();
 
     /** commits the content of the control (e.g. the text of an edit field) into the column model
@@ -651,7 +648,6 @@ public:
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
-protected:
     double GetCurrency(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
 protected:
