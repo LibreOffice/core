@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:28:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef EXTENSIONS_RESOURCE_SERVICES_HXX
+#include "res_services.hxx"
+#endif
 
 #include <vos/mutex.hxx>
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
@@ -77,11 +81,12 @@ public:
     BOOL     SAL_CALL           supportsService(const OUString& ServiceName) throw();
     Sequence< OUString > SAL_CALL   getSupportedServiceNames(void) throw();
 
-    static Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
+    static Sequence< OUString > getSupportedServiceNames_Static(void) throw();
     static OUString             getImplementationName_Static() throw()
                                 {
                                     return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.ResourceService"));
                                 }
+    static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
     // XExactName
     OUString  SAL_CALL          getExactName( const OUString & ApproximateName ) throw(RuntimeException);
@@ -105,6 +110,7 @@ private:
 };
 
 
+//-----------------------------------------------------------------------------
 ResourceService::ResourceService( const Reference< XMultiServiceFactory > & rSMgr )
     : xSMgr( rSMgr )
     , pResMgr( NULL )
@@ -112,16 +118,16 @@ ResourceService::ResourceService( const Reference< XMultiServiceFactory > & rSMg
 }
 
 //-----------------------------------------------------------------------------
-ResourceService::~ResourceService()
+Reference< XInterface > ResourceService::Create( const Reference< XComponentContext >& _rxContext )
 {
-    delete pResMgr;
+    Reference< XMultiServiceFactory > xFactory( _rxContext->getServiceManager(), UNO_QUERY_THROW );
+    return *( new ResourceService( xFactory ) );
 }
 
 //-----------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ResourceService_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
+ResourceService::~ResourceService()
 {
-    Reference< XInterface > xService = (cppu::OWeakObject*)new ResourceService( rSMgr );
-    return xService;
+    delete pResMgr;
 }
 
 // XServiceInfo
@@ -463,54 +469,15 @@ BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)
     }
 }
 
-
-extern "C" {
-
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+namespace res
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey * pRegistryKey )
-{
-    try
+    ComponentInfo getComponentInfo_VclStringResourceLoader()
     {
-        Reference< XRegistryKey > xNewKey =
-            pRegistryKey->createKey(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + ResourceService::getImplementationName_Static() + OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES" )));
-        Sequence< OUString > aServices = ResourceService::getSupportedServiceNames_Static();
-        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i]);
-
-        return sal_True;
+        ComponentInfo aInfo;
+        aInfo.aSupportedServices = ResourceService::getSupportedServiceNames_Static();
+        aInfo.sImplementationName = ResourceService::getImplementationName_Static();
+        aInfo.pFactory = &ResourceService::Create;
+        return aInfo;
     }
-    catch (Exception &)
-    {
-        // not allowed to throw an exception over the c function.
-        //OSL_ENSURE( sal_False, "Exception cannot register component!" );
-        return sal_False;
-    }
-}
-
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = 0;
-    if (!ResourceService::getImplementationName_Static().compareToAscii( pImplName ) )
-    {
-        // create the factory
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createSingleFactory(
-                pServiceManager, ResourceService::getImplementationName_Static(),
-                ResourceService_CreateInstance,
-                ResourceService::getSupportedServiceNames_Static() );
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
 }
 
