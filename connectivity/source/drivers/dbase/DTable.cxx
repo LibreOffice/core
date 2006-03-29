@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:03:59 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1115,7 +1115,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         catch(const Exception&)
         {
         }
-        throw e;
+        throw;
     }
     return TRUE;
 }
