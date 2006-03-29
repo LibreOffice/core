@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 14:45:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,16 +196,17 @@ int isQuiet(){
     else            return 0;
 }
 /*****************************************************************************/
-int InitCfgExport( char *pOutput )
+int InitCfgExport( char *pOutput , char* pFilename )
 /*****************************************************************************/
 {
     // instanciate Export
     ByteString sOutput( pOutput );
+    ByteString sFilename( pFilename );
     Export::InitLanguages();
     pParser = new CfgParser();
 
     if ( bMergeMode )
-        pParser = new CfgMerge( sMergeSrc, sOutputFile, bErrorLog );
+        pParser = new CfgMerge( sMergeSrc, sOutputFile, bErrorLog , sFilename );
       else if ( sOutputFile.Len()) {
         pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
     }
@@ -230,7 +231,10 @@ void removeTempFile(){
         aTempFile.Kill();
     }
 }
-
+extern const char* getFilename()
+{
+    return sInputFileName.GetBuffer(); //(*(aInputFileList.GetObject( 0 ))).GetBuffer();
+}
 /*****************************************************************************/
 extern FILE *GetCfgFile()
 /*****************************************************************************/
@@ -800,12 +804,13 @@ void CfgExport::WorkOnText(
 /*****************************************************************************/
 CfgMerge::CfgMerge(
     const ByteString &rMergeSource, const ByteString &rOutputFile,
-    BOOL bErrorLog )
+    BOOL bErrorLog , ByteString &rFilename )
 /*****************************************************************************/
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
                 bGerman( FALSE ),
+                sFilename( rFilename ),
                 bEnglish( FALSE )
 {
     if ( rMergeSource.Len()){
@@ -852,7 +857,7 @@ void CfgMerge::WorkOnText(
 
             ByteString sPlatform( "" );
 
-            pResData = new ResData( sPlatform, sGroupId );
+            pResData = new ResData( sPlatform, sGroupId , sFilename );
             pResData->sId = sLocalId;
             pResData->sResTyp = pStackData->sResTyp;
         }
