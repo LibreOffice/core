@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:46:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mbScreenComp    = TRUE;
     mbScreenComp    = FALSE;
     mnAlphaDepth    = -1;
+
+    // #i59315# init vdev size from system object, when passed a
+    // SystemGraphicsData. Otherwise, output size will always
+    // incorrectly stay at (1,1)
+    if( pData && mpVirDev )
+        mpVirDev->GetSize(mnOutWidth,mnOutHeight);
 
     if( mnBitCount < 8 )
         SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
