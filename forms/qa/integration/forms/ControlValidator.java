@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControlValidator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:20 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ public abstract class ControlValidator implements com.sun.star.form.validation.X
     {
         try
         {
-            com.sun.star.uno.Any anyValue = (com.sun.star.uno.Any)Value;
-            return ( anyValue.getType().getTypeClass() == com.sun.star.uno.TypeClass.VOID );
+            return ( com.sun.star.uno.AnyConverter.getType(Value).getTypeClass()
+                     == com.sun.star.uno.TypeClass.VOID );
         }
         catch( java.lang.ClassCastException e )
         {
