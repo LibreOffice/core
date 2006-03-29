@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:04:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,8 @@ public:
                         GetAddressBlocks() const;
     void                SetAddressBlocks(const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks);
 
+    void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
+    sal_Int32           GetCurrentAddressBlockIndex() const;
 
     sal_Bool            IsIncludeCountry() const;
     rtl::OUString&      GetExcludeCountry() const;
