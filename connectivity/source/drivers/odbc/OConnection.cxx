@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:14:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #endif
 #ifndef _CONNECTIVITY_RESOURCE_HRC_
 #include "Resource.hrc"
-#endif
-#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
-#include "ModuleContext.hxx"
 #endif
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
@@ -102,7 +99,6 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_bPreventGetVersionColumns(sal_False)
 {
     m_pDriver->acquire();
-    ModuleContext::AddRef();
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -116,7 +112,6 @@ OConnection::~OConnection()
 
     m_pDriver->release();
     m_pDriver = NULL;
-    ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
