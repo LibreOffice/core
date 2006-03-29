@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:30:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,6 @@
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_TABLEDESCRIPTIONWINDOW_HXX
-#include "TableDescWin.hxx"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
