@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:27:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 // Mozilla includes.
 #include <MNSInclude.hxx>
 
+#ifndef CONNECTIVITY_SHARED_RES_HRC
+#include "conn_shared_res.hrc"
+#endif
 #ifndef _CONNECTIVITY_MAB_DATABASEMETADATAHELPER_HXX_
 #include "MDatabaseMetaDataHelper.hxx"
 #endif
@@ -120,7 +123,7 @@ extern sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct);
 
 // -------------------------------------------------------------------------
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
-    : m_bProfileExists(sal_False)
+    :m_bProfileExists(sal_False)
 {
     OSL_TRACE( "IN MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()\n" );
 
@@ -366,29 +369,39 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
 
 void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI )
 {
-
-    if ( ! bGivenURI && m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Mozilla) {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Mozilla Addressbook Directories Exist"));
+    if ( ! bGivenURI && m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Mozilla)
+    {
+        setError( STR_NO_MOZIILA_ADDRESSBOOK );
     }
-    else {
-        if ( m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird) {
-            m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Thunderbird Addressbook Directories Exist"));
+    else
+    {
+        if ( m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird)
+        {
+            setError( STR_NO_THUNDERBIRD_ADDRESSBOOK );
         }
         else
-        if (_pCon->usesFactory()) {
-            if ( _pCon->isOutlookExpress() ) {
-                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Outlook Express Addressbook Exists"));
+        {
+            if (_pCon->usesFactory())
+            {
+                if ( _pCon->isOutlookExpress() )
+                {
+                    setError( STR_NO_OUTLOOKEXPRESS_ADDRESSBOOK );
+                }
+                else
+                {
+                    setError( STR_NO_OUTLOOK_ADDRESSBOOK );
+                }
             }
-            else {
-                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Outlook (MAPI) Addressbook Exists"));
-            }
-        }
-        else {
-            if (_pCon->isLDAP()) {
-                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Unable to connect to LDAP Server"));
-            }
-            else {
-                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Mozilla Addressbook Directories Exist"));
+            else
+            {
+                if (_pCon->isLDAP())
+                {
+                    setError( STR_COULDNOTCONNECT_TO_LDAP );
+                }
+                else
+                {
+                    setError( STR_NO_MOZIILA_ADDRESSBOOK );
+                }
             }
         }
     }
@@ -397,9 +410,9 @@ void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool b
 nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
                         ::std::vector< ::rtl::OUString >*   _rStrings,
                         ::std::vector< ::rtl::OUString >*   _rTypes,
-                        rtl::OUString * sError)
+                        sal_Int32* pErrorId )
 {
-    if (!sAbURI || !nmap || !_rStrings || !_rTypes || !sError)
+    if (!sAbURI || !nmap || !_rStrings || !_rTypes || !pErrorId)
     {
         return NS_ERROR_NULL_POINTER;
     }
@@ -443,8 +456,9 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
 
         nsCOMPtr<nsISupports> item;
         rv = subDirectories -> CurrentItem(getter_AddRefs(item));
-        if ( NS_FAILED( rv ) ) {
-            *sError = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem Getting Addressbook Entry"));
+        if ( NS_FAILED( rv ) )
+        {
+            *pErrorId = STR_COULD_NOT_RETRIEVE_AB_ENTRY;
             return NS_ERROR_FAILURE;
         }
 
@@ -454,7 +468,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         // For now we're not interested in mailing lists.
         rv = subDirectory -> GetDirName(&name);
         if ( NS_FAILED( rv ) ) {
-            *sError = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem Getting Addressbook Directory Name"));
+            *pErrorId = STR_COULD_NOT_GET_DIRECTORY_NAME;
             return NS_ERROR_FAILURE;
         }
         MTypeConverter::prUnicharToOUString(name, aTableName);
@@ -595,7 +609,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     MNameMapper *nmap = _pCon->getNameMapper();
     nmap->reset();
 
-    //rv = getTableStringsProxied(sAbURIString.getStr(),&nDirectoryType,nmap,&m_aTableNames,&m_aTableTypes,&m_aErrorString);
+    sal_Int32 nErrorResourceId( 0 );
 
     MNSMozabProxy xMProxy;
     RunArgs args;
@@ -606,8 +620,9 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     args.arg3 = (void*)nmap;
     args.arg4 = (void*)&m_aTableNames;
     args.arg5 = (void*)&m_aTableTypes;
-    args.arg6 = (void*)&m_aErrorString;
+    args.arg6 = (void*)&nErrorResourceId;
     rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
+    setError( nErrorResourceId );
 
     if (NS_FAILED(rv))
     {
@@ -751,7 +766,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
 
     if ( !bIsMozillaAB )
     {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("We do not support create table for this kind of AddressBook"));
+        setError( STR_NO_TABLE_CREATION_SUPPORT );
         return sal_False;
     }
     else
@@ -770,7 +785,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
     _pCon->setForceLoadTables(sal_True); //force reload table next time
     if (rv == NS_ERROR_FILE_IS_LOCKED)
     {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("You can't create Mozilla AddressBook while Mozilla is running!"));
+        setError( STR_MOZILLA_IS_RUNNING );
     }
     else if (NS_FAILED(rv))
     {
