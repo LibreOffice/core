@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:21:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,6 +409,9 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
             aDFA.mnQuality += 500;
     }
 
+    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
+
     // TODO: add alias names
 
     return aDFA;
@@ -487,6 +490,9 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
             aDFA.mnQuality += 500;
     }
+
+    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
 
     // TODO: add alias names
     return aDFA;
@@ -1882,6 +1888,8 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.mePitch      = PITCH_DONTKNOW;;
     aDFA.mbSubsettable= false;
     aDFA.mbEmbeddable = false;
+    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
 
     /*
     // TODO: improve ImplDevFontAttributes using "FONTRES:" from *.fot file
