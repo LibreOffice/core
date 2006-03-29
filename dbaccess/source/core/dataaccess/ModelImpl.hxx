@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:18:28 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,8 @@ class OSharedConnectionManager;
 class ODatabaseModelImpl : public ::rtl::IReference
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          m_xTempModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource>  m_xDataSource;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
 
     DocumentStorageAccess*                                                      m_pStorageAccess;
     ::rtl::Reference< SharedMutex >                                             m_xMutex;
@@ -428,7 +428,7 @@ public:
 
         Only to be called when the model is being disposed
     */
-    void    modelIsDisposing( ResetModelAccess ) { m_xTempModel = NULL; }
+    void    modelIsDisposing( ResetModelAccess ) { m_xModel = ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >(); }
 
     DocumentStorageAccess*
             getDocumentStorageAccess();
