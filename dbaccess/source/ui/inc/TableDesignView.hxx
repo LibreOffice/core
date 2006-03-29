@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:36:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:39:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ namespace dbaui
 {
     class OTableController;
     class OTableFieldDescWin;
-    class OTableDescWin;
     class OTableEditorCtrl;
     //==================================================================
     class OTableBorderWindow : public Window
