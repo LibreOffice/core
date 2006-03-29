@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:27:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,9 +201,6 @@
 #endif
 #ifndef SVX_DBAOBJECTEX_HXX
 #include <svx/dbaobjectex.hxx>
-#endif
-#ifndef _DBAUI_DLGRENAME_HXX
-#include "dlgrename.hxx"
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
