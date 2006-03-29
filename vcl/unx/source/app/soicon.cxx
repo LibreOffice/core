@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:01:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
         iconSize, iconSize, pDisplay->GetRootVisual()->GetDepth());
 
     pBitmap->ImplDraw(icon_pixmap, pDisplay->GetRootVisual()->GetDepth(),
-        aRect, DefaultGC(pDisplay->GetDisplay(), pDisplay->GetScreenNumber()), false);
+        aRect, DefaultGC(pDisplay->GetDisplay(), pDisplay->GetScreenNumber()));
 
     icon_mask = None;
 
@@ -124,7 +124,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >
             (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
 
-        pMask->ImplDraw(icon_mask, 1, aRect, aMonoGC, false);
+        pMask->ImplDraw(icon_mask, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
 
