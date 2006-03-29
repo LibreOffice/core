@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:10:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@
 
 #define SCROLL_OFFSET   ((long)2)
 #define SPACE_OFFSET    ((long)5)
+#define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
 
 typedef unsigned short (*fncUshort)();
 typedef const char* (*fncChar)();
@@ -105,10 +106,11 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL ) ),
 
-    aTimer  (),
-    nOff    ( 0 ),
-    nEnd    ( 0 ),
-    bNormal ( TRUE )
+    aTimer          (),
+    nOff            ( 0 ),
+    nEnd            ( 0 ),
+    m_nDeltaWidth   ( 0 ),
+    bNormal         ( TRUE )
 
 {
     rtl::OUString sProduct;
@@ -218,17 +220,28 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aBuildData.SetText( aBuildString );
     aBuildData.Show();
 
-    // Gr"ossen und Positionen berechnen
+    // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
     Size aOutSiz = GetOutputSizePixel();
-    //Size aTextSize = Size( GetTextWidth( DEFINE_CONST_UNICODE( "StarOfficeAbout" ) ), GetTextHeight() );
-
-    // Fenstergr"osse
     aOutSiz.Width() = aAppLogoSiz.Width();
-
-    // Texte (Gr"osse und Position )
+    // spacing to the margin
     Size a6Size = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nTextWidth = aAppLogoSiz.Width() - ( a6Size.Width() * 4 );
+    long nDlgMargin = a6Size.Width() * 4 ;
+    // The URL (if found in copyright text) should not be line-wrapped
+    if ( aCopyrightText.GetText().Search( WELCOME_URL ) != STRING_NOTFOUND )
+    {
+        long nURLWidth = GetTextWidth( WELCOME_URL ) + nDlgMargin + (2*SPACE_OFFSET);
+        if ( nURLWidth > aAppLogoSiz.Width() )
+        {
+            // pb: can be used to align the position of the logo
+            // m_nDeltaWidth = nURLWidth - aOutSiz.Width();
+
+            aOutSiz.Width() = nURLWidth;
+        }
+    }
+
+    // layout the text-elements
+    long nTextWidth = aOutSiz.Width() - nDlgMargin;
     long nY = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
 
     layoutText( aVersionText, nY, nTextWidth, a6Size );
@@ -411,10 +424,10 @@ static ExtraDeveloper_Impl Developer_Impl[] =
 
 void AboutDialog::Paint( const Rectangle& rRect )
 {
-    if ( bNormal )
+    if ( bNormal ) // not in scroll mode
     {
-        // not in scroll mode
-        DrawImage( Point(), aAppLogo );
+        Point aPos( m_nDeltaWidth / 2, 0 );
+        DrawImage( aPos, aAppLogo );
         return;
     }
 
