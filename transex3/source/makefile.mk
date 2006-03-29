@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:01:47 $
+#   last change: $Author: obo $ $Date: 2006-03-29 13:27:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ LIBTARGET=no
 
 .INCLUDE :  settings.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
+#CDEFS+= -pg
 
 .IF "$(SYSTEM_EXPAT)" == "YES"
 CFLAGS+=-DSYSTEM_EXPAT
