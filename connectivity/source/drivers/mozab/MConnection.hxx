@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:17:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
 #endif
 
+#include <memory>
+
 namespace connectivity
 {
     namespace mozab
@@ -107,6 +109,7 @@ namespace connectivity
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
+        struct ConnectionImplData;
         class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
@@ -126,6 +129,10 @@ namespace connectivity
                                                         //  an operation
             MozabDriver*                            m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
+            ::std::auto_ptr< ConnectionImplData >   m_pImplData;
+                // This is to be able to hold a boost::shared_ptr. If we would hold it as member, it would
+                // not compile the mozillasrc directory, since this directory is compiled without RTTI support
+                // and boost seems to require RTTI on some platforms.
             // Store Catalog
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>         m_xCatalog;
             // Start of Additions from the land of mozilla
@@ -204,6 +211,8 @@ namespace connectivity
                     return ::com::sun::star::mozilla::MozillaProductType_Thunderbird;
                 return ::com::sun::star::mozilla::MozillaProductType_Mozilla;
             }
+
+            void throwGenericSQLException( sal_Int32 _nErrorResourceId );
 
             // Get Ldap BindDN (user name)
             rtl::OUString getBindDN() const { return m_sBindDN; }
