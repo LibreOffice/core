@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:04:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ IMPL_LINK( SwMailMergeOutputTypePage, TypeHdl_Impl, RadioButton*, EMPTYARG )
         m_aHintFI.SetText(bLetter ? m_sLetterHint : m_sMailHint);
     m_pWizard->GetConfigItem().SetOutputToLetter(bLetter);
     m_pWizard->updateRoadmapItemLabel( MM_ADDRESSBLOCKPAGE );
+    m_pWizard->UpdateRoadmap();
     return 0;
 }
 
