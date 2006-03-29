@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSMozabProxy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:18:04 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
 #include "MNSMozabProxy.hxx"
+#endif
+
+#ifndef CONNECTIVITY_SHARED_RES_HRC
+#include "conn_shared_res.hrc"
 #endif
 
 #ifndef _CONNECTIVITY_MAB_DATABASEMETADATAHELPER_HXX_
@@ -122,7 +126,7 @@ sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::Mo
 extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
                         ::std::vector< ::rtl::OUString >*   _rStrings,
                         ::std::vector< ::rtl::OUString >*   _rTypes,
-                        rtl::OUString * sError);
+                        sal_Int32* pErrorId );
 
 ::com::sun::star::mozilla::MozillaProductType SAL_CALL MNSMozabProxy::getProductType(  ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -156,7 +160,7 @@ sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeE
                                 (MNameMapper *)m_Args->arg3,
                                 (::std::vector< ::rtl::OUString >*)m_Args->arg4,
                                 (::std::vector< ::rtl::OUString >*)m_Args->arg5,
-                                (rtl::OUString *)m_Args->arg6);
+                                (sal_Int32 *)m_Args->arg6);
         break;
     case ProxiedFunc::FUNC_EXECUTE_QUERY:
         if (m_Args->arg1 && m_Args->arg2)
