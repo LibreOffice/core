@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:19:48 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ GC X11SalGraphics::SelectPen()
         XGCValues values;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
-        values.graphics_exposures   = True;
+        values.graphics_exposures   = False;
 
         pPenGC_ = XCreateGC( pDisplay, hDrawable_,
                              GCSubwindowMode | GCFillRule | GCGraphicsExposures,
@@ -286,7 +286,7 @@ GC X11SalGraphics::SelectBrush()
         // values.subwindow_mode        = IncludeInferiors;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
-        values.graphics_exposures   = True;
+        values.graphics_exposures   = False;
 
         pBrushGC_ = XCreateGC( pDisplay, hDrawable_,
                                GCSubwindowMode | GCFillRule | GCGraphicsExposures,
@@ -335,7 +335,7 @@ GC X11SalGraphics::GetTrackingGC()
     {
         XGCValues     values;
 
-        values.graphics_exposures   = True;
+        values.graphics_exposures   = False;
         values.foreground           = m_pColormap->GetBlackPixel()
                                       ^ m_pColormap->GetWhitePixel();
         values.function             = GXxor;
