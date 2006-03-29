@@ -51,6 +51,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\presentation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\animations
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\registry
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\resource
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sdb
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sdbc
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sdbcx
@@ -213,6 +214,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\reflection\*.hpp %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hpp
 ..\%__SRC%\inc\com\sun\star\registry\*.hpp %_DEST%\inc%_EXT%\com\sun\star\registry\*.hpp
 ..\%__SRC%\inc\com\sun\star\registry\*.hdl %_DEST%\inc%_EXT%\com\sun\star\registry\*.hdl
+..\%__SRC%\inc\com\sun\star\resource\*.hpp %_DEST%\inc%_EXT%\com\sun\star\resource\*.hpp
+..\%__SRC%\inc\com\sun\star\resource\*.hdl %_DEST%\inc%_EXT%\com\sun\star\resource\*.hdl
 ..\%__SRC%\inc\com\sun\star\sdb\*.hdl %_DEST%\inc%_EXT%\com\sun\star\sdb\*.hdl
 ..\%__SRC%\inc\com\sun\star\sdb\*.hpp %_DEST%\inc%_EXT%\com\sun\star\sdb\*.hpp
 ..\%__SRC%\inc\com\sun\star\sdbc\*.hdl %_DEST%\inc%_EXT%\com\sun\star\sdbc\*.hdl
