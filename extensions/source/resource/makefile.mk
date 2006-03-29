@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:34:25 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:42:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/resource.obj
+SLOFILES=	$(SLO)$/resource.obj \
+            $(SLO)$/oooresourceloader.obj \
+            $(SLO)$/res_services.obj
 
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=	$(SLOFILES)
@@ -60,6 +62,9 @@ SHL1STDLIBS= \
         $(VOSLIB) 	 \
         $(SALLIB) 	 \
         $(VCLLIB)	\
+        $(COMPHELPERLIB) \
+        $(SVTOOLLIB) \
+        $(UNOTOOLSLIB) \
         $(TOOLSLIB)
 
 SHL1DEPN=
