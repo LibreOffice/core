@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:18:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,24 +178,24 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
 {
     if ( acceptsURL(url) )
     {
+        if ( acceptsURL_Stat(url) != LDAP )
+            return Sequence< DriverPropertyInfo >();
+
         ::std::vector< DriverPropertyInfo > aDriverInfo;
-        if ( acceptsURL_Stat(url) == LDAP )
-        {
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Base DN."))
-                    ,sal_False
-                    ,::rtl::OUString()
-                    ,Sequence< ::rtl::OUString >())
-                    );
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRowCount"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Records (max.)"))
-                    ,sal_False
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100"))
-                    ,Sequence< ::rtl::OUString >())
-                    );
-        }
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Base DN."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRowCount"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Records (max.)"))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100"))
+                ,Sequence< ::rtl::OUString >())
+                );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
