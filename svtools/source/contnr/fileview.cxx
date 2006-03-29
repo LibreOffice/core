@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:51:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,6 +704,8 @@ public:
     void                    InitSelection();
     void                    ResetCursor();
 
+    inline void             EndEditing( bool _bCancel );
+
 protected:
     DECL_LINK( SelectionMultiplexer, void* );
 
@@ -746,6 +748,13 @@ inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
 
     return bRet;
 }
+
+inline void SvtFileView_Impl::EndEditing( bool _bCancel )
+{
+    if ( mpView->IsEditingActive() )
+        mpView->EndEditing( _bCancel != false );
+}
+
 // functions -------------------------------------------------------------
 
 OUString CreateExactSizeText_Impl( sal_Int64 nSize )
@@ -1183,6 +1192,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
         nFlags |= FILEVIEW_MULTISELECTION;
 
     mpImp = new SvtFileView_Impl( this, nFlags, bOnlyFolder );
+    mpImp->mpView->ForbidEmptyText();
 
     long pTabs[] = { 5, 20, 180, 320, 400, 600 };
     mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
@@ -1585,6 +1595,12 @@ void SvtFileView::EnableDelete( sal_Bool bEnable )
 void SvtFileView::EnableNameReplacing( sal_Bool bEnable )
 {
     mpImp->EnableNameReplacing( bEnable );
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView::EndInplaceEditing( bool _bCancel )
+{
+    return mpImp->EndEditing( _bCancel );
 }
 
 // -----------------------------------------------------------------------
