@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:30:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #include <MConnection.hxx>
 #endif
 
+#ifndef CONNECTIVITY_SHARED_RES_HRC
+#include "conn_shared_res.hrc"
+#endif
 
 #ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
 #include "MNSDeclares.hxx"
@@ -253,16 +256,16 @@ MQueryHelper::waitForResultOrComplete(  )
     }
     if (times >= 20 &&  rv == ::osl::Condition::result_timeout ) {
         OSL_TRACE("waitForResultOrComplete() : Timeout!");
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Timeout waiting for result."));
+        setError( STR_TIMEOUT_WAITING );
         return sal_False;
     }
 
     if ( isError() ) {
         OSL_TRACE("waitForResultOrComplete() : Error returned!");
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error found when executing query"));
+        setError( STR_ERR_EXECUTING_QUERY );
         return sal_False;
     }
-    m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
+    resetError();
     OSL_TRACE("  Out : waitForResultOrComplete()");
     return sal_True;
 }
@@ -607,7 +610,7 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
 #define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)  \
     if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))   \
     {   \
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("You can't make any changes to mozilla address book when mozilla is running."));  \
+        setError( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
         return sal_False;   \
     }
 
@@ -644,7 +647,7 @@ sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
     }
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Mozilla Address Book has been changed out of this process, we can't modify it in this condition."));
+        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
 
     return !(NS_FAILED(rv));
 }
@@ -692,7 +695,7 @@ sal_Int32 MQueryHelper::deleteCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
         resEntry->setRowStates(RowStates_Deleted);
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Mozilla Address Book has been changed out of this process, we can't modify it in this condition."));
+        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
     return !(NS_FAILED(rv));
 }
 
@@ -701,13 +704,13 @@ sal_Bool MQueryHelper::setCardValues(const sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't find the requested row."));
+        setError( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
     if (!card)
     {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't find the card for the requested row."));
+        setError( STR_CANT_FIND_CARD_FOR_ROW );
         return sal_False;
     }
 
@@ -840,7 +843,6 @@ void MQueryHelper::getCardValues(nsIAbCard *card,sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry;
     if (rowIndex>0)
     {
-        ::rtl::OUString m_aErrorString;
         resEntry = getByIndex(rowIndex);
     }
     else
@@ -992,7 +994,7 @@ sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't find the requested row."));
+        setError( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
