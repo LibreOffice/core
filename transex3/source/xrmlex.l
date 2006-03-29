@@ -25,7 +25,7 @@
 /* external functions (C++ code, declared as extren "C" */
 extern WorkOnTokenSet( int, char* );
 extern Argument( char * );
-extern InitXrmExport( char * );
+extern InitXrmExport( char * , char * );
 extern EndXrmExport();
 extern GetError();
 extern SetError();
@@ -33,6 +33,7 @@ extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetXrmFile();
 extern int isQuiet();
 extern void removeTempFile();
+extern char* getFilename();
 
 /* forwards */
 void YYWarning();
@@ -186,15 +187,16 @@ main( int argc, char* argv[])
 //		fprintf( stdout, " -ISO99: IsoCode is the full qualified ISO language code for language 99" );
 		return 1;
 	}
-
 	pFile = GetXrmFile();
-	if ( !pFile )
+	InitXrmExport( pOutput , getFilename() );
+
+    if ( !pFile )
 		return 1;
 
    	yyin = pFile;
 
 	/* create global instance of class XmlExport */
-	InitXrmExport( pOutput );
+	//InitXrmExport( pOutput );
 
 	/* start parser */
    	yylex();
