@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 13:53:34 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,29 +247,8 @@ static HMENU createSystrayMenu( )
         addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
             pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
     if ( aModuleOptions.IsDataBase() )
-    {
-        SvtDynamicMenuOptions aOpt;
-        Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
-        for ( sal_Int32 n=0; n<aMenu.getLength(); n++ )
-        {
-            ::rtl::OUString aURL;
-            ::rtl::OUString aDescription;
-            Sequence < PropertyValue >& aEntry = aMenu[n];
-            for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
-            {
-                if ( aEntry[m].Name.equalsAsciiL( "URL", 3 ) )
-                    aEntry[m].Value >>= aURL;
-                if ( aEntry[m].Name.equalsAsciiL( "Title", 5 ) )
-                    aEntry[m].Value >>= aDescription;
-            }
-
-            if ( aURL.equalsAscii( BASE_URL ) && aDescription.getLength() )
-            {
-                addMenuItem( hMenu, IDM_BASE, ICON_DATABASE_DOCUMENT, aDescription, pos, true );
-                break;
-            }
-        }
-    }
+        addMenuItem( hMenu, IDM_BASE, ICON_DATABASE_DOCUMENT,
+            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( BASE_URL ) ) ), pos, true );
 
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
