@@ -12,22 +12,24 @@ package integration.forms;
  */
 public class BooleanValidator extends integration.forms.ControlValidator
 {
-    private boolean m_preventChecked;
+    private boolean                         m_preventChecked;
+    private com.sun.star.uno.AnyConverter   m_converter;
 
     /** Creates a new instance of BooleanValidator */
     public BooleanValidator( boolean preventChecked )
     {
         m_preventChecked = preventChecked;
+        m_converter = new com.sun.star.uno.AnyConverter();
     }
 
     public String explainInvalid( Object Value )
     {
         try
         {
-            short value = ((Short)Value).shortValue();
-            if ( value == 2 )
+            if ( m_converter.isVoid( Value ) )
                 return "'indetermined' is not an allowed state";
-            if ( m_preventChecked && ( value == 1 ) )
+            boolean value = ((Boolean)Value).booleanValue();
+            if ( m_preventChecked && ( value == true ) )
                 return "no no no. Don't check it.";
         }
         catch( java.lang.Exception e )
@@ -41,10 +43,11 @@ public class BooleanValidator extends integration.forms.ControlValidator
     {
         try
         {
-            short value = ((Short)Value).shortValue();
-            if ( value == 2 )
+            if ( m_converter.isVoid( Value ) )
                 return false;
-            if ( m_preventChecked && ( value == 1 ) )
+
+            boolean value = ((Boolean)Value).booleanValue();
+            if ( m_preventChecked && ( value == true ) )
                 return false;
             return true;
         }
