@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:19:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1229,6 +1229,32 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.meWidthType    = ToFontWidth (rInfo.m_eWidth);
     aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
+
+    switch (rInfo.m_eEmbeddedbitmap)
+    {
+        default:
+            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
+            break;
+    }
+
+    switch (rInfo.m_eAntialias)
+    {
+        default:
+            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            aDFA.meAntiAlias = ANTIALIAS_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            aDFA.meAntiAlias = ANTIALIAS_FALSE;
+            break;
+    }
 
     // special case for the ghostscript fonts
     if( aDFA.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
