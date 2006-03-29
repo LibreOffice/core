@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:20:59 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // create a shadow representing object
         const sal_Int32 nXDist(((SdrShadowXDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
         const sal_Int32 nYDist(((SdrShadowYDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
-        const Color aShadowColor(((SdrShadowColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetValue());
+        const ::Color aShadowColor(((SdrShadowColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetValue());
         const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
         pRetval = rOriginal.Clone();
         DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
@@ -394,12 +394,12 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                 nEndLuminance = (sal_uInt8)(nEndLuminance * ((double)aGradient.GetEndIntens() / 100.0));
             }
 
-            Color aStartColor(
+            ::Color aStartColor(
                 (sal_uInt8)((nStartLuminance * aShadowColor.GetRed()) / 256),
                 (sal_uInt8)((nStartLuminance * aShadowColor.GetGreen()) / 256),
                 (sal_uInt8)((nStartLuminance * aShadowColor.GetBlue()) / 256));
 
-            Color aEndColor(
+            ::Color aEndColor(
                 (sal_uInt8)((nEndLuminance * aShadowColor.GetRed()) / 256),
                 (sal_uInt8)((nEndLuminance * aShadowColor.GetGreen()) / 256),
                 (sal_uInt8)((nEndLuminance * aShadowColor.GetBlue()) / 256));
