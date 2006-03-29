@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:24:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1583,7 +1583,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw;*.oth" );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         if ( sFilterExt.Len() > 0 )
@@ -1691,7 +1691,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw;*.oth" );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         if ( sFilterExt.Len() > 0 )
