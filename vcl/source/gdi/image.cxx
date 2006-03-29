@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:07:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,32 +120,35 @@ Image::Image( const ResId& rResId ) :
             pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
 
-        if( !aBmpEx.IsEmpty() )
+        if( nObjMask & RSC_IMAGE_MASKBITMAP )
         {
-            if( nObjMask & RSC_IMAGE_MASKBITMAP )
+            if( !aBmpEx.IsEmpty() )
             {
                 if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
                 {
                     const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
                     aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
                 }
-
-                pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
             }
 
-            if( nObjMask & RSC_IMAGE_MASKCOLOR )
+            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+        }
+
+        if( nObjMask & RSC_IMAGE_MASKCOLOR )
+        {
+            if( ! aBmpEx.IsEmpty() )
             {
                 if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
                 {
                     const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
                     aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
                 }
-
-                pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
             }
 
-            ImplInit( aBmpEx );
+            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
+        if( !aBmpEx.IsEmpty() )
+            ImplInit( aBmpEx );
     }
 }
 
