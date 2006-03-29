@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:23:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,8 +462,9 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
             // can avoid potential driver crashes as their jobsetups are often not compatible
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
+            ByteString aPrinterNameA( ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ) );
             HANDLE hPrn;
-            if ( !OpenPrinterA( (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(), &hPrn, NULL ) )
+            if ( !OpenPrinterA( (LPSTR)aPrinterNameA.GetBuffer(), &hPrn, NULL ) )
                 return FALSE;
 
                 // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
@@ -471,7 +472,7 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             return FALSE;
 
             long nSysJobSize = DocumentPropertiesA( 0, hPrn,
-                                                    (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
+                                                    (LPSTR)aPrinterNameA.GetBuffer(),
                                                     NULL, NULL, 0 );
             if( nSysJobSize < 0 )
             {
@@ -479,8 +480,8 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
                 return FALSE;
             }
             DEVMODE *pBuffer = (DEVMODE*) _alloca( nSysJobSize );
-            DWORD nRet = DocumentPropertiesA( 0, hPrn,
-                                            (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
+            LONG nRet = DocumentPropertiesA( 0, hPrn,
+                                            (LPSTR)aPrinterNameA.GetBuffer(),
                                             pBuffer, NULL, DM_OUT_BUFFER );
             if( nRet < 0 )
             {
