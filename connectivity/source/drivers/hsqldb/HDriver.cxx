@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:39:24 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,31 +337,30 @@ namespace connectivity
     //--------------------------------------------------------------------
     Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
+        if ( !acceptsURL(url) )
+            return Sequence< DriverPropertyInfo >();
         ::std::vector< DriverPropertyInfo > aDriverInfo;
-        if ( acceptsURL(url) )
-        {
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the storage where the database will be stored."))
-                    ,sal_True
-                    ,::rtl::OUString()
-                    ,Sequence< ::rtl::OUString >())
-                    );
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the url of the data source."))
-                    ,sal_True
-                    ,::rtl::OUString()
-                    ,Sequence< ::rtl::OUString >())
-                    );
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the statement which will be executed to retrieve auto increment values."))
-                    ,sal_False
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"))
-                    ,Sequence< ::rtl::OUString >())
-                    );
-        }
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the storage where the database will be stored."))
+                ,sal_True
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the url of the data source."))
+                ,sal_True
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the statement which will be executed to retrieve auto increment values."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"))
+                ,Sequence< ::rtl::OUString >())
+                );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
