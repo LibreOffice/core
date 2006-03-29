@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:42:45 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,7 +791,7 @@ void X11SalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
                 aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
                 aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
                 pBM->ImplDraw( mhBackgroundPixmap, GetDisplay()->GetVisual()->GetDepth(),
-                               aTwoRect, GetDisplay()->GetCopyGC(), false );
+                               aTwoRect, GetDisplay()->GetCopyGC() );
                 XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), mhBackgroundPixmap );
             }
         }
