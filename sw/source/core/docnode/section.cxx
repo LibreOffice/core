@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:23:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 
 #include <sfx2/sfxsids.hrc>
+#ifndef _SFX_FCONTNR_HXX
+#include <sfx2/fcontnr.hxx>
+#endif
 
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -1242,13 +1245,14 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     const SfxFilter* pSfxFlt = 0;
     if( !pMed->GetError() )
     {
+        String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+        SfxFilterMatcher aMatcher( sFactory );
+
         // kein Filter, dann suche ihn. Ansonsten teste, ob der angegebene
         // ein gueltiger ist
         if( rFilter.Len() )
         {
-            pSfxFlt =  SwIoSystem::GetFilterOfFilterTxt( rFilter );
-            if( pSfxFlt && !SwIoSystem::IsFileFilter( *pMed, pSfxFlt->GetUserData() ) )
-                pSfxFlt = 0;        // dann neu detecten lassen
+            pSfxFlt = aMatcher.GetFilter4FilterName( rFilter );
         }
 
         if( nVersion )
@@ -1258,13 +1262,12 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr, pMed );
+            aMatcher.DetectFilter( *pMed, &pSfxFlt, FALSE, FALSE );
 
         if( pSfxFlt )
         {
             // ohne Filter geht gar nichts
             pMed->SetFilter( pSfxFlt );
-
 
             xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
             if( xDocSh->DoLoad( pMed ) )
