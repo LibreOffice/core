@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:32:08 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,7 +378,6 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         xDocSh->GetDoc()->ResetModified();
         if ( bShow )
             pFrame->GetFrame()->Appear();
-        xDocSh->GetDoc()->DoUndo ( FALSE );
 
         delete pGroup;
     }
