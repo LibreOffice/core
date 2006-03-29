@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:17:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types) ) {
-        ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
     }
 
     // ****************************************************
@@ -1023,7 +1023,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
     if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, types,_rRows ) ) {
-        ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
     }
     pResultSet->setRows( _rRows );
 
@@ -1134,19 +1134,17 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) )
-          {
-       ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
-         }
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
 
-        ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
-        ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);
-        aRows.reserve(8);
-        aRow[0] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[5] = new ::connectivity::ORowSetValueDecorator(getUserName());
-        aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NO")));
+    ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
+    ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);
+    aRows.reserve(8);
+    aRow[0] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[1] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[5] = new ::connectivity::ORowSetValueDecorator(getUserName());
+    aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NO")));
 
 
     // Iterate over all tables
