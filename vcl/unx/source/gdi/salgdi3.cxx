@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:20:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,7 +561,7 @@ X11SalGraphics::SelectFont()
         XGCValues values;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
-        values.graphics_exposures   = True;
+        values.graphics_exposures   = False;
         values.foreground           = nTextPixel_;
 #ifdef _USE_PRINT_EXTENSION_
         values.background = xColormap_->GetWhitePixel();
