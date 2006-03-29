@@ -2504,7 +2504,7 @@
         <node oor:name="Popups">
             <node oor:name=".uno:TableMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="de">~Tabelle</value>
                     <value xml:lang="en-US">T~able</value>
                 </prop>
             </node>
@@ -2552,7 +2552,7 @@
             </node>
             <node oor:name=".uno:WordCountDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Wortanzahl</value>
+                    <value xml:lang="de">~Wörter zählen</value>
                     <value xml:lang="en-US">~Word Count</value>
                 </prop>
             </node>
