@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:14:13 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2323,6 +2323,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
         KEY_RETURN,
         KEY_SPACE,
         KEY_RIGHT,
+        KEY_TAB,
         0
     };
 
