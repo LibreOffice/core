@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 13:56:27 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:35:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
         $(SLO)$/sdbcoretools.obj				\
-        $(SLO)$/commandbase.obj				\
         $(SLO)$/propertyhelper.obj			\
         $(SLO)$/services.obj				\
         $(SLO)$/PropertyForward.obj				\
