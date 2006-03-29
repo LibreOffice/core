@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:24:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,14 +95,12 @@ XMLChildNode& XMLChildNode::operator=(const XMLChildNode& obj){
 XMLParentNode::~XMLParentNode()
 /*****************************************************************************/
 {
-    if ( pChildList != NULL ) {
-        XMLChildNode* aChild = NULL;
-        for ( ULONG i = 0; i < pChildList->Count(); i++ ){
-            aChild = pChildList->GetObject( i );
-            if( aChild != NULL )delete aChild;
-        }
-        delete pChildList;
+    if( pChildList ){
+            RemoveAndDeleteAllChilds();
+            delete pChildList;
+            pChildList = NULL;
     }
+    pChildList = NULL;
 }
 /*****************************************************************************/
 XMLParentNode::XMLParentNode( const XMLParentNode& obj)
@@ -171,8 +169,8 @@ void XMLParentNode::AddChild( XMLChildNode *pChild , int pos )
 int XMLParentNode::GetPos( ByteString id ){
 /*****************************************************************************/
     XMLElement* a;
-    const ByteString sEnusStr = ByteString(String::CreateFromAscii(ENGLISH_US_ISO).ToLowerAscii() , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
-    const ByteString sDeStr   = ByteString(String::CreateFromAscii(GERMAN_ISO2).ToLowerAscii()    , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
+    static const ByteString sEnusStr = ByteString(String::CreateFromAscii(ENGLISH_US_ISO).ToLowerAscii() , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
+    static const ByteString sDeStr   = ByteString(String::CreateFromAscii(GERMAN_ISO2).ToLowerAscii()    , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
     if ( pChildList ){
         for ( ULONG i = 0; i < pChildList->Count(); i++ ) {
             XMLChildNode *pChild = pChildList->GetObject( i );
@@ -207,6 +205,7 @@ int XMLParentNode::RemoveChild( XMLElement *pRefElement )
                 {
                     if( pRefElement->ToOString().compareTo( a->ToOString() )==0 ){
                         pChildList->Remove( i );
+                        delete a; // Test
                         return i;
                     }
                 }
@@ -269,81 +268,61 @@ USHORT XMLFile::GetNodeType()
 }
 
 /*****************************************************************************/
-extern "C" void Signal_handler(int signo){
-/*****************************************************************************/
-    if( signo == SIGINT ){
-        printf("Helpex: Currently Writing!!! Ctrl+C aborted\n");
-    }
-}
-/*****************************************************************************/
-BOOL XMLFile::Write( String &rFileName )
+BOOL XMLFile::Write( ByteString &aFilename )
 /*****************************************************************************/
 {
-    ByteString aFilename( rFileName , RTL_TEXTENCODING_ASCII_US );
-    if ( rFileName.Len()) {
 
-        //signal( SIGINT, &::Signal_handler );
+    if ( aFilename.Len()) {
+        // retry harder if there is a NFS problem,
+        for( int x = 0 ; x < 200 ; x++ ){   // this looks strange...yes!
+            ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc );
 
-        // retry if there is a NFS problem
-        bool isOk = false;
-        for( int x = 0 ; !isOk && x < 200 ; x++ ){
-            DirEntry aTemp( Export::GetTempFile());
-            ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
-
-            ofstream aFStream( sTempFile.GetBuffer() , ios::out | ios::trunc );
-
-            if( !aFStream ){
-                cerr << "ERROR: - helpex - Can't create tempfile " << sTempFile.GetBuffer() << " No#" << x << "\n";
-                //  signal(SIGINT,SIG_DFL); // Enable Ctrl+C
-                // isOk = false;
-                // exit ( -1 );
+            if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
+            {                   // I wasn't able to track this down. I think this is an NFS issue .....
+                cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
             }
             else
             {
+                // write out
                 Write( aFStream );
                 aFStream.close();
-                // signal(SIGINT,SIG_DFL); // Enable Ctrl+C
 
+                // check!
                 DirEntry aTarget( aFilename );
-                aTarget.Kill();
-                aTemp.MoveTo( aTarget ) ;
-
                 FileStat aFileStat( aTarget );
-                if( aFileStat.GetSize() < 1 ){
+
+                if( aFileStat.GetSize() < 1 )
+                {
+                    //retry
                     cerr << "WARNING: - helpex - Can't create file " << aFilename.GetBuffer() << " No#" << x << "\n";
-                    //exit( -1 );
                     aTarget.Kill();
-                    aTemp.Kill();
-                }else{
+                }
+                else
+                {
+                    //everything ok!
                     return true;
                 }
-
             }
         }
-        cerr << "ERROR: - helpex - Can't create file " << aFilename.GetBuffer() << "\nDisk full ? Mounted NFS volume broken ?\n";
+        cerr << "ERROR: - helpex - Can't create file " << aFilename.GetBuffer() << "\nPossible reason: Disk full ? Mounted NFS volume broken ? Wrong permissions ?\n";
         exit( -1 );
-        return FALSE;
-    } // for
+        //return FALSE;
+    }
     cerr << "ERROR: - helpex - Empty file name\n";
     exit( -1 );
-    return FALSE;
+    //return FALSE;
 }
 
 
-/*****************************************************************************/
-//void XMLFile::WriteString( SvStream &rStream, const String &sString )
+
 void XMLFile::WriteString( ofstream &rStream, const String &sString )
-    /*****************************************************************************/
 {
     ByteString sText( sString, RTL_TEXTENCODING_UTF8 );
-      //sText.ConvertLineEnd(LINEEND_CRLF);
     rStream << sText.GetBuffer();
 }
 
-/*****************************************************************************/
-//BOOL XMLFile::Write( SvStream &rStream , XMLNode *pCur )
+
 BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
-/*****************************************************************************/
 {
     XMLUtil& xmlutil=XMLUtil::Instance();
     if ( !pCur )
@@ -408,12 +387,9 @@ BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
     return TRUE;
 }
 
-/*****************************************************************************/
+
 void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
-/*****************************************************************************/
 {
-//  const ByteString L10N( "l10n" , RTL_TEXTENCODING_UTF8 );
-//  const ByteString ID  ( "id" , RTL_TEXTENCODING_UTF8 );
 
     if ( !pCur )
         Print( this );
@@ -432,12 +408,8 @@ void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
                 if ( pElement->GetAttributeList())
                     for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
                         ByteString aAttrName( *pElement->GetAttributeList()->GetObject( j ), RTL_TEXTENCODING_UTF8 );
-                        //if( !( bNo_XML_Lang && aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) ){
-                        //if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ){
                         if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) {
                             fprintf( stdout, " %s=\"%s\"",
-                                //ByteString( *pElement->GetAttributeList()->GetObject( j ),
-                                //    RTL_TEXTENCODING_UTF8 ).GetBuffer(),
                                 aAttrName.GetBuffer(),
                                 ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),
                                     RTL_TEXTENCODING_UTF8 ).GetBuffer());
@@ -472,6 +444,63 @@ void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
         }
     }
 }
+XMLFile::~XMLFile()
+{
+    //static int cnt=0;
+    if( XMLStrings != NULL ){
+        XMLHashMap::iterator pos = XMLStrings->begin();
+        LangHashMap* elem;
+        for( ; pos != XMLStrings->end() ; ++pos ){
+            delete pos->second;             // Check and delete content also ?
+            //printf("LangHashMap deleted #%d\n",++cnt);
+            //elem=pos->second;
+            //if( (*elem)[ language ] )   delete (*elem)[ language ];
+            //(*elem)[ language ]=pElement;
+        }
+        delete XMLStrings;
+        XMLStrings == NULL;
+    }
+}
+/*XMLFile::~XMLFile()
+{
+  //printf("Killing Obj XMLFile\n");
+    if( XMLStrings )
+    {
+
+         XMLElement* cur;
+        //printf("A");
+        if( XMLStrings )
+        {
+        for(XMLHashMap::iterator pos=XMLStrings->begin(); pos!=XMLStrings->end();++pos){
+            //printf("B");
+            LangHashMap* elem=pos->second;
+             //printf("C");
+
+            if( elem ){
+             //printf("D");
+
+                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2)
+                {
+              //printf("E");
+
+                    cur=pos2->second;
+                    //printf("F");
+                    //printf("delete %s", (pos2->first).GetBuffer() );
+                    if( cur ) delete cur;
+                    //printf(" ...done\n");
+                }
+                delete elem;
+            }
+            //delete elem;
+        }
+
+        //delete XMLStrings;
+        //XMLStrings = NULL;
+    }
+    }//if
+  //printf("\nDone\n");
+}
+*/
 /*****************************************************************************/
 XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created from memory stream
 /*****************************************************************************/
@@ -479,7 +508,8 @@ XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created f
                   sFileName    ( rFileName ),
                   ID           ( "id" ),
                   OLDREF       ( "oldref" ),
-                  XML_LANG     ( "xml-lang" )
+                  XML_LANG     ( "xml-lang" ),
+                  XMLStrings   ( NULL )
 
 {
 //  nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark_value"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
@@ -491,11 +521,12 @@ XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created f
     nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("title"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
     nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("link"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
 }
-
 /*****************************************************************************/
 void XMLFile::Extract( XMLFile *pCur )
 /*****************************************************************************/
 {
+    if( XMLStrings != NULL ) delete XMLStrings; // Elements ?
+
     XMLStrings = new XMLHashMap();
        if ( !pCur )
         SearchL10NElements( this );
@@ -527,9 +558,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
 /*****************************************************************************/
     ByteString tmpStr,id,oldref,language("");
     LangHashMap* elem;
-    XMLUtil& rXMLUtil = XMLUtil::Instance();   // Get Singleton
-    //int langid=1; // ENGLISH define benutzen !!!
-    //ByteString sLangId;
+    XMLUtil& rXMLUtil = XMLUtil::Instance();
     if( pElement->GetAttributeList() != NULL ){
         for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
             tmpStr=ByteString( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
@@ -538,7 +567,6 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
             }
             if( tmpStr.CompareTo( XML_LANG ) == COMPARE_EQUAL ){    // Get the "xml-lang" Attribute
                 language = ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
-                //langid=rXMLUtil.GetLangByIsoLang(language);
             }
 
         }
@@ -552,13 +580,11 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
     XMLHashMap::iterator pos = XMLStrings->find( id );
     if( pos == XMLStrings->end() ){             // No instanze , create new one
         elem = new LangHashMap();
-        //(*elem)[langid]=pElement;
         (*elem)[ language ]=pElement;
         XMLStrings->insert( XMLHashMap::value_type( id , elem ) );
         order.push_back( id );
     }else{                                  // Already there
         elem=pos->second;
-        //(*elem)[langid]=pElement;
         if ( (*elem)[ language ] )
         {
             fprintf(stdout,"Error: Entry for language double. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), ByteString( sFileName,RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -579,12 +605,132 @@ void XMLFile::showType(XMLParentNode* node){
         default: break;
     }
 }
+XMLFile::XMLFile()
+/*****************************************************************************/
+                : XMLParentNode( NULL ),
+                  ID           ( "id" ),
+                  OLDREF       ( "oldref" ),
+                  XML_LANG     ( "xml-lang" ),
+                  XMLStrings   ( NULL ){};
+
+
+XMLFile::XMLFile( const XMLFile& obj )
+/*****************************************************************************/
+                : XMLParentNode( obj ),
+                  sFileName    ( obj.sFileName ),
+                  ID           ( "id" ),
+                  OLDREF       ( "oldref" ),
+                  XML_LANG     ( "xml-lang" ),
+                  XMLStrings   ( NULL )
+{
+    if( this!=&obj )
+    {
+        //printf("Copy XMLHashMap");
+
+        //XMLParentNode::operator=(obj);
+
+        //sFileName       =obj.sFileName;
+        //ID              =obj.ID;
+        //XML_LANG        =obj.XML_LANG;
+        //OLDREF          =obj.OLDREF;
+
+        //HashMap nodes_include,nodes_localize,nodes_print;
+        //nodes_include   =obj.nodes_include;
+        //nodes_print     =obj.nodes_print;
+
+        nodes_localize  =obj.nodes_localize;
+        order           =obj.order;
+
+        //std::vector <ByteString> order;
+
+        //TagMap      nodes_localize;
+        //XMLHashMap* XMLStrings;
+
+/*      if( XMLStrings != NULL ){
+            delete XMLStrings;
+            XMLStrings = NULL;
+        }
+
+        if( obj.XMLStrings != NULL )
+        {
+            XMLStrings = new XMLHashMap();
+             XMLElement* cur;
+
+            for( XMLHashMap::iterator pos = obj.XMLStrings->begin() ; pos != obj.XMLStrings->end() ; ++pos )
+            {
+                LangHashMap* elem=pos->second;
+                static int cnt = 0;
+                LangHashMap* newelem = new LangHashMap();
+                printf("LangHashMap created copy #%d\n",++cnt);
+                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
+                    (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
+                    //printf("*");
+                }
+                (*XMLStrings)[ pos->first ] = newelem;
+            }
+        }
+    }*/
+    }
+    //printf("done!\n");
+    //return *this;
+}
+/*****************************************************************************/
+XMLFile& XMLFile::operator=(const XMLFile& obj){
+/*****************************************************************************/
+    if( this!=&obj ){
+
+        XMLParentNode::operator=(obj);
+
+        //sFileName       =obj.sFileName;
+        //ID              =obj.ID;
+        //XML_LANG        =obj.XML_LANG;
+        //OLDREF          =obj.OLDREF;
+
+        //HashMap nodes_include,nodes_localize,nodes_print;
+        //nodes_include   =obj.nodes_include;
+        //nodes_print     =obj.nodes_print;
+
+        nodes_localize  =obj.nodes_localize;
+        order           =obj.order;
+
+        //std::vector <ByteString> order;
+
+        //TagMap      nodes_localize;
+        //XMLHashMap* XMLStrings;
+
+
+        if( XMLStrings )    delete XMLStrings;
+
+        if( obj.XMLStrings )
+        {
+            XMLStrings = new XMLHashMap();
+             XMLElement* cur;
+
+            for( XMLHashMap::iterator pos = obj.XMLStrings->begin() ; pos != obj.XMLStrings->end() ; ++pos )
+            {
+                LangHashMap* elem=pos->second;
+                //static int cnt = 0;
+                //printf("LangHashMap created copy #%d\n",++cnt);
+                LangHashMap* newelem = new LangHashMap();
+                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
+                    (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
+                    printf("*");
+                }
+                (*XMLStrings)[ pos->first ] = newelem;
+            }
+        }
+    }
+    printf("done!\n");
+    return *this;
+}
+
+
 /*****************************************************************************/
 void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
 /*****************************************************************************/
 {
-    const ByteString LOCALIZE("localize");
-    const ByteString ID("id");
+    static const ByteString LOCALIZE("localize");
+    static const ByteString ID("id");
     bool bInsert    = true;
     if ( !pCur )
         SearchL10NElements( this  );
@@ -776,7 +922,7 @@ void XMLElement::AddAttribute( const String &rAttribute, const String &rValue )
 /*****************************************************************************/
 void XMLElement::ChangeLanguageTag( const String &rValue ){
 /*****************************************************************************/
-    String rName = String::CreateFromAscii("xml-lang");
+    static const String rName = String::CreateFromAscii("xml-lang");
     SetLanguageId( ByteString(rValue,RTL_TEXTENCODING_UTF8) );
     if ( pAttributes ){
         for ( ULONG i = 0; i < pAttributes->Count(); i++ ){
@@ -824,6 +970,7 @@ XMLElement::~XMLElement()
             delete pAttributes->GetObject( i );
 
         delete pAttributes;
+        pAttributes = NULL;
     }
 }
 /*****************************************************************************/
@@ -836,13 +983,10 @@ bool    XMLElement::Equals(OUString refStr){
 OString XMLElement::ToOString(){
 /*****************************************************************************/
     OUString ouEmpty;
-    OString test(ouEmpty.getStr(), ouEmpty.getLength(), RTL_TEXTENCODING_UTF8);
 
     OUStringBuffer* buffer = new OUStringBuffer();
     Print( this, *buffer , true );
 
-    const sal_Unicode* pDbg1 = buffer->getStr();
-    sal_uInt32 nDbg2 = buffer->getLength();
     OString result( (sal_Unicode* )buffer->getStr(), buffer->getLength() , RTL_TEXTENCODING_UTF8 );
     delete buffer;
     return result;
@@ -861,9 +1005,9 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    const String COMMENT = String::CreateFromAscii("comment");
+    static const String COMMENT = String::CreateFromAscii("comment");
     XMLUtil& xmlutil=XMLUtil::Instance();
-    const OUString XML_LANG ( OUString::createFromAscii("xml-lang") );
+    static const OUString XML_LANG ( OUString::createFromAscii("xml-lang") );
 
     if(pCur!=NULL){
         if(rootelement){
@@ -1038,6 +1182,7 @@ XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
 #define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
 #define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
 
+
 /*****************************************************************************/
 SimpleXMLParser::SimpleXMLParser()
 /*****************************************************************************/
@@ -1132,18 +1277,15 @@ void SimpleXMLParser::CharacterData(
     const XML_Char *s, int len )
 /*****************************************************************************/
 {
-    //String z;
     if ( !pCurData ){
         String x=String( XML_CHAR_N_TO_OUSTRING( s, len ));
         XMLUtil::UnQuotHTML(x);
         pCurData = new XMLData( x , pCurNode );
-        /*pCurData = new XMLData(
-            String( XML_CHAR_N_TO_OUSTRING( s, len )), pCurNode );*/
     }else{
         String x=String( XML_CHAR_N_TO_OUSTRING( s, len ));
         XMLUtil::UnQuotHTML(x);
         pCurData->AddData( x );
-        //      pCurData->AddData( String( XML_CHAR_N_TO_OUSTRING( s, len )));
+
     }
 }
 
@@ -1153,8 +1295,7 @@ void SimpleXMLParser::Comment(
 /*****************************************************************************/
 {
     pCurData = NULL;
-    new XMLComment(
-        String( XML_CHAR_TO_OUSTRING( data )), pCurNode );
+        new XMLComment( String( XML_CHAR_TO_OUSTRING( data )), pCurNode );
 }
 
 /*****************************************************************************/
@@ -1272,64 +1413,73 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
 void XMLUtil::QuotHTML( String &rString )
 /*****************************************************************************/
 {
-    ByteString sString( rString, RTL_TEXTENCODING_UTF8 );
+    OUStringBuffer sReturn;
+    static const String LT(String::CreateFromAscii("<"));
+    static const String QLT(String::CreateFromAscii("&lt;"));
+    static const String GT(String::CreateFromAscii(">"));
+    static const String QGT(String::CreateFromAscii("&gt;"));
+    static const String QUOT(String::CreateFromAscii("\\"));
+    static const String QQUOT(String::CreateFromAscii("&quot;"));
+    static const String APOS(String::CreateFromAscii("\""));
+    static const String QAPOS(String::CreateFromAscii("&apos;"));
+    static const String AMP(String::CreateFromAscii("&"));
+    static const String QAMP(String::CreateFromAscii("&amp;"));
+    static const String SLASH(String::CreateFromAscii("\\"));
 
-    ByteString sReturn;
     BOOL bBreak = FALSE;
-    for ( USHORT i = 0; i < sString.Len(); i++) {
-        if ( i < sString.Len()) {
-            switch ( sString.GetChar( i )) {
-                //case '\\': if( i+1 <= sString.Len() ){
-                case '\\': if( i+1 <= sString.Len() ){
-                            switch( sString.GetChar( i+1 ) ){
-                             case '<':  sReturn += "<";i++;break;
-                             case '>':  sReturn += ">";i++;break;
-                             case '\\': sReturn += "\\";i++;break;
-                             case '\"': sReturn += "\"";i++;break;
+    for ( USHORT i = 0; i < rString.Len(); i++) {
+        if ( i < rString.Len()) {
+            switch ( rString.GetChar( i )) {
+                case '\\': if( i+1 <= rString.Len() ){
+                            switch( rString.GetChar( i+1 ) ){
+                             case '<':  sReturn.append( LT );i++;break;
+                             case '>':  sReturn.append( GT );i++;break;
+                             case '\\': sReturn.append( QUOT );i++;break;
+                             case '\"': sReturn.append( APOS );i++;break;
                              //case '\'': sReturn += "\'";i++;break;
                              //case '&' : sRetrun += "&";i++;break;
-                             default:   sReturn += "\\";break;
+                             default:   sReturn.append( SLASH );break;
 
                            }
                           }
                         break;
 
                 case '<':
-                    sReturn += "&lt;";
-
-                break;
+                    sReturn.append( QLT );
+                    break;
 
                 case '>':
-                    sReturn += "&gt;";
-                break;
+                    sReturn.append( QGT );
+                    break;
 
                 case '\"':
-                    sReturn += "&quot;";
-                break;
+                    sReturn.append( QQUOT );
+                    break;
 
 /*              case '\'':
                     sReturn += "&apos;";
                     break;
 */
                 case '&':
-                    if ((( i + 4 ) < sString.Len()) &&
-                        ( sString.Copy( i, 5 ) == "&amp;" ))
-                            sReturn += sString.GetChar( i );
+                    if (
+                          ( ( i + 4 ) < rString.Len()) &&
+                          ( String( rString.Copy( i, 5 ) ).Equals( QAMP ) )
+                       )
+                        sReturn.append( rString.GetChar( i ) );
                     else
-                        sReturn += "&amp;";
+                        sReturn.append( QAMP );
                 break;
 
                 default:
-                    sReturn += sString.GetChar( i );
+                    sReturn.append( rString.GetChar( i ) );
                 break;
             }
         }
     }
-    rString = String( sReturn, RTL_TEXTENCODING_UTF8 );
+    rString = String( sReturn.makeStringAndClear() );
 }
 
 void XMLUtil::UnQuotHTML( String &rString ){
-    //UnQuotTags( rString );
     UnQuotData( rString );
 }
 
