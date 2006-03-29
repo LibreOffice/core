@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:54:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,7 @@ private:
     MergeDataFile *pMergeDataFile;
     std::vector<ByteString> aLanguages;
     ResData *pResData;
+    ByteString sFilename;
 
     BOOL bGerman;
     BOOL bEnglish;
@@ -225,7 +226,7 @@ public:
     CfgMerge(
         const ByteString &rMergeSource,
         const ByteString &rOutputFile,
-        BOOL bErrorLog
+        BOOL bErrorLog , ByteString &rFilename
     );
     virtual ~CfgMerge();
 };
