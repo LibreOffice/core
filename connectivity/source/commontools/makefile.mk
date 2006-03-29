@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 11:36:59 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:13:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ SLOFILES=\
         $(SLO)$/TSortIndex.obj							\
         $(SLO)$/dbcharset.obj							\
         $(SLO)$/dbconversion.obj						\
+        $(SLO)$/propertyids.obj \
         $(SLO)$/FValue.obj
 
 
