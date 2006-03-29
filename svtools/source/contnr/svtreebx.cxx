@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 12:57:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:38:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ void SvTreeListBox::InitTreeView( WinBits nWinStyle )
     nFocusWidth = -1;
 
     Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
-    pReserved = pLink;
+    pLBoxImpl->m_pLink = pLink;
 
     nTreeFlags = TREEFLAG_RECALCTABS;
     nIndent = SV_LBOX_DEFAULT_INDENT_PIXEL;
@@ -137,7 +137,7 @@ SvTreeListBox::~SvTreeListBox()
     DBG_DTOR(SvTreeListBox,0);
     pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete pImp;
-    delete (Link*)pReserved;
+    delete pLBoxImpl->m_pLink;
     ClearTabList();
 }
 
