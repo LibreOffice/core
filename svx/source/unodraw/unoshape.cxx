@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:31:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 15:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1095,7 +1095,7 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
     if (!pSdrHint || ( /* (pSdrHint->GetKind() != HINT_OBJREMOVED)  && */
         (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
         // #110094#-9 (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
-        ((pSdrHint->GetKind() != HINT_OBJCHG || pSdrHint->GetObject() != pObj))))
+        ((pSdrHint->GetKind() != HINT_OBJCHG || pSdrHint->GetObject() != mpObj.get() ))))
         return;
 
     uno::Reference< uno::XInterface > xSelf( pObject->getWeakUnoShape() );
