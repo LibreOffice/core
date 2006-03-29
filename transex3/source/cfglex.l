@@ -24,7 +24,7 @@
 
 /* external functions (C++ code, declared as extren "C" */
 extern WorkOnTokenSet( int, char* );
-extern InitCfgExport( char * );
+extern InitCfgExport( char * , char *);
 extern EndCfgExport();
 extern GetError();
 extern SetError();
@@ -32,6 +32,7 @@ extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetCfgFile();
 extern isQuiet();
 extern void removeTempFile();
+extern char* getFilename();
 /* forwards */
 void YYWarning();
 
@@ -188,13 +189,14 @@ main( int argc, char* argv[])
 	}
 
 	pFile = GetCfgFile();
+	InitCfgExport( pOutput , getFilename() );
 	if ( !pFile )
 		return 1;
 
    	yyin = pFile;
 
 	/* create global instance of class CfgExport */
-	InitCfgExport( pOutput );
+	//InitCfgExport( pOutput );
 
 	/* start parser */
    	yylex();
