@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:58:39 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <tools/isolang.hxx>
+#include <osl/file.hxx>
+#include <osl/file.h>
 
 #include <hash_map> /* std::hashmap*/
 #include <iterator> /* std::iterator*/
@@ -96,10 +98,7 @@ typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString
 typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
-//#define GERMAN_LIST_LINE_INDEX "GERMAN_LIST_LINE_INDEX"
-// Test ----------------------------
 #define GERMAN_LIST_LINE_INDEX ByteString("de")
-// Test ----------------------------
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
@@ -145,6 +144,36 @@ public:
     ResData( const ByteString &rPF, const ByteString &rGId )
             : nWidth( 0 ),
             sPForm( rPF ),
+            sFilename( ByteString("") ),
+            pStringList( NULL ),
+            pFilterList( NULL ),
+            pItemList( NULL ),
+            pPairedList( NULL ),
+            pUIEntries( NULL ),
+            nChildIndex( 0 ),
+            nIdLevel( ID_LEVEL_NULL ),
+            sGId( rGId ),
+            sTextTyp( "Text" ),
+            bText( FALSE ),
+            bList( FALSE ),
+            bQuickHelpText( FALSE ),
+            bHelpText( FALSE ),
+            bTitle( FALSE ),
+            bChild( FALSE ),
+            bChildWithText( FALSE ),
+            nTextRefId( REFID_NONE ),
+            nHelpTextRefId( REFID_NONE ),
+            nQuickHelpTextRefId( REFID_NONE ),
+            nTitleRefId( REFID_NONE ),
+            bRestMerged( FALSE )
+    {
+        sGId.EraseAllChars( '\r' );
+        sPForm.EraseAllChars( '\r' );
+    };
+    ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
+            : nWidth( 0 ),
+            sPForm( rPF ),
+            sFilename( rFilename ),
             pStringList( NULL ),
             pFilterList( NULL ),
             pItemList( NULL ),
@@ -192,6 +221,7 @@ public:
     ByteString sId;
     ByteString sGId;
     ByteString sHelpId;
+    ByteString sFilename;
     USHORT nWidth;
 
     ByteStringHashMap sText;
@@ -269,30 +299,22 @@ private:
     BOOL bNextMustBeDefineEOL;          // define but no \ at lineend
     ULONG nLevel;                       // res. recursiv? how deep?
     USHORT nList;                       // cur. res. is String- or FilterList
-
     ByteString nListLang;
     ULONG nListIndex;
     ULONG nListLevel;
-
     bool bSkipFile;
-
     ByteString sProject;
     ByteString sRoot;
-    //ByteString sFile;
-
     BOOL bEnableExport;
     BOOL bMergeMode;
-
     ByteString sMergeSrc;
     ByteString sLastListLine;
-
     BOOL bError;                        // any errors while export?
     BOOL bReadOver;
     BOOL bDontWriteOutput;
-
     ByteString sLastTextTyp;
-
     static bool isInitialized;
+    ByteString sFilename;
 
 
 public:
@@ -318,12 +340,15 @@ public:
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
 
+    static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
+
     static bool isAllowed( ByteString &sLanguage );
     static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
-
+    static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
+    static void getRandomName( ByteString& sRandStr );
 
     static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
@@ -387,17 +412,6 @@ public:
     BOOL GetError() { return bError; }
 };
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
-//=============================================================================
-//
-//      classes used to merge data back into src
-//
-//=============================================================================
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
 //
 // class PFormEntrys
@@ -429,8 +443,6 @@ public:
                     const ByteString &rTitle )
         {
 
-            //printf("DBG: PFormEntrys::Insert [nId=%s]=rText=%s)\n",nId.GetBuffer(),rText.GetBuffer());
-
             sText[ nId ] = rText;
             bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
@@ -450,18 +462,19 @@ public:
 ******************************************************************************/
 
 class MergeDataFile;
-//DECLARE_LIST( MergeStrings, PFormEntrys * );
-class MergeData //: public MergeStrings
+
+class MergeData
 {
 friend class MergeDataFile;
 private:
     ByteString sTyp;
     ByteString sGID;
     ByteString sLID;
+    ByteString sFilename;
     PFormEntrysHashMap aMap;
 public:
-    MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID )
-            : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) {};
+    MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID , const ByteString &rFilename )
+            : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
     PFormEntrys* InsertEntry( const ByteString &rPForm );
     PFormEntrys* GetPFormEntrys( ResData *pResData );
@@ -502,11 +515,14 @@ public:
 
     PFormEntrys *GetPFormEntrys( ResData *pResData );
     void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-                const ByteString &rPFO, //USHORT nLANG
+                const ByteString &rPFO,
                 const ByteString &nLang , const ByteString &rTEXT,
-                const ByteString &rQHTEXT, const ByteString &rTITLE );
+                const ByteString &rQHTEXT, const ByteString &rTITLE ,
+                const ByteString &sFilename
+                );
     static USHORT GetLangIndex( USHORT nId );
-    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID );
+    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename //= ByteString("")
+        );
     ByteString Dump();
     void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
