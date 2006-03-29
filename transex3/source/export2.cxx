@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:29:55 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,13 @@
 #include <bootstrp/appdef.hxx>
 #include <tools/isofallback.hxx>
 #include <stdio.h>
-#include <osl/file.hxx>
-#include <osl/file.h>
+#include <osl/time.h>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <iostream>
+#include <iomanip>
 #include <tools/urlobj.hxx>
+#include <time.h>
 
 using namespace std;
 //
@@ -110,8 +112,6 @@ USHORT Export::GetLangIndex( USHORT nLangId )
 CharSet Export::GetCharSet( USHORT nLangId )
 /*****************************************************************************/
 {
-    // removeme
-    //return Langcode2TextEncoding( nLangId );
     return 0;
 }
 
@@ -131,23 +131,14 @@ ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
 
     if( sMapName.Len() )
         printf("MapName %s\n", sMapName.GetBuffer());
-//  sReturn+= ByteString("MapName ") ;
-//  sReturn+= sMapName ;
-//  sReturn+= ByteString("\n") ;
     if( aMap.size() < 1 ) return ByteString();
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
         ByteString a( idbg->first );
         ByteString b( idbg->second );
         printf("[%s]= %s",a.GetBuffer(),b.GetBuffer());
-/*      sReturn+= ByteString("[") ;
-        sReturn+= a ;
-        sReturn+= ByteString("]= ") ;
-        sReturn+= b ;
-        sReturn+= ByteString("\n") ;*/
         printf("\n");
     }
     printf("\n");
-    //sReturn+= "\n" ;
     return sReturn;
 }
 /*****************************************************************************/
@@ -538,6 +529,56 @@ ByteString Export::GetNativeFile( ByteString sSource )
     return "";
 }
 
+int Export::getCurrentDirectory( rtl::OUString& base_fqurl_out, rtl::OUString& base_out )
+{
+    DirEntry aDir(".");
+    aDir.ToAbs();
+    base_out = rtl::OUString( aDir.GetFull() );
+    return osl::File::getFileURLFromSystemPath( base_out , base_fqurl_out );
+}
+
+
+// Stolen from sal/osl/unx/tempfile.c
+
+#define RAND_NAME_LENGTH 6
+
+void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix )
+{
+    static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    static const int  COUNT_OF_LETTERS = sizeof(LETTERS)/sizeof(LETTERS[0]) - 1;
+    sRandStr.Append( sPrefix );
+
+    static sal_uInt64 value;
+    char     buffer[RAND_NAME_LENGTH];
+
+    TimeValue           tv;
+    sal_uInt64          v;
+    int                 i;
+
+    osl_getSystemTime( &tv );
+    oslProcessInfo  proInfo;
+    osl_getProcessInfo( 0 , osl_Process_IDENTIFIER , &proInfo );
+
+    value += ((sal_uInt64) ( tv.Nanosec / 1000 ) << 16) ^ ( tv.Nanosec / 1000 ) ^ proInfo.Ident;
+
+    v = value;
+
+    for (i = 0; i < RAND_NAME_LENGTH; i++)
+    {
+        buffer[i] = LETTERS[v % COUNT_OF_LETTERS];
+        v        /= COUNT_OF_LETTERS;
+    }
+
+    sRandStr.Append( buffer , RAND_NAME_LENGTH );
+    sRandStr.Append( sPostfix );
+}
+
+void Export::getRandomName( ByteString& sRandStr )
+{
+    const ByteString sEmpty;
+    getRandomName( sEmpty , sRandStr , sEmpty );
+}
+
 /*****************************************************************************/
 DirEntry Export::GetTempFile()
 /*****************************************************************************/
@@ -545,7 +586,6 @@ DirEntry Export::GetTempFile()
 #ifdef WNT
     String sTempDir( GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
 #else
-//  String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
     String sTempDir( String::CreateFromAscii( "/tmp" ));
 #endif
     rtl::OUString* sTempFilename = new rtl::OUString();
