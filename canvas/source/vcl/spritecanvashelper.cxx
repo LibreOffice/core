@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:40:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,11 +337,14 @@ namespace vclcanvas
                    aElapsedTime.getElapsedTime() );
 #endif
 
-        // commit to screen
+        // sync output with screen, to ensure that we don't queue up
+        // render requests (calling code might rely on timing,
+        // i.e. assume that things are visible on screen after
+        // updateScreen() returns).
         if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
         {
             // TODO(Q3): Evil downcast.
-            static_cast<Window&>(rOutDev).Flush();
+            static_cast<Window&>(rOutDev).Sync();
         }
 
         return sal_True;
