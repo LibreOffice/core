@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:39:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ class Edit;
 class SfxUndoManager;
 namespace dbaui
 {
-    class OTableDescWin;
     class OSQLNameEdit;
 
     class OTableEditorCtrl : public OTableRowView
