@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:32 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,7 @@ sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    m_aErrorString = m_aQueryHelper->getErrorString();
+    setError( m_aQueryHelper->getErrorResourceId() );
     return rv;
 }
 
@@ -502,7 +502,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    m_aErrorString = m_aQueryHelper->getErrorString();
+    setError( m_aQueryHelper->getErrorResourceId() );
     return rv;
 
 }
@@ -713,7 +713,7 @@ MQuery::waitForQueryComplete( void )
 {
     if( m_aQueryHelper->waitForQueryComplete( ) )
         return sal_True;
-    m_aErrorString = m_aQueryHelper->getErrorString();
+    setError( m_aQueryHelper->getErrorResourceId() );
     m_aErrorOccurred = sal_True;
     return( sal_False );
 }
@@ -726,7 +726,7 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
     while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
         if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
             m_aErrorOccurred = sal_True;
-            m_aErrorString = m_aQueryHelper->getErrorString();
+            setError( m_aQueryHelper->getErrorResourceId() );
             return( sal_False );
         }
 
@@ -742,7 +742,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     if (xResEntry == NULL )
     {
         m_aErrorOccurred = sal_True;
-        m_aErrorString = m_aQueryHelper->getErrorString();
+        setError( m_aQueryHelper->getErrorResourceId() );
         return sal_False;
     }
     switch ( nType )
@@ -774,7 +774,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     if (xResEntry == NULL )
     {
         m_aErrorOccurred = sal_True;
-        m_aErrorString = m_aQueryHelper->getErrorString();
+        setError( m_aQueryHelper->getErrorResourceId() );
         rValue.setNull();
         return sal_False;
     }
@@ -806,7 +806,7 @@ MQuery::getRowStates(sal_Int32 nDBRow)
     if (xResEntry == NULL )
     {
         m_aErrorOccurred = sal_True;
-        m_aErrorString = m_aQueryHelper->getErrorString();
+        setError( m_aQueryHelper->getErrorResourceId() );
         return RowStates_Error;
     }
     return xResEntry->getRowStates();
@@ -820,7 +820,7 @@ MQuery::setRowStates(sal_Int32 nDBRow,sal_Int32 aState)
     if (xResEntry == NULL )
     {
         m_aErrorOccurred = sal_True;
-        m_aErrorString = m_aQueryHelper->getErrorString();
+        setError( m_aQueryHelper->getErrorResourceId() );
         return sal_False;
     }
     return xResEntry->setRowStates(aState);
@@ -836,7 +836,7 @@ MQuery::resyncRow(sal_Int32 nDBRow)
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&nDBRow;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    m_aErrorString = m_aQueryHelper->getErrorString();
+    setError( m_aQueryHelper->getErrorResourceId() );
     return rv;
 }
 
@@ -852,7 +852,7 @@ MQuery::createNewCard()
     args.arg2 = (void*)&nNumber;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
 
-    m_aErrorString = m_aQueryHelper->getErrorString();
+    setError( m_aQueryHelper->getErrorResourceId() );
     NS_ENSURE_SUCCESS(rv,0);
     return nNumber;
 }
