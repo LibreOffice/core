@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 09:12:02 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,10 @@ public:
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
     int                   GetFontId() const         { return mnFontId; }
-
+    bool                  DontUseAntiAlias() const
+        { return maDevFontAttributes.UseAntiAlias() == ANTIALIAS_FALSE; }
+    bool                  DontUseEmbeddedBitmaps() const
+        { return maDevFontAttributes.UseEmbeddedBitmap() == EMBEDDEDBITMAP_FALSE; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
@@ -207,6 +210,8 @@ protected:
 
 private:
     int                         mnWidth;
+    int                         mnPrioEmbedded;
+    int                         mnPrioAntiAlias;
     FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
     double                      mfStretch;
