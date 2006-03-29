@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:43:21 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,148 +668,158 @@ void UnoControl::setFocus(  ) throw(RuntimeException)
 
 void UnoControl::addWindowListener( const Reference< XWindowListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maWindowListeners.addInterface( rxListener );
-    if( getPeer().is() && maWindowListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        // erster Focus Listener, also am Peer anmelden
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->addWindowListener( &maWindowListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maWindowListeners.addInterface( rxListener );
+        if ( maWindowListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addWindowListener( &maWindowListeners );
 }
 
 void UnoControl::removeWindowListener( const Reference< XWindowListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maWindowListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        // letzter Focus Listener, also am Peer abmelden
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removeWindowListener( &maWindowListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maWindowListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maWindowListeners.removeInterface( rxListener );
     }
-    maWindowListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removeWindowListener( &maWindowListeners );
 }
 
 void UnoControl::addFocusListener( const Reference< XFocusListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maFocusListeners.addInterface( rxListener );
-    if( getPeer().is() && maFocusListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->addFocusListener( &maFocusListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maFocusListeners.addInterface( rxListener );
+        if ( maFocusListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addFocusListener( &maFocusListeners );
 }
 
 void UnoControl::removeFocusListener( const Reference< XFocusListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maFocusListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removeFocusListener( &maFocusListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maFocusListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maFocusListeners.removeInterface( rxListener );
     }
-    maFocusListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removeFocusListener( &maFocusListeners );
 }
 
 void UnoControl::addKeyListener( const Reference< XKeyListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maKeyListeners.addInterface( rxListener );
-    if( getPeer().is() && maKeyListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->addKeyListener( &maKeyListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maKeyListeners.addInterface( rxListener );
+        if ( maKeyListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addKeyListener( &maKeyListeners);
 }
 
 void UnoControl::removeKeyListener( const Reference< XKeyListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maKeyListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removeKeyListener( &maKeyListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maKeyListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maKeyListeners.removeInterface( rxListener );
     }
-    maKeyListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removeKeyListener( &maKeyListeners);
 }
 
 void UnoControl::addMouseListener( const Reference< XMouseListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maMouseListeners.addInterface( rxListener );
-    if( getPeer().is() && maMouseListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );;
-        xW->addMouseListener( &maMouseListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maMouseListeners.addInterface( rxListener );
+        if ( maMouseListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addMouseListener( &maMouseListeners);
 }
 
 void UnoControl::removeMouseListener( const Reference< XMouseListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maMouseListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removeMouseListener( &maMouseListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maMouseListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maMouseListeners.removeInterface( rxListener );
     }
-    maMouseListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removeMouseListener( &maMouseListeners );
 }
 
 void UnoControl::addMouseMotionListener( const Reference< XMouseMotionListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maMouseMotionListeners.addInterface( rxListener );
-    if( getPeer().is() && maMouseMotionListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->addMouseMotionListener( &maMouseMotionListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maMouseMotionListeners.addInterface( rxListener );
+        if ( maMouseMotionListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addMouseMotionListener( &maMouseMotionListeners);
 }
 
 void UnoControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maMouseMotionListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removeMouseMotionListener( &maMouseMotionListeners);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maMouseMotionListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maMouseMotionListeners.removeInterface( rxListener );
     }
-    maMouseMotionListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removeMouseMotionListener( &maMouseMotionListeners );
 }
 
 void UnoControl::addPaintListener( const Reference< XPaintListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    maPaintListeners.addInterface( rxListener );
-    if( getPeer().is() && maPaintListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->addPaintListener( &maPaintListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        maPaintListeners.addInterface( rxListener );
+        if ( maPaintListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
     }
+    if ( xPeerWindow.is() )
+        xPeerWindow->addPaintListener( &maPaintListeners);
 }
 
 void UnoControl::removePaintListener( const Reference< XPaintListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && maPaintListeners.getLength() == 1 )
+    Reference< XWindow > xPeerWindow;
     {
-        Reference< XWindow >    xW( getPeer(), UNO_QUERY );
-        xW->removePaintListener( &maPaintListeners );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( maPaintListeners.getLength() == 1 )
+            xPeerWindow = xPeerWindow.query( getPeer() );
+        maPaintListeners.removeInterface( rxListener );
     }
-    maPaintListeners.removeInterface( rxListener );
+    if ( xPeerWindow.is() )
+        xPeerWindow->removePaintListener( &maPaintListeners );
 }
 
 // XView
