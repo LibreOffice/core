@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:25:36 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 07:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,8 +262,8 @@ public class FilterComponent{
                                     double dblvalue = ((Double) curValue).doubleValue();
                                     curValue = new Boolean(dblvalue == 1.0);
                                     /**TODO: 1) Datei SingleSelectQueryComposer modifizieren:
-                                    / Zeilen 1525ff in Methode auslagern und Aufruf in Zeile 1356 ändern TypeConverter is parameter
-                                     * 2) setDisplayCondition ändern
+                                    / Zeilen 1525ff in Methode auslagern und Aufruf in Zeile 1356 aendern TypeConverter is parameter
+                                     * 2) setDisplayCondition aendern
                                     */
                                     break;
                                 default:
