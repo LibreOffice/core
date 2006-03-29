@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:43:11 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ private:
     AutoTimer       aTimer;
     long            nOff;
     long            nEnd;
+    long            m_nDeltaWidth;
 
     BOOL            bNormal;
 
