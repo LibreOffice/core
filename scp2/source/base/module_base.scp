@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:36:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ Module gid_Module_Prg_Base_Bin
         ,gid_File_Lib_Abp,gid_File_Res_Abp
         ,gid_File_Lib_Dbp,gid_File_Res_Dbp
         ,gid_File_Lib_Dbu,gid_File_Res_Dbu
+        ,gid_File_Res_Cnr
     );
 End
 
