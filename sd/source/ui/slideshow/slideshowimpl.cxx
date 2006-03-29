@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:19:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1917,6 +1917,12 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
              // below)
              if( Application::AnyInput(INPUT_MOUSE|INPUT_KEYBOARD|INPUT_PAINT) )
                  break;
+
+             // #i60699# yield thread for a short time - otherwise,
+             // rendering taking place in other processes might not
+             // get CPU (e.g. X11).
+             TimeValue aTimeout={0,1000};
+             osl_waitThread(&aTimeout);
         }
         if( mxShow.is() && ( fUpdate >= 0.0 ) )
         {
