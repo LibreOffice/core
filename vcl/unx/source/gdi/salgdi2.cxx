@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:07:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ GC X11SalGraphics::CreateGC( Drawable hDrawable, unsigned long nMask )
 {
     XGCValues values;
 
-    values.graphics_exposures   = True;
+    values.graphics_exposures   = False;
     values.foreground           = m_pColormap->GetBlackPixel()
                                   ^ m_pColormap->GetWhitePixel();
     values.function             = GXxor;
@@ -173,7 +173,7 @@ GC X11SalGraphics::GetInvert50GC()
     {
         XGCValues values;
 
-        values.graphics_exposures   = True;
+        values.graphics_exposures   = False;
         values.foreground           = m_pColormap->GetWhitePixel();
         values.background           = m_pColormap->GetBlackPixel();
         values.function             = GXinvert;
@@ -497,6 +497,15 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
         && pPosAry->mnSrcWidth  == pPosAry->mnDestWidth
         && pPosAry->mnSrcHeight == pPosAry->mnDestHeight )
     {
+        // #i60699# Need to generate graphics exposures (to repaint
+        // obscured areas beneath overlapping windows), src and dest
+        // are the same window.
+        const bool bNeedGraphicsExposures( pSrcGraphics == this &&
+                                           !bVirDev_ &&
+                                           pSrcGraphics->bWindow_ );
+
+        GC pCopyGC;
+
         if( bXORMode_
             && !pSrcGraphics->bVirDev_
             && (GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
@@ -505,10 +514,18 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
                                             pSrcGraphics->GetDrawable(),        // source
                                             pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                             pSrcGraphics->GetBitCount() );
+
+            pCopyGC = GetDisplay()->GetCopyGC();
+
+            if( bNeedGraphicsExposures )
+                XSetGraphicsExposures( GetXDisplay(),
+                                       pCopyGC,
+                                       True );
+
             XCopyArea( GetXDisplay(),
                        pSrcGraphics->GetDrawable(),     // source
-                       hPixmap,                             // destination
-                       GetDisplay()->GetCopyGC(),           // no clipping
+                       hPixmap,                         // destination
+                       pCopyGC,                         // no clipping
                        pPosAry->mnSrcX,     pPosAry->mnSrcY,
                        pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                        0,                   0 );            // destination
@@ -522,21 +539,38 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
             XFreePixmap( GetXDisplay(), hPixmap );
         }
         else
+        {
+            pCopyGC = GetCopyGC();
+
+            if( bNeedGraphicsExposures )
+                XSetGraphicsExposures( GetXDisplay(),
+                                       pCopyGC,
+                                       True );
+
             XCopyArea( GetXDisplay(),
                        pSrcGraphics->GetDrawable(),     // source
-                       GetDrawable(),                       // destination
-                       GetCopyGC(),         // destination clipping
+                       GetDrawable(),                   // destination
+                       pCopyGC,                         // destination clipping
                        pPosAry->mnSrcX,     pPosAry->mnSrcY,
                        pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                        pPosAry->mnDestX,    pPosAry->mnDestY );
+        }
 
-        if( bWindow_ && ! bVirDev_ )
+        if( bNeedGraphicsExposures )
         {
             YieldGraphicsExpose( GetXDisplay(), m_pFrame, GetDrawable() );
+
+            if( pCopyGC )
+                XSetGraphicsExposures( GetXDisplay(),
+                                       pCopyGC,
+                                       False );
         }
     }
     else if( n )
     {
+        // #i60699# No chance to handle graphics exposures - we copy
+        // to a temp bitmap first, into which no repaints are
+        // technically possible.
         SalBitmap *pDDB = pSrcGraphics->getBitmap( pPosAry->mnSrcX,
                                                    pPosAry->mnSrcY,
                                                    pPosAry->mnSrcWidth,
@@ -601,7 +635,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
-    static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC, bWindow_ );
+    static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
 
     if( rSalBitmap.GetBitCount() == 1 )
         XChangeGC( pXDisp, aGC, nValues, &aOldVal );
@@ -642,7 +676,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         // draw paint bitmap in pixmap #1
         aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
         aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
-        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, nDepth, aTmpRect, aTmpGC, false );
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
         DBG_TESTTRANS( aFG );
 
         // draw background in pixmap #2
@@ -656,7 +690,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
         aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-        static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, 1, aTmpRect, aTmpGC, false );
+        static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, 1, aTmpRect, aTmpGC );
 
         DBG_TESTTRANS( aFG );
 
@@ -666,7 +700,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
             // mask out background in pixmap #2 (nontransparent areas 0)
             aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
             XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-            static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, 1, aTmpRect, aTmpGC, false );
+            static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, 1, aTmpRect, aTmpGC );
 
             DBG_TESTTRANS( aBG );
         }
@@ -689,7 +723,6 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
                    0, 0,
                    pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                    pPosAry->mnDestX, pPosAry->mnDestY );
-        YieldGraphicsExpose( pXDisp, bWindow_ ? m_pFrame : NULL, aDrawable );
 
         DBG_TESTTRANS( aBG );
 
@@ -738,7 +771,7 @@ void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
         aValues.function = GXcopyInverted;
         aValues.foreground = 1, aValues.background = 0;
         aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
-        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, 1, aTwoRect, aTmpGC, false );
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
 
         XFreeGC( pXDisp, aTmpGC );
 
