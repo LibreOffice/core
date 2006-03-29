@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:37:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -806,6 +806,14 @@
                     <label>Address Block</label>
                 </info>
                 <value>true</value>
+            </prop>
+            <prop oor:name="CurrentAddressBlock" oor:type="xs:int">
+                <info>
+                    <author>OS</author>
+                    <desc>Determines the currently used address block.</desc>
+                    <label>Current address block</label>
+                </info>
+                <value>0</value>
             </prop>
             <prop oor:name="IsHideEmptyParagraphs" oor:type="xs:boolean">
                 <info>
