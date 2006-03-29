@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:41:59 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:21:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,24 +34,37 @@
 #*************************************************************************
 
 PRJ=..$/..
-
+PRJINC=..
 PRJNAME=connectivity
-TARGET=resource
+TARGET=$(SHARED_RES_TARGET)
 
-# --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS=FALSE
+
+# --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
-# --- Files --------------------------------------------------------
-
-SLOFILES=\
-        $(SLO)$/ModuleContext.obj
+.INCLUDE :  $(PRJ)$/version.mk
 
 
-# --- Targets ------------------------------------------------------
+# --- Files -------------------------------------
 
-.INCLUDE :      target.mk
+SRS1NAME=conn_shared_res
+SRC1FILES= \
+    conn_shared_res.src
+
+# === .res file ==========================================================
+
+RES1FILELIST=\
+    $(SRS)$/$(SRS1NAME).srs \
+
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES=$(RES1FILELIST)
+
+# --- Targets ----------------------------------
+
+.INCLUDE : target.mk
 
 
