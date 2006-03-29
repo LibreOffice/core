@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,27 +285,41 @@ void SwMailMergeWizard::UpdateRoadmap()
 
     // enableState( <page id>, false );
     const sal_uInt16 nCurPage = GetCurLevel();
+    TabPage* pCurPage = GetPage( nCurPage );
+    if(!pCurPage)
+        return;
     bool bEnable = false;
-    bool bAddressFieldsConfigured = !m_rConfigItem.IsAddressBlock() || m_rConfigItem.IsAddressFieldsAssigned();
-    bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(sal_False) || m_rConfigItem.IsGreetingFieldsAssigned();
+    bool bAddressFieldsConfigured = !m_rConfigItem.IsOutputToLetter() ||
+                !m_rConfigItem.IsAddressBlock() ||
+                m_rConfigItem.IsAddressFieldsAssigned();
+    bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(sal_False) ||
+            !m_rConfigItem.IsIndividualGreeting(sal_False)||
+                    m_rConfigItem.IsGreetingFieldsAssigned();
+    bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
+            static_cast<svt::OWizardPage*>(pCurPage)->commitPage(IWizardPage::CR_VALIDATE);
+
     for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_OUTPUTPAGE; ++nPage)
     {
         switch(nPage)
         {
             case MM_DOCUMENTSELECTPAGE :
-            case MM_OUTPUTTYPETPAGE :
-            case MM_ADDRESSBLOCKPAGE  :
                 bEnable = sal_True;
             break;
+            case MM_OUTPUTTYPETPAGE :
+            case MM_ADDRESSBLOCKPAGE  :
+                bEnable = bEnableOutputTypePage;
+            break;
             case MM_GREETINGSPAGE     :
-                bEnable = m_rConfigItem.GetResultSet().is() &&
+                bEnable = bEnableOutputTypePage &&
+                    m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured;
             break;
             case MM_PREPAREMERGEPAGE  :
             case MM_MERGEPAGE         :
             case MM_OUTPUTPAGE       :
             case MM_LAYOUTPAGE        :
-                bEnable = m_rConfigItem.GetResultSet().is() &&
+                bEnable = bEnableOutputTypePage &&
+                            m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured &&
                             bGreetingFieldsConfigured;
                 if(MM_LAYOUTPAGE == nPage)
