@@ -38,7 +38,8 @@ F4_GLOBAL = \
     writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
     writer_globaldocument_pdf_Export \
     writerglobal8 \
-    writerglobal8_writer
+    writerglobal8_writer \
+    writerglobal8_HTML
 
 # -----------------------------------------------
 # count = 12
