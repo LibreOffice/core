@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.214 $
+ *  $Revision: 1.215 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:18:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7711,12 +7711,15 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     }
 
     bRet = true;
-    for (xub_StrLen i = nIndex; i < nIndex + nLen; ++i)
+    bool bRTL = false;
+    String aStr( rStr ); // prepare for e.g. localized digits
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
+    for( int nCharPos = -1; aLayoutArgs.GetNextPos( &nCharPos, &bRTL);)
     {
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout(rStr, i, 1, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nTWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
