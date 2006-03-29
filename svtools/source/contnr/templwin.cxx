@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:47:22 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1239,14 +1239,14 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
         aSelectTimer.Stop();
 
     String aURL = pFileWin->GetSelectedFile();
-    if ( ::utl::UCBContentHelper::IsFolder( aURL ) )
+    if ( aURL.Len() > 0 )
     {
-        pFileWin->OpenFolder( aURL );
+        if ( ::utl::UCBContentHelper::IsFolder( aURL ) )
+            pFileWin->OpenFolder( aURL );
+        else
+            aDoubleClickHdl.Call( this );
     }
-    else
-    {
-        aDoubleClickHdl.Call( this );
-    }
+
     return 0;
 }
 
