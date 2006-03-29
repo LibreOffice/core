@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:56 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,66 +838,6 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 }
 
 //------------------------------------------------------------------------------
-namespace
-{
-    static ::rtl::OUString getCompatibleControlServiceName( const ::rtl::OUString& _rServiceName, bool _bRevertedLookup )
-    {
-        ::rtl::OUString sReturn( _rServiceName );
-
-        ::rtl::OUString aServiceNamePairs[] = {
-            FRM_SUN_CONTROL_COMMANDBUTTON,  STARDIV_ONE_FORM_CONTROL_COMMANDBUTTON,
-            FRM_SUN_CONTROL_RADIOBUTTON,    STARDIV_ONE_FORM_CONTROL_RADIOBUTTON,
-            FRM_SUN_CONTROL_CHECKBOX,       STARDIV_ONE_FORM_CONTROL_CHECKBOX,
-            FRM_SUN_CONTROL_TEXTFIELD,      STARDIV_ONE_FORM_CONTROL_EDIT,
-            FRM_SUN_CONTROL_LISTBOX,        STARDIV_ONE_FORM_CONTROL_LISTBOX,
-            FRM_SUN_CONTROL_COMBOBOX,       STARDIV_ONE_FORM_CONTROL_COMBOBOX,
-            FRM_SUN_CONTROL_GROUPBOX,       STARDIV_ONE_FORM_CONTROL_GROUPBOX,
-            FRM_SUN_CONTROL_IMAGEBUTTON,    STARDIV_ONE_FORM_CONTROL_IMAGEBUTTON,
-            FRM_SUN_CONTROL_TIMEFIELD,      STARDIV_ONE_FORM_CONTROL_TIMEFIELD,
-            FRM_SUN_CONTROL_DATEFIELD,      STARDIV_ONE_FORM_CONTROL_DATEFIELD,
-            FRM_SUN_CONTROL_NUMERICFIELD,   STARDIV_ONE_FORM_CONTROL_NUMERICFIELD,
-            FRM_SUN_CONTROL_CURRENCYFIELD,  STARDIV_ONE_FORM_CONTROL_CURRENCYFIELD,
-            FRM_SUN_CONTROL_PATTERNFIELD,   STARDIV_ONE_FORM_CONTROL_PATTERNFIELD,
-            FRM_SUN_CONTROL_IMAGECONTROL,   STARDIV_ONE_FORM_CONTROL_IMAGECONTROL,
-            FRM_SUN_CONTROL_FORMATTEDFIELD, STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD
-        };
-
-        sal_Int32 i = 0;
-        for ( ; i < sizeof( aServiceNamePairs ) / sizeof( aServiceNamePairs[ 0 ] ) / 2; ++i )
-        {
-            if ( _bRevertedLookup )
-            {
-                if ( _rServiceName == aServiceNamePairs[ 2 * i + 1 ] )
-                {
-                    sReturn = aServiceNamePairs[ 2 * i ];
-                    break;
-                }
-            }
-            else
-            {
-                if ( _rServiceName == aServiceNamePairs[ 2 * i ] )
-                {
-                    sReturn = aServiceNamePairs[ 2 * i + 1 ];
-                    break;
-                }
-            }
-        }
-#if OSL_DEBUG_LEVEL > 0
-        if ( i >= sizeof( aServiceNamePairs ) / sizeof( aServiceNamePairs[ 0 ] ) / 2 )
-        {
-            DBG_WARNING( ( ::rtl::OString( "getCompatibleControlServiceName: unknown service name (" )
-                        += ::rtl::OString( _rServiceName.getStr(), _rServiceName.getLength(), RTL_TEXTENCODING_ASCII_US )
-                        += ::rtl::OString( ")!" )
-                        ).getStr()
-                       );
-        }
-#endif
-
-        return sReturn;
-    }
-}
-
-//------------------------------------------------------------------------------
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
                         throw(stario::IOException, RuntimeException)
 {
@@ -918,31 +858,7 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
 
     _rxOutStream->writeLong(nLen);
 
-    // during writing the aggregate, temporarily reset the DefaultControl property
-    // In the binary format, we need to have the old service names containing
-    // a "stardiv...." string, while today at runtime, we have "new" service names
-    // #92831# - 2004-03-17 - fs@openoffice.org
-    ::rtl::OUString sOriginalDefaultControl;
-    try
-    {
-        if ( m_xAggregateSet.is() )
-        {
-            m_xAggregateSet->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sOriginalDefaultControl;
-            ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl, false ) );
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sNewDefaultControl ) );
-        }
-
-        writeAggregate( _rxOutStream );
-
-        if ( m_xAggregateSet.is() )
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sOriginalDefaultControl ) );
-    }
-    catch( const Exception& )
-    {
-        if ( m_xAggregateSet.is() )
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sOriginalDefaultControl ) );
-        throw;
-    }
+    writeAggregate( _rxOutStream );
 
     // feststellen der Laenge
     nLen = xMark->offsetToMark(nMark) - 4;
@@ -990,16 +906,6 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
         try
         {
             readAggregate( InStream );
-
-            // translate the service name to a more modern one.
-            // #i29828# - 2004-06-18 - fs@openoffice.org
-            if ( m_xAggregateSet.is() )
-            {
-                ::rtl::OUString sOriginalDefaultControl;
-                m_xAggregateSet->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sOriginalDefaultControl;
-                ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl, true ) );
-                m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sNewDefaultControl ) );
-            }
         }
         catch( const Exception& )
         {
