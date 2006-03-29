@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:58:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ class HelpParser
 {
 private:
     bool       bUTF8;
+    bool       bHasInputList;
     ByteString sHelpFile;
 
 /// Copy fallback language String (ENUS,DE) into position of the numeric language iso code
@@ -62,23 +63,30 @@ private:
 /// Debugmethod, prints the content of the map to stdout
     static  void Dump(  XMLHashMap* rElem_in ) ;
 
+
+
 public:
-    HelpParser( const ByteString &rHelpFile, bool bUTF8 );
+    HelpParser( const ByteString &rHelpFile, bool bUTF8 , bool bHasInputList );
     ~HelpParser(){};
 
 /// Method creates/append a SDF file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
     bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in );
 
+    static  void parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
+
 /// Method merges the String from the SDFfile into XMLfile. Both Strings must
 /// point to existing files.
-    bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in );
-
-    bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO );
+    //bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
+    bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , ByteString& sLanguage , MergeDataFile& aMergeDataFile );
+    bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
+        , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
     ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
-    void Process( LangHashMap* aLangHM , ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
-    void ProcessHelp( LangHashMap* aLangHM , ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
+    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
+;
+    void Process( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
+    void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void MakeDir( const ByteString& sPath );
 };
