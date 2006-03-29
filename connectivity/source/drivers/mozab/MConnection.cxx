@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:17:29 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,12 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
+#ifndef COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
+#include <comphelper/officeresourcebundle.hxx>
+#endif
+
+#include <boost/shared_ptr.hpp>
+
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
@@ -83,6 +89,19 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 // --------------------------------------------------------------------------------
 
+namespace connectivity
+{
+    namespace mozab
+    {
+        // =====================================================================
+        // = ConnectionImplData
+        // =====================================================================
+        struct ConnectionImplData
+        {
+            ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
+        };
+    }
+}
 
 
 // -----------------------------------------------------------------------------
@@ -123,14 +142,29 @@ const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_EXPRESS()
 // -----------------------------------------------------------------------------
 
 OConnection::OConnection(MozabDriver*   _pDriver)
-                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         m_pDriver(_pDriver),
-                         m_xMetaData(NULL),
-                         m_nMaxResultRecords( -1 ),
-                         m_eSDBCAddressType(SDBCAddress::Unknown),
-                         m_aNameMapper(NULL)
+    :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    ,m_xMetaData(NULL)
+    ,m_pDriver(_pDriver)
+    ,m_pImplData( new ConnectionImplData )
+    ,m_nMaxResultRecords( -1 )
+    ,m_aNameMapper(NULL)
+    ,m_eSDBCAddressType(SDBCAddress::Unknown)
 {
     m_pDriver->acquire();
+
+    try
+    {
+        Reference< XPropertySet > xFactoryProps( m_pDriver->getMSFactory(), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext(
+            xFactoryProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+            UNO_QUERY_THROW
+        );
+        m_pImplData->pResourceBundle.reset( new ::comphelper::OfficeResourceBundle( xContext, "cnr" ) );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( false, "OConnection::OConnection: could not obtain the component context!" );
+    }
 
     // Initialise m_aColumnAlias.
     m_aColumnAlias.setAlias(_pDriver->getMSFactory());
@@ -336,7 +370,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if ( isLDAP() ) {
         if ( !_aDbHelper.testLDAPConnection( this ) ) {
             OSL_TRACE("testLDAPConnection : FAILED\n" );
-            ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
+            throwGenericSQLException( _aDbHelper.getErrorResourceId() );
         }
         else {
             OSL_TRACE("testLDAPConnection : SUCCESS\n" );
@@ -347,7 +381,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !_aDbHelper.getTableStrings( this, tables, types ) ) {
-        ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
+        throwGenericSQLException( _aDbHelper.getErrorResourceId() );
     }
 
 }
@@ -520,6 +554,8 @@ void OConnection::disposing()
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
 
+    m_pImplData->pResourceBundle.reset();
+
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -565,5 +601,19 @@ MNameMapper* OConnection::getNameMapper ()
 }
 // -----------------------------------------------------------------------------
 
+void OConnection::throwGenericSQLException( sal_Int32 _nErrorResourceId )
+{
+    ::boost::shared_ptr< ::comphelper::OfficeResourceBundle > pResourceBundle;
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        pResourceBundle = m_pImplData->pResourceBundle;
+    }
 
+    OSL_ENSURE( pResourceBundle.get(), "OConnection::throwGenericSQLException: no resource bundle?" );
+        // this means that we're disposed, and how could anybody request us to throw an exception then?
 
+    ::rtl::OUString sErrorMessage;
+    if ( pResourceBundle.get() )
+        sErrorMessage = pResourceBundle->loadString( _nErrorResourceId );
+    ::dbtools::throwGenericSQLException( sErrorMessage, *this );
+}
