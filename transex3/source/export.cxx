@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 13:18:49 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,20 +209,20 @@ int isQuiet(){
    else         return 0;
 }
 /*****************************************************************************/
-int InitExport( char *pOutput , char *pFileName )
+int InitExport( char *pOutput , char* pFilename )
 /*****************************************************************************/
 {
     // instanciate Export
     ByteString sOutput( pOutput );
-
+    ByteString sFilename( pFilename );
 
     if ( bMergeMode && !bUnmerge ) {
         // merge mode enabled, so read database
-        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot, sMergeSrc , ByteString( pFileName ) );
+        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot, sMergeSrc , sFilename );
     }
     else
         // no merge mode, only export
-        pExport = new Export( sOutput, bEnableExport, sPrj, sPrjRoot ,ByteString( pFileName ) );
+        pExport = new Export( sOutput, bEnableExport, sPrj, sPrjRoot , sFilename );
     return 1;
 }
 
@@ -234,6 +234,10 @@ int EndExport()
     return 1;
 }
 
+extern const char* getFilename()
+{
+    return (*(aInputFileList.GetObject( 0 ))).GetBuffer();
+}
 /*****************************************************************************/
 extern FILE *GetNextFile()
 /*****************************************************************************/
@@ -440,6 +444,7 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
                 bDontWriteOutput( FALSE ),
                 nListLevel( 0 ),
                 pWordTransformer( NULL ),
+                sFilename( rFile ),
                 bSkipFile( false )
 {
     pParseQueue = new ParserQueue( *this );
@@ -454,7 +459,6 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
             printf("ERROR : Can't open file %s\n",rOutput.GetBuffer());
             exit ( -1 );
         }
-        //aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
         aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
 
         aOutput.SetLineDelimiter( LINEEND_CRLF );
@@ -494,6 +498,7 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
                 bDontWriteOutput( FALSE ),
                 nListLevel( 0 ),
                 pWordTransformer( NULL ),
+                sFilename( rFile ),
                 bSkipFile( false )
 
 {
@@ -720,7 +725,7 @@ int Export::Execute( int nToken, char * pToken )
 
             // create new instance for this res. and fill mandatory fields
 
-            pResData = new ResData( sActPForm, FullId());
+            pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.Insert( pResData, LIST_APPEND );
             ByteString sBackup( sToken );
             sToken.EraseAllChars( '\n' );
@@ -762,7 +767,7 @@ int Export::Execute( int nToken, char * pToken )
 
             // create new instance for this res. and fill mandatory fields
 
-            pResData = new ResData( sActPForm, FullId());
+            pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.Insert( pResData, LIST_APPEND );
             sToken.EraseAllChars( '\n' );
             sToken.EraseAllChars( '\r' );
@@ -789,7 +794,7 @@ int Export::Execute( int nToken, char * pToken )
                 aResStack.GetObject( nLevel - 2 )->bChild = TRUE;
             }
 
-            ResData *pNewData = new ResData( sActPForm, FullId());
+            ResData *pNewData = new ResData( sActPForm, FullId() , sFilename );
             pNewData->sResTyp = sLowerTyp;
             aResStack.Insert( pNewData, LIST_APPEND );
         }
@@ -1707,7 +1712,7 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
     if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
         if( nList == LIST_PAIRED ){
             const ByteString sPlist("pairedlist");
-            ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) );
+            ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) , sFilename );
             pResData->addFallbackData( sKey , rText );
         }
     }
@@ -2386,7 +2391,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             if( !bText && bPairedList ){
                                 if( pResData->isMerged( sCur ) ) break;
                                 const ByteString sPlist("pairedlist");
-                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId );
+                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
                                 bText = pResData->getFallbackData( sKey , sText );
                             }
 
