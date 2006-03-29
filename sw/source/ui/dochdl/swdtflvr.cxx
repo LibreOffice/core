@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:51:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2807,7 +2807,7 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
             pHlp->CopyString( FORMAT_FILE, aFileList.GetFile( n ));
             TransferableDataHelper aData( pHlp );
 
-            if( SwTransferable::_PasteGrf( aData, rSh, SOT_FORMAT_FILE, nAct,
+            if( SwTransferable::_PasteFileName( aData, rSh, SOT_FORMAT_FILE, nAct,
                                             pPt, FALSE, bMsg ))
             {
                 if( bLink )
