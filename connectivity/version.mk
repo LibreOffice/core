@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-19 16:47:21 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:13:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,11 @@ DBTOOLS_MICRO=0
 DBTOOLS_CPP=1
 
 DBTOOLS=$(DBTOOLS_TARGET_TARGET)_$(CMPEXT)
+
+# ----------------------------conn/res settings-----------------------------------#
+# target
+SHARED_RES_TARGET=cnr
+CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(SHARED_RES_TARGET)
 
 # -----------------------DRIVER MANAGER settings--------------------------------#
 # target
