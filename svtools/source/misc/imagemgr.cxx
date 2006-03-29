@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,7 @@ static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
     { "simpress",               "odp" },
     { "sdraw",                  "odg" },
     { "smath",                  "odf" },
+    { "sdatabase",              "odb" },
     { NULL, NULL }
 };
 
@@ -556,6 +557,8 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
         nResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
     else if ( rFactory.EqualsIgnoreCaseAscii( "smath", 0, 5 ) )
         nResId = STR_DESCRIPTION_FACTORY_MATH;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "sdatabase", 0, 9 ) )
+        nResId = STR_DESCRIPTION_FACTORY_DATABASE;
 
     String aRet;
     if ( nResId )
