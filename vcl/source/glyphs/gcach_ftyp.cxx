@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:18:45 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,9 +153,9 @@ namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFi
 // if (AA prio <= AH prio) => antialias + autohint
 // if (AH<AA) => do not autohint when antialiasing
 // if (EB<AH) => do not autohint for monochrome
-static int nPrioEmbedded    = 2;
-static int nPrioAutoHint    = 1;
-static int nPrioAntiAlias   = 1;
+static int nDefaultPrioEmbedded    = 2;
+static int nDefaultPrioAutoHint    = 1;
+static int nDefaultPrioAntiAlias   = 1;
 
 // =======================================================================
 // FreetypeManager
@@ -470,7 +470,7 @@ FreetypeManager::FreetypeManager()
     // requested by env var below because it crashes StarOffice on RH9
     // TODO: investigate
     if( nFTVERSION == 2103 )
-        nPrioEmbedded = 0;
+        nDefaultPrioEmbedded = 0;
 
 #else // RTLD_DEFAULT
     // assume systems where dlsym is not possible use supplied library
@@ -481,13 +481,13 @@ FreetypeManager::FreetypeManager()
     char* pEnv;
     pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
     if( pEnv )
-        nPrioEmbedded  = pEnv[0] - '0';
+        nDefaultPrioEmbedded  = pEnv[0] - '0';
     pEnv = ::getenv( "SAL_ANTIALIASED_TEXT_PRIORITY" );
     if( pEnv )
-        nPrioAntiAlias = pEnv[0] - '0';
+        nDefaultPrioAntiAlias = pEnv[0] - '0';
     pEnv = ::getenv( "SAL_AUTOHINTING_PRIORITY" );
     if( pEnv )
-        nPrioAutoHint  = pEnv[0] - '0';
+        nDefaultPrioAutoHint  = pEnv[0] - '0';
 
     InitGammaTable();
 }
@@ -593,6 +593,9 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             aDFA.mbSubsettable= false;
             aDFA.mbEmbeddable = false;
 
+            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
+
             FT_Done_Face( aFaceFT );
             AddFontFile( aCFileName, nFaceNum, ++mnNextFontId, aDFA, NULL );
             ++nCount;
@@ -680,6 +683,7 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 
 FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
 :   ServerFont( rFSD ),
+    mnPrioEmbedded(nDefaultPrioEmbedded), mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
@@ -824,8 +828,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
+    if (mpFontInfo->DontUseAntiAlias())
+        mnPrioAntiAlias = 0;
+    if (mpFontInfo->DontUseEmbeddedBitmaps())
+        mnPrioEmbedded = 0;
+
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    if( nPrioAutoHint <= 0 )
+    if( nDefaultPrioAutoHint <= 0 )
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
@@ -835,7 +844,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    if( ((mnCos != 0) && (mnSin != 0)) || (nPrioEmbedded <= 0) )
+    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
@@ -1266,7 +1275,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 {
-    if( GetFontSelData().mbNonAntialiased || (nPrioAntiAlias<=0) )
+    if( GetFontSelData().mbNonAntialiased || (mnPrioAntiAlias<=0) )
         return false;
     bool bAdviseAA = true;
     // TODO: also use GASP info
@@ -1291,11 +1300,11 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 #if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
-    if( (mnCos==0 || mnSin==0) && (nPrioAutoHint > 0) )
+    if( (mnCos==0 || mnSin==0) && (nDefaultPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
-    if( nPrioEmbedded <= nPrioAutoHint )
+    if( mnPrioEmbedded <= nDefaultPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
@@ -1442,11 +1451,11 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #else
-    if( (nGlyphFlags & GF_UNHINTED) || (nPrioAutoHint < nPrioAntiAlias) )
+    if( (nGlyphFlags & GF_UNHINTED) || (nDefaultPrioAutoHint < mnPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
-    if( nPrioEmbedded <= nPrioAntiAlias )
+    if( mnPrioEmbedded <= mnPrioAntiAlias )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
