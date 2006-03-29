@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:36:34 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,15 @@ enum type {
 };
 }
 
+namespace fcstatus
+{
+enum type {
+    istrue,
+    isunset,
+    isfalse
+};
+}
+
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
@@ -168,6 +177,8 @@ struct FastPrintFontInfo
     weight::type                        m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
+    fcstatus::type                      m_eEmbeddedbitmap;
+    fcstatus::type                      m_eAntialias;
 
     FastPrintFontInfo() :
             m_nID( 0 ),
@@ -177,7 +188,9 @@ struct FastPrintFontInfo
             m_eWidth( width::Unknown ),
             m_eWeight( weight::Unknown ),
             m_ePitch( pitch::Unknown ),
-            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
+            m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
+            m_eEmbeddedbitmap( fcstatus::isunset ),
+            m_eAntialias( fcstatus::isunset )
     {}
 };
 
@@ -291,6 +304,10 @@ class PrintFontManager
         int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
+
+        fcstatus::type                              m_eEmbeddedbitmap;
+        fcstatus::type                              m_eAntialias;
+
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
 
