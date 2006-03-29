@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:18:54 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::cppu::OInterfaceContainerHelper                                                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                                                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                                                   m_aDocEventListeners;
-    sal_Bool                                                                            m_bCommitMasterStorage;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
