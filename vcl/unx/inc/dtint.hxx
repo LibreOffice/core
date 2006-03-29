@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 09:42:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,7 @@ DECLARE_LIST( DtIntegratorList, DtIntegrator* );
 
 enum DtType {
     DtGeneric,
-    DtCDE,
-    DtKDE,
-    DtGNOME,
-    DtSCO,
-    DtIRIX,
-    DtMACOSX
+    DtCDE
 };
 
 class DtIntegrator
