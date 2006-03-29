@@ -26,3 +26,4 @@ cn	connectivity\source\drivers\hsqldb		nmake	-	all	cn_hsqldb cn_dbtools NULL
 cn	connectivity\source\parse			nmake	-	all	cn_parse cn_types NULL
 cn	connectivity\source\simpledbt			nmake	-	all	cn_simpledbt cn_cmtools NULL
 cn	connectivity\source\dbtools			nmake	-	all	cn_dbtools cn_types cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx NULL
+cn  connectivity\qa\connectivity\tools      nmake   -   all cn_qa_tools NULL
