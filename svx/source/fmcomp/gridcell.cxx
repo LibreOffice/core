@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:12:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
 #include <com/sun/star/form/XBoundComponent.hpp>
@@ -153,6 +156,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
+
+using ::com::sun::star::util::XNumberFormatter;
 
 //==================================================================
 //= helper
@@ -1112,7 +1117,14 @@ String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Re
 {
     ::rtl::OUString aString;
     if ( _rxField.is() )
-        aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+        try
+        {
+            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
 
     return aString;
 }
@@ -1609,9 +1621,16 @@ static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XCol
     TriState eState = STATE_DONTKNOW;
     if (_rxField.is())
     {
-        sal_Bool bValue = _rxField->getBoolean();
-        if (!_rxField->wasNull())
-            eState = bValue ? STATE_CHECK : STATE_NOCHECK;
+        try
+        {
+            sal_Bool bValue = _rxField->getBoolean();
+            if (!_rxField->wasNull())
+                eState = bValue ? STATE_CHECK : STATE_NOCHECK;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
     _pCheckBoxControl->GetBox().SetState(eState);
 }
@@ -1713,7 +1732,16 @@ String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XCo
 {
     ::rtl::OUString aString;
     if (_rxField.is())
-        aString = _rxField->getString();
+    {
+        try
+        {
+            aString = _rxField->getString();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 
     m_pPainter->SetText(aString);
     return m_pPainter->GetText();
@@ -1862,37 +1890,43 @@ SpinField* DbNumericField::createField( Window* _pParent, WinBits _nFieldStyle, 
     return new DoubleNumericField( _pParent, _nFieldStyle );
 }
 
-//------------------------------------------------------------------------------
-String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+namespace
 {
-    if (!_rxField.is())
-        return String();
-    else
+    //--------------------------------------------------------------------------
+    static String lcl_setFormattedNumeric_nothrow( DoubleNumericField& _rField, const DbCellControl& _rControl,
+        const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
-        double fValue = GetValue(_rxField, xFormatter);
-        if (_rxField->wasNull())
-            return String();
-        else
+        String sValue;
+        if ( _rxField.is() )
         {
-            ((DoubleNumericField*)m_pPainter)->SetValue(fValue);
-            return m_pPainter->GetText();
+            try
+            {
+                double fValue = _rControl.GetValue( _rxField, _rxFormatter );
+                if ( !_rxField->wasNull() )
+                {
+                    _rField.SetValue( fValue );
+                    sValue = _rField.GetText();
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
+        return sValue;
     }
 }
 
 //------------------------------------------------------------------------------
-void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** ppColor)
 {
-    if (!_rxField.is())
-        m_pWindow->SetText(String());
-    else
-    {
-        double fValue = GetValue(_rxField, xFormatter);
-        if (_rxField->wasNull())
-            m_pWindow->SetText(String());
-        else
-            ((DoubleNumericField*)m_pWindow)->SetValue(fValue);
-    }
+    return lcl_setFormattedNumeric_nothrow( *dynamic_cast< DoubleNumericField* >( m_pPainter ), *this, _rxField, _rxFormatter );
+}
+
+//------------------------------------------------------------------------------
+void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
+{
+    lcl_setFormattedNumeric_nothrow( *dynamic_cast< DoubleNumericField* >( m_pWindow ), *this, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------------------
@@ -1990,37 +2024,43 @@ double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XCol
     return fValue;
 }
 
-//------------------------------------------------------------------------------
-String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+namespace
 {
-    if (!_rxField.is())
-        return String();
-    else
+    //--------------------------------------------------------------------------
+    static String lcl_setFormattedCurrency_nothrow( LongCurrencyField& _rField, const DbCurrencyField& _rControl,
+        const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
-        double fValue = GetCurrency(_rxField, xFormatter);
-        if (_rxField->wasNull())
-            return String();
-        else
+        String sValue;
+        if ( _rxField.is() )
         {
-            ((LongCurrencyField*)m_pPainter)->SetValue(fValue);
-            return m_pPainter->GetText();
+            try
+            {
+                double fValue = _rControl.GetCurrency( _rxField, _rxFormatter );
+                if ( !_rxField->wasNull() )
+                {
+                    _rField.SetValue( fValue );
+                    sValue = _rField.GetText();
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
+        return sValue;
     }
 }
 
 //------------------------------------------------------------------------------
-void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** ppColor)
 {
-    if (!_rxField.is())
-        m_pWindow->SetText(String());
-    else
-    {
-         double fValue = GetCurrency(_rxField, xFormatter);
-         if (_rxField->wasNull())
-             m_pWindow->SetText(String());
-         else
-            ((LongCurrencyField*)m_pWindow)->SetValue(fValue);
-    }
+    return lcl_setFormattedCurrency_nothrow( *dynamic_cast< LongCurrencyField* >( m_pPainter ), *this, _rxField, _rxFormatter );
+}
+
+//------------------------------------------------------------------------------
+void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
+{
+    lcl_setFormattedCurrency_nothrow( *dynamic_cast< LongCurrencyField* >( m_pWindow ), *this, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------------------
@@ -2120,39 +2160,41 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     }
 }
 
+namespace
+{
+    //--------------------------------------------------------------------------
+    static String lcl_setFormattedDate_nothrow( DateField& _rField, const Reference< XColumn >& _rxField )
+    {
+        String sDate;
+        if ( _rxField.is() )
+        {
+            try
+            {
+                ::com::sun::star::util::Date aValue = _rxField->getDate();
+                if ( !_rxField->wasNull() )
+                {
+                    _rField.SetDate( ::Date( aValue.Day, aValue.Month, aValue.Year ) );
+                    sDate = _rField.GetText();
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return sDate;
+    }
+}
 //------------------------------------------------------------------------------
 String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_rxField.is())
-        return String();
-    else
-    {
-        ::com::sun::star::util::Date aValue = _rxField->getDate();
-        if (_rxField->wasNull())
-            return String();
-        else
-        {
-            static_cast<DateField*>(m_pPainter)->SetDate(::Date(aValue.Day, aValue.Month, aValue.Year));
-            return m_pPainter->GetText();
-        }
-    }
+    return lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pPainter ), _rxField );
 }
 
 //------------------------------------------------------------------------------
 void DbDateField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_rxField.is())
-        m_pWindow->SetText(String());
-    else
-    {
-        ::com::sun::star::util::Date aValue = _rxField->getDate();
-        if (_rxField->wasNull())
-            m_pWindow->SetText(String());
-        else
-        {
-            static_cast<DateField*>(m_pWindow)->SetDate(::Date(aValue.Day, aValue.Month, aValue.Year));
-        }
-    }
+    lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pWindow ), _rxField );
 }
 
 //------------------------------------------------------------------------------
@@ -2224,39 +2266,41 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     }
 }
 
+namespace
+{
+    //--------------------------------------------------------------------------
+    static String lcl_setFormattedTime_nothrow( TimeField& _rField, const Reference< XColumn >& _rxField )
+    {
+        String sTime;
+        if ( _rxField.is() )
+        {
+            try
+            {
+                ::com::sun::star::util::Time aValue = _rxField->getTime();
+                if ( !_rxField->wasNull() )
+                {
+                    _rField.SetTime( ::Time( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds ) );
+                    sTime = _rField.GetText();
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return sTime;
+    }
+}
 //------------------------------------------------------------------------------
 String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_rxField.is())
-        return String();
-    else
-    {
-        ::com::sun::star::util::Time aValue = _rxField->getTime();
-        if (_rxField->wasNull())
-            return String();
-        else
-        {
-            static_cast<TimeField*>(m_pPainter)->SetTime(::Time(aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds));
-            return m_pPainter->GetText();
-        }
-    }
+    return lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pPainter ), _rxField );
 }
 
 //------------------------------------------------------------------------------
 void DbTimeField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_rxField.is())
-        m_pWindow->SetText(String());
-    else
-    {
-        ::com::sun::star::util::Time aValue = _rxField->getTime();
-        if (_rxField->wasNull())
-            m_pWindow->SetText(String());
-        else
-        {
-            static_cast<TimeField*>(m_pWindow)->SetTime(::Time(aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds));
-        }
-    }
+    lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pWindow ), _rxField );
 }
 
 //------------------------------------------------------------------------------
@@ -2380,7 +2424,14 @@ String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn
 {
     ::rtl::OUString aString;
     if (_rxField.is())
-        aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+        try
+        {
+            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     return aString;
 }
 
@@ -2497,27 +2548,37 @@ CellControllerRef DbListBox::CreateController() const
 //------------------------------------------------------------------------------
 String DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_rxField.is())
-        return String();
-    else
+    String sText;
+    if ( _rxField.is() )
     {
-        String aText;
-        if (m_bBound)
+        try
         {
-            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, _rxField->getString(), sal_True);
-            if (aPosSeq.getLength())
-                aText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
+            sText = _rxField->getString();
+            if ( m_bBound )
+            {
+                Sequence< sal_Int16 > aPosSeq = ::comphelper::findValue( m_aValueList, sText, sal_True );
+                if ( aPosSeq.getLength() )
+                    sText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
+                else
+                    sText = String();
+            }
         }
-        else
-            aText = (const sal_Unicode*)_rxField->getString();
-        return aText;
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
+    return sText;
 }
 
 //------------------------------------------------------------------------------
 void DbListBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    static_cast<ListBox*>(m_pWindow)->SelectEntry(GetFormatText(_rxField, xFormatter));
+    String sFormattedText( GetFormatText( _rxField, xFormatter ) );
+    if ( sFormattedText.Len() )
+        static_cast< ListBox* >( m_pWindow )->SelectEntry( sFormattedText );
+    else
+        static_cast< ListBox* >( m_pWindow )->SetNoSelection();
 }
 
 //------------------------------------------------------------------------------
