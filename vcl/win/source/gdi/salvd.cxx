@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:24:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,4 +244,10 @@ BOOL WinSalVirtualDevice::SetSize( long nDX, long nDY )
             return FALSE;
         }
     }
+}
+
+void WinSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
+{
+    rWidth = GetDeviceCaps( mhDC, HORZRES );
+    rHeight= GetDeviceCaps( mhDC, VERTRES );
 }
