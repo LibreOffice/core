@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:29:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1913,37 +1913,42 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
     SwFormTokens::iterator aIt = aPattern.begin();
     bool bPgNumFnd = false;
     FormTokenType eTType;
-    // #i21237#
-    while( ++aIt != aPattern.end() && !bPgNumFnd )
+
+    // #i61362#
+    if (! aPattern.empty())
     {
-        eTType = aIt->eTokenType;
-
-        switch( eTType )
+        // #i21237#
+        while( ++aIt != aPattern.end() && !bPgNumFnd )
         {
-        case TOKEN_PAGE_NUMS:
-            bPgNumFnd = true;
-            break;
+            eTType = aIt->eTokenType;
 
-        case TOKEN_TAB_STOP:
-            nRet = 2;
-            break;
-        case TOKEN_TEXT:
-            nRet = 3;
-            rText = aIt->sText.Copy( 0, 5 ); // #i21237#
-            break;
+            switch( eTType )
+            {
+            case TOKEN_PAGE_NUMS:
+                bPgNumFnd = true;
+                break;
 
-        case TOKEN_LINK_START:
-        case TOKEN_LINK_END:
-            break;
+            case TOKEN_TAB_STOP:
+                nRet = 2;
+                break;
+            case TOKEN_TEXT:
+                nRet = 3;
+                rText = aIt->sText.Copy( 0, 5 ); // #i21237#
+                break;
 
-        default:
-            nRet = 4;
-            break;
+            case TOKEN_LINK_START:
+            case TOKEN_LINK_END:
+                break;
+
+            default:
+                nRet = 4;
+                break;
+            }
         }
-    }
 
-    if( !bPgNumFnd )
-        nRet = 1;
+        if( !bPgNumFnd )
+            nRet = 1;
+    }
 
     return nRet;
 }
@@ -1960,16 +1965,17 @@ bool lcl_IsHyperlinked(const SwForm& rForm, USHORT nTOXLvl)
             SwFormTokens::iterator aIt = aPattern.begin();
 
             FormTokenType eTType;
+
             // #i21237#
             while ( ++aIt != aPattern.end() )
             {
                 eTType = aIt->eTokenType;
                 switch (eTType)
                 {
-                    case TOKEN_LINK_START:
-                    case TOKEN_LINK_END:
-                        return true;
-                        break;
+                case TOKEN_LINK_START:
+                case TOKEN_LINK_END:
+                    return true;
+                    break;
                 }
             }
         }
