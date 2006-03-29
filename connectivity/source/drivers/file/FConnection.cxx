@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:21:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_RESOURCE_HRC_
 #include "Resource.hrc"
-#endif
-#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
-#include "ModuleContext.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
 #include "file/FDriver.hxx"
@@ -96,9 +93,6 @@
 #ifndef _OSL_NLSUPPORT_H_
 #include <osl/nlsupport.h>
 #endif
-#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
-#include "ModuleContext.hxx"
-#endif
 
 using namespace connectivity::file;
 using namespace dbtools;
@@ -123,7 +117,6 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bCaseSensitiveExtension( sal_True )
                          ,m_bCheckSQL92(sal_False)
 {
-    ModuleContext::AddRef();
     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
 }
 //-----------------------------------------------------------------------------
@@ -131,7 +124,6 @@ OConnection::~OConnection()
 {
     if(!isClosed(  ))
         close();
-    ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
