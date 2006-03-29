@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.147 $
+#   $Revision: 1.148 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 09:00:40 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:47:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.147 $ ';
+    $id_str = ' $Revision: 1.148 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -174,11 +174,12 @@
     $html_last_updated = 0;
     %jobs_hash = ();
     $html_path = undef;
-    $html_file = CorrectPath($ENV{SRC_ROOT} . '/' . $ENV{INPATH}. '.build.html');
+    $html_file = CorrectPath($ENV{SOLARSRC} . '/' . $ENV{INPATH}. '.build.html');
     $build_finished = 0;
     %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
     $chekoutmissing = 1; # chekout missing modules (links still will be broken anyway)
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
+    %weights_hash = (); # hash contains info about how many modules are dependent from one module
 
 ### main ###
 
@@ -221,8 +222,12 @@
         if (open (CMD_FILE, ">>$cmd_file")) {
             select CMD_FILE;
             $echo = 'echo ';
-            $new_line = $echo."\"\"\n";
-            print "\@$echo off\npushd\n" if ($ENV{GUI} ne 'UNX');
+            if ($ENV{GUI} ne 'UNX') {
+                $new_line = "echo.\n";
+                print "\@$echo off\npushd\n";
+            } else {
+                $new_line = $echo."\"\"\n";
+            };
         } else {
             print_error ("Cannot open file $cmd_file");
         };
@@ -323,6 +328,17 @@ sub GetParentDeps {
     check_deps_hash($deps_hash);
 };
 
+sub store_weights {
+    my $deps_hash = shift;
+    foreach (keys %$deps_hash) {
+        foreach my $module_deps_hash ($$deps_hash{$_}) {
+            foreach my $dependency (keys %$module_deps_hash) {
+                $weights_hash{$dependency}++;
+            };
+        };
+    };
+};
+
 #
 # Build everything that should be built
 #
@@ -338,6 +354,7 @@ sub BuildAll {
         };
         $modules_number = scalar keys %global_deps_hash;
         initialize_html_info($_) foreach (keys %global_deps_hash);
+        store_weights(\%global_deps_hash);
         if ($QuantityToBuild) {
             build_multiprocessing();
             return;
@@ -431,7 +448,7 @@ sub dmake_dir {
             if (!-d $log_dir) {
                  system("$perl $mkout");
             };
-            $error_code = system ("$dmake > $log_file 2>&1");
+            $error_code = system ("$dmake >& $log_file");
         } else {
             $error_code = system ("$dmake");
         };
@@ -595,10 +612,13 @@ sub get_deps_hash {
                 };
                 $Dependencies =~ /\s+(\S+)\s+/o;
                 $DirAlias = $1;
-                if (!&CheckPlatform($Platform)) {
+                if (!CheckPlatform($Platform)) {
+                    next if (defined $PlatformHash{$DirAlias});
                     $DeadDependencies{$DirAlias}++;
                     next;
                 };
+                delete $DeadDependencies{$DirAlias} if (defined $DeadDependencies{$DirAlias});
+                print_error("Directory alias $DirAlias is defined at least twice!! Please, correct build.lst in module $module_to_build") if (defined $$dependencies_hash{$DirAlias});
                 $PlatformHash{$DirAlias}++;
                 $Dependencies = $';
                 print_error("$module_to_build/prj/build.lst has wrongly written dependencies string:\n$_\n") if (!$Dependencies);
@@ -638,7 +658,8 @@ sub get_deps_hash {
     if (!$prepare) {
         add_pre_job($dependencies_hash, $module_to_build);
         add_post_job($dependencies_hash, $module_to_build) if ($module_to_build ne $CurrentPrj);
-    }
+    };
+    store_weights($dependencies_hash);
 };
 
 #
@@ -964,6 +985,18 @@ sub FindIndepPrj {
             #return $Prj if (!scalar keys %$PrjDeps);
         };
         if (scalar @candidates) {
+            my $best_candidate = undef;
+            my $weight = 0;
+            foreach my $candidate (@candidates) {
+                if (defined $weights_hash{$candidate} && $weights_hash{$candidate} > $weight) {
+                    $best_candidate = $candidate;
+                    $weight = $weights_hash{$candidate};
+                };
+            };
+            if (defined $best_candidate) {
+                delete $weights_hash{$best_candidate};
+                return $best_candidate;
+            }
             my @sorted_candidates = sort(@candidates);
             return $sorted_candidates[0];
         };
@@ -1003,7 +1036,7 @@ sub GetDependenciesArray {
                 ($prj_platform{$ParentPrj} ne 'all')) {
                 print_error ("$ParentPrj\.$1 is a wrongly dependency identifier!\nCheck if it is platform dependent");
             };
-            $AliveDependencies{$ParentPrj}++ if (&CheckPlatform($1));
+            $AliveDependencies{$ParentPrj}++ if (CheckPlatform($1));
             push(@Dependencies, $ParentPrj);
         } else {
             if ((exists($prj_platform{$ParentPrj})) &&
@@ -1156,6 +1189,9 @@ sub get_options {
             next;
         };
         push (@dmake_args, $arg);
+    };
+    if (!$html) {
+        print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
     };
     print_error('Switches --with_branches and --all collision') if ($build_from && $build_from_opt);
     print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
@@ -1884,6 +1920,7 @@ sub get_tmp_dir {
 
 sub retrieve_build_list {
     my $module = shift;
+    my $old_fh = select(STDOUT);
 
     # First try to get global depencies from solver's build.lst if such exists
     my $solver_inc_dir = "$ENV{SOLARVER}/common";
@@ -1893,21 +1930,23 @@ sub retrieve_build_list {
     $solver_inc_dir .= "/$module";
     $solver_inc_dir = CorrectPath($solver_inc_dir);
     $dead_parents{$module}++;
-    print STDERR "Fetching dependencies for module $module from solver...";
+    print "Fetching dependencies for module $module from solver...";
     foreach (@possible_build_lists) {
         my $possible_build_lst = "$solver_inc_dir/$_";
         if (-e $possible_build_lst) {
             print " ok\n";
+            select($old_fh);
             return $possible_build_lst;
         };
     }
-    print STDERR " failed...\n";
-    print STDERR "Fetching from CVS... ";
+    print " failed...\n";
+    print "Fetching from CVS... ";
     if (!checkout_module($module, 'image', $tmp_dir)) {
         print " failed\n";
         if (!defined $dead_parents{$module}) {
-            print STDERR "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
+            print "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
         }
+        select($old_fh);
         return undef;
     };
     # no need to announce this module
@@ -1933,6 +1972,7 @@ sub retrieve_build_list {
         last;
     };
     rmtree(CorrectPath($tmp_dir . '/' . $module), 0, 1);
+    select($old_fh);
     return undef if (!$success);
     return $possible_build_lst;
 };
@@ -2320,7 +2360,7 @@ sub do_post_job {
     $module_path = CorrectPath($StandDir.$module);
     my $error_code = undef;
     if ($cmd_file) {
-        print "chdir $module_path";
+        print "cd $module_path\n";
         print "$job\n";
     } else {
         chdir $module_path;
@@ -2635,23 +2675,32 @@ sub generate_html_file {
     print HTML '        document.write("        <frame name=\"innerFrame\" src=\"" + urlquery + "?initInnerPage\"/>");' . "\n";
     print HTML '        document.write("    </frameset>");' . "\n";
     print HTML '        document.write("</head></html>");' . "\n";
-    print HTML '    } else if (urlquery[1] == "initTop") {' . "\n";
+    print HTML '    } else if (urlquery[1].substring(0,7) == "initTop") {' . "\n";
+    print HTML '        var urlquerycontent = urlquery[1].split("=");' . "\n";
+    print HTML '        var UpdateRate = 10' . "\n";
+    print HTML '        if (urlquerycontent.length > 2) {' . "\n";
+    print HTML '            if (isNaN(urlquerycontent[2] * 1)) {' . "\n";
+    print HTML '                alert(urlquerycontent[2] + " is not a number. Ignored.");' . "\n";
+    print HTML '            } else {' . "\n";
+    print HTML '                UpdateRate = urlquerycontent[2];' . "\n";
+    print HTML '            };' . "\n";
+    print HTML '        };' . "\n";
     print HTML '        document.write("<html><body>");' . "\n";
     print HTML '        document.write("<h3 align=center>Build process progress status</h3>");' . "\n";
     print HTML '        document.write("<div align=\"right\">");' . "\n";
     print HTML '        document.write("    <table border=\"0\"> <tr>");' . "\n";
     print HTML '        document.write("<td>Refresh rate(sec):</td>");' . "\n";
     print HTML '        document.write("<th>");' . "\n";
-    print HTML '        document.write("<FORM name=\"Refreshrate\">");' . "\n";
-    print HTML '        document.write("<input type=\"text\" name=\"rate\" value=\"10\" size=\"1\"/>");' . "\n";
-    print HTML '        document.write("<input type=\"button\" value=\"OK\" onClick=\"setRefreshRate(this.form.rate.value)\">");' . "\n";
-    print HTML '        document.write("</SELECT>");' . "\n";
+    print HTML '        document.write("<FORM action=\"\?initTop\">");' . "\n";
+    print HTML '        document.write("<input type=\"hidden\" name=\"initTop\" value=\"\"/>");' . "\n";
+    print HTML '        document.write("<input type=\"text\" id=\"RateValue\" name=\"rate\" autocomplete=\"off\" value=\"" + UpdateRate + "\" size=\"1\"/>");' . "\n";
+    print HTML '        document.write("<input type=\"button\" value=\"OK\">");' . "\n";
     print HTML '        document.write("</FORM>");' . "\n";
     print HTML '        document.write("</th></tr></table>");' . "\n";
     print HTML '        document.write("</div>");' . "\n";
     print HTML '        document.write("    </frameset>");' . "\n";
     print HTML '        document.write("</body></html>");' . "\n";
-    print HTML '        IntervalID = top.frames[0].setInterval("updateInnerFrame()", 10000);' . "\n";
+    print HTML '        IntervalID = top.frames[0].setInterval("updateInnerFrame()", UpdateRate * 1000);' . "\n";
     print HTML '    } else if (urlquery[1] == "initInnerPage") {' . "\n";
     print HTML '        document.write("<html><head>");' . "\n";
     print HTML '        document.write(\'    <frameset rows="80%,20%\">\');' . "\n";
