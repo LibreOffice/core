@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:49:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,13 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     m_aPrevSetIB.Show( bIsLetter );
     m_aNextSetIB.Show( bIsLetter );
     m_aHideEmptyParagraphsCB.Show( bIsLetter );
+    m_aSecondFL.Show( bIsLetter );
+    m_aSecondFI.Show( bIsLetter );
+    m_aSettingsFI.Show( bIsLetter );
+    m_aMatchFieldsFI.Show( bIsLetter );
+    m_aThirdFI.Show( bIsLetter );
+    m_aThirdFL.Show( bIsLetter );
+    m_aFourthFI.Show( bIsLetter );
 
     if(bIsLetter)
     {
@@ -186,6 +193,7 @@ void SwMailMergeAddressBlockPage::ActivatePage()
                     m_pWizard->GetConfigItem().GetAddressBlocks();
         for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
             m_aSettingsWIN.AddAddress(aBlocks[nAddress]);
+        m_aSettingsWIN.SelectAddress((sal_uInt16)rConfigItem.GetCurrentAddressBlockIndex());
         m_aAddressCB.Check(rConfigItem.IsAddressBlock());
         AddressBlockHdl_Impl(&m_aAddressCB);
         m_aSettingsWIN.SetLayout(1, 2);
@@ -249,6 +257,8 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
         InsertDataHdl_Impl(0);
     }
     delete pDlg;
+    GetWizard()->UpdateRoadmap();
+    GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     return 0;
 }
 /*-- 07.04.2004 16:19:31---------------------------------------------------
@@ -312,6 +322,9 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, SwAddressPrev
                 m_pWizard->GetConfigItem().GetAddressBlocks();
     String sPreview = SwAddressPreview::FillData(aBlocks[nSel], m_pWizard->GetConfigItem());
     m_aPreviewWIN.SetAddress(sPreview);
+    m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
+    GetWizard()->UpdateRoadmap();
+    GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     return 0;
 }
 /*-- 31.08.2005 15:34:55---------------------------------------------------
@@ -1397,6 +1410,8 @@ uno::Sequence< ::rtl::OUString > SwAssignFieldsDialog::CreateAssignments()
         String sSelect = (*aLBIter)->GetSelectEntry();
         if(m_sNone != sSelect)
             pAssignments[nIndex] = sSelect;
+        else
+            pAssignments[nIndex] = ::rtl::OUString();
     }
     return aAssignments;
 }
