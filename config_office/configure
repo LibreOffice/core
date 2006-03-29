@@ -18143,9 +18143,14 @@ echo $ECHO_N "checking whether $GNUCP is GNU cp... $ECHO_C" >&6
 	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   else
+   if $GNUCP --version | grep "GNU fileutils" >/dev/null 2>/dev/null; then
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+   else
   	{ { echo "$as_me:$LINENO: error: no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it" >&5
 echo "$as_me: error: no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it" >&2;}
    { (exit 1); exit 1; }; }
+   fi
   fi
 
 fi
