@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:33:57 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,9 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nXMax( 0 ),
         m_nYMax( 0 ),
         m_bHaveVerticalSubstitutedGlyphs( false ),
-        m_bUserOverride( false )
+        m_bUserOverride( false ),
+        m_eEmbeddedbitmap( fcstatus::isunset ),
+        m_eAntialias( fcstatus::isunset )
 {
 }
 
@@ -2591,6 +2593,8 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_eWeight         = pFont->m_eWeight;
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
+    rInfo.m_eEmbeddedbitmap = pFont->m_eEmbeddedbitmap;
+    rInfo.m_eAntialias      = pFont->m_eAntialias;
     rInfo.m_aAliases.clear();
     for( ::std::list< int >::iterator it = pFont->m_aAliases.begin(); it != pFont->m_aAliases.end(); ++it )
         rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, *it ) );
