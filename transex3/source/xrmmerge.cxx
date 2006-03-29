@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:31:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,15 +193,16 @@ void removeTempFile(){
     }
 }
 /*****************************************************************************/
-int InitXrmExport( char *pOutput )
+int InitXrmExport( char *pOutput , char* pFilename)
 /*****************************************************************************/
 {
     // instanciate Export
     ByteString sOutput( pOutput );
+    ByteString sFilename( pFilename );
     Export::InitLanguages( false );
 
     if ( bMergeMode )
-        pParser = new XRMResMerge( sMergeSrc, sOutputFile, bErrorLog );
+        pParser = new XRMResMerge( sMergeSrc, sOutputFile, bErrorLog , sFilename );
       else if ( sOutputFile.Len()) {
         pParser = new XRMResExport( sOutputFile, sPrj, sActFileName );
     }
@@ -222,7 +223,10 @@ int EndXrmExport()
     delete pParser;
     return 1;
 }
-
+extern const char* getFilename()
+{
+    return sInputFileName.GetBuffer();//(*(aInputFileList.GetObject( 0 ))).GetBuffer();
+}
 /*****************************************************************************/
 extern FILE *GetXrmFile()
 /*****************************************************************************/
@@ -586,7 +590,7 @@ void XRMResExport::WorkOnText(
     //if ( LANGUAGE_ALLOWED( nLangIndex )) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetGID());
+            pResData = new ResData( sPlatform, GetGID() );
             pResData->sId = GetLID();
         }
 
@@ -676,10 +680,11 @@ void XRMResExport::EndOfText(
 /*****************************************************************************/
 XRMResMerge::XRMResMerge(
     const ByteString &rMergeSource, const ByteString &rOutputFile,
-    BOOL bErrorLog )
+    BOOL bErrorLog , ByteString &rFilename)
 /*****************************************************************************/
                 : XRMResOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
+                sFilename( rFilename ) ,
                 pResData( NULL )
 {
     if ( rMergeSource.Len())
@@ -714,7 +719,7 @@ void XRMResMerge::WorkOnText(
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetGID());
+            pResData = new ResData( sPlatform, GetGID() , sFilename );
             pResData->sId = GetLID();
             pResData->sResTyp = "readmeitem";
         }
