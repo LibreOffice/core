@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:38:10 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -967,6 +967,8 @@ void SvtFileDialog::Init_Impl
 
 IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, pBtn )
 {
+    pThis->_pFileView->EndInplaceEditing( false );
+
     INetURLObject aObj( pThis->_pFileView->GetViewURL() );
     String sFolderName = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8 );
     svtools::QueryFolderNameDialog aDlg( pThis, sFolderName, String( SvtResId( STR_SVT_NEW_FOLDER ) ) );
@@ -1687,7 +1689,8 @@ void SvtFileDialog::UpdateControls( const String& rURL )
             {
                 // no Fsys path for server file system ( only UCB has mountpoints! )
                 if ( INET_PROT_FILE != aObj.GetProtocol() )
-                    sText = rURL.Copy( INetURLObject::GetScheme( aObj.GetProtocol() ).getLength() );
+                    sText = rURL.Copy( static_cast< USHORT >(
+                        INetURLObject::GetScheme( aObj.GetProtocol() ).getLength() ) );
             }
 
             if ( !sText.Len() && aObj.getSegmentCount() )
@@ -2410,6 +2413,8 @@ const String& SvtFileDialog::GetStandardDir() const
 
 void SvtFileDialog::PrevLevel_Impl()
 {
+    _pFileView->EndInplaceEditing( false );
+
     String sDummy;
     executeAsync( AsyncPickerAction::ePrevLevel, sDummy, sDummy );
 }
@@ -2418,6 +2423,8 @@ void SvtFileDialog::PrevLevel_Impl()
 
 void SvtFileDialog::OpenURL_Impl( const String& _rURL )
 {
+    _pFileView->EndInplaceEditing( false );
+
     DBG_ASSERT( m_aURLFilter.isUrlAllowed( _rURL ), "SvtFileDialog::OpenURL_Impl: forbidden URL! Should have been handled by the caller!" );
     executeAsync( AsyncPickerAction::eOpenURL, _rURL, getMostCurrentFilter( _pImp ) );
 }
