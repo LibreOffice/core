@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:19:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>       // ASSERT()
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 //simple template that manages a static [] array by sorting at construction
