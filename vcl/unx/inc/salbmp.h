@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:43:15 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,10 @@ public:
                                               const SalTwoRect& rTwoRect ) const;
 #ifdef _USE_PRINT_EXTENSION_
     void    ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+                          const SalTwoRect& rTwoRect, const GC& rGC ) const;
 #else
     void    ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+                          const SalTwoRect& rTwoRect, const GC& rGC ) const;
 #endif
 
 public:
@@ -162,7 +162,7 @@ private:
                               Drawable aDstDrawable, long nDstDrawableDepth,
                               long nSrcX, long nSrcY,
                               long nDestWidth, long nDestHeight,
-                              long nDestX, long nDestY, const GC& rGC, bool bDstIsWindow );
+                              long nDestX, long nDestY, const GC& rGC );
 
 public:
 
@@ -193,7 +193,7 @@ public:
                                 SalDisplay* pDisplay,
 #endif
                                 Drawable aDrawable, long nDrawableDepth,
-                                const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+                                const SalTwoRect& rTwoRect, const GC& rGC ) const;
 };
 
 // ----------------------
