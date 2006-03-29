@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:44:20 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@
 #endif
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
+#endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
 #endif
 #ifndef DBA_CORE_SHARED_CONNECTION_HXX
 #include "SharedConnection.hxx"
@@ -1258,20 +1261,27 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 {
-    ModelMethodGuard aGuard( *this );
     try
     {
-        SharedModel xModel( impl_getModel( true ) );
-        Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY );
-        if ( xStorable.is() )
+        {
+            ModelMethodGuard aGuard( *this );
+
+            typedef ::utl::SharedUNOComponent< XModel, ::utl::CloseableComponent > SharedModel;
+            SharedModel xModel( m_pImpl->getModel_noCreate(), SharedModel::NoTakeOwnership );
+
+            if ( !xModel.is() )
+                xModel.reset( m_pImpl->createNewModel_deliverOwnership(), SharedModel::TakeOwnership );
+
+            Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY_THROW );
             xStorable->store();
+        }
 
         css::lang::EventObject aFlushedEvent(*this);
-        aGuard.clear();
         m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1340,27 +1350,16 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) th
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-ODatabaseSource::SharedModel ODatabaseSource::impl_getModel( bool _bTakeOwnershipIfNewlyCreated )
-{
-    SharedModel xModel;
-    if ( m_pImpl.is() )
-    {
-        xModel.reset( m_pImpl->getModel_noCreate(), SharedModel::NoTakeOwnership );
-        if ( !xModel.is() )
-            xModel.reset( m_pImpl->createNewModel_deliverOwnership(), _bTakeOwnershipIfNewlyCreated ? SharedModel::TakeOwnership : SharedModel::NoTakeOwnership );
-    }
-    return xModel;
-}
-// -----------------------------------------------------------------------------
 // XDocumentDataSource
 Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
-    return Reference< XOfficeDatabaseDocument >( impl_getModel( false ), UNO_QUERY );
-    // by definition, clients of getDatabaseDocument are responsible for the model they obtain,
-    // including responsibility for (attempting to) close the model when they don't need it anymore.
-    // Thus the "false" parameter in the call to impl_getModel: We don't take the ownership
-    // of the model, even if it had to be newly created during this call.
+
+    Reference< XModel > xModel( m_pImpl->getModel_noCreate() );
+    if ( !xModel.is() )
+        xModel = m_pImpl->createNewModel_deliverOwnership();
+
+    return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > ODatabaseSource::getThis()
