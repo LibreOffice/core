@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:40:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1761,7 +1761,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
                 aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
                 aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
                 pBM->ImplDraw( m_hBackgroundPixmap, getDisplay()->GetVisual()->GetDepth(),
-                               aTwoRect, getDisplay()->GetCopyGC(), false );
+                               aTwoRect, getDisplay()->GetCopyGC() );
                 XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
                                             GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
                                             m_hBackgroundPixmap );
