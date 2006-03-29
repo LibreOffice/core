@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:04:12 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,8 @@ String FLD_EU_TELFIRMA
 };
 String FLD_EU_FAX
 {
-    TEXT = "FAX" ;
+    Text [ de ] = "FAX" ;
+    Text [ en-US ] = "FAX" ;
 };
 String FLD_EU_EMAIL
 {
