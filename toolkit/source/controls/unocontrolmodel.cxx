@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:53:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,9 +645,12 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
 
 void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    setPropertyValue( PropertyName, ImplGetDefaultValue( GetPropertyId( PropertyName ) ) );
+    Any aDefaultValue;
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        aDefaultValue = ImplGetDefaultValue( GetPropertyId( PropertyName ) );
+    }
+    setPropertyValue( PropertyName, aDefaultValue );
 }
 
 ::com::sun::star::uno::Any UnoControlModel::getPropertyDefault( const ::rtl::OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -1182,12 +1185,6 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
         }
         else
         {
-//          rConvertedValue.setValue( rValue.getValue(), *pDestType );
-                // VERY BAD. No check if is made if the value type of rValue and pDestType are compatible in any way.
-                // This will crash as soon as somebody tries to set a property value (rValue) which's type
-                // is far enough from the destination type which it is 'c-style cast' to with the line above.
-
-
             if ( pDestType->equals( rValue.getValueType() ) )
             {
                 rConvertedValue = rValue;
@@ -1361,10 +1358,12 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
 // ::com::sun::star::beans::XPropertySet
 void UnoControlModel::setPropertyValue( const ::rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    sal_Int32 nPropId = (sal_Int32) GetPropertyId( rPropertyName );
-    DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
+    sal_Int32 nPropId = 0;
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        nPropId = (sal_Int32) GetPropertyId( rPropertyName );
+        DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
+    }
     setFastPropertyValue( nPropId, rValue );
 }
 
