@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
 /* external functions (C++ code, declared as extren "C" */
 extern WorkOnTokenSet( int, char* );
 extern InitExport( char * , char * );
@@ -32,6 +33,7 @@ extern GetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetNextFile();
 extern int isQuiet();
+extern char* getFilename();
 
 /* forwards */
 void YYWarning();
@@ -272,7 +274,8 @@ main( int argc, char* argv[])
 		fprintf( stdout, "              Restriction to de and es, en-US will be fallback for es\n" );
 		return 1;
 	}
-
+    
+	InitExport( pOutput , getFilename() );
 	pFile = GetNextFile();
 	if ( !pFile )
 		return 1;
@@ -280,7 +283,7 @@ main( int argc, char* argv[])
    	yyin = pFile;
 
 	/* create global instance of class Export */
-	InitExport( pOutput , pFile );
+	//InitExport( pOutput , sFilename );
 
 	/* start parser */
    	yylex();
