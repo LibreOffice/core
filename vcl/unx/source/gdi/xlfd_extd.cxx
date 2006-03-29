@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:40:06 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,10 @@ ExtendedXlfd::ExtendedXlfd( bool bScalable )
     mbDevice       = false;
     mbSubsettable  = false;
     mbEmbeddable   = false;
+
+    meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+    meAntiAlias = ANTIALIAS_DONTKNOW;
+
     mnQuality      = -1;
 }
 
