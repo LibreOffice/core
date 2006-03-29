@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQueryHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:30:18 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 #define _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 
 #include <MNSInclude.hxx>
+
+#ifndef CONNECITIVITY_MOZAB_ERROR_RESOURCE_HXX
+#include "MErrorResource.hxx"
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -85,7 +89,7 @@ namespace connectivity
             sal_Int32 getRowStates()  { return m_RowStates;};
         };
 
-        class MQueryHelper : public nsIAbDirectoryQueryResultListener
+        class MQueryHelper : public nsIAbDirectoryQueryResultListener, public ErrorResourceAccess
         {
         private:
             typedef std::vector< MQueryHelperResultEntry* > resultsArray;
@@ -113,7 +117,6 @@ namespace connectivity
             oslThreadIdentifier m_oThreadID;
 #endif
 
-            mutable ::rtl::OUString         m_aErrorString;
         public:
 
             NS_DECL_ISUPPORTS
@@ -153,8 +156,6 @@ namespace connectivity
             sal_Bool                   setCardValues(const sal_Int32 rowIndex);
             sal_Int32                  commitCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
             sal_Int32                  deleteCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
-            const ::rtl::OUString&     getErrorString() const
-                                            { return m_aErrorString; };
         };
     }
 }
