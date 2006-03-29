@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:02:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,13 @@ IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
     m_pFemaleColumnLB->Enable(bIndividual);
     m_pFemaleFieldFT->Enable(bIndividual);
     m_pFemaleFieldCB->Enable(bIndividual);
+
+    if( m_bIsTabPage )
+    {
+        m_pWizard->GetConfigItem().SetIndividualGreeting(bIndividual, sal_False);
+        m_pWizard->UpdateRoadmap();
+        m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+    }
     return 0;
 }
 /*-- 30.04.2004 10:42:57---------------------------------------------------
@@ -148,7 +155,10 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
         pToInsert->SelectEntryPos(pToInsert->InsertEntry(pDlg->GetAddress()));
         UpdatePreview();
         if(m_bIsTabPage)
+        {
+            m_pWizard->UpdateRoadmap();
             m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+        }
     }
     delete pDlg;
     return 0;
