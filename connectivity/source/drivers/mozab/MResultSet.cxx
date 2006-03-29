@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:17:05 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,7 +395,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
             // Everything in the addressbook is a string!
             //
             if ( !m_aQuery.setRowValue( (*m_aRow)[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR )) {
-                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
             }
         }
     }
@@ -436,7 +436,7 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 cardNumber,sal_Bool bForceReload) throw
             // Everything in the addressbook is a string!
             //
             if ( !m_aQuery.getRowValue( (*m_aRow)[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR )) {
-                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
             }
         }
     }
@@ -1336,7 +1336,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     OSL_TRACE("Query is to be sorted");
                     if( ! m_aQuery.queryComplete() )
                         if ( !m_aQuery.waitForQueryComplete() ) {
-                            ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                            m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
                         }
 
                     OSL_ENSURE( m_aQuery.queryComplete(), "Query not complete!!");
@@ -1523,7 +1523,7 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
 #endif
             m_aQuery.checkRowAvailable( nRow );
             if ( m_aQuery.errorOccurred() ) {
-                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
             }
             nNumberOfRecords = m_aQuery.getRealRowCount();
     }
@@ -1623,7 +1623,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
             m_aQuery.checkRowAvailable( nCurCard );
             if ( m_aQuery.errorOccurred() ) {
-                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
             }
             nNumberOfRecords = m_aQuery.getRealRowCount();
     }
@@ -1905,7 +1905,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     {
         m_RowStates = RowStates_Error;
         m_nUpdatedRow = 0;
-        ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
     }
 
     m_nUpdatedRow = 0;
@@ -1930,7 +1930,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
                     ,1000,Any());
     sal_Bool m_bRowDeleted = ( m_aQuery.deleteRow( nCurrentRow ) > 0 );
     if (!m_bRowDeleted)
-        ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
 
     m_aQuery.setRowStates(nCurrentRow,RowStates_Deleted);
     m_pKeySet->erase(m_pKeySet->begin() + m_nRowPos -1);
