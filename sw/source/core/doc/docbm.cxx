@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:29:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,10 @@ void SwDoc::MakeUniqueBookmarkName( String& rNm )
     USHORT nBookCnt = pBookmarkTbl->Count();
     do {
         sTmp = rNm;
-        sTmp += String::CreateFromInt32( ++nCnt );
+        // #i35726# try without number extension first
+        if(nCnt)
+            sTmp += String::CreateFromInt32( nCnt );
+        nCnt++;
         for( n = 0; n < nBookCnt; ++n )
             if( (*pBookmarkTbl)[ n ]->GetName().Equals( sTmp ))
                 break;
