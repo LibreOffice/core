@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: OfficeResourceLoader.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:27:14 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_resource_OfficeResourceLoader_idl__
+#define __com_sun_star_resource_OfficeResourceLoader_idl__
+
+#ifndef __com_sun_star_resource_XResourceBundleLoader_idl__
+#include <com/sun/star/resource/XResourceBundleLoader.idl>
+#endif
+
+//=============================================================================
+module com { module sun { module star { module resource {
+//=============================================================================
+
+/** describes a <type>XResourceBundleLoader</type> which provides access to the OpenOffice.org
+    resource files.
+
+    <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
+    format, located insisde the installation's program/resource directory. The <type>OfficeResoureLoader</type>
+    singleton (available at a component context as value with the key
+    <code>/singletons/com/sun/star/resource/OfficeResoureLoader</code>), provides access to some
+    types of resources within those files.</p>
+
+    <p>Clients have to specifiy the resource file base name in the call to
+    <member>XResourceBundleLoader::loadBundle</member> resp. <member>XResourceBundleLoader::loadBundle_Default</member>
+    method. The loader will extent this base name so that the resulting name conforms to the OpenOffice.org
+    resource file naming conventions, and look up the respective resource file, for the requested locale,
+    in OpenOffice.org's installation.</p>
+
+    <p>The lookup process uses the fallback mechanism as described at the <type>XResourceBundle</type> interface,
+    except that <code>Locale.getDefault()</code> is not used.</p>
+
+    <p>Resource keys, as passed to the <member>XResourceBundle::getDirectElement</member> or
+    <member scope="com::sun::star::container">XNameAccess::getByName</member>, have the following format:
+    <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt; specifies
+    the type of the requested resource (see below) and <code>&lt;numeric_identifier&gt;</code> is the numeric
+    identifier of the resource.</p>
+
+    <p>The following resource types are currently supported:
+    <ul>
+        <li><em>string</em>: denotes a string resource</li>
+    </ul>
+    </p>
+
+    <p>Since the numeric resource identifiers are highly build-dependent (e.g. can change with any next
+    OpenOffice.org build), you are <strong>strongly</strong> discouraged from using the <type>OfficeResoureLoader</type>
+    service in a component which targets more than one particular OpenOffice.org build.</p>
+
+    @since OpenOffice.org 2.0.3
+*/
+singleton OfficeResourceLoader : XResourceBundleLoader;
+
+//=============================================================================
+}; }; }; };
+//=============================================================================
+
+#endif
