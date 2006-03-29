@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:47:00 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,7 +489,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT (START_X , 27 );
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 5* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Benutzen sie den Datenbank-Assistenten, um eine neue Datenbank anzulegen, eine bestehende Datenbankdatei zu öffnen, oder eine Verbindung zu einer Server-Datenbank herzustellen.";
+        Text [ de ] = "Benutzen Sie den Datenbank-Assistenten, um eine neue Datenbank anzulegen, eine bestehende Datenbankdatei zu öffnen, oder eine Verbindung zu einer Server-Datenbank herzustellen.";
         Text [ en-US ]  = "Use the Database Wizard to create a new database, open an existing database file, or connect to a database stored on a server." ;
         WordBreak = TRUE ;
     };
