@@ -278,6 +278,7 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:MergeCells" menu:helpid="20506" menu:label="" />
             <menu:menuitem menu:id=".uno:SplitCell" menu:helpid="20505" menu:label="" />
+            <menu:menuitem menu:id=".uno:Protect" menu:helpid="20517" menu:label="" />
             <menu:menuitem menu:id=".uno:MergeTable" menu:helpid="20652" menu:label="" />
             <menu:menuitem menu:id=".uno:SplitTable" menu:helpid="20642" menu:label="" />
             <menu:menuseparator/>
