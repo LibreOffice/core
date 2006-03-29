@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:14:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:20:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,40 +295,41 @@ namespace connectivity
     Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
-        if ( acceptsURL(url) )
+        if ( !acceptsURL(url) )
+            return Sequence< DriverPropertyInfo >();
+
+        sal_Bool bIsODBC = isOdbcUrl( url );
+
+        Sequence< ::rtl::OUString > aBoolean(2);
+        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SuppressVersionColumns"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Display version columns (when available)."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        if ( !bIsODBC )
         {
-            sal_Bool bIsODBC = isOdbcUrl( url );
-
-            Sequence< ::rtl::OUString > aBoolean(2);
-            aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-            aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
-
-
             aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
-                    ,sal_False
-                    ,::rtl::OUString()
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The JDBC driver class name."))
+                    ,sal_True
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"))
                     ,Sequence< ::rtl::OUString >())
                     );
-            aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SuppressVersionColumns"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Display version columns (when available)."))
-                    ,sal_False
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
-                    ,aBoolean)
-                    );
-            if ( !bIsODBC )
-            {
-                aDriverInfo.push_back(DriverPropertyInfo(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
-                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The JDBC driver class name."))
-                        ,sal_True
-                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"))
-                        ,Sequence< ::rtl::OUString >())
-                        );
-            }
         }
+
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
