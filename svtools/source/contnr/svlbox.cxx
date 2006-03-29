@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:56:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,7 +721,7 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     nImpFlags = 0;
     pTargetEntry = 0;
     nDragDropMode = 0;
-    pReserved = 0;
+    pLBoxImpl = new SvLBox_Impl;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
     SetModel( pTempModel );
@@ -746,7 +746,7 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     pTargetEntry = 0;
     nImpFlags = 0;
     nWindowStyle = 0;
-    pReserved = 0;
+    pLBoxImpl = new SvLBox_Impl;
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
@@ -783,6 +783,7 @@ __EXPORT SvLBox::~SvLBox()
         pDDSource = 0;
     if( this == pDDTarget )
         pDDTarget = 0;
+    delete pLBoxImpl;
 }
 
 void SvLBox::SetModel( SvLBoxTreeList* pNewModel )
@@ -1433,7 +1434,8 @@ IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, pSvInplaceEdit )
         aStr = pEdCtrl->GetText();
     else
         aStr = pEdCtrl->GetSavedValue();
-    EditedText( aStr );
+    if ( IsEmptyTextAllowed() || aStr.Len() > 0 )
+        EditedText( aStr );
     // Hide darf erst gerufen werden, nachdem der neue Text in den
     // Entry gesetzt wurde, damit im GetFocus der ListBox nicht
     // der Selecthandler mit dem alten EntryText gerufen wird.
@@ -1461,6 +1463,18 @@ void SvLBox::EndEditing( BOOL bCancel )
     nImpFlags &= (~SVLBOX_IN_EDT);
 }
 
+
+bool SvLBox::IsEmptyTextAllowed() const
+{
+    DBG_CHKTHIS(SvLBox,0);
+    return pLBoxImpl->m_bIsEmptyTextAllowed;
+}
+
+void SvLBox::ForbidEmptyText()
+{
+    DBG_CHKTHIS(SvLBox,0);
+    pLBoxImpl->m_bIsEmptyTextAllowed = false;
+}
 
 void SvLBox::EditedText( const String& )
 {
