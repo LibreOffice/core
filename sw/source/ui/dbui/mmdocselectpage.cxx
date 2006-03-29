@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:58:53 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,12 +162,9 @@ SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 {
     m_aRecentDocLB.Enable(&m_aRecentDocRB == pButton);
-    sal_Bool bEnableNext = m_aNewDocRB.IsChecked() || m_aCurrentDocRB.IsChecked() ||
-            (m_sLoadFileName.Len() && (m_aLoadDocRB.IsChecked() || m_aLoadTemplateRB.IsChecked())) ||
-            m_aRecentDocLB.GetSelectEntry().Len();
 
-    m_pWizard->enableButtons( WZB_NEXT, bEnableNext );
-
+    m_pWizard->UpdateRoadmap();
+    m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
 
     return 0;
 }
@@ -187,7 +184,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
         else if(RET_CANCEL != nRet)
-            m_sLoadFileName = pNewFileDlg->GetTemplateFileName();
+            m_sLoadTemplateName = pNewFileDlg->GetTemplateFileName();
         delete pNewFileDlg;
     }
     else
@@ -226,7 +223,8 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
             m_sLoadFileName = xFP->getFiles().getConstArray()[0];
         }
     }
-    m_pWizard->enableButtons( WZB_NEXT, m_sLoadFileName.Len() > 0 );
+    m_pWizard->UpdateRoadmap();
+    m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
 
     return 0;
 }
@@ -236,25 +234,23 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
   -----------------------------------------------------------------------*/
 sal_Bool SwMailMergeDocSelectPage::commitPage(COMMIT_REASON _eReason)
 {
-    if(_eReason == CR_TRAVEL_NEXT)
+    sal_Bool bReturn = sal_False;
+    bool bNext = _eReason == CR_TRAVEL_NEXT;
+    if(bNext || _eReason == CR_VALIDATE )
     {
-        sal_Bool bCloseDialog = sal_True;
-        if(m_sLoadFileName.Len() &&
-                (m_aLoadDocRB.IsChecked() || m_aLoadTemplateRB.IsChecked()))
-            m_pWizard->SetReloadDocument(m_sLoadFileName);
-        else if(m_aNewDocRB.IsChecked())
-            m_pWizard->SetReloadDocument(String());
-        else if(m_aRecentDocRB.IsChecked())
+        ::rtl::OUString sReloadDocument;
+        bReturn = m_aCurrentDocRB.IsChecked() ||
+                m_aNewDocRB.IsChecked() ||
+                ((sReloadDocument = m_sLoadFileName).getLength() && m_aLoadDocRB.IsChecked() )||
+                ((sReloadDocument = m_sLoadTemplateName).getLength() && m_aLoadTemplateRB.IsChecked())||
+                (m_aRecentDocRB.IsChecked() && (sReloadDocument = m_aRecentDocLB.GetSelectEntry()).getLength());
+        if(bNext && !m_aCurrentDocRB.IsChecked())
         {
-            m_pWizard->SetReloadDocument(m_aRecentDocLB.GetSelectEntry());
-        }
-        else
-            bCloseDialog = sal_False;
-        if(bCloseDialog)
-        {
+            if(sReloadDocument.getLength())
+                m_pWizard->SetReloadDocument( sReloadDocument );
             m_pWizard->SetRestartPage(MM_OUTPUTTYPETPAGE);
             m_pWizard->EndDialog(RET_LOAD_DOC);
         }
     }
-    return sal_True;
+    return bReturn;
 }
