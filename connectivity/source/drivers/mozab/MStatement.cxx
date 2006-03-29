@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:20:51 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ void OStatement_Base::createTable( )
             MDatabaseMetaDataHelper     _aDbHelper;
             if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
             {
-                ::dbtools::throwGenericSQLException(_aDbHelper.getErrorString() ,NULL);
+                getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId() );
             }
             m_aSQLIterator = connectivity::OSQLParseTreeIterator(m_pConnection->createCatalog()->getTables(), m_pConnection->getMetaData(), NULL);
         }
