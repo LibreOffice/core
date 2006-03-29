@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:02:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 16 , 27 ) ;
         Size = MAP_APPFONT ( 135 , 25 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "1. Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten der Adressenliste werden für den Adressblock benötigt." ;
-        Text[ en-US ] = "1. Select the address list containing the address data you want to use. This data is needed to create the address block.";
+        Text [ de ] = "Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten werden für den Adressblock benötigt." ;
+        Text[ en-US ] = "Select the address list containing the address data you want to use. This data is needed to create the address block.";
     };
     PushButton      PB_ADDRESSLIST
     {
