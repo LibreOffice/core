@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:46:45 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ public:
 
                             // Set new size, without saving the old contents
     virtual BOOL            SetSize( long nNewDX, long nNewDY );
+    virtual void            GetSize( long& rWidth, long& rHeight );
 };
 
 #ifdef _SV_SALDISP_HXX
