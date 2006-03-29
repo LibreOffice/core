@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:02 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,12 +527,12 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         SetGlblDocSaveLinks( FALSE );
     }
 
-    //JP 23.8.2001: use ExecuteSlot instead of Save & SaveCompleted - so the
     //              Medium istn't locked after reopen the document. Bug 91462
     SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
-    aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+    if(pFilter)
+        aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
     const SfxBoolItem *pRet = (const SfxBoolItem*)pDocShell->ExecuteSlot( aReq );
 
     return pRet && pRet->GetValue();
