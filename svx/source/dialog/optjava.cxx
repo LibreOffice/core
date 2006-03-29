@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:45:43 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,8 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 {
     SvLBoxEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
                                 : m_aJavaList.FirstSelected();
-    HandleCheckEntry( pEntry );
+    if ( pEntry )
+        HandleCheckEntry( pEntry );
     return 0;
 }
 
@@ -325,7 +326,8 @@ IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, pList )
     String* pLocation = static_cast< String* >( pEntry->GetUserData() );
     DBG_ASSERT( pLocation, "invalid location string" );
     String sInfo = m_sInstallText;
-    sInfo += *pLocation;
+    if ( pLocation )
+        sInfo += *pLocation;
     m_aJavaPathText.SetText( sInfo );
     return 0;
 }
@@ -390,9 +392,12 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
                     jfw_freeJavaInfo( pInfo );
 
                 SvLBoxEntry* pEntry = m_aJavaList.GetEntry( nPos );
-                m_aJavaList.Select( pEntry );
-                m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-                HandleCheckEntry( pEntry );
+                if ( pEntry )
+                {
+                    m_aJavaList.Select( pEntry );
+                    m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+                    HandleCheckEntry( pEntry );
+                }
                 bFinished = true;
             }
             else if ( JFW_E_NOT_RECOGNIZED == eErr )
@@ -580,7 +585,8 @@ void SvxJavaOptionsPage::LoadJREs()
             if ( jfw_areEqualJavaInfo( pCmpInfo, pSelectedJava ) )
             {
                 SvLBoxEntry* pEntry = m_aJavaList.GetEntry(i);
-                HandleCheckEntry( pEntry );
+                if ( pEntry )
+                    HandleCheckEntry( pEntry );
                 break;
             }
         }
