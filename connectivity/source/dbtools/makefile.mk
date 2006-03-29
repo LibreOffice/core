@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-14 10:48:09 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:14:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ LDUMP=ldump2.exe
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
-        $(SLB)$/resource.lib	\
         $(SLB)$/sdbcx.lib		\
         $(SLB)$/commontools.lib \
         $(SLB)$/sql.lib			\
