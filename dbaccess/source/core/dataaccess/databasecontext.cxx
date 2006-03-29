@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
+#endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -401,7 +404,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         // calls registerPrivate in attachResource
         xModel->attachResource(_sURL,aArgs);
 
-        SharedUNOComponent< XModel, CloseableComponent > aEnsureClose( xModel, SharedUNOComponent< XModel, CloseableComponent >::TakeOwnership );
+        ::utl::CloseableComponent aEnsureClose( xModel );
     }
 
     setTransientProperties(_sURL,xExistent);
