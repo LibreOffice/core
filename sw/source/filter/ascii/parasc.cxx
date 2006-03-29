@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:34:16 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     : pDoc(pD), rInput(rIn), rOpt(rOpts), nScript(0), bNewDoc(bReadNewDoc)
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
-    pArr = new sal_Char [ ASC_BUFFLEN + 1 ];
+    pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
 
     pItemSet = new SfxItemSet( pDoc->GetAttrPool(),
                 RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
