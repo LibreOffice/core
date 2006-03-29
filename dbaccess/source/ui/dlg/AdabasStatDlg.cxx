@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:15:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@
 #endif
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef DBAUI_ADABASPAGE_HXX
-#include "AdabasPage.hxx"
 #endif
 //.........................................................................
 namespace dbaui
