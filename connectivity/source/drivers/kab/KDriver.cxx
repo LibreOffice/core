@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:32:55 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,8 +220,6 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
         sal_Bool bDisableCheck = sal_False;
         xSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableKDEMaximumVersionCheck" ) ) ) >>= bDisableCheck;
 
-        fprintf( stderr, "---- disable: %i", (int)bDisableCheck );
-        fflush( stderr );
         return bDisableCheck != sal_False;
     }
     catch( const Exception& )
