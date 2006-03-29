@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-03-22 09:25:04 $
+dnl * Date: $Date: 2006-03-29 12:47:51 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.160 $ )
+AC_REVISION( $Revision: 1.161 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2374,6 +2374,12 @@ portable - Portable software distribution
          if test $? -eq 0; then
             RPM=$a
             break
+         else
+            $a --version >/dev/null 2> /dev/null
+            if test $? -eq 0; then
+               RPM=$a
+               break
+            fi 
          fi
        done
        if test -z "$RPM" ; then
@@ -3648,7 +3654,11 @@ dnl We also need to check for --with-gnu-cp
   if $GNUCP --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
 	AC_MSG_RESULT([yes])
   else
+   if $GNUCP --version | grep "GNU fileutils" >/dev/null 2>/dev/null; then
+	AC_MSG_RESULT([yes])
+   else
   	AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
+   fi
   fi	
 
 fi
