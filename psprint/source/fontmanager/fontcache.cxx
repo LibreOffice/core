@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:33:17 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
-#define CACHE_MAGIC "PspFontCacheFile format 2"
+#define CACHE_MAGIC "PspFontCacheFile format 3"
 
 using namespace std;
 using namespace rtl;
@@ -168,7 +168,7 @@ void FontCache::flush()
                 /*
                  *  for each font entry write:
                  *  name[;name[;name]]
-                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride[;{metricfile,typeflags}][;stylename]
+                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride;embed;antialias[;{metricfile,typeflags}][;stylename]
                  */
                 if( nEntrySize > 1 )
                     nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;
@@ -219,6 +219,10 @@ void FontCache::flush()
                 aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricY.height ) );
                 aLine.Append( ';' );
                 aLine.Append( (*it)->m_bUserOverride ? "1" : "0" );
+                aLine.Append( ';' );
+                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eEmbeddedbitmap ) );
+                aLine.Append( ';' );
+                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eAntialias ) );
 
                 switch( (*it)->m_eType )
                 {
@@ -387,8 +391,8 @@ void FontCache::read()
                 pLine = aLine.GetBuffer();
                 nLen = aLine.Len();
 
-                // get up to 18 token positions
-                const int nMaxTokens = 18;
+                // get up to 20 token positions
+                const int nMaxTokens = 20;
                 int nTokenPos[nMaxTokens];
                 nTokenPos[0] = 0;
                 int nTokens = 1;
@@ -401,7 +405,7 @@ void FontCache::read()
                             break;
                     }
                 }
-                if( nTokens < 16 )
+                if( nTokens < 18 )
                 {
                     delete pFont;
                     continue;
@@ -428,11 +432,14 @@ void FontCache::read()
                                     = atoi( pLine + nTokenPos[14] );
                 pFont->m_bUserOverride
                                     = (atoi( pLine + nTokenPos[15] ) != 0);
-                int nStyleTokenNr = 16;
+                pFont->m_eEmbeddedbitmap
+                                    = (fcstatus::type)atoi(pLine+nTokenPos[16]);
+                pFont->m_eAntialias = (fcstatus::type)atoi(pLine+nTokenPos[17]);
+                int nStyleTokenNr = 18;
                 switch( eType )
                 {
                     case fonttype::TrueType:
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nTypeFlags = atoi( pLine + nTokenPos[16] );
+                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nTypeFlags = atoi( pLine + nTokenPos[18] );
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nCollectionEntry = nCollEntry;
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_aFontFile = aFile;
@@ -440,7 +447,7 @@ void FontCache::read()
                         break;
                     case fonttype::Type1:
                     {
-                        int nTokLen = (nTokens > 17 ) ? nTokenPos[17]-nTokenPos[16]-1 : nLen - nTokenPos[16];
+                        int nTokLen = (nTokens > 19 ) ? nTokenPos[19]-nTokenPos[18]-1 : nLen - nTokenPos[18];
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile = OString( pLine + nTokenPos[16], nTokLen );
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aFontFile = aFile;
@@ -557,6 +564,8 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_nYMax            = pFrom->m_nYMax;
     pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
     pTo->m_bUserOverride    = pFrom->m_bUserOverride;
+    pTo->m_eEmbeddedbitmap  = pFrom->m_eEmbeddedbitmap;
+    pTo->m_eAntialias       = pFrom->m_eAntialias;
 }
 
 /*
@@ -618,7 +627,9 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         pRight->m_nXMax             != pLeft->m_nXMax           ||
         pRight->m_nYMax             != pLeft->m_nYMax           ||
         pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs ||
-        pRight->m_bUserOverride     != pLeft->m_bUserOverride
+        pRight->m_bUserOverride     != pLeft->m_bUserOverride   ||
+        pRight->m_eEmbeddedbitmap   != pLeft->m_eEmbeddedbitmap ||
+        pRight->m_eAntialias        != pLeft->m_eAntialias
         )
         return false;
     std::list< int >::const_iterator lit, rit;
