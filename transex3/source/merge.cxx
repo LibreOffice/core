@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 10:48:03 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,30 +135,15 @@ void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
 }
 ByteString MergeData::Dump(){
     ByteString sRet( "MergeData\n" );
-/*  sRet.Append("sTyp = ");
-    sRet.Append(sTyp);
-    sRet.Append("\n");
-    sRet.Append("sGid=");
-    sRet.Append(sGID);
-    sRet.Append("\n");
-    sRet.Append("sLid=");
-    sRet.Append(sLID);
-    sRet.Append("\n");*/
 
-    printf("MergeData sTyp = %s , sGid = %s , sLid =%s\n",sTyp.GetBuffer(),sGID.GetBuffer(),sLID.GetBuffer());
+    printf("MergeData sTyp = %s , sGid = %s , sLid =%s , sFilename = %s\n",sTyp.GetBuffer(),sGID.GetBuffer(),sLID.GetBuffer(), sFilename.GetBuffer() );
 
     PFormEntrysHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
-/*      sRet.Append( "aMap[" );
-        sRet.Append( idbg->first );
-           sRet.Append( "]= " );
-        sRet.Append( ( (PFormEntrys*)(idbg->second) )->Dump() );
-        sRet.Append("\n");*/
         printf("aMap[ %s ] = " ,idbg->first.GetBuffer());
         ( (PFormEntrys*)(idbg->second) )->Dump();
         printf("\n") ;
     }
-    //sRet.Append("\n");
     printf("\n") ;
     return sRet;
 }
@@ -223,7 +208,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     aInputStream.SetStreamCharSet( aCharSet );
     ByteString sLine;
-
+//    printf("\nReading localize.sdf ...\n");
     ByteString sTYP;
     ByteString sGID;
     ByteString sLID;
@@ -232,6 +217,8 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     ByteString sTEXT;
     ByteString sQHTEXT;
     ByteString sTITLE;
+
+    const ByteString sEmpty("");
 
     if( !aInputStream.IsOpen() ) {
         printf("ERROR : Can't open %s\n", rFileName.GetBuffer());
@@ -246,7 +233,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
             ByteString filename = sLine.GetToken( 1 , '\t' );
             filename = filename.Copy( filename.SearchCharBackward( "\\" )+1 , filename.Len() );
 
-            if( filename.Equals( sFile ) )
+            if( sFile.Equals( sEmpty ) || ( !sFile.Equals( sEmpty ) && filename.Equals( sFile )  ) )
             {
                 sTYP = sLine.GetToken( 3, '\t' );
                 sGID = sLine.GetToken( 4, '\t' );
@@ -270,7 +257,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 #else
                 if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
 #endif
-                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
+                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE , filename );
                     if( nLANG.Len() > 0 ){
                         bool bFound = false;
                         for( int x = 0; x < aLanguages.size(); x++ ){
@@ -288,6 +275,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         }
     }
     aInputStream.Close();
+    //printf(" done!\n");
 }
 /*****************************************************************************/
 MergeDataFile::~MergeDataFile()
@@ -356,7 +344,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData )
     pResData->sGId = sGID;
     pResData->sId = sLID;
 
-    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId );
+    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename );
 
     //printf("DBG: Searching [%s]\n",sKey.GetBuffer());
     if( aMap.find( sKey ) != aMap.end() ){
@@ -388,21 +376,23 @@ void MergeDataFile::InsertEntry(
                     const ByteString &rTYP, const ByteString &rGID,
                     const ByteString &rLID, const ByteString &rPFO,
                     const ByteString &nLANG, const ByteString &rTEXT,
-                    const ByteString &rQHTEXT, const ByteString &rTITLE )
+                    const ByteString &rQHTEXT, const ByteString &rTITLE ,
+                    const ByteString &rFilename
+                    )
 /*****************************************************************************/
 {
     MergeData *pData;
     BOOL bFound = FALSE;
 
     // search for MergeData
-    ByteString sKey = CreateKey( rTYP , rGID , rLID );
+    ByteString sKey = CreateKey( rTYP , rGID , rLID , rFilename );
     ByteString sKey2;
 
     if( aMap.find( sKey ) != aMap.end() ){
         pData = aMap[ sKey ];
     }else{
-        pData = new MergeData( rTYP, rGID, rLID );
-        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID ) , pData ) );
+        pData = new MergeData( rTYP, rGID, rLID , rFilename );
+        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID , rFilename ) , pData ) );
     }
 
     bFound = FALSE;
@@ -433,12 +423,16 @@ void MergeDataFile::InsertEntry(
 
     //printf("DBG: MergeDataFile::Insert[%s]=( sKey=%s,rTEXT=%s,%s,%s)\n",sKey2.GetBuffer(),nLANG.GetBuffer(),rTEXT.GetBuffer(),rQHTEXT.GetBuffer(),rTITLE.GetBuffer());
 }
-ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID ){
+ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename ){
+
     ByteString sKey( rTYP );
-    sKey.Append( '-' );
-    sKey.Append( rGID );
-    sKey.Append( '-' );
-    sKey.Append( rLID  );
+    sKey.Append( '-'        );
+    sKey.Append( rGID       );
+    sKey.Append( '-'        );
+    sKey.Append( rLID       );
+    sKey.Append( '-'        );
+    sKey.Append( rFilename  );
+
     return sKey.ToUpperAscii();
 }
 
