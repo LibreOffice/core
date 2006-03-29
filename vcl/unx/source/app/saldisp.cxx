@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:54:16 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -911,7 +911,7 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNo
 
     // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
     XGCValues values;
-    values.graphics_exposures   = True;
+    values.graphics_exposures   = False;
     values.fill_style           = FillOpaqueStippled;
     values.background           = (1<<pVisual_->GetDepth())-1;
     values.foreground           = 0;
