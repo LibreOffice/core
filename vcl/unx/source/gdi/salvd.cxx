@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:22:27 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,15 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
 
-    if( pData )
+    if( pData && pData->hDrawable != None )
     {
+        XLIB_Window aRoot;
+        int x, y;
+        unsigned int w = 0, h = 0, bw, d;
+        XGetGeometry( GetSalData()->GetDisplay()->GetDisplay(), pData->hDrawable,
+                      &aRoot, &x, &y, &w, &h, &bw, &d );
+        nDX = (long)w;
+        nDY = (long)h;
         if( !pVDev->Init( GetSalData()->GetDisplay(), nDX, nDY, nBitCount, pData->hDrawable, pData->pRenderFormat ) )
         {
             delete pVDev;
@@ -244,3 +251,8 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
     return TRUE;
 }
 
+void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )
+{
+    rWidth  = GetWidth();
+    rHeight = GetHeight();
+}
