@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:12:25 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,6 +448,22 @@ sal_Bool SAL_CALL SvxDrawPage::hasElements()
     return pPage?(pPage->GetObjCount()>0):sal_False;
 }
 
+namespace
+{
+    void lcl_markSdrObjectOfShape( const Reference< drawing::XShape >& _rxShape, SdrView& _rView, SdrPageView& _rPageView )
+    {
+        SvxShape* pShape = SvxShape::getImplementation( _rxShape );
+        if ( !pShape )
+            return;
+
+        SdrObject* pObj = pShape->GetSdrObject();
+        if ( !pObj )
+            return;
+
+        _rView.MarkObj( pObj, &_rPageView );
+    }
+}
+
 //----------------------------------------------------------------------
 // ACHTUNG: _SelectObjectsInView selektiert die ::com::sun::star::drawing::Shapes nur in der angegebennen
 //         SdrPageView. Dies muﬂ nicht die sichtbare SdrPageView sein.
@@ -467,12 +483,7 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
             uno::Any aAny( aShapes->getByIndex(i) );
             Reference< drawing::XShape > xShape;
             if( aAny >>= xShape )
-            {
-                SvxShape* pShape = SvxShape::getImplementation( xShape );
-
-                if( pShape )
-                    pView->MarkObj( pShape->pObj, pPageView );
-            }
+                lcl_markSdrObjectOfShape( xShape, *pView, *pPageView );
         }
     }
 }
@@ -489,11 +500,7 @@ void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xSha
     if(pPageView!=NULL && pView != NULL)
     {
         pView->UnmarkAllObj( pPageView );
-
-        SvxShape* pShape = SvxShape::getImplementation( xShape );
-
-        if( pShape )
-            pView->MarkObj( pShape->pObj, pPageView );
+        lcl_markSdrObjectOfShape( xShape, *pView, *pPageView );
     }
 }
 
