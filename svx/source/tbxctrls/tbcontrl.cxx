@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:17:19 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,7 +974,7 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, SfxItemState eState )
     if ( SFX_ITEM_AVAILABLE == eState )
     {
         // Metric Umrechnen
-        long nVal = nPoint * 10;
+        long nVal = nPoint;
 
         // ge"andert => neuen Wert setzen
         if ( GetValue() != nVal )
@@ -2706,7 +2706,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 ::com::sun::star::frame::status::FontHeight aFontHeight;
                 if ( rEvent.State >>= aFontHeight )
                 {
-                    pBox->statusChanged_Impl( long( aFontHeight.Height ), eState );
+                    pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), eState );
                     pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
                 }
             }
