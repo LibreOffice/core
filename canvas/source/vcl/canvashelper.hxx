@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:00:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,12 @@ namespace vclcanvas
                       const ::Size&                 rSz,
                       const GraphicAttr&            rAttr ) const;
 
-        // Flush drawing queue to screen (only works for Window outdev)
+        /** Flush drawing queue.
+
+            This only works for Window canvases, and ensures that all
+            pending render operations are flushed to the
+            driver/hardware.
+         */
         void flush() const;
 
         enum ColorType
