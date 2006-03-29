@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:18:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 #ifndef BOOST_BIND_HPP_INCLUDED
@@ -355,6 +358,20 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     m_pImpl->m_aControllers.erase(::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController));
     if ( m_pImpl->m_xCurrentController == _xController )
         m_pImpl->m_xCurrentController = NULL;
+
+    if ( m_pImpl->m_aControllers.empty() )
+    {
+        // if this was the last view, close the document as a whole
+        // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
+        try
+        {
+            close( sal_True );
+        }
+        catch( const CloseVetoException& )
+        {
+            // okay, somebody vetoed and took ownership
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::lockControllers(  ) throw (RuntimeException)
@@ -456,9 +473,7 @@ void ODatabaseDocument::store(const ::rtl::OUString& _rURL
     if ( m_pImpl->m_bDocumentReadOnly )
         throw IOException();
 
-    m_bCommitMasterStorage = sal_False;
     m_pImpl->commitStorages();
-    m_bCommitMasterStorage = sal_True;
 
     Reference<XStorage> xMyStorage = m_pImpl->getStorage();
     OSL_ENSURE( xMyStorage.is(), "ODatabaseDocument::storeToURL: no own storage?" );
@@ -495,16 +510,39 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const
         Sequence<Any> aParam(2);
         aParam[0] <<= _rURL;
         aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
+
         Reference<XStorage> xStorage;
+        ::rtl::OUString sOriginalExceptionType;
+        ::rtl::OUString sOriginalExceptionMessage;
         try
         {
             xStorage.set(xStorageFactory->createInstanceWithArguments( aParam ),UNO_QUERY);
         }
-        catch(Exception&)
+        catch ( const Exception& e )
         {
+            Any aException( ::cppu::getCaughtException() );
+            sOriginalExceptionType = aException.getValueTypeName();
+            sOriginalExceptionMessage = e.Message;
         }
+
         if ( !xStorage.is() )
-            throw IOException();
+        {
+            // TODO: localize this
+            ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( "Could not store the database document to '" );
+            sMessage += _rURL;
+            sMessage += ::rtl::OUString::createFromAscii( "'." );
+            if ( sOriginalExceptionMessage.getLength() )
+            {
+                sMessage += ::rtl::OUString::createFromAscii( "\noriginal error message: " );
+                sMessage += sOriginalExceptionMessage;
+            }
+            if ( sOriginalExceptionType.getLength() )
+            {
+                sMessage += ::rtl::OUString::createFromAscii( "\noriginal error type: " );
+                sMessage += sOriginalExceptionType;
+            }
+            throw IOException( sMessage, *this );
+        }
 
         if ( m_pImpl->isEmbeddedDatabase() )
             m_pImpl->clearConnections();
@@ -757,7 +795,6 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (::c
         aGuard.reset();
     }
 
-    DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::close: aren't controllers expected to veto the closing?" );
     impl_closeControllerFrames( _bDeliverOwnership );
 
     {
@@ -1066,8 +1103,8 @@ void ODatabaseDocument::disposing()
     }
 
     DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-        // normally, nobody should explicitly dispose, but only XCloseable::close the document. And controllers
-        // are expected to veto the closing, so when we're here, there shouldn't be any controllers anymore.
+        // normally, nobody should explicitly dispose, but only XCloseable::close the document.An upon
+        // closing, our controllers are closed, too
     m_pImpl->m_aControllers.clear();
 
     Reference< XModel > xHoldAlive( this );
