@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:28:26 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,8 @@ public:
 
     void                    SetUrlFilter( const IUrlFilter* _pFilter );
     const IUrlFilter*       GetUrlFilter( ) const;
+
+    void                    EndInplaceEditing( bool _bCancel );
 
 protected:
     virtual void            StateChanged( StateChangedType nStateChange );
