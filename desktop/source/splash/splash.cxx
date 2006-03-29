@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:22:01 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 
 #include <rtl/logfile.hxx>
 
+#define NOT_LOADED  ((long)-1)
 
 using namespace ::rtl;
 using namespace ::com::sun::star::registry;
@@ -69,18 +70,18 @@ namespace desktop
 SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
-    , _cProgressFrameColor( -1 )
-    , _cProgressBarColor( -1 )
+    , _cProgressFrameColor(NOT_LOADED)
+    , _cProgressBarColor(NOT_LOADED)
     , _iProgress(0)
     , _iMax(100)
     , _bPaintBitmap(sal_True)
     , _bPaintProgress(sal_False)
-    , _tlx(-1)
-    , _tly(-1)
-    , _barwidth(-1)
+    , _tlx(NOT_LOADED)
+    , _tly(NOT_LOADED)
+    , _barwidth(NOT_LOADED)
     , _xoffset(12)
     , _yoffset(18)
-    , _barheight(-1)
+    , _barheight(NOT_LOADED)
     , _barspace(2)
 {
     _rFactory = rSMgr;
@@ -95,34 +96,33 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     if (_width > 500)
     {
         Point xtopleft(212,216);
-        if ( -1 == _tlx || -1 == _tly )
+        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
         {
             _tlx = xtopleft.X();    // top-left x
             _tly = xtopleft.Y();    // top-left y
         }
-        if ( -1 == _barwidth )
+        if ( NOT_LOADED == _barwidth )
             _barwidth = 263;
-        if ( -1 == _barheight )
+        if ( NOT_LOADED == _barheight )
             _barheight = 8;
-        // <--
     }
     else
     {
-        if ( -1 == _barwidth )
-            _barwidth  = _width - (2 * _yoffset);
-        if ( -1 == _barheight )
+        if ( NOT_LOADED == _barwidth )
+            _barwidth  = _width - (2 * _xoffset);
+        if ( NOT_LOADED == _barheight )
             _barheight = 6;
-        if ( -1 == _tlx || -1 == _tly )
+        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
         {
             _tlx = _xoffset;           // top-left x
             _tly = _height - _yoffset; // top-left y
         }
     }
 
-    if ( -1 == _cProgressFrameColor.GetColor() )
+    if ( NOT_LOADED == _cProgressFrameColor.GetColor() )
         _cProgressFrameColor = Color( COL_LIGHTGRAY );
 
-    if ( -1 == _cProgressBarColor.GetColor() )
+    if ( NOT_LOADED == _cProgressBarColor.GetColor() )
     {
         // progress bar: new color only for big bitmap format
         if ( _width > 500 )
