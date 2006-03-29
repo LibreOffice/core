@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:41:14 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:15:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ SLOFILES=\
     $(SLO)$/DStatement.obj			\
     $(SLO)$/DPreparedStatement.obj	\
     $(SLO)$/dindexnode.obj			\
-    $(SLO)$/DIndexPage.obj			\
     $(SLO)$/DIndexIter.obj			\
     $(SLO)$/DDatabaseMetaData.obj	\
     $(SLO)$/DCatalog.obj			\
@@ -75,7 +74,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/DStatement.obj			\
     $(SLO)$/DPreparedStatement.obj	\
     $(SLO)$/dindexnode.obj			\
-    $(SLO)$/DIndexPage.obj			\
     $(SLO)$/DIndexIter.obj			\
     $(SLO)$/DDatabaseMetaData.obj	\
     $(SLO)$/DCatalog.obj			\
