@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:35:42 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ class FontCfgWrapper
     FcResult        (*m_pFcPatternGetBool)(const FcPattern*,const char*,int,FcBool*);
     void            (*m_pFcDefaultSubstitute)(FcPattern *);
     FcPattern*      (*m_pFcFontMatch)(FcConfig*,FcPattern*,FcResult*);
+    FcPattern*      (*m_pFcFontSetMatch)(FcConfig*,FcFontSet**, int, FcPattern*,FcResult*);
     FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
@@ -166,6 +167,8 @@ public:
     { m_pFcDefaultSubstitute( pPattern ); }
     FcPattern* FcFontMatch( FcConfig* pConfig, FcPattern* pPattern, FcResult* pResult )
     { return m_pFcFontMatch( pConfig, pPattern, pResult ); }
+    FcPattern* FcFontSetMatch( FcConfig* pConfig, FcFontSet **ppFontSet, int nset, FcPattern* pPattern, FcResult* pResult )
+    { return m_pFcFontSetMatch ? m_pFcFontSetMatch( pConfig, ppFontSet, nset, pPattern, pResult ) : 0; }
     FcBool FcConfigSubstitute( FcConfig* pConfig, FcPattern* pPattern, FcMatchKind eKind )
     { return m_pFcConfigSubstitute( pConfig, pPattern, eKind ); }
     FcBool FcPatternAddInteger( FcPattern* pPattern, const char* pObject, int nValue )
@@ -238,6 +241,8 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcDefaultSubstitute" );
     m_pFcFontMatch = (FcPattern*(*)(FcConfig*,FcPattern*,FcResult*))
         loadSymbol( "FcFontMatch" );
+    m_pFcFontSetMatch = (FcPattern*(*)(FcConfig*,FcFontSet**,int,FcPattern*,FcResult*))
+        loadSymbol( "FcFontSetMatch" );
     m_pFcConfigSubstitute = (FcBool(*)(FcConfig*,FcPattern*,FcMatchKind))
         loadSymbol( "FcConfigSubstitute" );
     m_pFcPatternAddInteger = (FcBool(*)(FcPattern*,const char*,int))
@@ -307,6 +312,10 @@ void FontCfgWrapper::release()
     }
 }
 
+#ifndef FC_EMBEDDED_BITMAP
+#define FC_EMBEDDED_BITMAP "embeddedbitmap"
+#endif
+
 /*
  * PrintFontManager::initFontconfig
  */
@@ -346,7 +355,7 @@ bool PrintFontManager::initFontconfig()
             int weight = 0;
             int spacing = 0;
             int nCollectionEntry = -1;
-            FcBool outline = false;
+            FcBool outline = false, embitmap = true, antialias = true;
 
             FcResult eFileRes   = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FILE, 0, &file );
             FcResult eFamilyRes = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FAMILY, 0, &family );
@@ -356,6 +365,24 @@ bool PrintFontManager::initFontconfig()
             FcResult eSpacRes   = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SPACING, 0, &spacing );
             FcResult eOutRes    = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_OUTLINE, 0, &outline );
             FcResult eIndexRes = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry );
+
+            FcResult eEmbeddedBitmap = FcResultNoMatch;
+            FcResult eAntialias = FcResultNoMatch;
+
+            if (eFamilyRes == FcResultMatch)
+            {
+                FcPattern *pMatch = rWrapper.FcPatternCreate();
+                rWrapper.FcPatternAddString(pMatch, FC_FAMILY, family);
+                rWrapper.FcConfigSubstitute( NULL, pMatch, FcMatchPattern );
+                FcResult eResult;
+                if (FcPattern* pResult = rWrapper.FcFontSetMatch( NULL, &pFSet, 1, pMatch, &eResult ))
+                {
+                    eEmbeddedBitmap = rWrapper.FcPatternGetBool( pResult, FC_EMBEDDED_BITMAP, 0, &embitmap );
+                    eAntialias = rWrapper.FcPatternGetBool( pResult, FC_ANTIALIAS, 0, &antialias );
+                    rWrapper.FcPatternDestroy(pResult);
+                }
+                rWrapper.FcPatternDestroy(pMatch);
+               }
 
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
                 continue;
@@ -491,6 +518,15 @@ bool PrintFontManager::initFontconfig()
                 {
                     pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), RTL_TEXTENCODING_UTF8 );
                 }
+                if( eEmbeddedBitmap == FcResultMatch )
+                {
+                  pUpdate->m_eEmbeddedbitmap = embitmap ? fcstatus::istrue : fcstatus::isfalse;
+                }
+                if( eAntialias == FcResultMatch )
+                {
+                  pUpdate->m_eAntialias = antialias ? fcstatus::istrue : fcstatus::isfalse;
+                }
+
 
                 // update font cache
                 m_pFontCache->updateFontCacheEntry( pUpdate, false );
