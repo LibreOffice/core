@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:40:09 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,11 +330,7 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pModelImplementation )
-    {
-        Reference< XModifiable > xModiable( m_pModelImplementation->getModel_noCreate(), UNO_QUERY );
-        if ( xModiable.is() )
-            xModiable->setModified( sal_True );
-    }
+        m_pModelImplementation->setModified( sal_True );
 
     if ( m_pModelImplementation && m_bPropagateCommitToRoot )
     {
@@ -397,7 +393,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_pDBContext(NULL)
             ,m_nControllerLockCount(0)
             ,m_bOwnStorage(sal_False)
-            ,m_xTempModel(_xModel)
+            ,m_xModel(_xModel)
             ,m_nLoginTimeout(0)
             ,m_refCount(0)
             ,m_pStorageAccess( NULL )
@@ -529,15 +525,17 @@ void ODatabaseModelImpl::dispose()
     {
         Reference< XDataSource > xDS( m_xDataSource );
         ::comphelper::disposeComponent( xDS );
-        m_xDataSource = WeakReference<XDataSource>();
+        m_xDataSource = WeakReference< XDataSource >();
 
-        ::comphelper::disposeComponent(m_xTempModel);
+        Reference< XModel > xModel( m_xModel );
+        ::comphelper::disposeComponent( xModel );
+        m_xModel = WeakReference< XModel >();
     }
     catch( const Exception& )
     {
     }
     m_xDataSource = WeakReference<XDataSource>();
-    m_xTempModel.clear();
+    m_xModel = WeakReference< XModel >();
 
     ::std::vector<TContentPtr>::iterator aIter = m_aContainer.begin();
     ::std::vector<TContentPtr>::iterator aEnd = m_aContainer.end();
@@ -815,9 +813,11 @@ void ODatabaseModelImpl::setModified( sal_Bool _bModified )
 {
     try
     {
-        Reference<XModifiable> xModi(m_xTempModel.get(),UNO_QUERY);
+        Reference<XModifiable> xModi(m_xModel.get(),UNO_QUERY);
         if ( xModi.is() )
-            xModi->setModified(_bModified);
+            xModi->setModified( _bModified );
+        else
+            m_bModified = _bModified;
     }
     catch(Exception)
     {
@@ -853,15 +853,19 @@ Reference<XDataSource> ODatabaseModelImpl::getDataSource( bool _bCreateIfNecessa
 // -----------------------------------------------------------------------------
 Reference< XModel> ODatabaseModelImpl::getModel_noCreate()
 {
-    return m_xTempModel;
+    return m_xModel;
 }
 // -----------------------------------------------------------------------------
-Reference< XModel> ODatabaseModelImpl::createNewModel_deliverOwnership()
+Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
 {
-    OSL_PRECOND( !m_xTempModel.is(), "ODatabaseModelImpl::getModel_noCreate: not to be called if there already is a model!" );
-    if ( !m_xTempModel.is() )
-        m_xTempModel = ODatabaseDocument::createDatabaseDocument( this, ODatabaseDocument::FactoryAccess() );
-    return m_xTempModel;
+    Reference< XModel > xModel( m_xModel );
+    OSL_PRECOND( !xModel.is(), "ODatabaseModelImpl::createNewModel_deliverOwnership: not to be called if there already is a model!" );
+    if ( !xModel.is() )
+    {
+        xModel = ODatabaseDocument::createDatabaseDocument( this, ODatabaseDocument::FactoryAccess() );
+        m_xModel = xModel;
+    }
+    return xModel;
 }
 // -----------------------------------------------------------------------------
 oslInterlockedCount SAL_CALL ODatabaseModelImpl::acquire()
