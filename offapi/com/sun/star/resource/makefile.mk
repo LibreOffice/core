@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:03:26 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:27:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ PACKAGE=com$/sun$/star$/resource
 
 IDLFILES=\
     MissingResourceException.idl\
+    OfficeResourceLoader.idl\
     XLocale.idl\
     XResourceBundle.idl\
     XResourceBundleLoader.idl\
