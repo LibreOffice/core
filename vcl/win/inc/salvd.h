@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:00:37 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ public:
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual BOOL                    SetSize( long nNewDX, long nNewDY );
+    virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // _SV_SALVD_H
