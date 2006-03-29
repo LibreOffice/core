@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:26:23 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,11 +249,9 @@ ResMgrContainer::~ResMgrContainer()
     for( std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Resource file %s loaded %d times\n",
+        OSL_TRACE( "Resource file %s loaded %d times\n",
                          OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr(),
                          it->second.nLoadCount );
-        #endif
         delete it->second.pResMgr;
     }
 }
@@ -332,18 +330,20 @@ void ResMgrContainer::init()
         }
         #if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "opening dir %s failed\n", OUStringToOString( *dir_it, osl_getThreadTextEncoding() ).getStr() );
+            OSL_TRACE( "opening dir %s failed\n", OUStringToOString( *dir_it, osl_getThreadTextEncoding() ).getStr() );
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
     for( std::hash_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
-        fprintf( stderr, "ResMgrContainer: %s -> %s\n",
+        OSL_TRACE( "ResMgrContainer: %s -> %s\n",
                  OUStringToOString( it->first, osl_getThreadTextEncoding() ).getStr(),
                  OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
     }
     #endif
+
+    int dummy = 0;
 }
 
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
@@ -353,9 +353,11 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 {
     com::sun::star::lang::Locale aLocale( rLocale );
     OUStringBuffer aSearch( rPrefix.getLength() + 16 );
-    std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it;
+    std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
-    int nTries = 1;
+    int nTries = 0;
+    if( aLocale.Language.getLength() > 0 )
+        nTries = 1;
     if( aLocale.Country.getLength() > 0 )
         nTries = 2;
     if( aLocale.Variant.getLength() > 0 )
@@ -363,7 +365,10 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     while( nTries-- )
     {
         aSearch.append( rPrefix );
-        aSearch.append( aLocale.Language );
+        if( nTries > -1 )
+        {
+            aSearch.append( aLocale.Language );
+        }
         if( nTries > 0 )
         {
             aSearch.append( sal_Unicode('-') );
@@ -395,6 +400,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             nTries = 2;
             aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
             aLocale.Country  = OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
+            aLocale.Variant = OUString();
         }
     }
     // try if there is anything with this prefix at all
@@ -1128,7 +1134,7 @@ void ResMgr::decStack()
         if( (rTop.Flags & RC_FALLBACK_DOWN) )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "returning from fallback %s\n",
+            OSL_TRACE( "returning from fallback %s\n",
                      OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() );
             #endif
             delete pFallbackResMgr;
@@ -1567,9 +1573,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 ResMgrContainer::get().freeResMgr( pRes );
                 return NULL;
             }
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "trying fallback: %s\n", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
-            #endif
+            OSL_TRACE( "trying fallback: %s\n", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
             ResMgr* pCurThreadMgr = ResData::get().getThreadResMgr();
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
@@ -2023,19 +2027,37 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 }
 
 // -----------------------------------------------------------------------
+SimpleResMgr::SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale )
+{
+    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+    m_pResImpl = ResMgrContainer::get().getResMgr( _rPrefixName, _inout_Locale, true );
+}
+
+// -----------------------------------------------------------------------
 SimpleResMgr::~SimpleResMgr()
 {
     delete m_pResImpl;
 }
 
+// -----------------------------------------------------------------------
 SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star::lang::Locale aLocale )
 {
-
     return new SimpleResMgr( pPrefixName, aLocale );
 }
 
 // -----------------------------------------------------------------------
+bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
+{
+    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
 
+    if ( ( RSC_STRING != _resourceType ) && ( RSC_RESOURCE != _resourceType ) )
+        return false;
+
+    DBG_ASSERT( m_pResImpl, "SimpleResMgr::IsAvailable: have no impl class !" );
+    return m_pResImpl->IsGlobalAvailable( _resourceType, _resourceId );
+}
+
+// -----------------------------------------------------------------------
 UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
     NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
@@ -2095,6 +2117,14 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
         ResMgrContainer::get().freeResMgr( pFallback );
     }
     return sReturn;
+}
+
+// -----------------------------------------------------------------------
+
+const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
+{
+    DBG_ASSERT( IsValid(), "SimpleResMgr::ReadBlob: invalid, this will crash!" );
+    return m_pResImpl->aLocale;
 }
 
 // -----------------------------------------------------------------------
