@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:59:14 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,7 @@ protected:
 
 public:
     virtual USHORT GetNodeType() = 0;
+    virtual ~XMLNode(){};
 };
 
 //-------------------------------------------------------------------------
@@ -151,6 +152,7 @@ public:
 
     /// returns the parent of this node
     XMLParentNode *GetParent() { return pParent; }
+    virtual ~XMLChildNode(){};
 };
 
 DECLARE_LIST( XMLChildNodeList, XMLChildNode * );
@@ -165,13 +167,18 @@ class XMLParentNode : public XMLChildNode
 {
 private:
     XMLChildNodeList *pChildList;
+    static int dbgcnt;
     //int         nParentPos;
 protected:
     XMLParentNode( XMLParentNode *pPar )
                 : XMLChildNode( pPar ), pChildList( NULL )
                 //, nParentPos( 0 )
-                {}
-    XMLParentNode(){}
+              {
+              //printf("Created ParentNode #%d XMLParentNode( XMLParentNode *pPar )\n",++dbgcnt);
+              }
+    XMLParentNode(): pChildList(NULL){
+        //printf("Created ParentNode #%d XMLParentNode()\n",++dbgcnt);
+    }
     /// Copyconstructor
     XMLParentNode( const XMLParentNode& );
 
@@ -196,16 +203,7 @@ public:
     int GetPos( ByteString id );
     int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChilds();
-    //int     ParentPosInc(){ fprintf(stdout,"%d ",nParentPos);return 0;}//nParentPos++;}
 
-//    void AddContent( XMLElement& rXMLEelement_in , XMLData& rData_in );
-/*  {
-        if ( pChildList ) {
-            for ( ULONG i = 0; i < pChildList->Count(); i++ )
-                delete pChildList->GetObject( i );
-        pChildList->Clear();
-    }
-*/
     /// returns a child element which matches the given one
     XMLElement *GetChildElement(
         XMLElement *pRefElement // the reference elelement
@@ -213,31 +211,10 @@ public:
 };
 
 //-------------------------------------------------------------------------
-/*
-struct eqstr{
-  BOOL operator()(const char* s1, const char* s2) const{
-    return strcmp(s1,s2)==0;
-  }
-};
 
-struct equalByteString{
-    bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-        return rKey1.CompareTo(rKey2)==COMPARE_EQUAL;
-    }
-};
-struct hashByteString{
-    size_t operator()( const ByteString& rName ) const{
-        std::hash< const char* > myHash;
-        return myHash( rName.GetBuffer() );
-    }
-};
-*/
 DECLARE_LIST( XMLStringList, XMLElement* );
 
-
-
 /// Mapping numeric Language code <-> XML Element
-//typedef std::hash_map<int,XMLElement*>                                    LangHashMap;
 typedef std::hash_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
@@ -258,9 +235,13 @@ typedef std::hash_map<ByteString , BOOL ,
 class XMLFile : public XMLParentNode
 {
 public:
+    XMLFile::XMLFile() ;
     XMLFile(
                 const String &rFileName // the file name, empty if created from memory stream
     );
+    XMLFile::XMLFile( const XMLFile& obj ) ;
+    ~XMLFile();
+
     ByteString* GetGroupID(std::deque<ByteString> &groupid);
     void        Print( XMLNode *pCur = NULL, USHORT nLevel = 0 );
     void        SearchL10NElements( XMLParentNode *pCur  , int pos = 0);
@@ -270,13 +251,12 @@ public:
     void        showType(XMLParentNode* node);
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    BOOL        Write( String &rFileName );
-    BOOL        Write() { return Write( sFileName ); }
+    BOOL        Write( ByteString &rFilename );
     BOOL        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL , int pos = 0 );
 
-    //XMLFile& XMLFile::operator=(const XMLFile& obj);
+    XMLFile& XMLFile::operator=(const XMLFile& obj);
 
     virtual USHORT  GetNodeType();
 
@@ -362,7 +342,6 @@ private:
                  languageId;
     int          nPos;
 
-
 protected:
     void Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement);
 public:
@@ -381,7 +360,8 @@ public:
                 resourceType(""),
                 languageId(""),
                 nPos(0)
-                   {}
+                   {
+                }
     ~XMLElement();
     /// Copyconstructor
     XMLElement(const XMLElement&);
@@ -439,7 +419,7 @@ class XMLData : public XMLChildNode
 {
 private:
     String sData;
-        bool   isNewCreated;
+    bool   isNewCreated;
 
 public:
     /// craete a data node
