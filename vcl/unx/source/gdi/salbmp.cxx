@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:34:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,7 +579,7 @@ X11SalBitmap::ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow, XIma
 
 #ifdef _USE_PRINT_EXTENSION_
 void X11SalBitmap::ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const
+                          const SalTwoRect& rTwoRect, const GC& rGC ) const
 {
     if( !mpDDB || !mpDDB->ImplMatches( nDrawableDepth, rTwoRect ) )
     {
@@ -629,11 +629,11 @@ void X11SalBitmap::ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDra
     }
 
     if( mpDDB )
-        mpDDB->ImplDraw( pDisplay, aDrawable, nDrawableDepth, rTwoRect, rGC, bDstIsWindow );
+        mpDDB->ImplDraw( pDisplay, aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
 #else
 void X11SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const
+                          const SalTwoRect& rTwoRect, const GC& rGC ) const
 {
     if( !mpDDB || !mpDDB->ImplMatches( nDrawableDepth, rTwoRect ) )
     {
@@ -721,7 +721,7 @@ void X11SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
     }
 
     if( mpDDB )
-        mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC, bDstIsWindow );
+        mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
 #endif
 
@@ -994,10 +994,10 @@ ImplSalDDB::ImplSalDDB(
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
 #ifdef _USE_PRINT_EXTENSION_
         ImplDraw( pDisplay, aDrawable, nDrawableDepth, maPixmap, mnDepth,
-                  nX, nY, nWidth, nHeight, 0, 0, aGC, false );
+                  nX, nY, nWidth, nHeight, 0, 0, aGC );
 #else
         ImplDraw( aDrawable, nDrawableDepth, maPixmap, mnDepth,
-                  nX, nY, nWidth, nHeight, 0, 0, aGC, false );
+                  nX, nY, nWidth, nHeight, 0, 0, aGC );
 #endif
         XFreeGC( pXDisp, aGC );
 
@@ -1049,18 +1049,18 @@ void ImplSalDDB::ImplDraw(
 #ifdef _USE_PRINT_EXTENSION_
                 SalDisplay* pDisplay,
 #endif
-                Drawable aDrawable, long nDrawableDepth, const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const
+                Drawable aDrawable, long nDrawableDepth, const SalTwoRect& rTwoRect, const GC& rGC ) const
 {
 #ifdef _USE_PRINT_EXTENSION_
     ImplDraw( pDisplay, maPixmap, mnDepth, aDrawable, nDrawableDepth,
               rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
               rTwoRect.mnDestWidth, rTwoRect.mnDestHeight,
-              rTwoRect.mnDestX, rTwoRect.mnDestY, rGC, bDstIsWindow );
+              rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
 #else
     ImplDraw( maPixmap, mnDepth, aDrawable, nDrawableDepth,
               rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
               rTwoRect.mnDestWidth, rTwoRect.mnDestHeight,
-              rTwoRect.mnDestX, rTwoRect.mnDestY, rGC, bDstIsWindow );
+              rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
 #endif
 }
 
@@ -1074,7 +1074,7 @@ void ImplSalDDB::ImplDraw(
                            Drawable aDstDrawable, long nDstDrawableDepth,
                            long nSrcX, long nSrcY,
                            long nDestWidth, long nDestHeight,
-                           long nDestX, long nDestY, const GC& rGC, bool bDstIsWindow )
+                           long nDestX, long nDestY, const GC& rGC )
 {
 #if !defined(_USE_PRINT_EXTENSION_)
     SalDisplay* pSalDisp = GetSalData()->GetDisplay();
@@ -1093,8 +1093,6 @@ void ImplSalDDB::ImplDraw(
         XCopyArea( pXDisp, aSrcDrawable, aDstDrawable, rGC,
                    nSrcX, nSrcY, nDestWidth, nDestHeight, nDestX, nDestY );
     }
-    if( bDstIsWindow )
-        X11SalGraphics::YieldGraphicsExpose( pXDisp, NULL, aDstDrawable );
 }
 
 // ----------------------
