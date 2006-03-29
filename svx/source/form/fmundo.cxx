@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:40 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,6 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 // XScriptListener
 void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 {
-    OSL_TRACE( "in FmXUndoEnvironment::firing_Impl");
     ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
 
     SfxObjectShellRef xObjSh = rModel.GetObjectShell();
@@ -956,7 +955,6 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         xObjSh = NULL;
     }
-    OSL_TRACE( "leaving FmXUndoEnvironment::firing_Impl");
 }
 
 void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException)
