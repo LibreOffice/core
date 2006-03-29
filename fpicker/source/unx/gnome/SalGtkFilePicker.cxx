@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:09:38 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 07:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,6 +923,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
         {
             OUString sFilterName;
+            sal_Int32 nTokenIndex = 0;
+            bool bExtensionTypedIn = false;
 
             GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(m_pFilterView));
             GtkTreeIter iter;
@@ -936,6 +938,33 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             }
             else
             {
+                if( aSelectedFiles[nToIndex].indexOf('.') > 0 )
+                {
+                    rtl::OUString sExtension;
+                    nTokenIndex = 0;
+                    do
+                        sExtension = aSelectedFiles[nToIndex].getToken( 0, '.', nTokenIndex );
+                    while( nTokenIndex >= 0 );
+
+                    if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
+                    {
+                        static const OUString aStarDot = OUString::createFromAscii( "*." );
+
+                        for ( FilterList::iterator aListIter = m_pFilterList->begin();
+                              aListIter != m_pFilterList->end();
+                              ++aListIter
+                        )
+                        {
+                            if( aListIter->getFilter().indexOf( aStarDot+sExtension ) >= 0 )
+                            {
+                                setCurrentFilter( aListIter->getTitle() );
+                                bExtensionTypedIn = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 const gchar* filtername =
                     gtk_file_filter_get_name( gtk_file_chooser_get_filter( GTK_FILE_CHOOSER( m_pDialog ) ) );
                 sFilterName = OUString( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
@@ -954,7 +983,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             OSL_TRACE( "turned into %s\n",
                 OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-            sal_Int32 nTokenIndex = 0;
+            nTokenIndex = 0;
             rtl::OUString sToken;
             //   rtl::OUString strExt;
             do
@@ -975,6 +1004,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             // if AutoExtension is enabled and checked and current filter is not *,
             // then complete the file name by concatinating the filter
             if( mbToggleVisibility[AUTOEXTENSION]
+                 && ( !bExtensionTypedIn )
                  && ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( m_pToggles[AUTOEXTENSION] ) ) )
                  && ( !sToken.equalsAscii( "*" ) ) )
             {
