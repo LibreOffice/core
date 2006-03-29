@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:46:52 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,6 @@
 #endif
 #ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
-#ifndef DBAUI_TABLEDESCRIPTIONWINDOW_HXX
-#include "TableDescWin.hxx"
 #endif
 #ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #include "TableFieldDescWin.hxx"
