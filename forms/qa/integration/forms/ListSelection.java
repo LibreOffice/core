@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListSelection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:29:30 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
             sheets.removeByName( sheetNames[ i ] );
 
         // need 5 sheets
-        String[] newSheetNames = new String[] { "first", "second", "third", "forth", "fivth" };
+        String[] newSheetNames = new String[] { "first", "second", "third", "forth", "fifth" };
 
         // give the first one the right name
         XNamed sheet = (XNamed)UnoRuntime.queryInterface( XNamed.class,
@@ -295,12 +295,11 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
         try
         {
             XStorable storable = (XStorable)m_document.query( XStorable.class );
-            storable.storeAsURL( "file:///g:/temp/bugdoc/" + getTestObjectName() + ".oxs", new com.sun.star.beans.PropertyValue[]{} );
+            storable.storeAsURL( java.io.File.createTempFile( getTestObjectName(),".oxs").getAbsoluteFile().toURL().toString(), new com.sun.star.beans.PropertyValue[]{} );
         }
         catch( java.lang.Throwable e )
         {
-            // ignore. Storing the file will probably fail on every system,
-            // except mine :)
+            e.printStackTrace();
         }
     }
 
