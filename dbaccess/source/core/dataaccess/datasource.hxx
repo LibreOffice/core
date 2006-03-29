@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:35:31 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 12:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,12 +141,8 @@
 #ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
-#include <boost/shared_ptr.hpp>
 #ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
 #include "ModelImpl.hxx"
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
-#include <unotools/sharedunocomponent.hxx>
 #endif
 
 //........................................................................
@@ -190,9 +186,6 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 private:
-    typedef ::utl::SharedUNOComponent< ::com::sun::star::frame::XModel, ::utl::CloseableComponent >
-                                                SharedModel;
-
     OBookmarkContainer                      m_aBookmarks;
     ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 
@@ -303,18 +296,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > buildIsolatedConnection(
         const rtl::OUString& user, const rtl::OUString& password
         );
-
-    /** retrieves the model we belong to
-
-        If the model does not yet exist, it is created (->OModelImpl::createNewModel_deliverOwnership).
-        Using the SharedModel implies that when <arg>_bTakeOwnershipIfNewlyCreated</arg> is <TRUE/>, then when the
-        returned SharedModel dies (and has not been shared with other SharedModels in the meantime),
-        then a close attempt for the XModel is made.
-
-        If there already exists a model, <arg>_bTakeOwnershipIfNewlyCreated</arg> is ignored,
-        and ownership of the model is not taken.
-    */
-    SharedModel impl_getModel( bool _bTakeOwnershipIfNewlyCreated );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
