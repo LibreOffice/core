@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:33:15 $
+#   last change: $Author: obo $ $Date: 2006-03-29 12:24:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,3 +45,6 @@ ALLTAR:
     +@echo these seems to appear by chance ... just re-run those testcases with
     +@echo $(SOLARENV)$/bin$/checkapi -o componentName -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
     +@echo =======================================================================			
+
+run_%:
+    +$(SOLARENV)$/bin$/checkapi -o $(PRJNAME).$(@:s/run_//) -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
