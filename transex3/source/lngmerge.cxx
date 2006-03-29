@@ -4,8 +4,8 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.23 $
- *  last change: $Author: rt $ $Date: 2005-11-08 17:22:58 $
+ *  $Revision: 1.24 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ BOOL LngParser::Merge(
         ByteString sID( sGroup );
         ULONG nLastLangPos = 0;
 
-        ResData  *pResData = new ResData( "", sID );
+        ResData  *pResData = new ResData( "", sID , sSource );
         pResData->sResTyp = "LngText";
         PFormEntrys *pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
         // read languages
