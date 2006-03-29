@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:07:58 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 11:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2405,6 +2405,9 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
     String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
 
+    pDev->Push( PUSH_CLIPREGION );
+    pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
+
     // kein Image-RadioButton
     if ( !maImage )
     {
@@ -2508,6 +2511,8 @@ da im Writer ansonsten die Images noch weiter oben haengen
         rMouseRect = aImageRect;
         rStateRect = aImageRect;
     }
+
+    pDev->Pop();
 }
 
 // -----------------------------------------------------------------------
@@ -3372,6 +3377,9 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
 
+    pDev->Push( PUSH_CLIPREGION );
+    pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
+
     if ( ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
          ( HasImage() && !  (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) ) )
     {
@@ -3422,6 +3430,8 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
         ImplSetFocusRect( rStateRect );
     }
+
+    pDev->Pop();
 }
 
 // -----------------------------------------------------------------------
