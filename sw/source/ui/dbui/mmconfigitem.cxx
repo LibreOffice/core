@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:49:29 $
+ *  last change: $Author: obo $ $Date: 2006-03-29 08:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     ::std::vector<DBAddressDataAssignment>  aAddressDataAssignments;
     ::std::vector< ::rtl::OUString>         aAddressBlocks;
+    sal_Int32                               nCurrentAddressBlock;
     sal_Bool                                bIsAddressBlock;
     sal_Bool                                bIsHideEmptyParagraphs;
 
@@ -248,6 +249,9 @@ public:
                                     const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks,
                                     sal_Bool bConvertFromConfig = sal_False);
 
+    void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
+    sal_Int32           GetCurrentAddressBlockIndex() const
+                        {   return nCurrentAddressBlock; }
     sal_Int32           GetCurrentGreeting(SwMailMergeConfigItem::Gender eType) const;
     void                SetCurrentGreeting(SwMailMergeConfigItem::Gender eType, sal_Int32 nIndex);
 
@@ -274,6 +278,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         bIsMailReplyTo(sal_False),
         bIsAuthentication(sal_False),
         bIsEMailSupported(sal_False),
+        nCurrentAddressBlock(0),
         nCurrentFemaleGreeting(0),
         nCurrentMaleGreeting(0),
         nCurrentNeutralGreeting(0),
@@ -357,6 +362,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 36: pValues[nProp] >>= sInServerUserName; break;
                 case 37: pValues[nProp] >>= sInServerPassword; break;
                 case 38: pValues[nProp] >>= bIsHideEmptyParagraphs; break;
+                case 39: pValues[nProp] >>= nCurrentAddressBlock; break;
             }
         }
     }
@@ -424,6 +430,17 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
   -----------------------------------------------------------------------*/
 SwMailMergeConfigItem_Impl::~SwMailMergeConfigItem_Impl()
 {
+}
+/*-- 13.03.2006 12:12:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMergeConfigItem_Impl::SetCurrentAddressBlockIndex( sal_Int32 nSet )
+{
+    if(aAddressBlocks.size() >= nSet)
+    {
+        nCurrentAddressBlock = nSet;
+        SetModified();
+    }
 }
 /*-- 16.04.2004 13:06:07---------------------------------------------------
 
@@ -556,7 +573,8 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
             "InServerIsPOP",                     //35
             "InServerUserName",                  //36
             "InServerPassword",                   //37
-            "IsHideEmptyParagraphs"             //38
+            "IsHideEmptyParagraphs",             //38
+            "CurrentAddressBlock"               //39
 
         };
         const int nCount = sizeof(aPropNames)/sizeof(const char*);
@@ -646,6 +664,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 36: pValues[nProp] <<= sInServerUserName; break;
             case 37: pValues[nProp] <<= sInServerPassword; break;
             case 38: pValues[nProp] <<= bIsHideEmptyParagraphs; break;
+            case 39: pValues[nProp] <<= nCurrentAddressBlock; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -722,7 +741,7 @@ void SwMailMergeConfigItem_Impl::SetAddressBlocks(
             lcl_ConvertFromNumbers(sBlock, m_AddressHeaderSA);
         aAddressBlocks.push_back(sBlock);
     }
-
+    nCurrentAddressBlock = 0;
     SetModified();
 }
 /*-- 30.04.2004 11:04:52---------------------------------------------------
@@ -1486,7 +1505,9 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
     const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
     const Sequence< ::rtl::OUString> aBlocks = GetAddressBlocks();
 
-    SwAddressIterator aIter(aBlocks[0]);
+    if(aBlocks.getLength() < m_pImpl->GetCurrentAddressBlockIndex())
+        return false;
+    SwAddressIterator aIter(aBlocks[m_pImpl->GetCurrentAddressBlockIndex()]);
     while(aIter.HasMore())
     {
         SwMergeAddressItem aItem = aIter.Next();
@@ -1976,7 +1997,6 @@ SwView* SwMailMergeConfigItem::GetSourceView()
 
 /*-- 04.11.2004 19:53 ---------------------------------------------------
   -----------------------------------------------------------------------*/
-
 void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 {
     m_pSourceView = pView;
@@ -2020,4 +2040,19 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
             m_pImpl->bUserSettingWereOverwritten = sal_False;
         }
     }
+}
+
+/*-- 13.03.2006 12:15:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMergeConfigItem::SetCurrentAddressBlockIndex( sal_Int32 nSet )
+{
+    m_pImpl->SetCurrentAddressBlockIndex( nSet );
+}
+/*-- 13.03.2006 12:15:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SwMailMergeConfigItem::GetCurrentAddressBlockIndex() const
+{
+    return m_pImpl->GetCurrentAddressBlockIndex();
 }
