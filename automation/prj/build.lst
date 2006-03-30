@@ -1,4 +1,4 @@
-au	automation	:	basic so3 NULL
+au	automation	:	basic so3 fpicker NULL
 au	automation								usr1	-	all	au_mkout NULL
 au	automation\source\simplecm				nmake	-	all	au_scom NULL
 au	automation\source\communi				nmake	-	all	au_comm NULL
