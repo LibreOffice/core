@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:15:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -852,8 +852,6 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
-        SvLBoxEntry* pSelected = pTreeView->GetSelectedEntry();
-        sal_Bool bClearPreview = sal_False;
         switch( _eType )
         {
             case E_TABLE:
@@ -865,7 +863,6 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
                 if ( pTreeView )
                 {
                     SvLBoxEntry* pEntry = lcl_findEntry_impl(*pTreeView,_rName,pTreeView->First());
-                    bClearPreview = pSelected == pEntry;
                     if ( pEntry )
                         pTreeView->GetModel()->Remove(pEntry);
                 }
@@ -876,7 +873,6 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
                     if ( pTreeView )
                     {
                         SvLBoxEntry* pEntry = lcl_findEntry(*pTreeView,_rName,pTreeView->First());
-                        bClearPreview = pSelected == pEntry;
                         if ( pEntry )
                             pTreeView->GetModel()->Remove(pEntry);
                     }
@@ -885,7 +881,7 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
             default:
                 OSL_ENSURE(0,"Invalid element type");
         }
-        if ( bClearPreview && pSelected )
+        if ( !pTreeView->GetEntryCount() )
             showPreview(NULL);
     }
 }
