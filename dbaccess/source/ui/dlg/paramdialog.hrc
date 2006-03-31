@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:08:19 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,20 +51,3 @@
 #define STR_COULD_NOT_CONVERT_PARAM 1
 
 #endif // _DBAUI_PARAMDIALOG_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.502.1  2005/09/05 17:34:05  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2001/06/07 15:09:39  fs
- *  #87912# redesigned the dialog
- *
- *  Revision 1.1  2000/10/26 18:06:58  fs
- *  initial checkin - parameter dialog
- *
- *
- *  Revision 1.0 26.10.00 15:15:22  fs
- ************************************************************************/
-
