@@ -1,0 +1,244 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: MethodHandler.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:17:41 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+package integration.extensions;
+
+import com.sun.star.uno.*;
+import com.sun.star.lang.*;
+import com.sun.star.beans.*;
+import com.sun.star.reflection.*;
+import com.sun.star.inspection.*;
+
+/**
+ *
+ * @author fs93730
+ */
+public class MethodHandler implements XPropertyHandler
+{
+    private XComponentContext       m_context;
+    private XIntrospection          m_introspection;
+    private XIntrospectionAccess    m_introspectionAccess;
+    private XIdlClass               m_idlClass;
+    private XIdlMethod[]            m_methods;
+    private java.util.HashMap       m_methodsHash;
+
+    /** Creates a new instance of MethodHandler */
+    public MethodHandler( XComponentContext _context )
+    {
+        m_context = _context;
+        m_methodsHash = new java.util.HashMap();
+
+        try
+        {
+            m_introspection = (XIntrospection)UnoRuntime.queryInterface( XIntrospection.class,
+                m_context.getServiceManager().createInstanceWithContext( "com.sun.star.beans.Introspection", m_context )
+            );
+        }
+        catch( com.sun.star.uno.Exception e )
+        {
+            System.err.println( "MethodHandler: could not create a Introspection service, not much functionality will be available." );
+        }
+    }
+
+    static public XSingleComponentFactory getFactory()
+    {
+        return new ComponentFactory( MethodHandler.class );
+    }
+
+    public void actuatingPropertyChanged(String _propertyName, Object _newValue, Object _oldValue, com.sun.star.inspection.XObjectInspectorUI _objectInspectorUI, boolean _firstTimeInit) throws com.sun.star.lang.NullPointerException
+    {
+        // not interested in
+    }
+
+    public void addEventListener(com.sun.star.lang.XEventListener _eventListener)
+    {
+        // ingnoring this
+    }
+
+    public void addPropertyChangeListener(com.sun.star.beans.XPropertyChangeListener _propertyChangeListener) throws com.sun.star.lang.NullPointerException
+    {
+        // ingnoring this
+    }
+
+    public Object convertToControlValue(String _propertyName, Object _propertyValue, com.sun.star.uno.Type type) throws com.sun.star.beans.UnknownPropertyException
+    {
+        return _propertyValue;
+    }
+
+    public Object convertToPropertyValue(String _propertyName, Object _controlValue) throws com.sun.star.beans.UnknownPropertyException
+    {
+        return _controlValue;
+    }
+
+    public void describePropertyLine(String _propertyName, com.sun.star.inspection.LineDescriptor[] _lineDescriptor, com.sun.star.inspection.XPropertyControlFactory _propertyControlFactory) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.NullPointerException
+    {
+        _lineDescriptor[0] = new LineDescriptor();
+        _lineDescriptor[0].Category = "Methods";
+        _lineDescriptor[0].DisplayName = "has method";
+        _lineDescriptor[0].HasPrimaryButton = _lineDescriptor[0].HasSecondaryButton = false;
+        _lineDescriptor[0].IndentLevel = 0;
+        try
+        {
+            XPropertyControl control = (XPropertyControl)UnoRuntime.queryInterface(
+                    XPropertyControl.class, _propertyControlFactory.createPropertyControl(
+                    PropertyControlType.TextField, true ) );
+
+            _lineDescriptor[0].Control = control;
+        }
+        catch( com.sun.star.lang.IllegalArgumentException e )
+        {
+        }
+    }
+
+    public void dispose()
+    {
+        // nothing to do
+    }
+
+    public String[] getActuatingProperties()
+    {
+        // none
+        return new String[] { };
+    }
+
+    public com.sun.star.beans.PropertyState getPropertyState(String _propertyName) throws com.sun.star.beans.UnknownPropertyException
+    {
+        return com.sun.star.beans.PropertyState.DIRECT_VALUE;
+    }
+
+    public Object getPropertyValue(String _propertyName) throws com.sun.star.beans.UnknownPropertyException
+    {
+        XIdlMethod method = impl_getMethod( _propertyName );
+
+        String signature = new String();
+        signature += method.getReturnType().getName();
+        signature += " ";
+        signature += method.getName();
+
+        signature += "(";
+
+        XIdlClass[] parameterTypes = method.getParameterTypes();
+        for ( int param = 0; param<parameterTypes.length; ++param )
+        {
+            signature += ( param == 0 ) ? " " : ", ";
+            signature += parameterTypes[param].getName();
+        }
+
+        signature += " )";
+        return signature;
+    }
+
+    public String[] getSupersededProperties()
+    {
+        return new String[] {  };
+    }
+
+    public com.sun.star.beans.Property[] getSupportedProperties()
+    {
+        Property[] properties = new Property[] { };
+        if ( m_methods != null )
+        {
+            properties = new Property[ m_methods.length ];
+            for ( int i=0; i<m_methods.length; ++i )
+            {
+                properties[i] = new Property( m_methods[i].getName(), 0, new Type( String.class ), (short)0 );
+                m_methodsHash.put( m_methods[i].getName(), m_methods[i] );
+            }
+        }
+        return properties;
+    }
+
+    public void inspect(Object _component) throws com.sun.star.lang.NullPointerException
+    {
+        if ( m_introspection == null )
+            return;
+
+        m_introspectionAccess = null;
+        m_methods = null;
+        m_methodsHash = new java.util.HashMap();
+
+        m_introspectionAccess = m_introspection.inspect( _component );
+        if ( m_introspectionAccess == null )
+            return;
+
+        m_methods = m_introspectionAccess.getMethods( MethodConcept.ALL );
+    }
+
+    public boolean isComposable(String _propertyName) throws com.sun.star.beans.UnknownPropertyException
+    {
+        return true;
+    }
+
+    public com.sun.star.inspection.InteractiveSelectionResult onInteractivePropertySelection(String str, boolean param, Object[] obj, com.sun.star.inspection.XObjectInspectorUI xObjectInspectorUI) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.NullPointerException
+    {
+        return InteractiveSelectionResult.Cancelled;
+    }
+
+    public void removeEventListener(com.sun.star.lang.XEventListener _eventListener)
+    {
+        // ignoring this
+    }
+
+    public void removePropertyChangeListener(com.sun.star.beans.XPropertyChangeListener _propertyChangeListener)
+    {
+        // ignoring this
+    }
+
+    public void setPropertyValue(String str, Object obj) throws com.sun.star.beans.UnknownPropertyException
+    {
+        // we declared our properties as readonly
+        throw new java.lang.RuntimeException();
+    }
+
+    public boolean suspend(boolean param)
+    {
+        return true;
+    }
+
+    /** returns the descriptor for the method with the given name
+     *  @param _propertyName
+     *      the name of the method whose descriptor should be obtained
+     *  @throws com.sun.star.beans.UnknownPropertyException
+     *      if we don't have a method hash, or the given property name does not denote a method of our inspectee
+     */
+    private XIdlMethod impl_getMethod( String _methodName ) throws UnknownPropertyException
+    {
+        XIdlMethod method = (XIdlMethod)m_methodsHash.get( _methodName );
+        if ( method == null )
+            throw new com.sun.star.beans.UnknownPropertyException();
+
+        return method;
+    }
+}
