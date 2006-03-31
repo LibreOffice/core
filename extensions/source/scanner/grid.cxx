@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:51:19 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include <cmath>
 #include <grid.hxx>
 
-ResId SaneResId( ULONG );
+ResId SaneResId( sal_uInt32 );
 
 /***********************************************************************
  *
