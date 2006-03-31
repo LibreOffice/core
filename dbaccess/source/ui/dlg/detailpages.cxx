@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:29:50 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,10 +359,10 @@ DBG_NAME(OCommonBehaviourTabPage)
             if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
                 eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
 
-            // the only types we're interested in is TEXT and DBASE
-            if ( ( DST_DBASE == eDSType ) || ( DST_FLAT == eDSType ) )
+            // the only type we're interested in is DBASE
+            if ( DST_DBASE == eDSType )
             {
-                // for these types, we need to exclude all encodings which do not have a fixed character
+                // for this type, we need to exclude all encodings which do not have a fixed character
                 // length (such as UTF-8)
                 rtl_TextEncodingInfo aEncodingInfo; aEncodingInfo.StructSize = sizeof( rtl_TextEncodingInfo );
 
