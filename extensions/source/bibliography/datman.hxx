@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:16:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:24:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ public:
         void                        saveCtrModel(const ::rtl::OUString& rName,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rCtrModel);
 
-        sal_Bool                        moveRelative(long nMove);
+        sal_Bool                        moveRelative(sal_Int32 nMove);
 
         void                        CreateMappingDialog(Window* pParent);
         ::rtl::OUString             CreateDBChangeDialog(Window* pParent);
