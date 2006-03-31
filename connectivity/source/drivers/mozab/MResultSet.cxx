@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:18:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,9 +142,8 @@ OResultSet::OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterat
     ,m_xStatement(*pStmt)
     ,m_nRowPos(0)
     ,m_xMetaData(NULL)
-    ,m_nIsAlwaysFalseQuery(sal_False)
+    ,m_bIsAlwaysFalseQuery(sal_False)
     ,m_nParamIndex(0)
-    ,m_nRowCountResult(-1)
     ,m_aQuery(pStmt->getOwnConnection()->getColumnAlias().getAliasMap())
     ,m_pKeySet(NULL)
     ,m_pStatement(pStmt)
@@ -363,8 +362,8 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
 // -------------------------------------------------------------------------
 sal_uInt32  OResultSet::currentRowCount()
 {
-    if ( m_nRowCountResult != -1 )
-        return m_nRowCountResult;
+    if ( m_bIsAlwaysFalseQuery )
+        return 0;
     return m_aQuery.getRealRowCount() - deletedCount();
 }
 
@@ -916,7 +915,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if ( columnName.compareToAscii("0") ==0 && op == MQueryOp::Is &&
              matchString.compareToAscii("1") == 0 ) {
             OSL_TRACE("Query always evaluates to FALSE");
-            m_nIsAlwaysFalseQuery = sal_True;
+            m_bIsAlwaysFalseQuery = sal_True;
         }
         queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
     }
@@ -1127,7 +1126,7 @@ void OResultSet::fillRowData()
 
     // const OSQLParseNode*  pParseTree = NULL;
 
-    m_nIsAlwaysFalseQuery = sal_False;
+    m_bIsAlwaysFalseQuery = sal_False;
     if ( pParseTree != NULL )
     {
         // Extract required info
@@ -1158,8 +1157,8 @@ void OResultSet::fillRowData()
     }
 
     // If the query is a 0=1 then set Row count to 0 and return
-    if ( m_nIsAlwaysFalseQuery ) {
-        m_nRowCountResult = 0;
+    if ( m_bIsAlwaysFalseQuery )
+    {
         m_bIsReadOnly = 1;
         return;
     }
@@ -1248,7 +1247,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     }
 
     m_nRowPos = 0;
-    m_nRowCountResult = -1;
 
     fillRowData();
 
@@ -1264,7 +1262,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     {
         case SQL_STATEMENT_SELECT:
         {
-            if(m_nIsAlwaysFalseQuery) {
+            if(m_bIsAlwaysFalseQuery) {
                 break;
             }
             else if(isCount())
@@ -1366,6 +1364,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     }
 
                     m_pKeySet = m_pSortIndex->CreateKeySet();
+                    m_CurrentRowCount = m_pKeySet->size();
 #if OSL_DEBUG_LEVEL > 0
                     for( OKeySet::size_type i = 0; i < m_pKeySet->size(); i++ )
                         OSL_TRACE("Sorted: %d -> %d", i, (*m_pKeySet)[i] );
@@ -1543,12 +1542,12 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-         sal_Int32  nKeyValue;
-         sal_Int32  nKeyPos;
-         if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
-             m_pKeySet->reserve(nMaxCardNumber + 20 );
+        sal_Int32   nKeyValue;
+        sal_Int32   nKeyPos;
+        if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
+            m_pKeySet->reserve(nMaxCardNumber + 20 );
 
-         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
+        for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
         {
             nKeyPos = m_pKeySet->size();
             m_pKeySet->insert( m_pKeySet->end() );
@@ -1990,9 +1989,8 @@ sal_Bool OResultSet::determineReadOnly()
 {
     if (m_bIsReadOnly == -1)
     {
-        //m_nRowCountResult == 0 mean user call with where case 0 = 1
         OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
-        m_bIsReadOnly = !m_aQuery.isWritable(xConnection) || (m_nRowCountResult == 0);
+        m_bIsReadOnly = !m_aQuery.isWritable(xConnection) || m_bIsAlwaysFalseQuery;
     }
 
     return m_bIsReadOnly != 0;
