@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:29:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -101,6 +104,12 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -224,6 +233,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException)
     {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( m_bSuspendingPropertyHandlers || !suspendPropertyHandlers_nothrow( sal_True ) )
@@ -262,6 +272,9 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
         if (_rxFrame.is() && haveView())
             throw RuntimeException(::rtl::OUString::createFromAscii("Unable to attach to a second frame."),*this);
 
@@ -410,6 +423,8 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::dispose(  ) throw(RuntimeException)
     {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
         // stop inspecting the current object
         stopInspection( false );
 
@@ -493,7 +508,7 @@ namespace pcr
 
         if (xContainerWindow.get() == xSourceWindow.get())
         {   // our container window got the focus
-            if ( getPropertyBox())
+            if ( haveView() && getPropertyBox())
                 getPropertyBox()->GrabFocus();
         }
     }
@@ -782,9 +797,12 @@ namespace pcr
                 (*loop)->removePropertyChangeListener( this );
                 (*loop)->dispose();
             }
+            catch( const DisposedException& )
+            {
+            }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::stopInspection: could not dispose one of the handlers!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
