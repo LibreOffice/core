@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:26:13 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,19 +245,19 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
 {
     Reference< XInterface > xRet( createInstanceWithContext( xContext ) );
 
-    if (rArguments.getLength())
+    Reference< lang::XInitialization > xInit( xRet, UNO_QUERY );
+    // always call initialize, even if there are no arguments.
+    // #i63511# / 2006-03-27 / frank.schoenheit@sun.com
+    if (xInit.is())
     {
-        Reference< lang::XInitialization > xInit( xRet, UNO_QUERY );
-        if (xInit.is())
-        {
-            xInit->initialize( rArguments );
-        }
-        else
-        {
+        xInit->initialize( rArguments );
+    }
+    else
+    {
+        if ( rArguments.getLength() )
             throw lang::IllegalArgumentException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("cannot pass arguments to component => no XInitialization implemented!") ),
                 Reference< XInterface >(), 0 );
-        }
     }
 
     return xRet;
