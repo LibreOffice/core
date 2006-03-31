@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:52:57 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ const SfxFilter* SfxFilterContainer::aMethod( ArgType aArg, SfxFilterFlags nMust
 }
 
 IMPL_FORWARD_LOOP( GetFilter4Mime, const String&, rMime );
-IMPL_FORWARD_LOOP( GetFilter4ClipBoardId, ULONG, nId );
+IMPL_FORWARD_LOOP( GetFilter4ClipBoardId, sal_uInt32, nId );
 IMPL_FORWARD_LOOP( GetFilter4EA, const String&, rEA );
 IMPL_FORWARD_LOOP( GetFilter4Extension, const String&, rExt );
 IMPL_FORWARD_LOOP( GetFilter4FilterName, const String&, rName );
