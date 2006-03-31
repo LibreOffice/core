@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:19:12 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,61 +508,75 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     USHORT nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
-    // nach vorne  -> vom Start erfragen
-    // nach hinten -> vom End erfragen
-    if( 0 > nOffset )       // nach vorne
+    BYTE nOutLineLevel = NO_NUMBERING;
+    SwNode* pSrch = &aSttRg.GetNode();
+    if( pSrch->IsTxtNode() )
+        nOutLineLevel = ((SwTxtNode*)pSrch)->GetOutlineLevel();
+    SwNode* pEndSrch = &aEndRg.GetNode();
+    if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
-        SwNode* pSrch = &aSttRg.GetNode();
-        if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
-        {
-            if( !nAktPos-- )
-                // wir stehen in keiner "Outline-Section"
-                return FALSE;
-
-            // dann sollten wir den Start korrigieren !!!
+        if( !nAktPos )
+            return FALSE; // Promoting or demoting before the first outline => no.
+        if( --nAktPos )
             aSttRg = *GetNodes().GetOutLineNds()[ nAktPos ];
-        }
-
-        pSrch = &aEndRg.GetNode();
-        USHORT nTmp;
-        if( GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nTmp ))
-            // wenn die Selection in einem OutlineNode endet, diesen noch
-            // mitnehmen
-            aEndRg++;
+        else if( 0 > nOffset )
+            return FALSE; // Promoting at the top of document?!
         else
-        {
-            aEndRg = nTmp < GetNodes().GetOutLineNds().Count()
-                            ? *GetNodes().GetOutLineNds()[ nTmp ]
-                            : GetNodes().GetEndOfContent();
-        }
-
-        if( aEndRg == aSttRg )
-            // kein Bereich, dann machen wir uns einen
-            aEndRg++;
+            aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
     }
-    // nach hinten
-    else
+    USHORT nTmpPos = 0;
+    // If the given range ends at an outlined text node we have to decide if it has to be a part of
+    // the moving range or not. Normally it will be a sub outline of our chapter
+    // and has to be moved, too. But if the chapter ends with a table(or a section end),
+    // the next text node will be choosen and this could be the next outline of the same level.
+    // The criteria has to be the outline level: sub level => incorporate, same/higher level => no.
+    if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
-        SwNode* pSrch = &aEndRg.GetNode();
-        if( GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
-            ++nAktPos;
-
-        aEndRg = nAktPos < GetNodes().GetOutLineNds().Count()
-                        ? *GetNodes().GetOutLineNds()[ nAktPos ]
-                        : GetNodes().GetEndOfContent();
-
-        pSrch = &aSttRg.GetNode();
-        USHORT nTmp;
-        if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nTmp ) )
-        {
-            if( --nTmp )
-                aSttRg = *GetNodes().GetOutLineNds()[ nTmp ];
-            else
-                aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
-        }
+        if( !pEndSrch->IsTxtNode() || pEndSrch == pSrch ||
+            nOutLineLevel < ((SwTxtNode*)pEndSrch)->GetOutlineLevel() )
+            ++nTmpPos; // For sub outlines only!
     }
-    // neue Position errechnen:
+
+    aEndRg = nTmpPos < GetNodes().GetOutLineNds().Count()
+                    ? *GetNodes().GetOutLineNds()[ nTmpPos ]
+                    : GetNodes().GetEndOfContent();
+    if( nOffset >= 0 )
+        nAktPos = nTmpPos;
+    if( aEndRg == aSttRg )
+    {
+        ASSERT( false, "Moving outlines: Surprising selection" );
+        aEndRg++;
+    }
+
     const SwNode* pNd;
+    // The following code corrects the range to handle sections (start/end nodes)
+    // The range will be extended if the least node before the range is a start node
+    // which ends inside the range => The complete section will be moved.
+    // The range will be shrinked if the last position is a start node.
+    // The range will be shrinked if the last node is an end node which starts before the range.
+    aSttRg--;
+    while( aSttRg.GetNode().IsStartNode() )
+    {
+        pNd = aSttRg.GetNode().EndOfSectionNode();
+        if( pNd->GetIndex() >= aEndRg.GetIndex() )
+            break;
+        aSttRg--;
+    }
+    aSttRg++;
+
+    aEndRg--;
+    while( aEndRg.GetNode().IsStartNode() )
+        aEndRg--;
+    while( aEndRg.GetNode().IsEndNode() )
+    {
+        pNd = aEndRg.GetNode().FindStartNode();
+        if( pNd->GetIndex() >= aSttRg.GetIndex() )
+            break;
+        aEndRg--;
+    }
+    aEndRg++;
+
+    // calculation of the new position
     if( nOffset < 0 && nAktPos < USHORT(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
     else if( nAktPos + nOffset >= GetNodes().GetOutLineNds().Count() )
@@ -571,6 +585,46 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         pNd = GetNodes().GetOutLineNds()[ nAktPos + nOffset ];
 
     ULONG nNewPos = pNd->GetIndex();
+
+    // And now a correction of the insert position if necessary...
+    SwNodeIndex aInsertPos( *pNd, -1 );
+    while( aInsertPos.GetNode().IsStartNode() )
+    {
+        // Just before the insert position starts a section:
+        // when I'm moving forward I do not want to enter the section,
+        // when I'm moving backward I want to stay in the section if I'm already a part of,
+        // I want to stay outside if I was outside before.
+        if( nOffset < 0 )
+        {
+            pNd = aInsertPos.GetNode().EndOfSectionNode();
+            if( pNd->GetIndex() >= aEndRg.GetIndex() )
+                break;
+        }
+        aInsertPos--;
+        --nNewPos;
+    }
+    if( nOffset >= 0 )
+    {
+        // When just before the insert position a section ends, it is okay when I'm moving backward
+        // because I want to stay outside the section.
+        // When moving forward I've to check if I started inside or outside the section
+        // because I don't want to enter of leave such a section
+        while( aInsertPos.GetNode().IsEndNode() )
+        {
+            pNd = aInsertPos.GetNode().FindStartNode();
+            if( pNd->GetIndex() >= aSttRg.GetIndex() )
+                break;
+            aInsertPos--;
+            --nNewPos;
+        }
+    }
+    // We do not want to move into tables (at the moment)
+    aInsertPos++;
+    pNd = &aInsertPos.GetNode();
+    if( pNd->IsTableNode() )
+        pNd = pNd->FindStartNode();
+    if( pNd->FindTableNode() )
+        return FALSE;
 
     ASSERT( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
                 "Position liegt im MoveBereich" );
@@ -1844,6 +1898,42 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
     ULONG nStIdx = pStt->nNode.GetIndex();
     ULONG nEndIdx = pEnd->nNode.GetIndex();
+
+    // Here are some sophisticated checks whether the wished PaM will be moved or not.
+    // For moving outlines (bIsOutlMv) I've already done some checks, so here are two different
+    // checks...
+    SwNode *pTmp1;
+    SwNode *pTmp2;
+    if( bIsOutlMv )
+    {
+        // For moving chapters (outline) the following reason will deny the move:
+        // if a start node is inside the moved area and its end node outside or vice versa.
+        // If a start node is the first moved paragraph, its end node has to be within the moved
+        // area, too (e.g. as last node).
+        // If an end node is the last node of the moved area, its start node has to be a part of
+        // the moved section, too.
+        pTmp1 = GetNodes()[ nStIdx ];
+        if( pTmp1->IsStartNode() )
+        {   // First is a start node
+            pTmp2 = pTmp1->EndOfSectionNode();
+            if( pTmp2->GetIndex() > nEndIdx )
+                return FALSE; // Its end node is behind the moved range
+        }
+        pTmp1 = pTmp1->FindStartNode()->EndOfSectionNode();
+        if( pTmp1->GetIndex() <= nEndIdx )
+            return FALSE; // End node inside but start node before moved range => no.
+        pTmp1 = GetNodes()[ nEndIdx ];
+        if( pTmp1->IsEndNode() )
+        {   // The last one is an end node
+            pTmp1 = pTmp1->FindStartNode();
+            if( pTmp1->GetIndex() < nStIdx )
+                return FALSE; // Its start node is before the moved range.
+        }
+        pTmp1 = pTmp1->FindStartNode();
+        if( pTmp1->GetIndex() >= nStIdx )
+            return FALSE; // A start node which ends behind the moved area => no.
+    }
+
     ULONG nInStIdx, nInEndIdx;
     long nOffs = nOffset;
     if( nOffset > 0 )
@@ -1861,16 +1951,40 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     // Folgende Absatzbloecke sollen vertauscht werden:
     // [ nStIdx, nInEndIdx ] mit [ nInStIdx, nEndIdx ]
 
-    SwNode *pStartNd = GetNodes()[ nStIdx ];
-    SwNode *pEndNd = GetNodes()[ nEndIdx ];
-    if( !pStartNd->IsCntntNode() || !pEndNd->IsCntntNode() )
+    if( nEndIdx >= GetNodes().GetEndOfContent().GetIndex() )
         return FALSE;
 
-    pStartNd = pStartNd->FindStartNode();
-    pEndNd = pEndNd->FindStartNode();
-    // Es muss sich alles in einem Bereich abspielen
-    if( pStartNd != pEndNd )
-        return FALSE;
+    if( !bIsOutlMv )
+    {   // And here the restrictions for moving paragraphs other than chapters (outlines)
+        // The plan is to exchange [nStIdx,nInEndIdx] and [nStartIdx,nEndIdx]
+        // It will checked if the both "start" nodes as well as the both "end" notes belongs to
+        // the same start-end-section. This is more restrictive than the conditions checked above.
+        // E.g. a paragraph will not escape from a section or be inserted to another section.
+        pTmp1 = GetNodes()[ nStIdx ]->FindStartNode();
+        pTmp2 = GetNodes()[ nInStIdx ]->FindStartNode();
+        if( pTmp1 != pTmp2 )
+            return FALSE; // "start" nodes in different sections
+        pTmp1 = GetNodes()[ nEndIdx ];
+        bool bIsEndNode = pTmp1->IsEndNode();
+        if( !pTmp1->IsStartNode() )
+        {
+            pTmp1 = pTmp1->FindStartNode();
+            if( bIsEndNode ) // For end nodes the first start node is of course inside the range,
+                pTmp1 = pTmp1->FindStartNode(); // I've to check the start node of the start node.
+        }
+        pTmp1 = pTmp1->EndOfSectionNode();
+        pTmp2 = GetNodes()[ nInEndIdx ];
+        if( !pTmp2->IsStartNode() )
+        {
+            bIsEndNode = pTmp2->IsEndNode();
+            pTmp2 = pTmp2->FindStartNode();
+            if( bIsEndNode )
+                pTmp2 = pTmp2->FindStartNode();
+        }
+        pTmp2 = pTmp2->EndOfSectionNode();
+        if( pTmp1 != pTmp2 )
+            return FALSE; // The "end" notes are in different sections
+    }
 
     // auf Redlining testen - darf die Selektion ueberhaupt verschoben
     // werden?
@@ -2086,8 +2200,12 @@ SetRedlineMode( eOld );
     }
 
     SwUndoMoveNum* pUndo = 0;
+    ULONG nMoved = 0;
     if( DoesUndo() )
+    {
         pUndo = new SwUndoMoveNum( rPam, nOffset, bIsOutlMv );
+        nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
+    }
 
 
     Move( aMvRg, aIdx, DOC_MOVEREDLINES );
@@ -2095,7 +2213,11 @@ SetRedlineMode( eOld );
     if( pUndo )
     {
         ClearRedo();
-        pUndo->SetStartNode( rPam.Start()->nNode.GetIndex() );
+        // i57907: Under circumstances (sections at the end of a chapter)
+        // the rPam.Start() is not moved to the new position.
+        // But aIdx should be at the new end position and as long as the number of moved paragraphs
+        // is nMoved, I know, where the new position is.
+        pUndo->SetStartNode( aIdx.GetIndex() - nMoved );
         AppendUndo( pUndo );
     }
 
