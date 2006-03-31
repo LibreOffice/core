@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:19:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1328,16 +1328,16 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
         if( T2T_PARA != pDelPara->cCh && pDelPara->pLastNd &&
             0 != ( pCurTxtNd = aDelRg.aStart.GetNode().GetTxtNode() ))
         {
-            // den Trenner einfuegen
-            SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
-            pDelPara->pLastNd->Insert( pDelPara->cCh, aCntIdx );
-            // verbinde den akt. TextNode mit dem aus der vorherigen Box
+            // Join the current text node with the last from the previous box if possible
             aDelRg.aStart--;
             ULONG nNdIdx = aDelRg.aStart.GetIndex();
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
+                // Inserting the seperator
+                SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
+                pDelPara->pLastNd->Insert( pDelPara->cCh, aCntIdx );
                 if( pDelPara->pUndo )
-                    pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx,
+                    pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
                 SvULongs aBkmkArr( 4, 4 );
@@ -1353,10 +1353,14 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
                                         nOldTxtLen );
             }
             else if( pDelPara->pUndo )
-                pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx );
+            {
+                aDelRg.aStart++;
+                nNdIdx = aDelRg.aStart.GetIndex();
+                pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
+            }
         }
         else if( pDelPara->pUndo )
-            pDelPara->pUndo->AddBoxPos( *pDoc, aDelRg.aStart.GetIndex() );
+            pDelPara->pUndo->AddBoxPos( *pDoc, aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
         aDelRg.aEnd--;
         pDelPara->pLastNd = aDelRg.aEnd.GetNode().GetTxtNode();
 
