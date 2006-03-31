@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:00:01 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,9 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             const SwFrmFmt *pRight = rHead.GetHeaderFmt();
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aLCnt = rLeftHead.GetHeaderFmt()->GetCntnt();
-            if ( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
+            if( !aLCnt.GetCntntIdx() )
+                pDesc->GetLeft().SetAttr( rChged.GetLeft().GetHeader() );
+            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
                                                 GetDfltFrmFmt() );
@@ -446,7 +448,9 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             const SwFrmFmt *pRight = rFoot.GetFooterFmt();
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aLCnt = rLeftFoot.GetFooterFmt()->GetCntnt();
-            if ( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
+            if( !aLCnt.GetCntntIdx() )
+                pDesc->GetLeft().SetAttr( rChged.GetLeft().GetFooter() );
+            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
                                                 GetDfltFrmFmt() );
