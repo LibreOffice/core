@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:13:44 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-SfxPickList*    SfxPickList::GetOrCreate( const ULONG nMenuSize )
+SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
 {
     if ( !pUniqueInstance )
     {
