@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:22:32 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
 #endif
+#include <tools/diagnose_ex.h>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -390,84 +391,88 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    String ControlCharacterDialog::translatePropertiesToItems(const SfxItemSet* _pSet, const Reference< XPropertySet >& _rxModel)
+    namespace
     {
-        String sNewFontName;
+        void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const ::rtl::OUString& _name, const Any& _value )
+        {
+            _out_properties.realloc( _out_properties.getLength() + 1 );
+            _out_properties[ _out_properties.getLength() - 1 ] = NamedValue( _name, _value );
+        }
+    }
 
-        OSL_ENSURE(_pSet && _rxModel.is(), "ControlCharacterDialog::translatePropertiesToItems: invalid arguments!");
-        if (!_pSet || !_rxModel.is())
-            return sNewFontName;
+    //------------------------------------------------------------------------
+    void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, Sequence< NamedValue >& _out_properties )
+    {
+        _out_properties.realloc( 0 );
 
         try
         {
             // --------------------------
             // font name
-            SfxItemState eState = _pSet->GetItemState(CFID_FONT);
+            SfxItemState eState = _rSet.GetItemState(CFID_FONT);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxFontItem& rFontItem =
-                    static_cast<const SvxFontItem&>(_pSet->Get(CFID_FONT));
+                    static_cast<const SvxFontItem&>(_rSet.Get(CFID_FONT));
 
-                sNewFontName = rFontItem.GetFamilyName();
-
-                _rxModel->setPropertyValue( PROPERTY_FONT_NAME     , makeAny(::rtl::OUString(rFontItem.GetFamilyName())));
-                _rxModel->setPropertyValue( PROPERTY_FONT_STYLENAME, makeAny(::rtl::OUString(rFontItem.GetStyleName())));
-                _rxModel->setPropertyValue( PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
-                _rxModel->setPropertyValue( PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(::rtl::OUString(rFontItem.GetFamilyName())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(::rtl::OUString(rFontItem.GetStyleName())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
             }
 
             // --------------------------
             // font height
-            eState = _pSet->GetItemState(CFID_HEIGHT);
+            eState = _rSet.GetItemState(CFID_HEIGHT);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxFontHeightItem& rSvxFontHeightItem =
-                    static_cast<const SvxFontHeightItem&>(_pSet->Get(CFID_HEIGHT));
+                    static_cast<const SvxFontHeightItem&>(_rSet.Get(CFID_HEIGHT));
 
                 float nHeight = (float)OutputDevice::LogicToLogic(Size(0, rSvxFontHeightItem.GetHeight()), MAP_TWIP, MAP_POINT).Height();
-                _rxModel->setPropertyValue( PROPERTY_FONT_HEIGHT,makeAny(nHeight));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_HEIGHT,makeAny(nHeight));
 
             }
 
             // --------------------------
             // font weight
-            eState = _pSet->GetItemState(CFID_WEIGHT);
+            eState = _rSet.GetItemState(CFID_WEIGHT);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxWeightItem& rWeightItem =
-                    static_cast<const SvxWeightItem&>(_pSet->Get(CFID_WEIGHT));
+                    static_cast<const SvxWeightItem&>(_rSet.Get(CFID_WEIGHT));
 
                 float nWeight = VCLUnoHelper::ConvertFontWeight( rWeightItem.GetWeight());
-                _rxModel->setPropertyValue( PROPERTY_FONT_WEIGHT,makeAny(nWeight));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
             }
 
             // --------------------------
             // font slant
-            eState = _pSet->GetItemState(CFID_POSTURE);
+            eState = _rSet.GetItemState(CFID_POSTURE);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxPostureItem& rPostureItem =
-                    static_cast<const SvxPostureItem&>(_pSet->Get(CFID_POSTURE));
+                    static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
 
                 ::com::sun::star::awt::FontSlant eSlant = (::com::sun::star::awt::FontSlant)rPostureItem.GetPosture();
-                _rxModel->setPropertyValue( PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
             }
 
             // --------------------------
             // font underline
-            eState = _pSet->GetItemState(CFID_UNDERLINE);
+            eState = _rSet.GetItemState(CFID_UNDERLINE);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxUnderlineItem& rUnderlineItem =
-                    static_cast<const SvxUnderlineItem&>(_pSet->Get(CFID_UNDERLINE));
+                    static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
 
                 sal_Int16 nUnderline = rUnderlineItem.GetUnderline();
-                _rxModel->setPropertyValue( PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
                 // the text line color is transported in this item, too
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
@@ -476,44 +481,44 @@ namespace pcr
                 if (COL_AUTO != nColor)
                     aUnoColor <<= (sal_Int32)nColor;
 
-                _rxModel->setPropertyValue(PROPERTY_TEXTLINECOLOR, aUnoColor);
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
             }
 
             // --------------------------
             // font strikeout
-            eState = _pSet->GetItemState(CFID_STRIKEOUT);
+            eState = _rSet.GetItemState(CFID_STRIKEOUT);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxCrossedOutItem& rCrossedOutItem =
-                    static_cast<const SvxCrossedOutItem&>(_pSet->Get(CFID_STRIKEOUT));
+                    static_cast<const SvxCrossedOutItem&>(_rSet.Get(CFID_STRIKEOUT));
 
                 sal_Int16 nStrikeout = rCrossedOutItem.GetStrikeout();
-                _rxModel->setPropertyValue( PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
             }
 
 
             // --------------------------
             // font wordline mode
-            eState = _pSet->GetItemState(CFID_WORDLINEMODE);
+            eState = _rSet.GetItemState(CFID_WORDLINEMODE);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxWordLineModeItem& rWordLineModeItem =
-                    static_cast<const SvxWordLineModeItem&>(_pSet->Get(CFID_WORDLINEMODE));
+                    static_cast<const SvxWordLineModeItem&>(_rSet.Get(CFID_WORDLINEMODE));
 
-                _rxModel->setPropertyValue( PROPERTY_WORDLINEMODE, ::cppu::bool2any(rWordLineModeItem.GetValue()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, ::cppu::bool2any(rWordLineModeItem.GetValue()));
             }
 
 
             // --------------------------
             // text color
-            eState = _pSet->GetItemState(CFID_CHARCOLOR);
+            eState = _rSet.GetItemState(CFID_CHARCOLOR);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxColorItem& rColorItem =
-                    static_cast<const SvxColorItem&>(_pSet->Get(CFID_CHARCOLOR));
+                    static_cast<const SvxColorItem&>(_rSet.Get(CFID_CHARCOLOR));
 
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
@@ -521,39 +526,59 @@ namespace pcr
                 if (COL_AUTO != nColor)
                     aUnoColor <<= (sal_Int32)nColor;
 
-                _rxModel->setPropertyValue( PROPERTY_TEXTCOLOR, aUnoColor );
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
             }
 
             // --------------------------
             // font relief
-            eState = _pSet->GetItemState(CFID_RELIEF);
+            eState = _rSet.GetItemState(CFID_RELIEF);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxCharReliefItem& rReliefItem =
-                    static_cast<const SvxCharReliefItem&>(_pSet->Get(CFID_RELIEF));
+                    static_cast<const SvxCharReliefItem&>(_rSet.Get(CFID_RELIEF));
 
-                _rxModel->setPropertyValue(PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()) );
             }
 
             // --------------------------
             // font emphasis mark
-            eState = _pSet->GetItemState(CFID_EMPHASIS);
+            eState = _rSet.GetItemState(CFID_EMPHASIS);
 
             if ( eState == SFX_ITEM_SET )
             {
                 const SvxEmphasisMarkItem& rEmphMarkItem =
-                    static_cast<const SvxEmphasisMarkItem&>(_pSet->Get(CFID_EMPHASIS));
+                    static_cast<const SvxEmphasisMarkItem&>(_rSet.Get(CFID_EMPHASIS));
 
-                _rxModel->setPropertyValue(PROPERTY_FONT_EMPHASIS_MARK, makeAny((sal_Int16)rEmphMarkItem.GetEmphasisMark()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, makeAny((sal_Int16)rEmphMarkItem.GetEmphasisMark()) );
             }
         }
-        catch (Exception&)
+        catch (const Exception& )
         {
-            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!")
+            DBG_UNHANDLED_EXCEPTION();
         }
+    }
 
-        return sNewFontName;
+    //------------------------------------------------------------------------
+    void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, const Reference< XPropertySet >& _rxModel)
+    {
+        OSL_ENSURE( _rxModel.is(), "ControlCharacterDialog::translateItemsToProperties: invalid arguments!" );
+        if ( !_rxModel.is())
+            return;
+
+        Sequence< NamedValue > aPropertyValues;
+        translateItemsToProperties( _rSet, aPropertyValues );
+        try
+        {
+            const NamedValue* propertyValue = aPropertyValues.getConstArray();
+            const NamedValue* propertyValueEnd = propertyValue + aPropertyValues.getLength();
+            for ( ; propertyValue != propertyValueEnd; ++propertyValue )
+                _rxModel->setPropertyValue( propertyValue->Name, propertyValue->Value );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //------------------------------------------------------------------------
