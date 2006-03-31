@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:55:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:26:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ protected:
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
-    virtual ULONG           exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) { return 0; }
+    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) { return 0; }
 
 public:
 
