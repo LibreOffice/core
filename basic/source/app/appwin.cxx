@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:11:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,9 @@ void AppWin::Maximize()
         pFrame->nMaximizedWindows++;
         nWinState = TT_WIN_STATE_MAX;
     }
-    long nTitleHeight;
+    sal_Int32 nTitleHeight;
     {
-        long nDummy1, nDummy2, nDummy3;
+        sal_Int32 nDummy1, nDummy2, nDummy3;
         pFrame->GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
     }
 
@@ -172,9 +172,9 @@ void AppWin::Cascade( USHORT nNr )
     nNr %= 10;
     nNr++;
 
-    long nTitleHeight;
+    sal_Int32 nTitleHeight;
     {
-        long nDummy1, nDummy2, nDummy3;
+        sal_Int32 nDummy1, nDummy2, nDummy3;
         pFrame->GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
     }
 
