@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:21:46 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,9 +803,15 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 for ( long n = 0; n < nEntries; n++ )
                     OutStream->writeShort( aSeq.getConstArray()[n] );
             }
+            else if ( rType.getTypeClass() == TypeClass_ENUM )
+            {
+                sal_Int32 nAsInt = 0;
+                ::cppu::enum2int( nAsInt, rValue );
+                OutStream->writeLong( nAsInt );
+            }
+#if OSL_DEBUG_LEVEL > 0
             else
             {
-#if OSL_DEBUG_LEVEL > 0
                 ::rtl::OString sMessage( "UnoControlModel::write: don't know how to handle a property of type '" );
                 ::rtl::OUString sTypeName( rType.getTypeName() );
                 sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -814,8 +820,8 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
                 DBG_ERROR( sMessage );
-#endif
             }
+#endif
         }
 
         sal_Int32 nPropDataLen = xMark->offsetToMark( nPropDataBeginMark );
@@ -994,6 +1000,22 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     for ( long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = (sal_Int16)InStream->readShort();
                     aValue <<= aSeq;
+                }
+                else if ( pType->getTypeClass() == TypeClass_ENUM )
+                {
+                    sal_Int32 nAsInt = InStream->readLong();
+                    aValue = ::cppu::int2enum( nAsInt, *pType );
+                }
+                else
+                {
+                    ::rtl::OString sMessage( "UnoControlModel::read: don't know how to handle a property of type '" );
+                    ::rtl::OUString sTypeName( pType->getTypeName() );
+                    sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += "'.\n(Currently handling property '";
+                    ::rtl::OUString sPropertyName( GetPropertyName( nPropId ) );
+                    sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
+                    sMessage += "'.)";
+                    DBG_ERROR( sMessage );
                 }
             }
             else
