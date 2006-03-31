@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:23:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:19:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,18 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
-        m_xComponent->setPropertyValue( _rPropertyName, _rValue );
+        if ( PROPERTY_ID_FONT_NAME == nPropId )
+        {
+            // special handling, the value is a faked value we generated ourself in impl_executeFontDialog_nothrow
+            Sequence< NamedValue > aFontPropertyValues;
+            OSL_VERIFY( _rValue >>= aFontPropertyValues );
+            const NamedValue* fontPropertyValue = aFontPropertyValues.getConstArray();
+            const NamedValue* fontPropertyValueEnd = fontPropertyValue + aFontPropertyValues.getLength();
+            for ( ; fontPropertyValue != fontPropertyValueEnd; ++fontPropertyValue )
+                m_xComponent->setPropertyValue( fontPropertyValue->Name, fontPropertyValue->Value );
+        }
+        else
+            m_xComponent->setPropertyValue( _rPropertyName, _rValue );
     }
 
     //--------------------------------------------------------------------
@@ -1209,8 +1220,8 @@ namespace pcr
             break;
 
         case PROPERTY_ID_FONT_NAME:
-            if ( impl_changeFont_nothrow( aGuard ) )
-                eResult = InteractiveSelectionResult_Success;
+            if ( impl_executeFontDialog_nothrow( _rData, aGuard ) )
+                eResult = InteractiveSelectionResult_ObtainedValue;
             break;
 
         case PROPERTY_ID_DATASOURCE:
@@ -2530,7 +2541,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool FormComponentPropertyHandler::impl_changeFont_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    bool FormComponentPropertyHandler::impl_executeFontDialog_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         bool bSuccess = false;
 
@@ -2548,8 +2559,13 @@ namespace pcr
             if ( RET_OK == aDlg.Execute() )
             {
                 const SfxItemSet* pOut = aDlg.GetOutputItemSet();
-                ControlCharacterDialog::translatePropertiesToItems(pOut, m_xComponent);
-                bSuccess = true;
+                if ( pOut )
+                {
+                    Sequence< NamedValue > aFontPropertyValues;
+                    ControlCharacterDialog::translateItemsToProperties( *pOut, aFontPropertyValues );
+                    _out_rNewValue <<= aFontPropertyValues;
+                    bSuccess = true;
+                }
             }
         }
 
