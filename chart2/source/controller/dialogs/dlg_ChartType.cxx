@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:06:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1232,7 +1232,7 @@ void SchDiagramTypeDlg::SwitchNumLines( SvxChartStyle eID )
     }
 }
 
-void SchDiagramTypeDlg::SetMaximumNumberOfLines( long nMaxLines )
+void SchDiagramTypeDlg::SetMaximumNumberOfLines( sal_Int32 nMaxLines )
 {
     aMtrFldNumLines.SetLast( nMaxLines );
     aMtrFldNumLines.SetMax( nMaxLines );
