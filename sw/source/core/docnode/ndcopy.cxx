@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:34:50 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,13 +490,56 @@ BOOL lcl_ChkFlyFly( SwDoc* pDoc, ULONG nSttNd, ULONG nEndNd,
     return FALSE;
 }
 
+/*
+    The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
+    array. It is called after a call of the _CopyNodes(..) function. But this function does not copy
+    every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied if the corresponding end/start node is outside the copied pam.
+    The lcl_NonCopyCount function counts the number of these nodes, given the copied pam and a node
+    index inside the pam.
+    rPam is the original source pam, rLastIdx is the last calculated position, rDelCount the number
+    of "non-copy" nodes between rPam.Start() and rLastIdx.
+    nNewIdx is the new position of interest.
+*/
+
+void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, ULONG nNewIdx, ULONG& rDelCount )
+{
+    ULONG nStart = rPam.Start()->nNode.GetIndex();
+    ULONG nEnd = rPam.End()->nNode.GetIndex();
+    if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
+    {
+        do // count "non-copy" nodes
+        {
+            SwNode& rNode = rLastIdx.GetNode();
+            if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
+                || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                ++rDelCount;
+            rLastIdx++;
+        }
+        while( rLastIdx.GetIndex() < nNewIdx );
+    }
+    else if( rDelCount ) // optimization: if there are no "non-copy" nodes until now,
+                         // no move backward needed
+    {
+        while( rLastIdx.GetIndex() > nNewIdx )
+        {
+            SwNode& rNode = rLastIdx.GetNode();
+            if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
+                || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                --rDelCount;
+            rLastIdx--;
+        }
+    }
+}
+
 void lcl_SetCpyPos( const SwPosition& rOrigPos,
                     const SwPosition& rOrigStt,
                     const SwPosition& rCpyStt,
-                    SwPosition& rChgPos )
+                    SwPosition& rChgPos,
+                    ULONG nDelCount )
 {
     ULONG nNdOff = rOrigPos.nNode.GetIndex();
     nNdOff -= rOrigStt.nNode.GetIndex();
+    nNdOff -= nDelCount;
     xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
 
     if( nNdOff )
@@ -524,6 +567,10 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
     SwPosition* pCpyStt = rCpyPam.Start();
 
     const SwBookmark* pBkmk;
+    // We have to count the "non-copied" nodes..
+    ULONG nDelCount = 0;
+    SwNodeIndex aCorrIdx( rStt.nNode );
+
     for( USHORT nCnt = pSrcDoc->GetBookmarks().Count(); nCnt; )
     {
         // liegt auf der Position ??
@@ -537,12 +584,15 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
             continue;
 
         SwPaM aTmpPam( *pCpyStt );
-        lcl_SetCpyPos( pBkmk->GetPos(), rStt, *pCpyStt, *aTmpPam.GetPoint() );
+
+        lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetPos().nNode.GetIndex(), nDelCount );
+        lcl_SetCpyPos( pBkmk->GetPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount );
         if( bHasOtherPos )
         {
             aTmpPam.SetMark();
+            lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetOtherPos()->nNode.GetIndex(), nDelCount );
             lcl_SetCpyPos( *pBkmk->GetOtherPos(), rStt, *pCpyStt,
-                            *aTmpPam.GetMark() );
+                            *aTmpPam.GetMark(), nDelCount );
         }
 
         String sNewNm( pBkmk->GetName() );
@@ -565,6 +615,10 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
         SwPaM* pDelPam = 0;
         const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+        // We have to count the "non-copied" nodes
+        ULONG nDelCount = 0;
+        SwNodeIndex aCorrIdx( pStt->nNode );
+
         USHORT n = 0;
         pSrcDoc->GetRedline( *pStt, &n );
         for( ; n < rTbl.Count(); ++n )
@@ -590,15 +644,21 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
                     {
                         pDelPam = new SwPaM( *pCpyStt, pDelPam );
                         if( *pStt < *pRStt )
+                        {
+                            lcl_NonCopyCount( rPam, aCorrIdx, pRStt->nNode.GetIndex(), nDelCount );
                             lcl_SetCpyPos( *pRStt, *pStt, *pCpyStt,
-                                            *pDelPam->GetPoint() );
+                                            *pDelPam->GetPoint(), nDelCount );
+                        }
                         pDelPam->SetMark();
 
                         if( *pEnd < *pREnd )
                             *pDelPam->GetPoint() = *pCpyEnd;
                         else
+                        {
+                            lcl_NonCopyCount( rPam, aCorrIdx, pREnd->nNode.GetIndex(), nDelCount );
                             lcl_SetCpyPos( *pREnd, *pStt, *pCpyStt,
-                                            *pDelPam->GetPoint() );
+                                            *pDelPam->GetPoint(), nDelCount );
+                        }
                     }
                 }
             }
@@ -956,12 +1016,18 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         }
         else if( pDestNd )
         {
+            // Problems with insertion of table selections into "normal" text solved.
+            // We have to set the correct PaM for Undo, if this PaM starts in a textnode,
+            // the undo operation will try to merge this node after removing the table.
+            // If we didn't split a textnode, the PaM should start at the inserted table node
             if( rPos.nContent.GetIndex() == pDestNd->Len() )
-            {
-                aInsPos++;
+            {    // Insertion at the last position of a textnode (empty or not)
+                aInsPos++; // The table will be inserted behind the text node
             }
             else if( rPos.nContent.GetIndex() )
-            {
+            {   // Insertion in the middle of a text node, it has to be split
+                // (and joined from undo)
+                bStartIsTxtNode = TRUE;
                 // splitte den TextNode, bei dem Eingefuegt wird.
                 BYTE nNumLevel = pDestNd->GetLevel();
 
@@ -993,6 +1059,16 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     rPos.nNode++;
                     aRg.aEnd--;
                 }
+            }
+            else if( bCanMoveBack )
+            {   //Insertion at the first position of a text node. It will not be splitted, the table
+                // will be inserted before the text node.
+                // See below, before the SetInsertRange funciton of the undo object will be called,
+                // the CpyPam would be moved to the next content position. This has to be avoided
+                // We want to be moved to the table node itself thus we have to set bCanMoveBack
+                // and to manipulate aCpyPam.
+                bCanMoveBack = false;
+                aCpyPam.GetPoint()->nNode--;
             }
         }
 
