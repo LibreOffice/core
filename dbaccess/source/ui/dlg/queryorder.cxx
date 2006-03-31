@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:53 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+
 #include <algorithm>
 
 
@@ -119,24 +123,24 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     aSettings.SetStyleSettings( aStyle );
     SetSettings( aSettings );
 
-    arrLbFields[0] = &aLB_ORDERFIELD1;
-    arrLbFields[1] = &aLB_ORDERFIELD2;
-    arrLbFields[2] = &aLB_ORDERFIELD3;
+    m_aColumnList[0] = &aLB_ORDERFIELD1;
+    m_aColumnList[1] = &aLB_ORDERFIELD2;
+    m_aColumnList[2] = &aLB_ORDERFIELD3;
 
-    arrLbValues[0] = &aLB_ORDERVALUE1;
-    arrLbValues[1] = &aLB_ORDERVALUE2;
-    arrLbValues[2] = &aLB_ORDERVALUE3;
+    m_aValueList[0] = &aLB_ORDERVALUE1;
+    m_aValueList[1] = &aLB_ORDERVALUE2;
+    m_aValueList[2] = &aLB_ORDERVALUE3;
 
     xub_StrLen j;
     for(j=0 ; j < DOG_ROWS ; j++ )
     {
-        arrLbFields[j]->InsertEntry( aSTR_NOENTRY );
+        m_aColumnList[j]->InsertEntry( aSTR_NOENTRY );
     }
 
     for( j=0 ; j < DOG_ROWS ; j++ )
     {
-        arrLbFields[j]->SelectEntryPos(0);
-        arrLbValues[j]->SelectEntryPos(0);
+        m_aColumnList[j]->SelectEntryPos(0);
+        m_aValueList[j]->SelectEntryPos(0);
     }
     try
     {
@@ -158,15 +162,14 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
                 {
                     for( j=0 ; j < DOG_ROWS ; j++ )
                     {
-                        arrLbFields[j]->InsertEntry(*pIter);
+                        m_aColumnList[j]->InsertEntry(*pIter);
                     }
                 }
             }
         }
 
         m_sOrgOrder = m_xQueryComposer->getOrder();
-
-        SetOrderList( m_sOrgOrder );
+        impl_initializeOrderList_nothrow();
     }
     catch(const Exception&)
     {
@@ -202,87 +205,70 @@ IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, pListBox )
 IMPL_LINK_INLINE_END( DlgOrderCrit, FieldListSelectHdl, ListBox *, pListBox )
 
 //------------------------------------------------------------------------------
+void DlgOrderCrit::impl_initializeOrderList_nothrow()
+{
+    try
+    {
+        const ::rtl::OUString sNameProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+        const ::rtl::OUString sAscendingProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAscending" ) );
+
+        Reference< XIndexAccess > xOrderColumns( m_xQueryComposer->getOrderColumns(), UNO_QUERY_THROW );
+        sal_Int32 nColumns = xOrderColumns->getCount();
+        if ( nColumns > DOG_ROWS )
+            nColumns = DOG_ROWS;
+
+        for ( sal_Int32 i = 0; i < nColumns; ++i )
+        {
+            Reference< XPropertySet > xColumn( xOrderColumns->getByIndex( i ), UNO_QUERY_THROW );
+
+            ::rtl::OUString sColumnName;
+            sal_Bool        bIsAscending( sal_True );
+
+            xColumn->getPropertyValue( sNameProperty ) >>= sColumnName;
+            xColumn->getPropertyValue( sAscendingProperty ) >>= bIsAscending;
+
+            m_aColumnList[i]->SelectEntry( sColumnName );
+            m_aValueList[i]->SelectEntryPos( bIsAscending ? 0 : 1 );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------------
 void DlgOrderCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
-    if( LbPos(aLB_ORDERFIELD1) == 0 )
-    {
-        String aOrderList(GetOrderList());
-        if(aOrderList.GetTokenCount(','))
-            SetOrderList(aOrderList);
-        else
-        {
-            aLB_ORDERFIELD2.Disable();
-            aLB_ORDERVALUE2.Disable();
 
-            aLB_ORDERFIELD3.Disable();
-            aLB_ORDERVALUE3.Disable();
-        }
+    if ( aLB_ORDERFIELD1.GetSelectEntryPos() == 0 )
+    {
+        aLB_ORDERFIELD2.Disable();
+        aLB_ORDERVALUE2.Disable();
+
+        aLB_ORDERFIELD2.SelectEntryPos( 0 );
+        aLB_ORDERVALUE2.SelectEntryPos( 0 );
     }
     else
     {
         aLB_ORDERFIELD2.Enable();
         aLB_ORDERVALUE2.Enable();
-
-        aLB_ORDERFIELD3.Enable();
-        aLB_ORDERVALUE3.Enable();
     }
 
-    if( LbPos(aLB_ORDERFIELD2) == 0 )
+    if ( aLB_ORDERFIELD2.GetSelectEntryPos() == 0 )
     {
-        String aOrderList(GetOrderList());
-        if(aOrderList.GetTokenCount(','))
-            SetOrderList(aOrderList);
-        else
-        {
-            aLB_ORDERFIELD3.Disable();
-            aLB_ORDERVALUE3.Disable();
-        }
+        aLB_ORDERFIELD3.Disable();
+        aLB_ORDERVALUE3.Disable();
+
+        aLB_ORDERFIELD3.SelectEntryPos( 0 );
+        aLB_ORDERVALUE3.SelectEntryPos( 0 );
     }
     else
     {
         aLB_ORDERFIELD3.Enable();
         aLB_ORDERVALUE3.Enable();
     }
-}
-
-//------------------------------------------------------------------------------
-void DlgOrderCrit::SetOrderList( const String& _rOrderList )
-{
-    DBG_CHKTHIS(DlgOrderCrit,NULL);
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-
-    xub_StrLen nLen = _rOrderList.GetTokenCount(',');
-    xub_StrLen i;
-    for(i=0;i<nLen && i<DOG_ROWS;++i)
-    {
-        String aOrder = _rOrderList.GetToken(i,',');
-        aOrder.EraseTrailingChars();
-        String sColumnName = aOrder.GetToken(0,' ');
-
-        xub_StrLen nCount = sColumnName.GetTokenCount('.');
-        if ( nCount > 1)
-            sColumnName = sColumnName.GetToken(nCount-1,'.');
-
-        if(sQuote.getLength() && sColumnName.Len() && sColumnName.GetChar(0) == sQuote.getStr()[0] && sColumnName.GetChar(sColumnName.Len()-1) == sQuote.getStr()[0])
-        {
-            sColumnName.Erase(0,1);
-            sColumnName.Erase(sColumnName.Len()-1,1);
-        }
-        arrLbFields[i]->SelectEntry( sColumnName );
-        xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 0 : 1) : 0;
-        arrLbValues[i]->SelectEntryPos( nAsc );
-    }
-
-    // die nicht gesetzten auf 'kein' 'aufsteigend'
-    xub_StrLen nItemsSet = std::min(nLen, xub_StrLen(DOG_ROWS));
-    for (i=0 ; i<DOG_ROWS-nItemsSet; ++i)
-    {
-        arrLbFields[2-i]->SelectEntryPos( 0 );
-        arrLbValues[2-i]->SelectEntryPos( 0 );
-    }
-
 }
 
 //------------------------------------------------------------------------------
@@ -299,12 +285,12 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
     ::rtl::OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
-        if(arrLbFields[i]->GetSelectEntryPos() != 0)
+        if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(sOrder.getLength())
                 sOrder += ::rtl::OUString::createFromAscii(",");
 
-            String sName = arrLbFields[i]->GetSelectEntry();
+            String sName = m_aColumnList[i]->GetSelectEntry();
             try
             {
                 sal_Bool bFunction = sal_False;
@@ -330,7 +316,7 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
             catch(Exception)
             {
             }
-            if(arrLbValues[i]->GetSelectEntryPos())
+            if(m_aValueList[i]->GetSelectEntryPos())
                 sOrder += sDESC;
             else
                 sOrder += sASC;
