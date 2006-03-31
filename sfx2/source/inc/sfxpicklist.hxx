@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:11:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ class SfxPickList : public SfxListener
     sal_uInt32                      m_nAllowedMenuSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;
 
-                            SfxPickList( ULONG nMenuSize );
+                            SfxPickList( sal_uInt32 nMenuSize );
                             ~SfxPickList();
 
     static osl::Mutex*      GetOrCreateMutex();
@@ -91,7 +91,7 @@ class SfxPickList : public SfxListener
     void                    RemovePickListEntries();
 
     public:
-        static SfxPickList* GetOrCreate( const ULONG nMenuSize );
+        static SfxPickList* GetOrCreate( const sal_uInt32 nMenuSize );
         static SfxPickList* Get();
         static void         Delete();
 
