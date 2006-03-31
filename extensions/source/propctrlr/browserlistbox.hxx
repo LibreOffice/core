@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:17:37 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:24:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ namespace pcr
         void    UpdatePlayGround();
         void    UpdateVScroll();
         void    ShowEntry(sal_uInt16 nPos);
-        void    MoveThumbTo(long nNewThumbPos);
+        void    MoveThumbTo(sal_Int32 nNewThumbPos);
         void    Resize();
 
     public:
