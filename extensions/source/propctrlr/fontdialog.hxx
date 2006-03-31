@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:10:34 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 
 class SvxFontListItem;
 class FontList;
@@ -72,12 +75,16 @@ namespace pcr
             SfxItemSet* _pSet);
 
         /** fills the given property set with values obtained from the given item set
-            @return
-                the name of the selected font (if changed by the user)
         */
-        static String       translatePropertiesToItems(
-            const SfxItemSet* _pSet,
+        static void translateItemsToProperties(
+            const SfxItemSet& _rSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel);
+
+        /** fills the given property set with values obtained from the given item set
+        */
+        static void translateItemsToProperties(
+            const SfxItemSet& _rSet,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_properties );
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
