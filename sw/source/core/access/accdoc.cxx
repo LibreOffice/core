@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:46:24 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:09:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
 }
 
 Reference< XAccessible> SAL_CALL
-    SwAccessibleDocumentBase::getAccessibleChild( long nIndex )
+    SwAccessibleDocumentBase::getAccessibleChild( sal_Int32 nIndex )
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException)
 {
