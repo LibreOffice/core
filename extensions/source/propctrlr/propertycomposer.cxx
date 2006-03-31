@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycomposer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:29:46 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #include <functional>
@@ -459,8 +462,19 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL PropertyComposer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
     {
+        if ( !impl_isSupportedProperty_nothrow( evt.PropertyName ) )
+            // A slave handler might fire events for more properties than we support. Ignore those.
+            return;
+
         PropertyChangeEvent aTranslatedEvent( evt );
-        aTranslatedEvent.NewValue = getPropertyValue( evt.PropertyName );
+        try
+        {
+            aTranslatedEvent.NewValue = getPropertyValue( evt.PropertyName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
         m_aPropertyListeners.notify( aTranslatedEvent, &XPropertyChangeListener::propertyChange );
     }
 
