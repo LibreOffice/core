@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:17:25 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,7 +553,7 @@ TabPage TAB_WIZ_COPYTABLE
         Pos                 = MAP_APPFONT ( 12, 77 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text [ de ] = "Daten a~nhängen" ;
-        Text [ en-US ] = "Attach ~data" ;
+        Text [ en-US ] = "Append ~data" ;
     };
 
     CheckBox CB_PRIMARY_COLUMN
