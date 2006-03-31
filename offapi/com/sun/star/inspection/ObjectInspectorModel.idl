@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:06:03 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ module com {  module sun {  module star {  module inspection {
     @see XObjectInspectorModel
     @see XObjectInspectorModel::describeCategories
     @see XObjectInspectorModel::getPropertyOrderIndex
+
+    @since OOo 2.0.3
 */
 service ObjectInspectorModel : XObjectInspectorModel
 {
