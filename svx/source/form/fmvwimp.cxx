@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:39:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@
 /** === end UNO includes === **/
 
 #ifndef _SVX_FMMODEL_HXX
-#include <fmmodel.hxx>
+#include "fmmodel.hxx"
 #endif
 
 #ifndef _SVX_FMUNDO_HXX
@@ -205,6 +205,9 @@
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include <algorithm>
@@ -1376,12 +1379,6 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if (!xNumberFormats.is())
             return NULL;
 
-        // Vom Feld werden nun zwei Informationen benoetigt:
-        // a.) Name des Feldes fuer Label und ControlSource
-        // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
-        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
-        sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
-
         ::rtl::OUString sLabelPostfix;
 
         ////////////////////////////////////////////////////////////////
@@ -1413,11 +1410,12 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if (!_pOutDev)
             return NULL;
 
+        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
         if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
             return NULL;
 
         //////////////////////////////////////////////////////////////////////
-        // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
+        // determine the control type by examining the data type of the bound column
         sal_uInt16 nOBJID = 0;
         sal_Bool bDateNTimeField = sal_False;
 
@@ -1695,7 +1693,15 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     if ( _rxField.is() )
     {
         nDataType = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FIELDTYPE));
-        nFormatKey = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FORMATKEY));
+        Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
+        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_FORMATKEY ) )
+            nFormatKey = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FORMATKEY));
+        else
+            nFormatKey = OStaticDataAccessTools().getDefaultNumberFormat(
+                _rxField,
+                Reference< XNumberFormatTypes >( _rxNumberFormats, UNO_QUERY ),
+                SvtSysLocale().GetLocaleData().getLocale()
+            );
 
         aFieldName = Any(_rxField->getPropertyValue(FM_PROP_NAME));
         aFieldName >>= sFieldName;
