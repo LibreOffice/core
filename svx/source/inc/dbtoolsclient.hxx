@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:00:17 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,12 @@ namespace svxform
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
             sal_Bool _bAllowDefault
         ) const;
+
+        // ------------------------------------------------
+        sal_Int32 getDefaultNumberFormat(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
+            const ::com::sun::star::lang::Locale& _rLocale );
 
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
