@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:08 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,23 +60,3 @@
 #define STR_EXCEPTION_ERRORCODE     6
 
 #endif // _DBAUI_SQLMESSAGE_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3.502.1  2005/09/05 17:34:08  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3  2001/06/21 15:07:11  fme
- *  Fix #86988#: Redesign of dialogs
- *
- *  Revision 1.2  2001/05/17 13:28:15  sj
- *  #86988# dialog redesign
- *
- *  Revision 1.1  2000/10/05 10:07:00  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 02.10.00 12:44:05  fs
- ************************************************************************/
-
