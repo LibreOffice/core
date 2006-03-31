@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:24:22 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ using namespace com::sun::star::ui::dialogs;
  *  PaResId
  */
 
-ResId padmin::PaResId( ULONG nId )
+ResId padmin::PaResId( sal_uInt32 nId )
 {
     static ResMgr* pPaResMgr = NULL;
     if( ! pPaResMgr )
