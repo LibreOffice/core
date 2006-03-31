@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:49 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,3 @@
 #define PB_CLOSE        11
 
 #endif // _DBACCESS_UI_DIRECTSQL_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1.502.1  2005/09/05 17:33:45  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.1  2001/06/19 10:54:13  fs
- *  initial checkin - dialog for executing SQL statements
- *
- *
- *  Revision 1.0 18.06.01 17:01:25  fs
- ************************************************************************/
-
