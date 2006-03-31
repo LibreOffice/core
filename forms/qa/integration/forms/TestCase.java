@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestCase.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:31:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,9 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
     /* internal methods                                                   */
     /* ------------------------------------------------------------------ */
     /** waits for the user to press a key (on the console where she started the java program)
-            or the document to be closed by the user.
-            @return
-                    <TRUE/> if the user pressed a key on the console, <FALSE/> if she closed the document
+        or the document to be closed by the user.
+    @return
+        <TRUE/> if the user pressed a key on the console, <FALSE/> if she closed the document
     */
     protected boolean waitForUserInput() throws java.lang.Exception
     {
