@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:15:04 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -904,7 +904,7 @@ sal_Bool TestValidity_Impl( const String& rString, sal_Bool bURL )
 #pragma optimize ( "", off )
 #endif
 
-ULONG SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
+sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
 {
     // TODO: is used for MS format, should stay here for a while
 
