@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:25:30 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 10:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,9 +602,10 @@ int OutputDevice::ImplGetGraphics() const
         Window* pWindow = (Window*)this;
 
         mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
-        // Wenn wir keinen bekommen haben, versuchen wir uns einen zu klauen
+        // try harder if no wingraphics was available directly
         if ( !mpGraphics )
         {
+            // find another output device in the same frame
             OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
             while ( pReleaseOutDev )
             {
@@ -615,11 +616,13 @@ int OutputDevice::ImplGetGraphics() const
 
             if ( pReleaseOutDev )
             {
+                // steal the wingraphics from the other outdev
                 mpGraphics = pReleaseOutDev->mpGraphics;
                 pReleaseOutDev->ImplReleaseGraphics( FALSE );
             }
             else
             {
+                // if needed retry after releasing least recently used wingraphics
                 while ( !mpGraphics )
                 {
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
@@ -630,6 +633,7 @@ int OutputDevice::ImplGetGraphics() const
             }
         }
 
+        // update global LRU list of wingraphics
         if ( mpGraphics )
         {
             mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
@@ -647,6 +651,7 @@ int OutputDevice::ImplGetGraphics() const
         if ( pVirDev->mpVirDev )
         {
             mpGraphics = pVirDev->mpVirDev->GetGraphics();
+            // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
@@ -654,6 +659,7 @@ int OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
                 mpGraphics = pVirDev->mpVirDev->GetGraphics();
             }
+            // update global LRU list of virtual device graphics
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
@@ -675,6 +681,7 @@ int OutputDevice::ImplGetGraphics() const
         {
             const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
             mpGraphics = pVirDev->mpVirDev->GetGraphics();
+            // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
@@ -682,6 +689,7 @@ int OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
                 mpGraphics = pVirDev->mpVirDev->GetGraphics();
             }
+            // update global LRU list of virtual device graphics
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
@@ -695,6 +703,7 @@ int OutputDevice::ImplGetGraphics() const
         else
         {
             mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
+            // if needed retry after releasing least recently used printer graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
@@ -702,6 +711,7 @@ int OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
                 mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
             }
+            // update global LRU list of printer graphics
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstPrnGraphics;
@@ -735,6 +745,13 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
     // release the fonts of the physically released graphics device
     if( bRelease )
     {
+#ifndef UNX
+        // HACK to fix an urgent P1 printing issue fast
+        // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
+        // so Printer::mpGraphics often points to a dead WinSalGraphics
+        // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
+        if( meOutDevType != OUTDEV_PRINTER )
+#endif
         mpGraphics->ReleaseFonts();
 
         mbNewFont = true;
@@ -747,7 +764,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
         }
 
         if ( mpGetDevFontList )
-    {
+        {
             delete mpGetDevFontList;
             mpGetDevFontList = NULL;
         }
@@ -759,7 +776,6 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
         }
     }
 
-
     ImplSVData* pSVData = ImplGetSVData();
     if ( meOutDevType == OUTDEV_WINDOW )
     {
@@ -767,6 +783,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
 
         if ( bRelease )
             pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
+        // remove from global LRU list of window graphics
         if ( mpPrevGraphics )
             mpPrevGraphics->mpNextGraphics = mpNextGraphics;
         else
@@ -782,6 +799,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
 
         if ( bRelease )
             pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
+        // remove from global LRU list of virtual device graphics
         if ( mpPrevGraphics )
             mpPrevGraphics->mpNextGraphics = mpNextGraphics;
         else
@@ -802,6 +820,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
                 VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
                 if ( bRelease )
                     pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
+                // remove from global LRU list of virtual device graphics
                 if ( mpPrevGraphics )
                     mpPrevGraphics->mpNextGraphics = mpNextGraphics;
                 else
@@ -815,6 +834,7 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
             {
                 if ( bRelease )
                     pPrinter->mpInfoPrinter->ReleaseGraphics( mpGraphics );
+                // remove from global LRU list of printer graphics
                 if ( mpPrevGraphics )
                     mpPrevGraphics->mpNextGraphics = mpNextGraphics;
                 else
