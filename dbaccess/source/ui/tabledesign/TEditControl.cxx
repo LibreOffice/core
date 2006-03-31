@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:39:46 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1290,7 +1290,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 }
 
 //------------------------------------------------------------------------------
-ULONG OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
+sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth('0');
