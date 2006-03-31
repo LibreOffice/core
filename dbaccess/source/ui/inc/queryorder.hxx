@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:01:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
 
 
-        ListBox*        arrLbFields[DOG_ROWS];
-        ListBox*        arrLbValues[DOG_ROWS];
+        ListBox*        m_aColumnList[DOG_ROWS];
+        ListBox*        m_aValueList[DOG_ROWS];
 
         DECL_LINK( FieldListSelectHdl, ListBox * );
         void            EnableLines();
@@ -135,8 +135,10 @@ namespace dbaui
         void            BuildOrderPart();
 
         ::rtl::OUString GetOrderList( ) const;
-        void            SetOrderList( const String& _rOrderList );
         ::rtl::OUString GetOrignalOrder() const { return m_sOrgOrder; }
+
+    private:
+        void            impl_initializeOrderList_nothrow();
     };
 }
 #endif // DBAUI_QUERYORDER_HXX
