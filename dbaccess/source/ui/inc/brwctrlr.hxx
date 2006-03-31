@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:34:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,9 +152,6 @@ namespace dbaui
 
         OAsyncronousLink        m_aAsyncGetCellFocus;
 
-        String                  m_sLoadStopperCaption;
-            // If the data source is loaded asynchronously a stopper is created (which will result in activation of
-            // the office's red button). This string is used as caption for the stopper.
         String                  m_sStateSaveRecord;
         String                  m_sStateUndoRecord;
 
