@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:49:46 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,16 @@ namespace svxform
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->getNumberFormats(_rxConn, _bAllowDefault);
         return xReturn;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 OStaticDataAccessTools::getDefaultNumberFormat( const Reference< XPropertySet >& _xColumn, const Reference< XNumberFormatTypes >& _xTypes, const Locale& _rLocale )
+    {
+        sal_Int32 nReturn = 0;
+        checkIfLoaded();
+        if (m_xDataAccessTools.is())
+            nReturn = m_xDataAccessTools->getDefaultNumberFormat( _xColumn, _xTypes, _rLocale );
+        return nReturn;
     }
 
     //--------------------------------------------------------------------
