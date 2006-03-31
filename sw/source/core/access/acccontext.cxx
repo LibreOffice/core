@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:20:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,7 +624,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
 }
 
 Reference< XAccessible> SAL_CALL
-    SwAccessibleContext::getAccessibleChild( long nIndex )
+    SwAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException)
 {
