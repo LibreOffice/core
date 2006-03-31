@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:37:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #define USE_SAVE_STATE
 #undef  SAVE_ALL_STATES
 
-ResId SaneResId( ULONG nID )
+ResId SaneResId( sal_uInt32 nID )
 {
     static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" MAKE_NUMSTR(SUPD) );
     return ResId( nID, pResMgr );
