@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:48:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
+#endif
+#ifndef _FMTANCHR_HXX //autogen
+#include <fmtanchr.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -104,26 +107,65 @@
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
-
 // DELETE
+/*  lcl_MakeAutoFrms has to call MakeFrms for objects bounded "AtChar" ( == AUTO ),
+    if the anchor frame has be moved via _MoveNodes(..) and DelFrms(..)
+*/
+
+void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, ULONG nMovedIndex )
+{
+    if( rSpzArr.Count() )
+    {
+        SwFlyFrmFmt* pFmt;
+        const SwFmtAnchor* pAnchor;
+        for( USHORT n = 0; n < rSpzArr.Count(); ++n )
+        {
+            pFmt = (SwFlyFrmFmt*)rSpzArr[n];
+            pAnchor = &pFmt->GetAnchor();
+            if( pAnchor->GetAnchorId() == FLY_AUTO_CNTNT )
+            {
+                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+                if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
+                    pFmt->MakeFrms();
+            }
+        }
+    }
+}
+
+/*
+SwUndoDelete has to perform a deletion and to record anything that is needed to restore the
+situation before the deletion. Unfortunately a part of the deletion will be done after calling
+this Ctor, this has to be kept in mind! In this Ctor only the complete paragraphs will be deleted,
+the joining of the first and last paragraph of the selection will be handled outside this function.
+Here are the main steps of the function:
+1. Deletion/recording of content indizes of the selection: footnotes, fly frames and bookmarks
+Step 1 could shift all nodes by deletion of footnotes => nNdDiff will be set.
+2. If the paragraph where the selection ends, is the last content of a section so that this
+section becomes empty when the paragraphs will be joined we have to do some smart actions ;-)
+The paragraph will be moved outside the section and replaced by a dummy text node, the complete
+section will be deleted in step 3. The difference between replacement dummy and original is
+nReplacementDummy.
+3. Moving complete selected nodes into the UndoArray. Before this happens the selection has to be
+extended if there are sections which would become empty otherwise. BTW: sections will be moved into
+the UndoArray if they are complete part of the selection. Sections starting or ending outside of the
+selection will not be removed from the DocNodeArray even they got a "dummy"-copy in the UndoArray.
+4. We have to anticipate the joining of the two paragraphs if the start paragraph is inside a
+section and the end paragraph not. Then we have to move the paragraph into this section and to
+record this in nSectDiff.
+*/
 
 SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
     : SwUndo(UNDO_DELETE), SwUndRng( rPam ),
-    pMvStt( 0 ), pSttStr(0), pEndStr(0), nNode( 0 ), nSectDiff( 0 ),
-    pRedlData( 0 ), pRedlSaveData( 0 ),
-    bSpecialSectNd( FALSE )
+    pMvStt( 0 ), pSttStr(0), pEndStr(0), pRedlData(0), pRedlSaveData(0),
+    nNode(0), nNdDiff(0), nSectDiff(0), nReplaceDummy(0), nSetPos(0),
+    bGroup( FALSE ), bBackSp( FALSE ), bJoinNext( FALSE ), bTblDelLastNd( FALSE ),
+    bDelFullPara( bFullPara ), bResetPgDesc( FALSE ), bResetPgBrk( FALSE )
 {
-    bMvAroundSectNd = bSectNdFnd = bGroup = bBackSp = bTblDelLastNd =
-        bResetPgDesc = bResetPgBrk = FALSE;
-
-    bDelFullPara = bFullPara;
+    bDelFullPara = bFullPara; // This is set e.g. if an empty paragraph before a table is deleted
 
     bCacheComment = false;
 
     SwDoc * pDoc = rPam.GetDoc();
-#ifdef COMPACT
-    pDoc->DelUndoGroups();
-#endif
 
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
     {
@@ -141,6 +183,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
                         ? rPam.GetMark()
                         : rPam.GetPoint();
 
+    // Step 1. deletion/record of content indizes
     if( bDelFullPara )
     {
         ASSERT( rPam.HasMark(), "PaM ohne Mark" );
@@ -220,151 +263,102 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
 
     if( bMoveNds )      // sind noch Nodes zu verschieben ?
     {
-        // verschiebe jetzt den Rest, also die vollstaendigen Nodes
-        // ACHTUNG: pStt und pEnd koennen durch die Pam-Korrektur schon
-        // ungueltig sein !!
-        int nNdOff = 0;
-        if( pSttTxtNd && ( pEndTxtNd || pSttTxtNd->GetTxt().Len() ))
-            nNdOff++;
-
-        SwNodeRange aRg( pDoc->GetNodes(), nSttNode - nNdDiff + nNdOff,
-                         pDoc->GetNodes(), nEndNode - nNdDiff );
-        if( !bFullPara && !pEndTxtNd &&
-            &aRg.aEnd.GetNode() != &pDoc->GetNodes().GetEndOfContent() )
-            aRg.aEnd++;
-
         SwNodes& rNds = (SwNodes&)*pDoc->GetUndoNds();
         SwNodes& rDocNds = pDoc->GetNodes();
-        nNode = rNds.GetEndOfContent().GetIndex();
-
-        // habe wir SectionNodes (Start/Ende) als 1. oder letzten
-        // Nodes in der Selection ?
+        SwNodeRange aRg( rDocNds, nSttNode - nNdDiff,
+                         rDocNds, nEndNode - nNdDiff );
+        if( !bFullPara && !pEndTxtNd &&
+            &aRg.aEnd.GetNode() != &pDoc->GetNodes().GetEndOfContent() )
+            aRg.aEnd++; // Deletion of a complete table
         SwNode* pTmpNd;
-        if( bJoinNext )     // Selektion von oben -> unten
+        // Step 2: Expand selection if necessary
+        if( bJoinNext || bFullPara )
         {
-            // Bedingung: - SectionNode und dessen Ende ist der naechste Node
-            //            - EndNode einer Section und der Start steht ausserhalb
-            if( pSttTxtNd && pEndTxtNd )
-            {
-                // am Ende erfolgt ein JoinNext, teste auf leere Sections
-                // Bedingung: - hinter dem EndTextNode steht ein SectionEndNd
-                //              dessen Start im Bereich liegt
-                //            - SectionSttNd und der Start steht ausserhalb
-                if( aRg.aEnd.GetIndex()+1 < rDocNds.Count() &&
-                    ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode()
-                    && pTmpNd->FindStartNode()->IsSectionNode()
-                    && pTmpNd->StartOfSectionIndex() >= aRg.aStart.GetIndex())
-                )
-                {
-                    aRg.aEnd++;
-                    bSectNdFnd = TRUE;
-                }
-                else if( ((pTmpNd = rDocNds[ aRg.aEnd.GetIndex()-1 ])->IsSectionNode()
-                        && pTmpNd->EndOfSectionIndex()-1 == aRg.aEnd.GetIndex())
-                    || ( pTmpNd->IsEndNode() &&
-                    pTmpNd->FindStartNode()->IsSectionNode() &&
-                    pTmpNd->FindStartNode()->GetIndex() < aRg.aStart.GetIndex())
-                    )
-                {
-                    aRg.aEnd++;
-                    bSectNdFnd = TRUE;
-                }
-            }
-            while( aRg.aEnd.GetIndex() < rDocNds.Count()-1 &&
-                // entstehen leere Sections ???
-                ( (pTmpNd = &aRg.aEnd.GetNode())->IsEndNode() &&
+            // If all content of a section will be moved into Undo,
+            // the section itself should be moved complete.
+            while( aRg.aEnd.GetIndex() + 2  < rDocNds.Count() &&
+                ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode() &&
                 pTmpNd->FindStartNode()->IsSectionNode() &&
-                pTmpNd->FindStartNode()->GetIndex()+1 >= aRg.aStart.GetIndex())
-                )
-            {
+                pTmpNd->FindStartNode()->GetIndex() >= aRg.aStart.GetIndex() ) )
                 aRg.aEnd++;
-                bSectNdFnd = TRUE;
-            }
-        }
-        else
-        {
-            if( pSttTxtNd && pEndTxtNd )
-            {
-                // am Ende erfolgt ein JoinPrev, teste auf leere Sections
-                // Bedingung: - vor dem StartTextNode steht ein SectionSttNd
-                //              dessen Ende im Bereich liegt
-                //            - SectionEndNd und der Start steht ausserhalb
-                if( 2 < aRg.aStart.GetIndex() &&
-                    ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-2 ])
-                        ->IsSectionNode() &&
-                    pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex())
-                )
+            nReplaceDummy = aRg.aEnd.GetIndex() + nNdDiff - nEndNode;
+            if( nReplaceDummy )
+            {   // The selection has been expanded, because
+                aRg.aEnd++;
+                if( pEndTxtNd )
                 {
-                    // remember section is adjacent or included in the
-                    // larger section
-                    ASSERT( aRg.aStart.GetIndex() + 1 <= rDocNds.Count(),
-                            "no more nodes?" );
-                    bSpecialSectNd =
-                        rDocNds[ aRg.aStart.GetIndex() + 1 ]->IsSectionNode();
-
-                    aRg.aStart = *pTmpNd;
-                    bSectNdFnd = TRUE;
-                    nSectDiff++;
-                }
-                else if( aRg.aStart.GetIndex() &&
-                    ((pTmpNd = &aRg.aStart.GetNode())->IsSectionNode()
-                    && pTmpNd->EndOfSectionIndex() > aRg.aEnd.GetIndex() ) ||
-                    (pTmpNd->IsEndNode() && pTmpNd->FindStartNode()->IsSectionNode() &&
-                    pTmpNd->FindStartNode()->GetIndex() < aRg.aStart.GetIndex() )
-                    )
-                {
-                    aRg.aStart--;
-                    bSectNdFnd = TRUE;
-                }
-            }
-            while( 1 < aRg.aStart.GetIndex() &&
-                // entstehen leere Sections ???
-                ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-1 ])->IsSectionNode() &&
-                pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex())
-                )
-            {
-                aRg.aStart--;
-                bSectNdFnd = TRUE;
-            }
-        }
-
-        // ein Index auf den Start-/End-ContentNode, der mit verschoben wird,
-        // um wieder an der Position eine Kopie anzulegen.
-        if( bSectNdFnd && ( bJoinNext ? pEndTxtNd : pSttTxtNd ))
-        {
-            if( bJoinNext )
-            {
-                SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
-                rDocNds.MakeTxtNode( aMvRg.aStart, pEndTxtNd->GetTxtColl() );
-                rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart );
-            }
-            else
-            {
-                SwNodeRange aMvRg( *pSttTxtNd, 0, *pSttTxtNd, 1 );
-                SwNode* pNew = rDocNds.MakeTxtNode( aMvRg.aEnd,
-                                            pSttTxtNd->GetTxtColl() );
-                if( nSectDiff )
-                {
-                    aMvRg.aEnd--;
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd );
+                    // The end text node has to leave the (expanded) selection
+                    // The dummy is needed because _MoveNodes deletes empty sections
+                    ++nReplaceDummy;
+                    SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
+                    SwPosition aSplitPos( *pEndTxtNd );
+                    BOOL bDoesUndo = pDoc->DoesUndo();
+                    pDoc->DoUndo( FALSE );
+                    pDoc->SplitNode( aSplitPos );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, TRUE );
+                    pDoc->DoUndo( bDoesUndo );
                     aRg.aEnd--;
                 }
                 else
-                    aRg.aStart = *pNew;
+                    nReplaceDummy = 0;
             }
         }
+        if( bBackSp || bFullPara )
+        {
+            //See above, the selection has to expanded if there are "nearly empty" sections
+            // and a replacement dummy has to be set if needed.
+            while( 1 < aRg.aStart.GetIndex() &&
+                ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-1 ])->IsSectionNode() &&
+                pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex() ) )
+                aRg.aStart--;
+            if( pSttTxtNd )
+            {
+                nReplaceDummy = nSttNode - nNdDiff - aRg.aStart.GetIndex();
+                if( nReplaceDummy )
+                {
+                    SwNodeRange aMvRg( *pSttTxtNd, 0, *pSttTxtNd, 1 );
+                    SwPosition aSplitPos( *pSttTxtNd );
+                    BOOL bDoesUndo = pDoc->DoesUndo();
+                    pDoc->DoUndo( FALSE );
+                    pDoc->SplitNode( aSplitPos );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, TRUE );
+                    pDoc->DoUndo( bDoesUndo );
+                    aRg.aStart--;
+                }
+            }
+        }
+           if( pSttTxtNd && ( pEndTxtNd || pSttTxtNd->GetTxt().Len() ) )
+            aRg.aStart++;
 
+        // Step 3: Moving into UndoArray...
+        nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds._MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
         pMvStt = new SwNodeIndex( rNds, nNode );
-        bMvAroundSectNd = FALSE;
-
-        if( !bSectNdFnd )
-        {
-            nSectDiff = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
-            bMvAroundSectNd = 0 != nSectDiff;
-        }
-
         nNode = rNds.GetEndOfContent().GetIndex() - nNode;      // Differenz merken !
+        if( pSttTxtNd && pEndTxtNd )
+        {
+            //Step 4: Moving around sections
+            nSectDiff = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
+            // nSect is the number of sections which starts(ends) between start and end node of the
+            // selection. The "loser" paragraph has to be moved into the section(s) of the
+            // "winner" paragraph
+            if( nSectDiff )
+            {
+                if( bJoinNext )
+                {
+                    SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, TRUE );
+                }
+                else
+                {
+                    SwNodeRange aMvRg( *pSttTxtNd, 0, *pSttTxtNd, 1 );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, TRUE );
+                }
+            }
+        }
+        if( nSectDiff || nReplaceDummy )
+            lcl_MakeAutoFrms( *pDoc->GetSpzFrmFmts(),
+                bJoinNext ? pEndTxtNd->GetIndex() : pSttTxtNd->GetIndex() );
     }
     else
         nNode = 0;      // kein Node verschoben -> keine Differenz zum Ende
@@ -376,9 +370,12 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
         rPam.Move( fnMoveForward, fnGoNode );
     }
     else
-        nNdDiff = nSttNode - rPam.GetPoint()->nNode.GetIndex();
-    if( bSectNdFnd )
-        nNdDiff -= nSectDiff;
+    {
+        nNdDiff = nSttNode;
+        if( nSectDiff && bBackSp )
+            nNdDiff += nSectDiff;
+        nNdDiff -= rPam.GetPoint()->nNode.GetIndex();
+    }
 
     if( !rPam.GetNode()->IsCntntNode() )
         rPam.GetPoint()->nContent.Assign( 0, 0 );
@@ -643,6 +640,32 @@ SwRewriter SwUndoDelete::GetRewriter() const
     return aResult;
 }
 
+// Every object, anchored "AtCntnt" will be reanchored at rPos
+void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos, ULONG nOldIdx )
+{
+    if( rSpzArr.Count() )
+    {
+        SwFlyFrmFmt* pFmt;
+        const SwFmtAnchor* pAnchor;
+        const SwPosition* pAPos;
+        for( USHORT n = 0; n < rSpzArr.Count(); ++n )
+        {
+            pFmt = (SwFlyFrmFmt*)rSpzArr[n];
+            pAnchor = &pFmt->GetAnchor();
+            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT )
+            {
+                pAPos =  pAnchor->GetCntntAnchor();
+                if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )
+                {
+                    SwFmtAnchor aAnch( *pAnchor );
+                    aAnch.SetAnchor( &rPos );
+                    pFmt->SetAttr( aAnch );
+                }
+            }
+        }
+    }
+}
+
 void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
@@ -650,13 +673,11 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
     pDoc->DoUndo( FALSE );
 
     ULONG nCalcStt = nSttNode - nNdDiff;
-    if( bSectNdFnd )
-        nCalcStt -= nSectDiff;
-    SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
 
-    // SectionNodes blieben stehen und es wurde danach zusammengefasst
-    if( bMvAroundSectNd && !bJoinNext && pSttStr && pEndStr )
-        pDoc->GetNodes().GoNext( &aIdx );
+    if( nSectDiff && bBackSp )
+        nCalcStt += nSectDiff;
+
+    SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
     SwNode* pInsNd = &aIdx.GetNode();
 
     {       // Block, damit der SwPosition beim loeschen vom Node
@@ -676,10 +697,6 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             {
                 if( pInsNd->IsCntntNode() )
                     aPos.nContent.Assign( (SwCntntNode*)pInsNd, nSttCntnt );
-#ifndef PRODUCT
-                else
-                    ASSERT( bSectNdFnd, "vor welchen Node kopieren?" );
-#endif
                 if( !bTblDelLastNd )
                     pInsNd = 0;         // Node nicht loeschen !!
             }
@@ -690,47 +707,30 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
         SwNodes* pUNds = (SwNodes*)pDoc->GetUndoNds();
         BOOL bNodeMove = 0 != nNode;
 
-        // damit nicht die Attribute aus dem "Start"-Node kopiert werden,
-        // splitte erstmal den Node (wenn noetig)
-        if( bSectNdFnd )
-        {
-            if( bJoinNext )
-                aPos.nNode++;
-        }
-        else if( pEndStr )
+        if( pEndStr )
         {
             // alle Attribute verwerfen, wurden alle gespeichert!
             SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-            if( pTxtNd && pTxtNd->GetpSwAttrSet() )
+
+            if( pTxtNd->GetpSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
-            if( pTxtNd && pTxtNd->GetpSwpHints() )
+            if( pTxtNd->GetpSwpHints() )
                 pTxtNd->ClearSwpHintsArr( FALSE );
 
             if( pSttStr )
             {
+                ULONG nOldIdx = aPos.nNode.GetIndex();
                 pDoc->SplitNode( aPos );
+                // After the split all objects are anchored at the first paragraph,
+                // but the pHistory of the fly frame formats relies on anchoring at
+                // the start of the selection => selection backwards needs a correction.
+                if( bBackSp )
+                    lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-                if( bMvAroundSectNd )
-                {
-                    // leider muessen wir den Node noch verschieben
-                    SwNodeIndex aMvIdx( pDoc->GetNodes(), ( bJoinNext
-                            ? nEndNode - nNdDiff - nNode + nSectDiff + 1
-                            : nCalcStt )
-                            );
-                    if( bJoinNext )
-                        aPos.nNode++;       // auf den naechsten
-                    SwNodeRange aRg( aPos.nNode, -1, aPos.nNode );
-                    pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, TRUE );
-
-                    if( !bJoinNext )
-                        aPos.nNode = aMvIdx;
-                }
             }
 
             pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
-            if( !bNodeMove && pSttStr )
-                aPos.nNode = nSttNode - nNdDiff;
         }
         else if( pSttStr && bNodeMove )
         {
@@ -738,70 +738,73 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             if( pNd )
             {
                 if( nSttCntnt < pNd->GetTxt().Len() )
+                {
+                    ULONG nOldIdx = aPos.nNode.GetIndex();
                     pDoc->SplitNode( aPos );
+                    if( bBackSp )
+                        lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
+                }
                 else
                     aPos.nNode++;
             }
         }
-
+        SwNode* pMovedNode = NULL;
+        if( nSectDiff )
+        {
+            ULONG nMoveIndex = aPos.nNode.GetIndex();
+            int nDiff = 0;
+            if( bJoinNext )
+            {
+                nMoveIndex += nSectDiff + 1;
+                pMovedNode = &aPos.nNode.GetNode();
+            }
+            else
+            {
+                nMoveIndex -= nSectDiff + 1;
+                ++nDiff;
+            }
+            SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
+            SwNodeRange aRg( aPos.nNode, 0 - nDiff, aPos.nNode, 1 - nDiff );
+            aPos.nNode--;
+            if( !bJoinNext )
+                pMovedNode = &aPos.nNode.GetNode();
+            pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, TRUE );
+            aPos.nNode++;
+        }
 
         if( bNodeMove )
         {
             SwNodeRange aRg( *pMvStt, 0, *pMvStt, nNode );
-            SwNodeIndex aCopyIndex( aPos.nNode, bSpecialSectNd ? -1 : 0 );
-            SwNodeIndex aPrevIdx( aCopyIndex, -1 );
-            pUNds->_Copy( aRg, aCopyIndex );
+            SwNodeIndex aCopyIndex( aPos.nNode, -1 );
+            pUNds->_Copy( aRg, aPos.nNode );
 
-            // SectionNode-Modus und von unten nach oben selektiert:
-            //  -> im EndNode steht noch der Rest vom Join => loeschen
-            if( bSectNdFnd )
+            if( nReplaceDummy )
             {
-                SwPosition aSpPos( bJoinNext ? aPrevIdx : aPos.nNode );
-                if( !bJoinNext && !nSectDiff )      // move to next content node
-                    pDoc->GetNodes().GoNext( &aSpPos.nNode );
-
-                aSpPos.nContent.Assign( aSpPos.nNode.GetNode().GetCntntNode(),
-                                        nSttCntnt );
-                pDoc->SplitNode( aSpPos );
+                ULONG nMoveIndex;
                 if( bJoinNext )
                 {
-                    aPrevIdx = aPos.nNode;
-                    if( aPrevIdx.GetNode().IsEndNode() &&
-                        aPrevIdx.GetNode().FindStartNode()->IsSectionNode() )
-                        // used for Buf #70454#
-                        pDoc->GetNodes().GoNext( &aPrevIdx );
-                    else
-                        // used for Buf #73345#
-                        pDoc->GetNodes().GoPrevious( &aPrevIdx );
+                    nMoveIndex = nEndNode - nNdDiff;
+                    aPos.nNode = nMoveIndex + nReplaceDummy;
                 }
                 else
                 {
-                    aPrevIdx++;
-                    if( nSectDiff )
-                        aPrevIdx++;
-                    aSpPos.nNode--;
+                    aPos = aCopyIndex;
+                    nMoveIndex = aPos.nNode.GetIndex() + nReplaceDummy + 1;
                 }
-                SwNodeRange aMvRg( aSpPos.nNode, 0, aSpPos.nNode, 1 );
-                pDoc->GetNodes()._MoveNodes( aMvRg, pDoc->GetNodes(),
-                                            aPrevIdx );
-                pDoc->GetNodes().Delete( aPrevIdx, 1 );
-
-                if( pEndStr )
-                {
-                    aPos.nNode = nEndNode - nNdDiff;    // am Anfang manipulieren
-                    SwTxtNode * pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-                    if( pTxtNd->GetpSwAttrSet() )
-                        pTxtNd->ResetAllAttr();
-
-                    aPos.nContent.Assign( pTxtNd, 0 );
-                    pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
-                }
+                SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
+                SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
+                pMovedNode = &aPos.nNode.GetNode();
+                pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, TRUE );
+                pDoc->GetNodes().Delete( aMvIdx, 1 );
             }
-
-            aPos.nNode = nSttNode - nNdDiff - ( bSpecialSectNd ? 1 : 0 );   // am Anfang manipulieren
         }
+
+        if( pMovedNode )
+            lcl_MakeAutoFrms( *pDoc->GetSpzFrmFmts(), pMovedNode->GetIndex() );
+
         if( pSttStr )
         {
+            aPos.nNode = nSttNode - nNdDiff + ( bJoinNext ? 0 : nReplaceDummy );
             SwTxtNode * pTxtNd = aPos.nNode.GetNode().GetTxtNode();
             // wenn mehr als ein Node geloescht wurde, dann wurden auch
             // alle "Node"-Attribute gespeichert
@@ -855,11 +858,9 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetAttr( nStt, nEnd );
         }
     }
-
     // den temp. eingefuegten Node noch loeschen !!
     if( pInsNd )
         pDoc->GetNodes().Delete( aIdx, 1 );
-
     if( pRedlSaveData )
         SetSaveData( *pDoc, *pRedlSaveData );
 
@@ -926,10 +927,10 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
 
     if( !pSttStr && !pEndStr )
     {
-        SwNodeIndex& rSttIdx = ( bDelFullPara || bJoinNext )
+        SwNodeIndex aSttIdx = ( bDelFullPara || bJoinNext )
                                     ? rPam.GetMark()->nNode
                                     : rPam.GetPoint()->nNode;
-        SwTableNode* pTblNd = rSttIdx.GetNode().GetTableNode();
+        SwTableNode* pTblNd = aSttIdx.GetNode().GetTableNode();
         if( pTblNd )
         {
             if( bTblDelLastNd )
@@ -958,9 +959,10 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
             pTblNd->DelFrms();
         }
 
-        rDoc.GetNodes().Delete( rSttIdx, nEndNode - nSttNode );
-
         rPam.DeleteMark();
+
+        rDoc.GetNodes().Delete( aSttIdx, nEndNode - nSttNode );
+
         // setze den Cursor immer in einen ContentNode !!
         if( !rPam.Move( fnMoveBackward, fnGoCntnt ) &&
             !rPam.Move( fnMoveForward, fnGoCntnt ) )
