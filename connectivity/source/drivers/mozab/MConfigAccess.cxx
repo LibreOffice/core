@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConfigAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:17:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
                             "PabDescription" ,
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Personal Address Book" )));
         sPabDescription = ::rtl::OUStringToOString( usPabDescription,
-                                                 RTL_TEXTENCODING_ASCII_US);
+                                                 RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;
     }
 
@@ -243,7 +243,7 @@ extern "C" const sal_Char* SAL_CALL getHisDescription( void )
                             "HisDescription" ,
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Collected Addresses" )));
         sHisDescription = ::rtl::OUStringToOString( usHisDescription,
-                                                 RTL_TEXTENCODING_ASCII_US);
+                                                 RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;
     }
 
