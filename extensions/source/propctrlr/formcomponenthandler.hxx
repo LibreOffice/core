@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:23:16 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,10 +342,12 @@ namespace pcr
             of our component
             @precond
                 our component actually has a Font property
+            @param _out_rNewValue
+                a value desribing the new font, as <code>Sequence&lt; NamedValue &gt;</code>
             @return
                 <TRUE/> if and only if the user successfully changed the font of our component
         */
-        bool impl_changeFont_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_executeFontDialog_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** allows the user browsing for a database document
             @precond
