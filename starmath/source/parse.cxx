@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:11:05 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,7 @@ void SmParser::NextToken()
     }
     else if (aRes.TokenType & KParseType::BOOLEAN)
     {
-        long   &rnEndPos = aRes.EndPos;
+        sal_Int32   &rnEndPos = aRes.EndPos;
         String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
         if (2 >= aName.Len())
         {
@@ -720,7 +720,7 @@ void SmParser::NextToken()
     }
     else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
     {
-        long   &rnEndPos = aRes.EndPos;
+        sal_Int32   &rnEndPos = aRes.EndPos;
         String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
 
         if (1 == aName.Len())
