@@ -4,10 +4,6 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.24 $
- *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:30:05 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -881,7 +877,7 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
     strncpy( lpszDriverName, aDriver.GetBuffer(), n );
     strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
     // HDU: the crashes usually happen in a MBCS to unicode conversion,
-    // so I suspect the MBCS string's end is not properly recogbnized.
+    // so I suspect the MBCS string's end is not properly recognized.
     // The longest MBCS encoding I'm aware of has six bytes per code
     // => add a couple of zeroes...
     memset( lpszDriverName+aDriver.Len(), 0, 16 );
@@ -924,9 +920,8 @@ static BOOL ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetu
         delete pPrinter->mpGraphics;
     }
 
-    WinSalGraphics* pGraphics = ImplCreateSalPrnGraphics( hNewDC );
+    pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hNewDC );
     pPrinter->mhDC      = hNewDC;
-    pPrinter->mpGraphics    = pGraphics;
 
     return TRUE;
 }
@@ -952,9 +947,8 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         return NULL;
     }
 
-    WinSalGraphics* pGraphics = ImplCreateSalPrnGraphics( hDC );
+    pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hDC );
     pPrinter->mhDC      = hDC;
-    pPrinter->mpGraphics    = pGraphics;
     if ( !pSetupData->mpDriverData )
         ImplUpdateSalJobSetup( pPrinter, pSetupData, FALSE, NULL );
     ImplDevModeToJobSetup( pPrinter, pSetupData, SAL_JOBSET_ALL );
@@ -1405,6 +1399,8 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
         return FALSE;
     }
 
+    // make sure mhDC is set before the printer driver may call our abortproc
+    mhDC = hDC;
     if ( SetAbortProc( hDC, SalPrintAbortProc ) <= 0 )
     {
         mnError = SAL_PRINTER_ERROR_GENERALERROR;
@@ -1458,9 +1454,6 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
     }
     while ( bWhile );
     ImplPostMessage( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
-
-    // make sure mhDC is set before the printer driver may call our abortproc
-    mhDC = hDC;
 
     // bring up a file choser if printing to file port but no file name given
     OString aOutFileName;
@@ -1613,24 +1606,16 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobDat
         return NULL;
     }
 
-    // Hack, damit alte PS-Treiber Leerseiten nicht wegoptimieren
+    // Hack to work around old PostScript printer drivers optimizing away empty pages
+    // TODO: move into ImplCreateSalPrnGraphics()?
     HPEN    hTempPen = SelectPen( hDC, GetStockPen( NULL_PEN ) );
     HBRUSH  hTempBrush = SelectBrush( hDC, GetStockBrush( NULL_BRUSH ) );
     WIN_Rectangle( hDC, -8000, -8000, -7999, -7999 );
     SelectPen( hDC, hTempPen );
     SelectBrush( hDC, hTempBrush );
 
-    WinSalGraphics* pGraphics = new WinSalGraphics;
-    pGraphics->SetLayout(0);
-    pGraphics->mhDC     = hDC;
-    pGraphics->mhWnd    = 0;
-    pGraphics->mbPrinter = TRUE;
-    pGraphics->mbVirDev = FALSE;
-    pGraphics->mbWindow = FALSE;
-    pGraphics->mbScreen = FALSE;
-    ImplSalInitGraphics( pGraphics );
-    mpGraphics = pGraphics;
-    return pGraphics;
+    mpGraphics = ImplCreateSalPrnGraphics( hDC );
+    return mpGraphics;
 }
 
 // -----------------------------------------------------------------------
