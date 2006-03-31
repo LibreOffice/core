@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:08:36 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@
     <node oor:name="com.sun.star.comp.sdbc.MozabDriver">
       <node oor:name="MozillaPreferences">
         <prop oor:name="PabDescription" >
-          <value xml:lang="de">Persönliches Adreßbuch</value>
+          <value xml:lang="de">Persönliches Adressbuch</value>
           <value xml:lang="en-US">Personal Address book</value>
     </prop>
         <prop oor:name="HisDescription">
