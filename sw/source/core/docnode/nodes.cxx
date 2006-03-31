@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:19:40 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2123,7 +2123,10 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             break;
 
         case ND_SECTIONNODE:            // SectionNode
-            // der gesamte Bereich oder nur ein Teil ??
+            // If the end of the section is outside the copy range,
+            // the section node will skipped, not copied!
+            // If someone want to change this behaviour, he has to adjust the function
+            // lcl_NonCopyCount(..) in ndcopy.cxx which relies on it.
             if( pAktNode->EndOfSectionIndex() < aRg.aEnd.GetIndex() )
             {
                 // also der gesamte, lege einen neuen SectionNode an
