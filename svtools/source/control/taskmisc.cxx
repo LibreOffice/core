@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:54 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,10 +281,10 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
     long        nRectHeight = nHeight;
     long        nOff;
     long        nCascadeWins;
-    long        nLeftBorder;
-    long        nTopBorder;
-    long        nRightBorder;
-    long        nBottomBorder;
+    sal_Int32   nLeftBorder;
+    sal_Int32   nTopBorder;
+    sal_Int32   nRightBorder;
+    sal_Int32   nBottomBorder;
     long        nStartOverWidth;
     long        nStartOverHeight;
     long        nOverWidth = 0;
