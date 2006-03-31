@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:39:58 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,8 @@ namespace dbaui
                                         // return FALSE, verhindert Zellenwechsel
         virtual void Undo();
         virtual void Redo();
-        virtual String GetCellText(long nRow, USHORT nColId) const;
-        virtual ULONG GetTotalCellWidth(long nRow, USHORT nColId);
+        virtual String GetCellText(long nRow, sal_uInt16 nColId) const;
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
         virtual void CopyRows();
         virtual void InsertRows( long nRow );
@@ -166,18 +166,18 @@ namespace dbaui
         void            DisplayData( long nRow, BOOL bGrabFocus = TRUE );
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
-        virtual void    SetData( long nRow, USHORT nColId, const TOTypeInfoSP& _pTypeInfo );
-        virtual void    SetData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rSaveData );
-        virtual ::com::sun::star::uno::Any  GetData( long nRow, USHORT nColId );
-        virtual void    SetControlText( long nRow, USHORT nColId, const String& rText );
-        virtual String  GetControlText( long nRow, USHORT nColId );
+        virtual void    SetData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
+        virtual void    SetData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
+        virtual ::com::sun::star::uno::Any  GetData( long nRow, sal_uInt16 nColId );
+        virtual void    SetControlText( long nRow, sal_uInt16 nColId, const String& rText );
+        virtual String  GetControlText( long nRow, sal_uInt16 nColId );
 
         virtual OTableDesignView* GetView() const;
 
         ::std::vector<OTableRow*>* GetRowList(){ return m_pRowList; }
 
         OTableRow*      GetActRow(){ return pActRow; }
-        void            CellModified( long nRow, USHORT nColId );
+        void            CellModified( long nRow, sal_uInt16 nColId );
         void            SetReadOnly( BOOL bRead=TRUE );
 
         virtual void Init();
