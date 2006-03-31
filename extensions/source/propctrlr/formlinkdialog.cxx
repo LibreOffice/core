@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:24:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ namespace pcr
         String sMasterType = getFormDataSourceType( m_xMasterForm );
         if ( !sMasterType.Len() )
         {
-            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_DIALOG );
+            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
             sMasterType = String( ResId( STR_MASTER_FORM ) );
         }
         m_aMasterLabel.SetText( sMasterType );
