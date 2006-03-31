@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:07:39 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
         throw (::com::sun::star::uno::RuntimeException);
 
