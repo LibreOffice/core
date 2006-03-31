@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-07 17:09:20 $
+#   last change: $Author: vg $ $Date: 2006-03-31 10:58:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,8 +124,8 @@ FIND*=$(BUILD_TOOLS)$/find.exe
 GNUCOPY=$(BUILD_TOOLS)$/gnucp.exe
 .ENDIF			# "$(use_cygcp)"!=""
 GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
-GNUMAKE*=$(ENV_TOOLS)$/gnumake.exe
-GREP*=$(ENV_TOOLS)$/gnugrep.exe
+GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
+GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
