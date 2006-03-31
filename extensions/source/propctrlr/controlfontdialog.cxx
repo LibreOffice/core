@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlfontdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:20:06 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ namespace pcr
         {
             const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog)->GetOutputItemSet();
             if (pOutput)
-                ControlCharacterDialog::translatePropertiesToItems(pOutput, m_xControlModel);
+                ControlCharacterDialog::translateItemsToProperties( *pOutput, m_xControlModel );
         }
     }
 
