@@ -126,9 +126,9 @@ class DispatchRecorder
 
     virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Any SAL_CALL getByIndex(long int)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException);
+    virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException);
 
-    virtual void SAL_CALL replaceByIndex(long int, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL replaceByIndex(sal_Int32, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // private functions
     private:
