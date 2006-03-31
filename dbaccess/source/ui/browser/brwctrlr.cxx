@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:36:29 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -519,7 +519,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bClosingKillOpen( sal_False )
     ,m_bLoadCanceled( sal_False )
     ,m_nPendingLoadFinished(0)
-    ,m_sLoadStopperCaption(ModuleRes(RID_STR_LOADING_DATASOURCE))
     ,m_nFormActionNestingLevel(0)
     ,m_bErrorOccured( sal_False )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
