@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:35:47 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1219,7 +1219,7 @@ Size MultiLineEdit::CalcMinimumSize() const
 {
     Size aSz = pImpSvMEdit->CalcMinimumSize();
 
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Width() += nLeft+nRight;
     aSz.Height() += nTop+nBottom;
@@ -1230,7 +1230,7 @@ Size MultiLineEdit::CalcMinimumSize() const
 Size MultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
 
     // In der Hoehe auf ganze Zeilen justieren
@@ -1251,7 +1251,7 @@ Size MultiLineEdit::CalcSize( USHORT nColumns, USHORT nLines ) const
 {
     Size aSz = pImpSvMEdit->CalcSize( nColumns, nLines );
 
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Width() += nLeft+nRight;
     aSz.Height() += nTop+nBottom;
