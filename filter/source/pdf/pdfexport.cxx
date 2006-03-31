@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:53:07 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 {
     bool bAssertionFired( false );
 
-    for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; )
+    for( sal_uInt32 i = 0, nCount = rMtf.GetActionCount(); i < nCount; )
     {
         if ( !pPDFExtOutDevData || !pPDFExtOutDevData->PlaySyncPageAct( rWriter, i ) )
         {
