@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,6 +619,10 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
             pFmt->Modify( &aMsgHint, &aMsgHint );
         }
+
+        // A ClearRedo could result in a rekursive call of this function and delete some section
+        // formats => the position iside the SectionFmtTbl could have changed
+        nPos = pSectionFmtTbl->GetPos( pFmt );
 
         // ACHTUNG: erst aus dem Array entfernen und dann loeschen.
         //          Der Section-DTOR versucht selbst noch sein Format
