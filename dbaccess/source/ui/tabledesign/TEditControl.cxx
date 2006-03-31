@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:20:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,6 +341,7 @@ void OTableEditorCtrl::InitCellController()
     //////////////////////////////////////////////////////////////////////
     // Zelle Typ
     pTypeCell = new ListBoxControl( &GetDataWindow() );
+    pTypeCell->SetDropDownLineCount( 15 );
 
     //////////////////////////////////////////////////////////////////////
     // Zelle Beschreibung
