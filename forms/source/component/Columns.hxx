@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:02 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,15 @@
 #ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
@@ -84,8 +88,9 @@ namespace frm
 //==================================================================
 // OGridColumn
 //==================================================================
-typedef ::cppu::WeakAggComponentImplHelper2<    ::com::sun::star::container::XChild,
-                                                ::com::sun::star::lang::XUnoTunnel > OGridColumn_BASE;
+typedef ::cppu::WeakAggComponentImplHelper3 <   ::com::sun::star::container::XChild
+                                            ,   ::com::sun::star::lang::XUnoTunnel
+                                            ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE
                     ,public OPropertySetAggregationHelper
@@ -99,8 +104,8 @@ protected:
 // [properties]
 
     InterfaceRef                m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
-                                m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
+                                m_xORB;
     ::rtl::OUString             m_aModelName;
 
 // [properties]
@@ -152,11 +157,16 @@ public:
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
+
     const ::rtl::OUString& getModelName() const { return m_aModelName; }
 
 protected:
     static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
     static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
+
+    virtual OGridColumn* createCloneColumn() const;
 };
 
 #define DECL_COLUMN(ClassName)                                      \
@@ -166,6 +176,7 @@ class ClassName                                                     \
 {                                                                                   \
 public:                                                                             \
     ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
+    ClassName(const ClassName* _pCloneFrom, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
                                                                                     \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();             \
@@ -174,34 +185,46 @@ public:                                                                         
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,  \
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps  \
         ) const;    \
+    \
+    virtual OGridColumn* createCloneColumn() const; \
 };
 
 
 #define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
 ClassName::ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) \
-    :OGridColumn(_rxFactory, Model){}                                           \
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)\
-{                                                                                   \
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );    \
-    return xInfo;                                                                   \
-}                                                                                   \
-::cppu::IPropertyArrayHelper& ClassName::getInfoHelper()                \
-{                                                                                   \
+    :OGridColumn(_rxFactory, Model) \
+{ \
+} \
+ClassName::ClassName( const ClassName* _pCloneFrom, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory ) \
+    :OGridColumn( _pCloneFrom, _rxFactory ) \
+{ \
+} \
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException) \
+{ \
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) ); \
+    return xInfo; \
+} \
+::cppu::IPropertyArrayHelper& ClassName::getInfoHelper() \
+{ \
     return *const_cast<ClassName*>(this)->getArrayHelper(); \
-}   \
+} \
 void ClassName::fillProperties( \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,  \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps  \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps, \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps \
     ) const \
-{   \
-    if (m_xAggregateSet.is())   \
-    {   \
-        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();  \
-        clearAggregateProperties(_rAggregateProps, bAllowDropDown);                 \
-        setOwnProperties(_rProps);                                              \
-    }   \
-}   \
-
+{ \
+    if (m_xAggregateSet.is()) \
+    { \
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties(); \
+        clearAggregateProperties(_rAggregateProps, bAllowDropDown); \
+        setOwnProperties(_rProps); \
+    } \
+} \
+OGridColumn* ClassName::createCloneColumn() const \
+{ \
+    return new ClassName( this, m_xORB ); \
+} \
+ \
 // column type ids
 #define TYPE_CHECKBOX       0
 #define TYPE_COMBOBOX       1
