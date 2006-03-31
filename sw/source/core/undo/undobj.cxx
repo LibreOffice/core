@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 09:21:11 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -640,74 +640,84 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 case FLY_AT_CNTNT:
                     {
                         pAPos =  pAnchor->GetCntntAnchor();
-
-                        bool bTmp;
-                        if (0 != pAPos &&
-                            ( DELCNT_CHKNOCNTNT & nDelCntntType ))
-                            bTmp = pStt->nNode <= pAPos->nNode &&
-                                pAPos->nNode < pEnd->nNode;
-                        else
+                        if( pAPos )
                         {
-                            if (bDelFwrd)
-                                bTmp = rMark.nNode < pAPos->nNode &&
-                                    pAPos->nNode <= rPoint.nNode;
+                            bool bTmp;
+                            if( DELCNT_CHKNOCNTNT & nDelCntntType )
+                                bTmp = pStt->nNode <= pAPos->nNode && pAPos->nNode < pEnd->nNode;
                             else
-                                bTmp = rPoint.nNode <= pAPos->nNode &&
-                                    pAPos->nNode < rMark.nNode;
-                        }
-
-                        if (bTmp)
-                        {
-                            if( !pHistory )
-                                pHistory = new SwHistory;
-
-                            // nur den Anker verchieben ??
-                            if( 0 != pAPos && // #i9456#
-                                !( DELCNT_CHKNOCNTNT & nDelCntntType ) &&
-                                rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
                             {
-                                    pHistory->Add( *pFmt );
-
-                                    SwFmtAnchor aAnch( *pAnchor );
-                                    SwPosition aPos( rMark.nNode );
-                                    aAnch.SetAnchor( &aPos );
-                                    pFmt->SetAttr( aAnch );
+                                if (bDelFwrd)
+                                    bTmp = rMark.nNode < pAPos->nNode &&
+                                        pAPos->nNode <= rPoint.nNode;
+                                else
+                                    bTmp = rPoint.nNode <= pAPos->nNode &&
+                                        pAPos->nNode < rMark.nNode;
                             }
-                            else
+
+                            if (bTmp)
                             {
-                                pHistory->Add( *pFmt, nChainInsPos );
-                                // n wieder zurueck, damit nicht ein
-                                // Format uebesprungen wird !
-                                n = n >= rSpzArr.Count() ?
-                                    rSpzArr.Count() : n+1;
+                                if( !pHistory )
+                                    pHistory = new SwHistory;
+
+                                // Moving the anchor?
+                                if( !( DELCNT_CHKNOCNTNT & nDelCntntType ) &&
+                                    ( rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex() ) )
+                                {
+                                    // Do not try to move the anchor to a table!
+                                    if( rMark.nNode.GetNode().GetTxtNode() )
+                                    {
+                                        pHistory->Add( *pFmt );
+                                        SwFmtAnchor aAnch( *pAnchor );
+                                        SwPosition aPos( rMark.nNode );
+                                        aAnch.SetAnchor( &aPos );
+                                        pFmt->SetAttr( aAnch );
+                                    }
+                                }
+                                else
+                                {
+                                    pHistory->Add( *pFmt, nChainInsPos );
+                                    // n wieder zurueck, damit nicht ein
+                                    // Format uebesprungen wird !
+                                    n = n >= rSpzArr.Count() ?
+                                        rSpzArr.Count() : n+1;
+                                }
                             }
                         }
                     }
                     break;
                 case FLY_AUTO_CNTNT:
                     if( 0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
-                        (( DELCNT_CHKNOCNTNT & nDelCntntType )
-                        ? ( pStt->nNode <= pAPos->nNode &&
-                            pAPos->nNode < pEnd->nNode )
-                        : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
+                        ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {
                         if( !pHistory )
                             pHistory = new SwHistory;
-                        if( ( DELCNT_CHKNOCNTNT & nDelCntntType ) ||
-                            ( ( pAPos->nNode < pEnd->nNode ) &&
-                                ( pStt->nNode < pAPos->nNode ||
-                                  !pStt->nContent.GetIndex() ) ) )
+                        if( pAPos->nNode < pEnd->nNode &&
+                            ( ( DELCNT_CHKNOCNTNT & nDelCntntType ) ||
+                              ( pStt->nNode < pAPos->nNode || !pStt->nContent.GetIndex() ) ) )
                         {
+                            // Here we identified the objects to destroy:
+                            // - anchored between start and end of the selection
+                            // - anchored in start of the selection with "CheckNoContent"
+                            // - anchored in start of sel. and the selection start at pos 0
                             pHistory->Add( *pFmt, nChainInsPos );
                             n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                         }
-                        else
+                        else if( !( DELCNT_CHKNOCNTNT & nDelCntntType ) )
                         {
-                            pHistory->Add( *pFmt );
-
-                            SwFmtAnchor aAnch( *pAnchor );
-                            aAnch.SetAnchor( &rMark );
-                            pFmt->SetAttr( aAnch );
+                            if( *pStt <= *pAPos && *pAPos < *pEnd )
+                            {
+                                // These are the objects anchored
+                                // between section start and end position
+                                // Do not try to move the anchor to a table!
+                                if( rMark.nNode.GetNode().GetTxtNode() )
+                                {
+                                    pHistory->Add( *pFmt );
+                                    SwFmtAnchor aAnch( *pAnchor );
+                                    aAnch.SetAnchor( &rMark );
+                                    pFmt->SetAttr( aAnch );
+                                }
+                            }
                         }
                     }
                     break;
