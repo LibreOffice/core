@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:25:00 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,18 +423,16 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     ULONG nNode;
     ULONG nNdDiff;              // Differenz von Nodes vor-nach Delete
     ULONG nSectDiff;            // Diff. von Nodes vor/nach Move mit SectionNodes
+    ULONG nReplaceDummy;        // Diff. to a temporary dummy object
     USHORT nSetPos;
 
     BOOL bGroup : 1;    // TRUE: ist schon eine Gruppe; wird in CanGrouping() ausgwertet !!
     BOOL bBackSp : 1;   // TRUE: wenn Gruppierung und der Inhalt davor geloescht wird
     BOOL bJoinNext: 1;  // TRUE: wenn der Bereich von Oben nach unten geht
-    BOOL bSectNdFnd : 1;    // TRUE: Sonderbehandlung fuer SectionNodes
-    BOOL bMvAroundSectNd :1;// TRUE: Sonderbehandlung fuer SectionNodes
     BOOL bTblDelLastNd : 1; // TRUE: TextNode hinter der Tabelle einf./loeschen
     BOOL bDelFullPara : 1;  // TRUE: gesamte Nodes wurden geloescht
     BOOL bResetPgDesc : 1;  // TRUE: am nachfolgenden Node das PgDsc zuruecksetzen
     BOOL bResetPgBrk : 1;   // TRUE: am nachfolgenden Node das PgBreak zuruecksetzen
-    BOOL bSpecialSectNd : 1; // TRUE: special section node treatement
 
     BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
@@ -834,7 +832,7 @@ public:
     virtual void Repeat( SwUndoIter& );
 
     void SetRange( const SwNodeRange& );
-    void AddBoxPos( SwDoc& rDoc, ULONG nNdIdx,
+    void AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, ULONG nEndIdx,
                     xub_StrLen nCntntIdx = STRING_MAXLEN);
     OUT_UNDOBJ( TableToText )
 };
