@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:17:27 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,8 +286,7 @@ protected:
             OValueRow                m_aParameterRow;
             ::std::vector< ::rtl::OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
-            sal_Int32                m_nRowCountResult;
-            sal_Bool                 m_nIsAlwaysFalseQuery;
+            sal_Bool                 m_bIsAlwaysFalseQuery;
             ::vos::ORef<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
             sal_Int32                 m_nNewRow;        //inserted row
