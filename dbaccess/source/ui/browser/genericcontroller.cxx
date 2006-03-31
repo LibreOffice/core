@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:21:38 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
-#if OSL_DEBUG_LEVEL >= 2
+#ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
 {
@@ -195,12 +195,12 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
         getView()->Show();
     }
 
-#if OSL_DEBUG_LEVEL >= 2
+#ifdef DBG_UTIL
     m_bDescribingSupportedFeatures = true;
 #endif
     m_aSupportedFeatures.clear();
     describeSupportedFeatures();
-#if OSL_DEBUG_LEVEL >= 2
+#ifdef DBG_UTIL
     m_bDescribingSupportedFeatures = false;
 #endif
 
@@ -830,8 +830,8 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( R
 void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsciiCommandURL,
         sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
 {
-#if OSL_DEBUG_LEVEL >= 2
-    OSL_ENSURE( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
+#ifdef DBG_UTIL
+    DBG_ASSERT( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
 #endif
 
     ControllerFeature aFeature;
