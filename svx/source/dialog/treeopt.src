@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:52:13 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
             < "Hier können Sie verschiedene globale Einstellungen für Zeichnungsdokumente vornehmen. Unter anderem legen Sie fest, welche Inhalte Sie auf den Seiten sehen wollen, welcher Maßstab allgemein gilt, ob und wie am Raster ausgerichtet wird und welche Inhalte standardmäßig gedruckt werden." ; SID_SD_GRAPHIC_OPTIONS; > ;
             < "Hier wählen Sie Druckformat und Druckoptionen für alle neu gespeicherten Formeldokumente. Diese Optionen gelten für den Fall, dass Sie eine Formel direkt aus %PRODUCTNAME Math drucken möchten." ; SID_SM_EDITOPTIONS; > ;
             < "Hier legen Sie allgemeine Voreinstellungen für Ihre %PRODUCTNAME Chart-Diagramme fest. Bestimmen Sie hier die Grundfarben für alle neu angelegten Diagramme." ; SID_SCH_EDITOPTIONS; > ;
-            < "Treffen Sie hier allgemeine Festlegungen für den Zugriff auf externen Datenquellen."; SID_SB_STARBASEOPTIONS; >;
+            < "Treffen Sie hier allgemeine Festlegungen für den Zugriff auf externe Datenquellen."; SID_SB_STARBASEOPTIONS; >;
             < "Hier bestimmen Sie allgemeine Einstellungen für das Öffnen und Speichern von Dokumenten in Fremdformaten. Sie können das Verhalten von Makros oder OLE-Objekten in Microsoft Office-Dokumenten steuern oder Einstellungen für HTML-Dokumente festlegen." ; SID_FILTER_DLG; > ;
         };
         ItemList [ x-comment ] =
