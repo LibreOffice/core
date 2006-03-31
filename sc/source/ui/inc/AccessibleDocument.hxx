@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:07:08 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,13 +132,13 @@ public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(long nIndex)
+        getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
