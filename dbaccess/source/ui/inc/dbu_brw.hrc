@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_brw.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:48:31 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 12:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "dbu_resource.hrc"
 #endif
 
-#define RID_STR_LOADING_DATASOURCE          RID_STR_BRW_START
+    // FREE                                 RID_STR_BRW_START +  0
 #define RID_STR_DATABROWSER_FILTERED        RID_STR_BRW_START +  1
 #define SBA_BROWSER_SETTING_ORDER           RID_STR_BRW_START +  2
 #define SBA_BROWSER_SETTING_FILTER          RID_STR_BRW_START +  3
