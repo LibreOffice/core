@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:48:53 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,13 +255,20 @@ void CheckTable( const SwTable& );
 #define CHECKTABLE(t)
 #endif
 
+/* #130880: Crash in undo of table to text when the table has (freshly) merged cells
+The order of cell content nodes in the nodes array is not given by the recursive table structure.
+The algorithmn must not rely on this even it holds for a fresh loaded table in odt file format.
+So we need to remember not only the start node position but the end node position as well.
+*/
+
 struct SwTblToTxtSave
 {
     ULONG nNode;
+    ULONG nEndNd;
     xub_StrLen nCntnt;
     SwHistory* pHstry;
 
-    SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, xub_StrLen nCntnt = STRING_MAXLEN );
+    SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLen nCntnt );
     ~SwTblToTxtSave() { delete pHstry; }
 };
 
@@ -427,8 +434,8 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
 
 // -----------------------------------------------------
 
-SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, xub_StrLen nCnt )
-    : nNode( nNd ), nCntnt( nCnt ), pHstry( 0 )
+SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLen nCnt )
+    : nNode( nNd ), nEndNd( nEndIdx), nCntnt( nCnt ), pHstry( 0 )
 {
     // Attributierung des gejointen Node merken.
     if( USHRT_MAX != nCnt )
@@ -647,6 +654,7 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
             pSave->pHstry->SetTmpEnd( nTmpEnd );
         }
 
+        aEndIdx = pSave->nEndNd;
         SwStartNode* pSttNd = new SwStartNode( aSttIdx, ND_STARTNODE,
                                                 SwTableBoxStartNode );
         pSttNd->pStartOfSection = pTblNd;
@@ -662,7 +670,6 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
 
         SwTableBox* pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
         pLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, 0 );
-        aEndIdx = *pSttNd;
     }
     return pTblNd;
 }
@@ -726,9 +733,9 @@ void SwUndoTblToTxt::SetRange( const SwNodeRange& rRg )
     nEndNd = rRg.aEnd.GetIndex();
 }
 
-void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, xub_StrLen nCntntIdx )
+void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, ULONG nEndIdx, xub_StrLen nCntntIdx )
 {
-    SwTblToTxtSave* pNew = new SwTblToTxtSave( rDoc, nNdIdx, nCntntIdx );
+    SwTblToTxtSave* pNew = new SwTblToTxtSave( rDoc, nNdIdx, nEndIdx, nCntntIdx );
     pBoxSaves->Insert( pNew, pBoxSaves->Count() );
 }
 
