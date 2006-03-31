@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:52:37 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,7 +615,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aTLPos.X() -= 0;
                 Size  aSize (pNode->GetSize());
 
-                long *pXAry = new long[ aNodeText.Len() ];
+                sal_Int32 *pXAry = new sal_Int32[ aNodeText.Len() ];
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.Len() );
                 aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
@@ -698,7 +698,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 long nNodeX = pNode->GetLeft();
 
-                long *pXAry = new long[ aTxt.Len() ];
+                sal_Int32 *pXAry = new sal_Int32[ aTxt.Len() ];
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aTxt, pXAry, 0, aTxt.Len() );
                 for (sal_Int32 i = 0;  i < aTxt.Len()  &&  nRes == -1;  ++i)
