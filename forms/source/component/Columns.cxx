@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:34:48 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 11:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 const sal_uInt16 WIDTH              = 0x0001;
@@ -252,6 +253,7 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
     ,m_aModelName(_sModelName)
     ,m_aHidden( makeAny( sal_False ) )
+    ,m_xORB( _rxFactory )
 {
     DBG_CTOR(OGridColumn,NULL);
 
@@ -288,6 +290,7 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
 OGridColumn::OGridColumn( const OGridColumn* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
+    ,m_xORB( _rxFactory )
 {
     DBG_CTOR(OGridColumn,NULL);
 
@@ -590,6 +593,20 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         default:
             return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
     }
+}
+
+// XCloneable
+//------------------------------------------------------------------------------
+Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeException)
+{
+    OGridColumn* pNewColumn = createCloneColumn();
+    return pNewColumn;
+}
+
+//------------------------------------------------------------------------------
+OGridColumn* OGridColumn::createCloneColumn() const
+{
+    return new OGridColumn( this, m_xORB );
 }
 
 //XPersistObject
