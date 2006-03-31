@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageShape.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:49 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Returns always 0 because there can be no children.
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void)
         throw ();
 
