@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:09:35 $
+ *  last change: $Author: vg $ $Date: 2006-03-31 09:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1553,9 +1553,9 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 }
 
 
-                long nTitleHeight;
+                sal_Int32 nTitleHeight;
                 {
-                    long nDummy1, nDummy2, nDummy3;
+                    sal_Int32 nDummy1, nDummy2, nDummy3;
                     GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
                 }
 
@@ -1577,9 +1577,9 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 }
 
 
-                long nTitleHeight;
+                sal_Int32 nTitleHeight;
                 {
-                    long nDummy1, nDummy2, nDummy3;
+                    sal_Int32 nDummy1, nDummy2, nDummy3;
                     GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
                 }
 
@@ -1605,9 +1605,9 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 }
 
 
-                long nTitleHeight;
+                sal_Int32 nTitleHeight;
                 {
-                    long nDummy1, nDummy2, nDummy3;
+                    sal_Int32 nDummy1, nDummy2, nDummy3;
                     GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
                 }
 
