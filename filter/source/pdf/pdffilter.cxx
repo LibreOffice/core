@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:01:37 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,15 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), sal_True );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), sal_False );
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "FitWindow" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "DirectionR2L" ) ), sal_False );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "OpenPDFDocumentMode" ) ), 0 );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "OpenPDFDocumentAction" ) ), 0 );
         aFilterData = aCfgItem.GetFilterData();
     }
     if( mxSrcDoc.is() && xOStm.is() )
