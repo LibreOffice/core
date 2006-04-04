@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 08:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1746,7 +1746,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     bDisplay=FALSE;
                                 }
                             }
-                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
+                            if ( children[n].is() && children[n]->getType() != browse::BrowseNodeTypes::SCRIPT && bDisplay )
                             {
 
                                 /*
