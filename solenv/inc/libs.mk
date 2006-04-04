@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 14:22:05 $
+#   last change: $Author: vg $ $Date: 2006-04-04 08:30:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.96 $$"
+LIBSMKREV!:="$$Revision: 1.97 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -182,12 +182,12 @@ ZLIB3RDLIB=-lz
 ZLIB3RDLIB=-lzlib
 .ENDIF
 .IF "$(SYSTEM_JPEG)"=="YES"
-.IF "$(SOLAR_JAVA)" != ""
-#i34482# Blackdown jdk is in the libsearch patch and has a libjpeg
+.IF "$(SOLAR_JAVA)" != "" && "$(JDK)" != "gcj" && "$(OS)" != "MACOSX"
+#i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so
-.ELIF "$(OS)" == "MACOSX"
-JPEG3RDLIB=-ljpeg
+.ELIF "$(CPUNAME)" == "X86_64"
+JPEG3RDLIB=/usr/lib64/libjpeg.so
 .ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
 .ENDIF
