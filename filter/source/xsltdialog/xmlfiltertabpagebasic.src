@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:21:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 
 TabPage RID_XML_FILTER_TABPAGE_BASIC
 {
-    HelpId                  = RID_XML_FILTER_TABPAGE_BASIC;
+    HelpId                  = HID_XML_FILTER_TABPAGE_BASIC;
     Hide                    = TRUE;
     Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
     Text [ de ] = "Allgemein" ;
