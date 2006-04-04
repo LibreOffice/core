@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:15:42 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 08:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
         dictentry * spthes;  // shared thesaurus list entry pointer
         dictentry * upthes;  // shared thesaurus list entry pointer
+    std::vector<dictentry*> postspthes;
+    std::vector<dictentry*> postupthes;
         SvtPathOptions aPathOpt;
         int numusr;          // number of user dictionary entries
         int numshr;          // number of shared dictionary entries
@@ -192,6 +194,33 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             if (sdMgr)
                  numshr = sdMgr->get_list(&spthes);
 
+            //Test for existence of the dictionaries
+            for (int i = 0; i < numusr; i++)
+        {
+                OUString str = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(upthes[i].filename) +
+            A2OU(".idx");
+        osl::File aTest(str);
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postupthes.push_back(&upthes[i]);
+            }
+
+            for (int i = 0; i < numshr; i++)
+        {
+                OUString str = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spthes[i].filename) +
+            A2OU(".idx");
+        osl::File aTest(str);
+                OString aTmpidx(OU2ENC(str,osl_getThreadTextEncoding()));
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postspthes.push_back(&spthes[i]);
+            }
+
+        numusr = postupthes.size();
+            numshr = postspthes.size();
+
 
             // we really should merge these and remove duplicates but since
             // users can name their dictionaries anything they want it would
@@ -214,7 +243,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
                 //first add the user dictionaries
                 for (i = 0; i < numusr; i++) {
-                Locale nLoc( A2OU(upthes->lang), A2OU(upthes->region), OUString() );
+                Locale nLoc( A2OU(postupthes[i]->lang), A2OU(postupthes[i]->region), OUString() );
                     newloc = 1;
                 for (j = 0; j < numlocs; j++) {
                         if (nLoc == pLocale[j]) newloc = 0;
@@ -227,15 +256,14 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     aThes[k] = NULL;
                     aTEncs[k] = 0;
 
-                    aTNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(upthes->filename);
+                    aTNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(postupthes[i]->filename);
                     aCharSetInfo[k] = new CharClass(nLoc);
                     k++;
-                    upthes++;
                 }
 
                 // now add the shared thesauri
                 for (i = 0; i < numshr; i++) {
-                Locale nLoc( A2OU(spthes->lang), A2OU(spthes->region), OUString() );
+                Locale nLoc( A2OU(postspthes[i]->lang), A2OU(postspthes[i]->region), OUString() );
                     newloc = 1;
                 for (j = 0; j < numlocs; j++) {
                         if (nLoc == pLocale[j]) newloc = 0;
@@ -247,10 +275,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     aTLocs[k] = nLoc;
                     aThes[k] = NULL;
                     aTEncs[k] = 0;
-                    aTNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spthes->filename);
+                    aTNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(postspthes[i]->filename);
                     aCharSetInfo[k] = new CharClass(nLoc);
                     k++;
-                    spthes++;
                 }
 
                 aSuppLocales.realloc(numlocs);
