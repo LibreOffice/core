@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+
+//uncomment this to use the Tabbed PDF dialog (under development !)
 
 // -----------------------
 // - PDFDialog functions -
@@ -179,7 +181,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mpResMgr && mxSrcDoc.is() )
     {
-        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc );
         pRet = pDlg;
     }
 
@@ -191,8 +193,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpPDFDialog* >( m_pDialog )->GetFilterData();
-
+        maFilterData = static_cast< ImpPDFTabDialog* >( m_pDialog )->GetFilterData();
     destroyDialog();
 }
 
