@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:13:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 08:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,10 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         dictentry * updict;  // user dict entry pointer
         SvtPathOptions aPathOpt;
 
+    std::vector<dictentry *> postspdict;
+    std::vector<dictentry *> postupdict;
+
+
     if (!numdict) {
 
             // invoke a dictionary manager to get the user dictionary list
@@ -184,6 +188,32 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             if (sdMgr)
                  numshr = sdMgr->get_list(&spdict);
 
+            //Test for existence of the dictionaries
+            for (int i = 0; i < numusr; i++)
+        {
+                OUString str = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(updict[i].filename) +
+            A2OU(".dic");
+        osl::File aTest(str);
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postupdict.push_back(&updict[i]);
+            }
+
+            for (int i = 0; i < numshr; i++)
+        {
+                OUString str = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spdict[i].filename) +
+            A2OU(".dic");
+        osl::File aTest(str);
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postspdict.push_back(&spdict[i]);
+            }
+
+        numusr = postupdict.size();
+            numshr = postspdict.size();
+
             // we really should merge these and remove duplicates but since
             // users can name their dictionaries anything they want it would
             // be impossible to know if a real duplication exists unless we
@@ -204,7 +234,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
                 //first add the user dictionaries
                 for (i = 0; i < numusr; i++) {
-                Locale nLoc( A2OU(updict->lang), A2OU(updict->region), OUString() );
+                Locale nLoc( A2OU(postupdict[i]->lang), A2OU(postupdict[i]->region), OUString() );
                     newloc = 1;
                 for (j = 0; j < numlocs; j++) {
                         if (nLoc == pLocale[j]) newloc = 0;
@@ -216,14 +246,13 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     aDLocs[k] = nLoc;
                     aDicts[k] = NULL;
                     aDEncs[k] = 0;
-                    aDNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(updict->filename);
+                    aDNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(postupdict[i]->filename);
                     k++;
-                    updict++;
                 }
 
                 // now add the shared dictionaries
                 for (i = 0; i < numshr; i++) {
-                Locale nLoc( A2OU(spdict->lang), A2OU(spdict->region), OUString() );
+                Locale nLoc( A2OU(postspdict[i]->lang), A2OU(postspdict[i]->region), OUString() );
                     newloc = 1;
                 for (j = 0; j < numlocs; j++) {
                         if (nLoc == pLocale[j]) newloc = 0;
@@ -235,9 +264,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     aDLocs[k] = nLoc;
                     aDicts[k] = NULL;
                     aDEncs[k] = 0;
-                    aDNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spdict->filename);
+                    aDNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(postspdict[i]->filename);
                     k++;
-                    spdict++;
                 }
 
                 aSuppLocales.realloc(numlocs);
