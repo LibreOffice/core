@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:26:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aCreator.AppendAscii( "Math" );
             }
 
+            PDFWriter::PDFWriterContext aContext;
+            sal_Int32             nPDFDocumentMode = 0, nPDFDocumentAction = 0, nPDFPageLayout = 0;
+
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
                 if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
@@ -307,11 +310,80 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.HideViewerToolbar;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.HideViewerMenubar;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.HideViewerWindowControls;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.FitWindow;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.CenterWindow;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.OpenInFullScreenMode;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.DisplayPDFDocumentTitle;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ) )
+                    rFilterData[ nData ].Value >>= nPDFDocumentMode;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ) )
+                    rFilterData[ nData ].Value >>= nPDFDocumentAction;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ) )
+                    rFilterData[ nData ].Value >>= nPDFPageLayout;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
+                    rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
             }
-            PDFWriter::PDFWriterContext aContext;
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             aContext.Version    = PDFWriter::PDF_1_4;
             aContext.Tagged     = mbUseTaggedPDF;
+
+            switch( nPDFDocumentMode )
+            {
+                default:
+                case 0:
+                    aContext.PDFDocumentMode = PDFWriter::ModeDefault;
+                    break;
+                case 1:
+                    aContext.PDFDocumentMode = PDFWriter::UseOutlines;
+                    break;
+                case 2:
+                    aContext.PDFDocumentMode = PDFWriter::UseThumbs;
+                    break;
+            }
+            switch( nPDFDocumentAction )
+            {
+                default:
+                case 0:
+                    aContext.PDFDocumentAction = PDFWriter::ActionDefault;
+                    break;
+                case 1:
+                    aContext.PDFDocumentAction = PDFWriter::FitInWindow;
+                    break;
+                case 2:
+                    aContext.PDFDocumentAction = PDFWriter::FitWidth;
+                    break;
+                case 3:
+                    aContext.PDFDocumentAction = PDFWriter::FitVisible;
+                    break;
+            }
+
+            switch( nPDFPageLayout )
+            {
+                default:
+                case 0:
+                    aContext.PageLayout = PDFWriter::DefaultLayout;
+                    break;
+                case 1:
+                    aContext.PageLayout = PDFWriter::SinglePage;
+                    break;
+                case 2:
+                    aContext.PageLayout = PDFWriter::Continuous;
+                    break;
+                case 3:
+                    aContext.PageLayout = PDFWriter::ContinuousFacing;
+                    break;
+            }
+
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
             * ever be an additional form submit format this could get invalid.
