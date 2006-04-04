@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:26:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4784,7 +4784,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</prop>
 					<prop oor:name="MaxImageResolution" oor:type="xs:int">
 						<info>
-							<desc>If the property ReduceImageResolution is set to true all images will be reduced to the given value. in DPI.</desc>
+							<desc>If the property ReduceImageResolution is set to true all images will be reduced to the given value in DPI.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="75">
@@ -4827,7 +4827,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 							<author>SJ</author>
 							<desc>Specifies if notes are exported to PDF.</desc>
 						</info>
-						<value>true</value>
+						<value>false</value>
 					</prop>
 					<prop oor:name="ExportNotesPages" oor:type="xs:boolean">
 						<info>
@@ -4878,6 +4878,144 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
                                                 </info>
                                                 <value>false</value>
                                         </prop>
+					<prop oor:name="HideViewerMenubar" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies whether to hide the PDF viewer menubar when the document is active.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="HideViewerToolbar" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies whether to hide the PDF viewer toolbar when the document is active.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="HideViewerWindowControls" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies whether to hide the PDF viewer controls when the document is active.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="ResizeWindowToInitialPage" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the PDF viewer window is opened full screen when the document is opened.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="CenterWindow" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the PDF viewer window is centered to the screen when the PDF document is opened.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="OpenInFullScreenMode" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the PDF viewer window is opened full screen, on top of all windows..</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="DisplayPDFDocumentTitle" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the title of the document, if present in the document properties, is displayed in the PDF viewer window title bar.</desc>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="InitialView" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies how the PDF document should be displayed when opened.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>Select the default viewer mode, neither outlines or thumbnails.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>The document is opened with outline pane opened</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>The document is opened with thumbnail pane opened</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>0</value>
+					</prop>
+					<prop oor:name="Magnification" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies the action to be performed when the PDF document is opened.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>Opens with default zoom magnification.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>Opens magnified to fit the entire page within the window.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>Opens magnified to fit the entire page width within the window.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="3">
+								<info>
+									<desc>Opens magnified to fit the entire width of its boundig box within the window (cuts out margins).</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>0</value>
+					</prop>
+					<prop oor:name="PageLayout" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies the page layout to be used when the document is opened.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>Display the pages according to the reader configuration.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>Display one page at a time.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>Display the pages in one column.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="3">
+								<info>
+									<desc>Display the pages in two columns odd pages on the right, to have the odd pages on the left the FirstPageOnLeft property should be used as well.</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>0</value>
+					</prop>
+					<prop oor:name="FirstPageOnLeft" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Used with the value 3 of the PageLayout property above, true if the first page (odd) should be on the left side of the screen.</desc>
+						</info>
+						<value>false</value>
+					</prop>
 				</group>
 			</group>
 		</group>
