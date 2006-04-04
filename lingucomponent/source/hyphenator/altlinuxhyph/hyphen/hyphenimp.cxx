@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:23:36 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 08:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             int numshr;          // number of shared dictionary entries
             dictentry * spdict;  // shared dict entry pointer
             dictentry * updict;  // user dict entry pointer
+        std::vector<dictentry*> postspdict;
+        std::vector<dictentry*> postupdict;
 
             // invoke a dictionary manager to get the user dictionary list
             OUString usrlst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
@@ -207,6 +209,31 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             if (sdMgr)
                  numshr = sdMgr->get_list(&spdict);
 
+            //Test for existence of the dictionaries
+            for (int i = 0; i < numusr; i++)
+        {
+                OUString str = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(updict[i].filename) +
+            A2OU(".dic");
+        osl::File aTest(str);
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postupdict.push_back(&updict[i]);
+            }
+
+            for (int i = 0; i < numshr; i++)
+        {
+                OUString str = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spdict[i].filename) +
+            A2OU(".dic");
+        osl::File aTest(str);
+        if (aTest.open(osl_File_OpenFlag_Read))
+            continue;
+        aTest.close();
+        postspdict.push_back(&spdict[i]);
+            }
+
+        numusr = postupdict.size();
+            numshr = postspdict.size();
 
             // we really should merge these and remove duplicates but since
             // users can name their dictionaries anything they want it would
@@ -227,7 +254,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
               // first add the user dictionaries
               // keeping track of unique locales only
               for (i = 0; i < numusr; i++) {
-             Locale nLoc( A2OU(updict->lang), A2OU(updict->region), OUString() );
+             Locale nLoc( A2OU(postupdict[i]->lang), A2OU(postupdict[i]->region), OUString() );
 
                  newloc = 1;
              for (j = 0; j < numlocs; j++) {
@@ -240,16 +267,15 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                  aDicts[k].aPtr = NULL;
                  aDicts[k].aLoc = nLoc;
                  aDicts[k].aEnc = 0;
-                 aDicts[k].aName = A2OU(updict->filename);
+                 aDicts[k].aName = A2OU(postupdict[i]->filename);
                  aDicts[k].apCC = new CharClass(nLoc);
                  k++;
-                 updict++;
               }
 
               // now add the shared dictionaries
               // keeping track of unique locales only
               for (i = 0; i < numshr; i++) {
-             Locale nLoc( A2OU(spdict->lang), A2OU(spdict->region), OUString() );
+             Locale nLoc( A2OU(postspdict[i]->lang), A2OU(postspdict[i]->region), OUString() );
 
                  newloc = 1;
              for (j = 0; j < numlocs; j++) {
@@ -262,10 +288,9 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                  aDicts[k].aPtr = NULL;
                  aDicts[k].aLoc = nLoc;
                  aDicts[k].aEnc = 0;
-                 aDicts[k].aName = A2OU(spdict->filename);
+                 aDicts[k].aName = A2OU(postspdict[i]->filename);
                  aDicts[k].apCC = new CharClass(nLoc);
                  k++;
-                 spdict++;
               }
 
               // reallocate the size to just cover the unique locales
