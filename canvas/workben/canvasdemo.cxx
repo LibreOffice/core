@@ -19,9 +19,14 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/unowrap.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <rtl/bootstrap.hxx>
@@ -42,10 +47,11 @@
 using namespace ::com::sun::star;
 
 
-class GalApp : public Application
+class DemoApp : public Application
 {
 public:
     virtual void Main();
+    virtual USHORT  Exception( USHORT nError );
 };
 
 static void PrintHelp()
@@ -212,8 +218,6 @@ class DemoRenderer
         {
             const double SCALE=7.0;
             const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
-            char *c;
-            double *pp, *p;
             int nLength = sizeof( hilbert ) / sizeof (hilbert [0]);
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
@@ -295,7 +299,26 @@ class DemoRenderer
 
             drawTitle( ::rtl::OString( "Ellipses" ) );
 
-            //XCanvas doesn't do ellipses!
+            const basegfx::B2DPoint aCenter( maBox.Width()*.5,
+                                             maBox.Height()*.5 );
+            const basegfx::B2DPoint aRadii( maBox.Width()*.3,
+                                            maBox.Height()*.3 );
+            const basegfx::B2DPolygon& rEllipse(
+                basegfx::tools::createPolygonFromEllipse( aCenter,
+                                                          aRadii.getX(),
+                                                          aRadii.getY() ));
+
+            uno::Reference< rendering::XPolyPolygon2D > xPoly(
+                basegfx::unotools::xPolyPolygonFromB2DPolygon(mxDevice,
+                                                              rEllipse) );
+
+            rendering::StrokeAttributes aStrokeAttrs;
+            aStrokeAttrs.StrokeWidth = 4.0;
+            aStrokeAttrs.MiterLimit = 2.0; // ?
+            aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
+            mxCanvas->strokePolyPolygon( xPoly, maViewState, maRenderState, aStrokeAttrs );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -306,6 +329,10 @@ class DemoRenderer
             translate( maBox.Width() * 2.0, 0.0 );
 
             drawTitle( ::rtl::OString( "Text" ) );
+
+            translate( 0.0,
+                       maBox.Height() * .5 );
+            drawTitle( ::rtl::OString( "This is lame" ) );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -319,8 +346,15 @@ class DemoRenderer
 
             uno::Reference< rendering::XBitmap > xBitmap(mxCanvas, uno::UNO_QUERY);
             xBitmap->queryBitmapCanvas();
-            uno::Reference< rendering::XBitmap > xBitmap2( xBitmap->getScaledBitmap(geometry::RealSize2D(48, 48), false) );
-            mxCanvas->drawBitmap(xBitmap2, maViewState, maRenderState); //yes, but where?
+
+            translate( maBox.Width()*0.1, maBox.Height()*0.2 );
+            maRenderState.AffineTransform.m00 *= 4.0/15;
+            maRenderState.AffineTransform.m11 *= 3.0/15;
+
+            mxCanvas->drawBitmap(xBitmap, maViewState, maRenderState);
+
+            // uno::Reference< rendering::XBitmap > xBitmap2( xBitmap->getScaledBitmap(geometry::RealSize2D(48, 48), false) );
+            // mxCanvas->drawBitmap(xBitmap2, maViewState, maRenderState); //yes, but where?
             //cairo-canvas says:
             //called CanvasHelper::getScaledBitmap, we return NULL, TODO
             //Exception 'BitmapEx vclcanvas::tools::bitmapExFromXBitmap(const com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap>&),
@@ -353,6 +387,8 @@ class DemoRenderer
             translate( maBox.Width() * 2.0, maBox.Height() );
 
             drawTitle( ::rtl::OString( "Curves" ) );
+
+            translate( maBox.Width() * .5, maBox.Height() * .5 );
 
             const double centerx = 100.0;
             const double centery = 100.0;
@@ -426,7 +462,7 @@ class DemoRenderer
                 double c1x= gimmerand();
                 double c1y= gimmerand();
                 double c2x= c1x;  //gimmerand();
-                double c2y= c2y;  //gimmerand();
+                double c2y= c1y;  //gimmerand();
                 maRenderState.DeviceColor = maColorRed;
                 mxCanvas->drawLine(geometry::RealPoint2D(ax, ay), geometry::RealPoint2D(c1x, c1y), maViewState, maRenderState);
                 mxCanvas->drawLine(geometry::RealPoint2D(bx, by), geometry::RealPoint2D(c2x, c2y), maViewState, maRenderState);
@@ -517,14 +553,15 @@ void TestWindow::Paint( const Rectangle& rRect )
         aRenderer.drawRectangles();
         aRenderer.drawEllipses();
         aRenderer.drawText();
-        aRenderer.drawImages();
         aRenderer.drawLines();
         aRenderer.drawCurves();
         aRenderer.drawArcs();
         aRenderer.drawPolygons();
         aRenderer.drawWidgets();
+        aRenderer.drawImages();
 
-        uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas, uno::UNO_QUERY_THROW );
+        uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
+                                                                  uno::UNO_QUERY_THROW );
         xSpriteCanvas->updateScreen( sal_True );
     }
     catch (const uno::Exception &e)
@@ -534,24 +571,18 @@ void TestWindow::Paint( const Rectangle& rRect )
     }
 }
 
-static void basicInit()
+USHORT DemoApp::Exception( USHORT nError )
 {
-    uno::Reference< lang::XMultiServiceFactory >
-        xMSF = cppu::createRegistryServiceFactory(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "canvasdemo.rdb" ) ), sal_True );
-    ::comphelper::setProcessServiceFactory( xMSF );
-
-    // Without this no file access works ...
-    ::ucb::ContentProviderDataList aData;
-    ::ucb::ContentProviderData aFileProvider(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.FileContentProvider" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) ) );
-    aData.push_back( aFileProvider );
-    ::ucb::ContentBroker::initialize( xMSF, aData );
+    switch( nError & EXC_MAJORTYPE )
+    {
+        case EXC_RSCNOTLOADED:
+            Abort( String::CreateFromAscii( "Error: could not load language resources.\nPlease check your installation.\n" ) );
+            break;
+    }
+    return 0;
 }
 
-void GalApp::Main()
+void DemoApp::Main()
 {
     bool bHelp = false;
 
@@ -570,13 +601,42 @@ void GalApp::Main()
         return;
     }
 
-    basicInit();
+    //-------------------------------------------------
+    // create the global service-manager
+    //-------------------------------------------------
+    uno::Reference< lang::XMultiServiceFactory > xFactory;
+    try
+    {
+        uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
+        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
+                                                                  uno::UNO_QUERY );
+        if( xFactory.is() )
+            ::comphelper::setProcessServiceFactory( xFactory );
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    if( !xFactory.is() )
+    {
+        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+
+    // Create UCB.
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
     pWindow.Execute();
+
+    // clean up UCB
+    ::ucb::ContentBroker::deinitialize();
 }
 
-GalApp aGalApp;
+DemoApp aDemoApp;
 
 // TODO
 //   - bouncing clip-rectangle mode - bounce a clip-rect around the window ...
