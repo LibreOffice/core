@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:00:58 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,15 @@
 
 #include <filter.hrc>
 
+#define RID_PDF_EXPORT_DLG          (RID_PDF_DIALOG_START +   0)
+#define RID_PDF_TAB_GENER           (RID_PDF_DIALOG_START +   1)
+#define RID_PDF_TAB_VPREFER         (RID_PDF_DIALOG_START +   2)
+#define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)
+#define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   4)
+
+//ATTENTION: maximum above is( RID_PDF_DIALOG_START +   9)
+
+//controls for General tab page
 #define FL_PAGES                    1
 #define RB_ALL                      2
 #define RB_RANGE                    3
@@ -70,3 +79,34 @@
 #define RB_OLD_SCREEN       60
 #define RB_OLD_PRINT        61
 #define RB_OLD_PRESS        62
+
+//controls for open options tab page
+#define FL_INITVIEW               80
+#define RB_OPNMODE_PAGEONLY       81
+#define RB_OPNMODE_OUTLINE        82
+#define RB_OPNMODE_THUMBS         83
+
+#define FL_MAGNIFICATION          84
+#define RB_MAGNF_DEFAULT          85
+#define RB_MAGNF_WIND             86
+#define RB_MAGNF_WIDTH            87
+#define RB_MAGNF_VISIBLE          88
+
+#define FL_PAGE_LAYOUT            89
+#define RB_PGLY_DEFAULT           90
+#define RB_PGLY_SINGPG            91
+#define RB_PGLY_CONT              92
+#define RB_PGLY_CONTFAC           93
+#define CB_PGLY_FIRSTLEFT         94
+
+//controls for viewer preferences tab page
+#define FL_WINOPT                100
+#define CB_WNDOPT_RESINIT        101
+#define CB_WNDOPT_CNTRWIN        102
+#define CB_WNDOPT_OPNFULL        103
+#define CB_DISPDOCTITLE          104
+
+#define FL_USRIFOPT              105
+#define CB_UOP_HIDEVMENUBAR      106
+#define CB_UOP_HIDEVTOOLBAR      107
+#define CB_UOP_HIDEVWINCTRL      108
