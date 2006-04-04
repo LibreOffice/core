@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:01:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,24 @@
      Text [ de ] = "PDF Optionen";    \
     Text [ en-US ] = "PDF Options";  \
 
-ModalDialog RID_PDF_EXPORT_DLG
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 200 )
+//string for TabDialog standard buttons
+String STR_PDF_EXPORT
 {
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpId = HID_FILTER_PDF_OPTIONS;
-    Size = MAP_APPFONT ( 230, 207 );
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    WORKARROUND
+        Text[ de ] = "E~xportieren" ;
+        Text[ en-US ] = "E~xport";
+};
+
+//////////////////////////////////////////////////////////////
+//tab page for PDF Export, general preferences
+TabPage  RID_PDF_TAB_GENER
+{
+    HelpId = HID_FILTER_PDF_OPTIONS ;
+    Hide = TRUE ;
+    Text[ de ] = "Allgemein";
+    Text[ en-US ] = "General";
+    TAB_PDF_SIZE;
+
     FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -206,27 +215,250 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ de ] = "Automatisch eingefügte ~Leerseiten exportieren" ;
         Text[ en-US ] = "Export automatically inserted ~blank pages";
     };
-    OKButton BT_OK
+};
+
+//----------------------------------------------------------
+//tab page for PDF Export, opening features
+TabPage  RID_PDF_TAB_OPNFTR
+{
+    HelpId = 0 ;
+    Text[ de ] = "Anfangsdarstellung" ;
+    Text[ en-US ] = "Initial View" ;
+    TAB_PDF_SIZE;
+
+////////////////////////////////////////
+    FixedLine FL_INITVIEW
     {
-        Pos = MAP_APPFONT( 174, 6 );
-        Size = MAP_APPFONT( 50 , 14 );
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-        Text[ de ] = "E~xportieren" ;
-        Text[ en-US ] = "E~xport";
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text[ de ] = "Bereiche" ;
+        Text[ en-US ] = "Panes" ;
     };
-    CancelButton BT_CANCEL
+    RadioButton  RB_OPNMODE_PAGEONLY
     {
-        Pos = MAP_APPFONT( 174, 23 );
-        Size = MAP_APPFONT( 50 , 14 );
-        TabStop = TRUE ;
-        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Nur Seite" ;
+        Text[ en-US ] = "~Page only" ;
     };
-    HelpButton BT_HELP
+    RadioButton  RB_OPNMODE_OUTLINE
     {
-        Pos = MAP_APPFONT( 174, 43 );
-        Size = MAP_APPFONT( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Lesezeichen-Fenster und Seite" ;
+        Text[ en-US ] = "~Bookmarks and page" ;
+    };
+    RadioButton  RB_OPNMODE_THUMBS
+    {
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Seiten-Fenster und Seite" ;
+        Text[ en-US ] = "~Thumbnails and page" ;
+    };
+
+///////////////////////////////////////////////////
+    FixedLine FL_MAGNIFICATION
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text[ de ] = "Vergrößerung" ;
+        Text[ en-US ] = "Magnification" ;
+    };
+    RadioButton  RB_MAGNF_DEFAULT
+    {
+        // see PDF ref v 1.5 tab 8.2, pg. 542 ( /XYZ )
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Standard" ;
+        Text[ en-US ] = "~Default" ;
+    };
+    RadioButton  RB_MAGNF_WIND
+    {
+        // see PDF ref v 1.5 tab 8.2, pg. 542 ( /Fit )
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Fenstergröße" ;
+        Text[ en-US ] = "~Fit in window" ;
+    };
+    RadioButton  RB_MAGNF_WIDTH
+    {
+        // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitH top )
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Fensterbreite" ;
+        Text[ en-US ] = "Fit ~width" ;
+    };
+    RadioButton  RB_MAGNF_VISIBLE
+    {
+        // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitBH top )
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Seitenbreite" ;
+        Text[ en-US ] = "Fit ~visible" ;
+        Text [ x-comment ] = " ";
+    };
+
+////////////////////////////////////////
+    FixedLine FL_PAGE_LAYOUT
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT (162  , 8 ) ;
+        Text[ de ] = "Seitenlayout" ;
+        Text[ en-US ] = "Page layout" ;
+    };
+    RadioButton  RB_PGLY_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Standard" ;
+        Text[ en-US ] = "D~efault" ;
+    };
+    RadioButton  RB_PGLY_SINGPG
+    {
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Einzelne Seite" ;
+        Text[ en-US ] = "~Single page" ;
+    };
+    RadioButton  RB_PGLY_CONT
+    {
+        Pos = MAP_APPFONT ( 12 , 150 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Fortlaufend" ;
+        Text[ en-US ] = "~Continuous" ;
+    };
+    RadioButton  RB_PGLY_CONTFAC
+    {
+        Pos = MAP_APPFONT ( 12 , 162 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Fortlaufend - Doppelseiten" ;
+        Text[ en-US ] = "C~ontinuous facing" ;
+    };
+    CheckBox  CB_PGLY_FIRSTLEFT
+    {
+        Pos = MAP_APPFONT ( 22 , 174 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        Text[ de ] = "Erste Seite ist links" ;
+        Text[ en-US ] = "First page is ~left" ;
+    };
+};
+
+//----------------------------------------------------------
+//tab page for PDF Export, viewer preferences
+TabPage  RID_PDF_TAB_VPREFER
+{
+    HelpId = 0 ;
+    Text[ de ] = "Benutzeroberfläche" ;
+    Text[ en-US ] = "User Interface" ;
+    TAB_PDF_SIZE;
+
+//////////////////////////////////////
+    FixedLine FL_WINOPT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT (162  , 8 ) ;
+        Text[ de ] = "Fensteroptionen" ;
+        Text[ en-US ] = "Window options" ;
+    };
+
+    CheckBox CB_WNDOPT_RESINIT
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
-        DefButton = TRUE ;
+        Text[ de ] = "Fenster an erste Seite anpassen" ;
+        Text[ en-US ] = "~Resize window to initial page";
+    };
+    CheckBox CB_WNDOPT_CNTRWIN
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Fenster auf Bildschirm zentrieren" ;
+        Text[ en-US ] = "~Center window on screen";
+    };
+    CheckBox CB_WNDOPT_OPNFULL
+    {
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        Text[ de ] = "Im Vollbildmodus öffnen" ;
+        Text[ en-US ] = "~Open in full screen mode" ;
+    };
+    CheckBox CB_DISPDOCTITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Dokumenttitel anzeigen" ;
+        Text[ en-US ] = "~Display document title";
+    };
+
+////////////////////////////////
+    FixedLine FL_USRIFOPT
+    {
+        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Size = MAP_APPFONT (162  , 8 ) ;
+        Text[ de ] = "Benutzeroberflächenoptionen" ;
+        Text[ en-US ] = "User interface options" ;
+    };
+    CheckBox CB_UOP_HIDEVMENUBAR
+    {
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Menüleiste ausblenden" ;
+        Text[ en-US ] = "Hide ~menubar";
+    };
+    CheckBox CB_UOP_HIDEVTOOLBAR
+    {
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Werkzeugleisten ausblenden" ;
+        Text[ en-US ] = "Hide ~toolbar";
+    };
+    CheckBox CB_UOP_HIDEVWINCTRL
+    {
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Fenstersteuerelemente ausblenden" ;
+        Text[ en-US ] = "Hide ~window controls";
+    };
+};
+
+//----------------------------------------------------------
+TabDialog  RID_PDF_EXPORT_DLG
+{
+    HelpId = HID_FILTER_PDF_OPTIONS ;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    WORKARROUND
+    TabControl 1
+    {
+        HelpId = HID_FILTER_PDF_OPTIONS ;
+        OutputSize = TRUE;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_PDF_TAB_GENER;
+                Text [ de ] = "Allgemein";
+                Text [ en-US ] = "General";
+            };
+            PageItem
+            {
+                Identifier = RID_PDF_TAB_OPNFTR;
+                Text [ de ] = "Anfangsdarstellung";
+                Text [ en-US ] = "Initial View";
+            };
+            PageItem
+            {
+                Identifier = RID_PDF_TAB_VPREFER;
+                Text [ de ] = "Benutzungsschnittstelle";
+                Text [ en-US ] = "User Interface";
+            };
+        };
     };
 };
