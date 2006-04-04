@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:01:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-04 09:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,59 +44,207 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+
+#ifndef _GROUP_HXX
+#include <vcl/group.hxx>
+#endif
 #include <svtools/FilterConfigItem.hxx>
+
+#ifndef _SFXTABDLG_HXX
+#include <sfx2/tabdlg.hxx>
+#endif
 
 // ----------------
 // - ImpPDFDialog -
 // ----------------
 
 class ResMgr;
+class ImpPDFTabGeneralPage;
+class ImpPDFTabViewerPage;
+class ImpPDFTabOpnFtrPage;
 
-class ImpPDFDialog : public ModalDialog
+////////////////////////////////////////////////////////////////////////
+//class tabbed dialog
+class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
 
-    FixedLine                           maFlPages;
-    RadioButton                         maRbAll;
-    RadioButton                         maRbRange;
-    RadioButton                         maRbSelection;
-    Edit                                maEdPages;
-    FixedLine                           maFlCompression;
-    RadioButton                         maRbLosslessCompression;
-    RadioButton                         maRbJPEGCompression;
-    FixedText                           maFtQuality;
-    MetricField                         maNfQuality;
-    CheckBox                            maCbReduceImageResolution;
-    ComboBox                            maCoReduceImageResolution;
-    FixedLine                           maFlGeneral;
-    CheckBox                            maCbTaggedPDF;
-    CheckBox                            maCbExportNotes;
-    CheckBox                            maCbTransitionEffects;
-    FixedText                           maFtFormsFormat;
-    ListBox                             maLbFormsFormat;
-    CheckBox                            maCbExportEmptyPages;
+    FixedLine                   maFlPages; //ugly hack: It seems the dialog is not resizable in any way
 
-    OKButton                            maBtnOK;
-    CancelButton                        maBtnCancel;
-    HelpButton                          maBtnHelp;
+    FilterConfigItem            maConfigItem;
+    FilterConfigItem            maConfigI18N;
 
-    FilterConfigItem                    maConfigItem;
-    Any                                 maSelection;
-    sal_Bool                            mbIsPresentation;
-    sal_Bool                            mbIsWriter;
+    Any                         maSelection;
 
-                                        DECL_LINK( TogglePagesHdl, void* );
-                                        DECL_LINK( ToggleCompressionHdl, void* );
-                                        DECL_LINK( ToggleReduceImageResolutionHdl, void* );
+protected:
+
+    ResMgr*                     mprResMgr;
+//the following data are the configuration used throughout the dialog and pages
+       sal_Bool                    mbIsPresentation;
+    sal_Bool                    mbIsWriter;
+    sal_Bool                    mbSelectionPresent;
+    sal_Bool                    mbUseCTLFont;
+    sal_Bool                    mbUseLosslessCompression;
+    sal_Int32                   mnQuality;
+    sal_Bool                    mbReduceImageResolution;
+    sal_Int32                   mnMaxImageResolution;
+    sal_Bool                    mbUseTaggedPDF;
+    sal_Bool                    mbExportNotesBoth;
+    sal_Bool                    mbUseTransitionEffects;
+    sal_Bool                    mbIsSkipEmptyPages;
+    sal_Int32                   mnFormsType;
+
+    sal_Bool                    mbHideViewerToolbar;
+    sal_Bool                    mbHideViewerMenubar;
+    sal_Bool                    mbHideViewerWindowControls;
+    sal_Bool                    mbResizeWinToInit;
+    sal_Bool                    mbCenterWindow;
+    sal_Bool                    mbOpenInFullScreenMode;
+    sal_Bool                    mbDisplayPDFDocumentTitle;
+    sal_Int32                   mnMagnification;
+    sal_Int32                   mnInitialView;
+
+    sal_Int32                   mnPageLayout;
+    sal_Bool                    mbFirstPageLeft;
+
+    sal_Bool                    mbIsRangeChecked;
+    String                      msPageRange;
+    sal_Bool                    mbSelectionIsChecked;
+
 
 public:
 
-                                        ImpPDFDialog( Window* pParent, ResMgr& rResMgr,
-                                                      Sequence< PropertyValue >& rFilterData,
-                                                      const Reference< XComponent >& rDoc );
-                                        ~ImpPDFDialog();
+    friend  class               ImpPDFTabGeneralPage;
+    friend  class               ImpPDFTabViewerPage;
+    friend  class               ImpPDFTabOpnFtrPage;
 
-    Sequence< PropertyValue >           GetFilterData();
+    ImpPDFTabDialog( Window* pParent, ResMgr& rResMgr,
+                     Sequence< PropertyValue >& rFilterData,
+                     const Reference< XComponent >& rDoc );
+    ~ImpPDFTabDialog();
+
+    Sequence< PropertyValue >   GetFilterData();
+
+protected:
+    virtual void                PageCreated( USHORT _nId,
+                                             SfxTabPage& _rPage );
+    virtual short               Ok();
+};
+
+//class tab page general
+class ImpPDFTabGeneralPage : public SfxTabPage
+{
+    FixedLine                   maFlPages;
+    RadioButton                 maRbAll;
+    RadioButton                 maRbRange;
+    RadioButton                 maRbSelection;
+    Edit                        maEdPages;
+
+    FixedLine                   maFlCompression;
+    RadioButton                 maRbLosslessCompression;
+    RadioButton                 maRbJPEGCompression;
+    FixedText                   maFtQuality;
+    MetricField                 maNfQuality;
+    CheckBox                    maCbReduceImageResolution;
+    ComboBox                    maCoReduceImageResolution;
+
+    FixedLine                   maFlGeneral;
+    CheckBox                    maCbTaggedPDF;
+    CheckBox                    maCbExportNotes;
+    CheckBox                    maCbTransitionEffects;
+
+    FixedText                   maFtFormsFormat;
+    ListBox                     maLbFormsFormat;
+    CheckBox                    maCbExportEmptyPages;
+
+    sal_Bool                    mbIsPresentation;
+    sal_Bool                    mbIsWriter;
+
+    ResMgr*                     mpaResMgr;
+
+    DECL_LINK( TogglePagesHdl, void* );
+    DECL_LINK( ToggleCompressionHdl, void* );
+    DECL_LINK( ToggleReduceImageResolutionHdl, void* );
+
+public:
+    ImpPDFTabGeneralPage( Window* pParent,
+                          const SfxItemSet& rSet,
+                          ResMgr* paResMgr );
+
+    ~ImpPDFTabGeneralPage();
+    static SfxTabPage*          Create( Window* pParent,
+                                        const SfxItemSet& rAttrSet);
+
+    void                        GetFilterConfigItem( ImpPDFTabDialog* paParent );
+    void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+};
+
+//class tab page viewer
+class ImpPDFTabOpnFtrPage : public SfxTabPage
+{
+    FixedLine                   maFlInitialView;
+    RadioButton                 maRbOpnPageOnly;
+    RadioButton                 maRbOpnOutline;
+    RadioButton                 maRbOpnThumbs;
+
+    FixedLine                   maFlMagnification;
+    RadioButton                 maRbMagnDefault;
+    RadioButton                 maRbMagnFitWin;
+    RadioButton                 maRbMagnFitWidth;
+    RadioButton                 maRbMagnFitVisible;
+
+    FixedLine                   maFlPageLayout;
+    RadioButton                 maRbPgLyDefault;
+    RadioButton                 maRbPgLySinglePage;
+    RadioButton                 maRbPgLyContinue;
+    RadioButton                 maRbPgLyContinueFacing;
+    CheckBox                    maCbPgLyFirstOnLeft;
+
+    sal_Bool                    mbUseCTLFont;
+    ResMgr*                     mpaResMgr;
+
+    DECL_LINK( ToggleRbPgLyContinueFacingHdl, void* );
+
+public:
+    ImpPDFTabOpnFtrPage( Window* pParent,
+                         const SfxItemSet& rSet,
+                         ResMgr* paResMgr );
+
+    ~ImpPDFTabOpnFtrPage();
+    static SfxTabPage*          Create( Window* pParent,
+                                        const SfxItemSet& rAttrSet );
+
+    void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
+    void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+};
+
+//class tab page viewer
+class ImpPDFTabViewerPage : public SfxTabPage
+{
+    FixedLine                   maFlWindowOptions;
+    CheckBox                    maCbResWinInit;
+    CheckBox                    maCbCenterWindow;
+    CheckBox                    maCbOpenFullScreen;
+    CheckBox                    maCbDispDocTitle;
+
+    FixedLine                   maFlUIOptions;
+    CheckBox                    maCbHideViewerMenubar;
+    CheckBox                    maCbHideViewerToolbar;
+    CheckBox                    maCbHideViewerWindowControls;
+
+    ResMgr*                     mpaResMgr;
+
+public:
+    ImpPDFTabViewerPage( Window* pParent,
+                         const SfxItemSet& rSet,
+                         ResMgr* paResMgr );
+
+    ~ImpPDFTabViewerPage();
+    static SfxTabPage*          Create( Window* pParent,
+                                        const SfxItemSet& rAttrSet );
+
+    void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
+    void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 };
 
 #endif // IMPDIALOG_HXX
