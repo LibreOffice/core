@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:26:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1005,6 +1005,20 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
+            if( isFloatGrabWindow() &&
+                m_pParent &&
+                m_nFloats == 0 &&
+                ! getDisplay()->GetCaptureFrame() )
+            {
+                /* #i63086#
+                 * outsmart Metacity's "focus:mouse" mode
+                 * which insists on taking the focus from the document
+                 * to the new float. Grab focus to parent frame BEFORE
+                 * showing the float (cannot grab it to the float
+                 * before show).
+                 */
+                 m_pParent->grabPointer( TRUE, TRUE );
+            }
             gtk_widget_show( GTK_WIDGET(m_pWindow) );
             if( isFloatGrabWindow() )
             {
