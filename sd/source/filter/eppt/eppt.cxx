@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:03:08 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:16:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,23 +468,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                 }
 
-                if ( ImplGetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) ) ) )
+                if ( ImplGetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
                 {
-                    sal_uInt16 nWidth = 4233;
-                    sal_uInt16 nHeight = ( (sal_uInt16)( (double)4233.0 /
-                                                (double)maDestPageSize.Width *
-                                                    (double)maDestPageSize.Height ) );
-                    aPropItem.Clear();
-                    aPropItem << (UINT32)VT_CF
-                              << (UINT32)0;
-
-                    aPropItem << (sal_uInt32)0xfffffff
-                              << (sal_uInt32)3
-                              << (sal_uInt16)8
-                              << nWidth
-                              << nHeight
-                              << (sal_uInt16)0;
-
                     ::com::sun::star::uno::Sequence<sal_uInt8> aSeq;
                     aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)mAny.getValue();
 
@@ -493,15 +478,19 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
 
                     if ( pAry && nAryLen )
                     {
-                        if ( nAryLen < 0x20000 )    // we will not generate preview pics greater than 128kb
-                        {
-                            aPropItem.Write( pAry, nAryLen );
-                            sal_uInt32 nSize = aPropItem.Tell() - 8;
-                            aPropItem.Seek( 4 );
-                            aPropItem << nSize;
-                            aPropSet.AddProperty( PID_PREVIEW, aPropItem );
-                            aDInfo.AddSection( aPropSet );
-                        }
+                        aPropItem.Clear();
+                        aPropItem << (sal_uInt32)VT_CF
+                                  << (sal_uInt32)0            /* size - filled later */
+                                  << (sal_uInt32)0xffffffff   /* windows clipboard format */
+                                  << (sal_uInt32)8;           /* CF_DIB data format DIB */
+
+                        aPropItem.Write( pAry, nAryLen );
+
+                        sal_uInt32 nSize = aPropItem.Tell() - 8;
+                        aPropItem.Seek( 4 );
+                        aPropItem << nSize;
+                        aPropSet.AddProperty( PID_PREVIEW, aPropItem );
+                        aDInfo.AddSection( aPropSet );
                     }
                 }
                 aDInfo.Write();
