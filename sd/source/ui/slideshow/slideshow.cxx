@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:17:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,8 +185,29 @@ void Slideshow::mouseButtonUp(const MouseEvent& rMEvt)
     mpImpl->mouseButtonUp( rMEvt );
 }
 
-void Slideshow::command(const CommandEvent& rCEvt)
+void Slideshow::command(const CommandEvent& rEvent)
 {
+    switch (rEvent.GetCommand())
+    {
+        case COMMAND_WHEEL:
+        {
+            // We ignore zooming with control+mouse wheel.
+            const CommandWheelData* pData = rEvent.GetWheelData();
+            if( pData && !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) && !pData->IsHorz() )
+            {
+                long nDelta = pData->GetDelta();
+                if( nDelta > 0 )
+                {
+                    mpImpl->gotoPreviousSlide();
+                }
+                else if( nDelta < 0 )
+                {
+                    mpImpl->gotoNextEffect();
+                }
+            };
+        }
+        break;
+    }
 }
 
 bool Slideshow::isAlwaysOnTop()
