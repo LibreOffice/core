@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:23:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,8 @@ public:
     BYTE*                   mpDitherHigh;           // Dither mapping table
     ULONG                   mnTimerMS;              // Current Time (in MS) of the Timer
     ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
+    DWORD                   mnNextTimerTime;
+    DWORD                   mnLastEventTime;
     UINT                    mnTimerId;              // windows timer id
     BOOL                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
