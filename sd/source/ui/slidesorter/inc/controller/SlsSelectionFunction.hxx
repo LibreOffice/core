@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:22:08 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 
 #include "controller/SlsSlideFunction.hxx"
+#include "model/SlsSharedPageDescriptor.hxx"
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -47,10 +48,6 @@ class SdWindow;
 class SdSlideView;
 class SdDrawDocument;
 class Sound;
-
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -64,7 +61,7 @@ public:
 
     static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
 
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -137,12 +134,12 @@ private:
     /** Set the selection to exactly the specified page and also set it as
         the current page.
     */
-    void SetCurrentPage (model::PageDescriptor& rDescriptor);
+    void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** When the view on which this selection function is working is the
         main view then the view is switched to the regular editing view.
     */
-    void SwitchView (model::PageDescriptor& rDescriptor);
+    void SwitchView (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
@@ -160,9 +157,9 @@ private:
     // ProcessMouseEvent().
 
     /// Select the specified page and set the selection anchor.
-    void SelectHitPage (model::PageDescriptor& rDescriptor);
+    void SelectHitPage (const model::SharedPageDescriptor& rpDescriptor);
     /// Deselect the specified page.
-    void DeselectHitPage (model::PageDescriptor& rDescriptor);
+    void DeselectHitPage (const model::SharedPageDescriptor& rpDescriptor);
     /// Deselect all pages.
     void DeselectAllPages (void);
 
@@ -175,7 +172,7 @@ private:
     /** Select all pages between and including the selection anchor and the
         specified page.
     */
-    void RangeSelect (model::PageDescriptor& rDescriptor);
+    void RangeSelect (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Start a rectangle selection at the given position.
     */
