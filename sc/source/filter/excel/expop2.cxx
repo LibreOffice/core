@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:00:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,17 @@ FltError ExportBiff5::Write()
 
     if( pDocShell && xRootStrg.Is() )
     {
+        GDIMetaFile *pMetaFile;
+
         SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
+
+        pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
+        if (pMetaFile)
+        {
+            rInfo.SetThumbnailMetaFile (*pMetaFile);
+            delete pMetaFile;
+        }
+
         rInfo.SavePropertySet( xRootStrg );
     }
 
