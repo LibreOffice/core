@@ -1522,8 +1522,17 @@ BOOL WinSalPrinter::EndJob()
             mpGraphics = NULL;
         }
 
+        // #i54419# Windows fax printer brings up a dialog in EndDoc
+        // which text previously copied in soffice process can be
+        // pasted to -> deadlock due to mutex not released.
+        // it should be safe to release the yield mutex over the EndDoc
+        // call, however the real solution is supposed to be the threading
+        // framework yet to come.
+        SalData* pSalData = GetSalData();
+        ULONG nAcquire = pSalData->mpFirstInstance->ReleaseYieldMutex();
         if( ::EndDoc( hDC ) <= 0 )
             err = GetLastError();
+        pSalData->mpFirstInstance->AcquireYieldMutex( nAcquire );
         DeleteDC( hDC );
     }
 
