@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:53:27 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #define SD_SLIDESORTER_SLIDE_SORTER_VIEW_HXX
 
 #include "View.hxx"
+
+#include "model/SlsSharedPageDescriptor.hxx"
 
 #include <sfx2/viewfrm.hxx>
 
@@ -70,7 +72,6 @@ class PageCache;
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
-class PageDescriptor;
 } } }
 
 namespace sd { namespace slidesorter { namespace view {
@@ -96,7 +97,7 @@ public:
     virtual ~SlideSorterView (void);
 
     void RequestRepaint (void);
-    void RequestRepaint (model::PageDescriptor& rDescriptor);
+    void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
 
     Rectangle GetModelArea (void);
 
@@ -115,7 +116,7 @@ public:
             information like page name and fader symbol.
     */
     Rectangle GetPageBoundingBox (
-        model::PageDescriptor& rDescriptor,
+        const model::SharedPageDescriptor& rpDescriptor,
         CoordinateSystem eCoordinateSystem,
         BoundingBoxType eBoundingBoxType) const;
 
