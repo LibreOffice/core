@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:20:33 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ void HideSlideFunction::DoExecute(SfxRequest& rRequest)
         mrController.GetModel().GetSelectedPagesEnumeration());
     while (aSelectedPages.HasMoreElements() && eState!=BOTH)
     {
-        bState = aSelectedPages.GetNextElement().GetPage()->IsExcluded();
+        bState = aSelectedPages.GetNextElement()->GetPage()->IsExcluded();
         switch (eState)
         {
             case UNDEFINED:
@@ -124,10 +124,9 @@ void HideSlideFunction::DoExecute(SfxRequest& rRequest)
     aSelectedPages.Rewind ();
     while (aSelectedPages.HasMoreElements())
     {
-        model::PageDescriptor& rDescriptor = aSelectedPages.GetNextElement();
-        rDescriptor.GetPage()->SetExcluded (eState==EXCLUDED);
-        static_cast<view::SlideSorterView*>(pView)->RequestRepaint (
-            rDescriptor);
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        pDescriptor->GetPage()->SetExcluded (eState==EXCLUDED);
+        static_cast<view::SlideSorterView*>(pView)->RequestRepaint(pDescriptor);
     }
 
     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
