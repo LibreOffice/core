@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,9 +174,9 @@ bool FocusManager::HasFocus (void) const
 
 
 
-model::PageDescriptor* FocusManager::GetFocusedPageDescriptor (void) const
+model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor (void) const
 {
-    return mrController.GetModel().GetPageDescriptor (mnPageIndex);
+    return mrController.GetModel().GetPageDescriptor(mnPageIndex);
 }
 
 
@@ -203,10 +203,13 @@ void FocusManager::FocusPage (sal_Int32 nPageIndex)
 
 
 
-void FocusManager::SetFocusedPage (const model::PageDescriptor& rDescriptor)
+void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
-    FocusHider aFocusHider (*this);
-    mnPageIndex = (rDescriptor.GetPage()->GetPageNum()-1)/2;
+    if (rpDescriptor.get() != NULL)
+    {
+        FocusHider aFocusHider (*this);
+        mnPageIndex = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+    }
 }
 
 
@@ -229,34 +232,34 @@ bool FocusManager::IsFocusShowing (void) const
 
 
 
-void FocusManager::HideFocusIndicator (model::PageDescriptor* pDescriptor)
+void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if( pDescriptor )
+    if (rpDescriptor.get() != NULL)
     {
-        pDescriptor->RemoveFocus();
-        mrController.GetView().RequestRepaint (*pDescriptor);
+        rpDescriptor->RemoveFocus();
+        mrController.GetView().RequestRepaint(rpDescriptor);
     }
 }
 
 
 
 
-void FocusManager::ShowFocusIndicator (model::PageDescriptor* pDescriptor)
+void FocusManager::ShowFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (pDescriptor != NULL)
+    if (rpDescriptor.get() != NULL)
     {
-        pDescriptor->SetFocus ();
+        rpDescriptor->SetFocus ();
 
         // Scroll the focused page object into the visible area and repaint
         // it, so that the focus indicator becomes visible.
         view::SlideSorterView& rView (mrController.GetView());
         mrController.MakeRectangleVisible (
             rView.GetPageBoundingBox (
-                *GetFocusedPageDescriptor(),
+                GetFocusedPageDescriptor(),
                 view::SlideSorterView::CS_MODEL,
                 view::SlideSorterView::BBT_INFO));
 
-        mrController.GetView().RequestRepaint (*pDescriptor);
+        mrController.GetView().RequestRepaint (rpDescriptor);
         NotifyFocusChangeListeners();
     }
 }
