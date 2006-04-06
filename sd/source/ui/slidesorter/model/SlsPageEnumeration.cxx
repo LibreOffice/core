@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:24:14 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,17 @@ using namespace ::sd::slidesorter::model;
 namespace {
 template <class Predicate>
 class PageEnumerationImpl
-    : public Enumeration<PageDescriptor>
+    : public Enumeration<SharedPageDescriptor>
 {
 public:
     inline PageEnumerationImpl (const SlideSorterModel& rModel);
     virtual ~PageEnumerationImpl (void);
     /** Create a copy of the called enumeration object.
     */
-    virtual inline Enumeration<PageDescriptor>* Clone (void);
+    virtual inline ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void);
 
     virtual inline bool HasMoreElements (void) const;
-    virtual inline PageDescriptor& GetNextElement (void);
+    virtual inline SharedPageDescriptor GetNextElement (void);
     virtual inline void Rewind (void);
 
 private:
@@ -106,12 +106,8 @@ public:
 namespace sd { namespace slidesorter { namespace model {
 
 
-
-
-
-
 PageEnumeration::PageEnumeration (
-    ::std::auto_ptr<Enumeration<PageDescriptor> > pImpl)
+    ::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl)
     : mpImpl(pImpl)
 {
 }
@@ -123,7 +119,7 @@ PageEnumeration::PageEnumeration (
     PageEnumeration& rEnumeration,
     bool bCloneImpl)
     : mpImpl (bCloneImpl
-        ? ::std::auto_ptr<Enumeration<PageDescriptor> >(
+        ? ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
             rEnumeration.mpImpl->Clone())
         : rEnumeration.mpImpl)
 {
@@ -132,7 +128,7 @@ PageEnumeration::PageEnumeration (
 
 
 PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration)
-    : mpImpl (::std::auto_ptr<Enumeration<PageDescriptor> >(
+    : mpImpl (::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
         rEnumeration.mpImpl->Clone()))
 {
 }
@@ -142,7 +138,7 @@ PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration)
 PageEnumeration& PageEnumeration::operator= (
     const PageEnumeration& rEnumeration)
 {
-    mpImpl = ::std::auto_ptr<Enumeration<PageDescriptor> >(
+    mpImpl = ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
         rEnumeration.mpImpl->Clone());
     return *this;
 }
@@ -154,7 +150,7 @@ PageEnumeration PageEnumeration::Create (
     const SlideSorterModel& rModel,
     PageEnumerationType eType)
 {
-    Enumeration<PageDescriptor>* pImpl;
+    Enumeration<SharedPageDescriptor>* pImpl;
     switch (eType)
     {
         case PET_ALL:
@@ -172,15 +168,16 @@ PageEnumeration PageEnumeration::Create (
     }
 
     return PageEnumeration (
-        ::std::auto_ptr<Enumeration<PageDescriptor> > (pImpl));
+        ::std::auto_ptr<Enumeration<SharedPageDescriptor> > (pImpl));
 }
 
 
 
 
-PageEnumeration* PageEnumeration::Clone (void)
+::std::auto_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone (void)
 {
-    return new PageEnumeration (*this, true);
+    return ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+        new PageEnumeration (*this, true));
 }
 
 
@@ -193,7 +190,7 @@ bool PageEnumeration::HasMoreElements (void) const
 
 
 
-PageDescriptor& PageEnumeration::GetNextElement (void)
+SharedPageDescriptor PageEnumeration::GetNextElement (void)
 {
     return mpImpl->GetNextElement();
 }
@@ -242,9 +239,11 @@ PageEnumerationImpl<Predicate>::~PageEnumerationImpl (void)
 
 
 template <class Predicate>
-Enumeration<PageDescriptor>* PageEnumerationImpl<Predicate>::Clone (void)
+::std::auto_ptr<Enumeration<SharedPageDescriptor> >
+    PageEnumerationImpl<Predicate>::Clone (void)
 {
-    return new PageEnumerationImpl<Predicate> (mrModel,mnIndex);
+    return ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+        new PageEnumerationImpl<Predicate>(mrModel,mnIndex));
 }
 
 
@@ -260,15 +259,15 @@ bool PageEnumerationImpl<Predicate>::HasMoreElements (void) const
 
 
 template <class Predicate>
-PageDescriptor& PageEnumerationImpl<Predicate>::GetNextElement (void)
+SharedPageDescriptor PageEnumerationImpl<Predicate>::GetNextElement (void)
 {
-    PageDescriptor& rDescriptor (*mrModel.GetPageDescriptor (mnIndex));
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
     // Go to the following valid element.
     mnIndex += 1;
     AdvanceToNextValidElement();
 
-    return rDescriptor;
+    return pDescriptor;
 }
 
 
@@ -291,13 +290,17 @@ void PageEnumerationImpl<Predicate>::AdvanceToNextValidElement (void)
 {
     while (mnIndex < mrModel.GetPageCount())
     {
-        PageDescriptor* pDescriptor (mrModel.GetPageDescriptor (mnIndex));
-        if (pDescriptor!= NULL && Predicate()(*pDescriptor))
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor (mnIndex));
+        if (pDescriptor.get()!=NULL && Predicate()(*pDescriptor))
+        {
             // This predicate is valid.
             break;
+        }
         else
+        {
             // Advance to next predicate.
             mnIndex += 1;
+        }
     }
 }
 
