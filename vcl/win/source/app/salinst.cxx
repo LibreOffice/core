@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:49:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,8 @@ SalData::SalData()
     mpDitherHigh = 0;           // Dither mapping table
     mnTimerMS = 0;              // Current Time (in MS) of the Timer
     mnTimerOrgMS = 0;           // Current Original Time (in MS)
+    mnNextTimerTime = 0;
+    mnLastEventTime = 0;
     mnTimerId = 0;              // windows timer id
     mbInTimerProc = FALSE;      // timer event is currently being dispatched
     mhSalObjMsgHook = 0;        // hook to get interesting msg for SalObject
@@ -717,14 +719,17 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 void ImplSalYield( BOOL bWait )
 {
     MSG aMsg;
+    bool bMsg = false;
 
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    SalData* pSalData = GetSalData();
+    WinSalInstance* pInst = pSalData->mpFirstInstance;
     if ( bWait )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
         {
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
+            bMsg = true;
         }
     }
     else
@@ -733,7 +738,15 @@ void ImplSalYield( BOOL bWait )
         {
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
+            bMsg = true;
         }
+    }
+
+    if( bMsg )
+    {
+        pSalData->mnLastEventTime = aMsg.time;
+        if( pSalData->mnNextTimerTime && pSalData->mnNextTimerTime < aMsg.time )
+            SalTimerProc( 0, 0, 0, aMsg.time );
     }
 }
 
