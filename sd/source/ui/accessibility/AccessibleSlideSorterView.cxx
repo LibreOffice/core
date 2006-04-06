@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:50:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,9 +466,9 @@ Reference<XAccessible> SAL_CALL
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
 
     const Point aTestPoint (aPoint.X, aPoint.Y);
-    ::sd::slidesorter::model::PageDescriptor* pHitDescriptor
-        = mrSlideSorterController.GetPageAt(aTestPoint);
-    if (pHitDescriptor != NULL)
+    ::sd::slidesorter::model::SharedPageDescriptor pHitDescriptor (
+        mrSlideSorterController.GetPageAt(aTestPoint));
+    if (pHitDescriptor.get() != NULL)
         xAccessible = mpImpl->GetAccessibleChild(
             (pHitDescriptor->GetPage()->GetPageNum()-1)/2);
 
@@ -902,9 +902,9 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
     {
         if (maPageObjects[nIndex] == NULL)
         {
-            ::sd::slidesorter::model::PageDescriptor* pDescriptor
-                = mrController.GetModel().GetPageDescriptor(nIndex);
-            if (pDescriptor != NULL)
+            ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
+                mrController.GetModel().GetPageDescriptor(nIndex));
+            if (pDescriptor.get() != NULL)
                 maPageObjects[nIndex] = new AccessibleSlideSorterObject(
                     &mrAccessibleSlideSorter,
                     mrController,
