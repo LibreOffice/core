@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:50:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,7 @@ SelectionManager::SelectionManager() :
         m_aDragExecuteThread( NULL ),
         m_aWindow( None ),
         m_nSelectionTimeout( 0 ),
+        m_nSelectionTimestamp( CurrentTime ),
         m_aCurrentDropWindow( None ),
         m_bDropWaitingForCompletion( false ),
         m_aDropWindow( None ),
@@ -357,6 +358,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
 
             // special targets
             m_nTARGETSAtom      = getAtom( OUString::createFromAscii( "TARGETS" ) );
+            m_nTIMESTAMPAtom    = getAtom( OUString::createFromAscii( "TIMESTAMP" ) );
             m_nTEXTAtom         = getAtom( OUString::createFromAscii( "TEXT" ) );
             m_nINCRAtom         = getAtom( OUString::createFromAscii( "INCR" ) );
             m_nCOMPOUNDAtom     = getAtom( OUString::createFromAscii( "COMPOUND_TEXT" ) );
@@ -739,6 +741,7 @@ bool SelectionManager::requestOwnership( Atom selection )
             pSel->m_bOwner = bSuccess;
             delete pSel->m_pPixmap;
             pSel->m_pPixmap = NULL;
+            pSel->m_nOrigTimestamp = m_nSelectionTimestamp;
         }
 #if OSL_DEBUG_LEVEL > 1
         else
@@ -1627,6 +1630,16 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                     fprintf( stderr, "   %s\n", pTypes[k] ? XGetAtomName( m_pDisplay, pTypes[k] ) : "<None>" );
 #endif
             }
+        }
+        else if( rRequest.target == m_nTIMESTAMPAtom )
+        {
+            sal_uInt32 nTimeStamp = (sal_uInt32)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
+            XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
+                             XA_INTEGER, 32, PropModeReplace, (const unsigned char*)&nTimeStamp, 1 );
+            aNotify.xselection.property = rRequest.property;
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "sending timestamp: %d\n", nTimeStamp );
+#endif
         }
         else
         {
@@ -3693,6 +3706,23 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
     event >>= aSeq;
 
     XEvent* pEvent = (XEvent*)aSeq.getArray();
+    Time nTimestamp = CurrentTime;
+    if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
+        nTimestamp = pEvent->xbutton.time;
+    else if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
+        nTimestamp = pEvent->xkey.time;
+    else if( pEvent->type == MotionNotify )
+        nTimestamp = pEvent->xmotion.time;
+    else if( pEvent->type == PropertyNotify )
+        nTimestamp = pEvent->xproperty.time;
+
+    if( nTimestamp != CurrentTime )
+    {
+        MutexGuard aGuard(m_aMutex);
+
+        m_nSelectionTimestamp = nTimestamp;
+    }
+
     return sal_Bool( handleXEvent( *pEvent ) );
 }
 
