@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
                 }
                 else if ( IsOneBlock() && nCharCnt > 1 )
                 {
-                    const long nSpaceAdd = nGluePortionWidth / ( nCharCnt - 1 );
+                    const long nSpaceAdd = - nGluePortionWidth / ( nCharCnt - 1 );
                     pCurr->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
                     pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
                 }
