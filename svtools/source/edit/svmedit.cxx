@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:29:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,7 +777,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
     BOOL bDone = FALSE;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
-    if ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() )
+    if ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
     {
         mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
         bDone = TRUE;
