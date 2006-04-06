@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.215 $
+ *  $Revision: 1.216 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:25:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3713,12 +3713,18 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
     long nDescent = mnDescent;
-    if ( !nDescent )
+    if ( nDescent <= 0 )
     {
-        nDescent = mnAscent*100/1000;
+        nDescent = mnAscent / 10;
         if ( !nDescent )
             nDescent = 1;
     }
+
+    // #i55341# for some fonts it is not a good idea to calculate
+    // their text line metrics from the real font descent
+    // => work around this problem just for these fonts
+    if( 3*nDescent > mnAscent )
+        nDescent = mnAscent / 3;
 
     long nLineHeight = ((nDescent*25)+50) / 100;
     if ( !nLineHeight )
@@ -3748,7 +3754,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    long nUnderlineOffset = nDescent/2 + 1;
+    long nUnderlineOffset = mnDescent/2 + 1;
     long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
