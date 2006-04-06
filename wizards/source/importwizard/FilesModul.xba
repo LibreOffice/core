@@ -363,7 +363,7 @@ Dim sPrevMimeTypeorExtension as String
 			End If
 			If bDoSave Then
 				If Not oUcb.Exists(TargetDir) Then
-					bDoSave = CreateFolder(TargetDir)
+					bDoSave = CreateFolder(TargetDir) 
 				End If
 				If bDoSave Then
 					oDocument = StarDesktop.LoadComponentFromURL(sSourceUrl, &quot;_default&quot;, 0, OpenProperties())
@@ -612,6 +612,7 @@ Dim bLogIsThere as Boolean
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_default&quot;, 4, OpenProperties())
+		SOWorkPath = RTrimStr(SOWorkPath,&quot;/&quot;)
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.odt&quot;
 		Do
 			bLogIsThere = oUcb.Exists(sLogUrl)
