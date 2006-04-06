@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:53:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 class SdDrawDocument;
 
-#include "SlsPageEnumeration.hxx"
+#include "model/SlsPageEnumeration.hxx"
+#include "model/SlsSharedPageDescriptor.hxx"
 
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
@@ -59,7 +60,6 @@ class PageObjectFactory;
 namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
-class PageDescriptor;
 class PageEnumeration;
 
 class SlideSorterModel
@@ -103,14 +103,14 @@ public:
             may change between subsequent calls to GetPageCount() and
             GetPageDescriptor().
     */
-    PageDescriptor* GetPageDescriptor (int nPageIndex) const;
+    SharedPageDescriptor GetPageDescriptor (int nPageIndex) const;
 
     /** Return the page descriptor for the page with the specified index.
         In contrast to GetPageDescriptor() this method does not create a
         page descriptor when not already present.  This method exists mainly
         for debugging so use it only when you know what you are doing.
     */
-    PageDescriptor* GetRawPageDescriptor (int nPageIndex) const;
+    SharedPageDescriptor GetRawPageDescriptor (int nPageIndex) const;
 
     /** Return the page descriptor whose page has the given object as UNO
         wrapper.  This method takes linear time (in the number of pages).
@@ -118,7 +118,7 @@ public:
             Returns NULL when no page descriptor is found with the given UNO
             wrapper.
     */
-    PageDescriptor* FindPageDescriptor (
+    SharedPageDescriptor FindPageDescriptor (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& rxPage) const;
 
@@ -171,7 +171,7 @@ public:
 
 private:
     mutable ::osl::Mutex maMutex;
-    typedef ::std::vector<PageDescriptor*> DescriptorContainer;
+    typedef ::std::vector<SharedPageDescriptor> DescriptorContainer;
     SdDrawDocument& mrDocument;
     PageKind mePageKind;
     EditMode meEditMode;
