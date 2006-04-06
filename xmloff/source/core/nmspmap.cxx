@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:35:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
         }
         while ( sal_True );
     }
-    NameSpaceEntry *pEntry = new NameSpaceEntry;
+    ::vos::ORef<NameSpaceEntry> pEntry(new NameSpaceEntry);
     pEntry->sName   = rName;
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
@@ -317,11 +317,10 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     else
     {
         sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
-        NameSpaceEntry *pEntry = new NameSpaceEntry;
+        ::vos::ORef<NameSpaceEntry> pEntry(new NameSpaceEntry);
         if( -1L == nColonPos )
         {
             // case: no ':' found -> default namespace
-            pEntry->sPrefix = OUString();
             pEntry->sName = rAttrName;
         }
         else
