@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageSelector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:19:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef SD_SLIDESORTER_PAGE_SELECTOR_HXX
 #define SD_SLIDESORTER_PAGE_SELECTOR_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
+
 #include <set>
 #include <memory>
 
@@ -42,7 +44,6 @@ class SdPage;
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
-class PageDescriptor;
 } } }
 
 namespace sd { namespace slidesorter { namespace view {
@@ -81,7 +82,7 @@ public:
     /** Select the descriptor that is associated with the given page.
     */
     void SelectPage (const SdPage* pPage);
-    void SelectPage (model::PageDescriptor& rDescriptor);
+    void SelectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return whether the specified page is selected.  This convenience
         method is a subsitute for
@@ -94,12 +95,12 @@ public:
     */
     void DeselectPage (int nPageIndex);
     void DeselectPage (const SdPage* pPage);
-    void DeselectPage (model::PageDescriptor& rDescriptor);
+    void DeselectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Set the current page of the main view to the one associated with the
         given descriptor.  Its selection is not modified.
     */
-    void SetCurrentPage (model::PageDescriptor& rDescriptor);
+    void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
     void SetCurrentPage (const SdPage* pPage);
     void SetCurrentPage (int nPageIndex);
 
@@ -138,14 +139,14 @@ public:
             selected) then NULL is returned, even when a selection did exist
             but has been cleared.
     */
-    model::PageDescriptor* GetMostRecentlySelectedPage (void) const;
+    model::SharedPageDescriptor GetMostRecentlySelectedPage (void) const;
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
         @return
             The returned anchor may be NULL.
     */
-    model::PageDescriptor* GetSelectionAnchor (void) const;
+    model::SharedPageDescriptor GetSelectionAnchor (void) const;
 
 
     typedef ::std::set<int> PageSelection;
@@ -175,9 +176,9 @@ private:
     int mnSelectedPageCount;
     int mnBroadcastDisableLevel;
     bool mbSelectionChangeBroadcastPending;
-    model::PageDescriptor* mpMostRecentlySelectedPage;
+    model::SharedPageDescriptor mpMostRecentlySelectedPage;
     /// Anchor for a range selection.
-    model::PageDescriptor* mpSelectionAnchor;
+    model::SharedPageDescriptor mpSelectionAnchor;
 
     void CountSelectedPages (void);
 };
