@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.95 $
-# Date:        $Date: 2006-03-22 10:47:19 $
+# Version:     $Revision: 1.96 $
+# Date:        $Date: 2006-04-06 11:53:26 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1175,8 +1175,6 @@ elsif ($platform =~ m/darwin/)
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.$USR.$BIN.
-                        $ps.$ds."Local".$ds."Users".$ds."buildso".$ds."bin".$ds."powerpc-apple-macos".
-                        $ps.$ds."Local".$ds."Users".$ds."buildso".$ds."bin".
                         $ps.$BIN.
                         $ps.$USR.$ds."sbin".
                         $ps.$ds."sbin".
