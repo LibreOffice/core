@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:06:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 11:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -868,15 +868,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
         {
             /* Load the locale discovery library if we are running on OS X */
 
-//FIXME : this have to be changed for Universal binaries
-#if defined INTEL
-        const sal_Char   *aLocaleLibName         = "libsalextra_x11osx_mxi" SAL_DLLEXTENSION;
-#elif defined POWERPC
-        const sal_Char   *aLocaleLibName         = "libsalextra_x11osx_mxp" SAL_DLLEXTENSION;
-#else
-//other case does not exist
-#endif
-            const sal_Char   *aGetOSXLocaleFunctionName  = "macxp_getOSXLocale";
+            const sal_Char   *aLocaleLibName            = "libsalsystools" SAL_DLLEXTENSION;
+            const sal_Char   *aGetOSXLocaleFunctionName = "macosx_getLocale";
             oslModule         pLocaleLib;
             void             *pFunc;
             int               err;
