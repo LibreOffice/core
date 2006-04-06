@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:33:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,13 @@
 #include <svtools/sfxecode.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <tools/new.hxx>
 #include <svtools/saveopt.hxx>
 #include <tools/tenccvt.hxx>
 #include <svtools/useroptions.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
+#include <vcl/bitmapex.hxx>
 #include "rtl/tencinfo.h"
 #include <unotools/localfilehelper.hxx>
 
@@ -54,6 +56,7 @@
 #include "app.hxx"
 #include "docinf.hxx"
 #include "docfile.hxx"
+#include "graphhelp.hxx"
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
 #include "doctempl.hxx"
@@ -71,6 +74,7 @@ static const char __FAR_DATA pDocInfoHeader[] = "SfxDocumentInfo";
 #define VT_LPSTR      30
 #define VT_LPWSTR     31
 #define VT_FILETIME   64
+#define VT_CF         71
 
 #define PID_TITLE              0x02
 #define PID_SUBJECT            0x03
@@ -84,6 +88,7 @@ static const char __FAR_DATA pDocInfoHeader[] = "SfxDocumentInfo";
 #define PID_LASTPRINTED_DTM    0x0b
 #define PID_CREATE_DTM         0x0c
 #define PID_LASTSAVED_DTM      0x0d
+#define PID_THUMBNAIL          0x11
 
 //=========================================================================
 
@@ -287,6 +292,7 @@ public:
     BOOL        bUseUserData;
     // --> PB 2004-08-23 #i33095#
     sal_Bool    bLoadReadonly;
+    GDIMetaFile aThumbnailMetaFile;
 
     SfxDocumentInfo_Impl() : nPriority( 0 ), bUseUserData( 1 ), bLoadReadonly( sal_False ) {}
 };
@@ -410,6 +416,111 @@ ErrCode SfxPSDateTimeProperty_Impl::Load( SvStream& rStream )
 ULONG SfxPSDateTimeProperty_Impl::Len()
 {
     return 8;
+}
+
+//=========================================================================
+
+class SfxPSThumbnailProperty_Impl : public SfxPSProperty_Impl
+{
+private:
+    SvMemoryStream aMemStream;
+    sal_Bool bHaveBitmap;
+    sal_Size nBitmapDataSize;
+
+public:
+    SfxPSThumbnailProperty_Impl (UINT32 nIdP, const GDIMetaFile &rThumbnailMetaFile);
+    virtual ~SfxPSThumbnailProperty_Impl();
+
+    virtual ULONG Save (SvStream &rStream);
+    virtual ULONG Len ();
+
+    sal_Bool IsValid ();
+};
+
+//#include <stdio.h>
+
+#define CF_DIB 8                // this is the clip_data format identifier for a DIB
+
+SfxPSThumbnailProperty_Impl::SfxPSThumbnailProperty_Impl (UINT32 nIdP, const GDIMetaFile &rThumbnailMetaFile) :
+    SfxPSProperty_Impl (nIdP, VT_CF)
+{
+    BitmapEx aBitmap;
+
+    if (!rThumbnailMetaFile.CreateThumbnail ( 160, /* magic value taken from GraphicHelper::getThumbnailFormatFromGDI_Impl() */
+                              aBitmap))
+    {
+        bHaveBitmap = sal_False;
+        nBitmapDataSize = 0;
+        return;
+    }
+
+    aBitmap.GetBitmap().Write( aMemStream, FALSE, FALSE );
+    nBitmapDataSize = aMemStream.Tell ();
+    bHaveBitmap = sal_True;
+    //fprintf (stderr, "ThumbnailProperty::constructor wrote %ld bytes for the bitmap\n", (long) nBitmapDataSize);
+}
+
+SfxPSThumbnailProperty_Impl::~SfxPSThumbnailProperty_Impl ()
+{
+    bHaveBitmap = sal_False;
+    nBitmapDataSize = 0;
+}
+
+ULONG
+SfxPSThumbnailProperty_Impl::Save (SvStream &rStream)
+{
+    /* clipboard size          uint32       sizeof (clipboard format tag) + sizeof (clipboard data)
+     * clipboard format tag    int32        see below
+     * clipboard data          byte[]       see below
+     *
+     * Clipboard format tag:
+     * -1 - Windows clipboard format
+     * -2 - Macintosh clipboard format
+     * -3 - GUID that contains a format identifier (FMTID)
+     * >0 - custom clipboard format name plus data (see msdn site below)
+     *  0 - No data
+     *
+     * References:
+     * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/stg/stg/propvariant.asp
+     * http://jakarta.apache.org/poi/hpsf/thumbnails.html
+     * http://linux.com.hk/docs/poi/org/apache/poi/hpsf/Thumbnail.html
+     * http://sparks.discreet.com/knowledgebase/public/solutions/ExtractThumbnailImg.htm
+     */
+
+    UINT32 nClipSize;
+    INT32 nClipFormat;
+    INT32 nDataFormat;
+
+    if (!IsValid ())
+        return SVSTREAM_INVALID_ACCESS;
+
+    nClipSize = 4 + 4 + nBitmapDataSize; /* clip_format_tag + data_format_tag + bitmap_len */
+    nClipFormat = -1; /* Windows clipboard format; we'll say "it's a BMP" in the data section */
+    nDataFormat = CF_DIB;
+#if 0
+    fprintf (stderr, "ThumbnailProperty::Save() writing clip_size %d, clip_format %d, data_format %d, bitmap_data_bytes %ld\n",
+             (int) nClipSize,
+             (int) nClipFormat,
+             (int) nDataFormat,
+             (long) nBitmapDataSize);
+#endif
+    rStream << nClipSize << nClipFormat << nDataFormat;
+    rStream.Write (aMemStream.GetData (), nBitmapDataSize);
+
+    return rStream.GetErrorCode ();
+}
+
+ULONG
+SfxPSThumbnailProperty_Impl::Len ()
+{
+    //fprintf (stderr, "ThumbnailProperty::Len() returns %ld\n", (long) 4 + 4 + 4 + nBitmapDataSize);
+    return 4 + 4 + 4 + nBitmapDataSize; /* total property size field + clip_format_tag + data_format_tag + bitmap_len */
+}
+
+sal_Bool
+SfxPSThumbnailProperty_Impl::IsValid ()
+{
+    return (bHaveBitmap && nBitmapDataSize != 0);
 }
 
 //=========================================================================
@@ -1000,6 +1111,8 @@ BOOL SfxDocumentInfo::SavePropertySet( SotStorage *pStorage) const
     SfxPS_Impl* pPS = new SfxPS_Impl;
     SotStorageStreamRef aStrPropSet = pStorage->OpenSotStream(
         String::CreateFromAscii( pPropSlot ), STREAM_TRUNC | STREAM_STD_WRITE );
+    SfxPSThumbnailProperty_Impl *thumb_prop;
+
     if ( !aStrPropSet.Is() )
     {
         DBG_ERRORFILE( "can not open the property set" );
@@ -1025,6 +1138,13 @@ BOOL SfxDocumentInfo::SavePropertySet( SotStorage *pStorage) const
     pPS->AddProperty( new SfxPSStringProperty_Impl(
         PID_REVNUMBER, String::CreateFromInt32( GetDocumentNumber() ) ) );
     pPS->AddProperty( new SfxPSCodePageProperty_Impl( RTL_TEXTENCODING_UTF8 ));
+
+    thumb_prop = new SfxPSThumbnailProperty_Impl (PID_THUMBNAIL, GetThumbnailMetaFile());
+    if (thumb_prop->IsValid ())
+        pPS->AddProperty (thumb_prop);
+    else
+        delete thumb_prop;
+
     pPS->Save( *aStrPropSet );
     delete pPS;
     return ( aStrPropSet->GetErrorCode() == 0 );
@@ -1662,6 +1782,17 @@ void SfxDocumentInfo::SetComment( const String& rVal )
 void SfxDocumentInfo::SetKeywords( const String& rVal )
 {
     aKeywords = AdjustTextLen_Impl( rVal, SFXDOCINFO_KEYWORDLENMAX );
+}
+//------------------------------------------------------------------------
+
+const GDIMetaFile& SfxDocumentInfo::GetThumbnailMetaFile() const
+{
+    return pImp->aThumbnailMetaFile;
+}
+
+void SfxDocumentInfo::SetThumbnailMetaFile (const GDIMetaFile &aMetaFile)
+{
+    pImp->aThumbnailMetaFile = aMetaFile;
 }
 
 void SfxDocumentInfo::DeleteUserData( BOOL bUseAuthor )
