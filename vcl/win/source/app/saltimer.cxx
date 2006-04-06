@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:49:29 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
 
     // Make a new timer with new period
     pSalData->mnTimerId = SetTimer( 0, 0, (UINT)nMS, SalTimerProc );
+    pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
 
 // -----------------------------------------------------------------------
@@ -105,6 +106,7 @@ void WinSalTimer::Stop()
     {
         KillTimer( 0, pSalData->mnTimerId );
         pSalData->mnTimerId = 0;
+        pSalData->mnNextTimerTime = 0;
     }
 }
 
@@ -120,22 +122,25 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
         // Test for MouseLeave
         SalTestMouseLeave();
 
-        if ( pSVData->mpSalTimer )
+        if ( pSVData->mpSalTimer && ! pSalData->mbInTimerProc )
         {
             // Try to aquire the mutex. If we don't get the mutex then we
             // try this a short time later again.
             if ( ImplSalYieldMutexTryToAcquire() )
             {
-                pSalData->mbInTimerProc = TRUE;
-                pSVData->mpSalTimer->CallCallback();
-                pSalData->mbInTimerProc = FALSE;
-                ImplSalYieldMutexRelease();
+                if ( pSVData->mpSalTimer && ! pSalData->mbInTimerProc )
+                {
+                    pSalData->mbInTimerProc = TRUE;
+                    pSVData->mpSalTimer->CallCallback();
+                    pSalData->mbInTimerProc = FALSE;
+                    ImplSalYieldMutexRelease();
 
-                // Run the timer in the correct time, if we start this
-                // with a small timeout, because we don't get the mutex
-                if ( pSalData->mnTimerId &&
-                    (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
-                    ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
+                    // Run the timer in the correct time, if we start this
+                    // with a small timeout, because we don't get the mutex
+                    if ( pSalData->mnTimerId &&
+                        (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
+                        ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
+                }
             }
             else
                 ImplSalStartTimer( 10, TRUE );
