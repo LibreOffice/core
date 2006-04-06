@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsEnumeration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:20:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,24 @@
 #ifndef SD_SLIDESORTER_ENUMERATION_HXX
 #define SD_SLIDESORTER_ENUMERATION_HXX
 
+#include <memory>
+
 namespace sd { namespace slidesorter { namespace model {
 
 
-/** Interface to generic enumerations.
+/** Interface to generic enumerations.  Designed to operate on shared
+    pointers.  Therefore GetNextElement() returns T and not T&.
 */
 template <class T>
 class Enumeration
 {
 public:
     virtual bool HasMoreElements (void) const = 0;
-    virtual T& GetNextElement (void) = 0;
+    /** Returns T instead of T& so that it can handle shared pointers.
+    */
+    virtual T GetNextElement (void) = 0;
     virtual void Rewind (void) = 0;
-    virtual Enumeration<T>* Clone (void) = 0;
+    virtual ::std::auto_ptr<Enumeration<T> > Clone (void) = 0;
 };
 
 } } } // end of namespace ::sd::slidesorter::model
