@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:38:14 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1563,7 +1563,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         }
     }
 
-    if ( !bDone && rKEvt.GetKeyCode().IsMod1() )
+    if ( !bDone && rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() )
     {
         if ( nCode == KEY_A )
         {
