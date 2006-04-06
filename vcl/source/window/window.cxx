@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.228 $
+ *  $Revision: 1.229 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:13:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4039,6 +4039,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         }
 
         Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
+        ImplDelData aOldFocusDel( pOldFocusWindow );
 
         pSVData->maWinData.mpFocusWin = this;
 
@@ -4176,7 +4177,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         while ( pActivateParent != this );
 */
         // call Get- and LoseFocus
-        if ( pOldFocusWindow )
+        if ( pOldFocusWindow && ! aOldFocusDel.IsDelete() )
         {
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & STARTTRACK_FOCUSCANCEL) )
@@ -4206,12 +4207,13 @@ void Window::ImplGrabFocus( USHORT nFlags )
                 // notify the new focus window so it can restore the inner focus
                 // eg, toolboxes can select their recent active item
                 if( pOldFocusWindow &&
+                    ! aOldFocusDel.IsDelete() &&
                     ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( EVENT_GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) )
                     GetFocus();
-                ImplCallActivateListeners( pOldFocusWindow );
+                ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDelete()) ? pOldFocusWindow : NULL );
                 if( !aDogTag.IsDelete() )
                 {
                     mpWindowImpl->mnGetFocusFlags = 0;
@@ -6557,6 +6559,15 @@ void Window::Enable( BOOL bEnable, BOOL bChild )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, TRUE );
     }
 
+    // #i56102# restore app focus win in case the
+    // window was disabled when the frame focus changed
+    ImplSVData* pSVData = ImplGetSVData();
+    if( bEnable &&
+        pSVData->maWinData.mpFocusWin == NULL &&
+        mpWindowImpl->mpFrameData->mbHasFocus &&
+        mpWindowImpl->mpFrameData->mpFocusWin == this )
+        pSVData->maWinData.mpFocusWin = this;
+
     if ( mpWindowImpl->mbDisabled != !bEnable )
     {
         mpWindowImpl->mbDisabled = !bEnable;
@@ -6619,6 +6630,15 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
 //              mpWindowImpl->mpFrame->Enable( !mpWindowImpl->mbDisabled && bEnable );
         }
     }
+
+    // #i56102# restore app focus win in case the
+    // window was disabled when the frame focus changed
+    ImplSVData* pSVData = ImplGetSVData();
+    if( bEnable &&
+        pSVData->maWinData.mpFocusWin == NULL &&
+        mpWindowImpl->mpFrameData->mbHasFocus &&
+        mpWindowImpl->mpFrameData->mpFocusWin == this )
+        pSVData->maWinData.mpFocusWin = this;
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
