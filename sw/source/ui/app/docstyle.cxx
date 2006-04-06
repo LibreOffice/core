@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,9 @@
 #endif
 #ifndef _APP_HRC
 #include <app.hrc>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -1353,6 +1356,25 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
         }
         SfxItemSet aSet(rSet);
         aSet.ClearInvalidItems();
+
+        // #i56252: If a standard numbering style is assigned to a standard paragraph style
+        // we have to create a physical instance of the numbering style. If we do not and
+        // neither the paragraph style nor the numbering style is used in the document
+        // the numbering style will not be saved with the document and the assignment got lost.
+        if( SFX_ITEM_SET == aSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) )
+        {   // Setting a numbering rule?
+            String sNumRule = ((SwNumRuleItem*)pItem)->GetValue();
+            if( sNumRule.Len() )
+            {
+                SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+                if( !pRule )
+                {   // Numbering rule not in use yet.
+                    USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, GET_POOLID_NUMRULE );
+                    if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
+                        rDoc.GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
+                }
+            }
+        }
 
         aCoreSet.ClearItem();
 
