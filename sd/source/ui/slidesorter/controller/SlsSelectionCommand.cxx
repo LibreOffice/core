@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionCommand.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:16:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ void SelectionCommand::AddPages (::std::auto_ptr<PageSelector::PageSelection> pS
 
 void SelectionCommand::AddPage (USHORT nPageIndex)
 {
-    model::PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
+    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
     {
         maPagesToSelect.push_back(pDescriptor->GetPage());
         if (mpCurrentPage == NULL)
@@ -82,8 +82,8 @@ void SelectionCommand::AddPage (USHORT nPageIndex)
 
 void SelectionCommand::SetCurrentPage (USHORT nPageIndex)
 {
-    model::PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
+    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
         mpCurrentPage = pDescriptor->GetPage();
 }
 
