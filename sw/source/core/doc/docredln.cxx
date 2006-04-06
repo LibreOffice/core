@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:16:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,32 @@ inline BOOL IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
                 ? rPos1.nContent.GetIndex() == pCNd->Len()
                 : 0;
 }
+
+#ifdef DEBUG
+bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
+{
+    int nError = 0;
+    SwNode* pSttNode = &pStt->nNode.GetNode();
+    SwNode* pEndNode = &pEnd->nNode.GetNode();
+    SwNode* pSttTab = pSttNode->FindStartNode()->FindTableNode();
+    SwNode* pEndTab = pEndNode->FindStartNode()->FindTableNode();
+    SwNode* pSttStart = pSttNode;
+    while( pSttStart && (!pSttStart->IsStartNode() || pSttStart->IsSectionNode() ||
+        pSttStart->IsTableNode() ) )
+        pSttStart = pSttStart->FindStartNode();
+    SwNode* pEndStart = pEndNode;
+    while( pEndStart && (!pEndStart->IsStartNode() || pEndStart->IsSectionNode() ||
+        pEndStart->IsTableNode() ) )
+        pEndStart = pEndStart->FindStartNode();
+    if( pSttTab != pEndTab )
+        nError = 1;
+    if( !pSttTab && pSttStart != pEndStart )
+        nError |= 2;
+    if( nError )
+        nError += 10;
+    return nError != 0;
+}
+#endif
 
 /*
 
@@ -2472,6 +2498,23 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
 
             pNew->SetMark();
             GoEndSection( pNew->GetPoint() );
+            // i60396: If the redlines starts before a table but the table is the last member
+            // of the section, the GoEndSection will end inside the table.
+            // This will result in an incorrect redline, so we've to go back
+            SwNode* pTab = pNew->GetPoint()->nNode.GetNode().FindStartNode()->FindTableNode();
+            // We end in a table when pTab != 0
+            if( pTab && !pNew->GetMark()->nNode.GetNode().FindStartNode()->FindTableNode() )
+            { // but our Mark was outside the table => Correction
+                do
+                {
+                    *pNew->GetPoint() = *pTab; // We want to be before the table
+                    pC = GoPreviousNds( &pNew->GetPoint()->nNode, FALSE ); // here we are.
+                    if( pC )
+                        pNew->GetPoint()->nContent.Assign( pC, 0 );
+                    pTab = pNew->GetPoint()->nNode.GetNode().FindStartNode()->FindTableNode();
+                }while( pTab ); // If there is another table we have to repeat our step backwards
+            }
+
             if( *pNew->GetPoint() > *pEnd )
             {
                 pC = 0;
@@ -2503,7 +2546,9 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
             }
             else
                 aNewStt = *pNew->GetPoint();
-
+#ifdef DEBUG
+            CheckPosition( pNew->GetPoint(), pNew->GetMark() );
+#endif
             if( *pNew->GetPoint() != *pNew->GetMark() &&
                 _SwRedlineTbl::Insert( pNew, nInsPos ) )
             {
