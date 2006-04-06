@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:52:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 mrController.GetModel().GetSelectedPagesEnumeration());
             while (aSelectedPages.HasMoreElements())
             {
-                SdPage* pPage = aSelectedPages.GetNextElement().GetPage();
+                SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
                 if (pObj!=NULL && !pObj->IsEmptyPresObj())
                     bDisable = false;
@@ -609,7 +609,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 mrController.GetModel().GetSelectedPagesEnumeration());
             while (aSelectedPages.HasMoreElements())
             {
-                SdPage* pPage = aSelectedPages.GetNextElement().GetPage();
+                SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
 
                 if (pObj!=NULL && !pObj->IsEmptyPresObj())
@@ -629,7 +629,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
             mrController.GetModel().GetAllPagesEnumeration());
         while (aAllPages.HasMoreElements())
         {
-            SdPage* pPage = aAllPages.GetNextElement().GetPage();
+            SdPage* pPage = aAllPages.GetNextElement()->GetPage();
 
             if( !pPage->IsExcluded() )
                 bDisable = FALSE;
@@ -711,7 +711,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         // page that is used by at least one page.
         else while (aSelectedPages.HasMoreElements())
         {
-            SdPage* pPage = aSelectedPages.GetNextElement().GetPage();
+            SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
             int nUseCount (mrController.GetModel().GetDocument()
                 ->GetMasterPageUserCount(pPage));
             if (nUseCount > 0)
@@ -768,7 +768,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     {
         model::SlideSorterModel::Enumeration aSelectedPages (
             mrController.GetModel().GetSelectedPagesEnumeration());
-        pPage = aSelectedPages.GetNextElement().GetPage();
+        pPage = aSelectedPages.GetNextElement()->GetPage();
         nFirstPage = pPage->GetPageNum()/2;
         pFirstPage = pPage;
 
@@ -864,7 +864,7 @@ void SlotManager::RenameSlide (void)
         model::PageEnumeration aSelectedPages (
             mrController.GetModel().GetSelectedPagesEnumeration());
         if (aSelectedPages.HasMoreElements())
-            pSelectedPage = aSelectedPages.GetNextElement().GetPage();
+            pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
         if (pSelectedPage != NULL)
         {
             String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
