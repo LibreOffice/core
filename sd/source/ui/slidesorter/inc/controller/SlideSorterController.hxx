@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:53:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_CONTROLLER_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_CONTROLLER_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
 #include "ViewShell.hxx"
 
 #ifndef _SFX_SHELL_HXX
@@ -66,7 +67,6 @@ class SlideSorterView;
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
-class PageDescriptor;
 } } }
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -131,7 +131,7 @@ public:
             reference because when no page is found at the position
             then NULL is returned to indicate this.
     */
-    model::PageDescriptor* GetPageAt (const Point& rPixelPosition);
+    model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
 
     /** Return the descriptor of the page that is associated to the page
         visible fade symbol at the given position.
@@ -139,7 +139,7 @@ public:
             When the given position is not over a visible page fade symbol
             then NULL is returned.
     */
-    model::PageDescriptor* GetFadePageAt (const Point& rPixelPosition);
+    model::SharedPageDescriptor GetFadePageAt (const Point& rPixelPosition);
 
     PageSelector& GetPageSelector (void);
     FocusManager& GetFocusManager (void);
