@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:59:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #define UNO_NAME_PAGE_SPEED             "Speed"
 #define UNO_NAME_PAGE_WIDTH             "Width"
 #define UNO_NAME_PAGE_PREVIEW           "Preview"
+#define UNO_NAME_PAGE_PREVIEWBITMAP     "PreviewBitmap"
 #define UNO_NAME_PAGE_VISIBLE           "Visible"
 
 #define UNO_NAME_OBJ_BOOKMARK           "Bookmark"
