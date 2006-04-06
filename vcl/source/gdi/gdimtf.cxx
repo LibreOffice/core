@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:38:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2363,4 +2363,120 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     rOStm.SetNumberFormatInt( nOldFormat );
 
     return rOStm;
+}
+
+// ------------------------------------------------------------------------
+
+BOOL GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
+                                    BitmapEx& rBmpEx,
+                                    const BitmapEx* pOverlay,
+                                    const Rectangle* pOverlayRect ) const
+{
+    // the implementation is provided by KA
+
+    // initialization seems to be complicated but is used to avoid rounding errors
+    VirtualDevice   aVDev;
+    const Point     aNullPt;
+    const Point     aTLPix( aVDev.LogicToPixel( aNullPt, GetPrefMapMode() ) );
+    const Point     aBRPix( aVDev.LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );
+    Size            aDrawSize( aVDev.LogicToPixel( GetPrefSize(), GetPrefMapMode() ) );
+    Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
+    Point           aPosPix;
+
+    if ( !rBmpEx.IsEmpty() )
+        rBmpEx.SetEmpty();
+
+    // determine size that has the same aspect ratio as image size and
+    // fits into the rectangle determined by nMaximumExtent
+    if ( aSizePix.Width() && aSizePix.Height()
+      && ( aSizePix.Width() > nMaximumExtent || aSizePix.Height() > nMaximumExtent ) )
+    {
+        const Size  aOldSizePix( aSizePix );
+        double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();
+
+        if ( fWH <= 1.0 )
+        {
+            aSizePix.Width() = FRound( nMaximumExtent * fWH );
+            aSizePix.Height() = nMaximumExtent;
+        }
+        else
+        {
+            aSizePix.Width() = nMaximumExtent;
+            aSizePix.Height() = FRound(  nMaximumExtent / fWH );
+        }
+
+        aDrawSize.Width() = FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() );
+        aDrawSize.Height() = FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() );
+    }
+
+    Size        aFullSize;
+    Point       aBackPosPix;
+    Rectangle   aOverlayRect;
+
+    // calculate addigtional positions and sizes if an overlay image is used
+    if (  pOverlay )
+    {
+        aFullSize = Size( nMaximumExtent, nMaximumExtent );
+        aOverlayRect = Rectangle( aNullPt, aFullSize  );
+
+        aOverlayRect.Intersection( pOverlayRect ? *pOverlayRect : Rectangle( aNullPt, pOverlay->GetSizePixel() ) );
+
+        if ( !aOverlayRect.IsEmpty() )
+            aBackPosPix = Point( ( nMaximumExtent - aSizePix.Width() ) >> 1, ( nMaximumExtent - aSizePix.Height() ) >> 1 );
+        else
+            pOverlay = NULL;
+    }
+    else
+    {
+        aFullSize = aSizePix;
+        pOverlay = NULL;
+    }
+
+    // draw image(s) into VDev and get resulting image
+    if ( aVDev.SetOutputSizePixel( aFullSize ) )
+    {
+        // draw metafile into VDev
+        const_cast<GDIMetaFile *>(this)->WindStart();
+        const_cast<GDIMetaFile *>(this)->Play( &aVDev, aBackPosPix, aDrawSize );
+
+        // draw overlay if neccessary
+        if ( pOverlay )
+            aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), *pOverlay );
+
+        // get paint bitmap
+        Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+
+        // assure that we have a true color image
+        if ( aBmp.GetBitCount() != 24 )
+            aBmp.Convert( BMP_CONVERSION_24BIT );
+
+        // create resulting mask bitmap with metafile output set to black
+        GDIMetaFile aMonchromeMtf( GetMonochromeMtf( COL_BLACK ) );
+        aVDev.DrawWallpaper( Rectangle( aNullPt, aSizePix ), Wallpaper( Color( COL_WHITE ) ) );
+        aMonchromeMtf.WindStart();
+        aMonchromeMtf.Play( &aVDev, aBackPosPix, aDrawSize );
+
+        // watch for overlay mask
+        if ( pOverlay  )
+        {
+            Bitmap aOverlayMergeBmp( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ) );
+
+            // create ANDed resulting mask at overlay area
+            if ( pOverlay->IsTransparent() )
+                aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), pOverlay->GetMask() );
+            else
+            {
+                aVDev.SetLineColor( COL_BLACK );
+                aVDev.SetFillColor( COL_BLACK );
+                aVDev.DrawRect( aOverlayRect);
+            }
+
+            aOverlayMergeBmp.CombineSimple( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ), BMP_COMBINE_AND );
+            aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), aOverlayMergeBmp );
+        }
+
+        rBmpEx = BitmapEx( aBmp, aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+    }
+
+    return !rBmpEx.IsEmpty();
 }
