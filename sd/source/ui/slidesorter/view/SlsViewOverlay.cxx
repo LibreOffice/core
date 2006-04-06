@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:28:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,9 +355,8 @@ void SubstitutionOverlay::Create (
     maShapes.clear();
     while (rSelection.HasMoreElements())
     {
-        maShapes.push_back (
-            rSelection.GetNextElement().GetPageObject()
-            ->GetCurrentBoundRect());
+        maShapes.push_back(
+            rSelection.GetNextElement()->GetPageObject()->GetCurrentBoundRect());
     }
 }
 
@@ -598,7 +597,7 @@ sal_Int32 InsertionIndicatorOverlay::GetInsertionPageIndex (void) const
 MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
     ViewOverlay& rViewOverlay)
     : OverlayBase (rViewOverlay),
-      mpPageUnderMouse(NULL)
+      mpPageUnderMouse()
 {
 }
 
@@ -606,16 +605,30 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
 
 
 void MouseOverIndicatorOverlay::SetSlideUnderMouse (
-    const model::PageDescriptor* pDescriptor)
+    const model::SharedPageDescriptor& rpDescriptor)
 {
     SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
     if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
-         if (mpPageUnderMouse != pDescriptor)
+    {
+        model::SharedPageDescriptor pDescriptor;
+        if ( ! mpPageUnderMouse.expired())
+        {
+            try
+            {
+                pDescriptor = model::SharedPageDescriptor(mpPageUnderMouse);
+            }
+            catch (::boost::bad_weak_ptr)
+            {
+            }
+        }
+
+         if (pDescriptor != rpDescriptor)
         {
             ShowingModeGuard aGuard (*this, true);
 
-            mpPageUnderMouse = pDescriptor;
+            mpPageUnderMouse = rpDescriptor;
         }
+    }
 }
 
 
@@ -623,18 +636,30 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
 
 void MouseOverIndicatorOverlay::Paint (void)
 {
-    if (mpPageUnderMouse != NULL)
+    if ( ! mpPageUnderMouse.expired())
     {
-        SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
-        if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
+        model::SharedPageDescriptor pDescriptor;
+        try
         {
-            SlideSorterView& rView (rViewShell.GetSlideSorterController().GetView());
-            OutputDevice* pDevice = rView.GetWindow();
-            PageObjectViewObjectContact* pContact = mpPageUnderMouse->GetViewObjectContact();
-            if (pDevice != NULL
-                && pContact != NULL)
+            pDescriptor = model::SharedPageDescriptor(mpPageUnderMouse);
+        }
+        catch (::boost::bad_weak_ptr)
+        {
+        }
+
+        if (pDescriptor.get() != NULL)
+        {
+            SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
+            if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
             {
-                pContact->PaintFrame(*pDevice, mbIsShowing);
+                SlideSorterView& rView (rViewShell.GetSlideSorterController().GetView());
+                OutputDevice* pDevice = rView.GetWindow();
+                PageObjectViewObjectContact* pContact = pDescriptor->GetViewObjectContact();
+                if (pDevice != NULL
+                    && pContact != NULL)
+                {
+                    pContact->PaintFrame(*pDevice, mbIsShowing);
+                }
             }
         }
     }
