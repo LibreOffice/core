@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:45:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 11:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1662,7 +1662,7 @@ End
 
 File gid_File_Lib_Salextra
     TXT_FILE_BODY;
-    Name = STRING(CONCAT3(libsalextra_x11osx_,DLLPOSTFIX,UNXSUFFIX));
+    Name = STRING(CONCAT2(libsalsystools,UNXSUFFIX));
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
