@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:44:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,9 @@ void DumpSlideSorterModel (const SlideSorterModel& rModel)
         OSL_TRACE ("    edit mode is unknown");
     for (int i=0; i<rModel.GetPageCount(); i++)
     {
-        PageDescriptor* pDescriptor = rModel.GetRawPageDescriptor(i);
+        SharedPageDescriptor pDescriptor = rModel.GetRawPageDescriptor(i);
         OSL_TRACE ("    page %d points to %x", i, pDescriptor);
-        if (pDescriptor != NULL)
+        if (pDescriptor.get() != NULL)
             OSL_TRACE ("        focused %d, selected %d, visible %d",
                 pDescriptor->IsFocused()?1:0,
                 pDescriptor->IsSelected()?1:0,
@@ -157,11 +157,11 @@ int SlideSorterModel::GetPageCount (void) const
 
 
 
-PageDescriptor* SlideSorterModel::GetPageDescriptor (int nPageIndex) const
+SharedPageDescriptor SlideSorterModel::GetPageDescriptor (int nPageIndex) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    PageDescriptor* pDescriptor = NULL;
+    SharedPageDescriptor pDescriptor;
     if (nPageIndex>=0 && nPageIndex<GetPageCount())
     {
         pDescriptor = maPageDescriptors[nPageIndex];
@@ -172,9 +172,9 @@ PageDescriptor* SlideSorterModel::GetPageDescriptor (int nPageIndex) const
                 pPage = mrDocument.GetSdPage (nPageIndex, mePageKind);
             else
                 pPage = mrDocument.GetMasterSdPage (nPageIndex, mePageKind);
-            pDescriptor = new PageDescriptor (
+            pDescriptor.reset(new PageDescriptor (
                 *pPage,
-                GetPageObjectFactory());
+                GetPageObjectFactory()));
             maPageDescriptors[nPageIndex] = pDescriptor;
         }
     }
@@ -184,11 +184,11 @@ PageDescriptor* SlideSorterModel::GetPageDescriptor (int nPageIndex) const
 
 
 
-PageDescriptor* SlideSorterModel::GetRawPageDescriptor (int nPageIndex) const
+SharedPageDescriptor SlideSorterModel::GetRawPageDescriptor (int nPageIndex) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    PageDescriptor* pDescriptor = NULL;
+    SharedPageDescriptor pDescriptor;
     if (nPageIndex>=0 && nPageIndex<GetPageCount())
         pDescriptor = maPageDescriptors[nPageIndex];
     return pDescriptor;
@@ -197,16 +197,16 @@ PageDescriptor* SlideSorterModel::GetRawPageDescriptor (int nPageIndex) const
 
 
 
-PageDescriptor* SlideSorterModel::FindPageDescriptor (
+SharedPageDescriptor SlideSorterModel::FindPageDescriptor (
         const Reference<drawing::XDrawPage>& rxPage) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    PageDescriptor* pDescriptor = NULL;
+    SharedPageDescriptor pDescriptor;
     for (int i=0; i<GetPageCount(); i++)
     {
         pDescriptor = GetPageDescriptor(i);
-        if (pDescriptor != NULL)
+        if (pDescriptor.get() != NULL)
         {
             Reference<drawing::XDrawPage> xPage (
                 pDescriptor->GetPage()->getUnoPage(), UNO_QUERY);
@@ -248,7 +248,11 @@ SlideSorterModel::Enumeration
 
 
 /** For now this method uses a trivial algorithm: throw away all descriptors
-    and create them anew (on demand).
+    and create them anew (on demand).  The main problem that we are facing
+    when designing a better algorithm is that we can not compare pointers to
+    pages stored in the PageDescriptor objects and those obtained from the
+    document: pages may have been deleted and others may have been created
+    at the exact same memory locations.
 */
 void SlideSorterModel::Resync (void)
 {
@@ -267,13 +271,9 @@ void SlideSorterModel::AdaptSize ()
     ::osl::MutexGuard aGuard (maMutex);
 
     if (meEditMode == EM_PAGE)
-        maPageDescriptors.resize (
-            mrDocument.GetSdPageCount(mePageKind),
-            NULL);
+        maPageDescriptors.resize(mrDocument.GetSdPageCount(mePageKind));
     else
-        maPageDescriptors.resize (
-            mrDocument.GetMasterSdPageCount(mePageKind),
-            NULL);
+        maPageDescriptors.resize(mrDocument.GetMasterSdPageCount(mePageKind));
 
 #ifdef USE_SLIDE_SORTER_PAGE_CACHE
     toolpanel::SlideSorterCacheDisplay* pDisplay = toolpanel::SlideSorterCacheDisplay::Instance(&mrDocument);
@@ -292,10 +292,15 @@ void SlideSorterModel::ClearDescriptorList (void)
     DescriptorContainer::iterator I;
     for (I=maPageDescriptors.begin(); I!=maPageDescriptors.end(); I++)
     {
-        if (*I != NULL)
+        if (I->get() != NULL)
         {
-            delete *I;
-            *I = NULL;
+            if ( ! I->unique())
+            {
+                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %d", I->use_count());
+                // No assertion here because that can hang the office when
+                // opening a dialog from here.
+            }
+            I->reset();
         }
     }
 }
@@ -310,8 +315,8 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
     Enumeration aAllPages (GetAllPagesEnumeration());
     while (aAllPages.HasMoreElements())
     {
-        PageDescriptor& rDescriptor (aAllPages.GetNextElement());
-        rDescriptor.GetPage()->SetSelected (rDescriptor.IsSelected());
+        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        pDescriptor->GetPage()->SetSelected (pDescriptor->IsSelected());
     }
 }
 
@@ -325,11 +330,11 @@ void SlideSorterModel::SynchronizeModelSelection (void)
     Enumeration aAllPages (GetAllPagesEnumeration());
     while (aAllPages.HasMoreElements())
     {
-        PageDescriptor& rDescriptor (aAllPages.GetNextElement());
-        if (rDescriptor.GetPage()->IsSelected())
-            rDescriptor.Select ();
+        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        if (pDescriptor->GetPage()->IsSelected())
+            pDescriptor->Select ();
         else
-            rDescriptor.Deselect ();
+            pDescriptor->Deselect ();
     }
 }
 
@@ -347,8 +352,8 @@ void SlideSorterModel::SetPageObjectFactory(
     Enumeration aAllPages (GetAllPagesEnumeration());
     while (aAllPages.HasMoreElements())
     {
-        PageDescriptor& rDescriptor (aAllPages.GetNextElement());
-        rDescriptor.SetPageObjectFactory(rFactory);
+        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        pDescriptor->SetPageObjectFactory(rFactory);
     }
 }
 
