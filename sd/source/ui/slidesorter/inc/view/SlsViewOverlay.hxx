@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:23:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,12 @@
 #ifndef SD_SLIDESORTER_VIEW_OVERLAY_HXX
 #define SD_SLIDESORTER_VIEW_OVERLAY_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
+
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
 #include <vector>
+#include <boost/weak_ptr.hpp>
 
 class OutputDevice;
 class Region;
@@ -48,7 +51,6 @@ class SlideSorterViewShell;
 } }
 
 namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
 class PageEnumeration;
 } } }
 
@@ -204,12 +206,16 @@ public:
         @param pContact
             A value of <NULL/> indicates to not paint the mouse over indicator.
     */
-    void SetSlideUnderMouse (const model::PageDescriptor* pDescriptor);
+    void SetSlideUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
 
     virtual void Paint (void);
 
 private:
-    const model::PageDescriptor* mpPageUnderMouse;
+    /** The page under the mouse is stored as weak shared pointer so that
+        model changes can be handled without having the SlideSorterModel
+        inform this class explicitly.
+    */
+    ::boost::weak_ptr<model::PageDescriptor> mpPageUnderMouse;
 };
 
 
