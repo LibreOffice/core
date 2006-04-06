@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:28:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1491,7 +1491,7 @@ public:
 
         // Dokument - Info
             // legt sie auf jedenfall an!
-    const SfxDocumentInfo* GetInfo();
+    SfxDocumentInfo* GetInfo();
             // kann auch 0 sein !!!
     const SfxDocumentInfo* GetpInfo() const { return pSwgInfo; }
 
