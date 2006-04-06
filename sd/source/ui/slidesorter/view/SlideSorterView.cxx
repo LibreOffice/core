@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:20:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ SlideSorterView::~SlideSorterView (void)
     while (aPageEnumeration.HasMoreElements())
     {
         view::PageObjectViewObjectContact* pContact
-            = aPageEnumeration.GetNextElement().GetViewObjectContact();
+            = aPageEnumeration.GetNextElement()->GetViewObjectContact();
         if (pContact != NULL)
             pContact->SetCache(pEmptyCache);
     }
@@ -234,14 +234,14 @@ void SlideSorterView::PreModelChange (void)
 {
     // Reset the slide under the mouse.  It will be set to the correct slide
     // on the next mouse motion.
-    GetOverlay().GetMouseOverIndicatorOverlay().SetSlideUnderMouse(NULL);
+    GetOverlay().GetMouseOverIndicatorOverlay().SetSlideUnderMouse(SharedPageDescriptor());
 
     // Tell the page descriptors of the model that the page objects do not
     // exist anymore.
     model::SlideSorterModel::Enumeration aPageEnumeration (
         mrModel.GetAllPagesEnumeration());
     while (aPageEnumeration.HasMoreElements())
-        aPageEnumeration.GetNextElement().ReleasePageObject();
+        aPageEnumeration.GetNextElement()->ReleasePageObject();
 
     // Remove all page objects from the page.
     mpPage->Clear();
@@ -260,7 +260,7 @@ void SlideSorterView::PostModelChange (void)
         mrModel.GetAllPagesEnumeration());
     while (aPageEnumeration.HasMoreElements())
     {
-        SdrPageObj* pPageObject = aPageEnumeration.GetNextElement().GetPageObject();
+        SdrPageObj* pPageObject = aPageEnumeration.GetNextElement()->GetPageObject();
         mpPage->InsertObject (pPageObject);
         pPageObject->SetModel (&maPageModel);
     }
@@ -330,9 +330,8 @@ void SlideSorterView::Layout ()
     int nIndex = 0;
     while (aPageEnumeration.HasMoreElements())
     {
-        model::PageDescriptor& rDescriptor (
-            aPageEnumeration.GetNextElement());
-        SdrPageObj* pPageObject = rDescriptor.GetPageObject();
+        model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
+        SdrPageObj* pPageObject = pDescriptor->GetPageObject();
         Rectangle aPageObjectBox (mpLayouter->GetPageObjectBox (nIndex));
         pPageObject->SetRelativePos (aPageObjectBox.TopLeft());
 
@@ -380,7 +379,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
         int nMaxIndex = ::std::max (mnLastVisiblePageIndex, nLastIndex);
         if (mnFirstVisiblePageIndex!=nFirstIndex || mnLastVisiblePageIndex!=nLastIndex)
             mbPreciousFlagUpdatePending |= true;
-        model::PageDescriptor* pDescriptor;
+        model::SharedPageDescriptor pDescriptor;
         view::PageObjectViewObjectContact* pContact;
         for (int nIndex=nMinIndex; nIndex<=nMaxIndex; nIndex++)
         {
@@ -395,7 +394,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
             if (bWasVisible != bIsVisible)
             {
                 pContact = NULL;
-                pDescriptor = mrModel.GetPageDescriptor (nIndex);
+                pDescriptor = mrModel.GetPageDescriptor(nIndex);
                 if (pDescriptor != NULL)
                     pContact = pDescriptor->GetViewObjectContact();
 
@@ -419,7 +418,7 @@ void SlideSorterView::UpdatePreciousFlags (void)
         mbPreciousFlagUpdatePending = false;
 
         view::PageObjectViewObjectContact* pContact = NULL;
-        model::PageDescriptor* pDescriptor = NULL;
+        model::SharedPageDescriptor pDescriptor;
         ::boost::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
         sal_Int32 nPageCount (mrModel.GetPageCount());
 
@@ -460,11 +459,11 @@ void SlideSorterView::RequestRepaint (void)
 
 
 
-void SlideSorterView::RequestRepaint (model::PageDescriptor& rDescriptor)
+void SlideSorterView::RequestRepaint (const model::SharedPageDescriptor& rpDescriptor)
 {
     GetWindow()->Invalidate(
         GetPageBoundingBox (
-            rDescriptor,
+            rpDescriptor,
             CS_MODEL,
             BBT_INFO));
 }
@@ -483,12 +482,12 @@ Rectangle SlideSorterView::GetModelArea (void)
 
 
 Rectangle SlideSorterView::GetPageBoundingBox (
-    model::PageDescriptor& rDescriptor,
+    const model::SharedPageDescriptor& rpDescriptor,
     CoordinateSystem eCoordinateSystem,
     BoundingBoxType eBoundingBoxType) const
 {
     Rectangle aBBox;
-    SdrObject* pPageObject = rDescriptor.GetPageObject();
+    SdrObject* pPageObject = rpDescriptor->GetPageObject();
     if (pPageObject != NULL)
     {
         aBBox = pPageObject->GetCurrentBoundRect();
@@ -696,10 +695,9 @@ void SlideSorterView::UpdatePageBorders (void)
             mrModel.GetAllPagesEnumeration());
         while (aPageEnumeration.HasMoreElements())
         {
-            model::PageDescriptor& rDescriptor (
-                aPageEnumeration.GetNextElement());
-            rDescriptor.SetModelBorder(maModelBorder);
-            rDescriptor.SetPageNumberAreaModelSize(maPageNumberAreaModelSize);
+            model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
+            pDescriptor->SetModelBorder(maModelBorder);
+            pDescriptor->SetPageNumberAreaModelSize(maPageNumberAreaModelSize);
         }
 
         // Convert the borders to pixel coordinates and store them for later
