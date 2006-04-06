@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:39:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:39:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1947,6 +1947,29 @@ static void ImplHandleLoseFocus( Window* pWindow )
 }
 
 // -----------------------------------------------------------------------
+struct DelayedCloseEvent
+{
+    Window*         pWindow;
+    ImplDelData     aDelData;
+};
+
+static long DelayedCloseEventLink( void* pCEvent, void* pDummy )
+{
+    DelayedCloseEvent* pEv = (DelayedCloseEvent*)pCEvent;
+
+    if( ! pEv->aDelData.IsDelete() )
+    {
+        pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
+        // dispatch to correct window type
+        if( pEv->pWindow->IsSystemWindow() )
+            ((SystemWindow*)pEv->pWindow)->Close();
+        else if( pEv->pWindow->ImplIsDockingWindow() )
+            ((DockingWindow*)pEv->pWindow)->Close();
+    }
+    delete pEv;
+
+    return 0;
+}
 
 void ImplHandleClose( Window* pWindow )
 {
@@ -1983,11 +2006,13 @@ void ImplHandleClose( Window* pWindow )
         // check whether close is allowed
         if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() )
             Sound::Beep( SOUND_DISABLE, pWin );
-        // dispatch to correct window type
-        else if( pWin->IsSystemWindow() )
-            ((SystemWindow*)pWin)->Close();
-        else if( pWin->ImplIsDockingWindow() )
-            ((DockingWindow*)pWin)->Close();
+        else
+        {
+            DelayedCloseEvent* pEv = new DelayedCloseEvent;
+            pEv->pWindow = pWin;
+            pWin->ImplAddDel( &pEv->aDelData );
+            Application::PostUserEvent( Link( pEv, DelayedCloseEventLink ) );
+        }
     }
 }
 
