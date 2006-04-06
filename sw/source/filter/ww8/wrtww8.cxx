@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:38:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2461,6 +2461,9 @@ void SwWW8Writer::PrepareStorage()
     const BYTE* pData;
     const char* pName;
     UINT32 nId1;
+    const SwDocShell* pDocShell;
+    SfxDocumentInfo* pInfo;
+
 
     if (bWrtWW8)
     {
@@ -2519,8 +2522,23 @@ void SwWW8Writer::PrepareStorage()
     pStg->SetClass( aGName, 0, String::CreateFromAscii( pName ));
     SvStorageStreamRef xStor( pStg->OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
-                // noch mal ueberplaetten, um auch Clipboardformat zu setzen
-    pDoc->GetInfo()->SavePropertySet( pStg );   // DocInfo
+
+    pInfo = pDoc->GetInfo ();
+    pDocShell = pDoc->GetDocShell ();
+
+    if (pDocShell)
+    {
+        GDIMetaFile *pMetaFile;
+
+        pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
+        if (pMetaFile)
+        {
+            pInfo->SetThumbnailMetaFile (*pMetaFile);
+            delete pMetaFile;
+        }
+    }
+
+    pInfo->SavePropertySet( pStg );   // DocInfo
 }
 
 ULONG SwWW8Writer::WriteStorage()
