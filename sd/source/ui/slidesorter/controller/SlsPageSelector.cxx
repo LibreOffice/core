@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:15:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ PageSelector::PageSelector (
       mnSelectedPageCount(0),
       mnBroadcastDisableLevel(0),
       mbSelectionChangeBroadcastPending(false),
-      mpMostRecentlySelectedPage(NULL),
-      mpSelectionAnchor(NULL)
+      mpMostRecentlySelectedPage(),
+      mpSelectionAnchor()
 {
     CountSelectedPages ();
 }
@@ -97,8 +97,8 @@ void PageSelector::DeselectAllPages (void)
     DBG_ASSERT (mnSelectedPageCount==0,
         "PageSelector::DeselectAllPages: the selected pages counter is not 0");
     mnSelectedPageCount = 0;
-    mpMostRecentlySelectedPage = NULL;
-    mpSelectionAnchor = NULL;
+    mpMostRecentlySelectedPage.reset();
+    mpSelectionAnchor.reset();
 }
 
 
@@ -111,17 +111,17 @@ void PageSelector::UpdateAllPages (void)
         mrModel.GetAllPagesEnumeration());
     while (aAllPages.HasMoreElements())
     {
-        model::PageDescriptor& rDescriptor (aAllPages.GetNextElement());
-        if (rDescriptor.UpdateSelection())
+        model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        if (pDescriptor->UpdateSelection())
         {
-            mrController.GetView().RequestRepaint (rDescriptor);
+            mrController.GetView().RequestRepaint(pDescriptor);
             if (mnBroadcastDisableLevel > 0)
                 mbSelectionChangeBroadcastPending = true;
             else
                 mrController.SelectionHasChanged();
         }
 
-        if (rDescriptor.IsSelected())
+        if (pDescriptor->IsSelected())
             mnSelectedPageCount++;
     }
 }
@@ -131,9 +131,9 @@ void PageSelector::UpdateAllPages (void)
 
 void PageSelector::SelectPage (int nPageIndex)
 {
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
-        SelectPage (*pDescriptor);
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
+        SelectPage(pDescriptor);
 }
 
 
@@ -142,24 +142,24 @@ void PageSelector::SelectPage (int nPageIndex)
 void PageSelector::SelectPage (const SdPage* pPage)
 {
     int nPageIndex = (pPage->GetPageNum()-1) / 2;
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
-        SelectPage (*pDescriptor);
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
+        SelectPage(pDescriptor);
 }
 
 
 
 
-void PageSelector::SelectPage (PageDescriptor& rDescriptor)
+void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rDescriptor.Select())
+    if (rpDescriptor.get()!=NULL && rpDescriptor->Select())
     {
         mnSelectedPageCount ++;
-        mrController.GetView().RequestRepaint (rDescriptor);
+        mrController.GetView().RequestRepaint(rpDescriptor);
 
-        mpMostRecentlySelectedPage = &rDescriptor;
+        mpMostRecentlySelectedPage = rpDescriptor;
         if (mpSelectionAnchor == NULL)
-            mpSelectionAnchor = &rDescriptor;
+            mpSelectionAnchor = rpDescriptor;
 
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
@@ -173,10 +173,9 @@ void PageSelector::SelectPage (PageDescriptor& rDescriptor)
 
 void PageSelector::DeselectPage (int nPageIndex)
 {
-    model::PageDescriptor* pDescriptor (
-        mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor != NULL)
-        DeselectPage (*pDescriptor);
+    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
+        DeselectPage(pDescriptor);
 }
 
 
@@ -185,22 +184,22 @@ void PageSelector::DeselectPage (int nPageIndex)
 void PageSelector::DeselectPage (const SdPage* pPage)
 {
     int nPageIndex = (pPage->GetPageNum()-1) / 2;
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
-        DeselectPage (*pDescriptor);
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
+        DeselectPage(pDescriptor);
 }
 
 
 
 
-void PageSelector::DeselectPage (PageDescriptor& rDescriptor)
+void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rDescriptor.Deselect())
+    if (rpDescriptor.get()!=NULL && rpDescriptor->Deselect())
     {
         mnSelectedPageCount --;
-        mrController.GetView().RequestRepaint (rDescriptor);
-        if (mpMostRecentlySelectedPage == &rDescriptor)
-            mpMostRecentlySelectedPage = NULL;
+        mrController.GetView().RequestRepaint(rpDescriptor);
+        if (mpMostRecentlySelectedPage == rpDescriptor)
+            mpMostRecentlySelectedPage.reset();
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
         else
@@ -213,8 +212,8 @@ void PageSelector::DeselectPage (PageDescriptor& rDescriptor)
 
 bool PageSelector::IsPageSelected (int nPageIndex)
 {
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
         return pDescriptor->IsSelected();
     else
         return false;
@@ -223,7 +222,7 @@ bool PageSelector::IsPageSelected (int nPageIndex)
 
 
 
-void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
+void PageSelector::SetCurrentPage (const SharedPageDescriptor& rpDescriptor)
 {
     // Set current page.  At the moment we have to do this in two different
     // ways.  The UNO way is the preferable one but, alas, it does not work
@@ -236,7 +235,7 @@ void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
             mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
         if (pDrawViewShell != NULL)
         {
-            USHORT nPageNumber = (rDescriptor.GetPage()->GetPageNum()-1)/2;
+            USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
             pDrawViewShell->SwitchPage(nPageNumber);
             pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
@@ -251,7 +250,7 @@ void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
                 break;
 
             Any aPage;
-            aPage <<= rDescriptor.GetPage()->getUnoPage();
+            aPage <<= rpDescriptor->GetPage()->getUnoPage();
             xSet->setPropertyValue (
                 String::CreateFromAscii("CurrentPage"),
                 aPage);
@@ -272,9 +271,9 @@ void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
 void PageSelector::SetCurrentPage (const SdPage* pPage)
 {
     int nPageIndex = (pPage->GetPageNum()-1) / 2;
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
-        SetCurrentPage(*pDescriptor);
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
+        SetCurrentPage(pDescriptor);
 }
 
 
@@ -282,9 +281,9 @@ void PageSelector::SetCurrentPage (const SdPage* pPage)
 
 void PageSelector::SetCurrentPage (int nPageIndex)
 {
-    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
-        SetCurrentPage (*pDescriptor);
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
+        SetCurrentPage(pDescriptor);
 }
 
 
@@ -322,7 +321,7 @@ void PageSelector::HandleModelChange (void)
 
 
 
-PageDescriptor* PageSelector::GetMostRecentlySelectedPage (void) const
+SharedPageDescriptor PageSelector::GetMostRecentlySelectedPage (void) const
 {
     return mpMostRecentlySelectedPage;
 }
@@ -330,7 +329,7 @@ PageDescriptor* PageSelector::GetMostRecentlySelectedPage (void) const
 
 
 
-PageDescriptor* PageSelector::GetSelectionAnchor (void) const
+SharedPageDescriptor PageSelector::GetSelectionAnchor (void) const
 {
     return mpSelectionAnchor;
 }
