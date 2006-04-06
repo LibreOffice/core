@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:23:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,7 @@ sal_Int32 AnimationSlideController::getNextSlideNumber() const
         return -1;
     }
 }
+
 
 bool AnimationSlideController::nextSlide()
 {
@@ -1327,12 +1328,33 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes )
     }
 }
 
+void SlideshowImpl::gotoNextEffect()
+{
+    if( mxShow.is() && mpSlideController.get() && mpShowWindow )
+    {
+        const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+        if( eMode == SHOWWINDOWMODE_END )
+        {
+            mpShowWindow->TerminateShow();
+        }
+        else if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+        {
+            mpShowWindow->RestartShow();
+        }
+        else
+        {
+            mxShow->nextEffect();
+            update();
+        }
+    }
+}
+
 void SlideshowImpl::gotoPreviousSlide()
 {
     if( mxShow.is() && mpSlideController.get() ) try
     {
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) )
+        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {
             const sal_Int32 nLastSlideIndex = mpSlideController->getSlideIndexCount() - 1;
             if( nLastSlideIndex >= 0 )
@@ -1964,7 +1986,6 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
         {
             // cancel show
             case KEY_ESCAPE:
-            case KEY_BACKSPACE:
             case KEY_SUBTRACT:
                 // in case the user cancels the presentation, switch to current slide
                 // in edit mode
@@ -1977,9 +1998,18 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 break;
 
             // advance show
+            case KEY_PAGEDOWN:
+                if(rKEvt.GetKeyCode().IsMod2())
+                {
+                    gotoNextSlide();
+                    break;
+                }
+                // warning, fall through!
             case KEY_SPACE:
-                mxShow->nextEffect();
-                update();
+            case KEY_RIGHT:
+            case KEY_DOWN:
+            case KEY_N:
+                gotoNextEffect();
                 break;
 
             case KEY_RETURN:
@@ -1995,8 +2025,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 }
                 else
                 {
-                    mxShow->nextEffect();
-                    update();
+                    gotoNextEffect();
                 }
             }
             break;
@@ -2015,17 +2044,11 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 maCharBuffer.Append( rKEvt.GetCharCode() );
                 break;
 
-            case KEY_PAGEDOWN:
-            case KEY_RIGHT:
-            case KEY_DOWN:
-            case KEY_N:
-                gotoNextSlide();
-                break;
-
             case KEY_PAGEUP:
             case KEY_LEFT:
             case KEY_UP:
             case KEY_P:
+            case KEY_BACKSPACE:
                 gotoPreviousSlide();
                 break;
 
@@ -2037,12 +2060,14 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 gotoLastSlide();
                 break;
 
-            case( KEY_B ):
-            case( KEY_W ):
+            case KEY_B:
+            case KEY_W:
+            case KEY_POINT:
+            case KEY_COMMA:
             {
                 if( mpShowWindow )
                 {
-                    const Color aBlankColor( (nKeyCode == KEY_B ) ? COL_BLACK : COL_WHITE );
+                    const Color aBlankColor( ((nKeyCode == KEY_W ) || (nKeyCode == KEY_COMMA)) ? COL_WHITE : COL_BLACK );
                     if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), aBlankColor ) )
                         pause( true );
                 }
