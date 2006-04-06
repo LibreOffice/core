@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:31:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumeration.hxx"
+#include "model/SlsSharedPageDescriptor.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
@@ -893,8 +894,8 @@ void SlideSorterViewShell::GetSelectedPages (
         mpSlideSorterModel->GetSelectedPagesEnumeration());
     while (aPages.HasMoreElements())
     {
-        model::PageDescriptor& rDescriptor (aPages.GetNextElement());
-        rPageContainer.push_back (rDescriptor.GetPage());
+        model::SharedPageDescriptor pDescriptor (aPages.GetNextElement());
+        rPageContainer.push_back(pDescriptor->GetPage());
     }
 }
 
