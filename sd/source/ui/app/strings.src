@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 16:15:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,7 +880,7 @@ String STR_UNDO_COPYOBJECTS
 String STR_TITLE_NAMEGROUP
 {
     Text [ de ] = "Objekt benennen" ;
-    Text [ en-US ] = "Name object";
+    Text [ en-US ] = "Name Object";
 };
 String STR_DESC_NAMEGROUP
 {
