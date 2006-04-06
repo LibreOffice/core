@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:57:15 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,14 @@ namespace vcl_sal {
         const KeysymNameReplacement*    pReplacements;
         int                             nReplacements;
         rtl_TextEncoding                nEncoding;
+    };
+
+    static const struct KeysymNameReplacement aImplReplacements_English[] =
+    {
+        { XK_Control_L, "Ctrl" },
+        { XK_Control_R, "Ctrl" },
+        { XK_Escape, "Esc" },
+        { XK_space, "Space" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_German[] =
@@ -347,20 +355,22 @@ namespace vcl_sal {
         { "Sweden6", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
         { "Sweden_x86", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
 #endif
-        { "German", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "French", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norwegian", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Swedish", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portuguese", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spanish", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italian", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 }
+        { "U.S. English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "United Kingdom", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Germany", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "France", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Italy", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Norway", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Portugal", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Spain", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Sweden", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 }
     };
 
     String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
     {
         for( int n = 0; n < sizeof(aKeyboards)/sizeof(aKeyboards[0]); n++ )
         {
-            if( ! strcasecmp( pKeyboard, aKeyboards[n].pKeyboardName ) )
+            if( ! strncasecmp( pKeyboard, aKeyboards[n].pKeyboardName, strlen( aKeyboards[n].pKeyboardName ) ) )
             {
                 const struct KeysymNameReplacement* pRepl = aKeyboards[n].pReplacements;
                 for( int m = aKeyboards[n].nReplacements ; m ; )
