@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:50:20 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,9 +570,9 @@ sal_Bool AccessibleSlideSorterObject::IsDisposed (void)
 
 SdPage* AccessibleSlideSorterObject::GetPage (void) const
 {
-    ::sd::slidesorter::model::PageDescriptor* pDescriptor
-        = mrSlideSorterController.GetModel().GetPageDescriptor(mnPageNumber);
-    if (pDescriptor != NULL)
+    ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
+        mrSlideSorterController.GetModel().GetPageDescriptor(mnPageNumber));
+    if (pDescriptor.get() != NULL)
         return pDescriptor->GetPage();
     else
         return NULL;
