@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:52:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,14 +239,13 @@ view::SlideSorterView& SlideSorterController::GetView (void) const
 
 
 
-model::PageDescriptor* SlideSorterController::GetPageAt (
+model::SharedPageDescriptor SlideSorterController::GetPageAt (
     const Point& aPixelPosition)
 {
-    sal_Int32 nHitPageIndex =
-        mrView.GetPageIndexAtPoint (aPixelPosition);
-    model::PageDescriptor* pDescriptorAtPoint = NULL;
+    sal_Int32 nHitPageIndex (mrView.GetPageIndexAtPoint(aPixelPosition));
+    model::SharedPageDescriptor pDescriptorAtPoint;
     if (nHitPageIndex >= 0)
-        pDescriptorAtPoint = mrModel.GetPageDescriptor (nHitPageIndex);
+        pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
 
     return pDescriptorAtPoint;
 }
@@ -254,14 +253,13 @@ model::PageDescriptor* SlideSorterController::GetPageAt (
 
 
 
-model::PageDescriptor* SlideSorterController::GetFadePageAt (
+model::SharedPageDescriptor SlideSorterController::GetFadePageAt (
     const Point& aPixelPosition)
 {
-    sal_Int32 nHitPageIndex =
-        mrView.GetFadePageIndexAtPoint (aPixelPosition);
-    model::PageDescriptor* pDescriptorAtPoint = NULL;
+    sal_Int32 nHitPageIndex (mrView.GetFadePageIndexAtPoint(aPixelPosition));
+    model::SharedPageDescriptor pDescriptorAtPoint;
     if (nHitPageIndex >= 0)
-        pDescriptorAtPoint = mrModel.GetPageDescriptor (nHitPageIndex);
+        pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
 
     return pDescriptorAtPoint;
 }
@@ -350,19 +348,19 @@ SdPage* SlideSorterController::GetActualPage (void)
     // 2. Try the currently focused page.
     if (pCurrentPage == NULL)
     {
-        model::PageDescriptor* pDescriptor = NULL;
+        model::SharedPageDescriptor pDescriptor;
         if (GetFocusManager().IsFocusShowing())
             pDescriptor = GetFocusManager().GetFocusedPageDescriptor();
-        if (pDescriptor == NULL)
+        if (pDescriptor.get() == NULL)
         {
             // 3. Take the first selected page.
             model::SlideSorterModel::Enumeration aEnumeration (
                 GetModel().GetSelectedPagesEnumeration());
             if (aEnumeration.HasMoreElements())
-                pDescriptor = &aEnumeration.GetNextElement();
+                pDescriptor = aEnumeration.GetNextElement();
         }
 
-        if (pDescriptor != NULL)
+        if (pDescriptor.get() != NULL)
             pCurrentPage = pDescriptor->GetPage();
     }
 
@@ -412,7 +410,7 @@ bool SlideSorterController::Command (
             model::SlideSorterModel::Enumeration aSelectedPages (
                 GetModel().GetSelectedPagesEnumeration());
             if (aSelectedPages.HasMoreElements())
-                pPage = aSelectedPages.GetNextElement().GetPage();
+                pPage = aSelectedPages.GetNextElement()->GetPage();
 
             // Choose the popup menu depending on a) the type of the main
             // view shell, b) the edit mode, and c) on whether the selection
@@ -459,12 +457,12 @@ bool SlideSorterController::Command (
                 // focused page as top left position of the context menu.
                 if (pPage != NULL)
                 {
-                    model::PageDescriptor* pDescriptor
-                        = GetFocusManager().GetFocusedPageDescriptor();
-                    if (pDescriptor != NULL)
+                    model::SharedPageDescriptor pDescriptor (
+                        GetFocusManager().GetFocusedPageDescriptor());
+                    if (pDescriptor.get() != NULL)
                     {
                         Rectangle aBBox (GetView().GetPageBoundingBox (
-                            *pDescriptor,
+                            pDescriptor,
                             view::SlideSorterView::CS_SCREEN,
                             view::SlideSorterView::BBT_SHAPE));
                         Point aPosition (aBBox.Center());
@@ -674,7 +672,7 @@ void SlideSorterController::DeleteSelectedPages (void)
         GetModel().GetSelectedPagesEnumeration());
     ::std::vector<SdPage*> aSelectedPages;
     while (aPageEnumeration.HasMoreElements())
-        aSelectedPages.push_back (aPageEnumeration.GetNextElement().GetPage());
+        aSelectedPages.push_back (aPageEnumeration.GetNextElement()->GetPage());
 
     // The actual deletion of the selected pages is done in one of two
     // helper functions.  They are specialized for normal respectively for
@@ -990,21 +988,21 @@ sal_Int32 SlideSorterController::MakeSelectionVisible (
 {
     // Determine the descriptors of the first, last, and most recently
     // selected page and the bounding box that encloses their page objects.
-    model::PageDescriptor* pFirst = NULL;
-    model::PageDescriptor* pLast = NULL;
+    model::SharedPageDescriptor pFirst;
+    model::SharedPageDescriptor pLast;
     Rectangle aSelectionBox;
     model::SlideSorterModel::Enumeration aSelectedPages (
         mrModel.GetSelectedPagesEnumeration());
     while (aSelectedPages.HasMoreElements())
     {
-        model::PageDescriptor* pDescriptor (&aSelectedPages.GetNextElement());
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
 
-        if (pFirst == NULL)
+        if (pFirst.get() == NULL)
             pFirst = pDescriptor;
         pLast = pDescriptor;
 
         aSelectionBox.Union (mrView.GetPageBoundingBox (
-            *pDescriptor,
+            pDescriptor,
             view::SlideSorterView::CS_MODEL,
             view::SlideSorterView::BBT_INFO));
     }
@@ -1014,7 +1012,7 @@ sal_Int32 SlideSorterController::MakeSelectionVisible (
         // The mose recently selected page is assumed to lie in the range
         // between first and last selected page.  Therefore the bounding box
         // is not modified.
-        model::PageDescriptor* pRecent = GetPageSelector().GetMostRecentlySelectedPage();
+        model::SharedPageDescriptor pRecent (GetPageSelector().GetMostRecentlySelectedPage());
 
         // Determine scroll direction and the position in model coordinates
         // that will be aligned with the top or bottom window border.
@@ -1027,7 +1025,7 @@ sal_Int32 SlideSorterController::MakeSelectionVisible (
             // We can show only a part of the selection.
 
             // Get the bounding box of the page object on which to concentrate.
-            model::PageDescriptor* pRepresentative;
+            model::SharedPageDescriptor pRepresentative;
             switch (eSelectionHint)
             {
                 case SH_FIRST:
@@ -1047,7 +1045,7 @@ sal_Int32 SlideSorterController::MakeSelectionVisible (
             }
             if (pRepresentative != NULL)
                 aSelectionBox = mrView.GetPageBoundingBox (
-                    *pRepresentative,
+                    pRepresentative,
                     view::SlideSorterView::CS_MODEL,
                     view::SlideSorterView::BBT_INFO);
         }
@@ -1237,8 +1235,8 @@ void SlideSorterController::PrepareEditModeChange (void)
         PageEnumeration aSelectedPages (mrModel.GetSelectedPagesEnumeration());
         while (aSelectedPages.HasMoreElements())
         {
-            PageDescriptor& rDescriptor (aSelectedPages.GetNextElement());
-            SdPage* pPage = rDescriptor.GetPage();
+            SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+            SdPage* pPage = pDescriptor->GetPage();
             // Remember the master page of the first selected descriptor.
             if (pPage!=NULL && mpEditModeChangeMasterPage==NULL)
                 mpEditModeChangeMasterPage = &static_cast<SdPage&>(
@@ -1284,10 +1282,10 @@ void SlideSorterController::FinishEditModeChange (void)
         PageEnumeration aAllPages (mrModel.GetAllPagesEnumeration ());
         while (aAllPages.HasMoreElements())
         {
-            PageDescriptor& rDescriptor (aAllPages.GetNextElement());
-            if (rDescriptor.GetPage() == mpEditModeChangeMasterPage)
+            SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+            if (pDescriptor->GetPage() == mpEditModeChangeMasterPage)
             {
-                mpPageSelector->SetCurrentPage (rDescriptor);
+                mpPageSelector->SetCurrentPage(pDescriptor);
                 break;
             }
         }
@@ -1315,9 +1313,9 @@ void SlideSorterController::FinishEditModeChange (void)
 void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rsOldName)
 {
     // Request a repaint for the page object whose name has changed.
-    model::PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
-    if (pDescriptor != NULL)
-        mrView.RequestRepaint(*pDescriptor);
+    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != NULL)
+        mrView.RequestRepaint(pDescriptor);
 
     // Get a pointer to the corresponding accessible object and notify
     // that of the name change.
