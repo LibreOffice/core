@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:23:09 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,7 +886,7 @@ void SwDoc::SetPersist( SfxObjectShell* pPersist )
 
 
 
-const SfxDocumentInfo* SwDoc::GetInfo()
+SfxDocumentInfo* SwDoc::GetInfo()
 {
     if( !pSwgInfo )
         // Pointer-Members initialisieren
