@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:12:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ const OUString& getOfficePath( enum whichOfficePath ePath )
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), aConfigPath );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+        OUString aUPath = aUserPath;
 
         if( ! aConfigPath.compareToAscii( "file://", 7 ) )
         {
@@ -97,6 +98,15 @@ const OUString& getOfficePath( enum whichOfficePath ePath )
             if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aUserPath = aSysPath;
         }
+        // ensure user path exists
+        aUPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/psprint" ) );
+        #if OSL_DEBUG_LEVEL > 1
+        oslFileError eErr =
+        #endif
+        osl_createDirectoryPath( aUPath.pData, NULL, NULL );
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "try to create \"%s\" = %d\n", OUStringToOString( aUPath, RTL_TEXTENCODING_UTF8 ).getStr(), eErr );
+        #endif
     }
 
     switch( ePath )
