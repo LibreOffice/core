@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:50:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #endif
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
+#endif
+#ifndef _SV_SALTIMER_H
+#include <saltimer.h>
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
@@ -2450,71 +2453,79 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::ImplGetKeyNameTextW(): WCHAR != sal_Unicode" );
 
-    WCHAR aKeyBuf[350];
+    static const int nMaxKeyLen = 350;
+    WCHAR aKeyBuf[ nMaxKeyLen ];
     int nKeyLen = 0;
     if ( lParam )
     {
-        nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, sizeof( aKeyBuf ) / sizeof( sal_Unicode ) );
-        // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
-        // fall back to the ANSI version instead
-        if ( aSalShlData.mbWNT && nKeyLen > 0 )
+        if ( aSalShlData.mbWNT )
         {
-            // Convert name, so that the keyname start with an upper
-            // char and the rest of the word are in lower chars
-            CharLowerBuffW( aKeyBuf, nKeyLen );
-            CharUpperBuffW( aKeyBuf, 1 );
-            WCHAR cTempChar;
-            WCHAR* pKeyBuf = aKeyBuf;
-            while ( (cTempChar = *pKeyBuf) != 0 )
+            nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
+            // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
+            // fall back to the ANSI version instead
+            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" )
+            if( nKeyLen > nMaxKeyLen )
+                nKeyLen = 0;
+            else if( nKeyLen > 0 )
             {
-                if ( (cTempChar == '+') || (cTempChar == '-') ||
-                     (cTempChar == ' ') || (cTempChar == '.') )
-                    CharUpperBuffW( pKeyBuf+1, 1 );
-                pKeyBuf++;
+                // Capitalize just the first letter of key names
+                CharLowerBuffW( aKeyBuf, nKeyLen );
+
+                bool bUpper = true;
+                for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
+                {
+                    if( bUpper )
+                        CharUpperBuffW( pW, 1 );
+                    bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
+                }
             }
         }
-        else
+        else // !mbWnt
         {
-            sal_Char aAnsiKeyBuf[250];
-            int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, sizeof( aAnsiKeyBuf ) / sizeof( sal_Char ) );
-            if ( nAnsiKeyLen )
+            sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
+            int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
+            DBG_ASSERT( nAnsiKeyLen <= nAnsiMaxKeyLen, "Invalid key name length!" )
+            if( nAnsiKeyLen > nMaxKeyLen )
+                nAnsiKeyLen = 0;
+            else if( nAnsiKeyLen > 0 )
             {
-                // Convert name, so that the keyname start with an upper
-                // char and the rest of the word are in lower chars
+                // Capitalize just the first letter of key names
+                // TODO: check MCBS key names
                 CharLowerBuffA( aAnsiKeyBuf, nAnsiKeyLen );
-                CharUpperBuffA( aAnsiKeyBuf, 1 );
-                sal_Char cTempChar;
-                sal_Char* pAnsiKeyBuf = aAnsiKeyBuf;
-                while ( (cTempChar = *pAnsiKeyBuf) != 0 )
+
+                bool bUpper = true;
+                for( sal_Char *pA=aAnsiKeyBuf, *pE=pA+nAnsiKeyLen; pA < pE; ++pA )
                 {
-                    if ( (cTempChar == '+') || (cTempChar == '-') ||
-                         (cTempChar == ' ') || (cTempChar == '.') )
-                        CharUpperBuffA( pAnsiKeyBuf+1, 1 );
-                    pAnsiKeyBuf++;
+                    if( bUpper )
+                        CharUpperBuffA( pA, 1 );
+                    bUpper = (*pA=='+') || (*pA=='-') || (*pA==' ') || (*pA=='.');
                 }
 
                 // Convert to Unicode and copy the data in the Unicode Buffer
-                nKeyLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, aAnsiKeyBuf, nAnsiKeyLen, aKeyBuf, sizeof( aKeyBuf ) / sizeof( sal_Unicode ) );
+                nKeyLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
+                    aAnsiKeyBuf, nAnsiKeyLen, aKeyBuf, nMaxKeyLen );
             }
         }
     }
 
     if ( (nKeyLen > 0) || pReplace )
     {
-        if ( rCount )
+        if( (rCount > 0) && (rCount < nMaxSize) )
         {
             pBuf[rCount] = '+';
             rCount++;
         }
 
-        if ( nKeyLen )
+        if( nKeyLen > 0 )
         {
+            if( nKeyLen + rCount > nMaxSize )
+                nKeyLen = nMaxSize - rCount;
             memcpy( pBuf+rCount, aKeyBuf, nKeyLen*sizeof( sal_Unicode ) );
             rCount += nKeyLen;
         }
-        else
+        else // fall back to provided default name
         {
-            while ( *pReplace )
+            while( *pReplace && (rCount < nMaxSize) )
             {
                 pBuf[rCount] = *pReplace;
                 rCount++;
@@ -2530,36 +2541,30 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
 XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
 {
-    XubString   aKeyCode;
-    sal_Unicode aKeyBuf[350];
+    static const int nMaxKeyLen = 350;
+    sal_Unicode aKeyBuf[ nMaxKeyLen ];
     UINT        nKeyBufLen = 0;
-    UINT        nSysCode;
+    UINT        nSysCode = 0;
 
     if ( nKeyCode & KEY_MOD2 )
     {
         nSysCode = MapVirtualKey( VK_MENU, 0 );
         nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen,
-                            sizeof( aKeyBuf ) / sizeof( sal_Unicode ),
-                            "Alt" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
     }
 
     if ( nKeyCode & KEY_MOD1 )
     {
         nSysCode = MapVirtualKey( VK_CONTROL, 0 );
         nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen,
-                            sizeof( aKeyBuf ) / sizeof( sal_Unicode ),
-                            "Ctrl" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Ctrl" );
     }
 
     if ( nKeyCode & KEY_SHIFT )
     {
         nSysCode = MapVirtualKey( VK_SHIFT, 0 );
         nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen,
-                            sizeof( aKeyBuf ) / sizeof( sal_Unicode ),
-                            "Shift" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Shift" );
     }
 
     USHORT      nCode = nKeyCode & 0x0FFF;
@@ -2706,33 +2711,23 @@ XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
         nSysCode = MapVirtualKey( (UINT)nSysCode, 0 );
         if ( nSysCode )
             nSysCode = (nSysCode << 16) | nSysCode2;
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen,
-                            sizeof( aKeyBuf ) / sizeof( sal_Unicode ),
-                            pReplace );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, pReplace );
     }
     else
     {
         if ( cSVCode )
         {
-            if ( !nKeyBufLen )
-            {
-                aKeyBuf[0] = cSVCode;
-                nKeyBufLen = 1;
-            }
-            else
-            {
-                aKeyBuf[nKeyBufLen] = '+';
-                nKeyBufLen++;
-                aKeyBuf[nKeyBufLen] = cSVCode;
-                nKeyBufLen++;
-            }
+            if ( nKeyBufLen > 0 )
+                aKeyBuf[ nKeyBufLen++ ] = '+';
+            if( nKeyBufLen < nMaxKeyLen )
+                aKeyBuf[ nKeyBufLen++ ] = cSVCode;
         }
     }
 
-    if ( nKeyBufLen )
-        aKeyCode.Assign( (const sal_Unicode*)aKeyBuf, nKeyBufLen );
+    if( !nKeyBufLen )
+        return XubString();
 
-    return aKeyCode;
+    return XubString( aKeyBuf, nKeyBufLen );
 }
 
 // -----------------------------------------------------------------------
@@ -3939,7 +3934,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandlePaintMsg( HWND hWnd )
+static bool ImplHandlePaintMsg( HWND hWnd )
 {
     BOOL bMutex = FALSE;
     if ( ImplSalYieldMutexTryToAcquire() )
@@ -4007,6 +4002,8 @@ static void ImplHandlePaintMsg( HWND hWnd )
 
     if ( bMutex )
         ImplSalYieldMutexRelease();
+
+    return bMutex ? true : false;
 }
 
 // -----------------------------------------------------------------------
@@ -5595,6 +5592,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         return 0;
     }
 
+    bool bCheckTimers = false;
+
     switch( nMsg )
     {
         case WM_MOUSEMOVE:
@@ -5732,11 +5731,12 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case WM_PAINT:
-            ImplHandlePaintMsg( hWnd );
+            bCheckTimers = ImplHandlePaintMsg( hWnd );
             rDef = FALSE;
             break;
         case SAL_MSG_POSTPAINT:
             ImplHandlePaintMsg2( hWnd, (RECT*)wParam );
+            bCheckTimers = true;
             rDef = FALSE;
             break;
 
@@ -5954,6 +5954,21 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     rDef = ImplSalWheelMousePos( hWnd, nMsg, wParam, lParam, nRet );
             }
             bInWheelMsg--;
+        }
+    }
+
+    if( bCheckTimers )
+    {
+        SalData* pSalData = GetSalData();
+        if( pSalData->mnNextTimerTime )
+        {
+            DWORD nCurTime = GetTickCount();
+            if( pSalData->mnNextTimerTime < nCurTime )
+            {
+                MSG aMsg;
+                if ( ! ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
+                    SalTimerProc( 0, 0, 0, nCurTime );
+            }
         }
     }
 
