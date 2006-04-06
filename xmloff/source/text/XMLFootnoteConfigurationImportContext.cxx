@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:01:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,6 +480,11 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat,
                                                      sNumSync );
+    // #i61399: Corrupt file? It contains "Bullet" as numbering style for footnotes.
+    // Okay, even it seems to be corrupt, we will oversee this and set the style to ARABIC
+    if( NumberingType::CHAR_SPECIAL == nNumType )
+        nNumType = NumberingType::ARABIC;
+
     aAny <<=  nNumType;
     rConfig->setPropertyValue(sPropertyNumberingType, aAny);
 
