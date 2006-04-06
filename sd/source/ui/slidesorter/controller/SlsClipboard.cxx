@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 13:02:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
         nInsertPosition = mrController.GetModel().GetPageCount();
         while (aSelectedPages.HasMoreElements())
         {
-            nInsertPosition = aSelectedPages.GetNextElement().GetPage()->GetPageNum();
+            nInsertPosition = aSelectedPages.GetNextElement()->GetPage()->GetPageNum();
             // Convert *2+1 index to straight index ((n-1)/2) after the page
             // (+1).
             nInsertPosition = (nInsertPosition-1)/2 + 1;
@@ -322,16 +322,16 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
     rSelector.DeselectAllPages();
     for (USHORT i=0; i<nPageCount; i++)
     {
-        model::PageDescriptor* pDescriptor
-            = mrController.GetModel().GetPageDescriptor(nFirstIndex + i);
-        if (pDescriptor != NULL)
+        model::SharedPageDescriptor pDescriptor (
+            mrController.GetModel().GetPageDescriptor(nFirstIndex + i));
+        if (pDescriptor.get() != NULL)
         {
-            rSelector.SelectPage(*pDescriptor);
+            rSelector.SelectPage(pDescriptor);
             // The first page of the new selection is made the current page.
             if (i == 0)
             {
-                rSelector.SetCurrentPage(*pDescriptor);
-                mrController.GetFocusManager().SetFocusedPage(*pDescriptor);
+                rSelector.SetCurrentPage(pDescriptor);
+                mrController.GetFocusManager().SetFocusedPage(pDescriptor);
             }
         }
     }
@@ -353,11 +353,11 @@ void Clipboard::CreateSlideTransferable (
         (mrController.GetModel().GetSelectedPagesEnumeration());
     while (aSelectedPages.HasMoreElements())
     {
-        model::PageDescriptor& rDescriptor (aSelectedPages.GetNextElement());
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
         aBookmarkList.Insert (
-            new String(rDescriptor.GetPage()->GetName()),
+            new String(pDescriptor->GetPage()->GetName()),
             LIST_APPEND);
-        maPagesToRemove.push_back (rDescriptor.GetPage());
+        maPagesToRemove.push_back (pDescriptor->GetPage());
     }
 
     if (aBookmarkList.Count() > 0)
@@ -644,9 +644,9 @@ USHORT Clipboard::InsertSlides (
     int nDocumentIndex = nInsertPosition / 2 - 1;
     for (USHORT i=1; i<=nInsertedPageCount; i++)
     {
-        model::PageDescriptor* pDescriptor
-            = mrController.GetModel().GetPageDescriptor(nDocumentIndex + i);
-        if (pDescriptor != NULL)
+        model::SharedPageDescriptor pDescriptor (
+            mrController.GetModel().GetPageDescriptor(nDocumentIndex + i));
+        if (pDescriptor.get() != NULL)
             maPagesToSelect.push_back (pDescriptor->GetPage());
     }
 
@@ -709,10 +709,10 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
         // number of the page under the mouse.
         if (nPage == SDRPAGE_NOTFOUND)
         {
-            model::PageDescriptor* pDescriptor
-                = mrController.GetModel().GetPageDescriptor(
-                    mrController.GetView().GetPageIndexAtPoint(rPosition));
-            if (pDescriptor != NULL && pDescriptor->GetPage()!=NULL)
+            model::SharedPageDescriptor pDescriptor (
+                mrController.GetModel().GetPageDescriptor(
+                    mrController.GetView().GetPageIndexAtPoint(rPosition)));
+            if (pDescriptor.get() != NULL && pDescriptor->GetPage()!=NULL)
                 nPage = (pDescriptor->GetPage()->GetPageNum() - 1) / 2;
         }
 
