@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:21:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,11 @@
 
 #include "memory"
 
-#include "SlsEnumeration.hxx"
-
+#include "model/SlsEnumeration.hxx"
+#include "model/SlsSharedPageDescriptor.hxx"
 
 namespace sd { namespace slidesorter { namespace model {
 
-class PageDescriptor;
 class SlideSorterModel;
 
 
@@ -54,7 +53,7 @@ class SlideSorterModel;
     predicates.
 */
 class PageEnumeration
-    : public Enumeration<PageDescriptor>
+    : public Enumeration<SharedPageDescriptor>
 {
 public:
     /** The type of the predicate that is used to filter pages from the set
@@ -84,7 +83,7 @@ public:
         factory method for creating a page enumeration.  Otherwise you may
         want to use that method as well.
     */
-    PageEnumeration (::std::auto_ptr<Enumeration<PageDescriptor> > pImpl);
+    PageEnumeration (::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl);
 
     /** This copy constructor creates a copy of the given enumeration.  This
         new enumeration points to the same element as the given one.
@@ -106,7 +105,7 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
-    virtual PageEnumeration* Clone (void);
+    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void);
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
@@ -120,7 +119,7 @@ public:
         more element.  Calling this method with HasMoreElements() returning
         <FALSE/> is an error.
     */
-    virtual PageDescriptor& GetNextElement (void);
+    virtual SharedPageDescriptor GetNextElement (void);
 
     /** Rewind the enumeration so that the next call to GetNextElement()
         will return its first element.
@@ -129,7 +128,7 @@ public:
 
 private:
     /// Implementation object.
-    ::std::auto_ptr<Enumeration<PageDescriptor> > mpImpl;
+    ::std::auto_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
 
     // Default constructor not implemented.
     PageEnumeration (void);
