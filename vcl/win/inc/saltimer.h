@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:00:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _SV_SALTIMER_HXX
 #include <saltimer.hxx>
 #endif
+
+void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD );
 
 class WinSalTimer : public SalTimer
 {
