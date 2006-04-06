@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:39:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 13:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,7 +580,7 @@ File gid_File_Help_Common_Zip
                   "shared.jar",
                   "shared.key",
                   "shared.tree",
-                  "err.html"); 
+                  "err.html");
 End
 
 File gid_File_Help_Help_Zip
@@ -606,7 +606,7 @@ File gid_File_Help_Sbasic_Zip
                   "sbasic.idx/LINKNAMES",
                   "sbasic.idx/OFFSETS",
                   "sbasic.idx/POSITIONS",
-                  "sbasic.idx/SCHEMA"); 
+                  "sbasic.idx/SCHEMA");
 End
 
 File gid_File_Help_Schart_Zip
@@ -1364,7 +1364,7 @@ End
 
 File gid_File_Oo_Office_Labels_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Labels.xcu";
 End
