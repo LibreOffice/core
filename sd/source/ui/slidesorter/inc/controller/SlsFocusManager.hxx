@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsFocusManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:18:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,13 @@
 #ifndef SD_SLIDESORTER_FOCUS_MANAGER_HXX
 #define SD_SLIDESORTER_FOCUS_MANAGER_HXX
 
+#include <model/SlsSharedPageDescriptor.hxx>
+
 #include <sal/types.h>
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
 #include <vector>
-
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -115,7 +113,7 @@ public:
             When there is no page that currently has the focus then NULL is
             returned.
     */
-    model::PageDescriptor* GetFocusedPageDescriptor (void) const;
+    model::SharedPageDescriptor GetFocusedPageDescriptor (void) const;
 
     /** Return the index of the page that currently has the focus as it is
         accepted by the slide sorter model.
@@ -141,7 +139,7 @@ public:
             One of the page descriptors that are currently managed by the
             SlideSorterModel.
     */
-    void SetFocusedPage (const model::PageDescriptor& rDescriptor);
+    void SetFocusedPage (const model::SharedPageDescriptor& rDescriptor);
 
     /** Set the focused page to the one described by the given page
         index.  The visibility of the focus indicator is not modified.
@@ -209,7 +207,7 @@ private:
         @param pDescriptor
             When NULL is given then the call is ignored.
     */
-    void HideFocusIndicator (model::PageDescriptor* pDescriptor);
+    void HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Set the focus state of the given descriptor, scroll it into the
         visible area and request a repaint so that the focus indicator is
@@ -217,7 +215,7 @@ private:
         @param pDescriptor
             When NULL is given then the call is ignored.
     */
-    void ShowFocusIndicator (model::PageDescriptor* pDescriptor);
+    void ShowFocusIndicator (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Call all currently registered listeners that a focus change has
         happended.  The focus may be hidden or shown or moved from one page
