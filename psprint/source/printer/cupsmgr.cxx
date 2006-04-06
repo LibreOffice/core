@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:25:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -855,7 +855,12 @@ bool CUPSManager::checkPrintersChanged()
     }
 
     if( ! bChanged )
+    {
         bChanged = PrinterInfoManager::checkPrintersChanged();
+        // #i54375# ensure new merging with CUPS list in :initialize
+        if( bChanged )
+            m_bNewDests = true;
+    }
 
     if( bChanged )
         initialize();
