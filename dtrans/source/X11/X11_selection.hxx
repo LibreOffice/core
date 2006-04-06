@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:02:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 15:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,9 @@ namespace x11 {
             bool                        m_bOwner;
             Window                      m_aLastOwner;
             PixmapHolder*               m_pPixmap;
+            // m_nOrigTimestamp contains the timestamp at which the seclection
+            // was acquired; needed for TIMESTAMP target
+            Time                        m_nOrigTimestamp;
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( NULL ),
@@ -254,7 +257,8 @@ namespace x11 {
                           m_bHaveCompound( false ),
                           m_bOwner( false ),
                           m_aLastOwner( None ),
-                          m_pPixmap( NULL )
+                          m_pPixmap( NULL ),
+                          m_nOrigTimestamp( CurrentTime )
                 {}
         };
 
@@ -291,6 +295,7 @@ namespace x11 {
         Reference< com::sun::star::script::XInvocation >
                                     m_xBitmapConverter;
         sal_Int32                   m_nSelectionTimeout;
+        Time                        m_nSelectionTimestamp;
 
 
         // members used for Xdnd
@@ -368,6 +373,7 @@ namespace x11 {
         // some special atoms that are needed often
         Atom                        m_nCLIPBOARDAtom;
         Atom                        m_nTARGETSAtom;
+        Atom                        m_nTIMESTAMPAtom;
         Atom                        m_nTEXTAtom;
         Atom                        m_nINCRAtom;
         Atom                        m_nCOMPOUNDAtom;
