@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:54:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-06 16:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1299,7 +1299,7 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
             sal_Int32 nX( pArray->X - rObjectPos.X );
             sal_Int32 nY( pArray->Y - rObjectPos.Y );
 
-            if(bScale)
+            if(bScale && rObjectSize.Width && rObjectSize.Height)
             {
                 nX = (nX * rViewBox.GetWidth()) / rObjectSize.Width;
                 nY = (nY * rViewBox.GetHeight()) / rObjectSize.Height;
@@ -1408,7 +1408,7 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
                 nY -= rViewBox.GetY();
             }
 
-            if(bScale)
+            if(bScale && rViewBox.GetWidth() && rViewBox.GetHeight() )
             {
                 nX = (nX * rObjectSize.Width) / rViewBox.GetWidth();
                 nY = (nY * rObjectSize.Height) / rViewBox.GetHeight();
@@ -1466,7 +1466,7 @@ void Imp_PrepareCoorExport(sal_Int32& nX, sal_Int32& nY,
     nX = pPointArray->X - rObjectPos.X;
     nY = pPointArray->Y - rObjectPos.Y;
 
-    if(bScale)
+    if(bScale && rObjectSize.Width && rObjectSize.Height )
     {
         nX = (nX * mrViewBox.GetWidth()) / rObjectSize.Width;
         nY = (nY * mrViewBox.GetHeight()) / rObjectSize.Height;
@@ -2097,7 +2097,7 @@ void Imp_PrepareCoorImport(sal_Int32& nX, sal_Int32& nY,
         nY -= rViewBox.GetY();
     }
 
-    if(bScale)
+    if(bScale && rViewBox.GetWidth() && rViewBox.GetHeight())
     {
         nX = (nX * rObjectSize.Width) / rViewBox.GetWidth();
         nY = (nY * rObjectSize.Height) / rViewBox.GetHeight();
