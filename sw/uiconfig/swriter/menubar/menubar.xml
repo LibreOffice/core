@@ -21,8 +21,9 @@
             <menu:menu menu:id=".uno:SendToMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SendMailDocAsOOo" />
+                    <menu:menuitem menu:id=".uno:SendMailDocAsMS" />
                     <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:helpid="6672" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SendMailDocAsFormat" />
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:NewGlobalDoc" menu:helpid="20004" menu:label="" />
                     <menu:menuitem menu:id=".uno:NewHtmlDoc" menu:helpid="20040" menu:label="" />
