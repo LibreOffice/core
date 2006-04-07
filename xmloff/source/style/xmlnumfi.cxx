@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:20:09 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
-#define _ZFORLIST_DECLARE_TABLE
+#include <svtools/syslocale.hxx>
 
+#define _ZFORLIST_DECLARE_TABLE
 #include <svtools/zforlist.hxx>
+
 #include <svtools/zformat.hxx>
 #include <svtools/numuno.hxx>
 #include <rtl/math.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -614,13 +616,13 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
         //pLocaleData = new LocaleDataWrapper(
         //  (pFormatter ? pFormatter->GetServiceManager() :
         //  ::comphelper::getProcessServiceFactory()),
-        //  SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+        //  MsLangId::convertLanguageToLocale( nLang ) );
         pLocaleData = new LocaleDataWrapper(
             (pFormatter ? pFormatter->GetServiceManager() :
             mxServiceFactory),
-            SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+            MsLangId::convertLanguageToLocale( nLang ) );
     else
-        pLocaleData->setLocale( SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+        pLocaleData->setLocale( MsLangId::convertLanguageToLocale( nLang ) );
     return *pLocaleData;
 }
 
@@ -974,7 +976,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 
     if ( sLanguage.getLength() || sCountry.getLength() )
     {
-        nElementLang = ConvertIsoNamesToLanguage( sLanguage, sCountry );
+        nElementLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
         if ( nElementLang == LANGUAGE_DONTKNOW )
             nElementLang = LANGUAGE_SYSTEM;         //! error handling for invalid locales?
     }
@@ -1196,13 +1198,20 @@ void SvXMLNumFmtElementContext::EndElement()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
+    // TODO: merge system information and defaults into i18n locale data
+#if 0
     return bLong ? rIntn.IsLongDateDayLeadingZero() : rIntn.IsDateDayLeadingZero();
+#else
+    return !bLong;
+#endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
+    // TODO: merge system information and defaults into i18n locale data
+#if 0
     if (bLong)
     {
         MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
@@ -1210,10 +1219,15 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const International& rIntn, BOO
     }
     else
         return rIntn.IsDateMonthLeadingZero();
+#else
+    return !bLong;
+#endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
+    // TODO: merge system information and defaults into i18n locale data
+#if 0
     if (bLong)
     {
         MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
@@ -1221,21 +1235,35 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const International& rIntn, 
     }
     else
         return sal_False;
+#else
+    return bLong;
+#endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
+    // TODO: merge system information and defaults into i18n locale data
+#if 0
     return bLong ? rIntn.IsLongDateCentury() : rIntn.IsDateCentury();
+#else
+    return bLong;
+#endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
-    return IsSystemLongYear( rIntn, bLong );        // no separate setting
+    // TODO: merge system information and defaults into i18n locale data
+    return IsSystemLongYear( rSysLoc, bLong );      // no separate setting
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const International& rIntn, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, BOOL bLong )
 {
+    // TODO: merge system information and defaults into i18n locale data
+#if 0
     return ( bLong && rIntn.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
+#else
+    return bLong && true;
+#endif
 }
 
 sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
@@ -1277,8 +1305,10 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
     pData( pNewData ),
+    pStyles( &rStyles ),
     aMyConditions(),
     nType( nNewType ),
+    nKey(-1),
     nFormatLang( LANGUAGE_SYSTEM ),
     bAutoOrder( FALSE ),
     bFromSystem( FALSE ),
@@ -1297,9 +1327,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateHours( XML_DEA_NONE ),
     eDateMins( XML_DEA_NONE ),
     eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( sal_False ),
-    pStyles( &rStyles ),
-    nKey(-1)
+    bDateNoDefault( sal_False )
 {
     OUString sLanguage, sCountry;
     ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
@@ -1365,7 +1393,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
     if ( sLanguage.getLength() || sCountry.getLength() )
     {
-        nFormatLang = ConvertIsoNamesToLanguage( sLanguage, sCountry );
+        nFormatLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
         if ( nFormatLang == LANGUAGE_DONTKNOW )
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for invalid locales?
     }
@@ -1379,8 +1407,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "[NatNum" ) );
             aFormatCode.append( nNatNum, 10 );
 
-            LanguageType eLang = ConvertIsoNamesToLanguage(
-                    aNatNumAttr.Locale.Language, aNatNumAttr.Locale.Country );
+            LanguageType eLang = MsLangId::convertLocaleToLanguage( aNatNumAttr.Locale );
             if ( eLang == LANGUAGE_DONTKNOW )
                 eLang = LANGUAGE_SYSTEM;            //! error handling for invalid locales?
             if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
@@ -1401,8 +1428,10 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
     pData( NULL ),
+    pStyles( &rStyles ),
     aMyConditions(),
     nType( 0 ),
+    nKey(nTempKey),
     nFormatLang( LANGUAGE_SYSTEM ),
     bAutoOrder( FALSE ),
     bFromSystem( FALSE ),
@@ -1421,9 +1450,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateHours( XML_DEA_NONE ),
     eDateMins( XML_DEA_NONE ),
     eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( sal_False ),
-    pStyles( &rStyles ),
-    nKey(nTempKey)
+    bDateNoDefault( sal_False )
 {
     SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
 }
