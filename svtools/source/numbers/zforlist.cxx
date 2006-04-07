@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:06:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-//#include <tools/intn.hxx>
-#endif
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
@@ -56,8 +53,8 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -110,7 +107,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
 
-        // Konstanten fuer Typoffsets pro Land/Sprache (CL)
+// Constants for type offsets per Country/Language (CL)
 #define ZF_STANDARD              0
 #define ZF_STANDARD_PERCENT     10
 #define ZF_STANDARD_CURRENCY    20
@@ -124,10 +121,9 @@ using namespace ::com::sun::star::lang;
 #define ZF_STANDARD_LOGICAL     SV_MAX_ANZ_STANDARD_FORMATE-1 //  99
 #define ZF_STANDARD_TEXT        SV_MAX_ANZ_STANDARD_FORMATE   // 100
 
-//  Sprache, die am International gesetzt wird, wenn eine unbekannte Sprache
-//  (von einem anderen System) geladen wird. Darf nicht SYSTEM sein, weil
-//  "DM" aus deutschen Einstellungen sonst als Datum erkannt wird (#53155#).
-
+/* Locale that is set if an unknown locale (from another system) is loaded of
+ * legacy documents. Can not be SYSTEM because else, for example, a German "DM"
+ * (old currency) is recognized as a date (#53155#). */
 #define UNKNOWN_SUBSTITUTE      LANGUAGE_ENGLISH_US
 
 static BOOL bIndexTableInitialized = FALSE;
@@ -165,7 +161,7 @@ public:
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
 {
-    eSysLanguage = SvNumberFormatter::GetProperLanguage( LANGUAGE_SYSTEM );
+    eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
     aSysLocaleOptions.AddListener( *this );
 }
 
@@ -189,7 +185,7 @@ void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint&
             {
                 p->ReplaceSystemCL( eSysLanguage );
             }
-            eSysLanguage = SvNumberFormatter::GetProperLanguage( LANGUAGE_SYSTEM );
+            eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
         }
         if ( p->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
         {
@@ -277,7 +273,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    aLocale = ConvertLanguageToLocale( eLang );
+    aLocale = MsLangId::convertLanguageToLocale( eLang );
     pCharClass = new CharClass( xServiceManager, aLocale );
     xLocaleData.init( xServiceManager, aLocale, eLang );
     xCalendar.init( xServiceManager, aLocale );
@@ -310,7 +306,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
     {
         ActLnge = eLnge;
 
-        aLocale = ConvertLanguageToLocale( eLnge );
+        aLocale = MsLangId::convertLanguageToLocale( eLnge );
         pCharClass->setLocale( aLocale );
         xLocaleData.changeLocale( aLocale, eLnge );
         xCalendar.changeLocale( aLocale );
@@ -352,38 +348,6 @@ SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
     if ( !pFormatterRegistry )
         pFormatterRegistry = new SvNumberFormatterRegistry_Impl;
     return *pFormatterRegistry;
-}
-
-
-// static
-LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
-{
-    switch ( eLang )
-    {
-        case LANGUAGE_DONTKNOW :
-            eLang = UNKNOWN_SUBSTITUTE;
-        break;
-        case LANGUAGE_NONE :
-            eLang = Application::GetSettings().GetUILanguage();
-        break;
-        case LANGUAGE_PROCESS_OR_USER_DEFAULT :
-        case LANGUAGE_SYSTEM_DEFAULT :
-            eLang = LANGUAGE_SYSTEM;
-        break;
-    }
-    if ( eLang == LANGUAGE_SYSTEM )
-        eLang = Application::GetSettings().GetLanguage();
-    return eLang;
-}
-
-
-// static
-::com::sun::star::lang::Locale SvNumberFormatter::ConvertLanguageToLocale( LanguageType eLang )
-{
-    eLang = GetProperLanguage( eLang );
-    String aLanguage, aCountry, aVariant;
-    ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
-    return Locale( aLanguage, aCountry, aVariant );
 }
 
 
@@ -1979,7 +1943,7 @@ String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
     else
     {
         ::com::sun::star::lang::Locale aSaveLocale( xLocaleData->getLocale() );
-        ::com::sun::star::lang::Locale aTmpLocale(ConvertLanguageToLocale(pFormat->GetLanguage()));
+        ::com::sun::star::lang::Locale aTmpLocale(MsLangId::convertLanguageToLocale(pFormat->GetLanguage()));
         ((SvNumberFormatter*)this)->xLocaleData.changeLocale(aTmpLocale, pFormat->GetLanguage() );
         aRet = xLocaleData->getNumDecimalSep();
         ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale, eSaveLang );
@@ -3071,7 +3035,7 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
     }
     else
     {
-        eLang = GetProperLanguage( eLang );
+        eLang = MsLangId::getRealLanguage( eLang );
         const NfCurrencyTable& rTable = GetTheCurrencyTable();
         USHORT nCount = rTable.Count();
         const NfCurrencyEntryPtr* ppData = rTable.GetData();
@@ -3089,7 +3053,7 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
         const String& rAbbrev, LanguageType eLang )
 {
-    eLang = GetProperLanguage( eLang );
+    eLang = MsLangId::getRealLanguage( eLang );
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     USHORT nCount = rTable.Count();
     const NfCurrencyEntryPtr* ppData = rTable.GetData();
@@ -3566,7 +3530,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     LanguageType eSysLang = Application::GetSettings().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(),
-        ConvertLanguageToLocale( eSysLang ) );
+        MsLangId::convertLanguageToLocale( eSysLang ) );
     // get user configured currency
     String aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
@@ -3589,14 +3553,11 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
-        LanguageType eLang = ConvertIsoNamesToLanguage(
-            pLocales[nLocale].Language, pLocales[nLocale].Country );
+        LanguageType eLang = MsLangId::convertLocaleToLanguage(
+                pLocales[nLocale]);
 #if OSL_DEBUG_LEVEL > 1
-        LanguageType eReal = International::GetRealLanguage( eLang );
-        LanguageType eNeut = International::GetNeutralLanguage( eLang );
+        LanguageType eReal = MsLangId::getRealLanguage( eLang );
         if ( eReal != eLang )
-            BOOL bBreak = TRUE;
-        if ( eNeut != eLang )
             BOOL bBreak = TRUE;
 #endif
         pLocaleData->setLocale( pLocales[nLocale] );
