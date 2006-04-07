@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:22:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
@@ -227,7 +224,6 @@ private:
     BOOL                bAllocDocSh;        // => AllocModel()
     DocumentType        eDocType;
     UINT16              nFileFormatVersion;
-    International*      mpInternational;
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
 
@@ -469,7 +465,6 @@ public:
     Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
 
     CharClass*          GetCharClass() const { return mpCharClass; }
-    International*      GetInternational() const { return mpInternational; }
 
     void                RestoreLayerNames();
     void                MakeUniqueLayerNames();
