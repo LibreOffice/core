@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:40:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:02:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 #endif
 
 #include <vcl/dndhelp.hxx>
+
+#ifndef INCLUDED_SVTOOLS_ONDEMAND_HXX
+#include <svtools/ondemand.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -512,6 +516,9 @@ private:
     InternalEditStatus  aStatus;
 
     LanguageType        eDefLanguage;
+
+    OnDemandLocaleDataWrapper       xLocaleDataWrapper;
+    OnDemandTransliterationWrapper  xTransliterationWrapper;
 
     sal_Bool            bIsFormatting;
     sal_Bool            bFormatted;
