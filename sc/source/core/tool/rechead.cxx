@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rechead.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:49:14 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 ScReadHeader::ScReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
-    ULONG nDataSize;
+    sal_uInt32 nDataSize;
     rStream >> nDataSize;
     nDataEnd = rStream.Tell() + nDataSize;
 }
@@ -82,7 +82,7 @@ ULONG ScReadHeader::BytesLeft() const
 
 // -----------------------------------------------------------------------
 
-ScWriteHeader::ScWriteHeader(SvStream& rNewStream, ULONG nDefault) :
+ScWriteHeader::ScWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault) :
     rStream( rNewStream )
 {
     nDataSize = nDefault;
@@ -98,7 +98,7 @@ ScWriteHeader::~ScWriteHeader()
     if ( nPos - nDataPos != nDataSize )             // Default getroffen?
     {
         nDataSize = nPos - nDataPos;
-        rStream.Seek(nDataPos - sizeof(ULONG));
+        rStream.Seek(nDataPos - sizeof(sal_uInt32));
         rStream << nDataSize;                       // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
@@ -109,7 +109,7 @@ ScWriteHeader::~ScWriteHeader()
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
-    ULONG nDataSize;
+    sal_uInt32 nDataSize;
     rStream >> nDataSize;
     ULONG nDataPos = rStream.Tell();
     nTotalEnd = nDataPos + nDataSize;
@@ -130,7 +130,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     }
     else
     {
-        ULONG nSizeTableLen;
+        sal_uInt32 nSizeTableLen;
         rStream >> nSizeTableLen;
         pBuf = new BYTE[nSizeTableLen];
         rStream.Read( pBuf, nSizeTableLen );
@@ -172,7 +172,7 @@ void ScMultipleReadHeader::EndEntry()
 void ScMultipleReadHeader::StartEntry()
 {
     ULONG nPos = rStream.Tell();
-    ULONG nEntrySize;
+    sal_uInt32 nEntrySize;
     (*pMemStream) >> nEntrySize;
 
     nEntryEnd = nPos + nEntrySize;
@@ -191,7 +191,7 @@ ULONG ScMultipleReadHeader::BytesLeft() const
 
 // -----------------------------------------------------------------------
 
-ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, ULONG nDefault) :
+ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault) :
     rStream( rNewStream ),
     aMemStream( 4096, 4096 )
 {
@@ -207,14 +207,14 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
     ULONG nDataEnd = rStream.Tell();
 
     rStream << (USHORT) SCID_SIZES;
-    rStream << aMemStream.Tell();
+    rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
     if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
     {
         nDataSize = nDataEnd - nDataPos;
         ULONG nPos = rStream.Tell();
-        rStream.Seek(nDataPos-sizeof(ULONG));
+        rStream.Seek(nDataPos-sizeof(sal_uInt32));
         rStream << nDataSize;                               // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
@@ -223,7 +223,7 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
 void ScMultipleWriteHeader::EndEntry()
 {
     ULONG nPos = rStream.Tell();
-    aMemStream << nPos - nEntryStart;
+    aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
 }
 
 void ScMultipleWriteHeader::StartEntry()
