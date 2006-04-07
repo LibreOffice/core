@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uunxapi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:03:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
  #include "uunxapi.h"
  #endif
 
+ #ifndef __OSL_SYSTEM_H__
+ #include "system.h"
+ #endif
+
  #ifndef _LIMITS_H
  #include <limits.h>
  #endif
@@ -58,20 +62,45 @@
  }
 
  //###########################
+#ifdef MACOSX
+/*
+ * Helper function for resolving Mac native alias files (not the same as unix alias files)
+ * and to return the resolved alias as rtl::OString
+ */
+ inline rtl::OString macxp_resolveAliasAndConvert(const rtl_uString* s)
+ {
+  rtl::OString p = OUStringToOString(s);
+  sal_Char path[PATH_MAX];
+  if (p.getLength() < PATH_MAX)
+    {
+      strcpy(path, p.getStr());
+      macxp_resolveAlias(path, PATH_MAX);
+      p = rtl::OString(path);
+    }
+  return p;
+ }
+#endif /* MACOSX */
+
+ //###########################
  //access_u
  int access_u(const rtl_uString* pustrPath, int mode)
  {
+#ifndef MACOSX // not MACOSX
     return access(OUStringToOString(pustrPath).getStr(), mode);
+#else
+    return access(macxp_resolveAliasAndConvert(pustrPath).getStr(), mode);
+#endif
  }
 
  //#########################
  //realpath_u
  sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
  {
-     rtl::OString fn = rtl::OUStringToOString(
-        rtl::OUString(const_cast<rtl_uString*>(pustrFileName)),
-        osl_getThreadTextEncoding());
-
+#ifndef MACOSX // not MACOSX
+        rtl::OString fn = OUStringToOString(pustrFileName);
+#else
+    rtl::OString fn = macxp_resolveAliasAndConvert(pustrFileName);
+#endif
     char  rp[PATH_MAX];
     bool  bRet = realpath(fn.getStr(), rp);
 
@@ -90,7 +119,11 @@
  //lstat_u
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
+#ifndef MACOSX  // not MACOSX
     return lstat(OUStringToOString(pustrPath).getStr(), buf);
+#else
+    return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
+#endif
  }
 
  //#########################
