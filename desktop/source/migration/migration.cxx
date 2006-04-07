@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:20:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/config.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
