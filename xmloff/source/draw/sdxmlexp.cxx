@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:49:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,6 @@
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
-#endif
-
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLMETAE_HXX
@@ -188,10 +184,6 @@
 
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
-#endif
-
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX
