@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:06:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1067,7 +1067,7 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
     if ( xParentTunnel.is() )
     {
         SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
-        SfxObjectShell* pDoc = (SfxObjectShell*)(sal_Int32)( xParentTunnel->getSomething(
+        SfxObjectShell* pDoc = reinterpret_cast<SfxObjectShell *>(xParentTunnel->getSomething(
                                         uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
         if ( pDoc )
             GetObjectShell()->OnDocumentPrinterChanged( pDoc->GetDocumentPrinter() );
