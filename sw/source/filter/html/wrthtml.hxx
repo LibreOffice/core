@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:37:37 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #ifndef _STREAM_HXX //autogen
