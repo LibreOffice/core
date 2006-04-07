@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 11:56:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #endif
 
-#include <tools/intn.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
