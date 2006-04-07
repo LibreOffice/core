@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:33:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,3 +204,4 @@ hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
 hidspecial HID_HELP_TEXT_SELECTION_MODE         { HelpID = HID_HELP_TEXT_SELECTION_MODE; };
 hidspecial HID_MACROCHECKDIALOG                 { HelpID = HID_MACROCHECKDIALOG; };
 hidspecial HID_MACRO_HEADERTABLISTBOX           { HelpID = HID_MACRO_HEADERTABLISTBOX; };
+hidspecial HID_DLG_CHECKFORONLINEUPDATE         { HelpID = HID_DLG_CHECKFORONLINEUPDATE; };
