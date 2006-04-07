@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorcallback.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:19:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,13 @@ void errorCallback(const char *file,
         int reason,
         const char *msg)
 {
+#if OSL_DEBUG_LEVEL > 1
+    const char * afunc = func ? func : "";
+    const char * errObj = errorObject ? errorObject : "";
+    const char * errSub = errorSubject ? errorSubject : "";
+    const char * amsg = msg ? msg : "";
+    fprintf(stdout, "xmlsec error: %s, %s,  %s, %i %s  \n", afunc, errObj, errSub, reason, amsg);
+#endif
     //ToDo write log message
 //  if (g_xErrorRecorder.is() && !g_bErrorRecorded)
 //  {
