@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdta.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
-#endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
