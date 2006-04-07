@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:58:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,22 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WEEKDAYS_HPP_
+#include <com/sun/star/i18n/Weekdays.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#endif
+
 #define _SV_CALENDAR_CXX
 #include <svtools.hrc>
 #include <svtdata.hxx>
@@ -88,6 +104,8 @@
 #define MENU_YEAR_COUNT                 3
 
 #define TABLE_DATE_SELECTED             ((void*)0x00000001)
+
+using namespace ::com::sun::star;
 
 // =======================================================================
 
@@ -240,6 +258,31 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbSelLeft               = FALSE;
     mbAllSel                = FALSE;
     mbDropPos               = FALSE;
+
+    ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian"));
+    maCalendarWrapper.loadCalendar( aGregorian,
+            Application::GetAppLocaleDataWrapper().getLocale());
+    if (maCalendarWrapper.getUniqueID() != aGregorian)
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``");
+        lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale());
+        aMsg += ByteString( String( aLoc.Language), RTL_TEXTENCODING_UTF8);
+        aMsg += '-';
+        aMsg += ByteString( String( aLoc.Country), RTL_TEXTENCODING_UTF8);
+        aMsg += "'' and other calendars aren't supported. Using en-US fallback.";
+        DBG_ERRORFILE( aMsg.GetBuffer());
+#endif
+        /* If we ever wanted to support other calendars than Gregorian a lot of
+         * rewrite would be necessary to internally replace use of class Date
+         * with proper class CalendarWrapper methods, get rid of fixed 12
+         * months, fixed 7 days, ... */
+        maCalendarWrapper.loadCalendar( aGregorian, lang::Locale(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en")),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US")),
+                    ::rtl::OUString()));
+    }
+
     SetFirstDate( maCurDate );
     ImplCalendarSelectDate( mpSelectTable, maCurDate, TRUE );
 
@@ -273,7 +316,7 @@ void Calendar::ImplInitSettings()
 
 Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
-    maIntn( Application::GetAppInternational() ),
+    maCalendarWrapper( Application::GetAppLocaleDataWrapper().getServiceFactory() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
     maOldFormatLastDate( 0, 0, 1900 ),
     maFirstDate( 0, 0, 1900 ),
@@ -289,7 +332,7 @@ Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
 
 Calendar::Calendar( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
-    maIntn( Application::GetAppInternational() ),
+    maCalendarWrapper( Application::GetAppLocaleDataWrapper().getServiceFactory() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
     maOldFormatLastDate( 0, 0, 1900 ),
     maFirstDate( 0, 0, 1900 ),
@@ -333,6 +376,73 @@ Calendar::~Calendar()
 
 // -----------------------------------------------------------------------
 
+void Calendar::SetMinimumNumberOfDaysInWeek( sal_Int16 nDays )
+{
+    ImplUpdate( TRUE );
+    maCalendarWrapper.setMinimumNumberOfDaysForFirstWeek( nDays);
+}
+
+// -----------------------------------------------------------------------
+
+void Calendar::SetWeekStart( sal_Int16 nDay )
+{
+    ImplUpdate( TRUE );
+    switch (nDay)
+    {
+        case i18n::Weekdays::SUNDAY :
+        case i18n::Weekdays::MONDAY :
+        case i18n::Weekdays::TUESDAY :
+        case i18n::Weekdays::WEDNESDAY :
+        case i18n::Weekdays::THURSDAY :
+        case i18n::Weekdays::FRIDAY :
+        case i18n::Weekdays::SATURDAY :
+            ;   // nothing
+        default:
+            DBG_ERRORFILE("Calendar::SetWeekStart: unknown value for setFirstDayOfWeek() of a Gregorian calendar");
+            nDay = i18n::Weekdays::SUNDAY;
+    }
+    maCalendarWrapper.setFirstDayOfWeek( nDay);
+}
+
+// -----------------------------------------------------------------------
+
+DayOfWeek Calendar::ImplGetWeekStart() const
+{
+    // Map i18n::Weekdays to Date DayOfWeek
+    DayOfWeek eDay;
+    sal_Int16 nDay = maCalendarWrapper.getFirstDayOfWeek();
+    switch (nDay)
+    {
+        case i18n::Weekdays::SUNDAY :
+            eDay = SUNDAY;
+            break;
+        case i18n::Weekdays::MONDAY :
+            eDay = MONDAY;
+            break;
+        case i18n::Weekdays::TUESDAY :
+            eDay = TUESDAY;
+            break;
+        case i18n::Weekdays::WEDNESDAY :
+            eDay = WEDNESDAY;
+            break;
+        case i18n::Weekdays::THURSDAY :
+            eDay = THURSDAY;
+            break;
+        case i18n::Weekdays::FRIDAY :
+            eDay = FRIDAY;
+            break;
+        case i18n::Weekdays::SATURDAY :
+            eDay = SATURDAY;
+            break;
+        default:
+            DBG_ERRORFILE("Calendar::ImplGetWeekStart: broken i18n Gregorian calendar (getFirstDayOfWeek())");
+            eDay = SUNDAY;
+    }
+    return eDay;
+}
+
+// -----------------------------------------------------------------------
+
 void Calendar::ImplGetWeekFont( Font& rFont ) const
 {
     // Wochennummer geben wir in WEEKNUMBER_HEIGHT%-Fonthoehe aus
@@ -349,8 +459,6 @@ void Calendar::ImplFormat()
 {
     if ( !mbFormat )
         return;
-
-    DayOfWeek eStartDay = maIntn.GetWeekStart();
 
     if ( mbCalc )
     {
@@ -427,13 +535,18 @@ void Calendar::ImplFormat()
         if ( mnWinStyle & WB_BOLDTEXT )
             SetFont( aOldFont );
 
-        // DayOffWeekText berechnen (werden im schmalen Font ausgegeben)
+        // Calculate DayOfWeekText (gets displayed in a narrow font)
         maDayOfWeekText.Erase();
         long nStartOffX = 0;
-        USHORT eDay = (USHORT)eStartDay;
-        for ( USHORT nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )
+        sal_Int16 nDay = maCalendarWrapper.getFirstDayOfWeek();
+        for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )
         {
-            String aDayOfWeek( maIntn.GetAbbrevDayText( (DayOfWeek)eDay ).GetChar( 0 ) );
+            // Use first character of full name, since the abbreviated name may
+            // be roman digits or similar in some locales. Proper
+            // implementation would need narrow one letter month names defined
+            // in locale data.
+            String aDayOfWeek( maCalendarWrapper.getDisplayName(
+                        i18n::CalendarDisplayIndex::DAY, nDay, 1).GetChar(0));
             long nOffX = (mnDayWidth-GetTextWidth( aDayOfWeek ))/2;
             if ( mnWinStyle & WB_BOLDTEXT )
                 nOffX++;
@@ -444,14 +557,17 @@ void Calendar::ImplFormat()
             nOffX += nDayOfWeek * mnDayWidth;
             mnDayOfWeekAry[nDayOfWeek] = nOffX;
             maDayOfWeekText += aDayOfWeek;
-            eDay++;
-            eDay %= 7;
+            nDay++;
+            nDay %= 7;
         }
 
         mbCalc = FALSE;
     }
 
     // Anzahl Tage berechnen
+
+    DayOfWeek eStartDay = ImplGetWeekStart();
+
     USHORT nWeekDay;
     Date aTempDate = GetFirstMonth();
     maFirstDate = aTempDate;
@@ -536,7 +652,7 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
     long        nOffX;
     long        nYMonth;
     USHORT      nDay;
-    DayOfWeek   eStartDay = maIntn.GetWeekStart();
+    DayOfWeek   eStartDay = ImplGetWeekStart();
 
     rDate = GetFirstMonth();
     nY = 0;
@@ -900,7 +1016,7 @@ void Calendar::ImplDraw( BOOL bPaint )
     USHORT      nMonth;
     USHORT      nYear;
     Date        aDate = GetFirstMonth();
-    DayOfWeek   eStartDay = maIntn.GetWeekStart();
+    DayOfWeek   eStartDay = ImplGetWeekStart();
 
     HideFocus();
 
@@ -964,7 +1080,8 @@ void Calendar::ImplDraw( BOOL bPaint )
             // Monat in der Titleleiste ausgeben
             nOffX = nX;
             nOffY = nY+TITLE_BORDERY;
-            String aMonthText( maIntn.GetMonthText( nMonth ) );
+            String aMonthText( maCalendarWrapper.getDisplayName(
+                        i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
             aMonthText += ' ';
             aMonthText += String::CreateFromInt64( nYear );
             long nMonthTextWidth = GetTextWidth( aMonthText );
@@ -980,7 +1097,9 @@ void Calendar::ImplDraw( BOOL bPaint )
             long nMaxMonthWidth = mnMonthWidth-nMonthOffX1-nMonthOffX2-4;
             if ( nMonthTextWidth > nMaxMonthWidth )
             {
-                aMonthText  = maIntn.GetAbbrevMonthText( nMonth );
+                // Abbreviated month name.
+                aMonthText  = maCalendarWrapper.getDisplayName(
+                        i18n::CalendarDisplayIndex::MONTH, nMonth-1, 0);
                 aMonthText += ' ';
                 aMonthText += String::CreateFromInt64( nYear );
                 nMonthTextWidth = GetTextWidth( aMonthText );
@@ -1031,15 +1150,16 @@ void Calendar::ImplDraw( BOOL bPaint )
                 SetFont( aTempFont );
                 nDayX -= mnWeekWidth;
                 nDayY = nY+mnDaysOffY;
-                Date aTempDate = aDate;
+                maCalendarWrapper.setGregorianDateTime( aDate);
                 for ( USHORT nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
                 {
-                    String  aWeekText( aTempDate.GetWeekOfYear( eStartDay, maIntn.GetWeekCountStart() ) );
+                    sal_Int16 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
+                    String  aWeekText( String::CreateFromInt32( nWeek));
                     long    nOffX = (mnWeekWidth-WEEKNUMBER_OFFX)-GetTextWidth( aWeekText );
                     long    nOffY = (mnDayHeight-GetTextHeight())/2;
                     DrawText( Point( nDayX+nOffX, nDayY+nOffY ), aWeekText );
                     nDayY += mnDayHeight;
-                    aTempDate += 7;
+                    maCalendarWrapper.addValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, 7);
                 }
                 SetFont( aOldFont );
             }
@@ -1362,7 +1482,9 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     {
         pYearPopupMenus[i] = new PopupMenu;
         for ( j = 1; j <= 12; j++ )
-            pYearPopupMenus[i]->InsertItem( nYearIdCount+j, maIntn.GetMonthText( j ) );
+            pYearPopupMenus[i]->InsertItem( nYearIdCount+j,
+                    maCalendarWrapper.getDisplayName(
+                        i18n::CalendarDisplayIndex::MONTH, j-1, 1));
         aPopupMenu.InsertItem( 10+i, UniString::CreateFromInt32( nYear+i ) );
         aPopupMenu.SetPopupMenu( 10+i, pYearPopupMenus[i] );
         nYearIdCount += 1000;
@@ -1788,7 +1910,8 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
 
             if ( rHEvt.GetMode() & HELPMODE_QUICK )
             {
-                USHORT      nWeek = aDate.GetWeekOfYear( maIntn.GetWeekStart(), maIntn.GetWeekCountStart() );
+                maCalendarWrapper.setGregorianDateTime( aDate);
+                USHORT      nWeek = (USHORT) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
                 USHORT      nMonth = aDate.GetMonth();
                 XubString   aStr( maDayText );
                 aStr.AppendAscii( ": " );
@@ -1927,15 +2050,6 @@ void Calendar::Select()
 
 // -----------------------------------------------------------------------
 
-void Calendar::SetInternational( const International& rIntn )
-{
-    ImplUpdate( TRUE );
-
-    maIntn = rIntn;
-}
-
-// -----------------------------------------------------------------------
-
 void Calendar::SelectDate( const Date& rDate, BOOL bSelect )
 {
     if ( !rDate.IsValid() )
@@ -2059,17 +2173,17 @@ void Calendar::SetCurDate( const Date& rNewDate )
             long nDateOff = maCurDate-aTempDate;
             if ( nDateOff < 365 )
             {
-                Date maFirstDate = GetFirstMonth();
-                maFirstDate += maFirstDate.GetDaysInMonth();
+                Date aFirstDate = GetFirstMonth();
+                aFirstDate += aFirstDate.GetDaysInMonth();
                 aTempDate++;
                 while ( nDateOff > aTempDate.GetDaysInMonth() )
                 {
-                    maFirstDate += maFirstDate.GetDaysInMonth();
+                    aFirstDate += aFirstDate.GetDaysInMonth();
                     long nDaysInMonth = aTempDate.GetDaysInMonth();
                     aTempDate += nDaysInMonth;
                     nDateOff -= nDaysInMonth;
                 }
-                SetFirstDate( maFirstDate );
+                SetFirstDate( aFirstDate );
             }
             else
                 SetFirstDate( maCurDate );
@@ -2192,7 +2306,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
         if ( rDate > aLastDate )
         {
             USHORT nWeekDay = (USHORT)aLastDate.GetDayOfWeek();
-            nWeekDay = (nWeekDay+(7-(USHORT)maIntn.GetWeekStart())) % 7;
+            nWeekDay = (nWeekDay+(7-(USHORT)ImplGetWeekStart())) % 7;
             aLastDate -= nWeekDay;
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
@@ -2233,7 +2347,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
                 long nDayX = nX+mnDaysOffX;
                 long nDayY = nY+mnDaysOffY;
                 nDayIndex = (USHORT)aDate.GetDayOfWeek();
-                nDayIndex = (nDayIndex+(7-(USHORT)maIntn.GetWeekStart())) % 7;
+                nDayIndex = (nDayIndex+(7-(USHORT)ImplGetWeekStart())) % 7;
                 for ( USHORT nDay = 1; nDay <= nDaysInMonth; nDay++ )
                 {
                     if ( nDay == rDate.GetDay() )
