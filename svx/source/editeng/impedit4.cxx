@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:50:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <editview.hxx>
 #include <eehtml.hxx>
 #include <editobj2.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/lang.h>
 
 #include <editxml.hxx>
 
