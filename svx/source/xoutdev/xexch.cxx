@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,8 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
         SfxWhichIter        aIter( rData.pXFillAttrSetItem->GetItemSet() );
         USHORT              nWhich = aIter.FirstWhich();
         const SfxPoolItem*  pItem;
-        ULONG               nItemCount = 0, nFirstPos = rOStm.Tell();
+        sal_uInt32          nItemCount = 0;
+        sal_Size            nFirstPos = rOStm.Tell();
 
         rOStm << nItemCount;
 
@@ -164,7 +165,7 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 
     SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
     SfxPoolItem*    pNewItem;
-    ULONG           nItemCount = 0;
+    sal_uInt32      nItemCount = 0;
     USHORT          nWhich, nItemVersion;
 
     rIStm >> nItemCount;
@@ -172,7 +173,7 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
     if( nItemCount > ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 ) )
         nItemCount = ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 );
 
-    for( ULONG i = 0; i < nItemCount; i++ )
+    for( sal_uInt32 i = 0; i < nItemCount; i++ )
     {
         VersionCompat aCompat( rIStm, STREAM_READ );
 
