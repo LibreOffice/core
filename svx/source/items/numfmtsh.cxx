@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:56:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #define _ZFORLIST_DECLARE_TABLE
@@ -1050,7 +1054,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     {   // append formats for all currencies defined in the current I18N locale
         const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCurrCount = rCurrencyTable.Count();
-        LanguageType eLang = SvNumberFormatter::GetProperLanguage( eCurLanguage );
+        LanguageType eLang = MsLangId::getRealLanguage( eCurLanguage );
         for ( sal_uInt16 i=0; i < nCurrCount; ++i )
         {
             const NfCurrencyEntry* pCurr = rCurrencyTable[i];
