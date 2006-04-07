@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Exporter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/package com.sun.star.wizards.web.export;
 
+import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.*;
@@ -59,7 +60,7 @@ public interface Exporter {
      * (call task.advacne(true) ) 3 times, while exporting.
      *
      */
-    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task);
+    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task) throws IOException;
 
     public void init(CGExporter exporter);
 }
