@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:44:20 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
             // HTML
             String aValStr, aNumStr;
             double fVal;
-            ULONG nNumForm;
+            sal_uInt32 nNumForm;
             LanguageType eNumLang;
             if ( pE->pNumStr )
             {   // SDNUM muss sein wenn SDVAL
