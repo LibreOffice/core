@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:33:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,8 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -2074,7 +2071,7 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( pLang && pLang->Len() )
     {
-        LanguageType eLang = ConvertIsoStringToLanguage( *pLang );
+        LanguageType eLang = MsLangId::convertIsoStringToLanguage( *pLang );
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang );
