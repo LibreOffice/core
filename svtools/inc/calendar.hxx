@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:01:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,13 @@
 #ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
 #endif
-
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_WEEKDAYS_HPP
+#include <com/sun/star/i18n/Weekdays.hpp>
+#endif
+
 #ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
 #endif
@@ -196,7 +199,7 @@ private:
     XubString*      mpDayText[31];
     XubString       maDayText;
     XubString       maWeekText;
-    International   maIntn;
+    CalendarWrapper maCalendarWrapper;
     Rectangle       maPrevRect;
     Rectangle       maNextRect;
     String          maDayOfWeekText;
@@ -281,6 +284,7 @@ private:
     SVT_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, BOOL bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, BOOL bCancel );
+    SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
 #endif
 
 protected:
@@ -314,8 +318,13 @@ public:
     virtual void    DoubleClick();
     virtual void    Select();
 
-    void                    SetInternational( const International& rIntn );
-    const International&    GetInternational() const { return maIntn; }
+    const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
+
+    /// Set one of ::com::sun::star::i18n::Weekdays.
+    void            SetWeekStart( sal_Int16 nDay );
+
+    /// Set how many days of a week must reside in the first week of a year.
+    void            SetMinimumNumberOfDaysInWeek( sal_Int16 nDays );
 
     void            SelectDate( const Date& rDate, BOOL bSelect = TRUE );
     void            SelectDateRange( const Date& rStartDate, const Date& rEndDate,
@@ -332,7 +341,7 @@ public:
     Date            GetCurDate() const { return maCurDate; }
     void            SetFirstDate( const Date& rNewFirstDate );
     Date            GetFirstDate() const { return maFirstDate; }
-    Date            GetLastDate() const { return maFirstDate+mnDayCount; }
+    Date            GetLastDate() const { return GetFirstDate() + mnDayCount; }
     ULONG           GetDayCount() const { return mnDayCount; }
     Date            GetFirstMonth() const;
     Date            GetLastMonth() const;
