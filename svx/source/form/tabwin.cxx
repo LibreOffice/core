@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:00:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,9 +126,6 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
