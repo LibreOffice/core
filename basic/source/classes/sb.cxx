@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,13 +1243,15 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
         }
         GetSbData()->aErrMsg = aMsg1;
     }
-    else
+    else if( nOldID != 0 )
     {
         String aStdMsg( RTL_CONSTASCII_USTRINGPARAM("Fehler ") );
         aStdMsg += String::CreateFromInt32( nOldID);
         aStdMsg += String( RTL_CONSTASCII_USTRINGPARAM(": Kein Fehlertext verfuegbar!") );
         GetSbData()->aErrMsg = aStdMsg;
     }
+    else
+        GetSbData()->aErrMsg = String::EmptyString();
 }
 
 BOOL StarBASIC::CError
