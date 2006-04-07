@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDataAware.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:53:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
