@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:09:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,6 @@
 
 #ifndef SC_TABVIEW_HXX
 #include "tabview.hxx"
-#endif
-
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
 #endif
 
 #ifndef _SVSTDARR_SHORTS
