@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLQueryComposer.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:25:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
