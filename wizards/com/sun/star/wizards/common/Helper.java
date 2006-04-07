@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:20:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
