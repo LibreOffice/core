@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:18:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -351,94 +348,6 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
        Color* pColor = NULL;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
-}
-
-// deprecated, to be removed
-XubString SvxDateField::GetFormatted( LanguageType eLanguage, LanguageType eFmt ) const
-{
-    International aInter( eLanguage, eFmt );
-    int bLongDate = FALSE;
-
-    Date aDate; // aktuelles
-    if ( eType == SVXDATETYPE_FIX )
-        aDate.SetDate( nFixDate );
-
-    SvxDateFormat eTmpFormat = eFormat;
-
-    if ( eTmpFormat == SVXDATEFORMAT_SYSTEM )
-    {
-        DBG_ERROR( "SVXDATEFORMAT_SYSTEM nicht implementiert!" );
-        eTmpFormat = SVXDATEFORMAT_STDSMALL;
-    }
-    else if ( eTmpFormat == SVXDATEFORMAT_APPDEFAULT )
-    {
-        DBG_ERROR( "SVXDATEFORMAT_APPDEFAULT: Woher nehmen?" );
-        eTmpFormat = SVXDATEFORMAT_STDSMALL;
-    }
-
-    switch( eTmpFormat )
-    {
-        // kurze Formate standard
-        case SVXDATEFORMAT_STDSMALL:
-        break;
-        case SVXDATEFORMAT_STDBIG:
-        {
-            bLongDate = TRUE;
-        }
-        break;
-        case SVXDATEFORMAT_A:
-        {
-            // 13.02.96
-            aInter.SetDateCentury( FALSE );
-        }
-        break;
-        case SVXDATEFORMAT_B:
-        {
-            // 13.02.1996
-            aInter.SetDateCentury( TRUE );
-        }
-        break;
-        case SVXDATEFORMAT_C:
-        {
-            // 13.Feb 1996
-            aInter.SetLongDateDayOfWeekFormat( DAYOFWEEK_NONE );
-            aInter.SetLongDateMonthFormat( MONTH_SHORT );
-            aInter.SetDateCentury( TRUE );
-            bLongDate = TRUE;
-        }
-        break;
-        case SVXDATEFORMAT_D:
-        {
-            // 13.Februar 1996
-            aInter.SetLongDateDayOfWeekFormat(DAYOFWEEK_NONE);
-            aInter.SetLongDateMonthFormat(MONTH_LONG);
-            aInter.SetDateCentury(TRUE);
-            bLongDate = TRUE;
-        }
-        break;
-        case SVXDATEFORMAT_E:
-        {
-            // Die, 13.Februar 1996
-            aInter.SetLongDateDayOfWeekFormat(DAYOFWEEK_SHORT);
-            aInter.SetLongDateMonthFormat(MONTH_LONG);
-            aInter.SetDateCentury(TRUE);
-            bLongDate = TRUE;
-        }
-        break;
-        case SVXDATEFORMAT_F:
-        {
-            // Dienstag, 13.Februar 1996
-            aInter.SetLongDateDayOfWeekFormat(DAYOFWEEK_LONG);
-            aInter.SetLongDateMonthFormat(MONTH_LONG);
-            aInter.SetDateCentury(TRUE);
-            bLongDate = TRUE;
-        }
-        break;
-    }
-
-    if( bLongDate )
-        return aInter.GetLongDate( aDate );
-    return aInter.GetDate( aDate );
 }
 
 MetaAction* SvxDateField::createBeginComment() const
@@ -821,66 +730,6 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
        Color* pColor = NULL;
     rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
-}
-
-// deprecated, to be removed
-XubString SvxExtTimeField::GetFormatted( LanguageType eLanguage, LanguageType eFmt ) const
-{
-    International aInter( eLanguage, eFmt );
-    XubString aStrTime;
-
-    Time aTime; // aktuelle Zeit
-    if ( eType == SVXTIMETYPE_FIX )
-        aTime.SetTime( nFixTime );
-
-    SvxTimeFormat eTmpFormat = eFormat;
-
-    if ( eTmpFormat == SVXTIMEFORMAT_SYSTEM )
-    {
-        DBG_ERROR( "SVXTIMEFORMAT_SYSTEM nicht implementiert!" );
-        eTmpFormat = SVXTIMEFORMAT_STANDARD;
-    }
-    else if ( eTmpFormat == SVXTIMEFORMAT_APPDEFAULT )
-    {
-        DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: Woher nehmen?" );
-        eTmpFormat = SVXTIMEFORMAT_STANDARD;
-    }
-
-    // 12 oder 24 Stunden
-    switch( eTmpFormat )
-    {
-        case SVXTIMEFORMAT_24_HM:
-        case SVXTIMEFORMAT_24_HMS:
-        case SVXTIMEFORMAT_24_HMSH:
-            aInter.SetTimeFormat( HOUR_24 );
-        break;
-
-        default:
-            aInter.SetTimeFormat( HOUR_12 );
-        break;
-    }
-    switch( eTmpFormat )
-    {
-        case SVXTIMEFORMAT_12_HM:
-        case SVXTIMEFORMAT_24_HM:
-             aStrTime = aInter.GetTime( aTime, FALSE );
-        break;
-
-        case SVXTIMEFORMAT_12_HMSH:
-        case SVXTIMEFORMAT_24_HMSH:
-             aStrTime = aInter.GetTime( aTime, TRUE, TRUE );
-        break;
-
-        case SVXTIMEFORMAT_STANDARD:
-        case SVXTIMEFORMAT_12_HMS:
-        case SVXTIMEFORMAT_24_HMS:
-        default:
-             aStrTime = aInter.GetTime( aTime, TRUE );
-        break;
-
-    }
-
-    return( aStrTime );
 }
 
 MetaAction* SvxExtTimeField::createBeginComment() const
