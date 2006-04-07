@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:13:15 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,13 @@
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/solar.hrc>
+#include <svtools/syslocale.hxx>
 
 
 namespace XmlSec
 {
     static ResMgr*          pResMgr = 0;
-    static International*   pInternational = 0;
+    static SvtSysLocale*    pSysLocale = 0;
 
     ResMgr* GetResMgr( void )
     {
@@ -62,15 +63,11 @@ namespace XmlSec
     return pResMgr;
     }
 
-    International* GetInternational( void )
+    const LocaleDataWrapper&    GetLocaleData( void )
     {
-        if( !pInternational )
-        {
-//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
-//          pInternational = new International( aLang );
-            pInternational = new International( Application::GetSettings().GetInternational() );
-        }
-        return pInternational;
+        if (!pSysLocale)
+            pSysLocale = new SvtSysLocale;
+        return pSysLocale->GetLocaleData();
     }
 
     DateTime GetDateTime( const ::com::sun::star::util::DateTime& _rDT )
@@ -84,10 +81,10 @@ namespace XmlSec
     {
         // --> PB 2004-10-12 #i20172# String with date and time information
         DateTime aDT( GetDateTime( _rDT ) );
-        International* pInter = GetInternational();
-        String sRet( pInter->GetDate( aDT ) );
+        const LocaleDataWrapper& rLoDa = GetLocaleData();
+        String sRet( rLoDa.getDate( aDT ) );
         sRet += ' ';
-        sRet += pInter->GetTime( aDT );
+        sRet += rLoDa.getTime( aDT );
         return sRet;
     }
 
@@ -104,15 +101,16 @@ namespace XmlSec
 
         Date aDate( (USHORT)sDay.ToInt32(), (USHORT) sMonth.ToInt32(), (USHORT)sYear.ToInt32() );
         Time aTime( sHour.ToInt32(), sMin.ToInt32(), sSec.ToInt32(), 0 );
-        String aStr( GetInternational()->GetDate( aDate ) );
+        const LocaleDataWrapper& rLoDa = GetLocaleData();
+        String aStr( rLoDa.getDate( aDate ) );
         aStr.AppendAscii( " " );
-        aStr += GetInternational()->GetTime( aTime );
+        aStr += rLoDa.getTime( aTime );
         return aStr;
     }
 
     String GetDateString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        return GetInternational()->GetDate( GetDateTime( _rDT ) );
+        return GetLocaleData().getDate( GetDateTime( _rDT ) );
     }
 
     String GetPureContent( const String& _rRawString, const char* _pCommaReplacement, bool _bPreserveId )
