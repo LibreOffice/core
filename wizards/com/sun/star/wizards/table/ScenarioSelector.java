@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScenarioSelector.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:23:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     return stablename;
             }
         }
-         return smytable;
+        return smytable;
     }
 
     public void fillupTables(){
@@ -304,7 +304,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 }
                 else
                     CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(xMSF, aLocale, this, NewItems[i], NewItems[i], imaxcolumnchars));
-             }
+            }
         }
         CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
      }
