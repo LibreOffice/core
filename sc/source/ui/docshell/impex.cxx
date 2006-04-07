@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:10:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class StarBASIC;
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
+#include <i18npool/mslangid.hxx>
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
@@ -1078,7 +1079,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     aTransliteration.loadModuleIfNeeded( eDocLang );
     CalendarWrapper aCalendar( pDoc->GetServiceManager() );
     aCalendar.loadDefaultCalendar(
-        SvNumberFormatter::ConvertLanguageToLocale( eDocLang ) );
+        MsLangId::convertLanguageToLocale( eDocLang ) );
     ::utl::TransliterationWrapper* pEnglishTransliteration = NULL;
     CalendarWrapper* pEnglishCalendar = NULL;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
@@ -1088,7 +1089,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
         pEnglishCalendar = new CalendarWrapper ( pDoc->GetServiceManager() );
         pEnglishCalendar->loadDefaultCalendar(
-            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+            MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
     }
 
     String aLine, aCell;
