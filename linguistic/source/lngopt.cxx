@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:53:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,7 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
 
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
 #endif
