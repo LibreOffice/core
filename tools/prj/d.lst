@@ -73,7 +73,7 @@ hedabu: ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\tools\inetdef.hxx
 hedabu: ..\inc\inetmime.hxx %_DEST%\inc%_EXT%\tools\inetmime.hxx
 hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\tools\inetmsg.hxx
 hedabu: ..\inc\inetstrm.hxx %_DEST%\inc%_EXT%\tools\inetstrm.hxx
-hedabu: ..\inc\intn.hxx %_DEST%\inc%_EXT%\tools\intn.hxx
+hedabu: ..\inc\mslangid.hxx %_DEST%\inc%_EXT%\tools\mslangid.hxx
 hedabu: ..\inc\isolang.hxx %_DEST%\inc%_EXT%\tools\isolang.hxx
 hedabu: ..\inc\lang.hxx %_DEST%\inc%_EXT%\tools\lang.hxx
 hedabu: ..\inc\link.hxx %_DEST%\inc%_EXT%\tools\link.hxx
