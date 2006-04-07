@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdmenu.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 17:54:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
 #endif
 #ifndef _MENU_HXX
 #include <vcl/menu.hxx>
@@ -231,7 +228,6 @@ public:
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 {
 private:
-    International   OLDMEMBER_TO_BE_REMOVED;
     long*           mpHeightAry;
     long            mnCurHeight;
     Link            maSelectHdl;
