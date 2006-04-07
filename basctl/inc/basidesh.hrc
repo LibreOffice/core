@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:50:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #define RID_TP_DLGS                     ( RID_BASICIDE_START + 39 )
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
 #define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
+#define RID_DLG_EXPORT                  ( RID_BASICIDE_START + 43 )
 #define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 
 #define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
@@ -176,6 +177,9 @@
 #define RID_STR_LINE                    ( RID_BASICIDE_START + 97 )
 #define RID_STR_COLUMN                  ( RID_BASICIDE_START + 98 )
 #define RID_STR_SOURCETOBIG             ( RID_BASICIDE_START + 99 )
+#define RID_STR_EXPORTPACKAGE           ( RID_BASICIDE_START + 100 )
+#define RID_STR_EXPORTBASIC             ( RID_BASICIDE_START + 101 )
+#define RID_STR_PACKAGE_BUNDLE          ( RID_BASICIDE_START + 102 )
 
 #endif  // _SVX_NOIDERESIDS
 
