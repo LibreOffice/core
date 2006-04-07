@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:13:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -877,7 +877,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 
     if (pEditEngine && mpViewShell)
     {
-        sal_Int32 nSizeX, nSizeY;
+        long nSizeX, nSizeY;
         mpViewShell->GetViewData()->GetMergeSizePixel(
             aCellPos.Col(), aCellPos.Row(), nSizeX, nSizeY);
 
