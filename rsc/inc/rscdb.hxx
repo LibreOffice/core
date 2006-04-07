@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 #ifndef _RSCDB_HXX
 #define _RSCDB_HXX
-
-#ifndef _LANG_HXX //autogen
-#include <tools/lang.hxx>
-#endif
 
 #ifndef _RSCALL_H
 #include <rscall.h>
@@ -175,12 +171,7 @@ class RscTypCont
     void        SETCONST( RscConst *, char *, UINT32 );
     void        SETCONST( RscConst *, Atom, UINT32 );
     RscEnum *   InitLangType();
-    RscEnum *   InitDateFormatType();
-    RscEnum *   InitTimeFormatType();
-    RscEnum *   InitWeekDayFormatType();
-    RscEnum *   InitMonthFormatType();
     RscEnum *   InitFieldUnitsType();
-    RscEnum *   InitDayOfWeekType();
     RscEnum *   InitTimeFieldFormat();
     RscEnum *   InitColor();
     RscEnum *   InitMapUnit();
@@ -242,27 +233,16 @@ class RscTypCont
     RscTop *    InitClassSplitter( RscTop * pSuper );
     RscTop *    InitClassSplitWindow( RscTop * pSuper );
     RscTop *    InitClassTime( RscTop * pSuper );
-    RscTop *    InitClassDate( RscTop * pSuper, RscEnum * pDayOfWeek );
-    RscTop *    InitClassInt1( RscTop * pSuper,
-                               RscEnum * pDateFormat,
-                               RscEnum * pTimeFormat, RscEnum * pWeekDayFormat,
-                               RscEnum * pMonthFormat );
-    RscTop *    InitClassInternational( RscTop * pSuper,
-                               RscEnum * pDateFormat,
-                               RscEnum * pTimeFormat, RscEnum * pWeekDayFormat,
-                               RscEnum * pMonthFormat );
+    RscTop *    InitClassDate( RscTop * pSuper );
 
     RscTop *    InitClassPatternFormatter( RscTop * pSuper );
-    RscTop *    InitClassNumericFormatter( RscTop * pSuper,
-                                           RscTop * pClassI12 );
+    RscTop *    InitClassNumericFormatter( RscTop * pSuper );
     RscTop *    InitClassMetricFormatter( RscTop * pSuper,
                                           RscEnum * pFieldUnits );
     RscTop *    InitClassCurrencyFormatter( RscTop * pSuper,
                                             RscEnum * pFieldUnits );
-    RscTop *    InitClassDateFormatter( RscTop * pSuper, RscTop * pClassDate,
-                                        RscTop * pClassI12 );
+    RscTop *    InitClassDateFormatter( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeFormatter( RscTop * pSuper, RscTop * pClassTime,
-                                        RscTop * pClassI12,
                                         RscEnum * pTimeFieldFormat );
 
     RscTop *    InitClassSpinField( RscTop * pSuper );
