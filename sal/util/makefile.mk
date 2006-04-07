@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:50:09 $
+#   last change: $Author: vg $ $Date: 2006-04-07 08:07:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ SHL1STDLIBS+=-lstlport_gcc
 .ENDIF
 
 .IF "$(OS)"=="MACOSX"
-SHL1STDLIBS+=-framework CoreFoundation
+SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
