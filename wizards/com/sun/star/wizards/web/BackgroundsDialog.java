@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BackgroundsDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:53:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,14 +138,14 @@ public class BackgroundsDialog extends ImageListDialog {
 
     }
 
-      /**
-       * an ImageList Imagerenderer implemtation.
-       * The image URL is the object given from the list model.
-       * the image name, got from the "render" method is
-       * the filename portion of the url.
-       * @author rpiterman
-       *
-       */
+    /**
+     * an ImageList Imagerenderer implemtation.
+     * The image URL is the object given from the list model.
+     * the image name, got from the "render" method is
+     * the filename portion of the url.
+     * @author rpiterman
+     *
+     */
     private class BGRenderer implements ImageList.ImageRenderer {
             private int cut;
 
@@ -201,13 +201,13 @@ public class BackgroundsDialog extends ImageListDialog {
            }
        }
 
-          /**
-           * when instanciating the model, it checks if each image
-           * exists. If it doesnot, it will be removed from
-           * the configuration.
-           * This is what this method does...
-           * @param imageName
-           */
+        /**
+         * when instanciating the model, it checks if each image
+         * exists. If it doesnot, it will be removed from
+         * the configuration.
+         * This is what this method does...
+         * @param imageName
+         */
        private void remove(String imageName) {
            try {
                Object conf = Configuration.getConfigurationRoot(xMSF,WebWizardConst.CONFIG_PATH + "/BackgroundImages",true);
@@ -218,12 +218,12 @@ public class BackgroundsDialog extends ImageListDialog {
            }
        }
 
-           /**
-            * if the given url is a directory
-            * adds the images in the given directory,
-            * otherwise (if it is a file) adds the file to the list.
-            * @param url
-            */
+        /**
+         * if the given url is a directory
+         * adds the images in the given directory,
+         * otherwise (if it is a file) adds the file to the list.
+         * @param url
+         */
         private void addDir(String url) {
            if (fileAccess.isDirectory(url))
                add(fileAccess.listFiles(url,false));
@@ -231,22 +231,22 @@ public class BackgroundsDialog extends ImageListDialog {
                add(url);
        }
 
-          /**
-           * adds the given filenames (urls) to
-           * the list
-           * @param filenames
-           */
-           private void add(String[] filenames) {
+        /**
+         * adds the given filenames (urls) to
+         * the list
+         * @param filenames
+         */
+        private void add(String[] filenames) {
            for (int i = 0; i<filenames.length; i++)
-               add(filenames[i]);
+            add(filenames[i]);
        }
 
-          /**
-           * adds the given image url to the list.
-           * if and only if it ends with jpg, jpeg or gif
-           * (case insensitive)
-           * @param filename image url.
-           */
+        /**
+         * adds the given image url to the list.
+         * if and only if it ends with jpg, jpeg or gif
+         * (case insensitive)
+         * @param filename image url.
+         */
        private void add(String filename) {
            String lcase = filename.toLowerCase();
                if (lcase.endsWith("jpg") ||
