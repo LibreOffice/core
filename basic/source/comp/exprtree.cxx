@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:47:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,8 +284,7 @@ SbiExprNode* SbiExpression::Term()
         // (Wobei 0 Parameter () entsprechen)
         if( pDef->GetDims() )
         {
-            if( !pPar
-            || ( pPar->GetSize() && pPar->GetSize() != pDef->GetDims() ) )
+            if( pPar && pPar->GetSize() && pPar->GetSize() != pDef->GetDims() )
                 pParser->Error( SbERR_WRONG_DIMS );
         }
         if( pDef->IsDefinedAs() )
