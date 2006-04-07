@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:43:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,8 @@
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-// #include <tools/intn.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -219,7 +216,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // #80023# be sure to generate keywords for the loaded Locale, not for the
     // requested Locale, otherwise number format codes might not match
     lang::Locale aLoadedLocale = pLocaleData->getLoadedLocale();
-    LanguageType eLang = ConvertIsoNamesToLanguage( aLoadedLocale.Language, aLoadedLocale.Country );
+    LanguageType eLang = MsLangId::convertLocaleToLanguage( aLoadedLocale );
     NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), aLoadedLocale );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
@@ -550,8 +547,8 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
     }
     // The Thai T NatNum modifier during Xcl import.
     if (i == 0 && bConvertMode && sString.GetChar(0) == 'T' && eTmpLnge ==
-            LANGUAGE_ENGLISH_US && SvNumberFormatter::GetProperLanguage(
-                eNewLnge) == LANGUAGE_THAI)
+            LANGUAGE_ENGLISH_US && MsLangId::getRealLanguage( eNewLnge) ==
+            LANGUAGE_THAI)
         i = NF_KEY_THAI_T;
     return i;       // 0 => not found
 }
