@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncnotification.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:40:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
 
-        OSL_TRACE( "AsyncEventNotifier(%08X): adding %08X\n", (int)this, (int)_rEvent.get() );
+        OSL_TRACE( "AsyncEventNotifier(%p): adding %p\n", this, _rEvent.get() );
         // remember this event
         m_pImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
 
@@ -242,7 +242,7 @@ namespace comphelper
                 xNextProcessor = aEvent.xProcessor;
                 m_pImpl->aEvents.pop_front();
 
-                OSL_TRACE( "AsyncEventNotifier(%08X): popping %08X\n", (int)this, (int)aNextEvent.get() );
+                OSL_TRACE( "AsyncEventNotifier(%p): popping %p\n", this, aNextEvent.get() );
 
                 if ( !aNextEvent.get() )
                     continue;
@@ -253,7 +253,7 @@ namespace comphelper
                 {
                     m_pImpl->m_aDeadProcessors.erase( xNextProcessor );
                     xNextProcessor.clear();
-                    OSL_TRACE( "AsyncEventNotifier(%08X): removing %08X\n", (int)this, (int)aNextEvent.get() );
+                    OSL_TRACE( "AsyncEventNotifier(%p): removing %p\n", this, aNextEvent.get() );
                 }
 
                 // if there was a termination request (->terminate), respect it
