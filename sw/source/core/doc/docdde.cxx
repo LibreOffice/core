@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #include <stdlib.h>
 
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif
