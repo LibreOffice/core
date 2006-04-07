@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:48:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,8 +281,8 @@
 #ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -528,10 +528,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     aFormatData.aNullDate = pParam->aNullDate;
     aFormatData.xFormatter = pParam->xFormatter;
 
-    String sLanguage, sCountry;
-    ::ConvertLanguageToIsoNames( (USHORT)nLanguage, sLanguage, sCountry );
-    aFormatData.aLocale.Language = sLanguage;
-    aFormatData.aLocale.Country = sCountry;
+    MsLangId::convertLanguageToLocale( (LanguageType)nLanguage, aFormatData.aLocale );
 
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return TRUE;
@@ -1905,11 +1902,7 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
         uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
         uno::Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
-        String sLanguage, sCountry;
-        ::ConvertLanguageToIsoNames( (USHORT)nLanguage, sLanguage, sCountry );
-        Locale aLocale;
-        aLocale.Language = sLanguage;
-        aLocale.Country = sCountry;
+        Locale aLocale( MsLangId::convertLanguageToLocale( (LanguageType)nLanguage ));
 
         //get the number formatter of the data source
         uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
