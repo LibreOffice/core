@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AggregateComponent.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:45:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ public class AggregateComponent extends ControlScroller{
             oControlRow.settovoid();
         }
         else{
-             ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(super.getBlockIncrementation()-1);
+            ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(super.getBlockIncrementation()-1);
             super.setScrollValue(getScrollValue() + 1, (fieldcount+1));
             oControlRow.settovoid();
         }
@@ -331,7 +331,7 @@ public class AggregateComponent extends ControlScroller{
             }
             CurDBMetaData.AggregateFieldNames = new String[a][2];
             aggregatevector.toArray(CurDBMetaData.AggregateFieldNames);
-         }
+        }
 
         int iduplicate = JavaTools.getDuplicateFieldIndex(CurDBMetaData.AggregateFieldNames);
         if (iduplicate != -1){
