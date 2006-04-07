@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:07:07 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #include <svx/passwd.hxx>
 #include <sbxitem.hxx>
 #include <basdoc.hxx>
+#include <ucbhelper/content.hxx>
+#include "rtl/uri.hxx"
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -65,6 +67,9 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -78,8 +83,20 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINEREXPORT_HPP_
+#include <com/sun/star/script/XLibraryContainerExport.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
+#include "com/sun/star/packages/manifest/XManifestWriter.hpp"
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -491,6 +508,34 @@ NewObjectDialog::~NewObjectDialog()
 {
 }
 
+//----------------------------------------------------------------------------
+// ExportDialog
+//----------------------------------------------------------------------------
+
+IMPL_LINK(ExportDialog, OkButtonHandler, Button *, EMPTYARG)
+{
+    mbExportAsPackage = maExportAsPackageButton.IsChecked();
+    EndDialog(1);
+    return 0;
+}
+
+ExportDialog::ExportDialog( Window * pParent )
+    : ModalDialog( pParent, IDEResId( RID_DLG_EXPORT ) ),
+        maExportAsPackageButton( this, IDEResId( RB_EXPORTASPACKAGE ) ),
+        maExportAsBasicButton( this, IDEResId( RB_EXPORTASBASIC ) ),
+        maOKButton( this, IDEResId( RID_PB_OK ) ),
+        maCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+{
+    FreeResource();
+    maExportAsPackageButton.Check();
+    maOKButton.SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
+}
+
+//----------------------------------------------------------------------------
+
+ExportDialog::~ExportDialog()
+{
+}
 
 //----------------------------------------------------------------------------
 //  LibPage
@@ -505,6 +550,7 @@ LibPage::LibPage( Window * pParent )
     ,aEditButton( this, IDEResId( RID_PB_EDIT ) )
     ,aCloseButton( this, IDEResId( RID_PB_CLOSE ) )
     ,aPasswordButton( this, IDEResId( RID_PB_PASSWORD ) )
+    ,aExportButton( this, IDEResId( RID_PB_EXPORT ) )
     ,aNewLibButton( this, IDEResId( RID_PB_NEWLIB ) )
     ,aInsertLibButton( this, IDEResId( RID_PB_APPEND ) )
     ,aDelButton( this, IDEResId( RID_PB_DELETE ) )
@@ -517,6 +563,7 @@ LibPage::LibPage( Window * pParent )
     aEditButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aNewLibButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aPasswordButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    aExportButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aInsertLibButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aCloseButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
@@ -575,6 +622,7 @@ void LibPage::CheckButtons()
             aPasswordButton.Disable();
             aNewLibButton.Enable();
             aInsertLibButton.Enable();
+            aExportButton.Disable();
             aDelButton.Disable();
             if ( !aLibBox.HasFocus() )
                 aCloseButton.GrabFocus();
@@ -600,6 +648,7 @@ void LibPage::CheckButtons()
 
             aNewLibButton.Enable();
             aInsertLibButton.Enable();
+            aExportButton.Enable();
             aDelButton.Enable();
         }
     }
@@ -672,6 +721,8 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         NewLib();
     else if ( pButton == &aInsertLibButton )
         InsertLib();
+    else if ( pButton == &aExportButton )
+        Export();
     else if ( pButton == &aDelButton )
         DeleteCurrent();
     else if ( pButton == &aCloseButton )
@@ -817,12 +868,20 @@ void LibPage::InsertLib()
     if ( aPath.Len() )
     {
         xFP->setDisplayDirectory( aPath );
-        xFltMgr->setCurrentFilter( IDE_DLL()->GetExtraData()->GetAddLibFilter() );
     }
     else
     {
         // macro path from configuration management
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
+    }
+
+    String aLastFilter( IDE_DLL()->GetExtraData()->GetAddLibFilter() );
+    if ( aLastFilter.Len() )
+    {
+        xFltMgr->setCurrentFilter( aLastFilter );
+    }
+    else
+    {
         xFltMgr->setCurrentFilter( String( IDEResId( RID_STR_BASIC ) ) );
     }
 
@@ -1155,6 +1214,278 @@ void LibPage::InsertLib()
                 if ( bChanges )
                     BasicIDE::MarkDocShellModified( m_pCurShell );
             }
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void LibPage::Export( void )
+{
+    SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+    String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+
+    // Password verification
+    ::rtl::OUString aOULibName( aLibName );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( m_pCurShell ), UNO_QUERY );
+
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+    {
+        BOOL bOK = TRUE;
+
+        // check password
+        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+        {
+            String aPassword;
+            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
+            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
+        }
+        if ( !bOK )
+            return;
+    }
+
+
+    Window* pWin = static_cast<Window*>( this );
+    std::auto_ptr< ExportDialog > xNewDlg( new ExportDialog( pWin ) );
+
+    if ( xNewDlg->Execute() == RET_OK )
+    {
+        if( xNewDlg->isExportAsPackage() )
+            ExportAsPackage( aLibName );
+        else
+            ExportAsBasic( aLibName );
+    }
+}
+
+void LibPage::implExportLib( const String& aLibName, const String& aTargetURL,
+    const Reference< task::XInteractionHandler > Handler )
+{
+    ::rtl::OUString aOULibName( aLibName );
+    Reference< script::XLibraryContainerExport > xModLibContainerExport
+        ( BasicIDE::GetModuleLibraryContainer( m_pCurShell ), UNO_QUERY );
+    Reference< script::XLibraryContainerExport > xDlgLibContainerExport
+        ( BasicIDE::GetDialogLibraryContainer( m_pCurShell ), UNO_QUERY );
+
+    if ( xModLibContainerExport.is() )
+        xModLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
+
+    if ( xDlgLibContainerExport.is() )
+        xDlgLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
+}
+
+
+//===========================================================================
+// Implementation XCommandEnvironment
+
+typedef cppu::WeakImplHelper1< XCommandEnvironment > LibCommandEnvironmentHelper;
+
+class OLibCommandEnvironment : public LibCommandEnvironmentHelper
+{
+    Reference< task::XInteractionHandler > mxInteraction;
+
+public:
+    OLibCommandEnvironment( Reference< task::XInteractionHandler > xInteraction )
+        : mxInteraction( xInteraction )
+    {}
+
+    // Methods
+    virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
+        throw(RuntimeException);
+    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
+        throw(RuntimeException);
+};
+
+Reference< task::XInteractionHandler > OLibCommandEnvironment::getInteractionHandler()
+    throw(RuntimeException)
+{
+    return mxInteraction;
+}
+
+Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
+    throw(RuntimeException)
+{
+    Reference< XProgressHandler > xRet;
+    return xRet;
+}
+
+
+
+void LibPage::ExportAsPackage( const String& aLibName )
+{
+    // file open dialog
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference< task::XInteractionHandler > xHandler;
+    Reference< XSimpleFileAccess > xSFA;
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
+    {
+        xHandler = Reference< task::XInteractionHandler >( xMSF->createInstance
+            ( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
+
+        xSFA = Reference< XSimpleFileAccess > ( xMSF->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
+        if( !xSFA.is() )
+        {
+            DBG_ERROR( "No simpleFileAccess" );
+            return;
+        }
+
+        Sequence <Any> aServiceType(1);
+        aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+    }
+    xFP->setTitle( String( IDEResId( RID_STR_EXPORTPACKAGE ) ) );
+
+    // filter
+    ::rtl::OUString aTitle = String( IDEResId( RID_STR_PACKAGE_BUNDLE ) );
+    ::rtl::OUString aFilter;
+    aFilter = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.uno.pkg" ) );       // library files
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( aTitle, aFilter );
+
+    // set display directory and filter
+    String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
+    if ( aPath.Len() )
+    {
+        xFP->setDisplayDirectory( aPath );
+    }
+    else
+    {
+        // macro path from configuration management
+        xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
+    }
+    xFltMgr->setCurrentFilter( aTitle );
+
+    if ( xFP->execute() == RET_OK )
+    {
+        IDE_DLL()->GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
+
+        Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
+        INetURLObject aURL( aFiles[0] );
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uno.pkg" ) ) );
+
+        ::rtl::OUString aPackageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+        String aTmpPath = SvtPathOptions().GetTempPath();
+        INetURLObject aInetObj( aTmpPath );
+        aInetObj.insertName( aLibName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+        OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        if( xSFA->exists( aSourcePath ) )
+            xSFA->kill( aSourcePath );
+        Reference< task::XInteractionHandler > xDummyHandler;
+        implExportLib( aLibName, aTmpPath, xDummyHandler );
+
+        Reference< XCommandEnvironment > xCmdEnv =
+            static_cast<XCommandEnvironment*>( new OLibCommandEnvironment( xHandler ) );
+
+        ::ucb::Content sourceContent( aSourcePath, xCmdEnv );
+
+        ::rtl::OUStringBuffer buf;
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
+        buf.append( ::rtl::Uri::encode( aPackageURL,
+                                        rtl_UriCharClassRegName,
+                                        rtl_UriEncodeIgnoreEscapes,
+                                        RTL_TEXTENCODING_UTF8 ) );
+        buf.append( static_cast<sal_Unicode>('/') );
+        OUString destFolder( buf.makeStringAndClear() );
+
+        if( xSFA->exists( aPackageURL ) )
+            xSFA->kill( aPackageURL );
+
+        ::ucb::Content destFolderContent( destFolder, xCmdEnv );
+        destFolderContent.transferContent(
+            sourceContent, ::ucb::InsertOperation_COPY,
+            OUString(), NameClash::OVERWRITE );
+
+        INetURLObject aMetaInfInetObj( aTmpPath );
+        aMetaInfInetObj.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+            sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+        OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        if( xSFA->exists( aMetaInfFolder ) )
+            xSFA->kill( aMetaInfFolder );
+        xSFA->createFolder( aMetaInfFolder );
+
+        ::std::vector< Sequence<beans::PropertyValue> > manifest;
+        const OUString strMediaType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+        const OUString strFullPath = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FullPath" ) );
+        const OUString strBasicMediaType = ::rtl::OUString
+            ( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.basic-library" ) );
+
+        Sequence<beans::PropertyValue> attribs( 2 );
+        beans::PropertyValue * pattribs = attribs.getArray();
+        pattribs[ 0 ].Name = strFullPath;
+        OUString fullPath = aLibName;
+        fullPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/") );
+        pattribs[ 0 ].Value <<= fullPath;
+        pattribs[ 1 ].Name = strMediaType;
+        pattribs[ 1 ].Value <<= strBasicMediaType;
+        manifest.push_back( attribs );
+
+        // write into pipe:
+        Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
+            ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
+        Reference<io::XOutputStream> xPipe( xMSF->createInstance
+            ( DEFINE_CONST_UNICODE("com.sun.star.io.Pipe") ), UNO_QUERY );
+        xManifestWriter->writeManifestSequence(
+            xPipe, Sequence< Sequence<beans::PropertyValue> >(
+                &manifest[ 0 ], manifest.size() ) );
+
+        aMetaInfInetObj.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ),
+            sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+
+        // write buffered pipe data to content:
+        ::ucb::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
+        manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
+
+        ::ucb::Content MetaInfContent( aMetaInfFolder, xCmdEnv );
+        destFolderContent.transferContent(
+            MetaInfContent, ::ucb::InsertOperation_COPY,
+            OUString(), NameClash::OVERWRITE );
+
+        if( xSFA->exists( aSourcePath ) )
+            xSFA->kill( aSourcePath );
+        if( xSFA->exists( aMetaInfFolder ) )
+            xSFA->kill( aMetaInfFolder );
+    }
+}
+
+void LibPage::ExportAsBasic( const String& aLibName )
+{
+    // Folder picker
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference< XFolderPicker > xFolderPicker;
+    Reference< task::XInteractionHandler > xHandler;
+    if( xMSF.is() )
+    {
+        xFolderPicker = Reference< XFolderPicker >( xMSF->createInstance(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
+
+        xHandler = Reference< task::XInteractionHandler >( xMSF->createInstance
+            ( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
+    }
+
+    if( xFolderPicker.is() )
+    {
+        xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+
+        // set display directory and filter
+        String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
+        if( !aPath.Len() )
+            aPath = SvtPathOptions().GetWorkPath();
+
+        // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
+        xFolderPicker->setDisplayDirectory( aPath );
+        short nRet = xFolderPicker->execute();
+        if( nRet == RET_OK )
+        {
+            String aTargetURL = xFolderPicker->getDirectory();
+            IDE_DLL()->GetExtraData()->SetAddLibPath( aTargetURL );
+
+            Reference< task::XInteractionHandler > xDummyHandler;
+            implExportLib( aLibName, aTargetURL, xDummyHandler );
         }
     }
 }
