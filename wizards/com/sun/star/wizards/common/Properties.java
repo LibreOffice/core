@@ -20,8 +20,8 @@ public class Properties extends Hashtable {
 
     public static Object getPropertyValue(PropertyValue[] props, String propName) {
         for (int i = 0; i<props.length; i++)
-              if (propName.equals(props[i].Name))
-                  return props[i].Value;
+            if (propName.equals(props[i].Name))
+                return props[i].Value;
         throw new IllegalArgumentException("Property '" + propName + "' not found.");
     }
 
@@ -71,7 +71,7 @@ public class Properties extends Hashtable {
         PropertyValue[] retproperties = null;
         if (_oObjectArray != null){
             if (_oObjectArray.length > 0){
-                 retproperties = new PropertyValue[_oObjectArray.length];
+                retproperties = new PropertyValue[_oObjectArray.length];
                 for (int i = 0; i < _oObjectArray.length; i++){
                     retproperties[i] = (PropertyValue) _oObjectArray[i];
                 }
