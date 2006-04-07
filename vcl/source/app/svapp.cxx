@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:21:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,12 @@
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -723,6 +729,8 @@ bool Application::ValidateSystemFont()
 
 void Application::SetSettings( const AllSettings& rSettings )
 {
+    MsLangId::setConfiguredSystemLanguage( rSettings.GetLanguage());
+    MsLangId::setConfiguredSystemUILanguage( rSettings.GetUILanguage());
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
@@ -1807,9 +1815,9 @@ long Application::CallEvent( NotifyEvent& rEvt )
 
 // -----------------------------------------------------------------------
 
-const International& Application::GetAppInternational()
+const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 {
-    return GetSettings().GetInternational();
+    return GetSettings().GetLocaleDataWrapper();
 }
 
 // -----------------------------------------------------------------------
