@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -1197,9 +1197,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
                                     SearchFlags::REG_NOT_ENDOFLINE);
 
-                String aLang, aCntry;
-                ConvertLanguageToIsoNames( LANGUAGE_SYSTEM, aLang, aCntry );
-                aTmp.Locale = Locale( aLang, aCntry, rtl::OUString() );
+                MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aTmp.Locale );
 
                 pSTxt = new utl::TextSearch( aTmp );
             }
