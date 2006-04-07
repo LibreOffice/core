@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlArranger.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:20:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.form;
+ ************************************************************************/
+package com.sun.star.wizards.form;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.UnknownPropertyException;
@@ -518,7 +519,7 @@ public class FormControlArranger {
         }
         this.curDBControl = DBControlList[i];
         nDBHeight = curDBControl.getDBHeight();
-        nDBWidth = curDBControl.getPreferredWidth();
+        nDBWidth = curDBControl.getDBWidth();
         if (FieldColumns[i].FieldType != DataType.TIMESTAMP)
             curDBControl.setSize(new Size(nDBWidth, nDBHeight));
         if (curDBControl.getControlType() == FormHandler.SOCHECKBOX){
