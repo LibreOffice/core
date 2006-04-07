@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:07:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #include <vcl/tabpage.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include "com/sun/star/task/XInteractionHandler.hpp"
+#endif
 
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>
@@ -94,6 +97,25 @@ public:
 
     String      GetObjectName() const { return aEdit.GetText(); }
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
+};
+
+class ExportDialog : public ModalDialog
+{
+private:
+    RadioButton     maExportAsPackageButton;
+    RadioButton     maExportAsBasicButton;
+    OKButton        maOKButton;
+    CancelButton    maCancelButton;
+
+    sal_Bool        mbExportAsPackage;
+
+    DECL_LINK(OkButtonHandler, Button *);
+
+public:
+    ExportDialog( Window * pParent );
+    ~ExportDialog();
+
+    sal_Bool        isExportAsPackage( void ) { return mbExportAsPackage; }
 };
 
 
@@ -240,6 +262,7 @@ protected:
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aPasswordButton;
+    PushButton          aExportButton;
     PushButton          aNewLibButton;
     PushButton          aInsertLibButton;
     PushButton          aDelButton;
@@ -255,6 +278,11 @@ protected:
     void                DeleteCurrent();
     void                NewLib();
     void                InsertLib();
+    void                implExportLib( const String& aLibName, const String& aTargetURL,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > Handler );
+    void                Export();
+    void                ExportAsPackage( const String& aLibName );
+    void                ExportAsBasic( const String& aLibName );
     void                EndTabDialog( USHORT nRet );
     void                FillListBox();
     void                InsertListBoxEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
