@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.216 $
+ *  $Revision: 1.217 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:37:58 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #include <cmath>
 #include <cstring>
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _SV_SVSYS_HXX
@@ -1061,10 +1061,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     }
     else
     {
-        String aLang, aCountry;
-        ConvertLanguageToIsoNames( eLang, aLang, aCountry );
-        aLocale.Language= aLang;
-        aLocale.Country = aCountry;
+        MsLangId::convertLanguageToLocale( eLang, aLocale );
     }
 
     DefaultFontConfigItem& rDefaults = *DefaultFontConfigItem::get();
