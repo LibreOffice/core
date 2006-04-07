@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:15:42 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
     Rectangle aCellRect;
     if (mpViewShell)
     {
-        sal_Int32 nSizeX, nSizeY;
+        long nSizeX, nSizeY;
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
