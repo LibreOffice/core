@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Process.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:56:38 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.web;
+ ************************************************************************/
+package com.sun.star.wizards.web;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -155,8 +156,8 @@ public class Process implements WebWizardConst, ProcessErrors {
         int count = 0;
         ConfigSet publishers = settings.cp_DefaultSession.cp_Publishing;
         for (int i = 0; i<publishers.getSize(); i++)
-              if (((CGPublish)publishers.getElementAt(i)).cp_Publish)
-                  count++;
+            if (((CGPublish)publishers.getElementAt(i)).cp_Publish)
+                count++;
         return count;
     }
 
@@ -242,7 +243,7 @@ public class Process implements WebWizardConst, ProcessErrors {
      */
     static String getSOTempDir(XMultiServiceFactory xmsf) {
         try {
-              String s = FileAccess.getOfficePath(xmsf,"Temp","");
+            String s = FileAccess.getOfficePath(xmsf,"Temp","");
             return s;
         }
         catch (Exception e) {}
@@ -259,8 +260,8 @@ public class Process implements WebWizardConst, ProcessErrors {
 
         task.setSubtaskName(TASK_FINISH);
         boolean b = fileAccess.delete(tempDir);
-         if (!b)
-             error(null,null,ERROR_CLEANUP,ErrorHandler.ERROR_WARNING);
+        if (!b)
+            error(null,null,ERROR_CLEANUP,ErrorHandler.ERROR_WARNING);
         task.advance(b);
         return b;
     }
@@ -345,13 +346,13 @@ public class Process implements WebWizardConst, ProcessErrors {
         try {
 
             copyMedia(ucb, settings, dir,task);
-              copyStaticImages(ucb,settings,dir);
+            copyStaticImages(ucb,settings,dir);
             task.advance(true);
         }
         catch (Exception ex) {
             //error in copying media
-              error(ex, "", ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL);
-              return false;
+            error(ex, "", ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL);
+            return false;
         }
 
         boolean result = true;
@@ -597,7 +598,7 @@ public class Process implements WebWizardConst, ProcessErrors {
                          * we never get here since we
                          * did not implement sub-contents.
                          */
-                          if (!export((CGContent) item, contentDir,task))
+                        if (!export((CGContent) item, contentDir,task))
                             return false;
                 }
                 catch (SecurityException sx) {
@@ -634,10 +635,10 @@ public class Process implements WebWizardConst, ProcessErrors {
         //first I check if the document was already validated...
         if (!doc.valid)
           try {
-              doc.validate(xmsf,null);
+            doc.validate(xmsf,null);
           }
           catch (Exception ex){
-              //fatal
+            //fatal
             error(ex,doc,ERROR_DOC_VALIDATE,ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
           }
