@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:22:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,25 +144,29 @@ sal_Int32 XMLSignatureHelper::GetNewSecurityId()
 void XMLSignatureHelper::SetX509Certificate(
         sal_Int32 nSecurityId,
         const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber)
+        const rtl::OUString& ouX509SerialNumber,
+        const rtl::OUString& ouX509Cert)
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
         ouX509IssuerName,
-        ouX509SerialNumber);
+        ouX509SerialNumber,
+        ouX509Cert);
 }
 
 void XMLSignatureHelper::SetX509Certificate(
         sal_Int32 nSecurityId,
         sal_Int32 nSecurityEnvironmentIndex,
         const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber)
+        const rtl::OUString& ouX509SerialNumber,
+        const rtl::OUString& ouX509Cert)
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
         nSecurityEnvironmentIndex,
         ouX509IssuerName,
-        ouX509SerialNumber);
+        ouX509SerialNumber,
+        ouX509Cert);
 }
 
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime )
