@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGDesign.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ public class CGDesign extends ConfigGroup implements XMLProvider {
 
     public short[] getStyle() {
         CGStyle style = ((CGStyle) ((CGSettings)root).cp_Styles.getElement(cp_Style));
-          return new short[] { (short) ((CGSettings)root).cp_Styles.getIndexOf(style)};
+        return new short[] { (short) ((CGSettings)root).cp_Styles.getIndexOf(style)};
     }
 
     public void setStyle(short[] newStyle) {
@@ -93,8 +93,8 @@ public class CGDesign extends ConfigGroup implements XMLProvider {
     }
 
     public void setLayout(int layoutIndex) {
-         CGLayout layout = (CGLayout)((CGSettings)root).cp_Layouts.getElementAt(layoutIndex);
-         cp_Layout = (String)((CGSettings)root).cp_Layouts.getKey(layout);
+        CGLayout layout = (CGLayout)((CGSettings)root).cp_Layouts.getElementAt(layoutIndex);
+        cp_Layout = (String)((CGSettings)root).cp_Layouts.getKey(layout);
     }
 
 }
