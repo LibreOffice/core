@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #include <string.h>
 
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
