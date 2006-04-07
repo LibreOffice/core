@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:13:21 $
+#   last change: $Author: vg $ $Date: 2006-04-07 14:22:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,7 @@ SHL3STDLIBS=	\
                 $(SVLLIB)							\
                 $(UNOTOOLSLIB)						\
                 $(TOOLSLIB) 						\
+                $(I18NISOLANGLIB)   				\
                 $(CPPUHELPERLIB)					\
                 $(CPPULIB)							\
                 $(VOSLIB)							\
