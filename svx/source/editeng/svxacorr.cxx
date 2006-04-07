@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,11 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _LANG_HXX //autogen
-#include <tools/lang.hxx>
-#endif
 #ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -1263,7 +1260,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, FALSE );
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = GetSystemLanguage();
+            eLang = MsLangId::getSystemLanguage();
         CharClass& rCC = GetCharClass( eLang );
 
         // Bug 19285: Symbolzeichen nicht anfassen
@@ -1538,7 +1535,7 @@ BOOL SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
     LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, FALSE );
     if( LANGUAGE_SYSTEM == eLang )
-        eLang = GetSystemLanguage();
+        eLang = MsLangId::getSystemLanguage();
 
     SvxAutoCorrect* pThis = (SvxAutoCorrect*)this;
     CharClass& rCC = pThis->GetCharClass( eLang );
@@ -1717,7 +1714,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     LanguageType eLang = rLang;
     const SvxAutocorrWord* pRet = 0;
     if( LANGUAGE_SYSTEM == eLang )
-        eLang = GetSystemLanguage();
+        eLang = MsLangId::getSystemLanguage();
 
     // zuerst nach eLang suchen, dann nach der Obersprache
     // US-Englisch -> Englisch und zuletzt in LANGUAGE_DONTKNOW
@@ -1907,7 +1904,7 @@ BOOL SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             BOOL bNewFile, BOOL bTst ) const
 {
-    String sRet, sExt( ConvertLanguageToIsoString( eLang ) );
+    String sRet, sExt( MsLangId::convertLanguageToIsoString( eLang ) );
     sExt.Insert('_', 0);
     sExt.AppendAscii( ".dat" );
     if( bNewFile )
