@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-19 13:34:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
