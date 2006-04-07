@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:46:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
@@ -171,12 +171,9 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
 void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
 {
     nLanguage = nLang;
-    String aLangStr, aCtryStr;
     if( LANGUAGE_NONE == nLanguage )
         nLanguage = LANGUAGE_SYSTEM;
-    ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
-    aLocale.Language = aLangStr;
-    aLocale.Country = aCtryStr;
+    MsLangId::convertLanguageToLocale( nLanguage, aLocale);
 }
 
 
