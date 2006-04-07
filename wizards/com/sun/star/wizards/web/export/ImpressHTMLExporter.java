@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImpressHTMLExporter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:48 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package com.sun.star.wizards.web.export;
 
+import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;
@@ -51,7 +52,7 @@ public class ImpressHTMLExporter extends ConfiguredExporter {
     private static final Integer MEDIUM_IMAGE = new Integer(640);
     private static final Integer LARGE_IMAGE = new Integer(800);
 
-    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task) {
+    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task)  throws IOException {
 
         /* here set some filter specific properties.
          * other properties, which are not dependant on
