@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:25:20 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,8 +127,8 @@
 #include <svtools/saveopt.hxx>
 #endif
 #include <comphelper/extract.hxx>
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #include <unotools/charclass.hxx>
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -264,7 +264,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     bInitialOnlineSpellingEnabled(TRUE),
     bHasOnlineSpellErrors(FALSE),
     pOnlineSearchItem(NULL),
-    mpInternational(NULL),
     mpLocale(NULL),
     mpCharClass(NULL),
     bAllocDocSh(FALSE),
@@ -335,19 +334,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         bHideSpell = aOptions.bIsSpellHideMarkings;
     }
 
-    LanguageType eRealLanguage = International::GetRealLanguage( eLanguage );
-
-    mpInternational = new International(eLanguage);
-    String aLanguage, aCountry, aEmpty;
-    ConvertLanguageToIsoNames( eRealLanguage, aLanguage, aCountry );
-    mpLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, aEmpty );
+    LanguageType eRealLanguage = MsLangId::getRealLanguage( eLanguage );
+    mpLocale = new ::com::sun::star::lang::Locale( MsLangId::convertLanguageToLocale( eRealLanguage ));
     mpCharClass = new CharClass( *mpLocale );
 
     // If the current application language is a language that uses right-to-left text...
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguage();
-    if( (LANGUAGE_ARABIC == (eRealCTLLanguage & 0x00ff)) ||
-        (LANGUAGE_URDU == (eRealCTLLanguage & 0x00ff)) ||
-        (LANGUAGE_HEBREW == eRealCTLLanguage) )
+    if( MsLangId::isRightToLeft( eRealCTLLanguage ) )
     {
         // ... then we have to set this as a default
         SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
@@ -561,9 +554,6 @@ SdDrawDocument::~SdDrawDocument()
 
     delete pInternalOutliner;
     pInternalOutliner = NULL;
-
-    delete mpInternational;
-    mpInternational = NULL;
 
     delete mpLocale;
     mpLocale = NULL;
