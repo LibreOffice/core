@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:36:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,7 +604,12 @@ RTLFUNC(Array)
 
     // Parameter ins Array uebernehmen
     for( short i = 0 ; i < nArraySize ; i++ )
-        pArray->Put( rPar.Get(i+1), &i );
+    {
+        SbxVariable* pVar = rPar.Get(i+1);
+        SbxVariable* pNew = new SbxVariable( *pVar );
+        pNew->SetFlag( SBX_WRITE );
+        pArray->Put( pNew, &i );
+    }
 
     // Array zurueckliefern
     SbxVariableRef refVar = rPar.Get(0);
@@ -1473,6 +1478,7 @@ RTLFUNC(Split)
         else
         {
             vRet.push_back( aExpression );
+            nArraySize = 1;
         }
     }
 
