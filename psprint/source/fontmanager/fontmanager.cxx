@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:22:03 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,14 +85,14 @@
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 
 
@@ -1786,7 +1786,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
     int nNameRecords = GetTTNameRecords( (TrueTypeFont*)pTTFont, &pNameRecords );
     if( nNameRecords && pNameRecords )
     {
-        LanguageType aLang = GetSystemLanguage();
+        LanguageType aLang = MsLangId::getSystemLanguage();
         int nLastMatch = -1;
         for( int i = 0; i < nNameRecords; i++ )
         {
