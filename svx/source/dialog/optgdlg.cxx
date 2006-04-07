@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:43:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
@@ -498,8 +498,10 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
     String aOutput( aStrDateInfo );
     String aStr( aYearValueField.GetText() );
-    International aInt;
-    aStr.EraseAllChars( aInt.GetNumThousandSep() );
+    const String& rSep = SvtSysLocale().GetLocaleData().getNumThousandSep();
+    xub_StrLen nIndex = 0;
+    while ((nIndex = aStr.Search( rSep, nIndex)) != STRING_NOTFOUND)
+        aStr.Erase( nIndex, rSep.Len());
     long nNum = aStr.ToInt32();
     if ( aStr.Len() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
         aOutput.AppendAscii("????");
@@ -1282,7 +1284,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         LanguageType aLang = LANGUAGE_DONTKNOW;
         for (sal_Int32 i=0; i<seqInstalledLanguages.getLength(); i++)
         {
-        aLang = ConvertIsoStringToLanguage(seqInstalledLanguages[i]);
+            aLang = MsLangId::convertIsoStringToLanguage(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //USHORT p = aUserInterfaceLB.InsertLanguage(aLang);
@@ -1385,41 +1387,19 @@ SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAtt
 LanguageType lcl_LangStringToLangType(const OUString& rLang)
 {
     Locale aLocale;
-    aLocale.Language = rLang.copy(0, 2);
-    if(rLang.getLength() >= 5)
-        aLocale.Country = rLang.copy(3, 2);
+    sal_Int32 nSep = rLang.indexOf('-');
+    if (nSep < 0)
+        aLocale.Language = rLang;
+    else
+    {
+        aLocale.Language = rLang.copy(0, nSep);
+        if (nSep < rLang.getLength())
+            aLocale.Country = rLang.copy(nSep+1, rLang.getLength() - (nSep+1));
+    }
     LanguageType eLangType = SvxLocaleToLanguage( aLocale );
     return eLangType;
 }
 
-/*-----------------12.02.01 09:01-------------------
- *
- * --------------------------------------------------*/
-void lcl_LanguageToLocale( Locale& rLocale, const LanguageType eLang )
-{
-    OUString aEmpty;
-    SvxLanguageToLocale( rLocale, eLang );
-    switch ( eLang )
-    {
-        case LANGUAGE_FRENCH :
-        case LANGUAGE_GERMAN :
-        case LANGUAGE_ITALIAN :
-        case LANGUAGE_DUTCH :
-        case LANGUAGE_SPANISH :
-        case LANGUAGE_PORTUGUESE :
-        case LANGUAGE_DANISH :
-        case LANGUAGE_GREEK :
-        case LANGUAGE_JAPANESE :
-        case LANGUAGE_KOREAN :
-        case LANGUAGE_SWEDISH :
-        case LANGUAGE_RUSSIAN :
-        case LANGUAGE_POLISH :
-        case LANGUAGE_TURKISH :
-            rLocale.Country = aEmpty;
-            break;
-    }
-
-}
 /*-- 23.11.00 13:06:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1527,7 +1507,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if ( eNewLocale != LANGUAGE_SYSTEM )
         {
             Locale aLocale;
-            // Do NOT use lcl_LanguageToLocale() or locale won't match I18N
             SvxLanguageToLocale( aLocale, eNewLocale );
             sNewLang = aLocale.Language;
             if ( aLocale.Country.getLength() > 0 )
@@ -1874,7 +1853,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
     //update the decimal separator key of the related CheckBox
     Locale aTempLocale;
-    lcl_LanguageToLocale( aTempLocale, eLang );
+    SvxLanguageToLocale( aTempLocale, eLang );
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
     String sTempLabel(sDecimalSeparatorLabel);
     sTempLabel.SearchAndReplaceAscii("%1", aLocaleWrapper.getNumDecimalSep() );
