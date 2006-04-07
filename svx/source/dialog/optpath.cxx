@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 13:55:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 09:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,20 +307,9 @@ BOOL SvxPathTabPage::FillItemSet( SfxItemSet& )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
         USHORT nRealId = pPathImpl->nRealId;
-        if(pPathImpl->eState == SFX_ITEM_SET)
-        {
-            String sPath(pPathImpl->aPathStr);
-            if(nRealId == SvtPathOptions::PATH_ADDIN ||
-                    nRealId == SvtPathOptions::PATH_FILTER ||
-                    nRealId == SvtPathOptions::PATH_HELP  ||
-                    nRealId == SvtPathOptions::PATH_MODULE  ||
-                    nRealId == SvtPathOptions::PATH_PLUGIN  ||
-                    nRealId == SvtPathOptions::PATH_STORAGE  )
-                ::utl::LocalFileHelper::ConvertURLToPhysicalName( pPathImpl->aPathStr, sPath );
-            aPathOpt.SetPath(SvtPathOptions::Pathes(nRealId), sPath);
-        }
+        if ( pPathImpl->eState == SFX_ITEM_SET )
+            aPathOpt.SetPath( SvtPathOptions::Pathes( nRealId ), pPathImpl->aPathStr );
     }
-
     return TRUE;
 }
 
@@ -333,48 +322,28 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 
     for( USHORT i = 0; i <= (USHORT)SvtPathOptions::PATH_WORK; ++i )
     {
-        switch(i)
+        switch (i)
         {
-            case SvtPathOptions::PATH_CONFIG:
-            case SvtPathOptions::PATH_FAVORITES:
-            case SvtPathOptions::PATH_HELP:
-            case SvtPathOptions::PATH_MODULE:
-            case SvtPathOptions::PATH_STORAGE:
-            /* #i29834# */
-            case SvtPathOptions::PATH_ADDIN:
-            case SvtPathOptions::PATH_PLUGIN:
-            case SvtPathOptions::PATH_FILTER:
-            /* #i29834# */
-            break;
-            default:
+            case SvtPathOptions::PATH_BACKUP:
+            case SvtPathOptions::PATH_GALLERY:
+            case SvtPathOptions::PATH_GRAPHIC:
+            case SvtPathOptions::PATH_TEMP:
+            case SvtPathOptions::PATH_WORK:
             {
-                // only writer uses autotext
-                if ( i != SvtPathOptions::PATH_AUTOTEXT ||
-                     SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                String aStr( SVX_RES(RID_SVXSTR_PATH_NAME_START + i));
+                String sTmpPath(aPathOpt.GetPath(SvtPathOptions::Pathes(i)));
+                String aValue( sTmpPath );
+                aStr += '\t';
+                aStr += Convert_Impl( aValue );
+                SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
+                if ( aPathOpt.IsPathReadonly( (SvtPathOptions::Pathes)i ) )
                 {
-                    String aStr( SVX_RES(RID_SVXSTR_PATH_NAME_START + i));
-                    String sTmpPath(aPathOpt.GetPath(SvtPathOptions::Pathes(i)));
-                    String aValue( sTmpPath );
-                    if(i == SvtPathOptions::PATH_ADDIN ||
-                            i == SvtPathOptions::PATH_FILTER ||
-                            i == SvtPathOptions::PATH_HELP  ||
-                            i == SvtPathOptions::PATH_MODULE  ||
-                            i == SvtPathOptions::PATH_PLUGIN  ||
-                            i == SvtPathOptions::PATH_STORAGE  )
-                        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sTmpPath, aValue );
-                    aStr += '\t';
-                    aStr += Convert_Impl( aValue );
-                    SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
-                    BOOL   bReadonly = aPathOpt.IsPathReadonly((SvtPathOptions::Pathes) i);
-                    if(bReadonly)
-                    {
-                        pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage,   BMP_COLOR_NORMAL );
-                        pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC,   BMP_COLOR_HIGHCONTRAST  );
-                    }
-                    PathUserData_Impl* pPathImpl = new PathUserData_Impl( i );
-                    pPathImpl->aPathStr = aValue;
-                    pEntry->SetUserData( pPathImpl );
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage, BMP_COLOR_NORMAL );
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC, BMP_COLOR_HIGHCONTRAST );
                 }
+                PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
+                pPathImpl->aPathStr = aValue;
+                pEntry->SetUserData( pPathImpl );
             }
         }
     }
