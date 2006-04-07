@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,6 @@
 #endif
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 
 #include <functional>
