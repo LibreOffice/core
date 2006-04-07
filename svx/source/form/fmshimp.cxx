@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:40:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,6 @@
 
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
-#endif
-
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 
 #ifndef _SHL_HXX
