@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextFieldHandler.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:42:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,11 +198,11 @@ public class TextFieldHandler {
                 XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
 
                 if (xSI.supportsService("com.sun.star.text.TextField.ExtendedUser")) {
-                       XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
                 if (xSI.supportsService("com.sun.star.text.TextField.User")) {
-                       XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
             }
