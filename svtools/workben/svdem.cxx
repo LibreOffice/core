@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:02:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <unotools/calendarwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
+
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -59,6 +62,8 @@
 #include <calendar.hxx>
 #include <prnsetup.hxx>
 #include <printdlg.hxx>
+
+using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -592,18 +597,26 @@ MyCalendar::MyCalendar( Window* pParent ) :
     aHolidayColor( COL_LIGHTRED ),
     aFrameColor( COL_LIGHTRED )
 {
-    const International& rIntn = aCalendar.GetInternational();
+    const CalendarWrapper& rCal = aCalendar.GetCalendarWrapper();
     aMenuBar.InsertItem( 1, XubString( RTL_CONSTASCII_USTRINGPARAM( "Wochen~anfang" ) ) );
     aMenuBar.InsertItem( 2, XubString( RTL_CONSTASCII_USTRINGPARAM( "~Erste Woche" ) ) );
     aMenuBar.SetPopupMenu( 1, &aWeekStartMenu );
     aMenuBar.SetPopupMenu( 2, &aWeekCountMenu );
-    for ( USHORT i = 0; i < 7; i++ )
-        aWeekStartMenu.InsertItem( 10+i, rIntn.GetDayText( (DayOfWeek)i ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekStartMenu.CheckItem( 10+(USHORT)rIntn.GetWeekStart() );
+    sal_Int16 nDays = rCal.getNumberOfDaysInWeek();
+    uno::Sequence< i18n::CalendarItem> xItems = rCal.getDays();
+    const i18n::CalendarItem* pArr = xItems.getArray();
+    for ( sal_Int16 i = 0; i < nDays; i++ )
+        aWeekStartMenu.InsertItem( 10+(USHORT)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekStartMenu.CheckItem( 10+(USHORT)rCal.getFirstDayOfWeek() );
     aWeekCountMenu.InsertItem( 20, XubString( RTL_CONSTASCII_USTRINGPARAM( "~1. Januar" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekCountMenu.InsertItem( 21, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste 4 ~Tage-Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekCountMenu.InsertItem( 22, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste ~volle Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekCountMenu.CheckItem( 20+(USHORT)rIntn.GetWeekCountStart() );
+    aWeekCountMenu.InsertItem( 21, XubString( RTL_CONSTASCII_USTRINGPARAM( "~2 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekCountMenu.InsertItem( 22, XubString( RTL_CONSTASCII_USTRINGPARAM( "~3 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekCountMenu.InsertItem( 23, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste 4 ~Tage-Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekCountMenu.InsertItem( 24, XubString( RTL_CONSTASCII_USTRINGPARAM( "~5 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekCountMenu.InsertItem( 25, XubString( RTL_CONSTASCII_USTRINGPARAM( "~6 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekCountMenu.InsertItem( 26, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste ~volle Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
+    //was: one of 0, 1, 2;  aWeekCountMenu.CheckItem( 20+(USHORT)rIntn.GetWeekCountStart() );
+    aWeekCountMenu.CheckItem( 20+(USHORT)rCal.getMinimumNumberOfDaysForFirstWeek() );
     aMenuBar.SetSelectHdl( LINK( this, MyCalendar, MenuSelectHdl ) );
     SetMenuBar( &aMenuBar );
 
@@ -652,7 +665,7 @@ IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
 {
     Date aDate = aCalendar.GetCurDate();
     String aStr( RTL_CONSTASCII_USTRINGPARAM( "Info: " ) );
-    aStr += Application::GetAppInternational().GetDate( aDate );
+    aStr += Application::GetAppLocaleDataWrapper().getDate( aDate );
     aCalendar.AddDateInfo( aDate, aStr, NULL, &aFrameColor, DIB_BOLD );
     return 0;
 }
@@ -661,14 +674,12 @@ IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
 
 IMPL_LINK( MyCalendar, MenuSelectHdl, Menu*, pMenu )
 {
-    International   aIntn = aCalendar.GetInternational();
     USHORT          nItemId = pMenu->GetCurItemId();
 
     if ( (nItemId >= 10) && (nItemId <= 19) )
-        aIntn.SetWeekStart( (DayOfWeek)(nItemId-10) );
+        aCalendar.SetWeekStart( nItemId-10 );
     else if ( (nItemId >= 20) && (nItemId <= 29) )
-        aIntn.SetWeekCountStart( (WeekCountStart)(nItemId-20) );
-    aCalendar.SetInternational( aIntn );
+        aCalendar.SetMinimumNumberOfDaysInWeek( nItemId-20 );
 
     return 0;
 }
