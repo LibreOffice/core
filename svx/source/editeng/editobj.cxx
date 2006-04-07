@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:47:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,19 +472,19 @@ BOOL EditTextObject::Store( SvStream& rOStream ) const
         return FALSE;
 
     // Vorspann:
-    ULONG nStartPos = rOStream.Tell();
+    sal_Size nStartPos = rOStream.Tell();
 
     USHORT nWhich = Which();
     rOStream << nWhich;
 
-    ULONG nStructSz = 0;
+    sal_uInt32 nStructSz = 0;
     rOStream << nStructSz;
 
     // Eigene Daten:
     StoreData( rOStream );
 
     // Nachspann:
-    ULONG nEndPos = rOStream.Tell();
+    sal_Size nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
     rOStream << nStructSz;
@@ -501,7 +501,7 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     USHORT nWhich;
     rIStream >> nWhich;
 
-    ULONG nStructSz;
+    sal_uInt32 nStructSz;
     rIStream >> nStructSz;
 
     DBG_ASSERT( ( nWhich == 0x22 /*EE_FORMAT_BIN300*/ ) || ( nWhich == EE_FORMAT_BIN ), "CreateTextObject: Unbekanntes Objekt!" );
@@ -526,22 +526,22 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     }
 
     // Sicherstellen, dass der Stream an der richtigen Stelle hinterlassen wird.
-    ULONG nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
+    sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
     return pTxtObj;
 }
 
 void EditTextObject::Skip( SvStream& rIStream )
 {
-    ULONG nStartPos = rIStream.Tell();
+    sal_Size nStartPos = rIStream.Tell();
 
     USHORT nWhich;
     rIStream >> nWhich;
 
-    ULONG nStructSz;
+    sal_uInt32 nStructSz;
     rIStream >> nStructSz;
 
-    ULONG nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
+    sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
 }
 
@@ -1864,7 +1864,7 @@ void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
     GetPool()->Load( rIStream );
 
     // Die Anzahl der Absaetze...
-    ULONG nParagraphs;
+    sal_uInt32 nParagraphs;
     rIStream >> nParagraphs;
 
     // Die einzelnen Absaetze...
@@ -1885,7 +1885,7 @@ void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
         pC->GetParaAttribs().Load( rIStream );
 
         // Die Anzahl der Attribute...
-        ULONG nAttribs;
+        sal_uInt32 nAttribs;
         rIStream >> nAttribs;
 
         // Und die einzelnen Attribute
