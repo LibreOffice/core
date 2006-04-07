@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:30:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,6 +358,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 #include <framework/acceleratorinfo.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include "imagemgr.hxx"
+#include "fwkhelper.hxx"
 
 ::osl::Mutex SfxApplication::gMutex;
 
@@ -371,8 +372,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         SetApp( pNew );
 
         ::framework::SetImageProducer( GetImage );
-//        ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
-//        ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
+        ::framework::SetRefreshToolbars( RefreshToolbars );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
 
