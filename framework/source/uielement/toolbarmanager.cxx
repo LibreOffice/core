@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 08:50:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,31 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
     if ( bHighContrast )
         n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
+}
+
+static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManagerFromFrame(
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+    Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        try
+        {
+            Any a( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) );
+            a >>= xLayoutManager;
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    return xLayoutManager;
 }
 
 static void ImplClearPopupMenu( ToolBox *pToolBar );
@@ -1740,12 +1765,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             case MENUITEM_TOOLBAR_DOCKTOOLBAR:
             {
-                Any a;
-                Reference< XLayoutManager > xLayoutManager;
-                Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
-                if ( xPropSet.is() )
-                    a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-                a >>= xLayoutManager;
+                Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
                 if ( xLayoutManager.is() )
                 {
                     ::com::sun::star::awt::Point aPoint;
@@ -1759,12 +1779,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             case MENUITEM_TOOLBAR_DOCKALLTOOLBAR:
             {
-                Any a;
-                Reference< XLayoutManager > xLayoutManager;
-                Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
-                if ( xPropSet.is() )
-                    a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-                a >>= xLayoutManager;
+                Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
                 if ( xLayoutManager.is() )
                 {
                     ::com::sun::star::awt::Point aPoint;
@@ -1776,12 +1791,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             case MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION:
             {
-                Any a;
-                Reference< XLayoutManager > xLayoutManager;
-                Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
-                if ( xPropSet.is() )
-                    a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-                a >>= xLayoutManager;
+                Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
                 if ( xLayoutManager.is() )
                 {
                     Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
@@ -1794,6 +1804,17 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 break;
             }
 
+            case MENUITEM_TOOLBAR_CLOSE:
+            {
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+                pExecuteInfo->aToolbarResName = m_aResourceName;
+                pExecuteInfo->nCmd            = EXEC_CMD_CLOSETOOLBAR;
+                pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
+
+                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+            }
+
             default:
             {
                 USHORT nId = pMenu->GetCurItemId();
@@ -1802,12 +1823,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                     // toggle toolbar button visibility
                     rtl::OUString aCommand = pMenu->GetItemCommand( nId );
 
-                    Any a;
-                    Reference< XLayoutManager > xLayoutManager;
-                    Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
-                    if ( xPropSet.is() )
-                        a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-                    a >>= xLayoutManager;
+                    Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
                     if ( xLayoutManager.is() )
                     {
                         Reference< XUIElementSettings > xUIElementSettings( xLayoutManager->getElement( m_aResourceName ), UNO_QUERY );
@@ -1977,6 +1993,25 @@ IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, pTimer )
     m_aAsyncUpdateControllersTimer.Stop();
     UpdateControllers();
 
+    return 0;
+}
+
+IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+{
+    try
+    {
+        // Asynchronous execution as this can lead to our own destruction!
+        if (( pExecuteInfo->nCmd == EXEC_CMD_CLOSETOOLBAR ) &&
+            ( pExecuteInfo->xLayoutManager.is() ))
+        {
+            pExecuteInfo->xLayoutManager->destroyElement( pExecuteInfo->aToolbarResName );
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    delete pExecuteInfo;
     return 0;
 }
 
