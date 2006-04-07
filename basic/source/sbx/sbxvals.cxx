@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvals.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:54:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ BOOL BigInt::INT64( SbxINT64 *p ) const
             p->CHS();
     }
     else
-        p->Set( nVal );
+        p->Set( (INT32)nVal );
 
     return TRUE;
 }
