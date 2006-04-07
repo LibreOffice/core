@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:53:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #endif
 #ifndef _DYNARY_HXX
 #include <tools/dynary.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -2083,7 +2086,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
         INT16 nLang = SvxLocaleToLanguage( pLocales[i] );
         aLanguageLB.InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
     }
-    LanguageType eSysLang = GetSystemLanguage();
+    LanguageType eSysLang = MsLangId::getSystemLanguage();
     aLanguageLB.SelectLanguage( eSysLang );
     if(!aLanguageLB.IsLanguageSelected( eSysLang ) )
         aLanguageLB.SelectEntryPos(0);
