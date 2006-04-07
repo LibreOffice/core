@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGLayout.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:02:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ public class CGLayout extends ConfigSetItem {
 
         for (int i = 0; i<files.length; i++)
             if (FileAccess.getExtension(files[i]).equals("xsl"))
-                  templates.put(FileAccess.getFilename(files[i]), tf.newTemplates( new StreamSource(files[i]) ));
+                templates.put(FileAccess.getFilename(files[i]), tf.newTemplates( new StreamSource(files[i]) ));
 
     }
 
