@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:18:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,9 @@
 
 #include <tools/debug.hxx>
 #include <tools/inetdef.hxx>
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -359,7 +361,7 @@ void SfxXMLMetaExport::Export()
 #if 0
     if ( eLanguage != LANGUAGE_SYSTEM )
     {
-        sValue = ConvertLanguageToIsoString( eLanguage, '-' );
+        sValue = MsLangId::convertLanguageToIsoString( eLanguage, '-' );
         if ( sValue.getLength() )
         {
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DC, XML_LANGUAGE,
