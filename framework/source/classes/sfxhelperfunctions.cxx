@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelperfunctions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:14:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = NULL;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = NULL;
+static pfunc_getRefreshToolbars            pRefreshToolbars            = NULL;
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -74,6 +76,20 @@ svt::StatusbarController* SAL_CALL CreateStatusBarController( const Reference< X
         return (*pStatusBarControllerCreator)( rFrame, pStatusBar, nID, aCommandURL );
     else
         return NULL;
+}
+
+pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars pNewRefreshToolbarsFunc )
+{
+    pfunc_getRefreshToolbars pOldFunc = pRefreshToolbars;
+    pRefreshToolbars = pNewRefreshToolbarsFunc;
+
+    return pOldFunc;
+}
+
+void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+{
+    if ( pRefreshToolbars )
+        (*pRefreshToolbars)( rFrame );
 }
 
 }
