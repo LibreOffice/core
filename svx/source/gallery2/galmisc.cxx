@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:38:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:07:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/intn.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/urihelper.hxx>
