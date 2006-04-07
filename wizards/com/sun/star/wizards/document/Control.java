@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Control.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:18:38 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -69,6 +70,7 @@ public class Control extends Shape{
     final int SOMAXTEXTSIZE = 50;
     int icontroltype;
     protected XNameContainer xFormName;
+    protected final int IIMGFIELDWIDTH = 2000;
 
 
     public Control(){
@@ -189,7 +191,7 @@ public class Control extends Shape{
 
     public int getPreferredWidth(){
         if (icontroltype == FormHandler.SOIMAGECONTROL)
-            return 2000; // TODO  replace literal value by constant
+            return IIMGFIELDWIDTH;
         else{
             Size aPeerSize = getPeerSize();
             // We increase the preferred Width a bit so that the control does not become too small
@@ -210,10 +212,7 @@ public class Control extends Shape{
             int nHeight = aPeerSize.Height;
             // We increase the preferred Height a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
-//          if (icontroltype == FormHandler.SOCHECKBOX)
-//              return(nHeight * oFormHandler.getYPixelFactor());
-//          else
-                return((nHeight+1) * oFormHandler.getYPixelFactor());
+            return((nHeight+1) * oFormHandler.getYPixelFactor());
         }
     }
 
@@ -221,7 +220,6 @@ public class Control extends Shape{
     public Size getPreferredSize(String sText){
     try {
         if (xPropertySet.getPropertySetInfo().hasPropertyByName("Text")){
-//          xPropertySet.setPropertyValue("MaxTextLen", new Integer(sText.length()));
             xPropertySet.setPropertyValue("Text", sText);
         }
         else if (xPropertySet.getPropertySetInfo().hasPropertyByName("Label"))
