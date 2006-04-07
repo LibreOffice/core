@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -189,10 +186,6 @@
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 
 #ifndef _SVX_FMPROP_HRC
