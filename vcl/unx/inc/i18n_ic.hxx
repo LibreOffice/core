@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:36:12 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #define _SAL_I18N_INPUTCONTEXT_HXX
 
-#ifndef _TOOLS_LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #ifndef _SAL_I18N_CALLBACK_HXX
