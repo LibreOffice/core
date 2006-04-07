@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockingarea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,17 +194,20 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
             for( int n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
-                Point aPos = pChild->GetPosPixel();
-                Size aSize = pChild->GetSizePixel();
-                Rectangle aRect( aPos, aSize );
+                if ( pChild->IsVisible() )
+                {
+                    Point aPos = pChild->GetPosPixel();
+                    Size aSize = pChild->GetSizePixel();
+                    Rectangle aRect( aPos, aSize );
 
-                SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-                DrawLine( aRect.TopLeft(), aRect.TopRight() );
-                DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+                    SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
+                    DrawLine( aRect.TopLeft(), aRect.TopRight() );
+                    DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
 
-                SetLineColor( GetSettings().GetStyleSettings().GetSeparatorColor() );
-                DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
-                DrawLine( aRect.TopRight(), aRect.BottomRight() );
+                    SetLineColor( GetSettings().GetStyleSettings().GetSeparatorColor() );
+                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                    DrawLine( aRect.TopRight(), aRect.BottomRight() );
+                }
             }
         }
         else
