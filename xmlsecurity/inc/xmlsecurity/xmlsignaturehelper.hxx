@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:08:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,30 @@ public:
     void        StartMission();
     void        EndMission();
     sal_Int32   GetNewSecurityId();
-    void        SetX509Certificate( sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName, const rtl::OUString& ouX509SerialNumber);
-    void        SetX509Certificate( sal_Int32 nSecurityId, sal_Int32 nSecurityEnvironmentIndex, const rtl::OUString& ouX509IssuerName,  const rtl::OUString& ouX509SerialNumber);
+    /** sets data that describes the certificate.
+
+        It is absolutely necessary that the parameter ouX509IssuerName is set. It contains
+        the base64 encoded certificate, which is DER encoded. The XMLSec needs it to find
+        the private key. Although issuer name and certificate should be sufficient to identify
+        the certificate the implementation in XMLSec is broken, both for Windows and mozilla.
+        The reason is that they use functions to find the certificate which take as parameter
+        the DER encoded ASN.1 issuer name. The issuer name is a DName, where most attributes
+        are of type DirectoryName, which is a choice of 5 string types. This information is
+        not contained in the issuer string and while it is converted to the ASN.1 name the
+        conversion function must assume a particular type, which is often wrong. For example,
+        the Windows function CertStrToName will use a T.61 string if the string does not contain
+        special characters. So if the certificate uses simple characters but encodes the
+        issuer attributes in Utf8, then CertStrToName will use T.61. The resulting DER encoded
+        ASN.1 name now contains different bytes which indicate the string type. The functions
+        for finding the certificate apparently use memcmp - hence they fail to find the
+        certificate.
+     */
+    void SetX509Certificate(sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName,
+        const rtl::OUString& ouX509SerialNumber, const rtl::OUString& ouX509Cert);
+
+    void SetX509Certificate(sal_Int32 nSecurityId, sal_Int32 nSecurityEnvironmentIndex,
+        const rtl::OUString& ouX509IssuerName,  const rtl::OUString& ouX509SerialNumber,
+        const rtl::OUString& ouX509Cert);
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
     void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
