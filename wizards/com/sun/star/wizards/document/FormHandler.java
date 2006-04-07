@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormHandler.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:19:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,13 +31,17 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.document;
+ ************************************************************************/
+package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNameAccess;
@@ -483,5 +487,15 @@ public class FormHandler {
         if (this.nLabelHeight == -1)
             initializeBasicControlValues();
         return nLabelHeight;
+    }
+
+
+    public void setDrawObjectsCaptureMode(boolean _bCaptureObjects){
+        try {
+            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, this.xMSFDoc.createInstance("com.sun.star.text.DocumentSettings"));
+            xPropertySet.setPropertyValue("DoNotCaptureDrawObjsOnPage", new Boolean(!_bCaptureObjects));
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 }
