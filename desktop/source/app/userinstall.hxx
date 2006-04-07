@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:52:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <tools/lang.hxx>
 
 namespace desktop
 {
