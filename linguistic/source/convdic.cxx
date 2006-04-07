@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:20 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -50,9 +50,6 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
