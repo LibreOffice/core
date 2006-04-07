@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:23:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
