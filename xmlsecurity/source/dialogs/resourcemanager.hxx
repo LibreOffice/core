@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:13:29 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
 #endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
@@ -55,12 +52,13 @@
 class FixedImage;
 class FixedInfo;
 class Control;
+class LocaleDataWrapper;
 
 namespace XmlSec
 {
     ResMgr*         GetResMgr( void );
 
-    International*  GetInternational( void );
+    const LocaleDataWrapper&    GetLocaleData( void );
     DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
     String          GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
     String          GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime );
