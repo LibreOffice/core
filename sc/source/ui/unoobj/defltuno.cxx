@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:44:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <svtools/smplhint.hxx>
 #include <svtools/itemprop.hxx>
 #include <svx/unomid.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -202,7 +202,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
         {
             LanguageType eNew;
             if (aLocale.Language.getLength() || aLocale.Country.getLength())
-                eNew = ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country );
+                eNew = MsLangId::convertLocaleToLanguage( aLocale );
             else
                 eNew = LANGUAGE_NONE;
 
