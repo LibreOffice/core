@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:41:42 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
     // #96441# Kach for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
-        ULONG nMagic = STORE_UNICODE_MAGIC_MARKER;
+        sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
         rStrm << nMagic;
         rStrm.WriteByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
         rStrm.WriteByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
@@ -541,8 +541,8 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, USHORT) const
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
     // Check if we have stored unicode
-    ULONG nStreamPos = rStrm.Tell();
-    ULONG nMagic = STORE_UNICODE_MAGIC_MARKER;
+    sal_Size nStreamPos = rStrm.Tell();
+    sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
     rStrm >> nMagic;
     if ( nMagic == STORE_UNICODE_MAGIC_MARKER )
     {
