@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:37:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,8 +203,8 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     };
     String STR_HEADER2
     {
-        Text [ de ] = "Bildschirm" ;
-        Text [ en-US ] = "Screen";
+        Text [ de ] = "Nur Bildschirm" ;
+        Text [ en-US ] = "Screen only";
         Text [ x-comment ] = " ";
     };
     String STR_HEADER3
