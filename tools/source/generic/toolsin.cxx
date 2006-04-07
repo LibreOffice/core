@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolsin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:22:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 
 #ifndef _DEBUG_HXX
 #include <debug.hxx>
-#endif
-#ifndef _INTNTAB_HXX
-#include <intntab.hxx>
 #endif
 #ifndef _TOOLSIN_HXX
 #include <toolsin.hxx>
@@ -91,7 +88,6 @@ void DeInitTools()
 
     if ( pData )
     {
-        ImplDeleteIntnListData();
         ImplDeleteCharTabData();
         delete pData;
         *ppData = NULL;
