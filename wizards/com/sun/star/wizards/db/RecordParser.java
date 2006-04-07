@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecordParser.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:17:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
