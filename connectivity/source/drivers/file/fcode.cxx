@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:58:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,8 @@
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include "connectivity/sqlparse.hxx"
 #endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -340,7 +337,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
             static String sLanguage;
             static String sCountry;
             if (!sLanguage.Len())
-                ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                MsLangId::convertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
 
             static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
             INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
