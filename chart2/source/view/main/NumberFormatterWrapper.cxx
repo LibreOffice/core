@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberFormatterWrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:48:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 //.............................................................................
@@ -124,27 +124,10 @@ SvNumberFormatter* NumberFormatterWrapper::getSvNumberFormatter() const
     return m_pNumberFormatter;
 }
 
-LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
-{
-    //  empty language -> LANGUAGE_SYSTEM
-    if ( rLocale.Language.getLength() == 0 )
-        return LANGUAGE_SYSTEM;
-
-    String aLangStr = rLocale.Language;
-    String aCtryStr = rLocale.Country;
-    //  Variant is ignored
-
-    LanguageType eRet = ConvertIsoNamesToLanguage( aLangStr, aCtryStr );
-    if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
-
-    return eRet;
-}
-
 sal_Int32 NumberFormatterWrapper::getKeyForNumberFormat( const NumberFormat& rNumberFormat ) const
 {
     String aStr( rNumberFormat.aFormat );
-    LanguageType eLnge = lcl_GetLanguage( rNumberFormat.aLocale );
+    LanguageType eLnge = MsLangId::convertLocaleToLanguage( rNumberFormat.aLocale );
     return m_pNumberFormatter->GetEntryKey( aStr, eLnge );
 }
 
@@ -155,7 +138,7 @@ NumberFormat NumberFormatterWrapper::getNumberFormatForKey( sal_Int32 nIndex ) c
     NumberFormat aNumberFormat;
     aNumberFormat.aFormat = pSvNumberformat->GetFormatstring();
     LanguageType nLanguageType = pSvNumberformat->GetLanguage();
-    aNumberFormat.aLocale = SvNumberFormatter::ConvertLanguageToLocale( nLanguageType );
+    aNumberFormat.aLocale = MsLangId::convertLanguageToLocale( nLanguageType );
     return aNumberFormat;
 }
 
