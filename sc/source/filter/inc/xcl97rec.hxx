@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:58:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ public:
                                 XclMsodrawing(
                                     const XclExpRoot& rRoot,
                                     UINT16 nEscherType = 0,
-                                    ULONG nInitialSize = 0 );
+                                    UINT32 nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
 
     virtual UINT16              GetNum() const;
