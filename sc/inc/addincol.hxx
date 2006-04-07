@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:21:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #ifndef _RTL_USTRING_H_
