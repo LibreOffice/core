@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWizard.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:21:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.table;
+ ************************************************************************/
+package com.sun.star.wizards.table;
 
 import java.util.Calendar;
 import java.util.Hashtable;
@@ -73,7 +74,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
-
+    private String sMsgColumnAlreadyExists = "";
 
     String WizardHeaderText[] = new String[8];
 
@@ -108,7 +109,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             case SOFINALPAGE:
                 break;
             default:
-                 break;
+                break;
           }
     }
 
@@ -126,7 +127,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             case SOFINALPAGE:
                 curFinalizer.initialize(curScenarioSelector.getFirstTableName());
                 break;
-             default:
+            default:
                 break;
         }
     }
@@ -205,6 +206,9 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             curproperties = new PropertyValue[1];
 //          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MySQL-JDBC-Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//           /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyNewHSQLDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+
 //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
             CurTableWizard.startTableWizard(xLocMSF, curproperties);
         }
@@ -225,6 +229,8 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
 
 
     public boolean createTable(){
+        boolean bIsSuccessfull = true;
+        boolean bTableCreated = false;
         String schemaname = curFinalizer.getSchemaName();
         String catalogname = curFinalizer.getCatalogName();
         if (curTableDescriptor.supportsCoreSQLGrammar()){
@@ -232,11 +238,18 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             if (keyfieldnames != null){
                 if (keyfieldnames.length > 0){
                     boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
-                    return curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement, curScenarioSelector.getSelectedFieldNames());
+                    bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement, curScenarioSelector.getSelectedFieldNames());
+                    bTableCreated = true;
                 }
             }
         }
-        return curTableDescriptor.createTable(catalogname, schemaname, tablename, curScenarioSelector.getSelectedFieldNames());
+        if (!bTableCreated){
+            bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, curScenarioSelector.getSelectedFieldNames());
+        }
+        if ((!bIsSuccessfull) && (curPrimaryKeyHandler.isAutomaticMode())){
+           curTableDescriptor.dropColumnbyName(curPrimaryKeyHandler.getAutomaticFieldName());
+        }
+        return bIsSuccessfull;
     }
 
 
@@ -304,7 +317,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
 
     public void startTableWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
     try{
-        curTableDescriptor = new TableDescriptor(xMSF);
+        curTableDescriptor = new TableDescriptor(xMSF, super.xWindow, this.sMsgColumnAlreadyExists);
         if (curTableDescriptor.getConnection(CurPropertyValue)){
             buildSteps();
             createWindowPeer();
@@ -336,6 +349,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         slblSelFields =  oResource.getResText(UIConsts.RID_TABLE + 25);
         serrToManyFields = oResource.getResText(UIConsts.RID_TABLE + 47);
         serrTableNameexists = oResource.getResText(UIConsts.RID_TABLE + 48);
+        sMsgColumnAlreadyExists = oResource.getResText(UIConsts.RID_TABLE + 51);
         return true;
     }
 
