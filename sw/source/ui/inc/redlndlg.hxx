@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:10:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #include <redlenum.hxx>
 #endif
 
-#ifndef _TOOLS_INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
 #endif
