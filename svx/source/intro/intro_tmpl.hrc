@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 11:23:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ ItemList = \
     < "Danese Cooper" ; > ; \
     < "Lee Corbin" ; > ; \
     < "Dietmar Cordes" ; > ; \
-     < "Jesús Corrius" ; > ; \
+     < "Jesus Corrius" ; > ; \
     < "Martin Coxall" ; > ; \
      < "Joszef Csongradi" ; > ; \
     < "Alessandro Cumin" ; > ; \
