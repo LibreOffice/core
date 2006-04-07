@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:53:47 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1064,7 +1064,7 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
                     else
                     {
-                        ::com::sun::star::uno::Sequence< long > xOff;
+                        ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                         String aCell( pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
                             &xOff ) );
