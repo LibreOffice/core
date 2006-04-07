@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrimaryKeyHandler.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:21:37 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
     TableDescriptor curTableDescriptor;
     int nAutoPrimeKeyDataType;
     boolean bAutoPrimaryKeysupportsAutoIncrmentation;
+    final String SAUTOMATICKEYFIELDNAME = "ID";
 
     public PrimaryKeyHandler(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor){
         this.CurUnoDialog = _CurUnoDialog;
@@ -96,8 +97,8 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
         String slblAvailableFields = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 4);
         String slblSelPrimaryFields = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 32);
         CurUnoDialog.insertLabel("lblExplanation",
-              new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { new Integer(40), sExplanations,  Boolean.TRUE, new Integer(91), new Integer(27),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(213)}
+            new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+            new Object[] { new Integer(40), sExplanations,  Boolean.TRUE, new Integer(91), new Integer(27),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(213)}
         );
 
         chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", SPRIMEKEYMODE, this,
@@ -105,18 +106,18 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
             new Object[] {UIConsts.INTEGERS[8], "HID:41227", screatePrimaryKey, new Integer(97), new Integer(70), new Short((short)1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(160)});
 
         optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", SPRIMEKEYMODE, this,
-              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41228", sAddAutomatically, new Integer(106), new Integer(82), new Short((short)1),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
+            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+            new Object[] { UIConsts.INTEGERS[8], "HID:41228", sAddAutomatically, new Integer(106), new Integer(82), new Short((short)1),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
         );
 
         optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", SPRIMEKEYMODE, this,
-              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"}, //94
-              new Object[] { UIConsts.INTEGERS[8], "HID:41230", sUseExisting, new Integer(106), new Integer(104),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
+            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"}, //94
+            new Object[] { UIConsts.INTEGERS[8], "HID:41230", sUseExisting, new Integer(106), new Integer(104),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
         );
 
         optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", SPRIMEKEYMODE, this,
-              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41233", sUseSeveral, new Integer(106), new Integer(132),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
+            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+            new Object[] { UIConsts.INTEGERS[8], "HID:41233", sUseSeveral, new Integer(106), new Integer(132),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
         );
 
         chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", SPRIMEKEYMODE, this,
@@ -229,6 +230,18 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
     return false;
     }
 
+    public boolean isAutomaticMode(){
+        boolean bisAutomaticMode = false;
+            if (chkcreatePrimaryKey.getState() == 1){
+             bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "State")).shortValue() == (short) 1;
+        }
+        return bisAutomaticMode;
+    }
+
+    public String getAutomaticFieldName(){
+           return SAUTOMATICKEYFIELDNAME;
+    }
+
 
     public boolean isAutoIncremented(){
     boolean bischecked = false;
@@ -296,7 +309,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
         else if (optUseExisting.getState())
             return (new String[]{lstSinglePrimeKey.getSelectedItem()});
         else if (optAddAutomatically.getState()){
-            return (new String[]{"ID"});
+            return (new String[]{SAUTOMATICKEYFIELDNAME});
         }
         return null;
     }
