@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:24:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #include <tools/urlobj.hxx>
 #include <svxacorr.hxx>
 #include <tools/fsys.hxx>
-#include <tools/intn.hxx>
 #include <xpoly.hxx>
 #include <svtools/filedlg.hxx>
 
