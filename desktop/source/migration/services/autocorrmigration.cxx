@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocorrmigration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "autocorrmigration.hxx"
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -187,7 +187,7 @@ namespace migration
                 sal_Int32 nStart = sBaseName.getLength();
                 sal_Int32 nEnd = sSourceLocalName.lastIndexOf ( sSuffix );
                 ::rtl::OUString sLanguageType = sSourceLocalName.copy( nStart, nEnd - nStart );
-                ::rtl::OUString sIsoName = ConvertLanguageToIsoString( (LanguageType) sLanguageType.toInt32() );
+                ::rtl::OUString sIsoName = MsLangId::convertLanguageToIsoString( (LanguageType) sLanguageType.toInt32() );
                 ::rtl::OUString sTargetLocalName = sBaseName;
                 sTargetLocalName += ::rtl::OUString::createFromAscii( "_" );
                 sTargetLocalName += sIsoName;
