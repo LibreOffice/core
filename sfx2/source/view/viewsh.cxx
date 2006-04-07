@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:38:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 09:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+namespace css = ::com::sun::star;
 
 //=========================================================================
 DBG_NAME(SfxViewShell);
@@ -136,6 +137,74 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
+
+//--------------------------------------------------------------------
+/** search for an internal typename, which map to the current app module
+    and map also to a "family" of file formats as e.g. PDF/MS Doc/OOo Doc.
+ */
+enum ETypeFamily
+{
+    E_MS_DOC,
+    E_OOO_DOC
+};
+
+::rtl::OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
+                                                  ETypeFamily                                eTypeFamily)
+{
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR         (::comphelper::getProcessServiceFactory()        , css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager >      xModuleManager(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+
+        ::rtl::OUString sModule = xModuleManager->identify(xFrame);
+        ::rtl::OUString sType   ;
+
+        switch(eTypeFamily)
+        {
+            case E_MS_DOC:
+                 {
+                    if (sModule.equalsAscii( "com.sun.star.text.TextDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                 }
+                 break;
+
+            case E_OOO_DOC:
+                 {
+                    if (sModule.equalsAscii( "com.sun.star.text.TextDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ));
+                    else
+                    if (sModule.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                        sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ));
+                 }
+                 break;
+        }
+
+        return sType;
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+
+    return ::rtl::OUString();
+}
 
 //--------------------------------------------------------------------
 
@@ -163,6 +232,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        case SID_MAIL_SENDDOCASMS:
+        case SID_MAIL_SENDDOCASOOO:
         case SID_MAIL_SENDDOCASPDF:
         case SID_MAIL_SENDDOC:
         case SID_MAIL_SENDDOCASFORMAT:
@@ -201,43 +272,25 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
                 SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
-                if ( nId == SID_MAIL_SENDDOCASPDF )
-                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
-                else if ( nId == SID_MAIL_SENDDOC )
+
+                if ( nId == SID_MAIL_SENDDOC )
                     eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
                 else
+                if ( nId == SID_MAIL_SENDDOCASPDF )
+                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
+                else
+                if ( nId == SID_MAIL_SENDDOCASMS )
                 {
-                    rtl::OUString aModuleName;
-                    if ( aDocType.getLength() == 0 )
-                    {
-                        // MS Document format as default for SID_MAIL_SENDDOCASFORMAT
-                        uno::Reference< lang::XMultiServiceFactory > xSMGR( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                        uno::Reference< frame::XModuleManager > xModuleManager(
-                            xSMGR->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.frame.ModuleManager" ))), uno::UNO_QUERY );
-                        try
-                        {
-                            aModuleName = xModuleManager->identify( xFrame );
-                        }
-                        catch ( uno::RuntimeException& )
-                        {
-                            throw;
-                        }
-                        catch ( uno::Exception& )
-                        {
-                        }
-
-                        if ( aModuleName.equalsAscii( "com.sun.star.text.TextDocument" ))
-                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
-                        else if ( aModuleName.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
-                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
-                        else if ( aModuleName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
-                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
-                        else if ( aModuleName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
-                            aDocType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
-                    }
-
-                    eResult = aModel.SaveAndSend( xFrame, aDocType );
+                    aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
+                    if (aDocType.getLength() > 0)
+                        eResult = aModel.SaveAndSend( xFrame, aDocType );
+                }
+                else
+                if ( nId == SID_MAIL_SENDDOCASOOO )
+                {
+                    aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
+                    if (aDocType.getLength() > 0)
+                        eResult = aModel.SaveAndSend( xFrame, aDocType );
                 }
 
                 if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
