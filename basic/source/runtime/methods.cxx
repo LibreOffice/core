@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:35:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3548,18 +3548,39 @@ RTLFUNC(RGB)
 
 RTLFUNC(QBColor)
 {
+    static const INT32 pRGB[] =
+    {
+        0x000000,
+        0x800000,
+        0x008000,
+        0x808000,
+        0x000080,
+        0x800080,
+        0x008080,
+        0xC0C0C0,
+        0x808080,
+        0xFF0000,
+        0x00FF00,
+        0xFFFF00,
+        0x0000FF,
+        0xFF00FF,
+        0x00FFFF,
+        0xFFFFFF,
+    };
+
     if ( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    Color aCol( (ColorData)rPar.Get(1)->GetInteger() );
-
-    ULONG nRed   = aCol.GetRed() >> 8;
-    ULONG nGreen = aCol.GetGreen() >> 8;
-    ULONG nBlue  = aCol.GetBlue() >> 8;
-    ULONG nRGB   = (nRed << 16) | (nGreen << 8) | nBlue;
+    INT16 nCol = rPar.Get(1)->GetInteger();
+    if( nCol < 0 || nCol > 15 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    INT32 nRGB = pRGB[ nCol ];
     rPar.Get(0)->PutLong( nRGB );
 }
 
