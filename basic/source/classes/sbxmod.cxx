@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:38:55 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1441,6 +1441,8 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // Zahl?
     else if( testCharFlags( c, CHAR_START_NUMBER ) == TRUE )
     {
+        reType = TT_NUMBER;
+
         // Buffer-Position initialisieren
         int nPos = 0;
 
@@ -1448,22 +1450,21 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         int nRadix = 10;
 
         // Ist es eine Hex- oder Oct-Zahl?
-        if( c == '0' )
+        if( c == '&' )
         {
             // Octal?
-            // Java-Script geht von einem Octal-Wert aus, wenn nach 0 eine
-            // Ziffer im oktalen Ziffernbereich folgt
-            if( testCharFlags( peekChar(), CHAR_IN_OCT_NUMBER ) )
+            if( peekChar() == 'o' || peekChar() == 'O' )
             {
+                // o entfernen
+                getChar();
                 nRadix = 8;     // Octal-Basis
 
                 // Alle Ziffern einlesen
                 while( testCharFlags( peekChar(), CHAR_IN_OCT_NUMBER ) )
                     c = getChar();
             }
-
-            // Dementsprechend wird bei 0x Hex geparsed
-            else if( peekChar() == 'x' || peekChar() == 'X' )
+            // Hex?
+            else if( peekChar() == 'h' || peekChar() == 'H' )
             {
                 // x entfernen
                 getChar();
@@ -1473,10 +1474,14 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 while( testCharFlags( peekChar(), CHAR_IN_HEX_NUMBER ) )
                     c = getChar();
             }
+            else
+            {
+                reType = TT_OPERATOR;
+            }
         }
 
         // Wenn nicht Oct oder Hex als double ansehen
-        if( nRadix == 10 )
+        if( reType == TT_NUMBER && nRadix == 10 )
         {
             // Flag, ob das letzte Zeichen ein Exponent war
             BOOL bAfterExpChar = FALSE;
@@ -1492,7 +1497,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             }
         }
 
-        reType = TT_NUMBER;
+        // reType = TT_NUMBER;
     }
 
     // String?
@@ -1500,6 +1505,8 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     {
         // Merken, welches Zeichen den String eroeffnet hat
         sal_Unicode cEndString = c;
+        if( c == '[' )
+            cEndString = ']';
 
         // Alle Ziffern einlesen und puffern
         while( peekChar() != cEndString )
@@ -1524,7 +1531,10 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         if( reType != TT_ERROR )
         {
             getChar();
-            reType = TT_STRING;
+            if( cEndString == ']' )
+                reType = TT_IDENTIFIER;
+            else
+                reType = TT_STRING;
         }
     }
 
@@ -1610,9 +1620,10 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
         aCharTypeTab[i] |= nHelpMask;
 
     // e und E sowie . von Hand ergaenzen
-    aCharTypeTab['e'] |=    CHAR_IN_NUMBER;
-    aCharTypeTab['E'] |=    CHAR_IN_NUMBER;
-    aCharTypeTab['.'] |=  (USHORT)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
+    aCharTypeTab['e'] |= CHAR_IN_NUMBER;
+    aCharTypeTab['E'] |= CHAR_IN_NUMBER;
+    aCharTypeTab['.'] |= (USHORT)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
+    aCharTypeTab['&'] |= CHAR_START_NUMBER;
 
     // Hex-Ziffern
     for( i = 'a' ; i <= 'f' ; i++ )
@@ -1627,11 +1638,12 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
     // String-Beginn/End-Zeichen
     aCharTypeTab['\''] |= CHAR_START_STRING;
     aCharTypeTab['\"'] |= CHAR_START_STRING;
+    aCharTypeTab['[']  |= CHAR_START_STRING;
 
     // Operator-Zeichen
     aCharTypeTab['!'] |= CHAR_OPERATOR;
     aCharTypeTab['%'] |= CHAR_OPERATOR;
-    aCharTypeTab['&'] |= CHAR_OPERATOR;
+    // aCharTypeTab['&'] |= CHAR_OPERATOR;      Removed because of #i14140
     aCharTypeTab['('] |= CHAR_OPERATOR;
     aCharTypeTab[')'] |= CHAR_OPERATOR;
     aCharTypeTab['*'] |= CHAR_OPERATOR;
@@ -1649,7 +1661,7 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
     aCharTypeTab['~'] |= CHAR_OPERATOR;
     aCharTypeTab['{'] |= CHAR_OPERATOR;
     aCharTypeTab['}'] |= CHAR_OPERATOR;
-    aCharTypeTab['['] |= CHAR_OPERATOR;
+    // aCharTypeTab['['] |= CHAR_OPERATOR;      Removed because of #i17826
     aCharTypeTab[']'] |= CHAR_OPERATOR;
     aCharTypeTab[';'] |= CHAR_OPERATOR;
 
