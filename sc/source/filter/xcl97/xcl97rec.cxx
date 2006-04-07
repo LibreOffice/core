@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:10:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,7 +564,7 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
     pEx->OpenContainer( ESCHER_SpContainer );
     pEx->AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     sal_uInt32 nFlags = 0x000A0000;
-    ::set_flag( nFlags, 2UL, !bVisible );
+    ::set_flag( nFlags, sal_uInt32(2), !bVisible );
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
