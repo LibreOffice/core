@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 16:16:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
@@ -570,7 +573,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
     maCBDateTimeLanguage.SetSelectHdl( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
 
     GetOrSetDateTimeLanguage( meOldLanguage, false );
-    meOldLanguage = International::GetRealLanguage( meOldLanguage );
+    meOldLanguage = MsLangId::getRealLanguage( meOldLanguage );
     maCBDateTimeLanguage.SelectLanguage( meOldLanguage );
 
     FillFormatList(SVXDATEFORMAT_A);
