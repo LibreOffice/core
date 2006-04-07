@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:34:39 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -84,8 +81,8 @@
 #ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -123,7 +120,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
             Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
             if( aValue >>= aLoc )
             {
-//                LanguageType nTmpLang = ConvertIsoStringToLanguage( aLoc );
+//                LanguageType nTmpLang = MsLangId::convertIsoStringToLanguage( aLoc );
 //                if( nTmpLang != LANGUAGE_DONTKNOW )
 //                    nLang = nTmpLang;
                 sal_Int32 nIndex = 0;
