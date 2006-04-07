@@ -1,0 +1,434 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: lang.h,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:27:34 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#define INCLUDED_I18NPOOL_LANG_H
+
+/**
+   These are MS LANGIDs, the lower 10 bits (mask 0x03ff, values below 0x0400
+   aren't real locale IDs) represent the primary language ID, the upper 6 bits
+   represent the sublanguage ID, which in most cases together with the primary
+   language simply designates a country. A LANGID is constructed by
+   UINT16 nLangID = ((((UINT16)(SubLangId)) << 10) | (UINT16)(PriLangId));
+
+   A user-defined primary language ID is a value in the range 0x0200 to 0x03ff.
+   All other values are reserved for Windows system use.
+
+   A user-defined sublanguage identifier is a value in the range 0x20 to 0x3f.
+   All other values are reserved for Windows system use.
+   If there is no sublanguage ID for a primary language ID, use SUBLANG_DEFAULT
+   (0x01, which shifted to the left by 10 bits results in the frequently seen
+   0x0400). OR'ed with a 0x0200 primary results in 0x0600.
+
+   Values added as of 2004-04-15, a helper script: ../source/intntl/lcid.awk
+   Utility to compare MS-LANGID definitions with those defined in this file.
+
+   For further information please see include/winnt.h of a recent MSDEV version
+   and the following web pages.
+
+   The complete list, not necessarily supported by Windows:
+   List of Locale ID (LCID) Values as Assigned by Microsoft
+   http://www.microsoft.com/globaldev/reference/lcid-all.mspx
+
+   As a complete list is never complete, some more that came with WinXP SP2:
+   Windows XP/Server 2003 - List of Locale IDs, Input Locale, and Language Collection
+   http://www.microsoft.com/globaldev/reference/winxp/xp-lcid.mspx
+
+   nls information page
+   http://www.microsoft.com/globaldev/nlsweb/
+
+   IDs used in specific Windows versions up to and including Windows XP:
+   Table of Language Identifiers
+   http://msdn.microsoft.com/library/en-us/intl/nls_238z.asp
+
+   Primary Language Identifiers (International Features: Platform SDK)
+   http://msdn.microsoft.com/library/en-us/intl/nls_61df.asp
+
+   SubLanguage Identifiers (International Features: Platform SDK)
+   http://msdn.microsoft.com/library/en-us/intl/nls_19ir.asp
+
+   WD2000: Supported Language ID Reference Numbers (LCID)
+   http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
+ */
+
+
+/* It must be safe to include this file in plain C code, so only C style
+ * comments are used. Do NOT use // C++ style comments. */
+
+/* disable typedef for usage in svx/source/dialog/langtab.src */
+#ifndef RSC_RESOURCE_USAGE
+typedef unsigned short LanguageType;
+#endif
+
+#define LANGUAGE_MASK_PRIMARY 0x03ff
+
+#ifdef __cplusplus
+/* Please use the methods provided in mslangid.hxx for type-safety! */
+#else
+#define MSLANGID_MAKELANGID( nSubLangId, nPriLangId )  \
+   (((nSubLangId) << 10) | (nPriLangId))
+#define MSLANGID_GETPRIMARYLANGUAGE( nLangID )         \
+    ((nLangID) & LANGUAGE_MASK_PRIMARY)
+#define MSLANGID_GETSUBLANGUAGE( nLangID )             \
+    (((nLangID) & ~LANGUAGE_MASK_PRIMARY) >> 10)
+#endif
+
+
+#define LANGUAGE_DONTKNOW                   0x03FF  /* yes, the mask */
+#define LANGUAGE_NONE                       0x00FF
+#define LANGUAGE_HID_HUMAN_INTERFACE_DEVICE 0x04FF
+#define LANGUAGE_SYSTEM                     0x0000  /* OOo/SO definition */
+
+/* The Invariant Locale (Locale ID = 0x007f) is a locale that can be used by
+ * applications when a consistent and locale-independent result is required.
+ * The invariant locale can be used, for example, when comparing character
+ * strings using the CompareString() API and a consistent result regardless of
+ * the User Locale is expected.
+ * The settings of the Invariant Locale are similar to US-English international
+ * standards, but should not be used to display formatted data. */
+/* NOTE: this is taken from the MS documentation! Not supported by OOo/SO! */
+#define LANGUAGE_INVARIANT                  0x007F
+
+#define LANGUAGE_AFRIKAANS                  0x0436
+#define LANGUAGE_ALBANIAN                   0x041C
+#define LANGUAGE_AMHARIC_ETHIOPIA           0x045E
+#define LANGUAGE_ARABIC                     0x0001  /* primary only, not a locale! */
+#define LANGUAGE_ARABIC_ALGERIA             0x1401
+#define LANGUAGE_ARABIC_BAHRAIN             0x3C01
+#define LANGUAGE_ARABIC_EGYPT               0x0C01
+#define LANGUAGE_ARABIC_IRAQ                0x0801
+#define LANGUAGE_ARABIC_JORDAN              0x2C01
+#define LANGUAGE_ARABIC_KUWAIT              0x3401
+#define LANGUAGE_ARABIC_LEBANON             0x3001
+#define LANGUAGE_ARABIC_LIBYA               0x1001
+#define LANGUAGE_ARABIC_MOROCCO             0x1801
+#define LANGUAGE_ARABIC_OMAN                0x2001
+#define LANGUAGE_ARABIC_QATAR               0x4001
+#define LANGUAGE_ARABIC_SAUDI_ARABIA        0x0401
+#define LANGUAGE_ARABIC_SYRIA               0x2801
+#define LANGUAGE_ARABIC_TUNISIA             0x1C01
+#define LANGUAGE_ARABIC_UAE                 0x3801
+#define LANGUAGE_ARABIC_YEMEN               0x2401
+#define LANGUAGE_ARMENIAN                   0x042B
+#define LANGUAGE_ASSAMESE                   0x044D
+#define LANGUAGE_AZERI                      0x002C  /* primary only, not a locale! */
+#define LANGUAGE_AZERI_CYRILLIC             0x082C
+#define LANGUAGE_AZERI_LATIN                0x042C
+#define LANGUAGE_BASQUE                     0x042D
+#define LANGUAGE_BELARUSIAN                 0x0423
+#define LANGUAGE_BENGALI                    0x0445  /* in India */
+#define LANGUAGE_BENGALI_BANGLADESH         0x0845
+#define LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA 0x141A
+#define LANGUAGE_BULGARIAN                  0x0402
+#define LANGUAGE_BURMESE                    0x0455
+#define LANGUAGE_CATALAN                    0x0403
+#define LANGUAGE_CHEROKEE_UNITED_STATES     0x045C
+#define LANGUAGE_CHINESE                    0x0004  /* primary only, not a locale! */
+#define LANGUAGE_CHINESE_HONGKONG           0x0C04
+#define LANGUAGE_CHINESE_MACAU              0x1404
+#define LANGUAGE_CHINESE_SIMPLIFIED         0x0804
+#define LANGUAGE_CHINESE_SINGAPORE          0x1004
+#define LANGUAGE_CHINESE_TRADITIONAL        0x0404
+#define LANGUAGE_CROATIAN                   0x041A
+#define LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA 0x101A
+#define LANGUAGE_CZECH                      0x0405
+#define LANGUAGE_DANISH                     0x0406
+#define LANGUAGE_DHIVEHI                    0x0465  /* AKA Divehi */
+#define LANGUAGE_DUTCH                      0x0413
+#define LANGUAGE_DUTCH_BELGIAN              0x0813
+#define LANGUAGE_EDO                        0x0466
+#define LANGUAGE_ENGLISH                    0x0009  /* primary only, not a locale! */
+#define LANGUAGE_ENGLISH_AUS                0x0C09
+#define LANGUAGE_ENGLISH_BELIZE             0x2809
+#define LANGUAGE_ENGLISH_CAN                0x1009
+#define LANGUAGE_ENGLISH_CARRIBEAN          0x2409
+#define LANGUAGE_ENGLISH_EIRE               0x1809
+#define LANGUAGE_ENGLISH_HONG_KONG_SAR      0x3C09
+#define LANGUAGE_ENGLISH_INDIA              0x4009
+#define LANGUAGE_ENGLISH_INDONESIA          0x3809
+#define LANGUAGE_ENGLISH_JAMAICA            0x2009
+#define LANGUAGE_ENGLISH_MALAYSIA           0x4409
+#define LANGUAGE_ENGLISH_NZ                 0x1409
+#define LANGUAGE_ENGLISH_PHILIPPINES        0x3409
+#define LANGUAGE_ENGLISH_SAFRICA            0x1C09
+#define LANGUAGE_ENGLISH_SINGAPORE          0x4809
+#define LANGUAGE_ENGLISH_TRINIDAD           0x2C09
+#define LANGUAGE_ENGLISH_UK                 0x0809
+#define LANGUAGE_ENGLISH_US                 0x0409
+#define LANGUAGE_ENGLISH_ZIMBABWE           0x3009
+#define LANGUAGE_ESTONIAN                   0x0425
+#define LANGUAGE_FAEROESE                   0x0438
+#define LANGUAGE_FARSI                      0x0429
+#define LANGUAGE_FILIPINO                   0x0464
+#define LANGUAGE_FINNISH                    0x040B
+#define LANGUAGE_FRENCH                     0x040C
+#define LANGUAGE_FRENCH_BELGIAN             0x080C
+#define LANGUAGE_FRENCH_CAMEROON            0x2C0C
+#define LANGUAGE_FRENCH_CANADIAN            0x0C0C
+#define LANGUAGE_FRENCH_COTE_D_IVOIRE       0x300C
+#define LANGUAGE_FRENCH_HAITI               0x3C0C
+#define LANGUAGE_FRENCH_LUXEMBOURG          0x140C
+#define LANGUAGE_FRENCH_MALI                0x340C
+#define LANGUAGE_FRENCH_MONACO              0x180C
+#define LANGUAGE_FRENCH_MOROCCO             0x380C
+#define LANGUAGE_FRENCH_NORTH_AFRICA        0xE40C
+#define LANGUAGE_FRENCH_REUNION             0x200C
+#define LANGUAGE_FRENCH_SENEGAL             0x280C
+#define LANGUAGE_FRENCH_SWISS               0x100C
+#define LANGUAGE_FRENCH_WEST_INDIES         0x1C0C
+#define LANGUAGE_FRENCH_ZAIRE               0x240C
+#define LANGUAGE_FRISIAN_NETHERLANDS        0x0462
+#define LANGUAGE_FULFULDE_NIGERIA           0x0467
+#define LANGUAGE_GAELIC_IRELAND             0x083C
+#define LANGUAGE_GAELIC_SCOTLAND            0x043C
+#define LANGUAGE_GALICIAN                   0x0456
+#define LANGUAGE_GEORGIAN                   0x0437
+#define LANGUAGE_GERMAN                     0x0407
+#define LANGUAGE_GERMAN_AUSTRIAN            0x0C07
+#define LANGUAGE_GERMAN_LIECHTENSTEIN       0x1407
+#define LANGUAGE_GERMAN_LUXEMBOURG          0x1007
+#define LANGUAGE_GERMAN_SWISS               0x0807
+#define LANGUAGE_GREEK                      0x0408
+#define LANGUAGE_GUARANI_PARAGUAY           0x0474
+#define LANGUAGE_GUJARATI                   0x0447
+#define LANGUAGE_HAUSA_NIGERIA              0x0468
+#define LANGUAGE_HAWAIIAN_UNITED_STATES     0x0475
+#define LANGUAGE_HEBREW                     0x040D
+#define LANGUAGE_HINDI                      0x0439
+#define LANGUAGE_HUNGARIAN                  0x040E
+#define LANGUAGE_IBIBIO_NIGERIA             0x0469
+#define LANGUAGE_ICELANDIC                  0x040F
+#define LANGUAGE_IGBO_NIGERIA               0x0470
+#define LANGUAGE_INDONESIAN                 0x0421
+#define LANGUAGE_INUKTITUT                  0x045D
+#define LANGUAGE_ITALIAN                    0x0410
+#define LANGUAGE_ITALIAN_SWISS              0x0810
+#define LANGUAGE_JAPANESE                   0x0411
+#define LANGUAGE_KANNADA                    0x044B
+#define LANGUAGE_KANURI_NIGERIA             0x0471
+#define LANGUAGE_KASHMIRI                   0x0460
+#define LANGUAGE_KASHMIRI_INDIA             0x0860
+#define LANGUAGE_KAZAK                      0x043F
+#define LANGUAGE_KHMER                      0x0453
+#define LANGUAGE_KIRGHIZ                    0x0440  /* AKA Kyrgyz */
+#define LANGUAGE_KONKANI                    0x0457
+#define LANGUAGE_KOREAN                     0x0412
+#define LANGUAGE_KOREAN_JOHAB               0x0812
+#define LANGUAGE_LAO                        0x0454
+#define LANGUAGE_LATIN                      0x0476  /* no locale possible, obsoletes LANGUAGE_USER_LATIN 0x0610 */
+#define LANGUAGE_LATVIAN                    0x0426
+#define LANGUAGE_LITHUANIAN                 0x0427
+#define LANGUAGE_LITHUANIAN_CLASSIC         0x0827
+#define LANGUAGE_MACEDONIAN                 0x042F
+#define LANGUAGE_MALAY                      0x003E  /* primary only, not a locale! */
+#define LANGUAGE_MALAYALAM                  0x044C  /* in India */
+#define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
+#define LANGUAGE_MALAY_MALAYSIA             0x043E
+#define LANGUAGE_MALTESE                    0x043A
+#define LANGUAGE_MANIPURI                   0x0458
+#define LANGUAGE_MAORI_NEW_ZEALAND          0x0481  /* obsoletes LANGUAGE_USER_MAORI 0x0620 */
+#define LANGUAGE_MARATHI                    0x044E
+#define LANGUAGE_MONGOLIAN                  0x0450  /* Cyrillic script */
+#define LANGUAGE_MONGOLIAN_MONGOLIAN        0x0850
+#define LANGUAGE_NEPALI                     0x0461
+#define LANGUAGE_NEPALI_INDIA               0x0861
+#define LANGUAGE_NORWEGIAN                  0x0014  /* primary only, not a locale! */
+#define LANGUAGE_NORWEGIAN_BOKMAL           0x0414
+#define LANGUAGE_NORWEGIAN_NYNORSK          0x0814
+#define LANGUAGE_ORIYA                      0x0448
+#define LANGUAGE_OROMO                      0x0472
+#define LANGUAGE_PAPIAMENTU                 0x0479
+#define LANGUAGE_PASHTO                     0x0463
+#define LANGUAGE_POLISH                     0x0415
+#define LANGUAGE_PORTUGUESE                 0x0816
+#define LANGUAGE_PORTUGUESE_BRAZILIAN       0x0416
+#define LANGUAGE_PUNJABI                    0x0446
+#define LANGUAGE_PUNJABI_PAKISTAN           0x0846
+#define LANGUAGE_QUECHUA_BOLIVIA            0x046B
+#define LANGUAGE_QUECHUA_ECUADOR            0x086B
+#define LANGUAGE_QUECHUA_PERU               0x0C6B
+#define LANGUAGE_RHAETO_ROMAN               0x0417
+#define LANGUAGE_ROMANIAN                   0x0418
+#define LANGUAGE_ROMANIAN_MOLDOVA           0x0818
+#define LANGUAGE_RUSSIAN                    0x0419
+#define LANGUAGE_RUSSIAN_MOLDOVA            0x0819
+#define LANGUAGE_SAMI_LAPPISH               0x043B
+#define LANGUAGE_SAMI_INARI                 0x243B
+#define LANGUAGE_SAMI_LULE_NORWAY           0x103B
+#define LANGUAGE_SAMI_LULE_SWEDEN           0x143B
+#define LANGUAGE_SAMI_NORTHERN_FINLAND      0x0C3B
+#define LANGUAGE_SAMI_NORTHERN_SWEDEN       0x083B
+#define LANGUAGE_SAMI_SKOLT                 0x203B
+#define LANGUAGE_SAMI_SOUTHERN_NORWAY       0x183B
+#define LANGUAGE_SAMI_SOUTHERN_SWEDEN       0x1C3B
+#define LANGUAGE_SANSKRIT                   0x044F
+#define LANGUAGE_SEPEDI                     0x046C
+#define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
+#define LANGUAGE_SERBIAN                    0x001A  /* primary only, not a locale! */
+#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A
+#define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA 0x1C1A
+#define LANGUAGE_SERBIAN_LATIN              0x081A
+#define LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA 0x181A
+#define LANGUAGE_SESOTHO                    0x0430  /* also called Sutu now by MS */
+#define LANGUAGE_SINDHI                     0x0459
+#define LANGUAGE_SINDHI_PAKISTAN            0x0859
+#define LANGUAGE_SINHALESE_SRI_LANKA        0x045B
+#define LANGUAGE_SLOVAK                     0x041B
+#define LANGUAGE_SLOVENIAN                  0x0424
+#define LANGUAGE_SOMALI                     0x0477
+#define LANGUAGE_SORBIAN                    0x042E  /* old MS-LCID, not a real language */
+#define LANGUAGE_SPANISH                    0x040A
+#define LANGUAGE_SPANISH_ARGENTINA          0x2C0A
+#define LANGUAGE_SPANISH_BOLIVIA            0x400A
+#define LANGUAGE_SPANISH_CHILE              0x340A
+#define LANGUAGE_SPANISH_COLOMBIA           0x240A
+#define LANGUAGE_SPANISH_COSTARICA          0x140A
+#define LANGUAGE_SPANISH_DOMINICAN_REPUBLIC 0x1C0A
+#define LANGUAGE_SPANISH_ECUADOR            0x300A
+#define LANGUAGE_SPANISH_EL_SALVADOR        0x440A
+#define LANGUAGE_SPANISH_GUATEMALA          0x100A
+#define LANGUAGE_SPANISH_HONDURAS           0x480A
+#define LANGUAGE_SPANISH_LATIN_AMERICA      0xE40A  /* no locale possible */
+#define LANGUAGE_SPANISH_MEXICAN            0x080A
+#define LANGUAGE_SPANISH_MODERN             0x0C0A
+#define LANGUAGE_SPANISH_NICARAGUA          0x4C0A
+#define LANGUAGE_SPANISH_PANAMA             0x180A
+#define LANGUAGE_SPANISH_PARAGUAY           0x3C0A
+#define LANGUAGE_SPANISH_PERU               0x280A
+#define LANGUAGE_SPANISH_PUERTO_RICO        0x500A
+#define LANGUAGE_SPANISH_UNITED_STATES      0x540A
+#define LANGUAGE_SPANISH_URUGUAY            0x380A
+#define LANGUAGE_SPANISH_VENEZUELA          0x200A
+#define LANGUAGE_SWAHILI                    0x0441  /* Kenya */
+#define LANGUAGE_SWEDISH                    0x041D
+#define LANGUAGE_SWEDISH_FINLAND            0x081D
+#define LANGUAGE_SYRIAC                     0x045A
+#define LANGUAGE_TAJIK                      0x0428
+#define LANGUAGE_TAMAZIGHT_ARABIC           0x045F
+#define LANGUAGE_TAMAZIGHT_LATIN            0x085F
+#define LANGUAGE_TAMIL                      0x0449
+#define LANGUAGE_TATAR                      0x0444
+#define LANGUAGE_TELUGU                     0x044A
+#define LANGUAGE_THAI                       0x041E
+#define LANGUAGE_TIBETAN                    0x0451
+#define LANGUAGE_DZONGKHA                   0x0851
+#define LANGUAGE_TIBETAN_BHUTAN             LANGUAGE_DZONGKHA   /* a MS error, see #i53497# */
+#define LANGUAGE_TIGRIGNA_ERITREA           0x0873
+#define LANGUAGE_TIGRIGNA_ETHIOPIA          0x0473
+#define LANGUAGE_TSONGA                     0x0431
+#define LANGUAGE_TSWANA                     0x0432  /* AKA Setsuana, for South Africa */
+#define LANGUAGE_TURKISH                    0x041F
+#define LANGUAGE_TURKMEN                    0x0442
+#define LANGUAGE_UIGHUR_CHINA               0x0480
+#define LANGUAGE_UKRAINIAN                  0x0422
+#define LANGUAGE_URDU                       0x0020  /* primary only, not a locale! */
+#define LANGUAGE_URDU_INDIA                 0x0820
+#define LANGUAGE_URDU_PAKISTAN              0x0420
+#define LANGUAGE_UZBEK                      0x0043  /* primary only, not a locale! */
+#define LANGUAGE_UZBEK_CYRILLIC             0x0843
+#define LANGUAGE_UZBEK_LATIN                0x0443
+#define LANGUAGE_VENDA                      0x0433
+#define LANGUAGE_VIETNAMESE                 0x042A
+#define LANGUAGE_WELSH                      0x0452
+#define LANGUAGE_XHOSA                      0x0434  /* AKA isiZhosa */
+#define LANGUAGE_YI                         0x0478
+#define LANGUAGE_YIDDISH                    0x043D
+#define LANGUAGE_YORUBA                     0x046A
+#define LANGUAGE_ZULU                       0x0435
+
+/* Not real, but used for legacy. */
+#define LANGUAGE_USER1                      0x0201
+#define LANGUAGE_USER2                      0x0202
+#define LANGUAGE_USER3                      0x0203
+#define LANGUAGE_USER4                      0x0204
+#define LANGUAGE_USER5                      0x0205
+#define LANGUAGE_USER6                      0x0206
+#define LANGUAGE_USER7                      0x0207
+#define LANGUAGE_USER8                      0x0208
+#define LANGUAGE_USER9                      0x0209
+/* Don't use higher USER values here, we reserve them for extension. */
+
+/*! use only for import/export of MS documents, number formatter maps it to
+ *! LANGUAGE_SYSTEM and then to effective system language */
+#define LANGUAGE_SYSTEM_DEFAULT             0x0800
+
+/*! use only for import/export of MS documents, number formatter maps it to
+ *! LANGUAGE_SYSTEM and then to effective system language */
+#define LANGUAGE_PROCESS_OR_USER_DEFAULT    0x0400
+
+/* And now the extensions we define, valid from
+ * 0x0610 to 0x07FF with sublanguage ID 0x01 (default)
+ * 0x0A00 to 0x0BFF with sublanguage ID 0x02
+ * ...
+ * 0x8200 to 0x83FF with sublanguage ID 0x20
+ * 0x8600 to 0x87FF with sublanguage ID 0x21
+ * ...
+ * 0xFA00 to 0xFBFF with sublanguage ID 0x3E
+ * 0xFE00 to 0xFFFF with sublanguage ID 0x3F
+ *
+ * Obsolete OOo user defines now have other values assigned by MS, and
+ * different name. Mapping an obsolete value to ISO code should work provided
+ * that such a mapping exists in i18npool/source/isolang/isolang.cxx, but
+ * mapping ISO back to LANGID will return the new value.
+ */
+#define LANGUAGE_USER_LATIN                 0x0610  /* obsoleted by LANGUAGE_LATIN, no locale possible */
+#define LANGUAGE_USER_ESPERANTO             0x0611  /* no locale possible */
+#define LANGUAGE_USER_INTERLINGUA           0x0612  /* no locale, but conventions */
+#define LANGUAGE_USER_MAORI                 0x0620  /* obsoleted by LANGUAGE_MAORI_NEW_ZEALAND */
+#define LANGUAGE_USER_KINYARWANDA           0x0621
+/* was reserved for Northern Sotho but never used: 0x0622 */  /* obsoleted by LANGUAGE_SEPEDI */
+#define LANGUAGE_USER_UPPER_SORBIAN         0x0623
+#define LANGUAGE_USER_LOWER_SORBIAN         0x0624
+#define LANGUAGE_USER_OCCITAN               0x0625
+#define LANGUAGE_USER_KOREAN_NORTH          0x8012  /* North Korean as opposed to South Korean, makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KOREAN)) */
+#define LANGUAGE_USER_KURDISH_TURKEY        0x0626  /* sublang 0x01, Latin script */
+#define LANGUAGE_USER_KURDISH_SYRIA         0x0A26  /* sublang 0x02, Latin script */
+#define LANGUAGE_USER_KURDISH_IRAQ          0x0E26  /* sublang 0x03, Arabic script */
+#define LANGUAGE_USER_KURDISH_IRAN          0x1226  /* sublang 0x04, Arabic script */
+#define LANGUAGE_USER_SARDINIAN             0x0627
+/* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA */
+#define LANGUAGE_USER_SWAHILI_TANZANIA      0x8041  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SWAHILI)) */
+#define LANGUAGE_USER_BRETON                0x0629
+#define LANGUAGE_USER_KALAALLISUT           0x062A
+#define LANGUAGE_USER_SWAZI                 0x062B
+#define LANGUAGE_USER_NDEBELE_SOUTH         0x062C
+#define LANGUAGE_USER_TSWANA_BOTSWANA       0x8032  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TSWANA)) */
+#define LANGUAGE_USER_MOORE                 0x062D
+#define LANGUAGE_USER_BAMBARA               0x062E
+#define LANGUAGE_USER_AKAN                  0x062F
+#define LANGUAGE_USER_LUXEMBOURGISH         0x0630
+#define LANGUAGE_USER_FRIULIAN              0x0631
+
+#endif /* INCLUDED_I18NPOOL_LANG_H */
