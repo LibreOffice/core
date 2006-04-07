@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:03:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
@@ -258,7 +261,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Color aOldColor = pDev->GetLineColor();
     pDev->SetLineColor(aTextColor);
     Font aFont(OutputDevice::GetDefaultFont(
-                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+                DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
 
     Size aSize = aFont.GetSize();
 
