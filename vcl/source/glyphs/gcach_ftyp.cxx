@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:26:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@
 
 #include <svapp.hxx>
 #include <settings.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 
 #if defined( FT_NEXT_SHORT ) && !defined( NEXT_Short )
 // Account for differing versions of freetype...
