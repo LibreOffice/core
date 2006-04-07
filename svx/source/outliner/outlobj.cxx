@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:58:47 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ OutlinerParaObject::OutlinerParaObject( USHORT nParaCount )
 
     bIsEditDoc = TRUE;
     pDepthArr = new USHORT[ nParaCount ];
-    nCount = (ULONG)nParaCount;
+    nCount = nParaCount;
 }
 
 OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& rObj )
@@ -74,7 +74,7 @@ OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& rObj )
 
     bIsEditDoc = rObj.bIsEditDoc;
     nCount = rObj.nCount;
-    pDepthArr = new USHORT[ (USHORT)nCount ];
+    pDepthArr = new USHORT[ nCount ];
     memcpy( pDepthArr, rObj.pDepthArr, (size_t)(sizeof(USHORT)*nCount) );
     pText = rObj.pText->Clone();
 }
@@ -135,7 +135,7 @@ void OutlinerParaObject::SetStyleSheets( USHORT nLevel, const XubString rNewName
 void OutlinerParaObject::Store(SvStream& rStream ) const
 {
     rStream << nCount;
-    rStream << (ULONG) 0x42345678;
+    rStream << static_cast<sal_uInt32>(0x42345678);
     pText->Store( rStream );
 
     for( USHORT nPos=0; nPos < nCount; nPos++ )
@@ -149,10 +149,10 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
     OutlinerParaObject* pPObj = NULL;
     USHORT nVersion = 0;
 
-    ULONG nCount;
+    sal_uInt32 nCount;
     rStream >> nCount;
 
-    ULONG nSyncRef;
+    sal_uInt32 nSyncRef;
     rStream >> nSyncRef;
     if( nSyncRef == 0x12345678 )
         nVersion = 1;
@@ -174,7 +174,7 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
             {
                 EditTextObject* pText = EditTextObject::Create( rStream, NULL );
                 DBG_ASSERT(pText,"CreateEditTextObject failed")
-                ULONG nSync = 0;
+                sal_uInt32 nSync = 0;
                 rStream >> nSync;
                 DBG_ASSERT(nSync==nSyncRef,"Stream out of sync")
                 USHORT nDepth;
@@ -218,7 +218,7 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
                 nCurPara++;
                 if( nCount )
                 {
-                    ULONG nSync = 0;
+                    sal_uInt32 nSync = 0;
                     rStream >> nSync;
                     DBG_ASSERT(nSync==nSyncRef,"Stream out of sync")
                 }
