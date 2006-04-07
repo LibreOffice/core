@@ -18,7 +18,7 @@ import com.sun.star.uno.Type;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author $author$
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class CallWizard {
 
