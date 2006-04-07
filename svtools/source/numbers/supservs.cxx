@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -139,7 +139,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         {
             Locale aLocale;
             *pArgs >>= aLocale;
-            eNewFormatterLanguage = ConvertIsoNamesToLanguage(aLocale.Language, aLocale.Country);
+            eNewFormatterLanguage = MsLangId::convertLocaleToLanguage( aLocale);
         }
 #if DBG_UTIL
         else
