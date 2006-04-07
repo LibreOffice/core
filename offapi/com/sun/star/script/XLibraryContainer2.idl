@@ -1,0 +1,134 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLibraryContainer2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:39:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XLibraryContainer2_idl__
+#define __com_sun_star_script_XLibraryContainer2_idl__
+
+#ifndef __com_sun_star_script_XLibraryContainer_idl__
+#include <com/sun/star/script/XLibraryContainer.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+/**
+    Extension of XLibraryContainer to provide additional information
+    about the libraries contained in a library container
+    </p>
+ */
+published interface XLibraryContainer2: com::sun::star::script::XLibraryContainer
+{
+    /**
+        returns true if the accessed library item is a link,
+        e.g., created by createLibraryLink, otherwise false.
+     */
+    boolean isLibraryLink( [in] string Name )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    /**
+        returns the location of the library link target.
+        Should return the same URL that was passed to
+        createLibraryLink in the StorageURL parameter.
+
+        If the accessed library item exists but isn't a
+        link, a IllegalArgumentException is thrown
+     */
+    string getLibraryLinkURL( [in] string Name )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::container::NoSuchElementException );
+
+    /**
+        returns true if the accessed library item (library or library
+        link) is read only. A library can be read only because it was
+        set to read only using the methods provided by this interface
+        or because of other reasons depending on the implementation
+        (e.g., file system write protection)
+     */
+    boolean isLibraryReadOnly( [in] string Name )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    /**
+        Sets the accessed library item (library or library link) to
+        read only according to the flag bReadOnly (true means read only)
+     */
+    void setLibraryReadOnly( [in] string Name, [in] boolean bReadOnly )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    /** renames the library item with the specified name. If the accessed
+        library item is a link only the link is renamed, not the target library.
+        If a library with the new name exists already a
+        com::sun::star::container::ElementExistException is thrown.
+     */
+    void renameLibrary( [in] string Name, [in] string NewName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::container::ElementExistException );
+
+};
+
+//=============================================================================
+
+
+}; }; }; };
+
+#endif
