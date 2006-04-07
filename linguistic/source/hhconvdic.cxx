@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhconvdic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:51:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include <external/unicode/uscript.h>
 #endif
 
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -54,9 +54,6 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
