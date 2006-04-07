@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multisigdemo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:37:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
-
+#include "xmlsecurity/baseencoding.hxx"
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
@@ -112,7 +112,10 @@ int SAL_CALL main( int argc, char **argv )
 
         // Select certificate...
         uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment( xSecurityEnvironment, true );
-        aSignatureHelper.SetX509Certificate( nSecurityId, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+        aSignatureHelper.SetX509Certificate(
+            nSecurityId, xPersonalCert->getIssuerName(),
+            bigIntegerToNumericString( xPersonalCert->getSerialNumber()),
+            baseEncode(xPersonalCert->getEncoded(), BASE64));
         aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
         aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
         aSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
@@ -174,7 +177,10 @@ int SAL_CALL main( int argc, char **argv )
 
     // Select certificate...
     uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment( xSecurityEnvironment, true );
-    aSignatureHelper.SetX509Certificate( nSecurityId, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+    aSignatureHelper.SetX509Certificate(
+        nSecurityId, xPersonalCert->getIssuerName(),
+        bigIntegerToNumericString( xPersonalCert->getSerialNumber()),
+        baseEncode(xPersonalCert->getEncoded(), BASE64));
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
     aSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
