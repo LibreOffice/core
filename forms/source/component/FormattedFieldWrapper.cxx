@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:37:38 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,8 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 
 //.........................................................................
