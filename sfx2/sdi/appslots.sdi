@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appslots.sdi,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:27:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,9 +435,17 @@ shell SfxApplication
         ExecMethod = OfaExec_Impl;
     ]
 
-        //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
 
     SID_ONLINE_REGISTRATION
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_ONLINEUPDATE
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
