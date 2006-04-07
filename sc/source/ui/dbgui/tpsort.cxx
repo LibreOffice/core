@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #pragma hdrstop
 
 #include <vcl/msgbox.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -744,9 +744,7 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& rArgSet )
         aBtnHeader.SetText( aStrRowLabel );
     }
 
-    LanguageType eLang = ConvertIsoNamesToLanguage(
-                                    rSortData.aCollatorLocale.Language,
-                                    rSortData.aCollatorLocale.Country );
+    LanguageType eLang = MsLangId::convertLocaleToLanguage( rSortData.aCollatorLocale );
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     aLbLanguage.SelectLanguage( eLang );
@@ -811,17 +809,14 @@ BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
     // get locale
     LanguageType eLang = aLbLanguage.GetSelectLanguage();
-    String sLangStr, sCountry;
-    if ( eLang != LANGUAGE_SYSTEM )
-        ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
-    lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
-    theSortData.aCollatorLocale = aLocale;
+    theSortData.aCollatorLocale = MsLangId::convertLanguageToLocale( eLang, false );
 
     // get algorithm
     String sAlg;
     if ( eLang != LANGUAGE_SYSTEM )
     {
-        uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
+        uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms(
+                theSortData.aCollatorLocale );
         USHORT nSel = aLbAlgorithm.GetSelectEntryPos();
         if ( nSel < aAlgos.getLength() )
             sAlg = aAlgos[nSel];
@@ -1040,10 +1035,7 @@ IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
     }
     else
     {
-        String sLangStr, sCountry;
-        ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
-
-        lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale( eLang ));
         uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
 
         long nCount = aAlgos.getLength();
