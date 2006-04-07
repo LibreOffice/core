@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:05:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,8 +605,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     private synchronized void redrawTitle(String controlName) {
         if (controlName.equals("txtTitle"))
             writeTitle(teTitle, trTitle, agenda.cp_Title);
-        else if (controlName.equals("txtDate"))
-            writeTitle(teDate, trDate, getDateString(agenda.cp_Date));
+        else if (controlName.equals("txtDate")) {
+            writeTitle(teDate, trDate, getDateString(agenda.cp_Date));}
         else if (controlName.equals("txtTime"))
             writeTitle(teTime, trTime, getTimeString(agenda.cp_Time));
         else if (controlName.equals("cbLocation"))
@@ -646,7 +646,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             return "";
         int time = new Integer(s).intValue();
 
-        double t = ( (double) ( time / 1000000 ) / 24 ) + ( (double) ( ( time % 1000000 ) / 10000 ) / ( 24 * 60 ) );
+        double t = ( (double) ( time / 1000000 ) / 24 ) + ( (double) ( ( time % 1000000 ) / 1000 ) / ( 24 * 60 ) );
         return timeFormatter.convertNumberToString(timeFormat, t);
     }
 
@@ -770,7 +770,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                                 time = (String)topic[3].Value;
                             else {
                                 time = getTimeString( String.valueOf(topicStartTime) ) + " - ";
-                                topicStartTime += topicTime * 10000;
+                                topicStartTime += topicTime * 1000;
                                 time += getTimeString( String.valueOf(topicStartTime ) );
                             }
                             fillMinutesItem( item , time , "" );
@@ -1572,7 +1572,10 @@ class ParaStyled implements AgendaElement {
         o = ((XText)UnoRuntime.queryInterface(XText.class,textRange));
         if (o == null)
             o = ((XTextRange)UnoRuntime.queryInterface(XTextRange.class,textRange)).getText();
-        Object cursor = o.createTextCursor();
+
+        XTextRange xtr = (XTextRange)UnoRuntime.queryInterface(XTextRange.class,textRange);
+        XTextCursor cursor = o.createTextCursorByRange(xtr);
+
         Helper.setUnoPropertyValue(cursor, "ParaStyleName", paraStyle);
     }
 
@@ -1758,7 +1761,7 @@ class AgendaItem implements AgendaElement {
  */
 class TableCellFormatter {
   static String[] properties = new String[] {
-          "BackColor",
+        "BackColor",
         "BackTransparent",
         "BorderDistance",
         "BottomBorder",
@@ -1774,12 +1777,12 @@ class TableCellFormatter {
   private Object[] values = new Object[properties.length];
 
   public TableCellFormatter(Object tableCell) {
-      for (int i = 0; i<properties.length; i++)
-          values[i] = Helper.getUnoPropertyValue(tableCell,properties[i]);
+    for (int i = 0; i<properties.length; i++)
+        values[i] = Helper.getUnoPropertyValue(tableCell,properties[i]);
   }
 
   public void format(Object tableCell) {
-      Helper.setUnoPropertyValues(tableCell,properties,values);
+    Helper.setUnoPropertyValues(tableCell,properties,values);
   }
 }
 
