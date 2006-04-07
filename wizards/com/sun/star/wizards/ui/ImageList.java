@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:47:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:24:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ import javax.swing.event.ListDataListener;
     public void intervalAdded(ListDataEvent event) {
         if (event.getIndex0()<=selected) {
             if (event.getIndex1()<=selected)
-                  selected += event.getIndex1()- event.getIndex0() + 1;
+                selected += event.getIndex1()- event.getIndex0() + 1;
         }
         if (event.getIndex0() < pageStart || event.getIndex1() < (pageStart + getRows() + getCols()))
             refreshImages();
