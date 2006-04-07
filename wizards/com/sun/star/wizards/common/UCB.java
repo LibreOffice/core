@@ -153,8 +153,8 @@ public class UCB {
 
         if (verifier != null)
             for (int i = 0; i<files.size(); i++)
-                  if (!verifier.verify(files.get(i)))
-                      files.remove(i--);
+                if (!verifier.verify(files.get(i)))
+                    files.remove(i--);
 
         return files;
     }
