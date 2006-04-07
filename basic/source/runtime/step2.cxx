@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:42:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,17 +579,19 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
 
     // #57915 Missing sauberer loesen
     USHORT nParamCount = refParams->Count();
-    // Wurden ueberhaupt genug Parameter uebergeben
     if( i >= nParamCount )
     {
-        p = new SbxVariable();
-        p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
-        refParams->Put( p, i );
+        INT16 iLoop = i;
+        while( iLoop >= nParamCount )
+        {
+            p = new SbxVariable();
+            p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+            refParams->Put( p, iLoop );
+            iLoop--;
+        }
     }
-    else
-    {
-        p = refParams->Get( i );
-    }
+    p = refParams->Get( i );
+
     if( p->GetType() == SbxERROR && ( i ) )
     //if( p->GetType() == SbxEMPTY && ( i ) )
     {
