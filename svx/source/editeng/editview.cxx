@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:29:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include <editeng.hrc>
 #include <dlgutil.hxx>
 #include <helpid.hrc>
-#include <tools/isolang.hxx>
+#include <i18npool/lang.h>
 #include <vcl/menu.hxx>
 #include <acorrcfg.hxx>
 
