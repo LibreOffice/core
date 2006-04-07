@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:06:30 $
+#   last change: $Author: vg $ $Date: 2006-04-07 14:59:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ SHL1USE_EXPORTS=ordinal
 SHL1STDLIBS= \
         $(SVTOOLLIB)	\
         $(TOOLSLIB)		\
+        $(I18NISOLANGLIB) \
         $(VOSLIB)		\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
