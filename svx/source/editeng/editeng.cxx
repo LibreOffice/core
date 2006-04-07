@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:40:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,10 @@
 #endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
+#endif
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _SV_HELP_HXX //autogen
@@ -1103,12 +1107,27 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                             {
                                 String aComplete;
 
-                                International aInt = International( pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1 ) ) );
-                                for( int n = MONDAY; n <= SUNDAY; ++n )
+                                LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1));
+                                lang::Locale aLocale( MsLangId::convertLanguageToLocale( eLang));
+
+                                if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())
+                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getServiceFactory(), aLocale, eLang);
+                                else
+                                    pImpEditEngine->xLocaleDataWrapper.changeLocale( aLocale, eLang);
+
+                                if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
+                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getServiceFactory(), eLang, i18n::TransliterationModules_IGNORE_CASE);
+                                else
+                                    pImpEditEngine->xTransliterationWrapper.changeLocale( eLang);
+
+                                const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->xTransliterationWrapper.get();
+                                Sequence< i18n::CalendarItem > xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarDays();
+                                sal_Int32 nCount = xItem.getLength();
+                                const i18n::CalendarItem* pArr = xItem.getArray();
+                                for( sal_Int32 n = 0; n <= nCount; ++n )
                                 {
-                                    const String& rDay = aInt.GetDayText( (DayOfWeek)n );
-                                    // MT: Auf International umstellen, wenn Compare mit Laengenangabe moeglich!
-                                    if( aWord.CompareIgnoreCaseToAscii( rDay, aWord.Len() ) == COMPARE_EQUAL )
+                                    const ::rtl::OUString& rDay = pArr[n].FullName;
+                                    if( pTransliteration->isMatch( aWord, rDay) )
                                     {
                                         aComplete = rDay;
                                         break;
@@ -1117,11 +1136,13 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
                                 if ( !aComplete.Len() )
                                 {
-                                    for( int n = 1; n <= 12; ++n )
+                                    xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
+                                    sal_Int32 nCount = xItem.getLength();
+                                    const i18n::CalendarItem* pArr = xItem.getArray();
+                                    for( sal_Int32 n = 0; n <= nCount; ++n )
                                     {
-                                        const String& rMon = aInt.GetMonthText( n );
-                                        // MT: Auf International umstellen, wenn Compare mit Laengenangabe moeglich!
-                                        if( aWord.CompareIgnoreCaseToAscii( rMon, aWord.Len() ) == COMPARE_EQUAL )
+                                        const ::rtl::OUString& rMon = pArr[n].FullName;
+                                        if( pTransliteration->isMatch( aWord, rMon) )
                                         {
                                             aComplete = rMon;
                                             break;
