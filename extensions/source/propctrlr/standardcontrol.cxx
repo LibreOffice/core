@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:32:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@
 #ifndef _UNOTOOLS_DATETIME_HXX_
 #include <unotools/datetime.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -323,7 +323,7 @@ namespace pcr
 
         // determine a default format
         Locale aSysLocale = SvtSysLocale().GetLocaleData().getLocale();
-        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( aSysLocale.Language, aSysLocale.Country );
+        LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage( aSysLocale );
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
