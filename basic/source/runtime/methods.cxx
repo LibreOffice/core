@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:03:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #ifndef _SBXVAR_HXX
 #include <sbxvar.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
 #endif
@@ -72,8 +69,10 @@
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/isolang.hxx>
 #include <tools/wldcrd.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
 
 #ifdef OS2
 #define INCL_WINWINDOWMGR
