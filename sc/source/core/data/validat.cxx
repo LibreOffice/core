@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:05:39 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -938,7 +938,7 @@ ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
 
-ScValidationData* ScValidationDataList::GetData( ULONG nKey )
+ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 {
     //! binaer suchen
 
