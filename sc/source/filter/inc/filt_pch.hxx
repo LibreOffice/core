@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:18:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:24:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #include <rtl/locale.hxx>
 #include <rtl/locale.h>
 #include <tools/contnr.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 #include <tools/list.hxx>
 #include <global.hxx>
 #include <tools/stream.hxx>
