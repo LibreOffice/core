@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:02:27 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #include <math.h>   // atof()
 #endif
 #include <rtl/math.hxx>
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
