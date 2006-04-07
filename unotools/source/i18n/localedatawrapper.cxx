@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:44:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
@@ -210,6 +210,7 @@ void LocaleDataWrapper::invalidateData()
         }
         bReservedWordValid = FALSE;
     }
+    xDefaultCalendar = NULL;
     // dummies
     cCurrZeroChar = '0';
 }
@@ -469,8 +470,7 @@ void LocaleDataWrapper::invalidateData()
             }
             continue;
         }
-        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
-            xLoc[i].Country );
+        LanguageType eLang = MsLangId::convertLocaleToLanguage( xLoc[i] );
 
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW
@@ -491,10 +491,10 @@ void LocaleDataWrapper::invalidateData()
         }
         if ( eLang != LANGUAGE_DONTKNOW )
         {
-            String aLanguage, aCountry;
-            ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
-            if ( String( xLoc[i].Language ) != aLanguage ||
-                    String( xLoc[i].Country ) != aCountry )
+            rtl::OUString aLanguage, aCountry;
+            MsLangId::convertLanguageToIsoNames( eLang, aLanguage, aCountry );
+            if ( xLoc[i].Language != aLanguage ||
+                    xLoc[i].Country != aCountry )
             {
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
@@ -511,11 +511,11 @@ void LocaleDataWrapper::invalidateData()
                     aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
                     aMsg += String::CreateFromInt32( eLang, 16 );
                     aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
-                    aMsg += aLanguage;
-                    if ( aCountry.Len() )
+                    aMsg += String( aLanguage);
+                    if ( aCountry.getLength() )
                     {
                         aMsg += '_';
-                        aMsg += aCountry;
+                        aMsg += String( aCountry);
                     }
                     outputCheckMessage( aMsg );
                 }
@@ -652,6 +652,54 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const String& r
         return MEASURE_METRIC;
 //! TODO: other measurement systems? => extend enum MeasurementSystem in tools/intn.hxx
     return MEASURE_US;
+}
+
+
+void LocaleDataWrapper::getDefaultCalendarImpl()
+{
+    if (!xDefaultCalendar.is())
+    {
+        Sequence< Calendar > xCals = getAllCalendars();
+        sal_Int32 nCount = xCals.getLength();
+        sal_Int32 nDef = 0;
+        if (nCount > 1)
+        {
+            const Calendar* pArr = xCals.getArray();
+            for (sal_Int32 i=0; i<nCount; ++i)
+            {
+                if (pArr[i].Default)
+                {
+                    nDef = i;
+                    break;
+                }
+            }
+        }
+        xDefaultCalendar = new Calendar( xCals[nDef]);
+    }
+}
+
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getDefaultCalendar() const
+{
+    ::utl::ReadWriteGuard aGuard( aMutex );
+    if (!xDefaultCalendar.is())
+    {   // no cached content
+        aGuard.changeReadToWrite();
+        ((LocaleDataWrapper*)this)->getDefaultCalendarImpl();
+    }
+    return xDefaultCalendar;
+}
+
+
+const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > LocaleDataWrapper::getDefaultCalendarDays() const
+{
+    return getDefaultCalendar()->Days;
+}
+
+
+const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > LocaleDataWrapper::getDefaultCalendarMonths() const
+{
+    return getDefaultCalendar()->Months;
 }
 
 
