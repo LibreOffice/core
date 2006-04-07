@@ -4,9 +4,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:09:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/rc.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 #include <tools/resmgr.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
@@ -91,7 +91,6 @@
 #include <tools/fract.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
-#include <tools/intn.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
