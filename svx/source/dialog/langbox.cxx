@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:25:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #pragma hdrstop
 
