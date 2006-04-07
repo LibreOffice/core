@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:17:47 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,17 +262,18 @@ static void lcl_throwIndexOutOfBoundsException( )
 // The performance of this method could certainly be improved.
 // As long as only vectors with up to 10 elements are
 // involved it should be sufficient
-    sal_Int32 UnoControlRoadmapModel::GetUniqueID()
-    {
-        Any aAny;
-        sal_Bool bIncrement = sal_False;
-        sal_Int32 CurID = 0;
-        sal_Int32 n_CurItemID;
-        Reference< XInterface > CurRoadmapItem;
-        while ( ! bIncrement )
-        {
-            for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); i++ )
-            {
+       sal_Int32 UnoControlRoadmapModel::GetUniqueID()
+      {
+          Any aAny;
+          sal_Bool bIncrement = sal_True;
+          sal_Int32 CurID = 0;
+          sal_Int32 n_CurItemID;
+          Reference< XInterface > CurRoadmapItem;
+          while ( bIncrement )
+          {
+           bIncrement = sal_False;
+              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); i++ )
+              {
                 CurRoadmapItem = *i;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
                 aAny = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
@@ -280,17 +281,12 @@ static void lcl_throwIndexOutOfBoundsException( )
                 if (n_CurItemID == CurID)
                 {
                     bIncrement = sal_True;
+                    CurID++;
                     break;
                 }
             }
-            if ( bIncrement )
-            {
-                bIncrement = sal_False;
-                CurID++;
-            }
-            else
-                return CurID;
         }
+        return CurID;
     }
 
 
