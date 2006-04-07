@@ -49,7 +49,6 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/fsys.hxx>
-#include <tools/intn.hxx>
 #include <svtools/filedlg.hxx>
 
 #include <vcl/window.hxx>
