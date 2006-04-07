@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SystemDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:21:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,8 +337,10 @@ public class SystemDialog {
             oDescriptor.WindowAttributes = windowAttribute;
             XWindowPeer xMsgPeer = xToolkit.createWindow(oDescriptor);
             XMessageBox xMsgbox = (XMessageBox) UnoRuntime.queryInterface(XMessageBox.class, xMsgPeer);
+            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMsgbox);
             xMsgbox.setMessageText(MessageText);
             iMessage = xMsgbox.execute();
+            xComponent.dispose();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace(System.out);
