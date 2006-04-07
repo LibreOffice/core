@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcessErrorHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:56:58 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,6 @@ public class ProcessErrorHandler extends AbstractErrorHandler
 
             case ERROR_MKDIR :
                 return JavaTools.replaceSubString(resources.resErrDocExport, ((CGDocument) obj).localFilename, FILENAME);
-
-            case ERROR_EXPORT :
-                return "";
             case ERROR_EXPORT_MKDIR :
                 return JavaTools.replaceSubString(resources.resErrMkDir, ((CGDocument) obj).localFilename, FILENAME);
             case ERROR_DOC_VALIDATE :
@@ -83,17 +80,15 @@ public class ProcessErrorHandler extends AbstractErrorHandler
                 return JavaTools.replaceSubString(resources.resErrExportIO, ((CGDocument) obj).localFilename, FILENAME);
             case ERROR_EXPORT_SECURITY :
                 return JavaTools.replaceSubString(resources.resErrSecurity, ((CGDocument) obj).localFilename, FILENAME);
-
             case ERROR_GENERATE_XSLT :
                 return resources.resErrTOC;
             case ERROR_GENERATE_COPY :
                 return resources.resErrTOCMedia;
-
             case ERROR_PUBLISH :
                 return JavaTools.replaceSubString(resources.resErrPublish, ((CGPublish) obj).cp_URL, URL);
+            case ERROR_EXPORT :
             case ERROR_PUBLISH_MEDIA :
                 return resources.resErrPublishMedia;
-
             case ERROR_CLEANUP :
                 return resources.resErrUnexpected;
 
