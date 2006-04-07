@@ -2,7 +2,6 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/textsearch.hxx>
-#include <tools/lang.hxx>
 
 using namespace rtl;
 using namespace com::sun::star;
