@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:25:15 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,16 +387,16 @@ struct Sc10FileInfo
     Sc10DateTime    CreateDate;
     Sc10DateTime    ChangeDate;
     Sc10DateTime    PrintDate;
-    ULONG           PageCount;
-    ULONG           ChartCount;
-    ULONG           PictureCount;
-    ULONG           GraphCount;
-    ULONG           OleCount;
-    ULONG           NoteCount;
-    ULONG           TextCellCount;
-    ULONG           ValueCellCount;
-    ULONG           FormulaCellCount;
-    ULONG           CellCount;
+    sal_uInt32      PageCount;
+    sal_uInt32      ChartCount;
+    sal_uInt32      PictureCount;
+    sal_uInt32      GraphCount;
+    sal_uInt32      OleCount;
+    sal_uInt32      NoteCount;
+    sal_uInt32      TextCellCount;
+    sal_uInt32      ValueCellCount;
+    sal_uInt32      FormulaCellCount;
+    sal_uInt32      CellCount;
     sal_Char        Reserved[52];
 };
 
@@ -462,7 +462,7 @@ struct Sc10ImageHeader
     INT16   y1;
     INT16   x2;
     INT16   y2;
-    ULONG   Size;               // Groesse der Grafik in BYTES
+    sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartHeader
@@ -471,7 +471,7 @@ struct Sc10ChartHeader
     INT16   MM;                 // Meatfile Struktur MapMode, Breite, Hoehe
     INT16   xExt;
     INT16   yExt;
-    ULONG   Size;               // Groesse der Grafik in BYTES
+    sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartSheetData
