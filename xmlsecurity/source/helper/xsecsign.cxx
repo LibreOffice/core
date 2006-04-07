@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:24:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,16 +254,18 @@ void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri
 void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
     const rtl::OUString& ouX509IssuerName,
-    const rtl::OUString& ouX509SerialNumber)
+    const rtl::OUString& ouX509SerialNumber,
+    const rtl::OUString& ouX509Cert)
 {
-    setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber);
+    setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber, ouX509Cert);
 }
 
 void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
     const sal_Int32 nSecurityEnvironmentIndex,
     const rtl::OUString& ouX509IssuerName,
-    const rtl::OUString& ouX509SerialNumber)
+    const rtl::OUString& ouX509SerialNumber,
+    const rtl::OUString& ouX509Cert)
 {
     int index = findSignatureInfor( nSecurityId );
 
@@ -273,6 +275,7 @@ void XSecController::setX509Certificate(
         isi.signatureInfor.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
         isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
+        isi.signatureInfor.ouX509Certificate = ouX509Cert;
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
@@ -281,6 +284,7 @@ void XSecController::setX509Certificate(
             = m_vInternalSignatureInformations[index].signatureInfor;
         si.ouX509IssuerName = ouX509IssuerName;
         si.ouX509SerialNumber = ouX509SerialNumber;
+        si.ouX509Certificate = ouX509Cert;
         si.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
     }
 }
