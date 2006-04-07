@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 14:04:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
@@ -319,7 +319,7 @@ void LngSvcMgr::SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
             {
                 const OUString *pImplNames = aSvcImplNames.getConstArray();
 
-                INT16 nLang = ConvertIsoStringToLanguage( pNodeNames[i] );
+                INT16 nLang = MsLangId::convertIsoStringToLanguage( pNodeNames[i] );
 
                 // build list of available services from those
                 INT32 nCnt = 0;
@@ -1038,7 +1038,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(aLocaleStr) ) );
+                Locale aLocale( CreateLocale( MsLangId::convertIsoStringToLanguage(aLocaleStr) ) );
                 rSpellDsp.SetServiceList( aLocale, aSvcImplNames );
             }
         }
@@ -1083,7 +1083,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(aLocaleStr) ) );
+                Locale aLocale( CreateLocale( MsLangId::convertIsoStringToLanguage(aLocaleStr) ) );
                 rHyphDsp.SetServiceList( aLocale, aSvcImplNames );
             }
         }
@@ -1128,7 +1128,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(aLocaleStr) ) );
+                Locale aLocale( CreateLocale( MsLangId::convertIsoStringToLanguage(aLocaleStr) ) );
                 rThesDsp.SetServiceList( aLocale, aSvcImplNames );
             }
         }
@@ -1498,7 +1498,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             aCfgAny <<= aSvcImplNames;
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
-            OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+            OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                         LocaleToLanguage( pLocale[i] ) ) );
             pValue->Value = aCfgAny;
             pValue->Name  = aNodeName;
@@ -1585,7 +1585,7 @@ Sequence< OUString > SAL_CALL
     Sequence< OUString > aSvcImplNames;
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    OUString aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
+    OUString aCfgLocale( MsLangId::convertLanguageToIsoString( nLanguage ) );
 
     //SvtLinguConfig aCfg;
 
