@@ -187,6 +187,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             xWindow.setVisible(true);
 
         } catch (Exception exception) {
+            removeTerminateListener();
             exception.printStackTrace(System.out);
         }
     }
