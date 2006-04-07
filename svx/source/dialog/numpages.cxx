@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:39:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
@@ -3117,7 +3120,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
         // fuer ein einziges Level darf nicht die gesamte Hoehe benutzt werden
         USHORT nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
         aStdFont = OutputDevice::GetDefaultFont(
-                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
+                DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
         aStdFont.SetColor(aTextColor);
         aStdFont.SetFillColor(aBackColor);
 
