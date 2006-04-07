@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:09:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,6 +432,10 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             //  helper
             //---------------------------------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------------------------------
+            //  helper
+            //---------------------------------------------------------------------------------------------------------
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
             void implts_clearMenuBarCloser();
@@ -445,6 +449,7 @@ namespace framework
             sal_Bool implts_findElement( const rtl::OUString& aName, UIElement& aElementData );
             UIElement& impl_findElement( const rtl::OUString& aName );
 
+            void implts_refreshContextToolbarsVisibility();
             void implts_writeNewStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
             sal_Bool implts_readWindowStateData( const rtl::OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const rtl::OUString& rName, const UIElement& rElementData );
@@ -564,7 +569,8 @@ namespace framework
                                                                                         m_bVisible : 1,
                                                                                         m_bParentWindowVisible : 1;
             sal_Bool                                                                    m_bMustDoLayout : 1,
-                                                                                        m_bAutomaticToolbars : 1;
+                                                                                        m_bAutomaticToolbars : 1,
+                                                                                        m_bStoreWindowState : 1;
             sal_Bool                                                                    m_bGlobalSettings : 1;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
