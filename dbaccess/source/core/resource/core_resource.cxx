@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 // ---- needed as long as we have no contexts for components ---
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 //---------------------------------------------------
 
