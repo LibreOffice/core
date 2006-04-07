@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:31:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,10 +140,6 @@
 
 #ifndef _SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
-
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
