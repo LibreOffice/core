@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigSet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:18:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,12 +107,12 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
             //first I remove all the children from the configuration.
             String children[] = Configuration.getChildrenNames(configView);
             for (int i = 0; i<children.length; i++)
-                  try {
-                      Configuration.removeNode(configView,children[i]);
-                  }
-                  catch (Exception ex) {
-                      ex.printStackTrace();
-                  }
+                try {
+                    Configuration.removeNode(configView,children[i]);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
             // and add them new.
             for (int i = 0; i < names.length; i++) {
