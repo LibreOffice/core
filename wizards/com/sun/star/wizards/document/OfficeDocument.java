@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:18:48 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
