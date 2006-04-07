@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:23:20 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -764,7 +764,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
                     // falls dies ueberhaupt moeglich ist
                     if( pIStm->Tell() >= 520 )
                     {
-                        ULONG nId1, nId2;
+                        sal_uInt32 nId1, nId2;
 
                         pIStm->SeekRel( -520 );
                         *pIStm >> nId1 >> nId2;
