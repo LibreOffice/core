@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:02:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1407,7 +1407,7 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
         // automatic margin is handled by host
         if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
         {
-            long nMargin = EXC_ESCHER_AUTOMARGIN;
+            sal_Int32 nMargin = EXC_ESCHER_AUTOMARGIN;
             ScaleEmu( nMargin );
             xSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
             xSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
