@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:46:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -122,11 +122,10 @@ TextSearch::TextSearch(const SearchParam & rParam, ULONG eLang )
 {
     if( LANGUAGE_NONE == eLang )
         eLang = LANGUAGE_SYSTEM;
-    String aLangStr, aCtryStr;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+    ::com::sun::star::lang::Locale aLocale(
+            MsLangId::convertLanguageToLocale( LanguageType(eLang)));
 
-    Init( rParam,
-        ::com::sun::star::lang::Locale( aLangStr, aCtryStr, String() ) );
+    Init( rParam, aLocale);
 }
 
 TextSearch::TextSearch(const SearchParam & rParam, const CharClass& rCClass )
