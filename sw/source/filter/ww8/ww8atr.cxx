@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:05:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,10 @@
 
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
+#endif
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 /*
@@ -2247,7 +2251,7 @@ bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
     {
         USHORT nLng = rFld.GetLanguage();
         LocaleDataWrapper aLocDat( pNFmtr->GetServiceManager(),
-            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+            MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
 
         if( !pKeyMap )
         {
