@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:43:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2997,7 +2997,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetIconFont( aIconFont );
     // We prefer Arial in the russian version, because MS Sans Serif
     // is to wide for the dialogs
-    if ( rSettings.GetInternational().GetLanguage() == LANGUAGE_RUSSIAN )
+    if ( rSettings.GetLanguage() == LANGUAGE_RUSSIAN )
     {
         XubString aFontName = aAppFont.GetName();
         XubString aFirstName = aFontName.GetToken( 0, ';' );
