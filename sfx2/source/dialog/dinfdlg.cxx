@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:19:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <tools/intn.hxx>
 #include <tools/datetime.hxx>
 
 #include <memory>
