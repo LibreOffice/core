@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdicxml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:49:30 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -48,8 +45,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -305,7 +302,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
         OUString aValue = rxAttrList->getValueByIndex(i);
 
         if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "lang" ))
-            nLanguage = ConvertIsoStringToLanguage( aValue );
+            nLanguage = MsLangId::convertIsoStringToLanguage( aValue );
         else if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "conversion-type" ))
             nConversionType = GetConversionTypeFromText( aValue );
     }
@@ -414,7 +411,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClas
                   _GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TCD ) );
     AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
 
-    OUString aIsoLang( ConvertLanguageToIsoString( rDic.nLanguage ) );
+    OUString aIsoLang( MsLangId::convertLanguageToIsoString( rDic.nLanguage ) );
     AddAttribute( XML_NAMESPACE_TCD, "lang", aIsoLang );
     OUString aConvType( ConversionTypeToText( rDic.nConversionType ) );
     AddAttribute( XML_NAMESPACE_TCD, "conversion-type", aConvType );
