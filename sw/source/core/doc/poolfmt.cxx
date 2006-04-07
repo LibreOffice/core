@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:17:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -402,37 +405,8 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
 {
-    SvxFrameDirection eResult = FRMDIR_HORI_LEFT_TOP;
-
-    switch (nLanguage)
-    {
-    case LANGUAGE_ARABIC:
-    case LANGUAGE_ARABIC_SAUDI_ARABIA:
-    case LANGUAGE_ARABIC_IRAQ:
-    case LANGUAGE_ARABIC_EGYPT:
-    case LANGUAGE_ARABIC_LIBYA:
-    case LANGUAGE_ARABIC_ALGERIA:
-    case LANGUAGE_ARABIC_MOROCCO:
-    case LANGUAGE_ARABIC_TUNISIA:
-    case LANGUAGE_ARABIC_OMAN:
-    case LANGUAGE_ARABIC_YEMEN:
-    case LANGUAGE_ARABIC_SYRIA:
-    case LANGUAGE_ARABIC_JORDAN:
-    case LANGUAGE_ARABIC_LEBANON:
-    case LANGUAGE_ARABIC_KUWAIT:
-    case LANGUAGE_ARABIC_UAE:
-    case LANGUAGE_ARABIC_BAHRAIN:
-    case LANGUAGE_ARABIC_QATAR:
-    case LANGUAGE_HEBREW:
-    case LANGUAGE_URDU:
-        eResult = FRMDIR_HORI_RIGHT_TOP;
-
-        break;
-
-    default:
-        break;
-    }
-
+    SvxFrameDirection eResult = (MsLangId::isRightToLeft( nLanguage) ?
+            FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
     return eResult;
 }
 
