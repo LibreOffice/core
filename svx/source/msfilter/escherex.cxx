@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:10:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3497,8 +3497,8 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                                     || pGraphicAttr->IsAdjusted() )
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt << (sal_uInt16)pGraphicAttr->GetDrawMode()
-                    << pGraphicAttr->GetMirrorFlags()
+                aSt << static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode())
+                    << static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags())
                     << pGraphicAttr->GetLeftCrop()
                     << pGraphicAttr->GetTopCrop()
                     << pGraphicAttr->GetRightCrop()
