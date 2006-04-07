@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:54:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 #ifndef _SFXSMPLHINT_HXX
 #include <smplhint.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -384,7 +384,7 @@ ULONG SvtSysLocaleOptions_Impl::ChangeLocaleSettings()
 {
     // An empty config value denotes SYSTEM locale
     if ( m_aLocaleString.getLength() )
-        m_eLocaleLanguageType = ConvertIsoStringToLanguage( m_aLocaleString );
+        m_eLocaleLanguageType = MsLangId::convertIsoStringToLanguage( m_aLocaleString );
     else
         m_eLocaleLanguageType = LANGUAGE_SYSTEM;
     ULONG nHint = 0;
@@ -615,7 +615,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
         String aIsoStr( rConfigString.copy( nDelim+1 ) );
-        eLang = ConvertIsoStringToLanguage( aIsoStr );
+        eLang = MsLangId::convertIsoStringToLanguage( aIsoStr );
     }
     else
     {
@@ -629,7 +629,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
 ::rtl::OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const String& rAbbrev, LanguageType eLang )
 {
-    String aIsoStr( ConvertLanguageToIsoString( eLang ) );
+    String aIsoStr( MsLangId::convertLanguageToIsoString( eLang ) );
     if ( aIsoStr.Len() )
     {
         ::rtl::OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
