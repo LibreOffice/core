@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 14:59:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@
                     <value xml:lang="de">Werkzeuge</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/oleobjectbar" oor:op="replace">
