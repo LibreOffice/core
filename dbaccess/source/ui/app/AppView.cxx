@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:16:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
