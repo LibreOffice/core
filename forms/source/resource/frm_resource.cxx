@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frm_resource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:02:42 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 // ---- needed as long as we have no contexts for components ---
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 //---------------------------------------------------
 
