@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:16:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
         nApiPos += nStart - nExp + 1;
         nExp *= 10;
     }
-    return ::std::max( nApiPos, 0L );
+    return ::std::max( nApiPos, static_cast<sal_Int32>(0) );
 }
 
 /** Converts an API text index to a ruler cursor position. */
@@ -600,7 +600,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
     // #107054# use object's coordinate system, convert to API position
-    return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), 0L ), rRuler.GetPosCount() ) );
+    return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getSelectedText() throw( RuntimeException )
