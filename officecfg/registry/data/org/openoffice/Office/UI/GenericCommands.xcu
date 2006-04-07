@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:12:15 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 09:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4518,8 +4518,8 @@
             </node>
             <node oor:name=".uno:SendMailDocAsPDF" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Dokument als PD~F-Anhang...</value>
-                    <value xml:lang="en-US">Document as P~DF Attachment...</value>
+                    <value xml:lang="de">E-Mail als PD~F...</value>
+                    <value xml:lang="en-US">E-mail as P~DF...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExportToPDF" oor:op="replace">
