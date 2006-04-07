@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:37:14 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _FRMHTMLW_HXX //autogen
 #include <sfx2/frmhtmlw.hxx>
@@ -1372,7 +1372,7 @@ void SwHTMLWriter::OutLanguage( LanguageType eLang )
         ByteString sOut( ' ' );
         (sOut += sHTML_O_lang) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), ConvertLanguageToIsoString(eLang),
+        HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(eLang),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
     }
 }
