@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:07:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #define RID_LB_BASICS           12
 #define RID_STR_BASICS          13
 
+#define RID_PB_EXPORT           14
+#define RID_PB_EXPORT_PACKAGE   15
+
 #define RID_TP_MOD              20
 #define RID_TP_LIB              21
 #define RID_TP_DLG              22
@@ -67,5 +70,7 @@
 
 #define RID_FT_NEWLIB           40
 #define RID_ED_LIBNAME          41
+#define RB_EXPORTASPACKAGE      42
+#define RB_EXPORTASBASIC        43
 
 #endif  // _MODULDLG_HRC
