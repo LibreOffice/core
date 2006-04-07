@@ -4,9 +4,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:47:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,12 +375,6 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
     if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
         SetStrictFormat(  (BOOL)pMgr->ReadShort() );
 
-    if ( NUMERICFORMATTER_I12 & nMask )
-    {
-        DBG_ERROR( "MT: Removed class International - missing ResCTOR!" );
-        International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-    }
     if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
         SetDecimalDigits( pMgr->ReadShort() );
 
