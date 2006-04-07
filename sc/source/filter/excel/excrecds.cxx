@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:07:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
     rStrm.SetStreamPos( nOwnPos );
-    rStrm << nStrPos;
+    rStrm << static_cast<sal_uInt32>(nStrPos);
 }
 
 
