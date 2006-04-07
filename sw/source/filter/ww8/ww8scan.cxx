@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:42:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _LANG_HXX
-#include "tools/lang.hxx"
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
