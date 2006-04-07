@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:53:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
@@ -65,11 +65,7 @@ LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
-    String aLangStr = rLocale.Language;
-    String aCtryStr = rLocale.Country;
-    //  Variant is ignored
-
-    LanguageType eRet = ConvertIsoNamesToLanguage( aLangStr, aCtryStr );
+    LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 
