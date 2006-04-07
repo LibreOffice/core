@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:54:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,12 @@
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef _DATE_HXX
+#include <tools/date.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
