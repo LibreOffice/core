@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:40:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,11 @@ void SbiParser::If()
 
         // multiline IF
         nEndLbl = aGen.Gen( _JUMPF, 0 );
-        while( !bAbort && Parse() )
+        eTok = Peek();
+        while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
+                !bAbort && Parse() )
         {
             eTok = Peek();
-            if( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF )
-                break;
             if( IsEof() )
             {
                 Error( SbERR_BAD_BLOCK, IF ); bAbort = TRUE; return;
@@ -79,16 +79,18 @@ void SbiParser::If()
 
             Next();
             aGen.BackChain( nEndLbl );
+
+            aGen.Statement();
             SbiExpression* pCond = new SbiExpression( this );
             pCond->Gen();
             nEndLbl = aGen.Gen( _JUMPF, 0 );
             delete pCond;
             TestToken( THEN );
-            while( !bAbort && Parse() )
+            eTok = Peek();
+            while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
+                    !bAbort && Parse() )
             {
                 eTok = Peek();
-                if( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF )
-                    break;
                 if( IsEof() )
                 {
                     Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = TRUE; return;
@@ -101,6 +103,8 @@ void SbiParser::If()
             USHORT nElseLbl = nEndLbl;
             nEndLbl = aGen.Gen( _JUMP, 0 );
             aGen.BackChain( nElseLbl );
+
+            aGen.Statement();
             StmntBlock( ENDIF );
         }
         else if( eTok == ENDIF )
