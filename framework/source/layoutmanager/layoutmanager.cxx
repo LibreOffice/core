@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:21:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,12 @@ static WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
 namespace framework
 {
 
+struct UIElementVisibility
+{
+    rtl::OUString aName;
+    bool          bVisible;
+};
+
 bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
 {
     if ( !m_xUIElement.is() && aUIElement.m_xUIElement.is() )
@@ -409,6 +415,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bParentWindowVisible( sal_False )
         ,   m_bMustDoLayout( sal_True )
         ,   m_bAutomaticToolbars( sal_True )
+        ,   m_bStoreWindowState( sal_False )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::com::sun::star::ui::XUIElementFactory >(
@@ -1302,6 +1309,51 @@ void LayoutManager::implts_writeNewStateData( const rtl::OUString aName, const R
     aWriteLock.unlock();
 }
 
+void LayoutManager::implts_refreshContextToolbarsVisibility()
+{
+    std::vector< UIElementVisibility > aToolbarVisibleVector;
+
+    ReadGuard aReadLock( m_aLock );
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    if ( !m_bVisible || !m_bAutomaticToolbars )
+        return;
+
+    UIElementVisibility aUIElementVisible;
+
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    {
+        if ( pIter->m_aType.equalsAsciiL( "toolbar", 7 ))
+        {
+            aUIElementVisible.aName    = pIter->m_aName;
+            aUIElementVisible.bVisible = pIter->m_bVisible;
+            aToolbarVisibleVector.push_back( aUIElementVisible );
+        }
+    }
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    aReadLock.unlock();
+
+    UIElement aUIElement;
+    for ( sal_uInt32 i = 0; i < aToolbarVisibleVector.size(); i++ )
+    {
+        UIElementVisibility& rToolbar = aToolbarVisibleVector[i];
+
+        sal_Bool bVisible = rToolbar.bVisible;
+        if ( implts_readWindowStateData( rToolbar.aName, aUIElement ) &&
+             aUIElement.m_bVisible != bVisible )
+        {
+            WriteGuard aWriteLock( m_aLock );
+            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+            UIElement& rUIElement = impl_findElement( rToolbar.aName );
+
+            if ( rUIElement.m_aName == rToolbar.aName )
+                rUIElement.m_bVisible = aUIElement.m_bVisible;
+            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+            aWriteLock.unlock();
+        }
+    }
+}
+
 sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData )
 {
     sal_Bool bGetSettingsState( sal_False );
@@ -1446,9 +1498,12 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
 
 void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, const UIElement& rElementData )
 {
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    aReadLock.unlock();
+
+    // set flag to determine that we triggered the notification
+    m_bStoreWindowState = sal_True;
+    aWriteLock.unlock();
 
     sal_Bool bPersistent( sal_False );
     Reference< XPropertySet > xPropSet( rElementData.m_xUIElement, UNO_QUERY );
@@ -1520,6 +1575,11 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         {
         }
     }
+
+    // Reset flag
+    aWriteLock.lock();
+    m_bStoreWindowState = sal_False;
+    aWriteLock.unlock();
 }
 
 void LayoutManager::implts_setElementData( UIElement& rElement, const Reference< css::awt::XDockableWindow >& rDockWindow )
@@ -6446,8 +6506,11 @@ throw (::com::sun::star::uno::RuntimeException)
             {
                 aName = pIter->m_aName;
 
-                // user closes a toolbar => make it invisible and store it permanently!
-                pIter->m_bVisible = sal_False;
+                // user closes a toolbar =>
+                // context sensitive toolbar: only destroy toolbar and store state.
+                // context sensitive toolbar: make it invisible, store state and destroy it.
+                if ( !pIter->m_bContextSensitive )
+                    pIter->m_bVisible = sal_False;
 
                 aUIElement = *pIter;
                 break;
@@ -7038,6 +7101,13 @@ sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConverted
                         aOldValue,
                         aConvertedValue);
                 break;
+        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
+            bReturn = PropHelper::willPropertyBeChanged(
+                        com::sun::star::uno::makeAny(sal_False),
+                        aValue,
+                        aOldValue,
+                        aConvertedValue);
+                break;
     }
 
     // Return state of operation.
@@ -7066,6 +7136,13 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
                 m_bAutomaticToolbars = bValue;
             break;
         }
+        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
+        {
+            sal_Bool bValue;
+            if (( aValue >>= bValue ) && bValue )
+                implts_refreshContextToolbarsVisibility();
+            break;
+        }
     }
 }
 
@@ -7076,6 +7153,12 @@ void SAL_CALL LayoutManager::getFastPropertyValue( com::sun::star::uno::Any& aVa
     {
         case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
             aValue <<= m_xMenuBarCloseListener;
+            break;
+        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
+            aValue <<= m_bAutomaticToolbars;
+            break;
+        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
+            aValue <<= sal_False;
             break;
     }
 }
@@ -7142,7 +7225,8 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
     static const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const Reference< XStatusListener >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const Reference< XStatusListener >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
     };
     // Use it to initialize sequence!
     static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, LAYOUTMANAGER_PROPCOUNT );
