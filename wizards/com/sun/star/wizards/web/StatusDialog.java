@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatusDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:57:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,13 +99,13 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
         short tabstop = 1;
 
         lblTaskName = insertLabel("lblTask" ,
-                  new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
-                  new Object[] { new Integer(8),taskName,new Integer(6),new Integer(6),new Short(tabstop++), new Integer(width * 2 / 3)});
+                new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
+                new Object[] { new Integer(8),taskName,new Integer(6),new Integer(6),new Short(tabstop++), new Integer(width * 2 / 3)});
         lblCounter = insertLabel("lblCounter",
-                  new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
-                  new Object[] { new Integer(8),"",new Integer(width * 2 / 3),new Integer(6),new Short(tabstop++), new Integer(width / 3 - 4)});
+                new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
+                new Object[] { new Integer(8),"",new Integer(width * 2 / 3),new Integer(6),new Short(tabstop++), new Integer(width / 3 - 4)});
         progressBar = insertProgressBar("progress",
-                  new String[] {"Height","PositionX","PositionY","TabIndex","Width"},
+                new String[] {"Height","PositionX","PositionY","TabIndex","Width"},
                 new Object[] { new Integer(10),new Integer(6),new Integer(16),new Short(tabstop++), new Integer(width -12)});
 
 
@@ -171,7 +171,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
             catch (Exception ex) {ex.printStackTrace();}
          }
          else
-               Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
+             Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
 
     }
 
