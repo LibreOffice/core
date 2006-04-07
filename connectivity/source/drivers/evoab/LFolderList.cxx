@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:16:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
@@ -97,8 +94,8 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
@@ -374,11 +371,9 @@ OEvoabFolderList::OEvoabFolderList( OEvoabConnection* _pConnection,
 void OEvoabFolderList::construct()
 {
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
+    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
 
-    String sLanguage, sCountry;
-    ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
-    ::com::sun::star::lang::Locale aAppLocale(sLanguage,sCountry,rtl::OUString());
+    ::com::sun::star::lang::Locale aAppLocale(MsLangId::convertLanguageToLocale(eLanguage));
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
