@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:19:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <svtools/numuno.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -259,10 +259,10 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     rExport( rExp ),
+    sPrefix( OUString::createFromAscii( "N" ) ),
     pFormatter( NULL ),
     pCharClass( NULL ),
-    pLocaleData( NULL ),
-    sPrefix( OUString::createFromAscii( "N" ) )
+    pLocaleData( NULL )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -279,7 +279,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
         // #110680#
         // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
@@ -297,10 +297,10 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
                         ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
                        const rtl::OUString& rPrefix ) :
     rExport( rExp ),
+    sPrefix( rPrefix ),
     pFormatter( NULL ),
     pCharClass( NULL ),
-    pLocaleData( NULL ),
-    sPrefix( rPrefix )
+    pLocaleData( NULL )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -317,7 +317,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
         // #110680#
         // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
@@ -383,20 +383,13 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
 {
     if ( nLang != LANGUAGE_SYSTEM )
     {
-        String aLangStr, aCountryStr;
-        ConvertLanguageToIsoNames( (LanguageType)nLang, aLangStr, aCountryStr );
+        OUString aLangStr, aCountryStr;
+        MsLangId::convertLanguageToIsoNames( (LanguageType)nLang, aLangStr, aCountryStr );
 
-        OUString sAttrValue;
-        if (aLangStr.Len())
-        {
-            sAttrValue = aLangStr;
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_LANGUAGE, sAttrValue );
-        }
-        if (aCountryStr.Len())
-        {
-            sAttrValue = aCountryStr;
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_COUNTRY, sAttrValue );
-        }
+        if (aLangStr.getLength())
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_LANGUAGE, aLangStr );
+        if (aCountryStr.getLength())
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_COUNTRY, aCountryStr );
     }
 }
 
@@ -836,7 +829,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 //  pLocaleData->setLocale( rLocale );
 //  String sCurString = pLocaleData->getCurrSymbol();
 
-    LanguageType nLang = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    LanguageType nLang = MsLangId::convertLocaleToLanguage( rLocale );
     pFormatter->ChangeIntl( nLang );
     String sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
@@ -879,9 +872,7 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
     CalendarWrapper* pCalendar = pFormatter->GetCalendar();
     if (pCalendar)
     {
-        String sLangStr, sCountry;
-        ConvertLanguageToIsoNames( nLang, sLangStr, sCountry );
-        lang::Locale aLocale( sLangStr, sCountry, OUString() );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale( nLang ) );
 
         uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
         sal_Int32 nCnt = aCals.getLength();
@@ -1351,7 +1342,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
                             bCurrencyWritten = WriteTextWithCurrency_Impl( *pElemStr,
-                                SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+                                MsLangId::convertLanguageToLocale( nLang ) );
                             bAnyContent = sal_True;
                         }
                         else
@@ -1525,7 +1516,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            pLocaleData->setLocale( SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+                            pLocaleData->setLocale( MsLangId::convertLanguageToLocale( nLang ) );
                             AddToTextElement_Impl( pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }
