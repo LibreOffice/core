@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:46:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,8 @@
 #include <vos/process.hxx>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -1252,7 +1252,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     Any aLocale = utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE );
     rtl::OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
-        aPreDefPathVariables.m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr );
+        aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
     else
     {
         LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Wrong Any type for language!" );
