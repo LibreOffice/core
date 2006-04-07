@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:04:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ FontStrikeout XclFontData::GetScStrikeout() const
 
 void XclFontData::SetScHeight( sal_Int32 nTwips )
 {
-    mnHeight = static_cast< sal_uInt16 >( ::std::min( nTwips, 0x7FFFL ) );
+    mnHeight = static_cast< sal_uInt16 >( ::std::min( nTwips, static_cast<sal_Int32>(0x7FFFL) ) );
 }
 
 void XclFontData::SetScFamily( FontFamily eScFamily )
