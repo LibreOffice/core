@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:26:09 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
@@ -1106,7 +1106,7 @@ void SwHTMLParser::InsertBodyOptions()
     }
     if( aLang.Len() )
     {
-        LanguageType eLang = ConvertIsoStringToLanguage( aLang );
+        LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
         sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
