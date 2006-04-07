@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:24:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include "osl/mutex.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "unotools/configmgr.hxx"
-#include "tools/isolang.hxx"
 
 
 using namespace ::com::sun::star;
