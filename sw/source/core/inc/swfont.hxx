@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:59:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #define _SWFONT_HXX
 
 
-#ifndef _TOOLS_LANG_HXX //autogen
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _TOOLS_COLOR_HXX //autogen
 #include <tools/color.hxx>
