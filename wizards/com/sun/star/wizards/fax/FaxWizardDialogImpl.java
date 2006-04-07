@@ -147,6 +147,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             xWindow.setVisible(true);
 
         } catch (Exception exception) {
+            removeTerminateListener();
             exception.printStackTrace(System.out);
         }
     }
@@ -251,7 +252,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
         i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_SENDERRECEIVER], RM_SENDERRECEIVER);
         i = insertRoadmapItem(i, false, resources.RoadmapLabels[RM_FOOTER], RM_FOOTER);
         i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_FINALSETTINGS], RM_FINALSETTINGS);
-        setRoadmapInteractive(false);
+        setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
     }
