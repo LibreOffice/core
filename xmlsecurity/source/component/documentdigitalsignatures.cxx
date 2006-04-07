@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:40:27 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,8 +287,8 @@ Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDig
             }
             else
             {
-                //We should always be aible to get the certificates because it is contained in the document.
-                OSL_ENSURE(0, "Could not create certificate");
+                //We should always be aible to get the certificates because it is contained in the document,
+                //unless the document is damaged so that signature xml file could not be parsed.
                 rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
 
