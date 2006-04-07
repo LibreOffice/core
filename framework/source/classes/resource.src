@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:08:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,9 @@ String STR_UPDATEDOC
 
 String STR_CLOSEDOC_ANDRETURN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlieﬂen & zur¸ck zu  : S~chlieòen & zur≥ck zu  */
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlieﬂen & zur¸ck zu  : S~chlieòen & zur≥ck zu  */
-    Text [ de ] = "S~chlie√üen & zur√ºck zu " ;
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlieen & zurÔøΩck zu  : S~chlieen & zurck zu  */
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlieÔøΩen & zurÔøΩck zu  : S~chlieen & zurck zu  */
+    Text [ de ] = "S~chlieÔøΩ√üen & zur√ºck zu " ;
     Text [ en-US ] = "~Close & Return to " ;
     Text [ x-comment ] = " ";
 };
@@ -119,6 +119,12 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
             Identifier = MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION;
             Text[ de ] = "Symbolleisten~position sperren" ;
             Text[ en-US ] = "~Lock Toolbar Position" ;
+        };
+        MenuItem
+        {
+            Identifier = MENUITEM_TOOLBAR_CLOSE;
+            Text[ de ] = "Symbolleiste s~chliessen" ;
+            Text[ en-US ] = "Close ~Toolbar" ;
         };
     };
 };
@@ -321,4 +327,10 @@ String STR_FULL_DISC_MSG
     Text [ de ] = "%PRODUCTNAME konnte wichtige interne Informationen nicht speichern, da im folgenden Pfad nicht gen√ºgend freier Speicherplatz zur Verf√ºgung steht:\n%PATH\n\nSie k√∂nnen Ihre Arbeit mit %PRODUCTNAME erst fortsetzen, wenn sie gen√ºgend freien Speicherplatz zur Verf√ºgung gestellt haben.\n\nBet√§tigen Sie die Schaltfl√§che 'Wiederholen', nachdem Sie mehr freien Speicher zur Verf√ºgung gestellt haben, um das Speichern der Daten zu wiederholen.\n\n" ;
     Text [ en-US ] = "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" ;
     Text [ x-comment ] = " ";
+};
+
+String STR_RESTORE_TOOLBARS
+{
+    Text [ de ] = "~Wiederherstellen" ;
+    Text [ en-US ] = "~Reset" ;
 };
