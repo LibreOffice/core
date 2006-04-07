@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinformation.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -58,9 +58,7 @@ using namespace ::com::sun::star::lang;
 UserInformation::UserInformation()
 {
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
-    UniString sLanguage, sCountry;
-    ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
-    m_aUserLocale = Locale(sLanguage,sCountry,::rtl::OUString());
+    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
+    m_aUserLocale = MsLangId::convertLanguageToLocale(eLanguage);
 }
 
