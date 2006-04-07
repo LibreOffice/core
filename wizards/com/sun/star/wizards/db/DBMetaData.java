@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBMetaData.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:16:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/package com.sun.star.wizards.db;
 
+import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.ui.dialogs.XExecutableDialog;
 import java.util.*;
 
 import com.sun.star.io.IOException;
@@ -295,6 +298,7 @@ public class DBMetaData {
         TableNames = (String[]) xTableNames.getElementNames();
         return TableNames;
     }
+
 
     void InitializeWidthList() {
         WidthList = new int[17][2];
@@ -661,6 +665,13 @@ public class DBMetaData {
         return xFormHier;
     }
 
+    public boolean hasFormDocumentByName(String _sFormName){
+        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, xModel);
+        XNameAccess xFormNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormDocumentSuppl.getFormDocuments());
+        return xFormNameAccess.hasByName(_sFormName);
+    }
+
+
     public void addFormDocument(XComponent _xComponent){
         XHierarchicalNameAccess _xFormDocNameAccess = getFormDocuments();
         addDatabaseDocument(_xComponent, _xFormDocNameAccess, false);
@@ -792,7 +803,7 @@ public class DBMetaData {
 
 
     public boolean storeDatabaseDocumentToTempPath(XComponent _xcomponent, String _storename){
-    try {
+    try{
         XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
         XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
         String storepath = FileAccess.getOfficePath(xMSF, "Temp", xSimpleFileAccess) + "/" + _storename;
@@ -830,4 +841,18 @@ public class DBMetaData {
     public void setWindowPeer(XWindowPeer windowPeer) {
         xWindowPeer = windowPeer;
     }
+
+    public void callSQLErrorMessageDialog(SQLException oSQLException, XWindow _xWindow){
+    try {
+            Object oDialog = xMSF.createInstance("com.sun.star.sdb.ErrorMessageDialog");
+            XInitialization xInitialization = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oDialog);
+            PropertyValue[] aPropertyValue = new PropertyValue[2];
+            aPropertyValue[0] = Properties.createProperty("SQLException", oSQLException);
+            aPropertyValue[1] = Properties.createProperty("ParentWindow", _xWindow);
+            xInitialization.initialize(aPropertyValue);
+            XExecutableDialog xExecutableDialog = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oDialog);
+            xExecutableDialog.execute();
+    } catch (com.sun.star.uno.Exception ex) {
+        ex.printStackTrace();
+    }}
 }
