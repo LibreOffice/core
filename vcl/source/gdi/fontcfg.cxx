@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:57:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@
 #endif
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
-#endif
-
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
