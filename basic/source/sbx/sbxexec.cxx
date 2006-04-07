@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxexec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:49:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,10 @@
 #ifndef _ERRCODE_HXX //autogen
 #include <tools/errcode.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
 #include "sbx.hxx"
-#include <tools/isolang.hxx>
 
 
 class SbxSimpleCharClass
