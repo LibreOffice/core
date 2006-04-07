@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:22:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,14 +86,14 @@ public:
     void        SetDetectiveAuto( BOOL bNew )   { bDetectiveAuto = bNew; }
     BOOL        GetDetectiveAuto() const        { return bDetectiveAuto; }
 
-    void        SetTrackContentColor(ULONG nNew) { nTrackContentColor = nNew; }
-    ULONG       GetTrackContentColor() const     { return nTrackContentColor; }
-    void        SetTrackInsertColor(ULONG nNew)  { nTrackInsertColor = nNew;  }
-    ULONG       GetTrackInsertColor() const      { return nTrackInsertColor;  }
-    void        SetTrackDeleteColor(ULONG nNew)  { nTrackDeleteColor = nNew;  }
-    ULONG       GetTrackDeleteColor() const      { return nTrackDeleteColor;  }
-    void        SetTrackMoveColor(ULONG nNew)    { nTrackMoveColor = nNew;    }
-    ULONG       GetTrackMoveColor() const        { return nTrackMoveColor;    }
+    void        SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
+    sal_uInt32  GetTrackContentColor() const     { return nTrackContentColor; }
+    void        SetTrackInsertColor(sal_uInt32 nNew)  { nTrackInsertColor = nNew;  }
+    sal_uInt32  GetTrackInsertColor() const      { return nTrackInsertColor;  }
+    void        SetTrackDeleteColor(sal_uInt32 nNew)  { nTrackDeleteColor = nNew;  }
+    sal_uInt32  GetTrackDeleteColor() const      { return nTrackDeleteColor;  }
+    void        SetTrackMoveColor(sal_uInt32 nNew)    { nTrackMoveColor = nNew;    }
+    sal_uInt32  GetTrackMoveColor() const        { return nTrackMoveColor;    }
 
     ScLkUpdMode GetLinkMode() const             { return eLinkMode ;}
     void        SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
@@ -117,10 +117,10 @@ private:
     USHORT      nStatusFunc;
     BOOL        bAutoComplete;
     BOOL        bDetectiveAuto;
-    ULONG       nTrackContentColor;
-    ULONG       nTrackInsertColor;
-    ULONG       nTrackDeleteColor;
-    ULONG       nTrackMoveColor;
+    sal_uInt32  nTrackContentColor;
+    sal_uInt32  nTrackInsertColor;
+    sal_uInt32  nTrackDeleteColor;
+    sal_uInt32  nTrackMoveColor;
     ScLkUpdMode eLinkMode;
     INT32       nDefaultObjectSizeWidth;
     INT32       nDefaultObjectSizeHeight;
