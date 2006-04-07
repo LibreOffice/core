@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:25:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@
 #include <ctype.h>
 
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -532,10 +532,8 @@ void ScGlobal::Init()
 
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
-    String aLanguage, aCountry;
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
-    ConvertLanguageToIsoNames( eOfficeLanguage, aLanguage, aCountry );
-    pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
+    pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
@@ -893,35 +891,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
 BOOL ScGlobal::IsSystemRTL()
 {
-    BOOL bRet = FALSE;
-
-    switch ( Application::GetSettings().GetLanguage() )
-    {
-        // same languages as in GetDefaultFrameDirection in Writer (poolfmt.cxx)
-        case LANGUAGE_ARABIC:
-        case LANGUAGE_ARABIC_SAUDI_ARABIA:
-        case LANGUAGE_ARABIC_IRAQ:
-        case LANGUAGE_ARABIC_EGYPT:
-        case LANGUAGE_ARABIC_LIBYA:
-        case LANGUAGE_ARABIC_ALGERIA:
-        case LANGUAGE_ARABIC_MOROCCO:
-        case LANGUAGE_ARABIC_TUNISIA:
-        case LANGUAGE_ARABIC_OMAN:
-        case LANGUAGE_ARABIC_YEMEN:
-        case LANGUAGE_ARABIC_SYRIA:
-        case LANGUAGE_ARABIC_JORDAN:
-        case LANGUAGE_ARABIC_LEBANON:
-        case LANGUAGE_ARABIC_KUWAIT:
-        case LANGUAGE_ARABIC_UAE:
-        case LANGUAGE_ARABIC_BAHRAIN:
-        case LANGUAGE_ARABIC_QATAR:
-        case LANGUAGE_HEBREW:
-        case LANGUAGE_URDU:
-            bRet = TRUE;
-            break;
-    }
-
-    return bRet;
+    return MsLangId::isRightToLeft( Application::GetSettings().GetLanguage() );
 }
 
 BYTE ScGlobal::GetDefaultScriptType()
