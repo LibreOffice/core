@@ -9,6 +9,7 @@ Private objEventListener
 Dim i As Long
 Dim j As Long
 Dim sError As String
+Dim inHyper As Variant, outHyper As Variant, retHyper As Variant
 
 Sub Main()
     Set objServiceManager = CreateObject("com.sun.star.ServiceManager")
@@ -19,6 +20,70 @@ Sub Main()
     Set objEventListener = CreateObject("VBasicEventListener.VBEventListener")
     Debug.Print TypeName(objOleTest)
 
+
+'testBasics
+'testHyper
+'testAny
+'testObjects
+'testGetStruct
+'testImplementedInterfaces
+'testGetValueObject
+'testArrays
+testProps
+
+End Sub
+Function testProps()
+    
+
+    Dim aToolbarItemProp1 As Object
+    Set aToolbarItemProp1 = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
+    Dim aToolbarItemProp2 As Object
+    Set aToolbarItemProp2 = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
+    Dim aToolbarItemProp3 As Object
+    Set aToolbarItemProp3 = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
+    Dim properties(2) As Object
+
+    aToolbarItemProp1.Name = "CommandURL"
+    aToolbarItemProp1.Value = "macro:///standard.module1.TestIt"
+    aToolbarItemProp2.Name = "Label"
+    aToolbarItemProp2.Value = "Test"
+    aToolbarItemProp3.Name = "Type"
+    aToolbarItemProp3.Value = 0
+
+    Set properties(0) = aToolbarItemProp1
+    Set properties(1) = aToolbarItemProp2
+    Set properties(2) = aToolbarItemProp3
+
+  
+    Dim dummy()
+    'Dim objDummy As Object = New Object
+    'dummy = System.Array.createInstance(objDummy.GetType, 0)
+    Dim Desktop As Object
+    Set Desktop = objServiceManager.createInstance("com.sun.star.frame.Desktop")
+    Dim Doc As Object
+    Set Doc = Desktop.loadComponentFromURL("private:factory/swriter", "_blank", 2, dummy)
+    Dim LayoutManager As Object
+    Set LayoutManager = Doc.currentController.Frame.LayoutManager
+        
+    LayoutManager.createElement ("private:resource/toolbar/user_toolbar1")
+    LayoutManager.showElement ("private:resource/toolbar/user_toolbar1")
+        Dim ToolBar As Object
+    Set ToolBar = LayoutManager.getElement("private:resource/toolbar/user_toolbar1")
+    Dim settings As Object
+    Set settings = ToolBar.getSettings(True)
+
+'the changes are here:
+    Dim aany As Object
+    Set aany = objServiceManager.Bridge_GetValueObject()
+    Call aany.Set("[]com.sun.star.beans.PropertyValue", properties)
+    Call settings.insertByIndex(0, aany)
+    Call ToolBar.setSettings(settings)
+
+
+End Function
+
+
+Function testBasics()
 ' In Parameter, simple types
 '============================================
 Dim tmpVar As Variant
@@ -102,7 +167,8 @@ If retByte <> inByte Or retBool <> inBool _
     Or Not (inXInterface Is retXInterface) _
     Or Not (inXInterface2 Is retXInterface2) Then
     sError = "in - parameter and return value test failed"
-    GoTo onerror
+    MsgBox sError
+    
 End If
 
 'Out Parameter simple types
@@ -142,7 +208,7 @@ If outByte <> inByte Or outFloat <> inFloat _
     Or Not (inXInterface2 Is outXInterface2) Then
 
     sError = "out - parameter test failed!"
-    GoTo onerror
+    MsgBox sError
 End If
 
 'Out Parameter simple types (VARIANT var)
@@ -170,7 +236,7 @@ If outVarByte <> inByte Or outVarBool <> inBool _
     Or outVarType <> inType _
     Then
     sError = "out - parameter (VARIANT) test failed!"
-    GoTo onerror
+    MsgBox sError
 End If
 
 'In/Out simple types
@@ -269,12 +335,9 @@ If outByte <> retByte Or outBool <> retBool _
     Or outType <> retType _
     Or Not (outXInterface Is retXInterface) Then
     sError = "in/out - parameter test failed!"
-    GoTo onerror
+    MsgBox sError
 End If
 
-
-'======================================================================
-'======================================================================
 'Attributes
 objOleTest.AByte = inByte
 retByte = 0
@@ -291,42 +354,50 @@ If inByte <> retByte _
     Or inType <> retType _
     Then
     sError = "Attributes - test failed!"
-    GoTo onerror
+    MsgBox sError
 End If
+
+End Function
+Function testHyper()
 
 '======================================================================
 ' Other Hyper tests
 Dim emptyVar As Variant
+Dim retAny As Variant
+
 retAny = emptyVar
 inHyper = CDec("9223372036854775807") 'highest positiv value of int64
 retAny = objOleTest.in_methodAny(inHyper)
 sError = "hyper test failed"
 If inHyper <> retAny Then
-    GoTo onerror
+    MsgBox sError
 End If
 inHyper = CDec("-9223372036854775808") 'lowest negativ value of int64
 retAny = objOleTest.in_methodAny(inHyper)
 If inHyper <> retAny Then
-    GoTo onerror
+    MsgBox sError
 End If
 inHyper = CDec("18446744073709551615") 'highest positiv value of unsigne int64
 retAny = objOleTest.in_methodAny(inHyper)
 If inHyper <> retAny Then
-    GoTo onerror
+    MsgBox sError
 End If
 inHyper = CDec(-1)
 retAny = objOleTest.in_methodAny(inHyper)
 If inHyper <> retAny Then
-    GoTo onerror
+    MsgBox sError
 End If
 inHyper = CDec(0)
 retAny = objOleTest.in_methodAny(inHyper)
 If inHyper <> retAny Then
-    GoTo onerror
+    MsgBox sError
 End If
 
 '==============================================================================
 
+
+End Function
+Function testAny()
 Dim outVAr
 
 'Any test. We pass in an any as value object. If it is not correct converted
@@ -349,12 +420,11 @@ anySeqRet = objOleTest.other_methodAny(anySeqLong, "[]long")
 If Err.Number <> 0 Then
     MsgBox "error"
 End If
+End Function
 
-
-'Objects
-'
-'==========================================================
+Function testObjects()
 ' COM obj
+Dim outVAr
 Dim retObj As Object
 'OleTest receives a COM object that implements XEventListener
 'OleTest then calls a disposing on the object. The object then will be
@@ -362,6 +432,7 @@ Dim retObj As Object
 objEventListener.setQuiet True
 objEventListener.resetDisposing
 Set retObj = objOleTest.in_methodInvocation(objEventListener)
+Dim ret
 ret = objEventListener.disposingCalled
 If ret = False Then
     MsgBox "Error"
@@ -376,24 +447,34 @@ If retObj.disposingCalled = False Then
     MsgBox "Error"
 End If
 
-
 ' out param gives out the OleTestComponent
-objOleTest.testout_methodXInterface retObj
-outVAr = Null
-retObj.testout_methodAny outVAr
-Debug.Print "test out Interface " & CStr(outVAr)
-If outVAr <> "I am a string in an any" Then
-    MsgBox "error"
-End If
+'objOleTest.testout_methodXInterface retObj
+'outVAr = Null
+'retObj.testout_methodAny outVAr
+'Debug.Print "test out Interface " & CStr(outVAr)
+'If outVAr <> "I am a string in an any" Then
+'    MsgBox "error"
+'End If
+
 
 'in out
 ' in: UNO object, the same is expected as out param
 ' the function expects OleTest as parameter and sets a value
+
+Dim myAny As Variant
+
+
+
 Dim objOleTest2 As Object
 Set objOleTest2 = objServiceManager.createInstance("oletest.OleTest")
 'Set a value
 objOleTest2.AttrAny2 = "VBString "
+
+'testinout_methodXInterfaces substitutes the argument with the object set in in_methodXInterface
+objOleTest.AttrAny2 = "VBString  this string was written in the UNO component to the inout pararmeter"
+objOleTest.in_methodXInterface objOleTest
 objOleTest.testinout_methodXInterface2 objOleTest2
+Dim tmpVar As Variant
 tmpVar = Null
 tmpVar = objOleTest2.AttrAny2
 Debug.Print "in: Uno out: the same object // " & CStr(tmpVar)
@@ -422,6 +503,89 @@ If structRet.message <> "Now we are in VBThis string was set in OleTest" Then
 End If
 
 
+End Function
+Function testGetStruct()
+'Bridge_GetStruct
+'========================================================
+Dim objDocument As Object
+Set objDocument = createHiddenDocument()
+objDocument.dispose
+End Function
+
+Function testImplementedInterfaces()
+'Bridge_ImplementedInterfaces
+'=================================================
+' call an UNO function that takes an XEventListener interface
+'We provide a COM implementation (IDispatch) as EventListener
+'Open a new empty writer document
+
+Dim objDocument As Object
+Set objDocument = createHiddenDocument()
+objEventListener.resetDisposing
+objDocument.addEventListener objEventListener
+objDocument.dispose
+If objEventListener.disposingCalled = False Then
+    MsgBox "Error"
+End If
+End Function
+
+Function testGetValueObject()
+'Bridge_GetValueObject
+'==================================================
+Dim objVal As Object
+Set objVal = objOleTest.Bridge_GetValueObject()
+Dim arrByte(9) As Byte
+Dim countvar As Long
+For countvar = 0 To 9
+    arrByte(countvar) = countvar
+Next countvar
+
+objVal.Set "[]byte", arrByte
+Dim ret
+ret = 0
+ret = objOleTest.methodByte(objVal)
+'Test if ret is the same array
+
+Dim key
+key = 0
+For Each key In ret
+    If ret(key) <> arrByte(key) Then
+        MsgBox "Error"
+    End If
+    Debug.Print ret(key)
+Next key
+
+Dim outByte As Byte
+outByte = 77
+Dim retByte As Byte
+retByte = outByte
+objVal.InitInOutParam "byte", retByte
+objOleTest.testinout_methodByte objVal
+objVal.InitInOutParam "byte", retByte
+objOleTest.testinout_methodByte objVal
+
+ret = 0
+ret = objVal.Get()
+Debug.Print ret
+If ret <> outByte Then
+    MsgBox "error"
+End If
+
+objVal.InitOutParam
+Dim inChar As Integer
+inChar = 65
+objOleTest.in_methodChar (inChar)
+objOleTest.testout_methodChar objVal 'Returns 'A' (65)
+ret = 0
+ret = objVal.Get()
+Debug.Print ret
+If ret <> inChar Then
+    MsgBox "error"
+End If
+
+End Function
+
+Function testArrays()
 'Arrays
 '========================================
 Dim arrLong(2) As Long
@@ -603,6 +767,7 @@ Next i
 resMul = 0
 resMul = objOleTest.methodSequence(mulAr2)
 arr = 0
+Dim tmpVar As Variant
 For countDim2 = 0 To 1
     arr = resMul(countDim2)
     tmpVar = mulAr2(countDim2)
@@ -671,8 +836,9 @@ For i = 0 To 2
     End If
 Next
 
-'Bridge_GetStruct
-'========================================================
+End Function
+
+Function createHiddenDocument()
 'Try to create a hidden document
 Dim objPropValue
 Set objPropValue = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
@@ -688,73 +854,5 @@ Set objDesktop = objServiceManager.createInstance("com.sun.star.frame.Desktop")
 'Open a new empty writer document
 Dim args(0) As Object
 Set args(0) = objPropValue
-Dim objDocument As Object
-Set objDocument = objDesktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, args())
-'Create a text object
-Dim objText As Object
-Set objText = objDocument.GetText
-
-'Bridge_ImplementedInterfaces
-'=================================================
-' call an UNO function that takes an XEventListener interface
-'We provide a COM implementation (IDispatch) as EventListener
-objEventListener.resetDisposing
-objDocument.addEventListener objEventListener
-objDocument.dispose
-If objEventListener.disposingCalled = False Then
-    MsgBox "Error"
-End If
-
-
-'Bridge_GetValueObject
-'==================================================
-Dim objVal As Object
-Set objVal = objOleTest.Bridge_GetValueObject()
-Dim arrByte(9) As Byte
-For countvar = 0 To 9
-    arrByte(countvar) = countvar
-Next countvar
-
-objVal.Set "[]byte", arrByte
-ret = 0
-ret = objOleTest.methodByte(objVal)
-'Test if ret is the same array
-
-key = 0
-For Each key In ret
-    If ret(key) <> arrByte(key) Then
-        MsgBox "Error"
-    End If
-    Debug.Print ret(key)
-Next key
-
-
-outByte = 77
-retByte = outByte
-objVal.InitInOutParam "byte", retByte
-objOleTest.testinout_methodByte objVal
-objVal.InitInOutParam "byte", retByte
-objOleTest.testinout_methodByte objVal
-
-ret = 0
-ret = objVal.Get()
-Debug.Print ret
-If ret <> outByte Then
-    MsgBox "error"
-End If
-
-objVal.InitOutParam
-inChar = 65
-objOleTest.in_methodChar (inChar)
-objOleTest.testout_methodChar objVal 'Returns 'A' (65)
-ret = 0
-ret = objVal.Get()
-Debug.Print ret
-If ret <> inChar Then
-    MsgBox "error"
-End If
-
-Exit Sub
-onerror:
-MsgBox "Error: " + sError
-End Sub
+Set createHiddenDocument = objDesktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, args())
+End Function
