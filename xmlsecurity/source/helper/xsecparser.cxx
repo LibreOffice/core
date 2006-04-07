@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:23:32 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
+#include "cppuhelper/exc_hlp.hxx"
 
 namespace cssu = com::sun::star::uno;
 namespace cssxs = com::sun::star::xml::sax;
@@ -101,172 +102,206 @@ void SAL_CALL XSecParser::startElement(
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
-    rtl::OUString ouIdAttr = getIdAttr(xAttribs);
-    if (ouIdAttr != NULL)
+    try
     {
-        m_pXSecController->collectToVerify( ouIdAttr );
-    }
-
-    if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
-    {
-        m_pXSecController->addSignature();
+        rtl::OUString ouIdAttr = getIdAttr(xAttribs);
         if (ouIdAttr != NULL)
         {
-            m_pXSecController->setId( ouIdAttr );
+            m_pXSecController->collectToVerify( ouIdAttr );
         }
-    }
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
-    {
-        rtl::OUString ouUri = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
-        DBG_ASSERT( ouUri != NULL, "URI == NULL" );
 
-        if (0 == ouUri.compareTo(rtl::OUString(RTL_ASCII_USTRINGPARAM(CHAR_FRAGMENT)),1))
+        if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
         {
-            /*
-             * remove the first character '#' from the attribute value
-             */
-            m_pXSecController->addReference( ouUri.copy(1) );
-        }
-        else
-        {
-            /*
-             * remember the uri
-             */
-            m_currentReferenceURI = ouUri;
-            m_bReferenceUnresolved = true;
-        }
-    }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TRANSFORM)))
-        {
-        if ( m_bReferenceUnresolved )
-        {
-            rtl::OUString ouAlgorithm = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
-
-            if (ouAlgorithm != NULL && ouAlgorithm == rtl::OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
-            /*
-             * a xml stream
-             */
+            m_pXSecController->addSignature();
+            if (ouIdAttr != NULL)
             {
-                m_pXSecController->addStreamReference( m_currentReferenceURI, sal_False);
-                m_bReferenceUnresolved = false;
+                m_pXSecController->setId( ouIdAttr );
             }
         }
-        }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
         {
-        m_ouX509IssuerName = rtl::OUString::createFromAscii("");
-        m_bInX509IssuerName = true;
+            rtl::OUString ouUri = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
+            DBG_ASSERT( ouUri != NULL, "URI == NULL" );
+
+            if (0 == ouUri.compareTo(rtl::OUString(RTL_ASCII_USTRINGPARAM(CHAR_FRAGMENT)),1))
+            {
+                /*
+                * remove the first character '#' from the attribute value
+                */
+                m_pXSecController->addReference( ouUri.copy(1) );
+            }
+            else
+            {
+                /*
+                * remember the uri
+                */
+                m_currentReferenceURI = ouUri;
+                m_bReferenceUnresolved = true;
+            }
         }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TRANSFORM)))
+            {
+            if ( m_bReferenceUnresolved )
+            {
+                rtl::OUString ouAlgorithm = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
+
+                if (ouAlgorithm != NULL && ouAlgorithm == rtl::OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
+                /*
+                * a xml stream
+                */
+                {
+                    m_pXSecController->addStreamReference( m_currentReferenceURI, sal_False);
+                    m_bReferenceUnresolved = false;
+                }
+            }
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            {
+            m_ouX509IssuerName = rtl::OUString::createFromAscii("");
+            m_bInX509IssuerName = true;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            {
+            m_ouX509SerialNumber = rtl::OUString::createFromAscii("");
+            m_bInX509SerialNumber = true;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            {
+            m_ouX509Certificate = rtl::OUString::createFromAscii("");
+            m_bInX509Certificate = true;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
+            {
+            m_ouSignatureValue = rtl::OUString::createFromAscii("");
+                m_bInSignatureValue = true;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+            {
+            m_ouDigestValue = rtl::OUString::createFromAscii("");
+                m_bInDigestValue = true;
+            }
+            else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
         {
-        m_ouX509SerialNumber = rtl::OUString::createFromAscii("");
-        m_bInX509SerialNumber = true;
+            if (ouIdAttr != NULL)
+            {
+                m_pXSecController->setPropertyId( ouIdAttr );
+            }
         }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+            {
+            m_ouDate = rtl::OUString::createFromAscii("");
+                m_bInDate = true;
+            }
+            /*
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)))
+            {
+            m_ouTime = rtl::OUString::createFromAscii("");
+                m_bInTime = true;
+            }
+            */
+
+        if (m_xNextHandler.is())
         {
-        m_ouX509Certificate = rtl::OUString::createFromAscii("");
-        m_bInX509Certificate = true;
-        }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
-        {
-        m_ouSignatureValue = rtl::OUString::createFromAscii("");
-            m_bInSignatureValue = true;
-        }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
-        {
-        m_ouDigestValue = rtl::OUString::createFromAscii("");
-            m_bInDigestValue = true;
-        }
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
-    {
-        if (ouIdAttr != NULL)
-        {
-            m_pXSecController->setPropertyId( ouIdAttr );
+            m_xNextHandler->startElement(aName, xAttribs);
         }
     }
-        else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
-                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
-        {
-        m_ouDate = rtl::OUString::createFromAscii("");
-            m_bInDate = true;
-        }
-        /*
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)))
-        {
-        m_ouTime = rtl::OUString::createFromAscii("");
-            m_bInTime = true;
-        }
-        */
-
-    if (m_xNextHandler.is())
+    catch (cssu::Exception& )
+    {//getCaughtException MUST be the first line in the catch block
+        cssu::Any exc =  cppu::getCaughtException();
+        throw cssxs::SAXException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "xmlsecurity: Exception in XSecParser::startElement")),
+            0, exc);
+    }
+    catch (...)
     {
-        m_xNextHandler->startElement(aName, xAttribs);
+        throw cssxs::SAXException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlsecurity: unexpected exception in XSecParser::startElement")), 0,
+            cssu::Any());
     }
 }
 
 void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
+    try
+    {
         if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+            {
+                m_bInDigestValue = false;
+            }
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
         {
-            m_bInDigestValue = false;
+            if ( m_bReferenceUnresolved )
+            /*
+            * it must be a octet stream
+            */
+            {
+                m_pXSecController->addStreamReference( m_currentReferenceURI, sal_True);
+                m_bReferenceUnresolved = false;
+            }
+
+            m_pXSecController->setDigestValue( m_ouDigestValue );
         }
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
-    {
-        if ( m_bReferenceUnresolved )
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
+        {
+            m_pXSecController->setReferenceCount();
+        }
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)) )
+        {
+            m_pXSecController->setSignatureValue( m_ouSignatureValue );
+                m_bInSignatureValue = false;
+        }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            {
+            m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
+            m_bInX509IssuerName = false;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            {
+            m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
+            m_bInX509SerialNumber = false;
+            }
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            {
+            m_pXSecController->setX509Certificate( m_ouX509Certificate );
+            m_bInX509Certificate = false;
+            }
+            else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+        {
+            m_pXSecController->setDate( m_ouDate );
+                m_bInDate = false;
+        }
         /*
-         * it must be a octet stream
-         */
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)) )
         {
-            m_pXSecController->addStreamReference( m_currentReferenceURI, sal_True);
-            m_bReferenceUnresolved = false;
+            m_pXSecController->setTime( m_ouTime );
+                m_bInTime = false;
         }
+        */
 
-        m_pXSecController->setDigestValue( m_ouDigestValue );
-    }
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
-    {
-        m_pXSecController->setReferenceCount();
-    }
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)) )
-    {
-        m_pXSecController->setSignatureValue( m_ouSignatureValue );
-            m_bInSignatureValue = false;
-    }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+        if (m_xNextHandler.is())
         {
-        m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
-        m_bInX509IssuerName = false;
+            m_xNextHandler->endElement(aName);
         }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
-        {
-        m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
-        m_bInX509SerialNumber = false;
-        }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
-        {
-        m_pXSecController->setX509Certificate( m_ouX509Certificate );
-        m_bInX509Certificate = false;
-        }
-        else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
-                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
-    {
-        m_pXSecController->setDate( m_ouDate );
-            m_bInDate = false;
     }
-    /*
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)) )
-    {
-        m_pXSecController->setTime( m_ouTime );
-            m_bInTime = false;
+    catch (cssu::Exception& )
+    {//getCaughtException MUST be the first line in the catch block
+        cssu::Any exc =  cppu::getCaughtException();
+        throw cssxs::SAXException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "xmlsecurity: Exception in XSecParser::endElement")),
+            0, exc);
     }
-    */
-
-    if (m_xNextHandler.is())
+    catch (...)
     {
-        m_xNextHandler->endElement(aName);
+        throw cssxs::SAXException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlsecurity: unexpected exception in XSecParser::endElement")), 0,
+            cssu::Any());
     }
 }
 
