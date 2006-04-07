@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:33:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,6 @@
  ************************************************************************/
 #ifndef _RSCRSC_HXX
 #define _RSCRSC_HXX
-
-#ifndef _LANG_HXX //autogen
-#include <tools/lang.hxx>
-#endif
-
 
 #ifndef RSCALL_H
 #include <rscall.h>
