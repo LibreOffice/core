@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-17 08:57:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #include <unolingu.hxx>
 #endif
 
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -103,8 +100,8 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
@@ -213,7 +210,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
 {
     Sequence< OUString > aRes;
 
-    OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+    OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                 SvxLocaleToLanguage( rAvailLocale ) ) );
 
     Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
@@ -346,7 +343,7 @@ void SvxLinguConfigUpdate::UpdateAll()
             const OUString *pNodeName = aNodeNames.getConstArray();
             for (i = 0;  i < nNodeNames;  ++i)
             {
-                Locale aLocale( SvxCreateLocale( ConvertIsoStringToLanguage(pNodeName[i]) ) );
+                Locale aLocale( SvxCreateLocale( MsLangId::convertIsoStringToLanguage(pNodeName[i]) ) );
                 Sequence< OUString > aCfgSvcs(
                         xLngSvcMgr->getConfiguredServices( aService, aLocale ));
                 Sequence< OUString > aAvailSvcs(
@@ -406,7 +403,7 @@ void SvxLinguConfigUpdate::UpdateAll()
                 }
 #endif
 
-                OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+                OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
                 aLastFoundSvcs[k][ aCfgLocaleStr ] = aSvcImplNames;
             }
@@ -710,7 +707,7 @@ void ThesDummy_Impl::GetCfgLocales()
         for (INT32 i = 0;  i < nLen;  ++i)
         {
             pLocale[i] = SvxCreateLocale(
-                            ConvertIsoStringToLanguage( pNodeNames[i] ) );
+                            MsLangId::convertIsoStringToLanguage( pNodeNames[i] ) );
         }
     }
 }
@@ -1621,30 +1618,26 @@ LanguageType SvxLocaleToLanguage( const Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
-    //  Variant of Locale is ignored
-    return ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    return MsLangId::convertLocaleToLanguage( rLocale );
 }
 
 Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    String aLangStr, aCtryStr;
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
-
-    rLocale.Language = aLangStr;
-    rLocale.Country  = aCtryStr;
-    rLocale.Variant  = OUString();
+        MsLangId::convertLanguageToLocale( eLang, rLocale );
+    else
+        rLocale = Locale();
 
     return rLocale;
 }
 
 Locale SvxCreateLocale( LanguageType eLang )
 {
-    String aLangStr, aCtryStr;
+    Locale aLocale;
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+        MsLangId::convertLanguageToLocale( eLang, aLocale );
 
-    return Locale( aLangStr, aCtryStr, OUString() );
+    return aLocale;
 }
 
 
