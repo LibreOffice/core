@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:33:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #include <vcl/sv.h>
 #include <global.hxx>
 #include <tools/color.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svtools/svarray.hxx>
