@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:55:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:13:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,6 @@
 #endif
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
