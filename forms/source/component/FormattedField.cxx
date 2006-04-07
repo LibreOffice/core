@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:40:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
@@ -221,10 +221,10 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
         if ( xSupplier.is() )
             return xSupplier;
 
-        // get the Office's UI locale
+        // get the Office's locale
         const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
         // translate
-        eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+        eSysLanguage = MsLangId::convertLocaleToLanguage( rSysLocale );
     }
 
     StandardFormatsSupplier* pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );
@@ -960,10 +960,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
                 Locale* pLocale = (Locale*)aLocale.getValue();
-                eFormatLanguage = ConvertIsoNamesToLanguage(
-                    ::rtl::OUStringToOString(pLocale->Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-                    ::rtl::OUStringToOString(pLocale->Country, RTL_TEXTENCODING_ASCII_US).getStr()
-                );
+                eFormatLanguage = MsLangId::convertLocaleToLanguage( *pLocale );
             }
         }
 
@@ -1047,13 +1044,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                 if (xFormats.is())
                 {
-                    UniString sLanguage, sCountry;
-                    ConvertLanguageToIsoNames(eDescriptionLanguage, sLanguage, sCountry);
-                    Locale aDescriptionLanguage(
-                        sLanguage,
-                        sCountry,
-                        ::rtl::OUString()
-                    );
+                    Locale aDescriptionLanguage( MsLangId::convertLanguageToLocale(eDescriptionLanguage));
 
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
                     if (nKey == (sal_Int32)-1)
