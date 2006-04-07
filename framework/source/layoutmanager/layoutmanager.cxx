@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:06:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2299,7 +2299,7 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
 
         if ( nSpace > 0 )
         {
-            sal_Int32 nMove = std::min( nSpace, aFrontDockingRect.getWidth() );
+            sal_Int32 nMove = std::min( nSpace, static_cast<sal_Int32>(aFrontDockingRect.getWidth()) );
             if ( bHorzDockArea )
                 aFrontDockingRect.Move( -nMove, 0 );
             else
@@ -2452,7 +2452,7 @@ LayoutManager::implts_determineDockingOperation(
                                 std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() )),
                                         sal_Int32( nTopDockingAreaSize )));
 
-        sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
+        sal_Int32 nSize = std::min( nMaxDockingAreaHeight, static_cast<sal_Int32>(aTrackingRect.getHeight()) );
 
         aTrackingRect.SetPos( ::Point( rRowColumnRect.Left(), nPosY ));
         aTrackingRect.setWidth( rRowColumnRect.getWidth() );
@@ -2788,7 +2788,7 @@ void LayoutManager::implts_calcDockingPosSize(
                                           sal_Int32( 0 )));
 
             sal_Int32 nSize = std::min( aContainerWinSize.Width(), rTrackingRect.getWidth() );
-            sal_Int32 nDockHeight = std::max( aDockingAreaRect.getHeight(), sal_Int32( 0 ));
+            sal_Int32 nDockHeight = std::max( static_cast<sal_Int32>(aDockingAreaRect.getHeight()), sal_Int32( 0 ));
             if ( nDockHeight == 0 )
             {
                 sal_Int32 nPosY( std::max( aDockingAreaRect.Top(), aDockingAreaRect.Bottom() ));
@@ -2835,8 +2835,8 @@ void LayoutManager::implts_calcDockingPosSize(
                                 std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() )),
                                         sal_Int32( nTopDockingAreaSize )));
 
-            sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
-            sal_Int32 nDockWidth = std::max( aDockingAreaRect.getWidth(), sal_Int32( 0 ));
+            sal_Int32 nSize = std::min( nMaxDockingAreaHeight, static_cast<sal_Int32>(aTrackingRect.getHeight()) );
+            sal_Int32 nDockWidth = std::max( static_cast<sal_Int32>(aDockingAreaRect.getWidth()), sal_Int32( 0 ));
             if ( nDockWidth == 0 )
             {
                 sal_Int32 nPosX( std::max( aDockingAreaRect.Left(), aDockingAreaRect.Right() ));
@@ -5203,7 +5203,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
             // Position the status bar
             if ( aStatusBarSize.Height() > 0 )
             {
-                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), sal_Int32( 0 ))),
+                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), long( 0 ))),
                                             ::Size( aContainerSize.Width(),aStatusBarSize.Height() ));
             }
 
@@ -5662,7 +5662,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
     // Position the status bar
     if ( aStatusBarSize.Height() > 0 )
     {
-        implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), sal_Int32( 0 ))),
+        implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), long( 0 ))),
                                     ::Size( aContainerClientSize.Width, aStatusBarSize.Height() ));
     }
 }
