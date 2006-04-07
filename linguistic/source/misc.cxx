@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:38 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
@@ -422,31 +425,25 @@ LanguageType LocaleToLanguage( const Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
-    //  Variant of Locale is ignored
-    return ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    return MsLangId::convertLocaleToLanguage( rLocale );
 }
 
 
 Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    String aLangStr, aCtryStr;
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
-
-    rLocale.Language = aLangStr;
-    rLocale.Country  = aCtryStr;
-    rLocale.Variant  = OUString();
+        MsLangId::convertLanguageToLocale( eLang, rLocale );
 
     return rLocale;
 }
 
 Locale CreateLocale( LanguageType eLang )
 {
-    String aLangStr, aCtryStr;
+    Locale aLocale;
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+        return MsLangId::convertLanguageToLocale( eLang );
 
-    return Locale( aLangStr, aCtryStr, OUString() );
+    return aLocale;
 }
 
 uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< INT16 > &rLangSeq )
