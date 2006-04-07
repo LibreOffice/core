@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:00:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@
 #ifndef _FMTFIELD_HXX_
 #include "fmtfield.hxx"
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -347,11 +347,9 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
     {
-        // get the Office's UI locale
-        SvtSysLocale aSysLocale;
-        const Locale& rSysLocale = aSysLocale.GetLocaleData().getLocale();
-        // translate
-        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+        // get the Office's locale and translate
+        LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage(
+                SvtSysLocale().GetLocaleData().getLocale() );
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessServiceFactory(),
             eSysLanguage);
@@ -671,11 +669,9 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetForm
         // calc the default format key from the Office's UI locale
         if ( m_pFormatter )
         {
-            // get the Office's UI locale
-            SvtSysLocale aSysLocale;
-            const Locale& rSysLocale = aSysLocale.GetLocaleData().getLocale();
-            // translate
-            LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+            // get the Office's locale and translate
+            LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage(
+                    SvtSysLocale().GetLocaleData().getLocale() );
             // get the standard numeric format for this language
             m_nFormatKey = m_pFormatter->GetStandardFormat( NUMBERFORMAT_NUMBER, eSysLanguage );
         }
@@ -1203,9 +1199,9 @@ void DoubleNumericField::ResetConformanceTester()
     sal_Unicode cSeparatorDecimal = '.';
     if (pFormatEntry)
     {
-        String aLanguage, aCountry, aVariant;
-        ConvertLanguageToIsoNames( pFormatEntry->GetLanguage(), aLanguage, aCountry );
-        LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), Locale( aLanguage, aCountry, aVariant ));
+        Locale aLocale;
+        MsLangId::convertLanguageToLocale( pFormatEntry->GetLanguage(), aLocale );
+        LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
 
         String sSeparator = aLocaleInfo.getNumThousandSep();
         if (sSeparator.Len())
@@ -1335,9 +1331,9 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     USHORT nDigits = GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
-    String aLanguage, aCountry, aVariant;
-    ConvertLanguageToIsoNames( eLanguage, aLanguage, aCountry );
-    LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), Locale( aLanguage, aCountry, aVariant ));
+    Locale aLocale;
+    MsLangId::convertLanguageToLocale( eLanguage, aLocale );
+    LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
 
     XubString sNewFormat;
     if (bThSep)
