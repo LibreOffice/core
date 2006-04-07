@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:46:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ void XclImpChangeTrack::DoInsertRange( const ScRange& rRange )
 
 void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 {
-    sal_uInt32 nFirst, nLast;
+    ULONG nFirst, nLast;
     pChangeTrack->AppendDeleteRange( rRange, NULL, nFirst, nLast );
     DoAcceptRejectAction( nFirst, nLast );
 }
