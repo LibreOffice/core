@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:30:33 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #endif
 #ifndef _TIME_HXX
 #include <time.hxx>
-#endif
-#ifndef _INTN_HXX
-#include <intn.hxx>
 #endif
 
 #ifndef _TOOLS_RC_HXX
@@ -114,80 +111,4 @@ Date::Date( const ResId& rResId )
         SetMonth( (USHORT)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
         SetDay( (USHORT)pResMgr->ReadShort() );
-}
-
-// =======================================================================
-
-International::International( const ResId& rResId )
-{
-    rResId.SetRT( RSC_INTERNATIONAL );
-    ResMgr* pResMgr = NULL;
-
-    ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
-
-    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
-
-    LanguageType eLangType = LANGUAGE_SYSTEM;
-    LanguageType eFormatType = LANGUAGE_SYSTEM;
-
-    if ( 0x0001 & nObjMask )
-    {
-            eLangType = (LanguageType)pResMgr->ReadLong();
-            eFormatType = eLangType;
-    }
-    if ( 0x0002 & nObjMask )
-        eFormatType = (LanguageType)pResMgr->ReadLong();
-    Init( eLangType, eFormatType );
-
-    if ( 0x0004 & nObjMask )
-        SetDateFormat( (DateFormat)pResMgr->ReadLong() );
-    if ( 0x0008 & nObjMask )
-            SetDateDayLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0010 & nObjMask )
-        SetDateMonthLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0020 & nObjMask )
-        SetDateCentury( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0040 & nObjMask )
-        SetLongDateFormat( (DateFormat)pResMgr->ReadLong() );
-    if ( 0x0080 & nObjMask )
-            SetLongDateDayOfWeekFormat( (DayOfWeekFormat)pResMgr->ReadLong() );
-    if ( 0x0100 & nObjMask )
-        SetLongDateDayOfWeekSep( pResMgr->ReadString() );
-    if ( 0x0200 & nObjMask )
-        SetLongDateDayLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0400 & nObjMask )
-        SetLongDateDaySep( pResMgr->ReadString() );
-    if ( 0x0800 & nObjMask )
-        SetLongDateMonthFormat( (MonthFormat)pResMgr->ReadLong() );
-    if ( 0x1000 & nObjMask )
-        SetLongDateMonthSep( pResMgr->ReadString() );
-    if ( 0x2000 & nObjMask )
-        SetLongDateCentury( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x4000 & nObjMask )
-        SetLongDateYearSep( pResMgr->ReadString() );
-    if ( 0x8000 & nObjMask )
-        SetTimeFormat( (TimeFormat)pResMgr->ReadLong() );
-
-    // Zweite Maske holen
-    nObjMask = pResMgr->ReadLong();
-    if ( 0x0001 & nObjMask )
-        SetTimeLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0002 & nObjMask )
-        SetTimeAM( pResMgr->ReadString() );
-    if ( 0x0004 & nObjMask )
-        SetTimePM( pResMgr->ReadString() );
-    if ( 0x0008 & nObjMask )
-        SetNumLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0010 & nObjMask )
-        SetNumDigits( (USHORT)pResMgr->ReadShort() );
-    if ( 0x0020 & nObjMask )
-        SetCurrPositiveFormat( (USHORT)pResMgr->ReadShort() );
-    if ( 0x0040 & nObjMask )
-        SetCurrNegativeFormat( (USHORT)pResMgr->ReadShort() );
-    if ( 0x0080 & nObjMask )
-        SetCurrDigits( (USHORT)pResMgr->ReadShort() );
-    if ( 0x0100 & nObjMask )
-        SetNumTrailingZeros( (BOOL)(USHORT)pResMgr->ReadShort() );
-    if ( 0x0200 & nObjMask )
-        SetMeasurementSystem( (MeasurementSystem)(USHORT)pResMgr->ReadShort() );
 }
