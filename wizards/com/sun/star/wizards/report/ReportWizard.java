@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:21:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                     CurReportDocument.DBColumnsVector = new Vector();
                     CurReportDocument.CurDBMetaData.setGroupFieldNames(new String[]{});
                     CurGroupFieldHandler.removeGroupFieldNames();
-                 }
+                }
                 break;
             case SOTITLEPAGE:
                 CurReportDocument.CurDBMetaData.FieldTitleSet = CurTitlesComponent.getFieldTitles();
@@ -488,7 +488,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
          public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
              if (ID == 1){
-                 CurDBCommandFieldSelection.setModified(true);
+                CurDBCommandFieldSelection.setModified(true);
                 enableWizardSteps(NewItems);
                 toggleSortingPage();
              }
