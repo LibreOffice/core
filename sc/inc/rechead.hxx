@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rechead.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,10 +157,10 @@ class ScWriteHeader
 private:
     SvStream&   rStream;
     ULONG       nDataPos;
-    ULONG       nDataSize;
+    sal_uInt32  nDataSize;
 
 public:
-    ScWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
+    ScWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);
     ~ScWriteHeader();
 };
 
@@ -191,11 +191,11 @@ private:
     SvStream&       rStream;
     SvMemoryStream  aMemStream;
     ULONG           nDataPos;
-    ULONG           nDataSize;
+    sal_uInt32      nDataSize;
     ULONG           nEntryStart;
 
 public:
-    ScMultipleWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
+    ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);
     ~ScMultipleWriteHeader();
 
     void    StartEntry();
