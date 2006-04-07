@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profiler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:24:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
@@ -122,7 +122,7 @@ String TTProfiler::GetProfileLine( ProfileSnapshot *pStart, ProfileSnapshot *pEn
 {
     String aProfileString;
 
-    aProfileString += Pad(GetpApp()->GetAppInternational().GetDuration( DIFF( pStart, pEnd, aTime) , TRUE, TRUE ), 12);
+    aProfileString += Pad(GetpApp()->GetAppLocaleDataWrapper().getDuration( DIFF( pStart, pEnd, aTime) , TRUE, TRUE ), 12);
 
     ULONG nProcessTicks = DIFF( pStart, pEnd, nProcessTicks );
     ULONG nSystemTicks = DIFF( pStart, pEnd, nSystemTicks );
