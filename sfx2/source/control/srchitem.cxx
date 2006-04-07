@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,9 @@
 #endif
 
 #include <svtools/memberid.hrc>
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
 
 #ifndef GCC
 #pragma hdrstop
@@ -480,7 +482,7 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
         {
             sal_Int16 nLocale;
             if (aSearchOpt.Locale.Language.getLength() || aSearchOpt.Locale.Country.getLength() )
-                nLocale = ConvertIsoNamesToLanguage( aSearchOpt.Locale.Language, aSearchOpt.Locale.Country );
+                nLocale = MsLangId::convertLocaleToLanguage( aSearchOpt.Locale );
             else
                 nLocale = LANGUAGE_NONE;
             rVal <<= nLocale;
@@ -549,10 +551,7 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
                 }
                 else
                 {
-                    String sLanguage, sCountry;
-                    ConvertLanguageToIsoNames( (sal_Int16) nInt, sLanguage, sCountry );
-                    aSearchOpt.Locale.Language = sLanguage;
-                    aSearchOpt.Locale.Country = sCountry;
+                    MsLangId::convertLanguageToLocale( (sal_Int16) nInt, aSearchOpt.Locale );
                 }
             }
             break;
