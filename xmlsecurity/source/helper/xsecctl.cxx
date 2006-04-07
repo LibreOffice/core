@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:23:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
 {
     sal_Bool bSuccess = sal_True;
 
-    rtl::OUString aDateStr, aTimeStr, sDoubleStr;
+    rtl::OUString aDateStr, aTimeStr, sHundredth;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
     sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
     if ( nPos >= 0 )
@@ -188,13 +188,31 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
         if ( nPos2 >= 0 )
         {
             aTimeStr = rString.copy( nPos + 1, nPos2 - nPos - 1 );
-            sDoubleStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0."));
-            sDoubleStr += rString.copy( nPos2 + 1 );
+
+            //Get the fraction of a second with the accuracy of one hundreds second.
+            //The fraction part of the date could have different accuracies. To calculate
+            //the count of a hundredth units one could form a fractional number by appending
+            //the value of the time string to 0. Then multiply it by 100 and use only the whole number.
+            //For example: 5:27:46,1 -> 0,1 * 100 = 10
+            //5:27:46,01 -> 0,01 * 100 = 1
+            //5:27:46,001 -> 0,001 * 100 = 0
+            //Due to the inaccuracy of floating point numbers the result may not be the same on different
+            //platforms. We had the case where we had a value of 24 hundredth of second, which converted to
+            //23 on Linux and 24 on Solaris and Windows.
+
+            //we only support a hundredth second
+            //make ,1 -> 10   ,01 -> 1    ,001 -> only use first two diggits
+            sHundredth = rString.copy(nPos2 + 1);
+            sal_Int32 len = sHundredth.getLength();
+            if (len == 1)
+                sHundredth += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+            if (len > 2)
+                sHundredth = sHundredth.copy(0, 2);
         }
         else
         {
             aTimeStr = rString.copy(nPos + 1);
-            sDoubleStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0.0"));
+            sHundredth = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
         }
     }
     else
@@ -264,7 +282,8 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
         rDateTime.Hours = (sal_uInt16)nHour;
         rDateTime.Minutes = (sal_uInt16)nMin;
         rDateTime.Seconds = (sal_uInt16)nSec;
-        rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
+ //       rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
+        rDateTime.HundredthSeconds = static_cast<sal_uInt16>(sHundredth.toInt32());
     }
     return bSuccess;
 }
@@ -1335,7 +1354,18 @@ void XSecController::exportSignature(
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList));
 
                     ::rtl::OUStringBuffer buffer;
-                    convertDateTime( buffer, signatureInfo.stDateTime );
+                    //If the xml signature was already contained in the document,
+                    //then we use the original date and time string, rather then the
+                    //converted one. When the original string is converted to the DateTime
+                    //structure then information may be lost because it only holds a fractional
+                    //of a second with a accuracy of one hundredth of second. If the string contains
+                    //milli seconds (document was signed by an application other than OOo)
+                    //and the converted time is written back, then the string looks different
+                    //and the signature is broken.
+                    if (signatureInfo.ouDateTime.getLength() > 0)
+                        buffer = signatureInfo.ouDateTime;
+                    else
+                        convertDateTime( buffer, signatureInfo.stDateTime );
                     xDocumentHandler->characters( buffer.makeStringAndClear() );
 
                     xDocumentHandler->endElement(
