@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:03:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,8 @@
 #define HID_WARNING_ALIENFORMAT                     (HID_SFX_START + 320)
 
 #define HID_HELP_ONSTARTUP_BOX                      (HID_SFX_START + 321)
+
+#define HID_DLG_CHECKFORONLINEUPDATE                (HID_SFX_START + 322)
 
 #define ACT_SFX_HID_END HID_HELP_ONSTARTUP_BOX
 
