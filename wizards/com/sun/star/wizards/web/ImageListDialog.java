@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageListDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:56:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    * and "deselect" not, both must be there :-(
    */
   public ImageListDialog(
-          XMultiServiceFactory xmsf, int hid_, String[] resources_)
+        XMultiServiceFactory xmsf, int hid_, String[] resources_)
   {
     super(xmsf);
     hid = hid_;
@@ -139,13 +139,13 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    * the il ImageList member properties
    */
   protected void build() {
-       //set dialog properties...
+    //set dialog properties...
 
-      int ilWidth = (il.getImageSize().Width + il.getGap().Width) * il.getCols()+ il.getGap().Width;
-      int ilHeight = (il.getImageSize().Height + il.getGap().Height) * il.getRows()+ il.getGap().Height;
+    int ilWidth = (il.getImageSize().Width + il.getGap().Width) * il.getCols()+ il.getGap().Width;
+    int ilHeight = (il.getImageSize().Height + il.getGap().Height) * il.getRows()+ il.getGap().Height;
 
-      int dialogWidth = 6 + ilWidth + 6 + 50 + 6;
-      int dialogHeight = 3 + 16 + 3 + ( ilHeight + 8 + 14 ) + 6;
+    int dialogWidth = 6 + ilWidth + 6 + 50 + 6;
+    int dialogHeight = 3 + 16 + 3 + ( ilHeight + 8 + 14 ) + 6;
 
     Helper.setUnoPropertyValues(xDialogModel,
       new String[] { "Closeable","Height","HelpURL", "Moveable","Name","PositionX","PositionY","Step","Title","Width"},
@@ -156,7 +156,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
 
     final String[] PROPNAMES = new String[] {"DefaultButton", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"};
 
-      Integer iButtonsX = new Integer(6 + ilWidth + 6);
+    Integer iButtonsX = new Integer(6 + ilWidth + 6);
 
     btnOK = insertButton("btnOK", null,
       PROPNAMES,
@@ -213,7 +213,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    * is called when the user clicks "none"
    */
   public void deselect() {
-      il.setSelected(-1);
+    il.setSelected(-1);
   }
   /**
    * is called when the user clicks "other"
@@ -226,7 +226,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    * @return the currently elected object.
    */
   public Object getSelected() {
-      return il.getSelectedObject();
+    return il.getSelectedObject();
   }
 
   /**
@@ -234,8 +234,8 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    * @param obj the object (out of the model) to be selected.
    */
   public void setSelected(Object obj) {
-      il.setSelected(obj);
-      il.showSelected();
+    il.setSelected(obj);
+    il.showSelected();
   }
 
   /**
@@ -246,15 +246,15 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
    *
    */
   public static class ARenderer implements Renderer {
-          String template;
-          /**
-           * @param aTempalte a template for this renderer.
-           * The strings %START, %END ,%TOTAL will be replaced
-           * with the actual values.
-           */
-          public ARenderer(String aTemplate) {
-              template = aTemplate;
-          }
+        String template;
+        /**
+         * @param aTempalte a template for this renderer.
+         * The strings %START, %END ,%TOTAL will be replaced
+         * with the actual values.
+         */
+        public ARenderer(String aTemplate) {
+            template = aTemplate;
+        }
 
         public String render(Object counter) {
             String s = JavaTools.replaceSubString(template, "" +  ((Counter) counter).start , START);
