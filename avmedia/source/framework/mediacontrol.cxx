@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediacontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:36:47 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,10 @@
 #include "mediawindow.hxx"
 #include "mediaplayer.hxx"
 #include "helpids.hrc"
+#include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
+#include <svtools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <cmath>
 #include <algorithm>
@@ -446,12 +448,14 @@ void MediaControl::implUpdateTimeField( double fCurTime )
 {
     if( maItem.getURL().getLength() > 0 )
     {
-        const International aInternational;
         String              aTimeString;
 
-        aTimeString += aInternational.GetDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) );
+        SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+
+        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) );
         aTimeString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aTimeString += aInternational.GetDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) ) ) );
+        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
 
         if( maTimeEdit.GetText() != aTimeString )
             maTimeEdit.SetText( aTimeString );
