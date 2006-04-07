@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:55:03 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2163,10 +2163,10 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
             switch( aIter->GetToken() )
             {
                 case HTML_O_COLSPAN:
-                    aSpanSize.mnCols = static_cast< SCCOL >( bound( aIter->GetString().ToInt32(), 1L, 256L ) );
+                    aSpanSize.mnCols = static_cast< SCCOL >( bound( aIter->GetString().ToInt32(), static_cast<sal_Int32>(1), static_cast<sal_Int32>(256) ) );
                 break;
                 case HTML_O_ROWSPAN:
-                    aSpanSize.mnRows = static_cast< SCROW >( bound( aIter->GetString().ToInt32(), 1L, 256L ) );
+                    aSpanSize.mnRows = static_cast< SCROW >( bound( aIter->GetString().ToInt32(), static_cast<sal_Int32>(1), static_cast<sal_Int32>(256) ) );
                 break;
                 case HTML_O_SDVAL:
                     pValStr.reset( new String( aIter->GetString() ) );
@@ -2790,7 +2790,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 {
 }
 
-sal_uInt32 ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
+ULONG ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = 0;
@@ -2818,7 +2818,7 @@ sal_uInt32 ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
-    sal_uInt32 nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    ULONG nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
     pEdit->SetImportHdl( aOldLink );
 
     mpGlobTable->Recalc();
@@ -2962,7 +2962,7 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
             break;
             case HTML_O_SIZE :
             {
-                sal_uInt32 nSize = bound( aIter->GetNumber(), 1UL, SC_HTML_FONTSIZES );
+                sal_uInt32 nSize = bound( aIter->GetNumber(), static_cast<sal_uInt32>(1UL), SC_HTML_FONTSIZES );
                 mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ nSize - 1 ], 100, ATTR_FONT_HEIGHT ) );
             }
             break;
