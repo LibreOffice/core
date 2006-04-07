@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormConfiguration.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:20:07 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ public class FormConfiguration {
 
         chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", SSUBFORMMODE, this,
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                              new Object[] {UIConsts.INTEGERS[8], "HID:34421", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)});
+                            new Object[] {UIConsts.INTEGERS[8], "HID:34421", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)});
         optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
                             new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34422", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)});
