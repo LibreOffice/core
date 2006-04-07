@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:52:29 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #include <math.h>
 #include <limits.h>
 
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
+#endif
 #include <tools/debug.hxx>
 
 #ifndef _SV_SVIDS_HRC
