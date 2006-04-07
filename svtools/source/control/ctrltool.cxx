@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:34 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 
 #include <string.h>
 
-#ifndef TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _VCL_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -933,7 +933,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     if ( eLanguage == LANGUAGE_DONTKNOW )
         eLanguage = Application::GetSettings().GetUILanguage();
     if ( eLanguage == LANGUAGE_SYSTEM )
-        eLanguage = ::GetSystemUILanguage();
+        eLanguage = MsLangId::getSystemUILanguage();
 
     switch( eLanguage )
     {
