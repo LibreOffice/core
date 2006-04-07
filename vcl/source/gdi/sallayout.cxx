@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:21:12 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
-#ifndef _TL_LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #ifndef _TL_DEBUG_HXX
