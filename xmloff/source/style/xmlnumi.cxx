@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:07:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,11 +757,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             sVerticalRel = rValue;
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, SAL_MAX_INT32) )
                 rListLevel.SetImageWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, SAL_MAX_INT32) )
                 rListLevel.SetImageHeight( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
