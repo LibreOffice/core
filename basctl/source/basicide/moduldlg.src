@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:20:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,7 @@ TabPage RID_TP_LIBS
         Size = MAP_APPFONT ( 130 , 87 ) ;
         TabStop = TRUE ;
     };
+
     PushButton RID_PB_EDIT
     {
         Text [ de ] = "~Bearbeiten";
@@ -263,9 +264,10 @@ TabPage RID_TP_LIBS
         Text [ en-US ] = "~Password..." ;
         TabStop = TRUE ;
     };
+
     PushButton RID_PB_NEWLIB
     {
-        Pos = MAP_APPFONT ( 144 , 86 ) ;
+        Pos = MAP_APPFONT ( 144 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
@@ -273,11 +275,19 @@ TabPage RID_TP_LIBS
     };
     PushButton RID_PB_APPEND
     {
-        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Pos = MAP_APPFONT ( 144 , 86 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hin~zufügen... : Hin~zuf³gen... */
-        Text [ de ] = "Hin~zufÃ¼gen..." ;
-        Text [ en-US ] = "~Append..." ;
+        Text [ de ] = "~Importieren..." ;
+        Text [ en-US ] = "~Import..." ;
+    };
+    PushButton RID_PB_EXPORT
+    {
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ de ] = "E~xport..." ;
+        Text [ en-US ] = "E~xport..." ;
+        TabStop = TRUE ;
     };
     PushButton RID_PB_DELETE
     {
@@ -382,3 +392,64 @@ ModalDialog RID_DLG_NEWLIB
     };
 };
 
+ModalDialog RID_DLG_EXPORT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 115 , 55 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ de ] = "Basic Bibliothek exportieren";
+    Text [ en-US ] = "Export Basic library";
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 59 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    RadioButton RB_EXPORTASPACKAGE
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 103, 10 );
+        Group = TRUE;
+        Text [ de ] = "Als Package ~exportieren";
+        Text [ en-US ] = "~Export as package";
+        TabStop = TRUE ;
+    };
+    RadioButton RB_EXPORTASBASIC
+    {
+        Pos = MAP_APPFONT( 6, 19 );
+        Size = MAP_APPFONT( 103, 10 );
+        //Group = TRUE;
+        Text [ de ] = "Als ~BASIC Bibliothek exportieren";
+        Text [ en-US ] = "Export as BASIC library";
+    };
+};
+
+String RID_STR_EXPORTPACKAGE
+{
+    Text [ de ] = "Bibliothek als Package exportieren";
+    Text [ en-US ] = "Export library as package";
+};
+
+String RID_STR_EXPORTBASIC
+{
+    Text [ de ] = "Als BASIC Bibliothek exportieren";
+    Text [ en-US ] = "Export as BASIC library";
+};
+
+String RID_STR_PACKAGE_BUNDLE
+{
+    Text [ en-US ] = "UNO Package Bundle";
+    Text [ de ] = "UNO Package Bundle";
+};
+
+ 
