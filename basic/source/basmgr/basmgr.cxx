@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:04:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,7 +546,7 @@ BasicLibInfo::BasicLibInfo( const String& rStorageName )
 void BasicLibInfo::Store( SotStorageStream& rSStream, const SotStorage& rStorageFromStream, const String& rBasMgrStorageName, BOOL bUseOldReloadInfo )
 {
     ULONG nStartPos = rSStream.Tell();
-    ULONG nEndPos = 0;
+    sal_uInt32 nEndPos = 0;
 
     USHORT nId = LIBINFO_ID;
     USHORT nVer = CURR_VER;
@@ -615,7 +615,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
 {
     BasicLibInfo* pInfo = new BasicLibInfo;
 
-    ULONG nEndPos;
+    sal_uInt32 nEndPos;
     USHORT nId;
     USHORT nVer;
 
@@ -1012,7 +1012,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
     xManagerStream->SetBufferSize( 1024 );
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
 
-    ULONG nEndPos;
+    sal_uInt32 nEndPos;
     *xManagerStream >> nEndPos;
 
     USHORT nLibs;
@@ -1090,7 +1090,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 
     xManagerStream->SetBufferSize( 1024 );
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
-    ULONG nBasicStartOff, nBasicEndOff;
+    sal_uInt32 nBasicStartOff, nBasicEndOff;
     *xManagerStream >> nBasicStartOff;
     *xManagerStream >> nBasicEndOff;
 
@@ -1416,7 +1416,7 @@ void BasicManager::Store( SotStorage& rStorage, const String& rBaseURL, BOOL bSt
         xManagerStream->Seek( 0 );
 
         ULONG nStartPos = 0;
-        ULONG nEndPos = 0;
+        sal_uInt32 nEndPos = 0;
         *xManagerStream << nEndPos;
 
         // Fehlerabfrage, falls schreiben nicht moeglich ?
@@ -1549,7 +1549,7 @@ BOOL BasicManager::ImpStoreLibary( StarBASIC* pLib, SotStorage& rStorage ) const
                 // Diese Informationen immer verschluesseln...
                 xBasicStream->SetBufferSize( 1024 );
                 xBasicStream->SetKey( szCryptingKey );
-                *xBasicStream << (ULONG)PASSWORD_MARKER;
+                *xBasicStream << static_cast<sal_uInt32>(PASSWORD_MARKER);
                 String aTmpPassword = pLibInfo->GetPassword();
                 xBasicStream->WriteByteString( aTmpPassword, RTL_TEXTENCODING_MS_1252 );
                 xBasicStream->SetBufferSize( 0 );
@@ -1659,7 +1659,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
                 // Ggf. stehen weitere Informationen im Stream...
                 xBasicStream->SetKey( szCryptingKey );
                 xBasicStream->RefreshBuffer();
-                ULONG nPasswordMarker = 0;
+                sal_uInt32 nPasswordMarker = 0;
                 *xBasicStream >> nPasswordMarker;
                 if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->IsEof() )
                 {
