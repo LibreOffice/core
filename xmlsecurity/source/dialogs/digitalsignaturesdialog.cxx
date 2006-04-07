@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:25:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/biginteger.hxx>
+#include "xmlsecurity/baseencoding.hxx"
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -272,7 +273,9 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             maSignatureHelper.StartMission();
 
             sal_Int32 nSecurityId = maSignatureHelper.GetNewSecurityId();
-            maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), aCertSerial );
+
+            maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), aCertSerial,
+                baseEncode(xCert->getEncoded(), BASE64));
 
             std::vector< rtl::OUString > aElements = DocumentSignatureHelper::CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
 
