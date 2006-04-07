@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Finalizer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:31:01 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
@@ -64,7 +65,6 @@ public class Finalizer {
         String slblProceed = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 51);
         String sWorkWithForm = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 52);
         String sModifyForm = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 53);
-
         CurUnoDialog.insertLabel("lblFormName",
           new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
           new Object[] { UIConsts.INTEGERS[8], slblFormName, new Integer(97), new Integer(25), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(111)}
@@ -109,7 +109,8 @@ public class Finalizer {
     }
 
     public boolean finish(){
-        return oFormDocument.oMainFormDBMetaData.storeDatabaseDocumentToTempPath(this.oFormDocument.xComponent, getName());
-
+//        if (!oFormDocument.oMainFormDBMetaData.hasFormDocumentByName(sFormName)){
+            return oFormDocument.oMainFormDBMetaData.storeDatabaseDocumentToTempPath(this.oFormDocument.xComponent, getName());
+//        }
     }
 }
