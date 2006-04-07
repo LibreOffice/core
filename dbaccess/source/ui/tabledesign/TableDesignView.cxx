@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:40:48 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
