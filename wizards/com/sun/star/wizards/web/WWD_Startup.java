@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:22:44 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,16 +314,16 @@ public abstract class WWD_Startup extends WWD_General{
      */
     private boolean getOOProxies() throws Exception {
         Object node = Configuration.getConfigurationRoot(xMSF,"org.openoffice.Inet/Settings",false);
-         int i = Configuration.getInt("ooInetProxyType",node);
-         //System.out.println("WWD:Startup:getOOProxies:" + i);
-         switch (i) {
-             case 0 : //no proxies
-                 return false;
-             case 2 : //http proxies
-                 return true;
-             default :
-                 return true;
-         }
+        int i = Configuration.getInt("ooInetProxyType",node);
+        //System.out.println("WWD:Startup:getOOProxies:" + i);
+        switch (i) {
+            case 0 : //no proxies
+                return false;
+            case 2 : //http proxies
+                return true;
+            default :
+                return true;
+        }
     }
 
 
