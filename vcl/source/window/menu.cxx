@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:10:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,6 @@
 #endif
 #ifndef _VCL_I18NHELP_HXX
 #include <i18nhelp.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef _SV_TASKPANELIST_HXX
 #include <taskpanelist.hxx>
