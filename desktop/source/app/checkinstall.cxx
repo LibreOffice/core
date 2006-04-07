@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkinstall.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:05:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _DATE_HXX
+#include <tools/date.hxx>
 #endif
 
 using namespace rtl;
