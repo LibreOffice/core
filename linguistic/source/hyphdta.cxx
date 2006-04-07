@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdta.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:52:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
-#endif
-
 #include "hyphdta.hxx"
 #include "lngprops.hxx"
 #include "misc.hxx"
@@ -48,9 +44,6 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
