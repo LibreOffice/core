@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskbar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:07:09 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 #ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
@@ -340,7 +337,6 @@ private:
     Time                maTime;
     XubString           maTimeText;
     AutoTimer           maTimer;
-    International       maIntn;
     long                mnClockWidth;
     long                mnItemWidth;
     long                mnFieldWidth;
