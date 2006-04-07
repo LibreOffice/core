@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdiclist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
