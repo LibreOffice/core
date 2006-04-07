@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 14:14:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,10 @@ extern char *strdup(const char *);
 #endif
 
 #ifdef MACOSX
+#define __OPENTRANSPORTPROVIDERS__ // these are already defined
+#define TimeValue CFTimeValue      // Do not conflict with TimeValue in sal/inc/osl/time.h
+#include <Carbon/Carbon.h>
+#undef TimeValue
 #   ifndef ETIME
 #       define  ETIME ETIMEDOUT
 #   endif
@@ -372,6 +376,13 @@ int  readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result );
 char *asctime_r( const struct tm *tm, char *buffer );
 char *macxp_tempnam( const char *tmpdir, const char *prefix );
 void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion, unsigned int *minorVersion, unsigned int *minorMinorVersion );
+#ifdef __cplusplus
+extern "C" {
+#endif
+int macxp_resolveAlias(char *path, int buflen);
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
