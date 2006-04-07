@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 17:37:28 $
+#   last change: $Author: vg $ $Date: 2006-04-07 11:58:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ SHARE_OBJS =	\
     $(OBJ)$/util.obj \
     $(OBJ)$/util2.obj \
     $(SLO)$/biginteger.obj \
+    $(SLO)$/baseencoding.obj \
     $(SLO)/xmlsignaturehelper.obj	\
     $(SLO)/xmlsignaturehelper2.obj	\
     $(SLO)/xsecctl.obj	\
