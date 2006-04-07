@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:40:58 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
-#include <tools/isolang.hxx>
 #include "analysis.hrc"
 
 #ifndef SCA_BESSEL_HXX
