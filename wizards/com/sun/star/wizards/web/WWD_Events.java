@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_Events.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:58:36 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,7 +918,7 @@ public abstract class WWD_Events extends WWD_Startup {
          * starts.
          */
         if (proxies)
-             p.cp_Publish = false;
+            p.cp_Publish = false;
 
         /*
          * There is currently a bug, which crashes office when
@@ -965,7 +965,7 @@ public abstract class WWD_Events extends WWD_Startup {
          */
         public void keyPressed(KeyEvent ke) {
             if (ke.KeyChar == '&' )
-                 time = System.currentTimeMillis();
+                time = System.currentTimeMillis();
             else if (ke.KeyChar == '%' && ( (System.currentTimeMillis() - time) < 300) )
                 {
                     Boolean b = (Boolean)getControlProperty("btnWizardFinish","Enabled");
