@@ -5,9 +5,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 14:58:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,9 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Tools</value>
                     <value xml:lang="de">Werkzeuge</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/fullscreenbar" oor:op="replace">
