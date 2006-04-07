@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselect.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:09:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #include <list>
 #include <sal/types.h>
 #include <tools/string.hxx>
-#include <tools/lang.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
