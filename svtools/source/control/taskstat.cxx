@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskstat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:08:12 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _DATE_HXX
+#include <tools/date.hxx>
+#endif
 
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
@@ -52,6 +55,11 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
+
+#include <syslocale.hxx>
 #include <taskbar.hxx>
 
 // =======================================================================
@@ -264,7 +272,7 @@ BOOL TaskStatusBar::ImplUpdateClock()
              (aTime.GetHour() != maTime.GetHour()) )
         {
             maTime = aTime;
-            maTimeText = maIntn.GetTime( aTime, FALSE, FALSE );
+            maTimeText = SvtSysLocale().GetLocaleData().getTime( aTime, FALSE, FALSE );
             return TRUE;
         }
     }
@@ -322,7 +330,7 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
     {
         if ( mnFieldFlags & TASKSTATUSFIELD_CLOCK )
         {
-            XubString aStr = maIntn.GetTime( Time( 23, 59, 59 ), FALSE, FALSE );
+            XubString aStr = SvtSysLocale().GetLocaleData().getTime( Time( 23, 59, 59 ), FALSE, FALSE );
             mnClockWidth = GetTextWidth( aStr )+(TASKSTATUSBAR_CLOCXOFFX*2);
         }
         else
@@ -512,7 +520,11 @@ void TaskStatusBar::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                XubString aStr = maIntn.GetLongDate( Date() );
+                SvtSysLocale aSL;
+                const LocaleDataWrapper& rLDW = aSL.GetLocaleData();
+                CalendarWrapper aCal( rLDW.getServiceFactory());
+                aCal.loadDefaultCalendar( rLDW.getLoadedLocale());
+                XubString aStr = rLDW.getLongDate( Date(), aCal );
                 if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                     Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
                 else
