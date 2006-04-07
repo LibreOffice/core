@@ -10,6 +10,8 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.ui.event.Task;
+import com.sun.star.wizards.web.ErrorHandler;
+import com.sun.star.wizards.web.ProcessErrors;
 import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGExporter;
 
@@ -19,7 +21,7 @@ import com.sun.star.wizards.web.data.CGExporter;
  * An exporter which is configured with a filter name, and
  * uses the specified filter to export documents.
  */
-public class FilterExporter extends AbstractExporter {
+public class FilterExporter extends AbstractExporter implements ProcessErrors {
 
     protected String filterName;
     protected Properties props = new Properties();
@@ -27,12 +29,7 @@ public class FilterExporter extends AbstractExporter {
     /* (non-Javadoc)
      * @see com.sun.star.wizards.web.export.Exporter#export(java.lang.Object, java.io.File, com.sun.star.wizards.web.data.CGSettings, com.sun.star.lang.XMultiServiceFactory)
      */
-    public boolean export(
-        CGDocument source,
-        String target,
-        XMultiServiceFactory xmsf,
-        Task task
-        ) {
+    public boolean export( CGDocument source,  String target, XMultiServiceFactory xmsf, Task task) throws IOException  {
 
         boolean result = true;
         Object document = null;
@@ -45,14 +42,17 @@ public class FilterExporter extends AbstractExporter {
 
         }
         catch (IOException iox) {
+            iox.printStackTrace(System.out);
             result = false;
+            throw iox;
         }
         finally {
             closeDocument(document,xmsf);
             calcFileSize(source,target,xmsf);
             task.advance(true);
         }
-        return true;
+        return result;
+
     }
 
     /* (non-Javadoc)
