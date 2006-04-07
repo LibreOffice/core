@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:07:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:55:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,24 +84,30 @@ typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInforma
 
 struct SignatureInformation
 {
-    sal_Int32                       nSecurityId;
-    sal_Int32           nSecurityEnvironmentIndex;
-
-    //sal_Int32         nStatus;
+    sal_Int32 nSecurityId;
+    sal_Int32 nSecurityEnvironmentIndex;
     ::com::sun::star::xml::crypto::SecurityOperationStatus nStatus;
-
     SignatureReferenceInformations  vSignatureReferenceInfors;
-    rtl::OUString                   ouX509IssuerName;
-    rtl::OUString                   ouX509SerialNumber;
-    rtl::OUString                   ouX509Certificate;
-    rtl::OUString                   ouSignatureValue;
-
-    //rtl::OUString                   ouDate;
-    //rtl::OUString                   ouTime;
+    rtl::OUString ouX509IssuerName;
+    rtl::OUString ouX509SerialNumber;
+    rtl::OUString ouX509Certificate;
+    rtl::OUString ouSignatureValue;
     ::com::sun::star::util::DateTime stDateTime;
 
-    rtl::OUString                   ouSignatureId;
-    rtl::OUString                   ouPropertyId;
+    //We also keep the date and time as string. This is done when this
+    //structure is created as a result of a XML signature being read.
+    //When then a signature is added or another removed, then the original
+    //XML signatures are written again (unless they have been removed).
+    //If the date time string is converted into the DateTime structure
+    //then information can be lost because it only holds a fractional
+    //of a second with a accuracy of one hundredth of second.
+    //If the string contains
+    //milli seconds (because the document was created by an application other than OOo)
+    //and the converted time is written back, then the string looks different
+    //and the signature is broken.
+    rtl::OUString ouDateTime;
+    rtl::OUString ouSignatureId;
+    rtl::OUString ouPropertyId;
 
     SignatureInformation( sal_Int32 nId )
     {
