@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:43:45 $
+#   last change: $Author: vg $ $Date: 2006-04-07 16:17:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ HXX1FILES=  $(INC)$/debug.hxx       \
             $(INC)$/stream.hxx      \
             $(INC)$/cachestr.hxx    \
             $(INC)$/errcode.hxx     \
-            $(INC)$/lang.hxx        \
             $(INC)$/ref.hxx         \
             $(INC)$/tools.h
 HXX2FILES=  $(INC)$/solar.h
@@ -84,7 +83,7 @@ HXX10FILES= $(INC)$/errinf.hxx $(INC)$/errcode.hxx $(INC)$/string.hxx
 HXX11FILES= $(INC)$/urlobj.hxx
 HXX12FILES= $(INC)$/bigint.hxx
 HXX13FILES= $(INC)$/multisel.hxx
-HXX14FILES= $(INC)$/date.hxx $(INC)$/time.hxx $(INC)$/datetime.hxx $(INC)$/intn.hxx $(INC)$/timestamp.hxx
+HXX14FILES= $(INC)$/date.hxx $(INC)$/time.hxx $(INC)$/datetime.hxx $(INC)$/timestamp.hxx
 HXX15FILES= $(INC)$/wldcrd.hxx $(INC)$/fsys.hxx
 HXX16FILES= $(INC)$/queue.hxx $(INC)$/dynary.hxx $(INC)$/stack.hxx
 HXX17FILES= $(INC)$/stream.hxx $(INC)$/cachestr.hxx
@@ -107,7 +106,6 @@ LIB7FILES=  $(LB)$/gen.lib          \
             $(MEMMGRLIB)            \
             $(LB)$/datetime.lib     \
             $(LB)$/timestamp.lib    \
-            $(LB)$/intntl.lib       \
             $(LB)$/fsys.lib         \
             $(LB)$/communi.lib      \
             $(LB)$/stream.lib       \
@@ -128,7 +126,6 @@ LIB1FILES+=  \
             $(SLB)$/mtools.lib      \
             $(SLB)$/datetime.lib    \
             $(SLB)$/timestamp.lib   \
-            $(SLB)$/intntl.lib      \
             $(SLB)$/fsys.lib        \
             $(SLB)$/communi.lib     \
             $(SLB)$/stream.lib      \
@@ -171,7 +168,7 @@ SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
 SHL1USE_EXPORTS=ordinal
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB)
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB) $(I18NISOLANGLIB)
 
 .IF "$(WITH_LIBART)"=="YES"
 SHL1STDLIBS+=   $(LIBART_LIBS)
