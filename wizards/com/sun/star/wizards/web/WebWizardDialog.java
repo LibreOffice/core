@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WebWizardDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:59:23 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ public abstract class WebWizardDialog  extends WizardDialog implements WebWizard
   }
 
   public void buildStep6() {
-      short tabIndex = 60;
+    short tabIndex = 60;
     lblTitleGeneralPage = insertLabel("lblTitleGeneralPage",
       PROPNAMES_TITLE,
       new Object[] { fontDescriptor4,INTEGERS[8],resources.reslblTitleGeneralPage_value,Boolean.TRUE,"lblTitleGeneralPage",new Integer(90),INTEGERS[9],INTEGERS[6], new Short(tabIndex++),new Integer(232)}
@@ -643,20 +643,20 @@ public abstract class WebWizardDialog  extends WizardDialog implements WebWizard
    * builds the layouts image list.
    */
   public void buildStepX() {
-      ilLayouts = new ImageList();
-      ilLayouts.setPos(new Size(97,38));
-      ilLayouts.setImageSize(new Size(34,30));
-      ilLayouts.setCols(5);
-      ilLayouts.setRows(3);
-      ilLayouts.setStep(new Short((short)3));
-      ilLayouts.setShowButtons(false);
-      ilLayouts.setRenderer(new LayoutRenderer());
-      ilLayouts.scaleImages = Boolean.FALSE;
-      ilLayouts.tabIndex = 31;
-      ilLayouts.helpURL = HID3_IL_LAYOUTS_IMG1;
+    ilLayouts = new ImageList();
+    ilLayouts.setPos(new Size(97,38));
+    ilLayouts.setImageSize(new Size(34,30));
+    ilLayouts.setCols(5);
+    ilLayouts.setRows(3);
+    ilLayouts.setStep(new Short((short)3));
+    ilLayouts.setShowButtons(false);
+    ilLayouts.setRenderer(new LayoutRenderer());
+    ilLayouts.scaleImages = Boolean.FALSE;
+    ilLayouts.tabIndex = 31;
+    ilLayouts.helpURL = HID3_IL_LAYOUTS_IMG1;
 
-      /*for (int i = 0; i<8; i++)
-        imgIconsPrev[i] = insertImage("imgIconPrev" + i,
+    /*for (int i = 0; i<8; i++)
+      imgIconsPrev[i] = insertImage("imgIconPrev" + i,
         new String[] { "BackgroundColor","Border","Height","ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Tabstop", "Width"},
         new Object[] { new Integer(-1), new Short((short)0),new Integer(14),"file:///c:/bludisk.gif", new Integer(97 + i * 20 + 7 ),new Integer(147),Boolean.FALSE,INTEGERS[5],Boolean.FALSE,new Integer(14)});
         */
