@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:51:23 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -79,11 +79,11 @@ static osl::Mutex &  GetOwnMutex()
 
 static Locale lcl_CreateLocale( LanguageType eLang )
 {
-    String aLangStr, aCtryStr;
+    Locale aLocale;
     if ( eLang != LANGUAGE_NONE )
-        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+        MsLangId::convertLanguageToLocale( eLang, aLocale );
 
-    return Locale( aLangStr, aCtryStr, OUString() );
+    return aLocale;
 }
 
 
@@ -94,7 +94,7 @@ static INT16 lcl_LocaleToLanguage( const Locale& rLocale )
         return LANGUAGE_NONE;
 
     //  Variant of Locale is ignored
-    return ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    return MsLangId::convertLocaleToLanguage( rLocale );
 }
 
 
@@ -121,7 +121,7 @@ static inline INT16 lcl_CfgLocaleStrToLanguage( const OUString &rCfgLocaleStr )
 {
     INT16 nRes = LANGUAGE_NONE;
     if (0 != rCfgLocaleStr.getLength())
-        nRes = ConvertIsoStringToLanguage( rCfgLocaleStr );
+        nRes = MsLangId::convertIsoStringToLanguage( rCfgLocaleStr );
     return nRes;
 }
 
@@ -130,7 +130,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( INT16 nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_NONE != nLanguage)
-        aRes = ConvertLanguageToIsoString( nLanguage );
+        aRes = MsLangId::convertLanguageToIsoString( nLanguage );
     return aRes;
 }
 
@@ -139,7 +139,7 @@ static void lcl_CfgAnyToLanguage( const Any &rVal, INT16& rLanguage )
 {
     OUString aTmp;
     if ((rVal >>= aTmp)  &&  0 != aTmp.getLength())
-       rLanguage = ConvertIsoStringToLanguage( aTmp );
+       rLanguage = MsLangId::convertIsoStringToLanguage( aTmp );
 }
 
 
