@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:30 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
