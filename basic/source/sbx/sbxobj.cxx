@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:51:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -763,7 +763,7 @@ BOOL SbxObject::LoadData( SvStream& rStrm, USHORT nVer )
     // Wenn kein fremdes Objekt enthalten ist, uns selbst eintragen
     if( aData.eType == SbxOBJECT && !aData.pObj )
         aData.pObj = this;
-    ULONG nSize;
+    sal_uInt32 nSize;
     XubString aDfltProp;
     rStrm.ReadByteString( aClassName, RTL_TEXTENCODING_ASCII_US );
     rStrm.ReadByteString( aDfltProp, RTL_TEXTENCODING_ASCII_US );
