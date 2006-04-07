@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 07:48:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+package com.sun.star.wizards.ui;
 
 import java.util.Vector;
 
@@ -261,10 +262,6 @@ public class FilterComponent{
                                 case DataType.BOOLEAN:
                                     double dblvalue = ((Double) curValue).doubleValue();
                                     curValue = new Boolean(dblvalue == 1.0);
-                                    /**TODO: 1) Datei SingleSelectQueryComposer modifizieren:
-                                    / Zeilen 1525ff in Methode auslagern und Aufruf in Zeile 1356 aendern TypeConverter is parameter
-                                     * 2) setDisplayCondition aendern
-                                    */
                                     break;
                                 default:
                                     curValue = String.valueOf(curValue);
@@ -475,8 +472,6 @@ public class FilterComponent{
                                 String sValue = (String.valueOf(oValue));
                                 return (!sValue.equals(""));
                             }
-//                          if (!AnyConverter.isVoid(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue")))
-//                          return (!AnyConverter.isVoid(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue")));
                         }
                     }
                     return false;
