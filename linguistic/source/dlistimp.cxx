@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:50:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,14 @@
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
 #endif
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -390,7 +390,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         // Aufnehmen in die Liste der Dictionaries
         // Wenn existent nicht aufnehmen
         //
-        INT16 nSystemLanguage = ::GetSystemLanguage();
+        INT16 nSystemLanguage = MsLangId::getSystemLanguage();
         String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
         if (STRING_NOTFOUND != nPos)
