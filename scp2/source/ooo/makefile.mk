@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:48:03 $
+#   last change: $Author: vg $ $Date: 2006-04-07 14:42:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ USE_JAVAVER=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE :  icuversion.mk
+.INCLUDE :  i18npool/version.mk
 
 .IF "$(ENABLE_CRASHDUMP)"!=""
 SCPDEFS+=-DENABLE_CRASHDUMP
@@ -158,7 +159,8 @@ SCPDEFS+=-DENABLE_CAIRO
 SCPDEFS+=\
     -DICU_MAJOR=$(ICU_MAJOR) \
     -DICU_MINOR=$(ICU_MINOR) \
-    -DICU_MICRO=$(ICU_MICRO)
+    -DICU_MICRO=$(ICU_MICRO) \
+    -DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 
 SCP_PRODUCT_TYPE=osl
 
