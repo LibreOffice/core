@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:38:46 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,16 +588,16 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCREVISOPT_CHANGE:
-                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( (ULONG) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( (sal_uInt32) nIntVal );
                         break;
                     case SCREVISOPT_INSERTION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( (ULONG) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( (sal_uInt32) nIntVal );
                         break;
                     case SCREVISOPT_DELETION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( (ULONG) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( (sal_uInt32) nIntVal );
                         break;
                     case SCREVISOPT_MOVEDENTRY:
-                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( (ULONG) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( (sal_uInt32) nIntVal );
                         break;
                 }
             }
