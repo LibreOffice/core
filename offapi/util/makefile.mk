@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-14 11:08:54 $
+#   last change: $Author: vg $ $Date: 2006-04-07 08:40:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssdomviews.db \
     $(UCR)$/cssdomevents.db \
     $(UCR)$/cssscanner.db \
+    $(UCR)$/cssscript.db \
     $(UCR)$/csssdb.db \
     $(UCR)$/csssdbc.db \
     $(UCR)$/csssdbcx.db \
