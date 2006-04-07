@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:35:36 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,8 @@
 #include <osl/file.hxx>
 #endif
 #include <rtl/math.hxx>
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #include <vector>
@@ -65,6 +62,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 using namespace rtl;
