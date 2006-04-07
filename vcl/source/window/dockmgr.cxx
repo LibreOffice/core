@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:48:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
