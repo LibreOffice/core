@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:01:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <tools/ref.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
-#include <tools/lang.hxx>
+#include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
 #include <svtools/memberid.hrc>
 #include <sfx2/sfxsids.hrc>
