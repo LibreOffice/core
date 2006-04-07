@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:20:12 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public class FormWizard extends WizardDialog{
 
     String sShowBinaryFields = "";
     String sMsgWizardName = "";
+    String serrFormNameexists = "";
 
     public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
@@ -176,9 +177,9 @@ public class FormWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Gemeinde_Test.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
@@ -193,8 +194,8 @@ public class FormWizard extends WizardDialog{
         curFormDocument.xProgressBar.setValue(20);
 
         insertLabel("lblBinaryHelpText",
-                         new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
-                          new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAINPAGE),new Integer(210)});
+                        new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
+                        new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAINPAGE),new Integer(210)});
 
         curFormConfiguration = new FormConfiguration(this);
         curFormDocument.xProgressBar.setValue(30);
@@ -203,7 +204,7 @@ public class FormWizard extends WizardDialog{
         curSubFormFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         insertLabel("lblSubFormBinaryHelpText",
             new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
-              new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDSPAGE), new Integer(210)});
+            new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDSPAGE), new Integer(210)});
 
         curFormDocument.xProgressBar.setValue(40);
 
@@ -234,13 +235,20 @@ public class FormWizard extends WizardDialog{
         int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE)){
             this.curFinalizer.initialize(curDBCommandFieldSelection.getSelectedCommandName(), this.curFormDocument);
-            bFormOpenMode = curFinalizer.getOpenMode();
-            FormName = curFinalizer.getName();
-            if (curFormDocument.finalizeForms(CurDataEntrySetter, curFieldLinker, curFormConfiguration)){;
-                if (curFinalizer.finish()){
-                    bcreateForm = true;
-                    xDialog.endExecute();
+            String sNewFormName = curFinalizer.getName();
+            if (!curFormDocument.oMainFormDBMetaData.hasFormDocumentByName(sNewFormName)){
+                bFormOpenMode = curFinalizer.getOpenMode();
+                FormName = curFinalizer.getName();
+                if (curFormDocument.finalizeForms(CurDataEntrySetter, curFieldLinker, curFormConfiguration)){;
+                    if (curFinalizer.finish()){
+                        bcreateForm = true;
+                        xDialog.endExecute();
+                    }
                 }
+            }
+            else{
+                String smessage = JavaTools.replaceSubString(serrFormNameexists, sNewFormName, "%FORMNAME");
+                showMessageBox("WarningBox", com.sun.star.awt.VclWindowPeerAttribute.OK, smessage );
             }
         }
     }
@@ -306,6 +314,8 @@ public class FormWizard extends WizardDialog{
         slblTables = oResource.getResText(UIConsts.RID_FORM + 6);
         slblFields = oResource.getResText(UIConsts.RID_FORM + 12);
         slblSelFields = oResource.getResText(UIConsts.RID_FORM + 1);
+        serrFormNameexists = oResource.getResText(UIConsts.RID_FORM + 98);
+
         return true;
     }
 
@@ -333,7 +343,7 @@ public class FormWizard extends WizardDialog{
                 toggleMainFormSteps();
              }
              else{
-                 toggleSubFormSteps();
+                toggleSubFormSteps();
              }
          }
 
@@ -355,7 +365,7 @@ public class FormWizard extends WizardDialog{
          }
 
          private boolean toggleSubFormSteps(){
-             curSubFormFieldSelection.setModified(true);
+            curSubFormFieldSelection.setModified(true);
             boolean benable = curSubFormFieldSelection.getSelectedFieldNames().length > 0;
             enablefromStep(SOFIELDLINKERPAGE, benable);
             if (benable)
