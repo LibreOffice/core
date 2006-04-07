@@ -3,6 +3,8 @@ mkdir: %_DEST%\xml%_EXT%
 
 mkdir: %_DEST%\inc%_EXT%\i18npool
 
+..\inc\i18npool\*.* %_DEST%\inc%_EXT%\i18npool\*.*
+
 ..\%__SRC%\bin\i18npool.uno.dll %_DEST%\bin%_EXT%\i18npool.uno.dll
 ..\%__SRC%\lib\i18npool.uno.so %_DEST%\lib%_EXT%\i18npool.uno.so
 ..\%__SRC%\lib\i18npool.uno.dylib %_DEST%\lib%_EXT%\i18npool.uno.dylib
@@ -30,5 +32,12 @@ mkdir: %_DEST%\inc%_EXT%\i18npool
 ..\%__SRC%\bin\textconv_dict.dll %_DEST%\bin%_EXT%\textconv_dict.dll
 ..\%__SRC%\lib\libtextconv_dict.so %_DEST%\lib%_EXT%\libtextconv_dict.so
 ..\%__SRC%\lib\libtextconv_dict.dylib %_DEST%\lib%_EXT%\libtextconv_dict.dylib
+
+..\version.mk  %_DEST%\inc%_EXT%\i18npool\version.mk
+
+..\%__SRC%\lib\ii18nisolang*.lib %_DEST%\lib%_EXT%\ii18nisolang*.lib
+..\%__SRC%\bin\i18nisolang*.dll %_DEST%\bin%_EXT%\i18nisolang*.dll
+..\%__SRC%\lib\libi18nisolang*.so %_DEST%\lib%_EXT%\libi18nisolang*.so
+..\%__SRC%\lib\libi18nisolang*.dylib %_DEST%\lib%_EXT%\libi18nisolang*.dylib
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
