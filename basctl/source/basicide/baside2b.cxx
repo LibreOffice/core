@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:32:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:05:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1861,7 +1861,6 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
             WatchItem* pChildItem = new WatchItem();
             pChildItem->maName = aName;
             pChildEntry->SetUserData( pChildItem );
-            MakeVisible( pChildEntry );
         }
         if( nPropCount > 0 )
         {
@@ -1914,7 +1913,6 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
             SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
             nElementCount++;
             pChildEntry->SetUserData( pChildItem );
-            MakeVisible( pChildEntry );
         }
         if( nElementCount > 0 )
         {
