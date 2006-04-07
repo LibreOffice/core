@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:01:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,6 +642,76 @@ void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion,
     *majorVersion = 0;
     *minorVersion = 0;
     *minorMinorVersion = 0;
+}
+
+/*
+ * Add support for resolving Mac native alias files (not the same as unix alias files)
+ * returns 0 on success.
+ */
+int macxp_resolveAlias(char *path, int buflen)
+{
+  FSRef aFSRef;
+  OSStatus nErr;
+  Boolean bFolder;
+  Boolean bAliased;
+  char *unprocessedPath = path;
+
+  if ( *unprocessedPath == '/' )
+    unprocessedPath++;
+
+  int nRet = 0;
+  while ( !nRet && unprocessedPath && *unprocessedPath )
+    {
+      unprocessedPath = strchr( unprocessedPath, '/' );
+      if ( unprocessedPath )
+    *unprocessedPath = '\0';
+
+      nErr = noErr;
+      bFolder = FALSE;
+      bAliased = FALSE;
+      if ( FSPathMakeRef( (const UInt8 *)path, &aFSRef, 0 ) == noErr )
+    {
+      nErr = FSResolveAliasFileWithMountFlags( &aFSRef, TRUE, &bFolder, &bAliased, kResolveAliasFileNoUI );
+      if ( nErr == nsvErr )
+        {
+          errno = ENOENT;
+          nRet = -1;
+        }
+      else if ( nErr == noErr && bAliased )
+        {
+          char tmpPath[ PATH_MAX ];
+          if ( FSRefMakePath( &aFSRef, (UInt8 *)tmpPath, PATH_MAX ) == noErr )
+        {
+          int nLen = strlen( tmpPath ) + ( unprocessedPath ? strlen( unprocessedPath + 1 ) + 1 : 0 );
+          if ( nLen < buflen && nLen < PATH_MAX )
+            {
+              if ( unprocessedPath )
+            {
+              int nTmpPathLen = strlen( tmpPath );
+              strcat( tmpPath, "/" );
+              strcat( tmpPath, unprocessedPath + 1 );
+              strcpy( path, tmpPath);
+              unprocessedPath = path + nTmpPathLen;
+            }
+              else if ( !unprocessedPath )
+            {
+              strcpy( path, tmpPath);
+            }
+            }
+          else
+            {
+              errno = ENAMETOOLONG;
+              nRet = -1;
+            }
+        }
+        }
+    }
+
+      if ( unprocessedPath )
+    *unprocessedPath++ = '/';
+    }
+
+  return nRet;
 }
 
 #endif  /* defined MACOSX */
