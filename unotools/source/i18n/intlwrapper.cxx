@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intlwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:44:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 IntlWrapper::IntlWrapper(
@@ -57,7 +57,7 @@ IntlWrapper::IntlWrapper(
         pCollator( NULL ),
         pCaseCollator( NULL )
 {
-    eLanguage = ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country );
+    eLanguage = MsLangId::convertLocaleToLanguage( aLocale );
 }
 
 
@@ -73,10 +73,7 @@ IntlWrapper::IntlWrapper(
         pCollator( NULL ),
         pCaseCollator( NULL )
 {
-    String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( eLanguage, aLanguage, aCountry );
-    aLocale.Language = aLanguage;
-    aLocale.Country = aCountry;
+    MsLangId::convertLanguageToLocale( eLanguage, aLocale );
 }
 
 
