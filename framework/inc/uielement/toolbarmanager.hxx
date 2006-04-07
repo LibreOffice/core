@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:10:28 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,19 @@
 
 #include <vcl/toolbox.hxx>
 
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace frame
+            {
+                class XLayoutManager;
+            }
+        }
+    }
+}
 
 namespace framework
 {
@@ -167,6 +180,19 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void Destroy();
 
     protected:
+        enum ExecuteCommand
+        {
+            EXEC_CMD_CLOSETOOLBAR,
+            EXEC_CMD_NONE,
+            EXEC_CMD_COUNT
+        };
+
+        struct ExecuteInfo
+        {
+            rtl::OUString   aToolbarResName;
+            ExecuteCommand  nCmd;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        };
         struct ControllerParams
         {
             sal_Int16 nWidth;
@@ -187,6 +213,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         DECL_LINK( MenuSelect, Menu * );
         DECL_LINK( MenuDeactivate, Menu * );
         DECL_LINK( AsyncUpdateControllersHdl, Timer * );
+        DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo* );
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
