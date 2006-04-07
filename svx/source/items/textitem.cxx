@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:18:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,8 +109,8 @@
 #endif
 
 #include <rtl/ustring>
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -2642,7 +2642,12 @@ SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const USHORT nId )
 
 USHORT SvxLanguageItem::GetValueCount() const
 {
-    return LANGUAGE_COUNT;  // aus tlintl.hxx
+    // #i50205# got rid of class International
+    DBG_ERRORFILE("SvxLanguageItem::GetValueCount: supposed to return a count of what?");
+    // FIXME: previously returned LANGUAGE_COUNT from tools/intn.hxx which was wrong anyway.
+    // Could be SvxLanguageTable::GetEntryCount() (all locales with resource string)?
+    // Could be LocaleDataWrapper::getInstalledLanguageTypes() (all locales with locale data)?
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -2710,11 +2715,7 @@ sal_Bool SvxLanguageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int16)(GetValue());
         break;
         case MID_LANG_LOCALE:
-            String sLanguage, sCountry;
-            ::ConvertLanguageToIsoNames( GetValue(), sLanguage, sCountry );
-            lang::Locale aRet;
-            aRet.Language = sLanguage;
-            aRet.Country = sCountry;
+            lang::Locale aRet( MsLangId::convertLanguageToLocale( GetValue()));
             rVal <<= aRet;
         break;
     }
@@ -2745,7 +2746,7 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 return sal_False;
 
             if (aLocale.Language.getLength() || aLocale.Country.getLength())
-                SetValue(ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ));
+                SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
             else
                 SetValue(LANGUAGE_NONE);
         }
