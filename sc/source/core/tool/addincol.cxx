@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:54:14 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/xception.hxx>
 #include <sfx2/objsh.hxx>
@@ -313,10 +313,10 @@ BOOL ScUnoAddInCollection::GetExcelName( const String& rCalcName,
             const sheet::LocalizedName* pArray = rSequence.getConstArray();
             long i;
 
-            String aLangStr, aCountryStr;
-            ConvertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
-            rtl::OUString aUserLang = aLangStr.ToLowerAscii();
-            rtl::OUString aUserCountry = aCountryStr.ToUpperAscii();
+            rtl::OUString aLangStr, aCountryStr;
+            MsLangId::convertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
+            rtl::OUString aUserLang = aLangStr.toAsciiLowerCase();
+            rtl::OUString aUserCountry = aCountryStr.toAsciiUpperCase();
 
             //  first check for match of both language and country
 
@@ -500,11 +500,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         //  AddIns must use the language for which the office is installed
         LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
 
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( eOfficeLang, aLanguage, aCountry );
-
-        rtl::OUString aEmpty;
-        lang::Locale aLocale(  aLanguage, aCountry, aEmpty );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale( eOfficeLang ));
         xAddIn->setLocale( aLocale );
 
         String aServiceName = String( xName->getServiceName() );
