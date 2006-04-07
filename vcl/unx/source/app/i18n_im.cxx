@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:07:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,13 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
         char *locale = SetSystemLocale( pLocale );
         if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
         {
+            #ifdef MACOSX // MacOS X always uses UTF-8 for the filesystem
+            osl_setThreadTextEncoding (RTL_TEXTENCODING_UTF8);
+            locale = SetSystemLocale( "en_US.UTF-8" );
+            #else
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
             locale = SetSystemLocale( "en_US" );
+            #endif
             #ifdef SOLARIS
             SetSystemEnvironment( "en_US" );
             #endif
