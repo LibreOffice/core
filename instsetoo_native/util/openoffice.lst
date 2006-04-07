@@ -10,6 +10,7 @@ OpenOffice
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -56,6 +57,7 @@ OpenOffice_wJRE
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -102,6 +104,7 @@ OpenOffice_Dev
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
