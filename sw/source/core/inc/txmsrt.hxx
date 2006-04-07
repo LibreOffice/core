@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:02:35 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef _TXMSRT_HXX
 #define _TXMSRT_HXX
 
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
