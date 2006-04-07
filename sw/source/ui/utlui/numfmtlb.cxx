@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:52:24 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-#ifndef _LANG_HXX //autogen
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE
