@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:18:47 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
         }
         catch (Exception ex) {
+            removeTerminateListener();
             ex.printStackTrace();
             running=false;
             return;
@@ -317,7 +318,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     public boolean initializeTemplates() {
         try {
-             String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
+            String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
 
             //sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
             String sAgendaPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/agenda" );
@@ -519,8 +520,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             xWindow.setVisible(false);
             running = false;
-            closeDocument();
             agendaTemplate.xTextDocument.unlockControllers();
+            closeDocument();
             removeTerminateListener();
 
             PropertyValue loadValues[] = new PropertyValue[2];
