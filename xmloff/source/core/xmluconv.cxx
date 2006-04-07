@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:53:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,7 +946,7 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
             bDone = sal_True;
         else if ( sal_Unicode('0') <= c && sal_Unicode('9') >= c )
         {
-            if ( nTemp >= LONG_MAX / 10 )
+            if ( nTemp >= SAL_MAX_INT32 / 10 )
                 bSuccess = sal_False;
             else
             {
@@ -2192,7 +2192,7 @@ bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time
         {
             if ( bFractional )
             {
-                if ( nSecondsFraction >= LONG_MAX / 10 )
+                if ( nSecondsFraction >= SAL_MAX_INT32 / 10 )
                     bSuccess = false;
                 else
                 {
@@ -2202,7 +2202,7 @@ bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time
             }
             else
             {
-                if ( nTemp >= LONG_MAX / 10 )
+                if ( nTemp >= SAL_MAX_INT32 / 10 )
                     bSuccess = false;
                 else
                 {
