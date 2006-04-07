@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:17:30 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
 #endif
 
 #include <tools/fsys.hxx>
-#include <tools/intn.hxx>
-#include <tools/isolang.hxx>
 #include <tools/stream.hxx>
 
 #ifndef _RSCERROR_H
