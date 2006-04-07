@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:09:04 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
