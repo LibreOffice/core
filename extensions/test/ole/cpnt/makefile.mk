@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:51:13 $
+#   last change: $Author: vg $ $Date: 2006-04-07 11:59:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,22 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+#UNOUCRDEP=    $(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
+#UNOUCRRDB=    $(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
+
+#UNOUCROUT=    $(OUT)$/inc
+
+#UNOTYPES= oletest.XTestSequence \
+#    oletest.XTestStruct     \
+#    oletest.XTestOther      \
+#    oletest.XTestInterfaces \
+#    oletest.XSimple         \
+#    oletest.XSimple2        \
+#    oletest.XSimple3        \
+#    oletest.XTestInParameters       \
+#    oletest.XIdentity       
+
+INCPRE+= -I$(ATL_INCLUDE)
 
 SLOFILES=	\
         $(SLO)$/cpnt.obj
@@ -55,9 +71,18 @@ SHL1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
 
+#.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+#	SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+#.ENDIF
+
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-    SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+.IF "$(USE_STLP_DEBUG)" != ""
+    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
+.ELSE
+    SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
+.ENDIF
+
 
 SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
@@ -67,19 +92,20 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-ALLIDLFILES:=	..$/idl$/oletest.idl
 
-# --- Targets ------------------------------------------------------
+ALLTAR : 	$(MISC)$/$(TARGET).cppumaker.done
+
 
 .INCLUDE :  target.mk
 
-ALLTAR : 	$(BIN)$/oletest.rdb
+ALLIDLFILES:=	..$/idl$/oletest.idl
 
 $(BIN)$/oletest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR)  -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
-#unoheader: $(BIN)$/testcppu.rdb
-#     +cppumaker -BUCR $(CPPUMAKERFLAGS) -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
+$(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/oletest.rdb
+    $(CPPUMAKER) -O$(INCCOM) -BUCR $< -X$(SOLARBINDIR)/types.rdb
+    $(TOUCH) $@
 
