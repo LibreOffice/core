@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:11:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,8 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#include <vos/process.hxx>
+#include <rtl/bootstrap.hxx>
 
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include "svtools/miscopt.hxx"
@@ -217,6 +219,8 @@ static const char ITEM_DESCRIPTOR_CONTAINER[]         = "ItemDescriptorContainer
 static const char ITEM_DESCRIPTOR_LABEL[]             = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]              = "Type";
 static const char ITEM_DESCRIPTOR_MODULEIDENTIFIER[]  = "ModuleIdentifier";
+
+static const char REFERENCECOMMAND_ONLINEUPDATE[]   = ".uno:OnlineUpdate";
 
 struct SystemMenuData
 {
@@ -768,7 +772,7 @@ throw ( RuntimeException )
                     // Visibility
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, aVisibilityStatus.bVisible );
                 }
-                else
+                else if ( !aFeatureURL.equalsAscii( REFERENCECOMMAND_ONLINEUPDATE ))
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
             }
 
@@ -1012,8 +1016,8 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu )
 
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
-    static const char REFERENCECOMMAND_AFTER[]  = ".uno:OnlineRegistrationDlg";
-    static const char REFERENCECOMMAND_BEFORE[] = ".uno:About";
+    static const char REFERENCECOMMAND_AFTER[]          = ".uno:OnlineRegistrationDlg";
+    static const char REFERENCECOMMAND_BEFORE[]         = ".uno:About";
 
     // retrieve menu extension item
     MenuExtensionItem aMenuItem( GetMenuExtension() );
@@ -1045,6 +1049,38 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 
         pMenu->InsertItem( nNewItemId, aMenuItem.aLabel, 0, nInsertPos );
         pMenu->SetItemCommand( nNewItemId, aMenuItem.aURL );
+    }
+
+    ::vos::OStartupInfo     aInfo;
+    ::rtl::OUString         aIniName;
+
+    aInfo.getExecutableFile( aIniName );
+    sal_uInt32 lastIndex = aIniName.lastIndexOf('/');
+    if ( lastIndex > 0 )
+    {
+        aIniName    = aIniName.copy( 0, lastIndex+1 );
+        aIniName    += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "version" ));
+#ifdef WNT
+        aIniName    += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
+#else
+        aIniName    += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
+#endif
+    }
+
+    ::rtl::OUString  aUpdateURL;
+    ::rtl::Bootstrap aVersionIni( aIniName );
+
+    // check update URL, if empty set user interface element to hidden state
+    aVersionIni.getFrom( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UpdateURL" )), aUpdateURL );
+    if ( aUpdateURL.getLength() == 0 )
+    {
+        String aUpdateCmd( String::CreateFromAscii( REFERENCECOMMAND_ONLINEUPDATE ));
+        for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
+        {
+            sal_uInt16 nItemId = pMenu->GetItemId( n );
+            if ( pMenu->GetItemCommand( nItemId ) == aUpdateCmd )
+                pMenu->HideItem( nItemId );
+        }
     }
 }
 
@@ -1218,8 +1254,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
                                     pMenu->HideItem( pMenuItemHandler->nItemId );
                             }
-                            else
-                                pMenu->ShowItem( pMenuItemHandler->nItemId );
 
                             if ( m_bIsBookmarkMenu )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
