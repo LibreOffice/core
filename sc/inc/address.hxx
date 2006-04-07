@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:48:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,6 @@ typedef sal_Int32 SCsCOLROW;
 // size_t typedef to be able to find places where code was changed from USHORT
 // to size_t and is used to read/write from/to streams.
 typedef size_t SCSIZE;
-#ifndef MACOSX
-// resolve ambiguity, TODO: move to tools/solar.h, or even better use ::std::min/max
-inline size_t Min( size_t a, size_t b) { return a<b ? a : b; }
-inline size_t Max( size_t a, size_t b) { return a>b ? a : b; }
-#endif
 
 // Maximum possible value of data type, NOT maximum row value.
 // MSC confuses numeric_limit max() with macro max() if vcl/wintypes.hxx is
