@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGContent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@ public class CGContent         extends ConfigSetItem implements XMLProvider {
   public ConfigSet   cp_Documents = new ConfigSet(CGDocument.class);
 
   public CGContent() {
-        /*cp_Documents = new ConfigSet(CGDocument.class) {
+      /*cp_Documents = new ConfigSet(CGDocument.class) {
         protected DefaultListModel createChildrenList() {
             return cp_Contents.getChildrenList();
         }
-        };*/
+      };*/
 
   }
 
