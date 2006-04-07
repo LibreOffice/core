@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:28:08 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,8 @@
 #include <svtools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <tools/shl.hxx>
+#include <vos/process.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
@@ -211,6 +213,7 @@
 #include "dialogs.hrc"
 #include "sorgitm.hxx"
 #include "sfxhelp.hxx"
+#include "updatedlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -901,6 +904,14 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
         }
         break;
+
+        case SID_ONLINEUPDATE:
+        {
+            SfxUpdateDialog aUpdateDlg( GetTopWindow() );
+            aUpdateDlg.Execute();
+            bDone = true;
+            break;
+        }
 
         case SID_BASICIDE_APPEAR:
         {
