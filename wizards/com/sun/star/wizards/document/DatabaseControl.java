@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseControl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:26:33 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,10 @@ import com.sun.star.wizards.db.FieldColumn;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class DatabaseControl extends Control {
-    int ifieldtype;
+    protected int ifieldtype;
+    private int iMemofieldwidth = IIMGFIELDWIDTH;
+    private int iMemofieldheight = -1;
+
 
 
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn){
@@ -128,14 +131,27 @@ public class DatabaseControl extends Control {
         if (this.icontroltype == FormHandler.SOIMAGECONTROL)
             return oFormHandler.getImageControlHeight();
         else{
-            if (this.icontroltype == DataType.LONGVARCHAR){
-                Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
-                return (oFormHandler.getDBRefHeight() * 4);
+            if (this.ifieldtype == DataType.LONGVARCHAR){
+                if (iMemofieldheight == -1){
+                    Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
+                    iMemofieldheight = oFormHandler.getDBRefHeight() * 4;
+                }
+                return iMemofieldheight;
             }
             else if (this.icontroltype == FormHandler.SOCHECKBOX)
                 return super.getPreferredHeight();
             else
                 return oFormHandler.getDBRefHeight();
+        }
+    }
+
+
+    public int getDBWidth(){
+        if (this.ifieldtype == DataType.LONGVARCHAR){
+            return 2 * getDBHeight();
+        }
+        else{
+            return getPreferredWidth();
         }
     }
 
@@ -185,21 +201,8 @@ public class DatabaseControl extends Control {
 
 // TODO: HelpText???
             }
-//          If oLocObject.PropertySetinfo.HasPropertyByName("Width")Then // Note: an Access AutoincrementField does not provide this property Width
-//              oLocObject.Width = CurFieldLength + CurScale + 1
-//          End If
-//          If CurIsCurrency Then
-// TODO: How do you set currencies?
-//          End If
         }
         else if (icontroltype == FormHandler.SOTEXTBOX){     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
-//          If CurFieldLength = 0 Then           // Or oLocObject.MaxTextLen > SBMAXTEXTSIZE
-//              oLocObject.MaxTextLen = SBMAXTEXTSIZE
-//              CurFieldLength = SBMAXTEXTSIZE
-//          else
-//              oLocObject.MaxTextLen = CurFieldLength
-//          End If
-//          oLocObject.DefaultText = CurDefaultValue
         }
 //      else if (CurControlType == cDateBox)
 // TODO Why does this not work?:        oLocObject.DefaultDate = CurDefaultValue
@@ -209,11 +212,7 @@ public class DatabaseControl extends Control {
         else if (icontroltype == FormHandler.SOCHECKBOX){
 // TODO Why does this not work?:        oLocObject.DefautState = CurDefaultValue
         }
-//      If oLocObject.PropertySetInfo.HasPropertybyName("FormatKey") Then
-//          oLocObject.FormatKey = CurFormatKey
-//      End If
     } catch (Exception e) {
-        // TODO Auto-generated catch block
         e.printStackTrace(System.out);
     }}
 
