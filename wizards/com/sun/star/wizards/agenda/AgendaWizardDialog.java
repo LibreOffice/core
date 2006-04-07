@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 16:13:07 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
