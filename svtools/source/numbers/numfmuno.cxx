@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:01:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <vos/mutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -129,23 +129,11 @@ LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
-    String aLangStr = rLocale.Language;
-    String aCtryStr = rLocale.Country;
-    //  Variant is ignored
-
-    LanguageType eRet = ConvertIsoNamesToLanguage( aLangStr, aCtryStr );
+    LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 
     return eRet;
-}
-
-void lcl_FillLocale( lang::Locale& rLocale, LanguageType eLang )
-{
-    String aLangStr, aCtryStr;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
-    rLocale.Language = aLangStr;
-    rLocale.Country  = aCtryStr;
 }
 
 //----------------------------------------------------------------------------------------
@@ -791,8 +779,8 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         }
         else if (aString.EqualsAscii( PROPERTYNAME_LOCALE ))
         {
-            lang::Locale aLocale;
-            lcl_FillLocale( aLocale, pFormat->GetLanguage() );
+            lang::Locale aLocale( MsLangId::convertLanguageToLocale(
+                        pFormat->GetLanguage()));
             aRet <<= aLocale;
         }
         else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))
@@ -926,8 +914,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         BOOL bThousand, bRed;
         USHORT nDecimals, nLeading;
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        lang::Locale aLocale;
-        lcl_FillLocale( aLocale, pFormat->GetLanguage() );
+        lang::Locale aLocale( MsLangId::convertLanguageToLocale(
+                    pFormat->GetLanguage()));
 
         uno::Sequence<beans::PropertyValue> aSeq(13);
         beans::PropertyValue* pArray = aSeq.getArray();
