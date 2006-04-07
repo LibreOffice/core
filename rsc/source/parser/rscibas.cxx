@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:42:31 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <tools/isolang.hxx>
-#include <tools/intn.hxx>
+#include <i18npool/mslangid.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>
 
@@ -115,16 +114,16 @@ void RscLangEnum::Init( RscNameTable& rNames )
     sal_Int32 nIndex = 0;
     unsigned long nI = 0x400; // stay away from selfdefined...
     char csep = '-';
-    const IsoLangEntry* pLangEntry;
+    const MsLangId::IsoLangEntry* pLangEntry;
     ByteString aCountry, aLang;
 
-    while (( pLangEntry = GetIsoLangEntry( nIndex )) && ( pLangEntry->meLang != LANGUAGE_DONTKNOW ))
+    while (( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d %d %s\n",
                  nIndex,
                  pLangEntry->meLang,
-                 ConvertLanguageToIsoByteString( pLangEntry->meLang ).GetBuffer() );
+                 MsLangId::convertLanguageToIsoByteString( pLangEntry->meLang ).GetBuffer() );
 #endif
         aLang = pLangEntry->maLangStr;
         aCountry = pLangEntry->maCountry;
@@ -212,90 +211,6 @@ RscEnum * RscTypCont::InitLangType()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitDateFormatType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
-*************************************************************************/
-RscEnum * RscTypCont::InitDateFormatType()
-{
-    RscEnum * pDate;
-    pDate = new RscEnum( pHS->getID( "EnumDateFormat" ), RSC_NOTYPE );
-
-    SETCONST( pDate, "MDY", MDY );
-    SETCONST( pDate, "DMY", DMY );
-    SETCONST( pDate, "YMD", YMD );
-
-    return pDate;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont::InitTimeType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
-*************************************************************************/
-RscEnum * RscTypCont::InitTimeFormatType()
-{
-    RscEnum * pTime;
-    pTime = new RscEnum( pHS->getID( "EnumTimeFormat" ), RSC_NOTYPE );
-
-    SETCONST( pTime, "HOUR_12", HOUR_12 );
-    SETCONST( pTime, "HOUR_24", HOUR_24 );
-
-    return pTime;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont::InitWeekDayFormatType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
-*************************************************************************/
-RscEnum * RscTypCont::InitWeekDayFormatType()
-{
-    RscEnum * pWeekDay;
-    pWeekDay = new RscEnum( pHS->getID( "EnumWeekDayFormat" ), RSC_NOTYPE );
-
-    SETCONST( pWeekDay, "DAYOFWEEK_NONE", DAYOFWEEK_NONE );
-    SETCONST( pWeekDay, "DAYOFWEEK_SHORT", DAYOFWEEK_SHORT );
-    SETCONST( pWeekDay, "DAYOFWEEK_LONG", DAYOFWEEK_LONG );
-
-    return pWeekDay;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont::InitMonthFormatType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
-*************************************************************************/
-RscEnum * RscTypCont::InitMonthFormatType()
-{
-    RscEnum * pMonth;
-    pMonth = new RscEnum( pHS->getID( "EnumMonthFormat" ), RSC_NOTYPE );
-
-    SETCONST( pMonth, "MONTH_NORMAL", MONTH_NORMAL );
-    SETCONST( pMonth, "MONTH_ZERO", MONTH_ZERO );
-    SETCONST( pMonth, "MONTH_SHORT", MONTH_SHORT );
-    SETCONST( pMonth, "MONTH_LONG", MONTH_LONG );
-
-    return pMonth;
-}
-
-/*************************************************************************
-|*
 |*    RscTypCont::InitFieldUnitsType()
 |*
 |*    Beschreibung
@@ -323,31 +238,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     SETCONST( pFieldUnits, "FUNIT_PERCENT", FUNIT_PERCENT );
 
     return pFieldUnits;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont::InitDayOfWeekType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
-*************************************************************************/
-RscEnum * RscTypCont::InitDayOfWeekType()
-{
-    RscEnum * pDayOfWeek;
-    pDayOfWeek = new RscEnum( pHS->getID( "EnumDayOfWeek" ), RSC_NOTYPE );
-
-    SETCONST( pDayOfWeek, "MONDAY", MONDAY );
-    SETCONST( pDayOfWeek, "TUESDAY", TUESDAY );
-    SETCONST( pDayOfWeek, "WEDNESDAY", WEDNESDAY );
-    SETCONST( pDayOfWeek, "THURSDAY", THURSDAY );
-    SETCONST( pDayOfWeek, "FRIDAY", FRIDAY );
-    SETCONST( pDayOfWeek, "SATURDAY", SATURDAY );
-    SETCONST( pDayOfWeek, "SUNDAY", SUNDAY );
-
-    return pDayOfWeek;
 }
 
 /*************************************************************************
