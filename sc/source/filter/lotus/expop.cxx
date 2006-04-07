@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:40:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ inline void ExportWK1::Snrange()
 
 inline void ExportWK1::Hidcol()
 {   // (0x64)
-    ULONG   nHide = 0x00000000;   // ...niemand ist versteckt
+    sal_uInt32 nHide = 0x00000000;   // ...niemand ist versteckt
 
     aOut << ( USHORT ) 0x64 << ( USHORT ) 32;
 
