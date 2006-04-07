@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18nhelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:40:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -105,7 +105,7 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( mxMSF, (i18n::TransliterationModules)nModules );
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( ConvertIsoNamesToLanguage( maLocale.Language, maLocale.Country ) );
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( MsLangId::convertLocaleToLanguage( maLocale ) );
     }
     return *mpTransliterationWrapper;
 }
