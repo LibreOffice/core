@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:36:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
 
-    sal_Int32   nRes = Max( Min( aCbbRes.GetText().ToInt32(), 600L), 75L );
+    sal_Int32   nRes = Max( Min( aCbbRes.GetText().ToInt32(), sal_Int32( 600 ) ), sal_Int32( 75 ) );
     ::com::sun::star::awt::Size aSize(
         (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
             (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
