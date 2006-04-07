@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:15:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
