@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:43:35 $
+#   last change: $Author: vg $ $Date: 2006-04-07 10:24:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,8 @@ SLOFILES =  \
     $(SLO)$/linksrc.obj\
     $(SLO)$/linkmgr2.obj\
     $(SLO)$/lnkbase2.obj\
-    $(SLO)$/impldde.obj
+    $(SLO)$/impldde.obj\
+    $(SLO)$/fwkhelper.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
