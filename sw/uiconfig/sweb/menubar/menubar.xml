@@ -363,6 +363,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport" menu:helpid="6683" menu:label="" />
             <menu:menuitem menu:id=".uno:OnlineRegistrationDlg" menu:helpid="6537" menu:label="" />
+            <menu:menuitem menu:id=".uno:OnlineUpdate" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:About" menu:helpid="5301" menu:label="" />
         </menu:menupopup>
