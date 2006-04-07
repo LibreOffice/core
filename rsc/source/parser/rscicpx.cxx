@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:46:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,7 +1310,7 @@ RscTop * RscTypCont::InitClassTime( RscTop * pSuper )
 /*************************************************************************
 |*    RscTypCont::InitClassDate()
 *************************************************************************/
-RscTop * RscTypCont::InitClassDate( RscTop * pSuper, RscEnum * /*pDayOfWeek*/ )
+RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassDate;
@@ -1333,129 +1333,6 @@ RscTop * RscTypCont::InitClassDate( RscTop * pSuper, RscEnum * /*pDayOfWeek*/ )
     pClassDate->SetVariable( nId, &a1to31Short, NULL, 0, DATE_DAY  );
 
     return pClassDate;
-}
-
-/*************************************************************************
-|*    RscTypCont::InitClassInt1()
-*************************************************************************/
-RscTop * RscTypCont::InitClassInt1( RscTop * pSuper,
-                            RscEnum * pDateFormat,
-                            RscEnum * pTimeFormat, RscEnum * pDayOfWeekFormat,
-                            RscEnum * pMonthFormat )
-{
-    Atom        nId;
-    RscTop *    pClassInt;
-
-    // Klasse anlegen
-    nId = pHS->getID( "SubInternational" );
-    pClassInt = new RscClass( nId, RSC_NOTYPE, pSuper );
-    //pClassInt->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Language", VARNAME );
-    pClassInt->SetVariable( nId, &aLangType, NULL, 0, INT1_LANGUAGE  );
-
-    nId = aNmTb.Put( "FormatLanguage", VARNAME );
-    pClassInt->SetVariable( nId, &aLangType, NULL, 0, INT1_FORMATLANGUAGE  );
-
-    nId = aNmTb.Put( "DateFormat", VARNAME );
-    pClassInt->SetVariable( nId, pDateFormat, NULL, 0, INT1_DATEFORMAT  );
-
-    nId = aNmTb.Put( "DateDayLeadingZero", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT1_DATEDAYLEADINDZERO  );
-
-    nId = aNmTb.Put( "DateMonthLeadingZero", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT1_DATEMONTHLEADINDZERO  );
-
-    nId = aNmTb.Put( "DateCentury", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT1_DATECENTURY  );
-
-    nId = aNmTb.Put( "LongDateFormat", VARNAME );
-    pClassInt->SetVariable( nId, pDateFormat, NULL, 0, INT1_LONGDATEFORMAT  );
-
-    nId = aNmTb.Put( "LongDateDayOfWeekFormat", VARNAME );
-    pClassInt->SetVariable( nId, pDayOfWeekFormat, NULL, 0,
-                                                        INT1_LONGDATEDAYOFWEEKFORMAT  );
-
-    nId = aNmTb.Put( "LongDateDayOfWeekSep", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT1_LONGDATEDAYOFWEEKSEP );
-
-    nId = aNmTb.Put( "LongDateDayLeadingZero", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0,
-                                                        INT1_LONGDATEDAYLEADINGZERO );
-
-    nId = aNmTb.Put( "LongDateDaySep", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT1_LONGDATEDAYSEP );
-
-    nId = aNmTb.Put( "LongDateMonthFormat", VARNAME );
-    pClassInt->SetVariable( nId, pMonthFormat, NULL, 0,
-                                                        INT1_LONGDATEMONTHFORMAT );
-
-    nId = aNmTb.Put( "LongDateMonthSep", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT1_LONGDATEMONTHSEP );
-
-    nId = aNmTb.Put( "LongDateCentury", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT1_LONGDATECENTURY  );
-
-    nId = aNmTb.Put( "LongDateYearSep", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT1_LONGDATEYEARSEP  );
-
-    nId = aNmTb.Put( "TimeFormat", VARNAME );
-    pClassInt->SetVariable( nId, pTimeFormat, NULL, 0, INT1_TIMEFORMAT  );
-
-        // Maske voll zweite Struktur anfangen
-
-        return pClassInt;
-}
-
-
-/*************************************************************************
-|*    RscTypCont::InitClassInternational()
-*************************************************************************/
-RscTop * RscTypCont::InitClassInternational( RscTop * pSuper,
-                                RscEnum * /*pDateFormat*/,
-                                RscEnum * /*pTimeFormat*/, RscEnum * /*pWeekDayFormat*/,
-                                RscEnum * /*pMonthFormat*/ )
-{
-    Atom        nId;
-    RscTop *    pClassInt;
-
-    // Klasse anlegen
-    nId = pHS->getID( "International" );
-    pClassInt = new RscClass( nId, RSC_INTERNATIONAL, pSuper );
-    pClassInt->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassInt );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "TimeLeadingZero", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT2_TIMELEADINGZERO  );
-
-    nId = aNmTb.Put( "TimeAM", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT2_TIMEAM  );
-
-    nId = aNmTb.Put( "TimePM", VARNAME );
-    pClassInt->SetVariable( nId, &aString, NULL, 0, INT2_TIMEPM  );
-
-    nId = aNmTb.Put( "NumLeadingZero", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT2_NUMLEADINGZERO  );
-
-    nId = aNmTb.Put( "NumDigits", VARNAME );
-    pClassInt->SetVariable( nId, &aUShort, NULL, 0, INT2_NUMDIGITS  );
-
-    nId = aNmTb.Put( "CurrPositiveFormat", VARNAME );
-    pClassInt->SetVariable( nId, &aUShort, NULL, 0, INT2_CURRPOSITIVEFORMAT  );
-
-    nId = aNmTb.Put( "CurrNegativeFormat", VARNAME );
-    pClassInt->SetVariable( nId, &aUShort, NULL, 0, INT2_CURRNEGATIVEFORMAT  );
-
-    nId = aNmTb.Put( "CurrDigits", VARNAME );
-    pClassInt->SetVariable( nId, &aUShort, NULL, 0, INT2_CURRDIGITS  );
-
-    nId = aNmTb.Put( "NumTrailingZeros", VARNAME );
-    pClassInt->SetVariable( nId, &aBool, NULL, 0, INT2_NUMTRAILINGZEROS  );
-
-    return pClassInt;
 }
 
 /*************************************************************************
@@ -1488,8 +1365,7 @@ RscTop * RscTypCont::InitClassPatternFormatter( RscTop * pSuper )
 /*************************************************************************
 |*    RscTypCont::InitClassNumericFormatter()
 *************************************************************************/
-RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper,
-                                                                                        RscTop * pClassI12 )
+RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassNumeric;
@@ -1509,9 +1385,6 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper,
     nId = aNmTb.Put( "StrictFormat", VARNAME );
     pClassNumeric->SetVariable( nId, &aBool, NULL,
                                 0, NUMERICFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "Intnl", VARNAME );
-    pClassNumeric->SetVariable( nId, pClassI12, NULL,
-                                0, NUMERICFORMATTER_I12 );
     nId = aNmTb.Put( "DecimalDigits", VARNAME );
     pClassNumeric->SetVariable( nId, &aUShort, NULL,
                                 0, NUMERICFORMATTER_DECIMALDIGITS );
@@ -1570,7 +1443,7 @@ RscTop * RscTypCont::InitClassCurrencyFormatter
 |*    RscTypCont::InitClassDateFormatter()
 *************************************************************************/
 RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
-                        RscTop * pClassDate, RscTop * pClassI12 )
+                        RscTop * pClassDate )
 {
     Atom        nId;
     RscTop *    pClassDateF;
@@ -1593,9 +1466,6 @@ RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
     nId = aNmTb.Put( "StrictFormat", VARNAME );
     pClassDateF->SetVariable( nId, &aBool, NULL,
                                                                         0, DATEFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "Intnl", VARNAME );
-    pClassDateF->SetVariable( nId, pClassI12, NULL,
-                                                                        0, DATEFORMATTER_I12 );
     nId = aNmTb.Put( "Value", VARNAME );
     pClassDateF->SetVariable( nId, pClassDate, NULL,
                                                                         0, DATEFORMATTER_VALUE );
@@ -1607,7 +1477,7 @@ RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
 |*    RscTypCont::InitClassTimeFormatter()
 *************************************************************************/
 RscTop * RscTypCont::InitClassTimeFormatter( RscTop * pSuper,
-                        RscTop * pClassTime, RscTop * pClassI12,
+                        RscTop * pClassTime,
                         RscEnum * pTimeFieldFormat )
 {
     Atom        nId;
@@ -1634,9 +1504,6 @@ RscTop * RscTypCont::InitClassTimeFormatter( RscTop * pSuper,
     nId = aNmTb.Put( "StrictFormat", VARNAME );
     pClassTimeF->SetVariable( nId, &aBool, NULL,
                               0, TIMEFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "Intnl", VARNAME );
-    pClassTimeF->SetVariable( nId, pClassI12, NULL,
-                              0, TIMEFORMATTER_I12 );
     nId = aNmTb.Put( "Value", VARNAME );
     pClassTimeF->SetVariable( nId, pClassTime, NULL,
                               0, TIMEFORMATTER_VALUE );
