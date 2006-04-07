@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:36:07 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@
 #define ITEMID_FRAMEDIR     SID_ATTR_FRAMEDIRECTION
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
@@ -3152,7 +3152,7 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     if( CSS1_IDENT == pExpr->GetType() ||
         CSS1_STRING == pExpr->GetType() )
     {
-        LanguageType eLang = ConvertIsoStringToLanguage( pExpr->GetString() );
+        LanguageType eLang = MsLangId::convertIsoStringToLanguage( pExpr->GetString() );
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
