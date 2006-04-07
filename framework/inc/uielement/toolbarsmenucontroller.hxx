@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:48:22 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,8 @@ namespace framework
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > getLayoutManagerToolbars( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager );
             rtl::OUString getUINameFromCommand( const rtl::OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const rtl::OUString& rCommandURL );
-            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId );
+            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId, const rtl::OUString& aLabel );
+            sal_Bool isContextSensitiveToolbarNonVisible();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >                 m_xURLTransformer;
@@ -165,6 +166,7 @@ namespace framework
             rtl::OUString                                                                               m_aPropUIName;
             rtl::OUString                                                                               m_aPropResourceURL;
             sal_Bool                                                                                    m_bModuleIdentified;
+            sal_Bool                                                                                    m_bResetActive;
             std::vector< rtl::OUString >                                                                m_aCommandVector;
             IntlWrapper                                                                                 m_aIntlWrapper;
     };
