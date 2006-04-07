@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:24:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:41:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,9 +139,6 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
-#endif
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
