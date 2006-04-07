@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:47:09 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,12 +120,7 @@ void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
 *************************************************************************/
 void RscTypCont::Init()
 {
-    RscEnum *   pDateFormat;
-    RscEnum *   pTimeFormat;
-    RscEnum *   pWeekDayFormat;
-    RscEnum *   pMonthFormat;
     RscEnum *   pFieldUnits;
-    RscEnum *   pDayOfWeek;
     RscEnum *   pTimeFieldFormat;
     RscEnum *   pColor;
     RscEnum *   pMapUnit;
@@ -195,8 +190,6 @@ void RscTypCont::Init()
     RscTop   *  pClassSpinButton;
     RscTop   *  pClassTime;
     RscTop   *  pClassDate;
-    RscTop   *  pClassI12;
-    RscTop   *  pLangClassI12;
     RscTop   *  pClassSpinField;
     RscTop   *  pClassPatternField;
     RscTop   *  pClassNumericField;
@@ -410,12 +403,7 @@ void RscTypCont::Init()
 {
     /********** I n i t   B a s i c   T y p e s **************************/
     InitLangType();
-    aBaseLst.Insert( pDateFormat = InitDateFormatType(), LIST_APPEND );
-    aBaseLst.Insert( pTimeFormat = InitTimeFormatType(), LIST_APPEND );
-    aBaseLst.Insert( pWeekDayFormat = InitWeekDayFormatType(), LIST_APPEND );
-    aBaseLst.Insert( pMonthFormat = InitMonthFormatType(), LIST_APPEND );
     aBaseLst.Insert( pFieldUnits = InitFieldUnitsType(), LIST_APPEND );
-    aBaseLst.Insert( pDayOfWeek = InitDayOfWeekType(), LIST_APPEND );
     aBaseLst.Insert( pTimeFieldFormat = InitTimeFieldFormat(), LIST_APPEND );
     aBaseLst.Insert( pColor   = InitColor(), LIST_APPEND             );
     aBaseLst.Insert( pMapUnit       = InitMapUnit(),       LIST_APPEND );
@@ -774,29 +762,10 @@ void RscTypCont::Init()
     pRoot->Insert( pClassTime );
 
     /********** D A T E **************************************************/
-    pClassDate = InitClassDate( pClassMgr, pDayOfWeek );
+    pClassDate = InitClassDate( pClassMgr );
     pRoot->Insert( pClassDate );
 }
 {
-    /********** I N T E R N A T I O N A L ********************************/
-    {
-    RscTop * pClassInt1;
-
-    pClassInt1 = InitClassInt1( pClassMgr,
-                                pDateFormat, pTimeFormat,
-                                pWeekDayFormat, pMonthFormat );
-    aBaseLst.Insert( pClassInt1, LIST_APPEND );
-    pClassI12 = InitClassInternational( pClassInt1,
-                                        pDateFormat, pTimeFormat,
-                                        pWeekDayFormat, pMonthFormat );
-    pRoot->Insert( pClassI12 );
-    }
-    {
-    pLangClassI12 = new RscClassArray( pHS->getID( "LangInternational" ),
-                                       RSC_INTERNATIONAL, pClassI12, &aLangType );
-    aBaseLst.Insert( pLangClassI12 );
-    }
-
     /********** S P I N F I E L D ****************************************/
     pClassSpinField = InitClassSpinField( pClassEdit );
     pRoot->Insert( pClassSpinField );
@@ -812,8 +781,7 @@ void RscTypCont::Init()
     }
     /********** N U M E R I C F I E L D **********************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassNumericField = InitClassNumericField( pClassTmp );
@@ -821,8 +789,7 @@ void RscTypCont::Init()
     }
     /********** M E T R I C F I E L D ************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
@@ -832,8 +799,7 @@ void RscTypCont::Init()
     }
     /********** C U R R E N C Y F I E L D ********************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
@@ -847,8 +813,7 @@ void RscTypCont::Init()
     }
     /********** D A T E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate,
-                                                     pClassI12 );
+    RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassDateField = InitClassDateField( pClassTmp, pClassDate );
@@ -857,7 +822,7 @@ void RscTypCont::Init()
     /********** T I M E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassSpinField, pClassTime,
-                                                 pClassI12, pTimeFieldFormat );
+                                                 pTimeFieldFormat );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
@@ -873,8 +838,7 @@ void RscTypCont::Init()
     }
     /********** N U M E R I C B O X **************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassNumericBox = InitClassNumericBox( pClassTmp );
@@ -884,8 +848,7 @@ void RscTypCont::Init()
 {
     /********** M E T R I C B O X ****************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
@@ -895,8 +858,7 @@ void RscTypCont::Init()
     }
     /********** C U R R E N C Y B O X ************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox,
-                                                    pClassI12 );
+    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
@@ -909,8 +871,7 @@ void RscTypCont::Init()
     }
     /********** D A T E B O X ********************************************/
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate,
-                                                 pClassI12 );
+    RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassDateBox = InitClassDateBox( pClassTmp, pClassDate );
@@ -919,7 +880,7 @@ void RscTypCont::Init()
     /********** T I M E B O X ********************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassComboBox, pClassTime,
-                                                 pClassI12, pTimeFieldFormat );
+                                                 pTimeFieldFormat );
     aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassTimeBox = InitClassTimeBox( pClassTmp, pClassTime );
