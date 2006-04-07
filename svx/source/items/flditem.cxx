@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:55:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #include <tools/tenccvt.hxx>
 #endif
 
-#define FRAME_MARKER    (ULONG)0x21981357
+#define FRAME_MARKER    (sal_uInt32)0x21981357
 #define CHARSET_MARKER  (FRAME_MARKER+1)
 
 // -----------------------------------------------------------------------
@@ -489,7 +489,7 @@ int SvxURLField::operator==( const SvxFieldData& rOther ) const
 void SvxURLField::Load( SvPersistStream & rStm )
 {
     USHORT nFormat;
-    ULONG nFrameMarker, nCharSetMarker;
+    sal_uInt32 nFrameMarker, nCharSetMarker;
     long nUlongSize = (long)sizeof(ULONG);
     String aTmpURL;
 
