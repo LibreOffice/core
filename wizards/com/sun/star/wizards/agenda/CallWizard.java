@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:17:02 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ import com.sun.star.uno.Type;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author $author$
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class CallWizard {
 
