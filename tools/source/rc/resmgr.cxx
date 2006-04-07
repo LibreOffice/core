@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:43:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #ifndef _STREAM_HXX
 #include <stream.hxx>
 #endif
-#ifndef _INTN_HXX
-#include <intn.hxx>
-#endif
 #ifndef _TOOLS_RESMGR_HXX
 #include <resmgr.hxx>
 #endif
@@ -93,8 +90,8 @@
 #include <rtl/instance.hxx>
 #endif
 
-#ifndef _ISOLANG_HXX
-#include <isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
@@ -1628,7 +1625,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
 const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 {
     if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
-        nType = ::GetSystemUILanguage();
+        nType = MsLangId::getSystemUILanguage();
 
     if ( nPrio == 0 )
     {
