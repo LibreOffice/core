@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.229 $
+ *  $Revision: 1.230 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:39:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 
 #include <unohelp.hxx>
 
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
+#endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
