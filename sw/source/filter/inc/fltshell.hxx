@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:49:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ class SwTableLines;
 class SwTableBoxes;
 class SwTableBox;
 class SwTableLine;
-class International;
 class DateTime;
 
 
