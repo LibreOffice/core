@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:32:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,17 +142,14 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _CHARFMT_HXX //autogen
@@ -2887,7 +2884,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
-    String sOut = ConvertLanguageToIsoString( eLang );
+    String sOut = MsLangId::convertLanguageToIsoString( eLang );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
 
