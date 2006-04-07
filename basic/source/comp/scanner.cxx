@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:30:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,10 @@ BOOL SbiScanner::NextSym()
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
         // (sonst falsche Zeilenfortsetzung)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
+        {
+            aSym.GetBufferAccess();     // #109693 force copy if necessary
             *((sal_Unicode*)(pLine-1)) = ' ';       // cast wegen const
+        }
         // Typkennung?
         // Das Ausrufezeichen bitte nicht testen, wenn
         // danach noch ein Symbol anschliesst
