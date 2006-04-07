@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:37:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
-#include <tools/lang.hxx>
+
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 
 #ifndef _DICIMP_HXX
