@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGDocument.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,10 +153,10 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
                 Exception {
 
         if (!getSettings().getFileAccess(xmsf).exists(cp_URL,false))
-              throw new FileNotFoundException("The given URL does not point to a file");
+            throw new FileNotFoundException("The given URL does not point to a file");
 
         if (getSettings().getFileAccess(xmsf).isDirectory(cp_URL))
-              throw new IllegalArgumentException("The given URL points to a directory");
+            throw new IllegalArgumentException("The given URL points to a directory");
 
         //create a TypeDetection service
 
@@ -284,17 +284,17 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
         return XMLHelper.addElement(parent,"document",
           new String[] {"title","description","author","format","filename","create-date","update-date","pages","size","icon","dir","fn"},
           new String[] {
-              d.cp_DisplayTitle ? cp_Title : "" ,
-              d.cp_DisplayDescription ? cp_Description : "",
-              d.cp_DisplayAuthor ? cp_Author : "",
-              d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "",
-              d.cp_DisplayFilename ? localFilename : "",
-              d.cp_DisplayCreateDate ? createDate() : "",
-              d.cp_DisplayUpdateDate ? updateDate() : "",
-              d.cp_DisplayPages && (pages > -1) ? "" + pages() : "", //TODO when do i calculate pages?
-              d.cp_DisplaySize ? sizeKB() : "" ,//TODO when do i calculate size?
-              d.cp_DisplayFormatIcon ? getIcon(exp) : "",
-              dirName, urlFilename}
+            d.cp_DisplayTitle ? cp_Title : "" ,
+            d.cp_DisplayDescription ? cp_Description : "",
+            d.cp_DisplayAuthor ? cp_Author : "",
+            d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "",
+            d.cp_DisplayFilename ? localFilename : "",
+            d.cp_DisplayCreateDate ? createDate() : "",
+            d.cp_DisplayUpdateDate ? updateDate() : "",
+            d.cp_DisplayPages && (pages > -1) ? "" + pages() : "", //TODO when do i calculate pages?
+            d.cp_DisplaySize ? sizeKB() : "" ,//TODO when do i calculate size?
+            d.cp_DisplayFormatIcon ? getIcon(exp) : "",
+            dirName, urlFilename}
         );
     }
 
