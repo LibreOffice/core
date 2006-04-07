@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:44:50 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
 #endif
 class CommandExtTextInputData;
 class Font;
