@@ -94,12 +94,12 @@ public class CGSettings    extends ConfigGroup {
         Vector v = new Vector();
         for (int i = 0; i<exporters.length; i++)
           if (((CGExporter)exporters[i]).supports(mime)) {
-                  try {
+                try {
                     v.add(exporters[i]);
-                  }
-                  catch (Exception ex) {
-                      ex.printStackTrace();
-                  }
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
           }
         return (CGExporter[])v.toArray(EMPTY_ARRAY_1);
     }
