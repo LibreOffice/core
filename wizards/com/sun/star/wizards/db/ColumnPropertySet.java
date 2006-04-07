@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnPropertySet.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:19:19 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
