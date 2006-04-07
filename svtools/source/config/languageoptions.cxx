@@ -4,9 +4,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:10:38 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -65,6 +65,11 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+
 using namespace ::com::sun::star;
 // global ----------------------------------------------------------------------
 
@@ -241,106 +246,18 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     else if( LANGUAGE_SYSTEM == nLang  )
         nLang = Application::GetSettings().GetLanguage();
 
+    sal_Int16 nScriptType = MsLangId::getScriptType( nLang );
     USHORT nScript;
-    switch( nLang )
+    switch (nScriptType)
     {
-        // CJK
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_SINGAPORE:
-        case LANGUAGE_CHINESE_MACAU:
-        case LANGUAGE_JAPANESE:
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-        case LANGUAGE_USER_KOREAN_NORTH:
+        case ::com::sun::star::i18n::ScriptType::ASIAN:
             nScript = SCRIPTTYPE_ASIAN;
             break;
-
-        // CTL
-        case LANGUAGE_ARABIC:
-        case LANGUAGE_ARABIC_SAUDI_ARABIA:
-        case LANGUAGE_ARABIC_IRAQ:
-        case LANGUAGE_ARABIC_EGYPT:
-        case LANGUAGE_ARABIC_LIBYA:
-        case LANGUAGE_ARABIC_ALGERIA:
-        case LANGUAGE_ARABIC_MOROCCO:
-        case LANGUAGE_ARABIC_TUNISIA:
-        case LANGUAGE_ARABIC_OMAN:
-        case LANGUAGE_ARABIC_YEMEN:
-        case LANGUAGE_ARABIC_SYRIA:
-        case LANGUAGE_ARABIC_JORDAN:
-        case LANGUAGE_ARABIC_LEBANON:
-        case LANGUAGE_ARABIC_KUWAIT:
-        case LANGUAGE_ARABIC_UAE:
-        case LANGUAGE_ARABIC_BAHRAIN:
-        case LANGUAGE_ARABIC_QATAR:
-        case LANGUAGE_ASSAMESE:
-        case LANGUAGE_BENGALI:
-        case LANGUAGE_BENGALI_BANGLADESH:
-        case LANGUAGE_FARSI:
-        case LANGUAGE_HEBREW:
-        case LANGUAGE_MARATHI:
-        case LANGUAGE_PUNJABI:
-        case LANGUAGE_GUJARATI:
-        case LANGUAGE_HINDI:
-        case LANGUAGE_KANNADA:
-        case LANGUAGE_KASHMIRI:
-        case LANGUAGE_KASHMIRI_INDIA:
-        case LANGUAGE_KHMER:
-        case LANGUAGE_LAO:
-        case LANGUAGE_MALAYALAM:
-        case LANGUAGE_MANIPURI:
-        case LANGUAGE_MONGOLIAN_MONGOLIAN:
-        case LANGUAGE_NEPALI:
-        case LANGUAGE_NEPALI_INDIA:
-        case LANGUAGE_ORIYA:
-        case LANGUAGE_SANSKRIT:
-        case LANGUAGE_SINDHI:
-        case LANGUAGE_SINDHI_PAKISTAN:
-        case LANGUAGE_SINHALESE_SRI_LANKA:
-        case LANGUAGE_SYRIAC:
-        case LANGUAGE_TAMIL:
-        case LANGUAGE_TELUGU:
-        case LANGUAGE_THAI:
-        case LANGUAGE_TIBETAN:
-        case LANGUAGE_DZONGKHA:
-        case LANGUAGE_URDU:
-        case LANGUAGE_URDU_PAKISTAN:
-        case LANGUAGE_URDU_INDIA:
-        case LANGUAGE_USER_KURDISH_IRAQ:
-        case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_VIETNAMESE:
+        case ::com::sun::star::i18n::ScriptType::COMPLEX:
             nScript = SCRIPTTYPE_COMPLEX;
             break;
-
-// currently not knowing scripttype - defaultet to LATIN:
-/*
-#define LANGUAGE_ARMENIAN                   0x042B
-#define LANGUAGE_INDONESIAN                 0x0421
-#define LANGUAGE_KAZAK                      0x043F
-#define LANGUAGE_KONKANI                    0x0457
-#define LANGUAGE_MACEDONIAN                 0x042F
-#define LANGUAGE_TATAR                      0x0444
-*/
-
-    default:
-        switch ( nLang & LANGUAGE_MASK_PRIMARY )
-        {
-            // CJK catcher
-            case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
-                nScript = SCRIPTTYPE_ASIAN;
-                break;
-            // CTL catcher
-            case LANGUAGE_ARABIC & LANGUAGE_MASK_PRIMARY:
-                nScript = SCRIPTTYPE_COMPLEX;
-                break;
-            // Western (actually not necessarily Latin but also Cyrillic, for example)
-            default:
-                nScript = SCRIPTTYPE_LATIN;
-        }
-        break;
+        default:
+            nScript = SCRIPTTYPE_LATIN;
     }
     return nScript;
 }
@@ -383,7 +300,7 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
 {
     if( m_sWin16SystemLocale.getLength() == 0 )
         return LANGUAGE_NONE;
-    return ConvertIsoStringToLanguage( m_sWin16SystemLocale );
+    return MsLangId::convertIsoStringToLanguage( m_sWin16SystemLocale );
 }
 
 
