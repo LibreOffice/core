@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:09:18 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,6 @@
  ************************************************************************/
 #ifndef SC_XLTOOLS_HXX
 #define SC_XLTOOLS_HXX
-
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
