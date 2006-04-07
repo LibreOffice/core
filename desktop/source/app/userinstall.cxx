@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:52:42 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@
 #endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/isolang.hxx>
+#include <i18npool/mslangid.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
@@ -139,8 +139,7 @@ namespace desktop {
             // localize the provider to user selection
 //            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
 //            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
-//            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
-//            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
+//            Locale aLocale( MsLangId::convertLanguageToIsoString(aUserLanguageType));
 //            localizable->setLocale(aLocale);
 
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
