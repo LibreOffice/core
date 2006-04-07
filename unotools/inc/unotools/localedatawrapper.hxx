@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:32:40 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
-#ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>       // enum MeasurementSystem, enum DateFormat
-#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -70,6 +67,20 @@ class Date;
 class Time;
 class CalendarWrapper;
 
+
+enum DateFormat {
+    MDY,
+    DMY,
+    YMD
+};
+
+
+enum MeasurementSystem {
+    MEASURE_METRIC,
+    MEASURE_US
+};
+
+
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
@@ -77,6 +88,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
     ::com::sun::star::lang::Locale          aLocale;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar >  xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem  aLocaleDataItem;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aReservedWordSeq;
     // cached items
@@ -121,6 +133,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
             void                getDateFormatsImpl();
             DateFormat          scanDateFormatImpl( const String& rCode );
 
+            void                getDefaultCalendarImpl();
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
                                     long nNumber, USHORT nDecimals,
@@ -131,8 +144,16 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
                                     const ::com::sun::star::lang::Locale& rLocale
                                     );
-
                                 ~LocaleDataWrapper();
+
+    /** Get the service factory, meant to be able to create a CalendarWrapper
+        from a LocaleDataWrapper. Note that the service factory may be
+        non-existent if this LocaleDataWrapper was created without one and
+        lives "on the grassland". The CalendarWrapper ctor can handle that
+        though. */
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & getServiceFactory()
+        const { return xSMgr; }
 
     /// set a new Locale to request
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
@@ -171,6 +192,15 @@ public:
 
     /// maps the LocaleData string to the International enum
             MeasurementSystem   mapMeasurementStringToEnum( const String& rMS ) const;
+
+    /// Convenience method to obtain the default calendar.
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar > getDefaultCalendar() const;
+
+    /// Convenience method to obtain the day names of the default calendar.
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarDays() const;
+
+    /// Convenience method to obtain the month names of the default calendar.
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarMonths() const;
 
 
     // Functionality of class International methods, LocaleItem
