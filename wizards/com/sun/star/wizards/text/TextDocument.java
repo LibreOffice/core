@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:24:43 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
