@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:45:53 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,11 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#ifndef _INTN_HXX //autogen
-//#include <tools/intn.hxx>
-#endif
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -219,7 +219,7 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, USHORT nAnz)
 BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDate )
 {
     BYTE nNatNum = 0;
-    eLang = SvNumberFormatter::GetProperLanguage( eLang );  // resolve SYSTEM etc.
+    eLang = MsLangId::getRealLanguage( eLang );  // resolve SYSTEM etc.
     eLang &= 0x03FF;    // 10 bit primary language
     if ( bDate )
     {
@@ -273,7 +273,7 @@ BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDa
 BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang, BOOL bDate )
 {
     BYTE nDBNum = 0;
-    eLang = SvNumberFormatter::GetProperLanguage( eLang );  // resolve SYSTEM etc.
+    eLang = MsLangId::getRealLanguage( eLang );  // resolve SYSTEM etc.
     eLang &= 0x03FF;    // 10 bit primary language
     if ( bDate )
     {
@@ -905,7 +905,7 @@ SvNumberformat::SvNumberformat(String& rString,
                         LanguageType eLanguage;
                         if (NumFor[nIndex].GetNatNum().GetNatNum() == 1 &&
                                 ((eLanguage =
-                                  SvNumberFormatter::GetProperLanguage( eLan))
+                                  MsLangId::getRealLanguage( eLan))
                                  == LANGUAGE_THAI) &&
                                 NumFor[nIndex].GetNatNum().GetLang() ==
                                 LANGUAGE_DONTKNOW)
@@ -4122,7 +4122,7 @@ String SvNumberformat::GetMappedFormatstring(
         // The Thai T NatNum modifier during Xcl export.
         if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
                 rKeywords[NF_KEY_THAI_T].EqualsAscii( "T") &&
-                SvNumberFormatter::GetProperLanguage( rNum.GetLang()) ==
+                MsLangId::getRealLanguage( rNum.GetLang()) ==
                 LANGUAGE_THAI)
         {
             aPrefix += 't';     // must be lowercase, otherwise taken as literal
@@ -4242,7 +4242,7 @@ void SvNumberformat::ImpTransliterateImpl( String& rStr,
         const SvNumberNatNum& rNum ) const
 {
     com::sun::star::lang::Locale aLocale(
-            SvNumberFormatter::ConvertLanguageToLocale( rNum.GetLang() ) );
+            MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
     rStr = GetFormatter().GetNatNum()->getNativeNumberString( rStr,
             aLocale, rNum.GetNatNum() );
 }
@@ -4258,7 +4258,7 @@ void SvNumberformat::GetNatNumXml(
         if ( rNum.IsSet() )
         {
             com::sun::star::lang::Locale aLocale(
-                    SvNumberFormatter::ConvertLanguageToLocale( rNum.GetLang() ) );
+                    MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
             rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
                     aLocale, rNum.GetNatNum() );
         }
