@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:19:48 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #include "svtools/svtdllapi.h"
 #endif
 
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -263,7 +260,6 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
 {
     ImpLineList*    pLineList;
     VirtualDevice   aVirDev;
-    International   OLDMEMBER_TO_BE_REMOVED;
     Size            aTxtSize;
     Color           aColor;
     Color           maPaintCol;
