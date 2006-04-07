@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:45:00 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1372,3 +1372,46 @@ String RID_XMLSEC_DOCUMENTSIGNED
     Text [ en-US ] = "(Signed)" ;
 };
 
+ModalDialog DLG_CHECKFORONLINEUPDATE
+{
+    HelpID = HID_DLG_CHECKFORONLINEUPDATE ;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = FALSE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 200, 125 );
+    Text [ de ] = "Check for Updates" ;
+    Text [ en-US ] = "Suche nach Updates" ;
+
+    FixedText RID_CHECKFORONLINEUPDATE_FT_MSG
+    {
+        Pos = MAP_APPFONT( 10, 25 );
+        Size = MAP_APPFONT( 180, 50 );
+        Wordbreak = TRUE;
+        Text [ de ] = "Das Programm sucht nach einem neuen Versions Update basierend auf Informationen über Ihre installierte %PRODUCTNAME Version und aktuell verfügbare Updates.";
+        Text [ en-US ] = "The program checks for a new version update based on information about your installed %PRODUCTNAME version and currently available updates.";
+    };
+
+    CancelButton RID_CHECKFORONLINEUPDATE_PB_CANCEL
+    {
+        Pos = MAP_APPFONT( 140, 100 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+};
+
+InfoBox INFOBOX_NO_NEW_UPDATE_AVAILABLE
+{
+    Message [ de ] = "Es ist kein neues Update verfügbar." ;
+    Message [ en-US ] = "No new update is available." ;
+};
+
+InfoBox INFOBOX_NEW_UPDATE_AVAILABLE
+{
+    Message [ de ] = "Ein neues Update ist verfügbar.\nBei Klick auf OK werden Sie auf die Download Seite weitergeleitet, auf der Sie den Download starten können." ;
+    Message [ en-US ] = "A new update is available.\nClick OK to open the download website, where you can start the download." ;
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+};
