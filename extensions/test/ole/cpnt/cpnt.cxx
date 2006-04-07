@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include <windows.h>
 #include <atlbase.h>
 #include <stdio.h>
