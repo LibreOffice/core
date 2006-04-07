@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:10:41 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -558,7 +558,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     ULONG nEndPos = rStm.Tell();
     rStm.Seek( nPos );
-    rStm << (UINT32)nEndPos - nPos - 4;
+    rStm << (UINT32)(nEndPos - nPos - 4);
     rStm.Seek( nEndPos );
 }
 
@@ -5038,8 +5038,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
                                 {
                                     Point aP;
-                                    seqCoordinates[ nPtNum ].First.Value >>= aP.X();
-                                    seqCoordinates[ nPtNum ].Second.Value >>= aP.Y();
+                                    sal_Int32 nX, nY;
+                                    seqCoordinates[ nPtNum ].First.Value >>= nX;
+                                    seqCoordinates[ nPtNum ].Second.Value >>= nY;
+                                    aP.X() = nX;
+                                    aP.Y() = nY;
                                     aXP[ (sal_uInt16)nPtNum ] = aP;
                                 }
                                 aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
@@ -6429,7 +6432,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
     const ULONG nSkipBLIPLen = 20;  // bis zu nBLIPLen zu ueberspringende Bytes
     const ULONG nSkipBLIPPos =  4;  // dahinter bis zu nBLIPPos zu skippen
 
-    ULONG nBLIPLen = 0, nBLIPPos = 0;
+    sal_uInt32 nBLIPLen = 0, nBLIPPos = 0;
 
     nRead = 0;
     do
@@ -6606,7 +6609,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
             // nach der Blip Property suchen!
             ULONG  nPropRead = 0;
             USHORT nPropId;
-            ULONG  nPropVal;
+            sal_uInt32  nPropVal;
             nLenShapePropTbl = nLength;
             UINT32 nPropCount = nInst;
             long nStartShapePropTbl = rSt.Tell();
