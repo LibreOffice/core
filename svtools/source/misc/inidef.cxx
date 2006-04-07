@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inidef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:20:06 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #include "inetdef.hxx"
 #include "inidef.hxx"
