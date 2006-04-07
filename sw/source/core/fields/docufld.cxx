@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:27:21 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,6 @@
 
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
