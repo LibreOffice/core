@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:30 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -864,7 +864,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 MapMode     aMap( MAP_100TH_INCH );
 
                 sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, pResMgr ) ), 75 );
-                Fraction    aFrac( 1, Min( Max( nDPI, 75L ), 600L ) );
+                Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
                 aMap.SetScaleY( aFrac );
