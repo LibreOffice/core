@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 10:24:48 $
+#   last change: $Author: vg $ $Date: 2006-04-07 15:11:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,9 @@ SLOFILES =  \
     $(SLO)$/linksrc.obj\
     $(SLO)$/linkmgr2.obj\
     $(SLO)$/lnkbase2.obj\
+    $(SLO)$/fwkhelper.obj \
     $(SLO)$/impldde.obj\
-    $(SLO)$/fwkhelper.obj
+    $(SLO)$/updatedlg.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
@@ -121,7 +122,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/sfxpicklist.obj		\
     $(SLO)$/helpdispatch.obj	\
-    $(SLO)$/xpackcreator.obj
+    $(SLO)$/xpackcreator.obj    \
+    $(SLO)$/updatedlg.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
