@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioDataAware.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:51:59 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
