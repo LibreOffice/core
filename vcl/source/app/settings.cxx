@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:46:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -1592,7 +1592,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maSoundSettings( rData.maSoundSettings ),
     maNotificationSettings( rData.maNotificationSettings ),
     maHelpSettings( rData.maHelpSettings ),
-    maInternational( rData.maInternational ),
     maLocale( rData.maLocale ),
     maUILocale( rData.maUILocale )
 
@@ -1792,37 +1791,8 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
 
     if ( nFlags & SETTINGS_INTERNATIONAL )
     {
-        if ( mpData->maInternational != rSet.mpData->maInternational )
-        {
-            CopyData();
-            mpData->maInternational = rSet.mpData->maInternational;
-            mpData->meLanguage = mpData->maInternational.GetFormatLanguage();
-            mpData->meUILanguage = mpData->maInternational.GetLanguage();
-            // Will be calculated in GetLocale()/GetUILocale()
-            mpData->maLocale = ::com::sun::star::lang::Locale();
-            mpData->maUILocale = ::com::sun::star::lang::Locale();
-            nChangeFlags |= SETTINGS_INTERNATIONAL;
-            if ( mpData->mpLocaleDataWrapper )
-            {
-                delete mpData->mpLocaleDataWrapper;
-                mpData->mpLocaleDataWrapper = NULL;
-            }
-            if ( mpData->mpUILocaleDataWrapper )
-            {
-                delete mpData->mpUILocaleDataWrapper;
-                mpData->mpUILocaleDataWrapper = NULL;
-            }
-            if ( mpData->mpI18nHelper )
-            {
-                delete mpData->mpI18nHelper;
-                mpData->mpI18nHelper = NULL;
-            }
-            if ( mpData->mpUII18nHelper )
-            {
-                delete mpData->mpUII18nHelper;
-                mpData->mpUII18nHelper = NULL;
-            }
-        }
+        // Nothing, class International is gone.
+        DBG_ERRORFILE("AllSettings::Update: who calls with SETTINGS_INTERNATIONAL and why? You're flogging a dead horse.");
     }
 
     if ( nFlags & SETTINGS_LOCALE )
@@ -1879,9 +1849,6 @@ ULONG AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     if ( mpData->maHelpSettings != rSet.mpData->maHelpSettings )
         nChangeFlags |= SETTINGS_HELP;
 
-    if ( mpData->maInternational != rSet.mpData->maInternational )
-        nChangeFlags |= SETTINGS_INTERNATIONAL;
-
     if ( mpData->meLanguage || rSet.mpData->meLanguage )
         nChangeFlags |= SETTINGS_LOCALE;
 
@@ -1909,7 +1876,6 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maSoundSettings           == rSet.mpData->maSoundSettings)        &&
          (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
-         (mpData->maInternational           == rSet.mpData->maInternational)        &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
          (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
     {
@@ -1936,8 +1902,7 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
     if ( !rLocale.Language.getLength() )
         mpData->meLanguage = LANGUAGE_SYSTEM;
     else
-        mpData->meLanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
-    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+        mpData->meLanguage = MsLangId::convertLocaleToLanguage( rLocale );
     if ( mpData->mpLocaleDataWrapper )
     {
         delete mpData->mpLocaleDataWrapper;
@@ -1961,8 +1926,7 @@ void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& rLocale )
     if ( !rLocale.Language.getLength() )
         mpData->meUILanguage = LANGUAGE_SYSTEM;
     else
-        mpData->meUILanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
-    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+        mpData->meUILanguage = MsLangId::convertLocaleToLanguage( rLocale );
     if ( mpData->mpUILocaleDataWrapper )
     {
         delete mpData->mpUILocaleDataWrapper;
@@ -1985,7 +1949,6 @@ void AllSettings::SetLanguage( LanguageType eLang )
 
     // Will be calculated in GetLocale()
     mpData->maLocale = ::com::sun::star::lang::Locale();
-    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
     if ( mpData->mpLocaleDataWrapper )
     {
         delete mpData->mpLocaleDataWrapper;
@@ -2008,7 +1971,6 @@ void AllSettings::SetUILanguage( LanguageType eLang  )
 
     // Will be calculated in GetUILocale()
     mpData->maUILocale = ::com::sun::star::lang::Locale();
-    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
     if ( mpData->mpUILocaleDataWrapper )
     {
         delete mpData->mpUILocaleDataWrapper;
@@ -2058,34 +2020,7 @@ BOOL AllSettings::GetLayoutRTL() const
         ImplSVData* pSVData = ImplGetSVData();
         if ( pSVData->maAppData.mpSettings )
             aLang = pSVData->maAppData.mpSettings->GetUILanguage();
-
-        switch( aLang )
-        {
-            // languages with right-to-left UI
-            case LANGUAGE_ARABIC:
-            case LANGUAGE_ARABIC_SAUDI_ARABIA:
-            case LANGUAGE_ARABIC_IRAQ:
-            case LANGUAGE_ARABIC_EGYPT:
-            case LANGUAGE_ARABIC_LIBYA:
-            case LANGUAGE_ARABIC_ALGERIA:
-            case LANGUAGE_ARABIC_MOROCCO:
-            case LANGUAGE_ARABIC_TUNISIA:
-            case LANGUAGE_ARABIC_OMAN:
-            case LANGUAGE_ARABIC_YEMEN:
-            case LANGUAGE_ARABIC_SYRIA:
-            case LANGUAGE_ARABIC_JORDAN:
-            case LANGUAGE_ARABIC_LEBANON:
-            case LANGUAGE_ARABIC_KUWAIT:
-            case LANGUAGE_ARABIC_UAE:
-            case LANGUAGE_ARABIC_BAHRAIN:
-            case LANGUAGE_ARABIC_QATAR:
-            case LANGUAGE_HEBREW:
-                bRTL = TRUE;
-                break;
-
-            default:
-                break;
-        }
+        bRTL = MsLangId::isRightToLeft( aLang );
     }
     else
         bRTL = (nUIMirroring == 1);
@@ -2098,13 +2033,8 @@ BOOL AllSettings::GetLayoutRTL() const
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
     if ( !mpData->maLocale.Language.getLength() )
-    {
-        String  aLanguage;
-        String  aCountry;
-        ConvertLanguageToIsoNames( GetLanguage(), aLanguage, aCountry );
-        ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
-        ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
-    }
+        MsLangId::convertLanguageToLocale( GetLanguage(),
+                ((AllSettings*)this)->mpData->maLocale );
 
     return mpData->maLocale;
 }
@@ -2114,13 +2044,8 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
     if ( !mpData->maUILocale.Language.getLength() )
-    {
-        String  aLanguage;
-        String  aCountry;
-        ConvertLanguageToIsoNames( GetUILanguage(), aLanguage, aCountry );
-        ((AllSettings*)this)->mpData->maUILocale.Language = aLanguage;
-        ((AllSettings*)this)->mpData->maUILocale.Country = aCountry;
-    }
+        MsLangId::convertLanguageToLocale( GetUILanguage(),
+                ((AllSettings*)this)->mpData->maUILocale );
 
     return mpData->maUILocale;
 }
@@ -2130,7 +2055,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 LanguageType AllSettings::GetLanguage() const
 {
     if ( mpData->meLanguage == LANGUAGE_SYSTEM )
-        return GetSystemLanguage();
+        return MsLangId::getSystemLanguage();
 
     return mpData->meLanguage;
 }
@@ -2140,7 +2065,7 @@ LanguageType AllSettings::GetLanguage() const
 LanguageType AllSettings::GetUILanguage() const
 {
     if ( mpData->meUILanguage == LANGUAGE_SYSTEM )
-        return GetSystemUILanguage();
+        return MsLangId::getSystemUILanguage();
 
     return mpData->meUILanguage;
 }
