@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:16:56 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 14:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@ Version 2           changed order of entries(New Entries at the end)
 Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 
 *************************************************************************/
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _TIME_HXX //autogen
 #include <tools/time.hxx>
 #endif
