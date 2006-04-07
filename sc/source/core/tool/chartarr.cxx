@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:55:16 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ void ScChartArray::CopySettings( SchMemChart& rDest, const SchMemChart& rSource 
     rDest.SetYAxisTitle( rSource.GetYAxisTitle() );
     rDest.SetZAxisTitle( rSource.GetZAxisTitle() );
 
-    const long* pArr;
+    const sal_Int32* pArr;
     if ( rSource.GetRowCount() == rDest.GetRowCount() &&
          rSource.GetColCount() == rDest.GetColCount() )
     {
