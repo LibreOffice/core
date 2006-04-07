@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:11:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 16:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ USHORT Date::GetDayOfYear() const
 // -----------------------------------------------------------------------
 
 USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
-                            WeekCountStart eWeekStart ) const
+                            sal_Int16 nMinimumNumberOfDaysInWeek ) const
 {
     short nWeek;
     short n1WDay = (short)Date( 1, 1, GetYear() ).GetDayOfWeek();
@@ -267,7 +267,13 @@ USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
     // StartDay beruecksichtigen
     n1WDay = (n1WDay+(7-(short)eStartDay)) % 7;
 
-    if ( eWeekStart == WEEKCOUNT_FIRSTDAY )
+    if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
+    {
+        DBG_ERRORFILE("Date::GetWeekOfYear: invalid nMinimumNumberOfDaysInWeek");
+        nMinimumNumberOfDaysInWeek = 4;
+    }
+
+    if ( nMinimumNumberOfDaysInWeek == 1 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7) + 1;
         // 53te-Woche nur dann, wenn wir nicht schon in der ersten
@@ -283,7 +289,7 @@ USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
                 nWeek = 1;
         }
     }
-    else if ( eWeekStart == WEEKCOUNT_FIRSTFULLWEEK )
+    else if ( nMinimumNumberOfDaysInWeek == 7 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7);
         // Erste Woche eines Jahres entspricht der letzen Woche des
@@ -291,19 +297,19 @@ USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
         if ( nWeek == 0 )
         {
             Date aLastDatePrevYear( 31, 12, GetYear()-1 );
-            nWeek = aLastDatePrevYear.GetWeekOfYear( eStartDay, eWeekStart );
+            nWeek = aLastDatePrevYear.GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
         }
     }
-    else // ( eWeekStart == WEEKCOUNT_FIRST4DAYWEEK )
+    else // ( nMinimumNumberOfDaysInWeek == somehing_else, commentary examples for 4 )
     {
         // x_monday - thursday
-        if ( n1WDay < 4 )
+        if ( n1WDay < nMinimumNumberOfDaysInWeek )
             nWeek = 1;
         // friday
-        else if ( n1WDay == 4 )
+        else if ( n1WDay == nMinimumNumberOfDaysInWeek )
             nWeek = 53;
         // saturday
-        else if ( n1WDay == 5 )
+        else if ( n1WDay == nMinimumNumberOfDaysInWeek + 1 )
         {
             // Jahr nach Schaltjahr
             if ( Date( 1, 1, GetYear()-1 ).IsLeapYear() )
@@ -331,7 +337,7 @@ USHORT Date::GetWeekOfYear( DayOfWeek eStartDay,
                 USHORT  nMonth;
                 USHORT  nYear;
                 DaysToDate( nTempDays, nDay, nMonth, nYear );
-                nWeek = Date( nDay, nMonth, nYear ).GetWeekOfYear( eStartDay, eWeekStart );
+                nWeek = Date( nDay, nMonth, nYear ).GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
             }
         }
     }
