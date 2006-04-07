@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:15:11 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 10:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,13 +143,20 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aNewDelTBX.SetClickHdl(aLink);
 
     aNonPropFontsOnlyCB.SetClickHdl(LINK(this, SvxFontSubstTabPage, NonPropFontsHdl));
-    static long aStaticTabs[]=
-    {
-//        5, 0, 30, 60, 154, 248
-        4, 0, 30, 60, 154
-    };
 
-    aCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
+    static long aStaticTabs[] = { 4, 0, 0, 0, 0 };
+    long nW1 = GetTextWidth( sHeader1 );
+    long nW2 = GetTextWidth( sHeader2 );
+    long nMax = Max( nW1, nW2 ) + 6; // width of the longest header + a little offset
+    long nMin = aFontNameFT.LogicToPixel( Size( 30, 0 ), MAP_APPFONT ).Width();
+    nMax = Max( nMax, nMin );
+    const long nDoubleMax = 2*nMax;
+    const long nRest = aCheckLB.GetSizePixel().Width() - nDoubleMax;
+    aStaticTabs[2] = nMax;
+    aStaticTabs[3] = nDoubleMax;
+    aStaticTabs[4] = nDoubleMax + nRest/2;
+    aCheckLB.SvxSimpleTable::SetTabs( aStaticTabs, MAP_PIXEL );
+
     String sHeader(sHeader1);
     String sTab(String::CreateFromAscii("\t"));
     String sTabSpace(String::CreateFromAscii("\t "));
