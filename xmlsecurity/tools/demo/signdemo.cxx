@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:38:25 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 11:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
+#include "xmlsecurity/baseencoding.hxx"
 
 using namespace ::com::sun::star;
 
@@ -116,7 +117,11 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * configures the X509 certificate
      */
-    aSignatureHelper.SetX509Certificate( nSecurityId, nEnvIndex, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+    aSignatureHelper.SetX509Certificate(
+        nSecurityId, nEnvIndex,
+        xPersonalCert->getIssuerName(),
+        bigIntegerToNumericString( xPersonalCert->getSerialNumber()),
+        baseEncode(xPersonalCert->getEncoded(), BASE64));
 
     /*
      * configures date/time
