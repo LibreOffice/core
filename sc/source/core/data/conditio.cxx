@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:13 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1285,7 +1285,7 @@ void ScCondFormatEntry::DataChanged( const ScRange* pModified ) const
 
 //------------------------------------------------------------------------
 
-ScConditionalFormat::ScConditionalFormat(ULONG nNewKey, ScDocument* pDocument) :
+ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
     pAreas( NULL ),
     nKey( nNewKey ),
@@ -1698,7 +1698,7 @@ void ScConditionalFormatList::Store( SvStream& rStream ) const
     }
 }
 
-ScConditionalFormat* ScConditionalFormatList::GetFormat( ULONG nKey )
+ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //! binaer suchen
 
