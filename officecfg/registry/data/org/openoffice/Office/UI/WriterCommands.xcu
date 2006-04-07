@@ -2494,10 +2494,16 @@
                     <value xml:lang="en-US">Remove Direct Character Formats</value>
                 </prop>
             </node>
-            <node oor:name=".uno:SendMailDocAsFormat" oor:op="replace">
+            <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Dokument als Microsoft Word-Anhang…</value>
-                    <value xml:lang="en-US">Document as Microsoft Word Attachment…</value>
+                    <value xml:lang="de">E-Mail als ~Microsoft Word...</value>
+                    <value xml:lang="en-US">E-mail as ~Microsoft Word...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">E-Mail als ~OpenDocument Text...</value>
+                    <value xml:lang="en-US">E-mail as ~OpenDocument Text...</value>
                 </prop>
             </node>
         </node>
