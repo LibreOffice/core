@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:18:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 12:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,16 @@
  ************************************************************************/
 package com.sun.star.wizards.db;
 
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.ui.dialogs.XExecutableDialog;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.ui.WizardDialog;
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -79,17 +89,23 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
     public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
+    private XColumnsSupplier xKeyColumnSupplier;
     private XPropertySet xKey;
     private boolean bIDFieldisInserted = false;
     private String IDFieldName = "";
+    private String sColumnAlreadyExistsMessage = "";
+    private WizardDialog oUnoDialog;
+    private XWindow xWindow;
 
         /**
          * @param xMSF
          */
-        public TableDescriptor(XMultiServiceFactory xMSF) {
+        public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage) {
             super(xMSF);
             columncontainer = new Vector();
             keycolumncontainer = new Vector();
+            sColumnAlreadyExistsMessage = _sColumnAlreadyExistsMessage;
+            xWindow = _xWindow;
         }
 
 
@@ -137,8 +153,8 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
            xKeyAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyFac);
            xKey = xKeyFac.createDataDescriptor();
            xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
-           XColumnsSupplier xKeyColumSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
-           XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumSup.getColumns());
+           xKeyColumnSupplier = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
+           XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumnSupplier.getColumns());
            xKeyColAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
             if (keycolumncontainer.size() > 0){
                 for (int i = (keycolumncontainer.size()-1); i >= 0 ; i--){
@@ -146,32 +162,53 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                 }
             }
            for (int i = 0; i < _fieldnames.length; i++){
-                  XPropertySet xKeyColPropertySet = xKeyColFac.createDataDescriptor();
-                   xKeyColPropertySet.setPropertyValue("Name", _fieldnames[i]);
-                   keycolumncontainer.add(xKeyColPropertySet);
+                XPropertySet xKeyColPropertySet = xKeyColFac.createDataDescriptor();
+                xKeyColPropertySet.setPropertyValue("Name", _fieldnames[i]);
+                keycolumncontainer.add(xKeyColPropertySet);
                 XPropertySet xColPropertySet = null;
-                   if (hasByName(_fieldnames[i]))
-                       xColPropertySet = getByName(_fieldnames[i]);
-                   else
-                       xColPropertySet = addPrimaryKeyColumn(_fieldnames[i]);
-                   xColPropertySet.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
-                   if (_bAutoincrementation){
-                       int nDataType  = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
-                       if (nDataType != oTypeInspector.INVALID)
-                           if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement")){
+                if (hasByName(_fieldnames[i]))
+                    xColPropertySet = getByName(_fieldnames[i]);
+                else
+                    xColPropertySet = addPrimaryKeyColumn(_fieldnames[i]);
+                xColPropertySet.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
+                if (_bAutoincrementation){
+                    int nDataType  = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
+                    if (nDataType != oTypeInspector.INVALID)
+                        if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement")){
                             xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
                             xColPropertySet.setPropertyValue("IsAutoIncrement", new Boolean(_bAutoincrementation));
-                           }
+                        }
                 }
-                   modifyColumn(_fieldnames[i], xColPropertySet);
+                modifyColumn(_fieldnames[i], xColPropertySet);
            }
            return true;
-        } catch (Exception e) {
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
+        } catch (UnknownPropertyException e) {
+            e.printStackTrace(System.out);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace(System.out);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace(System.out);
+        } catch (WrappedTargetException e) {
             e.printStackTrace(System.out);
         }
-            return false;
+
+        return false;
         }
+
+
+        public boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet){
+        try {
+            String sColumnName = (String) _xToBeAppendedPropertySet.getPropertyValue("Name");
+            if (_xColumns.hasByName(sColumnName)){
+                String sMessage = JavaTools.replaceSubString(sColumnAlreadyExistsMessage, sColumnName, "%FIELDNAME");
+                showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMessage);
+                return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            return false;
+        }}
 
 
         /**
@@ -180,31 +217,56 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
          * @return true or false to indicate successful creation or not
          */
         public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames){
+            boolean breturn = true;
             try {
                 XAppend xAppendColumns = (XAppend) UnoRuntime.queryInterface(XAppend.class, xNameAccessColumns);
                 for (int i = 0; i < columncontainer.size(); i++){
                     XPropertySet xColPropertySet = getByIndex(i);
-                    xAppendColumns.appendByDescriptor(xColPropertySet);
-                }
-                assignTableProperty("Name", _tablename);
-                assignTableProperty("CatalogName", _catalogname);
-                assignTableProperty("SchemaName", _schemaname);
-                xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, xTableNames);
-                xTableContainer.addContainerListener(this);
-                if (keycolumncontainer.size() > 0){
-                    for (int i = 0; i < keycolumncontainer.size(); i++){
-                        XPropertySet xKeyColPropertySet = (XPropertySet) keycolumncontainer.get(i);
-                        xKeyColAppend.appendByDescriptor(xKeyColPropertySet);
+                    if (!isColunnNameDuplicate(xNameAccessColumns, xColPropertySet)){
+                         xAppendColumns.appendByDescriptor(xColPropertySet);    //xColPropertySet.setPropertyValue("Type", new Integer(32423))
                     }
-                   xKeyAppend.appendByDescriptor(xKey);
+                    else{
+                         breturn = false;
+                    }
                 }
-//              XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName("AnlageID"));
-                xTableAppend.appendByDescriptor(xPropTableDataDescriptor);
-//              xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName("AnlageID"));
-                return true;
-            } catch (Exception e) {
+                if (breturn){
+                   assignTableProperty("Name", _tablename);
+                   assignTableProperty("CatalogName", _catalogname);
+                   assignTableProperty("SchemaName", _schemaname);
+                   xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, xTableNames);
+                   xTableContainer.addContainerListener(this);
+                   if (keycolumncontainer.size() > 0){
+                       for (int i = 0; i < keycolumncontainer.size(); i++){
+                           XPropertySet xKeyColPropertySet = (XPropertySet) keycolumncontainer.get(i);
+                           if (!isColunnNameDuplicate(xKeyColumnSupplier.getColumns(), xKeyColPropertySet)){
+                               xKeyColAppend.appendByDescriptor(xKeyColPropertySet);
+                           }
+                           else{
+                            breturn = false;
+                           }
+                       }
+                       if (breturn)
+                        xKeyAppend.appendByDescriptor(xKey);
+                   }
+                   if (breturn)
+                      xTableAppend.appendByDescriptor(xPropTableDataDescriptor);
+                }
+            } catch (SQLException oSQLException) {
+                super.callSQLErrorMessageDialog(oSQLException, xWindow);
+                breturn = false;
+            }
+            catch (Exception e){
                 e.printStackTrace(System.out);
-                showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
+                breturn = false;
+            }
+            if (!breturn){
+                removeAllColumnsFromDescriptor(_tablename);
+            }
+            return breturn;
+        }
+
+
+        private boolean removeAllColumnsFromDescriptor(String _tablename){
                 try {
                     xPropTableDataDescriptor.setPropertyValue("Name", "");
                     if ((xKeyDrop != null) && (xIndexAccessKeys != null)){
@@ -226,11 +288,13 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                         bIDFieldisInserted = false;
                     }
                     return false;
-                } catch (Exception e1) {
+                } catch (SQLException oSQLException) {
+                    super.callSQLErrorMessageDialog(oSQLException, xWindow);
+                }
+                catch (Exception e1) {
                     e1.printStackTrace(System.out);
                 }
                 return false;
-            }
         }
 
 
@@ -257,12 +321,6 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         public boolean modifyColumnName(String _soldname, String _snewname){
         try {
             return modifyColumn(_soldname, "Name", _snewname);
-//          if (hasByName(_soldname)){
-//              ColumnDescriptor oColumnDescriptor = this.getColumnDescriptorByName(_soldname);
-//              oColumnDescriptor.xColPropertySet.setPropertyValue("Name", _snewname);
-//              oColumnDescriptor.Name = _snewname;
-//          }
-//          return true;
         } catch (Exception e) {
             e.printStackTrace(System.out);
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
@@ -271,26 +329,30 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
 
         public boolean modifyColumn(String _sname, String _spropname, Object _oValue){
-            try {
-                if (this.columncontainer.size() > 0){
-                    for (int i = 0; i < columncontainer.size(); i++){
-                        ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
-                        if (oColumnDescriptor.Name.equals(_sname)){
-                            oColumnDescriptor.xColPropertySet.setPropertyValue(_spropname, _oValue);
-                            if (_spropname.equals("Name"))
-                                oColumnDescriptor.Name = (String) _oValue;
-                            columncontainer.remove(i);
-                            columncontainer.insertElementAt(oColumnDescriptor, i);
-                            return true;
-                        }
+        try {
+            if (this.columncontainer.size() > 0){
+                for (int i = 0; i < columncontainer.size(); i++){
+                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    if (oColumnDescriptor.Name.equals(_sname)){
+                        oColumnDescriptor.xColPropertySet.setPropertyValue(_spropname, _oValue);
+                        if (_spropname.equals("Name"))
+                            oColumnDescriptor.Name = (String) _oValue;
+                        columncontainer.remove(i);
+                        columncontainer.insertElementAt(oColumnDescriptor, i);
+                        return true;
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-                showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
             }
+        } catch (UnknownPropertyException e) {
+            e.printStackTrace(System.out);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace(System.out);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace(System.out);
+        } catch (WrappedTargetException e) {
+            e.printStackTrace(System.out);
+        }
             return false;
-
         }
 
 
@@ -310,7 +372,6 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
         return false;
         }
@@ -466,7 +527,6 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
         return false;
         }
@@ -491,7 +551,6 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
         }
             return null;
         }
@@ -523,21 +582,21 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         }
 
 
-           public String getComposedTableName(String _scatalogname, String _sschemaname, String _stablename){
+        public String getComposedTableName(String _scatalogname, String _sschemaname, String _stablename){
             ComposedTableName = new CommandName(this, _scatalogname, _sschemaname, _stablename, false);
             return ComposedTableName.getComposedName();
-           }
+        }
 
 
-           public String getComposedTableName(){
-               if (ComposedTableName != null)
-                   return this.ComposedTableName.getComposedName();
-               else
-                   return null;
-           }
+        public String getComposedTableName(){
+            if (ComposedTableName != null)
+                return this.ComposedTableName.getComposedName();
+            else
+                return null;
+        }
 
 
-               /* (non-Javadoc)
+            /* (non-Javadoc)
          * @see com.sun.star.container.XContainerListener#elementInserted(com.sun.star.container.ContainerEvent)
          */
         public void elementInserted(ContainerEvent arg0) {
@@ -574,37 +633,37 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
         }
 
-           /**
-            * @param _stablename
-            * @return
-            */
-           public boolean appendTableNameToFilter(String _scomposedtablename){
-               boolean bhastoinsert = true;
-               for (int i = 0; i < sTableFilters.length; i++){
-                   if (sTableFilters[i].compareTo("%") > -1){
-                       if (sTableFilters[i].endsWith("." + _scomposedtablename))
-                           bhastoinsert = false;
-                       else if (sTableFilters[i].length() == 1)
-                           bhastoinsert = false;
-                   }
-                   else if (sTableFilters[i].equals(_scomposedtablename))
-                       bhastoinsert = false;
-                   if (!bhastoinsert)
-                       break;
-               }
-               if (bhastoinsert){
-                   String[] sNewTableFilters = new String[sTableFilters.length + 1];
+        /**
+         * @param _stablename
+         * @return
+         */
+        public boolean appendTableNameToFilter(String _scomposedtablename){
+            boolean bhastoinsert = true;
+            for (int i = 0; i < sTableFilters.length; i++){
+                if (sTableFilters[i].compareTo("%") > -1){
+                    if (sTableFilters[i].endsWith("." + _scomposedtablename))
+                        bhastoinsert = false;
+                    else if (sTableFilters[i].length() == 1)
+                        bhastoinsert = false;
+                }
+                else if (sTableFilters[i].equals(_scomposedtablename))
+                    bhastoinsert = false;
+                if (!bhastoinsert)
+                    break;
+            }
+            if (bhastoinsert){
+                String[] sNewTableFilters = new String[sTableFilters.length + 1];
                 System.arraycopy(sTableFilters, 0, sNewTableFilters, 0, sTableFilters.length);
-                   sNewTableFilters[sTableFilters.length] = _scomposedtablename;
-                   sTableFilters = sNewTableFilters;
-                   try {
+                sNewTableFilters[sTableFilters.length] = _scomposedtablename;
+                sTableFilters = sNewTableFilters;
+                try {
                     xDataSourcePropertySet.setPropertyValue("TableFilter", sTableFilters);
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
                     bhastoinsert = false;
                 }
-               }
-               return bhastoinsert;
-           }
+            }
+            return bhastoinsert;
+        }
 }
 
