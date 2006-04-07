@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_General.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:58:52 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,10 +145,10 @@ public abstract class WWD_General extends WebWizardDialog {
     protected FileAccess getFileAccess() {
         if (fileAccess == null)
           try {
-              fileAccess = new FileAccess(xMSF);
+            fileAccess = new FileAccess(xMSF);
           }
           catch (Exception ex) {
-              ex.printStackTrace();
+            ex.printStackTrace();
           }
 
         return fileAccess;
