@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCompletion.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:49:48 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 13:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
