@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.164 $
+#   $Revision: 1.165 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 14:01:53 $
+#   last change: $Author: vg $ $Date: 2006-04-07 08:01:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ APP9TARGET=
 .IF "$(BUILD_URD_ONLY)" != ""
 NOURD=
 URD=TRUE
-.ENDIF			# "$(URD_ONLY)" != ""
+.ENDIF			# "$(BUILD_URD_ONLY)" != ""
 
 .IF "$(IDLFILES)"!=""
 
