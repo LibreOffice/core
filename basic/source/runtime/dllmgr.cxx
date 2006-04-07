@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:38:33 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
                     strcpy( pStr, rStr.GetBuffer() ); // #100211# - checked
                     // ist nicht so sauber, aber wir sparen ein Pointerarray
                     DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
-                    pVar->SetUserData( (UINT32)pStr );
+                    pVar->SetUserData( (sal_uIntPtr)pStr );
                     *((const char**)pTop) = pStr;
                     pTop += sizeof( char* );
                     }
@@ -640,7 +640,7 @@ void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
                     strcpy( pStr, aByteStr.GetBuffer() ); // #100211# - checked
                     // ist nicht so sauber, aber wir sparen ein Pointerarray
                     DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
-                    pVar->SetUserData( (UINT32)pStr );
+                    pVar->SetUserData( (sal_uIntPtr)pStr );
                     *((const char**)pTop) = pStr;
                     pTop += sizeof( char* );
                     }
