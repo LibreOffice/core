@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:19:39 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 08:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,8 @@ String RID_STR_FILENAME
 String RID_STR_APPENDLIBS
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bibliotheken hinzufügen : Bibliotheken hinzuf³gen */
-    Text [ de ] = "Bibliotheken hinzufÃ¼gen" ;
-    Text [ en-US ] = "Append Libraries" ;
+    Text [ de ] = "Bibliotheken importieren" ;
+    Text [ en-US ] = "Import Libraries" ;
 };
 String RID_STR_QUERYDELMACRO
 {
