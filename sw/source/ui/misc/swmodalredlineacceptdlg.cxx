@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodalredlineacceptdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:41:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-07 15:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #endif
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
