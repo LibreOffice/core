@@ -3,7 +3,7 @@
  // shell SfxViewShell
  //
  // (C) 1996 StarDivision GmbH, Hamburg, Germany
- // $Author: obo $ $Date: 2006-03-27 09:32:24 $  $Revision: 1.5 $
+ // $Author: vg $ $Date: 2006-04-07 09:51:57 $  $Revision: 1.6 $
  // $Logfile:   T:/sfx2/sdi/viwslots.sdv  $ $Workfile:   viwslots.sdi  $
  //-------------------------------------------------------------------------
 interface View : Object
@@ -23,6 +23,16 @@ interface View : Object
         StateMethod = GetState_Impl ;
     ]
     SID_MAIL_SENDDOCASFORMAT // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASMS // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASOOO // ole(no) api(todo)
     [
         ExecMethod = ExecMisc_Impl ;
         StateMethod = GetState_Impl ;
