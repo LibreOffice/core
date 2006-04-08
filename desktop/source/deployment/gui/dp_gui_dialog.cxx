@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:19:05 $
+ *  last change: $Author: vg $ $Date: 2006-04-08 09:58:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "unotools/configmgr.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/sequence.hxx"
-#include "tools/isolang.hxx"
 #include "tools/resmgr.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "vcl/wintypes.hxx"
