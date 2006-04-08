@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:52:26 $
+ *  last change: $Author: vg $ $Date: 2006-04-08 09:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
 #endif
-#ifndef _TOOLS_ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -215,7 +215,7 @@ void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
     // org.openoffice.Office.Linguistic/General/DefaultLocale_CTL
 
     // determine script type of UI locale
-    LanguageType ltUILocale = ConvertIsoStringToLanguage(usUILocale);
+    LanguageType ltUILocale = MsLangId::convertIsoStringToLanguage(usUILocale);
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(ltUILocale);
 
     try
@@ -240,7 +240,7 @@ void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
             // in the UI
             // covert the LanguageType we've got from the LanguageTable back to
             // an iso string and store it
-            OUString usDefault = ConvertLanguageToIsoString(ltUILocale);
+            OUString usDefault = MsLangId::convertLanguageToIsoString(ltUILocale);
             try
             {
                 xProp->setPropertyValue(usName, makeAny(usDefault));
