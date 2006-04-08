@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:49:51 $
+ *  last change: $Author: vg $ $Date: 2006-04-08 10:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_RESOURCE_HRC_
 #include "Resource.hrc"
-#endif
-#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
-#include "ModuleContext.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
