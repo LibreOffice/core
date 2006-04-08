@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:06:45 $
+ *  last change: $Author: vg $ $Date: 2006-04-08 10:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "unotools/configmgr.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/unwrapargs.hxx"
-#include "tools/isolang.hxx"
+#include <i18npool/mslangid.hxx>
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -165,7 +165,7 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
                        ::utl::ConfigManager::LOCALE ) >>= slang))
                 throw RuntimeException( OUSTR("Cannot determine language!"),
                                         static_cast<OWeakObject *>(this) );
-            as.SetUILanguage( ConvertIsoStringToLanguage( slang ) );
+            as.SetUILanguage( MsLangId::convertIsoStringToLanguage( slang ) );
             app->SetSettings( as );
         }
     }
