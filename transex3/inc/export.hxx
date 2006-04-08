@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:25:08 $
+ *  last change: $Author: vg $ $Date: 2006-04-08 09:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
-#include <tools/isolang.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
