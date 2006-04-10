@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfileview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:55:03 $
+ *  last change: $Author: vg $ $Date: 2006-04-10 13:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
