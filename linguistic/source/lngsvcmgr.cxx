@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:49:49 $
+ *  last change: $Author: vg $ $Date: 2006-04-10 12:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,7 +731,7 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (0 != aKeyText.getLength())
-                    nLang = ConvertIsoStringToLanguage( aKeyText );
+                    nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetSpellCheckerDsp_Impl( sal_False );     // don't set service list, it will be done below
                 pSpellDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
@@ -753,7 +753,7 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (0 != aKeyText.getLength())
-                    nLang = ConvertIsoStringToLanguage( aKeyText );
+                    nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetHyphenatorDsp_Impl( sal_False );   // don't set service list, it will be done below
                 pHyphDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
@@ -775,7 +775,7 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (0 != aKeyText.getLength())
-                    nLang = ConvertIsoStringToLanguage( aKeyText );
+                    nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetThesaurusDsp_Impl( sal_False );  // don't set service list, it will be done below
                 pThesDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
