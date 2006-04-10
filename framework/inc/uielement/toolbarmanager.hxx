@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:18:07 $
+ *  last change: $Author: vg $ $Date: 2006-04-10 10:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,6 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand );
         void Destroy();
 
-    protected:
         enum ExecuteCommand
         {
             EXEC_CMD_CLOSETOOLBAR,
@@ -199,6 +198,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         };
         typedef std::vector< ControllerParams > ControllerParamsVector;
 
+    protected:
         DECL_LINK( Click, ToolBox * );
         DECL_LINK( DropdownClick, ToolBox * );
         DECL_LINK( DoubleClick, ToolBox * );
