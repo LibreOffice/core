@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:04:17 $
+ *  last change: $Author: vg $ $Date: 2006-04-10 12:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ void SvxLinguConfigUpdate::UpdateAll()
                 Sequence< OUString > aNewSvcs =
                         lcl_GetNewEntries( aLastFoundSvcs, aAvailSvcs );
 
-                OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+                OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
                 Sequence< OUString > aCfgSvcs( aCurSvcs[k][ aCfgLocaleStr ] );
 
