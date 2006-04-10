@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:35:10 $
+ *  last change: $Author: vg $ $Date: 2006-04-10 14:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,8 +129,8 @@ Any SAL_CALL SdUnoSlideView::getSelection (void)
     int nIndex = 0;
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
-        slidesorter::model::PageDescriptor& rDescriptor (aSelectedPages.GetNextElement());
-        aPages[nIndex++] = rDescriptor.GetPage()->getUnoPage();
+        slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        aPages[nIndex++] = pDescriptor->GetPage()->getUnoPage();
     }
     aResult <<= aPages;
 
