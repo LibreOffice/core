@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:13 $
+ *  last change: $Author: rt $ $Date: 2006-04-11 08:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 
 #include "invader.hxx"
