@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:36:54 $
+ *  last change: $Author: vg $ $Date: 2006-04-11 08:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2484,7 +2484,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         {
             sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
             int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nAnsiKeyLen <= nAnsiMaxKeyLen, "Invalid key name length!" )
+            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" )
             if( nAnsiKeyLen > nMaxKeyLen )
                 nAnsiKeyLen = 0;
             else if( nAnsiKeyLen > 0 )
