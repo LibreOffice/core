@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:39:27 $
+ *  last change: $Author: vg $ $Date: 2006-04-12 09:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1713,7 +1713,18 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     pLocale = ::comphelper::Locale::getFallback(lLocales, sActLocale);
     if (pLocale == lLocales.end())
     {
-        OSL_ENSURE(sal_False, "Fallback scenario for localized value failed ...");
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
+
+            ::rtl::OUStringBuffer sMsg(256);
+            sMsg.appendAscii("Fallback scenario for filter or type '"           );
+            sMsg.append     (sName                                              );
+            sMsg.appendAscii("' and locale '"                                   );
+            sMsg.append     (sActLocale                                         );
+            sMsg.appendAscii("' failed. Please check your filter configuration.");
+
+            OSL_ENSURE(sal_False, _FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
+        #endif
         return;
     }
 
