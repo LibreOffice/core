@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inunx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:37:57 $
+ *  last change: $Author: vg $ $Date: 2006-04-12 10:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,8 +130,8 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 
             if ( osl_getProcessLocale(&procLocale) == osl_Process_E_None )
             {
-                OUString     rLang( procLocale->Language );
-                OUString     rCountry( procLocale->Country );
+                rtl::OUString     rLang( procLocale->Language );
+                rtl::OUString     rCountry( procLocale->Country );
 
                 nLang = MsLangId::convertIsoNamesToLanguage( rLang, rCountry );
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
