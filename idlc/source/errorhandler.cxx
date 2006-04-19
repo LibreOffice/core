@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:48:41 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:45:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,8 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return
             "an unpublished entity cannot be used in the declaration of a"
             " published entity: ";
+    case EIDL_SIMILAR_CONSTRUCTORS:
+        return "two constructors have identical lists of parameter types";
     }
     return "unknown errror";
 }
