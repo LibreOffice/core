@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:55:55 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,7 +860,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
     UINT32 nPos2 = rStrm.Tell();                    // Ende merken
     rStrm.Seek( nPos );
     SVBT32 nLen;
-    LongToSVBT32( nPos2 - nPos, nLen );             // Grafik-Laenge ausrechnen
+    UInt32ToSVBT32( nPos2 - nPos, nLen );             // Grafik-Laenge ausrechnen
     rStrm.Write( nLen, 4 );                         // im Header einpatchen
     rStrm.Seek( nPos2 );                            // Pos wiederherstellen
 }
