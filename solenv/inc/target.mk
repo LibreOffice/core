@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.165 $
+#   $Revision: 1.166 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 08:01:46 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:34:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2629,8 +2629,10 @@ $(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkc
     @+echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
     @+echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
     @+echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
+    @+-$(RM) $(@)_$(VERSIONTMP:b) >& $(NULLDEV)
+    @+$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+-$(RENAME) $(VERSIONTMP) $@
+    @+-$(RENAME) $(@)_$(VERSIONTMP:b) $@
 
 .IF "$(MAKEFILERC)"==""
 warn_target_empty:
