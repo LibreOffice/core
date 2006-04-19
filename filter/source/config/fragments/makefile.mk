@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-16 11:08:21 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:07:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,8 @@ $(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
 MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
-PACKLANG := $(JAVAI) $(JAVACPS) $(SOLARBINDIR)/xalan.jar org.apache.xalan.xslt.Process -XSL langfilter.xsl
+XALAN_JAR*=$(SOLARBINDIR)$/xalan.jar
+PACKLANG := $(JAVAI) $(JAVACPS) $(XALAN_JAR) org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
 
 # -----------------------------------------------------------------------------
