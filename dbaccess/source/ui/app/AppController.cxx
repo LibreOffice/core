@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:35:54 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,20 +531,15 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
             TDocuments::iterator aFind = ::std::find_if(m_aDocuments.begin(),m_aDocuments.end(),
                 ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XComponent> >(),xComp),::std::select1st<TDocuments::value_type>()));
             if ( aFind != m_aDocuments.end() )
-            {
                 m_aDocuments.erase(aFind);
-            }
         }
-        else if ( xContainer.is() )
+        if ( xContainer.is() )
         {
             TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
             if ( aFind != m_aCurrentContainers.end() )
-            {
                 m_aCurrentContainers.erase(aFind);
-            }
         }
-        else
-            OApplicationController_CBASE::disposing( _rSource );
+        OApplicationController_CBASE::disposing( _rSource );
     }
 }
 //--------------------------------------------------------------------
@@ -552,6 +547,10 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( getView() && getView()->IsInModalMode() )
+        return sal_False;
+
     sal_Bool bCanSuspend = sal_True;
 
     if ( m_bSuspended != bSuspend )
