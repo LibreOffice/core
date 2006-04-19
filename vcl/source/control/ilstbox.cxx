@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:08:11 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2627,7 +2627,7 @@ void ImplWin::ImplDraw( bool bLayout )
             // The listbox is painted over the entire control including the
             // border, but ImplWin does not contain the border => correction
             // needed.
-            long nLeft, nTop, nRight, nBottom;
+            sal_Int32 nLeft, nTop, nRight, nBottom;
             pWin->GetBorder( nLeft, nTop, nRight, nBottom );
             Point aPoint( -nLeft, -nTop );
             Region aCtrlRegion( Rectangle( aPoint - GetPosPixel(), pWin->GetSizePixel() ) );
