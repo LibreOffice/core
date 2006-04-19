@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:19:18 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:27:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,9 @@ $(DEBFILE) : $(DEBDEPN) control postinst postrm prerm
     @cat prerm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/prerm
     @chmod -R g-w $(MISC)/$(TARGET)/$(DEBFILE:f)
     @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
-    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@"
+    @chmod g-s $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
+    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@" && $(TOUCH) $(MISC)$/$(TARGET).debflag
+    +$(TYPE) $(MISC)$/$(TARGET).debflag || echo "ERROR: packing $(TARGET) failed! "
     @$(RM) -r $(MISC)/$(TARGET)/$(@:f)/DEBIAN
 
 .ENDIF
