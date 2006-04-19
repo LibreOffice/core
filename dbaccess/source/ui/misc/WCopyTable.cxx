@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:44:34 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBAUI_WIZARD_CPAGE_HXX
+#include "WCPage.hxx"
+#endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -179,11 +182,18 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                 m_sSourceName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sal_False,::dbtools::eInDataManipulation);
             else
                 _xSourceObject->getPropertyValue(PROPERTY_NAME) >>= m_sSourceName;
-            m_sName = m_sSourceName;
+            if ( m_xSourceConnection == m_xConnection )
+            {
+                Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY_THROW);
+                m_sName = ::dbtools::createUniqueName(xSup->getTables(),m_sSourceName,sal_False);
+            }
+            else
+                m_sName = m_sSourceName;
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
+        m_sName = m_sSourceName;
     }
 }
 // -----------------------------------------------------------------------------
@@ -210,12 +220,17 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_xFactory(_rM)
     ,m_sName(_rDefaultName)
-    ,m_vSourceVec(_rSourceColVec)
     ,m_xSourceConnection(_xConnection) // in this case source connection and dest connection are the same
     ,m_bDeleteSourceColumns(sal_False)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
+    ODatabaseExport::TColumnVector::const_iterator aIter = _rSourceColVec.begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = _rSourceColVec.end();
+    for (; aIter != aEnd ; ++aIter)
+    {
+        m_vSourceVec.push_back(m_vSourceColumns.find((*aIter)->first));
+    }
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::construct()
@@ -428,6 +443,50 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                         pPage->setDisplayRow(nBreakPos);
                         ShowPage(3);
                         return 0;
+                    }
+                }
+                if ( m_xConnection.is() )
+                {
+                    sal_Bool bPKeyAllowed = sal_False;
+                    try
+                    {
+                        Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
+                        bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+                    }
+                    catch(const Exception&)
+                    {
+                        OSL_ENSURE(0,"Exception caught while asking for supportsCoreSQLGrammar!");
+                    }
+                    if ( bPKeyAllowed )
+                    {
+                        ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
+                            ,::std::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::std::select2nd<ODatabaseExport::TColumns::value_type>()));
+                        if ( aFind == m_vDestColumns.end() )
+                        {
+                            String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
+                            String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+                            OSQLMessageBox aBox(this, sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+
+                            INT16 nReturn = aBox.Execute();
+
+                            switch(nReturn )
+                            {
+                                case RET_YES:
+                                {
+                                    OCopyTable* pPage = reinterpret_cast<OCopyTable*>(GetPage(0));
+                                    m_bCreatePrimaryColumn = sal_True;
+                                    m_aKeyName = pPage->GetKeyName();
+                                    sal_Int32 nBreakPos = 0;
+                                    CheckColumns(nBreakPos);
+                                    break;
+                                }
+                                case RET_CANCEL:
+                                    ShowPage(3);
+                                    return 0;
+                                default:
+                                    ;
+                            }
+                        }
                     }
                 }
                 break;
@@ -1002,6 +1061,11 @@ OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
     OSL_ENSURE(m_mNameMapping.find(_sColumnName) == m_mNameMapping.end(),"name doubled!");
     m_mNameMapping[_sColumnName] = sAlias;
     return sAlias;
+}
+// -----------------------------------------------------------------------------
+void OCopyTableWizard::removeColumnNameFromNameMap(const ::rtl::OUString& _sName)
+{
+    m_mNameMapping.erase(_sName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
