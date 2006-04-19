@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:39:08 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,8 @@ Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs,Ele
 
     else if (sOpName.equals(OPERATION_REPLACE))
         return Operation::replace;
+    else if (sOpName.equals(OPERATION_FUSE))
+        return Operation::fuse;
 
     else if (sOpName.equals(OPERATION_REMOVE))
         return Operation::remove;

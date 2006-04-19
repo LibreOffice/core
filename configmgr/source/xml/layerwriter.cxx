@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:40:06 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #endif
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #include <com/sun/star/configuration/backend/ConnectionLostException.hpp>
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -223,6 +224,20 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
+        void LayerWriter::prepareAddOrReplaceElement(
+            rtl::OUString const & name, sal_Int16 attributes)
+        {
+            ElementInfo info(name, ElementType::node);
+            info.flags = attributes &
+                ~com::sun::star::configuration::backend::NodeAttribute::FUSE;
+            info.op =
+                (attributes &
+                 com::sun::star::configuration::backend::NodeAttribute::FUSE)
+                == 0
+                ? Operation::replace : Operation::fuse;
+            m_aFormatter.prepareElement(info);
+        }
+
         void SAL_CALL LayerWriter::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
@@ -231,11 +246,7 @@ namespace configmgr
 
             try
             {
-                ElementInfo aInfo(aName, ElementType::node);
-                aInfo.flags = aAttributes;
-                aInfo.op = Operation::replace;
-
-                m_aFormatter.prepareElement(aInfo);
+                prepareAddOrReplaceElement(aName, aAttributes);
 
                 this->startNode();
             }
@@ -254,11 +265,7 @@ namespace configmgr
 
             try
             {
-                ElementInfo aInfo(aName, ElementType::node);
-                aInfo.flags = aAttributes;
-                aInfo.op = Operation::replace;
-
-                m_aFormatter.prepareElement(aInfo);
+                prepareAddOrReplaceElement(aName, aAttributes);
                 m_aFormatter.addInstanceType(aTemplate.Name,aTemplate.Component);
 
                 this->startNode();
