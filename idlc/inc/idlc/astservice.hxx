@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astservice.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:00:43 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@ public:
     virtual sal_Bool dump(RegistryKey& rKey);
 
     void setDefaultConstructor(bool b) { m_defaultConstructor = b; }
+
+    bool checkLastConstructor() const;
 
 private:
     bool m_defaultConstructor;
