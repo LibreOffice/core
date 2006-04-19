@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:03:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 15:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,9 +643,9 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -741,7 +741,9 @@ UNO_JAR_FILE_PATCH( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
+#ifndef SYSTEM_HSQLDB
 STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb, hsqldb )
+#endif
 STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
@@ -766,14 +768,14 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 File gid_File_Jar_Sandbox
     TXT_FILE_BODY;
     Name = JARFILENAME(sandbox);
     Dir = gid_Dir_Classes;
     Styles = (PACKED,PATCH);
 End
-
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -795,15 +797,16 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-
 STD_JAR_FILE( gid_File_Jar_Xt, xt )
-
 #ifndef SYSTEM_XALAN
 STD_JAR_FILE( gid_File_Jar_Xalan, xalan )
+#endif
+#ifndef SYSTEM_XERCES
 STD_JAR_FILE( gid_File_Jar_XercesImpl, xercesImpl )
+#endif
+#ifndef SYSTEM_XML_APIS
 STD_JAR_FILE( gid_File_Jar_Xml_Apis, xml-apis )
 #endif
-
 #endif
 
 File gid_File_Mod_Chart
