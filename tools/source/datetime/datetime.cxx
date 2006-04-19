@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datetime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:10:31 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,4 +385,59 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
         return double(nDays) + fTime;
     }
     return double(nDays);
+}
+
+void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
+{
+    const sal_Int64 a100nPerSecond = SAL_CONST_INT64( 10000000 );
+    const sal_Int64 a100nPerDay = a100nPerSecond * sal_Int64( 60 * 60 * 24 );
+
+    sal_Int64 nYears = GetYear() - 1601;
+    sal_Int64 nDays =
+        nYears * 365 +
+        nYears / 4 - nYears / 100 + nYears / 400 +
+        GetDayOfYear() - 1;
+
+    sal_Int64 aTime =
+        a100nPerDay * nDays +
+        a100nPerSecond * (
+                sal_Int64( GetSec() ) +
+                60 * sal_Int64( GetMin() ) +
+                60 * 60 * sal_Int64( GetHour() ) );
+
+    rLower = sal_uInt32( aTime % SAL_CONST_UINT64( 0x100000000 ) );
+    rUpper = sal_uInt32( aTime / SAL_CONST_UINT64( 0x100000000 ) );
+}
+
+DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const sal_uInt32 & rUpper )
+{
+    const sal_Int64 a100nPerSecond = SAL_CONST_INT64( 10000000 );
+    const sal_Int64 a100nPerDay = a100nPerSecond * sal_Int64( 60 * 60 * 24 );
+
+    sal_Int64 aTime = sal_Int64(
+            sal_uInt64( rUpper ) * SAL_CONST_UINT64( 0x100000000 ) +
+            sal_uInt64( rLower ) );
+
+    sal_Int64 nDays = aTime / a100nPerDay;
+    sal_Int64 nYears =
+        ( nDays -
+          ( nDays / ( 4 * 365 ) ) +
+          ( nDays / ( 100 * 365 ) ) -
+          ( nDays / ( 400 * 365 ) ) ) / 365;
+    nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
+
+    USHORT nMonths = 0;
+    for( long nDaysCount = nDays; nDaysCount >= 0; )
+    {
+        nDays = nDaysCount;
+        nMonths ++;
+        nDaysCount -= Date( 1, nMonths, 1601 + nYears ).GetDaysInMonth();
+    }
+
+    Date _aDate( (USHORT)( nDays + 1 ), nMonths, nYears + 1601 );
+    Time _aTime( ULONG( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
+            ULONG( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
+            ULONG( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
+
+    return DateTime( _aDate, _aTime );
 }
