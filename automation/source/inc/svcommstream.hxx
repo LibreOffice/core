@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svcommstream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:18:13 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,17 +48,17 @@ public:
     SvCommStream( SvStream* pIO );
     ~SvCommStream();
 
-    ICommStream&        operator>>( USHORT& rUShort );
-    ICommStream&        operator>>( ULONG& rULong );
-    ICommStream&        operator>>( unsigned char& rChar );
+    ICommStream&        operator>>( comm_USHORT& rUShort );
+    ICommStream&        operator>>( comm_ULONG& rULong );
+    ICommStream&        operator>>( comm_BOOL& rChar );
 
-    ICommStream&        operator<<( USHORT nUShort );
-    ICommStream&        operator<<( ULONG nULong );
-    ICommStream&        operator<<( unsigned char nChar );
+    ICommStream&        operator<<( comm_USHORT nUShort );
+    ICommStream&        operator<<( comm_ULONG nULong );
+    ICommStream&        operator<<( comm_BOOL nChar );
 
-    ULONG           Read( void* pData, ULONG nSize );
-    ULONG           Write( const void* pData, ULONG nSize );
+    comm_ULONG      Read( void* pData, comm_ULONG nSize );
+    comm_ULONG      Write( const void* pData, comm_ULONG nSize );
 
-    BOOL            IsEof() const;
-    ULONG           SeekRel( long nPos );
+    comm_BOOL       IsEof() const;
+    comm_ULONG      SeekRel( long nPos );
 };
