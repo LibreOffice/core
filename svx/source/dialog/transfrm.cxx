@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1279,8 +1279,8 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* pSet )
 {
     if( pSet )
     {
-        INT32 lX = maMtrPosX.GetValue();
-        INT32 lY = maMtrPosY.GetValue();
+        long lX = maMtrPosX.GetValue();
+        long lY = maMtrPosY.GetValue();
 
         // #106330#
         // The below BugFix assumed that GetTopLeftPosition()
@@ -1575,7 +1575,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
 
 //------------------------------------------------------------------------
 
-void SvxPositionSizeTabPage::GetTopLeftPosition( INT32& rX, INT32& rY,
+void SvxPositionSizeTabPage::GetTopLeftPosition( long& rX, long& rY,
                                                 const Rectangle& rRect )
 {
     switch ( maCtlPos.GetActualRP() )
