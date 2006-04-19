@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstrings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:44:13 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ namespace configmgr
         // States for update actions
         DECLARE_CONSTASCII_USTRING(OPERATION_MODIFY);
         DECLARE_CONSTASCII_USTRING(OPERATION_REPLACE);
+        DECLARE_CONSTASCII_USTRING(OPERATION_FUSE);
         DECLARE_CONSTASCII_USTRING(OPERATION_REMOVE);
 
         // the default separator for strings
