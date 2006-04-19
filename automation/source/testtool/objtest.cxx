@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:00:00 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -697,29 +697,23 @@ void TestToolObj::InitTestToolObj()
 
 
     pImpl->pControlsObj = new Controls( CUniString("GetNextCloseWindow") );
-    pImpl->pControlsObj -> SetType( SbxVARIANT );
+    pImpl->pControlsObj->SetType( SbxVARIANT );
     pImpl->pControlsObj->SetUserData( ID_GetNextCloseWindow );
-    Insert( pImpl->pControlsObj );                         // Hier so umst‰ndlich wegen Compilerfehlers
-    pImpl->pControlsObj->ChangeListener();
+    pImpl->pControlsObj->ChangeListener( this );
 
     for ( i=0;i<VAR_POOL_SIZE;i++)
     {
 /*              pMyVar = new SbxObject( "Dummy" );
-        pMyVar -> SetType( SbxVARIANT );*/
+        pMyVar->SetType( SbxVARIANT );*/
 
 //           pMyVar = new SbxMethod( "Dummy", SbxVARIANT );
 
         pImpl->pMyVars[i] = new SbxTransportMethod( SbxVARIANT );
-        pImpl->pMyVars[i] -> SetName( CUniString("VarDummy").Append(String::CreateFromInt32(i) ) );
+        pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(String::CreateFromInt32(i) ) );
 
         Insert( pImpl->pMyVars[i] );
 //              StartListening( pMyVars[i]->GetBroadcaster(), TRUE );
 
-        pImpl->pControlsObj = new Controls( CUniString("ControlDummy").Append(String::CreateFromInt32(i) ) );
-        pImpl->pControlsObj -> SetType( SbxOBJECT );
-        Insert( pImpl->pControlsObj );                         // Hier so umst‰ndlich wegen Compilerfehlers
-        pImpl->pControlsObj->ChangeListener();
-        pImpl->pControlsObjs[i] = pImpl->pControlsObj;
     }
 
     pControls = new CNames();
@@ -727,7 +721,6 @@ void TestToolObj::InitTestToolObj()
     pNameKontext = pControls;
 
     nMyVar = 0;
-    nControlsObj = 0;
 
     pImpl->pMyBasic->AddFactory( &aComManFac );
 
@@ -781,7 +774,6 @@ TestToolObj::~TestToolObj()
     for ( int i = 0 ; i < VAR_POOL_SIZE ; i++ )
     {
         pImpl->pMyVars[i].Clear();
-        pImpl->pControlsObjs[i].Clear();
     }
 
     if (pControls)
@@ -1595,7 +1587,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         if( nHintId == SBX_HINT_DATAWANTED )
         {
             nMyVar = 0;
-            nControlsObj = 0;
             switch( nUserData )
             {
                 case ID_Kontext:
@@ -1606,8 +1597,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // So daﬂ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
-                            pImpl->pMyVars[i] -> SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
-                            pImpl->pControlsObjs[i] -> SetName( CUniString("ControlDummy").Append(UniString::CreateFromInt32(i)) );
+                            pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                         }
                     }
                     else if ( rPar && rPar->Count() == 2 )
@@ -1623,8 +1613,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             // So daﬂ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                             for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                             {
-                                pImpl->pMyVars[i] -> SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
-                                pImpl->pControlsObjs[i] -> SetName( CUniString("ControlDummy").Append(UniString::CreateFromInt32(i)) );
+                                pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                             }
                         }
                     }
@@ -1739,11 +1728,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
-                            pImpl->pMyVars[i] -> SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
-                            pImpl->pControlsObjs[i] -> SetName( CUniString("ControlDummy").Append(UniString::CreateFromInt32(i)) );
+                            pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                         }
                         nMyVar = 0;
-                        nControlsObj = 0;
 
                         if (pControls)
                         {
@@ -2192,52 +2179,56 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     break;
                 case ID_Control:
                 case ID_StringControl:
-                    if ( SingleCommandBlock )
-                        BeginBlock();
-                    else
-                        if ( ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
-                        {
-                            SetError( SbxERR_NOTIMP );
-                        }
-                    if ( !IsError() )
+                    // if only the object is given in the script we don't have to do anything (object stands for itself)
+                    if ( !pVar->ISA( SbxObject ) )
                     {
-                        SbxVariable *pMember = NULL;
-                        if ( !( pVar->GetParent() && (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) ) )
-                        {
-                            SetError( SbxERR_NAMED_NOT_FOUND );
-                        }
+                        if ( SingleCommandBlock )
+                            BeginBlock();
                         else
-                        {
-                            if ( nUserData == ID_Control )
+                            if ( ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                             {
-                                In->GenCmdControl (pMember->GetULong(),
-                                    (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                aNextReturnId = SmartId( pMember->GetULong() );
+                                SetError( SbxERR_NOTIMP );
+                            }
+                        if ( !IsError() )
+                        {
+                            SbxVariable *pMember = NULL;
+                            if ( !( pVar->GetParent() && (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) ) )
+                            {
+                                SetError( SbxERR_NAMED_NOT_FOUND );
                             }
                             else
                             {
-                                In->GenCmdControl (pMember->GetString(),
-                                    (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                aNextReturnId = SmartId( pMember->GetString() );
+                                if ( nUserData == ID_Control )
+                                {
+                                    In->GenCmdControl (pMember->GetULong(),
+                                        (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                    aNextReturnId = SmartId( pMember->GetULong() );
+                                }
+                                else
+                                {
+                                    In->GenCmdControl (pMember->GetString(),
+                                        (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                    aNextReturnId = SmartId( pMember->GetString() );
+                                }
                             }
-                        }
 
-                        if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
-                        {
-                            pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
-                        }
-                        else
-                        {
-                            pImpl->pNextReturn = NULL;
-                            aNextReturnId = SmartId();
-                        }
+                            if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
+                            {
+                                pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
+                            }
+                            else
+                            {
+                                pImpl->pNextReturn = NULL;
+                                aNextReturnId = SmartId();
+                            }
 
-                    }
-                    if ( SingleCommandBlock )
-                        EndBlock();
-                    if ( !IsError() && (USHORT)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
-                    {
-                        WaitForAnswer();
+                        }
+                        if ( SingleCommandBlock )
+                            EndBlock();
+                        if ( !IsError() && (USHORT)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
+                        {
+                            WaitForAnswer();
+                        }
                     }
 
                     break;
@@ -2661,6 +2652,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             if (pFehlerListe)
                 delete pFehlerListe;
             pFehlerListe = new CErrors;
+
+            for (USHORT i=0;i<VAR_POOL_SIZE;i++)
+            {
+                pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
+            }
+            nMyVar = 0;
+
         }  // if( nHintId == SBX_HINT_BASICSTART )
         else if( nHintId == SBX_HINT_BASICSTOP )
         {
@@ -2719,16 +2717,18 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         return NULL;
 
     SbxVariableRef Old = SbxObject::Find(Str, Type );
-    // do not return any objects from pControlsObjs[] or pMyVars[]
+    // do not return any objects from pMyVars[]
     if (Old && Old->GetUserData() != ID_Dispatch
             && Old->GetUserData() != ID_UNODispatch
-            && Old->GetUserData() != ID_Control
-            && Old->GetUserData() != ID_StringControl
             && Old->GetUserData() != ID_ErrorDummy
             && Old->GetUserData() != 0 )
         return Old;
+    else if ( Str.SearchAscii(":") != STRING_NOTFOUND )
+    {   // ignore qualified names e.g.  main:FormWizard     If this was removed an error would be generated
+    }
     else
     {
+
         USHORT nElement;
         ControlDef *pWhatName = new ControlDef(Str,SmartId());
 
@@ -2737,8 +2737,12 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         {
             delete pWhatName;
             pWhatName = ((ControlDef*)pNameKontext->GetObject(nElement));
-            pImpl->pControlsObj = pImpl->pControlsObjs[nControlsObj++];
-            pImpl->pControlsObj->SetName(pWhatName->pData->Kurzname);
+
+//// new Controls Object every time
+            pImpl->pControlsObj = new Controls( pWhatName->pData->Kurzname );
+            pImpl->pControlsObj->SetType( SbxOBJECT );
+            pImpl->pControlsObj->ChangeListener( this );
+
 
             // Will be set on method-child further down
             if ( pWhatName->pData->aUId.HasNumeric() )
@@ -2831,7 +2835,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.21 $
+    // search $Revision: 1.22 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3310,7 +3314,13 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
                         if ( aNextReturnId.Matches( aUId ) )
                         {
-                            if( nParams & PARAM_ULONG_1 )       pImpl->pNextReturn->PutULong( nLNr1 );
+                            if( nParams & PARAM_ULONG_1 )
+                            {
+                                if ( nLNr1 > 0x7fffffff )
+                                    pImpl->pNextReturn->PutLong( long(nLNr1 - 0xffffffff) -1 );
+                                else
+                                    pImpl->pNextReturn->PutULong( nLNr1 );
+                            }
                             if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
                             if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
                             if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
@@ -4085,7 +4095,7 @@ Controls::Controls( String aName )
 : SbxObject( aName)
 {
     pMethodVar = new SbxTransportMethod( SbxVARIANT );
-    pMethodVar -> SetName( CUniString("Dummy") );
+    pMethodVar->SetName( CUniString("Dummy") );
     Insert( pMethodVar );
 //      pMethodVar = Make( CUniString("Dummy"), SbxCLASS_PROPERTY, SbxULONG );
 }
@@ -4095,10 +4105,10 @@ Controls::~Controls()
 {}
 
 
-void Controls::ChangeListener()
+void Controls::ChangeListener( SbxObject* pParent )
 {
     EndListening( pMethodVar->GetBroadcaster(), TRUE );
-    GetParent()->StartListening( pMethodVar->GetBroadcaster(), TRUE );
+    pParent->StartListening( pMethodVar->GetBroadcaster(), TRUE );
 }
 
 void Controls::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
@@ -4136,7 +4146,7 @@ SbxVariable* Controls::Find( const String& Str, SbxClassType Type)
         SbxVariableRef Old = SbxObject::Find(Str, Type );
         if (Old)
             return Old;
-        else if ( Str.CompareIgnoreCaseToAscii("ID") == COMPARE_EQUAL )
+        else if ( Str.EqualsIgnoreCaseAscii("ID") )
             return NULL;    // suppress generation of error in this case
     }
     ADD_ERROR(SbxERR_BAD_METHOD,GEN_RES_STR2(S_UNKNOWN_METHOD, GetName(), Str));
