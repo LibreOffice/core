@@ -65,6 +65,7 @@
 			<xs:restriction base="xs:string">
 				<xs:enumeration value="modify"/>
 				<xs:enumeration value="replace"/>
+				<xs:enumeration value="fuse"/>
 				<xs:enumeration value="remove"/>
 				<xs:enumeration value="reset"/>
 			</xs:restriction>
