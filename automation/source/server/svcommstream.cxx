@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svcommstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:27:48 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,16 @@
 SvCommStream::SvCommStream( SvStream* pIO ) { pStream = pIO; }
 SvCommStream::~SvCommStream() {}
 
-ICommStream& SvCommStream::operator>>( USHORT& rUShort ) { *pStream >> rUShort; return *this; }
-ICommStream& SvCommStream::operator>>( ULONG& rULong ) { *pStream >> rULong; return *this; }
-ICommStream& SvCommStream::operator>>( unsigned char& rChar ) { *pStream >> rChar; return *this; }
+ICommStream& SvCommStream::operator>>( comm_USHORT& rUShort ) { *pStream >> rUShort; return *this; }
+ICommStream& SvCommStream::operator>>( comm_ULONG& rULong ) { *pStream >> rULong; return *this; }
+ICommStream& SvCommStream::operator>>( comm_BOOL& rChar ) { *pStream >> rChar; return *this; }
 
-ICommStream& SvCommStream::operator<<( USHORT nUShort ) { *pStream << nUShort; return *this; }
-ICommStream& SvCommStream::operator<<( ULONG nULong ) { *pStream << nULong; return *this; }
-ICommStream& SvCommStream::operator<<( unsigned char nChar ) { *pStream << nChar; return *this; }
+ICommStream& SvCommStream::operator<<( comm_USHORT nUShort ) { *pStream << nUShort; return *this; }
+ICommStream& SvCommStream::operator<<( comm_ULONG nULong ) { *pStream << nULong; return *this; }
+ICommStream& SvCommStream::operator<<( comm_BOOL nChar ) { *pStream << nChar; return *this; }
 
-ULONG SvCommStream::Read( void* pData, ULONG nSize ) { return pStream->Read( pData, nSize ); }
-ULONG SvCommStream::Write( const void* pData, ULONG nSize ) { return pStream->Write( pData, nSize ); }
+comm_ULONG SvCommStream::Read( void* pData, comm_ULONG nSize ) { return pStream->Read( pData, nSize ); }
+comm_ULONG SvCommStream::Write( const void* pData, comm_ULONG nSize ) { return pStream->Write( pData, nSize ); }
 
-BOOL SvCommStream::IsEof() const { return pStream->IsEof(); }
-ULONG SvCommStream::SeekRel( long nPos ) { return pStream->SeekRel( nPos ); }
+comm_BOOL SvCommStream::IsEof() const { return pStream->IsEof(); }
+comm_ULONG SvCommStream::SeekRel( long nPos ) { return pStream->SeekRel( nPos ); }
