@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtritem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:04:40 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,8 @@ SfxPoolItem* SfxDateTimeRangeItem::Create( SvStream& rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxDateTimeRangeItem, 0);
 
-    ULONG   nStartDate, nEndDate;
-    long    nStartTime, nEndTime;
+    sal_uInt32 nStartDate, nEndDate;
+    sal_Int32 nStartTime, nEndTime;
 
     rStream >> nStartDate;
     rStream >> nStartTime;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dateitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:04:24 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,8 +135,8 @@ int SfxDateTimeItem::Compare( const SfxPoolItem& rItem ) const
 SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
-    ULONG nDate = 0;
-    long nTime = 0;
+    sal_uInt32 nDate = 0;
+    sal_Int32 nTime = 0;
     rStream >> nDate;
     rStream >> nTime;
     DateTime aDT(nDate, nTime);
