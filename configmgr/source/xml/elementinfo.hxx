@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementinfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:38:52 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ namespace configmgr
                 clear,
 
                 replace,
+                fuse,
                 remove,
 
                 unknown
