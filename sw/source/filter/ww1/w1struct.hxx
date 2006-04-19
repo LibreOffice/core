@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1struct.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:02 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,45 +90,45 @@ struct W1_FIB /////////////////////////////////////////////////////////
     SVBT16 u2[5];// 0xe reserved
     SVBT32 fcMin;// 0x18 file offset of first character of text
     ULONG fcMinGet() {
-        return SVBT32ToLong(fcMin); }
+        return SVBT32ToUInt32(fcMin); }
     SVBT32 fcMac;// 0x1c file offset of last character of text + 1
     ULONG fcMacGet() {
-        return SVBT32ToLong(fcMac); }
+        return SVBT32ToUInt32(fcMac); }
     SVBT32 cbMac;// 0x20 file offset of last byte written to file + 1.
     ULONG cbMacGet() {
-        return SVBT32ToLong(cbMac); }
+        return SVBT32ToUInt32(cbMac); }
     SVBT32 u4[4];// 0x24 reserved
     SVBT32 ccpText;// 0x34 length of main document text stream
     ULONG ccpTextGet() {
-        return SVBT32ToLong(ccpText); }
+        return SVBT32ToUInt32(ccpText); }
     SVBT32 ccpFtn;// 0x38 length of footnote subdocument text stream
     ULONG ccpFtnGet() {
-        return SVBT32ToLong(ccpFtn); }
+        return SVBT32ToUInt32(ccpFtn); }
     SVBT32 ccpHdd;// 0x3c length of header subdocument text stream
     ULONG ccpHddGet() {
-        return SVBT32ToLong(ccpHdd); }
+        return SVBT32ToUInt32(ccpHdd); }
     SVBT32 ccpMcr;// 0x40 length of macro subdocument text stream
     ULONG ccpMcrGet() {
-        return SVBT32ToLong(ccpMcr); }
+        return SVBT32ToUInt32(ccpMcr); }
     SVBT32 ccpAtn;// 0x44 length of annotation subdocument text stream
     ULONG ccpAtnGet() {
-        return SVBT32ToLong(ccpAtn); }
+        return SVBT32ToUInt32(ccpAtn); }
     SVBT32 cp5[4];// 0x48
     SVBT32 fcStshfOrig;// 0x58 file offset of original allocation for STSH in file
     ULONG fcStshfOrigGet() {
-        return SVBT32ToLong(fcStshfOrig); }
+        return SVBT32ToUInt32(fcStshfOrig); }
     SVBT16 cbStshfOrig;// 0x5c count of bytes of original STSH allocation
     USHORT cbStshfOrigGet() {
         return SVBT16ToShort(cbStshfOrig); }
     SVBT32 fcStshf;// 0x5e file offset of STSH in file.
     ULONG fcStshfGet() {
-        return SVBT32ToLong(fcStshf); }
+        return SVBT32ToUInt32(fcStshf); }
     SVBT16 cbStshf;// 0x62 count of bytes of current STSH allocation
     USHORT cbStshfGet() {
         return SVBT16ToShort(cbStshf); }
     SVBT32 fcPlcffndRef;// 0x64 file offset of footnote reference PLC.
     ULONG fcPlcffndRefGet() {
-        return SVBT32ToLong(fcPlcffndRef); }
+        return SVBT32ToUInt32(fcPlcffndRef); }
     SVBT16 cbPlcffndRef;// 0x68 count of bytes of footnote reference PLC
     USHORT cbPlcffndRefGet() {
         return SVBT16ToShort(cbPlcffndRef); }
@@ -136,7 +136,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcffndTxt;// 0x6a file offset of footnote text PLC.
     ULONG fcPlcffndTxtGet() {
-        return SVBT32ToLong(fcPlcffndTxt); }
+        return SVBT32ToUInt32(fcPlcffndTxt); }
     SVBT16 cbPlcffndTxt;// 0x6e count of bytes of footnote text PLC.
     USHORT cbPlcffndTxtGet() {
         return SVBT16ToShort(cbPlcffndTxt); }
@@ -144,28 +144,28 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcfandRef;// 0x70 file offset of annotation reference PLC.
     ULONG fcPlcfandRefGet() {
-        return SVBT32ToLong(fcPlcfandRef); }
+        return SVBT32ToUInt32(fcPlcfandRef); }
     SVBT16 cbPlcfandRef;// 0x74 count of bytes of annotation reference PLC.
     USHORT cbPlcfandRefGet() {
         return SVBT16ToShort(cbPlcfandRef); }
 
     SVBT32 fcPlcfandTxt;// 0x76 file offset of annotation text PLC.
     ULONG fcPlcfandTxtGet() {
-        return SVBT32ToLong(fcPlcfandTxt); }
+        return SVBT32ToUInt32(fcPlcfandTxt); }
     SVBT16 cbPlcfandTxt;// 0x7a count of bytes of the annotation text PLC
     USHORT cbPlcfandTxtGet() {
         return SVBT16ToShort(cbPlcfandTxt); }
 
     SVBT32 fcPlcfsed;// 8x7c file offset of section descriptor PLC.
     ULONG fcPlcfsedGet() {
-        return SVBT32ToLong(fcPlcfsed); }
+        return SVBT32ToUInt32(fcPlcfsed); }
     SVBT16 cbPlcfsed;// 0x80 count of bytes of section descriptor PLC.
     USHORT cbPlcfsedGet() {
         return SVBT16ToShort(cbPlcfsed); }
 
     SVBT32 fcPlcfpgd;// 0x82 file offset of paragraph descriptor PLC
     ULONG fcPlcfpgdGet() {
-        return SVBT32ToLong(fcPlcfpgd); }
+        return SVBT32ToUInt32(fcPlcfpgd); }
     SVBT16 cbPlcfpgd;// 0x86 count of bytes of paragraph descriptor PLC.
     USHORT cbPlcfpgdGet() {
         return SVBT16ToShort(cbPlcfpgd); }
@@ -174,7 +174,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcfphe;// 0x88 file offset of PLC of paragraph heights.
     ULONG fcPlcfpheGet() {
-        return SVBT32ToLong(fcPlcfphe); }
+        return SVBT32ToUInt32(fcPlcfphe); }
     SVBT16 cbPlcfphe;// 0x8c count of bytes of paragraph height PLC.
     USHORT cbPlcfpheGet() {
         return SVBT16ToShort(cbPlcfphe); }
@@ -182,7 +182,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcSttbfglsy;// 0x8e file offset of glossary string table.
     ULONG fcSttbfglsyGet() {
-        return SVBT32ToLong(fcSttbfglsy); }
+        return SVBT32ToUInt32(fcSttbfglsy); }
     SVBT16 cbSttbfglsy;// 0x92 count of bytes of glossary string table.
     USHORT cbSttbfglsyGet() {
         return SVBT16ToShort(cbSttbfglsy); }
@@ -191,7 +191,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcfglsy;// 0x94 file offset of glossary PLC.
     ULONG fcPlcfglsyGet() {
-        return SVBT32ToLong(fcPlcfglsy); }
+        return SVBT32ToUInt32(fcPlcfglsy); }
     SVBT16 cbPlcfglsy;// 0x98 count of bytes of glossary PLC.
     USHORT cbPlcfglsyGet() {
         return SVBT16ToShort(cbPlcfglsy); }
@@ -200,7 +200,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcfhdd;// 0x9a byte offset of header PLC.
     ULONG fcPlcfhddGet() {
-        return SVBT32ToLong(fcPlcfhdd); }
+        return SVBT32ToUInt32(fcPlcfhdd); }
     SVBT16 cbPlcfhdd;// 0x9e count of bytes of header PLC.
     USHORT cbPlcfhddGet() {
         return SVBT16ToShort(cbPlcfhdd); }
@@ -208,126 +208,126 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcPlcfbteChpx;// 0xa0 file offset of character property bin table.PLC.
     ULONG fcPlcfbteChpxGet() {
-        return SVBT32ToLong(fcPlcfbteChpx); }
+        return SVBT32ToUInt32(fcPlcfbteChpx); }
     SVBT16 cbPlcfbteChpx;// 0xa4 count of bytes of character property bin table PLC.
     USHORT cbPlcfbteChpxGet() {
         return SVBT16ToShort(cbPlcfbteChpx); }
 
     SVBT32 fcPlcfbtePapx;// 0xa6 file offset of paragraph property bin table.PLC.
     ULONG fcPlcfbtePapxGet() {
-        return SVBT32ToLong(fcPlcfbtePapx); }
+        return SVBT32ToUInt32(fcPlcfbtePapx); }
     SVBT16 cbPlcfbtePapx;// 0xaa count of bytes of paragraph property bin table PLC.
     USHORT cbPlcfbtePapxGet() {
         return SVBT16ToShort(cbPlcfbtePapx); }
 
     SVBT32 fcPlcfsea;// 0xac file offset of PLC reserved for private use. The SEA is 6 bytes long.
     ULONG fcPlcfseaGet() {
-        return SVBT32ToLong(fcPlcfsea); }
+        return SVBT32ToUInt32(fcPlcfsea); }
     SVBT16 cbPlcfsea;// 0xb0    count of bytes of private use PLC.
     USHORT cbPlcfseaGet() {
         return SVBT16ToShort(cbPlcfsea); }
 
     SVBT32 fcSttbfffn;// 0xb2   file offset of font information STTBF. See the FFN file structure definition.
     ULONG fcSttbfffnGet() {
-        return SVBT32ToLong(fcSttbfffn); }
+        return SVBT32ToUInt32(fcSttbfffn); }
     SVBT16 cbSttbfffn;// 0xb6   count of bytes in sttbfffn.
     USHORT cbSttbfffnGet() {
         return SVBT16ToShort(cbSttbfffn); }
 
     SVBT32 fcPlcffldMom;// 0xb8 offset in doc stream to the PLC of field positions in the main document.
     ULONG fcPlcffldMomGet() {
-        return SVBT32ToLong(fcPlcffldMom); }
+        return SVBT32ToUInt32(fcPlcffldMom); }
     SVBT16 cbPlcffldMom;// 0xbc
     USHORT cbPlcffldMomGet() {
         return SVBT16ToShort(cbPlcffldMom); }
 
     SVBT32 fcPlcffldHdr;// 0xbe offset in doc stream to the PLC of field positions in the header subdocument.
     ULONG fcPlcffldHdrGet() {
-        return SVBT32ToLong(fcPlcffldHdr); }
+        return SVBT32ToUInt32(fcPlcffldHdr); }
     SVBT16 cbPlcffldHdr;// 0xc2
     USHORT cbPlcffldHdrGet() {
         return SVBT16ToShort(cbPlcffldHdr); }
 
     SVBT32 fcPlcffldFtn;// 0xc4 offset in doc stream to the PLC of field positions in the footnote subdocument.
     ULONG fcPlcffldFtnGet() {
-        return SVBT32ToLong(fcPlcffldFtn); }
+        return SVBT32ToUInt32(fcPlcffldFtn); }
     SVBT16 cbPlcffldFtn;// 0xc8
     USHORT cbPlcffldFtnGet() {
         return SVBT16ToShort(cbPlcffldFtn); }
 
     SVBT32 fcPlcffldAtn;// 0xca offset in doc stream to the PLC of field positions in the annotation subdocument.
     ULONG fcPlcffldAtnGet() {
-        return SVBT32ToLong(fcPlcffldAtn); }
+        return SVBT32ToUInt32(fcPlcffldAtn); }
     SVBT16 cbPlcffldAtn;// 0xce
     USHORT cbPlcffldAtnGet() {
         return SVBT16ToShort(cbPlcffldAtn); }
 
     SVBT32 fcPlcffldMcr;// 0xd0 offset in doc stream to the PLC of field positions in the macro subdocument.
     ULONG fcPlcffldMcrGet() {
-        return SVBT32ToLong(fcPlcffldMcr); }
+        return SVBT32ToUInt32(fcPlcffldMcr); }
     SVBT16 cbPlcffldMcr;// 0xd4
     USHORT cbPlcffldMcrGet() {
         return SVBT16ToShort(cbPlcffldMcr); }
 
     SVBT32 fcSttbfbkmk;// 0xd6 offset in document stream of the STTBF that records bookmark names in the main document
     ULONG fcSttbfbkmkGet() {
-        return SVBT32ToLong(fcSttbfbkmk); }
+        return SVBT32ToUInt32(fcSttbfbkmk); }
     SVBT16 cbSttbfbkmk;// 0xda
     USHORT cbSttbfbkmkGet() {
         return SVBT16ToShort(cbSttbfbkmk); }
 
     SVBT32 fcPlcfbkf;// 0xdc offset in document stream of the PLCF that records the beginning CP offsets of bookmarks in the main document. See BKF
     ULONG fcPlcfbkfGet() {
-        return SVBT32ToLong(fcPlcfbkf); }
+        return SVBT32ToUInt32(fcPlcfbkf); }
     SVBT16 cbPlcfbkf;// 0xe0
     USHORT cbPlcfbkfGet() {
         return SVBT16ToShort(cbPlcfbkf); }
 
     SVBT32 fcPlcfbkl;// 0xe2 offset in document stream of the PLCF that records the ending CP offsets of bookmarks recorded in the main document. See the BKL structure definition.
     ULONG fcPlcfbklGet() {
-        return SVBT32ToLong(fcPlcfbkl); }
+        return SVBT32ToUInt32(fcPlcfbkl); }
     SVBT16 cbPlcfbkl;// 0xe6 SVBT16
     USHORT cbPlcfbklGet() {
         return SVBT16ToShort(cbPlcfbkl); }
 
     SVBT32 fcCmds;// 0xe8 FC
     ULONG fcCmdsGet() {
-        return SVBT32ToLong(fcCmds); }
+        return SVBT32ToUInt32(fcCmds); }
     SVBT16 cbCmds;// 0xec
     USHORT cbCmdsGet() {
         return SVBT16ToShort(cbCmds); }
 
     SVBT32 fcPlcmcr;// 0xee FC
     ULONG fcPlcmcrGet() {
-        return SVBT32ToLong(fcPlcmcr); }
+        return SVBT32ToUInt32(fcPlcmcr); }
     SVBT16 cbPlcmcr;// 0xf2
     USHORT cbPlcmcrGet() {
         return SVBT16ToShort(cbPlcmcr); }
 
     SVBT32 fcSttbfmcr;// 0xf4 FC
     ULONG fcSttbfmcrGet() {
-        return SVBT32ToLong(fcSttbfmcr); }
+        return SVBT32ToUInt32(fcSttbfmcr); }
     SVBT16 cbSttbfmcr;// 0xf8
     USHORT cbSttbfmcrGet() {
         return SVBT16ToShort(cbSttbfmcr); }
 
     SVBT32 fcPrEnv;// 0xfa
     ULONG fcPrEnvGet() {
-        return SVBT32ToLong(fcPrEnv); }
+        return SVBT32ToUInt32(fcPrEnv); }
     SVBT16 cbPrEnv;// 0xfe
     USHORT cbPrEnvGet() {
         return SVBT16ToShort(cbPrEnv); }
 
     SVBT32 fcWss;// 0x100 file offset of Window Save State data structure. See WSS.
     ULONG fcWssGet() {
-        return SVBT32ToLong(fcWss); }
+        return SVBT32ToUInt32(fcWss); }
     SVBT16 cbWss;// 0x100 count of bytes of WSS. ==0 if unable to store the window state.
     USHORT cbWssGet() {
         return SVBT16ToShort(cbWss); }
 
     SVBT32 fcDop;// 0x106 file offset of document property data structure.
     ULONG fcDopGet() {
-        return SVBT32ToLong(fcDop); }
+        return SVBT32ToUInt32(fcDop); }
     SVBT16 cbDop;// 0x10a count of bytes of document properties.
     USHORT cbDopGet() {
         return SVBT16ToShort(cbDop); }
@@ -335,21 +335,21 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcSttbfAssoc;// 0x10c offset to STTBF of associated strings. See STTBFASSOC.
     ULONG fcSttbfAssocGet() {
-        return SVBT32ToLong(fcSttbfAssoc); }
+        return SVBT32ToUInt32(fcSttbfAssoc); }
     SVBT16 cbSttbfAssoc;// 0x110
     USHORT cbSttbfAssocGet() {
         return SVBT16ToShort(cbSttbfAssoc); }
 
     SVBT32 fcClx;// 0x112 file offset of beginning of information for complex files.
     ULONG fcClxGet() {
-        return SVBT32ToLong(fcClx); }
+        return SVBT32ToUInt32(fcClx); }
     SVBT16 cbClx;// 0x116 count of bytes of complex file information. 0 if file is non-complex.
     USHORT cbClxGet() {
         return SVBT16ToShort(cbClx); }
 
     SVBT32 fcPlcfpgdFtn;// 0x118 file offset of page descriptor PLC for footnote subdocument.
     ULONG fcPlcfpgdFtnGet() {
-        return SVBT32ToLong(fcPlcfpgdFtn); }
+        return SVBT32ToUInt32(fcPlcfpgdFtn); }
     SVBT16 cbPlcfpgdFtn;// 0x11C count of bytes of page descriptor PLC for footnote subdocument.
     USHORT cbPlcfpgdFtnGet() {
         return SVBT16ToShort(cbPlcfpgdFtn); }
@@ -357,25 +357,25 @@ struct W1_FIB /////////////////////////////////////////////////////////
 
     SVBT32 fcSpare1;// 0x11e file offset of the name of the original file.
     ULONG fcSpare1Get() {
-        return SVBT32ToLong(fcSpare1); }
+        return SVBT32ToUInt32(fcSpare1); }
     SVBT16 cbSpare1;// 0x122 count of bytes of the name of the original file.
     USHORT cbSpare1Get() {
         return SVBT16ToShort(cbSpare1); }
     SVBT32 fcSpare2;// 0x124 file offset of the name of the original file.
     ULONG fcSpare2Get() {
-        return SVBT32ToLong(fcSpare2); }
+        return SVBT32ToUInt32(fcSpare2); }
     SVBT16 cbSpare2;// 0x128 count of bytes of the name of the original file.
     USHORT cbSpare2Get() {
         return SVBT16ToShort(cbSpare2); }
     SVBT32 fcSpare3;// 0x12a file offset of the name of the original file.
     ULONG fcSpare3Get() {
-        return SVBT32ToLong(fcSpare3); }
+        return SVBT32ToUInt32(fcSpare3); }
     SVBT16 cbSpare3;// 0x12e count of bytes of the name of the original file.
     USHORT cbSpare3Get() {
         return SVBT16ToShort(cbSpare3); }
     SVBT32 fcSpare4;// 0x130 file offset of the name of the original file.
     ULONG fcSpare4Get() {
-        return SVBT32ToLong(fcSpare4); }
+        return SVBT32ToUInt32(fcSpare4); }
     SVBT16 cbSpare4;// 0x134 count of bytes of the name of the original file.
     USHORT cbSpare4Get() {
         return SVBT16ToShort(cbSpare4); }
@@ -490,25 +490,25 @@ struct W1_DOP ///////////////////////////////////// Document Properties
     SVBT16  rgwSpare[2];// reserved
     SVBT32  dttmCreated;// DTTM date and time document was created
     ULONG dttmCreatedGet() {
-        return SVBT32ToLong(dttmCreated); }
+        return SVBT32ToUInt32(dttmCreated); }
     SVBT32  dttmRevised;// DTTM date and time document was last revised
     ULONG dttmRevisedGet() {
-        return SVBT32ToLong(dttmRevised); }
+        return SVBT32ToUInt32(dttmRevised); }
     SVBT32  dttmLastPrint;// DTTM date and time document was last printed
     ULONG dttmLastPrintGet() {
-        return SVBT32ToLong(dttmLastPrint); }
+        return SVBT32ToUInt32(dttmLastPrint); }
     SVBT16  nRevision;// number of times document has been revised since its creation
     USHORT nRevisionGet() {
         return SVBT16ToShort(nRevision); }
     SVBT32  tmEdited;// time document was last edited
     ULONG tmEditedGet() {
-        return SVBT32ToLong(tmEdited); }
+        return SVBT32ToUInt32(tmEdited); }
     SVBT32  cWords;// count of words tallied by last Word Count execution
     ULONG cWordsGet() {
-        return SVBT32ToLong(cWords); }
+        return SVBT32ToUInt32(cWords); }
     SVBT32  cCh;// count of characters tallied by last Word Count execution
     ULONG cChGet() {
-        return SVBT32ToLong(cCh); }
+        return SVBT32ToUInt32(cCh); }
     SVBT16  cPg;// count of pages tallied by last Word Count execution
     USHORT cPgGet() {
         return SVBT16ToShort(cPg); }
@@ -589,7 +589,7 @@ struct W1_CHP /////////////////////////////////////////////////////////
     // SVBT16 kul: 3;// Underline code: 0=none, 1=single, 2=by word, 3=double, 4=dotted
     // SVBT16 fSysVanish: 1;// used internally
 
-    ULONG fcPicGet()        { return SVBT32ToLong(fcPic); }
+    ULONG fcPicGet()        { return SVBT32ToUInt32(fcPic); }
     USHORT fnPicGet()       { return SVBT8ToByte(fnPic); }
     USHORT hpsLargeChpGet() { return SVBT16ToShort(hpsLargeChp); }
 
@@ -734,7 +734,7 @@ struct W1_PIC /////////////////////////////////////// PictureStructure
 {
     SVBT32 lcb;// 0x0 number of bytes in the PIC structure plus size of following picture data which may be a Window's metafile, a bitmap, or the filename of a TIFF file.
     ULONG lcbGet() {
-        return SVBT32ToLong(lcb); }
+        return SVBT32ToUInt32(lcb); }
     SVBT16 cbHeader;// 0x4 number of bytes in the PIC (to allow for future expansion).
     USHORT cbHeaderGet() {
         return SVBT16ToShort(cbHeader); }
