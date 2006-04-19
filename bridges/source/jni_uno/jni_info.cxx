@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:37:24 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,8 @@ JNI_type_info const * JNI_info::get_type_info(
 
 //______________________________________________________________________________
 JNI_info::JNI_info(
-    JNIEnv * jni_env, jobject class_loader, jmethodID classLoader_loadClass )
+    JNIEnv * jni_env, jobject class_loader, jclass classClass,
+    jmethodID methodForName )
     : m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
             css::uno::TypeDescription(
@@ -511,7 +512,8 @@ JNI_info::JNI_info(
       m_void_type( ::getCppuVoidType() ),
       m_class_JNI_proxy( 0 ),
       m_XInterface_type_info( 0 ),
-      m_method_ClassLoader_loadClass( classLoader_loadClass )
+      m_class_Class( classClass ),
+      m_method_Class_forName( methodForName )
 {
     JNI_context jni( this, jni_env, class_loader ); // !no proper jni_info!
 
@@ -851,6 +853,8 @@ JNI_info::JNI_info(
         (jclass) jni->NewGlobalRef( jo_String.get() );
     m_class_Object =
         (jclass) jni->NewGlobalRef( jo_Object.get() );
+    m_class_Class =
+        (jclass) jni->NewGlobalRef( m_class_Class );
 
     m_object_Any_VOID =
         jni->NewGlobalRef( jo_Any_VOID.get() );
@@ -899,6 +903,7 @@ void JNI_info::destruct( JNIEnv * jni_env )
     jni_env->DeleteGlobalRef( m_object_Type_UNSIGNED_LONG );
     jni_env->DeleteGlobalRef( m_object_Type_UNSIGNED_HYPER );
 
+    jni_env->DeleteGlobalRef( m_class_Class );
     jni_env->DeleteGlobalRef( m_class_Object );
     jni_env->DeleteGlobalRef( m_class_String );
     jni_env->DeleteGlobalRef( m_class_Double );
@@ -929,19 +934,15 @@ JNI_info const * JNI_info::get_jni_info(
     JNI_context jni(
         0, jni_env, static_cast< jobject >(uno_vm->getClassLoader()) );
 
-    jmethodID jo_loadClass = jni.get_loadClass_method();
-    JLocalAutoRef name(
-        jni,
-        jni->NewStringUTF( "com.sun.star.bridges.jni_uno.JNI_info_holder" ) );
+    jclass jo_class;
+    jmethodID jo_forName;
+    jni.getClassForName( &jo_class, &jo_forName );
     jni.ensure_no_exception();
-    jvalue arg;
-    arg.l = name.get();
     JLocalAutoRef jo_JNI_info_holder(
         jni,
-        jni->CallObjectMethodA(
-            static_cast< jobject >(uno_vm->getClassLoader()), jo_loadClass,
-            &arg ) );
-    jni.ensure_no_exception();
+        jni.findClass(
+            "com.sun.star.bridges.jni_uno.JNI_info_holder", jo_class,
+            jo_forName, false ) );
     // field JNI_info_holder.m_jni_info_handle
     jfieldID field_s_jni_info_handle =
         jni->GetStaticFieldID(
@@ -956,8 +957,8 @@ JNI_info const * JNI_info::get_jni_info(
     if (0 == jni_info) // un-initialized?
     {
         JNI_info * new_info = new JNI_info(
-            jni_env, static_cast< jobject >(uno_vm->getClassLoader()),
-            jo_loadClass );
+            jni_env, static_cast< jobject >(uno_vm->getClassLoader()), jo_class,
+            jo_forName );
 
         ClearableMutexGuard guard( Mutex::getGlobalMutex() );
         jni_info =
