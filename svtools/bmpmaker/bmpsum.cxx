@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:54:31 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,13 +238,13 @@ sal_uInt64 BmpSum::GetCRC( Bitmap& rBmp )
             {
                 const BitmapColor aCol( pRAcc->GetColor( nY, nX ) );
 
-                LongToSVBT32( aCol.GetRed(), aBT32 );
+                UInt32ToSVBT32( aCol.GetRed(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( aCol.GetGreen(), aBT32 );
+                UInt32ToSVBT32( aCol.GetGreen(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( aCol.GetBlue(), aBT32 );
+                UInt32ToSVBT32( aCol.GetBlue(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
             }
         }
