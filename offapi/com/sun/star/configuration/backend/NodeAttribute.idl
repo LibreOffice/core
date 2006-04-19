@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NodeAttribute.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:36:01 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,19 @@ published constants NodeAttribute
         in this or subsequent layer.
      */
     const short READONLY = 1024;
+
+    //-------------------------------------------------------------------------
+
+    /** indicates that contents shall be fused.
+
+        <p>Used in <member>XLayerHandler::addOrReplaceNode</member>,
+        <member>XLayerHandler::addOrReplaceNodeFromTemplate</member>,
+        <member>XUpdateHandler::addOrReplaceNode</member>, and
+        <member>XUpdateHandler::addOrReplaceNodeFromTemplate</member>.</p>
+
+        @since OOo 2.0.3
+     */
+    const short FUSE = 2048;
 
     //-------------------------------------------------------------------------
 
