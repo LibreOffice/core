@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:43:23 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,11 +307,11 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 break;
             case HTML_TABLEROW_ON:
-                if ( m_xResultSetUpdate.is() )
+                if ( m_pUpdateHelper.get() )
                 {
                     try
                     {
-                        m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                        m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
                     }
                     catch(SQLException& e)
                     // UpdateFehlerbehandlung
@@ -370,7 +370,7 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 break;
             case HTML_TABLEROW_OFF:
-                if ( !m_xResultSetUpdate.is() )
+                if ( !m_pUpdateHelper.get() )
                 {
                     m_bError = sal_True;
                     break;
@@ -379,8 +379,8 @@ void OHTMLReader::NextToken( int nToken )
                 {
                     m_nRowCount++;
                     if (m_bIsAutoIncrement) // if bSetAutoIncrement then I have to set the autoincrement
-                        m_xRowUpdate->updateInt(1,m_nRowCount);
-                    m_xResultSetUpdate->insertRow();
+                        m_pUpdateHelper->updateInt(1,m_nRowCount);
+                    m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
                 //////////////////////////////////////////////////////////////////////
