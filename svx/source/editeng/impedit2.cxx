@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:40:32 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2927,14 +2927,14 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, BOOL bSmart )
     return aPaM;
 }
 
-ULONG ImpEditEngine::GetTextHeight() const
+sal_uInt32 ImpEditEngine::GetTextHeight() const
 {
     DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=FALSE nicht verwendet werden: GetTextHeight" );
     DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Nicht formatiert" );
     return nCurTextHeight;
 }
 
-ULONG ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
+sal_uInt32 ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
 {
     // Wenn noch nicht formatiert und nicht gerade dabei.
     // Wird in der Formatierung bei AutoPageSize gerufen.
@@ -2997,10 +2997,10 @@ ULONG ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
         nMaxWidth = 0;
 
     nMaxWidth++; // Ein breiter, da in CreateLines bei >= umgebrochen wird.
-    return (ULONG)nMaxWidth;
+    return (sal_uInt32)nMaxWidth;
 }
 
-ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace )
+sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace )
 {
     USHORT nPara = GetEditDoc().GetPos( pPortion->GetNode() );
 
@@ -3013,7 +3013,7 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL
     SvxAdjust eJustification = GetJustification( nPara );
 
     // Berechnung der Breite ohne die Indents...
-    ULONG nWidth = 0;
+    sal_uInt32 nWidth = 0;
     USHORT nPos = pLine->GetStart();
     for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
     {
@@ -3051,10 +3051,10 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL
     return nWidth;
 }
 
-ULONG ImpEditEngine::CalcTextHeight()
+sal_uInt32 ImpEditEngine::CalcTextHeight()
 {
     DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=FALSE nicht verwendet werden: CalcTextHeight" );
-    ULONG nY = 0;
+    sal_uInt32 nY = 0;
     for ( USHORT nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
         nY += GetParaPortions()[nPortion]->GetHeight();
     return nY;
@@ -3101,9 +3101,9 @@ USHORT ImpEditEngine::GetLineHeight( USHORT nParagraph, USHORT nLine )
     return 0xFFFF;
 }
 
-ULONG ImpEditEngine::GetParaHeight( USHORT nParagraph )
+sal_uInt32 ImpEditEngine::GetParaHeight( USHORT nParagraph )
 {
-    ULONG nHeight = 0;
+    sal_uInt32 nHeight = 0;
 
     ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetParaHeight" );
@@ -3959,7 +3959,7 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                         {
                             USHORT n = nIndex - nTextPortionStart;
                             const sal_Int32* pDXArray = pLine->GetCharPosArray().GetData()+( nTextPortionStart-pLine->GetStart() );
-                            long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
+                            sal_Int32 nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < pPortion->GetLen() )
                             {
@@ -3967,9 +3967,9 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                                 nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex+1 ) );
                                 if ( nType == CHAR_PUNCTUATIONRIGHT )
                                 {
-                                    long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
+                                    sal_Int32 nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
                                                                     - pDXArray[n];
-                                    long nCompressed = nNextCharWidth/2;
+                                    sal_Int32 nCompressed = nNextCharWidth/2;
                                     nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
                                     nCompressed /= 10000;
                                     nCharWidth += nCompressed;
