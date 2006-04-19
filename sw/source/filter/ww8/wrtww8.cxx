@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:36:57 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,7 +791,7 @@ void WW8_WrMagicTable::Append( WW8_CP nCp, ULONG nData)
     */
     if ((!Count()) || (Prev() != nCp))
     {
-        LongToSVBT32(nData,nLittle);
+        UInt32ToSVBT32(nData,nLittle);
         WW8_WrPlc1::Append(nCp, nLittle);
     }
 }
@@ -1135,7 +1135,7 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
             continue;
 
         SVBT32 nPos;                // Signatur gefunden
-        LongToSVBT32( rGrf.GetFPos(), nPos );   // FilePos der Grafik
+        UInt32ToSVBT32( rGrf.GetFPos(), nPos );   // FilePos der Grafik
         memcpy( p, nPos, 4 );       // Patche FilePos ueber Signatur
     }
     rStrm.Write( pFkp, 512 );
@@ -1191,14 +1191,14 @@ WW8_FC WW8_WrFkp::GetStartFc() const
 // umgedreht, d.h. zum Herausholen der Anfangs- und Endpositionen muss
 // zurueckgedreht werden.
     if( bCombined )
-        return SVBT32ToLong( pFkp );        // 0. Element
+        return SVBT32ToUInt32( pFkp );        // 0. Element
     return ((INT32*)pFkp)[0];
 }
 
 WW8_FC WW8_WrFkp::GetEndFc() const
 {
     if( bCombined )
-        return SVBT32ToLong( &(pFkp[nIMax*4]) );    // nIMax-tes SVBT32-Element
+        return SVBT32ToUInt32( &(pFkp[nIMax*4]) );    // nIMax-tes SVBT32-Element
     return ((INT32*)pFkp)[nIMax];
 }
 
@@ -1591,7 +1591,7 @@ void SwWW8Writer::InsUInt16(ww::bytes &rO, sal_uInt16 n)
 void SwWW8Writer::InsUInt32(ww::bytes &rO, sal_uInt32 n)
 {
     SVBT32 nL;
-    LongToSVBT32( n, nL );
+    UInt32ToSVBT32( n, nL );
     rO.push_back(nL[0]);
     rO.push_back(nL[1]);
     rO.push_back(nL[2]);
@@ -1631,7 +1631,7 @@ void SwWW8Writer::InsUInt16( WW8Bytes& rO, UINT16 n )
 void SwWW8Writer::InsUInt32( WW8Bytes& rO, UINT32 n )
 {
     SVBT32 nL;
-    LongToSVBT32( n, nL );
+    UInt32ToSVBT32( n, nL );
     rO.Insert( nL, 4, rO.Count() );
 }
 
