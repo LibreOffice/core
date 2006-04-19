@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:26:16 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -736,10 +736,10 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
             }
         }
 
-
+/*  #i46293# remove reschedules
         for (int xx = 1;xx < 20;xx++)
             StatementList::NormalReschedule();
-
+*/
         m_bInsideExecutionLoop = FALSE;
     }
 
