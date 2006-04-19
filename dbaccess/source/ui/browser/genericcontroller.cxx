@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:12:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,7 +721,7 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
     // for the time frame of the fix.
     // #i52602# / frank.schoenheit@sun.com / 2005-07-29
-    executeUnChecked(_aURL,aArgs);
+    executeChecked(_aURL,aArgs);
 }
 
 // -----------------------------------------------------------------------
