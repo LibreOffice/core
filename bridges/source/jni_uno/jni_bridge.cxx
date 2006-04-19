@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:36:26 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,23 +359,45 @@ void JNI_context::java_exc_occured() const
 }
 
 //______________________________________________________________________________
-jmethodID JNI_context::get_loadClass_method() const
+void JNI_context::getClassForName(
+    jclass * classClass, jmethodID * methodForName) const
 {
-    JLocalAutoRef jo_ClassLoader(
-        *this, m_env->FindClass( "java/lang/ClassLoader" ) );
-    ensure_no_exception();
-    jmethodID jo_loadClass = m_env->GetMethodID(
-        static_cast< jclass >( jo_ClassLoader.get() ), "loadClass",
-        "(Ljava/lang/String;)Ljava/lang/Class;" );
-    ensure_no_exception();
-    return jo_loadClass;
+    jclass c = m_env->FindClass("java/lang/Class");
+    if (c != 0) {
+        *methodForName = m_env->GetStaticMethodID(
+            c, "forName",
+            "(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;");
+    }
+    *classClass = c;
+}
+
+//______________________________________________________________________________
+jclass JNI_context::findClass(
+    char const * name, jclass classClass, jmethodID methodForName,
+    bool inException) const
+{
+    jclass c = 0;
+    JLocalAutoRef s(*this, m_env->NewStringUTF(name));
+    if (s.is()) {
+        jvalue a[3];
+        a[0].l = s.get();
+        a[1].z = JNI_FALSE;
+        a[2].l = m_class_loader;
+        c = static_cast< jclass >(
+            m_env->CallStaticObjectMethodA(classClass, methodForName, a));
+    }
+    if (!inException) {
+        ensure_no_exception();
+    }
+    return c;
 }
 
 //______________________________________________________________________________
 OUString JNI_context::get_stack_trace( jobject jo_exc ) const
 {
     JLocalAutoRef jo_JNI_proxy(
-        *this, find_class( *this, "com.sun.star.bridges.jni_uno.JNI_proxy" ) );
+        *this,
+        find_class( *this, "com.sun.star.bridges.jni_uno.JNI_proxy", true ) );
     if (assert_no_exception())
     {
         // static method JNI_proxy.get_stack_trace()
