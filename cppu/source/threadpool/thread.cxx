@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:47:03 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,13 @@ namespace cppu_threadpool {
     }
 
 // ----------------------------------------------------------------------------------
-    ORequestThread::ORequestThread( JobQueue *pQueue,
-                                    const ByteSequence &aThreadId,
-                                    sal_Bool bAsynchron )
+    ORequestThread::ORequestThread(
+        rtl::Reference< ThreadPool > const & threadPool,
+        JobQueue *pQueue,
+        const ByteSequence &aThreadId,
+        sal_Bool bAsynchron )
         : m_thread( 0 )
+        , m_threadPool( threadPool )
         , m_pQueue( pQueue )
         , m_aThreadId( aThreadId )
         , m_bAsynchron( bAsynchron )
@@ -193,11 +196,13 @@ namespace cppu_threadpool {
                 // Note : Oneways should not get a disposable disposeid,
                 //        It does not make sense to dispose a call in this state.
                 //        That's way we put it an disposeid, that can't be used otherwise.
-                m_pQueue->enter( (sal_Int64 ) this , sal_True );
+                m_pQueue->enter(
+                    m_threadPool->m_disposedCallerAdmin, (sal_Int64 ) this,
+                    sal_True );
 
                 if( m_pQueue->isEmpty() )
                 {
-                    ThreadPool::getInstance()->revokeQueue( m_aThreadId , m_bAsynchron );
+                    m_threadPool->revokeQueue( m_aThreadId , m_bAsynchron );
                     // Note : revokeQueue might have failed because m_pQueue.isEmpty()
                     //        may be false (race).
                 }
@@ -211,7 +216,7 @@ namespace cppu_threadpool {
                 uno_releaseIdFromCurrentThread();
             }
 
-            cppu_threadpool::ThreadPool::getInstance()->waitInPool( this );
+            m_threadPool->waitInPool( this );
         }
     }
 }
