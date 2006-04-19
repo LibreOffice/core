@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:09:20 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,7 +804,7 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
 {
     INT16 ls, os, rs, us;
     rSt >> os >> ls >> rs >> us; // etwas seltsame Koordinatenreihenfolge ...
-    long l = ls, o = os, r = rs, u = us;
+    sal_Int32 l = ls, o = os, r = rs, u = us;
     Scale( l );
     Scale( o );
     Scale( r );
