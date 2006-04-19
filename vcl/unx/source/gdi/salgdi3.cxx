@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:28:56 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
                 if( pFontCache_->GetCurPos() )
                 {
                     pFontCache_->Remove( pItem );
-                    pFontCache_->Insert( pItem, (sal_uInt32)0 );
+                    pFontCache_->Insert( pItem, 0UL );
                 }
                 return pItem;
             }
@@ -475,7 +475,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
                                         rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
-    pFontCache_->Insert( pItem, (sal_uInt32)0 );
+    pFontCache_->Insert( pItem, 0UL );
     pItem->AddRef();
 
     return pItem;
