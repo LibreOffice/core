@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:52:28 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,7 +446,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
         aPaM.GetPoint()->nNode = nNodeIdx;
         aPaM.GetPoint()->nContent.Assign( aPaM.GetCntntNode(), nCntIdx );
 
-        _SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode );
+        _SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
 
         rNds.Move( aPaM, rInsPos, rDoc.GetNodes() );
 
