@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:21:01 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,62 +310,78 @@ service S1: XTest {
         [in] sequence< SequenceStruct > at16,
         [in] sequence< SequenceXInterface > at17,
         [in] sequence< SequenceXNamingService > at18);
-
-    abstract([in] long abstract);
-    assert([in] long assert);
-    //TODO: boolean([in] long boolean);
-    break([in] long break);
-    //TODO: byte([in] long byte);
-    //TODO: case([in] long case);
-    catch([in] long catch);
-    //TODO: char([in] long char);
-    class([in] long class);
-    //TODO: const([in] long const);
-    continue([in] long continue);
-    //TODO: default([in] long default);
-    do([in] long do);
-    //TODO: double([in] long double);
-    else([in] long else);
-    //TODO: enum([in] long enum);
-    extends([in] long extends);
-    final([in] long final);
-    finally([in] long finally);
-    //TODO: float([in] long float);
-    for([in] long for);
-    goto([in] long goto);
-    if([in] long if);
-    implements([in] long implements);
-    import([in] long import);
-    instanceof([in] long instanceof);
-    int([in] long int);
-    //TODO: interface([in] long interface);
-    //TODO: long([in] long long);
-    native([in] long native);
-    new([in] long new);
-    package([in] long package);
-    private([in] long private);
-    protected([in] long protected);
-    public([in] long public);
-    return([in] long return);
-    //TODO: short([in] long short);
-    static([in] long static);
-    strictfp([in] long strictfp);
-    super([in] long super);
-    //TODO: switch([in] long switch);
-    synchronized([in] long synchronized);
-    this([in] long this);
-    throw([in] long throw);
-    throws([in] long throws);
-    //TODO: transient([in] long transient);
-    try([in] long try);
-    //TODO: void([in] long void);
-    volatile([in] long volatile);
-    while([in] long while);
 };
 
 service S2: XTest;
 
 service S3 { interface XTest; };
+
+module services {
+
+service abstract: com::sun::star::uno::XInterface {
+    abstract([in] long abstract); };
+service assert: com::sun::star::uno::XInterface { assert([in] long assert); };
+//TODO: boolean
+service break: com::sun::star::uno::XInterface { break([in] long break); };
+//TODO: byte
+//TODO: case
+service catch: com::sun::star::uno::XInterface { catch([in] long catch); };
+//TODO: char
+service class: com::sun::star::uno::XInterface { class([in] long class); };
+//TODO: const
+service continue: com::sun::star::uno::XInterface {
+    continue([in] long continue); };
+//TODO: default
+service do: com::sun::star::uno::XInterface { do([in] long do); };
+//TODO: double
+service else: com::sun::star::uno::XInterface { else([in] long else); };
+//TODO: enum
+service extends: com::sun::star::uno::XInterface {
+    extends([in] long extends); };
+service final: com::sun::star::uno::XInterface { final([in] long final); };
+service finally: com::sun::star::uno::XInterface {
+    finally([in] long finally); };
+//TODO: float
+service for: com::sun::star::uno::XInterface { for([in] long for); };
+service goto: com::sun::star::uno::XInterface { goto([in] long goto); };
+service if: com::sun::star::uno::XInterface { if([in] long if); };
+service implements: com::sun::star::uno::XInterface {
+    implements([in] long implements); };
+service import: com::sun::star::uno::XInterface { import([in] long import); };
+service instanceof: com::sun::star::uno::XInterface {
+    instanceof([in] long instanceof); };
+service int: com::sun::star::uno::XInterface { int([in] long int); };
+//TODO: interface
+//TODO: long
+service native: com::sun::star::uno::XInterface { native([in] long native); };
+service new: com::sun::star::uno::XInterface { new([in] long new); };
+service package: com::sun::star::uno::XInterface {
+    package([in] long package); };
+service private: com::sun::star::uno::XInterface {
+    private([in] long private); };
+service protected: com::sun::star::uno::XInterface {
+    protected([in] long protected); };
+service public: com::sun::star::uno::XInterface { public([in] long public); };
+service return: com::sun::star::uno::XInterface { return([in] long return); };
+//TODO: short
+service static: com::sun::star::uno::XInterface { static([in] long static); };
+service strictfp: com::sun::star::uno::XInterface {
+    strictfp([in] long strictfp); };
+service super: com::sun::star::uno::XInterface { super([in] long super); };
+//TODO: switch
+service synchronized: com::sun::star::uno::XInterface {
+    synchronized([in] long synchronized); };
+service this: com::sun::star::uno::XInterface { this([in] long this); };
+service throw: com::sun::star::uno::XInterface { throw([in] long throw); };
+service throws: com::sun::star::uno::XInterface { throws([in] long throws); };
+//TODO: transient
+service try: com::sun::star::uno::XInterface { try([in] long try); };
+//TODO: void
+service volatile: com::sun::star::uno::XInterface {
+    volatile([in] long volatile); };
+service while: com::sun::star::uno::XInterface { while([in] long while); };
+
+};
 
 singleton S4: XTest;
 
