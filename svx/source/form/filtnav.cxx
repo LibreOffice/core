@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:05:34 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1344,7 +1344,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
     if (aText.Len() == 0)
     {
         // deleting the entry asynchron
-        sal_uInt32 nEvent;
+        ULONG nEvent;
         PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnRemove), pEntry);
     }
     else
