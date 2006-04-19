@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astscope.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:00:02 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ public:
 
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 
-    sal_uInt32 nMembers()
+    sal_uInt32 nMembers() const
         { return (sal_uInt32)(m_declarations.size()); }
     DeclList::const_iterator getIteratorBegin() const
         { return m_declarations.begin(); }
@@ -78,6 +78,10 @@ public:
     AstDeclaration* lookupPrimitiveType(ExprType type);
 
     AstDeclaration* lookupForAdd(AstDeclaration* pDecl);
+
+protected:
+    inline AstDeclaration const * getLast() const
+    { return m_declarations.back(); }
 
 private:
     DeclList        m_declarations;
