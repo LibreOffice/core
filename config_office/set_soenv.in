@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.98 $
-# Date:        $Date: 2006-04-19 14:02:40 $
+# Version:     $Revision: 1.99 $
+# Date:        $Date: 2006-04-19 15:10:10 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1759,6 +1759,16 @@ ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
 ToFile( "DB_JAR",            "@DB_JAR@",           "e" );
+ToFile( "SYSTEM_HSQLDB",     "@SYSTEM_HSQLDB@",    "e" );
+ToFile( "HSQLDB_JAR",        "@HSQLDB_JAR@",       "e" );
+ToFile( "SYSTEM_BSH",        "@SYSTEM_BSH@",       "e" );
+ToFile( "BSH_JAR",           "@BSH_JAR@",          "e" );
+ToFile( "SYSTEM_XML_APIS",   "@SYSTEM_XML_APIS@",  "e" );
+ToFile( "XML_APIS_JAR",      "@XML_APIS_JAR@",     "e" );
+ToFile( "SYSTEM_XERCES",     "@SYSTEM_XERCES@",    "e" );
+ToFile( "XERCES_JAR",        "@XERCES_JAR@",       "e" );
+ToFile( "SYSTEM_XALAN",      "@SYSTEM_XALAN@",     "e" );
+ToFile( "XALAN_JAR",         "@XALAN_JAR@",        "e" );
 ToFile( "SYSTEM_SABLOT",     "@SYSTEM_SABLOT@",    "e" );
 ToFile( "SABLOT_LIBS",       "@SABLOT_LIBS@",      "e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
