@@ -4,9 +4,9 @@
  *
  *  $RCSfile: retstrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:25:27 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:58:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,23 +60,19 @@ public:
 //  CmdBaseStream::GenReturn;
     void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
-//  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenReturn( nRet, nUId, aString, nLenInChars );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
-//  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_ULONG nNr, const comm_UniChar* aString, comm_USHORT nLenInChars, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, nNr, aString, nLenInChars, bBool );}
 // MacroRecorder
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );}
-//  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, aString, nLenInChars );}
-//  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, const comm_UniChar* aString, comm_USHORT nLenInChars, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, aString, nLenInChars, bBool );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
 //  new
     void GenReturn( USHORT nRet, SmartId aUId, String aString );
     void GenReturn( USHORT nRet, SmartId aUId, SbxValue &aValue );
-    void GenReturn( USHORT nRet, SmartId aUId, ULONG nNr, String aString, BOOL bBool );
+    void GenReturn( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool );
 // MacroRecorder
-    void GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString );
-    void GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString, BOOL bBool );
+    void GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString );
+    void GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString, BOOL bBool );
 
     void Reset();
     SvStream* GetStream();
@@ -86,7 +82,6 @@ public:
 //  CmdBaseStream::Write;
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
-//  void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new
     void Write( SbxValue &aValue );
