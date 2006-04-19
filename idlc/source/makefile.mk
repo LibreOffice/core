@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:12:29 $
+#   last change: $Author: hr $ $Date: 2006-04-19 13:46:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@ CXXFILES=   \
             astenum.cxx \
             astarray.cxx \
             astunion.cxx \
-            astexpression.cxx
+            astexpression.cxx \
+            astservice.cxx
 
 YACCTARGET=$(MISC)$/parser.cxx
 YACCFILES=parser.y
@@ -99,7 +100,8 @@ OBJFILES=   \
             $(OBJ)$/astenum.obj	\
             $(OBJ)$/astarray.obj	\
             $(OBJ)$/astunion.obj	\
-            $(OBJ)$/astexpression.obj
+            $(OBJ)$/astexpression.obj \
+            $(OBJ)$/astservice.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJFILES)
