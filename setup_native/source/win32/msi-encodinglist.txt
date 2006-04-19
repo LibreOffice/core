@@ -94,3 +94,6 @@ st       0  1072   # Southern Sotho
 ve       0  1075   # Venda
 ga       0  2108   # Irish
 mk    1251  1071   # Macedonian
+gl    1252  1110   # Galician
+kn       0  1099   # Kannada
+ms       0  1086   # Malay (Malaysian)
