@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:40:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,6 +700,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
 
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
+    if ( getView() && getView()->IsInModalMode() )
+        return sal_False;
     sal_Bool bCheck = sal_True;
     if ( isModified() )
     {
@@ -1170,15 +1172,17 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
 // -----------------------------------------------------------------------------
 void OTableController::alterColumns()
 {
-    Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
+    Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY_THROW);
     OSL_ENSURE(xColSup.is(),"What happen here?!");
 
     Reference<XNameAccess> xColumns = xColSup->getColumns();
-    Reference<XIndexAccess> xIdxColumns(xColumns,UNO_QUERY);
+    Reference<XIndexAccess> xIdxColumns(xColumns,UNO_QUERY_THROW);
     OSL_ENSURE(xColumns.is(),"No columns");
+    if ( !xColumns.is() )
+        return;
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);  // can be null
 
-    sal_Int32 nColumnCount = xColumns->getElementNames().getLength();
+    sal_Int32 nColumnCount = xIdxColumns->getCount();
     Reference<XDrop> xDrop(xColumns,UNO_QUERY);         // can be null
     Reference<XAppend> xAppend(xColumns,UNO_QUERY);     // can be null
     Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY); // can be null
