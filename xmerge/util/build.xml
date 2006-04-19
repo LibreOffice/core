@@ -4,9 +4,9 @@
 
     $RCSfile: build.xml,v $
 
-    $Revision: 1.10 $
+    $Revision: 1.11 $
 
-    last change: $Author: vg $ $Date: 2006-03-16 11:18:29 $
+    last change: $Author: hr $ $Date: 2006-04-19 15:11:30 $
 
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,13 @@
 
     <property name="javadoc.dir" location="${build.dir}/javadoc"/>
 
+    <property environment="env"/>
+    <property name="env.XML_APIS_JAR" value="${solar.jar}/xml-apis.jar"/>
+    <property name="env.XERCES_JAR" value="${solar.jar}/xercesImpl.jar"/>
+
     <path id="classpath">
-        <pathelement location="${solar.jar}/xml-apis.jar"/>
-        <pathelement location="${solar.jar}/xercesImpl.jar"/>
+        <pathelement location="${env.XML_APIS_JAR}"/>
+        <pathelement location="${env.XERCES_JAR}"/>
         <pathelement location="${solar.jar}/unoil.jar"/>
         <pathelement location="${solar.jar}/ridl.jar"/>
         <pathelement location="${solar.jar}/jurt.jar"/>
