@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:01:58 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1269,7 +1269,7 @@ void EditEngine::SetText( const XubString& rText )
         pImpEditEngine->FormatAndUpdate();
 }
 
-sal_uInt32 EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+ULONG EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
@@ -1281,7 +1281,7 @@ sal_uInt32 EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFor
     return rInput.GetError();
 }
 
-sal_uInt32 EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
+ULONG EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditPaM aStartPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );
@@ -2388,7 +2388,7 @@ BOOL EditEngine::IsVerboseTextComments() const
 // =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
-void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex, BYTE nRightToLeft )
+void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const sal_Int32*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex, BYTE nRightToLeft )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
