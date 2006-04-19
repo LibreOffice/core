@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:37:40 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,9 @@ class JNI_info
     mutable t_str2type          m_type_map;
 
 public:
-    jmethodID                   m_method_ClassLoader_loadClass;
+    // These two are needed very early by find_class from within the ctor:
+    jclass                      m_class_Class;
+    jmethodID                   m_method_Class_forName;
 
     //
     jobject                     m_object_java_env;
@@ -243,9 +245,8 @@ private:
 
     void destruct( JNIEnv * jni_env );
 
-    explicit JNI_info(
-        JNIEnv * jni_env, jobject class_loader,
-        jmethodID classLoader_loadClass );
+    JNI_info( JNIEnv * jni_env, jobject class_loader,
+              jclass classClass, jmethodID methodForName );
     inline ~JNI_info() {}
 };
 
