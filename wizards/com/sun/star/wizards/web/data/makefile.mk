@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:03:15 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:12:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,25 @@ PACKAGE = com$/sun$/star$/wizards$/web$/data
 .INCLUDE : settings.mk
 
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar xalan.jar xercesImp.jar xml-apis.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar 
+
+.IF "$(SYSTEM_XALAN)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
+.ELSE
+JARFILES += xalan.jar
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
+.ELSE
+JARFILES += xercesImpl.jar
+.ENDIF
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
 
 #JARCLASSDIRS	= com$/sun$/star$/wizards$/web
 #JARTARGET		= $(TARGET).jar
