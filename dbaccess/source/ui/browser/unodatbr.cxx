@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:31:15 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -970,6 +970,10 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 // -----------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( getView() && getView()->IsInModalMode() )
+        return sal_False;
     sal_Bool bRet = sal_False;
     if ( !m_bInSuspend )
     {
