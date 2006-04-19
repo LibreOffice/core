@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 12:37:43 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ void ControlDef::Write( SvStream &aStream )
     if ( pData->aUId.HasString() )
         aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
-        aStream << pData->aUId.GetNum();
+        aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() ULONG != comm_ULONG on 64bit
     if ( pSons )
         for ( int i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
@@ -1466,7 +1466,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         }
         else
         {
-            ULONG nUId;
+            comm_ULONG nUId;
             aStream >> nUId;
             aUId = SmartId( nUId );
         }
@@ -2831,7 +2831,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.20 $
+    // search $Revision: 1.21 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3259,14 +3259,14 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                ULONG nUId;
+                comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 aUId = SmartId( nUId );
             }
             pRetStream->Read(nParams);
 
             USHORT nNr1 = 0;
-            ULONG nLNr1 = 0;
+            comm_ULONG nLNr1 = 0;
             String aString1;
             BOOL bBool1 = FALSE;
             SbxValueRef xValue1 = new SbxValue;
@@ -3856,7 +3856,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                ULONG nUId;
+                comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 aUId = SmartId( nUId );
             }
