@@ -4,9 +4,9 @@
 #
 #   $RCSfile: profiles.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:08:48 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:08:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,12 @@ sub create_profiles
                 my $section = $oneprofileitem->{'Section'};
                 my $key = $oneprofileitem->{'Key'};
                 my $value = $oneprofileitem->{'Value'};
+                for (my $pk = 1; $pk <= 50; $pk++)
+                {
+                    my $key = "ValueList" . $pk;
+                    if ( $oneprofileitem->{$key} )
+                        { $value = $value . " " . $oneprofileitem->{$key} }
+                }
                 my $order = $oneprofileitem->{'Order'}; # ignoring order at the moment
 
                 my $line = "[" . $section . "]" . "\n";
