@@ -5,7 +5,7 @@
   oor:name NMTOKEN #REQUIRED
   oor:package NMTOKEN #REQUIRED
   oor:finalized (true | false) #IMPLIED
-  oor:op (modify | replace | remove | reset) #IMPLIED
+  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
   xmlns:oor CDATA #FIXED "http://openoffice.org/2001/registry"
   xmlns:install CDATA #FIXED "http://openoffice.org/2004/installation"
   xmlns:xs CDATA #FIXED "http://www.w3.org/2001/XMLSchema"
@@ -18,7 +18,7 @@
   oor:component CDATA #IMPLIED
   oor:finalized (true | false) #IMPLIED
   oor:mandatory (true | false) #IMPLIED
-  oor:op (modify | replace | remove | reset) #IMPLIED
+  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
   oor:node-type NMTOKEN #IMPLIED
   install:module NMTOKEN #IMPLIED
 >
@@ -26,7 +26,7 @@
 <!ELEMENT prop (value*)>
 <!ATTLIST prop
   oor:name CDATA #REQUIRED
-  oor:op (modify | replace | remove | reset) #IMPLIED
+  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
   oor:finalized CDATA #IMPLIED
   oor:type (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string | xs:hexBinary | oor:boolean-list | oor:short-list | oor:int-list | oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list) #IMPLIED
   install:module NMTOKEN #IMPLIED
