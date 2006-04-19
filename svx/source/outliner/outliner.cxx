@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:58:29 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,7 +1173,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 else
                 {
                     Font aSvxFont( aBulletFont );
-                    long* pBuf = new long[ pPara->GetText().Len() ];
+                    sal_Int32* pBuf = new sal_Int32[ pPara->GetText().Len() ];
                     pOutDev->GetTextArray( pPara->GetText(), pBuf );
                     // aTextPos ist Bottom, jetzt die Baseline liefern:
                     FontMetric aMetric( pOutDev->GetFontMetric() );
