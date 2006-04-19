@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:26:13 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -746,9 +746,13 @@ void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
 }
 
 // ------------------------------------------------------------------------
+// #i59534: Redo of insertion of multiple text nodes runs into trouble
+// because of unnecessary expanded redlines
+// From now on this class saves the redline positions of all redlines which ends exact at the
+// insert position (node _and_ content index)
 
-_SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx )
-    : pSavArr( 0 ), pSavIdx( 0 )
+_SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, xub_StrLen nCnt )
+    : pSavArr( 0 ), pSavIdx( 0 ), nSavCntnt( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
@@ -756,11 +760,10 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
     {
         sal_uInt16 nFndPos;
         const SwPosition* pEnd;
-        SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), 0 ));
+        SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), nCnt ));
         const SwRedline* pRedl = pDest->GetRedline( aSrcPos, &nFndPos );
         while( nFndPos-- && *( pEnd = ( pRedl =
-            pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos &&
-            *pRedl->Start() != aSrcPos )
+            pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos && *pRedl->Start() < aSrcPos )
         {
             if( !pSavArr )
             {
@@ -785,9 +788,15 @@ _SaveRedlEndPosForRestore::~_SaveRedlEndPosForRestore()
 void _SaveRedlEndPosForRestore::_Restore()
 {
     (*pSavIdx)++;
-    SwPosition aPos( *pSavIdx, SwIndex( pSavIdx->GetNode().GetCntntNode(), 0 ));
-    for( sal_uInt16 n = pSavArr->Count(); n; )
-        *((SwPosition*)pSavArr->GetObject( --n )) = aPos;
+    SwCntntNode* pNode = pSavIdx->GetNode().GetCntntNode();
+    // If there's no content node at the remembered position, we will not restore the old position
+    // This may happen if a table (or section?) will be inserted.
+    if( pNode )
+    {
+        SwPosition aPos( *pSavIdx, SwIndex( pNode, nSavCntnt ));
+        for( sal_uInt16 n = pSavArr->Count(); n; )
+            *((SwPosition*)pSavArr->GetObject( --n )) = aPos;
+    }
 }
 
 
@@ -1253,18 +1262,22 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     }
     else
     {
+        bool bRemove = true;
         // muessen am SavePam 2 Nodes zusammengefasst werden ??
         if( bSplit && pTNd )
         {
             if( pTNd->CanJoinNext())
+            {
                 pTNd->JoinNext();
+                bRemove = false;
+            }
         }
         if( bNullCntnt )
         {
             pSavePam->GetPoint()->nNode++;
             pSavePam->GetPoint()->nContent.Assign( pSavePam->GetCntntNode(), 0 );
         }
-        else
+        else if( bRemove ) // No move forward after joining with next paragraph
             pSavePam->Move( fnMoveForward, fnGoCntnt );
     }
 
@@ -1274,7 +1287,6 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         aSaveBkmk[n]->SetInDoc( this, rPaM.GetMark()->nNode,
                                     &rPaM.GetMark()->nContent );
     *rPaM.GetPoint() = *pSavePam->End();
-    delete pSavePam;
 
     // verschiebe die Flys an die neue Position
     _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
@@ -1282,6 +1294,7 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     // restore redlines (if DOC_MOVEREDLINES is used)
     if( aSaveRedl.Count() )
         lcl_RestoreRedlines( this, *pSavePam->Start(), aSaveRedl );
+    delete pSavePam; // Better to delete an object _after_ the last use
 
     if( bUpdateFtn )
     {
@@ -1618,7 +1631,8 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
             StartUndo();
             AppendUndo( pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE ));
         }
-        AppendRedline( new SwRedline( REDLINE_DELETE, rPam ));
+        if( *rPam.GetPoint() != *rPam.GetMark() )
+            AppendRedline( new SwRedline( REDLINE_DELETE, rPam ));
         SetModified();
 
         if( pUndo )
