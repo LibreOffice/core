@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:50:59 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,7 +845,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
 void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
 {
-    pPic->lcb = SVBT32ToLong( pPicS->lcb );
+    pPic->lcb = SVBT32ToUInt32( pPicS->lcb );
     pPic->cbHeader = SVBT16ToShort( pPicS->cbHeader );
     pPic->MFP.mm = SVBT16ToShort( pPicS->MFP.mm );
     pPic->MFP.xExt = SVBT16ToShort( pPicS->MFP.xExt );
@@ -886,11 +886,11 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     //long nTxbx; //count of textboxes in shape (undo doc only)
 
 
-    pFSPA->nSpId        = SVBT32ToLong( pFSPAS->nSpId );
-    pFSPA->nXaLeft      = SVBT32ToLong( pFSPAS->nXaLeft );
-    pFSPA->nYaTop       = SVBT32ToLong( pFSPAS->nYaTop );
-    pFSPA->nXaRight     = SVBT32ToLong( pFSPAS->nXaRight );
-    pFSPA->nYaBottom    = SVBT32ToLong( pFSPAS->nYaBottom );
+    pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
+    pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );
+    pFSPA->nYaTop       = SVBT32ToUInt32( pFSPAS->nYaTop );
+    pFSPA->nXaRight     = SVBT32ToUInt32( pFSPAS->nXaRight );
+    pFSPA->nYaBottom    = SVBT32ToUInt32( pFSPAS->nYaBottom );
 
     USHORT nBits        = SVBT16ToShort( pFSPAS->aBits1 );
 
@@ -902,7 +902,7 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->bRcaSimple   = 0 !=  ( nBits & 0x2000 );
     pFSPA->bBelowText   = 0 !=  ( nBits & 0x4000 );
     pFSPA->bAnchorLock  = 0 !=  ( nBits & 0x8000 );
-    pFSPA->nTxbx = SVBT32ToLong( pFSPAS->nTxbx );
+    pFSPA->nTxbx = SVBT32ToUInt32( pFSPAS->nTxbx );
 }
 #endif // defined __WW8_NEEDS_COPY
 
