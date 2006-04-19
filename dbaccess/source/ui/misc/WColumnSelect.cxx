@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:44:12 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,6 +386,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 
             _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, nPos),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
+            m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }
     }
 }
