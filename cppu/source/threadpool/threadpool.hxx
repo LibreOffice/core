@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadpool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:48:33 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #include <osl/conditn.h>
 
 #include <rtl/byteseq.hxx>
+
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "jobqueue.hxx"
 
@@ -89,8 +92,6 @@ namespace cppu_threadpool {
     public:
         ~DisposedCallerAdmin();
 
-        static DisposedCallerAdmin *getInstance();
-
         void dispose( sal_Int64 nDisposeId );
         void stopDisposing( sal_Int64 nDisposeId );
         sal_Bool isDisposed( sal_Int64 nDisposeId );
@@ -100,11 +101,10 @@ namespace cppu_threadpool {
         DisposedCallerList m_lst;
     };
 
-    class ThreadPool
+    class ThreadPool: public salhelper::SimpleReferenceObject
     {
     public:
-        ~ThreadPool();
-        static ThreadPool *getInstance();
+        ThreadPool();
 
         void dispose( sal_Int64 nDisposeId );
         void stopDisposing( sal_Int64 nDisposeId );
@@ -123,7 +123,11 @@ namespace cppu_threadpool {
         sal_Bool revokeQueue( const ByteSequence & aThreadId , sal_Bool bAsynchron );
 
         void waitInPool( ORequestThread *pThread );
+
+        DisposedCallerAdmin m_disposedCallerAdmin;
+
     private:
+        ~ThreadPool();
         void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, sal_Bool bAsynchron);
 
 
