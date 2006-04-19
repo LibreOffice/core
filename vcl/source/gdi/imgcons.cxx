@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgcons.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:00:11 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:55:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ ImageConsumer::~ImageConsumer()
 
 // -----------------------------------------------------------------------------
 
-void ImageConsumer::Init( ULONG nWidth, ULONG nHeight )
+void ImageConsumer::Init( sal_uInt32 nWidth, sal_uInt32 nHeight )
 {
     maSize = Size( nWidth, nHeight );
     maBitmap = maMask = Bitmap();
@@ -145,8 +145,8 @@ void ImageConsumer::Init( ULONG nWidth, ULONG nHeight )
 // -----------------------------------------------------------------------------
 
 void ImageConsumer::SetColorModel( USHORT nBitCount,
-                                   ULONG nPalEntries, const ULONG* pRGBAPal,
-                                   ULONG nRMask, ULONG nGMask, ULONG nBMask, ULONG nAMask )
+                                   sal_uInt32 nPalEntries, const sal_uInt32* pRGBAPal,
+                                   sal_uInt32 nRMask, sal_uInt32 nGMask, sal_uInt32 nBMask, sal_uInt32 nAMask )
 {
     DBG_ASSERT( maSize.Width() && maSize.Height(), "Missing call to ImageConsumer::Init(...)!" );
 
@@ -221,9 +221,9 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
 
 // -----------------------------------------------------------------------------
 
-void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
-                                      ULONG nConsWidth, ULONG nConsHeight,
-                                      const BYTE* pData, ULONG nOffset, ULONG nScanSize )
+void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
+                                      sal_uInt32 nConsWidth, sal_uInt32 nConsHeight,
+                                      const BYTE* pData, sal_uInt32 nOffset, sal_uInt32 nScanSize )
 {
     DBG_ASSERT( !!maBitmap && !!maMask, "Missing call to ImageConsumer::SetColorModel(...)!" );
 
@@ -358,9 +358,9 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
 
 // -----------------------------------------------------------------------------
 
-void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
-                                      ULONG nConsWidth, ULONG nConsHeight,
-                                      const ULONG* pData, ULONG nOffset, ULONG nScanSize )
+void ImageConsumer::SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
+                                      sal_uInt32 nConsWidth, sal_uInt32 nConsHeight,
+                                      const sal_uInt32* pData, sal_uInt32 nOffset, sal_uInt32 nScanSize )
 {
     DBG_ASSERT( !!maBitmap && !!maMask, "Missing call to ImageConsumer::SetColorModel(...)!" );
 
@@ -495,7 +495,7 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 
 // -----------------------------------------------------------------------------
 
-void ImageConsumer::Completed( ULONG nStatus /*, ImageProducer& rProducer */ )
+void ImageConsumer::Completed( sal_uInt32 nStatus /*, ImageProducer& rProducer */ )
 {
     delete mpMapper;
     mpMapper = NULL;
@@ -539,7 +539,7 @@ void ImageConsumer::DataChanged()
 
 // -----------------------------------------------------------------------------
 
-ULONG ImageConsumer::GetStatus() const
+sal_uInt32 ImageConsumer::GetStatus() const
 {
     return mnStatus;
 }
