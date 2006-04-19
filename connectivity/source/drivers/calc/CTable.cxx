@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:08:42 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,9 +255,7 @@ Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int
         {
             CellRangeAddress aTotalRange = xAddr->getRangeAddress();
             sal_Int32 nLastRow = aTotalRange.EndRow;
-            Reference<XCellRange> xRange =
-                    xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow );
-            Reference<XCellRangesQuery> xQuery( xRange, UNO_QUERY );
+            Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
             if (xQuery.is())
             {
                 // queryIntersection to get a ranges object
@@ -271,8 +269,7 @@ Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int
                         if ( xEnum.is() && xEnum->hasMoreElements() )
                         {
                             // get first non-empty cell from enumeration
-                            Any aCellAny = xEnum->nextElement();
-                            aCellAny >>= xCell;
+                            xCell.set(xEnum->nextElement(),UNO_QUERY);
                         }
                         // otherwise, keep empty cell
                     }
@@ -293,8 +290,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
 
     if ( bHasHeaders )
     {
-        Reference<XCell> xHeaderCell = xSheet->getCellByPosition( nDocColumn, nStartRow );
-        Reference<XText> xHeaderText( xHeaderCell, UNO_QUERY );
+        Reference<XText> xHeaderText( xSheet->getCellByPosition( nDocColumn, nStartRow ), UNO_QUERY );
         if ( xHeaderText.is() )
             rName = xHeaderText->getString();
     }
@@ -389,10 +385,7 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     // no difference between empty cell and empty string in spreadsheet
                     Reference<XText> xText( xCell, UNO_QUERY );
                     if ( xText.is() )
-                    {
-                        ::rtl::OUString sVal = xText->getString();
-                        rValue = sVal;
-                    }
+                        rValue = xText->getString();
                 }
                 break;
             case DataType::DECIMAL:
@@ -606,8 +599,8 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
         Reference<XSpreadsheets> xSheets = xDoc->getSheets();
         if ( xSheets.is() && xSheets->hasByName( _Name ) )
         {
-            Any aAny = xSheets->getByName( _Name );
-            if ( aAny >>= m_xSheet )
+            m_xSheet.set(xSheets->getByName( _Name ),UNO_QUERY);
+            if ( m_xSheet.is() )
             {
                 lcl_GetDataArea( m_xSheet, m_nDataCols, m_nDataRows );
                 m_bHasHeaders = sal_True;
@@ -619,56 +612,40 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
             Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
             if ( xDocProp.is() )
             {
-                Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString::createFromAscii("DatabaseRanges") );
-                Reference<XDatabaseRanges> xRanges;
-                if ( aRangesAny >>= xRanges )
+                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges")) ),UNO_QUERY);
+
+                if ( xRanges.is() && xRanges->hasByName( _Name ) )
                 {
-                    if ( xRanges.is() && xRanges->hasByName( _Name ) )
+                    Reference<XDatabaseRange> xDBRange(xRanges->getByName( _Name ),UNO_QUERY);
+                    Reference<XCellRangeReferrer> xRefer( xDBRange, UNO_QUERY );
+                    if ( xRefer.is() )
                     {
-                        Any aAny = xRanges->getByName( _Name );
-                        Reference<XDatabaseRange> xDBRange;
-                        if ( aAny >>= xDBRange )
+                        //  Header flag is always stored with database range
+                        //  Get flag from FilterDescriptor
+
+                        sal_Bool bRangeHeader = sal_True;
+                        Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
+                        if ( xFiltProp.is() )
+                            xFiltProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainsHeader"))) >>= bRangeHeader;
+
+                        Reference<XSheetCellRange> xSheetRange( xRefer->getReferredCells(), UNO_QUERY );
+                        Reference<XCellRangeAddressable> xAddr( xSheetRange, UNO_QUERY );
+                        if ( xSheetRange.is() && xAddr.is() )
                         {
-                            Reference<XCellRangeReferrer> xRefer( xDBRange, UNO_QUERY );
-                            if ( xRefer.is() )
+                            m_xSheet = xSheetRange->getSpreadsheet();
+                            CellRangeAddress aRangeAddr = xAddr->getRangeAddress();
+                            m_nStartCol = aRangeAddr.StartColumn;
+                            m_nStartRow = aRangeAddr.StartRow;
+                            m_nDataCols = aRangeAddr.EndColumn - m_nStartCol + 1;
+                            //  m_nDataRows is excluding header row
+                            m_nDataRows = aRangeAddr.EndRow - m_nStartRow;
+                            if ( !bRangeHeader )
                             {
-                                //  Header flag is always stored with database range
-                                //  Get flag from FilterDescriptor
-
-                                sal_Bool bRangeHeader = sal_True;
-                                Reference<XSheetFilterDescriptor> xFilter = xDBRange->getFilterDescriptor();
-                                Reference<XPropertySet> xFiltProp( xFilter, UNO_QUERY );
-                                if ( xFiltProp.is() )
-                                {
-                                    Any aHdrAny = xFiltProp->getPropertyValue(
-                                            ::rtl::OUString::createFromAscii("ContainsHeader") );
-                                    aHdrAny >>= bRangeHeader;
-                                }
-
-                                Reference<XCellRange> xCellRange = xRefer->getReferredCells();
-                                Reference<XSheetCellRange> xSheetRange( xCellRange, UNO_QUERY );
-                                Reference<XCellRangeAddressable> xAddr( xCellRange, UNO_QUERY );
-                                if ( xSheetRange.is() && xAddr.is() )
-                                {
-                                    m_xSheet = xSheetRange->getSpreadsheet();
-                                    CellRangeAddress aRangeAddr = xAddr->getRangeAddress();
-                                    m_nStartCol = aRangeAddr.StartColumn;
-                                    m_nStartRow = aRangeAddr.StartRow;
-                                    m_nDataCols = aRangeAddr.EndColumn - m_nStartCol + 1;
-                                    if ( bRangeHeader )
-                                    {
-                                        //  m_nDataRows is excluding header row
-                                        m_nDataRows = aRangeAddr.EndRow - m_nStartRow;
-                                    }
-                                    else
-                                    {
-                                        //  m_nDataRows counts the whole range
-                                        m_nDataRows = aRangeAddr.EndRow - m_nStartRow + 1;
-                                    }
-
-                                    m_bHasHeaders = bRangeHeader;
-                                }
+                                //  m_nDataRows counts the whole range
+                                m_nDataRows += 1;
                             }
+
+                            m_bHasHeaders = bRangeHeader;
                         }
                     }
                 }
@@ -682,9 +659,8 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
         Reference<XPropertySet> xProp( xDoc, UNO_QUERY );
         if (xProp.is())
         {
-            Any aDateAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("NullDate") );
             ::com::sun::star::util::Date aDateStruct;
-            if ( aDateAny >>= aDateStruct )
+            if ( xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate")) ) >>= aDateStruct )
                 m_aNullDate = ::Date( aDateStruct.Day, aDateStruct.Month, aDateStruct.Year );
         }
     }
@@ -702,7 +678,8 @@ void OCalcTable::refreshColumns()
 
     TStringVector aVector;
 
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
+    OSQLColumns::const_iterator aEnd = m_aColumns->end();
+    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != aEnd;++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
@@ -880,22 +857,21 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     // fields
 
     OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
+    OSQLColumns::const_iterator aEnd = _rCols.end();
+    for (sal_Int32 i = 1; aIter != aEnd && i < _rRow->size();++aIter, i++)
     {
-        Reference< XPropertySet> xColumn = *aIter;
+        if ( (*_rRow)[i]->isBound() )
+        {
+            sal_Int32 nType;
+            if ( _bUseTableDefs )
+                nType = m_aTypes[i-1];
+            else
+                (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
-//      ::rtl::OUString aName;
-//      xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
 
-        sal_Int32 nType;
-        if(_bUseTableDefs)
-            nType = m_aTypes[i-1];
-        else
-            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
-
-        if ((*_rRow)[i]->isBound())
             lcl_SetValue( (*_rRow)[i]->get(), m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
-                            m_aNullDate, m_nFilePos, i, nType );
+                                m_aNullDate, m_nFilePos, i, nType );
+        }
     }
     return sal_True;
 }
