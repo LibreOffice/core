@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:02 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,9 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+#endif
 #include <functional>
 
 using namespace dbaui;
