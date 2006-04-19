@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:13:51 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1277,97 +1277,6 @@ sal_Bool InterfaceType::dumpHFile(
     return sal_True;
 }
 
-
-/* collects all base interface of a given interface.
- */
-void collectBases(TypeManager const & manager,
-                  typereg::Reader const & reader,
-                  StringSet & bases)
-{
-    for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i)
-    {
-        OString supertype = rtl::OUStringToOString(
-            reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8);
-
-        if ( ! supertype.equals("com/sun/star/uno/XInterface") ) {
-            bases.insert(supertype);
-
-            typereg::Reader super(manager.getTypeReader(supertype));
-            collectBases(manager, super, bases);
-        }
-    }
-}
-
-/* collects ambiguous base interfaces by firstly collecting all bases
-   from the direct parents and secondly build an intersection of this
-   collected base sets.
- */
-StringSet collectAmbiguousBases(TypeManager const & manager,
-                           typereg::Reader const & reader)
-{
-    std::vector< StringSet > basesets;
-    for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i)
-    {
-        OString superType = rtl::OUStringToOString(
-            reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8);
-
-        typereg::Reader super(manager.getTypeReader(superType));
-        StringSet bases;
-        collectBases(manager, super, bases);
-        basesets.push_back(bases);
-    }
-
-    StringSet ambiguousbases;
-    long index=1;
-    long length = static_cast< long >(basesets.size());
-    for (std::vector<StringSet>::const_iterator iter(basesets.begin());
-             iter != basesets.end(); ++iter)
-    {
-        for (long i=index; i < length; ++i)
-        {
-            std::set_intersection((*iter).begin(), (*iter).end(),
-                                  basesets[i].begin(), basesets[i].end(),
-                                  std::inserter(
-                                      ambiguousbases, ambiguousbases.begin()),
-                                  LessString());
-        }
-        ++index;
-    }
-    return ambiguousbases;
-}
-
-/* dump the re-declaration of ambiguous base interfaces. It simply declares all
-   ambiguous methods and attribute methods again to avoid ambiguity.
- */
-void InterfaceType::dumpAmbiguousBaseInterfaces(FileStream& o)
-{
-    StringSet ambiguousBases = collectAmbiguousBases(m_typeMgr, m_reader);
-
-    if (ambiguousBases.size() > 0)
-        o << indent() << "// begin re-declaration of ambiguous base "
-            "interfaces";
-
-    for (StringSet::const_iterator i(ambiguousBases.begin());
-             i != ambiguousBases.end(); ++i)
-    {
-        typereg::Reader ambiguousreader(m_typeMgr.getTypeReader(*i));
-        if (ambiguousreader.isValid()) {
-            InterfaceType iType(ambiguousreader, *i, m_typeMgr);
-
-            o << "\n" << indent() << "// disambiguate "
-              << iType.m_typeName.replace('/', '.') << ":";
-            iType.inc();
-            iType.dumpAttributes(o);
-            iType.dumpMethods(o);
-        }
-    }
-
-    if (ambiguousBases.size() > 0)
-        o << indent() << "// end re-declaration of ambiguous base "
-            "interfaces\n";
-}
-
-
 sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
@@ -1386,8 +1295,6 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     o << "\n{\npublic:\n";
 
     inc();
-
-    dumpAmbiguousBaseInterfaces(o);
 
     dumpAttributes(o);
     dumpMethods(o);
