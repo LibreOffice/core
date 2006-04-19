@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:42:01 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@
 #ifdef PRODUCT
 
     #define _CHECK_REDLINE( pDoc )
+    #define _DEBUG_REDLINE( pDoc )
 
 #else
 
@@ -177,6 +178,22 @@
     }
 
     #define _CHECK_REDLINE( pDoc ) lcl_CheckRedline( pDoc );
+
+    void lcl_DebugRedline( const SwDoc* pDoc )
+    {
+        static USHORT nWatch = 0;
+        const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
+        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        {
+            USHORT nDummy = 0;
+            const SwRedline* pCurrent = rTbl[ n ];
+            const SwRedline* pNext = n+1 < rTbl.Count() ? rTbl[ n+1 ] : 0;
+            if( n == nWatch )
+                ++nDummy; // Possible debugger breakpoint
+        }
+    }
+
+    #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
 
 #endif
 
@@ -632,11 +649,13 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     break;
 
                 case REDLINE_INSERT:
-                    if( pRedl->IsOwnRedline( *pNewRedl ) )
+                {
+                    // b62341295: Do not throw away redlines
+                    // even if they are not allowed to be combined
+                    SwRedlineMode eOld = eRedlineMode;
+                    if( !( eOld & REDLINE_DONTCOMBINE_REDLINES ) &&
+                        pRedl->IsOwnRedline( *pNewRedl ) )
                     {
-                        SwRedlineMode eOld = eRedlineMode;
-                        if( eOld & REDLINE_DONTCOMBINE_REDLINES )
-                            break;
 
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
@@ -893,7 +912,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             n = (USHORT)-1;
                         }
                     }
-                    break;
+                }
+                break;
 
                 case REDLINE_FORMAT:
                     switch( eCmpPos )
