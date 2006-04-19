@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:44 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,33 +383,33 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
     switch( eType )
     {
         case CSVCMD_SETPOSCOUNT:
-            maData.mnPosCount = Max( nParam1, 1L );
+            maData.mnPosCount = Max( nParam1, sal_Int32( 1 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETPOSOFFSET:
             ImplSetPosOffset( nParam1 );
         break;
         case CSVCMD_SETHDRWIDTH:
-            maData.mnHdrWidth = Max( nParam1, 0L );
+            maData.mnHdrWidth = Max( nParam1, sal_Int32( 0 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETCHARWIDTH:
-            maData.mnCharWidth = Max( nParam1, 1L );
+            maData.mnCharWidth = Max( nParam1, sal_Int32( 1 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETLINECOUNT:
-            maData.mnLineCount = Max( nParam1, 1L );
+            maData.mnLineCount = Max( nParam1, sal_Int32( 1 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_SETLINEOFFSET:
             ImplSetLineOffset( nParam1 );
         break;
         case CSVCMD_SETHDRHEIGHT:
-            maData.mnHdrHeight = Max( nParam1, 0L );
+            maData.mnHdrHeight = Max( nParam1, sal_Int32( 0 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_SETLINEHEIGHT:
-            maData.mnLineHeight = Max( nParam1, 1L );
+            maData.mnLineHeight = Max( nParam1, sal_Int32( 1 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_MOVERULERCURSOR:
