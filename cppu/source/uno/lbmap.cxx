@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:53:22 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline Mapping(
-        uno_Environment * pFrom, uno_Environment * pTo,
-        const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
-        SAL_THROW( () );
     inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
     inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
     inline ~Mapping() SAL_THROW( () );
@@ -82,14 +78,6 @@ public:
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pMapping != 0); }
 };
-//__________________________________________________________________________________________________
-inline Mapping::Mapping(
-    uno_Environment * pFrom, uno_Environment * pTo, const ::rtl::OUString & rAddPurpose )
-    SAL_THROW( () )
-    : _pMapping( 0 )
-{
-    uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
-}
 //__________________________________________________________________________________________________
 inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW( () )
     : _pMapping( pMapping )
@@ -204,8 +192,9 @@ static MappingsData & getMappingsData() SAL_THROW( () )
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_p)
         {
-            static MappingsData s_obj;
-            s_p = &s_obj;
+            //TODO  This memory is leaked; see #i63473# for when this should be
+            // changed again:
+            s_p = new MappingsData;
         }
     }
     return *s_p;
