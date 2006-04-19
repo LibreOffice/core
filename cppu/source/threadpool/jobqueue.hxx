@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobqueue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:46:23 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 
 namespace cppu_threadpool
 {
+    class DisposedCallerAdmin;
+
     struct Job
     {
         void *pThreadSpecificData;
@@ -66,7 +68,9 @@ namespace cppu_threadpool
         void add( void *pThreadSpecificData ,
                   void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ) );
 
-        void *enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob = sal_False );
+        void *enter(
+            DisposedCallerAdmin & disposedCallerAdmin, sal_Int64 nDisposeId,
+            sal_Bool bReturnWhenNoJob = sal_False );
         void dispose( sal_Int64 nDisposeId );
 
         void suspend();
