@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:55:52 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ private:
     void                ImplWritePalette();
     void                ImplOpenChunk( ULONG nChunkType );
     void                ImplWriteChunk( BYTE nNumb );
-    void                ImplWriteChunk( ULONG nNumb );
+    void                ImplWriteChunk( sal_uInt32 nNumb );
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
     void                ImplCloseChunk( void );
 };
@@ -306,8 +306,8 @@ std::vector< vcl::PNGWriter::ChunkData >& PNGWriterImpl::GetChunks()
 BOOL PNGWriterImpl::ImplWriteHeader()
 {
     ImplOpenChunk(PNGCHUNK_IHDR);
-    ImplWriteChunk( ( mnWidth = (ULONG)mpAccess->Width() ) );
-    ImplWriteChunk( ( mnHeight = (ULONG)mpAccess->Height() ) );
+    ImplWriteChunk( sal_uInt32( mnWidth =  mpAccess->Width() ) );
+    ImplWriteChunk( sal_uInt32( mnHeight = mpAccess->Height() ) );
 
     if ( mnWidth && mnHeight && mnBitsPerPixel && mbStatus )
     {
@@ -664,7 +664,7 @@ void PNGWriterImpl::ImplWriteChunk ( BYTE nSource )
     maChunkSeq.back().aData.push_back( nSource );
 }
 
-void PNGWriterImpl::ImplWriteChunk ( ULONG nSource )
+void PNGWriterImpl::ImplWriteChunk ( sal_uInt32 nSource )
 {
     vcl::PNGWriter::ChunkData& rChunkData = maChunkSeq.back();
     rChunkData.aData.push_back( (sal_uInt8)( nSource >> 24 ) );
