@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblcpy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:19:48 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,12 @@
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
-
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
 
 BOOL _FndCntntLine( const SwTableLine*& rpLine, void* pPara );
 BOOL _FndCntntBox( const SwTableBox*& rpBox, void* pPara );
-
 
 // ---------------------------------------------------------------
 
@@ -133,6 +134,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pUndo->AddBoxBefore( *pDstBox, bDelCntnt );
 
     BOOL bUndo = pDoc->DoesUndo();
+    bool bUndoRedline = pUndo && pDoc->IsRedlineOn();
     pDoc->DoUndo( FALSE );
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
@@ -144,7 +146,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pLine = pLine->GetUpper()->GetUpper();
 
     BOOL bReplaceColl = TRUE;
-    if( bDelCntnt )
+    if( bDelCntnt && !bUndoRedline )
     {
         // zuerst die Fly loeschen, dann die entsprechenden Nodes
         SwNodeIndex aEndNdIdx( *aInsIdx.GetNode().EndOfSectionNode() );
@@ -194,8 +196,9 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pDoc->GetNodes().Delete( aInsIdx, aEndNdIdx.GetIndex() - aInsIdx.GetIndex() );
     }
 
+    //b6341295: Table copy redlining will be managed by AddBoxAfter()
     if( pUndo )
-        pUndo->AddBoxAfter( *pDstBox, bDelCntnt );
+        pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelCntnt );
 
     // Ueberschrift
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ aSavePos ]->GetTxtNode();
