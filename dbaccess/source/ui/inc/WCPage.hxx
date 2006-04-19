@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:41:45 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ namespace dbaui
         inline BOOL IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
         inline BOOL IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
         inline BOOL IsOptionView()          const { return m_aRB_View.IsChecked(); }
-
+        String      GetKeyName()            const { return m_edKeyName.GetText(); }
     };
 }
 #endif // DBAUI_WIZARD_CPAGE_HXX
