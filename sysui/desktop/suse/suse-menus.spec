@@ -19,6 +19,13 @@ Obsoletes: openofficeorg-suse-menus
 OpenOffice.org desktop integration
 
 %install
+
+# hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
+# to be present on the build-system/the buildroot. But the point is that we generate stale
+# links intentionally (until we find a better solution) #46226
+export NO_BRP_STALE_LINK_ERROR=yes
+
+
 ## add symlinks so that nautilus can identify the mime-icons 
 ## not strictly freedesktop-stuff but there is no common naming scheme yet.
 ## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
