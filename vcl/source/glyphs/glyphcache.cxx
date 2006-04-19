@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:19:02 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ inline
 size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: is it worth to improve this hash function?
-    int nFontId = reinterpret_cast<int>( rFontSelData.mpFontData );
+    sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
     size_t nHash = nFontId << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
@@ -96,8 +96,8 @@ size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData
 bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const ImplFontSelectData& rB) const
 {
     // check font ids
-    int nFontIdA = reinterpret_cast<int>( rA.mpFontData );
-    int nFontIdB = reinterpret_cast<int>( rB.mpFontData );
+    sal_IntPtr nFontIdA = reinterpret_cast<sal_IntPtr>( rA.mpFontData );
+    sal_IntPtr nFontIdB = reinterpret_cast<sal_IntPtr>( rB.mpFontData );
     if( nFontIdA != nFontIdB )
         return false;
 
@@ -151,7 +151,7 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 // -----------------------------------------------------------------------
 
 // this gets called when someone deletes the related ImplFontData
-void GlyphCache::RemoveFont( int nFontId )
+void GlyphCache::RemoveFont( sal_IntPtr nFontId )
 {
     // since the FontList no longer depends on FontData objects there is no
     // more need to be clean it up when some FontData is about to be deleted
@@ -187,7 +187,7 @@ void GlyphCache::AddFontPath( const String& rFontPath )
 // -----------------------------------------------------------------------
 
 void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
-    int nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
+    sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
 {
     if( mpFtManager )
         mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA, pExtraKern );
@@ -210,7 +210,7 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
     if( rFontSelData.mpFontData == NULL )
         return NULL;
     // a serverfont request has a fontid > 0
-    int nFontId = rFontSelData.mpFontData->GetFontId();
+    sal_IntPtr nFontId = rFontSelData.mpFontData->GetFontId();
     if( nFontId <= 0 )
         return NULL;
 
@@ -499,7 +499,7 @@ ImplServerFontEntry::~ImplServerFontEntry()
 
 // =======================================================================
 
-ExtraKernInfo::ExtraKernInfo( int nFontId )
+ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
 :   mnFontId( nFontId ),
     mbInitialized( false )
 {}
