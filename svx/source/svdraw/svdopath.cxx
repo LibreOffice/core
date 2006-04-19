@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:35:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@
 // #104018# replace macros above with type-safe methods
 inline sal_Int32 ImplTwipsToMM(sal_Int32 nVal) { return ((nVal * 127 + 36) / 72); }
 inline sal_Int32 ImplMMToTwips(sal_Int32 nVal) { return ((nVal * 72 + 63) / 127); }
+inline sal_Int64 ImplTwipsToMM(sal_Int64 nVal) { return ((nVal * 127 + 36) / 72); }
+inline sal_Int64 ImplMMToTwips(sal_Int64 nVal) { return ((nVal * 72 + 63) / 127); }
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 
