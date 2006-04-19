@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:01:41 $
+#   last change: $Author: hr $ $Date: 2006-04-19 13:50:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,7 @@ SHL1TARGET=$(TARGET)
 SHL1TARGET= uno_$(TARGET)
 .ENDIF
 
-SHL1STDLIBS= \
-    $(SALLIB)
+SHL1STDLIBS = $(SALLIB) $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
