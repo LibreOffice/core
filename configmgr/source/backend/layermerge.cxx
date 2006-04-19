@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:30:23 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,6 +647,18 @@ sal_Int16 getOverrideViolationLogLevel(bool bIsSublayer)
 { return bIsSublayer ? LogLevel::FINER : LogLevel::INFO; }
 // -----------------------------------------------------------------------------
 
+void LayerMergeHandler::implOverrideNode(
+    ISubtree * node, sal_Int16 attributes, bool clear)
+{
+    ensureUnchanged(node);
+    if (startOverride(node, clear)) {
+        applyAttributes(node, attributes);
+        m_aContext.pushNode(node);
+    } else {
+        skipNode();
+    }
+}
+
 void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
     throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -660,16 +672,7 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
     }
     else if (ISubtree * pNode = m_aContext.findNode(aName))
     {
-        ensureUnchanged(pNode);
-
-        if (startOverride(pNode,bClear))
-        {
-            applyAttributes(pNode, aAttributes);
-
-            m_aContext.pushNode(pNode);
-        }
-        else
-            this->skipNode();
+        implOverrideNode(pNode, aAttributes, bClear);
     }
     else // ignore non-matched data
     {
@@ -694,12 +697,18 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
     ISubtree * pReplacedNode = m_aContext.findNode(aName);
     if (pReplacedNode)
     {
-        this->ensureUnchanged(pReplacedNode);
+        if ((aAttributes & NodeAttribute::FUSE) == 0) {
+            this->ensureUnchanged(pReplacedNode);
 
-        if (!m_aContext.isRemovable(pReplacedNode))
-        {
-            logRejection(m_aContext,pReplacedNode,true);
-            this->skipNode();
+            if (!m_aContext.isRemovable(pReplacedNode))
+            {
+                logRejection(m_aContext,pReplacedNode,true);
+                this->skipNode();
+                return;
+            }
+        } else {
+            implOverrideNode(
+                pReplacedNode, aAttributes & ~NodeAttribute::FUSE, false);
             return;
         }
     }
@@ -721,7 +730,7 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
     if (NULL == apNewInstance.get())
         m_aContext.raiseNoSuchElementException("Layer merging: Cannot instantiate template.", aTemplate.Name);
 
-    applyAttributes(apNewInstance.get(), aAttributes);
+    applyAttributes(apNewInstance.get(), aAttributes & ~NodeAttribute::FUSE);
     //Set removable flag
     apNewInstance->markRemovable();
 
