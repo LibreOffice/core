@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:34:19 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 #include "commandcontainer.hxx"
 #endif
+#include "databasedocument.hxx"
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -755,6 +756,9 @@ void ODatabaseSource::disposing()
 
     EventObject aDisposeEvent(static_cast<XWeak*>(this));
     m_aFlushListeners.disposeAndClear( aDisposeEvent );
+
+    ODatabaseDocument::clearObjectContainer(m_pImpl->m_xCommandDefinitions);
+    ODatabaseDocument::clearObjectContainer(m_pImpl->m_xTableDefinitions);
     m_pImpl.clear();
 }
 //------------------------------------------------------------------------------
