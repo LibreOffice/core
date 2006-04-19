@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:28:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,12 +503,12 @@ class ImplPspFontData : public ImplFontData
 {
 private:
     enum { PSPFD_MAGIC = 0xb5bf01f0 };
-    int                     mnFontId;
+    sal_IntPtr              mnFontId;
 
 public:
                             ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual                 ~ImplPspFontData();
-    virtual int             GetFontId() const { return mnFontId; }
+    virtual sal_IntPtr      GetFontId() const { return mnFontId; }
     virtual ImplFontData*   Clone() const { return new ImplPspFontData( *this ); }
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( PSPFD_MAGIC ); }
@@ -526,7 +526,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 ImplPspFontData::~ImplPspFontData()
 {
     // TODO: better integration with GlyphCache
-    int nFontId = GetFontId();
+    sal_IntPtr nFontId = GetFontId();
     GlyphCache::GetInstance().RemoveFont( nFontId );
 }
 
@@ -549,7 +549,7 @@ public:
     virtual void        DrawText( SalGraphics& ) const;
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
-    int                 mnFontID;
+    sal_IntPtr          mnFontID;
     int                 mnFontHeight;
     int                 mnFontWidth;
     bool                mbVertical;
@@ -660,7 +660,7 @@ public:
     int                 getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
-    int                 mnFontID;
+    sal_IntPtr          mnFontID;
     int                 mnFontHeight;
     int                 mnFontWidth;
     bool                mbVertical;
@@ -782,7 +782,7 @@ USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
     if( !pEntry )
         return 0;
 
-    sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->GetFontId() : 0;
+    sal_IntPtr nID = pEntry->mpFontData ? pEntry->mpFontData->GetFontId() : 0;
 
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
