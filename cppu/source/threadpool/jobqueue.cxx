@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobqueue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:45:56 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,13 +68,15 @@ namespace cppu_threadpool {
         m_nToDo ++;
     }
 
-    void *JobQueue::enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob )
+    void *JobQueue::enter(
+        DisposedCallerAdmin & disposedCallerAdmin, sal_Int64 nDisposeId,
+        sal_Bool bReturnWhenNoJob )
     {
         void *pReturn = 0;
         {
             // synchronize with the dispose calls
             MutexGuard guard( m_mutex );
-            if( DisposedCallerAdmin::getInstance()->isDisposed( nDisposeId ) )
+            if( disposedCallerAdmin.isDisposed( nDisposeId ) )
             {
                 return 0;
             }
