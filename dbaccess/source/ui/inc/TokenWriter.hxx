@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:34:12 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,12 @@
 #include "commontypes.hxx"
 #endif
 #include <memory>
+
+namespace com { namespace sun { namespace star {
+    namespace sdbc{
+        class XRowUpdate;
+    }
+}}}
 
 namespace dbaui
 {
