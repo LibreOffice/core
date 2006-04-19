@@ -1,4 +1,4 @@
-tc	scripting	:	bridges rdbmaker vcl xmlscript basic sfx2 rhino beanshell javaunohelper NULL
+tc	scripting	:	bridges rdbmaker vcl xmlscript basic sfx2 rhino BSH:beanshell javaunohelper NULL
 tc	scripting									usr1	-	all	tc_mkout NULL
 tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider NULL
 tc	scripting\source\basprov				nmake	-	all	tc_scriptingbasprov NULL
