@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:19:45 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:28:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,8 @@ ALLTAR : $(RPMFILE)
 
 %.desktop :
     @$(MKDIRHIER) $(@:d)
-    @ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+    ln -svf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+#	@ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 # --- icons --------------------------------------------------------
 
@@ -212,7 +213,7 @@ $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.s
 
 $(MISC)/$(TARGET)/usr/bin/soffice : 
     @$(MKDIRHIER) $(@:d)
-    @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
+    @ln -svf /etc/$(UNIXFILENAME)/program/soffice $@
 
 $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
@@ -227,6 +228,7 @@ $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
         --buildroot $(LAUNCHERDIR) \
         --define "unixfilename $(UNIXFILENAME)" \
         --define "iconprefix $(ICONPREFIX)" \
-        --define "version $(PKGVERSION)" --define "release $(PKGREV)"
+        --define "version $(PKGVERSION)" --define "release $(PKGREV)" && $(TOUCH) $(MISC)$/$(TARGET).rpmflag
+    @+$(TYPE) $(MISC)$/$(TARGET).rpmflag || echo "ERROR: packing $(TARGET) failed! "
 
 .ENDIF
