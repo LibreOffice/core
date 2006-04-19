@@ -57,9 +57,13 @@
 
     <property file="../inc/antbuild.properties"/>
 
+    <property environment="env"/>
+    <property name="env.XML_APIS_JAR" value="${solar.jar}/xml-apis.jar"/>
+    <property name="env.XERCES_JAR" value="${solar.jar}/xercesImpl.jar"/>
+
     <path id="classpath">
-        <pathelement location="${solar.jar}/xml-apis.jar"/>
-        <pathelement location="${solar.jar}/xercesImpl.jar"/>
+        <pathelement location="${env.XML_APIS_JAR}"/>
+        <pathelement location="${env.XERCES_JAR}"/>
         <pathelement location="${solar.jar}/unoil.jar"/>
         <pathelement location="${solar.jar}/ridl.jar"/>
         <pathelement location="${solar.jar}/jurt.jar"/>
