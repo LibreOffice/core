@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:03:10 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2813,7 +2813,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
             xub_StrLen nLen = nCurrentEnd - nCurrentStart;
 
-            Sequence <long> aOffsets;
+            Sequence <sal_Int32> aOffsets;
             String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
             if( ( nLen != aNewText.Len() ) || !pNode->Equals( aNewText, nCurrentStart, nLen ) )
@@ -2838,7 +2838,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 // Change text without loosing the attributes
                 USHORT nCharsAfterTransliteration = aOffsets.getLength();
-                const long* pOffsets = aOffsets.getConstArray();
+                const sal_Int32* pOffsets = aOffsets.getConstArray();
                 short nDiffs = 0;
                 for ( USHORT n = 0; n < nCharsAfterTransliteration; n++ )
                 {
