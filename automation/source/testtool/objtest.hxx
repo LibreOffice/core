@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 12:38:00 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ class Controls: public SbxObject
 public:
     Controls( String aName );
     ~Controls();
-    void ChangeListener();
+    void ChangeListener( SbxObject* pParent );
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
@@ -271,7 +271,6 @@ public:
 
 #define VAR_POOL_SIZE 8
     SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];  // Falls in Ausdrücken mehrere verwendet werden
-    ControlsRef pControlsObjs[VAR_POOL_SIZE];
 
     Time aServerTimeout;
 
