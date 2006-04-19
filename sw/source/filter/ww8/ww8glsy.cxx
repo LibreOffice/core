@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:39:16 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
     WW8_CP start,ende;
     void *pData;
     aPlc.Get(start,ende,pData);
-    UINT32 nPo = SVBT32ToLong((BYTE *)pData+2);
+    UINT32 nPo = SVBT32ToUInt32((BYTE *)pData+2);
     //*pOut << hex << "Offset of last SEPX is " << nPo << endl;
 
     UINT16 nLen;
@@ -365,14 +365,14 @@ UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
 
     xcPLCF.Get(start,ende,pData);
 
-    nPo = SVBT32ToLong((BYTE *)pData);
+    nPo = SVBT32ToUInt32((BYTE *)pData);
     //*pOut << hex << "Offset of last CHPX is " << (nPo+1) *512<< endl;
     if (((nPo+1)*512) > nEndLastPage) nEndLastPage = (nPo+1)*512;
 
     WW8PLCF xpPLCF( &rTableStrm, rFib.fcPlcfbtePapx,
             rFib.lcbPlcfbtePapx, (8 > rFib.nVersion) ? 2 : 4);
     xpPLCF.Get(start,ende,pData);
-    nPo = SVBT32ToLong((BYTE *)pData);
+    nPo = SVBT32ToUInt32((BYTE *)pData);
     //*pOut << hex << "Offset of last PAPX is " << nPo *512 << endl;
     if (((nPo+1)*512) > nEndLastPage) nEndLastPage = (nPo+1)*512;
 
