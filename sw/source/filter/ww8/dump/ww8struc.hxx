@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,9 @@ inline USHORT Get_UShort( BYTE *& p )
     { USHORT n = SVBT16ToShort( *(SVBT16*)p );  p += 2; return n; }
 
 inline long Get_Long( BYTE *& p )
-    { long n = SVBT32ToLong( *(SVBT32*)p );     p += 4; return n; }
+    { long n = SVBT32ToUInt32( *(SVBT32*)p );       p += 4; return n; }
 inline ULONG Get_ULong( BYTE *& p )
-    { ULONG n = SVBT32ToLong( *(SVBT32*)p );        p += 4; return n; }
+    { ULONG n = SVBT32ToUInt32( *(SVBT32*)p );      p += 4; return n; }
 
 inline void Set_UInt8( BYTE *& p, UINT8 n )
     { ByteToSVBT8( n, *(SVBT8*)p );  p+= 1; }
@@ -68,7 +68,7 @@ inline void Set_UInt16( BYTE *& p, UINT16 n )
     { ShortToSVBT16( n, *(SVBT16*)p );  p+= 2; }
 
 inline void Set_UInt32( BYTE *& p, UINT32 n )
-    { LongToSVBT32( n, *(SVBT32*)p );  p+= 4; }
+    { UInt32ToSVBT32( n, *(SVBT32*)p );  p+= 4; }
 
 
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
