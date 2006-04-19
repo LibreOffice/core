@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:11:08 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include <idlc/astbasetype.hxx>
 #endif
 #include "idlc/astdeclaration.hxx"
+#include "idlc/astsequence.hxx"
 #include "idlc/asttype.hxx"
 #include "idlc/asttypedef.hxx"
 
@@ -284,6 +285,28 @@ AstDeclaration const * resolveTypedefs(AstDeclaration const * type) {
         }
     }
     return type;
+}
+
+AstDeclaration const * deconstructAndResolveTypedefs(
+    AstDeclaration const * type, sal_Int32 * rank)
+{
+    *rank = 0;
+    for (;;) {
+        if (type == 0) {
+            return 0;
+        }
+        switch (type->getNodeType()) {
+        case NT_typedef:
+            type = static_cast< AstTypeDef const * >(type)->getBaseType();
+            break;
+        case NT_sequence:
+            ++(*rank);
+            type = static_cast< AstSequence const * >(type)->getMemberType();
+            break;
+        default:
+            return type;
+        }
+    }
 }
 
 AstInterface const * resolveInterfaceTypedefs(AstType const * type) {
