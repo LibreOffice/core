@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:12 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
+#include <memory>
 
+class PopupMenu;
 namespace dbaui
 {
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo> TToolboxController_BASE;
@@ -61,6 +63,8 @@ namespace dbaui
         DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TCommandState);
         TCommandState   m_aStates;
         sal_uInt16      m_nToolBoxId;
+
+        ::std::auto_ptr<PopupMenu> getMenu();
     public:
         OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
