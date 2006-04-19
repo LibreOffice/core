@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bordrhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:37:14 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,7 +354,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     sal_uInt16 nNamedWidth = USHRT_MAX;
     Color aColor;
 
-    long nTemp;
+    sal_Int32 nTemp;
     while( aTokens.getNextToken( aToken ) && aToken.getLength() != 0 )
     {
         if( !bHasWidth &&
