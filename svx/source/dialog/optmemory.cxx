@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:00:54 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     // GraphicCache
     long    n = aCacheOptions.GetGraphicManagerTotalCacheSize();
     SetNfGraphicCacheVal( n );
-    SetNfGraphicObjectCacheVal( Min( GetNfGraphicCacheVal(), aCacheOptions.GetGraphicManagerObjectCacheSize() ) );
+    SetNfGraphicObjectCacheVal( Min( static_cast<sal_Int32>(GetNfGraphicCacheVal()), aCacheOptions.GetGraphicManagerObjectCacheSize() ) );
 
     sal_Int32 nTime = aCacheOptions.GetGraphicManagerObjectReleaseTime();
     Time aTime( (USHORT)( nTime / 3600 ), (USHORT)( ( nTime % 3600 ) / 60 ), (USHORT)( ( nTime % 3600 ) % 60 ) );
