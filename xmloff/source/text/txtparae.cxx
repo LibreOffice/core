@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:06:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1672,7 +1672,7 @@ void XMLTextParagraphExport::exportParagraph(
                 if( -1 != nOutlineLevel )
                 {
                     OUStringBuffer sTmp;
-                    sTmp.append( (sal_Int32)nOutlineLevel+1L );
+                    sTmp.append( sal_Int32( nOutlineLevel + 1 ) );
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
                                   sTmp.makeStringAndClear() );
