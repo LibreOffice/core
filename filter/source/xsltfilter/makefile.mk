@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 12:53:22 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:08:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,28 @@ SHL1STDLIBS= \
 
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar xalan.jar xercesImpl.jar xml-apis.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
+
+.IF "$(SYSTEM_XALAN)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
+.ELSE
+JARFILES += xalan.jar
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
+.ELSE
+JARFILES += xercesImpl.jar
+.ENDIF
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
+
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
-#JARMANIFEST = Manifest
-
-#JARDIR=$(CLASSDIR)
 
 JARCOMPRESS		= TRUE  
 JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class XSLTFilterOLEExtracter*.class
