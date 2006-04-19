@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:26:57 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ void StatementList::SendProfile( String aText )
                 pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileLine( aText ) );
 
             if ( pProfiler->IsPartitioning() )
-                pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileTime ), pProfiler->GetPartitioningTime() );
+                pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileTime ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )
