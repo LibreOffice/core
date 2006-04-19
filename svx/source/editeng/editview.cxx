@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:02:15 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,7 +532,7 @@ void EditView::Redo()
     PIMPEE->Redo( this );
 }
 
-sal_uInt32 EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -556,7 +556,7 @@ sal_uInt32 EditView::Read( SvStream& rInput, const String& rBaseURL, EETextForma
 }
 
 #ifndef SVX_LIGHT
-sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
+ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
