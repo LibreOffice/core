@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:48:10 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,21 +49,6 @@ using namespace ::osl;
 
 namespace cppu_threadpool
 {
-    DisposedCallerAdmin *DisposedCallerAdmin::getInstance()
-    {
-        static DisposedCallerAdmin *pDisposedCallerAdmin = 0;
-        if( ! pDisposedCallerAdmin )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pDisposedCallerAdmin )
-            {
-                static DisposedCallerAdmin admin;
-                pDisposedCallerAdmin = &admin;
-            }
-        }
-        return pDisposedCallerAdmin;
-    }
-
     DisposedCallerAdmin::~DisposedCallerAdmin()
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -110,8 +95,8 @@ namespace cppu_threadpool
         return sal_False;
     }
 
+    ThreadPool::ThreadPool() {}
 
-    //-------------------------------------------------------------------------------
     ThreadPool::~ThreadPool()
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -121,27 +106,12 @@ namespace cppu_threadpool
         }
 #endif
     }
-    ThreadPool *ThreadPool::getInstance()
-    {
-        static ThreadPool *pThreadPool = 0;
-        if( ! pThreadPool )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pThreadPool )
-            {
-                static ThreadPool pool;
-                pThreadPool = &pool;
-            }
-        }
-        return pThreadPool;
-    }
-
 
     void ThreadPool::dispose( sal_Int64 nDisposeId )
     {
         if( nDisposeId )
         {
-            DisposedCallerAdmin::getInstance()->dispose( nDisposeId );
+            m_disposedCallerAdmin.dispose( nDisposeId );
 
             MutexGuard guard( m_mutex );
             for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
@@ -176,7 +146,7 @@ namespace cppu_threadpool
 
     void ThreadPool::stopDisposing( sal_Int64 nDisposeId )
     {
-        DisposedCallerAdmin::getInstance()->stopDisposing( nDisposeId );
+        m_disposedCallerAdmin.stopDisposing( nDisposeId );
     }
 
     /******************
@@ -240,7 +210,7 @@ namespace cppu_threadpool
         if( bCreate )
         {
             ORequestThread *pThread =
-                new ORequestThread( pQueue , aThreadId, bAsynchron);
+                new ORequestThread( this, pQueue , aThreadId, bAsynchron);
             // deletes itself !
             pThread->create();
         }
@@ -370,7 +340,7 @@ namespace cppu_threadpool
         }
 
         OSL_ASSERT( pQueue );
-        void *pReturn = pQueue->enter( nDisposeId );
+        void *pReturn = pQueue->enter( m_disposedCallerAdmin, nDisposeId );
 
         if( pQueue->isCallstackEmpty() )
         {
@@ -407,6 +377,8 @@ struct uno_ThreadPool_Hash
 
 typedef ::std::hash_set< uno_ThreadPool, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 
+static ThreadPool * g_threadPool;
+
 static ThreadpoolHashSet *g_pThreadpoolHashSet;
 
 struct _uno_ThreadPool
@@ -418,6 +390,14 @@ extern "C" uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C()
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
+
+    //TODO: g_threadPool is accessed in other places without locking the global
+    // mutex, so that the value set here might not be observed there:
+    if (g_threadPool == 0) {
+        g_threadPool = new ThreadPool;
+    }
+    g_threadPool->acquire();
+
     if( ! g_pThreadpoolHashSet )
     {
         g_pThreadpoolHashSet = new ThreadpoolHashSet();
@@ -434,7 +414,7 @@ uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
-    ThreadPool::getInstance()->prepare( pThreadId );
+    g_threadPool->prepare( pThreadId );
     rtl_byte_sequence_release( pThreadId );
     uno_releaseIdFromCurrentThread();
 }
@@ -445,8 +425,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
-    *ppJob =
-        ThreadPool::getInstance()->enter( pThreadId , (sal_Int64 ) hPool );
+    *ppJob = g_threadPool->enter( pThreadId , (sal_Int64 ) hPool );
     rtl_byte_sequence_release( pThreadId );
     uno_releaseIdFromCurrentThread();
 }
@@ -465,19 +444,19 @@ uno_threadpool_putJob(
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
     sal_Bool bIsOneway ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pJob ,doRequest );
+    g_threadPool->addJob( pThreadId, bIsOneway, pJob ,doRequest );
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->dispose( (sal_Int64 ) hPool );
+    g_threadPool->dispose( (sal_Int64 ) hPool );
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->stopDisposing( (sal_Int64) hPool );
+    g_threadPool->stopDisposing( (sal_Int64) hPool );
 
     if( hPool )
     {
@@ -497,4 +476,6 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
             g_pThreadpoolHashSet = 0;
         }
     }
+
+    g_threadPool->release();
 }
