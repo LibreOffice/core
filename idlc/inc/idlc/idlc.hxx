@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:04:17 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@ Idlc* SAL_CALL idlc();
 Idlc* SAL_CALL setIdlc(Options* pOptions);
 
 AstDeclaration const * resolveTypedefs(AstDeclaration const * type);
+
+AstDeclaration const * deconstructAndResolveTypedefs(
+    AstDeclaration const * type, sal_Int32 * rank);
 
 AstInterface const * resolveInterfaceTypedefs(AstType const * type);
 
