@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:23:54 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:04:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2197,17 +2197,23 @@ sub replace_one_variable_in_file
 
 sub set_patchinfo
 {
-    my ( $patchinfofile, $patchid ) = @_;
+    my ( $patchinfofile, $patchid, $allvariables ) = @_;
 
-    # Setting: PATCHIDPLACEHOLDER and ARCHITECTUREPLACEHOLDER
+    # Setting: PATCHIDPLACEHOLDER and ARCHITECTUREPLACEHOLDER and PATCHCORRECTSPLACEHOLDER
 
     replace_one_variable_in_file($patchinfofile, "PATCHIDPLACEHOLDER", $patchid);
 
     my $architecture = "";
     if ( $installer::globals::issolarissparcbuild ) { $architecture = "sparc"; }
-    if ( $installer::globals::issolarisx86build ) { $architecture = "x86"; }
+    if ( $installer::globals::issolarisx86build ) { $architecture = "i386"; }
 
     replace_one_variable_in_file($patchinfofile, "ARCHITECTUREPLACEHOLDER", $architecture);
+
+    if ( ! $allvariables->{'SOLARISPATCHCORRECTS'} ) { installer::exiter::exit_program("ERROR: No setting for PATCH_CORRECTS in zip list file!", "set_patchinfo"); }
+    my $patchcorrects = $allvariables->{'SOLARISPATCHCORRECTS'};
+
+    replace_one_variable_in_file($patchinfofile, "PATCHCORRECTSPLACEHOLDER", $patchcorrects);
+
 }
 
 ######################################################
@@ -2244,7 +2250,7 @@ sub finalize_patch
 
     my $patchinfofilename = $patchid . $installer::globals::separator . "patchinfo";
     my $patchinfofile = installer::files::read_file($patchinfofilename);
-    set_patchinfo($patchinfofile, $patchid);
+    set_patchinfo($patchinfofile, $patchid, $allvariables);
     installer::files::save_file($patchinfofilename, $patchinfofile);
 }
 
