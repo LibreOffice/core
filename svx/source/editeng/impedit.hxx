@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:02:41 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ private:
 
 
     long                nInvMore;
-    sal_uInt32          nControl;
+    ULONG               nControl;
     sal_uInt32          nTravelXPos;
     sal_uInt16          nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
