@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:50:28 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:51:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     ImpCreateTables();
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -315,7 +315,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCoun
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
@@ -328,7 +328,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -340,7 +340,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtCo
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
