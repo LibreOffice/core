@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:17:58 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,8 @@
 #define RC_GetDocumentCount ( M_SOFFICE             | M_WITH_RETURN | 39 )
 
 #define RC_GetSystemLanguage ( M_SOFFICE             | M_WITH_RETURN | 40 )
+
+#define RC_IsProduct         ( M_SOFFICE             | M_WITH_RETURN | 41 )
 
 // Flow Control
 #define F_EndCommandBlock   101         // Initiiert Rückmeldung des Status
