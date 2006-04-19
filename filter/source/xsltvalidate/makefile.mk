@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:23:33 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:08:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,20 @@ XCLASSPATH+=":$(XML_CLASSPATH)"
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar xalan.jar xml-apis.jar crimson.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar crimson.jar
+
+.IF "$(SYSTEM_XALAN)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
+.ELSE
+JARFILES += xalan.jar
+.ENDIF
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
+
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
 #JARMANIFEST = Manifest
