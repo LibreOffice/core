@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:15 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleContextBase::getAccessibleChild (long nIndex)
+    AccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
