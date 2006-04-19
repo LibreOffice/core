@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:52:41 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,13 @@
 #include <comcore.hrc>
 #endif
 
+#ifdef PRODUCT
+    #define _DEBUG_REDLINE( pDoc )
+#else
+    void lcl_DebugRedline( const SwDoc* pDoc );
+    #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
+#endif
+
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 extern void ClearFEShellTabCols();
 
@@ -159,7 +166,10 @@ struct _UndoTblCpyTbl_Entry
 {
     ULONG nBoxIdx, nOffset;
     SfxItemSet* pBoxNumAttr;
-    SwUndoDelete* pUndo;
+    SwUndo* pUndo;
+
+    // Was the last paragraph of the new and the first paragraph of the old content joined?
+    bool bJoin; // For redlining only
 
     _UndoTblCpyTbl_Entry( const SwTableBox& rBox );
     ~_UndoTblCpyTbl_Entry();
@@ -2482,7 +2492,7 @@ void SwUndoTblNumFmt::SetBox( const SwTableBox& rBox )
 
 _UndoTblCpyTbl_Entry::_UndoTblCpyTbl_Entry( const SwTableBox& rBox )
     : nBoxIdx( rBox.GetSttIdx() ), nOffset( 0 ),
-    pBoxNumAttr( 0 ), pUndo( 0 )
+    pBoxNumAttr( 0 ), pUndo( 0 ), bJoin( false )
 {
 }
 
@@ -2508,6 +2518,7 @@ SwUndoTblCpyTbl::~SwUndoTblCpyTbl()
 void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
+    _DEBUG_REDLINE( &rDoc )
 
     SwTableNode* pTblNd = 0;
     for( USHORT n = pArr->Count(); n; )
@@ -2523,14 +2534,78 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
         SwTxtNode* pNd = rDoc.GetNodes().MakeTxtNode( aInsIdx,
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl());
-        SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
-        SwUndoDelete* pUndo = new SwUndoDelete( aPam, TRUE );
+
+        // b62341295: Redline for copying tables
+        const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
+        SwPaM aPam( aInsIdx.GetNode(), *pEndNode );
+
+        bool bDeleteCompleteParagraph = false;
+        bool bShiftPam = false;
+        if( IsRedlineOn( GetRedlineMode() ) )
+        {
+            // There are a couple of different situations to consider during redlining
+            if( pEntry->pUndo )
+            {
+                SwUndoDelete *pUnDel = (SwUndoDelete*)pEntry->pUndo;
+                if( UNDO_REDLINE == pUnDel->GetId() )
+                {
+                    // The old content was not empty or he has been merged with the new content
+                    bDeleteCompleteParagraph = !pEntry->bJoin; // bJoin is set when merged
+                    // Set aTmpIdx to the beginning fo the old content
+                    SwNodeIndex aTmpIdx( *pEndNode, pUnDel->NodeDiff()-1 );
+                    SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
+                    if( pTxt )
+                    {
+                        aPam.GetPoint()->nNode = *pTxt;
+                        aPam.GetPoint()->nContent.Assign( pTxt, pUnDel->ContentStart() );
+                    }
+                    else
+                        *aPam.GetPoint() = SwPosition( aTmpIdx );
+                }
+                else if( pUnDel->IsDelFullPara() )
+                {
+                    // When the old content was an empty paragraph, but could not be joined
+                    // with the new content (e.g. because of a section or table)
+                    // We "save" the aPam.Point, we go one step backwards (because later on the
+                    // empty paragraph will be inserted by the undo) and set the "ShiftPam-flag
+                    // for step forward later on.
+                    bDeleteCompleteParagraph = true;
+                    bShiftPam = true;
+                    SwNodeIndex aTmpIdx( *pEndNode, -1 );
+                    SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
+                    if( pTxt )
+                    {
+                        aPam.GetPoint()->nNode = *pTxt;
+                        aPam.GetPoint()->nContent.Assign( pTxt, 0 );
+                    }
+                    else
+                        *aPam.GetPoint() = SwPosition( aTmpIdx );
+                }
+            }
+            rDoc.DeleteRedline( aPam );
+        }
 
         if( pEntry->pUndo )
         {
             pEntry->pUndo->Undo( rIter );
             delete pEntry->pUndo;
         }
+        if( bShiftPam )
+        {
+            // The aPam.Point is at the moment at the last position of the new content and has to be
+            // moved to the first postion of the old content for the SwUndoDelete operation
+            SwNodeIndex aTmpIdx( aPam.GetPoint()->nNode, 1 );
+            SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
+            if( pTxt )
+            {
+                aPam.GetPoint()->nNode = *pTxt;
+                aPam.GetPoint()->nContent.Assign( pTxt, 0 );
+            }
+            else
+                *aPam.GetPoint() = SwPosition( aTmpIdx );
+        }
+
+        SwUndoDelete* pUndo = new SwUndoDelete( aPam, bDeleteCompleteParagraph );
         pEntry->pUndo = pUndo;
 
         aInsIdx = rBox.GetSttIdx() + 1;
@@ -2565,11 +2640,13 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
 
     if( pInsRowUndo )
         pInsRowUndo->Undo( rIter );
+    _DEBUG_REDLINE( &rDoc )
 }
 
 void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
+    _DEBUG_REDLINE( &rDoc )
 
     if( pInsRowUndo )
         pInsRowUndo->Redo( rIter );
@@ -2586,17 +2663,34 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
         SwTableBox& rBox = *pTblNd->GetTable().GetTblBox( nSttPos );
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
+
+        // b62341295: Redline for copying tables - Start.
         SwTxtNode* pNd = rDoc.GetNodes().MakeTxtNode( aInsIdx,
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl());
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        SwUndoDelete* pUndo = new SwUndoDelete( aPam, TRUE );
-
+        SwUndo* pUndo = IsRedlineOn( GetRedlineMode() ) ? 0 : new SwUndoDelete( aPam, TRUE );
         if( pEntry->pUndo )
         {
             pEntry->pUndo->Undo( rIter );
+            if( IsRedlineOn( GetRedlineMode() ) )
+            {
+                // PrepareRedline has to be called with the beginning of the old content
+                // When new and old content has been joined, the rIter.pAktPam has been set
+                // by the Undo operation to this point.
+                // Otherwise aInsIdx has been moved during the Undo operation
+                if( pEntry->bJoin )
+                    pUndo = PrepareRedline( &rDoc, rBox, *rIter.pAktPam->GetPoint(),
+                                            pEntry->bJoin, true );
+                else
+                {
+                    SwPosition aTmpPos( aInsIdx );
+                    pUndo = PrepareRedline( &rDoc, rBox, aTmpPos, pEntry->bJoin, true );
+                }
+            }
             delete pEntry->pUndo;
         }
         pEntry->pUndo = pUndo;
+        // b62341295: Redline for copying tables - End.
 
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx, 1 );
@@ -2626,6 +2720,7 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
 
         pEntry->nOffset = rBox.GetSttIdx() - pEntry->nBoxIdx;
     }
+    _DEBUG_REDLINE( &rDoc )
 }
 
 void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt )
@@ -2637,14 +2732,16 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt )
     pArr->Insert( pEntry, pArr->Count() );
 
     SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
+    _DEBUG_REDLINE( pDoc )
     if( bDelCntnt )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
         SwTxtNode* pNd = pDoc->GetNodes().MakeTxtNode( aInsIdx,
                                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl());
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
-        pEntry->pUndo = new SwUndoDelete( aPam, TRUE );
 
+        if( !pDoc->IsRedlineOn() )
+            pEntry->pUndo = new SwUndoDelete( aPam, TRUE );
     }
 
     pEntry->pBoxNumAttr = new SfxItemSet( pDoc->GetAttrPool(),
@@ -2653,21 +2750,110 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt )
     pEntry->pBoxNumAttr->Put( rBox.GetFrmFmt()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
         delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = 0;
+    _DEBUG_REDLINE( pDoc )
 }
 
-void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, BOOL bDelCntnt )
+void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, BOOL bDelCntnt )
 {
     _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ pArr->Count() - 1 ];
 
     // wurde der Inhalt geloescht, so loesche jetzt auch noch den temp.
     // erzeugten Node
-    if( bDelCntnt && pEntry->pUndo )
+    if( bDelCntnt )
     {
+        SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
+        _DEBUG_REDLINE( pDoc )
+
+        if( pDoc->IsRedlineOn() )
+        {
+            SwPosition aTmpPos( rIdx );
+            pEntry->pUndo = PrepareRedline( pDoc, rBox, aTmpPos, pEntry->bJoin, false );
+        }
         SwNodeIndex aDelIdx( *rBox.GetSttNd(), 1 );
         rBox.GetFrmFmt()->GetDoc()->GetNodes().Delete( aDelIdx, 1 );
+        _DEBUG_REDLINE( pDoc )
     }
+
     pEntry->nOffset = rBox.GetSttIdx() - pEntry->nBoxIdx;
 }
+
+// PrepareRedline is called from AddBoxAfter() and from Redo() in slightly different situations.
+// bRedo is set by calling from Redo()
+// rJoin is false by calling from AddBoxAfter() and will be set if the old and new content has
+// been merged.
+// rJoin is true if Redo() is calling and the content has already been merged
+
+SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
+    const SwPosition& rPos, bool& rJoin, bool bRedo )
+{
+    SwUndo *pUndo = 0;
+    // b62341295: Redline for copying tables
+    // What's to do?
+    // Mark the cell content before rIdx as insertion,
+    // mark the cell content behind rIdx as deletion
+    // merge text nodes at rIdx if possible
+    SwRedlineMode eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld | REDLINE_DONTCOMBINE_REDLINES ) &
+                                ~REDLINE_IGNORE );
+    SwPosition aInsertEnd( rPos );
+    SwTxtNode* pTxt;
+    if( !rJoin )
+    {
+        // If the content is not merged, the end of the insertion is at the end of the node
+        // _before_ the given position rPos
+        --aInsertEnd.nNode;
+        pTxt = aInsertEnd.nNode.GetNode().GetTxtNode();
+        if( pTxt )
+        {
+            aInsertEnd.nContent.Assign( pTxt, pTxt->GetTxt().Len() );
+            if( !bRedo && rPos.nNode.GetNode().GetTxtNode() )
+            {   // Try to merge, if not called by Redo()
+                rJoin = true;
+                pTxt->JoinNext();
+            }
+        }
+        else
+            aInsertEnd.nContent = SwIndex( 0 );
+    }
+    // For joined (merged) contents the start of deletionm and end of insertion are identical
+    // otherwise adjacent nodes.
+    SwPosition aDeleteStart( rJoin ? aInsertEnd : rPos );
+    if( !rJoin )
+    {
+        pTxt = aDeleteStart.nNode.GetNode().GetTxtNode();
+        if( pTxt )
+            aDeleteStart.nContent.Assign( pTxt, 0 );
+    }
+    SwPosition aCellEnd( SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode(), -1 ) );
+    pTxt = aCellEnd.nNode.GetNode().GetTxtNode();
+    if( pTxt )
+        aCellEnd.nContent.Assign( pTxt, pTxt->GetTxt().Len() );
+    if( aDeleteStart != aCellEnd )
+    {   // If the old (deleted) part is not empty, here we are...
+        SwPaM aDeletePam( aDeleteStart, aCellEnd );
+        pUndo = new SwUndoRedlineDelete( aDeletePam, UNDO_DELETE );
+        pDoc->AppendRedline( new SwRedline( REDLINE_DELETE, aDeletePam ) );
+    }
+    else if( !rJoin ) // If the old part is empty and joined, we are finished
+    {   // if it is not joined, we have to delete this empty paragraph
+        aCellEnd = SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() );
+        SwPaM aTmpPam( aDeleteStart, aCellEnd );
+        pUndo = new SwUndoDelete( aTmpPam, TRUE );
+    }
+    SwPosition aCellStart( SwNodeIndex( *rBox.GetSttNd(), 2 ) );
+    pTxt = aCellStart.nNode.GetNode().GetTxtNode();
+    if( pTxt )
+        aCellStart.nContent.Assign( pTxt, 0 );
+    if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
+    {
+        SwPaM aTmpPam( aCellStart, aInsertEnd );
+        pDoc->AppendRedline( new SwRedline( REDLINE_INSERT, aTmpPam ) );
+    }
+
+    pDoc->SetRedlineMode_intern( eOld );
+    return pUndo;
+}
+
 
 BOOL SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
                                 USHORT nCnt )
