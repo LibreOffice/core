@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:24:30 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@
 #include "UITools.hxx"
 #endif
 
-#include <memory>
 
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController()
 {
@@ -112,6 +111,20 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ui;
+
+    namespace
+    {
+        void lcl_copy(Menu* _pMenu,USHORT _nMenuId,USHORT _nMenuPos,ToolBox* _pToolBox,USHORT _nToolId,const ::rtl::OUString& _sCommand)
+        {
+            if ( _pMenu->GetItemType(_nMenuPos) != MENUITEM_STRING )
+                _pToolBox->SetItemImage(_nToolId, _pMenu->GetItemImage(_nMenuId));
+            _pToolBox->SetItemCommand( _nToolId, _sCommand);
+            _pToolBox->SetHelpId(_nToolId, _pMenu->GetHelpId(_nMenuId));
+            _pToolBox->SetHelpText(_nToolId, _pMenu->GetHelpText(_nMenuId));
+            _pToolBox->SetQuickHelpText(_nToolId, _pMenu->GetTipHelpText(_nMenuId));
+            _pToolBox->SetItemText(_nToolId, _pMenu->GetItemText(_nMenuId));
+        }
+    }
 
     OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& _rxORB)
         : m_nToolBoxId(1)
@@ -151,19 +164,18 @@ namespace dbaui
 
         if ( m_aCommandURL.equalsAscii(".uno:DBNewForm") )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewSQL")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm")),sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm"))           ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"))           ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewSQL"))        ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery"))          ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql"))       ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable"))          ,sal_True));
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Refresh")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRebuildData")),sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Refresh"))         ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRebuildData"))   ,sal_True));
         }
 
         TCommandState::iterator aIter = m_aStates.begin();
@@ -191,26 +203,43 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
     {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
         ::osl::MutexGuard aGuard(m_aMutex);
         TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
         if ( aFind != m_aStates.end() )
+        {
             aFind->second = Event.IsEnabled;
+            if ( m_aCommandURL == aFind->first && !Event.IsEnabled )
+            {
+                ::std::auto_ptr<PopupMenu> pMenu = getMenu();
+                USHORT nCount = pMenu->GetItemCount();
+                for (USHORT i = 0; i < nCount; ++i)
+                {
+                    USHORT nItemId = pMenu->GetItemId(i);
+                    aFind = m_aStates.find(pMenu->GetItemCommand(nItemId));
+                    if ( aFind != m_aStates.end() && aFind->second )
+                    {
+                        m_aCommandURL = aFind->first;
+
+                        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+                        lcl_copy(pMenu.get(),nItemId,i,pToolBox,m_nToolBoxId, m_aCommandURL);
+                        break;
+                    }
+                }
+            }
+        }
     }
     // -----------------------------------------------------------------------------
-    Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
+    ::std::auto_ptr<PopupMenu> OToolboxController::getMenu()
     {
-        // execute the menu
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-        ::osl::MutexGuard aGuard(m_aMutex);
-
-        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         ::std::auto_ptr<PopupMenu> pMenu;
-        if ( m_aCommandURL.equalsAscii(".uno:DBNewForm") )
+        if ( m_aStates.size() > 2 )
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
             sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
 
-            sal_Bool bHighContrast = ::dbaui::isHiContrast(pToolBox);
+            ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+            sal_Bool bHighContrast = isHighContrast();
 
             try
             {
@@ -222,8 +251,6 @@ namespace dbaui
                 short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
                 if ( bHighContrast )
                     nImageType |= ImageType::COLOR_HIGHCONTRAST;
-
-                Reference< XDispatchProvider >  xProvider(getFrameInterface(), UNO_QUERY);
 
                 Sequence< ::rtl::OUString> aSeq(1);
                 USHORT nCount = pMenu->GetItemCount();
@@ -254,14 +281,17 @@ namespace dbaui
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_REFRESH_DATA ) ) );
         }
+        return pMenu;
+    }
+    // -----------------------------------------------------------------------------
+    Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
+    {
+        // execute the menu
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard(m_aMutex);
 
-//        // show disabled entries?
-//        if ( !SvtMenuOptions().IsEntryHidingEnabled() )
-//            pMenu->RemoveDisabledEntries();
-//        else
-//            // force showing disabled entries. Due to #102790#, popup menus automatically
-//            // set the MENU_FLAG_HIDEDISABLEDENTRIES flag
-//            pMenu->SetMenuFlags( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+        ::std::auto_ptr<PopupMenu> pMenu = getMenu();
 
         USHORT nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state
@@ -272,18 +302,20 @@ namespace dbaui
 
         if ( nSelected )
         {
-            if ( pMenu->GetItemType(pMenu->GetItemPos(nSelected)) != MENUITEM_STRING )
-                pToolBox->SetItemImage(m_nToolBoxId, pMenu->GetItemImage(nSelected));
+            m_aCommandURL = pMenu->GetItemCommand(nSelected);
+            lcl_copy(pMenu.get(),nSelected,pMenu->GetItemPos(nSelected),pToolBox,m_nToolBoxId, m_aCommandURL);
+
             Reference<XDispatch> xDispatch = m_aListenerMap.find(m_aCommandURL)->second;
             if ( xDispatch.is() )
             {
                 URL aUrl;
                 Sequence < PropertyValue > aArgs;
-                aUrl.Complete = pMenu->GetItemCommand(nSelected);
+                aUrl.Complete = m_aCommandURL;
                 OSL_ENSURE(aUrl.Complete.getLength(),"Command is empty!");
                 if ( getURLTransformer().is() )
                     getURLTransformer()->parseStrict(aUrl);
                 xDispatch->dispatch(aUrl,aArgs);
+
             }
         }
         return Reference< ::com::sun::star::awt::XWindow >();
