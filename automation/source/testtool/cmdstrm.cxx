@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:06 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
 {
     USHORT nParams = PARAM_NONE;
     USHORT nNr1,nNr2,nNr3,nNr4;
-    ULONG nLNr1;
+    comm_ULONG nLNr1;
     String aString1,aString2;
     BOOL bBool1,bBool2;
 
@@ -398,7 +398,7 @@ void CmdStream::GenCmdUNOSlot( const String &aURL )
     Write( aURL );          // Die UNO URL eben
 }
 
-void CmdStream::GenCmdControl( ULONG nUId, USHORT nMethodId, SbxArray* rPar )
+void CmdStream::GenCmdControl( comm_ULONG nUId, USHORT nMethodId, SbxArray* rPar )
 {
     Write(USHORT(SIControl));
     Write(nUId);
@@ -429,7 +429,7 @@ void CmdStream::GenCmdFlow( USHORT nArt, USHORT nNr1 )
     Write(nNr1);
 }
 
-void CmdStream::GenCmdFlow( USHORT nArt, ULONG nNr1 )
+void CmdStream::GenCmdFlow( USHORT nArt, comm_ULONG nNr1 )
 {
     Write(USHORT(SIFlow));
     Write(nArt);
@@ -458,7 +458,7 @@ SvMemoryStream* CmdStream::GetStream()
     return pSammel;
 }
 
-void CmdStream::Reset( ULONG nSequence )
+void CmdStream::Reset( comm_ULONG nSequence )
 {
     delete pCommStream;
     delete pSammel;
