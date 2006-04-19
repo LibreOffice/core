@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:04:41 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2195,7 +2195,7 @@ void FmGridControl::Select()
     }
 }
 // -----------------------------------------------------------------------------
-long FmGridControl::GetSelectedColumn() const
+sal_Int32 FmGridControl::GetSelectedColumn() const
 {
     return m_nCurrentSelectedColumn;
 }
