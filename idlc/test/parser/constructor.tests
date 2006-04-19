@@ -4,9 +4,9 @@
 #
 #   $RCSfile: constructor.tests,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:17:34 $
+#   last change: $Author: hr $ $Date: 2006-04-19 13:46:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,4 +166,54 @@ module com { module sun { module star { module uno {
 interface X {};
 singleton S: X {
     f();
+};
+
+
+EXPECT FAILURE "constructor.tests 15":
+module com { module sun { module star { module uno {
+    interface XInterface {};
+service S: com::sun::star::uno::XInterface {
+    c1([in] long a, [in] com::sun::star::uno::XInterface b);
+    c2([in] long c, [in] XInterface d);
+};
+}; }; }; };
+
+
+EXPECT FAILURE "constructor.tests 16":
+module com { module sun { module star { module uno {
+    interface XInterface {};
+}; }; }; };
+typedef long T;
+service S: com::sun::star::uno::XInterface {
+    c1([in] sequence<long> a);
+    c2([in] sequence<T> b);
+};
+
+
+EXPECT FAILURE "constructor.tests 17":
+module com { module sun { module star { module uno {
+    interface XInterface {};
+}; }; }; };
+service S: com::sun::star::uno::XInterface {
+    c1([in] any... a);
+    c2([in] any... b);
+};
+
+
+EXPECT SUCCESS "constructor.tests 18":
+module com { module sun { module star { module uno {
+    interface XInterface {};
+}; }; }; };
+service S: com::sun::star::uno::XInterface {
+    c1([in] any... a);
+    c2([in] sequence<any> b);
+};
+
+
+EXPECT SUCCESS "constructor.tests 19":
+module com { module sun { module star { module uno {
+    interface XInterface { void m(); };
+}; }; }; };
+service S: com::sun::star::uno::XInterface {
+    c([in] any... a);
 };
