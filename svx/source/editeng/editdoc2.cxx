@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:23:48 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 
 DBG_NAME( EE_ParaPortion );
 
-SV_IMPL_VARARR( CharPosArray, long );
+SV_IMPL_VARARR( CharPosArray, sal_Int32 );
 
 /*
 
