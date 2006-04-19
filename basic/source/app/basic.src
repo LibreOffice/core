@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:38:19 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,6 @@ String IDS_WARNING_PREFIX
 String IDS_OBJECT
 {
     Text [ de ] = "Objekt";
-    Text[ LANGUAGE_USER1 ] = "Gemeint sind Objekte aus der Objektorientierten Programmierung";
     Text[ en-US ] = "Object";
 };
 String IDS_EDIT_VAR
@@ -508,12 +507,6 @@ Bitmap MBP_PLUS {
 };
 Bitmap MBP_MINUS {
         File = "minus.bmp";
-};
-Bitmap MBP_ASSERT {
-        File = "assert.bmp";
-};
-Bitmap MBP_QAERROR {
-        File = "qaerror.bmp";
 };
 
 Menu RID_APPMENUBAR {
@@ -1089,7 +1082,7 @@ TabPage RID_TP_PROFILE {
     CheckBox CB_AUTORELOAD {
             Pos = MAP_APPFONT( 7, 74 );
             Size = MAP_APPFONT( 115, 12 );
-            Text [ de ] = "automatiscc neu laden";
+            Text [ de ] = "Automatisch neu laden";
         Text[ en-US ] = "AutoReload";
     };
     CheckBox CB_AUTOSAVE {
