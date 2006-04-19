@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:03:42 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,8 @@ enum ErrorCode
     EIDL_IDENTICAL_TYPE_PARAMETERS,
     EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE,
     EIDL_PUBLISHED_FORWARD,
-    EIDL_PUBLISHED_USES_UNPUBLISHED
+    EIDL_PUBLISHED_USES_UNPUBLISHED,
+    EIDL_SIMILAR_CONSTRUCTORS
 };
 
 enum WarningCode
