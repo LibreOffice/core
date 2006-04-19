@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 09:28:36 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:04:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -415,6 +415,14 @@ sub get_downloadname_language
         $languages =~ s/_en-US//;
     }
 
+    # en-US is default language and can be removed therefore
+    # for one-language installation sets
+
+    if ( $languages =~ /^\s*en-US\s*$/ )
+    {
+        $languages = "";
+    }
+
     return $languages;
 }
 
@@ -533,10 +541,18 @@ sub set_download_filename
         if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
         $versionstring = $allvariables->{'PRODUCTVERSION'} . "." . $localminor;
     }
+    else
+    {
+        if ( $allvariables->{'PACKAGEVERSION'} )
+        {
+            $versionstring = $allvariables->{'PACKAGEVERSION'};
+        }
+    }
 
     my $filename = $start . "_" . $versionstring . "_" . $date . "_" . $platform . "_" . $type . "_" . $language . $addon;
 
-    $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform is empty
+    $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform or $language are empty
+    $filename =~ s/\_\s*$//;    # necessary, if $language and $addon are empty
 
     $installer::globals::ooodownloadfilename = $filename;
 
