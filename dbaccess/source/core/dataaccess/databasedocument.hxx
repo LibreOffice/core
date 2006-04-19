@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:34:04 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,12 +77,15 @@
 #ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
 #include <com/sun/star/embed/XTransactionListener.hpp>
+#endif
+
 #include <boost/shared_ptr.hpp>
 #ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
 #include "ModelImpl.hxx"
 #endif
-#include <cppuhelper/compbase11.hxx>
+
 //........................................................................
 namespace dbaccess
 {
@@ -112,7 +115,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
                         ,public ODatabaseDocument_OfficeDocument
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >      m_xDocEventBroadcaster;
 
     ::cppu::OInterfaceContainerHelper                                                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                                                   m_aCloseListener;
@@ -301,6 +303,18 @@ public:
     // XOfficeDatabaseDocument
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
 
+    /** clears the given object container
+
+        Clearing is done via disposal - the method calls XComponent::dispose at the given object,
+        which must be one of our impl's or our object containers (m_xForms, m_xReports,
+        m_xTableDefinitions, m_xCommandDefinitions)
+
+        @param _rxContainer
+            the container to clear
+    */
+    static void clearObjectContainer(
+                ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer);
+
 private:
     /** closes the frames of all connected controllers
 
@@ -319,21 +333,6 @@ private:
         object containers (m_xForms, m_xReports, m_xTableDefinitions, m_xCommandDefinitions)
     */
     void    impl_reparent_nothrow( const ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer );
-
-    /** clears the given object container
-
-        Clearing is done via disposal - the method calls XComponent::dispose at the given object,
-        which must be one of our impl's or our object containers (m_xForms, m_xReports,
-        m_xTableDefinitions, m_xCommandDefinitions)
-
-        @param _rxContainer
-            the container to clear
-        @param _bResetAndRelease
-            <TRUE/> if and only if the given container should also be reset and release.
-    */
-    void    impl_clearObjectContainer(
-                ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer,
-                bool _bResetAndRelease = false );
 
     /** retrieves the forms or reports contained, creates and initializes it, if necessary
 
