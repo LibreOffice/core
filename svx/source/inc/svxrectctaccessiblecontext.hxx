@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:01 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,11 +199,11 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild( long nIndex )
+        getAccessibleChild( sal_Int32 nIndex )
             throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
