@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:33:31 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ IMPL_LINK( ImplDockFloatWin2, DockingHdl, ImplDockFloatWin2*, pWindow )
         {
             Point aPt;
             Rectangle aBorderRect( aPt, pBorder->GetSizePixel() );
-            long nLeft, nTop, nRight, nBottom;
+            sal_Int32 nLeft, nTop, nRight, nBottom;
             GetBorder( nLeft, nTop, nRight, nBottom );
             // limit borderrect to the caption part only and without the resizing borders
             aBorderRect.nBottom = aBorderRect.nTop + nTop;
