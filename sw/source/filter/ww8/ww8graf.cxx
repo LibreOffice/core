@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:39:37 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1497,13 +1497,13 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         return;
     }
     WW8_FDOA* pF = (WW8_FDOA*)pF0;
-    if( !SVBT32ToLong( pF->fc ) )
+    if( !SVBT32ToUInt32( pF->fc ) )
     {
         ASSERT( !this, "+Wo ist die Grafik (3) ?" );
         return;
     }
     WW8_DO aDo;
-    pStrm->Seek( SVBT32ToLong( pF->fc ) );                  // Lese Draw-Header
+    pStrm->Seek( SVBT32ToUInt32( pF->fc ) );                  // Lese Draw-Header
     pStrm->Read( &aDo, sizeof( WW8_DO ) );
 
     short nLeft = SVBT16ToShort( aDo.cb ) - sizeof( WW8_DO );
