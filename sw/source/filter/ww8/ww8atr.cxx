@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:16:31 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1736,7 +1736,7 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c, String* _pLinkStr = 0L
         const UINT32 nCurrPos = rStrm.Tell();
         rStrm.Seek( nLinkPosInDataStrm );
         SVBT32 nLen;
-        LongToSVBT32( nCurrPos - nLinkPosInDataStrm, nLen );
+        UInt32ToSVBT32( nCurrPos - nLinkPosInDataStrm, nLen );
         rStrm.Write( nLen, 4 );
         rStrm.Seek( nCurrPos );
 
