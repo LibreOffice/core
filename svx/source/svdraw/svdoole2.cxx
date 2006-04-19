@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:01:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:52:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1385,8 +1385,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {}
 
                 Rectangle aAcceptedVisArea;
-                aAcceptedVisArea.SetSize( Size( (long)( Fraction( aSz.Width ) * pClient->GetScaleWidth() ),
-                                                (long)( Fraction( aSz.Height ) * pClient->GetScaleHeight() ) ) );
+                aAcceptedVisArea.SetSize( Size( (long)( Fraction( long( aSz.Width ) ) * pClient->GetScaleWidth() ),
+                                                (long)( Fraction( long( aSz.Height ) ) * pClient->GetScaleHeight() ) ) );
                 //Rectangle aAcceptedVisArea(rIPRef->GetVisArea());
                 if (aVisSize != aAcceptedVisArea.GetSize())
                 {
