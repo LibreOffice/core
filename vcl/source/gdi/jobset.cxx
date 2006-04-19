@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:03:24 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,12 +347,12 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
                 USHORT nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
-                pJobData->mnDriverDataLen           = SVBT32ToLong( pOldJobData->nDriverDataLen );
+                pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
                 pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
                 pJobData->mnPaperBin                = SVBT16ToShort( pOldJobData->nPaperBin );
                 pJobData->mePaperFormat             = (Paper)SVBT16ToShort( pOldJobData->nPaperFormat );
-                pJobData->mnPaperWidth              = (long)SVBT32ToLong( pOldJobData->nPaperWidth );
-                pJobData->mnPaperHeight             = (long)SVBT32ToLong( pOldJobData->nPaperHeight );
+                pJobData->mnPaperWidth              = (long)SVBT32ToUInt32( pOldJobData->nPaperWidth );
+                pJobData->mnPaperHeight             = (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
                 if ( pJobData->mnDriverDataLen )
                 {
                     BYTE* pDriverData = ((BYTE*)pOldJobData) + nOldJobDataSize;
@@ -407,12 +407,12 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             USHORT              nOldJobDataSize = sizeof( aOldJobData );
             ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
             ShortToSVBT16( pJobData->mnSystem, aOldJobData.nSystem );
-            LongToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
+            UInt32ToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
             ShortToSVBT16( (USHORT)(pJobData->meOrientation), aOldJobData.nOrientation );
             ShortToSVBT16( pJobData->mnPaperBin, aOldJobData.nPaperBin );
             ShortToSVBT16( (USHORT)(pJobData->mePaperFormat), aOldJobData.nPaperFormat );
-            LongToSVBT32( (ULONG)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
-            LongToSVBT32( (ULONG)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
+            UInt32ToSVBT32( (ULONG)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
+            UInt32ToSVBT32( (ULONG)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );
