@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:00 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nLastLine = GetLastVisLine() + 1;
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
-    nDigits = Max( nDigits, 3L );
+    nDigits = Max( nDigits, sal_Int32( 3 ) );
     Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( String( '0' ) ) * nDigits );
 }
 
@@ -678,8 +678,8 @@ void ScCsvGrid::MoveCursor( sal_uInt32 nColIndex )
     {
         sal_Int32 nPosBeg = GetColumnPos( nColIndex );
         sal_Int32 nPosEnd = GetColumnPos( nColIndex + 1 );
-        sal_Int32 nMinPos = Max( nPosBeg - CSV_SCROLL_DIST, 0L );
-        sal_Int32 nMaxPos = Min( nPosEnd - GetVisPosCount() + CSV_SCROLL_DIST + 1L, nMinPos );
+        sal_Int32 nMinPos = Max( nPosBeg - CSV_SCROLL_DIST, sal_Int32( 0 ) );
+        sal_Int32 nMaxPos = Min( nPosEnd - GetVisPosCount() + CSV_SCROLL_DIST + sal_Int32( 1 ), nMinPos );
         if( nPosBeg - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
             Execute( CSVCMD_SETPOSOFFSET, nMinPos );
         else if( nPosEnd + CSV_SCROLL_DIST >= GetLastVisPos() )
@@ -761,7 +761,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep );
 
         // update column width
-        sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + 1L );
+        sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );
         if( IsValidColumn( nColIx ) )
         {
             // expand existing column
@@ -892,7 +892,7 @@ void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
 
         sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
         // on mouse tracking: keep position valid
-        nPos = Max( Min( nPos, GetPosCount() - 1L ), 0L );
+        nPos = Max( Min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
         Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
 
         sal_uInt32 nColIx = GetColumnFromPos( nPos );
@@ -1340,7 +1340,7 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
     if( HasFocus() && IsVisibleColumn( nColIndex ) )
     {
         sal_Int32 nX1 = Max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
-        sal_Int32 nX2 = Min( GetColumnX( nColIndex + 1 ) - 1L, GetLastX() );
+        sal_Int32 nX2 = Min( GetColumnX( nColIndex + 1 ) - sal_Int32( 1 ), GetLastX() );
         sal_Int32 nY2 = Min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
         InvertTracking( Rectangle( nX1, 0, nX2, nY2 ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
     }
