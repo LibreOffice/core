@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLParser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:22:36 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetNodeType:
             {
-                   pRet->GenReturn ( RET_Value, aSmartMethodId, (ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
+                   pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
             }
             break;
         case RC_SAXGetAttributeCount:
@@ -524,13 +524,13 @@ void StatementCommand::HandleSAXParser()
                             pRet->GenReturn ( RET_Value, aSmartMethodId, pElementNode->GetNodeName() );
                             break;
                         case RC_SAXGetChildCount:
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (ULONG)pElementNode->GetChildCount() );
+                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)pElementNode->GetChildCount() );
                             break;
                         case RC_SAXGetAttributeCount:
                             if ( xAttributeList.is() )
-                                pRet->GenReturn ( RET_Value, aSmartMethodId, (ULONG)xAttributeList->getLength() );
+                                pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)xAttributeList->getLength() );
                             else
-                                pRet->GenReturn ( RET_Value, aSmartMethodId, (ULONG)0 );
+                                pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)0 );
                             break;
                         case RC_SAXGetAttributeName:
                             {
@@ -609,7 +609,7 @@ void StatementCommand::HandleSAXParser()
                     if ( aString1.EqualsAscii( "/" ) )
                     {
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)TRUE );
+                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)TRUE );
                         else
                             pSAXParser->SetCurrentNode( pSAXParser->GetRootNode() );
                     }
@@ -618,7 +618,7 @@ void StatementCommand::HandleSAXParser()
                         ULONG nTimestamp = (ULONG)aString1.GetToken( 1, ':' ).ToInt64();
                         ULONG nPointer = (ULONG)aString1.GetToken( 2, ':' ).ToInt64();
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)(pSAXParser->GetTimestamp() == nTimestamp) );
+                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)(pSAXParser->GetTimestamp() == nTimestamp) );
                         else
                             if ( pSAXParser->GetTimestamp() == nTimestamp )
                             {
@@ -670,7 +670,7 @@ void StatementCommand::HandleSAXParser()
                     }
                     else
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)FALSE );
+                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)FALSE );
                         else
                             ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
                 }
