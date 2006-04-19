@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:02:34 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,7 +1128,7 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     // diese methode ist bei den meisten start/stop methoden der
     // memberklassen des managers identisch.
         BYTE* p = GetData();
-        Ww1SprmSep aSprm(rFib, SVBT32ToLong(p+2));
+        Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(p+2));
         aSprm.Start(rOut, rMan);
         aSprm.Stop(rOut, rMan);
         (*this)++;
@@ -1892,7 +1892,7 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     SVBT16 tmpShort;
     SVBT8 tmpByte;
 #define wLong(n) \
-    LongToSVBT32(n, tmpLong); \
+    UInt32ToSVBT32(n, tmpLong); \
     if ((rOut.Write(tmpLong, sizeof(SVBT32))) != sizeof(SVBT32)) goto error;
 #define wShort(n) \
     ShortToSVBT16(n, tmpShort); \
