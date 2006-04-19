@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:07:13 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,8 +507,8 @@ PreeditCaretCallback ( XIC ic, XPointer client_data,
         case XIMDontChange:   direction = "Dont change";   break;
     }
 
-    fprintf (stderr, "PreeditCaretCallback( ic=%i, client=%i,\n",
-        (unsigned int)ic, (unsigned int)client_data );
+    fprintf (stderr, "PreeditCaretCallback( ic=%p, client=%p,\n",
+        ic, client_data );
     fprintf (stderr, "\t position=%i, direction=\"%s\", style=\"%s\" )\n",
         call_data->position, direction, style );
     #endif
