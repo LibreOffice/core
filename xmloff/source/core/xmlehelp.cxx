@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:11:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 using namespace ::rtl;
 using namespace ::xmloff::token;
 
-void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
+void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
                                            OUStringBuffer& rOut,
                                    MapUnit eOutUnit )
 {
@@ -69,9 +69,9 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
     }
 
     // The new length is (nVal * nMul)/(nDiv*nFac*10)
-    long nMul = 1000;
-    long nDiv = 1;
-    long nFac = 100;
+    sal_Int32 nMul = 1000;
+    sal_Int32 nDiv = 1;
+    sal_Int32 nFac = 100;
     enum XMLTokenEnum eUnit = XML_TOKEN_INVALID;
     switch( eValueUnit )
     {
@@ -180,7 +180,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
     }
 
 
-    long nLongVal;
+    sal_Int32 nLongVal;
     BOOL bOutLongVal = TRUE;
     if( nValue > SAL_MAX_INT32 / nMul )
     {
@@ -194,8 +194,8 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
 
         if( nBigVal.IsLong() )
         {
-            // To convert the value into a string a long is sufficient
-            nLongVal = (long)nBigVal;
+            // To convert the value into a string a sal_Int32 is sufficient
+            nLongVal = sal_Int32( nBigVal );
         }
         else
         {
@@ -241,7 +241,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         rOut.append( GetXMLToken(eUnit) );
 #if 0
     enum XMLTokenEnum eUnit;
-    long nFac = 1;
+    sal_Int32 nFac = 1;
     switch( eOutUnit )
     {
     case MAP_100TH_MM:
@@ -317,7 +317,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
 
 }
 
-void SvXMLExportHelper::AddPercentage( long nValue, OUStringBuffer& rOut )
+void SvXMLExportHelper::AddPercentage( sal_Int32 nValue, OUStringBuffer& rOut )
 {
     rOut.append( nValue );
     rOut.append( sal_Unicode('%' ) );
