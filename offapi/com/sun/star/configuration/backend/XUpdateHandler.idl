@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XUpdateHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:43:36 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,9 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                <type>NodeAttribute</type> flags.  Note that
+                <member>NodeAttribute::FUSE</member> has an impact on the
+                semantics of this method.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -240,7 +242,9 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                <type>NodeAttribute</type> flags.  Note that
+                <member>NodeAttribute::FUSE</member> has an impact on the
+                semantics of this method.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
