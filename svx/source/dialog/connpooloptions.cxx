@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:45:25 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace offapp
         virtual void CursorMoved();
 
     protected:
-        virtual ULONG GetTotalCellWidth(long nRow, USHORT nColId);
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, USHORT nColId);
 
 
     private:
@@ -235,7 +235,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    ULONG DriverListControl::GetTotalCellWidth(long nRow, USHORT nColId)
+    sal_uInt32 DriverListControl::GetTotalCellWidth(long nRow, USHORT nColId)
     {
         return GetDataWindow().GetTextWidth(GetCellText(nRow, nColId));
     }
