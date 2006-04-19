@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-03-29 12:47:51 $
+dnl * Date: $Date: 2006-04-19 15:09:58 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.161 $ )
+AC_REVISION( $Revision: 1.162 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -257,6 +257,41 @@ AC_ARG_WITH(system-db,
 AC_ARG_WITH(db-jar,
 [  --with-db-jar=JARFILE   Specify path to jarfile manually ],
 [ DB_JAR="$withval"
+])
+AC_ARG_WITH(system-hsqldb,
+[  --with-system-hsqldb    Use hsqldb already on system
+],,)
+AC_ARG_WITH(hsqldb-jar,
+[  --with-hsqldb-jar=JARFILE   Specify path to jarfile manually ],
+[ HSQLDB_JAR="$withval"
+])
+AC_ARG_WITH(system-beanshell,
+[  --with-system-beanshell Use beanshell already on system
+],,)
+AC_ARG_WITH(beanshell-jar,
+[  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
+[ BSH_JAR="$withval"
+])
+AC_ARG_WITH(system-xml-apis,
+[  --with-system-xml-apis  Use xml-apis already on system
+],,)
+AC_ARG_WITH(xml-apis-jar,
+[  --with-xml-apis-jar=JARFILE   Specify path to jarfile manually ],
+[ XML_APIS_JAR="$withval"
+])
+AC_ARG_WITH(system-xerces,
+[  --with-system-xerces    Use xerces already on system
+],,)
+AC_ARG_WITH(xerces-jar,
+[  --with-xerces-jar=JARFILE   Specify path to jarfile manually ],
+[ XERCES_JAR="$withval"
+])
+AC_ARG_WITH(system-xalan,
+[  --with-system-xalan     Use xalan already on system
+],,)
+AC_ARG_WITH(xalan-jar,
+[  --with-xalan-jar=JARFILE   Specify path to jarfile manually ],
+[ XALAN_JAR="$withval"
 ])
 AC_ARG_WITH(system-sablot,
 [  --with-system-sablot    Use sablot already on system
@@ -2724,6 +2759,166 @@ AC_SUBST(DB_INCLUDES)
 AC_SUBST(DB_JAR)
 
 dnl ===================================================================
+dnl Check for system hsqldb
+dnl ===================================================================
+AC_MSG_CHECKING([which hsqldb to use])
+if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
+       test "$with_system_hsqldb" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_HSQLDB=YES
+        if test -z $HSQLDB_JAR; then
+               HSQLDB_JAR=/usr/share/java/hsqldb.jar
+        fi
+        AC_CHECK_FILE($HSQLDB_JAR, [],
+               [AC_MSG_ERROR(hsqldb.jar not found.)], [])
+        AC_MSG_CHECKING([whether hsqldb is >= 1.8.0])
+        export HSQLDB_JAR
+        if $PERL -e 'use Archive::Zip;
+            my $file = "$ENV{'HSQLDB_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
+               exit 0;
+            } else {
+               exit 1;
+            }'; then
+            AC_MSG_RESULT([yes])
+         else
+            AC_MSG_ERROR([no, hsqldb >= 1.8.0 is needed])
+         fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_HSQLDB=NO
+    BUILD_TYPE="$BUILD_TYPE HSQLDB"
+fi
+AC_SUBST(SYSTEM_HSQLDB)
+AC_SUBST(HSQLDB_JAR)
+
+dnl ===================================================================
+dnl Check for system beanshell
+dnl ===================================================================
+AC_MSG_CHECKING([which beanshell to use])
+if test -n "$with_system_beanshell" -o -n "$with_system_libs" && \
+       test "$with_system_beanshell" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_BSH=YES
+        if test -z $BSH_JAR; then
+               BSH_JAR=/usr/share/java/bsh.jar
+        fi
+        AC_CHECK_FILE($BSH_JAR, [],
+               [AC_MSG_ERROR(bsh.jar not found.)], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_BSH=NO
+    BUILD_TYPE="$BUILD_TYPE BSH"
+fi
+AC_SUBST(SYSTEM_BSH)
+AC_SUBST(BSH_JAR)
+
+dnl ===================================================================
+dnl Check for system xml-apis
+dnl ===================================================================
+AC_MSG_CHECKING([which xml-apis to use])
+if test -n "$with_system_xml_apis" -o -n "$with_system_libs" && \
+       test "$with_system_xml_apis" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_XML_APIS=YES
+        if test -z $XML_APIS_JAR; then
+          AC_CHECK_FILE(/usr/share/java/xml-commons-apis.jar, 
+            [ XML_APIS_JAR=/usr/share/java/xml-commons-apis.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/xml-apis.jar, 
+                [ XML_APIS_JAR=/usr/share/java/xml-apis.jar ],
+                [ AC_CHECK_FILE(/usr/share/java/jaxp-1.2.jar,
+                    [ XML_APIS_JAR=/usr/share/java/jaxp-1.2.jar ],
+                    [ AC_MSG_ERROR(xml-apis.jar replacement not found)]
+                  )
+                ]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($XML_APIS_JAR, [],
+               [AC_MSG_ERROR(xml-apis.jar replacement not found.)], [])
+        fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_XML_APIS=NO
+    NEED_XALAN=TRUE
+fi
+AC_SUBST(SYSTEM_XML_APIS)
+AC_SUBST(XML_APIS_JAR)
+
+dnl ===================================================================
+dnl Check for system xerces
+dnl ===================================================================
+AC_MSG_CHECKING([which xerces to use])
+if test -n "$with_system_xerces" -o -n "$with_system_libs" && \
+       test "$with_system_xerces" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_XERCES=YES
+        if test -z $XERCES_JAR; then
+          AC_CHECK_FILE(/usr/share/java/xerces-j2.jar, 
+            [ XERCES_JAR=/usr/share/java/xerces-j2.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/xercesImpl.jar, 
+                [ XERCES_JAR=/usr/share/java/xercesImpl.jar ],
+                [ AC_MSG_ERROR(xercesImpl.jar replacement not found)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($XERCES_JAR, [],
+               [AC_MSG_ERROR(xercesImpl.jar replacement not found.)], [])
+        fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_XERCES=NO
+    NEED_XALAN=TRUE
+fi
+AC_SUBST(SYSTEM_XERCES)
+AC_SUBST(XERCES_JAR)
+
+dnl ===================================================================
+dnl Check for system xalan
+dnl ===================================================================
+AC_MSG_CHECKING([which xalan to use])
+if test -n "$with_system_xalan" -o -n "$with_system_libs" && \
+       test "$with_system_xalan" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_XALAN=YES
+        if test -z $XALAN_JAR; then
+          AC_CHECK_FILE(/usr/share/java/xalan-j2.jar, 
+            [ XALAN_JAR=/usr/share/java/xalan-j2.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/xalan2.jar, 
+                [ XALAN_JAR=/usr/share/java/xalan2.jar ],
+                [ AC_CHECK_FILE(/usr/share/java/xalan.jar,
+                    [ XALAN_JAR=/usr/share/java/xalan.jar ],
+                    [ AC_MSG_ERROR(xalan.jar replacement not found)]
+                  )
+                ]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($XALAN_JAR, [],
+               [AC_MSG_ERROR(xalan.jar replacement not found.)], [])
+        fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_XALAN=NO
+    NEED_XALAN=TRUE
+fi
+AC_SUBST(SYSTEM_XALAN)
+AC_SUBST(XALAN_JAR)
+
+if test -n "$NEED_XALAN"; then
+   BUILD_TYPE="$BUILD_TYPE XALAN"
+fi
+
+
+dnl ===================================================================
 dnl Check for system sablot
 dnl ===================================================================
 AC_MSG_CHECKING([which sablot to use])
@@ -4456,8 +4651,6 @@ else
    AC_MSG_RESULT([$with_local_solver])
 fi
 AC_SUBST(LOCAL_SOLVER)
-
-BUILD_TYPE="$BUILD_TYPE XALAN"
 
 AC_SUBST(BUILD_TYPE)
 
