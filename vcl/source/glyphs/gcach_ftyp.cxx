@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:33:10 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ void FtFontFile::Unmap()
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
-    const ::rtl::OString& rNativeFileName, int nFaceNum, int nFontId, int nSynthetic,
+    const ::rtl::OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
     const ExtraKernInfo* pExtraKernInfo )
 :
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
@@ -505,7 +505,7 @@ FreetypeManager::~FreetypeManager()
 // -----------------------------------------------------------------------
 
 void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
-    int nFaceNum, int nFontId, const ImplDevFontAttributes& rDevFontAttr,
+    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr,
     const ExtraKernInfo* pExtraKernInfo )
 {
     if( !rNormalizedName.getLength() )
@@ -636,7 +636,7 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
     FtFontInfo* pFontInfo = NULL;
 
     // find a FontInfo matching to the font id
-    int nFontId = reinterpret_cast<int>( rFSD.mpFontData );
+    sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFSD.mpFontData );
     FontList::iterator it = maFontList.find( nFontId );
     if( it != maFontList.end() )
         pFontInfo = it->second;
@@ -665,7 +665,7 @@ ImplFTSFontData::~ImplFTSFontData()
 {
     // tell lower layers about the imminent death
     // TODO: better integration with GlyphCache
-    int nFontId = GetFontId();
+    sal_IntPtr nFontId = GetFontId();
     GlyphCache::GetInstance().RemoveFont( nFontId );
 }
 
