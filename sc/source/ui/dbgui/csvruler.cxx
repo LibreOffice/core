@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:14 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
         else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
         {
             sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
-            nNewPos = Min( nNewPos, GetLastVisPos() - nScroll - 1L );
+            nNewPos = Min( nNewPos, GetLastVisPos() - nScroll - sal_Int32( 1 ) );
         }
     }
     return nNewPos;
@@ -348,7 +348,7 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         if( IsTracking() )
         {
             // on mouse tracking: keep position valid
-            nPos = Max( Min( nPos, GetPosCount() - 1L ), 1L );
+            nPos = Max( Min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
             MoveMouseTracking( nPos );
         }
         else
@@ -487,7 +487,7 @@ void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
 
     aRect = maActiveRect;
     aRect.Left() = Max( GetFirstX(), nPosX );
-    aRect.Right() = Min( Min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - 1L );
+    aRect.Right() = Min( Min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) );
     if( aRect.Left() <= aRect.Right() )
     {
         maBackgrDev.SetFillColor( maActiveColor );
