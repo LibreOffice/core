@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:41:43 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1178,7 +1178,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
         aNewSection.maSep.clm = ReadUSprm( pSep, 0x5032, 0 );
         aNewSection.maSep.dyaLinePitch = ReadUSprm(pSep, 0x9031, 360);
         if (const BYTE* pS = pSep->HasSprm(0x7030))
-            aNewSection.maSep.dxtCharSpace = SVBT32ToLong(pS);
+            aNewSection.maSep.dxtCharSpace = SVBT32ToUInt32(pS);
 
         //sprmSPgbProp
         sal_uInt16 pgbProp = ReadSprm( pSep, 0x522F, 0 );
@@ -2887,7 +2887,7 @@ void SwWW8ImplReader::Read_PicLoc(USHORT , const BYTE* pData, short nLen )
     }
     else
     {
-        nPicLocFc = SVBT32ToLong( pData );
+        nPicLocFc = SVBT32ToUInt32( pData );
         bSpec = true;
 
         if( bObj && nPicLocFc && bEmbeddObj )
@@ -3489,7 +3489,7 @@ void SwWW8ImplReader::Read_TxtForeColor(USHORT, const BYTE* pData, short nLen)
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
     else
     {
-        Color aColor(wwUtility::BGRToRGB(SVBT32ToLong(pData)));
+        Color aColor(wwUtility::BGRToRGB(SVBT32ToUInt32(pData)));
         NewAttr(SvxColorItem(aColor));
         if (pAktColl && pStyles)
             pStyles->bTxtColChanged = true;
@@ -4725,10 +4725,10 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
 sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData, bool bVer67)
 {
     ASSERT(bVer67 == false, "Impossible");
-    //ASSERT(SVBT32ToLong(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
-    sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
+    //ASSERT(SVBT32ToUInt32(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
+    sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
-    sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
+    sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt16 nIndex = SVBT16ToShort(rpData);
     rpData+=2;
