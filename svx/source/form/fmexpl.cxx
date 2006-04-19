@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:54 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 void FmEntryData::Clear()
 {
     FmEntryData* pEntryData;
-    while( pEntryData = GetChildList()->Remove(sal_uInt32(0)) )
+    while( pEntryData = GetChildList()->Remove(ULONG(0)) )
         delete pEntryData;
 }
 
