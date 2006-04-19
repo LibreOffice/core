@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:13:03 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -143,6 +140,9 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
+#endif
+#ifndef DBAUI_UPDATEHELPERIMPL_HXX
+#include "UpdateHelperImpl.hxx"
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -384,7 +384,7 @@ void ODatabaseExport::insertValueIntoColumn()
 //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
 
                 if(!m_sTextToken.Len() && m_xResultSetMetaData->isNullable(nPos))
-                    m_xRowUpdate->updateNull(nPos);
+                    m_pUpdateHelper->updateNull(nPos,pField->GetType());
                 else
                 {
                     sal_Int32 nNumberFormat = 0;
@@ -425,16 +425,16 @@ void ODatabaseExport::insertValueIntoColumn()
                         try
                         {
                             fOutNumber = m_xFormatter->convertStringToNumber(nNumberFormat,m_sTextToken);
-                            m_xRowUpdate->updateDouble(nPos,::dbtools::DBTypeConversion::toStandardDbDate(::dbtools::DBTypeConversion::getStandardDate(),fOutNumber));
+                            m_pUpdateHelper->updateDouble(nPos,::dbtools::DBTypeConversion::toStandardDbDate(::dbtools::DBTypeConversion::getStandardDate(),fOutNumber));
                         }
                         catch(Exception&)
                         {
-                            m_xRowUpdate->updateString(nPos,m_sTextToken);
+                            m_pUpdateHelper->updateString(nPos,m_sTextToken);
                         }
 
                     }
                     else
-                        m_xRowUpdate->updateString(nPos,m_sTextToken);
+                        m_pUpdateHelper->updateString(nPos,m_sTextToken);
                 }
             }
             m_sTextToken.Erase();
@@ -699,14 +699,20 @@ sal_Bool ODatabaseExport::createRowSet()
         xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
         Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
         xRowSet->execute();
-        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xRowSet,UNO_QUERY);
-        m_xResultSetMetaData = xSrcMetaSup->getMetaData();
-        OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
-    }
-    m_xResultSetUpdate.set(xDestSet,UNO_QUERY);
-    m_xRowUpdate.set(xDestSet,UNO_QUERY);
 
-    return m_xResultSetUpdate.is() && m_xRowUpdate.is() && m_xResultSetMetaData.is();
+        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xRowSet,UNO_QUERY_THROW);
+        m_xResultSetMetaData = xSrcMetaSup->getMetaData();
+
+        if ( ::dbtools::canInsert(xProp) )
+        {
+            m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
+            OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
+        }
+        else
+            m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
+    }
+
+    return m_pUpdateHelper.get() != NULL;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
@@ -802,6 +808,67 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         else
             m_bError = TRUE;
     } // if(!m_bDontAskAgain)
+}
+// -----------------------------------------------------------------------------
+Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const Reference<XDatabaseMetaData>& _xMetaData
+                                                       ,const Reference<XPropertySet>& _xDestTable
+                                                       ,const TPositions& _rvColumns)
+{
+    ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
+    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(_xMetaData,_xDestTable,sal_True,::dbtools::eInDataManipulation);
+
+    aSql += sComposedTableName;
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
+    // set values and column names
+    ::rtl::OUString aValues(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
+    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
+
+    ::rtl::OUString aQuote;
+    if ( _xMetaData.is() )
+        aQuote = _xMetaData->getIdentifierQuoteString();
+
+    Reference<XColumnsSupplier> xDestColsSup(_xDestTable,UNO_QUERY_THROW);
+
+    // create sql string and set column types
+    Sequence< ::rtl::OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
+    if ( aDestColumnNames.getLength() == 0 )
+    {
+        return Reference< XPreparedStatement > ();
+    }
+    const ::rtl::OUString* pIter = aDestColumnNames.getConstArray();
+    const ::rtl::OUString* pEnd   = pIter + aDestColumnNames.getLength();
+    ::std::vector< ::rtl::OUString> aInsertList;
+    aInsertList.resize(aDestColumnNames.getLength()+1);
+    sal_Int32 i = 0;
+    for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
+    {
+        ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
+            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
+        if ( _rvColumns.end() != aFind && aFind->second != CONTAINER_ENTRY_NOTFOUND && aFind->first != CONTAINER_ENTRY_NOTFOUND )
+        {
+            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+i));
+        }
+    }
+
+    i = 1;
+    // create the sql string
+    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertList.end(); ++aInsertIter)
+    {
+        if ( aInsertIter->getLength() )
+        {
+            aSql += *aInsertIter;
+            aSql += aComma;
+            aValues += aPara;
+        }
+    }
+
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+
+    aSql += aValues;
+    // now create,fill and execute the prepared statement
+    return Reference< XPreparedStatement >(_xMetaData->getConnection()->prepareStatement(aSql));
 }
 // -----------------------------------------------------------------------------
 
