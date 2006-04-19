@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:53:55 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1473,7 +1473,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getCharacterSt
 // -------------------------------------------------------------------------
 Any SAL_CALL ORowSet::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
-    return Any();
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    return getInsertValue(columnIndex).makeAny();
 }
 // -------------------------------------------------------------------------
 Reference< XRef > SAL_CALL ORowSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -2458,15 +2459,16 @@ void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetVa
 // -----------------------------------------------------------------------------
 void ORowSet::doCancelModification( )
 {
-    OSL_ENSURE( isModification(), "ORowSet::doCancelModification: invalid call (no cache!)!" );
+    //OSL_ENSURE( isModification(), "ORowSet::doCancelModification: invalid call (no cache!)!" );
     if ( isModification() )
         m_pCache->cancelRowModification();
+    m_bModified = sal_False;
 }
 
 // -----------------------------------------------------------------------------
 sal_Bool ORowSet::isModification( )
 {
-    return m_pCache && m_pCache->m_bNew;
+    return isNew();
 }
 
 // -----------------------------------------------------------------------------
@@ -2749,7 +2751,7 @@ void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,c
 // -----------------------------------------------------------------------------
 void ORowSetClone::doCancelModification( )
 {
-    OSL_ENSURE( sal_False, "ORowSetClone::doCancelModification: invalid call!" );
+    //OSL_ENSURE( sal_False, "ORowSetClone::doCancelModification: invalid call!" );
 }
 
 // -----------------------------------------------------------------------------
