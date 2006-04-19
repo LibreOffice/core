@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:47:30 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #include <list>
 
+#ifndef _RTL_REF_HXX_
+#include "rtl/ref.hxx"
+#endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -48,6 +51,7 @@
 namespace cppu_threadpool {
 
     class JobQueue;
+    class ThreadPool;
 
     //-----------------------------------------
     // private thread class for the threadpool
@@ -56,7 +60,8 @@ namespace cppu_threadpool {
     class ORequestThread
     {
     public:
-        ORequestThread( JobQueue * ,
+        ORequestThread( rtl::Reference< ThreadPool > const & threadPool,
+                        JobQueue * pQueue,
                         const ::rtl::ByteSequence &aThreadId,
                         sal_Bool bAsynchron );
         ~ORequestThread();
@@ -72,6 +77,7 @@ namespace cppu_threadpool {
 
     private:
         oslThread m_thread;
+        rtl::Reference< ThreadPool > m_threadPool;
         JobQueue *m_pQueue;
         ::rtl::ByteSequence m_aThreadId;
         sal_Bool m_bAsynchron;
