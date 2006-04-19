@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:27:32 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 
 #ifndef _SMARTID_HXX_
 #include <vcl/smartid.hxx>
+#endif
+#ifndef _COMMTYPES_HXX
+#include "commtypes.hxx"
 #endif
 
 class Window;
@@ -363,8 +366,8 @@ protected:
     USHORT nMethodId;
     SmartId aSmartMethodId;
     USHORT nParams;
-    USHORT nNr1,nNr2,nNr3,nNr4;
-    ULONG nLNr1;
+    comm_USHORT nNr1,nNr2,nNr3,nNr4;
+    comm_ULONG nLNr1;
     String aString1,aString2;
     BOOL bBool1,bBool2;
 
@@ -401,8 +404,8 @@ protected:
     SmartId aUId;
     USHORT nMethodId;
     USHORT nParams;
-    USHORT nNr1,nNr2,nNr3,nNr4;
-    ULONG nLNr1;
+    comm_USHORT nNr1,nNr2,nNr3,nNr4;
+    comm_ULONG nLNr1;
     String aString1,aString2;
     BOOL bBool1,bBool2;
     BOOL ControlOK( Window *pControl, const sal_Char* aBezeichnung );
@@ -425,8 +428,8 @@ class StatementFlow : public StatementList      // Kommunikation mit Sequence
     USHORT nArt;
 
     USHORT nParams;
-    USHORT nSNr1;
-    ULONG nLNr1;
+    comm_USHORT nSNr1;
+    comm_ULONG nLNr1;
     String aString1;
     BOOL bBool1;
 
