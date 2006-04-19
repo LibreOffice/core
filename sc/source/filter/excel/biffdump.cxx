@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:59:11 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ inline void lclAppendHex( ByteString& rStr, double fData, bool bPrefix = true )
 
 void lclAppendGuid( ByteString& rStr, const XclGuid& rGuid )
 {
-    lclAppendHex( rStr, SVBT32ToLong( rGuid.mpnData ), false );
+    lclAppendHex( rStr, SVBT32ToUInt32( rGuid.mpnData ), false );
     rStr.Append( '-' );
     lclAppendHex( rStr, SVBT16ToShort( rGuid.mpnData + 4 ), false );
     rStr.Append( '-' );
