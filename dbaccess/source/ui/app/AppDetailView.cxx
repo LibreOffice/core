@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:40:47 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -627,6 +627,9 @@ void OApplicationDetailView::GetFocus()
 void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xConnection)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
+
+    m_pControlHelper->createTablesPage(_xConnection);
+
     TResourceStruct aList;
     aList.reserve(4);
     aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),RID_STR_TABLES_HELP_TEXT_DESIGN)));
@@ -641,7 +644,6 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
     static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
     static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_TABLE_DESIGN));
 
-    m_pControlHelper->createTablesPage(_xConnection);
     m_aContainer.setTitle(RID_STR_TABLES_CONTAINER);
     Resize();
 }
