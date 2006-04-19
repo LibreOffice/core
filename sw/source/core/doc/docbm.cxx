@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:04:29 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,6 +650,33 @@ void _ChkPaM( SvULongs& rSaveArr, ULONG nNode, xub_StrLen nCntnt,
     }
 }
 
+// #i59534: If a paragraph will be splitted we have to restore some redline positions
+// This help function checks a position compared with a node and an content index
+
+const int BEFORE_NODE = 0;          // Position before the given node index
+const int BEFORE_SAME_NODE = 1;     // Same node index but content index before given content index
+const int SAME_POSITION = 2;        // Same node index and samecontent index
+const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
+const int BEHIND_NODE = 4;          // Position behind the given node index
+
+int lcl_RelativePosition( const SwPosition& rPos, ULONG nNode, xub_StrLen nCntnt )
+{
+    ULONG nIndex = rPos.nNode.GetIndex();
+    int nReturn = BEFORE_NODE;
+    if( nIndex == nNode )
+    {
+        xub_StrLen nCntIdx = rPos.nContent.GetIndex();
+        if( nCntIdx < nCntnt )
+            nReturn = BEFORE_SAME_NODE;
+        else if( nCntIdx == nCntnt )
+            nReturn = SAME_POSITION;
+        else
+            nReturn = BEHIND_SAME_NODE;
+    }
+    else if( nIndex > nNode )
+        nReturn = BEHIND_NODE;
+    return nReturn;
+}
 
 void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
                     SvULongs& rSaveArr, BYTE nSaveFly )
@@ -685,18 +712,23 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     for( ; aSave.GetCount() < rRedlTbl.Count(); aSave.IncCount() )
     {
         const SwRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
-        if( pRdl->GetPoint()->nNode.GetIndex() == nNode &&
-            pRdl->GetPoint()->nContent.GetIndex() < nCntnt )
+        ULONG nPointIdx = pRdl->GetPoint()->nNode.GetIndex();
+        int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
+        int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
+                                          nPointPos;
+        // #i59534: We have to store the positions inside the same node before the insert position
+        // and the one at the insert position if the corresponding Point/Mark position is before
+        // the insert position.
+        if( nPointPos == BEFORE_SAME_NODE ||
+            ( nPointPos == SAME_POSITION && nMarkPos < SAME_POSITION ) )
         {
             aSave.SetContent( pRdl->GetPoint()->nContent.GetIndex() );
             aSave.IncType();
             aSave.Add( rSaveArr );
             aSave.DecType();
         }
-
-        if( pRdl->HasMark() &&
-            pRdl->GetMark()->nNode.GetIndex() == nNode &&
-            pRdl->GetMark()->nContent.GetIndex() < nCntnt )
+        if( pRdl->HasMark() && ( nMarkPos == BEFORE_SAME_NODE ||
+            ( nMarkPos == SAME_POSITION && nPointPos < SAME_POSITION ) ) )
         {
             aSave.SetContent( pRdl->GetMark()->nContent.GetIndex() );
             aSave.Add( rSaveArr );
