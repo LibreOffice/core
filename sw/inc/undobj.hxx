@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:50:13 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,6 +466,11 @@ public:
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
     void SetTableName(const String & rName);
+
+    // SwUndoTblCpyTbl needs this information:
+    long NodeDiff() const { return nSttNode - nEndNode; }
+    xub_StrLen ContentStart() const { return nSttCntnt; }
+    BOOL IsDelFullPara() const { return bDelFullPara; }
 
     OUT_UNDOBJ( Delete )
 
@@ -975,6 +980,11 @@ class SwUndoTblCpyTbl : public SwUndo
 {
     _UndoTblCpyTbl_Entries* pArr;
     SwUndoTblNdsChg* pInsRowUndo;
+
+    //b6341295: When redlining is active, PrepareRedline has to create the redlining attributes
+    //for the new and the old table cell content
+    SwUndo* PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox, const SwPosition& rPos,
+        bool& rJoin, bool bRedo );
 public:
     SwUndoTblCpyTbl();
     virtual ~SwUndoTblCpyTbl();
@@ -982,7 +992,7 @@ public:
     virtual void Redo( SwUndoIter& );
 
     void AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt );
-    void AddBoxAfter( const SwTableBox& rBox, BOOL bDelCntnt );
+    void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, BOOL bDelCntnt );
 
     BOOL IsEmpty() const;
     BOOL InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, USHORT nCnt );
