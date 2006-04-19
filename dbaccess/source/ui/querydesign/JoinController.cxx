@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:55:35 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,9 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -337,6 +340,11 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
+
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( getView() && getView()->IsInModalMode() )
+        return sal_False;
     sal_Bool bCheck = sal_True;
     if ( _bSuspend )
     {
