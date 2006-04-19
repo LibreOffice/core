@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:06 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ BOOL WW8ReadINT32( SvStream& rStrm, INT32& rTarget )
       SVBT32 nData;
       BOOL bOk = TRUE;
       if( 4 == rStrm.Read( &nData, 4 ) )
-              rTarget = SVBT32ToLong( nData );
+              rTarget = SVBT32ToUInt32( nData );
       else
               bOk = FALSE;
       return bOk;
@@ -1503,12 +1503,12 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                 if( 8 == pWwFib->nVersion )
                 {
                     nId = SVBT16ToShort( ((WW8_ATRD*)pData)->ibst );
-                    nBkmkId = SVBT32ToLong( ((WW8_ATRD*)pData)->ITagBkmk );
+                    nBkmkId = SVBT32ToUInt32( ((WW8_ATRD*)pData)->ITagBkmk );
                 }
                 else
                 {
                     nId = SVBT16ToShort( ((WW67_ATRD*)pData )->ibst );
-                    nBkmkId = SVBT32ToLong( ((WW67_ATRD*)pData )->ITagBkmk );
+                    nBkmkId = SVBT32ToUInt32( ((WW67_ATRD*)pData )->ITagBkmk );
                 }
 
                 *pOut << "\", AutorId: " << hex << nId
