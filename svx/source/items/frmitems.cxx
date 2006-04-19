@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:06:28 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,8 +504,8 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
 
 // -----------------------------------------------------------------------
 
-SvxLRSpaceItem::SvxLRSpaceItem( const sal_Int32 nLeft, const sal_Int32 nRight,
-                                const sal_Int32 nTLeft, const short nOfset,
+SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
+                                const long nTLeft, const short nOfset,
                                 const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
