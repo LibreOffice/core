@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,25 +53,16 @@ public:
 
     void GenCmdUNOSlot( const String &aURL );
 
-    void GenCmdControl( ULONG nUId, USHORT nMethodId, SbxArray* rPar );
+    void GenCmdControl( comm_ULONG nUId, USHORT nMethodId, SbxArray* rPar );
     void GenCmdControl( String aUId, USHORT nMethodId, SbxArray* rPar );
 
-/*  void GenCmdControl (ULONG nUId, USHORT nMethodId = 0);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, String aString);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, String aString, USHORT nNr);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, String aString, BOOL bBool);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, USHORT nNr);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, USHORT nNr1, USHORT nNr2);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, USHORT nNr, BOOL bBool);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, ULONG nNr);
-    void GenCmdControl (ULONG nUId, USHORT nMethodId, BOOL bBool);*/
 
     void GenCmdFlow( USHORT nArt );
     void GenCmdFlow( USHORT nArt, USHORT nNr1 );
-    void GenCmdFlow( USHORT nArt, ULONG nNr1 );
+    void GenCmdFlow( USHORT nArt, comm_ULONG nNr1 );
     void GenCmdFlow( USHORT nArt, String aString1 );
 
-    void Reset(ULONG nSequence);
+    void Reset(comm_ULONG nSequence);
 
     SvMemoryStream* GetStream();
 
