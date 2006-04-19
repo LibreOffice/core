@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:27 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,11 +101,11 @@ const sal_uInt16 TYPE_OTHER     = 30;
 
         sal_Int32       nPrecision;     // Laenge des Types
         sal_Int32       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
+        sal_Int32       nType;          // Datenbanktyp
 
         sal_Int16       nMaximumScale;  // Nachkommastellen
         sal_Int16       nMinimumScale;  // Min Nachkommastellen
 
-        sal_Int16       nType;          // Datenbanktyp
         sal_Int16       nSearchType;    // kann nach dem Typen gesucht werden
 
 
