@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:56:47 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1948,7 +1948,7 @@ void XclExpFmlaCompImpl::Append( sal_uInt16 nData )
 void XclExpFmlaCompImpl::Append( sal_uInt32 nData )
 {
     maTokVec.resize( maTokVec.size() + 4 );
-    LongToSVBT32( nData, &*(maTokVec.end() - 4) );
+    UInt32ToSVBT32( nData, &*(maTokVec.end() - 4) );
 }
 
 void XclExpFmlaCompImpl::Append( double fData )
