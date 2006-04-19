@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:02:44 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 15:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #define WRITER_COMPONENT 16
 #define MATH_COMPONENT 32
 
+// #define OWN_DEBUG_PRINT
+
 typedef int ( __stdcall * DllNativeProc ) ( int, BOOL );
 
 BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
@@ -75,6 +77,14 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
 
     return buff;
 }
+
+#ifdef OWN_DEBUG_PRINT
+void WarningMessageInt( wchar_t* pWarning, unsigned int nValue )
+{
+    wchar_t pStr[5] = { nValue%10000/1000 + 48, nValue%1000/100 + 48, nValue%100/10 + 48, nValue%10 + 48, 0 };
+       MessageBox(NULL, pStr, pWarning, MB_OK | MB_ICONINFORMATION);
+}
+#endif
 
 //----------------------------------------------------------
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
@@ -174,11 +184,17 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Wrt_Bin", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        WarningMessageInt( L"writer current_state = ", current_state );
+        WarningMessageInt( L"writer future_state = ", future_state );
+#endif
+
         // analyze writer installation mode
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= WRITER_COMPONENT;
 
-        if ( future_state == INSTALLSTATE_LOCAL )
+        if ( future_state == INSTALLSTATE_LOCAL
+          || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= WRITER_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= WRITER_COMPONENT;
@@ -190,11 +206,17 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Calc_Bin", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        WarningMessageInt( L"calc current_state = ", current_state );
+        WarningMessageInt( L"calc future_state = ", future_state );
+#endif
+
         // analyze calc installation mode
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= CALC_COMPONENT;
 
-        if ( future_state == INSTALLSTATE_LOCAL )
+        if ( future_state == INSTALLSTATE_LOCAL
+          || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= CALC_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= CALC_COMPONENT;
@@ -210,7 +232,8 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= DRAW_COMPONENT;
 
-        if ( future_state == INSTALLSTATE_LOCAL )
+        if ( future_state == INSTALLSTATE_LOCAL
+          || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= DRAW_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= DRAW_COMPONENT;
@@ -226,7 +249,8 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= IMPRESS_COMPONENT;
 
-        if ( future_state == INSTALLSTATE_LOCAL )
+        if ( future_state == INSTALLSTATE_LOCAL
+          || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= IMPRESS_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= IMPRESS_COMPONENT;
@@ -238,11 +262,12 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Math_Bin", &current_state, &future_state ) )
     {
-        // analyze impress installation mode
+        // analyze math installation mode
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= MATH_COMPONENT;
 
-        if ( future_state == INSTALLSTATE_LOCAL )
+        if ( future_state == INSTALLSTATE_LOCAL
+          || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= MATH_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= MATH_COMPONENT;
@@ -276,30 +301,48 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
     int nInstallMode = 0;
     int nDeinstallMode = 0;
 
-    // MessageBox(NULL, L"InstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#ifdef OWN_DEBUG_PRINT
+    MessageBox(NULL, L"InstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
 
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        MessageBox(NULL, L"InstallActiveXControl Step2", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
+
         BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
         char* pActiveXPath = NULL;
         if ( GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath
         && GetDelta( hMSI, nOldInstallMode, nInstallMode, nDeinstallMode ) )
         {
-            if ( future_state == INSTALLSTATE_LOCAL )
+#ifdef OWN_DEBUG_PRINT
+            MessageBox(NULL, L"InstallActiveXControl Step3", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
+
+            if ( future_state == INSTALLSTATE_LOCAL
+              || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             {
+#ifdef OWN_DEBUG_PRINT
+                MessageBox(NULL, L"InstallActiveXControl, adjusting", L"Information", MB_OK | MB_ICONINFORMATION);
+                WarningMessageInt( L"nInstallMode = ", nInstallMode );
+#endif
                 // the control is installed in the new selected configuration
 
                 if ( current_state == INSTALLSTATE_LOCAL && nDeinstallMode )
-                    UnregisterActiveXNative( pActiveXPath, nInstallMode, bInstallForAllUser );
+                    UnregisterActiveXNative( pActiveXPath, nDeinstallMode, bInstallForAllUser );
 
                 if ( nInstallMode )
                     RegisterActiveXNative( pActiveXPath, nInstallMode, bInstallForAllUser );
             }
             else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             {
+#ifdef OWN_DEBUG_PRINT
+                MessageBox(NULL, L"InstallActiveXControl, removing", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
                 if ( nOldInstallMode )
                     UnregisterActiveXNative( pActiveXPath, nOldInstallMode, bInstallForAllUser );
             }
@@ -322,7 +365,9 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
 
-    // MessageBox(NULL, L"DeinstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#ifdef OWN_DEBUG_PRINT
+    MessageBox(NULL, L"DeinstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
@@ -331,9 +376,6 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
         {
             BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
 
-            // the following condition is checked by installation itself
-            // wchar_t* rm = NULL;
-            // if ( GetMsiProp( hMSI, L"REMOVE", &rm ) && rm && UnicodeEquals( rm, L"ALL" ) )
             {
                 UnregisterActiveXNative( pActiveXPath,
                                         CHART_COMPONENT
@@ -344,9 +386,6 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
                                         | MATH_COMPONENT,
                                         bInstallForAllUser );
             }
-
-            // if ( rm )
-            //  free( rm );
 
             free( pActiveXPath );
         }
