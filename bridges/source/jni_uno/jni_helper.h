@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:37:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,22 +90,28 @@ inline jstring ustring_to_jstring(
 
 
 //------------------------------------------------------------------------------
-inline jclass find_class( JNI_context const & jni, char const * class_name )
+// if inException, does not handle exceptions, in which case returned value will
+// be null if exception occurred:
+inline jclass find_class(
+    JNI_context const & jni, char const * class_name, bool inException = false )
 {
-    jclass jo_class = 0;
-    JLocalAutoRef name( jni, jni->NewStringUTF( class_name ) );
-    if ( name.is() ) {
-        // find_class may be called before the JNI_info is set:
-        JNI_info const * info = jni.get_info();
-        jmethodID loadClass = info == 0
-            ? jni.get_loadClass_method() : info->m_method_ClassLoader_loadClass;
-        jvalue arg;
-        arg.l = name.get();
-        jo_class = static_cast< jclass >(
-            jni->CallObjectMethodA( jni.get_class_loader(), loadClass, &arg ) );
+    // find_class may be called before the JNI_info is set:
+    jclass c;
+    jmethodID m;
+    JNI_info const * info = jni.get_info();
+    if (info == 0) {
+        jni.getClassForName(&c, &m);
+        if (c == 0) {
+            if (inException) {
+                return 0;
+            }
+            jni.ensure_no_exception();
+        }
+    } else {
+        c = info->m_class_Class;
+        m = info->m_method_Class_forName;
     }
-    jni.ensure_no_exception();
-    return jo_class;
+    return jni.findClass(class_name, c, m, inException);
 }
 
 
