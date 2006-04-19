@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmdstrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:25:40 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
     {
         case BinUSHORT:
             {
-                USHORT nNr;
+                comm_USHORT nNr;
                 Read (nNr );
                 pItem = new SfxUInt16Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
@@ -115,7 +115,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             break;
         case BinULONG:
             {
-                ULONG nNr;
+                comm_ULONG nNr;
                 Read (nNr );
                 pItem = new SfxUInt32Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
@@ -138,7 +138,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             break;
         case BinBool:
             {
-                BOOL bBool;
+                comm_BOOL bBool;
                 Read (bBool);
                 pItem = new SfxBoolItem(nId,bBool);
 #if OSL_DEBUG_LEVEL > 1
@@ -175,7 +175,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
     {
         case BinUSHORT:
             {
-                USHORT nNr;
+                comm_USHORT nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
@@ -186,7 +186,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             break;
         case BinULONG:
             {
-                ULONG nNr;
+                comm_ULONG nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
@@ -208,7 +208,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             break;
         case BinBool:
             {
-                BOOL bBool;
+                comm_BOOL bBool;
                 Read (bBool);
                 rItem.Value <<= bBool;
 #if OSL_DEBUG_LEVEL > 1
