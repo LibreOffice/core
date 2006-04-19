@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:05:14 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ XclGuid::XclGuid(
         sal_uInt8 nData45, sal_uInt8 nData46, sal_uInt8 nData47, sal_uInt8 nData48 )
 {
     // convert to little endian -> makes streaming easy
-    LongToSVBT32( nData1, mpnData );
+    UInt32ToSVBT32( nData1, mpnData );
     ShortToSVBT16( nData2, mpnData + 4 );
     ShortToSVBT16( nData3, mpnData + 6 );
     mpnData[  8 ] = nData41;
