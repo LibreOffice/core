@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:31:55 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,11 +544,11 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
     nSttWdt /= 2;
 
     // Lieber etwas mehr, dafuer keine Wurzel ziehen
-    long nSttAdd = Max(nSttWdt, nSttHgt);
+    sal_Int32 nSttAdd = Max(nSttWdt, nSttHgt);
     nSttAdd *= 3;
     nSttAdd /= 2;
 
-    long nEndWdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+    sal_Int32 nEndWdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
     if(nEndWdt < 0)
         nEndWdt = -nLineWdt * nEndWdt / 100; // <0 = relativ
