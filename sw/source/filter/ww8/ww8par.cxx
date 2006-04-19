@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:59:04 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2847,7 +2847,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     WW8_FC nPos;
                     void *pData;
                     pTest->Get(nPos, pData);
-                    sal_uInt32 nData = SVBT32ToLong(*(SVBT32*)pData);
+                    sal_uInt32 nData = SVBT32ToUInt32(*(SVBT32*)pData);
                     if (nData & 0x2)    //Might be how it works
                     {
                         TabCellEnd();
@@ -4901,7 +4901,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 
                             if( 0x6A03 == nId && 0 < nLen )
                             {
-                                nPictureId = SVBT32ToLong(pSprm +
+                                nPictureId = SVBT32ToUInt32(pSprm +
                                     aSprmParser.DistanceToData(nId));
                                 bRet = true;
                             }
