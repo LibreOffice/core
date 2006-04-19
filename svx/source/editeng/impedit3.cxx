@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:40:45 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,7 +751,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
     sal_Bool bCalcCharPositions = sal_True;
-    long* pBuf = new long[ pNode->Len() ];
+    sal_Int32* pBuf = new sal_Int32[ pNode->Len() ];
 
     sal_Bool bSameLineAgain = sal_False;    // Fuer TextRanger, wenn sich die Hoehe aendert.
     TabInfo aCurrentTab;
@@ -1063,7 +1063,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                 // And now check for Compression:
                 if ( pPortion->GetLen() && GetAsianCompressionMode() )
-                    bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (long*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, FALSE );
+                    bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (sal_Int32*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, FALSE );
 
                 nTmpWidth += pPortion->GetSize().Width();
 
@@ -1236,7 +1236,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break postion...
-                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast< sal_Int32* >( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) ), 10000, TRUE );
+                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast<sal_Int32*>(( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) )), 10000, TRUE );
             }
             ImpBreakLine( pParaPortion, pLine, pPortion, nPortionStart,
                                             nRemainingWidth, bCanHyphenate && bHyphenatePara );
