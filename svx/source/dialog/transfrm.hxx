@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:50 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ private:
 //  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
-    void GetTopLeftPosition( INT32& rX, INT32& rY, const Rectangle& rRect );
+    void GetTopLeftPosition( long& rX, long& rY, const Rectangle& rRect );
 #endif
 
 #if _SOLAR__PRIVATE
