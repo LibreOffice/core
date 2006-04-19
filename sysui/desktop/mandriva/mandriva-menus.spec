@@ -184,22 +184,15 @@ EOF
       chmod 0755 /usr/bin/%unixfilename
     fi
   fi
-  for theme in gnome hicolor locolor; do
-    if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
-      # touch it, just in case we cannot find the binary...
-      touch /usr/share/icons/$theme
-      if (which gtk-update-icon-cache); then
-        gtk-update-icon-cache /usr/share/icons/$theme
-      fi
-      # ignore errors (e.g. when there is a cache, but no index.theme)
-      true
-    fi
-  done
 fi
 %{update_menus}
 
 
 %install
+# hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
+# to be present on the build-system/the buildroot. But the point is that we generate stale
+# links intentionally (until we find a better solution) #46226
+export NO_BRP_STALE_LINK_ERROR=yes
 
 #
 # Mandriva menus fun
@@ -264,7 +257,7 @@ GenerateMenu "%unixfilename -writer" \
 	"OpenOffice.org %{menuversion} Writer" \
 	"OpenOffice.org %{menuversion} Word Processing Component" \
 	"writer" \
-	"application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/vnd.oasis.opendocument.text-web,application/vnd.oasis.opendocument.text-master,application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.global,application/vnd.stardivision.writer,application/msword,application/vnd.ms-word,application/x-doc,text/rtf"
+	"application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/vnd.oasis.opendocument.text-web,application/vnd.oasis.opendocument.text-master,application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.global,application/vnd.stardivision.writer,application/msword,application/vnd.ms-word,application/x-doc,application/rtf"
 
 GenerateMenu "%unixfilename -math" \
 	"Office/Wordprocessors" \
@@ -300,17 +293,7 @@ fi
 
 %postun
 %{update_menus}
-for theme in gnome hicolor locolor; do
-  if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
-    # touch it, just in case we cannot find the binary...
-    touch /usr/share/icons/$theme
-    if (which gtk-update-icon-cache); then
-      gtk-update-icon-cache /usr/share/icons/$theme
-    fi
-    # ignore errors (e.g. when there is a cache, but no index.theme)
-    true
-  fi
-done
+
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
