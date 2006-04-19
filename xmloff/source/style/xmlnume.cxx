@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:52:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 
     // text:level
     OUStringBuffer sTmp;
-    sTmp.append( nLevel+1L );
+    sTmp.append( nLevel + 1 );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
     if( sTextStyleName.getLength() > 0 )
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
