@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:29:20 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,48 +211,9 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
     for(sal_Int32 k=1;k <= nCount;++k)
         aColumnTypes.push_back(xMeta->getColumnType(k));
 
-    // create sql string and set column types
-    Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
-    Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-    if ( aSeq.getLength() == 0 )
-    {
-        return;
-    }
-    const ::rtl::OUString* pBegin = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-    ::std::vector< ::rtl::OUString> aInsertList;
-    aInsertList.resize(aSeq.getLength()+1);
-    sal_Int32 i = 0;
-    for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
-    {
-        ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
-        if ( _rvColumns.end() != aFind && aFind->second != CONTAINER_ENTRY_NOTFOUND && aFind->first != CONTAINER_ENTRY_NOTFOUND )
-        {
-            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pBegin+i));
-        }
-    }
-
-    i = 1;
-    // create the sql string
-    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertList.end(); ++aInsertIter)
-    {
-        if ( aInsertIter->getLength() )
-        {
-            aSql += *aInsertIter;
-            aSql += aComma;
-            aValues += aPara;
-        }
-    }
-
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-
-    aSql += aValues;
     // now create,fill and execute the prepared statement
-    Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
+    Reference< XPreparedStatement > xPrep(ODatabaseExport::createPreparedStatment(_xMetaData,_xDestTable,_rvColumns));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-
 
     sal_Int32 nRowCount = 0;
     const Any* pSelBegin    = _aSelection.getConstArray();
@@ -853,6 +814,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else
         m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
 }
+// -----------------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaui
 //........................................................................
