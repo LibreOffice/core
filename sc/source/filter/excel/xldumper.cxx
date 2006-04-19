@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:03:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace {
 
 Output& operator<<( Output& rOut, const XclGuid& rGuid )
 {
-    rOut.WriteHex( SVBT32ToLong( rGuid.mpnData ), false );
+    rOut.WriteHex( SVBT32ToUInt32( rGuid.mpnData ), false );
     rOut.WriteChar( '-' );
     rOut.WriteHex( SVBT16ToShort( rGuid.mpnData + 4 ), false );
     rOut.WriteChar( '-' );
