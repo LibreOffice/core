@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:51:41 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,25 +83,25 @@ ULONG AnimationBitmap::GetChecksum() const
     sal_uInt32  nCrc = aBmpEx.GetChecksum();
     SVBT32      aBT32;
 
-    LongToSVBT32( aPosPix.X(), aBT32 );
+    UInt32ToSVBT32( aPosPix.X(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( aPosPix.Y(), aBT32 );
+    UInt32ToSVBT32( aPosPix.Y(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( aSizePix.Width(), aBT32 );
+    UInt32ToSVBT32( aSizePix.Width(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( aSizePix.Height(), aBT32 );
+    UInt32ToSVBT32( aSizePix.Height(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( (long) nWait, aBT32 );
+    UInt32ToSVBT32( (long) nWait, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( (long) eDisposal, aBT32 );
+    UInt32ToSVBT32( (long) eDisposal, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( (long) bUserInput, aBT32 );
+    UInt32ToSVBT32( (long) bUserInput, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
     return nCrc;
@@ -317,21 +317,21 @@ ULONG Animation::GetChecksum() const
     SVBT32      aBT32;
     sal_uInt32  nCrc = GetBitmapEx().GetChecksum();
 
-    LongToSVBT32( maList.Count(), aBT32 );
+    UInt32ToSVBT32( maList.Count(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( maGlobalSize.Width(), aBT32 );
+    UInt32ToSVBT32( maGlobalSize.Width(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( maGlobalSize.Height(), aBT32 );
+    UInt32ToSVBT32( maGlobalSize.Height(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( (long) meCycleMode, aBT32 );
+    UInt32ToSVBT32( (long) meCycleMode, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
     for( long i = 0, nCount = maList.Count(); i < nCount; i++ )
     {
-        LongToSVBT32( ( (AnimationBitmap*) maList.GetObject( i ) )->GetChecksum(), aBT32 );
+        UInt32ToSVBT32( ( (AnimationBitmap*) maList.GetObject( i ) )->GetChecksum(), aBT32 );
         nCrc = rtl_crc32( nCrc, aBT32, 4 );
     }
 
