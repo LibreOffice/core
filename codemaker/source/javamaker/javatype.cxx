@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:26:53 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2144,6 +2144,17 @@ void handleInterfaceType(
         dependencies->insert(t);
         cf->addInterface(t);
     }}
+    // As a special case, let com.sun.star.lang.XEventListener extend
+    // java.util.EventListener ("A tagging interface that all event listener
+    // interfaces must extend"):
+    if (className ==
+        rtl::OString(
+            RTL_CONSTASCII_STRINGPARAM("com/sun/star/lang/XEventListener")))
+    {
+        cf->addInterface(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM("java/util/EventListener")));
+    }
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
     {for (sal_uInt16 i = 0; i < fields; ++i) {
@@ -2734,6 +2745,8 @@ void addConstructor(
                 "(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
                 "Ljava/lang/Object;")));
     // stack: instance
+    code->instrCheckcast(returnType);
+    // stack: instance
     code->instrAreturn();
     if (!tree.getRoot()->present) {
         ClassFile::Code::Position pos1 = code->getPosition();
@@ -3168,6 +3181,8 @@ void handleSingleton(
     code->instrDup();
     // stack: instance instance
     ClassFile::Code::Branch branch3 = code->instrIfnull();
+    // stack: instance
+    code->instrCheckcast(base);
     // stack: instance
     code->instrAreturn();
     code->branchHere(branch2);
