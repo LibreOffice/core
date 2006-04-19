@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-16 11:08:35 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:07:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,19 @@ JARFILES        =   \
                     jurt.jar        \
                     juh.jar         \
                     jut.jar         \
-                    java_uno.jar    \
-                    xml-apis.jar    \
-                    xercesImpl.jar
+                    java_uno.jar
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
+.ELSE
+JARFILES += xercesImpl.jar
+.ENDIF
 
 JAVACLASSFILES  =   \
                     $(CLASSDIR)$/$(PACKAGE)$/AnalyzeStartupLog.class              \
