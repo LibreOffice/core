@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:42:16 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
-#include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -78,11 +72,19 @@
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
+#ifndef DBAUI_IUPDATEHELPER_HXX
+#include "IUpdateHelper.hxx"
+#endif
 
-namespace com { namespace sun { namespace star { namespace awt
-{
-    struct FontDescriptor;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace awt{
+        struct FontDescriptor;
+    }
+    namespace sdbc{
+        class XPreparedStatement;
+        class XDatabaseMetaData;
+    }
+}}}
 
 class Window;
 namespace dbaui
@@ -111,10 +113,9 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      // container
         SharedConnection                                                                m_xConnection;  // dest conn
 
+        ::boost::shared_ptr<IUpdateHelper>                                              m_pUpdateHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate; //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xRowUpdate;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
@@ -177,6 +178,10 @@ namespace dbaui
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
         sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
+
+        static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > createPreparedStatment( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData
+                                                       ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDestTable
+                                                       ,const TPositions& _rvColumns);
     };
 }
 
