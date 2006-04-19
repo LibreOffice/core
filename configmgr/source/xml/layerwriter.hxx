@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:40:27 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,10 @@ namespace configmgr
 
             void raiseMalformedDataException(sal_Char const * pMsg);
             void raiseIllegalTypeException(sal_Char const * pMsg);
+
+            void prepareAddOrReplaceElement(
+                rtl::OUString const & name, sal_Int16 attributes);
+
         private:
             typedef Stack< OUString > TagStack;
             uno::Reference< uno::XInterface > m_xTCV;
