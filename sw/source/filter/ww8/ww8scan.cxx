@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:17:18 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,7 +892,7 @@ inline short Get_Short( BYTE *& p )
 
 inline ULONG Get_ULong( BYTE *& p )
 {
-    ULONG n = SVBT32ToLong( *(SVBT32*)p );
+    ULONG n = SVBT32ToUInt32( *(SVBT32*)p );
     p += 4;
     return n;
 }
@@ -1235,7 +1235,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
         nCp = nCpEnd - 1;
 
     bool bIsUnicode = false;
-    WW8_FC nFC = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+    WW8_FC nFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
     if( !bVer67 )
         nFC = WW8PLCFx_PCD::TransformPieceAddress( nFC, bIsUnicode );
 
@@ -1264,7 +1264,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
-    INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+    INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
     if( !bVer67 )
         nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
 
@@ -1520,7 +1520,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 ASSERT( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
                 break;
             }
-            INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+            INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
@@ -1601,7 +1601,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         if( pNextPieceCp )
             *pNextPieceCp = nCpEnd;
 
-        WW8_FC nRet = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+        WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
             *pIsUnicode = false;
         else
@@ -2579,7 +2579,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
 
                             UINT32 nCurr = pDataSt->Tell();
 
-                            UINT32 nPos = SVBT32ToLong(aEntry.mpData + 2);
+                            UINT32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
                             pDataSt->Seek(nPos);
                             *pDataSt >> aEntry.mnLen;
                             aEntry.mpData =
@@ -3246,7 +3246,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 void* pData;
                 pPieceIter->Get(nCpStart, nCpEnd, pData);
 
-                WW8_FC nLimitFC = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+                WW8_FC nLimitFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
                 WW8_FC nBeginLimitFC = nLimitFC;
                 if (IsEightPlus(GetFIBVersion()))
                 {
@@ -3298,7 +3298,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 break;
                             }
                             bIsUnicode = false;
-                            INT32 nFcStart=SVBT32ToLong(((WW8_PCD*)pData)->fc);
+                            INT32 nFcStart=SVBT32ToUInt32(((WW8_PCD*)pData)->fc);
 
                             if (IsEightPlus(GetFIBVersion()))
                             {
@@ -3425,7 +3425,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
     else
     {
-        long nPo =  SVBT32ToLong( (BYTE*)pData+2 );
+        long nPo =  SVBT32ToUInt32( (BYTE*)pData+2 );
         if (nPo == -1L)
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
