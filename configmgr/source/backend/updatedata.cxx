@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:34:46 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "updatedata.hxx"
 
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 #include <com/sun/star/configuration/backend/XLayerHandler.hpp>
 
 #include <iterator>
@@ -87,7 +88,9 @@ NodeUpdate::NodeUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16
 
 NodeUpdate * NodeUpdate::asNodeUpdate(bool _bMerged)
 {
-    return (!_bMerged || m_op == modify) ? this : NULL;
+    return (!_bMerged || m_op == modify
+            || (updateFlags() & backenduno::NodeAttribute::FUSE) != 0)
+        ? this : NULL;
 }
 // -----------------------------------------------------------------------------
 
