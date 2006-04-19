@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:42:19 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:15:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,9 +148,30 @@ SCPDEFS+=-DSYSTEM_PORTAUDIO
 SCPDEFS+=-DSYSTEM_HUNSPELL
 .ENDIF
 
-.IF "$(SYSTEM_XALAN)" == "YES"
-SCPDEFS+=-DSYSTEM_XALAN
+.IF "$(SYSTEM_BSH)" == "YES"
+SCPDEFS+=-DSYSTEM_BSH -DBSH_JAR=\""file://$(BSH_JAR)"\"
 .ENDIF
+
+.IF "$(SYSTEM_HSQLDB)" == "YES"
+SCPDEFS+=-DSYSTEM_HSQLDB -DHSQLDB_JAR=\""file://$(HSQLDB_JAR)"\"
+.ENDIF
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+SCPDEFS+=-DSYSTEM_XML_APIS -DXML_APIS_JAR=\""file://$(XML_APIS_JAR)"\"
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+SCPDEFS+=-DSYSTEM_XERCES -DXERCES_JAR=\""file://$(XERCES_JAR)"\"
+.ENDIF
+
+.IF "$(SYSTEM_XALAN)" == "YES"
+SCPDEFS+=-DSYSTEM_XALAN -DXALAN_JAR=\""file://$(XALAN_JAR)"\"
+.ENDIF
+
+.IF "$(JDK)" == "gcj"
+SCPDEFS+=-DGCJ
+.ENDIF
+
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"
 SCPDEFS+=-DENABLE_CAIRO
