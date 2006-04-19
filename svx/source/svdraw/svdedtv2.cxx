@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:49:28 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -875,7 +875,7 @@ void SdrEditView::DistributeMarkedObjects()
 
                     // clear list
                     while(aEntryList.Count())
-                        delete aEntryList.Remove((UINT32)0L);
+                        delete aEntryList.Remove((ULONG)0L);
                 }
 
                 if(eVer != SvxDistributeVerticalNone)
@@ -963,7 +963,7 @@ void SdrEditView::DistributeMarkedObjects()
 
                     // clear list
                     while(aEntryList.Count())
-                        delete aEntryList.Remove((UINT32)0L);
+                        delete aEntryList.Remove((ULONG)0L);
                 }
 
                 // UNDO-Comment and end of UNDO
