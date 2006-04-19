@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:43:12 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ inline void Set_UInt16( BYTE *& p, UINT16 n )
 
 inline void Set_UInt32( BYTE *& p, UINT32 n )
 {
-    LongToSVBT32( n, *(SVBT32*)p );
+    UInt32ToSVBT32( n, *(SVBT32*)p );
     p+= 4;
 }
 
