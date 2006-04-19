@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:48:53 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2024,6 +2024,11 @@ constructor:
             $6);
         delete $6;
         idlc()->scopes()->pop();
+        if (static_cast< AstService * >(idlc()->scopes()->top())->
+            checkLastConstructor())
+        {
+            idlc()->error()->error0(EIDL_SIMILAR_CONSTRUCTORS);
+        }
     }
     ';'
     ;
