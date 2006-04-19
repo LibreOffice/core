@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:51:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3982,6 +3982,10 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     }
     else
     {
+        SwRedlineMode eOld = GetRedlineMode();
+        if( IsRedlineOn() )
+            SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+
         SwUndoTblCpyTbl* pUndo = 0;
         if( DoesUndo() )
         {
@@ -4079,6 +4083,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             rInsPos.nNode = *pSttNd;
             rInsPos.nContent.Assign( GetNodes().GoNext( &rInsPos.nNode ), 0 );
         }
+        SetRedlineMode( eOld );
     }
 
     if( bRet )
