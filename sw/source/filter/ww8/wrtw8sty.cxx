@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:38:18 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -862,7 +862,7 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
     for( USHORT i = 0; i < nLen; ++i )
     {
         SVBT32 nP;
-        LongToSVBT32( aPos[i], nP );
+        UInt32ToSVBT32( aPos[i], nP );
         rStrm.Write( nP, 4 );
     }
 }
@@ -1648,7 +1648,7 @@ void WW8_WrPlcSepx::WritePlcSed( SwWW8Writer& rWrt ) const
     {
         UINT32 nP = aCps[i];
         SVBT32 nPos;
-        LongToSVBT32( nP, nPos );
+        UInt32ToSVBT32( nP, nPos );
         rWrt.pTableStrm->Write( nPos, 4 );
     }
 
@@ -1658,7 +1658,7 @@ void WW8_WrPlcSepx::WritePlcSed( SwWW8Writer& rWrt ) const
     for( i = 0; i < aSects.Count(); i++ )
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
-        LongToSVBT32( pA->nSepxFcPos, aSed.fcSepx );    // Sepx-Pos
+        UInt32ToSVBT32( pA->nSepxFcPos, aSed.fcSepx );    // Sepx-Pos
         rWrt.pTableStrm->Write( &aSed, sizeof( aSed ) );
     }
     rWrt.pFib->fcPlcfsed = nFcStart;
