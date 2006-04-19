@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:16:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,12 +561,13 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     xub_StrLen nStartPos = 0;
     String aStr;
     OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 0; aIter != _rCols.end();++aIter, ++i)
+    OSQLColumns::const_iterator aEnd = _rCols.end();
+    for (sal_Int32 i = 1; aIter != aEnd && i < _rRow->size();++aIter, i++)
     {
         m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
         if (aStr.Len() == 0)
-            (*_rRow)[i+1]->setNull();
+            (*_rRow)[i]->setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -600,18 +601,18 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                         switch(nType)
                         {
                             case DataType::DATE:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i+1]->setNull();
+                        (*_rRow)[i]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -645,15 +646,15 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(*_rRow)[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
+                        *(*_rRow)[i] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
-                        *(*_rRow)[i+1] = nVal;
+                        *(*_rRow)[i] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    *(*_rRow)[i+1] = ORowSetValue(aStr);
+                    *(*_rRow)[i] = ORowSetValue(aStr);
                 }
                 break;
             }
