@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:14:04 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,6 @@ public:
     sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-
-    void InterfaceType::dumpAmbiguousBaseInterfaces(FileStream& o);
 
     void        dumpAttributes(FileStream& o);
     void        dumpMethods(FileStream& o);
