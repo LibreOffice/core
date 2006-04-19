@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:45:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,12 @@
 #ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
 #endif
+#ifndef _UNDO_HXX
+#include <svtools/undo.hxx>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 using namespace dbaui;
 using namespace ::dbtools;
@@ -208,7 +213,7 @@ void ORelationTableView::ReSync()
             ::rtl::OUString strTabExistenceTest = pTabConnData->GetSourceWinName();
             sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->GetDestWinName();
-            bInvalid |= ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+            bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
             {   // nein -> Pech gehabt, die Connection faellt weg
@@ -473,8 +478,12 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_DELETE_WINDOW),String(),WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
     if(aDlg.Execute() == RET_YES)
     {
+        m_pView->getController()->getUndoMgr()->Clear();
         OJoinTableView::RemoveTabWin( pTabWin );
+
         m_pView->getController()->InvalidateFeature(SID_RELATION_ADD_RELATION);
+        m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
+        m_pView->getController()->InvalidateFeature(ID_BROWSER_REDO);
     }
 }
 // -----------------------------------------------------------------------------
