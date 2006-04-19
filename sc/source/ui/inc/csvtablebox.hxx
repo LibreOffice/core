@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvtablebox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,10 +117,10 @@ private:
 
     /** Calculates and sets valid position offset nearest to nPos. */
     SC_DLLPRIVATE inline void                 ImplSetPosOffset( sal_Int32 nPos )
-                                    { maData.mnPosOffset = Max( Min( nPos, GetMaxPosOffset() ), 0L ); }
+                                    { maData.mnPosOffset = Max( Min( nPos, GetMaxPosOffset() ), sal_Int32( 0 ) ); }
     /** Calculates and sets valid line offset nearest to nLine. */
     SC_DLLPRIVATE inline void                 ImplSetLineOffset( sal_Int32 nLine )
-                                    { maData.mnLineOffset = Max( Min( nLine, GetMaxLineOffset() ), 0L ); }
+                                    { maData.mnLineOffset = Max( Min( nLine, GetMaxLineOffset() ), sal_Int32( 0 ) ); }
     /** Moves controls (not cursors!) so that nPos becomes visible. */
     SC_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
 
