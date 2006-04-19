@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:32:14 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,9 @@ ContextAdmin *ContextAdmin::getInstance()
     if( ! g_pTheContext ) {
         ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
         if( ! g_pTheContext ) {
-            static ContextAdmin admin;
-            g_pTheContext = &admin;
+            //TODO  This memory is leaked; see #i63473# for when this should be
+            // changed again:
+            g_pTheContext = new ContextAdmin;
         }
     }
     return g_pTheContext;
