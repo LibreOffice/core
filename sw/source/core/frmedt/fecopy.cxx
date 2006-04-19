@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 13:44:37 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,9 @@
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
+#endif
+#ifndef _MVSAVE_HXX
+#include <mvsave.hxx>
 #endif
 
 
@@ -923,7 +926,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 // ????? was ist mit Tabelle alleine im Rahmen ???????
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
-                PaMCorrAbs( SwNodeIndex( *pDestNd ),
+                // #i59539: Don't remove all redline
+                ::PaMCorrAbs( SwNodeIndex( *pDestNd ),
                             SwNodeIndex( *pDestNd->EndOfSectionNode() ),
                             aPos );
             }
@@ -939,7 +943,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 aNdIdx = *pSttNd;
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
-                PaMCorrAbs( PCURCRSR->GetPoint()->nNode, aPos );
+                // #i59539: Don't remove all redline
+                ::PaMCorrAbs( PCURCRSR->GetPoint()->nNode, aPos );
             }
 
             break;      // aus der "while"-Schleife heraus
