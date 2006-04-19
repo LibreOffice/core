@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:02:06 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,10 +428,10 @@ Ww1Picture::Ww1Picture(SvStream& rStream, ULONG ulFilePos)
     SVBT32 lcb;
     if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
         if (rStream.Read(&lcb, sizeof(lcb)) == (ULONG)sizeof(lcb))
-            if (sizeof(int)>=4 || SVBT32ToLong(lcb) < 0x8000) //~ mdt: 64K & 16bit
-                if ((pPic = (W1_PIC*)(new BYTE[SVBT32ToLong(lcb)])) != NULL)
+            if (sizeof(int)>=4 || SVBT32ToUInt32(lcb) < 0x8000) //~ mdt: 64K & 16bit
+                if ((pPic = (W1_PIC*)(new BYTE[SVBT32ToUInt32(lcb)])) != NULL)
                     if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
-                        if (rStream.Read(pPic, SVBT32ToLong(lcb)) == (ULONG)SVBT32ToLong(lcb))
+                        if (rStream.Read(pPic, SVBT32ToUInt32(lcb)) == (ULONG)SVBT32ToUInt32(lcb))
                         {
                             DBG_ASSERT(pPic->cbHeaderGet()==sizeof(*pPic)-sizeof(pPic->rgb), "Ww1Picture");
                             bOK = true;
@@ -794,7 +794,7 @@ ULONG Ww1Plc::Where(USHORT nIndex)
     ULONG ulRet = 0xffffffff;
     DBG_ASSERT(nIndex <= iMac, "index out of bounds");
     if (iMac && nIndex <= iMac)
-        ulRet = SVBT32ToLong(p + sizeof(SVBT32) * nIndex);
+        ulRet = SVBT32ToUInt32(p + sizeof(SVBT32) * nIndex);
     return ulRet;
 }
 
@@ -983,7 +983,7 @@ ULONG Ww1Fkp::Where(USHORT nIndex)
     ULONG lRet = 0xffffffff;
     DBG_ASSERT(nIndex<=Count(), "index out of bounds");
     if (nIndex<=Count())
-        lRet = SVBT32ToLong(aFkp+nIndex*sizeof(SVBT32));
+        lRet = SVBT32ToUInt32(aFkp+nIndex*sizeof(SVBT32));
     return lRet;
 }
 
