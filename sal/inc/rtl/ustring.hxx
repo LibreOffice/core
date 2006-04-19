@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:25 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,6 +694,8 @@ public:
       Returns a hashcode for this string.
 
       @return   a hash code value for this object.
+
+      @see rtl::OUStringHash for convenient use of STLPort's hash_map
     */
     sal_Int32 hashCode() const SAL_THROW(())
     {
