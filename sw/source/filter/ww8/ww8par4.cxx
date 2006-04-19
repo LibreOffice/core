@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:51:42 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         {
             if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
-                UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToLong(pSprmCDttmRMark): 0;
+                UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
 #if 0
                 ASSERT(nWWDate, "Date is 0, this will cause trouble!");
 #endif
