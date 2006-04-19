@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:26:24 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ class FtFontInfo
 public:
                            FtFontInfo( const ImplDevFontAttributes&,
                                const ::rtl::OString& rNativeFileName,
-                               int nFaceNum, int nFontId, int nSynthetic,
+                               int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
                                 const ExtraKernInfo* );
                           ~FtFontInfo();
 
@@ -92,7 +92,7 @@ public:
     const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
-    int                   GetFontId() const         { return mnFontId; }
+    sal_IntPtr            GetFontId() const         { return mnFontId; }
     bool                  DontUseAntiAlias() const
         { return maDevFontAttributes.UseAntiAlias() == ANTIALIAS_FALSE; }
     bool                  DontUseEmbeddedBitmaps() const
@@ -116,7 +116,7 @@ private:
     int             mnRefCount;
     const int       mnSynthetic;
 
-    int             mnFontId;
+    sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
 
     // cache unicode->glyphid mapping because looking it up is expensive
@@ -154,7 +154,7 @@ public:
 
     long                AddFontDir( const String& rUrlName );
     void                AddFontFile( const rtl::OString& rNormalizedName,
-                            int nFaceNum, int nFontId, const ImplDevFontAttributes&,
+                            int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
                             const ExtraKernInfo* );
     void                AnnounceFonts( ImplDevFontList* ) const;
     void                ClearFontList();
@@ -162,11 +162,11 @@ public:
     FreetypeServerFont* CreateFont( const ImplFontSelectData& );
 
 private:
-    typedef ::std::hash_map<int,FtFontInfo*> FontList;
+    typedef ::std::hash_map<sal_IntPtr,FtFontInfo*> FontList;
     FontList            maFontList;
 
-    int                 mnMaxFontId;
-    int                 mnNextFontId;
+    sal_IntPtr          mnMaxFontId;
+    sal_IntPtr          mnNextFontId;
 };
 
 // -----------------------------------------------------------------------
@@ -245,7 +245,7 @@ public:
 
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual ImplFontData*   Clone() const   { return new ImplFTSFontData( *this ); }
-    virtual int             GetFontId() const { return mpFtFontInfo->GetFontId(); }
+    virtual sal_IntPtr      GetFontId() const { return mpFtFontInfo->GetFontId(); }
 
     static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( IFTSFONT_MAGIC ); }
 };
