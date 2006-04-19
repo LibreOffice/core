@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:21:48 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,8 +215,8 @@ void SwUndoRedlineDelete::_Undo( SwUndoIter& rIter )
 
 void SwUndoRedlineDelete::_Redo( SwUndoIter& rIter )
 {
-    rIter.GetDoc().AppendRedline( new SwRedline( *pRedlData,
-                                        *rIter.pAktPam ), FALSE );
+    if( *rIter.pAktPam->GetPoint() != *rIter.pAktPam->GetMark() )
+        rIter.GetDoc().AppendRedline( new SwRedline( *pRedlData, *rIter.pAktPam ), FALSE );
 }
 
 BOOL SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
