@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:52:27 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,22 +351,22 @@ ULONG Bitmap::GetChecksum() const
 
                 pRAcc->ImplZeroInitUnusedBits();
 
-                LongToSVBT32( pRAcc->Width(), aBT32 );
+                UInt32ToSVBT32( pRAcc->Width(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( pRAcc->Height(), aBT32 );
+                UInt32ToSVBT32( pRAcc->Height(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( pRAcc->GetBitCount(), aBT32 );
+                UInt32ToSVBT32( pRAcc->GetBitCount(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( pRAcc->GetColorMask().GetRedMask(), aBT32 );
+                UInt32ToSVBT32( pRAcc->GetColorMask().GetRedMask(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( pRAcc->GetColorMask().GetGreenMask(), aBT32 );
+                UInt32ToSVBT32( pRAcc->GetColorMask().GetGreenMask(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-                LongToSVBT32( pRAcc->GetColorMask().GetBlueMask(), aBT32 );
+                UInt32ToSVBT32( pRAcc->GetColorMask().GetBlueMask(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
                 if( pRAcc->HasPalette() )
