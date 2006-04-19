@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStringWrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:18:50 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& 
     }
     else
     {
-        long aXArray[2];
+        sal_Int32 aXArray[2];
         mrDev.GetCaretPositions( maText, aXArray, static_cast< USHORT >(nIndex), 1 );
         rRect.Left() = 0;
         rRect.Top() = 0;
