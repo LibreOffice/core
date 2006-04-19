@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:07:16 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,15 +359,15 @@ ULONG BitmapEx::GetChecksum() const
     sal_uInt32  nCrc = aBitmap.GetChecksum();
     SVBT32      aBT32;
 
-    LongToSVBT32( (long) eTransparent, aBT32 );
+    UInt32ToSVBT32( (long) eTransparent, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
-    LongToSVBT32( (long) bAlpha, aBT32 );
+    UInt32ToSVBT32( (long) bAlpha, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
 
     if( ( TRANSPARENT_BITMAP == eTransparent ) && !aMask.IsEmpty() )
     {
-        LongToSVBT32( aMask.GetChecksum(), aBT32 );
+        UInt32ToSVBT32( aMask.GetChecksum(), aBT32 );
         nCrc = rtl_crc32( nCrc, aBT32, 4 );
     }
 
