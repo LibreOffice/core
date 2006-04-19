@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:31:09 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     }
                     else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                     {
-                        long nPrc = 50;
+                        sal_Int32 nPrc = 50;
                         if( rUnitConverter.convertPercent( nPrc, aToken ) )
                         {
                             if( !bHori )
