@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:58:59 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3509,6 +3509,17 @@ BOOL StatementCommand::Execute()
         case RC_CatchGPF :
             {
                 bCatchGPF = bBool1;
+            }
+            break;
+        case RC_IsProduct :
+            {
+                BOOL bIsProduct;
+                #ifdef DBG_UTIL
+                    bIsProduct = FALSE;
+                #else
+                    bIsProduct = TRUE;
+                #endif
+                pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)bIsProduct );
             }
             break;
         default:
