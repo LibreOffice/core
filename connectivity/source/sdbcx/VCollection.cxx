@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:42:34 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,11 +162,11 @@ namespace
         // -----------------------------------------------------------------------------
         virtual Sequence< ::rtl::OUString > getElementNames()
         {
-            sal_Int32 nLen = size();
-            Sequence< ::rtl::OUString > aNameList(nLen);
+            Sequence< ::rtl::OUString > aNameList(m_aElements.size());
 
             ::rtl::OUString* pStringArray = aNameList.getArray();
-            for(typename ::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter,++pStringArray)
+            typename ::std::vector< ObjectIter >::const_iterator aEnd = m_aElements.end();
+            for(typename ::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != aEnd;++aIter,++pStringArray)
                 *pStringArray = (*aIter)->first;
 
             return aNameList;
