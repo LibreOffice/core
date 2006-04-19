@@ -4,9 +4,9 @@
  *
  *  $RCSfile: secimpl.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,15 @@
 #ifndef _OSL_SECURITYIMPL_H_
 #define _OSL_SECURITYIMPL_H_
 
-#include <osl/security.h>
-
-#define PASSWD_BUFFER_SIZE 1024     /* recommended, see 'man getpwnam_r' */
+#include <pwd.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct _oslSecurityImpl {
-    int           m_isValid;
     struct passwd m_pPasswd;
-    sal_Char          m_buffer[PASSWD_BUFFER_SIZE];
+    char m_buffer[1]; /* should be a C99 flexible array member */
 } oslSecurityImpl;
 
 #ifdef __cplusplus
