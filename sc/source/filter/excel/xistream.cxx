@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:03:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,7 +617,7 @@ XclImpStream& XclImpStream::operator>>( sal_Int32& rnValue )
         {
             SVBT32 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            rnValue = static_cast< sal_Int32 >( SVBT32ToLong( pnBuffer ) );
+            rnValue = static_cast< sal_Int32 >( SVBT32ToUInt32( pnBuffer ) );
         }
         else
             mrStrm >> rnValue;
@@ -634,7 +634,7 @@ XclImpStream& XclImpStream::operator>>( sal_uInt32& rnValue )
         {
             SVBT32 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            rnValue = SVBT32ToLong( pnBuffer );
+            rnValue = SVBT32ToUInt32( pnBuffer );
         }
         else
             mrStrm >> rnValue;
@@ -651,7 +651,7 @@ XclImpStream& XclImpStream::operator>>( float& rfValue )
         {
             SVBT32 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            sal_uInt32 nValue = SVBT32ToLong( pnBuffer );
+            sal_uInt32 nValue = SVBT32ToUInt32( pnBuffer );
             memcpy( &rfValue, &nValue, 4 );
         }
         else
