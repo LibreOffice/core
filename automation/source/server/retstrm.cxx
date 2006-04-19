@@ -4,9 +4,9 @@
  *
  *  $RCSfile: retstrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:25:12 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,17 +74,17 @@ void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
     Write(aValue);
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, ULONG nNr, String aString, BOOL bBool )
+void RetStream::GenReturn ( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString )
+void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString, BOOL bBool )
+void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
@@ -110,7 +110,7 @@ void RetStream::Write( SmartId* pId )
         Write( &aTmp );
     }
     else
-        Write( pId->GetNum() );
+        Write( static_cast<comm_ULONG>(pId->GetNum()) ); ////GetNum() ULONG != comm_ULONG on 64bit
 }
 
 
