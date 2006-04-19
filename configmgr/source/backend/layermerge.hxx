@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:30:36 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,9 @@ namespace configmgr
 
             bool startOverride(INode * pNode, sal_Bool bClear) /* check if writable, mark merged */
                 CFG_NOTHROW( );
+
+            void implOverrideNode(
+                ISubtree * node, sal_Int16 attributes, bool clear);
 
             void implAddOrReplaceNode(const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes)
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
