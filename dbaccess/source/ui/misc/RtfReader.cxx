@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:43:40 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ void ORTFReader::NextToken( int nToken )
                 {
                     try
                     {
-                        m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                        m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
                     }
                     catch(SQLException& e)
                     // UpdateFehlerbehandlung
@@ -261,8 +261,8 @@ void ORTFReader::NextToken( int nToken )
                     insertValueIntoColumn();
                     m_nRowCount++;
                     if(m_bIsAutoIncrement) // if bSetAutoIncrement then I have to set the autoincrement
-                        m_xRowUpdate->updateInt(1,m_nRowCount);
-                    m_xResultSetUpdate->insertRow();
+                        m_pUpdateHelper->updateInt(1,m_nRowCount);
+                    m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
                 //////////////////////////////////////////////////////////////////////
