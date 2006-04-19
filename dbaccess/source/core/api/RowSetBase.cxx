@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:54:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,7 +406,7 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    return Any();
+    return getValue(columnIndex).makeAny();
 }
 // -------------------------------------------------------------------------
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -489,7 +489,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveToBookmark(bookmark);
-        m_pCache->clearModified();
+        doCancelModification( );
         if(bRet)
         {
             // notification order
@@ -531,7 +531,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
-        m_pCache->clearModified();
+        doCancelModification( );
         if(bRet)
         {
             // notification order
@@ -638,7 +638,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         positionCache( MOVE_FORWARD );
         sal_Bool bAfterLast = m_pCache->isAfterLast();
         bRet = m_pCache->next();
-        m_pCache->clearModified();
+        doCancelModification( );
 
 
         if ( bRet || bAfterLast != m_pCache->isAfterLast() )
@@ -762,7 +762,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         {
             ORowSetRow aOldValues = getOldRow(bWasNew);
             m_pCache->beforeFirst();
-            m_pCache->clearModified();
+            doCancelModification( );
 
             // notification order
             // - column values
@@ -804,7 +804,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
             ORowSetRow aOldValues = getOldRow(bWasNew);
 
             m_pCache->afterLast();
-            m_pCache->clearModified();
+            doCancelModification( );
 
             // notification order
             // - column values
@@ -844,7 +844,7 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
         sal_Bool bMoved = ( bWasNew || !_aCheckFunctor(this) );
 
         bRet = _aMovementFunctor(m_pCache);
-        m_pCache->clearModified();
+        doCancelModification( );
 
         if ( bRet )
         {
@@ -936,7 +936,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->absolute(row);
-        m_pCache->clearModified();
+        doCancelModification( );
 
         if(bRet)
         {
@@ -988,7 +988,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 
         positionCache( rows > 0 ? MOVE_FORWARD : MOVE_BACKWARD );
         bRet = m_pCache->relative(rows);
-        m_pCache->clearModified();
+        doCancelModification( );
 
         if(bRet)
         {
@@ -1035,7 +1035,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
 
         positionCache( MOVE_BACKWARD );
         bRet = m_pCache->previous();
-        m_pCache->clearModified();
+        doCancelModification( );
 
         // if m_bBeforeFirst is false and bRet is false than we stood on the first row
         if(!m_bBeforeFirst || bRet)
