@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-16 11:17:16 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:10:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,41 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= xml-apis.jar xercesImpl.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
+JARFILES 	= xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
 EXTRAJARFILES 	= 
 
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+.IF "$(XCLASSPATH)" != ""
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+XCLASSPATH!:=$(XML_APIS_JAR)
+.ENDIF
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+.IF "$(XCLASSPATH)" != ""
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
+.ELSE
+XCLASSPATH!:=$(XERCES_JAR)
+.ENDIF
+.ELSE
+JARFILES += xercesImpl.jar
+.ENDIF
+
 .IF "$(SYSTEM_DB)" == "YES"
+.IF "$(XCLASSPATH)" != ""
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(DB_JAR)
 .ELSE
-JARFILES+= db.jar
+XCLASSPATH!:=$(DB_JAR)
+.ENDIF
+.ELSE
+JARFILES += db.jar
 .ENDIF
 
 CLASSGENDIR		= $(OUT)$/classgen
-RDB		 		= $(SOLARBINDIR)$/types.rdb
+RDB	 		= $(SOLARBINDIR)$/types.rdb
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
 # --- Files --------------------------------------------------------
