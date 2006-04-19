@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:49:59 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -908,57 +908,26 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     Font aFont( aOldFont );
     if ( aFeatures != HasNothing )
     {
-        if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 )
+        Color aCol;
+        if ( ( aFeatures & HasError ) == HasError )
+            aCol = Color( 255, 130, 130 );  // Red
+        else if ( ( aFeatures & HasWarning ) == HasWarning )
+            aCol = Color( 255, 200, 120 );  // Ocker oder so
+        else if ( ( aFeatures & HasAssertion ) == HasAssertion )
+            aCol = Color( 0xd0, 0xd0, 0xff );   // blueish
+        else
+            aCol = Color( 0xd0, 0xff, 0xd0 );   // greenish
+
+        if( rDev.IsSelected(pEntry) )
+            aFont.SetColor( aCol );
+        else
         {
-            Color aCol;
-            if ( ( aFeatures & HasError ) == HasError )
-                aCol = Color( 255, 120, 120 );  // Rot
-            else if ( ( aFeatures & HasWarning ) == HasWarning )
-                aCol = Color( 255, 200, 120 );  // Ocker oder so
-            else
-                aCol = Color( 255, 102, 51 );   // Orange oder so
-
-            if( rDev.IsSelected(pEntry) )
-                aFont.SetColor( aCol );
-            else
-            {
-                aFont.SetFillColor( aCol );
-                aFont.SetTransparent( FALSE );
-                Color aCol( COL_BLACK );
-                aFont.SetColor( aCol );
-            }
+            aFont.SetFillColor( aCol );
+            aFont.SetTransparent( FALSE );
+            Color aCol( COL_BLACK );
+            aFont.SetColor( aCol );
         }
-        else    // so its HasAssertion or HasQAError
-        {
-            if( rDev.IsSelected(pEntry) )
-            {
-                Color aCol( 255, 255, 153 );
-                aFont.SetColor( aCol );
-            }
-            else
-            {
-                Size aSize( rDev.GetTextWidth( GetText() ), rDev.GetTextHeight() );
-                Rectangle aRect( rPos, aSize );
 
-                static Bitmap aAssertionBmp( ResId( MBP_ASSERT ) );
-                static BitmapEx aAssertionBmpEx( aAssertionBmp );
-                static Wallpaper aAssertionWP( aAssertionBmpEx );
-
-                static Bitmap aQAErrorBmp( ResId( MBP_QAERROR ) );
-                static BitmapEx aQAErrorBmpEx( aQAErrorBmp );
-                static Wallpaper aQAErrorWP( aQAErrorBmpEx );
-
-                if ( ( aFeatures & HasAssertion ) == HasAssertion )
-                    rDev.DrawWallpaper( aRect, aAssertionWP );
-                else    // HasQAError
-                    rDev.DrawWallpaper( aRect, aQAErrorWP );
-
-                Color aCol( COL_BLACK );
-                aFont.SetColor( aCol );
-            }
-
-//          virtual void    NotifyScrolling( long nLines );
-        }
         rDev.SetFont( aFont );
         rDev.DrawText( rPos, GetText() );
     }
