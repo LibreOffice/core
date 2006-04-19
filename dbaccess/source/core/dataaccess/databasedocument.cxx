@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:33:47 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,17 +175,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 {
     DBG_CTOR(ODatabaseDocument,NULL);
 
-    // adjust our readonly flag
-    try
-    {
-        m_xDocEventBroadcaster.set(m_pImpl->m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
-            UNO_QUERY);
-    }
-    catch(Exception)
-    {
-        OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
-    }
-
     osl_incrementInterlockedCount( &m_refCount );
     {
         impl_reparent_nothrow( m_xForms );
@@ -254,10 +243,10 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         if ( m_pImpl->m_bOwnStorage )
             ::comphelper::disposeComponent(m_pImpl->m_xStorage);
 
-        impl_clearObjectContainer( m_xForms );
-        impl_clearObjectContainer( m_xReports );
-        impl_clearObjectContainer( m_pImpl->m_xTableDefinitions );
-        impl_clearObjectContainer( m_pImpl->m_xCommandDefinitions );
+        clearObjectContainer( m_xForms);
+        clearObjectContainer( m_xReports);
+        clearObjectContainer( m_pImpl->m_xTableDefinitions);
+        clearObjectContainer( m_pImpl->m_xCommandDefinitions);
 
         m_pImpl->m_aContainer.clear();
         m_pImpl->lateInit();
@@ -716,18 +705,15 @@ void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess 
         xChild->setParent( *this );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_clearObjectContainer( WeakReference< XNameAccess >& _rxContainer, bool _bResetAndRelease )
+void ODatabaseDocument::clearObjectContainer( WeakReference< XNameAccess >& _rxContainer)
 {
     Reference< XNameAccess > xContainer = _rxContainer;
     ::comphelper::disposeComponent( xContainer );
 
-    if ( _bResetAndRelease )
-    {
-        Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
-        if ( xChild.is() )
-            xChild->setParent( NULL );
-        _rxContainer = Reference< XNameAccess >();
-    }
+    Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
+    if ( xChild.is() )
+        xChild->setParent( NULL );
+    _rxContainer = Reference< XNameAccess >();
 }
 // -----------------------------------------------------------------------------
 Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType )
@@ -1071,21 +1057,7 @@ void ODatabaseDocument::impl_notifyEvent( const ::rtl::OUString& _sEventName, ::
     try
     {
         css::document::EventObject aEvt(*this, _sEventName);
-        Reference< XEventListener > xDocEventBroadcaster;
-        /// TODO: this code has to be deleted after AS' cws will be integrated
-        try
-        {
-            xDocEventBroadcaster = xDocEventBroadcaster.query( m_pImpl->m_xServiceFactory->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ) ) ) );
-        }
-        catch(Exception)
-        {
-            OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
-        }
-
         _rGuard.clear();
-        if ( xDocEventBroadcaster.is() )
-            xDocEventBroadcaster->notifyEvent(aEvt);
         m_aDocEventListeners.notifyEach( &css::document::XEventListener::notifyEvent, aEvt );
     }
     catch(Exception&)
@@ -1119,13 +1091,10 @@ void ODatabaseDocument::disposing()
         m_aCloseListener.disposeAndClear( aDisposeEvent );
         m_aDocEventListeners.disposeAndClear( aDisposeEvent );
 
-        m_xDocEventBroadcaster = NULL;
         m_xUIConfigurationManager = NULL;
 
-        impl_clearObjectContainer( m_xForms, true );
-        impl_clearObjectContainer( m_xReports, true );
-        impl_clearObjectContainer( m_pImpl->m_xTableDefinitions, true );
-        impl_clearObjectContainer( m_pImpl->m_xCommandDefinitions, true );
+        clearObjectContainer( m_xForms);
+        clearObjectContainer( m_xReports);
 
         m_pImpl->modelIsDisposing( ODatabaseModelImpl::ResetModelAccess() );
     }
