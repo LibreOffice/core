@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:52:51 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,20 +867,20 @@ BOOL Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 // ------------------------------------------------------------------
 
 BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                               ULONG nCompression, ULONG& rImageSize )
+                               ULONG nCompression, sal_uInt32& rImageSize )
 {
     if( BITFIELDS == nCompression )
     {
         const ColorMask&    rMask = rAcc.GetColorMask();
         SVBT32              aVal32;
 
-        LongToSVBT32( rMask.GetRedMask(), aVal32 );
+        UInt32ToSVBT32( rMask.GetRedMask(), aVal32 );
         rOStm.Write( (BYTE*) aVal32, 4UL );
 
-        LongToSVBT32( rMask.GetGreenMask(), aVal32 );
+        UInt32ToSVBT32( rMask.GetGreenMask(), aVal32 );
         rOStm.Write( (BYTE*) aVal32, 4UL );
 
-        LongToSVBT32( rMask.GetBlueMask(), aVal32 );
+        UInt32ToSVBT32( rMask.GetBlueMask(), aVal32 );
         rOStm.Write( (BYTE*) aVal32, 4UL );
 
         rImageSize = rOStm.Tell();
