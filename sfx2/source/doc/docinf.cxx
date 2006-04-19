@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:40:37 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _BIGINT_HXX //autogen wg. BigInt
-#include <tools/bigint.hxx>
-#endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
@@ -354,23 +351,12 @@ ULONG SfxPSDateTimeProperty_Impl::Save(SvStream &rStream)
     // Nicht Valid ist das gleiche, wie bei MS, nur nicht konvertiert
     if( aDateTime.IsValid() )
         aDateTime.ConvertToUTC();
-    BigInt a100nPerSecond(10000000L);
-    BigInt a100nPerDay=a100nPerSecond*BigInt(60L*60*24);
-    USHORT nYears=aDateTime.GetYear()-1601;
-    long nDays=
-        nYears*365+nYears/4-nYears/100+nYears/400+
-            aDateTime.GetDayOfYear()-1;
-    BigInt aTime=
-        a100nPerDay*BigInt(nDays)+a100nPerSecond*
-            BigInt((long)( aDateTime.GetSec() +
-                   60* aDateTime.GetMin() +
-                   60L*60* aDateTime.GetHour() ));
 
-    BigInt aUlongMax((ULONG)ULONG_MAX);
-    aUlongMax += 1;
+    sal_uInt32 nUpper, nLower;
+    aDateTime.GetWin32FileDateTime( nLower, nUpper );
 
-    rStream<<(UINT32)(aTime % aUlongMax) ;
-    rStream<<(UINT32)(aTime / aUlongMax);
+    rStream << nLower;
+    rStream << nUpper;
     return rStream.GetErrorCode();
 }
 
@@ -381,33 +367,10 @@ ErrCode SfxPSDateTimeProperty_Impl::Load( SvStream& rStream )
     UINT32 nLow, nHigh;
     rStream >> nLow;
     rStream >> nHigh;
-    BigInt aUlongMax( (ULONG)ULONG_MAX );
-    aUlongMax += 1;
-    BigInt aTime = aUlongMax * BigInt( nHigh );
-    aTime += nLow;
-    BigInt a100nPerSecond(10000000L);
-    BigInt a100nPerDay = a100nPerSecond*BigInt( 60L * 60 * 24 );
-    ULONG nDays = aTime / a100nPerDay;
-    USHORT nYears = (USHORT)
-        (( nDays - ( nDays / ( 4 * 365 ) ) + ( nDays / ( 100 * 365 ) ) -
-          ( nDays / ( 400 * 365 ) ) ) / 365 );
-    nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
-    USHORT nMonths = 0;
-    for( long nDaysCount = nDays; nDaysCount >= 0; )
-    {
-        nDays = nDaysCount;
-        nMonths ++;
-        nDaysCount-= Date(  1, nMonths, 1601 + nYears ).GetDaysInMonth();
-    }
-    Date _aDate( (USHORT)( nDays + 1 ), nMonths, nYears + 1601 );
-    Time _aTime( ( aTime / ( a100nPerSecond * BigInt( 60 * 60 ) ) ) %
-                 BigInt( 24 ),
-                 ( aTime / ( a100nPerSecond * BigInt( 60 ) ) ) %
-                 BigInt( 60 ),
-                 ( aTime / ( a100nPerSecond ) ) %
-                 BigInt( 60 ) );
-    aDateTime = DateTime( _aDate, _aTime );
+
+    aDateTime = DateTime::CreateFromWin32FileDateTime( nLow, nHigh );
     aDateTime.ConvertToLocalTime();
+
     return rStream.GetErrorCode();
 }
 
