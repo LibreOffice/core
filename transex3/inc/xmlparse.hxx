@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:25:32 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 15:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,11 +235,11 @@ typedef std::hash_map<ByteString , BOOL ,
 class XMLFile : public XMLParentNode
 {
 public:
-    XMLFile::XMLFile() ;
+    XMLFile() ;
     XMLFile(
                 const String &rFileName // the file name, empty if created from memory stream
     );
-    XMLFile::XMLFile( const XMLFile& obj ) ;
+    XMLFile( const XMLFile& obj ) ;
     ~XMLFile();
 
     ByteString* GetGroupID(std::deque<ByteString> &groupid);
@@ -256,7 +256,7 @@ public:
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL , int pos = 0 );
 
-    XMLFile& XMLFile::operator=(const XMLFile& obj);
+    XMLFile&    operator=(const XMLFile& obj);
 
     virtual USHORT  GetNodeType();
 
