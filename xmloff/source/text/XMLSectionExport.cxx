@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:15:57 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1908,7 +1908,7 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
                                       GetExport().EncodeStyleName( sStyle ) );
 
             OUStringBuffer sTmp;
-            sTmp.append( nLevel+1L );
+            sTmp.append( nLevel + 1 );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL,
                                         sTmp.makeStringAndClear() );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_H,
