@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:36:08 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,10 +103,15 @@ public:
     inline JNIEnv * get_jni_env() const
         { return m_env; }
 
-    inline jobject get_class_loader() const
-        { return m_class_loader; }
+    // does not handle exceptions, *classClass will be null if exception
+    // occurred:
+    void getClassForName(jclass * classClass, jmethodID * methodForName) const;
 
-    jmethodID get_loadClass_method() const;
+    // if inException, does not handle exceptions, in which case returned value
+    // will be null if exception occurred:
+    jclass findClass(
+        char const * name, jclass classClass, jmethodID methodForName,
+        bool inException) const;
 
     inline void ensure_no_exception() const; // throws BridgeRuntimeError
     inline bool assert_no_exception() const; // asserts and clears exception
