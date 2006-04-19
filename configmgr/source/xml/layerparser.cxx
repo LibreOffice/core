@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:39:40 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include "com/sun/star/configuration/backend/NodeAttribute.hpp"
 #include "layerparser.hxx"
 
 // -----------------------------------------------------------------------------
@@ -203,12 +204,18 @@ void LayerParser::startNode( ElementInfo const & aInfo, const uno::Reference< sa
         break;
 
     case Operation::replace:
+    case Operation::fuse:
         {
             backenduno::TemplateIdentifier aTemplate;
+            sal_Int16 flags = aInfo.flags;
+            if (aInfo.op == Operation::fuse) {
+                flags |=
+                    com::sun::star::configuration::backend::NodeAttribute::FUSE;
+            }
             if (getDataParser().getInstanceType(xAttribs,aTemplate.Name,aTemplate.Component))
-                m_xHandler->addOrReplaceNodeFromTemplate(aInfo.name,aTemplate,aInfo.flags);
+                m_xHandler->addOrReplaceNodeFromTemplate(aInfo.name,aTemplate,flags);
             else
-                m_xHandler->addOrReplaceNode(aInfo.name,aInfo.flags);
+                m_xHandler->addOrReplaceNode(aInfo.name,flags);
         }
         break;
 
@@ -258,6 +265,9 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
         // defer to later
         m_bNewProp = true;
         break;
+
+    case Operation::fuse:
+        this->raiseParseException("Layer parser: Invalid Data: operation 'fuse' is not permitted for properties");
 
     case Operation::remove:
         this->raiseParseException("Layer parser: Invalid Data: operation 'remove' is not permitted for properties");

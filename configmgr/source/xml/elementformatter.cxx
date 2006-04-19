@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:38:25 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
     case Operation::clear:      OSL_ENSURE(false,"'clear' operation is not yet supported"); break ;
                                 //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_CLEAR));  break;
     case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REPLACE)); break;
+    case Operation::fuse:       addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_FUSE));    break;
     case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REMOVE));  break;
 
     case Operation::unknown:
