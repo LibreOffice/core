@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:20:30 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,62 @@
 package test.codemaker.javamaker;
 
 import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.lang.XEventListener;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XNamingService;
 import complexlib.ComplexTestCase;
+import java.util.EventListener;
 import test.codemaker.javamaker.Enum1;
 import test.codemaker.javamaker.Enum2;
 import test.codemaker.javamaker.PolyStruct;
 import test.codemaker.javamaker.S2;
 import test.codemaker.javamaker.Struct2;
+import test.codemaker.javamaker.services.service_abstract;
+import test.codemaker.javamaker.services.service_assert;
+import test.codemaker.javamaker.services.service_break;
+import test.codemaker.javamaker.services.service_catch;
+import test.codemaker.javamaker.services.service_class;
+import test.codemaker.javamaker.services.service_continue;
+import test.codemaker.javamaker.services.service_do;
+import test.codemaker.javamaker.services.service_else;
+import test.codemaker.javamaker.services.service_extends;
+import test.codemaker.javamaker.services.service_final;
+import test.codemaker.javamaker.services.service_finally;
+import test.codemaker.javamaker.services.service_for;
+import test.codemaker.javamaker.services.service_goto;
+import test.codemaker.javamaker.services.service_if;
+import test.codemaker.javamaker.services.service_implements;
+import test.codemaker.javamaker.services.service_import;
+import test.codemaker.javamaker.services.service_instanceof;
+import test.codemaker.javamaker.services.service_int;
+import test.codemaker.javamaker.services.service_native;
+import test.codemaker.javamaker.services.service_new;
+import test.codemaker.javamaker.services.service_package;
+import test.codemaker.javamaker.services.service_private;
+import test.codemaker.javamaker.services.service_protected;
+import test.codemaker.javamaker.services.service_public;
+import test.codemaker.javamaker.services.service_return;
+import test.codemaker.javamaker.services.service_static;
+import test.codemaker.javamaker.services.service_strictfp;
+import test.codemaker.javamaker.services.service_super;
+import test.codemaker.javamaker.services.service_synchronized;
+import test.codemaker.javamaker.services.service_this;
+import test.codemaker.javamaker.services.service_throw;
+import test.codemaker.javamaker.services.service_throws;
+import test.codemaker.javamaker.services.service_try;
+import test.codemaker.javamaker.services.service_volatile;
+import test.codemaker.javamaker.services.service_while;
 import test.codemaker.javamaker.singleton_abstract;
 
 public final class Test extends ComplexTestCase {
     public String[] getTestMethodNames() {
         return new String[] {
             "testEnum1", "testEnum2", "testPolyStruct", "testEmptyStruct2",
-            "testFullStruct2", "testS1", "testS2", "testSingletons" };
+            "testFullStruct2", "testXEventListener", "testS1", "testS2",
+            "testKeywordServices", "testSingletons" };
     }
 
     public void before() throws Exception {
@@ -319,6 +357,10 @@ public final class Test extends ComplexTestCase {
         assure(s.at18.length == 0);
     }
 
+    public void testXEventListener() {
+        assure(EventListener.class.isAssignableFrom(XEventListener.class));
+    }
+
     public void testS1() throws com.sun.star.uno.Exception {
         //TODO:
         try {
@@ -361,18 +403,153 @@ public final class Test extends ComplexTestCase {
                 new XNamingService[0][]);
             failed("S1.create4");
         } catch (DeploymentException e) {}
-        try {
-            S1.method_abstract(context, 0);
-            failed("S1.method_abstract");
-        } catch (DeploymentException e) {}
-        try {
-            S1.method_assert(context, 0);
-            failed("S1.method_assert");
-        } catch (DeploymentException e) {}
     }
 
     public void testS2() {
         //TODO
+    }
+
+    public void testKeywordServices() {
+        try {
+            service_abstract.method_abstract(context, 0);
+            failed("service_abstract.method_abstract");
+        } catch (DeploymentException e) {}
+        try {
+            service_assert.method_assert(context, 0);
+            failed("service_assert.method_assert");
+        } catch (DeploymentException e) {}
+        try {
+            service_break.method_break(context, 0);
+            failed("service_break.method_break");
+        } catch (DeploymentException e) {}
+        try {
+            service_catch.method_catch(context, 0);
+            failed("service_catch.method_catch");
+        } catch (DeploymentException e) {}
+        try {
+            service_class.method_class(context, 0);
+            failed("service_class.method_class");
+        } catch (DeploymentException e) {}
+        try {
+            service_continue.method_continue(context, 0);
+            failed("service_continue.method_continue");
+        } catch (DeploymentException e) {}
+        try {
+            service_do.method_do(context, 0);
+            failed("service_do.method_do");
+        } catch (DeploymentException e) {}
+        try {
+            service_else.method_else(context, 0);
+            failed("service_else.method_else");
+        } catch (DeploymentException e) {}
+        try {
+            service_extends.method_extends(context, 0);
+            failed("service_extends.method_extends");
+        } catch (DeploymentException e) {}
+        try {
+            service_final.method_final(context, 0);
+            failed("service_final.method_final");
+        } catch (DeploymentException e) {}
+        try {
+            service_finally.method_finally(context, 0);
+            failed("service_finally.method_finally");
+        } catch (DeploymentException e) {}
+        try {
+            service_for.method_for(context, 0);
+            failed("service_for.method_for");
+        } catch (DeploymentException e) {}
+        try {
+            service_goto.method_goto(context, 0);
+            failed("service_goto.method_goto");
+        } catch (DeploymentException e) {}
+        try {
+            service_if.method_if(context, 0);
+            failed("service_if.method_if");
+        } catch (DeploymentException e) {}
+        try {
+            service_implements.method_implements(context, 0);
+            failed("service_implements.method_implements");
+        } catch (DeploymentException e) {}
+        try {
+            service_import.method_import(context, 0);
+            failed("service_import.method_import");
+        } catch (DeploymentException e) {}
+        try {
+            service_instanceof.method_instanceof(context, 0);
+            failed("service_instanceof.method_instanceof");
+        } catch (DeploymentException e) {}
+        try {
+            service_int.method_int(context, 0);
+            failed("service_int.method_int");
+        } catch (DeploymentException e) {}
+        try {
+            service_native.method_native(context, 0);
+            failed("service_native.method_native");
+        } catch (DeploymentException e) {}
+        try {
+            service_new.method_new(context, 0);
+            failed("service_new.method_new");
+        } catch (DeploymentException e) {}
+        try {
+            service_package.method_package(context, 0);
+            failed("service_package.method_package");
+        } catch (DeploymentException e) {}
+        try {
+            service_private.method_private(context, 0);
+            failed("service_private.method_private");
+        } catch (DeploymentException e) {}
+        try {
+            service_protected.method_protected(context, 0);
+            failed("service_protected.method_protected");
+        } catch (DeploymentException e) {}
+        try {
+            service_public.method_public(context, 0);
+            failed("service_public.method_public");
+        } catch (DeploymentException e) {}
+        try {
+            service_return.method_return(context, 0);
+            failed("service_return.method_return");
+        } catch (DeploymentException e) {}
+        try {
+            service_static.method_static(context, 0);
+            failed("service_static.method_static");
+        } catch (DeploymentException e) {}
+        try {
+            service_strictfp.method_strictfp(context, 0);
+            failed("service_strictfp.method_strictfp");
+        } catch (DeploymentException e) {}
+        try {
+            service_super.method_super(context, 0);
+            failed("service_super.method_super");
+        } catch (DeploymentException e) {}
+        try {
+            service_synchronized.method_synchronized(context, 0);
+            failed("service_synchronized.method_synchronized");
+        } catch (DeploymentException e) {}
+        try {
+            service_this.method_this(context, 0);
+            failed("service_this.method_this");
+        } catch (DeploymentException e) {}
+        try {
+            service_throw.method_throw(context, 0);
+            failed("service_throw.method_throw");
+        } catch (DeploymentException e) {}
+        try {
+            service_throws.method_throws(context, 0);
+            failed("service_throws.method_throws");
+        } catch (DeploymentException e) {}
+        try {
+            service_try.method_try(context, 0);
+            failed("service_try.method_try");
+        } catch (DeploymentException e) {}
+        try {
+            service_volatile.method_volatile(context, 0);
+            failed("service_volatile.method_volatile");
+        } catch (DeploymentException e) {}
+        try {
+            service_while.method_while(context, 0);
+            failed("service_while.method_while");
+        } catch (DeploymentException e) {}
     }
 
     public void testSingletons() {
