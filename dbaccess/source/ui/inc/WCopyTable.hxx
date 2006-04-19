@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:42:49 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,8 @@ namespace dbaui
 
         // displays a error message that a column type is not supported
         void showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName);
+
+        void removeColumnNameFromNameMap(const ::rtl::OUString& _sName);
     };
 }
 
