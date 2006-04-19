@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:19:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 13:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3454,7 +3454,7 @@ struct EscherBlipCacheEntry
         aUniqueID( rUniqueID ) {}
 };
 
-void SvxMSDffManager::Scale( long& rVal ) const
+void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 {
     if ( bNeedMap )
         rVal = BigMulDiv( rVal, nMapMul, nMapDiv );
@@ -3528,7 +3528,7 @@ void SvxMSDffManager::Scale( XPolyPolygon& rPoly ) const
         Scale( rPoly[ nPolyNum ] );
 }
 
-void SvxMSDffManager::ScaleEmu( long& rVal ) const
+void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 {
     rVal = BigMulDiv( rVal, nEmuMul, nEmuDiv );
 }
@@ -5423,7 +5423,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                     {
                         sal_Int16 ls, os, rs, us;
                         rSt >> os >> ls >> rs >> us; // etwas seltsame Koordinatenreihenfolge ...
-                        long l = ls, o = os, r = rs, u = us;
+                        sal_Int32 l = ls, o = os, r = rs, u = us;
                         Scale( l );
                         Scale( o );
                         Scale( r );
@@ -6361,7 +6361,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
     BYTE   nVer;
     USHORT nInst;
     USHORT nFbt;
-    ULONG  nLength;
+    UINT32  nLength;
     if( !this->ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
     BOOL bOk;
@@ -6406,7 +6406,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
     BYTE   nVer;
     USHORT nInst;
     USHORT nFbt;
-    ULONG  nLength;
+    UINT32 nLength;
 
     ULONG nLenBStoreCont = 0, nLenFBSE = 0, nRead = 0;
 
@@ -6491,7 +6491,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
 //
 void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
 {
-    BYTE nVer;USHORT nInst;USHORT nFbt;ULONG nLength;
+    BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
 
     ULONG nReadDg = 0;
 
@@ -6524,7 +6524,7 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                                                   ULONG nLenShapeGroupCont,
                                                   BOOL bPatriarch )
 {
-    BYTE nVer;USHORT nInst;USHORT nFbt;ULONG nLength;
+    BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
     long nStartShapeGroupCont = rSt.Tell();
     // Wir stehen in einem Shape Group Container (ggfs. mehrere pro Seite)
     // und muessen nun
@@ -6563,7 +6563,7 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
 
 BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont, ULONG nPosGroup )
 {
-    BYTE nVer;USHORT nInst;USHORT nFbt;ULONG nLength;
+    BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
     long  nStartShapeCont = rSt.Tell();
     // Wir stehen in einem Shape Container (ggfs. mehrere pro Sh. Group)
     // und muessen nun
@@ -6926,7 +6926,7 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
     int nRes = GRFILTER_OPENERROR;  // Fehlervariable initialisieren
 
     // nachschauen, ob es sich auch wirklich um ein BLIP handelt
-    ULONG  nLength;
+    UINT32 nLength;
     USHORT nInst, nFbt;
     BYTE   nVer;
     if( ReadCommonRecordHeader( rBLIPStream, nVer, nInst, nFbt, nLength) && ( 0xF018 <= nFbt ) && ( 0xF117 >= nFbt ) )
@@ -7101,7 +7101,7 @@ BOOL SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
                                               BYTE&     rVer,
                                               USHORT&   rInst,
                                               USHORT&   rFbt,
-                                              ULONG&    rLength )
+                                              UINT32&    rLength )
 {
     sal_uInt16 nTmp;
     rSt >> nTmp >> rFbt >> rLength;
