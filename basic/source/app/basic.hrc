@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:12:45 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,8 +183,6 @@
 #define RID_CALLDLG 6001
 #define MBP_PLUS 8001
 #define MBP_MINUS 8002
-#define MBP_ASSERT 8003
-#define MBP_QAERROR 8004
 #define RID_IMGLST_LAYOUT 8005
 #define MAIN_ACCEL 9001
 
