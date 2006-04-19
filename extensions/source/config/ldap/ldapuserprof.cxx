@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapuserprof.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:22:58 $
+ *  last change: $Author: hr $ $Date: 2006-04-19 14:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,16 +137,10 @@ void LdapUserProfileMap::ldapToUserProfile(LDAP *aConnection,
 
             if (values != NULL)
             {
-                rtl::OUString aStr = rtl::OUString::createFromAscii(*values);
-                if ((*values[0] != ' ') && ((*values+1) !=0))
-                {
-
-                    aProfile.mProfile [i].mValue = rtl::OStringToOUString(
-                                                    *values,
-                                                     RTL_TEXTENCODING_ASCII_US);
-                    ldap_value_free(values) ;
-                    break ;
-                }
+                aProfile.mProfile[i].mValue = rtl::OStringToOUString(
+                    *values, RTL_TEXTENCODING_UTF8);
+                ldap_value_free(values);
+                break;
             }
         }
     }
