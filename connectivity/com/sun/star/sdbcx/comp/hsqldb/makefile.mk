@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 04:56:11 $
+#   last change: $Author: hr $ $Date: 2006-04-19 15:02:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,12 @@ TARGET  = sdbc_hsqldb
 # --- Files --------------------------------------------------------  
 
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar hsqldb.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar
+.IF "$(SYSTEM_HSQLDB)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
+.ELSE
+JARFILES+= hsqldb.jar
+.ENDIF
 JAVAFILES =\
     NativeInputStreamHelper.java\
     NativeOutputStreamHelper.java\
