@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.99 $
-# Date:        $Date: 2006-04-19 15:10:10 $
+# Version:     $Revision: 1.100 $
+# Date:        $Date: 2006-04-20 13:34:17 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1129,7 +1129,7 @@ elsif ($platform =~ m/cygwin/)
    } 
    # zip.exe / unzip.exe path for Windows users.
    my $zip_home_path = PosixFormat('@ZIP_HOME@');
-   if ( ! $PATH =~ /(?:[:]|\A)(?:$zip_home_path)(?:[:]|\Z)/ ) {
+   if ( $PATH !~ /(?:[:]|\A)(?:$zip_home_path)(?:[:]|\Z)/ ) {
        $PATH          .= $ps.$zip_home_path;
    }
 
@@ -1141,11 +1141,11 @@ elsif ($platform =~ m/cygwin/)
       $PATH          .= $ps.$PERL_PATH;
    }
    # Check if $TCSH_PATH is already set in PATH
-   if ( ( "'@USE_SHELL@'" eq "tcsh" ) && ( ! $PATH =~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
+   if ( ( "'@USE_SHELL@'" eq "tcsh" ) && ( $PATH !~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
    {   $PATH          .= $ps.$TCSH_PATH;
    }
    # Check if $CYGWIN_PATH is already set in PATH
-   if ( ! $PATH =~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ ) {
+   if ( $PATH !~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ ) {
       $PATH           .= $ps.$CYGWIN_PATH;
    }
    $PATH              .= $ps_STLPORT_LIB;
@@ -1708,6 +1708,7 @@ ToFile( "ENABLE_LOCKDOWN",   "@ENABLE_LOCKDOWN@",  "e" );
 ToFile( "WITH_LIBSN",        "@WITH_LIBSN@",       "e" );
 ToFile( "LIBSN_CFLAGS",      "@LIBSN_CFLAGS@",     "e" );
 ToFile( "LIBSN_LIBS",        "@LIBSN_LIBS@",       "e" );
+ToFile( "WITH_LDAP",         "@WITH_LDAP@",        "e" );
 ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
 ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
 ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
@@ -1787,6 +1788,7 @@ ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
 ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
+ToFile( "DISABLE_NEON",      "@DISABLE_NEON@",     "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
