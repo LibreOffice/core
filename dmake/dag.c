@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:05:07 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 11:58:53 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -48,8 +48,11 @@ HASHPTR hp;
 
          tvalue = atoi(hp->ht_value);
          if( hp->MV_IVAR == &Buffer_size ) {
-        /* If Buffer_size is modified then make sure you change the
-             * size of the real buffer as well. */
+        /* If Buffer_size (MAXLINELENGTH) is modified then make sure
+         * you change the size of the real buffer as well. As the
+         * value will at least be BUFSIZ this might lead to the
+         * situation that the (string) value of MAXLINELENGTH is
+         * smaller than the integer value. */
             tvalue = (tvalue < (BUFSIZ-2)) ? BUFSIZ : tvalue+2;
             if( Buffer_size == tvalue ) break;
             if( Buffer ) FREE(Buffer);
