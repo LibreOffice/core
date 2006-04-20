@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
 <LC_INFO>
 <Language>
 <LangID>es</LangID>
@@ -15,14 +15,21 @@
 </Platform>
 </LC_INFO>
 <LC_CTYPE ref="es_DO"/>
-<LC_FORMAT ref="es_GT" replaceTo="[$B-180A]"/>
+<LC_FORMAT ref="es_GT" replaceTo="[$B/.-180A]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_INDEX ref="es_ES"/>
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>B</CurrencyID>
+<CurrencyID>PAB</CurrencyID>
+<CurrencySymbol>B/.</CurrencySymbol>
+<BankSymbol>PAB</BankSymbol>
+<CurrencyName>Balboa</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+<Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+<CurrencyID>PAB</CurrencyID>
 <CurrencySymbol>B</CurrencySymbol>
 <BankSymbol>PAB</BankSymbol>
 <CurrencyName>Balboa</CurrencyName>
