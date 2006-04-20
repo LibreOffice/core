@@ -1,4 +1,4 @@
-/* RCS  $Id: startup.h,v 1.1.1.1 2000-09-22 15:33:33 hr Exp $
+/* RCS  $Id: startup.h,v 1.2 2006-04-20 12:18:14 hr Exp $
 --
 -- SYNOPSIS
 --      Definition of MAKESTARTUP
@@ -24,4 +24,5 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
-"MAKESTARTUP := $(ROOTDIR)/etc/startup/startup.mk",
+"DMAKEROOT *:= $(ROOTDIR)/etc/startup",
+"MAKESTARTUP := $(DMAKEROOT)/startup.mk",
