@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.3">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
   <LC_INFO>
     <Language>
       <LangID>ja</LangID>
@@ -66,22 +66,22 @@
       <FormatCode>0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="false" type="medium" usage="CURRENCY" formatindex="12">
-      <FormatCode>[$¥-411]#,##0;-[$¥-411]#,##0</FormatCode>
+      <FormatCode>[$￥-411]#,##0;-[$￥-411]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$¥-411]#,##0.00;-[$¥-411]#,##0.00</FormatCode>
+      <FormatCode>[$￥-411]#,##0.00;-[$￥-411]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[$¥-411]#,##0;[RED]-[$¥-411]#,##0</FormatCode>
+      <FormatCode>[$￥-411]#,##0;[RED]-[$￥-411]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[$¥-411]#,##0.00;[RED]-[$¥-411]#,##0.00</FormatCode>
+      <FormatCode>[$￥-411]#,##0.00;[RED]-[$￥-411]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#,##0 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$¥-411]#,##0.--;[RED]-[$¥-411]#,##0.--</FormatCode>
+      <FormatCode>[$￥-411]#,##0.--;[RED]-[$￥-411]#,##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="18">
       <FormatCode>YY/M/D</FormatCode>
@@ -455,6 +455,13 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>JPY</CurrencyID>
+      <CurrencySymbol>￥</CurrencySymbol>
+      <BankSymbol>JPY</BankSymbol>
+      <CurrencyName>円</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>JPY</CurrencyID>
       <CurrencySymbol>¥</CurrencySymbol>
       <BankSymbol>JPY</BankSymbol>
