@@ -1,99 +1,76 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: objwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-01 14:18:34 $
+ *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
-
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
-//src680 #include <vcl/system.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-//src680 #include <vcl/gdiobj.hxx>
 
 #include "objwin.hxx"
 #include "depwin.hxx"
+//#include "depapp.hxx"
 #include "depper.hxx"
-#include "prjdep.hxx"
+//#include "prjdep.hxx"
 #include "connctr.hxx"
+#include <stdio.h>
 
-//src680
-static Wallpaper* pDefaultWallpaper = NULL;
 static Color aDefaultColor = 0L;
+static Wallpaper* pDefaultWallpaper = 0L;
+
+// Initialize static class member
+BOOL ObjectWin::msbHideMode = FALSE;
+ULONG ObjectWin::msnGlobalViewMask = 0;
+
 
 UINT32 aColorMap[] = {
-    COL_TRANSPARENT,
-    COL_GREEN,
-    COL_RED,
-    COL_MAGENTA,
-    COL_BLUE,
-    COL_LIGHTGREEN,
-    COL_LIGHTRED,
-    COL_LIGHTMAGENTA,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE,
-    COL_BLUE
+    COL_TRANSPARENT,        //MARKMODE_DEFAULT    0
+    COL_GREEN,              //MARKMODE_DEPENDING  1
+    COL_RED,                //MARKMODE_NEEDED     2
+    COL_MAGENTA,            //1+2
+    COL_YELLOW,             //MARKMODE_ACTIVATED  4
+    COL_LIGHTGREEN,         //1+4
+    COL_LIGHTRED,           //2+4
+    COL_LIGHTMAGENTA,       //1+2+4
+    COL_BLUE,               //MARKMODE_SELECTED   8
+    COL_LIGHTGRAY,          //1+8
+    COL_CYAN,               //2+8
+    COL_LIGHTCYAN,          //1+2+8
+    COL_LIGHTBLUE,          //4+8
+    COL_BROWN,              //1+4+8
+    COL_BLACK,              //2+4+8
+    COL_BLUE                //1+2+4+8
 };
 
 
@@ -106,24 +83,23 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
 /*****************************************************************************/
                 : Window( pParent, nWinStyle ),
                 mnObjectId( 0 ),
-                sBodyText( "" ),
-                sTipText( "" ),
+                msBodyText( "" ),
+                msTipText( "" ),
                 mnRootDist( 0 ),
                 mnHeadDist( 0 ),
                 mbVisited( FALSE ),
                 mbFixed( FALSE ),
                 mnMarkMode( 0 ),
-                nViewMask( 0 ),
-                bVisible( FALSE ),
-                bMenuExecute( FALSE )
+                mnViewMask( 0 ),
+                mbVisible( FALSE ),
+                mbMenuExecute( FALSE )
 {
     SetBackground( Wallpaper( Color( COL_WHITE )));
 
     aTipTimer.SetTimeout( 500 );
     aTipTimer.SetTimeoutHdl(
-        LINK( this, ObjectWin, TipHdl ));
+    LINK( this, ObjectWin, TipHdl ));
 
-//src680    SetFont( System::_GetStandardFont( _STDFONT_SWISS ));
     SetFont( Font( GetFont() ) );
     EnableClipSiblings();
     SetZOrder( NULL, WINDOW_ZORDER_FIRST );
@@ -137,12 +113,11 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
     mpPopup->SetDeactivateHdl( LINK( this, ObjectWin, PopupDeactivated ));
     mnPopupStaticItems = mpPopup->GetItemCount();
 
-/*src680    if ( ! pDefaultBrush )
+    if ( ! pDefaultWallpaper )
     {
-        pDefaultBrush = new Brush( GetBackgroundBrush() );
+        pDefaultWallpaper = new Wallpaper( GetBackground() );
         aDefaultColor = GetTextColor();
     }
-*/
     Hide();
 }
 
@@ -150,55 +125,69 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
 ObjectWin::~ObjectWin()
 /*****************************************************************************/
 {
-    while ( Connections.Count() > 0 )
+    while ( mConnections.Count() > 0 )
     {
-        delete Connections.GetObject( 0 );
+        delete mConnections.GetObject( 0 );
     }
+}
+
+void ObjectWin::SetHideMode(BOOL bHide)
+{
+    msbHideMode = bHide;
+    mConnections.GetObject(0)->SetHideMode(msbHideMode);
+}
+
+BOOL ObjectWin::ToggleHideMode()
+{
+    msbHideMode = !msbHideMode;
+    mConnections.GetObject(0)->SetHideMode(msbHideMode);
+    return msbHideMode;
 }
 
 /*****************************************************************************/
 void ObjectWin::SetViewMask( ULONG nMask )
 /*****************************************************************************/
 {
-    nViewMask = nMask;
-    if ( nViewMask & mpDepperDontuseme->GetViewMask()) {
-        bVisible = TRUE;
+    mnViewMask = nMask;
+    // Compares
+    if ( mnViewMask & msnGlobalViewMask) {
+        mbVisible = TRUE;
         Show();
     }
     else {
         Hide();
-        bVisible = FALSE;
+        mbVisible = FALSE;
     }
-    for ( ULONG i = 0; i < Connections.Count(); i++ )
-        Connections.GetObject( i )->UpdateVisibility();
+    for ( ULONG i = 0; i < mConnections.Count(); i++ )
+        mConnections.GetObject( i )->UpdateVisibility();
 }
 
 /*****************************************************************************/
 void ObjectWin::SetBodyText( const ByteString& rNewString )
 /*****************************************************************************/
 {
-    sBodyText = rNewString;
+    msBodyText = rNewString;
 }
 
 /*****************************************************************************/
 ByteString& ObjectWin::GetBodyText()
 /*****************************************************************************/
 {
-    return sBodyText;
+    return msBodyText;
 }
 
 /*****************************************************************************/
 void ObjectWin::SetTipText( const ByteString& rNewString )
 /*****************************************************************************/
 {
-    sTipText = rNewString;
+    msTipText = rNewString;
 }
 
 /*****************************************************************************/
 ByteString& ObjectWin::GetTipText()
 /*****************************************************************************/
 {
-    return sTipText;
+    return msTipText;
 }
 
 /*****************************************************************************/
@@ -287,15 +276,15 @@ Point ObjectWin::GetFixPoint( const Point& rRefPoint, BOOL bUseRealPos )
 void ObjectWin::AddConnector( Connector* pNewCon )
 /*****************************************************************************/
 {
-    Connections.Insert( pNewCon );
+    mConnections.Insert( pNewCon );
 }
 
 /*****************************************************************************/
 BOOL ObjectWin::ConnectionExistsInAnyDirection( ObjectWin *pWin )
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Connections.Count(); i++ )
-        if ( Connections.GetObject( i )->GetOtherWin( this ) == pWin )
+    for ( ULONG i = 0; i < mConnections.Count(); i++ )
+        if ( mConnections.GetObject( i )->GetOtherWin( this ) == pWin )
             return TRUE;
 
     return FALSE;
@@ -305,17 +294,17 @@ BOOL ObjectWin::ConnectionExistsInAnyDirection( ObjectWin *pWin )
 void ObjectWin::RemoveConnector( Connector* pOldCon )
 /*****************************************************************************/
 {
-    Connections.Remove( pOldCon );
+    mConnections.Remove( pOldCon );
 }
 
 /*****************************************************************************/
 Connector* ObjectWin::GetConnector( ULONG nIndex )
 /*****************************************************************************/
 {
-    ULONG nConCount = Connections.Count();
+    ULONG nConCount = mConnections.Count();
 
     if ( nIndex < nConCount )
-        return Connections.GetObject( nIndex );
+        return mConnections.GetObject( nIndex );
     return NULL;
 }
 
@@ -328,46 +317,53 @@ Connector* ObjectWin::GetConnector( ULONG nStartId, ULONG nEndId )
 
     USHORT i;
     Connector* pCon;
-    ULONG nConCount = Connections.Count();
+    ULONG nConCount = mConnections.Count();
 
     for ( i = 0; i < nConCount; i++ )
     {
-        pCon = Connections.GetObject( i );
+        pCon = mConnections.GetObject( i );
         if ( pCon->GetOtherWin( this )->GetId() == nEndId )
             return pCon;
     }
     return NULL;
 }
 
+void ObjectWin::SetAllConnectorsUnvisible()
+{
+    Connector* pCon;
+    ULONG nConCount = mConnections.Count();
+    for ( int i = 0; i < nConCount; i++ )
+    {
+        pCon = mConnections.GetObject( i );
+        if (pCon) pCon->SetVisibility( FALSE );
+    }
+}
+
 /*****************************************************************************/
 void ObjectWin::SetMarkMode( ULONG nMarkMode )
 /*****************************************************************************/
 {
-//src680    Brush aBrush;
-    Wallpaper aWallpaper;
+    //Wallpaper aWallpaper;
 
     if ( nMarkMode == MARKMODE_DEFAULT )
     {
-//src680
         if ( pDefaultWallpaper )
         {
-            aWallpaper = GetBackground();
-            aWallpaper.SetColor( pDefaultWallpaper->GetColor() );
-            SetBackground( aWallpaper );
+            maObjWallpaper = GetBackground();
+            maObjWallpaper.SetColor( pDefaultWallpaper->GetColor() );
+            SetBackground( maObjWallpaper );
             SetTextColor( aDefaultColor );
         }
     }
     else
     {
         mnMarkMode |= nMarkMode;
-//src680
-        aWallpaper = GetBackground();
-//src680
-        aWallpaper.SetColor( aColorMap[ mnMarkMode ] );
-//src680
-        SetBackground( aWallpaper );
+        maObjWallpaper = GetBackground();
+        maObjWallpaper.SetColor( aColorMap[ mnMarkMode ] );
+        SetBackground( maObjWallpaper );
         SetTextColor( COL_WHITE );
     }
+
     Invalidate();
 }
 
@@ -375,8 +371,7 @@ void ObjectWin::SetMarkMode( ULONG nMarkMode )
 void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
 /*****************************************************************************/
 {
-//src680
-    Wallpaper aWallpaper;
+    //Wallpaper aWallpaper;
 
     ULONG nOldMode = mnMarkMode;
     mnMarkMode &= ( !nMarkMode );
@@ -384,21 +379,19 @@ void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
     if ( nOldMode != mnMarkMode ) {
         if ( mnMarkMode == MARKMODE_DEFAULT )
         {
-//src680
             if ( pDefaultWallpaper )
             {
-                aWallpaper = GetBackground();
-                aWallpaper.SetColor( pDefaultWallpaper->GetColor() );
-                SetBackground( aWallpaper );
+                maObjWallpaper = GetBackground();
+                maObjWallpaper.SetColor( pDefaultWallpaper->GetColor() );
+                SetBackground( maObjWallpaper );
                 SetTextColor( aDefaultColor );
             }
         }
         else
         {
-//src680
-            aWallpaper = GetBackground();
-            aWallpaper.SetColor( aColorMap[ mnMarkMode ] );
-            SetBackground( aWallpaper );
+            maObjWallpaper = GetBackground();
+            maObjWallpaper.SetColor( aColorMap[ mnMarkMode ] ); //mnMarkMode
+            SetBackground( maObjWallpaper );
             SetTextColor( COL_WHITE );
         }
         Invalidate();
@@ -412,13 +405,13 @@ void ObjectWin::MarkNeeded( BOOL bReset )
     Connector* pCon;
     ObjectWin* pWin;
 
-    ULONG nConCount = Connections.Count();
+    ULONG nConCount = mConnections.Count();
     ULONG i;
 
     for ( i = 0; i < nConCount; i++ )
     {
-        pCon = Connections.GetObject( i );
-        if ( pCon && !pCon->IsStart( this) )
+        pCon = mConnections.GetObject( i );
+        if ( pCon && !pCon->IsStart( this))
         {
             pWin = pCon->GetOtherWin( this );
             if ( pWin )
@@ -427,7 +420,7 @@ void ObjectWin::MarkNeeded( BOOL bReset )
                     pWin->UnsetMarkMode( MARKMODE_NEEDED );
                 else
                     pWin->SetMarkMode( MARKMODE_NEEDED );
-                pWin->MarkNeeded( bReset );
+                pWin->MarkNeeded( bReset );                    // recursive call
             }
         }
     }
@@ -440,12 +433,12 @@ void ObjectWin::MarkDepending( BOOL bReset )
     Connector* pCon;
     ObjectWin* pWin;
 
-    ULONG nConCount = Connections.Count();
+    ULONG nConCount = mConnections.Count();
     ULONG i;
 
     for ( i = 0; i < nConCount; i++ )
     {
-        pCon = Connections.GetObject( i );
+        pCon = mConnections.GetObject( i );
         if ( pCon && pCon->IsStart( this) )
         {
             pWin = pCon->GetOtherWin( this );
@@ -455,7 +448,7 @@ void ObjectWin::MarkDepending( BOOL bReset )
                     pWin->UnsetMarkMode( MARKMODE_DEPENDING );
                 else
                     pWin->SetMarkMode( MARKMODE_DEPENDING );
-                pWin->MarkDepending( bReset );
+                pWin->MarkDepending( bReset );                  // recursive call
             }
         }
     }
@@ -468,42 +461,54 @@ void ObjectWin::Paint( const Rectangle& rRect )
 
     Size  aWinSize  = PixelToLogic( GetOutputSizePixel() );
     Size  aTextSize;
-    aTextSize.Width() = GetTextWidth( String( sBodyText, RTL_TEXTENCODING_UTF8 ));
+    ByteString sbt = msBodyText;                         //debug
+    //sbt += " ";                                         //debug
+    //sbt += ByteString::CreateFromInt32(mnMarkMode);     //debug
+    aTextSize.Width() = GetTextWidth( String( msBodyText, RTL_TEXTENCODING_UTF8 ));
     aTextSize.Height() = GetTextHeight();
     Point aPos( aWinSize.Width() / 2  - aTextSize.Width() / 2,
                 aWinSize.Height() / 2 - aTextSize.Height() / 2 );
 
-    DrawText( aPos , String( sBodyText, RTL_TEXTENCODING_UTF8 ));
+    //DrawText( aPos , String( sBodyText, RTL_TEXTENCODING_UTF8 ));
+    if (msBodyText =="null") //don't paint this "window"
+    {
+        Hide();
+        Invalidate();
+    } else
+        DrawText( aPos , String( sbt, RTL_TEXTENCODING_UTF8 )); //debug
 }
 
 /*****************************************************************************/
 void ObjectWin::MouseButtonDown( const MouseEvent& rMEvt )
 /*****************************************************************************/
 {
+    //Notify Soldep to clear ObjectList
     SetZOrder( NULL, WINDOW_ZORDER_FIRST );
     GrabFocus();
 
     // workaround fuer vcl-bug
 //  GetWindow( WINDOW_REALPARENT)->Invalidate();
+//    MyApp *pApp = (MyApp*)GetpApp();
+//    SolDep *pSoldep = pApp->GetSolDep();
 
-    aMouseOffset = rMEvt.GetPosPixel();
+    maMouseOffset = rMEvt.GetPosPixel();
     if ( rMEvt.IsLeft() )
     {
-        if ( rMEvt.IsMod1() )    //IsMod2
+
+        if ( rMEvt.IsMod2() )               // alt + mouse click left
         {
-            CaptureMouse();
-            SetMarkMode( MARKMODE_ACTIVATED );
-            MarkNeeded();
-            MarkDepending();
+            CallEventListeners( VCLEVENT_USER_MOUSEBUTTON_DOWN_ALT, this );
         }
         else {
-            MarkNeeded( TRUE );
-            MarkDepending( TRUE );
+            CallEventListeners( VCLEVENT_USER_MOUSEBUTTON_DOWN, this );
         }
         if( rMEvt.GetClicks() == 2 )
-            DoubleClick();
+            CallEventListeners( VCLEVENT_USER_MOUSEBUTTON_DOWN_DBLCLICK, this );
         else if ( !rMEvt.IsShift() && !((DepWin*)GetParent())->IsStartNewCon())
+        {
+            //((DepWin*)GetParent())->SaveSelectedObjWin(&this);
             CaptureMouse();
+        }
     }
 }
 
@@ -511,25 +516,16 @@ void ObjectWin::MouseButtonDown( const MouseEvent& rMEvt )
 void ObjectWin::MouseButtonUp( const MouseEvent& rMEvt )
 /*****************************************************************************/
 {
+    fprintf(stdout,"ObjectWin::MouseButtonUp\n");
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.IsShift() || ((DepWin*)GetParent())->IsStartNewCon())
-            ((DepWin*)GetParent())->NewConnector( this );
+            CallEventListeners( VCLEVENT_USER_MOUSEBUTTON_UP_SHFT, this );
+//          ((DepWin*)GetParent())->NewConnector( this );
         else
         {
-            ReleaseMouse();
-//          ((DepWin*)GetParent())->SetCapturer( NULL );
-            // workaround fuer vcl-bug
-
-// try without
-//          GetParent()->Invalidate();
-        }
-        if ( GetMarkMode() &  MARKMODE_ACTIVATED )
-        {
-//          UnsetMarkMode( MARKMODE_ACTIVATED );
-//          MarkNeeded( TRUE );
-//          MarkDepending( TRUE );
-            SetMarkMode( MARKMODE_SELECTED );
+            CallEventListeners( VCLEVENT_USER_MOUSEBUTTON_UP, this );
+            if ( IsMouseCaptured() ) ReleaseMouse();
         }
     }
     else if ( rMEvt.IsRight() )
@@ -541,15 +537,15 @@ void ObjectWin::MouseButtonUp( const MouseEvent& rMEvt )
             mpPopup->RemoveItem( mnPopupStaticItems );
         }
 
-        if ( Connections.Count()) {
+        if ( mConnections.Count()) {
             mpPopup->InsertSeparator();
 
-            for( i = 0; i < Connections.Count() ; i++ )
+            for( i = 0; i < mConnections.Count() ; i++ )
             {
-                mpPopup->InsertItem( mnPopupStaticItems + i, String( ((Connections.GetObject( i ))->GetOtherWin( this ))->GetBodyText(), RTL_TEXTENCODING_UTF8 ));
+                mpPopup->InsertItem( mnPopupStaticItems + i, String( ((mConnections.GetObject( i ))->GetOtherWin( this ))->GetBodyText(), RTL_TEXTENCODING_UTF8 ));
             }
         }
-        bMenuExecute = TRUE;
+        mbMenuExecute = TRUE;
         mpPopup->Execute( GetParent(), rMEvt.GetPosPixel() + GetPosPixel());
     }
 }
@@ -562,18 +558,19 @@ void ObjectWin::MouseMove( const MouseEvent& rMEvt )
     {
         USHORT i;
 
-        Point aNewWinPos( GetPosPixel() + rMEvt.GetPosPixel() - aMouseOffset );
+        Point aNewWinPos( GetPosPixel() + rMEvt.GetPosPixel() - maMouseOffset );
 
         aNewWinPos.X() = Max( 0L, aNewWinPos.X());
         aNewWinPos.Y() = Max( 0L, aNewWinPos.Y());
         SetPosPixel( aNewWinPos );
+        int t = mConnections.Count();
 
-        for ( i=0; i < Connections.Count();i++)
+        for ( i=0; i < mConnections.Count();i++)
         {
-            Connections.GetObject( i )->UpdatePosition( this );
+            mConnections.GetObject( i )->UpdatePosition( this );
         }
     }
-    else
+    else // !IsMouseCaptured()
     {
         if ( rMEvt.IsLeaveWindow() )
             aTipTimer.Stop();
@@ -582,15 +579,8 @@ void ObjectWin::MouseMove( const MouseEvent& rMEvt )
 
         MouseEvent aNewMEvt( rMEvt.GetPosPixel() + GetPosPixel());
 
-        GetParent()->MouseMove( aNewMEvt );
+        GetParent()->MouseMove( aNewMEvt ); //call to DepWin::MouseMove
     }
-}
-
-/*****************************************************************************/
-void ObjectWin::DoubleClick()
-/*****************************************************************************/
-{
-    mpDepperDontuseme->ViewContent( sBodyText );
 }
 
 /*****************************************************************************/
@@ -627,9 +617,9 @@ void ObjectWin::UpdateConnectors()
 {
     USHORT i;
 
-    for ( i = 0; i < Connections.Count(); i++ )
+    for ( i = 0; i < mConnections.Count(); i++ )
     {
-        Connections.GetObject( i )->UpdatePosition( this );
+        mConnections.GetObject( i )->UpdatePosition( this );
     }
 }
 
@@ -645,7 +635,7 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup )
         case OBJWIN_REMOVE_WIN :
 //          DBG_ASSERT( FALSE,"remove");
 //          DBG_ASSERT( mpDepperDontuseme,"remove");
-            mpDepperDontuseme->RemoveObject(( USHORT ) GetId());
+            //mpDepperDontuseme->RemoveObject(mpDepperDontuseme->mpObjectList, ( USHORT ) GetId());
                 break;
         case OBJWIN_ADD_CONNECTOR :
 //          DBG_ASSERT( FALSE,"add con");
@@ -653,13 +643,16 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup )
                 break;
         case OBJWIN_VIEW_CONTENT :
 //          DBG_ASSERT( FALSE,"view cnt");
-            mpDepperDontuseme->ViewContent( sBodyText );
+//          mpDepperDontuseme->ViewContent( msBodyText );
+//          TBD: CallEventListener
                 break;
         default :
 //          DBG_ASSERT( FALSE, String (nItemId) );
-            Connector* pCon = Connections.GetObject( nItemId - mnPopupStaticItems );
+            Connector* pCon = mConnections.GetObject( nItemId - mnPopupStaticItems );
 //          delete pCon;
-            mpDepperDontuseme->RemoveConnector( pCon->GetStartId(), pCon->GetEndId());
+//          mpDepperDontuseme->RemoveConnector( pCon->GetStartId(), pCon->GetEndId());
+//          TBD: CallEventListener
+
                 break;
     }
     return 0;
@@ -671,41 +664,41 @@ IMPL_LINK( ObjectWin, TipHdl, void *, EMTY_ARG )
 {
     aTipTimer.Stop();
 
-    if ( sTipText.Len()) {
+    if ( msTipText.Len()) {
         Point aPos( GetpApp()->GetAppWindow()->GetPointerPosPixel());
         Help::ShowBalloon( GetpApp()->GetAppWindow(),
             Point( aPos.X(), aPos.Y()),
-            String( sTipText, RTL_TEXTENCODING_UTF8 ));
+            String( msTipText, RTL_TEXTENCODING_UTF8 ));
     }
     return 0;
 }
 
 /*****************************************************************************/
-void ObjectWin::GetFocus()
+//void ObjectWin::GetFocus()
 /*****************************************************************************/
-{
-    SetMarkMode( MARKMODE_SELECTED );
-}
+//{
+    //SetMarkMode( MARKMODE_SELECTED );
+//}
 
 /*****************************************************************************/
 void ObjectWin::LoseFocus()
 /*****************************************************************************/
 {
-    if ( !bMenuExecute ) {
+    if ( !mbMenuExecute && !msbHideMode ) {
         UnsetMarkMode( MARKMODE_SELECTED );
         UnsetMarkMode( MARKMODE_ACTIVATED );
         MarkNeeded( TRUE );
         MarkDepending( TRUE );
     }
     else
-        bMenuExecute = FALSE;
+        mbMenuExecute = FALSE;
 }
 
 /*****************************************************************************/
 IMPL_LINK( ObjectWin, PopupDeactivated, PopupMenu*, mpPopup )
 /*****************************************************************************/
 {
-    bMenuExecute = FALSE;
+    mbMenuExecute = FALSE;
 
     if ( !HasFocus()) {
         UnsetMarkMode( MARKMODE_SELECTED );
@@ -721,6 +714,53 @@ IMPL_LINK( ObjectWin, PopupDeactivated, PopupMenu*, mpPopup )
 void ObjectWin::Command( const CommandEvent& rEvent)
 /*****************************************************************************/
 {
-    mpDepperDontuseme->GetGraphWin()->Command( rEvent );
+    fprintf(stdout, "ObjectWin::Command");
+//  mpDepperDontuseme->GetGraphWin()->Command( rEvent );
+//          TBD: CallEventListener
+
 }
 
+/*****************************************************************************/
+/*****************************************************************************/
+
+ObjectList::ObjectList() : ObjWinList()
+{
+}
+
+/*****************************************************************************/
+void ObjectList::ResetSelectedObject()
+/*****************************************************************************/
+{
+//    return;
+
+    ULONG i = 0;
+    ULONG nCount = Count();
+    ObjectWin* pObjectWin = NULL;
+    for (ULONG i=0; i < nCount; i++ )
+    {
+        pObjectWin = GetObject( i );
+        pObjectWin->UnsetMarkMode( MARKMODE_SELECTED );
+        pObjectWin->UnsetMarkMode( MARKMODE_NEEDED );
+        pObjectWin->UnsetMarkMode( MARKMODE_DEPENDING );
+        pObjectWin->SetActualWallpaper(*pDefaultWallpaper);
+        pObjectWin->SetAllConnectorsUnvisible();
+    }
+    return;
+}
+
+/*****************************************************************************/
+ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
+/*****************************************************************************/
+{
+    ULONG i = 0;
+    ULONG nCount = Count();
+    ObjectWin* pObjectWin = NULL;
+    while ( i < nCount )
+    {
+       pObjectWin = GetObject( i );
+       ByteString sPrj = pObjectWin->GetBodyText();
+       if (sPrj == rText) return pObjectWin;
+       i++;
+    }
+    return 0;
+}

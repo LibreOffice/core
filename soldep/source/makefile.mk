@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-20 13:53:34 $
+#   last change: $Author: obo $ $Date: 2006-04-20 15:16:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,13 +76,12 @@ SLOFILES        = \
     $(SLO)$/soldep.obj		\
     $(SLO)$/soldlg.obj		\
     $(SLO)$/depper.obj		\
-     $(SLO)$/hashtbl.obj		\
     $(SLO)$/hashobj.obj		\
     $(SLO)$/connctr.obj		\
     $(SLO)$/depwin.obj		\
     $(SLO)$/graphwin.obj	\
     $(SLO)$/tbox.obj		\
-    $(SLO)$/sdresid.obj		\
+    $(SLO)$/sdtresid.obj		\
     $(SLO)$/objwin.obj
 
 SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)

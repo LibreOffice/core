@@ -1,61 +1,36 @@
+
 /*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: soldlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-27 15:35:09 $
+ *  last change: $Author: obo $ $Date: 2006-04-20 15:16:35 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
@@ -67,8 +42,7 @@
 ModalDialog RID_SD_DIALOG_NEWPROJECT
 {
     OutputSize = TRUE;
-    Text [ de ] = "New Project";
-    Text [ en-US ] = "New Project";
+    Text = "New Project";
     PosSize = MAP_SYSFONT(18,18,142,142);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -86,8 +60,7 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJNAME {
         PosSize = MAP_SYSFONT( 5, 10, 100, 10 );
-        Text [ de ]  = "Project Name";
-        Text [ en-US ]  = "Project Name";
+        Text = "Project Name";
     };
     Edit EDIT_PRJNAME {
         Border = TRUE;
@@ -95,8 +68,7 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJSHORT {
         PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
-        Text [ de ]  = "Project Short Name";
-        Text [ en-US ]  = "Project Short Name";
+        Text = "Project Short Name";
     };
     Edit EDIT_PRJSHORT {
         Border = TRUE;
@@ -104,8 +76,7 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJDEPS {
         PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
-        Text [ de ]  = "Project Depends on";
-        Text [ en-US ]  = "Project Depends on";
+        Text = "Project Depends on";
     };
     Edit EDIT_PRJDEPS {
         Border = TRUE;
@@ -116,8 +87,7 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
 ModalDialog RID_SD_DIALOG_NEWDIRECTORY
 {
     OutputSize = TRUE;
-    Text [ de ]  = "New Directory";
-    Text [ en-US ]  = "New Directory";
+    Text = "New Directory";
     PosSize = MAP_SYSFONT(18,18,142,142);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -135,8 +105,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRNAME {
         PosSize = MAP_SYSFONT( 5, 10, 132, 10 );
-        Text [ de ]  = "Directory Name ( with projectname )";
-        Text [ en-US ]  = "Directory Name ( with projectname )";
+        Text = "Directory Name ( with projectname )";
     };
     Edit EDIT_DIRNAME {
         Border = TRUE;
@@ -144,8 +113,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRFLAG {
         PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
-        Text [ de ]  = "Directory Flag";
-        Text [ en-US ]  = "Directory Flag";
+        Text = "Directory Flag";
     };
     Edit EDIT_DIRFLAG {
         Border = TRUE;
@@ -153,8 +121,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRDEPS {
         PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
-        Text [ de ]  = "Directory Depends on";
-        Text [ en-US ]  = "Directory Depends on";
+        Text = "Directory Depends on";
     };
     Edit EDIT_DIRDEPS {
         Border = TRUE;
@@ -162,8 +129,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRACTION {
         PosSize = MAP_SYSFONT( 5, 70, 100, 10 );
-        Text [ de ]  = "What To Do";
-        Text [ en-US ]  = "What To Do";
+        Text = "What To Do";
     };
     Edit EDIT_DIRACTION {
         Border = TRUE;
@@ -171,8 +137,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRENV {
         PosSize = MAP_SYSFONT( 5, 90, 100, 10 );
-        Text [ de ]  = "Which Environments";
-        Text [ en-US ]  = "Which Environments";
+        Text = "Which Environments";
     };
     Edit EDIT_DIRENV {
         Border = TRUE;
@@ -184,8 +149,7 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
 ModalDialog RID_SD_DIALOG_HELP
 {
     OutputSize = TRUE;
-    Text [ de ]  = "Help";
-    Text [ en-US ]  = "Help";
+    Text = "Help";
     PosSize = MAP_SYSFONT(18,18,242,242);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -207,8 +171,7 @@ ModalDialog DLG_VERSIONSELECT {
     OutputSize = TRUE;
     Pos = MAP_APPFONT( 92, 40 );
     Size = MAP_APPFONT( 161, 98 );
-    Text [ de ]  = "Open workspace";
-    Text [ en-US ]  = "Open workspace";
+    Text = "Open workspace";
     Moveable = TRUE;
     Closeable = TRUE;
     ListBox DLG_VERSIONSELECT_LISTBOX {
@@ -220,12 +183,12 @@ ModalDialog DLG_VERSIONSELECT {
     GroupBox DLG_VERSIONSELECT_GROUP {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 104, 88 );
-            Text [ de ]  = "Workspaces";
-            Text [ en-US ]  = "Workspaces";
+            Text = "Workspaces";
         };
     OKButton DLG_VERSIONSELECT_OK {
             Pos = MAP_APPFONT( 116, 64 );
             Size = MAP_APPFONT( 40, 12 );
+            DefButton = TRUE;
             TabStop = TRUE;
         };
     CancelButton DLG_VERSIONSELECT_CANCEL {
@@ -239,26 +202,166 @@ ModelessDialog DLG_AUTOARRANGE {
     OutputSize = TRUE;
     Pos = MAP_APPFONT( 40, 12 );
     Size = MAP_APPFONT( 225, 82 );
-    Text [ de ]  = "Autoarrange";
-    Text [ en-US ]  = "Autoarrange";
+    Text = "Autoarrange";
     Moveable = TRUE;
     GroupBox DLG_AUTOARRANGE_GROUP {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 216, 72 );
-            Text [ de ]  = "Progress";
-            Text [ en-US ]  = "Progress";
+            Text = "Progress";
         };
     FixedText DLG_AUTOARRANGE_TEXT_MODULE {
             Pos = MAP_APPFONT( 8, 16 );
             Size = MAP_APPFONT( 208, 10 );
-            Text [ de ]  = "";
-            Text [ en-US ]  = "";
+            Text = "";
         };
     FixedText DLG_AUTOARRANGE_TEXT_OVERALL {
             Pos = MAP_APPFONT( 8, 48 );
             Size = MAP_APPFONT( 208, 10 );
-            Text [ de ]  = "";
-            Text [ en-US ]  = "";
+            Text = "";
         };
 };
+
+ModalDialog DLG_FIND_PROJECT {
+    OutputSize = TRUE;
+    Pos = MAP_APPFONT( 40, 12 );
+    Size = MAP_APPFONT( 155, 55 );
+    Text = "Find Project";
+    Moveable = TRUE;
+    SVLook          = TRUE;
+    ComboBox DLG_FIND_PROJECT_COMBOBOX
+    {
+        Pos = MAP_APPFONT ( 5 , 18 ) ;
+        Size = MAP_APPFONT ( 100 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        VScroll = TRUE ;
+        Sort = TRUE ;
+    };
+    OKButton DLG_FIND_PROJECT_OK {
+            Pos = MAP_APPFONT( 110, 10 );
+            Size = MAP_APPFONT( 40, 12 );
+            DefButton = TRUE;
+            TabStop = TRUE;
+        };
+    CancelButton DLG_FIND_PROJECT_CANCEL {
+            Pos = MAP_APPFONT( 110, 26 );
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+        };
+};
+
+ToolBox TID_SOLDEP_MAIN
+{
+    ButtonType      = BUTTON_SYMBOL;
+    Align           = BOXALIGN_TOP;
+        LineCount       = 1;
+        SVLook          = TRUE;
+        Border          = TRUE;
+        Sizeable                = TRUE;
+        Dockable                = TRUE;
+        Scroll                  = TRUE;
+        Moveable                = TRUE;
+        Closeable               = TRUE;
+        Zoomable                = TRUE;
+        ItemList        =
+        {
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_OPEN;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Load";
+                        HelpId          = TID_SOLDEP_OPEN;
+                        HelpText        = "Load";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_open.png";
+                        };
+                };
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_SAVE;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Save";
+                        HelpId          = TID_SOLDEP_SAVE;
+                        HelpText        = "Save";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_save.png";
+                        };
+                };
+                ToolBoxItem
+                {
+                         Type            = TOOLBOXITEM_SEPARATOR;
+                };
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_SELECT_WORKSPACE;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Select Workspace";
+                        HelpId          = TID_SOLDEP_HIDE_INDEPENDEND;
+                        HelpText        = "Select Workspace";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_verwin.png";
+                        };
+                };
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_FIND;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Find Module";
+                        HelpId          = TID_SOLDEP_FIND;
+                        HelpText        = "Find Module";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_find.png";
+                        };
+                };
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_BACK;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Back to Overview";
+                        HelpId          = TID_SOLDEP_BACK;
+                        HelpText        = "Back to Overview";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_zurueck.png";
+                        };
+                };
+                ToolBoxItem
+                {
+                        Identifier      = TID_SOLDEP_HIDE_INDEPENDEND;
+                        Type            = TOOLBOXITEM_BUTTON;
+                        Text            = "Hide Independend Modules";
+                        HelpId          = TID_SOLDEP_HIDE_INDEPENDEND;
+                        HelpText        = "Hide Independend Modules";
+                        Checkable               = TRUE;
+                        ItemBitmap      = Bitmap
+                        {
+                                File = "dt_hidedep.png";
+                        };
+                };
+        };
+};
+
+/*****************************************************************************/
+Bitmap BMP_SMALL_PIN_PINED
+/*****************************************************************************/
+{
+    File = "bs_pined.png";
+};
+
+/*****************************************************************************/
+Bitmap BMP_SMALL_PIN_UNPINED
+/*****************************************************************************/
+{
+    File = "bs_unpined.png";
+};
+
 

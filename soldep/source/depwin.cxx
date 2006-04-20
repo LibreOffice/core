@@ -1,65 +1,37 @@
-
 /*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: depwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:14 $
+ *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #include <tools/debug.hxx>
 
@@ -74,22 +46,17 @@ DepWin::DepWin( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle ),
     mbStartNewCon( FALSE ),
     maNewConStart( 0, 0 ),
-    maNewConEnd( 0, 0 ),
-    mpCapturer( NULL )
+    maNewConEnd( 0, 0 )
+//    mpSelectedProject( NULL ) unbekannt
+//  mpCapturer( NULL )
 {
     if ( !pParent->IsChildNotify() )
         pParent->EnableChildNotify( TRUE );
 //  if ( !pParent->IsAllResizeEnabled())
 //      pParent->EnableAllResize( TRUE );
     SetUpdateMode( TRUE );
-    SetPosSizePixel( Point(0,0), Size( 2000, 2000 ));
-
+    SetPosSizePixel( Point(0,0), Size( 2000, 2000 )); //Size of the scrollable Window
     mpPopup = new PopupMenu();
-    mpPopup->InsertItem( DEPPOPUP_NEW, String::CreateFromAscii("New object") );
-    mpPopup->InsertItem( DEPPOPUP_ZOOMIN, String::CreateFromAscii("Zoom in") );
-    mpPopup->InsertItem( DEPPOPUP_ZOOMOUT, String::CreateFromAscii("Zoom out") );
-    mpPopup->InsertSeparator();
-    mpPopup->InsertItem( DEPPOPUP_CLEAR, String::CreateFromAscii("Clear") );
 }
 
 DepWin::~DepWin()
@@ -129,7 +96,9 @@ void DepWin::NewConnector( ObjectWin* pWin )
 //          Connector* pConctr;
 //          pConctr = new Connector( this, WB_NOBORDER );
 //          pConctr->Initialize( mpNewConWin, pWin );
-            mpDepperDontuseme->AddConnector( mpNewConWin, pWin );
+
+// AddConnector has been moved to soldep
+//          mpDepperDontuseme->AddConnector( mpNewConWin, pWin );
         }
         mpNewConWin = 0L;
         mbStartNewCon = FALSE;
@@ -137,48 +106,26 @@ void DepWin::NewConnector( ObjectWin* pWin )
 
 }
 
-void    DepWin::Paint( const Rectangle& rRect )
+void DepWin::Paint( const Rectangle& rRect )
 {
     ULONG i = 0;
+    ULONG nListCount = ConList.Count();
 
-    if ( ! mpCapturer )
+    for ( i=0 ; i < nListCount ; i++ )
     {
-        ULONG nListCount = ConList.Count();
-
-        for ( i=0 ; i < nListCount ; i++ )
-        {
-            ConList.GetObject( i )->Paint( aEmptyRect );
-        }
-        if ( mbStartNewCon )
-        {
-            DrawLine( maNewConStart, maNewConEnd );
-        }
+        ConList.GetObject( i )->Paint( aEmptyRect );
     }
-    else
+    if ( mbStartNewCon )
     {
-        Connector* pCon;
-
-        Point aPoint( 0, 0 );
-        DrawBitmap( aPoint, *pWinCopy );
-        while( pCon = mpCapturer->GetConnector( i ))
-        {
-            pCon->Paint( aEmptyRect );
-            i++;
-        }
+        DrawLine( maNewConStart, maNewConEnd );
     }
 }
-
-/*void  DepWin::Resize()
-{
-} */
 
 void DepWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsRight() )
     {
-//#ifdef DEBUG
         mpPopup->Execute( this, rMEvt.GetPosPixel());
-//#endif
     }
 }
 
@@ -203,22 +150,8 @@ void DepWin::SetPopupHdl( void* pHdl )
     mpPopup->SetSelectHdl( LINK( pHdl, Depper, PopupSelected ));
 }
 
-
-void DepWin::SetCapturer( ObjectWin* pWin )
-{
-    mpCapturer = pWin;
-    if ( pWin )
-        pWinCopy = new Bitmap( GetBitmap( Point( 0, 0 ), GetParent()->GetSizePixel()));
-    else
-    {
-        Invalidate();
-        delete pWinCopy;
-        pWinCopy = NULL;
-    }
-}
-
 void DepWin::Command( const CommandEvent& rEvent)
 {
-    mpDepperDontuseme->GetGraphWin()->Command( rEvent );
+    //mpDepperDontuseme->GetGraphWin()->Command( rEvent );
+    GetParent()->Command( rEvent );
 }
-

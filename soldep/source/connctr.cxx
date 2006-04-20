@@ -1,69 +1,45 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: connctr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:13 $
+ *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
 #include "connctr.hxx"
 #include "objwin.hxx"
 #include "depwin.hxx"
-
+//#include "depapp.hxx"
 #include "math.h"
+
+BOOL Connector::msbHideMode = FALSE;
 
 Connector::Connector( DepWin* pParent, WinBits nWinStyle ) :
 mpStartWin( 0L ),
@@ -90,7 +66,7 @@ Connector::~Connector()
     mpParent->Invalidate( Rectangle( mEnd - Point( 3, 3), mEnd + Point( 3, 3)));
 }
 
-void Connector::Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin )
+void Connector::Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin, BOOL bVis )
 {
     mpStartWin = pStartWin;
     mpEndWin = pEndWin;
@@ -101,13 +77,15 @@ void Connector::Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin )
     mEnd = pEndWin->GetFixPoint( mCenter );
     mnStartId = pStartWin->GetId();
     mnEndId = pEndWin->GetId();
+    bVisible = bVis;
 
-    if ( mpParent->IsPaintEnabled())
+//  if ( mpParent->IsPaintEnabled())
+    if ( IsVisible() )
     {
         mpParent->DrawLine( mEnd, mStart );
         mpParent->DrawEllipse( Rectangle( mEnd - Point( 2, 2), mEnd + Point( 2, 2)));
     }
-    UpdateVisibility();
+    UpdateVisibility(); //null_Project
 }
 
 void Connector::UpdateVisibility()
@@ -143,7 +121,63 @@ Point Connector::GetMiddle()
 
 void Connector::Paint( const Rectangle& rRect )
 {
-    if ( IsVisible()) {
+    //MyApp *pApp = (MyApp*)GetpApp();
+    //SolDep *pSoldep = pApp->GetSolDep();
+    if (msbHideMode)
+    {
+    /*
+        if ((mpStartWin->GetMarkMode() == 0) || (mpEndWin->GetMarkMode() == 0))
+        {
+            //bVisible = FALSE;
+            UpdateVisibility();
+            fprintf( ((MyApp*)GetpApp())->pDebugFile, "FALSE connctr: Start: %s %i - End: %s %i\n",
+                mpStartWin->GetBodyText().GetBuffer(),mpStartWin->GetMarkMode(),
+                mpEndWin->GetBodyText().GetBuffer(),mpEndWin->GetMarkMode());
+        } else
+        {
+            bVisible = TRUE;
+            fprintf( ((MyApp*)GetpApp())->pDebugFile, "TRUE connctr: Start: %s %i - End: %s %i\n",
+                mpStartWin->GetBodyText().GetBuffer(),mpStartWin->GetMarkMode(),
+                mpEndWin->GetBodyText().GetBuffer(),mpEndWin->GetMarkMode());
+        }
+     */
+    if (!(mpStartWin->IsNullObject())) //null_project
+    {
+        if (mpStartWin->GetMarkMode() == 0)
+        {
+            mpStartWin->SetViewMask(0); //objwin invisible
+        } else
+        {
+            mpStartWin->SetViewMask(1); //objwin visible
+        }
+    }
+    if (!(mpEndWin->IsNullObject()))
+    {
+        if (mpEndWin->GetMarkMode() == 0)
+        {
+            mpEndWin->SetViewMask(0); //objwin invisible
+        } else
+        {
+            mpEndWin->SetViewMask(1); //objwin visible
+        }
+    }
+    UpdateVisibility();
+    } else //IsHideMode
+    {
+        //bVisible = TRUE;
+        if (!(mpStartWin->IsNullObject())) //null_project
+        {
+             mpStartWin->SetViewMask(1);
+        }
+        if (!(mpEndWin->IsNullObject())) //null_project
+        {
+             mpEndWin->SetViewMask(1);
+        }
+        UpdateVisibility();
+    }
+    if ( (mpStartWin->GetBodyText() != ByteString("null")) &&              //null_project
+         (mpEndWin->GetBodyText() != ByteString("null")) && IsVisible())  //null_project
+    {
         mpParent->DrawLine( mEnd, mStart );
         mpParent->DrawEllipse( Rectangle( mEnd - Point( 2, 2), mEnd + Point( 2, 2)));
     }
@@ -154,10 +188,14 @@ void Connector::UpdatePosition( ObjectWin* pWin, BOOL bPaint )
 //  more than one call ?
 //
     Point OldStart, OldEnd;
-    static nCallCount;
-//  BOOL bPaint = TRUE;
+    static ULONG nCallCount = 0;
 
-    if ( nCallCount )
+    //MyApp *pApp = (MyApp*)GetpApp();
+    //SolDep *pSoldep = pApp->GetSolDep();
+    if (msbHideMode)
+        bVisible = 1;
+
+    if ( nCallCount )           // only one call
         nCallCount++;
     else
     {
@@ -176,15 +214,17 @@ void Connector::UpdatePosition( ObjectWin* pWin, BOOL bPaint )
             {
                 mpParent->Invalidate( Rectangle( OldStart, OldEnd ));
                 mpParent->Invalidate( Rectangle( OldEnd - Point( 2, 2), OldEnd + Point( 2, 2)));
-//who uses this rectangle???
-                Paint ( Rectangle( mEnd - Point( 3, 3), mEnd + Point( 3, 3)));
-                Paint ( Rectangle( mEnd, mStart ));
+//Don't paint "null_project" connectors
+                if ( (mpStartWin->GetBodyText() != ByteString("null")) &&               //null_project
+                     (mpEndWin->GetBodyText() != ByteString("null")))                   //null_project
+                {
+                    Paint ( Rectangle( mEnd - Point( 3, 3), mEnd + Point( 3, 3)));
+                    Paint ( Rectangle( mEnd, mStart ));
+                }
             }
             nCallCount--;
         }
     }
-//  mpParent->DrawLine( mEnd, mStart );
-//  mpParent->DrawEllipse( Rectangle( mEnd - Point( 2, 2), mEnd + Point( 2, 2)));
 }
 
 USHORT Connector::Save( SvFileStream& rOutFile )
@@ -205,6 +245,7 @@ USHORT Connector::Load( SvFileStream& rInFile )
 
 ObjectWin* Connector::GetOtherWin( ObjectWin* pWin )
 {
+// get correspondent object ptr
     if ( mpStartWin == pWin )
         return mpEndWin;
     else
@@ -216,6 +257,7 @@ ObjectWin* Connector::GetOtherWin( ObjectWin* pWin )
 
 ULONG Connector::GetOtherId( ULONG nId )
 {
+// get correspondent object id
     if ( mnStartId == nId )
         return mnEndId;
     else
@@ -239,4 +281,3 @@ BOOL Connector::IsStart( ObjectWin* pWin )
 {
     return pWin == mpStartWin;
 }
-
