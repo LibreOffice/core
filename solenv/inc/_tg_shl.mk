@@ -337,7 +337,7 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -347,7 +347,7 @@ $(SHL1TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN)
@@ -735,7 +735,7 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -745,7 +745,7 @@ $(SHL2TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN)
@@ -1133,7 +1133,7 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1143,7 +1143,7 @@ $(SHL3TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN)
@@ -1531,7 +1531,7 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1541,7 +1541,7 @@ $(SHL4TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN)
@@ -1929,7 +1929,7 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1939,7 +1939,7 @@ $(SHL5TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN)
@@ -2327,7 +2327,7 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2337,7 +2337,7 @@ $(SHL6TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN)
@@ -2725,7 +2725,7 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2735,7 +2735,7 @@ $(SHL7TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN)
@@ -3123,7 +3123,7 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3133,7 +3133,7 @@ $(SHL8TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN)
@@ -3521,7 +3521,7 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3531,7 +3531,7 @@ $(SHL9TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN)
@@ -3919,7 +3919,7 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3929,7 +3929,7 @@ $(SHL10TARGETN) : \
 .ENDIF
 .ENDIF
     @echo "Making: $@.jnilib"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN)
