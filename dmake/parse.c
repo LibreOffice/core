@@ -1,6 +1,6 @@
 /* $RCSfile: parse.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:06:58 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:01:27 $
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis
@@ -107,8 +107,9 @@ FILE *fil;
                   }
                   else if( *p == ']' )
                      Fatal( "Found unmatched ']'" );
-                  else if( (*pTmpBuf && *p) || (Notabs && !*pTmpBuf && !*p))
+                  else if( *pTmpBuf ) /* Something that was no recipe. */
              State = NORMAL_SCAN;
+          /* The only thing that was not handled was an empty line. */
                }
 
                if( State == RULE_SCAN ) break;     /* ie. keep going    */
@@ -152,8 +153,8 @@ FILE *fil;
            if( Parse_macro(pTmpBuf, M_DEFAULT) ) break;/* it's a macro def*/
            if( Parse_rule_def( &State ) )       break;/* it's a rule def */
 
-           /* if just blank line then ignore it */
-           if( *DmStrSpn( Buffer, " \t\r\n" ) == '\0' ) break;
+           /* if it is an empty or blank line then ignore it */
+           if( !*Buffer || *DmStrSpn( Buffer, " \t\r\n" ) == '\0' ) break;
 
            /* otherwise assume it was a line of unrecognized input, or a
             * recipe line out of place so print a message */
