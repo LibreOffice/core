@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:46:07 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #endif
 
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
-#define LOCALE_VERSION_DTD "2.0"
+#define LOCALE_VERSION_DTD "2.0.3"
 
 typedef ::std::set< ::rtl::OUString > NameSet;
 typedef ::std::set< sal_Int16 > ValueSet;
@@ -1166,12 +1166,30 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
     ::rtl::OUString str;
     sal_Int16 i;
 
+    bool bTheDefault= false;
+    bool bTheCompatible = false;
     for ( i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
         LocaleNode * calNode = getChildAt (i);
         str = calNode->getAttr() -> getValueByName("default");
-        of.writeDefaultParameter("Currency", str, nbOfCurrencies);
+        bool bDefault = of.writeDefaultParameter("Currency", str, nbOfCurrencies);
         str = calNode->getAttr() -> getValueByName("usedInCompatibleFormatCodes");
-        of.writeDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
+        bool bCompatible = of.writeDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
+        str = calNode->getAttr() -> getValueByName("legacyOnly");
+        bool bLegacy = of.writeDefaultParameter("CurrencyLegacyOnly", str, nbOfCurrencies);
+        if (bLegacy && (bDefault || bCompatible))
+            incError( "Currency: if legacyOnly==true, both 'default' and 'usedInCompatibleFormatCodes' must be false.");
+        if (bDefault)
+        {
+            if (bTheDefault)
+                incError( "Currency: more than one default currency.");
+            bTheDefault = true;
+        }
+        if (bCompatible)
+        {
+            if (bTheCompatible)
+                incError( "Currency: more than one currency flagged as usedInCompatibleFormatCodes.");
+            bTheCompatible = true;
+        }
         str = calNode -> findNode ("CurrencyID") -> getValue();
         of.writeParameter("currencyID", str, nbOfCurrencies);
         str = calNode -> findNode ("CurrencySymbol") -> getValue();
@@ -1185,6 +1203,11 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         of.writeIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
         of.writeAsciiString("\n");
     };
+
+    if (!bTheDefault)
+        incError( "Currency: no default currency.");
+    if (!bTheCompatible)
+        incError( "Currency: no currency flagged as usedInCompatibleFormatCodes.");
 
     of.writeAsciiString("static const sal_Int16 currencyCount = ");
     of.writeInt(nbOfCurrencies);
@@ -1210,6 +1233,9 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         of.writeInt(i);
         of.writeAsciiString(",\n");
         of.writeAsciiString("\tcurrencyDecimalPlaces");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+        of.writeAsciiString("\tdefaultCurrencyLegacyOnly");
         of.writeInt(i);
         of.writeAsciiString(",\n");
     }
