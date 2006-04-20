@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:28:56 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_LOCALEITEM_HPP_
 #include <com/sun/star/i18n/LocaleItem.hpp>
@@ -86,7 +86,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >    xLD;
     ::com::sun::star::lang::Locale          aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar >  xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem  aLocaleDataItem;
@@ -165,12 +165,13 @@ public:
     ::com::sun::star::lang::Locale getLoadedLocale() const;
 
 
-    // Wrapper implementations of class LocaleData
+    // Wrapper implementations of service LocaleData
 
     ::com::sun::star::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
     ::com::sun::star::i18n::LocaleDataItem getLocaleItem() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > getAllCalendars() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency > getAllCurrencies() const;
+    /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > getAllFormats() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation > getCollatorImplementations() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getTransliterations() const;
