@@ -14,7 +14,7 @@ TMPDIR :=
 # Definition of macros for library, and C startup code.
 
 # The following sources are required for MSC
-OSR_SRC += tempnam.c ruletab.c
+OSR_SRC += ruletab.c
 DOS_SRC += runargv.c rmprq.c
 
 .SETDIR=$(osrdir) : $(OSR_SRC)
@@ -27,13 +27,14 @@ SET_STACK  = /stack:4096
 ASFLAGS   += -t -mx $(S_$(MODEL))
 
 # Microsoft C doesn't need tail but needs head
+LDOBJS         != $(CSTARTUP) $(OBJDIR)/{$(<:f)}
 LDTAIL         !=
 LDHEAD         != $(LDFLAGS)
 LDARGS	       != $(LDHEAD) -out:$(TARGET) @$(LDTMPOBJ) $(LDTAIL)
 LDTAIL	       != $(_libs)
 _libs          != $(!null,$(LDLIBS) ,@$(LDTMPLIB))
-LDTMPOBJ       != $(mktmp,,$(DIVFILE) $(LDOBJS:s,/,\\,:t"\n")\n)
-LDTMPLIB       != $(mktmp,,$(DIVFILE) $(LDLIBS:s,/,\\,:t"\n")\n)
+LDTMPOBJ       != $(mktmp,,$(DIVFILE) $(LDOBJS:s,/,\,:t"\n"))
+LDTMPLIB       != $(mktmp,,$(DIVFILE) $(LDLIBS:s,/,\,:t"\n"))
 
 # Debugging libraries and flags
 DB_LDFLAGS += /nologo /co /li /map
