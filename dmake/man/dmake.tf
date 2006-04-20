@@ -19,14 +19,16 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "UW" "Version 4.3"
+.TH DMAKE 1  "UW" "Version 4.4"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
+.nh
 .B dmake
 [\-P#] [\-{f|C|K} file] [\-{w|W} target ...]
 [macro[[!][*][+][:]]=\fIvalue\fP ...]
-[\-v{cdfimrtw}] [\-ABcdeEghiknpqrsStTuVxX] [target ...]
+[\-ABcdeEghiknpqrsStTuVxX] [\-v[cdfimrtw]] [\-m[trae]] [target ...]
+.hy 14
 .SH DESCRIPTION
 .PP
 .B dmake
@@ -139,6 +141,32 @@ all targets not depending on targets that could not be made.
 Ordinarily \fBdmake\fR stops after a command returns a non-zero status,
 specifying \fB\-k\fR causes \fBdmake\fR to ignore the error
 and continue to make as much as possible.
+.IP "\fB\-m[trae]\fR"
+Measure timing information. Print the time when targets and/or recipes
+are started and finished to stdout. The following format is used:
+.IP ""
+\fB{s|e} {target|recipe} time maketarget\fP
+.IP ""
+\fBs\fP or \fBe\fP stands for started or ended, \fBtarget\fP or
+\fBrecipe\fP denotes if this line refers to the whole target or a
+recipe. \fBtime\fP is displayed in Unix time format, i.e. the number
+of seconds since an epoch.  (Since 1970-01-01T00:00:00Z).  \fBmaketarget\fP
+obviously represents the target the timing information is given for.
+The optional flags \fB[trae]\fP can be used to change the information that
+is displayed.  If no optional flags are given only the \fBt\fP flag
+is assumed to be selected, ie. \fB\-mt\fP.  The optional flags stand for:
+.RS
+.IP "\fBt\fP"
+Display the start and end time of each target.
+.IP "\fBr\fP"
+Display the start and end time of each recipe.
+.IP "\fBa\fP"
+Display the target as an absolute path, i.e. prepend the current working
+directory.
+.IP "\fBe\fP"
+Also display the start and end time of the \fB$(shell command)\fP function
+(aka. shell escape) macros.
+.RE
 .IP "\fB\-n\fR"
 Causes \fBdmake\fR to print out what it would have executed,
 but does not actually execute the commands.  A special check is made for
@@ -181,7 +209,7 @@ Verbose flag, when making targets print to stdout what we are going to make
 and what we think its time stamp is.  The optional flags \fB[cdfimrtw]\fP can be
 used to restrict the information that is displayed.  In the absence of any
 optional flags all are assumed to be given (ie. \fB\-v\fP is equivalent to
-\fB\-vdfimt\fP).  The meanings of the optional flags are:
+\fB\-vcdfimrtw\fP).  The meanings of the optional flags are:
 .RS
 .IP "\fBc\fP"
 Notify of directory cache operations only.
@@ -311,6 +339,14 @@ MAKESTARTUP defined internally within \fBdmake\fP.  In this version, the
 internal definition of MAKESTARTUP is "$(DMAKEROOT)/startup.mk", so you
 can set the environment variable DMAKEROOT to the location of your startup
 directory.
+.sp
+If DMAKEROOT is not changed, for native Windows dmake versions its value
+defaults to "$(ABSMAKECMD:d)startup" (see definition of ABSMAKECMD for
+details).
+For unix like versions build with the autotools build system it defaults
+to the value of "${prefix}/share/startup" at build time. The actual value,
+usually something like /usr/local/share/startup can be checked with the \-V
+command line switch.
 .RE
 .LP
 The above search is disabled by specifying the \-r option on the command line.
@@ -344,7 +380,7 @@ if the proper rules for doing so are defined in the startup file.
 If the first line of the user makefile is of the form:
 .RS
 .sp
-\#! command command_args
+#!command command_args
 .sp
 .RE
 then \fBdmake\fP will expand and run the command prior to reading any
@@ -651,10 +687,10 @@ target in the set is made.  As a side-effect, \fBdmake\fP internally sorts
 such targets in ascending alphabetical order and the value of $@ is always
 the first target in the sorted set.
 .LP
-All attributes are user setable and except for .UPDATEALL, .SETDIR and .MKSARGS
+All attributes are user setable and except for .UPDATEALL and .MKSARGS
 may be used in one of two forms.
 The .MKSARGS attribute is restricted to use as a global attribute, and
-the use of the .UPDATEALL and .SETDIR attributes is restricted to rules
+the use of the .UPDATEALL attribute is restricted to rules
 of the second form only.
 .sp
 \tATTRIBUTE_LIST : \fItargets\fP
@@ -776,35 +812,41 @@ The first is of the form:
 .LP
 where
 .I modifier_list
-is chosen from the set { B or b, D or d, E or e, F or f, I or i, L or l, S or
-s, T or t, U or u, ^, +, 1 } and
+may be a combination of:
 .RS
 .sp
-.Is "b  "
-.Ii "b "
+.Is "b or B "
+.Ii "b or B"
 \- file (not including suffix) portion of path names
-.Ii "d"
+.Ii "d or D"
 \- directory portion of all path names
-.Ii "e"
+.Ii "e or E"
 \- suffix portion of path names
-.Ii "f"
+.Ii "f or F"
 \- file (including suffix) portion of path names
-.Ii "i"
+.Ii "i or I"
 \- inferred names of targets
-.Ii "l"
+.Ii "l or L"
 \- macro value in lower case
-.Ii "s"
-\- simple pattern substitution
-.Ii "t"
-\- tokenization.
-.Ii "u"
+.Ii "u or U"
 \- macro value in upper case
+.Ii "1"
+\- return the first white space separated token from value
+.RE
+.sp
+or a single one of:
+.RS
+.sp
+.Ii "m or M"
+\- map escape codes found in macro to their ASCII value
+.Ii "s or S"
+\- simple pattern substitution
+.Ii "t or T"
+\- tokenization.
 .Ii "^"
 \- prepend a prefix to each token
 .Ii "+"
 \- append a suffix to each token
-.Ii "1"
-\- return the first white space separated token from value
 .sp
 .RE
 .fi
@@ -844,12 +886,20 @@ If a token ends in a string composed from the value of the macro DIRBRKSTR
 final directory separator string.  Thus successive pairs of :d modifiers
 each remove a level of directory in the token string.
 .PP
-The tokenization modifier takes all white space separated tokens from the
-macro value and separates them by the quoted separator string.  The separator
-string may contain the following escape codes \ea => <bel>,
+The map escape codes modifier changes the following escape codes \ea => <bel>,
 \&\eb => <backspace>, \ef => <formfeed>, \en => <nl>, \er => <cr>,
 \&\et => <tab>, \ev => <vertical tab>, \e" => ", and \exxx => <xxx> where
-xxx is the octal representation of a character.  Thus the
+xxx is the octal representation of a character into the corresponding ASCII
+value.
+.PP
+The tokenization, prepend and append modifier may use the same escape codes
+that are supported by the map escape codes modifier in the string that is
+inserted, prepended or added by the respective macro modifier.
+These modifiers may quote this string to include otherwise problematic
+characters.  E.g. spaces, colons and parentheses.
+.PP
+The tokenization modifier takes all white space separated tokens from the
+macro value and separates them by the separator string.  Thus the
 expansion:
 .LP
 .RS
@@ -1256,8 +1306,11 @@ $(mktmp[,[\fIfile\fP][,\fItext\fP]] \fIdata\fP)
 .sp
 .RE
 then all text contained in the \fIdata\fP expression is expanded and
-is written to a temporary file.  The return
-value of the macro is the name of the temporary file.
+is written to a temporary file.  The \fIdata\fP in the file will always
+be terminated from a new line character.  The return
+value of the macro is the name of the temporary file unless the \fItext\fP
+parameter is defined. In this case the return value is the expanded value
+of \fItext\fP.
 .PP
 .I data
 can be any text and must be separated from the 'mktmp' portion of the
@@ -1288,16 +1341,14 @@ be nested and any diversions that are created as part of ':=' macro
 expansions persist for the duration of the
 .B dmake
 run.
-The diversion text may contain
-the same escape codes as those described in the MACROS section.
-Thus if the \fIdata\fP text is to contain new lines they must be inserted
-using the \en escape sequence.  For example the expression:
+If the \fIdata\fP text is to contain new lines the map escape codes macro
+expasion can be used.  For example the expression:
 .RS
 .sp
 .nf
+mytext:=this is a\entest of the text diversion
 all:
-	cat $(mktmp this is a\en\e
-	test of the text diversion\en)
+	cat $(mktmp $(mytext:m))
 .fi
 .sp
 .RE
@@ -1308,8 +1359,7 @@ cat /tmp/mk12294AA
 .sp
 .RE
 where the temporary file contains two lines both of which are terminated
-by a new-line.  If the \fIdata\fP text spans multiple lines in the makefile
-then each line must be continued via the use of a \e.
+by a new-line.
 A second more illustrative example generates a response file to an MSDOS
 link command:
 .RS
@@ -1317,7 +1367,7 @@ link command:
 .nf
 OBJ = fred.obj mary.obj joe.obj
 all : $(OBJ)
-	link @$(mktmp $(^:t"+\en")\en)
+	link @$(mktmp $(^:t"+\en"))
 .fi
 .sp
 .RE
@@ -1337,8 +1387,8 @@ joe.obj
 .fi
 .sp
 .RE
-The last line of the file is terminated by a new-line which is inserted
-due to the \en found at the end of the \fIdata\fP string.
+The last line of the file is terminated by a new-line which is always
+inserted at the end of the \fIdata\fP string.
 .PP
 If the optional \fIfile\fP specifier is present then its expanded value
 is the name of the temporary file to create.  An example that would be useful
@@ -1414,7 +1464,10 @@ Only macros which have been assigned a value in the makefile prior to the
 export directive are exported, macros as yet undefined
 or macros whose value contains any of the characters "+=:*"
 are not exported.
-is suppre
+.sp
+Note that macros that are not expanded during the macro assignment and contain
+other macros will be written into the environment containing these other
+macros in the form of $(macroname).
 .IP \fB.IMPORT\fP 1.4i
 Prerequisite names specified for this target are searched for in the
 environment and defined as macros with their value taken from the environment.
@@ -1522,6 +1575,13 @@ The following are all of the string valued macros.
 This list is divided into two groups.  The first group gives the string
 valued macros that are defined internally and cannot be directly set by the
 user.
+.IP \fBABSMAKECMD\fP 1.6i
+\fBWarning!\fP This macro's value is differently defined for a native Windows
+dmake executable (compiled with MS Visual C++ or MinGW) and dmake for other
+operating systems or build with other compilers.
+.sp
+In the first case its value is the absolute filename of the executable of
+the current dmake process, otherwise it is defined as the NULL string.
 .IP \fBINCDEPTH\fP 1.6i
 This macro's value is a string of digits representing
 the current depth of makefile inclusion.
@@ -1559,13 +1619,21 @@ This is useful when comparing a conditional expression to an NULL value.
 .IP \fBPWD\fP 1.6i
 Is the full path to the
 current directory in which make is executing.
+.IP \fBSPACECHAR\fP 1.6i
+Is permanently defined to contain one space character. This is useful
+when using space characters in function macros, e.g. subst, that
+otherwise would get deleted (leading/trailing spaces) or for using
+spaces in function macro parameters.
 .IP \fBTMPFILE\fP 1.6i
 Is set to the name of the most recent temporary file opened by \fBdmake\fP.
 Temporary files are used for text diversions and for group recipe processing.
 .IP \fBTMD\fP 1.6i
 Stands for "To Make Dir", and
 is the path from the present directory (value of $(PWD)) to the directory
-that \fBdmake\fP was started up in (value of $(MAKEDIR)).
+that \fBdmake\fP was started up in (value of $(MAKEDIR)). If the present
+directory is the directory that \fBdmake\fP was started up in TMD will be
+set to the relative path ".". This allows to create valid paths by prepending
+$(TMD)$(DIRSEPSTR) to a relative path.
 This macro is modified when .SETDIR attributes are processed.
 .IP \fBUSESHELL\fP 1.6i
 The value of this macro is set to "yes" if the current recipe is forced to
@@ -1583,11 +1651,11 @@ If set to "yes" enables the directory cache (this is the default).  If set to
 If set to "yes" causes the directory cache, if enabled, to respect
 file case, if set to "no" facilities of the native OS are used to
 match file case.
-.IP \fB.NAMEMAX\fP 1.6i
+.IP \fBNAMEMAX\fP 1.6i
 Defines the maximum length of a filename component.  The value of the variable
 is initialized at startup to the value of the compiled macro NAME_MAX.  On
 some systems the value of NAME_MAX is too short by default.  Setting a new
-value for .NAMEMAX will override the compiled value.
+value for NAMEMAX will override the compiled value.
 .IP \fB.NOTABS\fP 1.6i
 When set to "yes" enables the use of spaces as well as <tabs> to begin
 recipe lines.
@@ -1795,6 +1863,10 @@ will be:
 supports a full set of functional macros.  One of these, the $(mktmp ...)
 macro, is discussed in detail in the TEXT DIVERSION section and is not
 covered here.
+.PP
+Note that some of these macros take comma separated parameters
+but that these parameters must not contain literal whitespaces. Whitespaces
+in macros used in these parameters are allowed.
 .RS
 .sp
 .IP "$(\fBand\fP \fBmacroterm ...\fP)"
@@ -1928,8 +2000,8 @@ expands each \fBmacroterm\fP in turn and returs the empty string if
 each term expands to the empty string; otherwise, it returs the string
 "t".
 .IP "$(\fBshell\fP \fBcommand\fP)"
-Runs \fIcommand\fP as if it were part of a recipe and returns,
-separated by a single space, all the non-white
+is a shell escape macro. It runs \fIcommand\fP as if it were part of a
+recipe and returns, separated by a single space, all the non-white
 space terms written to stdout by the command.
 For example:
 .RS
@@ -1947,10 +2019,14 @@ $(shell +ls *.c)
 .sp
 .RE
 will run the command using the current shell.
+.LP
+\fBNote\fP that if the macro is part of a recipe it will be evaluated after
+all previous recipe lines have been executed. For obvious reasons it will be
+evaluated before the current recipe line or group recipe is executed.
 .RE
 .IP "$(\fBshell,expand\fP \fBcommand\fP)"
-Is an extension to the \fB$(shell...\fP function macro that expands the result
-of running \fBcommand\fP.
+Is an extension to the \fB$(shell command)\fP function macro that expands the
+result of running \fBcommand\fP.
 .IP "$(\fBsort\fP \fBlist\fP)"
 Will take all white\-space separated tokens in \fIlist\fP and will
 return their sorted equivalent list.
