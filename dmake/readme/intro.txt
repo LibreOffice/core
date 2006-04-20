@@ -1,4 +1,4 @@
-DMAKE 4.3
+DMAKE 4.4
 ---------
 
 The original sources of dmake were available on http://dmake.wticorp.com.
@@ -30,10 +30,11 @@ enhancements.  A short summary of the more important features follows:
 	. directory caching
 	. highly configurable
 
-Release notes of dmake can be found in the file
+Current release notes can be found in the file:
+
+	NEWS
+
+Release notes for older dmake versions (4.1 and before) can be found in
+the file:
 
 	readme/release.txt
-
-and are continued in the file
-
-    NEWS
