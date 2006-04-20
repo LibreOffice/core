@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL ALLOC BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVACACHE JAVA_HOME JDK XSLTPROC PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SYSTEM_XML_APIS XML_APIS_JAR SYSTEM_XERCES XERCES_JAR SYSTEM_XALAN XALAN_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON AGG_CFLAGS AGG_LIBS SYSTEM_AGG MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HUNSPELL HUNSPELL_CFLAGS SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO SYSTEM_CAIRO MOC KDE_CFLAGS KDE_LIBS ENABLE_LOCKDOWN LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS WITHOUT_PPDS WITHOUT_AFMS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL ALLOC BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVACACHE JAVA_HOME JDK XSLTPROC PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SYSTEM_XML_APIS XML_APIS_JAR SYSTEM_XERCES XERCES_JAR SYSTEM_XALAN XALAN_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON AGG_CFLAGS AGG_LIBS SYSTEM_AGG MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HUNSPELL HUNSPELL_CFLAGS SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO SYSTEM_CAIRO MOC KDE_CFLAGS KDE_LIBS ENABLE_LOCKDOWN LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS WITHOUT_PPDS WITHOUT_AFMS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -864,8 +864,8 @@ Optional Features:
   --enable-libart         Enables the use of libart, instead of GPC for
                           polygon clipping.
 
-  --enable-openldap       Enables the use of the OpenLDAP LDAP SDK instead
-                          of the Netscape/Mozilla one
+  --disable-ldap       Disables the use of LDAP backend via Netscape/Mozilla or
+                          OpenLDAP LDAP SDK
 
   --enable-lockdown       Enables the gconf integration work in OOo
 
@@ -969,14 +969,13 @@ Optional Features:
 
   --enable-xrender-link   link with libXrender instead of dynamically open it
 
+  --disable-neon          Disable neon and the compilation of webdav binding
+
   --enable-check-only     Use this option option if you just want to check your
                           environment.  This option stops the generation of an
                           ????env.set
 
                           Usage: --enable-check-only=yes
-
-  --enable-macos9         Use this option option if you want to generate a
-                          macos9 environment on macosx.
 
   --enable-sgistl         for IRIX users, use this option option to build
                           OpenOffice.org using SGI's STL.
@@ -993,6 +992,9 @@ Optional Packages:
 
   --without-gpc           Use the internal polygon clipping code instead of
                           the external GPC polygon clipping library.
+
+  --with-openldap       Enables the use of the OpenLDAP LDAP SDK instead
+                          of the Netscape/Mozilla one
 
   --with-firefox          Use Firefox instead of Mozilla Suite for building.
                           Only honoured with --with-system-mozilla
@@ -1753,9 +1755,15 @@ if test "${enable_libart+set}" = set; then
   enableval="$enable_libart"
 
 fi;
-# Check whether --enable-openldap or --disable-openldap was given.
-if test "${enable_openldap+set}" = set; then
-  enableval="$enable_openldap"
+# Check whether --enable-ldap or --disable-ldap was given.
+if test "${enable_ldap+set}" = set; then
+  enableval="$enable_ldap"
+
+fi;
+
+# Check whether --with-openldap or --without-openldap was given.
+if test "${with_openldap+set}" = set; then
+  withval="$with_openldap"
 
 fi;
 # Check whether --enable-lockdown or --disable-lockdown was given.
@@ -1934,6 +1942,8 @@ fi;
 if test "${enable_cairo+set}" = set; then
   enableval="$enable_cairo"
 
+else
+  enable_cairo=no
 fi;
 # Check whether --enable-gnome-vfs or --disable-gnome-vfs was given.
 if test "${enable_gnome_vfs+set}" = set; then
@@ -2207,6 +2217,11 @@ if test "${with_system_portaudio+set}" = set; then
   withval="$with_system_portaudio"
 
 fi;
+# Check whether --enable-neon or --disable-neon was given.
+if test "${enable_neon+set}" = set; then
+  enableval="$enable_neon"
+
+fi;
 
 # Check whether --with-system-neon or --without-system-neon was given.
 if test "${with_system_neon+set}" = set; then
@@ -2364,11 +2379,6 @@ fi;
 # Check whether --enable-check-only or --disable-check-only was given.
 if test "${enable_check_only+set}" = set; then
   enableval="$enable_check_only"
-
-fi;
-# Check whether --enable-macos9 or --disable-macos9 was given.
-if test "${enable_macos9+set}" = set; then
-  enableval="$enable_macos9"
 
 fi;
 
@@ -11367,6 +11377,9 @@ fi
 
 
 
+if test "$_os" = "Darwin" && test "$with_system_curl" != "no"; then
+   with_system_curl=yes
+fi
 echo "$as_me:$LINENO: checking which curl to use" >&5
 echo $ECHO_N "checking which curl to use... $ECHO_C" >&6
 if test -n "$with_system_curl" -o -n "$with_system_libs" && \
@@ -11967,24 +11980,26 @@ fi
 
 echo "$as_me:$LINENO: checking whether to build LDAP configuration backend" >&5
 echo $ECHO_N "checking whether to build LDAP configuration backend... $ECHO_C" >&6
-if test "$enable_mozilla" = "no" && test "$enable_openldap" != "yes"; then
-   echo "$as_me:$LINENO: result: no. Either Mozilla or OpenLDAP needed." >&5
-echo "${ECHO_T}no. Either Mozilla or OpenLDAP needed." >&6
-   WITH_LDAP=NO
-elif test "$with_system_mozilla" = "yes" || test "$enable_openldap" = "yes"; then
-   echo "$as_me:$LINENO: result: yes" >&5
+if test -z "$enable_ldap" || test "$enable_ldap" = "yes"; then
+   if test "$enable_mozilla" = "yes" || test "$with_openldap" = "yes"; then
+      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-   WITH_LDAP=YES
+      WITH_LDAP=YES
+   else
+      echo "$as_me:$LINENO: result: no. Either Mozilla or OpenLDAP needed" >&5
+echo "${ECHO_T}no. Either Mozilla or OpenLDAP needed" >&6
+      WITH_LDAP=NO
+   fi
 else
-   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-   WITH_LDAP=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   WITH_LDAP=NO
 fi
 
 if test "$WITH_LDAP" = "YES"; then
             echo "$as_me:$LINENO: checking which LDAP SDK to use" >&5
 echo $ECHO_N "checking which LDAP SDK to use... $ECHO_C" >&6
-   if test -n "$enable_openldap"; then
+   if test -n "$with_openldap" && test "$with_openldap" != "no"; then
   	   echo "$as_me:$LINENO: result: OpenLDAP" >&5
 echo "${ECHO_T}OpenLDAP" >&6
 	   WITH_OPENLDAP=YES
@@ -12308,6 +12323,7 @@ echo "${ECHO_T}Netscape/Mozilla" >&6
 	   WITH_OPENLDAP=NO
    fi
 fi
+
 
 
 echo "$as_me:$LINENO: checking which mozilla to use" >&5
@@ -12917,7 +12933,7 @@ fi
     MOZ_INC=`$PKG_CONFIG --variable=includedir $moz_flavour-xpcom`
     MOZ_LIB=`$PKG_CONFIG --variable=libdir $moz_flavour-xpcom`
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-    if test "$WITH_OPENLDAP" != "YES"; then
+    if test "$WITH_LDAP" != "NO" && test "$WITH_OPENLDAP" != "YES"; then
       echo "$as_me:$LINENO: checking whether $tmp was compiled with --enable-ldap" >&5
 echo $ECHO_N "checking whether $tmp was compiled with --enable-ldap... $ECHO_C" >&6
       if test -d "$MOZ_INC/ldap"; then
@@ -16577,6 +16593,16 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking whether to build neon" >&5
+echo $ECHO_N "checking whether to build neon... $ECHO_C" >&6
+if test "$enable_neon" = "no"; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    DISABLE_NEON=TRUE
+
+else
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 echo "$as_me:$LINENO: checking which neon to use" >&5
 echo $ECHO_N "checking which neon to use... $ECHO_C" >&6
 if test -n "$with_system_neon" -o -n "$with_system_libs" && \
@@ -16792,6 +16818,7 @@ fi
 
 
 
+fi
 
 echo "$as_me:$LINENO: checking which AGG to use" >&5
 echo $ECHO_N "checking which AGG to use... $ECHO_C" >&6
@@ -17887,9 +17914,9 @@ echo "$as_me: error: no. You are sure you have altlinuyhyph headers?" >&2;}
 fi
 
 
-echo "$as_me:$LINENO: checking for hnj_hyphen_hyphenate in -lhyph" >&5
-echo $ECHO_N "checking for hnj_hyphen_hyphenate in -lhyph... $ECHO_C" >&6
-if test "${ac_cv_lib_hyph_hnj_hyphen_hyphenate+set}" = set; then
+echo "$as_me:$LINENO: checking for hnj_hyphen_hyphenate2 in -lhyph" >&5
+echo $ECHO_N "checking for hnj_hyphen_hyphenate2 in -lhyph... $ECHO_C" >&6
+if test "${ac_cv_lib_hyph_hnj_hyphen_hyphenate2+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -17907,11 +17934,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char hnj_hyphen_hyphenate ();
+char hnj_hyphen_hyphenate2 ();
 int
 main ()
 {
-hnj_hyphen_hyphenate ();
+hnj_hyphen_hyphenate2 ();
   ;
   return 0;
 }
@@ -17938,20 +17965,20 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_hyph_hnj_hyphen_hyphenate=yes
+  ac_cv_lib_hyph_hnj_hyphen_hyphenate2=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_hyph_hnj_hyphen_hyphenate=no
+ac_cv_lib_hyph_hnj_hyphen_hyphenate2=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_hyph_hnj_hyphen_hyphenate" >&5
-echo "${ECHO_T}$ac_cv_lib_hyph_hnj_hyphen_hyphenate" >&6
-if test $ac_cv_lib_hyph_hnj_hyphen_hyphenate = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_hyph_hnj_hyphen_hyphenate2" >&5
+echo "${ECHO_T}$ac_cv_lib_hyph_hnj_hyphen_hyphenate2" >&6
+if test $ac_cv_lib_hyph_hnj_hyphen_hyphenate2 = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBHYPH 1
 _ACEOF
@@ -17959,8 +17986,8 @@ _ACEOF
   LIBS="-lhyph $LIBS"
 
 else
-   { { echo "$as_me:$LINENO: error: altlinuxhyph library not found." >&5
-echo "$as_me: error: altlinuxhyph library not found." >&2;}
+   { { echo "$as_me:$LINENO: error: altlinuxhyph library not found or too old." >&5
+echo "$as_me: error: altlinuxhyph library not found or too old." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -19657,7 +19684,9 @@ if test  "$build_cairo" = "yes"; then
 echo $ECHO_N "checking whether to enable the Cairo canvas backend... $ECHO_C" >&6
     if test "x$enable_cairo" != "xno" ; then
         ENABLE_CAIRO="TRUE"
-	SYSTEM_CAIRO=YES
+	     SYSTEM_CAIRO=YES
+	     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
   succeeded=no
 
@@ -19756,10 +19785,62 @@ echo "$as_me: error: Library requirements (cairo >= 1.0.2 ) not met; consider ad
    { (exit 1); exit 1; }; }
   fi
 
-	echo "$as_me:$LINENO: result: yes" >&5
+        if test "$with_system_xrender_headers" = "yes"; then
+            echo "$as_me:$LINENO: checking whether Xrender.h defines PictStandardA8" >&5
+echo $ECHO_N "checking whether Xrender.h defines PictStandardA8... $ECHO_C" >&6
+            if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <X11/extensions/Xrender.h>
+
+int main(int argc, char **argv) {
+#ifdef PictStandardA8
+      return 0;
+#else
+      return 1;
+#endif
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+{ { echo "$as_me:$LINENO: error: no, X headers too old." >&5
+echo "$as_me: error: no, X headers too old." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+        fi
     else
-	echo "$as_me:$LINENO: result: no" >&5
+	     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
 fi
@@ -19774,17 +19855,35 @@ KDE_CFLAGS=""
 KDE_LIBS=""
 MOC="moc"
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
+        if test "$build_cpu" != "x86_64" ; then
         qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include $x_includes"
-    qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+        qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+    else
+        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib64/qt3/include /usr/lib64/qt/include /usr/share/qt3/include /usr/lib/qt3/include /usr/lib/qt/include $x_includes"
+        qt_libdirs="$QTLIB /usr/local/qt/lib64 /usr/lib64/qt /usr/lib64 /usr/X11R6/lib64/X11/qt /usr/X11R6/lib64/qt /usr/lib64/qt3/lib64 /usr/lib64/qt/lib64 /usr/share/qt3/lib64 /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+    fi
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
-        qt_libdirs="$QTDIR/lib $qt_libdirs"
+        if test "$build_cpu" != "x86_64" ; then
+            qt_libdirs="$QTDIR/lib $qt_libdirs"
+        else
+            qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
+        fi
     fi
-    kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
-    kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    if test "$build_cpu" != "x86_64" ; then
+        kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
+        kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    else
+        kde_incdirs="/usr/lib64/kde/include /usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
+        kde_libdirs="/usr/lib64/kde/lib64 /usr/local/kde/lib64 /usr/kde/lib64 /usr/lib64/kde /usr/lib64/kde3 /usr/lib64 /usr/X11R6/lib64 /usr/local/lib64 /opt/kde3/lib64 /opt/kde/lib64 /usr/X11R6/kde/lib64 /usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    fi
     if test -n "$KDEDIR" ; then
         kde_incdirs="$KDEDIR/include $kde_incdirs"
-        kde_libdirs="$KDEDIR/lib $kde_libdirs"
+        if test "$build_cpu" != "x86_64" ; then
+            kde_libdirs="$KDEDIR/lib $kde_libdirs"
+        else
+            kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
+        fi
     fi
 
         qt_test_include="qstyle.h"
@@ -21871,6 +21970,7 @@ s,@CURL_LIBS@,$CURL_LIBS,;t t
 s,@SYSTEM_BOOST@,$SYSTEM_BOOST,;t t
 s,@SYSTEM_ODBC_HEADERS@,$SYSTEM_ODBC_HEADERS,;t t
 s,@WITH_MOZILLA@,$WITH_MOZILLA,;t t
+s,@WITH_LDAP@,$WITH_LDAP,;t t
 s,@WITH_OPENLDAP@,$WITH_OPENLDAP,;t t
 s,@MOZILLAXPCOM_CFLAGS@,$MOZILLAXPCOM_CFLAGS,;t t
 s,@MOZILLAXPCOM_LIBS@,$MOZILLAXPCOM_LIBS,;t t
@@ -21905,6 +22005,7 @@ s,@ENABLE_PASF@,$ENABLE_PASF,;t t
 s,@SYSTEM_PORTAUDIO@,$SYSTEM_PORTAUDIO,;t t
 s,@SYSTEM_SNDFILE@,$SYSTEM_SNDFILE,;t t
 s,@BUILD_TYPE@,$BUILD_TYPE,;t t
+s,@DISABLE_NEON@,$DISABLE_NEON,;t t
 s,@NEON_CFLAGS@,$NEON_CFLAGS,;t t
 s,@NEON_LIBS@,$NEON_LIBS,;t t
 s,@SYSTEM_NEON@,$SYSTEM_NEON,;t t
