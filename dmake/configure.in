@@ -3,16 +3,29 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.52)
 
 dnl Set the package version
-dnl Don't forget to update the PACKAGE and VERSION macros in
+dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.3)
+AC_INIT(dmake, 4.4)
+AC_CANONICAL_BUILD
+BUILDINFO="$build"
 
 AC_CONFIG_SRCDIR(man/dmake.tf)
 AM_INIT_AUTOMAKE
 
 AM_MAINTAINER_MODE
 
+AC_CONFIG_HEADER(config.h)
+
+dnl Extra parameters
+AC_ARG_ENABLE(dbug,
+[  --enable-dbug:          Enable build with dbug macros.
+],,)
+
+AC_ARG_ENABLE(spawn,
+[  --enable-spawn:         Enables the use of spawn instead of fork/exec
+                          if it is supported.
+],,)
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
@@ -23,39 +36,6 @@ AC_PROG_RANLIB
 
 dnl Checks for utilities.
 AC_PROG_AWK
-
-dnl Checks for libraries.
-
-dnl Initialize libtool
-#AM_PROG_LIBTOOL
-
-
-dnl Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h sys/wait.h)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_OFF_T
-AC_TYPE_SIZE_T
-AC_CHECK_TYPES(int8)
-AC_CHECK_TYPES(uint8)
-AC_CHECK_TYPES(int16)
-AC_CHECK_TYPES(uint16)
-AC_CHECK_TYPES(int32)
-AC_CHECK_TYPES(uint32)
-AC_HEADER_TIME
-AC_CHECK_SIZEOF(short, 2)
-AC_CHECK_SIZEOF(int, 4)
-AC_CHECK_SIZEOF(long, 4)
-
-dnl Checks for library functions.
-AC_FUNC_MEMCMP
-AC_TYPE_SIGNAL
-AC_FUNC_UTIME_NULL
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr setvbuf tzset settz mkstemp tempnam)
 
 dnl Checks for OS
 AC_MSG_CHECKING([the operating system])
@@ -93,10 +73,12 @@ case "$_os" in
 	"MINGW")
 	  OS_VERSION=mingw
 	  OS_TYPE=winnt
+	  BUILDINFO="Windows / MinGW"
 	  ;;
 	"MSVC6")
 	  OS_VERSION=msvc6
 	  OS_TYPE=winnt
+	  BUILDINFO="Windows / MS Visual C++"
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
@@ -129,6 +111,7 @@ esac
 
 AC_MSG_RESULT([checked ($_os)])
 
+dnl Set OS dependent settings
 if test x$OS_TYPE = xunix; then
   OS_SUBDIRS=["unix startup"]
   OS_LIBRARY=unix/libunix.a
@@ -139,66 +122,96 @@ fi
 
 AC_SUBST(OS_TYPE)
 AC_SUBST(OS_VERSION)
+AC_DEFINE_UNQUOTED(BUILDINFO, "$BUILDINFO", [Build info string])
 AC_SUBST(OS_SUBDIRS)
 AC_SUBST(OS_LIBRARY)
 
-AM_CONFIG_HEADER(config.h)
+if test xOS_TYPE != xwinnt; then
+dnl See iz53148. Only *nix like builds enable parallel makefile processing
+dnl and use stdout redirection in the child for _exec_shell()
+AC_DEFINE(USE_SANE_EXEC_SHELL_REDIR, 1, [Use sane redirection mechanism for systems that support parallel building, see iz53148.])
+dnl iz61170 needs to know of DOS style file names with drive letters.
+AC_DEFINE(NO_DRIVE_LETTERS, 1, [Do not check for drive letters. Introduced as an optimization for iz61170.])
+fi
 
-AC_CONFIG_FILES(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
+dnl =============================================
+dnl Enable dbug
+dnl =============================================
+AC_MSG_CHECKING([whether to do a build with dbug macros])
+if test -n "$enable_dbug" && test "$enable_dbug" != "no"; then
+   DBUG="1"
+   CPPFLAGS="$CPPFLAGS -DDBUG=1 -I\$(top_srcdir)/dbug/dbug"
+   AC_MSG_RESULT([yes])
+else
+   DBUG=""
+   AC_MSG_RESULT([no])
+fi
+AM_CONDITIONAL(DBUG, test -n "$DBUG")
+
+dnl =============================================
+dnl Enable spawn
+dnl =============================================
+AC_MSG_CHECKING([if spawn shall be used])
+if test -n "$enable_spawn" && test "$enable_spawn" != "no"; then
+   AC_DEFINE(ENABLE_SPAWN, 1, [Enables the use of spawn instead of fork/exec if it is supported.])
+   AC_MSG_RESULT([yes])
+else
+   AC_MSG_RESULT([no])
+fi
+
+dnl Predefine the DMAKEROOT macro for unix targets.
+eval dmakerootprefix="$datadir"
+# $datadir is ${prefix}/share if not overridden
+test "x$dmakerootprefix" != "x${dmakerootprefix##NONE}" && dmakerootprefix=${ac_default_prefix}/share
+
+if test x$OS_TYPE = xunix; then
+DMAKEROOT_H_LINE1='"DMAKEROOT := '${dmakerootprefix}'/startup",'
+fi
+AC_SUBST(DMAKEROOT_H_LINE1)
+
+dnl List (all possible) *.in files
+AC_CONFIG_FILES(dmakeroot.h Makefile unix/Makefile startup/config.mk \
+		startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
 		startup/unix/cygwin/Makefile \
 		startup/winnt/Makefile startup/winnt/mingw/Makefile \
 		startup/winnt/msvc6/Makefile \
-		msdos/Makefile win95/Makefile win95/microsft/Makefile )
+		msdos/Makefile win95/Makefile win95/microsft/Makefile \
+		tests/Makefile)
 
-dnl ******************************
-dnl *** output the whole stuff ***
-dnl ******************************
+dnl Checks for libraries.
 
-AC_CONFIG_COMMANDS_POST([
+dnl Initialize libtool
+#AM_PROG_LIBTOOL
 
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h sys/wait.h sys/time.h)
 
-## Generate `dmakeroot.h' in two cases
-## 1. `config.status' is run either explicitly, or via configure.
-##     Esp. not when it is run in `Makefile' to generate makefiles and
-##     config.h
-## 2. CONFIG_OTHER is set explicitly
-##
-## Case 1 is difficult.  We know that `automake' sets one of
-## CONFIG_FILES or CONFIG_HEADERS to empty.  This heuristic works
-## only when AM_CONFIG_HEADER is set, however.
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_CHECK_TYPES(int8)
+AC_CHECK_TYPES(uint8)
+AC_CHECK_TYPES(int16)
+AC_CHECK_TYPES(uint16)
+AC_CHECK_TYPES(int32)
+AC_CHECK_TYPES(uint32)
+AC_HEADER_TIME
+AC_CHECK_SIZEOF(short, 2)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
 
-if test -n "${CONFIG_FILES}" && test -n "${CONFIG_HEADERS}"; then
-	# Both CONFIG_FILES and CONFIG_HEADERS are non-empty ==> Case 1
-	CONFIG_OTHER=${CONFIG_OTHER:-dmakeroot.h}
-fi
-    outfile=dmakeroot.h-tmp
-    cat > $outfile <<\_______EOF
-	/* dmakeroot.h
-	 *
-  	 * This is a generated file.  Please modify `configure.in'
-     */
+dnl Checks for library functions.
+AC_FUNC_MEMCMP
+AC_TYPE_SIGNAL
+AC_FUNC_UTIME_NULL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr setvbuf tzset settz mkstemp tempnam gettimeofday)
 
-_______EOF
-
-if test x$prefix != x; then
-   if test x$OS_TYPE = xunix; then
-       echo '"DMAKEROOT := '$prefix'/share/startup",' >> $outfile
-   fi
-   echo '"OS := '${OS_VERSION}'",' >> $outfile
-fi
-if cmp -s $outfile dmakeroot.h; then
-    echo dmakeroot.h is unchanged
-    rm -f $outfile
-else
-    mv $outfile dmakeroot.h
-fi
-])
-							  
-				   
-dnl set the DMAKEROOT
-AC_SET_DMAKEROOT
 
 dnl *** output to disk ***
 AC_OUTPUT
