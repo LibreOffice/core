@@ -3,6 +3,6 @@ startupdir = $(datadir)/startup/winnt
 
 startup_DATA = macros.mk recipes.mk
 
-#SUBDIRS = mingw
+DIST_SUBDIRS = mingw msvc6
 SUBDIRS = @OS_VERSION@
 
