@@ -1,6 +1,6 @@
 /* $RCSfile: extern.h,v $
--- $Revision: 1.8 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:06:06 $
+-- $Revision: 1.9 $
+-- last change: $Author: hr $ $Date: 2006-04-20 11:59:59 $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -114,6 +114,12 @@
 /*  If setvbuf is not available set output to unbuffered */
 #if ! HAVE_SETVBUF
 #  define setvbuf(fp,bp,type,len) setbuf(fp,NULL)
+#endif
+
+/* coreleft is used in some debug macros. Only Turbo C seems to provide
+ * this function. Define it here so that the code compiles. */
+#ifdef DBUG
+#define coreleft() 0L
 #endif
 
 #endif
