@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:27:05 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:31:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,11 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 .ENDIF
 
 # --- General -----------------------------------------------------
+
+.IF "$(DISABLE_NEON)" == "TRUE"
+@all:
+    @echo "neon disabled...."
+.ENDIF
 
 SLOFILES=\
     $(SLO)$/webdavservices.obj    	\
