@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 10:58:58 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:35:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@ LDAP_MAJOR=2
 .INCLUDE : settings.mk
 DLLPRE =
 
-.IF "$(WITH_MOZILLA)" == "NO" && "$(WITH_OPENLDAP)" != "YES"
+.IF "$(WITH_LDAP)" != "YES"
 @all:
-    @echo "Mozilla disabled and no OpenLDAP wanted -> LDAP disabled."
+    @echo "LDAP disabled."
 .ENDIF
 
 .IF "$(LDAPSDKINCLUDES)" == ""
