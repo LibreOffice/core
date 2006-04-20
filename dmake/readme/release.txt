@@ -1,3 +1,5 @@
+This file is superseded/continued by the toplevel NEWS file.
+
 DMAKE Version 4.1
 =================
 FINAL FREE RELEASE OF DMAKE, REPLACES VERSION 4.0
