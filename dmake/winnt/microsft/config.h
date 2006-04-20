@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:37 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2006-04-20 12:26:04 hr Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -24,6 +24,11 @@
 -- LOG
 --      Use cvs log to obtain detailed change logs.
 */
+
+/* Name and version number of this package */
+#define PACKAGE "dmake"
+#define VERSION "4.4-cvs"
+#define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
 # if _MSC_VER < 500
@@ -63,8 +68,10 @@
 #   define SIGQUIT SIGTERM
 #endif
 
-/* MSC doesn't seem to care about CONST */
-#define CONST
+/* MSC didn't seem to care about CONST in the past */
+#ifndef CONST
+#   define CONST
+#endif
 
 #ifndef MSDOS
 #   define MSDOS 1
