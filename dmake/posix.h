@@ -1,4 +1,4 @@
-/* RCS  $Id: posix.h,v 1.2 2003-03-25 14:02:13 hr Exp $
+/* RCS  $Id: posix.h,v 1.3 2006-04-20 12:01:40 hr Exp $
 --
 -- SYNOPSIS
 --      Definition for POSIX conforming defines in dmake.
@@ -53,7 +53,8 @@
 #define CHILD_MAX _POSIX_CHILD_MAX
 #endif
 
-/* now fix these since some values are all wet */
+/* FIXME! This is a very big hammer, these values should be set to
+ * sensible values in the architecture dependent sysintf.h files. */
 #if NAME_MAX < 255
 #undef NAME_MAX
 #define NAME_MAX 255
