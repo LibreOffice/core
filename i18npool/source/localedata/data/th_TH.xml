@@ -369,7 +369,7 @@
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">ก-ฮ</IndexKey>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">ก-ฮ[เ-ไ]</IndexKey>
 <UnicodeScript>24</UnicodeScript>
 <FollowPageWord>p.</FollowPageWord>
 <FollowPageWord>pp.</FollowPageWord>
