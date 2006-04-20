@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.1.1.1 2000-09-22 15:33:27 hr Exp $
+/* RCS  $Id: runargv.c,v 1.2 2006-04-20 12:06:24 hr Exp $
 --
 -- SYNOPSIS
 --      Run a sub process.
@@ -51,6 +51,9 @@ char    *cmd;
    int status;
    char **argv;
 
+   if( Measure & M_RECIPE )
+      Do_profile_output( "s", M_RECIPE, target );
+
    _add_child(target, ignore);
    /* return immediately for noop command */
    if (strncmp(cmd, "noop", 4) == 0 && (cmd[4] == ' ' || cmd[4] == '\0')) {
@@ -80,6 +83,10 @@ char    *cmd;
    }
 
    if( status == -1 ) Error("%s: %s", argv[0], strerror(errno));
+
+   if( Measure & M_RECIPE )
+      Do_profile_output( "e", M_RECIPE, target );
+
    _finished_child(status);
    if( last && !Doing_bang ) Update_time_stamp( target );
 
