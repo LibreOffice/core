@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:43:54 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 11:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
     IndexEntrySupplier_Common(rxMSF)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
-    index = new Index(collator);
+    index = new Index(rxMSF);
 }
 
 IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
@@ -111,7 +111,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
     for (sal_Unicode i = start; i <= end; i++) {
         sal_Int16 j;
         for (j = 0; j < key_count; j++) {
-            if (i == keys[j].key || index->compare(i, keys[j].key) == 0) {
+            if (keys[j].key > 0 && (i == keys[j].key || index->compare(i, keys[j].key) == 0)) {
                 table[i-start] = j;
                 break;
             }
@@ -121,9 +121,14 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
     }
 }
 
-Index::Index(CollatorImpl *col)
+Index::Index(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF)
 {
-    collator = col;
+    collator = new CollatorImpl(rxMSF);
+}
+
+Index::~Index()
+{
+    delete collator;
 }
 
 sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
@@ -133,7 +138,19 @@ sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
 
 sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
 {
-    sal_Unicode code = rIndexEntry[0];
+    sal_Int32 startPos=0;
+    if (skipping_chars.getLength() > 0)
+        while (skipping_chars.indexOf(rIndexEntry[startPos]) >= 0)
+            startPos++;
+    if (mkey_count > 0) {
+        for (sal_Int16 i = 0; i < mkey_count; i++) {
+            sal_Int32 len = keys[mkeys[i]].mkey.getLength();
+            if (collator->compareSubstring(rIndexEntry, startPos, len,
+                                    keys[mkeys[i]].mkey, 0, len) == 0)
+                return mkeys[i];
+        }
+    }
+    sal_Unicode code = rIndexEntry[startPos];
     for (sal_Int16 i = 0; i < table_count; i++) {
         if (tables[i].start <= code && code <= tables[i].end)
             return tables[i].table[code-tables[i].start];
@@ -147,8 +164,10 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
     if (wgt < MAX_KEYS) {
         if (keys[wgt].desc.getLength())
             return keys[wgt].desc;
-        else
+        else if (keys[wgt].key > 0)
             return OUString(&keys[wgt].key, 1);
+        else
+            return keys[wgt].mkey;
     }
     return rIndexEntry.copy(0, 1);
 }
@@ -166,44 +185,78 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             throw RuntimeException();
     }
 
-    sal_Int16 j = 0, len = keyStr.getLength();
+    sal_Int16 len = keyStr.getLength();
+    mkey_count=key_count=0;
+    skipping_chars=OUString();
+    sal_Int16 i, j;
 
-    for (sal_Int16 i = 0; i < len && j < MAX_KEYS; i++)
+    for (i = 0; i < len && key_count < MAX_KEYS; i++)
     {
         sal_Unicode curr = keyStr[i];
+        sal_Unicode close = sal_Unicode(')');
 
         if (unicode::isWhiteSpace(curr))
             continue;
 
         switch(curr) {
             case sal_Unicode('-'):
-                if (j > 0 && i + 1 < len ) {
-                    for (curr = keyStr[++i]; j < MAX_KEYS && keys[j-1].key < curr; j++) {
-                        keys[j].key = keys[j-1].key+1;
-                        keys[j].desc = OUString();
+                if (key_count > 0 && i + 1 < len ) {
+                    for (curr = keyStr[++i]; key_count < MAX_KEYS && keys[key_count-1].key < curr; key_count++) {
+                        keys[key_count].key = keys[key_count-1].key+1;
+                        keys[key_count].desc = OUString();
                     }
                 } else
                     throw RuntimeException();
                 break;
+            case sal_Unicode('['):
+                for (i++; i < len && keyStr[i] != sal_Unicode(']'); i++) {
+                    if (unicode::isWhiteSpace(keyStr[i])) {
+                        continue;
+                    } else if (keyStr[i] == sal_Unicode('_')) {
+                        for (curr=keyStr[i-1]+1;  curr <= keyStr[i+1]; curr++)
+                            skipping_chars+=OUString(curr);
+                        i+=2;
+                    } else {
+                        skipping_chars+=OUString(keyStr[i]);
+                    }
+                }
+                break;
+            case sal_Unicode('{'):
+                close = sal_Unicode('}');
             case sal_Unicode('('):
-                if (j > 0) {
+                if (key_count > 0) {
                     sal_Int16 end = i+1;
-                    while (end < len && keyStr[end] != sal_Unicode(')')) end++;
+                    for (end=i+1; end < len && keyStr[end] != close; end++);
 
                     if (end >= len) // no found
                         throw RuntimeException();
-                    keys[j-1].desc = keyStr.copy(i+1, end-i-1);
+                    if (close == sal_Unicode(')'))
+                        keys[key_count-1].desc = keyStr.copy(i+1, end-i-1);
+                    else {
+                        mkeys[mkey_count++]=key_count;
+                        keys[key_count].key = 0;
+                        keys[key_count].mkey = keyStr.copy(i+1, end-i-1);
+                        keys[key_count++].desc=OUString();
+                    }
                     i=end+1;
                 } else
                     throw RuntimeException();
                 break;
             default:
-                keys[j].key = curr;
-                keys[j++].desc = OUString();
+                keys[key_count].key = curr;
+                keys[key_count++].desc = OUString();
                 break;
         }
     }
-    key_count = j;
+    for (i = 0; i < mkey_count; i++) {
+        for (j=i+1; j < mkey_count; j++) {
+            if (keys[mkeys[i]].mkey.getLength() < keys[mkeys[j]].mkey.getLength()) {
+                sal_Int16 k = mkeys[i];
+                mkeys[i] = mkeys[j];
+                mkeys[j] = k;
+            }
+        }
+    }
 }
 
 void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (RuntimeException)
