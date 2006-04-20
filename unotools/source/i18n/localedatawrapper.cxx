@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:29:50 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ LocaleDataWrapper::LocaleDataWrapper(
     {
         try
         {
-            xLD = Reference< XLocaleData > ( xSMgr->createInstance(
+            xLD = Reference< XLocaleData2 > ( xSMgr->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) ),
                 uno::UNO_QUERY );
         }
@@ -152,7 +152,7 @@ LocaleDataWrapper::LocaleDataWrapper(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) );
             if ( xI.is() )
             {
-                Any x = xI->queryInterface( ::getCppuType((const Reference< XLocaleData >*)0) );
+                Any x = xI->queryInterface( ::getCppuType((const Reference< XLocaleData2 >*)0) );
                 x >>= xLD;
             }
         }
@@ -273,12 +273,12 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency > LocaleDataWrapper::getAllCurrencies() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
 {
     try
     {
         if ( xLD.is() )
-            return xLD->getAllCurrencies( getLocale() );
+            return xLD->getAllCurrencies2( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -288,7 +288,7 @@ void LocaleDataWrapper::invalidateData()
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >(0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
 }
 
 
@@ -767,9 +767,9 @@ USHORT LocaleDataWrapper::getCurrDigits() const
 
 void LocaleDataWrapper::getCurrSymbolsImpl()
 {
-    Sequence< Currency > aCurrSeq = getAllCurrencies();
+    Sequence< Currency2 > aCurrSeq = getAllCurrencies();
     sal_Int32 nCnt = aCurrSeq.getLength();
-    Currency const * const pCurrArr = aCurrSeq.getArray();
+    Currency2 const * const pCurrArr = aCurrSeq.getArray();
     sal_Int32 nElem;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
