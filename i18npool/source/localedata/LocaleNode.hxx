@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:18:39 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ virtual ~OFileWriter();
     virtual void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
     virtual void  writeRefFunction3(const char *func, const ::rtl::OUString& useLocale) const;
     virtual void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
-    virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const;
-    virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const;
+    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const;
+    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const;
     virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const;
     virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count) const;
     virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
