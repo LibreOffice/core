@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleData.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:48:23 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define __com_sun_star_i18n_LocaleData_idl__
 
 #include <com/sun/star/lang/XServiceInfo.idl>
-#include <com/sun/star/i18n/XLocaleData.idl>
+#include <com/sun/star/i18n/XLocaleData2.idl>
 
 //============================================================================
 
@@ -50,6 +50,8 @@ published service LocaleData
 {
     interface com::sun::star::i18n::XLocaleData;
     interface com::sun::star::lang::XServiceInfo;
+
+    [optional] interface com::sun::star::i18n::XLocaleData2;
 };
 
 //============================================================================
