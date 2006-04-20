@@ -22,8 +22,8 @@ S := .asm	# Assembler sources
 V := 		# RCS suffix
 
 # See if these are defined
-TMPDIR := $(ROOTDIR)/tmp
-.IMPORT .IGNORE : TMPDIR SHELL COMSPEC
+.IMPORT .IGNORE : TMPDIR SHELL COMSPEC ROOTDIR
+TMPDIR *:= $(ROOTDIR)/tmp
 
 # Recipe execution configurations
 # First set SHELL, If it is not defined, use COMSPEC, otherwise
@@ -46,14 +46,14 @@ GROUPSHELL := $(SHELL)
    SHELLMETAS  := *"?<>
    GROUPSUFFIX := .bat
    DIRSEPSTR   := \\\
-   DIVFILE      = $(TMPFILE:s,/,\)
+   DIVFILE      = $(TMPFILE:s,/,\,)
 .ELSE
    SHELLFLAGS  := -c
    GROUPFLAGS  := 
    SHELLMETAS  := *"?<>|()&][$$\#`'
    GROUPSUFFIX := .ksh
    .MKSARGS    := yes
-   DIVFILE      = $(TMPFILE:s,/,${DIVSEP_shell_${USESHELL}})
+   DIVFILE      = $(TMPFILE:s,/,${DIVSEP_shell_${USESHELL}},)
    DIVSEP_shell_yes := \\\
    DIVSEP_shell_no  := \\
 .END
