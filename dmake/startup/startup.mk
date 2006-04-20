@@ -24,7 +24,9 @@ __.DEFAULTS  !:= yes		# yes => define default construction rules.
 __.EXECS     !:= yes            # yes => define how to build executables.
 
 # Grab key definitions from the environment
-.IMPORT .IGNORE : OS OSRELEASE OSENVIRONMENT TMPDIR SHELL
+# The variables OS OSRELEASE OSENVIRONMENT were removed from this
+# list because of windows. See issue 43254 for details. 
+.IMPORT .IGNORE : TMPDIR SHELL
 
 # Default DMAKE configuration, if not overriden by environment
 .INCLUDE .NOINFER $(!null,$(OS) .IGNORE) : $(INCFILENAME:d)config.mk
