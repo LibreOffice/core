@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:52:54 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 11:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ private:
 
 struct IndexKey {
     sal_Unicode key;
+    rtl::OUString mkey;
     rtl::OUString desc;
 };
 
@@ -96,7 +97,8 @@ public:
 class Index
 {
 public:
-    Index(CollatorImpl *col);
+    Index(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    ~Index();
 
     void init(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& algorithm) throw (com::sun::star::uno::RuntimeException);
 
@@ -108,6 +110,9 @@ public:
     sal_Int16 table_count;
     IndexKey keys[MAX_KEYS];
     sal_Int16 key_count;
+    sal_Int16 mkeys[MAX_KEYS];
+    sal_Int16 mkey_count;
+    rtl::OUString skipping_chars;
     CollatorImpl *collator;
     sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
