@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
   <LC_INFO>
     <Language>
       <LangID>es</LangID>
@@ -69,22 +69,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[$Ch$-340A]#.##0;[$Ch$-340A] -#.##0</FormatCode>
+      <FormatCode>[$$-340A]#.##0;[$$-340A] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$Ch$-340A]#.##0;[$Ch$-340A] -#.##0</FormatCode>
+      <FormatCode>[$$-340A]#.##0;[$$-340A] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[$Ch$-340A]#.##0;[RED][$Ch$-340A] -#.##0</FormatCode>
+      <FormatCode>[$$-340A]#.##0;[RED][$$-340A] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[$Ch$-340A]#.##0;[RED][$Ch$-340A] -#.##0</FormatCode>
+      <FormatCode>[$$-340A]#.##0;[RED][$$-340A] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$Ch$-340A]#.##0;[RED][$Ch$-340A] -#.##0</FormatCode>
+      <FormatCode>[$$-340A]#.##0;[RED][$$-340A] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D-MM-AA</FormatCode>
@@ -185,6 +185,13 @@
   <LC_CALENDAR ref="es_AR"/>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>CLP</CurrencyID>
+      <CurrencySymbol>$</CurrencySymbol>
+      <BankSymbol>CLP</BankSymbol>
+      <CurrencyName>Peso Chileno</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>CLP</CurrencyID>
       <CurrencySymbol>Ch$</CurrencySymbol>
       <BankSymbol>CLP</BankSymbol>
