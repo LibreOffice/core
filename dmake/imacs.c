@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.2 2004-10-22 08:04:58 rt Exp $
+/* RCS  $Id: imacs.c,v 1.3 2006-04-20 12:00:37 hr Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -108,6 +108,11 @@ Create_macro_vars()
    _set_string_var("TMD",  "",       M_DEFAULT|M_NOEXPORT, &Tmd);
 
    Def_macro("NULL", "", M_PRECIOUS|M_NOEXPORT|M_FLAG);
+
+   /* Initialize a macro that contains a space. As leading and trailing
+    * spaces are stripped by Def_macro a little cheating is necessary. */
+   _set_string_var("SPACECHAR", "x", M_PRECIOUS|M_NOEXPORT|M_FLAG, &Spacechar );
+   Spacechar[0] = ' ';
 
    _set_int_var( "MAXLINELENGTH", "0", M_DEFAULT|M_NOEXPORT, &Buffer_size );
    _set_int_var( "PREP",          "0", M_DEFAULT, &Prep );
