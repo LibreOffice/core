@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:37 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData2.hpp>
 
 
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -94,7 +94,7 @@ inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::s
 
 class LocaleData : public cppu::WeakImplHelper2
 <
-    XLocaleData,
+    XLocaleData2,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -108,6 +108,7 @@ public:
     virtual LocaleDataItem SAL_CALL getLocaleItem( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Calendar > SAL_CALL getAllCalendars( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Currency > SAL_CALL getAllCurrencies( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< Currency2 > SAL_CALL getAllCurrencies2( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< FormatElement > SAL_CALL getAllFormats( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Implementation > SAL_CALL getCollatorImplementations( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getTransliterations( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
