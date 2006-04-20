@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.1.1.1 2000-09-22 15:33:37 hr Exp $
+/* RCS  $Id: sysintf.h,v 1.2 2006-04-20 12:25:43 hr Exp $
 --
 -- SYNOPSIS
 --      Interfaces for sysintf.c
@@ -48,9 +48,9 @@ extern char * getcwd();
 #ifdef _POSIX_NAME_MAX
 #undef  _POSIX_NAME_MAX
 #endif
-#define _POSIX_NAME_MAX 12
+#define _POSIX_NAME_MAX _MAX_FNAME
 
 #ifdef _POSIX_PATH_MAX
 #undef _POSIX_PATH_MAX
 #endif
-#define _POSIX_PATH_MAX 64
+#define _POSIX_PATH_MAX _MAX_PATH
