@@ -1,6 +1,6 @@
 /* $RCSfile: infer.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:06:32 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:00:49 $
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -166,9 +166,12 @@ CELLPTR setdirroot;
      }
       }
 
-      /* MATCH now points at the derived recipe.  We must now take cp, and
-       * construct the correct graph so that the make may proceed. */
+      /* MATCH now points at the derived prerequisite chain(s).  We must now
+       * take cp, and construct the correct graph so that the make may
+       * proceed.  */
 
+      /* The folowing shows only the first element, i.e. the last matching
+       * recipe that was found.  */
       if( Verbose & V_INFER ) {
      char *tmp = dump_inf_chain(match, TRUE, FALSE);
      printf("%s:  Inferring prerequistes and recipes using:\n%s:  ... %s\n",
@@ -409,7 +412,25 @@ ICELLPTR *nnmp;
         thp = Get_name( iprqh.ht_name, Defs, FALSE );
         if(thp != NIL(HASH)) {
            iprq = *thp->CP_OWNR;
-           ircp = iprq.ce_recipe;
+           /* Check if a recipe for this target exists. Targets with F_MULTI
+        * set need each cell checked for existing recipes.
+        */
+           if( iprq.ce_flag & F_MULTI ) {
+          /* Walk through all cells of this target. */
+          LINKPTR mtcp = iprq.ce_prq;
+          ircp = NIL(STRING);
+          for( ; mtcp != NIL(LINK); mtcp = mtcp->cl_next ) {
+             /* If a recipe is found stop searching and set ircp to that result.
+              * ircp is not used but only checked if it is set.
+              */
+             if( mtcp->cl_prq->ce_recipe != NIL(STRING) ) {
+            ircp = mtcp->cl_prq->ce_recipe;
+            break;
+             }
+          }
+           }
+           else
+          ircp = iprq.ce_recipe;
         }
         else
            ircp = NIL(STRING);
@@ -718,7 +739,10 @@ ICELLPTR uset;
 
 static char *
 dump_inf_chain( ip, flag, print )/*
-====================================*/
+===================================
+Return string with infered prerequisites.
+flag == TRUE adds the top of the chain.
+print == TRUE prints to screen with number "print" and returns NULL. */
 ICELLPTR ip;
 int      flag;
 int  print;
