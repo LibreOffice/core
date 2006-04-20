@@ -11,4 +11,4 @@ mkdir: %_DEST%\inc%_EXT%\unotools
 ..\inc\unotools\*.hxx %_DEST%\inc%_EXT%\unotools\*.hxx
 ..\inc\unotools\unotoolsdllapi.h %_DEST%\inc%_EXT%\unotools\unotoolsdllapi.h
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
