@@ -13,4 +13,4 @@ mkdir: %_DEST%\inc%_EXT%\xmlscript
 
 ..\dtd\*.dtd %_DEST%\bin%_EXT%\*.dtd
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
