@@ -1,5 +1,11 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* Build info string */
+#undef BUILDINFO
+
+/* Enables the use of spawn instead of fork/exec if it is supported. */
+#undef ENABLE_SPAWN
+
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H
@@ -15,6 +21,9 @@
 
 /* Define to 1 if you have the `getcwd' function. */
 #undef HAVE_GETCWD
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
 
 /* Define to 1 if you have the `getwd' function. */
 #undef HAVE_GETWD
@@ -90,6 +99,9 @@
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
@@ -126,6 +138,10 @@
 /* Define to 1 if you have the <wait.h> header file. */
 #undef HAVE_WAIT_H
 
+/* Do not check for drive letters. Introduced as an optimization for iz61170.
+   */
+#undef NO_DRIVE_LETTERS
+
 /* Name of package */
 #undef PACKAGE
 
@@ -161,6 +177,10 @@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
+
+/* Use sane redirection mechanism for systems that support parallel building,
+   see iz53148. */
+#undef USE_SANE_EXEC_SHELL_REDIR
 
 /* Version number of package */
 #undef VERSION
