@@ -7,7 +7,7 @@
 # Execution environment configuration.
 # Grab the current setting of COMSPEC.
 #
-.IMPORT .IGNORE : COMSPEC
+.IMPORT .IGNORE : COMSPEC ROOTDIR
 
 # First check if SHELL is defined to be something other than COMSPEC.
 # If it is assume that SHELL is a Korn compatible shell like MKS's
@@ -41,7 +41,7 @@ V *:= 		# RCS suffix
    SHELLMETAS       *:= *"?<>
    GROUPSUFFIX      *:= .bat
    DIRSEPSTR        *:= \\\
-   DIVFILE          *=  $(TMPFILE:s,/,\)
+   DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
    RMFLAGS          *=
    MV	            *=  rename
@@ -54,7 +54,7 @@ V *:= 		# RCS suffix
    RM               *=  $(ROOTDIR)$/bin$/rm
    RMFLAGS          *=  -f
    MV	            *=  $(ROOTDIR)$/bin$/mv
-   DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
+   DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}},)
    __.DIVSEP-sh-yes !:= \\\
    __.DIVSEP-sh-no  !:= \\
 .ENDIF
