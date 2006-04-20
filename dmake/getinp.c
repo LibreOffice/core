@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.5 2004-04-21 14:10:17 svesik Exp $
+/* RCS  $Id: getinp.c,v 1.6 2006-04-20 12:00:25 hr Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -106,6 +106,7 @@ FILE *fil;
 do_again:
    do {
       p = buf+pos;
+      /* fgets() reads at most one less than Buffer_size-pos characters. */
       if(feof( fil ) || (fgets( p, Buffer_size-pos, fil ) == NIL(char)))
      DB_RETURN( TRUE );
 
@@ -116,72 +117,86 @@ do_again:
 
       Line_number++;
 
-      /* ignore input if ignore flag set and line ends in a continuation
-     character. */
+      /* Set q to the last char in p before the \n\0. */
       q = p+strlen(p)-2;
-      if( q<p ) q=p;
+      if( q >= p ) {    /* Only check for special cases if p points
+             * to a non-empty line. */
 
-      /* ignore each RETURN at the end of a line before any further
-       * processing */
-      if( q[0] == '\r' && q[1] == '\n' ) {
-     q[0] = '\n';
-     q[1] = '\0';
-     q--;
-      }
-      /* you also have to deal with END_OF_FILE chars to process raw
-       * DOS-Files. Normally they are the last chars in file, but after
-       * working on these file with vi, there is an additional NEWLINE
-       * after the last END_OF_FILE. So if the second last char in the
-       * actual line is END_OF_FILE, you can skip the last char. Then
-       * you can search the line back until you find no more END_OF_FILE
-       * and nuke each you found by string termination. */
-      if( q[0] == '\032' )
-     q--;
-      while( q[1] == '\032' ) {
-     q[1] = '\0';
-     q--;
-      }
+     /* ignore each RETURN at the end of a line before any further
+      * processing */
+     if( q[0] == '\r' && q[1] == '\n' ) {
+        q[0] = '\n';
+        q[1] = '\0';
+        q--;
+     }
+     /* you also have to deal with END_OF_FILE chars to process raw
+      * DOS-Files. Normally they are the last chars in file, but after
+      * working on these file with vi, there is an additional NEWLINE
+      * after the last END_OF_FILE. So if the second last char in the
+      * actual line is END_OF_FILE, you can skip the last char. Then
+      * you can search the line back until you find no more END_OF_FILE
+      * and nuke each you found by string termination. */
+     if( q[0] == '\032' )
+        q--;
+     while( q[1] == '\032' ) {
+        q[1] = '\0';
+        q--;
+     }
 
-      if( ignore ) {
-     if( q[0] != CONTINUATION_CHAR || q[1] != '\n' )  ignore = FALSE;
-     *p = '\0';
-     continue;
-      }
+     /* ignore input if ignore flag set and line ends in a continuation
+        character. */
 
-      c = Do_comment(p, &q, Group || (*buf == '\t') || (Notabs && *buf ==' '));
+     if( ignore ) {
+        if( q[0] != CONTINUATION_CHAR || q[1] != '\n' )  ignore = FALSE;
+        *p = '\0';
+        continue;
+     }
 
-      /* Does the end of the line end in a continuation sequence? */
+     /* If a comment is found the line does not end in \n anymore. */
+     c = Do_comment(p, &q, Group || (*buf == '\t') || (Notabs && *buf ==' '));
 
-      if( (q[0] == CONTINUATION_CHAR) && (q[1] == '\n')) {
+     /* Does the end of the line end in a continuation sequence? */
+
+     if( (q[0] == CONTINUATION_CHAR) && (q[1] == '\n')) {
      /* If the continuation was at the end of a comment then ignore the
       * next input line, (or lines until we get one ending in just <nl>)
       * else it's a continuation, so build the input line from several
       * text lines on input.  The maximum size of this is governened by
       * Buffer_size */
-     if( q != p && q[-1] == CONTINUATION_CHAR ) {
-        strcpy( q, q+1 );
-        q--;
+        if( q != p && q[-1] == CONTINUATION_CHAR ) {
+           strcpy( q, q+1 );
+           q--;
+           cont = FALSE;
+        }
+        else if( c != NIL(char) )
+           ignore = TRUE;
+        else
+           cont   = TRUE;   /* Keep the \<nl>. */
+     }
+     else {
         cont = FALSE;
      }
-     else if( c != NIL(char) )
-        ignore = TRUE;
-     else
-        cont   = TRUE;
+
+     q = ( c == NIL(char) ) ? q+2 : c;
       }
-      else {
+      else {  /* empty line or "" */
      cont = FALSE;
+     ignore = FALSE;
+     q = p+strlen(p);  /* strlen(p) is 1 or 0 */
       }
 
-      q    = ( c == NIL(char) ) ? q+2 : c;
       pos += q-p;
    }
-   while( (cont || !*buf) && (pos <= Buffer_size) );
+   while( (cont || !*buf) && (pos < Buffer_size-1) );
 
-   if( buf[ pos-1 ] == '\n' )
-      buf[ --pos ] = '\0';
-   else
-      if( pos == Buffer_size-1 )
-     Fatal( "Input line too long, increase MAXLINELENGTH" );
+   if( pos >= Buffer_size-1 )
+      Fatal( "Input line too long, increase MAXLINELENGTH" );
+
+   /* Lines that had comments don't contain \n anymore. */
+   /* ??? Continued lines that are followed by an empty or comment only
+    * line will end in \<nl>. */
+   if( (q > p) && (buf[ pos-1 ] == '\n') )
+      buf[ --pos ] = '\0';   /* Remove the final \n. */
 
    /* STUPID AUGMAKE uses "include" at the start of a line as
     * a signal to include a new file, so let's look for it.
@@ -274,6 +289,7 @@ int  keep;
         if( pend ) (*pend)--;    /* shift tail pointer left */
      }
      else {
+        /* Check/execute if shebang command is present. */
         if(    !No_exec
         && c == str
             && c[1] == '!'
@@ -287,6 +303,7 @@ int  keep;
            Swap_on_exec = TRUE;
            Wait_for_completion = TRUE;
            Do_cmnd(cmnd, FALSE, TRUE, Current_target, FALSE, FALSE, TRUE);
+           Wait_for_completion = FALSE;
         }
 
         *c = '\0';               /* a true comment so break */
@@ -480,8 +497,8 @@ _handle_conditional( opcode, tg )
    static short action[MAX_COND_DEPTH];
    static char      ifcntl[MAX_COND_DEPTH];
    char         *lhs, *expr, *expr_end;
-   char         *lop, *partstr;
-   int          result, n, m;
+   char         *lop;
+   int          result;
 
    DB_ENTER( "_handle_conditional" );
 
@@ -561,7 +578,7 @@ _handle_conditional( opcode, tg )
 }
 
 /* uncomment to turn on expression debug statements */
-/*#define PARSE_DEBUG       /* */
+/*#define PARSE_DEBUG */
 #define PARSE_SKIP_WHITE(A)     while( *A && ((*A==' ') || (*A=='\t')) )  A++;
 
 #define OP_NONE 0
