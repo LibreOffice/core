@@ -14,4 +14,4 @@ mkdir: %_DEST%\inc%_EXT%\vos
 
 ..\%__SRC%\bin\vos*.dll %_DEST%\bin%_EXT%\vos*.dll
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
