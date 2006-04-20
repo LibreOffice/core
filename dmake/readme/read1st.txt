@@ -1,4 +1,4 @@
-DMAKE 4.3
+DMAKE 4.4
 =========
 
 This directory tree contains a number of files.  Here is a short
@@ -34,7 +34,18 @@ The configure command will notify you when your platform is not supported.
 
 With Microsoft C++ compiler
 ---------------------------
-For MS Visual C++ 6 and up start "make.bat win95-vpp40" in a command shell.
+For MS Visual C++ 6 and up run "make.bat win95-vpp40" in a command shell.
+This should create a dmake.exe in the top-level directory.
+
+It is possible to rename this to, say, dmake0.exe, delete the objects/
+sub-directory and then simply run "dmake0.exe" to build a new dmake.exe.
+Note that it is not necessary to have dmake rebuild itself in this way,
+but it is a nice test that your new dmake is working to see that it can.
+
+To install dmake, simply copy dmake.exe and the startup/ sub-directory to
+a directory of your choice.  You may also want to copy the man/
+sub-directory for future access to the manual page.
+
 
 All other systems might look in the public/ directory for usefull hints.
 
