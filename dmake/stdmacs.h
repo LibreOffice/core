@@ -1,6 +1,6 @@
 /* $RCSfile: stdmacs.h,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:07:37 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:02:29 $
 --
 -- SYNOPSIS
 --      General use macros.
@@ -37,7 +37,8 @@
 #define  __STDC__ 0
 #endif
 
-#if __STDC__ || defined(__TURBOC__) || defined(__IBMC__)
+/* MSVC 6 and newer understand ANSI prototypes */
+#if __STDC__ || defined(__TURBOC__) || defined(__IBMC__) || defined (_MSC_VER)
 #define ANSI(x) x
 #else
 #define ANSI(x) ()
