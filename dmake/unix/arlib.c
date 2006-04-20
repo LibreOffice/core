@@ -1,6 +1,6 @@
 /* $RCSfile: arlib.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:08:45 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:18:37 $
 --
 -- SYNOPSIS
 --      Unix archive manipulation code.
@@ -158,7 +158,7 @@ char    *lib;
 }
 
 
-int
+PUBLIC int
 touch_arch(name, lib)/*
 =======================
    Look for module 'name' inside 'lib'.  If compiled with cacheing then first
@@ -398,7 +398,7 @@ struct   ar_args *arg;
       if( _ar.ar_size == 0L ) break;
       fseek( f, (long) _ar.ar_size, 0 );
 #else
-      fseek( f, arhdroffset + sizeof(arhdr) + (_ar.ar_size+1 & ~1L), 0 );
+      fseek( f, arhdroffset + sizeof(arhdr) + ((_ar.ar_size+1) & ~1L), 0 );
 #endif
    }
 
@@ -566,7 +566,7 @@ char   *name;
 
 
 
-void
+PUBLIC void
 void_lcache( lib, member )/*
 ============================
    Void the library cache for lib.  If member is NIL(char) then nuke all
