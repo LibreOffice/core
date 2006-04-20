@@ -1,4 +1,4 @@
-/* RCS  $Id: startup.h,v 1.1.1.1 2000-09-22 15:33:27 hr Exp $
+/* RCS  $Id: startup.h,v 1.2 2006-04-20 12:06:36 hr Exp $
 --
 -- SYNOPSIS
 --      Dmake startup header file definition.
@@ -23,4 +23,4 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
-"MAKESTARTUP := $(MAKECMD:d)startup/startup.mk",
+"MAKESTARTUP := $(DMAKEROOT)\\startup.mk",
