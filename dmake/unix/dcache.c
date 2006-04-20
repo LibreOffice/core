@@ -1,6 +1,6 @@
 /* $RCSfile: dcache.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:09:00 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:18:48 $
 --
 -- SYNOPSIS
 --      Directory cache management routines.
@@ -173,6 +173,9 @@ int          force;
 
    if( force && !loaded) {
       if (strlen(comp) > NameMax || DMSTAT(spath,&stbuf) != 0) {
+     if (strlen(comp) > NameMax)
+        Warning( "File [%s] longer than value of NAMEMAX [%d].\n\
+    Assume unix time 0.\n", comp, NameMax );
      if(ep)
         ep->mtime = 0L;
       }
