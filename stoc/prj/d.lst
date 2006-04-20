@@ -30,4 +30,4 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\typeconverter.uno.xml
 ..\source\uriproc\module.xml %_DEST%\xml%_EXT%\uriproc.uno.xml
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
