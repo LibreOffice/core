@@ -1,6 +1,6 @@
 /* $RCSfile: ruletab.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:09:26 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:18:58 $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -35,7 +35,7 @@ static char *_rules[] = {
     "MAXPROCESSLIMIT := 10",
     "MAXLINELENGTH := 8190",
 #include "dmakeroot.h"
-    ".IMPORT .IGNORE: DMAKEROOT SOLARVER UPD INPATH OS UPDMINOREXT",
+    ".IMPORT .IGNORE: DMAKEROOT",
     ".MAKEFILES : makefile.mk Makefile makefile",
     ".SOURCE    : .NULL",
 #include "startup.h"
