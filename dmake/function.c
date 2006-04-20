@@ -1,6 +1,6 @@
 /* $RCSfile: function.c,v $
--- $Revision: 1.7 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:06:20 $
+-- $Revision: 1.8 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:00:12 $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -58,23 +58,48 @@ char *buf;
    char *args;
    char *mod1;
    char *mod2 = NIL(char);
+   int mod_count = 0;
    char *res  = NIL(char);
 
    /* This must succeed since the presence of ' ', \t or \n is what
-    * determines if this function is called in the first place. */
+    * determines if this function is called in the first place.
+    * Unfortunately this prohibits the use of whitespaces in parameters
+    * for macro functions. */
+   /* ??? Using ScanToken to find the next ' ', \t or \n and discarding
+    * the returned, evaluated result is a misuse of that function. */
    FREE(ScanToken(buf, &args, FALSE));
    fname = DmSubStr(buf, args);
+   /* args points to the whitespace after the found token, this leads
+    * to leading whitespaces. */
+   if( *args ) {
+      args = DmStrSpn(args," \t"); /* strip whitespace before */
+      if( *args ) {                /* ... and after value */
+     char *q;
+     for(q=args+strlen(args)-1; ((*q == ' ')||(*q == '\t')); q--);
+     *++q = '\0';
+      }
+   }
 
+   /* ??? Some function macros expect comma seperated parameters, but
+    * no decent parser is included. The desirable solution would be
+    * to parse fname for the correct number of parameters in fname
+    * when a function is recognized. We only count the parameters
+    * at the moment. Note "" is a valid parameter. */
    if( (mod1 = strchr(fname,',')) != NIL(char) ){
       *mod1 = '\0';
       mod1++;
+      mod_count++;
 
       if( (mod2 = strchr(mod1,',')) != NIL(char) ){
      *mod2 = '\0';
      mod2++;
+     mod_count++;
       }
    }
 
+   /* ??? At the moment only the leading part of fname compared if it
+    * matches a known function macro. For example assignXXX or even
+    * assign,,,, is also erroneously accepted. */
    switch( *fname ) {
       case 'a':
      if(strncmp(fname,"assign",6) == 0)
@@ -87,7 +112,10 @@ char *buf;
 
       case 'e':
      if(strncmp(fname,"eq",2) == 0)
-        res = _exec_iseq(mod1,mod2,args,TRUE);
+        if( mod_count == 2 )
+          res = _exec_iseq(mod1,mod2,args,TRUE);
+        else
+          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
      else if (strncmp(fname,"echo",4) == 0)
         res = _exec_echo(args);
          else
@@ -96,16 +124,22 @@ char *buf;
 
       case 'f':
      if(strncmp(fname,"foreach",7) == 0)
+        if( mod_count == 2 )
           res = _exec_foreach(mod1,mod2,args);
-         else
-            res = _exec_call(fname,args);
+        else
+          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+     else
+        res = _exec_call(fname,args);
      break;
 
       case 'm':
      if(strncmp(fname,"mktmp",5) == 0)
-            res = _exec_mktmp(mod1,mod2,args);
-         else
-            res = _exec_call(fname,args);
+        if( mod_count < 3 )
+          res = _exec_mktmp(mod1,mod2,args);
+        else
+          Fatal( "Maximal two comma-seperated arguments expected in [%s].\n", buf );
+     else
+        res = _exec_call(fname,args);
      break;
 
       case 'n':
@@ -123,9 +157,12 @@ char *buf;
      if(strncmp(fname,"!null",5) == 0)
         res = _exec_iseq(mod1,NIL(char),args,FALSE);
      else if(strncmp(fname,"!eq",3) ==0)
-            res = _exec_iseq(mod1,mod2,args,FALSE);
-         else
-            res = _exec_call(fname,args);
+        if( mod_count == 2 )
+          res = _exec_iseq(mod1,mod2,args,FALSE);
+        else
+          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+     else
+        res = _exec_call(fname,args);
      break;
 
       case 'o':
@@ -142,8 +179,12 @@ char *buf;
         res = _exec_shell(args,mod1);
      else if(strncmp(fname,"strip",5)==0)
         res = Tokenize(Expand(args)," ",'t',TRUE);
-     else if(strncmp(fname,"subst",5)==0)
-        res = _exec_subst(mod1,mod2,args);
+     else if(strncmp(fname,"subst",5)==0) {
+        if( mod_count == 2 )
+          res = _exec_subst(mod1,mod2,args);
+        else
+          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+     }
          else
             res = _exec_call(fname,args);
      break;
@@ -286,14 +327,13 @@ char *data;
    name = Current_target ? Current_target->CE_NAME:"makefile text";
 
    if( file && *file ) {
-      char *newtmp;
-
       /* This call to Get_temp sets TMPFILE for subsequent expansion of file.
        * The contents file variable passed may include TMPFILE to be expanded. */
       /* Using TMPFILE as an argument to mktmp is no longer supported because it is not
        * safe to create a random filename and assume the file does not exist.  Howver,
        * we still allow Expand() to do its job for fixed filenames */
-      /* Get_temp( &newtmp, "", FALSE ); FREE(newtmp); */
+      /* char *newtmp;
+       * Get_temp( &newtmp, "", FALSE ); FREE(newtmp); */
       tmpname = Expand(file);
 
       if( *tmpname ) {
@@ -455,6 +495,8 @@ char *data;
 
    pat = Expand(pat);
    subst = Expand(subst);
+
+   /* This implies FREE(Expand(data)) */
    res = Apply_edit( Expand(data), pat, subst, TRUE, FALSE );
    FREE(pat);
    FREE(subst);
@@ -464,19 +506,24 @@ char *data;
 
 
 static char *
-_exec_shell( data, mod1 )
+_exec_shell( data, mod1 )/*
+===========================
+   Capture the stdout of an execuded command. */
 char *data;
 char *mod1;
 {
    extern char *tempnam();
-   static int  nestlevel = 0;
-   static int  org_out;
-   static int  bsize;
-   static char *buffer;
-   static char *tmpnm;
-   static FILE *tmp;
+   int  bsize;
+   char *buffer;
+   char *tmpnm;
+   FILE *old_stdout_redir = stdout_redir;
+#if !defined(USE_SANE_EXEC_SHELL_REDIR)
+   int old_stdout;
+#endif
 
    int wait     = Wait_for_completion;
+   int old_is_exec_shell = Is_exec_shell;
+   CELLPTR old_Shell_exec_target = Shell_exec_target;
    uint16 vflag = Verbose;
    int tflag    = Trace;
    char *res    = NIL(char);
@@ -505,62 +552,81 @@ char *mod1;
    cell.ce_fname  = cname.ht_name;
    cell.ce_recipe = &rcp;
    cell.ce_flag   = F_TARGET|F_RULES;
-   cell.ce_attr   = A_PHONY|A_SILENT;
+   /* Setting A_SILENT supresses the recipe output from Print_cmnd(). */
+   cell.ce_attr   = A_PHONY|A_SILENT|A_SHELLESC;
 
-   if( nestlevel == 0 ) {
-      org_out = dup(1);
+   if( Measure & M_TARGET )
+      Do_profile_output( "s", M_TARGET, &cell );
 
-      if( (tmp = Get_temp(&tmpnm, "", "w+")) == NIL(FILE) )
-     Open_temp_error( tmpnm, cname.ht_name );
-
-      close(1);
-      dup( fileno(tmp) );
-
-      bsize  = (Buffer_size < BUFSIZ)?BUFSIZ:Buffer_size;
-      buffer = MALLOC(bsize,char);
+   /* Print the shell escape command. */
+   if( !(rcp.st_attr & A_SILENT) ) {
+      printf( "%s: Executing shell macro: %s\n", Pname, data );
+      fflush(stdout);
    }
 
+   if( (stdout_redir = Get_temp(&tmpnm, "", "w+")) == NIL(FILE) )
+      Open_temp_error( tmpnm, cname.ht_name );
+
+   bsize  = (Buffer_size < BUFSIZ)?BUFSIZ:Buffer_size;
+   buffer = MALLOC(bsize,char);
+
+   /* As this function redirects the output of stdout we have to make sure
+    * that only this single command is executed and all previous recipe lines
+    * that belong to the same target have finished. With Shell_exec_target and
+    * Wait_for_completion set this is realized. Current_target being NIL(CELL)
+    * outside of recipe lines makes sure that no waiting for previous recipe
+    * lines has to be done. */
    Wait_for_completion = TRUE;
+   Is_exec_shell = TRUE;
+   Shell_exec_target = Current_target;
    Verbose &= V_LEAVE_TMP;
    Trace   = FALSE;
-   nestlevel++;
+
+   /* Only unix type builds define the redirection of stdout in the forked
+    * child process. Other OSs have to do it here, in the parent process.
+    * Note! This is not save for parallel builds, see #iz53148#, but parallel
+    * builds are not supported for non-unix like builds anyway. */
+#if !defined(USE_SANE_EXEC_SHELL_REDIR)
+   old_stdout = dup(1);
+   close(1);
+   dup( fileno(stdout_redir) );
+#endif
    Exec_commands( &cell );
+#if !defined(USE_SANE_EXEC_SHELL_REDIR)
+   close(1);
+   dup(old_stdout);
+#endif
    Unlink_temp_files( &cell );
-   nestlevel--;
+
    Trace   = tflag;
    Verbose = vflag;
    Wait_for_completion = wait;
+   Is_exec_shell = old_is_exec_shell;
+   Shell_exec_target = old_Shell_exec_target;
 
    /* Now we have to read the temporary file, get the tokens and return them
     * as a string. */
-   rewind(tmp);
-   while( fgets(buffer, bsize, tmp) ) {
+   rewind(stdout_redir);
+   while( fgets(buffer, bsize, stdout_redir) ) {
       char *p = strchr(buffer, '\n');
 
       if( p == NIL(char) )
      res = DmStrJoin(res,buffer,-1,TRUE);
       else {
      *p = '\0';
+     /* You might encounter '\r\n' on windows, handle it. */
+     if( p > buffer && *(p-1) == '\r')
+        *(p-1) = '\0';
          res = DmStrApp(res,buffer);
       }
    }
 
-   fclose(tmp);
-   if( nestlevel == 0 ) {
-      close(1);
-      dup(org_out);
-      close(org_out);
-      Remove_file(tmpnm);
-      FREE(tmpnm);
-      FREE(buffer);
-   }
-   else {
-      if( (tmp = fopen(tmpnm, "w+")) == NIL(FILE) )
-     Open_temp_error( tmpnm, cname.ht_name );
+   fclose(stdout_redir);
+   Remove_file(tmpnm);
+   FREE(tmpnm);
+   FREE(buffer);
 
-      close(1);
-      dup( fileno(tmp) );
-   }
+   stdout_redir = old_stdout_redir;
 
    if ( mod1 ) {
       mod1 = Expand(res);
