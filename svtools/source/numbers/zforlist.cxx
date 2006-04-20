@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:02:39 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,9 @@ namespace
 {
     struct theCurrencyTable :
         public rtl::Static< NfCurrencyTable, theCurrencyTable > {};
+
+    struct theLegacyOnlyCurrencyTable :
+        public rtl::Static< NfCurrencyTable, theLegacyOnlyCurrencyTable > {};
 }
 USHORT SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
@@ -3068,6 +3071,25 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
 
 
 // static
+const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry(
+        const String& rSymbol, const String& rAbbrev )
+{
+    if (!bCurrencyTableInitialized)
+        GetTheCurrencyTable();      // just for initialization
+    const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
+    USHORT nCount = rTable.Count();
+    const NfCurrencyEntryPtr* ppData = rTable.GetData();
+    for ( USHORT j = 0; j < nCount; j++, ppData++ )
+    {
+        if ( (*ppData)->GetSymbol() == rSymbol &&
+                (*ppData)->GetBankSymbol() == rAbbrev )
+            return *ppData;
+    }
+    return NULL;
+}
+
+
+// static
 IMPL_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void*, pNull )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -3387,7 +3409,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
 
 void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
         xCurrencies = xLocaleData->getAllCurrencies();
     sal_Int32 nCurrencies = xCurrencies.getLength();
     sal_Int32 j;
@@ -3551,6 +3573,8 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     RTL_LOGFILE_CONTEXT_TRACE1( aTimeLog, "number of locales: %ld", nLocaleCount );
     Locale const * const pLocales = xLoc.getConstArray();
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
+    NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
+    USHORT nLegacyOnlyCurrencyPos = 0;
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
         LanguageType eLang = MsLangId::convertLocaleToLanguage(
@@ -3561,9 +3585,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             BOOL bBreak = TRUE;
 #endif
         pLocaleData->setLocale( pLocales[nLocale] );
-        Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
+        Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
-        Currency const * const pCurrencies = aCurrSeq.getConstArray();
+        Currency2 const * const pCurrencies = aCurrSeq.getConstArray();
 
         // one default currency for each locale, insert first so it is found first
         sal_Int32 nDefault;
@@ -3595,7 +3619,12 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             sal_Int32 nCurrency;
             for ( nCurrency = 0; nCurrency < nCurrencyCount; nCurrency++ )
             {
-                if ( nCurrency != nDefault )
+                if (pCurrencies[nCurrency].LegacyOnly)
+                {
+                    pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
+                    rLegacyOnlyCurrencyTable.Insert( pEntry, nLegacyOnlyCurrencyPos++ );
+                }
+                else if ( nCurrency != nDefault )
                 {
                     pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
                     // no dupes
