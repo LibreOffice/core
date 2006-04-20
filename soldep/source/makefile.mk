@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-01 14:18:34 $
+#   last change: $Author: obo $ $Date: 2006-04-20 13:53:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,64 +60,72 @@
 #
 #*************************************************************************
 
-# --- Globals ------------------------------------------------------
+PRJ=..
 
-PRJ             = ..
-PRJINC			= $(PRJ)$/source
-PRJNAME         = soldep
-TARGET          = soldep
+PRJNAME=soldep
+TARGET=soldep
+
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :settings.mk
-
+.INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
 
-CDEFS+=-DUPDSTRING=\"$(UPD)\"
+SLOFILES        = \
+    $(SLO)$/soldep.obj		\
+    $(SLO)$/soldlg.obj		\
+    $(SLO)$/depper.obj		\
+     $(SLO)$/hashtbl.obj		\
+    $(SLO)$/hashobj.obj		\
+    $(SLO)$/connctr.obj		\
+    $(SLO)$/depwin.obj		\
+    $(SLO)$/graphwin.obj	\
+    $(SLO)$/tbox.obj		\
+    $(SLO)$/sdresid.obj		\
+    $(SLO)$/objwin.obj
 
-.IF "$(HJS_TEST)"!=""
-CDEFS+=-DHJS_TEST
+SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB	=i$(TARGET)
+SHL1LIBS	=$(SLB)$/$(TARGET).lib
+SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
+SHL1DEPN	=$(SHL1LIBS)
+SHL1STDLIBS     = $(SVTOOLLIB)		\
+                $(CPPUHELPERLIB)	\
+                $(COMPHELPERLIB)	\
+                $(SVLIB)			\
+                $(SOTLIB)			\
+                $(BTSTRPLIB)		\
+                $(TOOLSLIB) 		\
+                $(VOSLIB)			\
+                $(UNOLIB)			\
+                $(OSLLIB)			\
+                $(SALLIB)           \
+                $(CPPULIB)  \
+                $(LB)$/ibootstrpdt.lib \
+                   $(PERL_LIB)
+
+.IF "$(GUI)" == "UNX"
+SHL1STDLIBS+=\
+        $(SALLIB)
 .ENDIF
 
-DEPOBJFILES= \
-    $(OBJ)$/depapp.obj
 
-SRC1FILES = \
-    soldlg.src
+DEF1NAME    =$(SHL1TARGET)
+DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
+DEFLIB1NAME	=$(TARGET)
 
-RES1TARGET = dep
-SRS1NAME=$(TARGET)
-SRS1FILES = \
-    $(SRS)$/soldep.srs
-
-RESLIB1NAME = dep
-RESLIB1SRSFILES = \
-    $(SRS)$/soldep.srs
-
-
-OBJFILES        = \
-    $(OBJ)$/soldep.obj		\
-    $(OBJ)$/soldlg.obj		\
-    $(OBJ)$/prjdep.obj		\
-    $(OBJ)$/depper.obj		\
-     $(OBJ)$/hashtbl.obj		\
-    $(OBJ)$/hashobj.obj		\
-    $(OBJ)$/connctr.obj		\
-    $(OBJ)$/depwin.obj		\
-    $(OBJ)$/graphwin.obj	\
-    $(OBJ)$/objwin.obj
-
+#------------- Application ---------------
 APP1TARGET=soldepl
-APP1OBJS=$(OBJFILES) \
-    $(OBJ)$/depapp.obj
+APP1OBJS= \
+    $(SLO)$/depapp.obj
 
-#APP1LIBS=	$(LB)$/hashtab.lib
+APP1LIBS=   $(LB)$/ibootstrpdt.lib \
+            $(LB)$/isoldep.lib
 
 APP1ICON=soldep.ico
 APP1STDLIBS= \
             $(SVTOOLLIB)		\
-            $(CPPULIB)			\
             $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB)	\
             $(SVLIB)			\
@@ -127,30 +135,29 @@ APP1STDLIBS= \
             $(VOSLIB)			\
             $(UNOLIB)			\
             $(OSLLIB)			\
-            $(SALLIB)
-APP1LINKRES=$(MISC)$/$(TARGET).res
+            $(SALLIB)           \
+               $(CPPULIB)  \
+               $(PERL_LIB)
 
 
-.IF "$(GUI)" == "UNX"
-LIB1OBJFILES		= $(OBJFILES)
-LIB1ARCHIV              = $(LB)$/libdepper.a
-LIB1TARGET              = $(LB)$/dep.lib
-.ENDIF
-
-# --- Targets -------------------------------------------------------
-
-ALL : \
-    ALLTAR \
-    $(BIN)$/applicat.rdb
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(BIN)$/applicat.rdb
 
 $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
     $(GNUCOPY) $(UNOUCRRDB) $@
      +cd $(BIN) && \
-         regcomp -register -r applicat.rdb \
-             -c $(DLLPRE)i18nsearch.uno$(DLLPOST) \
-             -c $(DLLPRE)i18npool.uno$(DLLPOST)
+    regcomp -register -r applicat.rdb \
+             -c i18nsearch.uno$(DLLPOST) \
+             -c i18npool.uno$(DLLPOST)
 
-
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo WEP > $@
+    @echo LIBMAIN >> $@
+    @echo LibMain >> $@
+    @echo __CT >> $@
