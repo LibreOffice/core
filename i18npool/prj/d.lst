@@ -40,4 +40,4 @@ mkdir: %_DEST%\inc%_EXT%\i18npool
 ..\%__SRC%\lib\libi18nisolang*.so %_DEST%\lib%_EXT%\libi18nisolang*.so
 ..\%__SRC%\lib\libi18nisolang*.dylib %_DEST%\lib%_EXT%\libi18nisolang*.dylib
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
