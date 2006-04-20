@@ -1,4 +1,4 @@
-/* RCS  $Id: startup.h,v 1.1.1.1 2000-09-22 15:33:36 hr Exp $
+/* RCS  $Id: startup.h,v 1.2 2006-04-20 12:23:16 hr Exp $
 --
 -- SYNOPSIS
 --      Definition of MAKESTARTUP
@@ -24,5 +24,5 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
-/*"MAKESTARTUP := $(MAKECMD:d)startup/startup.mk",*/
+"DMAKEROOT *= $(ABSMAKECMD:d)startup",
 "MAKESTARTUP := $(DMAKEROOT)\\startup.mk",
