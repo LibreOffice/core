@@ -23,15 +23,12 @@ DIE=0
 (autoconf --version ) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "You must have autoconf installed to compile $PROJECT."
-    echo "Get ftp://ftp.gnu.org/gnu/gettext/autoconf/autoconf-2.13.tar.gz"
     DIE=1
 }
 
-(automake --version) < /dev/null > /dev/null 2>&1 || {
+(automake --version ) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "You must have automake installed to compile $PROJECT."
-    echo "Get ftp://ftp.gnu.org/gnu/gettext/automake/automake-1.4.tar.gz"
-    echo "(or a newer version if it is available)"
     DIE=1
 }
 
@@ -49,35 +46,13 @@ if test -z "$*"; then
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
-if test -z "$ACLOCAL_FLAGS"; then
+# After the first run of autoconf a configure file exists.
+# 'configure --enable-maintainer-mode' will start all other needed autotool helpers.
+# autoconf
 
-    acdir=`aclocal --print-ac-dir`
-        m4list="glib.m4"
+# needed when autotools version changed
+aclocal
 
-    for file in $m4list
-    do
-        if [ ! -f "$acdir/$file" ]; then
-            echo "WARNING: aclocal's directory is $acdir, but..."
-            echo "         no file $acdir/$file"
-            echo "         You may see fatal macro warnings below."
-            echo "         If these files are installed in /some/dir, set the ACLOCAL_FLAGS "
-            echo "         environment variable to \"-I /some/dir\", or install"
-            echo "         $acdir/$file."
-            echo ""
-        fi
-    done
-fi
-
-#
-
-chmod 666 aclocal.m4
-aclocal $ACLOCAL_FLAGS
-
-# optionally feature autoheader
-(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
-
-automake -a --include-deps $am_opt
-autoconf
 cd $ORIGDIR
 
 $srcdir/configure --enable-maintainer-mode  --prefix=/usr/local "$@"
