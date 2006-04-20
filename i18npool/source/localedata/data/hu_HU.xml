@@ -176,12 +176,18 @@
       <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
-  <LC_COLLATION ref="en_US" />
+  <LC_COLLATION>
+    <Collator unoid="charset" default="true"/>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Ó Ö Ő Ü Ű</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="charset">A(A, Á) B C {Cs} D {DZ} {DZS} E(E, É) F G {Gy} H I(I, Í) J-L {Ly}  -N {Ny} O(O, Ó) Ő(Ö, Ő) P-S {Sz} T {Ty} U(U, Ú) Ű(Ü, Ű) V-Z {Zs}</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
     <UnicodeScript>3</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
     <FollowPageWord>pp.</FollowPageWord>
