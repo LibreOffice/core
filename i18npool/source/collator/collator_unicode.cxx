@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-10 10:02:05 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 }
                 if (func) {
                     const sal_uInt8* ruleImage=func();
-                    collator = new RuleBasedCollator(UnicodeString(reinterpret_cast<const char*>(ruleImage)), status);
+                    collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), status);
                     if (! U_SUCCESS(status))
                         throw RuntimeException();
                 }
