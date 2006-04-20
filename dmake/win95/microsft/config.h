@@ -1,6 +1,6 @@
 /* $RCSfile: config.h,v $
--- $Revision: 1.6 $
--- last change: $Author: rt $ $Date: 2004-10-22 08:11:51 $
+-- $Revision: 1.7 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:24:12 $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +38,8 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.3"
+#define VERSION "4.4"
+#define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
 # if _MSC_VER < 500
@@ -79,8 +80,10 @@
 #   define SIGQUIT SIGTERM
 #endif
 
-/* MSC doesn't seem to care about CONST */
-#define CONST
+/* MSC didn't seem to care about CONST in the past */
+#ifndef CONST
+#   define CONST
+#endif
 
 /* MSC has sys/types.h and sys/stat.h (this is tested only with MSVC++ 6.0) */
 #define HAVE_SYS_TYPES_H 1
