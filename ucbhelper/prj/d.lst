@@ -39,4 +39,4 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
 ..\inc\ucbhelper\ucbhelperdllapi.h %_DEST%\inc%_EXT%\ucbhelper\ucbhelperdllapi.h
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
