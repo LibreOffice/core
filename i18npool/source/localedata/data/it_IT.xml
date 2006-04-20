@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
   <LC_INFO>
     <Language>
       <LangID>it</LangID>
@@ -66,22 +66,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[$L.-410] #.##0;-[$L.-410] #.##0</FormatCode>
+      <FormatCode>[$₤-410] #.##0;-[$₤-410] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$L.-410] #.##0;-[$L.-410] #.##0</FormatCode>
+      <FormatCode>[$₤-410] #.##0;-[$₤-410] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[$L.-410] #.##0;[RED]-[$L.-410] #.##0</FormatCode>
+      <FormatCode>[$₤-410] #.##0;[RED]-[$₤-410] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[$L.-410] #.##0;[RED]-[$L.-410] #.##0</FormatCode>
+      <FormatCode>[$₤-410] #.##0;[RED]-[$₤-410] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$L.-410] #.##0;[RED]-[$L.-410] #.##0</FormatCode>
+      <FormatCode>[$₤-410] #.##0;[RED]-[$₤-410] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>GG/MM/AA</FormatCode>
@@ -313,6 +313,13 @@
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
     <Currency default="false" usedInCompatibleFormatCodes="true">
+      <CurrencyID>ITL</CurrencyID>
+      <CurrencySymbol>₤</CurrencySymbol>
+      <BankSymbol>ITL</BankSymbol>
+      <CurrencyName>Lira Italiana</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>ITL</CurrencyID>
       <CurrencySymbol>L.</CurrencySymbol>
       <BankSymbol>ITL</BankSymbol>
