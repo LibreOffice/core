@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.2 2004-09-08 16:05:34 rt Exp $
+/* RCS  $Id: dmake.h,v 1.3 2006-04-20 11:59:16 hr Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -100,6 +100,7 @@
 #define A_POOL        0x08000000        /* used for directory pool      */
 #define A_ERROR       0x10000000        /* used to halt construction    */
 #define A_FIRST       0x20000000        /* used for .INCLUDE termination*/
+#define A_SHELLESC    0x40000000        /* used for shell escape target */
 
 
 /* Global and target bit flag definitions */
@@ -124,7 +125,7 @@
 #define F_REMOVE         0x1000         /* marks an intermediate target */
 #define F_MAGIC          0x2000         /* marks a magic target         */
 #define F_INFER          0x4000         /* target is result of inference*/
-#define F_MADE           0x8000         /* target is manufactured       */
+#define F_MADE           0x8000         /* target is currently made     */
 
 
 /* Definitions for the Parser states */
@@ -175,7 +176,7 @@
 #define ST_IFNEQ       14
 
 /* Flags for controling use of -v switch */
-#define V_NONE          0x00
+#define V_NOFLAG        0x00   /* V_NONE is used in MinGW w32api/oleauto.h */
 #define V_LEAVE_TMP     0x01
 #define V_DIR_SET       0x02
 #define V_DIR_CACHE     0x04
@@ -186,6 +187,14 @@
 #define V_FORCEECHO     0x80
 #define V_ALL           (V_LEAVE_TMP | V_DIR_SET | V_INFER | V_MAKE |\
                        V_FILE_IO | V_DIR_CACHE | V_WARNALL | V_FORCEECHO)
+
+/* Flags for controling use of -m switch */
+#define M_NOFLAG        0x00
+#define M_TARGET        0x01
+#define M_RECIPE        0x02
+#define M_ABSPATH       0x04
+#define M_SHELLESC      0x08
+#define M_ALL           (M_TARGET | M_RECIPE | M_ABSPATH | M_SHELLESC)
 
 /* Macro definitions for use inside dmake */
 #define SET_TOKEN(A, B)  (A)->tk_str = (B);\
