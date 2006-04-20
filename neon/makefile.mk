@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:01:10 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:31:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,11 @@ TARGET=so_neon
 .IF "$(SYSTEM_NEON)" == "YES"
 @all:
     @echo "Using system neon...."
+.ENDIF
+
+.IF "$(DISABLE_NEON)" == "TRUE"
+@all:
+    @echo "neon disabled...."
 .ENDIF
 
 NEON_NAME=neon-0.24.7
