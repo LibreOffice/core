@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $
+/* RCS  $Id: vextern.h,v 1.2 2006-04-20 12:03:05 hr Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -47,9 +47,11 @@ EXTERN  char*   GShell_flags;   /* pointer to macro value for GROUPFLAGS  */
 EXTERN  char*   Shell_metas;    /* pointer to macro value for SHELLMETAS  */
 EXTERN  char*   Grp_suff;   /* pointer to macro value for GROUPSUFFIX */
 EXTERN  char*   DirSepStr;  /* pointer to macro value for DIRSEPSTR   */
+EXTERN  char*   AbsPname;   /* pointer to macro value for ABSMAKECMD  */
 EXTERN  char*   Pname;      /* dmake process invoke name              */
 EXTERN  char*   Pwd;        /* current working dir, value of PWD      */
 EXTERN  char*   Tmd;        /* path to directory where dmake started  */
+EXTERN  char*   Spacechar;  /* pointer to macro value for SPACECHAR   */
 EXTERN  char*   Keep_state; /* current .KEEP_STATE file       */
 EXTERN  char*   Escape_char;    /* Current escape character               */
 EXTERN  char*   LastMacName;    /* Last macro successfully parsed     */
@@ -72,8 +74,12 @@ EXTERN  CELLPTR Root;       /* Root of the make graph         */
 EXTERN  CELLPTR Targets;    /* Targets in makefile            */
 
 EXTERN  CELLPTR Current_target; /* cell of current target being made      */
-EXTERN  int Wait_for_completion;
-EXTERN  int Doing_bang;
+EXTERN  int Wait_for_completion; /* Wait for subprocess to finish     */
+EXTERN  int Is_exec_shell;  /* Indicate shell escape                  */
+EXTERN  CELLPTR Shell_exec_target; /* Keep Current_target for _exec__shell */
+EXTERN  FILE*   stdout_redir;   /* For _exec_shell client redirects       */
+EXTERN  int Doing_bang; /* TRUE if target timestamp needs not to be
+                 * updated immediately. */
 EXTERN  int Packed_shell;   /* TRUE if packed args to use a shell     */
 EXTERN  int Swap_on_exec;   /* TRUE if going to swap on exec call     */
 EXTERN  int State;      /* parser state               */
@@ -94,6 +100,7 @@ EXTERN  int Trace;        /* -n */
 EXTERN  int Touch;        /* -t */
 EXTERN  int Check;        /* -q */
 EXTERN  uint16  Verbose;      /* -v */
+EXTERN  uint16  Measure;      /* -m */
 EXTERN  int Microsoft;    /* -M */
 EXTERN  int Transitive;   /* -T */
 EXTERN  int     No_exec;          /* -X */
