@@ -12,4 +12,4 @@ mkdir: %_DEST%\inc%_EXT%\i18nutil
 ..\%__SRC%\lib\libi18nutil*.dylib %_DEST%\lib%_EXT%\libi18nutil*.dylib
 ..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib%_EXT%\ii18nutil.lib
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
