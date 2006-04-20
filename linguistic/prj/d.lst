@@ -9,4 +9,4 @@
 mkdir: %_DEST%\inc%_EXT%\linguistic
 ..\inc\*.hxx %_DEST%\inc%_EXT%\linguistic\*.hxx
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
