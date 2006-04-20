@@ -1,6 +1,6 @@
 /* $RCSfile: runargv.c,v $
--- $Revision: 1.8 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:09:39 $
+-- $Revision: 1.9 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:19:12 $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -24,8 +24,52 @@
 -- LOG
 --      Use cvs log to obtain detailed change logs.
 */
+/*
+This file (runargv.c) provides all the parallel process handling routines
+for dmake on unix like operating systems. The following text briefly
+describes the process flow.
+
+Exec_commands() [make.c] builds the recipes associated to the given target.
+  They are build sequentially in a loop that calls Do_cmnd() for each of them.
+
+Do_cmnd() [sysintf.c] feeds the given command or command group to runargv().
+
+runargv() [unix/runargv] The actual child processes are started in this
+  function, even in non parallel builds (MAXPROCESS==1) child processes are
+  created.
+  If recipes for a target are currently running attach them to the process
+  queue (_procs[i]) of that target and return.
+  If the maximum number of running process queues is reached
+  Wait_for_child(?, -1) is used to wait for one to be available.
+  New child processes are started using:
+    spawn:       posix_spawnp (POSIX) or spawnvp (cygwin).
+    fork/execvp: Create a client process with fork and run the command with
+                 execvp.
+  The parent calls _add_child() to track the child.
+
+_add_child() [unix/runargv] creates a new process queue and enters the child
+  parameters.
+  If Wait_for_completion (global variable) is set the function calls
+  Wait_for_child to waits for the new process queue to be finished.
+
+Wait_for_child(abort_flg, pid) [unix/runargv] waits for the child processes
+  with pid to finish. All finished processes are handled by calling
+  _finished_child() for each of them.
+  If pid == -1 wait for the next child process to finish.
+  If abort_flg is TRUE no further processes will be added to the process
+  queue.
+  If the global variable Wait_for_completion is set then all finished
+  processes are handled until the process with the given pid is reached.
+
+_finished_child(pid, ?) [unix/runargv] removes the finished child from its
+  process queue. If there are more commands in this queue start the next
+  with runargv().
+*/
 
 #include <signal.h>
+
+#include "extern.h"
+
 #ifdef HAVE_WAIT_H
 #  include <wait.h>
 #else
@@ -34,13 +78,14 @@
 # endif
 #endif
 
-#include "extern.h"
-
-/*  temporarily comment out spawn code as it does not actually work yet */
-#undef HAVE_SPAWN_H
-#if HAVE_SPAWN_H
+#if HAVE_SPAWN_H && ENABLE_SPAWN
 #  include <spawn.h>
 #endif
+
+#if __CYGWIN__ && ENABLE_SPAWN
+#  include <process.h>
+#endif
+
 #include "sysintf.h"
 #if HAVE_ERRNO_H
 #  include <errno.h>
@@ -113,19 +158,33 @@ int     shell;
 char    *cmd;
 {
    int          pid;
+   int          st_pq = 0; /* Current _exec_shell target process queue */
    char         **argv;
 
-   if( _running(target) /*&& Max_proc != 1*/ ) {
-      /* The command will be executed when the previous recipe
-       * line completes. */
-      _attach_cmd( cmd, group, ignore, target, last, shell );
-      return(1);
+#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ )
+   int old_stdout;
+#endif
+
+   /* Special handling for the shell function macro is required. If the currend
+    * command is called as part of a shell escape in a recipe make sure that all
+    * previous recipe lines of this target have finished. */
+   if( Is_exec_shell ) {
+      if( (st_pq = _running(Shell_exec_target)) != -1 ) {
+     Wait_for_child(FALSE, _procs[st_pq].pr_pid);
+      }
+   } else {
+      if( _running(target) != -1 /*&& Max_proc != 1*/ ) {
+     /* The command will be executed when the previous recipe
+      * line completes. */
+     _attach_cmd( cmd, group, ignore, target, last, shell );
+     return(1);
+      }
    }
 
     /*  Any Fatal call can potentially loop by recursion because we
      *  are called from the Quit routine that Fatal indirectly calls
      *  since Fatal should not happen I have left this bug in here */
-   while( _proc_cnt == Max_proc ) {
+   while( _proc_cnt == Max_proc ) { /* This forces sequential execution for Max_proc == 1. */
       if( Wait_for_child(FALSE, -1) == -1 ) {
         if( ! in_quit() || errno != ECHILD )
             Fatal( "Lost a child %d: %s", errno, strerror( errno ) );
@@ -138,17 +197,35 @@ char    *cmd;
 
    argv = Pack_argv( group, shell, cmd );
 
-#if HAVE_SPAWN_H
-   if (posix_spawn (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
-   {   /* posix_spawn failed */
+#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ )
+   /* As no other childs are started while the output is redirected this
+    * is save. */
+   if( Is_exec_shell ) {
+      old_stdout = dup(1);
+      close(1);
+      dup( fileno(stdout_redir) );
+   }
+#if __CYGWIN__
+   pid = spawnvp(_P_NOWAIT, argv[0], (const char**) argv);
+#else   /* __CYGWIN__ */
+   if (posix_spawnp (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
+      pid = -1; /* posix_spawn failed */
+#endif  /* __CYGWIN__ */
+   if( Is_exec_shell ) {
+      close(1);
+      dup(old_stdout);
+   }
+   if(pid == -1)
+   {   /* spawn failed */
        Error("%s: %s", argv[0], strerror(errno));
        Handle_result(-1, ignore, _abort_flg, target);
        return(-1);
    } else {
        _add_child(pid, target, ignore, last);
    }
-#else  /* HAVE_SPAWN_H */
+#else  /* ENABLE_SPAWN && ... */
 
+   fflush(stdout);
    switch( pid=fork() ){
 
    case -1: /* fork failed */
@@ -157,7 +234,14 @@ char    *cmd;
       return(-1);
 
    case 0:  /* child */
+      /* redirect stdout for _exec_shell */
+      if( Is_exec_shell ) {
+     /* org_out = dup(1); */
+         close(1);
+         dup( fileno(stdout_redir) );
+      }
       execvp(argv[0], argv);
+      /* restoring stdout is not needed */
       Continue = TRUE;   /* survive error message */
       Error("%s: %s", argv[0], strerror( errno ));
       kill(getpid(), SIGTERM);
@@ -167,27 +251,46 @@ char    *cmd;
       _add_child(pid, target, ignore, last);
    }
 
-#endif  /* HAVE_SPAWN_H */
+#endif  /* ENABLE_SPAWN && ... */
 
    return(1);
 }
 
 
 PUBLIC int
-Wait_for_child( abort_flg, pid )
+Wait_for_child( abort_flg, pid )/*
+==================================
+   Wait for the child processes with pid to to finish. All finished processes
+   are handled by calling _finished_child() for each of them.
+   If pid == -1 wait for the next child process to finish.
+   If abort_flg is TRUE no further processes will be added to the process
+   queue.
+   If the global variable Wait_for_completion is set then all finished
+   processes are handled until the process with the given pid is reached. */
 int abort_flg;
 int pid;
 {
    int wid;
    int status;
    int waitchild;
+   int is_exec_shell_status = Is_exec_shell;
+
+   /* It is impossible that processes that were started from _exec_shell
+    * have follow-up commands in its process queue. Unset Is_exec_shell
+    * to prevent piping of child processes that are started from the
+    * _finished_child subroutine and reset to its original value when
+    * leaving this function. */
+   Is_exec_shell = FALSE;
 
    waitchild = (pid == -1)? FALSE : Wait_for_completion;
 
    do {
       wid = wait(&status);
-      if( wid  == -1 )
-         return(-1);
+
+      if( wid  == -1 ) {
+     Is_exec_shell = is_exec_shell_status;
+     return(-1);
+      }
 
       _abort_flg = abort_flg;
       _finished_child(wid, status);
@@ -195,6 +298,7 @@ int pid;
    }
    while( waitchild && pid != wid );
 
+   Is_exec_shell = is_exec_shell_status;
    return(0);
 }
 
@@ -228,6 +332,10 @@ int     last;
       TALLOC( _procs, Max_proc, PR );
    }
 
+   if( Measure & M_RECIPE )
+      Do_profile_output( "s", M_RECIPE, target );
+
+   /* If _use_i!=-1 then this function is called by _finished_child() */
    if( (i = _use_i) == -1 )
       for( i=0; i<Max_proc; i++ )
      if( !_procs[i].pr_valid )
@@ -265,7 +373,11 @@ int status;
    /* Some children we didn't make esp true if using /bin/sh to execute a
     * a pipe and feed the output as a makefile into dmake. */
    if( i == Max_proc ) return;
-   _procs[i].pr_valid = 0;
+
+   _procs[i].pr_valid = 0; /* Not a running process anymore. */
+   if( Measure & M_RECIPE )
+      Do_profile_output( "e", M_RECIPE, _procs[i].pr_target );
+
    _proc_cnt--;
    dir = DmStrDup(Get_current_dir());
    Set_dir( _procs[i].pr_dir );
@@ -287,6 +399,7 @@ int status;
       _procs[i].pr_recipe = rp->prp_next;
 
       _use_i = i;
+      /* Run next recipe line. */
       runargv( _procs[i].pr_target, rp->prp_ignore, rp->prp_group,
            rp->prp_last, rp->prp_shell, rp->prp_cmd );
       _use_i = -1;
@@ -319,14 +432,14 @@ CELLPTR cp;
 {
    register int i;
 
-   if( !_procs ) return(FALSE);
+   if( !_procs ) return( -1 );
 
    for( i=0; i<Max_proc; i++ )
       if( _procs[i].pr_valid &&
       _procs[i].pr_target == cp  )
      break;
 
-   return( i != Max_proc );
+   return( i == Max_proc ? -1 : i );
 }
 
 
