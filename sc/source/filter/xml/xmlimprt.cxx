@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-10 14:02:29 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -2098,7 +2102,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
        return nKey;
 }
 
-sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol)
+sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrentCurrency, const rtl::OUString& sBankSymbol)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
     if (xNumberFormatsSupplier.is())
@@ -2113,7 +2117,23 @@ sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl:
                 {
                     rtl::OUString sTemp;
                     if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURRENCYSYMBOL))) >>= sTemp)
-                        return sCurrencySymbol.equals(sTemp);
+                    {
+                        if (sCurrentCurrency.equals(sTemp))
+                            return sal_True;
+                        // #i61657# This may be a legacy currency symbol that changed in the meantime.
+                        if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != NULL)
+                            return true;
+                        // In the rare case that sCurrentCurrency is not the
+                        // currency symbol, but a matching ISO code
+                        // abbreviation instead that was obtained through
+                        // XMLNumberFormatAttributesExportHelper::GetCellType(),
+                        // check with the number format's symbol. This happens,
+                        // for example, in the es_BO locale, where a legacy
+                        // B$,BOB matched B$->BOP, which leads to
+                        // sCurrentCurrency being BOP, and the previous call
+                        // with BOP,BOB didn't find an entry, but B$,BOB will.
+                        return SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sTemp, sBankSymbol) != NULL;
+                    }
                 }
             }
             catch ( uno::Exception& )
@@ -2136,10 +2156,12 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
             rProperties->getPropertyValue( sNumberFormat ) >>= rNumberFormat;
         DBG_ASSERT(rNumberFormat != -1, "no NumberFormat");
         sal_Bool bIsStandard;
-        rtl::OUString sCurrentBankCurrency;
+        // sCurrentCurrency may be the ISO code abbreviation if the currency
+        // symbol matches such, or if no match found the symbol itself!
+        rtl::OUString sCurrentCurrency;
         sal_Int32 nCurrentCellType(
             GetNumberFormatAttributesExportHelper()->GetCellType(
-                rNumberFormat, sCurrentBankCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
+                rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
         if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
             ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
             (nCurrentCellType == util::NumberFormat::FRACTION) ||
@@ -2170,10 +2192,10 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                                 rProperties->setPropertyValue( sNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                             }
                         }
-                        else if (rCurrency.getLength() && sCurrentBankCurrency.getLength())
+                        else if (rCurrency.getLength() && sCurrentCurrency.getLength())
                         {
-                            if (!sCurrentBankCurrency.equals(rCurrency))
-                                if (!IsCurrencySymbol(rNumberFormat, rCurrency))
+                            if (!sCurrentCurrency.equals(rCurrency))
+                                if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
                                     rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
                         }
                     }
@@ -2186,8 +2208,8 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         }
         else
         {
-            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentBankCurrency.getLength() &&
-                !sCurrentBankCurrency.equals(rCurrency) && !IsCurrencySymbol(rNumberFormat, rCurrency))
+            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength() &&
+                !sCurrentCurrency.equals(rCurrency) && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
                 rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
         }
     }
