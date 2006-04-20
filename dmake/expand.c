@@ -1,6 +1,6 @@
 /* $RCSfile: expand.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:05:48 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 11:59:48 $
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -37,14 +37,18 @@
 --               D or d      - Directory portion of token including separator
 --               F or f      - File portion of token including suffix
 --               B or b      - basename portion of token not including suffix
---       T or t      - for tokenization
---       E or e      - Suffix portion of name
---       L or l      - translate to lower case
---           U or u      - translate to upper case
---       I or i      - return inferred names
+--               E or e      - Suffix portion of name
+--               L or l      - translate to lower case
+--               U or u      - translate to upper case
+--               I or i      - return inferred names
+--               1           - return the first white space separated token
 --
---    or a single
+--    or a single one of:
+--               M or m      - map escape codes
 --               S or s      - pattern substitution (simple)
+--               T or t      - for tokenization
+--               ^           - prepend a prefix to each token
+--               +           - append a suffix to each token
 --
 --        NOTE:  Modifiers are applied once the macro value has been found.
 --               Thus the construct $($(test):s/joe/mary/) is defined and
@@ -636,6 +640,7 @@ int  doexpand;          /* If TRUE enables macro expansion  */
    DB_ENTER( "_scan_macro" );
 
    /* Check for $ at end of line, or $ followed by white space */
+   /* FIXME: Shouldn't a single '$' be an error? */
    if( !*s || strchr(" \t", *s) != NIL(char)) {
       *ps = s;
       DB_RETURN( DmStrDup("") );
@@ -652,7 +657,7 @@ int  doexpand;          /* If TRUE enables macro expansion  */
    else
       edelim = '}';
 
-   start = s;           /* build up macro name, find its end*/
+   start = s;           /* build up macro name, find its end */
    while( !done ) {
       switch( *s ) {
          case '(':              /* open macro brace */
@@ -667,12 +672,26 @@ int  doexpand;          /* If TRUE enables macro expansion  */
             if( lev == 1 && !fflag && doexpand ) {
                done = TRUE;
                mflag = 1;
-            }
+            } else                              /* must be $: */
+          done = !lev;
             break;
 
+     case '\n':                             /* Not possible because of the
+                                                 * following case. */
+        Fatal( "DEBUG: No standalone '\n' [%s].\n", start );
+        break;
+
+     case '\\':                             /* Transform \<nl> -> ' '. */
+            if( s[1] != '\n' ) {
+          done = !lev;
+          break;
+            } else {
+          s[1] = ' ';
+          strcpy( s, s+1 );
+        }
+        /*FALLTHRU*/
      case ' ':
      case '\t':
-     case '\n':
         if ( lev == 1 ) fflag = 1;
         break;
 
@@ -682,7 +701,8 @@ int  doexpand;          /* If TRUE enables macro expansion  */
         if( lev ) {
            bflag = 0;
            s     = start;
-        }
+        } else
+          Fatal( "DEBUG: This cannot occur! [%s].\n", start );
         break;
 
          case ')':              /* close macro brace */
@@ -690,7 +710,7 @@ int  doexpand;          /* If TRUE enables macro expansion  */
         if( *s == edelim && lev ) --lev;
         /*FALLTHRU*/
 
-         default:
+         default:               /* Done when lev == 0 */
         done = !lev;
       }
       s++;
@@ -703,6 +723,7 @@ int  doexpand;          /* If TRUE enables macro expansion  */
    else
       macro_name = DmSubStr( start, s );
 
+   /* If we don't have to expand the macro we're done. */
    if (!doexpand) {
       *ps = s;
       DB_RETURN(macro_name);
@@ -760,6 +781,18 @@ int  doexpand;          /* If TRUE enables macro expansion  */
       char *pat2;
       char *p;
 
+      /* We are inside of a macro expansion. The "build up macro name,
+       * find its while loop above should have caught all \<nl> and
+       * converted them to a real space. Let's verify this. */
+      for( p=s; *p && *p != edelim && *p; p++ ) {
+    if( p[0] == '\\' && p[1] == '\n' ) {
+      p[1] = ' ';
+      strcpy( p, p+1 );
+    }
+      }
+      if( !*p )
+     Fatal( "Syntax error in macro modifier pattern [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
+
       /* Yet another brain damaged AUGMAKE kludge.  We should accept the
        * AUGMAKE bullshit of $(f:pat=sub) form of macro expansion.  In
        * order to do this we will forgo the normal processing if the
@@ -779,7 +812,7 @@ int  doexpand;          /* If TRUE enables macro expansion  */
      p = _scan_ballanced_parens(s+1, edelim);
 
      if ( !*p ) {
-        Warning( "Incomplete macro expression [%s]", s );
+        Fatal( "Incomplete macro expression [%s]", s );
         p = s+1;
      }
      pat2 = Expand(tmp = DmSubStr(s,p)); FREE(tmp);
@@ -819,6 +852,26 @@ int  doexpand;          /* If TRUE enables macro expansion  */
            case 'u':
            case 'U': modifier_list |= TOUPPER_FLAG; break;
 
+           case 'm':
+           case 'M':
+          if( modifier_list || ( (*s != edelim) && (*s != ':') ) ) {
+             Warning( "Map escape modifier must appear alone, ignored");
+             modifier_list = 0;
+          }
+          else {
+             /* map the escape codes in the separator string first */
+             for(p=result; (p = strchr(p,ESCAPE_CHAR)) != NIL(char); p++)
+                Map_esc( p );
+          }
+          /* find the end of the macro spec, or the start of a new
+           * modifier list for further processing of the result */
+
+          for( ; (*s != edelim) && (*s != ':') && *s; s++ );
+          if( !*s )
+             Fatal( "Syntax error in macro. [$%s].\n", start );
+          if( *s == ':' ) s++;
+          break;
+
            case 'S':
            case 's':
           if( modifier_list ) {
@@ -827,14 +880,30 @@ int  doexpand;          /* If TRUE enables macro expansion  */
           }
           else {
              separator = *s++;
-             for( p=s; *p != separator && *p != edelim; p++ );
+             for( p=s; *p != separator && *p; p++ );
 
-             if( *p == edelim )
-                Warning("Syntax error in edit pattern, ignored");
+             if( !*p )
+                Fatal( "Syntax error in subst macro. [$%s].\n", start );
              else {
             char *t1, *t2;
             pat1 = DmSubStr( s, p );
-            for(s=p=p+1; (*p != separator) && (*p != edelim); p++ );
+            for(s=p=p+1; (*p != separator) && *p; p++ );
+            /* Before the parsing fixes in iz36027 the :s macro modifier
+             * erroneously worked with patterns with missing pattern
+             * separator, i.e. $(XXX:s#pat#sub). This is an error because
+             * it prohibits the use of following macro modifiers.
+             * I.e. $(XXX:s#pat#sub:u) falsely replaces with "sub:u".
+             * ??? Remove this special case once OOo compiles without
+             * any of this warnings. */
+            if( !*p ) {
+               if( *(p-1) == edelim ) {
+                  p--;
+                  Warning( "Syntax error in subst macro. Bracket found, but third delimiter [%c] missing in [$%s].\n", separator, start );
+               }
+               else {
+                  Fatal( "Syntax error in subst macro. Third delimiter [%c] missing in [$%s].\n", separator, start );
+               }
+            }
             pat2 = DmSubStr( s, p );
             t1 = Expand(pat1); FREE(pat1);
             t2 = Expand(pat2); FREE(pat2);
@@ -847,7 +916,9 @@ int  doexpand;          /* If TRUE enables macro expansion  */
           /* find the end of the macro spec, or the start of a new
            * modifier list for further processing of the result */
 
-          for( ; (*s != edelim) && (*s != ':'); s++ );
+          for( ; (*s != edelim) && (*s != ':') && *s; s++ );
+          if( !*s )
+             Fatal( "Syntax error in macro. [$%s].\n", start );
           if( *s == ':' ) s++;
           break;
 
