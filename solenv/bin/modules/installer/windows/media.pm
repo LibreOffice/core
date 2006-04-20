@@ -4,9 +4,9 @@
 #
 #   $RCSfile: media.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:19:28 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:57:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,7 @@ sub create_media_table
     {
         # number of cabfiles
         my $maxcabfilenumber = $installer::globals::number_of_cabfiles;
+        if ( $allvariables->{'CABFILENUMBER'} ) { $maxcabfilenumber = $allvariables->{'CABFILENUMBER'}; }
         my $allfiles = $#{$filesref} + 1;
         my $maxfilenumber = get_maximum_filenumber($allfiles, $maxcabfilenumber);
         # my $maxfilenumber = 1000; # maximum 1000 files in each cabinet file
