@@ -2,4 +2,4 @@
 
 ..\%__SRC%\bin\sandbox_src.zip %COMMON_DEST%\bin%_EXT%\sandbox_src.zip
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
