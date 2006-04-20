@@ -153,7 +153,8 @@ typedef int BOOLEAN;
  *  be accessed via the macro package facilities.
  */
 
-EXPORT FILE *_db_fp_ = stderr;      /* Output stream, default stderr */
+EXPORT FILE *_db_fp_ = (FILE *)0;   /* Output stream, default is set to
+                     * stderr later */
 EXPORT FILE *_db_pfp_ = (FILE *)0;  /* Profile stream, 'dbugmon.out' */
 EXPORT char *_db_process_ = "dbug"; /* Pointer to process name; argv[0] */
 EXPORT BOOLEAN _db_on_ = FALSE;     /* TRUE if debugging currently on */
@@ -162,6 +163,9 @@ EXPORT BOOLEAN _db_pon_ = FALSE;    /* TRUE if debugging currently on */
 /*
  *  Externally supplied functions.
  */
+
+/* Disable the manual definitions, if something is missing use #include's! */
+#if 0
 
 #ifdef unix         /* Only needed for unix */
 IMPORT VOID perror ();      /* Print system/library error */
@@ -194,6 +198,8 @@ IMPORT int strlen ();       /* Find length of string */
 
 #ifndef fflush          /* This is sometimes a macro */
 IMPORT int fflush ();       /* Flush output for stream */
+#endif
+
 #endif
 
 
@@ -263,6 +269,8 @@ LOCAL char *BaseName ();    /* Remove leading pathname components */
 LOCAL VOID DoPrefix ();     /* Print debugger line prefix */
 LOCAL VOID FreeList ();     /* Free memory from linked list */
 LOCAL VOID Indent ();       /* Indent line to specified indent */
+LOCAL int DelayArg (int value); /* Convert D flag argument */
+LOCAL BOOLEAN DoProfile (); /* Check if profiling is enabled */
 
                 /* Supplied in Sys V runtime environ */
 LOCAL char *strtok ();      /* Break string into tokens */
@@ -430,6 +438,9 @@ char *control;
 {
     REGISTER char *scan;
     REGISTER struct link *temp;
+
+    if (!_db_fp_)
+    _db_fp_ = stderr;   /* Output stream, default stderr */
 
     if (control && *control == '-') {
     if (*++control == '#') {
