@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:46:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,8 +382,8 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 }
 
 
-Sequence< Currency > SAL_CALL
-LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
+Sequence< Currency2 > SAL_CALL
+LocaleData::getAllCurrencies2( const Locale& rLocale ) throw(RuntimeException)
 {
 
         sal_Int16 currencyCount = 0;
@@ -394,26 +394,44 @@ LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
         if ( func ) {
             allCurrencies = func(currencyCount);
 
-            Sequence< Currency > seq(currencyCount);
-            for(int i = 0, nOff = 0; i < currencyCount; i++, nOff += 7 ) {
-                Currency cur(
+            Sequence< Currency2 > seq(currencyCount);
+            for(int i = 0, nOff = 0; i < currencyCount; i++, nOff += 8 ) {
+                Currency2 cur(
                     allCurrencies[nOff],        // string ID
                     allCurrencies[nOff+1],      // string Symbol
                     allCurrencies[nOff+2],      // string BankSymbol
                     allCurrencies[nOff+3],      // string Name
                     allCurrencies[nOff+4][0],   // boolean Default
                     allCurrencies[nOff+5][0],   // boolean UsedInCompatibleFormatCodes
-                    allCurrencies[nOff+6][0]    // short DecimalPlaces
+                    allCurrencies[nOff+6][0],   // short DecimalPlaces
+                    allCurrencies[nOff+7][0]    // boolean LegacyOnly
                     );
                     seq[i] = cur;
             }
             return seq;
         }
         else {
-            Sequence< Currency > seq1(0);
+            Sequence< Currency2 > seq1(0);
             return seq1;
         }
 }
+
+
+Sequence< Currency > SAL_CALL
+LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
+{
+    Sequence< Currency2 > aCur2( getAllCurrencies2( rLocale));
+    sal_Int32 nLen = aCur2.getLength();
+    Sequence< Currency > aCur1( nLen);
+    const Currency2* p2 = aCur2.getArray();
+    Currency* p1 = aCur1.getArray();
+    for (sal_Int32 i=0; i < nLen; ++i, ++p1, ++p2)
+    {
+        *p1 = *p2;
+    }
+    return aCur1;
+}
+
 
 // return a string resulting from replacing all occurrences of 'oldStr' string
 // in 'formatCode' string with 'newStr' string
