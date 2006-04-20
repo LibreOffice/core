@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:15:02 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:35:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,8 @@ SCPDEFS+=-DWITHOUT_MOZILLA
 SCPDEFS+=-DSYSTEM_MOZILLA
 .ENDIF
 
-.IF "$(WITH_OPENLDAP)" == "YES"
-SCPDEFS+=-DWITH_OPENLDAP
+.IF "$(WITH_LDAP)" == "YES"
+SCPDEFS+=-DWITH_LDAP
 .ENDIF
 
 .IF "$(SYSTEM_CURL)" == "YES"
@@ -182,6 +182,10 @@ SCPDEFS+=\
     -DICU_MINOR=$(ICU_MINOR) \
     -DICU_MICRO=$(ICU_MICRO) \
     -DISOLANG_MAJOR=$(ISOLANG_MAJOR)
+
+.IF "$(DISABLE_NEON)" == "TRUE"
+SCPDEFS+=-DDISABLE_NEON
+.ENDIF
 
 SCP_PRODUCT_TYPE=osl
 
