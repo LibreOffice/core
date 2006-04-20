@@ -1,9 +1,7 @@
 
 startupdir = $(datadir)/startup
 
-startup_DATA = startup.mk template.mk
+startup_DATA = startup.mk config.mk
 
-#SUBDIRS = mac msdos os2 qssl unix win95 winnt
+DIST_SUBDIRS = unix winnt
 SUBDIRS = @OS_TYPE@ 
-
-                                                                                
