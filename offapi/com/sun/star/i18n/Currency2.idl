@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Currency2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:27:37 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_Currency2_idl__
+#define __com_sun_star_i18n_Currency2_idl__
+
+#ifndef __com_sun_star_i18n_Currency_idl__
+#include <com/sun/star/i18n/Currency.idl>
+#endif
+
+//============================================================================
+
+module com { module sun { module star { module i18n {
+
+//============================================================================
+
+/**
+    Symbols, names, and attributes of a specific currency, returned in a
+    sequence by <member>XLocaleData2::getAllCurrencies2()</member>.
+
+    <p> It is derived from
+    <type scope="::com::sun::star::i18n">Currency</type> and provides an
+    additional flag for currency entries that are available only for legacy
+    reasons in context of loaded documents that use them, but otherwise
+    should not be offered to the user to be selectable.
+
+    @see XLocaleData
+        for links to DTD of XML locale data files.
+ */
+
+published struct Currency2 : com::sun::star::i18n::Currency
+{
+    /** If set, the currency and/or its symbol is only to be used in
+        legacy context.
+
+        @since OOo 2.0.3
+     */
+    boolean LegacyOnly;
+};
+
+//============================================================================
+}; }; }; };
+//============================================================================
+#endif
