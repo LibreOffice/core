@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Currency.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:43:59 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,17 +52,21 @@ module com { module sun { module star { module i18n {
 
 published struct Currency
 {
-    /** Identifier, for example, <b>dollar</b>. */
+    /** ISO 4217 currency code identifier, for example, <b>EUR</b> or
+        <b>USD</b>. */
     string ID;
 
     /** Currency symbol, for example, <b>$</b>. */
     string Symbol;
 
     /** Currency abbreviation used by banks and in money exchange, for
-        example, <b>USD</b>. */
+        example, <b>EUR</b> or <b>USD</b>. This usually should be
+        identical to the ISO 4217 currency code also used in the
+        <member>ID</member>, but doesn't necessarily have to be. */
     string BankSymbol;
 
-    /** Name of the currency, for example, <b>US Dollar</b>. */
+    /** Name of the currency, for example, <b>Euro</b> or <b>US
+        Dollar</b>. Should be the localized name. */
     string Name;
 
     /** If this currency is the default currency for a given locale. */
