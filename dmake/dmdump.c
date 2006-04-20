@@ -1,4 +1,4 @@
-/* RCS  $Id: dmdump.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: dmdump.c,v 1.2 2006-04-20 11:59:37 hr Exp $
 --
 -- SYNOPSIS
 --      Dump the internal dag to stdout.
@@ -218,7 +218,10 @@ int     flag;
 
 
 static void
-dump_prerequisites( lp, namecp, quote, recurse, flag )
+dump_prerequisites( lp, namecp, quote, recurse, flag )/*
+========================================================
+    Dump as prerequisites if recurse is FALSE or as targets
+    if recurse is TRUE. (For F_MULTI targets.) */
 LINKPTR lp;
 CELLPTR namecp;
 int     quote;
