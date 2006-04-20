@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:36:04 $
+#   last change: $Author: hr $ $Date: 2006-04-20 14:13:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.98 $ ';
+$id_str = ' $Revision: 1.99 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -825,8 +825,8 @@ sub copy_if_newer
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
-                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                system("macosx-create-bundle", $to) if ( $to =~ /\.dylib/ );
+                system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
             }
             return 1;
