@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:59:52 $
+#   last change: $Author: hr $ $Date: 2006-04-20 11:56:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,19 @@ dmake_SOURCES = \
 	infer.c make.c stat.c expand.c dmstring.c hash.c dag.c dmake.c\
 	path.c imacs.c sysintf.c parse.c getinp.c quit.c state.c\
 	dmdump.c macparse.c rulparse.c percent.c function.c
+if DBUG
+dmake_SOURCES += dbug/dbug/dbug.c
+endif
 
 #dmake_LDADD   = unix/libunix.a
 #dmake_LDADD   = win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a
-dmake_LDADD   = $(OS_LIBRARY)
+dmake_LDADD = @OS_LIBRARY@
+dmake_DEPENDENCIES = @OS_LIBRARY@
 
-DIST_SUBDIRS = unix startup win95 msdos
-SUBDIRS = $(OS_SUBDIRS)
+DIST_SUBDIRS = unix startup win95 msdos tests
+SUBDIRS = $(OS_SUBDIRS) tests
 
-EXTRA_DIST = make.c 
+EXTRA_DIST = NEWS ChangeLog
 
 # set the include path found by configure
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@ -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu 
