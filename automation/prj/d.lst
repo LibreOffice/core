@@ -22,4 +22,4 @@ hedabu: ..\inc\simplecm.hxx %_DEST%\inc%_EXT%\automation\simplecm.hxx
 
 ..\%COMMON_OUTDIR%\bin\images_tt.zip %COMMON_DEST%\bin%_EXT%\images_tt.zip
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
