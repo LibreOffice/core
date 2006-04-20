@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 14:30:33 $
+#   last change: $Author: hr $ $Date: 2006-04-20 14:14:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -148,7 +148,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
