@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.0">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
       <LangID>vi</LangID>
