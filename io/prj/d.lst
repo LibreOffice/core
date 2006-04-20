@@ -6,4 +6,4 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
