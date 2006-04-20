@@ -1,4 +1,4 @@
-/* RCS  $Id: state.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: state.c,v 1.2 2006-04-20 12:02:17 hr Exp $
 --
 -- SYNOPSIS
 --      .KEEP_STATE state file management
@@ -122,8 +122,9 @@ Write_state()
      if( Search_table(Defs, sp->st_name, &hv, &hk) ) {
         fprintf( fp, "%s\n",  sp->st_name   );
         fprintf( fp, "%d\n",  sp->st_count );
-        fprintf( fp, "%lu\n", sp->st_dkey   );
-        fprintf( fp, "%lu\n", sp->st_key    );
+        /* long unsigned can be !=  uint32, silence the warning. */
+        fprintf( fp, "%lu\n", (unsigned long)sp->st_dkey   );
+        fprintf( fp, "%lu\n", (unsigned long)sp->st_key    );
      }
       }
 
