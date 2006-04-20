@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.5 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:06:46 $
+-- $Revision: 1.6 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:01:03 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -237,7 +237,7 @@ CELLPTR setdirroot;
    char             *inf    = NIL(char);
    char             *outall = NIL(char);
    char             *imm    = NIL(char);
-   int              rval    = 0;
+   int              rval    = 0; /* 0==ready, 1==target still running, -1==error */
    int          push    = 0;
    int          made    = F_MADE;
    int          ignore;
@@ -281,6 +281,11 @@ CELLPTR setdirroot;
    }
 
    DB_PRINT( "mem", ("%s:-A mem %ld", cp->CE_NAME, (long) coreleft()) );
+
+   /* FIXME: F_MULTI targets don't have cp->ce_recipe set but the recipes
+    * are known nevertheless. It is not necessary to infer them.
+    * If (cp->ce_flag & F_MULTI) is true the recipes of the corresponding
+    * subtargets can be used. */
    if( cp->ce_recipe == NIL(STRING) ) {
       char *dir = cp->ce_dir;
 
@@ -318,6 +323,7 @@ CELLPTR setdirroot;
      /* Inherit the stat info from the parent. */
      cp->ce_time  = cp->ce_parent->ce_time;
      cp->ce_flag |= F_STAT;
+     /* Propagate the A_PRECIOUS attribute from the parent. */
      cp->ce_attr |= cp->ce_parent->ce_attr & A_PRECIOUS;
       }
       else {
@@ -403,6 +409,7 @@ CELLPTR setdirroot;
       }
    }
 
+   /* First round, will be repeated a second time below. */
    for( prev=NULL,dp=cp->ce_prq; dp != NIL(LINK); prev=dp, dp=next ) {
       int seq;
       int nesting_count;
@@ -453,6 +460,7 @@ CELLPTR setdirroot;
      if( strcmp(name,cp->CE_NAME) == 0 )
         Fatal("Detected circular dynamic dependency; generated '%s'",name);
 
+     /* Call helper for dynamic prerequisite expansion. */
      dp = _expand_dynamic_prq( cp->ce_prq, dp, name );
      FREE( name );
 
@@ -469,9 +477,11 @@ CELLPTR setdirroot;
      FREE(dp);
      if ( prev == NIL(LINK) ) {
         cp->ce_prq = next;
+        dp = NULL;      /* dp will be the new value of prev. */
      }
      else {
         prev->cl_next = next;
+        dp = prev;
      }
      continue;
       }
@@ -516,6 +526,9 @@ CELLPTR setdirroot;
    for( dp = cp->ce_prq; dp != NIL(LINK); dp = dp->cl_next ) {
       int  tgflg;
       tcp  = dp->cl_prq;
+      if( tcp == NIL(CELL) )
+     Fatal("Internal Error: Found prerequisite list cell without prerequisite!");
+
       name = tcp->ce_fname;
 
       /* make certain that all prerequisites are made prior to advancing. */
@@ -553,8 +566,11 @@ CELLPTR setdirroot;
    DB_PRINT( "make", ("I make '%s' if %ld > %ld", cp->CE_NAME, otime,
           cp->ce_time) );
 
-   if( Verbose & V_MAKE && !(cp->ce_flag & F_MULTI) ) {
+   if( Verbose & V_MAKE ) {
       printf( "%s:  >>>> Making ", Pname );
+      /* Also print the F_MULTI master target. */
+      if( cp->ce_flag & F_MULTI )
+     printf( "(::-\"master\" target) " );
       if( cp->ce_count != 0 )
      printf( "[%s::{%d}]\n", cp->CE_NAME, cp->ce_count );
       else
@@ -580,6 +596,9 @@ CELLPTR setdirroot;
       || (cp->ce_time < otime)
       || ((cp->ce_flag & F_TARGET) && Force)
      ) {
+
+      if( Measure & M_TARGET )
+     Do_profile_output( "s", M_TARGET, cp );
 
       /* Only checking so stop as soon as we determine we will make
        * something */
@@ -616,6 +635,7 @@ CELLPTR setdirroot;
      Update_time_stamp( cp );
       }
       else if( cp->ce_recipe != NIL(STRING) ) {
+     /* If a recipe is found use it. Note this misses F_MULTI targets. */
      if( !(cp->ce_flag & F_SINGLE) )
            rval = Exec_commands( cp );
      else {
@@ -623,19 +643,27 @@ CELLPTR setdirroot;
 
         _drop_mac( m_q );
 
+        /* Build all out of date prerequisites. */
         if( outall && *outall ) {
+           /* Wait for each prerequisite to finish, save the status
+        * of Wait_for_completion. */
+           int wait_for_completion_status = Wait_for_completion;
+           Wait_for_completion = TRUE;
+
            SET_TOKEN( &tk, outall );
 
+           /* No need to update the target timestamp until all
+        * prerequisites are done. */
            Doing_bang = TRUE;
            name = Get_token( &tk, "", FALSE );
            do {
           m_q->ht_value = name;
 
-          Wait_for_completion = TRUE;   /* Reset in Exec_commands */
           rval = Exec_commands( cp );
           Unlink_temp_files(cp);
            }
            while( *(name = Get_token( &tk, "", FALSE )) != '\0' );
+           Wait_for_completion = wait_for_completion_status;
            Doing_bang = FALSE;
         }
 
@@ -644,10 +672,17 @@ CELLPTR setdirroot;
      }
       }
       else if( !(cp->ce_flag & F_RULES) && !(cp->ce_flag & F_STAT) &&
-           (!(cp->ce_attr & A_ROOT) || !(cp->ce_flag & F_EXPLICIT)) )
+           (!(cp->ce_attr & A_ROOT) || !(cp->ce_flag & F_EXPLICIT)) &&
+           !(cp->ce_count) )
+     /* F_MULTI subtargets should evaluate its parents F_RULES value
+      * but _make_multi always sets the F_RULES value of the master
+      * target. Assume F_RULES is set for subtargets. This might not
+      * be true if there are no prerequisites and no recipes in any
+      * of the subtargets. (FIXME) */
      Fatal( "Don't know how to make `%s'",cp->CE_NAME );
       else {
          /* Empty recipe, set the flag as MADE and update the time stamp */
+         /* This might be a the master cell of a F_MULTI target. */
      Update_time_stamp( cp );
       }
    }
@@ -793,19 +828,25 @@ LINKPTR lp;
 
 
 static LINKPTR
-_expand_dynamic_prq( head, lp, name )
+_expand_dynamic_prq( head, lp, name )/*
+=======================================
+   The string name can contain one or more target names. Check if these are
+   already a prerequisite for the current target. If not add them to the list
+   of prerequisites. If no prerequisites were added set lp->cl_prq to NULL. */
 LINKPTR head;
 LINKPTR lp;
 char *name;
 {
    CELLPTR cur = lp->cl_prq;
 
+   /* If condition is true, no space is found. */
    if ( strchr(name, ' ') == NIL(char) ) {
       CELLPTR prq = Def_cell(name);
       LINKPTR tmp;
 
       for(tmp=head;tmp != NIL(LINK) && tmp->cl_prq != prq;tmp=tmp->cl_next);
 
+      /* If tmp is NULL then the prerequisite is new and is added to the list. */
       if ( !tmp )
      lp->cl_prq = prq;
    }
@@ -816,14 +857,18 @@ char *name;
       char  *p;
       int   first=TRUE;
 
+      /* Handle more than one prerequisite. */
       SET_TOKEN(&token, name);
       while (*(p=Get_token(&token, "", FALSE)) != '\0') {
      CELLPTR prq = Def_cell(p);
      LINKPTR tmp;
 
      for(tmp=head;tmp != NIL(LINK) && tmp->cl_prq != prq;tmp=tmp->cl_next);
+
+     /* If tmp is not NULL the prerequisite already exists. */
      if ( tmp ) continue;
 
+     /* Add list elements when more then one new prerequisite is found. */
      if ( first ) {
         first = FALSE;
      }
@@ -839,6 +884,7 @@ char *name;
       CLEAR_TOKEN( &token );
    }
 
+   /* If the condition is true no new prerequisits were found. */
    if ( lp->cl_prq == cur ) {
       lp->cl_prq = NIL(CELL);
       lp->cl_flag = 0;
@@ -938,8 +984,8 @@ Exec_commands( cp )/*
   .IGNORE and .SILENT treatment for the group.
 
   The function returns 0, if the command is executed and has successfully
-  returned, and returns 1 if the command is executing but has not yet
-  returned (for parallel makes).
+  returned, and it returns 1 if the command is executing but has not yet
+  returned or -1 if an error occured (Return value from Do_cmnd()).
 
   The F_MADE bit in the cell is guaranteed set when the command has
   successfully completed.  */
@@ -960,6 +1006,9 @@ CELLPTR cp;
    int          rval  = 0;
 
    DB_ENTER( "Exec_commands" );
+
+   if( cp->ce_recipe == NIL(STRING) )
+      Fatal("Internal Error: No recipe found!");
 
    attr  = Glob_attr | cp->ce_attr;
    trace = Trace || !(attr & A_SILENT);
@@ -1066,7 +1115,9 @@ CELLPTR cp;
 
       /* We force execution of the recipe if we are tracing and the .EXECUTE
        * attribute was given or if the it is not a group recipe and the
-       * recipe line contains the string $(MAKE). */
+       * recipe line contains the string $(MAKE). Wait_for_completion might
+       * be changed gobaly but this is without consequences as we wait for
+       * every recipe with .EXECUTE and don't start anything else. */
       if( Trace
        && ((l_attr & A_EXECUTE)||(!group && DmStrStr(rp->st_string,"$(MAKE)")))
       ) {
@@ -1108,7 +1159,6 @@ CELLPTR cp;
              TRUE, TRUE);
    }
 
-   Wait_for_completion = FALSE;
    _recipes[ RP_RECIPE ] = orp;
    cp->ce_attr &= ~A_ERROR;
    DB_RETURN( rval );
@@ -1119,8 +1169,11 @@ PUBLIC void
 Print_cmnd( cmnd, echo, map )/*
 ================================
    This routine is called to print out the command to stdout.  If echo is
-   false the printing to stdout is supressed, but the new lines in the command
-   are still deleted. */
+   false the printing to stdout is supressed.
+   The routine is also used to remove the line continuation sequence
+   \<nl> from the command string and convert escape sequences if the
+   map flag is set.
+   The changed string is used later to actually to execute the command. */
 char *cmnd;
 int  echo;
 int  map;
@@ -1141,11 +1194,14 @@ int  map;
    tmp[2] = '\0';
 
    for( p=cmnd; *(n = DmStrPbrk(p,tmp)) != '\0'; )
+      /* Remove the \<nl> sequences. */
       if(*n == CONTINUATION_CHAR && n[1] == '\n') {
      DB_PRINT( "make", ("fixing [%s]", p) );
      strcpy( n, n+2 );
      p = n;
       }
+      /* Look for an escape sequence and replace it by it's corresponding
+       * character value. */
       else {
          if( *n == ESCAPE_CHAR && map ) Map_esc( n );
      p = n+1;
@@ -1259,45 +1315,100 @@ int ignore;
 static void
 _set_tmd()/*
 ============
-   Set the TWD Macro */
+   Set the TMD Macro */
 {
-   TKSTR md, pd;
    char  *m, *p;
+   char  *mend, *pend;
+   char  *mtd, *ptd;
+   int   mleadslash, pleadslash;
    char  *tmd;
-   int   is_sep;
    int   first = 1;
 
-   SET_TOKEN( &md, Makedir );
-   SET_TOKEN( &pd, Pwd );
+   /* Don't use Get_token because this fails on paths that contain spaces. */
+   m = DmStrSpn(Makedir, DirBrkStr);
+   mleadslash = m - Makedir;
+   p = DmStrSpn(Pwd, DirBrkStr);
+   pleadslash = p - Pwd;
 
-   m = Get_token( &md, DirBrkStr, FALSE );
-   (void) Get_token( &pd, DirBrkStr, FALSE );
-   is_sep = (strchr(DirBrkStr, *m) != NIL(char));
+   /* leading slashes can only mean POSIX paths or Windows resources (two)
+    * slashes. In any case if the number of slashes are not equal there
+    * can be no relative path from one two the other. Use the Makedir path. */
+   if(mleadslash != pleadslash) {
+      tmd = Makedir;
+      goto tmd_end;
+   }
+
+   /* If Makedir and Pwd are identical skip to the end. */
+   for(mend=m, pend=p; *mend && *pend && *mend==*pend; mend++, pend++)
+      ;
+   if( ( ! *mend ) && ( ! *pend ) ) {
+      tmd = DmStrDup( "." );
+      goto tmd_end;
+   }
+
+   /* If Makedir and Pwd are not identical we will construct TMD. */
    tmd = DmStrDup( "" );
 
    do {
-      m = Get_token( &md, DirBrkStr, FALSE );
-      p = Get_token( &pd, DirBrkStr, FALSE );
 
-      if( !is_sep && strcmp(m, p) ) {   /* they differ */
+      /* get the next top directory name */
+      mend = DmStrPbrk( m, DirBrkStr );
+      /* For DOSish filenames the first part might be a drive letter */
+#if !defined(NO_DRIVE_LETTERS)
+      if( first && *mend == ':' )
+     mend++;
+#endif
+
+      mtd = DmSubStr( m, mend ); /* Free later */
+      /* {m|p}end either points to a DirBrkStr member or the end of string. */
+      if(*mend) mend++;
+      m = mend;
+
+      pend = DmStrPbrk( p, DirBrkStr );
+#if !defined(NO_DRIVE_LETTERS)
+      if( first && *pend == ':' )
+     pend++;
+#endif
+
+      ptd = DmSubStr( p, pend ); /* Free later */
+      if(*pend) pend++;
+      p = pend;
+
+      if( strcmp(mtd, ptd) ) {  /* they differ */
      char *tmp = 0;
+
      if( first ) {      /* They differ in the first component   */
+        FREE( tmd );
+        FREE( mtd );
+        FREE( ptd );
         tmd = Makedir;  /* In this case use the full path   */
         break;
      }
 
-     if( *p ) tmp = Build_path( "..", tmd );
-     if( *m ) tmp = Build_path( tmd, m );
-     FREE( tmd );
-     tmd = DmStrDup( tmp );
+     if( *ptd ) {
+        /* Build_path puts a DirSepStr behind the first parameter if
+         * its length is greater null, even if the second parameter
+         * is empty. */
+        if(*tmd)
+           tmp = Build_path( "..", tmd );
+        else
+           tmp = "..";
+        FREE( tmd );
+        tmd = DmStrDup( tmp );
+     }
+     if( *mtd ) {
+        tmp = Build_path( tmd, mtd );
+        FREE( tmd );
+        tmd = DmStrDup( tmp );
+     }
       }
 
-      is_sep = 1-is_sep;
+      FREE( mtd );
+      FREE( ptd );
       first  = 0;
    } while (*m || *p);
 
-   CLEAR_TOKEN( &md );
-   CLEAR_TOKEN( &pd );
+tmd_end:
 
    Def_macro( "TMD", tmd, M_MULTI | M_EXPANDED );
    if( tmd != Makedir ) FREE( tmd );
