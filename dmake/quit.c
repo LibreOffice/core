@@ -1,6 +1,6 @@
 /* $RCSfile: quit.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:07:13 $
+-- $Revision: 1.5 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:01:52 $
 --
 -- SYNOPSIS
 --      End the dmake session.
@@ -32,8 +32,9 @@ static  int _dont_quit = 0;
 
 
 PUBLIC void
-Quit()/*
+Quit( sig )/*
 ======== Error or quit */
+int sig;
 {
    if( _dont_quit ) return;
 
@@ -50,7 +51,11 @@ Quit()/*
 }
 
 
-const int in_quit( void )
+PUBLIC const int
+in_quit( void )/*
+=================
+   Called to check if we are already quitting.
+   (Only used in unix/runargv.c.) */
 {
     return _dont_quit;
 }
