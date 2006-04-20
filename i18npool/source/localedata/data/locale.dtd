@@ -55,20 +55,20 @@
 <!-- Entities for characters and symbols ........................... -->
 
 <!ENTITY % UNOModule
-        'unoid                     CDATA              #IMPLIED'>
+        'unoid                  CDATA           #IMPLIED'>
 <!ENTITY % MessageID
-        'msgid                     CDATA              #REQUIRED'>
+        'msgid                  CDATA           #REQUIRED'>
 <!ENTITY % RefLocale
-        'ref                     CDATA              #IMPLIED'>
+        'ref                    CDATA           #IMPLIED'>
 <!ENTITY % LIBModule
-        'module                     CDATA              #IMPLIED'>
+        'module                 CDATA           #IMPLIED'>
 <!-- The locale referred to for the sub categories -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
 
 <!-- Locale is made of different sub categories -->
 <!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
-<!ATTLIST Locale versionDTD CDATA #FIXED "2.0">
+<!ATTLIST Locale versionDTD CDATA #FIXED "2.0.3">
 <!-- Version identifier to prevent mismatching data files being submitted
      because of older files being copied as templates. The version should be
      less than or equal to the OOo release, or the OOo release number plus some
@@ -91,7 +91,7 @@
 <!ELEMENT Language (LangID, DefaultName) >
 <!ELEMENT LangID (#PCDATA) >
 <!-- LangID must be valid two or three letter language identifier defined by ISO-639
-    Use ISO 639-1 two letter code where available.
+     Use ISO 639-1 two letter code where available, else ISO 639-2 three letter code.
 -->
 
 <!ELEMENT Country (CountryID, DefaultName) >
@@ -134,8 +134,11 @@
         The format indices 0..49 are reserved and, for backwards compatibility,
         MUST be used as stated in
         offapi/com/sun/star/i18n/NumberFormatIndex.idl.
-        Note that 48 and 49 are used internally and must not be used in locale
-        data XML files. All other formats have to be present.
+        Note that indices 10 ("# ?/?"), 11 ("# ??/??"), 48 (BOOLEAN) and 49 (@
+        Text) are generated internally, as they aren't locale dependent, and
+        must not be used in locale data XML files. All other formats have to be
+        present.
+
         Note also that "must be used as stated" does not mean that the format
         codes must be identical, of course the meaning of a format code should
         match, for example en_US MM/DD/YY matches de_DE DD.MM.YY
@@ -148,8 +151,13 @@
         languages/locales aren't the same, or if the default locale is switched
         under menu Tools.Options.LanguageSettings.Languages.LocaleSetting
         dialog, which exchanges formats on the fly in the spreadsheet
-        application. Please check it out! So far _no_ locale data file we
-        received got that right, especially not in date formats!
+        application. Please check it out! So far only very few locale data file
+        we received got that right, especially not in date formats!
+
+        For easier comparison between locales in future please sort the
+        FormatElements by their formatindex="..." value. This isn't necessary
+        to be technically correct and isn't done in many locales yet, but will
+        certainly help.
 
     Of usage="DATE":
         formatindex="21" is used to edit already existing date data. In order
@@ -192,13 +200,6 @@
 -->
 <!ELEMENT FormatCode      (#PCDATA)>
 
-<!-- Deprecated
-<!ELEMENT DateFormats     (FormatElement+)>
-<!ELEMENT TimeFormats     (FormatElement+)>
-<!ELEMENT NumberFormats   (FormatElement+)>
-<!ELEMENT CurrencyFormats (FormatElement+)>
-<!ELEMENT PercentFormats (FormatElement+)>
--->
 
 <!ELEMENT LC_CALENDAR (Calendar* ) >
 <!ATTLIST LC_CALENDAR %RefLocale;>
@@ -220,6 +221,7 @@
 <!ELEMENT MonthID (#PCDATA)>
 <!-- preferably the lower case abbreviated English name like jan for January -->
 <!ELEMENT Eras (Era*)>
+<!-- The eras MUST be in chronological order, e.g. first BC then AC -->
 <!ATTLIST Eras %RefLocale;>
 <!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT EraID (#PCDATA)>
@@ -253,6 +255,12 @@
      Every locale data file MUST contain exactly one currency having this set to "true",
      and that currency MUST be used in format codes 12..17.
      For European countries using the EURo it MUST be the old currency, for example, DM.
+-->
+<!ATTLIST Currency  legacyOnly (true|false) #IMPLIED >
+<!-- If this Currency element exists only to be able to correctly load legacy
+     documents and is not selectable in the UI otherwise. Defaults to "false"
+     if not specified. If this attribute is "true", 'default' and
+     'usedInCompatibleFormatCodes' must both be "false".
 -->
 <!ELEMENT CurrencyID (#PCDATA)>
 <!ELEMENT CurrencySymbol (#PCDATA)>
@@ -298,9 +306,15 @@
 <!ELEMENT LC_INDEX (IndexKey*, UnicodeScript*, FollowPageWord*)>
 <!ATTLIST LC_INDEX %RefLocale;>
 <!--
-Index key for the algorithm and language, like >A-Z< for English => A, B, C,
-..., Y, Z. The initial data was setup according to the ICU collation chart at
-http://oss.software.ibm.com/icu/charts/collation/
+    Index key for the algorithm and language, like >A-Z< for English => A, B,
+    C, ..., Y, Z. The letters specify under which key an entry goes and the
+    order the keys are sorted. Keys may be reordered or letters inserted to
+    form a specific order, for example (ve_ZA) >A-D Ḓ E-L Ḽ M N Ṋ Ṅ O-T Ṱ U-Z<
+    Entries that don't match a defined key are appended to the index list. Used
+    in Writer textprocessor.
+
+    The initial data was setup according to the ICU collation chart at
+    http://oss.software.ibm.com/icu/charts/collation/
 -->
 <!ELEMENT IndexKey (#PCDATA)>
 <!ATTLIST IndexKey  %UNOModule;>
@@ -308,15 +322,15 @@ http://oss.software.ibm.com/icu/charts/collation/
 <!ATTLIST IndexKey  default (true|false) #REQUIRED >
 <!ATTLIST IndexKey  phonetic (true|false) #REQUIRED >
 <!--
-The Unicode script types are those of
-offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for the
-language.
+    The Unicode script types are those of
+    offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for
+    the language.
 -->
 <!ELEMENT UnicodeScript (#PCDATA)>
 <!--
-The FollowPageWord entries were originally hard-coded in
-../../indexentry/indexentrysupplier.cxx, most locales used the English ``p.''
-and ``pp.'', valid data should be provided by native speakers.
+    The FollowPageWord entries were originally hard-coded in
+    ../../indexentry/indexentrysupplier.cxx, most locales used the English
+    ``p.'' and ``pp.'', valid data should be provided by native speakers.
 -->
 <!ELEMENT FollowPageWord (#PCDATA)>
 
@@ -342,6 +356,9 @@ and ``pp.'', valid data should be provided by native speakers.
 <!ELEMENT quarter4Word (#PCDATA)>
 <!ELEMENT aboveWord (#PCDATA)>
 <!ELEMENT belowWord (#PCDATA)>
+<!-- aboveWord and belowWord are used as reference field content in Writer, it
+     is a "physical" object relative position, not "numerical" relative.
+-->
 <!ELEMENT quarter1Abbreviation (#PCDATA)>    <!-- "Q1" (quarter), "T1" (trimestre), ... -->
 <!ELEMENT quarter2Abbreviation (#PCDATA)>
 <!ELEMENT quarter3Abbreviation (#PCDATA)>
