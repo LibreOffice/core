@@ -171,4 +171,4 @@ hedabu: ..\inc\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
 hedabu: ..\inc\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 hedabu: ..\inc\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
