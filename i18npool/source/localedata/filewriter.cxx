@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filewriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:19:02 $
+ *  last change: $Author: hr $ $Date: 2006-04-20 13:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,16 +146,18 @@ void OFileWriter::writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 c
     fprintf(m_f, "static const sal_Unicode %s%d[] = {%d};\n", pAsciiStr, count, val);
 }
 
-void OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const
+bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const
 {
-    fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count,
-        str.equalsAscii("true") ? 1 : 0);
+    bool bBool = (str.equalsAscii("true") ? 1 : 0);
+    fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count, bBool);
+    return bBool;
 }
 
-void OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const
+bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const
 {
-    fprintf(m_f,"static const sal_Unicode default%s[] = {%d};\n", pAsciiStr,
-        str.equalsAscii("true") ? 1 : 0);
+    bool bBool = (str.equalsAscii("true") ? 1 : 0);
+    fprintf(m_f,"static const sal_Unicode default%s[] = {%d};\n", pAsciiStr, bBool);
+    return bBool;
 }
 
 void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const
