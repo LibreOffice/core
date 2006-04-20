@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.5 $
--- last change: $Author: rt $ $Date: 2004-10-22 08:04:42 $
+-- $Revision: 1.6 $
+-- last change: $Author: hr $ $Date: 2006-04-20 11:59:05 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -17,7 +17,8 @@
 --  -C file     - duplicate console output to file (MSDOS only)
 --  -K file     - .KEEP_STATE file
 --  -#dbug_string   - dump out debugging info, see below
---  -v{cdfimrtw}    - verbose, print what we are doing, as we do it.
+--  -v[cdfimrtw]    - verbose, print what we are doing, as we do it
+--  -m[trae]    - measure timing information
 --
 --   options: (can be catenated, ie -irn == -i -r -n)
 --
@@ -84,12 +85,12 @@
 #define USAGE \
 "Usage:\n%s [-P#] [-{f|K} file] [-{w|W} target ...] [macro[!][[*][+][:]]=value ...]\n"
 #define USAGE2 \
-"%s [-v{cdfimrtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
+"%s [-v[cdfimrtw]] [-m[trae]] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
 #else
 #define USAGE \
 "Usage:\n%s [-P#] [-{f|C|K} file] [-{w|W} target ...] [macro[!][[*][+][:]]=value ...]\n"
 #define USAGE2 \
-"%s [-v{cdfimrtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
+"%s [-v[cdfimrtw]] [-m[trae]] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
 #endif
 
 /* We don't use va_end at all, so define it out so that it doesn't produce
@@ -141,6 +142,10 @@ char **argv;
    Create_macro_vars();
    Catch_signals(Quit);
 
+   /* This macro is only defined for some OSs, see sysintf.c for details *
+    * and NULL if undefined.                                             */
+   Def_macro("ABSMAKECMD", AbsPname, M_PRECIOUS|M_NOEXPORT );
+
    Def_macro( "MAKECMD", Pname, M_PRECIOUS|M_NOEXPORT );
    Pname = Basename(Pname);
 
@@ -165,8 +170,12 @@ char **argv;
    m_export  = FALSE;
    cmdmacs   = NIL(char);
    targets   = NIL(char);
+   Is_exec_shell = FALSE;
+   Shell_exec_target = NIL(CELL);
+   stdout_redir = NIL(FILE);
 
-   Verbose     = V_NONE;
+   Verbose     = V_NOFLAG;
+   Measure     = M_NOFLAG;
    Transitive  = TRUE;
    Nest_level  = 0;
    Line_number = 0;
@@ -241,7 +250,7 @@ char **argv;
         case 'e': Get_env    = 'e';   break;
         case 'E': Get_env    = 'E';   break;
 
-        case 'V': Version();  Quit(NIL(CELL));  break;
+        case 'V': Version();  Quit(0);  break;
         case 'A': Def_macro("AUGMAKE", "y", M_EXPANDED); break;
         case 'B': Def_macro(".NOTABS", "y", M_EXPANDED); break;
         case 'i': Def_macro(".IGNORE", "y", M_EXPANDED); break;
@@ -274,6 +283,19 @@ char **argv;
                  /* cleaned. See _set_bit_var() definition in imacs.c.    */
                  hp->MV_MASK  = A_DEFAULT;
                }
+           break;
+
+        case 'm':
+           if( p[-1] != '-' ) Usage(TRUE);
+           while( p[1] ) switch( *++p ) {
+          case 't': Measure |= M_TARGET;    break;
+          case 'r': Measure |= M_RECIPE;    break;
+          case 'a': Measure |= M_ABSPATH;   break;
+          case 'e': Measure |= M_SHELLESC;  break;
+
+          default: Usage(TRUE); break;
+           }
+           if( !Measure ) Measure = M_TARGET;
            break;
 
         case 'P':
@@ -330,6 +352,7 @@ char **argv;
    if( Rules ) {
       char *fname;
 
+      /* Search_file() also checks the environment variable. */
       if( (mkfil=Search_file("MAKESTARTUP", &fname)) != NIL(FILE) ) {
          Parse(mkfil);
      Def_macro( "MAKESTARTUP", fname, M_EXPANDED|M_MULTI|M_FORCE );
@@ -627,7 +650,11 @@ Nestlevel()/*
 
 
 PUBLIC FILE *
-TryFiles(lp)
+TryFiles(lp)/*
+==============
+   Try to open a makefile, try to make it if needed and return a
+   filepointer to the first successful found or generated file.
+   The function returns NIL(FILE) if nothing was found. */
 LINKPTR lp;
 {
    FILE *mkfil = NIL(FILE);
@@ -648,9 +675,16 @@ LINKPTR lp;
 
      mkfil = Openfile( lp->cl_prq->CE_NAME, FALSE, FALSE );
 
-     if( mkfil == NIL(FILE) &&
-         Make(lp->cl_prq, NIL(CELL)) != -1 )
+     /* Note that no error handling for failed Make() calls is possible
+      * as expected errors (no rule to make the makefile) or unexpected
+      * errors both return -1. */
+     if( mkfil == NIL(FILE) && Make(lp->cl_prq, NIL(CELL)) != -1 ) {
         mkfil = Openfile( lp->cl_prq->CE_NAME, FALSE, FALSE );
+        /* Clean the F_VISITED flag after making the target as this
+         * can conflict with the circular dependency check in rulparse(),
+         * see issue 62118 for details. */
+        lp->cl_prq->ce_flag &= ~(F_VISITED);
+     }
       }
 
       Trace = s_n;
@@ -684,13 +718,13 @@ va_list  args;
       if( f != NIL(char) ) fprintf(stderr, "%s:  line %d:  ", f, Line_number);
 
       if( errflg )
-         fprintf(stderr, "Error -- ");
+         fprintf(stderr, "Error: -- ");
       else if( warn )
-         fprintf(stderr, "Warning -- ");
+         fprintf(stderr, "Warning: -- ");
 
       vfprintf( stderr, fmt, args );
       putc( '\n', stderr );
-      if( errflg && !Continue ) Quit( NIL(CELL) );
+      if( errflg && !Continue ) Quit(0);
    }
 }
 
@@ -791,7 +825,7 @@ int eflag;
    puts("    -K file    - use file as the .KEEP_STATE file");
    puts("    -w target  - show what you would do if 'target' were out of date");
    puts("    -W target  - rebuild pretending that 'target' is out of date");
-   puts("    -v{cdfimrtw} - verbose, indicate what we are doing, (-v => -vcdfimrtw)");
+   puts("    -v[cdfimrtw] - verbose, indicate what we are doing, (-v => -vcdfimrtw)");
    puts("                   c => dump directory cache info only" );
    puts("                   d => dump change of directory info only" );
    puts("                   f => dump file open/close info only" );
@@ -801,6 +835,12 @@ int eflag;
    puts("                        overrides -s" );
    puts("                   t => keep temporary files when done" );
    puts("                   w => issue non-essential warnings\n" );
+
+   puts("    -m[trae] - Measure timing information, (-m => -mt)");
+   puts("               t => display the start and end time of each target" );
+   puts("               r => display the start and end time of each recipe" );
+   puts("               a => display the target as an absolute path" );
+   puts("               e => display the timing of shell escape macros\n" );
 
    puts("Options: (can be catenated, ie -irn == -i -r -n)");
    puts("    -A   - enable AUGMAKE special target mapping");
@@ -828,7 +868,7 @@ int eflag;
    puts("    -X   - ignore #! lines at start of makefile");
    }
 
-   Quit(NIL(CELL));
+   Quit(0);
 }
 
 
@@ -838,20 +878,13 @@ Version()
    extern char **Rule_tab;
    char **p;
 
-   printf("%s - %s, ", Pname, sccid);
-   printf("Version %s\n\n", VERSION);
+   printf("%s - Version %s (%s)\n", Pname, VERSION, BUILDINFO);
+   printf("%s\n\n", sccid);
 
    puts("Default Configuration:");
    for (p=Rule_tab;  *p != NIL(char);  p++)
       printf("\t%s\n", *p);
 
    printf("\n");
-printf("Please read the file readme/release for the latest release notes.\n");
-#if 0
-printf("\n");
-printf("Please support the DMAKE Reference Manual project.  See the file\n");
-printf("readme/release for additional information on where to send contributions.\n");
-printf("Or, send mail to dvadura@plg.uwaterloo.ca for additional information if the\n");
-printf("above file is not readily available.\n");
-#endif
+printf("Please read the file readme/read1st.txt for the latest release notes.\n");
 }
