@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.6 2004-10-22 08:05:43 rt Exp $
+/* RCS  $Id: sysintf.c,v 1.7 2006-04-20 12:02:41 hr Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -59,6 +59,19 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
+/* The following two include files are only needed for GetModuleFileName() *
+ * therefore they are not included in extern.h. Unfortunately they cannot  *
+ * be loaded after extern.h because extern.h defines PVOID and this leads  *
+ * to conflicts when including windows.h.                                  */
+#if defined(_MSC_VER) || defined(__MINGW32__)
+#   define HAVE_GETMODULEFILENAMEFUNC 1
+#   include <windows.h>
+#   include <winbase.h>
+
+/* this is needed for the _ftime call below. Only needed here. */
+#   include <sys/timeb.h>
+#endif
+
 #include "extern.h"
 #include "sysintf.h"
 
@@ -100,10 +113,13 @@ int  force;
    buf.st_mtime = (time_t)0L;
    if( lib != NIL(char) )
       return( seek_arch(Basename(name), lib) );
+   else if( strlen(Basename(name)) > NameMax ) {
+      Warning( "Filename [%s] longer than value of NAMEMAX [%d].\n\
+      Assume unix time 0.\n", Basename(name), NameMax );
+      return((time_t)0L);
+   }
    else if( STOBOOL(UseDirCache) )
       return(CacheStat(name,force));
-   else if( strlen(Basename(name)) > NameMax )
-      return((time_t)0L);
    else
       return(really_dostat(name,&buf));
 }
@@ -122,8 +138,11 @@ char **member;
 
    if (lib != NIL(char))
       return( touch_arch(Basename(name), lib) );
-   else if( strlen(Basename(name)) > NameMax )
+   else if( strlen(Basename(name)) > NameMax ) {
+      Warning( "Filename [%s] longer than value of NAMEMAX [%d].\n\
+      File timestamp not updated to present time.\n", Basename(name), NameMax );
       return(-1);
+   }
    else
 #ifdef HAVE_UTIME_NULL
       return( utime(name, NULL) );
@@ -152,8 +171,66 @@ char *member_name;
 PUBLIC time_t
 Do_time()
 {
-   extern time_t time();
-   return (time((time_t*)0));
+   return (time( NIL(time_t) ));
+}
+
+
+
+/*
+** Print profiling information
+*/
+PUBLIC void
+Do_profile_output( text, mtype, target )
+char *text;
+uint16 mtype;
+CELLPTR target;
+{
+
+   time_t time_sec;
+   uint32 time_msec;
+   char *tstrg;
+   char *tname;
+
+#ifdef HAVE_GETTIMEOFDAY
+   struct timeval timebuffer;
+   gettimeofday(&timebuffer, NULL);
+   time_sec = timebuffer.tv_sec;
+   time_msec = timebuffer.tv_usec/1000;
+#else
+#if defined(_MSC_VER) || defined(__MINGW32__)
+   struct _timeb timebuffer;
+   _ftime( &timebuffer );
+   time_sec = timebuffer.time;
+   time_msec = timebuffer.millitm;
+#   else
+   time_sec = time( NIL(time_t) );
+   time_msec = 0;
+#   endif
+#endif
+
+   tname = target->CE_NAME;
+   if( mtype & M_TARGET ) {
+      tstrg = "target";
+      /* Don't print special targets .TARGETS and .ROOT */
+      if( tname[0] == '.' && (strcmp(".TARGETS", tname) == 0 || \
+                  strcmp(".ROOT", tname) == 0) ) {
+     return;
+      }
+   } else {
+      tstrg = "recipe";
+   }
+
+   /* Don't print shell escape targets if not especially requested. */
+   if( (target->ce_attr & A_SHELLESC) && !(Measure & M_SHELLESC) ) {
+      return;
+   }
+
+   /* Print absolute path if requested. */
+   if( !(target->ce_attr & A_SHELLESC) && (Measure & M_ABSPATH) ) {
+      printf("%s %s %lu.%.3u %s%s%s\n",text, tstrg, time_sec, time_msec, Pwd, DirSepStr, tname);
+   } else {
+      printf("%s %s %lu.%.3u %s\n",text, tstrg, time_sec, time_msec, tname);
+   }
 }
 
 
@@ -198,11 +275,13 @@ int last;
    if( Max_proc == 1 ) Wait_for_completion = TRUE;
 
    if( (i = runargv(target, ignore, group, last, shell, cmd)) == -1 )
-      Quit();
+      /* Only fails for failed spawn. (Spawn is disabled ATM.) */
+      Quit(0);
 
    /* NOTE:  runargv must return either 0 or 1, 0 ==> command executed, and
     * we waited for it to return, 1 ==> command started and is running
-    * concurrently with make process. */
+    * concurrently with make process or -1 if something failed. */
+   /* NOTE2: runargv currently always returns 1 (possible speed up) or -1. */
    return(i);
 }
 
@@ -272,9 +351,6 @@ PUBLIC char *
 Read_env_string(ename)
 char *ename;
 {
-#if !defined(_MSC_VER) || _MSC_VER < 600
-   extern char *getenv();
-#endif
    return( getenv(ename) );
 }
 
@@ -289,7 +365,6 @@ Write_env_string(ename, value)
 char *ename;
 char *value;
 {
-   extern int putenv();
    char*   p;
    char*   envstr = DmStrAdd(ename, value, FALSE);
 
@@ -340,15 +415,16 @@ ReadEnvironment()
 
 
 /*
-** All we have to catch is SIG_INT
+** All we have to catch is SIGINT
 */
 PUBLIC void
 Catch_signals(fn)
-void (*fn)();
+void (*fn)(int);
 {
-   if( (void (*)()) signal(SIGINT, SIG_IGN) != (void (*)())SIG_IGN )
+   /* FIXME: Check this and add error handling. */
+   if( (void (*)(int)) signal(SIGINT, SIG_IGN) != (void (*)(int))SIG_IGN )
       signal( SIGINT, fn );
-   if( (void (*)()) signal(SIGQUIT, SIG_IGN) != (void (*)())SIG_IGN )
+   if( (void (*)(int)) signal(SIGQUIT, SIG_IGN) != (void (*)(int))SIG_IGN )
       signal( SIGQUIT, fn );
 }
 
@@ -377,6 +453,15 @@ int   argc;
 char* argv[];
 {
    Pname = (argc == 0) ? DEF_MAKE_PNAME : argv[0];
+
+   /* Only some native Windows compilers provide this functionality. */
+#ifdef HAVE_GETMODULEFILENAMEFUNC
+   if( (AbsPname = MALLOC( PATH_MAX, char)) == NIL(char) ) No_ram();
+   GetModuleFileName(NULL, AbsPname, PATH_MAX*sizeof(char));
+#else
+   AbsPname = "";
+#endif
+
    Root = Def_cell( ".ROOT" );
    Targets = Def_cell( ".TARGETS" );
    Add_prerequisite(Root, Targets, FALSE, FALSE);
@@ -465,7 +550,19 @@ char *suff;
    umask(mask);
 
 #elif defined(HAVE_TEMPNAM)
-   *path = DmStrJoin( tempnam(tmpdir, "mk"), suff, -1, TRUE );
+   char pidbuff[32];
+#if _MSC_VER >= 1300
+   /* Create more unique filename for .NET2003 and newer. */
+   long npid;
+   long nticks;
+
+   npid = _getpid();
+   nticks = GetTickCount() & 0xfff;
+   sprintf(pidbuff,"mk%d_%d_",npid,nticks);
+#else
+   sprintf(pidbuff,"mk");
+#endif
+   *path = DmStrJoin( tempnam(tmpdir, pidbuff), suff, -1, TRUE );
    fd = open(*path, O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);
 #else
 
@@ -689,7 +786,7 @@ CELLPTR target;
           fprintf(stderr,"%s:  '%s' removed.\n", Pname,
               target->ce_fname);
 
-        Quit();
+        Quit(0);
      }
       }
       else if(!(target->ce_attr & A_PRECIOUS)||(target->ce_attr & A_ERRREMOVE))
@@ -699,7 +796,11 @@ CELLPTR target;
 
 
 PUBLIC void
-Update_time_stamp( cp )
+Update_time_stamp( cp )/*
+=========================
+   Update the time stamp of cp and scan the list of its prerequisites for
+   files being marked as removable (ie. an inferred intermediate node).
+   Remove them if there are any. */
 CELLPTR cp;
 {
    HASHPTR hp;
@@ -741,13 +842,16 @@ CELLPTR cp;
      printf( "%s:  <<<< Set [%s] time stamp to %lu\n",
          Pname, tcp->CE_NAME, tcp->ce_time );
 
+      if( Measure & M_TARGET )
+     Do_profile_output( "e", M_TARGET, tcp );
+
       Unlink_temp_files( tcp );
       tcp->ce_flag |= F_MADE;
       tcp->ce_attr |= A_UPDATED;
    }
 
    /* Scan the list of prerequisites and if we find one that is
-    * marked as being removable, (ie. an inferred intermediate node
+    * marked as being removable, (ie. an inferred intermediate node)
     * then remove it.  We remove a prerequisite by running the recipe
     * associated with the special target .REMOVE, with $< set to
     * the list of prerequisites to remove. */
@@ -770,11 +874,17 @@ CELLPTR cp;
      register CELLPTR prq = dp->cl_prq;
 
      attr = Glob_attr | prq->ce_attr;
+     /* We seem to have problems here that F_MULTI subtargets get removed
+      * that even though they are still needed because the A_PRECIOUS
+      * was not propagated correctly. Solution: Don't remove subtargets, the
+      * master target will be removed if is not needed. */
      rem  = (prq->ce_flag & F_REMOVE) &&
         (prq->ce_flag & F_MADE  ) &&
+            !(prq->ce_count ) && /* Don't remove F_MULTI subtargets. */
         !(prq->ce_attr & A_PHONY) &&
         !(attr & A_PRECIOUS);
 
+     /* remove if rem is != 0 */
      if(rem) {
         LINKPTR tdp;
 
