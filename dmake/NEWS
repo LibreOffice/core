@@ -2,6 +2,80 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.4
+===========
+
+2006/02/03 Volker Quetschke (vq@openoffice.org)
+#i61170# Fix the TMD macro. Up to now the TMD macro appended a directory
+separator if it ended in "..", but most of the time it was not set correctly
+at all and/or without a trailing slash.
+Note: If your application relies on TMD please check the dmake manual page
+for its definition and fix your makefiles if needed.
+
+2006/02/01 Volker Quetschke (vq@openoffice.org)
+#i60948# Add -m option family to generate timing information for targets
+and/or recipes.
+
+2005/09/19 Volker Quetschke (vq@openoffice.org)
+#i53148# Fix $(shell ...) macro picking up the output of earlier
+recipe lines in parallel builds.
+#i54766# Ensure that all previous recipe lines to a recipe
+line containing a $(shell ...) macro have finished before executing
+the macro in parallel builds.
+
+2005/06/01 Volker Quetschke (vq@openoffice.org)
+#i39248# Add a testsuite to test some dmake features (only for autotools
+builds). Start the tests with "make check".
+
+2005/04/21 Volker Quetschke (vq@openoffice.org)
+#i47851# Increase the version number to 4.4-cvs and slightly rearrange the
+output of "dmake -V".
+Remove the hard-coded (in autotools builds) OS macro. It had the wrong value
+to be usable with the startup/*.mk and is not mentioned in the man page.
+Clean up configure.in and friends.
+
+2005/04/20 Volker Quetschke (vq@openoffice.org)
+#i43310# Fix percent (%) rules to recognize prerequisites that are defined
+with the multiple target rule operator (::). 
+This implicitly fixes the similar problem for .<suffix>.<suffix> targets.
+
+2005/04/16 Volker Quetschke (vq@openoffice.org)
+#i46987# Fix the documentation of the $(mktmp ...) function macro. This is
+not necessarily a new feature as the macro works this way since dmake was
+imported into the OpenOffice.org cvs but mentioning it here might help users
+of dmake upgrading from very old versions.
+
+Add the "map escape codes" $(...:m) macro expansion that allows to expand
+escape codes in macros.  It can also be used to reproduce the former (pre
+OpenOffice.org cvs) $(mktmp ...) behavior.
+
+2005/04/10 Volker Quetschke (vq@openoffice.org)
+#i43252# Introduce the macro ABSMAKECMD that's value for a native Windows
+dmake executable (compiled with MS Visual C++ or MinGW) is the absolute
+filename and NULL for other operating systems or dmake build with other
+compilers.
+If DMAKEROOT is not changed and only for native Windows dmake versions the
+value of DMAKEROOT now defaults to "$(ABSMAKECMD:d)startup".
+This allows to use the startup files from the startup directory from the
+same location where the dmake.exe is located.
+
+2005/04/08 Steve Hay (shay@openoffice.org)
+#i43241# Fix build problems with VC++ (in non-OOo environment) and fix
+the dmake makefiles so that dmake can rebuild itself (VC++ only).
+
+2005/03/14 Volker Quetschke (vq@openoffice.org)
+#i44959# Fix problems when a continued line is followed by an empty
+or comment line.
+
+2005/03/13 Volker Quetschke (vq@openoffice.org)
+#i37053# Fix function macro problems with continued lines.
+
+2004/11/23 Volker Quetschke (vq@openoffice.org)
+#i37491# Predefine dmake macro containing one space (SPACECHAR).
+
+2004/11/21 Volker Quetschke (vq@openoffice.org)
+#i36027# Improve function macro parameter parsing.
+
 Version 4.3
 ===========
 
