@@ -69,7 +69,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1)` \
     $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -80,7 +80,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -235,7 +235,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2)` \
     $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -246,7 +246,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -401,7 +401,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3)` \
     $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -412,7 +412,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -567,7 +567,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4)` \
     $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -578,7 +578,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -733,7 +733,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5)` \
     $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -744,7 +744,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -899,7 +899,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6)` \
     $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -910,7 +910,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -1065,7 +1065,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7)` \
     $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1076,7 +1076,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -1231,7 +1231,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8)` \
     $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1242,7 +1242,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -1397,7 +1397,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9)` \
     $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1408,7 +1408,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
@@ -1563,7 +1563,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10)` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10)` \
     $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1574,7 +1574,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-    @create-bundle $@
+    @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
