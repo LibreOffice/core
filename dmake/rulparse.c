@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.6 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:07:25 $
+-- $Revision: 1.7 $
+-- last change: $Author: hr $ $Date: 2006-04-20 12:02:04 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -138,7 +138,7 @@ int *state;
      op = Rule_op( tok );
 
      if( !op ) {
-        /* define a new cell, or get old cell  */
+        /* Define a new cell, or get pointer to pre-existing cell.  */
         cp = Def_cell( tok );
         DB_PRINT( "par", ("tg_cell [%s]", tok) );
 
@@ -276,6 +276,15 @@ int *state;
     * Bind_rules_to_targets to go and bind the line */
 
    if( _sv_rules != NIL(STRING) ) Bind_rules_to_targets( F_DEFAULT );
+
+   /* The target can be already build, e.g. as infered makefile for
+    * the .INCLUDE directive. Clean F_MADE and F_STAT when recipes
+    * or prerequisites are changed. */
+    if( (prereq != NIL(CELL)) || (_sv_rules != NIL(STRING)) )
+      for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) {
+     DB_PRINT( "par", ("Cleaning %s flags %04x", cp->CE_NAME, cp->ce_flag) );
+     cp->ce_flag &= ~(F_STAT|F_MADE);
+      }
 
    /* Add the first recipe line to the list */
    if( firstrcp != NIL( char ) )
@@ -721,12 +730,16 @@ int     *state;
 
 static int
 _do_targets( op, attr, set_dir, targets, prereq )/*
-================================================= */
-int op;
-t_attr  attr;
-char    *set_dir;
-CELLPTR targets;
-CELLPTR prereq;
+===================================================
+   Evaluate the values derived from the current target definition
+   line.  */
+int op;     /* rule operator                           */
+t_attr  attr;       /* attribute flags for current targets     */
+char    *set_dir;   /* value of setdir attribute               */
+CELLPTR targets;    /* list of targets (each cell maybe already
+             * defined by a previous target definition
+             * line.  */
+CELLPTR prereq;     /* list of prerequisites                   */
 {
    CELLPTR  tg1;        /* temporary target pointer     */
    CELLPTR  tp1;        /* temporary prerequisite pointer   */
@@ -777,7 +790,7 @@ CELLPTR prereq;
       /* Check each target.  Check for inconsistencies between :: and : rule
        * sets.  :: may follow either : or :: but not the reverse.
        *
-       * Any targets that contain :: rules are represented by a prerequisite
+       * Any F_MULTI target (contains :: rules) is represented by a prerequisite
        * list hanging off the main target cell where each of the prerequisites
        * is a copy of the target cell but is not entered into the hash table.
        */
@@ -805,6 +818,16 @@ CELLPTR prereq;
      CELLPTR tmp_cell = _make_multi(tg1);
      tflag |= _add_root(tg1);
      targets = _replace_cell( targets, tg1, tmp_cell );
+
+    /* We have to set (add) the attributes also for the F_MULTI
+     * target cell. As there is no recipe the setdir value is not
+     * needed. _set_attributes() that follows in approx. 8 lines
+     * will set the attributes for the current target cell.  */
+     tg1->ce_attr |= (attr & ~A_SETDIR);
+
+     /* Now switch tg1 to the current (F_MULTI prereq.) target.
+      * All recipes have to be added to that cell and not to the
+      * F_MULTI master.  */
      tg1 = tmp_cell;
       }
 
@@ -910,7 +933,10 @@ char    *set_dir;
 
 
 static CELLPTR
-_replace_cell( lst, cell, rep )
+_replace_cell( lst, cell, rep )/*
+=================================
+   Replace cell with rep in lst. Note if cell is not part of lst we are in
+   real trouble. */
 CELLPTR lst;
 CELLPTR cell;
 CELLPTR rep;
@@ -1109,7 +1135,13 @@ CELLPTR prereq;
 
 
 static CELLPTR
-_make_multi( tg )
+_make_multi( tg )/*
+===================
+   This function is called to convert tg into an F_MULTI target.
+   I don't know what the author intended but the ce_index entry is only
+   used in this function (set to 0 for added targets) and undefined otherwise!
+   The undefined value is hopefully set to 0 by the C compiler as each added
+   target sets its ce_count to ++ce_index (==1). (FIXME) */
 CELLPTR tg;
 {
    CELLPTR cp;
@@ -1137,6 +1169,8 @@ CELLPTR tg;
    TALLOC(cp, 1, CELL);
    *cp = *tg;
 
+   /* This is reached if the target already exists, but without having
+    * prerequisites or recepies. */
    if( !(tg->ce_flag & F_MULTI) ) {
       tg->ce_prq    = NIL(LINK);
       tg->ce_flag  |= F_RULES|F_MULTI|F_TARGET;
@@ -1145,6 +1179,8 @@ CELLPTR tg;
       tg->ce_dir    = NIL(char);
       cp->ce_cond   = NIL(STRING);
    }
+   /* This handles the case of adding an additional target as a
+    * prerequisite to a F_MULTI target. */
    else {
       cp->ce_flag  &= ~(F_RULES|F_MULTI);
       cp->ce_attr  &= ~A_SEQ;
