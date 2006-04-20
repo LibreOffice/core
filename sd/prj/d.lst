@@ -72,4 +72,4 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar\*.xml
 ..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar\*.xml
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
