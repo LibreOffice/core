@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-04-19 15:09:58 $
+dnl * Date: $Date: 2006-04-20 13:34:04 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.162 $ )
+AC_REVISION( $Revision: 1.163 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -30,8 +30,12 @@ AC_ARG_ENABLE(libart,
 [  --enable-libart         Enables the use of libart, instead of GPC for
                           polygon clipping.
 ],,)
-AC_ARG_ENABLE(openldap,
-[  --enable-openldap       Enables the use of the OpenLDAP LDAP SDK instead
+AC_ARG_ENABLE(ldap,
+[  --disable-ldap       Disables the use of LDAP backend via Netscape/Mozilla or
+                          OpenLDAP LDAP SDK
+],,)
+AC_ARG_WITH(openldap,
+[  --with-openldap       Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
 ],,)
 AC_ARG_ENABLE(lockdown,
@@ -164,7 +168,7 @@ AC_ARG_ENABLE(gtk,
 AC_ARG_ENABLE(cairo,
 [  --enable-cairo         Determines whether to use Cairo canvas backend on platforms
                           where Cairo is available.
-],,)
+],,enable_cairo=no)
 AC_ARG_ENABLE(gnome-vfs,
 [  --disable-gnome-vfs     Determines whether to use the Gnome Virtual Filing
                           System on platforms where that VFS is available
@@ -319,6 +323,9 @@ AC_ARG_WITH(system-sndfile,
 ],,)
 AC_ARG_WITH(system-portaudio,
 [  --with-system-portaudio Use portaudio already on system
+],,)
+AC_ARG_ENABLE(neon,
+[  --disable-neon          Disable neon and the compilation of webdav binding
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
@@ -486,10 +493,6 @@ AC_ARG_ENABLE(check-only,
                           ????env.set
  
                           Usage: --enable-check-only=yes
-],,)
-AC_ARG_ENABLE(macos9,
-[  --enable-macos9         Use this option option if you want to generate a
-                          macos9 environment on macosx.
 ],,)
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice.org with
@@ -2945,6 +2948,9 @@ AC_SUBST(SABLOT_LIBS)
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
+if test "$_os" = "Darwin" && test "$with_system_curl" != "no"; then
+   with_system_curl=yes
+fi
 AC_MSG_CHECKING([which curl to use])
 if test -n "$with_system_curl" -o -n "$with_system_libs" && \
 	test "$with_system_curl" != "no"; then
@@ -3043,15 +3049,17 @@ else
 fi
 
 AC_MSG_CHECKING([whether to build LDAP configuration backend])
-if test "$enable_mozilla" = "no" && test "$enable_openldap" != "yes"; then
-   AC_MSG_RESULT([no. Either Mozilla or OpenLDAP needed.])
-   WITH_LDAP=NO
-elif test "$with_system_mozilla" = "yes" || test "$enable_openldap" = "yes"; then
-   AC_MSG_RESULT([yes])
-   WITH_LDAP=YES
+if test -z "$enable_ldap" || test "$enable_ldap" = "yes"; then
+   if test "$enable_mozilla" = "yes" || test "$with_openldap" = "yes"; then
+      AC_MSG_RESULT([yes])
+      WITH_LDAP=YES
+   else
+      AC_MSG_RESULT([no. Either Mozilla or OpenLDAP needed])
+      WITH_LDAP=NO
+   fi
 else
-   AC_MSG_RESULT([yes])
-   WITH_LDAP=YES
+   AC_MSG_RESULT([no])
+   WITH_LDAP=NO
 fi
 
 if test "$WITH_LDAP" = "YES"; then
@@ -3059,7 +3067,7 @@ if test "$WITH_LDAP" = "YES"; then
    dnl Test whether we want to use the Mozilla or the OpenLDAP LDAP SDK
    dnl ===================================================================
    AC_MSG_CHECKING([which LDAP SDK to use])
-   if test -n "$enable_openldap"; then
+   if test -n "$with_openldap" && test "$with_openldap" != "no"; then
   	   AC_MSG_RESULT([OpenLDAP])
 	   WITH_OPENLDAP=YES
 	   AC_CHECK_HEADERS(ldap.h, [],
@@ -3077,6 +3085,7 @@ if test "$WITH_LDAP" = "YES"; then
 	   WITH_OPENLDAP=NO
    fi
 fi
+AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
 
 dnl ===================================================================
@@ -3124,7 +3133,7 @@ Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
     MOZ_INC=`$PKG_CONFIG --variable=includedir $moz_flavour-xpcom`
     MOZ_LIB=`$PKG_CONFIG --variable=libdir $moz_flavour-xpcom`
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-    if test "$WITH_OPENLDAP" != "YES"; then
+    if test "$WITH_LDAP" != "NO" && test "$WITH_OPENLDAP" != "YES"; then
       AC_MSG_CHECKING([whether $tmp was compiled with --enable-ldap])
       if test -d "$MOZ_INC/ldap"; then
          AC_MSG_RESULT([yes])
@@ -3492,6 +3501,16 @@ AC_SUBST(SYSTEM_SNDFILE)
 AC_SUBST(BUILD_TYPE)
 
 dnl ===================================================================
+dnl Check for building neon
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build neon])
+if test "$enable_neon" = "no"; then
+    AC_MSG_RESULT([no])
+    DISABLE_NEON=TRUE
+    AC_SUBST(DISABLE_NEON)
+else
+    AC_MSG_RESULT([yes])
+dnl ===================================================================
 dnl Check for system neon
 dnl ===================================================================
 AC_MSG_CHECKING([which neon to use])
@@ -3512,6 +3531,7 @@ fi
 AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
+fi
 
 dnl ===================================================================
 dnl Check for system AGG
@@ -3590,8 +3610,8 @@ if test -n "$with_system_altlinuxhyph" && test "$with_system_altlinuxyph" != "no
     AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
        [ AC_MSG_ERROR(no. You are sure you have altlinuyhyph headers?)],
        [#include <hyphen.h>])
-    AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate, [],
-        [ AC_MSG_ERROR(altlinuxhyph library not found.)], [])
+    AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate2, [],
+        [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
@@ -4164,11 +4184,25 @@ if test  "$build_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to enable the Cairo canvas backend])
     if test "x$enable_cairo" != "xno" ; then
         ENABLE_CAIRO="TRUE"
-	SYSTEM_CAIRO=YES
-	PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
-	AC_MSG_RESULT([yes])
+	     SYSTEM_CAIRO=YES
+	     AC_MSG_RESULT([yes])
+	     PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+        if test "$with_system_xrender_headers" = "yes"; then
+            AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+            AC_TRY_RUN([
+#include <X11/extensions/Xrender.h>
+
+int main(int argc, char **argv) {
+#ifdef PictStandardA8
+      return 0;
+#else
+      return 1;
+#endif
+}
+            ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, X headers too old.])])
+        fi
     else
-	AC_MSG_RESULT([no])
+	     AC_MSG_RESULT([no])
     fi
 fi
 
@@ -4186,17 +4220,35 @@ KDE_LIBS=""
 MOC="moc"
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     dnl Search paths for Qt and KDE
-    qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include $x_includes"
-    qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+    if test "$build_cpu" != "x86_64" ; then
+        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include $x_includes"
+        qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+    else
+        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib64/qt3/include /usr/lib64/qt/include /usr/share/qt3/include /usr/lib/qt3/include /usr/lib/qt/include $x_includes"
+        qt_libdirs="$QTLIB /usr/local/qt/lib64 /usr/lib64/qt /usr/lib64 /usr/X11R6/lib64/X11/qt /usr/X11R6/lib64/qt /usr/lib64/qt3/lib64 /usr/lib64/qt/lib64 /usr/share/qt3/lib64 /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+    fi
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
-        qt_libdirs="$QTDIR/lib $qt_libdirs"
+        if test "$build_cpu" != "x86_64" ; then
+            qt_libdirs="$QTDIR/lib $qt_libdirs"
+        else
+            qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
+        fi
     fi
-    kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
-    kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    if test "$build_cpu" != "x86_64" ; then
+        kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
+        kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    else
+        kde_incdirs="/usr/lib64/kde/include /usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
+        kde_libdirs="/usr/lib64/kde/lib64 /usr/local/kde/lib64 /usr/kde/lib64 /usr/lib64/kde /usr/lib64/kde3 /usr/lib64 /usr/X11R6/lib64 /usr/local/lib64 /opt/kde3/lib64 /opt/kde/lib64 /usr/X11R6/kde/lib64 /usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
+    fi
     if test -n "$KDEDIR" ; then
         kde_incdirs="$KDEDIR/include $kde_incdirs"
-        kde_libdirs="$KDEDIR/lib $kde_libdirs"
+        if test "$build_cpu" != "x86_64" ; then
+            kde_libdirs="$KDEDIR/lib $kde_libdirs"
+        else
+            kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
+        fi
     fi
 
     dnl What to test
