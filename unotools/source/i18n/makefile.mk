@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:44:55 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:26:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,14 @@ UNOTYPES+= \
     com.sun.star.i18n.KParseType            \
     com.sun.star.i18n.LocaleItem            \
     com.sun.star.i18n.XCalendar             \
+    com.sun.star.i18n.XExtendedCalendar     \
     com.sun.star.i18n.XCharacterClassification \
     com.sun.star.i18n.XCollator             \
     com.sun.star.i18n.XExtendedTransliteration      \
+    com.sun.star.i18n.Currency          	\
+    com.sun.star.i18n.Currency2          	\
     com.sun.star.i18n.XLocaleData           \
+    com.sun.star.i18n.XLocaleData2          \
     com.sun.star.i18n.XNativeNumberSupplier	\
     com.sun.star.i18n.XNumberFormatCode     \
     com.sun.star.i18n.XTransliteration      \
