@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 09:59:40 $
+#   last change: $Author: hr $ $Date: 2006-04-20 13:28:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ IDLFILES=\
     Collator.idl \
     CollatorOptions.idl \
     Currency.idl \
+    Currency2.idl \
     DirectionProperty.idl \
     ForbiddenCharacters.idl \
     FormatElement.idl \
@@ -118,6 +119,7 @@ IDLFILES=\
     XInputSequenceChecker.idl \
     XExtendedInputSequenceChecker.idl \
     XLocaleData.idl \
+    XLocaleData2.idl \
     XNativeNumberSupplier.idl \
     XNumberFormatCode.idl \
     XTextConversion.idl \
