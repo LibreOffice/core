@@ -8,4 +8,4 @@
 mkdir: %_DEST%\inc%_EXT%\rsc
 ..\inc\rscsfx.hxx %_DEST%\inc%_EXT%\rsc\rscsfx.hxx
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
