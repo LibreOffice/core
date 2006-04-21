@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checksize.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 14:02:04 $
+#   last change: $Author: rt $ $Date: 2006-04-21 10:48:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ sub check       #04.02.2005 13:40
     my $file = shift;
     print "$path$file\n" if ((-e "$path$file") && $is_debug);
     # don't check dpc,flag,rpmflag, [obj for UNX] files, or etc subdirectory
-    return if ( ($file =~ /.+\.(dpc|flag|rpmflag)/) || ($file =~ /.+\.obj/ && $ENV{GUI} eq 'UNX') || ($path =~ /.+etc/) );
+    return if ( ($file =~ /.+\.(dpc|\w*?flag)/) || ($file =~ /.+\.obj/ && $ENV{GUI} eq 'UNX') || ($path =~ /.+etc/) );
     if ( -z "$path$file" ) {
         print "Error: $path$file 0 Bytes!\n";
         $err++;
