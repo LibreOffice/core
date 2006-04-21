@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:26:21 $
+ *  last change: $Author: hr $ $Date: 2006-04-21 10:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
+#ifndef _COM_SUN_STAR_I18N_XLOCALEDATA2_HPP_
 #include <com/sun/star/i18n/XLocaleData2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_LOCALEITEM_HPP_
