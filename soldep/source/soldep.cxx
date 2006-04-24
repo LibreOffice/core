@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldep.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: obo $ $Date: 2006-04-24 11:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,7 +489,8 @@ ULONG SolDep::GetStartPrj(SolIdMapper* pIdMapper, ObjectList* pObjList)
     MyHashObject* pHObject = mpPrjIdMapper->Find( ByteString( "null" ) ); //null_dir
     if ( !pHObject )
     {
-        ULONG nObjectId = AddPrjObject( ByteString("null"), FALSE); //null_dir
+        ByteString bsNull("null");
+        ULONG nObjectId = AddPrjObject( bsNull, FALSE); //null_dir
         return nObjectId;
     }
     else

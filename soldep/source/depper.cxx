@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: obo $ $Date: 2006-04-24 11:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,7 +534,8 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
 
             sTokenLine += String( "NULL", RTL_TEXTENCODING_UTF8 );
 
-            mpStarWriter->InsertTokenLine( ByteString( sTokenLine, RTL_TEXTENCODING_UTF8 ));
+            ByteString bsTokenLine = ByteString( sTokenLine, RTL_TEXTENCODING_UTF8 );
+            mpStarWriter->InsertTokenLine( bsTokenLine );
 
             if ( aNewDirectoryDlg.maEDeps.GetText() != String( "", RTL_TEXTENCODING_UTF8 ))
             {
