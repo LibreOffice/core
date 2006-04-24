@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtresid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:07:14 $
+ *  last change: $Author: obo $ $Date: 2006-04-24 14:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,3 +55,4 @@ DtSodResId::DtSodResId( USHORT nId ) :
 ResId(nId, (*(SolDevDll**)GetAppData( SHL_SCH ))->GetResMgr())
 {
 }
+

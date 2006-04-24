@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-20 15:16:23 $
+#   last change: $Author: obo $ $Date: 2006-04-24 14:09:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ TARGET=soldep
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
@@ -85,8 +86,8 @@ SLOFILES        = \
     $(SLO)$/objwin.obj
 
 SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)
-SHL1IMPLIB	=i$(TARGET)
-SHL1LIBS	=$(SLB)$/$(TARGET).lib
+SHL1IMPLIB	=$(TARGET)
+SHL1LIBS	=$(SLB)$/bootstrpdt.lib
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN	=$(SHL1LIBS)
 SHL1STDLIBS     = $(SVTOOLLIB)		\
@@ -101,7 +102,6 @@ SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(OSLLIB)			\
                 $(SALLIB)           \
                 $(CPPULIB)  \
-                $(LB)$/ibootstrpdt.lib \
                    $(PERL_LIB)
 
 .IF "$(GUI)" == "UNX"
@@ -114,15 +114,18 @@ DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME	=$(TARGET)
 
+SRC1FILES = \
+    soldlg.src
+RES1TARGET = dep
+SRS1NAME=$(TARGET)
+SRS1FILES = \
+    $(SRS)$/$(TARGET).srs
+
 #------------- Application ---------------
 APP1TARGET=soldepl
-APP1OBJS= \
-    $(SLO)$/depapp.obj
-
-APP1LIBS=   $(LB)$/ibootstrpdt.lib \
-            $(LB)$/isoldep.lib
 
 APP1ICON=soldep.ico
+
 APP1STDLIBS= \
             $(SVTOOLLIB)		\
             $(CPPUHELPERLIB)	\
@@ -138,6 +141,12 @@ APP1STDLIBS= \
                $(CPPULIB)  \
                $(PERL_LIB)
 
+APP1LIBS=\
+    $(SLB)$/bootstrpdt.lib \
+    $(SLB)$/soldep.lib
+
+APP1OBJS= \
+    $(SLO)$/depapp.obj
 
 # --- Targets ------------------------------------------------------
 
