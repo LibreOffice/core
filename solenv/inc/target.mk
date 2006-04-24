@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.166 $
+#   $Revision: 1.167 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:34:48 $
+#   last change: $Author: hjs $ $Date: 2006-04-24 13:50:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2013,8 +2013,10 @@ COMPVTMP:=$(mktmp iii)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
     @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
+    @+-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
+    @+$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+-$(RENAME) $(COMPVTMP) $@
+    @+-$(RENAME) $(@)_$(COMPVTMP:b) $@
 .ELSE           # "$(CCNUMVER)"!=""
     @+-$(RM) $@ >& $(NULLDEV)
 .ENDIF          # "$(CCNUMVER)"!=""
