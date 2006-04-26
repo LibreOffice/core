@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:13:03 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,8 @@ SlideTransitionPane::SlideTransitionPane(
 
         maSTR_NO_TRANSITION( SdResId( STR_NO_TRANSITION ) ),
         mbHasSelection( false ),
-        mbUpdatingControls( false )
+        mbUpdatingControls( false ),
+        maLateInitTimer()
 {
     // use no resource ids from here on
     FreeResource();
@@ -517,31 +518,12 @@ SlideTransitionPane::SlideTransitionPane(
     // fill list box of slide transitions
     maLB_SLIDE_TRANSITIONS.InsertEntry( maSTR_NO_TRANSITION );
 
-    // test
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-    const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
-    ::std::size_t nIndex = 0;
-    ::std::size_t nUIIndex = 0;
-    while( aIter != aEnd )
-    {
-        TransitionPresetPtr pPreset = (*aIter++);
-        const OUString aUIName( pPreset->getUIName() );
-         if( aUIName.getLength() )
-        {
-            maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
-            m_aPresetIndexes[ nIndex ] = nUIIndex;
-            ++nUIIndex;
-        }
-        ++nIndex;
-    }
-
     // set defaults
     maCB_AUTO_PREVIEW.Check();      // automatic preview on
 
     // update control states before adding handlers
     updateLayout();
-    updateSoundList();
+    //    updateSoundList();
     updateControls();
 
     // set handlers
@@ -560,10 +542,15 @@ SlideTransitionPane::SlideTransitionPane(
     maMF_ADVANCE_AUTO_AFTER.SetModifyHdl( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
     maCB_AUTO_PREVIEW.SetClickHdl( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
+
+    maLateInitTimer.SetTimeout(200);
+    maLateInitTimer.SetTimeoutHdl(LINK(this, SlideTransitionPane, LateInitCallback));
+    maLateInitTimer.Start();
 }
 
 SlideTransitionPane::~SlideTransitionPane()
 {
+    maLateInitTimer.Stop();
     removeListener();
 }
 
@@ -1281,6 +1268,32 @@ IMPL_LINK( SlideTransitionPane, AutoPreviewClicked, void *, EMPTYARG )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewTransitions( maCB_AUTO_PREVIEW.IsChecked() ? sal_True : sal_False );
+    return 0;
+}
+
+IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, pTimer )
+{
+    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
+    TransitionPresetList::const_iterator aIter( rPresetList.begin() );
+    const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
+    ::std::size_t nIndex = 0;
+    ::std::size_t nUIIndex = 0;
+    while( aIter != aEnd )
+    {
+        TransitionPresetPtr pPreset = (*aIter++);
+        const OUString aUIName( pPreset->getUIName() );
+         if( aUIName.getLength() )
+        {
+            maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
+            m_aPresetIndexes[ nIndex ] = nUIIndex;
+            ++nUIIndex;
+        }
+        ++nIndex;
+    }
+
+    updateSoundList();
+    updateControls();
+
     return 0;
 }
 
