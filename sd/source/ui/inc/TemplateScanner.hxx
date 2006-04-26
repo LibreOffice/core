@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TemplateScanner.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:17:13 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,52 +36,47 @@
 #ifndef _TEMPLATE_SCANNER_HXX
 #define _TEMPLATE_SCANNER_HXX
 
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
-#include <com/sun/star/frame/XDocumentTemplates.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
+#include "tools/AsynchronousTask.hxx"
 
 #ifndef INCLUDED_SDDLLAPI_H
 #include "sddllapi.h"
 #endif
 
-#ifndef INCLUDED_VECTOR
-#include <vector>
-#define INCLUDED_VECTOR
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
-namespace sd
-{
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
+
+#include <vector>
+#include <boost/scoped_ptr.hpp>
+
+namespace com { namespace sun { namespace star { namespace ucb {
+class XContent;
+class XCommandEnvironment;
+} } } }
+
+namespace com { namespace sun { namespace star { namespace sdbc {
+class XResultSet;
+} } } }
+
+namespace sd {
 
 /** Representation of a template or layout file.
 */
 class TemplateEntry
 {
 public:
-    TemplateEntry   (const String& rTitle, const String& rPath)
-        :   m_aTitle (rTitle), m_aPath  (rPath) {}
+    TemplateEntry   (const String& rsTitle, const String& rsPath)
+        :   msTitle(rsTitle), msPath(rsPath) {}
 
-    String m_aTitle;
-    String m_aPath;
+    String msTitle;
+    String msPath;
 };
 
 
@@ -92,26 +87,30 @@ public:
 class TemplateDir
 {
 public:
-    TemplateDir (const String & rRegion, const String & rUrl )
-        :   m_aRegion(rRegion), m_aUrl(rUrl) {}
+    TemplateDir (const String& rsRegion, const String& rsUrl )
+        :   msRegion(rsRegion), msUrl(rsUrl), maEntries() {}
 
-    String                      m_aRegion;
-    String                      m_aUrl;
-    std::vector<TemplateEntry*> m_aEntries;
+    String msRegion;
+    String msUrl;
+    ::std::vector<TemplateEntry*> maEntries;
 };
 
 
 
 
-/** This class scans the template folders for impress templates and puts
-    them into listboxes.  While scanning the found templates are collected
-    in a local list.  After completing the scan an object of this class may
-    be called to offer this list to transfer its contents to the caller.
-    Every remaining entries are deleted from the local list in the
-    destructor.  An easy way to transfer the whole list is to call the swap
-    method on an STL vector with the list as argument.
+/** This class scans the template folders for impress templates.  There are
+    two ways to use this class.
+    1. The old and deprecated way is to call Scan() to scan all templates
+    and collect the supported ones in a tree structure.  This structure is
+    returned by GetFolderList().
+    2. The new way implements the AsynchronousTask interface.  Call
+    RunNextStep() as long HasNextStep() returns <TRUE/>.  After every step
+    GetLastAddedEntry() returns the template that was scanned (and has a
+    supported format) last.  When a step does not add a new template then
+    the value of the previous step is returned.
 */
 class SD_DLLPUBLIC TemplateScanner
+    : public ::sd::tools::AsynchronousTask
 {
 public:
     /** Create a new template scanner and prepare but do not execute the scanning.
@@ -136,40 +135,105 @@ public:
     */
     std::vector<TemplateDir*>& GetFolderList (void);
 
-protected:
-    /** Set the member mxTemplateRoot to the XContent that represents the
-        root of the template tree.
+    /** Implementation of the AsynchronousTask interface method.
     */
-    void ScanFolders (void);
+    virtual void RunNextStep (void);
 
-    /** Scan the given template folder for impress templates and insert them
-        into the given list.
-        @param  rRoot
-            specifies the folder to search.
-        @param  pDir
-            The list into which the entries for the impress templates are to
-            be inserted.
+    /** Implementation of the AsynchronousTask interface method.
     */
-    void ScanEntries (::ucb::Content& rRoot, TemplateDir* pDir);
+    virtual bool HasNextStep (void);
 
-    /** Obtain the root folder of the template folder hierarchy.  The result
-        is stored in mxTemplateRoot for later use.
+    /** Return the TemplateDir object that was last added to
+        mpTemplateDirectory.
+        @return
+            <NULL/> is returned either before the template scanning is
+            started or after it has ended.
     */
-    void GetTemplateRoot (void);
+    const TemplateEntry* GetLastAddedEntry (void) const;
 
 private:
+    /** The current state determines which step will be executed next by
+        RunNextStep().
+    */
+    enum State {
+        INITIALIZE_SCANNING,
+        INITIALIZE_FOLDER_SCANNING,
+        GATHER_FOLDER_LIST,
+        SCAN_FOLDER,
+        INITIALIZE_ENTRY_SCAN,
+        SCAN_ENTRY,
+        DONE,
+        ERROR
+    };
+    State meState;
+
+    ::ucb::Content maFolderContent;
+    TemplateDir* mpTemplateDirectory;
 
     /** The data structure that is to be filled with information about the
         template files.
     */
      std::vector<TemplateDir*> maFolderList;
 
-    /** The root folder of the template folders.
+    /** This member points into the maFolderList to the member that was most
+        recently added.
     */
-    com::sun::star::uno::Reference<com::sun::star::ucb::XContent>
-        mxTemplateRoot;
+    TemplateEntry* mpLastAddedEntry;
+
+    /** The folders that are collected by GatherFolderList().
+    */
+    class FolderDescriptorList;
+    ::boost::scoped_ptr<FolderDescriptorList> mpFolderDescriptors;
+
+    /** Set of state variables used by the methods
+        InitializeFolderScanning(), GatherFolderList(), ScanFolder(),
+        InitializeEntryScanning(), and ScanEntry().
+    */
+    com::sun::star::uno::Reference<com::sun::star::ucb::XContent> mxTemplateRoot;
+    com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
+    com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> mxEntryEnvironment;
+    com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSet> mxFolderResultSet;
+    com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSet> mxEntryResultSet;
+
+    /** Obtain the root folder of the template folder hierarchy.  The result
+        is stored in mxTemplateRoot for later use.
+    */
+    State GetTemplateRoot (void);
+
+    /** Initialize the scanning of folders.  This is called exactly once.
+        @return
+            Returns one of the two states ERROR or GATHER_FOLDER_LIST.
+    */
+    State InitializeFolderScanning (void);
+
+    /** Collect all available top-level folders in an ordered list which can
+        then be processed by ScanFolder().
+        @return
+            Returns one of the two states ERROR or SCAN_FOLDER.
+    */
+    State GatherFolderList (void);
+
+    /** From the list of top-level folders collected by GatherFolderList()
+        the one with highest priority is processed.
+        @return
+            Returns one of the states ERROR, DONE, or INITILIZE_ENTRY_SCAN.
+    */
+    State ScanFolder (void);
+
+    /** Initialize the scanning of entries of a top-level folder.
+        @return
+            Returns one of the states ERROR or SCAN_ENTRY.
+    */
+    State InitializeEntryScanning (void);
+
+    /** Scan one entry.  When this entry matches the recognized template
+        types it is appended to the result set.
+        @return
+            Returns one of the states ERROR, SCAN_ENTRY, or SCAN_FOLDER.
+    */
+    State ScanEntry (void);
 };
 
-}
+} // end of namespace sd
 
 #endif
