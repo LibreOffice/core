@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-19 12:56:30 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:54:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ SLOFILES =      							\
     $(SLO)$/EventMultiplexer.obj			\
     $(SLO)$/PreviewRenderer.obj				\
     $(SLO)$/SdGlobalResourceContainer.obj	\
-    $(SLO)$/SlotStateListener.obj
+    $(SLO)$/SlotStateListener.obj			\
+    $(SLO)$/TimerBasedTaskExecution.obj
 
 EXCEPTIONSFILES=
 
