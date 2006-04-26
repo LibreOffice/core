@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:32:49 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
     TitledControl* pTitledControl;
 
+    ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+
     // Create a panel with the master pages that are in use by the currently
     // edited document.
     DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(
@@ -68,7 +70,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         this,
         *pDocument,
         rBase,
-        *pDrawViewShell));
+        *pDrawViewShell,
+        pContainer));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
     GetShellManager()->AddSubShell(
@@ -84,7 +87,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     pSelector.reset(new controls::RecentMasterPagesSelector (
         this,
         *pDocument,
-        rBase));
+        rBase,
+        pContainer));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
     GetShellManager()->AddSubShell(
@@ -101,7 +105,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         this,
         *pDocument,
         rBase,
-        *pDrawViewShell));
+        *pDrawViewShell,
+        pContainer));
     pSelector->LateInit();
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
     GetShellManager()->AddSubShell(
