@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:33:08 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #include "MasterPagesSelector.hxx"
 
 #include "MasterPageContainer.hxx"
+#include "DocumentHelper.hxx"
 #include "pres.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -100,7 +101,6 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
-#include "undoback.hxx"
 
 using namespace ::sd::toolpanel::controls;
 #define MasterPagesSelector
@@ -112,6 +112,7 @@ using namespace ::com::sun::star::text;
 
 namespace sd { namespace toolpanel { namespace controls {
 
+
 SFX_IMPL_INTERFACE(MasterPagesSelector, SfxShell,
     SdResId(STR_MASTERPAGESSELECTOR))
 {
@@ -121,40 +122,39 @@ SFX_IMPL_INTERFACE(MasterPagesSelector, SfxShell,
 TYPEINIT1(MasterPagesSelector, SfxShell);
 
 
-// The widths for the previews contain two pixels for the border that is
-// painted arround the preview.
-const int MasterPagesSelector::snSmallPreviewWidth = 72 + 2;
-const int MasterPagesSelector::snLargePreviewWidth = 2*72 + 2;
-
 
 MasterPagesSelector::MasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
-    ViewShellBase& rBase)
+    ViewShellBase& rBase,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
     : TreeNode (pParent),
       SfxShell(),
+      maMutex(),
+      mpContainer(rpContainer),
       mrDocument(rDocument),
       mpPageSet (new PreviewValueSet(pParent)),
-      mnPreviewWidth (snSmallPreviewWidth),
       mrBase(rBase),
       mnDefaultClickAction(SID_TP_APPLY_TO_ALL_SLIDES),
-      maPreviewUpdateTimer(),
-      maPreviewUpdateQueue()
+      maPreviewUpdateQueue(),
+      maCurrentItemList(),
+      maTokenToValueSetIndex(),
+      maLockedMasterPages()
 {
-    mpPageSet->SetSelectHdl (LINK(this, MasterPagesSelector, ClickHandler));
+    SetPool (&rDocument.GetPool());
+
+    mpPageSet->SetSelectHdl (
+        LINK(this, MasterPagesSelector, ClickHandler));
     mpPageSet->SetRightMouseClickHandler (
         LINK(this, MasterPagesSelector, RightClickHandler));
     mpPageSet->SetContextMenuCallback (
         LINK(this, MasterPagesSelector, ContextMenuCallback));
-    mpPageSet->SetPreviewWidth (mnPreviewWidth);
     mpPageSet->SetStyle(mpPageSet->GetStyle() | WB_NO_DIRECTSELECT);
-
-    SetPool (&rDocument.GetPool());
-
-    maPreviewUpdateTimer.SetTimeoutHdl (LINK(this,MasterPagesSelector,ProcessPreviewUpdateRequest));
-    maPreviewUpdateTimer.SetTimeout(100/*ms*/);
-
+    mpPageSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
     mpPageSet->Show();
+
+    Link aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
+    mpContainer->AddChangeListener(aChangeListener);
 }
 
 
@@ -164,8 +164,13 @@ MasterPagesSelector::~MasterPagesSelector (void)
 {
     Clear();
     mpPageSet.reset();
+    UpdateLocks(ItemList());
+
     if (GetShellManager() != NULL)
-        GetShellManager()->RemoveSubShell(this);
+        GetShellManager()->RemoveSubShell (this);
+
+    Link aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
+    mpContainer->RemoveChangeListener(aChangeListener);
 }
 
 
@@ -180,6 +185,8 @@ void MasterPagesSelector::LateInit (void)
 
 sal_Int32 MasterPagesSelector::GetPreferredWidth (sal_Int32 nHeight)
 {
+    const ::osl::MutexGuard aGuard (maMutex);
+
     return mpPageSet->GetPreferredWidth (nHeight);
 }
 
@@ -188,6 +195,8 @@ sal_Int32 MasterPagesSelector::GetPreferredWidth (sal_Int32 nHeight)
 
 sal_Int32 MasterPagesSelector::GetPreferredHeight (sal_Int32 nWidth)
 {
+    const ::osl::MutexGuard aGuard (maMutex);
+
     return mpPageSet->GetPreferredHeight (nWidth);
 }
 
@@ -201,6 +210,49 @@ Size MasterPagesSelector::GetPreferredSize (void)
     int nPreferredHeight = GetPreferredHeight(nPreferredWidth);
     return Size (nPreferredWidth, nPreferredHeight);
 
+}
+
+
+
+
+void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
+{
+    ItemList aNewLockList;
+
+    // In here we first lock the master pages in the given list and then
+    // release the locks acquired in a previous call to this method.  When
+    // this were done the other way round the lock count of some master
+    // pages might drop temporarily to 0 and would lead to unnecessary
+    // deletion and re-creation of MasterPageDescriptor objects.
+
+    // Lock the master pages in the given list.
+    ItemList::const_iterator iItem;
+    for (iItem=rItemList.begin(); iItem!=rItemList.end(); ++iItem)
+    {
+        mpContainer->AcquireToken(*iItem);
+        aNewLockList.push_back(*iItem);
+    }
+
+    // Release the previously locked master pages.
+    ItemList::const_iterator iPage;
+    ItemList::const_iterator iEnd (maLockedMasterPages.end());
+    for (iPage=maLockedMasterPages.begin(); iPage!=iEnd; ++iPage)
+        mpContainer->ReleaseToken(*iPage);
+
+    maLockedMasterPages.swap(aNewLockList);
+}
+
+
+
+
+void MasterPagesSelector::Fill (void)
+{
+    ::std::auto_ptr<ItemList> pItemList (new ItemList());
+
+    Fill(*pItemList);
+
+    UpdateLocks(*pItemList);
+    UpdateItemList(pItemList);
 }
 
 
@@ -280,20 +332,11 @@ IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
 
 
 
-IMPL_LINK(MasterPagesSelector, ProcessPreviewUpdateRequest, Timer*, pTimer)
+IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent*, pEvent)
 {
-    while ( ! (maPreviewUpdateQueue.empty() || GetpApp()->AnyInput()))
-    {
-        USHORT nIndex = maPreviewUpdateQueue.front();
-        maPreviewUpdateQueue.pop();
-        UpdatePreview(nIndex);
-    }
-
-    // Restart the timer for processing the remaining queue entries.
-    if ( ! maPreviewUpdateQueue.empty())
-        maPreviewUpdateTimer.Start();
-
-    return 1;
+    if (pEvent)
+        NotifyContainerChangeEvent(*pEvent);
+    return 0;
 }
 
 
@@ -301,7 +344,16 @@ IMPL_LINK(MasterPagesSelector, ProcessPreviewUpdateRequest, Timer*, pTimer)
 
 SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
 {
-    return NULL;
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    SdPage* pMasterPage = NULL;
+    USHORT nIndex = mpPageSet->GetSelectItemId();
+    UserData* pData = GetUserData(nIndex);
+    if (pData != NULL)
+    {
+        pMasterPage = mpContainer->GetPageObjectForToken(pData->second);
+    }
+    return pMasterPage;
 }
 
 
@@ -336,7 +388,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
             }
         }
 
-        AssignMasterPageToPageList (pMasterPage, aPageList);
+        AssignMasterPageToPageList(pMasterPage, aPageList);
     }
     while (false);
 }
@@ -378,7 +430,7 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
             if (aSelectedPages.size() == 0)
                 break;
 
-            AssignMasterPageToPageList (pMasterPage, aSelectedPages);
+            AssignMasterPageToPageList(pMasterPage, aSelectedPages);
         }
 
         // Restore the previous selection.
@@ -395,225 +447,82 @@ void MasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const ::std::vector<SdPage*>& rPageList)
 {
-    do
+    DocumentHelper::AssignMasterPageToPageList(mrDocument, pMasterPage, rPageList);
+}
+
+
+
+
+void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    switch (rEvent.meEventType)
     {
-        if (pMasterPage == NULL && pMasterPage->IsMasterPage())
+        case MasterPageContainerChangeEvent::SIZE_CHANGED:
+            mpPageSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
+            UpdateAllPreviews();
             break;
 
-        // Make the layout name by stripping ouf the layout postfix from the
-        // layout name of the given master page.
-        String sFullLayoutName (pMasterPage->GetLayoutName());
-        String sBaseLayoutName (sFullLayoutName);
-        sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
-
-        if (rPageList.size() == 0)
-            break;
-
-        // Create a second list that contains only the valid pointers to
-        // pages for which an assignment is necessary.
-        ::std::vector<SdPage*>::const_iterator iPage;
-        ::std::vector<SdPage*> aCleanedList;
-        for (iPage=rPageList.begin();
-             iPage!=rPageList.end();
-             ++iPage)
+        case MasterPageContainerChangeEvent::PREVIEW_CHANGED:
         {
-            if (*iPage != NULL
-                && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+            int nIndex (GetIndexForToken(rEvent.maChildToken));
+            if (nIndex >= 0)
             {
-                aCleanedList.push_back(*iPage);
+                mpPageSet->SetItemImage (
+                    nIndex,
+                    mpContainer->GetPreviewForToken(rEvent.maChildToken));
+                mpPageSet->Invalidate(mpPageSet->GetItemRect(nIndex));
             }
         }
-        if (aCleanedList.size() == 0)
-            break;
+        break;
 
-        SfxUndoManager* pUndoMgr = mrDocument.GetDocSh()->GetUndoManager();
-        if( pUndoMgr )
-            pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
-
-        SdPage* pMasterPageInDocument = ProvideMasterPage(pMasterPage,rPageList);
-        if (pMasterPageInDocument == NULL)
-            break;
-
-        // Assign the master pages to the given list of pages.
-        for (iPage=aCleanedList.begin();
-             iPage!=aCleanedList.end();
-             ++iPage)
+        case MasterPageContainerChangeEvent::DATA_CHANGED:
         {
-            AssignMasterPageToPage (
-                pMasterPageInDocument,
-                sBaseLayoutName,
-                *iPage);
+            InvalidateItem(rEvent.maChildToken);
+            Fill();
         }
-
-        if( pUndoMgr )
-            pUndoMgr->LeaveListAction();
-    }
-    while (false);
+        break;
+   }
 }
 
 
 
 
-SdPage* MasterPagesSelector::ProvideMasterPage (
-    SdPage* pMasterPage,
-    const ::std::vector<SdPage*>& rPageList)
+MasterPagesSelector::UserData* MasterPagesSelector::CreateUserData (
+    int nIndex,
+    MasterPageContainer::Token aToken) const
 {
-    SdPage* pMasterPageInDocument = NULL;
-
-    // Get notes master page.
-    SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-    SdPage* pNotesMasterPage = static_cast<SdPage*>(
-        pSourceDocument->GetMasterPage (pMasterPage->GetPageNum()+1));
-    if (pNotesMasterPage != NULL)
-    {
-        // When the given master page or its associated notes master page do
-        // not already belong to the document we have to create copies of
-        // them and insert them into the document.
-
-        // Determine the position where the new master pages are inserted.
-        // By default they are inserted at the end.  When we assign to a
-        // master page then insert after the last of the (selected) pages.
-        USHORT nInsertionIndex = mrDocument.GetMasterPageCount();
-        if (rPageList.front()->IsMasterPage())
-        {
-            nInsertionIndex = rPageList.back()->GetPageNum();
-        }
-
-        if (pMasterPage->GetModel() != &mrDocument)
-        {
-            pMasterPageInDocument = AddMasterPage (&mrDocument, pMasterPage, nInsertionIndex);
-            mrDocument.AddUndo(mrDocument.GetSdrUndoFactory().CreateUndoNewPage(*pMasterPageInDocument));
-        }
-        else
-            pMasterPageInDocument = pMasterPage;
-        if (pNotesMasterPage->GetModel() != &mrDocument)
-        {
-            SdPage* pClonedNotesMasterPage
-                = AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+1);
-            mrDocument.AddUndo(mrDocument.GetSdrUndoFactory().CreateUndoNewPage(*pClonedNotesMasterPage));
-        }
-    }
-    return pMasterPageInDocument;
+    return new UserData(nIndex,aToken);
 }
 
 
 
 
-/** In here we have to handle three cases:
-    1. pPage is a normal slide.  We can use SetMasterPage to assign the
-    master pages to it.
-    2. pPage is a master page that is used by at least one slide.  We can
-    assign the master page to these slides.
-    3. pPage is a master page that is currently not used by any slide.
-    We can delete that page and add copies of the given master pages
-    instead.
-
-    For points 2 and 3 where one master page A is assigned to another B we have
-    to keep in mind that the master page that page A has already been
-    inserted into the target document.
-*/
-void MasterPagesSelector::AssignMasterPageToPage (
-    SdPage* pMasterPage,
-    const String& rsBaseLayoutName,
-    SdPage* pPage)
+MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) const
 {
-    // Leave early when the parameters are invalid.
-    if (pPage == NULL || pMasterPage == NULL)
-        return;
+    const ::osl::MutexGuard aGuard (maMutex);
 
-    if ( ! pPage->IsMasterPage())
-    {
-        // 1. Remove the background object (so that that, if it exists, does
-        // not override the new master page) and assign the master page to
-        // the regular slide.
-        mrDocument.GetDocSh()->GetUndoManager()->AddUndoAction(
-            new SdBackgroundObjUndoAction(mrDocument, *pPage, pPage->GetBackgroundObj()),
-                TRUE);
-        pPage->SetBackgroundObj(NULL);
-
-        mrDocument.SetMasterPage (
-            (pPage->GetPageNum()-1)/2,
-            rsBaseLayoutName,
-            &mrDocument,
-            FALSE,
-            FALSE);
-    }
+    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
+        return reinterpret_cast<UserData*>(mpPageSet->GetItemData(nIndex));
     else
-    {
-        // Find first slide that uses the master page.
-        SdPage* pSlide = NULL;
-        USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
-        for (USHORT nPage=0; nPage<nPageCount&&pSlide==NULL; nPage++)
-        {
-            SdrPage* pCandidate = mrDocument.GetSdPage(nPage,PK_STANDARD);
-            if (pCandidate != NULL
-                && pCandidate->TRG_HasMasterPage()
-                && &(pCandidate->TRG_GetMasterPage()) == pPage)
-            {
-                pSlide = static_cast<SdPage*>(pCandidate);
-            }
-        }
-
-        USHORT nIndex = pPage->GetPageNum();
-        if (pSlide != NULL)
-        {
-            // 2. Assign the given master pages to the first slide that was
-            // found above that uses the master page.
-            mrDocument.SetMasterPage (
-                (pSlide->GetPageNum()-1)/2,
-                rsBaseLayoutName,
-                &mrDocument,
-                FALSE,
-                FALSE);
-        }
-        else
-        {
-            // 3. Replace the master page A by a copy of the given master
-            // page B.
-            mrDocument.RemoveUnnessesaryMasterPages (
-                pPage, FALSE);
-        }
-    }
+        return NULL;
 }
 
 
 
 
-SdPage* MasterPagesSelector::AddMasterPage (
-    SdDrawDocument* pTargetDocument,
-    SdPage* pMasterPage,
-    USHORT nInsertionIndex)
+void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
 {
-    SdPage* pClonedMasterPage = NULL;
+    const ::osl::MutexGuard aGuard (maMutex);
 
-    if (pTargetDocument!=NULL && pMasterPage!=NULL)
+    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
     {
-        // Duplicate the master page.
-        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
-
-        // Copy the necessary styles.
-        SdDrawDocument* pSourceDocument
-            = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-        ProvideStyles (pSourceDocument, pTargetDocument, pClonedMasterPage);
-
-        // Now that the styles are available we can insert the cloned master
-        // page.
-        pTargetDocument->InsertMasterPage (pClonedMasterPage, nInsertionIndex);
-
-        // Adapt the size of the new master page to that of the pages in the
-        // document.
-        Size aNewSize (pTargetDocument->GetSdPage(0, pMasterPage->GetPageKind())->GetSize());
-        Rectangle aBorders (
-            pClonedMasterPage->GetLftBorder(),
-            pClonedMasterPage->GetUppBorder(),
-            pClonedMasterPage->GetRgtBorder(),
-            pClonedMasterPage->GetLwrBorder());
-        pClonedMasterPage->ScaleObjects(aNewSize, aBorders, TRUE);
-        pClonedMasterPage->SetSize(aNewSize);
-        pClonedMasterPage->CreateTitleAndLayout(TRUE);
+        UserData* pOldData = GetUserData(nIndex);
+        if (pOldData!=NULL && pOldData!=pData)
+            delete pOldData;
+        mpPageSet->SetItemData(nIndex, pData);
     }
-
-    return pClonedMasterPage;
 }
 
 
@@ -637,64 +546,7 @@ bool MasterPagesSelector::IsResizable (void)
 
 sal_Int32 MasterPagesSelector::GetMinimumWidth (void)
 {
-    return mnPreviewWidth + 2*3;
-}
-
-
-
-
-void MasterPagesSelector::ProvideStyles (
-    SdDrawDocument* pSourceDocument,
-    SdDrawDocument* pTargetDocument,
-    SdPage* pPage)
-{
-    // Get the layout name of the given page.
-    String sLayoutName (pPage->GetLayoutName());
-    sLayoutName.Erase (sLayoutName.SearchAscii (SD_LT_SEPARATOR));
-
-    // Copy the style sheet from source to target document.
-    SdStyleSheetPool* pSourceStyleSheetPool =
-        static_cast<SdStyleSheetPool*>(pSourceDocument->GetStyleSheetPool());
-    SdStyleSheetPool* pTargetStyleSheetPool =
-        static_cast<SdStyleSheetPool*>(pTargetDocument->GetStyleSheetPool());
-    List* pCreatedStyles = new List();
-    pTargetStyleSheetPool->CopyLayoutSheets (
-        sLayoutName,
-        *pSourceStyleSheetPool,
-        pCreatedStyles);
-
-    // Add an undo action for the copied style sheets.
-    if (pCreatedStyles->Count() > 0)
-    {
-         SfxUndoManager* pUndoManager
-            = pTargetDocument->GetDocSh()->GetUndoManager();
-       if (pUndoManager != NULL)
-       {
-           SdMoveStyleSheetsUndoAction* pMovStyles =
-               new SdMoveStyleSheetsUndoAction (
-                   pTargetDocument,
-                   pCreatedStyles,
-                   TRUE);
-           pUndoManager->AddUndoAction (pMovStyles);
-       }
-    }
-    else
-    {
-        delete pCreatedStyles;
-    }
-}
-
-
-
-
-
-void MasterPagesSelector::SetPreviewWidth (int nPreviewWidth)
-{
-    mpPageSet->SetPreviewWidth (nPreviewWidth);
-    mnPreviewWidth = nPreviewWidth;
-
-    //    UpdateAllPreviews();
-    InvalidateAllPreviews();
+    return mpContainer->GetPreviewSizePixel().Width() + 2*3;
 }
 
 
@@ -733,31 +585,10 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
         case SID_TP_SHOW_LARGE_PREVIEW:
         {
             mrBase.SetBusyState (true);
-            // The following iteration over all chidren of our father,
-            // casting them to MasterPagesSelector and call
-            // SetPreviewWidth() is a hack that may be replaced eventually
-            // by making out parent SubToolPanel a special master page
-            // control that is a shell and can process these slots itself.
-            ControlContainer& rContainer (
-                GetParentNode()->GetParentNode()->GetControlContainer());
-            for (sal_uInt32 nIndex=0;
-                 nIndex<rContainer.GetControlCount();
-                 nIndex++)
-            {
-                TitledControl* pNode = static_cast<TitledControl*>(
-                    rContainer.GetControl(nIndex));
-                if (pNode == NULL)
-                    continue;
-                MasterPagesSelector* pSelector
-                    = static_cast<MasterPagesSelector*>(pNode->GetControl());
-                if (pSelector != NULL)
-                {
-                    pSelector->SetPreviewWidth (
-                        rRequest.GetSlot()==SID_TP_SHOW_SMALL_PREVIEW
-                        ? snSmallPreviewWidth
-                        : snLargePreviewWidth);
-                }
-            }
+            mpContainer->SetPreviewSize(
+                rRequest.GetSlot()==SID_TP_SHOW_SMALL_PREVIEW
+                ? MasterPageContainer::SMALL
+                : MasterPageContainer::LARGE);
             mrBase.SetBusyState (false);
             break;
         }
@@ -776,11 +607,10 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
 
 void MasterPagesSelector::GetState (SfxItemSet& rItemSet)
 {
-    const int nCenter = (snLargePreviewWidth + snSmallPreviewWidth) / 2;
-    if (mnPreviewWidth > nCenter)
-        rItemSet.DisableItem (SID_TP_SHOW_LARGE_PREVIEW);
-    else
+    if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
         rItemSet.DisableItem (SID_TP_SHOW_SMALL_PREVIEW);
+    else
+        rItemSet.DisableItem (SID_TP_SHOW_LARGE_PREVIEW);
 
     // Cut and paste is not supported so do not show the menu entries.
     rItemSet.DisableItem (SID_CUT);
@@ -791,10 +621,123 @@ void MasterPagesSelector::GetState (SfxItemSet& rItemSet)
 
 
 
-void MasterPagesSelector::InvalidatePreview (USHORT nIndex)
+void MasterPagesSelector::SetItem (
+    USHORT nIndex,
+    MasterPageContainer::Token aToken)
 {
-    maPreviewUpdateQueue.push(nIndex);
-    maPreviewUpdateTimer.Start();
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    RemoveTokenToIndexEntry(nIndex,aToken);
+
+    if (nIndex > 0)
+    {
+        if (aToken != MasterPageContainer::NIL_TOKEN)
+        {
+            Image aPreview (mpContainer->GetPreviewForToken(aToken));
+            MasterPageContainer::PreviewState eState (mpContainer->GetPreviewState(aToken));
+
+            if (aPreview.GetSizePixel().Width()>0)
+            {
+                if (mpPageSet->GetItemPos(nIndex) != VALUESET_ITEM_NOTFOUND)
+                {
+                    mpPageSet->SetItemImage(nIndex,aPreview);
+                    mpPageSet->SetItemText(nIndex, mpContainer->GetPageNameForToken(aToken));
+                }
+                else
+                {
+                    mpPageSet->InsertItem (
+                        nIndex,
+                        aPreview,
+                        mpContainer->GetPageNameForToken(aToken),
+                        nIndex);
+                }
+                SetUserData(nIndex, CreateUserData(nIndex,aToken));
+
+                AddTokenToIndexEntry(nIndex,aToken);
+            }
+
+            if (eState == MasterPageContainer::PS_CREATABLE)
+                mpContainer->RequestPreview(aToken);
+        }
+        else
+        {
+            mpPageSet->RemoveItem(nIndex);
+        }
+    }
+
+}
+
+
+
+
+void MasterPagesSelector::AddTokenToIndexEntry (
+    USHORT nIndex,
+    MasterPageContainer::Token aToken)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    maTokenToValueSetIndex[aToken] = nIndex;
+}
+
+
+
+
+void MasterPagesSelector::RemoveTokenToIndexEntry (
+    USHORT nIndex,
+    MasterPageContainer::Token aNewToken)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    UserData* pData = GetUserData(nIndex);
+    if (pData != NULL)
+    {
+        // Get the token that the index pointed to previously.
+        MasterPageContainer::Token aOldToken (pData->second);
+
+        if (aNewToken != aOldToken
+            && nIndex == GetIndexForToken(aOldToken))
+        {
+            maTokenToValueSetIndex[aOldToken] = 0;
+        }
+    }
+}
+
+
+
+
+void MasterPagesSelector::InvalidatePreview (MasterPageContainer::Token aToken)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    int nIndex (GetIndexForToken(aToken));
+    if (nIndex > 0)
+    {
+        mpContainer->InvalidatePreview(aToken);
+        mpContainer->RequestPreview(aToken);
+    }
+}
+
+
+
+
+void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    {
+        UserData* pData = GetUserData(nIndex);
+        if (pData != NULL)
+        {
+            MasterPageContainer::Token aToken (pData->second);
+            if (pPage == mpContainer->GetPageObjectForToken(aToken,false))
+            {
+                mpContainer->InvalidatePreview(aToken);
+                mpContainer->RequestPreview(aToken);
+                break;
+            }
+        }
+    }
 }
 
 
@@ -802,11 +745,73 @@ void MasterPagesSelector::InvalidatePreview (USHORT nIndex)
 
 void MasterPagesSelector::InvalidateAllPreviews (void)
 {
-    while ( ! maPreviewUpdateQueue.empty())
-        maPreviewUpdateQueue.pop();
+    const ::osl::MutexGuard aGuard (maMutex);
+
     for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
-        maPreviewUpdateQueue.push(nIndex);
-    maPreviewUpdateTimer.Start();
+        InvalidatePreview(nIndex);
+}
+
+
+
+
+void MasterPagesSelector::UpdateAllPreviews (void)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    {
+        UserData* pData = GetUserData(nIndex);
+        if (pData != NULL)
+        {
+            MasterPageContainer::Token aToken (pData->second);
+            mpPageSet->SetItemImage(
+                nIndex,
+                mpContainer->GetPreviewForToken(aToken));
+            if (mpContainer->GetPreviewState(aToken) == MasterPageContainer::PS_CREATABLE)
+                mpContainer->RequestPreview(aToken);
+        }
+    }
+    mpPageSet->Rearrange(true);
+}
+
+
+
+
+void MasterPagesSelector::ClearPageSet (void)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    {
+        UserData* pData = GetUserData(nIndex);
+        if (pData != NULL)
+            delete pData;
+    }
+    mpPageSet->Clear();
+}
+
+
+
+
+void MasterPagesSelector::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    mpPageSet->SetSmartHelpId( aId, aMode );
+}
+
+
+
+
+sal_Int32 MasterPagesSelector::GetIndexForToken (MasterPageContainer::Token aToken) const
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    TokenToValueSetIndex::const_iterator iIndex (maTokenToValueSetIndex.find(aToken));
+    if (iIndex != maTokenToValueSetIndex.end())
+        return iIndex->second;
+    else
+        return -1;
 }
 
 
@@ -814,12 +819,72 @@ void MasterPagesSelector::InvalidateAllPreviews (void)
 
 void MasterPagesSelector::Clear (void)
 {
-    mpPageSet->Clear ();
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    ClearPageSet();
 }
 
-void MasterPagesSelector::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+
+
+
+void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
 {
-    mpPageSet->SetSmartHelpId( aId, aMode );
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    ItemList::iterator iItem;
+    for (iItem=maCurrentItemList.begin(); iItem!=maCurrentItemList.end(); ++iItem)
+    {
+        if (*iItem == aToken)
+        {
+            *iItem = MasterPageContainer::NIL_TOKEN;
+            break;
+        }
+    }
 }
+
+
+
+
+void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    ItemList::const_iterator iNewItem (pNewItemList->begin());
+    ItemList::const_iterator iCurrentItem (maCurrentItemList.begin());
+    ItemList::const_iterator iNewEnd (pNewItemList->end());
+    ItemList::const_iterator iCurrentEnd (maCurrentItemList.end());
+    USHORT nIndex (1);
+
+    // Update existing items.
+    for ( ; iNewItem!=iNewEnd && iCurrentItem!=iCurrentEnd; ++iNewItem, ++iCurrentItem,++nIndex)
+    {
+        if (*iNewItem != *iCurrentItem)
+        {
+            SetItem(nIndex,*iNewItem);
+        }
+    }
+
+    // Append new items.
+    for ( ; iNewItem!=iNewEnd; ++iNewItem,++nIndex)
+    {
+        SetItem(nIndex,*iNewItem);
+    }
+
+    // Remove trailing items.
+    for ( ; iCurrentItem!=iCurrentEnd; ++iCurrentItem,++nIndex)
+    {
+        SetItem(nIndex,MasterPageContainer::NIL_TOKEN);
+    }
+
+    maCurrentItemList.swap(*pNewItemList);
+
+    mpPageSet->Rearrange();
+    if (GetParentNode() != NULL)
+        GetParentNode()->RequestResize();
+}
+
+
+
+
 
 } } } // end of namespace ::sd::toolpanel::controls
