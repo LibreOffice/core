@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:30:07 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3553,11 +3553,12 @@ void SdrObjCustomShape::operator=(const SdrObject& rObj)
 void SdrObjCustomShape::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulCUSTOMSHAPE);
-    if(aName.Len())
+    String aNm( GetName() );
+    if( aNm.Len() )
     {
         rName += sal_Unicode(' ');
         rName += sal_Unicode('\'');
-        rName += aName;
+        rName += aNm;
         rName += sal_Unicode('\'');
     }
 }
