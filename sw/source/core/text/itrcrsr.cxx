@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:18:51 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     }
     else
     {
-        if ( !pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() )
+        if ( !pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() )
         {
             // --> FME 2004-07-29 #i32267# Do not forget paragraph border
             // I'm quite sure this can be optimized. But how?
@@ -240,7 +240,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     if( nLeft >= nRight &&
          // --> FME 2005-08-10 #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
-        ( pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() ||
+        ( pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() ||
           !pFrm->IsInTab() ||
           !nLMWithNum) )
          // <--
@@ -310,7 +310,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
             nFirstLineOfs = nFLOfst;
 
         if ( pFrm->IsRightToLeft() ||
-            !pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() )
+            !pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() )
         {
             nFirst = nLeft + nFirstLineOfs;
         }
