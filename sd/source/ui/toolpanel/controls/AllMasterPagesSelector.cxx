@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:37:31 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,28 +37,76 @@
 #include "PreviewValueSet.hxx"
 
 #include "MasterPageContainer.hxx"
-#include "DrawDocShell.hxx"
-#include <svtools/languageoptions.hxx>
-#include "drawdoc.hxx"
-#include <vcl/image.hxx>
-#include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/colorcfg.hxx>
+#include "MasterPageDescriptor.hxx"
+#include <tools/link.hxx>
+#include <set>
+
+namespace {
+
+using namespace sd::toolpanel::controls;
+
+int GetURLPriority (const SharedMasterPageDescriptor& rpDescriptor)
+{
+    int nPriority (0);
+    switch (rpDescriptor->GetURLClassification())
+    {
+        case MasterPageDescriptor::URLCLASS_USER:         nPriority = 0; break;
+        case MasterPageDescriptor::URLCLASS_LAYOUT:       nPriority = 1; break;
+        case MasterPageDescriptor::URLCLASS_PRESENTATION: nPriority = 2; break;
+        case MasterPageDescriptor::URLCLASS_OTHER:        nPriority = 3; break;
+        case MasterPageDescriptor::URLCLASS_UNKNOWN:      nPriority = 4; break;
+        default:
+        case MasterPageDescriptor::URLCLASS_UNDETERMINED: nPriority = 5; break;
+    }
+    return nPriority;
+}
+
+
+class MasterPageDescriptorOrder
+{
+public:
+    bool operator() (const sd::toolpanel::controls::SharedMasterPageDescriptor& rp1,
+        const sd::toolpanel::controls::SharedMasterPageDescriptor& rp2)
+    {
+        if (rp1->meOrigin == MasterPageContainer::DEFAULT)
+            return true;
+        else if (rp2->meOrigin == MasterPageContainer::DEFAULT)
+            return false;
+        else if (rp1->GetURLClassification() == rp2->GetURLClassification())
+            return rp1->mnTemplateIndex < rp2->mnTemplateIndex;
+        else
+            return GetURLPriority(rp1) < GetURLPriority(rp2);
+    }
+};
+
+} // end of anonymous namespace
+
 
 
 namespace sd { namespace toolpanel { namespace controls {
+
+class AllMasterPagesSelector::SortedMasterPageDescriptorList
+    : public ::std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
+{
+public:
+    SortedMasterPageDescriptorList (void) {}
+};
+
+
+
 
 AllMasterPagesSelector::AllMasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    DrawViewShell& rViewShell)
-    : MasterPagesContainerSelector (pParent, rDocument, rBase),
-      mrViewShell(rViewShell)
+    DrawViewShell& rViewShell,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
+    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer),
+      mrViewShell(rViewShell),
+      mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {
     SetName (String(RTL_CONSTASCII_USTRINGPARAM("AllMasterPagesSelector")));
-    Fill ();
+    MasterPagesSelector::Fill();
 }
 
 
@@ -71,20 +119,81 @@ AllMasterPagesSelector::~AllMasterPagesSelector (void)
 
 
 
-void AllMasterPagesSelector::Fill (void)
+void AllMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    Clear();
-
-    MasterPageContainer& rContainer (MasterPageContainer::Instance());
-
-    int nTokenCount = rContainer.GetTokenCount();
-    for (int i=0; i<nTokenCount; i++)
-    {
-        MasterPageContainer::Token aToken (rContainer.GetTokenForIndex(i));
-        AddItemForToken (aToken, true);
-    }
-    mpPageSet->Rearrange ();
+    if (mpSortedMasterPages->empty())
+        UpdateMasterPageList();
+    UpdatePageSet(rItemList);
 }
+
+
+
+
+void AllMasterPagesSelector::NotifyContainerChangeEvent (
+    const MasterPageContainerChangeEvent& rEvent)
+{
+    switch (rEvent.meEventType)
+    {
+        case MasterPageContainerChangeEvent::CHILD_ADDED:
+            AddItem(rEvent.maChildToken);
+            MasterPagesSelector::Fill();
+            break;
+
+        case MasterPageContainerChangeEvent::INDEX_CHANGED:
+        case MasterPageContainerChangeEvent::INDEXES_CHANGED:
+            mpSortedMasterPages->clear();
+            MasterPagesSelector::Fill();
+            break;
+
+        default:
+            MasterPagesSelector::NotifyContainerChangeEvent(rEvent);
+            break;
+    }
+}
+
+
+
+
+void AllMasterPagesSelector::UpdateMasterPageList (void)
+{
+    mpSortedMasterPages->clear();
+    int nTokenCount = mpContainer->GetTokenCount();
+    for (int i=0; i<nTokenCount; i++)
+        AddItem(mpContainer->GetTokenForIndex(i));
+}
+
+
+
+
+void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
+{
+    switch (mpContainer->GetOriginForToken(aToken))
+    {
+        case MasterPageContainer::DEFAULT:
+        case MasterPageContainer::TEMPLATE:
+            // Templates are added only when coming from the
+            // MasterPageContainerFiller so that they have an id which
+            // defines their place in the list.  Templates (pre) loaded from
+            // RecentlyUsedMasterPages are ignored (they will be loaded
+            // later by the MasterPageContainerFiller.)
+            if (mpContainer->GetTemplateIndexForToken(aToken) >= 0)
+                mpSortedMasterPages->insert(mpContainer->GetDescriptorForToken(aToken));
+            break;
+    }
+}
+
+
+
+
+void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
+{
+    SortedMasterPageDescriptorList::const_iterator iDescriptor;
+    SortedMasterPageDescriptorList::const_iterator iEnd (mpSortedMasterPages->end());
+    for (iDescriptor=mpSortedMasterPages->begin(); iDescriptor!=iEnd; ++iDescriptor)
+        rItemList.push_back((*iDescriptor)->maToken);
+}
+
+
 
 
 } } } // end of namespace ::sd::toolpanel::controls
