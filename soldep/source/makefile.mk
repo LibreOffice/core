@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-24 14:09:34 $
+#   last change: $Author: obo $ $Date: 2006-04-26 09:43:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ SLOFILES        = \
 
 SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=$(TARGET)
-SHL1LIBS	=$(SLB)$/bootstrpdt.lib
+SHL1LIBS	=$(SLB)$/$(TARGET).lib \
+            $(SLB)$/bootstrpdt.lib
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN	=$(SHL1LIBS)
 SHL1STDLIBS     = $(SVTOOLLIB)		\
