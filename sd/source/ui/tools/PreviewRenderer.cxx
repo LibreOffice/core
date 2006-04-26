@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:56 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,13 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/eeitem.hxx>
+#include <svx/editstat.hxx>
 #include <tools/link.hxx>
 
 
 namespace sd {
 
-const int PreviewRenderer::snSubstitutioinTextSize = 5000;
+const int PreviewRenderer::snSubstitutionTextSize = 11;
 const int PreviewRenderer::snFrameWidth = 1;
 
 PreviewRenderer::PreviewRenderer (OutputDevice* pTemplate)
@@ -90,12 +91,17 @@ Image PreviewRenderer::RenderPage (
     int nWidth,
     const String& rSubstitutionText)
 {
-    Size aPageModelSize (pPage->GetSize());
-    double nAspectRatio (
-        double(aPageModelSize.Width()) / double(aPageModelSize.Height()));
-    int nHeight = (int)((nWidth - 2*snFrameWidth) / nAspectRatio
-        + 2*snFrameWidth + 0.5);
-    return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText);
+    if (pPage != NULL)
+    {
+        Size aPageModelSize (pPage->GetSize());
+        double nAspectRatio (
+            double(aPageModelSize.Width()) / double(aPageModelSize.Height()));
+        int nHeight = (int)((nWidth - 2*snFrameWidth) / nAspectRatio
+            + 2*snFrameWidth + 0.5);
+        return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText);
+    }
+    else
+        return Image();
 }
 
 
@@ -108,21 +114,84 @@ Image PreviewRenderer::RenderPage (
 {
     Image aPreview;
 
+    if (pPage != NULL)
+    {
+        try
+        {
+            if (Initialize (pPage, aPixelSize))
+            {
+                PaintPage (pPage);
+                PaintSubstitutionText (rSubstitutionText);
+                PaintFrame();
+
+                Size aSize (mpPreviewDevice->GetOutputSizePixel());
+                aPreview = mpPreviewDevice->GetBitmap (
+                    mpPreviewDevice->PixelToLogic(Point(0,0)),
+                    mpPreviewDevice->PixelToLogic(aSize));
+
+                Cleanup();
+            }
+        }
+        catch (const com::sun::star::uno::Exception&)
+        {
+            OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+        }
+    }
+
+    return aPreview;
+}
+
+
+
+
+Image PreviewRenderer::RenderSubstitution (
+    const Size& rPreviewPixelSize,
+    const String& rSubstitutionText)
+{
+    Image aPreview;
+
     try
     {
-        if (Initialize (pPage, aPixelSize))
-        {
-            PaintPage (pPage);
-            PaintSubstitutionText (rSubstitutionText);
-            PaintFrame();
+        // Set size.
+        mpPreviewDevice->SetOutputSizePixel(rPreviewPixelSize);
 
-            Size aSize (mpPreviewDevice->GetOutputSizePixel());
-            aPreview = mpPreviewDevice->GetBitmap (
-                mpPreviewDevice->PixelToLogic(Point(0,0)),
-                mpPreviewDevice->PixelToLogic(aSize));
+        // Adjust contrast mode.
+        bool bUseContrast = Application::GetSettings().GetStyleSettings().
+            GetHighContrastMode();
+        mpPreviewDevice->SetDrawMode (bUseContrast
+            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+            : ViewShell::OUTPUT_DRAWMODE_COLOR);
 
-            Cleanup();
-        }
+        // Set a map mode makes a typical substitution text completely
+        // visible.
+        MapMode aMapMode (mpPreviewDevice->GetMapMode());
+        aMapMode.SetMapUnit(MAP_100TH_MM);
+        double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
+        aMapMode.SetScaleX(nFinalScale);
+        aMapMode.SetScaleY(nFinalScale);
+        aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(
+            Point(snFrameWidth,snFrameWidth),aMapMode));
+        mpPreviewDevice->SetMapMode (aMapMode);
+
+        // Clear the background.
+        Rectangle aPaintRectangle (
+            Point(0,0),
+            mpPreviewDevice->GetOutputSizePixel());
+        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->SetLineColor();
+        svtools::ColorConfig aColorConfig;
+        mpPreviewDevice->SetFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+        mpPreviewDevice->DrawRect (aPaintRectangle);
+        mpPreviewDevice->EnableMapMode(TRUE);
+
+        // Paint substitution text and a frame around it.
+        PaintSubstitutionText (rSubstitutionText);
+        PaintFrame();
+
+        Size aSize (mpPreviewDevice->GetOutputSizePixel());
+        aPreview = mpPreviewDevice->GetBitmap (
+            mpPreviewDevice->PixelToLogic(Point(0,0)),
+            mpPreviewDevice->PixelToLogic(aSize));
     }
     catch (const com::sun::star::uno::Exception&)
     {
@@ -205,11 +274,23 @@ void PreviewRenderer::Cleanup (void)
 
 
 
+
 void PreviewRenderer::PaintPage (const SdPage* pPage)
 {
     // Paint the page.
     Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
     Region aRegion (aPaintRectangle);
+
+    // Turn off online spelling and redlining.
+    SdrOutliner* pOutliner = NULL;
+    ULONG nOriginalControlWord = 0;
+    if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
+    {
+        pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
+        nOriginalControlWord = pOutliner->GetControlWord();
+        pOutliner->SetControlWord(
+            (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING) | EE_CNTRL_NOREDLINES);
+    }
 
     try
     {
@@ -219,6 +300,10 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
     {
         OSL_TRACE("PreviewRenderer::PaintPage: caught exception");
     }
+
+    // Restore the previous online spelling and redlining states.
+    if (pOutliner != NULL)
+        pOutliner->SetControlWord(nOriginalControlWord);
 }
 
 
@@ -230,8 +315,9 @@ void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
     {
         // Set the font size.
         const Font& rOriginalFont (mpPreviewDevice->GetFont());
-        Font aFont (rOriginalFont);
-        aFont.SetHeight (snSubstitutioinTextSize);
+        Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
+        sal_Int32 nHeight (mpPreviewDevice->PixelToLogic(Size(0,snSubstitutionTextSize)).Height());
+        aFont.SetHeight(nHeight);
         mpPreviewDevice->SetFont (aFont);
 
         // Paint the substitution text.
