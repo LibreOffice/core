@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:15:05 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1188,12 +1188,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         break;
 
                         default :
-                        {
-                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
-                                eTHA = SDRTEXTHORZADJUST_LEFT;
-                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                                eTHA = SDRTEXTHORZADJUST_RIGHT;
-                        }
                         break;
                     }
                     nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
