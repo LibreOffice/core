@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:42:51 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,29 @@
 #ifndef SD_TOOLPANEL_CONTROLS_RECENT_MASTER_PAGES_SELECTOR_HXX
 #define SD_TOOLPANEL_CONTROLS_RECENT_MASTER_PAGES_SELECTOR_HXX
 
-#include "MasterPagesContainerSelector.hxx"
+#include "MasterPagesSelector.hxx"
 
 namespace sd { namespace toolpanel { namespace controls {
 
 
+/** Show the recently used master pages (that are not currently used).
+*/
 class RecentMasterPagesSelector
-    : public MasterPagesContainerSelector
+    : public MasterPagesSelector
 {
 public:
     RecentMasterPagesSelector (
         TreeNode* pParent,
         SdDrawDocument& rDocument,
-        ViewShellBase& rBase);
+        ViewShellBase& rBase,
+        const ::boost::shared_ptr<MasterPageContainer>& rpContainer);
     virtual ~RecentMasterPagesSelector (void);
 
     virtual void LateInit (void);
 
 protected:
     DECL_LINK(MasterPageListListener, void*);
-    void Fill (void);
+    virtual void Fill (ItemList& rItemList);
 
     /** Forward this call to the base class but save and restore the
         currently selected item.
