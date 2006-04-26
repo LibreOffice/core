@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:49:29 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
 
 #ifndef INCLUDED_SVXDLLAPI_H
@@ -106,7 +109,8 @@ private:
                                     ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjectStorageName,
                                     sal_Bool bInternalToExternal,
-                                       sal_Bool *pGraphicRepl=0 ) const;
+                                       sal_Bool *pGraphicRepl=0,
+                                    sal_Bool *pOasisFormat=0 ) const;
 
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
@@ -120,6 +124,9 @@ private:
 
     SVX_DLLPRIVATE ::rtl::OUString              ImplInsertEmbeddedObjectURL(
                                     const ::rtl::OUString& rURLStr );
+
+    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > ImplGetReplacementImage(
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj );
 
 protected:
 
