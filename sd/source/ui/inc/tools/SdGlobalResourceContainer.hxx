@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdGlobalResourceContainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:04:07 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "sdmod.hxx"
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace sd {
 
@@ -77,8 +78,18 @@ public:
     /** Add a resource to the container.  The ownership of the resource is
         transferred to the container.  The resource is destroyed when the
         container is destroyed, i.e. when the sd module is destroyed.
+
+        When in doubt, use the shared_ptr variant of this method.
     */
     void AddResource (::std::auto_ptr<SdGlobalResource> pResource);
+
+    /** Add a resource to the container.  By using a shared_ptr and
+        releasing it only when the SgGlobalResourceContainer is destroyed
+        the given resource is kept alive at least that long.  When at the
+        time of the destruction of SgGlobalResourceContainer no other
+        references exist the resource is destroyed as well.
+    */
+    void AddResource (::boost::shared_ptr<SdGlobalResource> pResource);
 
     /** Tell the container that it is not any longer responsible for the
         specified resource.
