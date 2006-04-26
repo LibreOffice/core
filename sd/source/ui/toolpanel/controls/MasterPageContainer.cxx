@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:52:37 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,27 +32,31 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #include "MasterPageContainer.hxx"
 
+#include "MasterPageDescriptor.hxx"
+#include "MasterPageContainerFiller.hxx"
+#include "MasterPageContainerQueue.hxx"
 #include "TemplateScanner.hxx"
+#include "tools/AsynchronousTask.hxx"
 #include "strings.hrc"
 #include <algorithm>
-#include <vector>
-#include <queue>
+#include <list>
+#include <set>
 
-#include <comphelper/processfactory.hxx>
 #include "unomodel.hxx"
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -66,29 +70,12 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
-#include <com/sun/star/embed/XStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
-#include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#include <unotools/ucbstreamhelper.hxx>
-#include <vcl/pngread.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdpage.hxx>
@@ -97,149 +84,39 @@
 #include "sdpage.hxx"
 #include <svtools/itemset.hxx>
 #include <svtools/eitem.hxx>
-#include "stlpool.hxx"
-#include "unmovss.hxx"
 #include "sdresid.hxx"
-#include "tools/IdleDetection.hxx"
+#include "tools/TimerBasedTaskExecution.hxx"
 #include "pres.hxx"
+#include <osl/mutex.hxx>
+#include <boost/weak_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-//#define RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
+using namespace ::sd::toolpanel::controls;
 
 namespace {
+
+typedef ::std::vector<SharedMasterPageDescriptor> MasterPageContainerType;
+
 
 class PreviewCreationRequest
 {
 public:
-    ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
-    int mnWidth;
-    Link maCallback;
-    void* mpUserData;
-    PreviewCreationRequest (
-        ::sd::toolpanel::controls::MasterPageContainer::Token aToken,
-        int nWidth,
-        const Link& rCallback,
-        void* pUserData)
-        : maToken(aToken),
-          mnWidth(nWidth),
-          maCallback(rCallback),
-          mpUserData(pUserData)
-    {}
-};
-
-
-/** A collection of data that is stored for every master page in the
-    container.
-*/
-class MasterPageDescriptor
-{
-public:
-    MasterPageDescriptor (
-        const String& rURL,
-        const String& rPageName,
-        const String& rStyleName,
-        SdPage* pMasterPage,
-        SdPage* pSlide,
-        const Image& rPreview,
-        ::sd::toolpanel::controls::MasterPageContainer::Token aToken
-        )
-        : msURL(rURL),
-          msPageName(rPageName),
-          msStyleName(rStyleName),
-          mpMasterPage(pMasterPage),
-          mpSlide(pSlide),
-          maPreview(rPreview),
-          maToken(aToken)
-    {}
-    MasterPageDescriptor (const MasterPageDescriptor& rDescriptor)
-        : msURL(rDescriptor.msURL),
-          msPageName(rDescriptor.msPageName),
-          msStyleName(rDescriptor.msStyleName),
-          mpMasterPage(rDescriptor.mpMasterPage),
-          mpSlide(rDescriptor.mpSlide),
-          maPreview(rDescriptor.maPreview),
-          maToken(rDescriptor.maToken)
-    {}
-    ~MasterPageDescriptor (void)
-    {}
-
-    String msURL;
-    /// Taken from the title of the template file.
-    String msPageName;
-    /// Taken from the master page object.
-    String msStyleName;
-    /// The actual master page.
-    SdPage* mpMasterPage;
-    /// A slide that uses the master page.
-    SdPage* mpSlide;
-    /// Previews of the master page.  May be empty.
-    Image maPreview;            // original preview from file
-    Image maScaledPreview;      // scaled size for display
-    ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
-};
-
-typedef ::std::vector<MasterPageDescriptor> MasterPageContainerType;
-
-class URLComparator { public:
-    String msURL;
-    URLComparator (const String& sURL) : msURL(sURL) {};
-    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
-    { return rDescriptor.msURL.CompareTo(msURL)==0; }
-};
-class PageNameComparator { public:
-    String msPageName;
-    PageNameComparator (const String& sPageName) : msPageName(sPageName) {};
-    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
-    { return rDescriptor.msPageName.CompareTo(msPageName)==0; }
-};
-class StyleNameComparator { public:
-    String msStyleName;
-    StyleNameComparator (const String& sStyleName) : msStyleName(sStyleName) {};
-    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
-    { return rDescriptor.msStyleName.CompareTo(msStyleName)==0; }
-};
-class PageObjectComparator { public:
-    const SdPage* mpMasterPage;
-    PageObjectComparator (const SdPage* pPageObject)
-        : mpMasterPage(pPageObject) {};
-    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
-    { return rDescriptor.mpMasterPage==mpMasterPage; }
-};
-class AllComparator { public:
-    String msURL;
-    String msPageName;
-    String msStyleName;
-    const SdPage* mpMasterPage;
-    AllComparator (
-        const String& sURL,
-        const String& sPageName,
-        const String& sStyleName,
-        const SdPage* pPageObject)
-        : msURL(sURL),
-          msPageName(sPageName),
-          msStyleName(sStyleName),
-          mpMasterPage(pPageObject)
-    {}
-    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
-    {
-        return
-            (msURL.Len()>0
-                &&rDescriptor.msURL.CompareTo(msURL)==0)
-            || (msPageName.Len()>0
-                && rDescriptor.msPageName.CompareTo(msPageName)==0)
-            || (msStyleName.Len()>0
-                && rDescriptor.msStyleName.CompareTo(msStyleName)==0)
-            || (mpMasterPage!=NULL
-                && rDescriptor.mpMasterPage==mpMasterPage);
-    }
+    PreviewCreationRequest (MasterPageContainer::Token aToken, int nPriority);
+    MasterPageContainer::Token maToken;
+    int mnPriority;
+    class Compare {public:
+        bool operator() (const PreviewCreationRequest& r1,const PreviewCreationRequest& r2);
+    };
+    class CompareToken {public:
+        MasterPageContainer::Token maToken;
+        CompareToken(MasterPageContainer::Token aToken);
+        bool operator() (const PreviewCreationRequest& rRequest);
+    };
 };
 
 
 } // end of anonymous namespace
-
-
 
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -250,114 +127,114 @@ namespace sd { namespace toolpanel { namespace controls {
     MasterPageContainer at method or member with the same name.
 */
 class MasterPageContainer::Implementation
+    : public SdGlobalResource,
+      public MasterPageContainerFiller::ContainerAdapter
 {
 public:
-    static MasterPageContainer* mpInstance;
+    mutable ::osl::Mutex maMutex;
 
+    static ::boost::weak_ptr<Implementation> mpInstance;
     MasterPageContainerType maContainer;
 
+    static ::boost::shared_ptr<Implementation> Instance (void);
+
+    void LateInit (MasterPageContainer& rContainer);
+    void AddChangeListener (const Link& rLink);
+    void RemoveChangeListener (const Link& rLink);
+    void UpdatePreviewSizePixel (void);
+    Size GetPreviewSizePixel (PreviewSize eSize) const;
+
+    bool HasToken (Token aToken) const;
+    const SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken) const;
+    SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken);
+    virtual Token PutMasterPage (const SharedMasterPageDescriptor& rDescriptor);
+    void InvalidatePreview (Token aToken);
+    Image GetPreviewForToken (
+        Token aToken,
+        PreviewSize ePreviewSize);
+    PreviewState GetPreviewState (Token aToken) const;
+    bool RequestPreview (Token aToken);
+
+    Reference<frame::XModel> GetModel (void);
+    SdDrawDocument* GetDocument (void);
+
+    void FireContainerChange (
+        MasterPageContainerChangeEvent::EventType eType,
+        Token aToken,
+        bool bNotifyAsynchronously = false);
+
+    bool UpdateDescriptor (
+        const SharedMasterPageDescriptor& rpDescriptor,
+        bool bForcePageObject,
+        bool bForcePreview,
+        bool bSendEvents);
+
+    void ReleaseDescriptor (Token aToken);
+
+    /** Called by the MasterPageContainerFiller to notify that all master
+        pages from template documents have been added.
+    */
+    virtual void FillingDone (void);
+
+private:
     Implementation (void);
     ~Implementation (void);
 
-    void AddPreviewCreationRequest (
-        Token aToken,
-         int nWidth,
-        const Link& rCallback,
-        void* pUserData);
+    class Deleter { public:
+        void operator() (Implementation* pObject) { delete pObject; }
+    };
+    friend class Deleter;
 
-    SdPage* GetPageObjectForToken (
-        MasterPageContainer::Token aToken,
-        bool bLoad);
-    SdPage* GetSlideForToken (
-        MasterPageContainer::Token aToken,
-        bool bLoad);
-    SdPage* CopyMasterPageToLocalDocument (SdPage* pMasterPage);
-    Token PutMasterPage (
-        const String& sURL,
-        const String& sPageName,
-        const String& sStyleName,
-        SdPage* pMasterPage,
-        Image aPreview);
-    Image GetPreviewForToken (
-        Token aToken,
-        int nWidth);
-    Image GetPreviewForToken (
-        Token aToken,
-        int nWidth,
-        const Link& rCallback,
-        void* pUserData);
-    void RemoveCallback (const Link& rCallback);
-    Image GetPreviewForPage (
-        SdPage* pPage,
-        int nWidth);
+    enum InitializationState { NOT_INITIALIZED, INITIALIZING, INITIALIZED } meInitializationState;
 
-private:
-    Timer maDelayedPreviewCreationTimer;
-
-    /** Use a vector for the queue so that we can iterate over all
-        elements and remove those that became invalid.
-    */
-    typedef ::std::queue<PreviewCreationRequest> RequestQueue;
-    RequestQueue maRequestQueue;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel> mxModel;
+    ::boost::scoped_ptr<MasterPageContainerQueue> mpRequestQueue;
+    ::com::sun::star::uno::Reference<com::sun::star::frame::XModel> mxModel;
     SdDrawDocument* mpDocument;
     PreviewRenderer maPreviewRenderer;
+    /** Remember whether the first page object has already been used to
+        determine the correct size ratio.
+    */
+    bool mbFirstPageObjectSeen;
 
-    /// The time to wait (in milliseconds) between the creation of previews.
-    static const int DELAYED_CREATION_TIMEOUT=250;
-    /// The time to wait when the system is not idle.
-    static const int DELAYED_CREATION_TIMEOUT_WHEN_NOT_IDLE=1000;
+    // The widths for the previews contain two pixels for the border that is
+    // painted arround the preview.
+    static const int SMALL_PREVIEW_WIDTH = 72 + 2;
+    static const int LARGE_PREVIEW_WIDTH = 2*72 + 2;
 
     /** This substition of page preview shows "Preparing preview" and is
         shown as long as the actual previews are not being present.
     */
-    Image maPreviewBeingCreated;
+    Image maLargePreviewBeingCreated;
+    Image maSmallPreviewBeingCreated;
 
     /** This substition of page preview is shown when a preview can not be
         created and thus is not available.
     */
-    Image maPreviewNotAvailable;
+    Image maLargePreviewNotAvailable;
+    Image maSmallPreviewNotAvailable;
 
-    DECL_LINK(DelayedPreviewCreation, Timer *);
+    ::std::vector<Link> maChangeListeners;
+
+    // We have to remember the tasks for initialization and filling in case
+    // a MasterPageContainer object is destroyed before these tasks have
+    // been completed.
+    ::boost::weak_ptr<sd::tools::TimerBasedTaskExecution> mpFillerTask;
+
+    Size maSmallPreviewSizePixel;
+    Size maLargePreviewSizePixel;
+    bool mbPageRatioKnown;
+
+    bool mbContainerCleaningPending;
+
+    typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
+    DECL_LINK(AsynchronousNotifyCallback, EventData*);
     ::sd::DrawDocShell* LoadDocument (
         const String& sFileName,
         SfxObjectShellLock& rxDocumentShell);
-    SdPage* AddMasterPage (
-        SdDrawDocument* pTargetDocument,
-        SdPage* pMasterPage);
-    void ProvideStyles (
-        SdDrawDocument* pSourceDocument,
-        SdDrawDocument* pTargetDocument,
-        SdPage* pPage);
-    SdPage* GetSlideForMasterPage (SdPage* pMasterPage);
 
-    /** Retrieve the preview of the document specified by the given URL.
-    */
-    BitmapEx LoadPreviewFromURL (const ::rtl::OUString& aURL);
+    Image GetPreviewSubstitution (USHORT nId, PreviewSize ePreviewSize);
 
-    /** Fetch previews of the master pages of all relevant templates,
-        styles, and layouts and put them in the container.
-    */
-    void FillContainer (void);
-
-    /** This function is used by FillContainer() to add the master page of
-        one of the templates.  It tries to load the thumbnail bitmap from
-        the file.  If that is not present the preview remains empty save a
-        short text indicating what happened.
-    */
-    void AddTemplate (
-        const String& rsPath,
-        const String& rsTitle);
-
-    /** Also used by FillContainer() to filter out those templates among
-        those provided by the ucb that can be handled by us, i.e. Impress
-        templates, layouts, styles.
-        @param rsFileName
-            The full file name, possibly a URL, that is used to recognize
-            whether a template can be handled by this class.
-    */
-    bool FileFilter (const String& rsFileName);
+    void CleanContainer (void);
 };
 
 
@@ -365,46 +242,55 @@ private:
 
 //===== MasterPageContainer ===================================================
 
-MasterPageContainer* MasterPageContainer::Implementation::mpInstance = NULL;
+::boost::weak_ptr<MasterPageContainer::Implementation>
+    MasterPageContainer::Implementation::mpInstance;
 static const MasterPageContainer::Token NIL_TOKEN (-1);
 
-MasterPageContainer& MasterPageContainer::Instance (void)
+
+
+
+::boost::shared_ptr<MasterPageContainer::Implementation>
+    MasterPageContainer::Implementation::Instance (void)
 {
-    if (Implementation::mpInstance == NULL)
+    ::boost::shared_ptr<MasterPageContainer::Implementation> pInstance;
+
+    if (Implementation::mpInstance.expired())
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (Implementation::mpInstance == NULL)
+        if (Implementation::mpInstance.expired())
         {
-            MasterPageContainer* pInstance = new MasterPageContainer ();
-            pInstance->LateInit();
-            SdGlobalResourceContainer::Instance().AddResource (
-                ::std::auto_ptr<SdGlobalResource>(pInstance));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+                new MasterPageContainer::Implementation(),
+                MasterPageContainer::Implementation::Deleter());
+            SdGlobalResourceContainer::Instance().AddResource(pInstance);
             Implementation::mpInstance = pInstance;
         }
+        else
+            pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+                Implementation::mpInstance);
     }
     else
+    {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+            Implementation::mpInstance);
+    }
 
-    DBG_ASSERT (Implementation::mpInstance!=NULL,
-        "MasterPageContainer::Instance(): instance is NULL");
-    return *Implementation::mpInstance;
+    DBG_ASSERT (pInstance.get()!=NULL,
+        "MasterPageContainer::Implementation::Instance(): instance is NULL");
+    return pInstance;
 }
 
 
 
 
 MasterPageContainer::MasterPageContainer (void)
-    : mpImpl(new Implementation())
+    : mpImpl(Implementation::Instance()),
+      mePreviewSize(SMALL)
 {
-}
-
-
-
-
-void MasterPageContainer::LateInit (void)
-{
+    mpImpl->LateInit(*this);
 }
 
 
@@ -417,27 +303,112 @@ MasterPageContainer::~MasterPageContainer (void)
 
 
 
-MasterPageContainer::Token MasterPageContainer::PutMasterPage (
-    const String& sURL,
-    const String& sPageName,
-    const String& sStyleName,
-    SdPage* pMasterPage,
-    Image aPreview)
+void MasterPageContainer::AddChangeListener (const Link& rLink)
 {
-    return mpImpl->PutMasterPage (
-        sURL,
-        sPageName,
-        sStyleName,
-        pMasterPage,
-        aPreview);
+    mpImpl->AddChangeListener(rLink);
 }
 
 
 
 
-int MasterPageContainer::GetTokenCount (void)
+void MasterPageContainer::RemoveChangeListener (const Link& rLink)
 {
+    mpImpl->RemoveChangeListener(rLink);
+}
+
+
+
+
+void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
+{
+    mePreviewSize = eSize;
+    mpImpl->FireContainerChange(
+        MasterPageContainerChangeEvent::SIZE_CHANGED,
+        NIL_TOKEN);
+}
+
+
+
+
+MasterPageContainer::PreviewSize MasterPageContainer::GetPreviewSize (void) const
+{
+    return mePreviewSize;
+}
+
+
+
+
+Size MasterPageContainer::GetPreviewSizePixel (void) const
+{
+    return mpImpl->GetPreviewSizePixel(mePreviewSize);
+}
+
+
+
+
+MasterPageContainer::Token MasterPageContainer::PutMasterPage (
+    const SharedMasterPageDescriptor& rDescriptor)
+{
+    return mpImpl->PutMasterPage(rDescriptor);
+}
+
+
+
+
+void MasterPageContainer::AcquireToken (Token aToken)
+{
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+    {
+        ++pDescriptor->mnUseCount;
+    }
+}
+
+
+
+
+void MasterPageContainer::ReleaseToken (Token aToken)
+{
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+    {
+        OSL_ASSERT(pDescriptor->mnUseCount>0);
+        --pDescriptor->mnUseCount;
+        if (pDescriptor->mnUseCount <= 0)
+        {
+            switch (pDescriptor->meOrigin)
+            {
+                case DEFAULT:
+                case TEMPLATE:
+                default:
+                    break;
+
+                case MASTERPAGE:
+                    mpImpl->ReleaseDescriptor(aToken);
+                    break;
+            }
+        }
+    }
+}
+
+
+
+
+int MasterPageContainer::GetTokenCount (void) const
+{
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     return mpImpl->maContainer.size();
+}
+
+
+
+
+bool MasterPageContainer::HasToken (Token aToken) const
+{
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    return mpImpl->HasToken(aToken);
 }
 
 
@@ -445,9 +416,11 @@ int MasterPageContainer::GetTokenCount (void)
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForIndex (int nIndex)
 {
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     Token aResult (NIL_TOKEN);
-    if (nIndex>=0 && nIndex<GetTokenCount())
-        aResult = mpImpl->maContainer[nIndex].maToken;
+    if (HasToken(nIndex))
+        aResult = mpImpl->maContainer[nIndex]->maToken;
     return aResult;
 }
 
@@ -457,16 +430,18 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForIndex (int nIndex)
 MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
     const String& sURL)
 {
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     Token aResult (NIL_TOKEN);
     if (sURL.Len() > 0)
     {
-        MasterPageContainerType::iterator aEntry (
+        MasterPageContainerType::iterator iEntry (
             ::std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
-                URLComparator(sURL)));
-        if (aEntry != mpImpl->maContainer.end())
-            aResult = aEntry->maToken;
+                MasterPageDescriptor::URLComparator(sURL)));
+        if (iEntry != mpImpl->maContainer.end())
+            aResult = (*iEntry)->maToken;
     }
     return aResult;
 }
@@ -477,16 +452,18 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
 MasterPageContainer::Token MasterPageContainer::GetTokenForPageName (
     const String& sPageName)
 {
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     Token aResult (NIL_TOKEN);
     if (sPageName.Len() > 0)
     {
-        MasterPageContainerType::iterator aEntry (
+        MasterPageContainerType::iterator iEntry (
             ::std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
-                PageNameComparator(sPageName)));
-        if (aEntry != mpImpl->maContainer.end())
-            return aEntry->maToken;
+                MasterPageDescriptor::PageNameComparator(sPageName)));
+        if (iEntry != mpImpl->maContainer.end())
+            aResult = (*iEntry)->maToken;
     }
     return aResult;
 }
@@ -496,16 +473,18 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageName (
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const String& sStyleName)
 {
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     Token aResult (NIL_TOKEN);
     if (sStyleName.Len() > 0)
     {
-        MasterPageContainerType::iterator aEntry (
+        MasterPageContainerType::iterator iEntry (
             ::std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
-                StyleNameComparator(sStyleName)));
-        if (aEntry != mpImpl->maContainer.end())
-            return aEntry->maToken;
+                MasterPageDescriptor::StyleNameComparator(sStyleName)));
+        if (iEntry != mpImpl->maContainer.end())
+            aResult = (*iEntry)->maToken;
     }
     return aResult;
 }
@@ -516,16 +495,18 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const Stri
 MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     const SdPage* pPage)
 {
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
     Token aResult (NIL_TOKEN);
     if (pPage != NULL)
     {
-        MasterPageContainerType::iterator aEntry (
+        MasterPageContainerType::iterator iEntry (
             ::std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
-                PageObjectComparator(pPage)));
-        if (aEntry != mpImpl->maContainer.end())
-            return aEntry->maToken;
+                MasterPageDescriptor::PageObjectComparator(pPage)));
+        if (iEntry != mpImpl->maContainer.end())
+            aResult = (*iEntry)->maToken;
     }
     return aResult;
 }
@@ -536,8 +517,11 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
 String MasterPageContainer::GetURLForToken (
     MasterPageContainer::Token aToken)
 {
-    if (aToken>=0 && (unsigned)aToken<mpImpl->maContainer.size())
-        return mpImpl->maContainer[aToken].msURL;
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return pDescriptor->msURL;
     else
         return String();
 }
@@ -548,8 +532,11 @@ String MasterPageContainer::GetURLForToken (
 String MasterPageContainer::GetPageNameForToken (
     MasterPageContainer::Token aToken)
 {
-    if (aToken>=0 && (unsigned)aToken<mpImpl->maContainer.size())
-        return mpImpl->maContainer[aToken].msPageName;
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return pDescriptor->msPageName;
     else
         return String();
 }
@@ -560,8 +547,11 @@ String MasterPageContainer::GetPageNameForToken (
 String MasterPageContainer::GetStyleNameForToken (
     MasterPageContainer::Token aToken)
 {
-    if (aToken>=0 && (unsigned)aToken<mpImpl->maContainer.size())
-        return mpImpl->maContainer[aToken].msStyleName;
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return pDescriptor->msStyleName;
     else
         return String();
 }
@@ -573,7 +563,70 @@ SdPage* MasterPageContainer::GetPageObjectForToken (
     MasterPageContainer::Token aToken,
     bool bLoad)
 {
-    return mpImpl->GetPageObjectForToken (aToken, bLoad);
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SdPage* pPageObject = NULL;
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+    {
+        pPageObject = pDescriptor->mpMasterPage;
+        if (pPageObject == NULL)
+        {
+            // The page object is not (yet) present.  Call
+            // UpdateDescriptor() to trigger the PageObjectProvider() to
+            // provide it.
+            if (bLoad)
+                mpImpl->GetModel();
+            if (mpImpl->UpdateDescriptor(pDescriptor,bLoad,false, true))
+                pPageObject = pDescriptor->mpMasterPage;
+        }
+    }
+    return pPageObject;
+}
+
+
+
+
+MasterPageContainer::Origin MasterPageContainer::GetOriginForToken (Token aToken)
+{
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return pDescriptor->meOrigin;
+    else
+        return UNKNOWN;
+}
+
+
+
+
+sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
+{
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return pDescriptor->mnTemplateIndex;
+    else
+        return -1;
+}
+
+
+
+
+void MasterPageContainer::SetPreviewProviderForToken (
+    Token aToken,
+    const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider)
+{
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get()!=NULL)
+    {
+        pDescriptor->mpPreviewProvider = rpPreviewProvider;
+        mpImpl->InvalidatePreview(aToken);
+    }
 }
 
 
@@ -583,51 +636,75 @@ SdPage* MasterPageContainer::GetSlideForToken (
     MasterPageContainer::Token aToken,
     bool bLoad)
 {
-    return mpImpl->GetSlideForToken (aToken, bLoad);
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    SdPage* pSlide = NULL;
+    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+    {
+        pSlide = pDescriptor->mpSlide;
+        if (pSlide==NULL && bLoad)
+        {
+            GetPageObjectForToken(aToken, bLoad);
+            pSlide = pDescriptor->mpSlide;
+        }
+    }
+    return pSlide;
 }
 
 
 
 
-Image MasterPageContainer::GetPreviewForToken (
-    MasterPageContainer::Token aToken,
-    int nWidth)
+SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
+    MasterPageContainer::Token aToken)
 {
-    return mpImpl->GetPreviewForToken (aToken, nWidth);
+    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    return mpImpl->GetDescriptor(aToken);
 }
 
 
 
 
-Image MasterPageContainer::GetPreviewForToken (
-    MasterPageContainer::Token aToken,
-    int nWidth,
-    const Link& rCallback,
-    void* pUserData)
+bool MasterPageContainer::UpdateDescriptor (
+    const SharedMasterPageDescriptor& rpDescriptor,
+    bool bForcePageObject,
+    bool bForcePreview,
+    bool bSendEvents)
 {
-    return mpImpl->GetPreviewForToken (
-            aToken,
-            nWidth,
-            rCallback,
-            pUserData);
+    return mpImpl->UpdateDescriptor(rpDescriptor, bForcePageObject, bForcePreview, bSendEvents);
 }
 
 
 
 
-Image MasterPageContainer::GetPreviewForPage (
-    SdPage* pPage,
-    int nWidth)
+void MasterPageContainer::InvalidatePreview (MasterPageContainer::Token aToken)
 {
-    return mpImpl->GetPreviewForPage(pPage, nWidth);
+    mpImpl->InvalidatePreview(aToken);
 }
 
 
 
 
-void MasterPageContainer::RemoveCallback (const Link& rCallback)
+Image MasterPageContainer::GetPreviewForToken (MasterPageContainer::Token aToken)
 {
-    mpImpl->RemoveCallback (rCallback);
+    return mpImpl->GetPreviewForToken(aToken,mePreviewSize);
+}
+
+
+
+
+MasterPageContainer::PreviewState MasterPageContainer::GetPreviewState (Token aToken)
+{
+    return mpImpl->GetPreviewState(aToken);
+}
+
+
+
+
+bool MasterPageContainer::RequestPreview (Token aToken)
+{
+    return mpImpl->RequestPreview(aToken);
 }
 
 
@@ -636,19 +713,403 @@ void MasterPageContainer::RemoveCallback (const Link& rCallback)
 //==== Implementation ================================================
 
 MasterPageContainer::Implementation::Implementation (void)
-    : maContainer(),
-      maDelayedPreviewCreationTimer(),
-      maRequestQueue(),
+    : maMutex(),
+      maContainer(),
+      meInitializationState(NOT_INITIALIZED),
+      mpRequestQueue(NULL),
       mxModel(NULL),
       mpDocument(NULL),
       maPreviewRenderer(),
-      maPreviewBeingCreated(),
-      maPreviewNotAvailable()
+      mbFirstPageObjectSeen(false),
+      maSmallPreviewBeingCreated(),
+      maLargePreviewBeingCreated(),
+      maSmallPreviewNotAvailable(),
+      maLargePreviewNotAvailable(),
+      maChangeListeners(),
+      maSmallPreviewSizePixel(),
+      maLargePreviewSizePixel(),
+      mbPageRatioKnown(false),
+      mbContainerCleaningPending(true)
 {
-    try
-    {
-        // Use the API to create a new document.
+    UpdatePreviewSizePixel();
+}
 
+
+
+
+MasterPageContainer::Implementation::~Implementation (void)
+{
+    // When the initializer or filler tasks are still running then we have
+    // to stop them now in order to prevent them from calling us back.
+    tools::TimerBasedTaskExecution::ReleaseTask(mpFillerTask);
+
+    mpRequestQueue.reset();
+
+    uno::Reference<util::XCloseable> xCloseable (mxModel, uno::UNO_QUERY);
+    if (xCloseable.is())
+    {
+        try
+        {
+            xCloseable->close(true);
+        }
+        catch (::com::sun::star::util::CloseVetoException aException)
+        {
+        }
+    }
+    mxModel = NULL;
+}
+
+
+
+
+void MasterPageContainer::Implementation::LateInit (MasterPageContainer& rContainer)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    if (meInitializationState == NOT_INITIALIZED)
+    {
+        meInitializationState = INITIALIZING;
+
+        mpRequestQueue.reset(MasterPageContainerQueue::Create(rContainer));
+
+        mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
+            ::boost::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
+            5,
+            50);
+
+        meInitializationState = INITIALIZED;
+    }
+}
+
+
+
+
+void MasterPageContainer::Implementation::AddChangeListener (const Link& rLink)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    ::std::vector<Link>::iterator iListener (
+        ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
+    if (iListener == maChangeListeners.end())
+        maChangeListeners.push_back(rLink);
+
+}
+
+
+
+
+void MasterPageContainer::Implementation::RemoveChangeListener (const Link& rLink)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    ::std::vector<Link>::iterator iListener (
+        ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
+    if (iListener != maChangeListeners.end())
+        maChangeListeners.erase(iListener);
+}
+
+
+
+
+void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    // The default aspect ratio is 4:3
+    int nWidth (4);
+    int nHeight (3);
+
+    // Search for the first entry with an existing master page.
+    MasterPageContainerType::const_iterator iDescriptor;
+    MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
+    for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
+        if ((*iDescriptor)->mpMasterPage != NULL)
+        {
+            Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
+            nWidth = aPageSize.Width();
+            nHeight = aPageSize.Height();
+            mbFirstPageObjectSeen = true;
+            break;
+        }
+
+    maSmallPreviewSizePixel.Width() = SMALL_PREVIEW_WIDTH;
+    maLargePreviewSizePixel.Width() = LARGE_PREVIEW_WIDTH;
+
+    int nNewSmallHeight ((maSmallPreviewSizePixel.Width()-2) * nHeight / nWidth + 2);
+    int nNewLargeHeight ((maLargePreviewSizePixel.Width()-2) * nHeight / nWidth + 2);
+
+    if (nNewSmallHeight!=maSmallPreviewSizePixel.Height()
+        || nNewLargeHeight!=maLargePreviewSizePixel.Height())
+    {
+        maSmallPreviewSizePixel.Height() = nNewSmallHeight;
+        maLargePreviewSizePixel.Height() = nNewLargeHeight;
+        FireContainerChange(
+            MasterPageContainerChangeEvent::SIZE_CHANGED,
+            NIL_TOKEN);
+    }
+}
+
+
+
+
+Size MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize) const
+{
+    if (eSize == SMALL)
+        return maSmallPreviewSizePixel;
+    else
+        return maLargePreviewSizePixel;
+}
+
+
+
+
+IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventData*, pData)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    if (pData != NULL)
+    {
+        FireContainerChange(pData->first, pData->second, false);
+        delete pData;
+    }
+
+    return 0;
+}
+
+
+
+
+MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
+    const SharedMasterPageDescriptor& rpDescriptor)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    Token aResult (NIL_TOKEN);
+
+    // Get page object and preview when that is inexpensive.
+    UpdateDescriptor(rpDescriptor,false,false, false);
+
+    // Look up the new MasterPageDescriptor and either insert it or update
+    // an already existing one.
+    MasterPageContainerType::iterator aEntry (
+        ::std::find_if (
+            maContainer.begin(),
+            maContainer.end(),
+            MasterPageDescriptor::AllComparator(rpDescriptor)));
+    if (aEntry == maContainer.end())
+    {
+        // Insert a new MasterPageDescriptor.
+        bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==NULL
+            && rpDescriptor->msURL.getLength()==0);
+
+        if ( ! bIgnore)
+        {
+            if (mbContainerCleaningPending)
+                CleanContainer();
+
+            aResult = maContainer.size();
+            rpDescriptor->SetToken(aResult);
+
+            // Templates are precious, i.e. we lock them so that they will
+            // not be destroyed when (temporarily) no one references them.
+            // They will only be deleted when the container is destroyed.
+            switch (rpDescriptor->meOrigin)
+            {
+                case TEMPLATE:
+                case DEFAULT:
+                    ++rpDescriptor->mnUseCount;
+                    break;
+            }
+
+            maContainer.push_back(rpDescriptor);
+            aEntry = maContainer.end()-1;
+
+            FireContainerChange(MasterPageContainerChangeEvent::CHILD_ADDED,aResult);
+        }
+    }
+    else
+    {
+        // Update an existing MasterPageDescriptor.
+        aResult = (*aEntry)->maToken;
+        ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
+            (*aEntry)->Update(*rpDescriptor));
+        if (pEventTypes.get()!=NULL && pEventTypes->size()>0)
+        {
+            // One or more aspects of the descriptor have changed.  Send
+            // appropriate events to the listeners.
+            UpdateDescriptor(*aEntry,false,false, true);
+
+            std::vector<MasterPageContainerChangeEvent::EventType>::const_iterator iEventType;
+            for (iEventType=pEventTypes->begin(); iEventType!=pEventTypes->end(); ++iEventType)
+            {
+                FireContainerChange(
+                    *iEventType,
+                    (*aEntry)->maToken,
+                    false);
+            }
+        }
+    }
+
+    return aResult;
+}
+
+
+
+
+bool MasterPageContainer::Implementation::HasToken (Token aToken) const
+{
+    return aToken>=0
+        && (unsigned)aToken<maContainer.size()
+        && maContainer[aToken].get()!=NULL;
+}
+
+
+
+
+const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (
+    Token aToken) const
+{
+    if (aToken>=0 && (unsigned)aToken<maContainer.size())
+        return maContainer[aToken];
+    else
+        return SharedMasterPageDescriptor();
+}
+
+
+
+
+SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken)
+{
+    if (aToken>=0 && (unsigned)aToken<maContainer.size())
+        return maContainer[aToken];
+    else
+        return SharedMasterPageDescriptor();
+}
+
+
+
+
+void MasterPageContainer::Implementation::InvalidatePreview (Token aToken)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    SharedMasterPageDescriptor pDescriptor (GetDescriptor(aToken));
+    if (pDescriptor.get() != NULL)
+    {
+        pDescriptor->maSmallPreview = Image();
+        pDescriptor->maLargePreview = Image();
+        RequestPreview(aToken);
+    }
+}
+
+
+
+
+Image MasterPageContainer::Implementation::GetPreviewForToken (
+    MasterPageContainer::Token aToken,
+    PreviewSize ePreviewSize)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    Image aPreview;
+    PreviewState ePreviewState (GetPreviewState(aToken));
+
+    SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
+
+    // When the preview is missing but inexpensively creatable then do that
+    // now.
+    if (pDescriptor.get()!=NULL)
+    {
+        if (ePreviewState == PS_CREATABLE)
+            if (UpdateDescriptor(pDescriptor, false,false, true))
+                if (pDescriptor->maLargePreview.GetSizePixel().Width() != 0)
+                    ePreviewState = PS_AVAILABLE;
+
+        switch (ePreviewState)
+        {
+            case PS_AVAILABLE:
+                aPreview = pDescriptor->GetPreview(ePreviewSize);
+                break;
+
+            case PS_PREPARING:
+                aPreview = GetPreviewSubstitution(
+                    STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION,
+                    ePreviewSize);
+                break;
+
+            case PS_CREATABLE:
+                aPreview = GetPreviewSubstitution(
+                    STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION,
+                    ePreviewSize);
+                break;
+
+            case PS_NOT_AVAILABLE:
+                aPreview = GetPreviewSubstitution(
+                    STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION,
+                    ePreviewSize);
+                if (ePreviewSize == SMALL)
+                    pDescriptor->maSmallPreview = aPreview;
+                else
+                    pDescriptor->maLargePreview = aPreview;
+                break;
+        }
+    }
+
+    return aPreview;
+}
+
+
+
+
+MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPreviewState (
+    Token aToken) const
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    PreviewState eState (PS_NOT_AVAILABLE);
+
+    SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+    {
+        if (pDescriptor->maLargePreview.GetSizePixel().Width() != 0)
+            eState = PS_AVAILABLE;
+        else if (pDescriptor->mpPreviewProvider.get() != NULL)
+        {
+            // The preview does not exist but can be created.  When that is
+            // not expensive then do it at once.
+            if (mpRequestQueue->HasRequest(aToken))
+                eState = PS_PREPARING;
+            else
+                eState = PS_CREATABLE;
+        }
+        else
+            eState = PS_NOT_AVAILABLE;
+    }
+
+    return eState;
+}
+
+
+
+
+bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
+{
+    SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
+    if (pDescriptor.get() != NULL)
+        return mpRequestQueue->RequestPreview(pDescriptor);
+    else
+        return false;
+}
+
+
+
+
+Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    if ( ! mxModel.is())
+    {
         // Get the desktop a s service factory.
         ::rtl::OUString sDesktopServiceName (
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
@@ -666,7 +1127,7 @@ MasterPageContainer::Implementation::Implementation (void)
                 sModelServiceName),
             uno::UNO_QUERY);
 
-        // Initialize it.
+        // Initialize the model.
         uno::Reference<frame::XLoadable> xLoadable (mxModel,uno::UNO_QUERY);
         if (xLoadable.is())
             xLoadable->initNew();
@@ -680,539 +1141,78 @@ MasterPageContainer::Implementation::Implementation (void)
                     SdXImpressDocument::getUnoTunnelId()))->GetDoc();
         }
 
-        // Create slides that are used to render previews of empty pages.
-        uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
-            mxModel, uno::UNO_QUERY);
+        // Create a default page.
+        uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (mxModel, uno::UNO_QUERY);
         if (xSlideSupplier.is())
         {
             uno::Reference<drawing::XDrawPages> xSlides (
                 xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
             if (xSlides.is())
             {
-                xSlides->insertNewByIndex (0);
-                xSlides->insertNewByIndex (1);
+                sal_Int32 nIndex (0);
+                uno::Reference<drawing::XDrawPage> xNewPage (xSlides->insertNewByIndex(nIndex));
+                uno::Reference<beans::XPropertySet> xProperties(xNewPage, uno::UNO_QUERY);
+                if (xProperties.is())
+                    xProperties->setPropertyValue(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")),
+                        makeAny((sal_Int16)AUTOLAYOUT_TITLE));
             }
         }
     }
-    catch (...)
-    {
-        mxModel = NULL;
-        mpDocument = NULL;
-    }
-
-    // Set up the timer for the delayed creation of preview bitmaps.
-    maDelayedPreviewCreationTimer.SetTimeout (DELAYED_CREATION_TIMEOUT);
-    maDelayedPreviewCreationTimer.SetTimeoutHdl (
-        LINK(this,Implementation,DelayedPreviewCreation));
-
-    FillContainer();
+    return mxModel;
 }
 
 
 
 
-MasterPageContainer::Implementation::~Implementation (void)
+SdDrawDocument* MasterPageContainer::Implementation::GetDocument (void)
 {
-    maDelayedPreviewCreationTimer.Stop();
-    while ( ! maRequestQueue.empty())
-        maRequestQueue.pop();
-
-   uno::Reference<util::XCloseable> xCloseable (mxModel, uno::UNO_QUERY);
-    if (xCloseable.is())
-    {
-        try
-        {
-            xCloseable->close(true);
-        }
-        catch (::com::sun::star::util::CloseVetoException aException)
-        {
-        }
-    }
-    mxModel = NULL;
+    GetModel();
+    return mpDocument;
 }
 
 
 
 
-void MasterPageContainer::Implementation::AddPreviewCreationRequest (
-    ::sd::toolpanel::controls::MasterPageContainer::Token aToken,
-    int nWidth,
-    const Link& rCallback,
-    void* pUserData)
+Image MasterPageContainer::Implementation::GetPreviewSubstitution (
+    USHORT nId,
+    PreviewSize ePreviewSize)
 {
-    maRequestQueue.push (PreviewCreationRequest(
-        aToken, nWidth, rCallback, pUserData));
-    maDelayedPreviewCreationTimer.Start();
-}
+    const ::osl::MutexGuard aGuard (maMutex);
 
-
-
-
-IMPL_LINK(MasterPageContainer::Implementation,
-    DelayedPreviewCreation,
-    Timer*, pTimer)
-{
-    bool bIsShowingFullScreenShow (true);
-
-    while (maRequestQueue.size() > 0)
-    {
-        // First check whether the system is idle.
-        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
-        if (nIdleState != tools::IdleDetection::IDET_IDLE)
-        {
-            if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)
-                bIsShowingFullScreenShow = true;
-            break;
-        }
-
-        PreviewCreationRequest aRequest (maRequestQueue.front());
-        maRequestQueue.pop();
-
-        if (aRequest.maToken>=0
-            && (unsigned)aRequest.maToken<maContainer.size())
-        {
-            String sURL (maContainer[aRequest.maToken].msURL);
-            // Store bitmap in original size so that both preview sizes have
-            // access to the full resolution.
-            // #i42576# read from file only if preview not avilable yet
-            if ( maContainer[aRequest.maToken].maPreview.GetSizePixel().Width() == 0 )
-                maContainer[aRequest.maToken].maPreview = LoadPreviewFromURL (sURL);
-            aRequest.maCallback.Call (aRequest.mpUserData);
-        }
-    }
-
-    if (maRequestQueue.size() > 0)
-    {
-        if (bIsShowingFullScreenShow)
-            maDelayedPreviewCreationTimer.SetTimeout (DELAYED_CREATION_TIMEOUT_WHEN_NOT_IDLE);
-        else
-            maDelayedPreviewCreationTimer.SetTimeout (DELAYED_CREATION_TIMEOUT);
-        pTimer->Start();
-    }
-
-    return 0;
-}
-
-
-
-
-MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
-    const String& sURL,
-    const String& sPageName,
-    const String& sStyleName,
-    SdPage* pMasterPage,
-    Image aPreview)
-{
-    Token aResult (NIL_TOKEN);
-
-    MasterPageContainerType::iterator aEntry (
-        ::std::find_if (
-            maContainer.begin(),
-            maContainer.end(),
-            AllComparator(sURL,sPageName,sStyleName,pMasterPage)));
-    if (aEntry == maContainer.end())
-    {
-        bool bIgnore = false;
-        SdPage* pLocalMasterPage = NULL;
-        SdPage* pLocalSlide = NULL;
-        if (pMasterPage != NULL)
-        {
-            // When a master page is given then copy it to the local document.
-            pLocalMasterPage = CopyMasterPageToLocalDocument (pMasterPage);
-            pLocalSlide = GetSlideForMasterPage(pLocalMasterPage);
-            bIgnore = (pLocalMasterPage==NULL || pLocalSlide==NULL);
-        }
-        else
-            // When no master page is given then at least the URL has to be
-            // there.
-            bIgnore = (sURL.Len() == 0);
-
-        if ( ! bIgnore)
-        {
-            aResult = maContainer.size();
-            maContainer.push_back (MasterPageDescriptor (
-                sURL,
-                sPageName,
-                sStyleName,
-                pLocalMasterPage,
-                pLocalSlide,
-                aPreview,
-                aResult));
-        }
-    }
-    else
-    {
-        // Update the existing entry.
-        if (aEntry->msURL.Len() == 0)
-            aEntry->msURL = sURL;
-        if (aEntry->msPageName.Len() == 0)
-            aEntry->msPageName = sPageName;
-        if (aEntry->msStyleName.Len() == 0)
-            aEntry->msStyleName = sStyleName;
-        if (aEntry->mpMasterPage == NULL)
-            aEntry->mpMasterPage = pMasterPage;
-        Size aImageSize (aEntry->maPreview.GetSizePixel());
-        if (aImageSize.Width()<=0 || aImageSize.Height()<=0)
-            aEntry->maPreview = aPreview;
-        aResult = aEntry->maToken;
-    }
-
-    return aResult;
-}
-
-
-
-
-SdPage* MasterPageContainer::Implementation::GetPageObjectForToken (
-    MasterPageContainer::Token aToken,
-    bool bLoad)
-{
-    SdPage* pPageObject = NULL;
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
-    {
-        pPageObject = maContainer[aToken].mpMasterPage;
-
-        if (pPageObject == NULL && bLoad)
-        {
-            SfxObjectShellLock xDocumentShell (NULL);
-            ::sd::DrawDocShell* pDocumentShell = NULL;
-            try
-            {
-                pDocumentShell = LoadDocument (
-                    maContainer[aToken].msURL,
-                    xDocumentShell);
-                if (pDocumentShell != NULL)
-                {
-                    SdDrawDocument* pDocument = pDocumentShell->GetDoc();
-                    SdPage* pPage = pDocument->GetMasterSdPage(0, PK_STANDARD);
-                    pPageObject = CopyMasterPageToLocalDocument (pPage);
-                    maContainer[aToken].mpMasterPage = pPageObject;
-                    maContainer[aToken].mpSlide
-                        = GetSlideForMasterPage(pPageObject);
-                    maContainer[aToken].msStyleName = pPageObject->GetName();
-                    // Delete an existing substitution. The next request for
-                    // a preview will create the real one.
-                    maContainer[aToken].maPreview = Image();
-                    //AF delete pDocumentShell;
-                }
-            }
-            catch (...)
-            {
-                pPageObject = NULL;
-                OSL_TRACE ("caught general exception");
-            }
-        }
-    }
-    return pPageObject;
-}
-
-
-
-
-SdPage* MasterPageContainer::Implementation::GetSlideForToken (
-    Token aToken,
-    bool bLoad=true)
-{
-    SdPage* pSlide = NULL;
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
-        pSlide = maContainer[aToken].mpSlide;
-
-    if (pSlide==NULL && bLoad)
-    {
-        GetPageObjectForToken (aToken, bLoad);
-        pSlide = maContainer[aToken].mpSlide;
-    }
-
-    return pSlide;
-}
-
-
-
-
-DrawDocShell* MasterPageContainer::Implementation::LoadDocument (
-    const String& sFileName,
-    SfxObjectShellLock& rxDocumentShell)
-{
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
-    pSet->Put (SfxBoolItem (SID_TEMPLATE, TRUE));
-    pSet->Put (SfxBoolItem (SID_PREVIEW, TRUE));
-    if (pSfxApp->LoadTemplate (rxDocumentShell, sFileName, TRUE, pSet))
-    {
-        rxDocumentShell = NULL;
-    }
-    SfxObjectShell* pShell = rxDocumentShell;
-    return PTR_CAST(DrawDocShell,pShell);
-}
-
-
-
-
-SdPage* MasterPageContainer::Implementation::CopyMasterPageToLocalDocument (
-    SdPage* pMasterPage)
-{
-    SdPage* pNewMasterPage = NULL;
-
-    do
-    {
-        if (pMasterPage == NULL)
-            break;
-
-        // Check the presence of the target document.
-        if (mpDocument == NULL)
-            break;
-        // Check the presence of the source document.
-        SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(
-            pMasterPage->GetModel());
-        if (pSourceDocument == NULL)
-            break;
-
-        // Test if the master pages of both the slide and its notes page are
-        // present.  This is not the case when we are called during the
-        // creation of the slide master page because then the notes master
-        // page is not there.
-        USHORT nSourceMasterPageCount = pSourceDocument->GetMasterPageCount();
-        if (nSourceMasterPageCount%2 == 0)
-            // There should be 1 handout page + n slide masters + n notes
-            // masters = 2*n+1.  An even value indicates that a new slide
-            // master but not yet the notes master has been inserted.
-            break;
-        USHORT nIndex = pMasterPage->GetPageNum();
-        if (nSourceMasterPageCount <= nIndex+1)
-            break;
-        // Get the slide master page.
-        if (pMasterPage != static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(nIndex)))
-            break;
-        // Get the notes master page.
-        SdPage* pNotesMasterPage = static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(nIndex+1));
-        if (pNotesMasterPage == NULL)
-            break;
-
-
-        // Check if a master page with the same name as that of the given
-        // master page already exists.
-        bool bPageExists (false);
-        USHORT nMasterPageCount(mpDocument->GetMasterSdPageCount(PK_STANDARD));
-        for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
-        {
-            SdPage* pCandidate = static_cast<SdPage*>(
-                mpDocument->GetMasterSdPage (nIndex, PK_STANDARD));
-            if (pMasterPage!=NULL
-                && pCandidate->GetName().CompareTo(pMasterPage->GetName())==0)
-            {
-                bPageExists = true;
-                pNewMasterPage = pCandidate;
-                break;
-            }
-        }
-        if (bPageExists)
-            break;
-
-        // Create a new slide (and its notes page.)
-        uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
-            mxModel, uno::UNO_QUERY);
-        if ( ! xSlideSupplier.is())
-            break;
-        uno::Reference<drawing::XDrawPages> xSlides (
-            xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
-        if ( ! xSlides.is())
-            break;
-        xSlides->insertNewByIndex (xSlides->getCount());
-
-        // Set a layout.
-        SdPage* pSlide = mpDocument->GetSdPage(
-            mpDocument->GetSdPageCount(PK_STANDARD)-1,
-            PK_STANDARD);
-        if (pSlide == NULL)
-            break;
-
-        // Create a copy of the master page and the associated notes
-        // master page and insert them into our document.
-        pNewMasterPage = AddMasterPage(mpDocument, pMasterPage);
-        if (pNewMasterPage==NULL)
-            break;
-        SdPage* pNewNotesMasterPage
-            = AddMasterPage(mpDocument, pNotesMasterPage);
-        if (pNewNotesMasterPage==NULL)
-            break;
-
-        // Make the connection from the new slide to the master page
-        // (and do the same for the notes page.)
-        mpDocument->SetMasterPage (
-            mpDocument->GetSdPageCount(PK_STANDARD)-1,
-            pNewMasterPage->GetName(),
-            mpDocument,
-            FALSE, // Connect the new master page with the new slide but
-                   // do not modify other (master) pages.
-            TRUE);
-    }
-    while (false);
-
-    // We are not interested in any automatisms for our modified internal
-    // document.
-    mpDocument->SetChanged (sal_False);
-
-    return pNewMasterPage;
-}
-
-
-
-
-SdPage* MasterPageContainer::Implementation::AddMasterPage (
-    SdDrawDocument* pTargetDocument,
-    SdPage* pMasterPage)
-{
-    SdPage* pClonedMasterPage = NULL;
-
-    if (pTargetDocument!=NULL && pMasterPage!=NULL)
-    {
-        try
-        {
-            // Duplicate the master page.
-            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
-
-            // Copy the necessary styles.
-            SdDrawDocument* pSourceDocument
-                = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-            ProvideStyles (pSourceDocument,
-                pTargetDocument, pClonedMasterPage);
-
-            // Now that the styles are available we can insert the cloned
-            // master page.
-            pTargetDocument->InsertMasterPage (pClonedMasterPage);
-        }
-        catch (Exception& rException)
-        {
-            pClonedMasterPage = NULL;
-            OSL_TRACE("caught exception while adding master page: %s",
-                ::rtl::OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
-        }
-        catch (::std::exception rException)
-        {
-            pClonedMasterPage = NULL;
-            OSL_TRACE ("caught general exception");
-        }
-        catch (...)
-        {
-            pClonedMasterPage = NULL;
-            OSL_TRACE ("caught general exception");
-        }
-    }
-
-    return pClonedMasterPage;
-}
-
-
-
-
-void MasterPageContainer::Implementation::ProvideStyles (
-    SdDrawDocument* pSourceDocument,
-    SdDrawDocument* pTargetDocument,
-    SdPage* pPage)
-{
-    // Get the layout name of the given page.
-    String sLayoutName (pPage->GetLayoutName());
-    sLayoutName.Erase (sLayoutName.SearchAscii (SD_LT_SEPARATOR));
-
-    // Copy the style sheet from source to target document.
-    SdStyleSheetPool* pSourceStyleSheetPool =
-        static_cast<SdStyleSheetPool*>(pSourceDocument->GetStyleSheetPool());
-    SdStyleSheetPool* pTargetStyleSheetPool =
-        static_cast<SdStyleSheetPool*>(pTargetDocument->GetStyleSheetPool());
-    List* pCreatedStyles = new List();
-    pTargetStyleSheetPool->CopyLayoutSheets (
-        sLayoutName,
-        *pSourceStyleSheetPool,
-        pCreatedStyles);
-
-    // Add an undo action for the copied style sheets.
-    if (pCreatedStyles->Count() > 0)
-    {
-         SfxUndoManager* pUndoManager
-            = pTargetDocument->GetDocSh()->GetUndoManager();
-       if (pUndoManager != NULL)
-       {
-           SdMoveStyleSheetsUndoAction* pMovStyles =
-               new SdMoveStyleSheetsUndoAction (
-                   pTargetDocument,
-                   pCreatedStyles,
-                   TRUE);
-           pUndoManager->AddUndoAction (pMovStyles);
-       }
-    }
-    else
-    {
-        delete pCreatedStyles;
-    }
-}
-
-
-
-
-Image MasterPageContainer::Implementation::GetPreviewForToken (
-    MasterPageContainer::Token aToken,
-    int nWidth)
-{
     Image aPreview;
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
-    {
-        aPreview = maContainer[aToken].maPreview;
-        if (aPreview.GetSizePixel().Width() == nWidth)
-        {
-            // The existing preview already has the right size so use that.
-        }
-        else if (maContainer[aToken].mpMasterPage!=NULL)
-        {
-            // We have the page in memory so we can render it in the desired
-            // size.
-            aPreview = maPreviewRenderer.RenderPage(
-#ifdef RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
-                maContainer[aToken].mpMasterPage,
-#else
-                maContainer[aToken].mpSlide,
-#endif
-                nWidth,
-                String::CreateFromAscii(""));
-            maContainer[aToken].maScaledPreview = aPreview;
-        }
-        else if (nWidth>0 && aPreview.GetSizePixel().Width()>0)
-        {
-            // #i42576# scale preview only if required and cache it
-            if( maContainer[aToken].maScaledPreview.GetSizePixel().Width() != nWidth )
-            {
-                maContainer[aToken].maScaledPreview = maPreviewRenderer.ScaleBitmap (
-                    aPreview.GetBitmapEx(),
-                    nWidth);
-            }
-            aPreview = maContainer[aToken].maScaledPreview;
-        }
-        else if (maContainer[aToken].msURL.Len() > 0)
-        {
-            // We have a URL.  Try to load the thumbnail from that file.
-            BitmapEx aBitmap (LoadPreviewFromURL (maContainer[aToken].msURL));
-            maContainer[aToken].maPreview = aBitmap;
-            aPreview = maPreviewRenderer.ScaleBitmap (aBitmap, nWidth);
-        }
 
-        if (aPreview.GetSizePixel().Width()==0
-            || aPreview.GetSizePixel().Height()==0)
+    switch (nId)
+    {
+        case STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION:
         {
-            // All else failed so return an empty preview with a text that
-            // tells the user that there is no preview available.
-            if (maPreviewNotAvailable.GetSizePixel().Width() != nWidth)
+            Image& rPreview (ePreviewSize==SMALL
+                ? maSmallPreviewBeingCreated
+                : maLargePreviewBeingCreated);
+            if (rPreview.GetSizePixel().Width() == 0)
             {
-                maPreviewNotAvailable = maPreviewRenderer.RenderPage(
-                    mpDocument->GetSdPage(0, PK_STANDARD),
-                    nWidth,
+                rPreview = maPreviewRenderer.RenderSubstitution(
+                    ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
+                    SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
+            }
+            aPreview = rPreview;
+        }
+        break;
+
+        case STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION:
+        {
+            Image& rPreview (ePreviewSize==SMALL
+                ? maSmallPreviewNotAvailable
+                : maLargePreviewNotAvailable);
+            if (rPreview.GetSizePixel().Width() == 0)
+            {
+                rPreview = maPreviewRenderer.RenderSubstitution(
+                    ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
                     SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
             }
-            maContainer[aToken].maPreview = maPreviewNotAvailable;
-            maContainer[aToken].maScaledPreview = maPreviewNotAvailable;
-            aPreview = maPreviewNotAvailable;
+            aPreview = rPreview;
         }
+        break;
     }
 
     return aPreview;
@@ -1221,371 +1221,168 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
 
 
-Image MasterPageContainer::Implementation::GetPreviewForToken (
-    MasterPageContainer::Token aToken,
-    int nWidth,
-    const Link& rCallback,
-    void* pUserData)
+void MasterPageContainer::Implementation::CleanContainer (void)
 {
-    Image aPreview;
-    SdPage* pPage = NULL;
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
-    {
-        aPreview = maContainer[aToken].maPreview;
-        pPage = maContainer[aToken].mpMasterPage;
-    }
+    // Remove the empty elements at the end of the container.  The empty
+    // elements in the middle can not be removed because that would
+    // invalidate the references still held by others.
+    int nIndex (maContainer.size()-1);
+    while (nIndex>=0 && maContainer[nIndex].get()==NULL)
+        --nIndex;
+    maContainer.resize(++nIndex);
+}
 
-    bool bShowSubstitution = false;
-    Size aSize (aPreview.GetSizePixel());
-    if (aPreview.GetSizePixel().Width() == nWidth)
+
+
+
+void MasterPageContainer::Implementation::FireContainerChange (
+    MasterPageContainerChangeEvent::EventType eType,
+    Token aToken,
+    bool bNotifyAsynchronously)
+{
+    if (bNotifyAsynchronously)
     {
-        // The existing preview already has the right size so use that.
-        bShowSubstitution = false;
-    }
-    else if (pPage != NULL)
-    {
-        // We have the page in memory so we can render it in the desired
-        // size.
-        aPreview = maPreviewRenderer.RenderPage(
-#ifdef RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
-                maContainer[aToken].mpMasterPage,
-#else
-                maContainer[aToken].mpSlide,
-#endif
-                nWidth,
-                String::CreateFromAscii(""));
-        maContainer[aToken].maScaledPreview = aPreview;
-        bShowSubstitution = false;
-    }
-    else if (nWidth>0 && aPreview.GetSizePixel().Width()>0)
-    {
-        // We already have a preview so we scale that to the desired size.
-        // #i42576# scale preview only if required and cache it
-        if( maContainer[aToken].maScaledPreview.GetSizePixel().Width() != nWidth )
-        {
-            maContainer[aToken].maScaledPreview = maPreviewRenderer.ScaleBitmap (
-                aPreview.GetBitmapEx(),
-                nWidth);
-        }
-        aPreview = maContainer[aToken].maScaledPreview;
-        bShowSubstitution = false;
+        Application::PostUserEvent(
+            LINK(this,Implementation,AsynchronousNotifyCallback),
+            new EventData(eType,aToken));
     }
     else
     {
-        // The page object has to be loaded.  That takes so long that we
-        // do it asynchronously.
-        AddPreviewCreationRequest(
-            aToken,
-            nWidth,
-            rCallback,
-            pUserData);
-        bShowSubstitution = true;
+        ::std::vector<Link> aCopy(maChangeListeners.begin(),maChangeListeners.end());
+        ::std::vector<Link>::iterator iListener;
+        MasterPageContainerChangeEvent aEvent;
+        aEvent.meEventType = eType;
+        aEvent.maChildToken = aToken;
+        for (iListener=aCopy.begin(); iListener!=aCopy.end(); ++iListener)
+            iListener->Call(&aEvent);
     }
-
-    if (bShowSubstitution)
-    {
-        // If the preview substitution is not yet present or has the wrong
-        // size then create a new one.
-        if (maPreviewBeingCreated.GetSizePixel().Width() != nWidth)
-        {
-            maPreviewBeingCreated = maPreviewRenderer.RenderPage(
-                mpDocument->GetSdPage(0, PK_STANDARD),
-                nWidth,
-                SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
-        }
-        aPreview = maPreviewBeingCreated;
-    }
-
-    return aPreview;
 }
 
 
 
 
-Image MasterPageContainer::Implementation::GetPreviewForPage (
-    SdPage* pPage,
-    int nWidth)
+bool MasterPageContainer::Implementation::UpdateDescriptor (
+    const SharedMasterPageDescriptor& rpDescriptor,
+    bool bForcePageObject,
+    bool bForcePreview,
+    bool bSendEvents)
 {
-    return maPreviewRenderer.RenderPage(
-        pPage,
-        nWidth,
-        String::CreateFromAscii(""));
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    // We have to create the page object when the preview provider needs it
+    // and the caller needs the preview.
+    bForcePageObject |= (bForcePreview
+        && rpDescriptor->mpPreviewProvider->NeedsPageObject()
+        && rpDescriptor->mpMasterPage==NULL);
+
+    // Define a cost threshold so that an update or page object or preview
+    // that is at least this cost are made at once. Updates with higher cost
+    // are scheduled for later.
+    sal_Int32 nCostThreshold (mpRequestQueue->IsEmpty() ? 5 : 0);
+
+    // Update the page object (which may be used for the preview update).
+    if (bForcePageObject)
+        GetDocument();
+    bool bPageObjectModified (rpDescriptor->UpdatePageObject(
+        (bForcePageObject ? -1 : nCostThreshold),
+        mpDocument));
+    if (bPageObjectModified && bSendEvents)
+        FireContainerChange(
+            MasterPageContainerChangeEvent::DATA_CHANGED,
+            rpDescriptor->maToken);
+    if (bPageObjectModified && ! mbFirstPageObjectSeen)
+        UpdatePreviewSizePixel();
+
+    // Update the preview.
+    bool bPreviewModified (rpDescriptor->UpdatePreview(
+        (bForcePreview ? -1 : nCostThreshold),
+        maSmallPreviewSizePixel,
+        maLargePreviewSizePixel,
+        maPreviewRenderer));
+
+    if (bPreviewModified && bSendEvents)
+        FireContainerChange(
+            MasterPageContainerChangeEvent::PREVIEW_CHANGED,
+            rpDescriptor->maToken);
+
+    return bPageObjectModified || bPreviewModified;
 }
 
 
 
 
-void MasterPageContainer::Implementation::RemoveCallback (
-    const Link& rCallback)
+void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
 {
-    maDelayedPreviewCreationTimer.Stop();
-
-    // Remove all entries from the queue for the given callback.
-
-    // Move all entries to the temporary queue that will not call the
-    // specified callback.
-    RequestQueue aTemporaryQueue;
-    while ( ! maRequestQueue.empty())
+    if (aToken>=0 && (unsigned)aToken<maContainer.size())
     {
-        PreviewCreationRequest aRequest (maRequestQueue.front());
-        maRequestQueue.pop();
-        if (aRequest.maCallback != rCallback)
-            aTemporaryQueue.push (aRequest);
+        maContainer[aToken].reset();
+        mbContainerCleaningPending = true;
     }
-
-    // Move the entries back to the queue member to reverse the order
-    // of the temprorary queue.
-    while ( ! aTemporaryQueue.empty())
-    {
-        maRequestQueue.push (aTemporaryQueue.front());
-        aTemporaryQueue.pop();
-    }
-
-    // Start the timer again when there are entries left.
-    if ( ! maRequestQueue.empty())
-        maDelayedPreviewCreationTimer.Start();
 }
 
 
 
 
-SdPage* MasterPageContainer::Implementation::GetSlideForMasterPage (
-    SdPage* pMasterPage)
+void MasterPageContainer::Implementation::FillingDone (void)
 {
-    SdPage* pCandidate = NULL;
-
-    // Iterate over all pages and check if it references the given master
-    // page.
-    if (mpDocument->GetSdPageCount(PK_STANDARD) > 0)
-    {
-        // In most cases a new slide has just been inserted so start with
-        // the last page.
-        USHORT nPageIndex (mpDocument->GetSdPageCount(PK_STANDARD)-1);
-        bool bFound (false);
-        while ( ! bFound)
-        {
-            pCandidate = mpDocument->GetSdPage(
-                nPageIndex,
-                PK_STANDARD);
-            if (pCandidate != NULL)
-            {
-                if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
-                    == pMasterPage)
-                {
-                    bFound = true;
-                    break;
-                }
-            }
-
-            if (nPageIndex == 0)
-                break;
-            else
-                nPageIndex --;
-        }
-
-        // If no page was found that refernced the given master page reset
-        // the pointer that is returned.
-        if ( ! bFound)
-            pCandidate = NULL;
-    }
-
-    return pCandidate;
+    mpRequestQueue->ProcessAllRequests();
 }
 
 
-
-
-BitmapEx MasterPageContainer::Implementation::LoadPreviewFromURL (
-    const ::rtl::OUString& aURL)
-{
-    uno::Reference<io::XInputStream> xIStream;
-
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager (
-        ::comphelper::getProcessServiceFactory());
-    if (xServiceManager.is())
-    {
-        try
-        {
-            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
-                xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.embed.StorageFactory")),
-                uno::UNO_QUERY);
-
-            if (xStorageFactory.is())
-            {
-                uno::Sequence<uno::Any> aArgs (2);
-                aArgs[0] <<= aURL;
-                aArgs[1] <<= embed::ElementModes::READ;
-                uno::Reference<embed::XStorage> xDocStorage (
-                    xStorageFactory->createInstanceWithArguments(aArgs),
-                    uno::UNO_QUERY);
-
-                try
-                {
-                    if (xDocStorage.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnails"),
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(aURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
-                }
-
-                try
-                {
-                    // An (older) implementation had a bug - The storage
-                    // name was "Thumbnail" instead of "Thumbnails".  The
-                    // old name is still used as fallback but this code can
-                    // be removed soon.
-                    if ( ! xIStream.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnail"),
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(aURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
-                }
-            }
-        }
-        catch (uno::Exception& rException)
-        {
-            OSL_TRACE (
-                "caught exception while trying to access tumbnail of %s: %s",
-                ::rtl::OUStringToOString(aURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-
-    BitmapEx aThumbnail;
-    if (xIStream.is())
-    {
-        ::std::auto_ptr<SvStream> pStream (
-            ::utl::UcbStreamHelper::CreateStream (xIStream));
-        ::vcl::PNGReader aReader (*pStream);
-        aThumbnail = aReader.Read ();
-    }
-    return aThumbnail;
-}
-
-
-
-
-void MasterPageContainer::Implementation::FillContainer (void)
-{
-    //add a default master page
-    if(mpDocument)
-    {
-        Image aPreview;
-        String aEmpty;
-        Token aResult = maContainer.size();
-        USHORT nDefaultPageIndex = 1;
-        SdPage* pLocalSlide = mpDocument->GetSdPage(nDefaultPageIndex, PK_STANDARD);
-        SdPage* pLocalMasterPage = NULL;
-        if (pLocalSlide != NULL && pLocalSlide->TRG_HasMasterPage())
-            pLocalMasterPage = static_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
-
-        if (pLocalMasterPage!=NULL)
-        {
-            // Assign the title,text layout to the slide so that its preview
-            // is consistent with that of the tumbnails of the other master
-            // pages.
-            pLocalSlide->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
-
-            maContainer.push_back (MasterPageDescriptor (
-                aEmpty/*sURL*/,
-                pLocalMasterPage->GetName()/*sPageName*/,
-                pLocalMasterPage->GetName()/*rStyleName*/,
-                pLocalMasterPage,
-                pLocalSlide,
-                aPreview,
-                aResult));
-        }
-    }
-
-    //add all master pages from the template directories
-    TemplateScanner aScanner;
-    aScanner.Scan ();
-
-    // Move all relevant entries to a local list.
-    ::std::vector<TemplateDir*>::const_iterator iDirectory;
-    ::std::vector<TemplateDir*>& aDirectories (aScanner.GetFolderList());
-    for (iDirectory=aDirectories.begin();
-         iDirectory!=aDirectories.end();
-         ++iDirectory)
-    {
-        ::std::vector<TemplateEntry*>::iterator iEntry;
-        ::std::vector<TemplateEntry*>& aEntries ((*iDirectory)->m_aEntries);
-        for (iEntry=aEntries.begin(); iEntry!=aEntries.end(); ++iEntry)
-        {
-            if (FileFilter ((*iEntry)->m_aPath))
-                AddTemplate ((*iEntry)->m_aPath, (*iEntry)->m_aTitle);
-            delete *iEntry;
-        }
-        aEntries.clear();
-    }
-}
-
-
-
-
-void MasterPageContainer::Implementation::AddTemplate (
-    const String& rsPath,
-    const String& rsTitle)
-{
-    PutMasterPage (
-        rsPath,
-        rsTitle,
-        String(),
-        NULL,
-        Image());
-}
-
-
-
-
-bool MasterPageContainer::Implementation::FileFilter (const String& rsFileName)
-{
-    return rsFileName.SearchAscii ("presnt")!=STRING_NOTFOUND
-        || rsFileName.SearchAscii ("layout")!=STRING_NOTFOUND;
-}
 
 } } } // end of namespace ::sd::toolpanel::controls
+
+
+
+
+namespace {
+
+//===== PreviewCreationRequest ================================================
+
+PreviewCreationRequest::PreviewCreationRequest (
+    MasterPageContainer::Token aToken,
+    int nPriority)
+    : maToken(aToken),
+      mnPriority(nPriority)
+{
+}
+
+
+
+
+bool PreviewCreationRequest::Compare::operator() (
+    const PreviewCreationRequest& aRequest1,
+    const PreviewCreationRequest& aRequest2)
+{
+    if (aRequest1.mnPriority != aRequest2.mnPriority)
+    {
+        // Prefer requests with higher priority.
+        return aRequest1.mnPriority > aRequest2.mnPriority;
+    }
+    else
+    {
+        // Prefer tokens that have been earlier created (those with lower
+        // value).
+        return aRequest1.maToken < aRequest2.maToken;
+    }
+}
+
+
+
+
+PreviewCreationRequest::CompareToken::CompareToken (MasterPageContainer::Token aToken)
+    : maToken(aToken)
+{
+}
+
+
+
+
+bool PreviewCreationRequest::CompareToken::operator() (const PreviewCreationRequest& aRequest)
+{
+    return maToken==aRequest.maToken;
+}
+
+
+
+} // end of anonymous namespace
