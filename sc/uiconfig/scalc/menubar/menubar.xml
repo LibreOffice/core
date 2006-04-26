@@ -1,438 +1,438 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
-    <menu:menu menu:id=".uno:PickList" menu:label="" >
+    <menu:menu menu:id=".uno:PickList">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:AddDirect" menu:helpid="5537" menu:label="" />
-            <menu:menuitem menu:id=".uno:Open" menu:helpid="5501" menu:label="" />
+            <menu:menuitem menu:id=".uno:AddDirect"/>
+            <menu:menuitem menu:id=".uno:Open"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:helpid="6381" menu:label="" />
+            <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:CloseDoc" menu:helpid="5503" menu:label="" />
-            <menu:menuitem menu:id=".uno:Save" menu:helpid="5505" menu:label="" />
-            <menu:menuitem menu:id=".uno:SaveAs" menu:helpid="5502" menu:label="" />
-            <menu:menuitem menu:id=".uno:SaveAll" menu:helpid="5309" menu:label="" />
+            <menu:menuitem menu:id=".uno:CloseDoc"/>
+            <menu:menuitem menu:id=".uno:Save"/>
+            <menu:menuitem menu:id=".uno:SaveAs"/>
+            <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Reload" menu:helpid="5508" menu:label="" />
-            <menu:menuitem menu:id=".uno:VersionDialog" menu:helpid="6583" menu:label="" />
+            <menu:menuitem menu:id=".uno:Reload"/>
+            <menu:menuitem menu:id=".uno:VersionDialog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ExportTo" menu:helpid="5829" menu:label="" />
-            <menu:menuitem menu:id=".uno:ExportToPDF" menu:helpid="6673" menu:label="" />
-            <menu:menu menu:id=".uno:SendTo" menu:label="" >
+            <menu:menuitem menu:id=".uno:ExportTo"/>
+            <menu:menuitem menu:id=".uno:ExportToPDF"/>
+            <menu:menu menu:id=".uno:SendTo">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SendMailDocAsOOo" />
-                    <menu:menuitem menu:id=".uno:SendMailDocAsMS" />
-                    <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:helpid="6672" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SendMail"/>
+                    <menu:menuitem menu:id=".uno:SendMailDocAsOOo"/>
+                    <menu:menuitem menu:id=".uno:SendMailDocAsMS"/>
+                    <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetDocumentProperties" menu:helpid="5535" menu:label="" />
-            <menu:menuitem menu:id=".uno:Signature" menu:helpid="5508" menu:label="" />
-            <menu:menu menu:id=".uno:TemplateMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
+            <menu:menuitem menu:id=".uno:Signature"/>
+            <menu:menu menu:id=".uno:TemplateMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Organizer" menu:helpid="5540" menu:label="" />
-                    <menu:menuitem menu:id=".uno:AddressBookSource" menu:helpid="6655" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SaveAsTemplate" menu:helpid="5538" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OpenTemplate" menu:helpid="5594" menu:label="" />
+                    <menu:menuitem menu:id=".uno:Organizer"/>
+                    <menu:menuitem menu:id=".uno:AddressBookSource"/>
+                    <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
+                    <menu:menuitem menu:id=".uno:OpenTemplate"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PrintPreview" menu:helpid="5325" menu:label="" />
-            <menu:menuitem menu:id=".uno:Print" menu:helpid="5504" menu:label="" />
-            <menu:menuitem menu:id=".uno:PrinterSetup" menu:helpid="5302" menu:label="" />
+            <menu:menuitem menu:id=".uno:PrintPreview"/>
+            <menu:menuitem menu:id=".uno:Print"/>
+            <menu:menuitem menu:id=".uno:PrinterSetup"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Quit" menu:helpid="5300" menu:label="" />
+            <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:EditMenu" menu:label="" >
+    <menu:menu menu:id=".uno:EditMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:Undo" menu:helpid="5701" menu:label="" />
-            <menu:menuitem menu:id=".uno:Redo" menu:helpid="5700" menu:label="" />
-            <menu:menuitem menu:id=".uno:Repeat" menu:helpid="5702" menu:label="" />
+            <menu:menuitem menu:id=".uno:Undo"/>
+            <menu:menuitem menu:id=".uno:Redo"/>
+            <menu:menuitem menu:id=".uno:Repeat"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Cut" menu:helpid="5710" menu:label="" />
-            <menu:menuitem menu:id=".uno:Copy" menu:helpid="5711" menu:label="" />
-            <menu:menuitem menu:id=".uno:Paste" menu:helpid="5712" menu:label="" />
-            <menu:menuitem menu:id=".uno:PasteSpecial" menu:helpid="26220" menu:label="" />
-            <menu:menuitem menu:id=".uno:SelectAll" menu:helpid="5723" menu:label="" />
+            <menu:menuitem menu:id=".uno:Cut"/>
+            <menu:menuitem menu:id=".uno:Copy"/>
+            <menu:menuitem menu:id=".uno:Paste"/>
+            <menu:menuitem menu:id=".uno:PasteSpecial"/>
+            <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:ChangesMenu" menu:label="" >
+            <menu:menu menu:id=".uno:ChangesMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:TraceChangeMode" menu:helpid="26238" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ProtectTraceChangeMode" menu:helpid="26084" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowChanges" menu:helpid="26239" menu:label="" />
+                    <menu:menuitem menu:id=".uno:TraceChangeMode"/>
+                    <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
+                    <menu:menuitem menu:id=".uno:ShowChanges"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:AcceptChanges" menu:helpid="26258" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommentChange" menu:helpid="26259" menu:label="" />
+                    <menu:menuitem menu:id=".uno:AcceptChanges"/>
+                    <menu:menuitem menu:id=".uno:CommentChange"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MergeDocuments" menu:helpid="6587" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MergeDocuments"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:CompareDocuments" menu:helpid="6586" menu:label="" />
-            <menu:menuitem menu:id=".uno:SearchDialog" menu:helpid="5961" menu:label="" />
-            <menu:menuitem menu:id=".uno:Navigator" menu:helpid="10366" menu:label="" />
-            <menu:menuitem menu:id=".uno:EditHeaderAndFooter" menu:helpid="26235" menu:label="" />
+            <menu:menuitem menu:id=".uno:CompareDocuments"/>
+            <menu:menuitem menu:id=".uno:SearchDialog"/>
+            <menu:menuitem menu:id=".uno:Navigator"/>
+            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:FillCellsMenu" menu:label="" >
+            <menu:menu menu:id=".uno:FillCellsMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:FillDown" menu:helpid="26224" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FillRight" menu:helpid="26225" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FillUp" menu:helpid="26226" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FillLeft" menu:helpid="26227" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FillTable" menu:helpid="26228" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FillSeries" menu:helpid="26229" menu:label="" />
+                    <menu:menuitem menu:id=".uno:FillDown"/>
+                    <menu:menuitem menu:id=".uno:FillRight"/>
+                    <menu:menuitem menu:id=".uno:FillUp"/>
+                    <menu:menuitem menu:id=".uno:FillLeft"/>
+                    <menu:menuitem menu:id=".uno:FillTable"/>
+                    <menu:menuitem menu:id=".uno:FillSeries"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:Delete" menu:helpid="5713" menu:label="" />
-            <menu:menuitem menu:id=".uno:DeleteCell" menu:helpid="26222" menu:label="" />
-            <menu:menu menu:id=".uno:EditSheetMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:Delete"/>
+            <menu:menuitem menu:id=".uno:DeleteCell"/>
+            <menu:menu menu:id=".uno:EditSheetMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Move" menu:helpid="26348" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SelectTables" menu:helpid="26090" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Remove" menu:helpid="26223" menu:label="" />
+                    <menu:menuitem menu:id=".uno:Move"/>
+                    <menu:menuitem menu:id=".uno:SelectTables"/>
+                    <menu:menuitem menu:id=".uno:Remove"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:DelBreakMenu" menu:label="" >
+            <menu:menu menu:id=".uno:DelBreakMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DeleteRowbreak" menu:helpid="26263" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DeleteColumnbreak" menu:helpid="26264" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DeleteRowbreak"/>
+                    <menu:menuitem menu:id=".uno:DeleteColumnbreak"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:EditLinks" menu:helpid="26060" menu:label="" />
-            <menu:menuitem menu:id=".uno:PlugInsActive" menu:helpid="6314" menu:label="" />
-            <menu:menuitem menu:id=".uno:ImageMapDialog" menu:helpid="10371" menu:label="" />
-            <menu:menuitem menu:id=".uno:ObjectMenue" menu:helpid="5575" menu:label="" />
+            <menu:menuitem menu:id=".uno:EditLinks"/>
+            <menu:menuitem menu:id=".uno:PlugInsActive"/>
+            <menu:menuitem menu:id=".uno:ImageMapDialog"/>
+            <menu:menuitem menu:id=".uno:ObjectMenue"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
+    <menu:menu menu:id=".uno:ViewMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NormalViewMode" menu:helpid="26249" menu:label="" />
-            <menu:menuitem menu:id=".uno:PagebreakMode" menu:helpid="26247" menu:label="" />
+            <menu:menuitem menu:id=".uno:NormalViewMode"/>
+            <menu:menuitem menu:id=".uno:PagebreakMode"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
-            <menu:menuitem menu:id=".uno:InputLineVisible" menu:helpid="26241" menu:label="" />
-            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
+            <menu:menuitem menu:id=".uno:AvailableToolbars"/>
+            <menu:menuitem menu:id=".uno:InputLineVisible"/>
+            <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ViewRowColumnHeaders" menu:helpid="26242" menu:label="" />
-            <menu:menuitem menu:id=".uno:ViewValueHighlighting" menu:helpid="26245" menu:label="" />
+            <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
+            <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ViewDataSourceBrowser" menu:helpid="6660" menu:label="" />
+            <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FullScreen" menu:helpid="5627" menu:label="" />
-            <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
+            <menu:menuitem menu:id=".uno:FullScreen"/>
+            <menu:menuitem menu:id=".uno:Zoom"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
+    <menu:menu menu:id=".uno:InsertMenu">
         <menu:menupopup>
-            <menu:menu menu:id=".uno:InsertBreakMenu" menu:label="" >
+            <menu:menu menu:id=".uno:InsertBreakMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertRowBreak" menu:helpid="26261" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertColumnBreak" menu:helpid="26262" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertRowBreak"/>
+                    <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertCell" menu:helpid="26266" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertRows" menu:helpid="26267" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertColumns" menu:helpid="26268" menu:label="" />
-            <menu:menuitem menu:id=".uno:Insert" menu:helpid="26269" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertSheetFromFile" menu:helpid="26275" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertExternalDataSource" menu:helpid="26085" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
-            <menu:menu menu:id=".uno:FormattingMarkMenu" >
+            <menu:menuitem menu:id=".uno:InsertCell"/>
+            <menu:menuitem menu:id=".uno:InsertRows"/>
+            <menu:menuitem menu:id=".uno:InsertColumns"/>
+            <menu:menuitem menu:id=".uno:Insert"/>
+            <menu:menuitem menu:id=".uno:InsertSheetFromFile"/>
+            <menu:menuitem menu:id=".uno:InsertExternalDataSource"/>
+            <menu:menuitem menu:id=".uno:InsertSymbol"/>
+            <menu:menu menu:id=".uno:FormattingMarkMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertNonBreakingSpace" menu:helpid="20344" />
-                    <menu:menuitem menu:id=".uno:InsertHardHyphen" menu:helpid="20385" />
-                    <menu:menuitem menu:id=".uno:InsertSoftHyphen" menu:helpid="20343" />
-                    <menu:menuitem menu:id=".uno:InsertZWSP" menu:helpid="21425" />
-                    <menu:menuitem menu:id=".uno:InsertZWNBSP" menu:helpid="21424" />
-                    <menu:menuitem menu:id=".uno:InsertLRM" menu:helpid="21423" />
-                    <menu:menuitem menu:id=".uno:InsertRLM" menu:helpid="21422" />
+                    <menu:menuitem menu:id=".uno:InsertNonBreakingSpace"/>
+                    <menu:menuitem menu:id=".uno:InsertHardHyphen"/>
+                    <menu:menuitem menu:id=".uno:InsertSoftHyphen"/>
+                    <menu:menuitem menu:id=".uno:InsertZWSP"/>
+                    <menu:menuitem menu:id=".uno:InsertZWNBSP"/>
+                    <menu:menuitem menu:id=".uno:InsertLRM"/>
+                    <menu:menuitem menu:id=".uno:InsertRLM"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
+            <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FunctionDialog" menu:helpid="26152" menu:label="" />
-            <menu:menuitem menu:id=".uno:FunctionBox" menu:helpid="58991" menu:label="" />
+            <menu:menuitem menu:id=".uno:FunctionDialog"/>
+            <menu:menuitem menu:id=".uno:FunctionBox"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:NamesMenu" menu:label="" >
+            <menu:menu menu:id=".uno:NamesMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DefineName" menu:helpid="26271" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertName" menu:helpid="26272" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CreateNames" menu:helpid="26273" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DefineLabelRange" menu:helpid="26629" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DefineName"/>
+                    <menu:menuitem menu:id=".uno:InsertName"/>
+                    <menu:menuitem menu:id=".uno:CreateNames"/>
+                    <menu:menuitem menu:id=".uno:DefineLabelRange"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertAnnotation" menu:helpid="26276" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertAnnotation"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:GraphicMenu" menu:label="" >
+            <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertGraphic" menu:helpid="10241" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertGraphic"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertAVMedia" menu:helpid="6695" menu:label="" />
-            <menu:menu menu:id=".uno:ObjectMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:InsertAVMedia"/>
+            <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertObject" menu:helpid="5561" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertPlugin" menu:helpid="5672" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertSound" menu:helpid="5676" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertVideo" menu:helpid="5677" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertApplet" menu:helpid="5673" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertObjectStarMath" menu:helpid="26063" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertObject"/>
+                    <menu:menuitem menu:id=".uno:InsertPlugin"/>
+                    <menu:menuitem menu:id=".uno:InsertSound"/>
+                    <menu:menuitem menu:id=".uno:InsertVideo"/>
+                    <menu:menuitem menu:id=".uno:InsertApplet"/>
+                    <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:StarChartDialog" menu:helpid="26155" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:helpid="5563" menu:label="" />
+            <menu:menuitem menu:id=".uno:StarChartDialog"/>
+            <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:FormatMenu" menu:label="" >
+    <menu:menu menu:id=".uno:FormatMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:ResetAttributes" menu:helpid="26067" menu:label="" />
+            <menu:menuitem menu:id=".uno:ResetAttributes"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FormatCellDialog" menu:helpid="26280" menu:label="" />
-            <menu:menu menu:id=".uno:RowMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:FormatCellDialog"/>
+            <menu:menu menu:id=".uno:RowMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:RowHeight" menu:helpid="26281" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetOptimalRowHeight" menu:helpid="26282" menu:label="" />
-                    <menu:menuitem menu:id=".uno:HideRow" menu:helpid="26283" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowRow" menu:helpid="26284" menu:label="" />
+                    <menu:menuitem menu:id=".uno:RowHeight"/>
+                    <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
+                    <menu:menuitem menu:id=".uno:HideRow"/>
+                    <menu:menuitem menu:id=".uno:ShowRow"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ColumnMenu" menu:label="" >
+            <menu:menu menu:id=".uno:ColumnMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ColumnWidth" menu:helpid="26285" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetOptimalColumnWidth" menu:helpid="26286" menu:label="" />
-                    <menu:menuitem menu:id=".uno:HideColumn" menu:helpid="26287" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowColumn" menu:helpid="26288" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ColumnWidth"/>
+                    <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
+                    <menu:menuitem menu:id=".uno:HideColumn"/>
+                    <menu:menuitem menu:id=".uno:ShowColumn"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:SheetMenu" menu:label="" >
+            <menu:menu menu:id=".uno:SheetMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:RenameTable" menu:helpid="26346" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Hide" menu:helpid="26289" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Show" menu:helpid="26290" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SheetRightToLeft" menu:helpid="26352" menu:label="" />
+                    <menu:menuitem menu:id=".uno:RenameTable"/>
+                    <menu:menuitem menu:id=".uno:Hide"/>
+                    <menu:menuitem menu:id=".uno:Show"/>
+                    <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:ToggleMergeCells" menu:helpid="26581" menu:label="" />
+            <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PageFormatDialog" menu:helpid="26295" menu:label="" />
-            <menu:menu menu:id=".uno:PrintRangesMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:PageFormatDialog"/>
+            <menu:menu menu:id=".uno:PrintRangesMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DefinePrintArea" menu:helpid="26602" menu:label="" />
-                    <menu:menuitem menu:id=".uno:AddPrintArea" menu:helpid="26651" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DeletePrintArea" menu:helpid="26603" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DefinePrintArea"/>
+                    <menu:menuitem menu:id=".uno:AddPrintArea"/>
+                    <menu:menuitem menu:id=".uno:DeletePrintArea"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:EditPrintArea" menu:helpid="26605" menu:label="" />
+                    <menu:menuitem menu:id=".uno:EditPrintArea"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FontDialog" menu:helpid="10296" menu:label="" />
-            <menu:menuitem menu:id=".uno:ParagraphDialog" menu:helpid="10297" menu:label="" />
-            <menu:menu menu:id=".uno:TransliterateMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:FontDialog"/>
+            <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+            <menu:menu menu:id=".uno:TransliterateMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper" menu:helpid="10912" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChangeCaseToLower" menu:helpid="10913" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth" menu:helpid="10914" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth" menu:helpid="10915" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChangeCaseToHiragana" menu:helpid="10916" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChangeCaseToKatakana" menu:helpid="10917" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:DesignerDialog" menu:helpid="5539" menu:label="" />
-            <menu:menuitem menu:id=".uno:AutoFormat" menu:helpid="10242" menu:label="" />
-            <menu:menuitem menu:id=".uno:ConditionalFormatDialog" menu:helpid="26159" menu:label="" />
+            <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuitem menu:id=".uno:AutoFormat"/>
+            <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:AnchorMenu" menu:label="" >
+            <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:helpid="26410" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:helpid="26411" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SetAnchorToPage"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToCell"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ObjectAlign" menu:label="" >
+            <menu:menu menu:id=".uno:ObjectAlign">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalDefault" menu:helpid="11006" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:helpid="10999" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter" menu:helpid="11000" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignRight" menu:helpid="11001" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:helpid="11002" menu:label="" />
+                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalDefault"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignLeft"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignRight"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignJustified"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:CommonAlignTop" menu:helpid="11003" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter" menu:helpid="11004" menu:label="" />
-                    <menu:menuitem menu:id=".uno:CommonAlignBottom" menu:helpid="11005" menu:label="" />
+                    <menu:menuitem menu:id=".uno:CommonAlignTop"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignBottom"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ArrangeMenu" menu:label="" >
+            <menu:menu menu:id=".uno:ArrangeMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:BringToFront" menu:helpid="10286" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ObjectForwardOne" menu:helpid="26407" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ObjectBackOne" menu:helpid="26408" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SendToBack" menu:helpid="10287" menu:label="" />
+                    <menu:menuitem menu:id=".uno:BringToFront"/>
+                    <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+                    <menu:menuitem menu:id=".uno:ObjectBackOne"/>
+                    <menu:menuitem menu:id=".uno:SendToBack"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:SetObjectToForeground" menu:helpid="10282" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetObjectToBackground" menu:helpid="10283" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
+                    <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:FlipMenu" menu:label="" >
+            <menu:menu menu:id=".uno:FlipMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ObjectMirrorVertical" menu:helpid="26065" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal" menu:helpid="26066" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
+                    <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:GroupMenu" menu:label="" >
+            <menu:menu menu:id=".uno:GroupMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:FormatGroup" menu:helpid="10454" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FormatUngroup" menu:helpid="10455" menu:label="" />
-                    <menu:menuitem menu:id=".uno:EnterGroup" menu:helpid="27096" menu:label="" />
-                    <menu:menuitem menu:id=".uno:LeaveGroup" menu:helpid="27097" menu:label="" />
+                    <menu:menuitem menu:id=".uno:FormatGroup"/>
+                    <menu:menuitem menu:id=".uno:FormatUngroup"/>
+                    <menu:menuitem menu:id=".uno:EnterGroup"/>
+                    <menu:menuitem menu:id=".uno:LeaveGroup"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:DrawGraphicMenu" menu:label="" >
+            <menu:menu menu:id=".uno:DrawGraphicMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:TransformDialog" menu:helpid="10087" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FormatLine" menu:helpid="10143" menu:label="" />
-                    <menu:menuitem menu:id=".uno:FormatArea" menu:helpid="10142" menu:label="" />
-                    <menu:menuitem menu:id=".uno:TextAttributes" menu:helpid="26297" menu:label="" />
+                    <menu:menuitem menu:id=".uno:TransformDialog"/>
+                    <menu:menuitem menu:id=".uno:FormatLine"/>
+                    <menu:menuitem menu:id=".uno:FormatArea"/>
+                    <menu:menuitem menu:id=".uno:TextAttributes"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:ToggleObjectBezierMode" menu:helpid="10126" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:ControlProperties" menu:helpid="10613" menu:label="" />
-            <menu:menuitem menu:id=".uno:FormProperties" menu:helpid="10614" menu:label="" />
+            <menu:menuitem menu:id=".uno:ControlProperties"/>
+            <menu:menuitem menu:id=".uno:FormProperties"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
+    <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:SpellDialog" menu:helpid="10243" menu:label="" />
-            <menu:menu menu:id=".uno:LanguageMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:SpellDialog"/>
+            <menu:menu menu:id=".uno:LanguageMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ChineseConversion" menu:helpid="10999" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Thesaurus" menu:helpid="10245" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Hyphenate" menu:helpid="26087" menu:label="" />
+                    <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
+                    <menu:menuitem menu:id=".uno:ChineseConversion"/>
+                    <menu:menuitem menu:id=".uno:Thesaurus"/>
+                    <menu:menuitem menu:id=".uno:Hyphenate"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:AuditMenu" menu:label="" >
+            <menu:menu menu:id=".uno:AuditMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ShowPrecedents" menu:helpid="26456" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ClearArrowPrecedents" menu:helpid="26457" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowDependents" menu:helpid="26458" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ClearArrowDependents" menu:helpid="26459" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ClearArrows" menu:helpid="26461" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ShowPrecedents"/>
+                    <menu:menuitem menu:id=".uno:ClearArrowPrecedents"/>
+                    <menu:menuitem menu:id=".uno:ShowDependents"/>
+                    <menu:menuitem menu:id=".uno:ClearArrowDependents"/>
+                    <menu:menuitem menu:id=".uno:ClearArrows"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:ShowErrors" menu:helpid="26460" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowInvalid" menu:helpid="26469" menu:label="" />
-                    <menu:menuitem menu:id=".uno:RefreshArrows" menu:helpid="26470" menu:label="" />
-                    <menu:menuitem menu:id=".uno:AutoRefreshArrows" menu:helpid="26471" menu:label="" />
-                    <menu:menuitem menu:id=".uno:AuditingFillMode" menu:helpid="26462" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ShowErrors"/>
+                    <menu:menuitem menu:id=".uno:ShowInvalid"/>
+                    <menu:menuitem menu:id=".uno:RefreshArrows"/>
+                    <menu:menuitem menu:id=".uno:AutoRefreshArrows"/>
+                    <menu:menuitem menu:id=".uno:AuditingFillMode"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AutoCorrectDlg" menu:helpid="10424" menu:label="" />
+            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:GoalSeekDialog" menu:helpid="26153" menu:label="" />
-            <menu:menuitem menu:id=".uno:ScenarioManager" menu:helpid="26312" menu:label="" />
+            <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
+            <menu:menuitem menu:id=".uno:ScenarioManager"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:ProtectMenu" menu:label="" >
+            <menu:menu menu:id=".uno:ProtectMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Protect" menu:helpid="26306" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ToolProtectionDocument" menu:helpid="26307" menu:label="" />
+                    <menu:menuitem menu:id=".uno:Protect"/>
+                    <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:CellContentsMenu" menu:label="" >
+            <menu:menu menu:id=".uno:CellContentsMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Calculate" menu:helpid="26304" menu:label="" />
-                    <menu:menuitem menu:id=".uno:AutomaticCalculation" menu:helpid="26303" menu:label="" />
+                    <menu:menuitem menu:id=".uno:Calculate"/>
+                    <menu:menuitem menu:id=".uno:AutomaticCalculation"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:AutoComplete" menu:helpid="26319" menu:label="" />
+                    <menu:menuitem menu:id=".uno:AutoComplete"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Gallery" menu:helpid="5960" menu:label="" />
-            <menu:menuitem menu:id=".uno:AVMediaPlayer" menu:helpid="6694" menu:label="" />
+            <menu:menuitem menu:id=".uno:Gallery"/>
+            <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
+            <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
-                    <menu:menuitem menu:id=".uno:RunMacro" menu:helpid="40011" menu:label="" />
-                    <menu:menu menu:id=".uno:ScriptOrganizer" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MacroSignature" menu:helpid="6704" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MacroRecorder"/>
+                    <menu:menuitem menu:id=".uno:RunMacro"/>
+                    <menu:menu menu:id=".uno:ScriptOrganizer"/>
+                    <menu:menuitem menu:id=".uno:MacroSignature"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:helpid="40013" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                 </menu:menupopup>
             </menu:menu>
 
-            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
 
-            <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
-            <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
-            <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
+            <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+            <menu:menuitem menu:id=".uno:ConfigureDialog"/>
+            <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:DataMenu" menu:label="" >
+    <menu:menu menu:id=".uno:DataMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:DefineDBName" menu:helpid="26320" menu:label="" />
-            <menu:menuitem menu:id=".uno:SelectDB" menu:helpid="26321" menu:label="" />
+            <menu:menuitem menu:id=".uno:DefineDBName"/>
+            <menu:menuitem menu:id=".uno:SelectDB"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DataSort" menu:helpid="26322" menu:label="" />
-            <menu:menu menu:id=".uno:FilterMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:DataSort"/>
+            <menu:menu menu:id=".uno:FilterMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DataFilterAutoFilter" menu:helpid="26325" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DataFilterStandardFilter" menu:helpid="26323" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DataFilterSpecialFilter" menu:helpid="26324" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DataFilterAutoFilter"/>
+                    <menu:menuitem menu:id=".uno:DataFilterStandardFilter"/>
+                    <menu:menuitem menu:id=".uno:DataFilterSpecialFilter"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:DataFilterRemoveFilter" menu:helpid="26326" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DataFilterHideAutoFilter" menu:helpid="26341" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DataFilterRemoveFilter"/>
+                    <menu:menuitem menu:id=".uno:DataFilterHideAutoFilter"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:DataSubTotals" menu:helpid="26328" menu:label="" />
-            <menu:menuitem menu:id=".uno:Validation" menu:helpid="26625" menu:label="" />
+            <menu:menuitem menu:id=".uno:DataSubTotals"/>
+            <menu:menuitem menu:id=".uno:Validation"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:TableOperationDialog" menu:helpid="26154" menu:label="" />
-            <menu:menuitem menu:id=".uno:DataConsolidate" menu:helpid="26150" menu:label="" />
-            <menu:menu menu:id=".uno:GroupOutlineMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:TableOperationDialog"/>
+            <menu:menuitem menu:id=".uno:DataConsolidate"/>
+            <menu:menu menu:id=".uno:GroupOutlineMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:HideDetail" menu:helpid="26329" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ShowDetail" menu:helpid="26330" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Group" menu:helpid="26331" menu:label="" />
-                    <menu:menuitem menu:id=".uno:Ungroup" menu:helpid="26332" menu:label="" />
+                    <menu:menuitem menu:id=".uno:HideDetail"/>
+                    <menu:menuitem menu:id=".uno:ShowDetail"/>
+                    <menu:menuitem menu:id=".uno:Group"/>
+                    <menu:menuitem menu:id=".uno:Ungroup"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:AutoOutline" menu:helpid="26333" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ClearOutline" menu:helpid="10234" menu:label="" />
+                    <menu:menuitem menu:id=".uno:AutoOutline"/>
+                    <menu:menuitem menu:id=".uno:ClearOutline"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:DataPilotMenu" menu:label="" >
+            <menu:menu menu:id=".uno:DataPilotMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DataDataPilotRun" menu:helpid="26151" menu:label="" />
-                    <menu:menuitem menu:id=".uno:RecalcPivotTable" menu:helpid="26314" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DeletePivotTable" menu:helpid="26315" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
+                    <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
+                    <menu:menuitem menu:id=".uno:DeletePivotTable"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DataAreaRefresh" menu:helpid="26643" menu:label="" />
+            <menu:menuitem menu:id=".uno:DataAreaRefresh"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:WindowList" menu:label="" >
+    <menu:menu menu:id=".uno:WindowList">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NewWindow" menu:helpid="5620" menu:label="" />
-            <menu:menuitem menu:id=".uno:CloseWin" menu:helpid="5621" menu:label="" />
+            <menu:menuitem menu:id=".uno:NewWindow"/>
+            <menu:menuitem menu:id=".uno:CloseWin"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SplitWindow" menu:helpid="26069" menu:label="" />
-            <menu:menuitem menu:id=".uno:FreezePanes" menu:helpid="26070" menu:label="" />
+            <menu:menuitem menu:id=".uno:SplitWindow"/>
+            <menu:menuitem menu:id=".uno:FreezePanes"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:HelpMenu" menu:label="" >
+    <menu:menu menu:id=".uno:HelpMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:HelpIndex" menu:helpid="5401" menu:label="" />
-            <menu:menuitem menu:id=".uno:ExtendedHelp" menu:helpid="5402" menu:label="" />
+            <menu:menuitem menu:id=".uno:HelpIndex"/>
+            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelpSupport" menu:helpid="6683" menu:label="" />
-            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg" menu:helpid="6537" menu:label="" />
-            <menu:menuitem menu:id=".uno:OnlineUpdate" />
+            <menu:menuitem menu:id=".uno:HelpSupport"/>
+            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
+            <menu:menuitem menu:id=".uno:OnlineUpdate"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:About" menu:helpid="5301" menu:label="" />
+            <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>
 </menu:menubar>
