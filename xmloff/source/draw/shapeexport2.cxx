@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:22:05 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1623,7 +1623,13 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 else
                 {
                     // embed as Base64
-                    rExport.AddEmbeddedObjectAsBase64( sURL );
+                    // this is an alien object ( currently MSOLE is the only supported type of such objects )
+                    // in case it is not an OASIS format the object should be asked to store replacement image if possible
+
+                    ::rtl::OUString sURLRequest( sURL );
+                    if ( ( rExport.getExportFlags() & EXPORT_OASIS ) == 0 )
+                        sURLRequest += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?oasis=false" ) );
+                    rExport.AddEmbeddedObjectAsBase64( sURLRequest );
                 }
             }
         }
