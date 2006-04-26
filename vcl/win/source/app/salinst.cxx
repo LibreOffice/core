@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:42:12 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1136,6 +1136,6 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPT
     if (pExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_MSC_CPP_EXCEPTION)
         return EXCEPTION_CONTINUE_SEARCH;
 
-    return EXCEPTION_EXECUTE_HANDLER;
+    return UnhandledExceptionFilter( pExceptionInfo );
 }
 
