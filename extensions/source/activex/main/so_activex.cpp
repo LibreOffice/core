@@ -58,13 +58,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 // DllRegisterServer - Adds entries to the system registry
 
 // for now database component and chart are always installed
-#define SUPPORTED_EXT_NUM 31
+#define SUPPORTED_EXT_NUM 30
 const char* aFileExt[] = { ".vor",
                            ".sds", ".sda", ".sdd", ".sdp", ".sdc", ".sdw", ".smf",
                            ".stw", ".stc", ".sti", ".std",
                            ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
                            ".ott", ".otg", ".otp", ".ots", ".otf",
-                           ".odt", ".oth", ".odm", ".odg", ".odp", ".ods", ".odf", ".odb"};
+                           ".odt", ".oth", ".odm", ".odg", ".odp", ".ods", ".odf"};
 const char* aMimeType[] = {
                           "application/vnd.stardivision.writer",
 
@@ -100,15 +100,14 @@ const char* aMimeType[] = {
                           MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII,
                           MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII,
                           MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII };
+                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII };
 
 const int nForModes[] = { 16,
                            1,  2,  4,  4,  8, 16, 32,
                           16,  8,  4,  2,
                           16,  8,  4,  2, 16, 32,
                           16,  2,  4,  8, 32,
-                          16, 16, 16,  2,  4,  8, 32, 1 };
+                          16, 16, 16,  2,  4,  8, 32 };
 
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
