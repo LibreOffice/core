@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:42:30 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "PreviewValueSet.hxx"
 
 #include "RecentlyUsedMasterPages.hxx"
+#include "MasterPageContainerProviders.hxx"
 #include "MasterPageObserver.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -49,8 +50,9 @@ namespace sd { namespace toolpanel { namespace controls {
 RecentMasterPagesSelector::RecentMasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
-    ViewShellBase& rBase)
-    : MasterPagesContainerSelector (pParent, rDocument, rBase)
+    ViewShellBase& rBase,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
+    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer)
 {
     SetName (String(RTL_CONSTASCII_USTRINGPARAM("RecentMasterPagesSelector")));
 }
@@ -71,7 +73,7 @@ void RecentMasterPagesSelector::LateInit (void)
 {
     MasterPagesSelector::LateInit();
 
-    Fill ();
+    MasterPagesSelector::Fill();
     RecentlyUsedMasterPages::Instance().AddEventListener (
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
@@ -81,18 +83,16 @@ void RecentMasterPagesSelector::LateInit (void)
 
 IMPL_LINK(RecentMasterPagesSelector,MasterPageListListener, void*, pUnused)
 {
-    Fill ();
+    MasterPagesSelector::Fill();
     return 0;
 }
 
 
 
 
-void RecentMasterPagesSelector::Fill (void)
+void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    Clear ();
-
-    // Create a set of names of the master pages used by the given document.
+    // Create a set of names of the master pages used by the document.
     MasterPageObserver::MasterPageNameSet aCurrentNames;
     USHORT nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     USHORT nIndex;
@@ -104,27 +104,26 @@ void RecentMasterPagesSelector::Fill (void)
     }
     MasterPageObserver::MasterPageNameSet::iterator aI;
 
-    // Insert the recently used master pages that are not currently used.
-    int nPageCount = RecentlyUsedMasterPages::Instance().GetMasterPageCount();
+    // Insert the recently used master pages that are currently not used.
+    RecentlyUsedMasterPages& rInstance (RecentlyUsedMasterPages::Instance());
+    int nPageCount = rInstance.GetMasterPageCount();
     for (nIndex=0; nIndex<nPageCount; nIndex++)
     {
-        // Add the page when a) the style name is empty, i.e. it has not yet
-        // been loaded (and thus can not be in use) or otherwise b) the
+        // Add an entry when a) the page is already known to the
+        // MasterPageContainer, b) the style name is empty, i.e. it has not yet
+        // been loaded (and thus can not be in use) or otherwise c) the
         // style name is not currently in use.
-        String sStyleName (RecentlyUsedMasterPages::Instance().GetMasterPageStyleName(nIndex));
-        String sPageName (RecentlyUsedMasterPages::Instance().GetMasterPageName(nIndex));
-        if (sStyleName.Len()==0
-            || aCurrentNames.find(sStyleName) == aCurrentNames.end())
+        MasterPageContainer::Token aToken (rInstance.GetTokenForIndex(nIndex));
+        if (aToken != MasterPageContainer::NIL_TOKEN)
         {
-            AddItemForPage (
-                String(),
-                sPageName,
-                NULL,
-                Image());
-            aCurrentNames.insert (sPageName);
+            String sStyleName (mpContainer->GetStyleNameForToken(aToken));
+            if (sStyleName.Len()==0
+                || aCurrentNames.find(sStyleName) == aCurrentNames.end())
+            {
+                rItemList.push_back(aToken);
+            }
         }
     }
-    mpPageSet->Rearrange();
 }
 
 
@@ -136,7 +135,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
 {
     USHORT nSelectedItemId = mpPageSet->GetSelectItemId();
 
-    MasterPagesContainerSelector::AssignMasterPageToPageList(pMasterPage, rPageList);
+    MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rPageList);
 
     // Restore the selection.
     if (mpPageSet->GetItemCount() > 0)
