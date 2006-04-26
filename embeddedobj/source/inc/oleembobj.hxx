@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-03 08:50:43 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,8 @@ protected:
         throw ( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream )
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
+                    sal_Bool bAllowRepair50 = sal_False )
         throw ();
 
     sal_Bool SaveObject_Impl();
