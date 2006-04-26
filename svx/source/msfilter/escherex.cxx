@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:18:39 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
+#endif
+#ifndef _SVDOPATH_HXX
+#include <svdopath.hxx>
 #endif
 #ifndef _INC_STDLIB
 #include <stdlib.h>
@@ -161,6 +164,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_hpp_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -686,8 +692,12 @@ void EscherPropertyContainer::CreateTextProperties(
     {
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowWidth" ) ), sal_True ) )
             aAny >>= bAutoGrowWidth;
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) ), sal_True ) )
-            aAny >>= bAutoGrowHeight;
+
+// i63936 not setting autogrowheight, because otherwise
+// the minframeheight of the text will be ignored
+//
+//      if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) ), sal_True ) )
+//          aAny >>= bAutoGrowHeight;
     }
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) ) ) )
         aAny >>= nLeft;
@@ -4125,29 +4135,112 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
     }
     else
     {
-        ::com::sun::star::awt::Point aPoint( aXShape->getPosition() );
-        ::com::sun::star::awt::Size  aSize( aXShape->getSize() );
+        bool bRectangularConnection = true;
 
-        Rectangle   aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-        Point       aCenter( aRect.Center() );
-        Polygon     aPoly( 4 );
+        if ( aType == "drawing.Custom" )
+        {
+            SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
+            if ( pCustoShape && pCustoShape->ISA( SdrObjCustomShape ) )
+            {
+                SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)
+                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
-        aPoly[ 0 ] = Point( aCenter.X(), aRect.Top() );
-        aPoly[ 1 ] = Point( aRect.Left(), aCenter.Y() );
-        aPoly[ 2 ] = Point( aCenter.X(), aRect.Bottom() );
-        aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
+                const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM( "Path" ) );
+                const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+                const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM( "GluePointType" ) );
 
-        sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny,
-            aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
-                ? *((sal_Int32*)aAny.getValue() )
-                : 0;
-        if ( nAngle )
-            aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );
-        nRule = GetClosestPoint( aPoly, aRefPoint );
+                rtl::OUString sShapeType;
+                uno::Any* pType = rGeometryItem.GetPropertyValueByName( sType );
+                if ( pType )
+                    *pType >>= sShapeType;
+                MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
+
+                uno::Any* pGluePointType = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sGluePointType );
+
+                sal_Int16 nGluePointType;
+                if ( pGluePointType )
+                    *pGluePointType >>= nGluePointType;
+                else
+                    nGluePointType = GetCustomShapeConnectionTypeDefault( eSpType );
+
+                if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM )
+                {
+                    const SdrGluePointList* pList = pCustoShape->GetGluePointList();
+                    if ( pList )
+                    {
+                        Polygon aPoly;
+                        USHORT nNum, nAnz = pList->GetCount();
+                        if ( nAnz )
+                        {
+                            for ( nNum = 0; nNum < nAnz; nNum++ )
+                            {
+                                const SdrGluePoint& rGP = (*pList)[ nNum ];
+                                Point aPt( rGP.GetAbsolutePos( *pCustoShape ) );
+                                aPoly.Insert( POLY_APPEND, aPt );
+                            }
+                            nRule = GetClosestPoint( aPoly, aRefPoint );
+                            bRectangularConnection = false;
+                        }
+                    }
+                }
+                else if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
+                {
+                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( TRUE );
+                    if ( pPoly && pPoly->ISA( SdrPathObj ) )
+                    {
+                        sal_Int16 a, b, nIndex = 0;
+                        sal_uInt32 nDistance = 0xffffffff;
+
+                        const XPolyPolygon& rPolyPoly = ((SdrPathObj*)pPoly)->GetPathPoly();
+                        for ( a = 0; a < rPolyPoly.Count(); a++ )
+                        {
+                            const XPolygon& rPoly = rPolyPoly.GetObject( a );
+                            for ( b = 0; b < rPoly.GetPointCount(); b++ )
+                            {
+                                if ( rPoly.GetFlags( b ) != XPOLY_NORMAL )
+                                    continue;
+                                const Point& rPt = rPoly[ b ];
+                                sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - rPt.X(), aRefPoint.Y - rPt.Y() );
+                                if ( nDist < nDistance )
+                                {
+                                    nRule = nIndex;
+                                    nDistance = nDist;
+                                }
+                                nIndex++;
+                            }
+                        }
+                        if ( nDistance != 0xffffffff )
+                            bRectangularConnection = false;
+                    }
+                }
+            }
+        }
+        if ( bRectangularConnection )
+        {
+            ::com::sun::star::awt::Point aPoint( aXShape->getPosition() );
+            ::com::sun::star::awt::Size  aSize( aXShape->getSize() );
+
+            Rectangle   aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
+            Point       aCenter( aRect.Center() );
+            Polygon     aPoly( 4 );
+
+            aPoly[ 0 ] = Point( aCenter.X(), aRect.Top() );
+            aPoly[ 1 ] = Point( aRect.Left(), aCenter.Y() );
+            aPoly[ 2 ] = Point( aCenter.X(), aRect.Bottom() );
+            aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
+
+            sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny,
+                aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                    ? *((sal_Int32*)aAny.getValue() )
+                    : 0;
+            if ( nAngle )
+                aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );
+            nRule = GetClosestPoint( aPoly, aRefPoint );
+
+            if ( aType == "drawing.Ellipse" )
+                nRule <<= 1;    // In PPT hat eine Ellipse 8 Möglichkeiten sich zu connecten
+        }
     }
-    if ( aType == "drawing.Ellipse" )
-        nRule <<= 1;    // In PPT hat eine Ellipse 8 Möglichkeiten sich zu connecten
-
     return nRule;
 }
 
