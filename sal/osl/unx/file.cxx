@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:06:02 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
+#define HAVE_O_EXLOCK
 
 // add MACOSX Time Value
 
@@ -545,6 +546,7 @@ oslFileHandle osl_createFileHandleFromFD( int fd )
     return (oslFileHandle)pHandleImpl;
 }
 
+
 /****************************************************************************
  *  osl_openFile
  ***************************************************************************/
@@ -616,6 +618,9 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
             {
                 mode |= S_IWUSR | S_IWGRP | S_IWOTH;
                 flags = O_RDWR;
+#ifdef HAVE_O_EXLOCK
+                flags |= O_EXLOCK | O_NONBLOCK;
+#endif
                 aflock.l_type = F_WRLCK;
             }
 
@@ -623,12 +628,16 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
             {
                 mode |= S_IWUSR | S_IWGRP | S_IWOTH;
                 flags = O_CREAT | O_EXCL | O_RDWR;
+#ifdef HAVE_O_EXLOCK
+                flags |= O_EXLOCK | O_NONBLOCK;
+#endif
             }
 
             /* open the file */
             fd = open( buffer, flags, mode );
             if ( fd >= 0 )
             {
+#ifndef HAVE_O_EXLOCK
                 /* check if file lock is enabled and clear l_type member of flock otherwise */
                 if( (char *) -1 == pFileLockEnvVar )
                 {
@@ -638,7 +647,16 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
                     if( NULL == pFileLockEnvVar)
                         pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
                 }
+#else
+                /* disable range based locking */
+                pFileLockEnvVar = NULL;
 
+                /* remove the NONBLOCK flag again */
+                flags = fcntl(fd, F_GETFL, NULL);
+                flags &= ~O_NONBLOCK;
+                if( 0 > fcntl(fd, F_GETFL, flags) )
+                    return oslTranslateFileError(OSL_FET_ERROR, errno);
+#endif
                 if( NULL == pFileLockEnvVar )
                     aflock.l_type = 0;
 
