@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:00:36 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,6 +607,9 @@ public:
     void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
 
     sd::UndoManager* GetUndoManager() const;
+
+    /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
+    static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
 
 private:
     /** This member stores the printer independent layout mode.  Please
