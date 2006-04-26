@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 06:44:01 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:53:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,17 +55,20 @@ PRJINC=..$/..$/ ..$/..$/slidesorter
 SLOFILES =      							\
     $(SLO)$/AllMasterPagesSelector.obj		\
     $(SLO)$/CurrentMasterPagesSelector.obj	\
+    $(SLO)$/DocumentHelper.obj				\
     $(SLO)$/MasterPageObserver.obj			\
     $(SLO)$/MasterPagesPanel.obj			\
     $(SLO)$/MasterPagesSelector.obj			\
-    $(SLO)$/MasterPagesContainerSelector.obj\
-    $(SLO)$/MasterPagesSelectorListener.obj	\
     $(SLO)$/MasterPageContainer.obj			\
+    $(SLO)$/MasterPageContainerFiller.obj	\
+    $(SLO)$/MasterPageContainerProviders.obj\
+    $(SLO)$/MasterPageContainerQueue.obj	\
+    $(SLO)$/MasterPageDescriptor.obj		\
     $(SLO)$/PreviewValueSet.obj				\
     $(SLO)$/RecentlyUsedMasterPages.obj		\
     $(SLO)$/RecentMasterPagesSelector.obj	\
-    $(SLO)$/CustomAnimationPanel.obj \
-    $(SLO)$/SlideTransitionPanel.obj \
+    $(SLO)$/CustomAnimationPanel.obj		\
+    $(SLO)$/SlideTransitionPanel.obj		\
     $(SLO)$/AnimationSchemesPanel.obj
 
 
