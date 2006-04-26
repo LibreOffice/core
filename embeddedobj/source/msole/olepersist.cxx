@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:08:20 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/classids.hxx>
 
 
 #include <olecomponent.hxx>
@@ -774,7 +775,8 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
 //------------------------------------------------------
 uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
-        const uno::Reference< io::XStream >& xStream )
+        const uno::Reference< io::XStream >& xStream,
+        sal_Bool bAllowToRepair50 )
     throw ()
 {
     uno::Reference< io::XStream > xResult;
@@ -828,6 +830,74 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     {}
                 }
             }
+
+            try
+            {
+                if ( bAllowToRepair50 && !xResult.is() )
+                {
+                    ::rtl::OUString aOrigContName( RTL_CONSTASCII_USTRINGPARAM( "Ole-Object" ) );
+                    if ( xNameContainer->hasByName( aOrigContName ) )
+                    {
+                        uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );
+                        uno::Sequence< sal_Int8 > aClassID;
+                        if ( ClassIDsEqual( xClassified->getClassID(), GetSequenceClassID( SO3_OUT_CLASSID ) ) )
+                        {
+                            // this is an OLE object wrongly stored in 5.0 format
+                            // this object must be repaired since SO7 has done it
+
+                            uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
+                            uno::Reference< io::XTruncate > xTruncate( xOutputStream, uno::UNO_QUERY_THROW );
+
+                            uno::Reference< io::XInputStream > xOrigInputStream;
+                            if ( ( xNameContainer->getByName( aOrigContName ) >>= xOrigInputStream )
+                              && xOrigInputStream.is() )
+                            {
+                                // the provided input stream must be based on temporary medium and must be independent
+                                // from the stream the storage is based on
+                                uno::Reference< io::XSeekable > xOrigSeekable( xOrigInputStream, uno::UNO_QUERY );
+                                if ( xOrigSeekable.is() )
+                                    xOrigSeekable->seek( 0 );
+
+                                uno::Reference< lang::XComponent > xNameContDisp( xNameContainer, uno::UNO_QUERY_THROW );
+                                xNameContDisp->dispose(); // free the original stream
+
+                                xTruncate->truncate();
+                                ::comphelper::OStorageHelper::CopyInputToOutput( xOrigInputStream, xOutputStream );
+                                xOutputStream->flush();
+
+                                if ( xStream == m_xObjectStream )
+                                {
+                                    if ( m_aTempURL.getLength() )
+                                    {
+                                        // this is the own stream, so the temporary URL must be cleaned if it exists
+                                        KillFile_Impl( m_aTempURL, m_xFactory );
+                                        m_aTempURL = ::rtl::OUString();
+                                    }
+
+#ifdef WNT
+                                    // retry to create the component after recovering
+                                    GetRidOfComponent();
+
+                                    try
+                                    {
+                                        CreateOleComponentAndLoad_Impl( NULL );
+                                        m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+                                    }
+                                    catch( uno::Exception& )
+                                    {
+                                        GetRidOfComponent();
+                                    }
+#endif
+                                }
+
+                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, sal_False );
+                            }
+                        }
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {}
         }
     }
 
