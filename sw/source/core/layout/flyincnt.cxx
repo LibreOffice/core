@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:12:13 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,8 +366,11 @@ void SwFlyInCntFrm::MakeAll()
             MakeObjPos();
         }
 
-/* #111909# objects anchored as characters may exceed right margin!
-        if ( bValidPos && bValidSize )
+        // --> OD 2006-04-13 #b6402800#
+        // re-activate clipping of as-character anchored Writer fly frames
+        // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
+        if ( bValidPos && bValidSize &&
+             GetFmt()->GetDoc()->ClipAsCharacterAnchoredWriterFlyFrames() )
         {
             SwFrm* pFrm = AnchorFrm();
             if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&
@@ -378,7 +381,7 @@ void SwFlyInCntFrm::MakeAll()
                 bWidthClipped = TRUE;
             }
         }
- */
+        // <--
     }
     Unlock();
 }
