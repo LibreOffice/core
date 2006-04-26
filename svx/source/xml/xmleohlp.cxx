@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:15:31 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,12 @@
 #ifndef _COM_SUN_STAR_EMBED_ENTRYINITMODES_HPP_
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -74,6 +80,7 @@
 #include <unotools/tempfile.hxx>
 #endif
 
+#include <svtools/embedhlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -247,7 +254,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         OUString& rContainerStorageName,
         OUString& rObjectStorageName,
         sal_Bool bInternalToExternal,
-        sal_Bool *pGraphicRepl ) const
+        sal_Bool *pGraphicRepl,
+        sal_Bool *pOasisFormat ) const
 {
     // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
     //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
@@ -258,38 +266,70 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     //           or: <path>/<object-name>
     //           or: <object-name>
     // currently, path may only consist of a single directory name
+    // it is also possible to have additional arguments at the end of URL: <main URL>[?<name>=<value>[,<name>=<value>]*]
+
     sal_Bool    bRet = sal_False;
     if( pGraphicRepl )
         *pGraphicRepl = sal_False;
 
+    if( pOasisFormat )
+        *pOasisFormat = sal_True; // the default value
+
     if( !rURLStr.getLength() )
         return sal_False;
 
+    // get rid of arguments
+    sal_Int32 nPos = rURLStr.indexOf( '?' );
+    ::rtl::OUString aURLNoPar;
+    if ( nPos == -1 )
+        aURLNoPar = rURLStr;
+    else
+    {
+        aURLNoPar = rURLStr.copy( 0, nPos );
+
+        // check the arguments
+        nPos++;
+        while( nPos >= 0 && nPos < rURLStr.getLength() )
+        {
+            ::rtl::OUString aToken = rURLStr.getToken( 0, ',', nPos );
+            if ( aToken.equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "oasis=false" ) ) ) )
+            {
+                if ( pOasisFormat )
+                    *pOasisFormat = sal_False;
+                break;
+            }
+            else
+            {
+                DBG_ASSERT( sal_False, "invalid arguments was found in URL!" );
+            }
+        }
+    }
+
     if( bInternalToExternal )
     {
-        sal_Int32 nPos = rURLStr.indexOf( ':' );
+        nPos = aURLNoPar.indexOf( ':' );
         if( -1 == nPos )
             return sal_False;
         sal_Bool bObjUrl =
-            0 == rURLStr.compareToAscii( XML_EMBEDDEDOBJECT_URL_BASE,
+            0 == aURLNoPar.compareToAscii( XML_EMBEDDEDOBJECT_URL_BASE,
                                  sizeof( XML_EMBEDDEDOBJECT_URL_BASE ) -1 );
         sal_Bool bGrUrl = !bObjUrl &&
-              0 == rURLStr.compareToAscii( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE,
+              0 == aURLNoPar.compareToAscii( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE,
                          sizeof( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE ) -1 );
         if( !(bObjUrl || bGrUrl) )
             return sal_False;
 
         sal_Int32 nPathStart = nPos + 1;
-        nPos = rURLStr.lastIndexOf( '/' );
+        nPos = aURLNoPar.lastIndexOf( '/' );
         if( -1 == nPos )
         {
             rContainerStorageName = OUString();
-            rObjectStorageName = rURLStr.copy( nPathStart );
+            rObjectStorageName = aURLNoPar.copy( nPathStart );
         }
         else if( nPos > nPathStart )
         {
-            rContainerStorageName = rURLStr.copy( nPathStart, nPos-nPathStart);
-            rObjectStorageName = rURLStr.copy( nPos+1 );
+            rContainerStorageName = aURLNoPar.copy( nPathStart, nPos-nPathStart);
+            rObjectStorageName = aURLNoPar.copy( nPos+1 );
         }
         else
             return sal_False;
@@ -310,22 +350,22 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     }
     else
     {
-        DBG_ASSERT( '#' != rURLStr[0], "invalid object URL" );
+        DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
 
-        sal_Int32 nPos = rURLStr.lastIndexOf( '/' );
+        sal_Int32 nPos = aURLNoPar.lastIndexOf( '/' );
         if( -1 == nPos )
         {
             rContainerStorageName = OUString();
-            rObjectStorageName = rURLStr;
+            rObjectStorageName = aURLNoPar;
         }
         else
         {
             sal_Int32 nPathStart = 0;
-            if( 0 == rURLStr.compareToAscii( "./", 2 ) )
+            if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
                 nPathStart = 2;
             if( nPos >= nPathStart )
-                rContainerStorageName = rURLStr.copy( nPathStart, nPos-nPathStart);
-            rObjectStorageName = rURLStr.copy( nPos+1 );
+                rContainerStorageName = aURLNoPar.copy( nPathStart, nPos-nPathStart);
+            rObjectStorageName = aURLNoPar.copy( nPos+1 );
         }
     }
 
@@ -512,6 +552,52 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
 
 // -----------------------------------------------------------------------------
 
+uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacementImage(
+                                            const uno::Reference< embed::XEmbeddedObject >& xObj )
+{
+    uno::Reference< io::XInputStream > xStream;
+
+    if( xObj.is() )
+    {
+        try
+        {
+            sal_Bool bSwitchBackToLoaded = sal_False;
+            sal_Int32 nCurState = xObj->getCurrentState();
+            if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+            {
+                // means that the object is not active
+                // copy replacement image from old to new container
+                OUString aMediaType;
+                xStream = mpDocPersist->GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+            }
+
+            if ( !xStream.is() )
+            {
+                // the image must be regenerated
+                // TODO/LATER: another aspect could be used
+                if ( nCurState == embed::EmbedStates::LOADED )
+                    bSwitchBackToLoaded = sal_True;
+
+                ::rtl::OUString aMediaType;
+                xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                    embed::Aspects::MSOLE_CONTENT,
+                                                    xObj,
+                                                    &aMediaType );
+            }
+
+            if ( bSwitchBackToLoaded )
+                // switch back to loaded state; that way we have a minimum cache confusion
+                xObj->changeState( embed::EmbedStates::LOADED );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    return xStream;
+}
+
+// -----------------------------------------------------------------------------
+
 void SvXMLEmbeddedObjectHelper::Init(
         const uno::Reference < embed::XStorage >& rRootStorage,
         SfxObjectShell& rPersist,
@@ -614,51 +700,61 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     else
     {
         sal_Bool bGraphicRepl = sal_False;
+        sal_Bool bOasisFormat = sal_True;
         Reference < XInputStream > xStrm;
         OUString aContainerStorageName, aObjectStorageName;
         if( ImplGetStorageNames( rURLStr, aContainerStorageName,
                                  aObjectStorageName,
                                  sal_True,
-                                    &bGraphicRepl ) )
+                                    &bGraphicRepl,
+                                 &bOasisFormat ) )
         {
             try
             {
-                if( bGraphicRepl )
-                {
-                    Reference < embed::XEmbeddedObject > xObj =
-                        mpDocPersist->GetEmbeddedObjectContainer().
-                            GetEmbeddedObject( aObjectStorageName );
-                    DBG_ASSERT( xObj.is(), "Didn't get object" );
-                    if( xObj.is() )
-                    {
-                        OUString aMimeType;
-                        xStrm = mpDocPersist->GetEmbeddedObjectContainer().
-                                                    GetGraphicStream( xObj,
-                                                    &aMimeType );
-                    }
-                }
-                else
-                {
-                    comphelper::EmbeddedObjectContainer& rContainer =
+                comphelper::EmbeddedObjectContainer& rContainer =
                         mpDocPersist->GetEmbeddedObjectContainer();
 
-                    Reference < embed::XEmbeddedObject > xObj =
-                        rContainer.GetEmbeddedObject( aObjectStorageName );
-                    Reference < embed::XEmbedPersist > xPersist( xObj, UNO_QUERY );
-                    if( xPersist.is() )
+                Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( aObjectStorageName );
+                DBG_ASSERT( xObj.is(), "Didn't get object" );
+
+                if( xObj.is() )
+                {
+                    if( bGraphicRepl )
                     {
-                        if( !mxTempStorage.is() )
-                            mxTempStorage =
-                                comphelper::OStorageHelper::GetTemporaryStorage();
-                        Sequence < beans::PropertyValue > aDummy1( 0), aDummy2( 0 );
-                        xPersist->storeToEntry( mxTempStorage, aObjectStorageName,
-                                                aDummy1, aDummy2 );
-                        Reference < io::XStream > xStream =
-                            mxTempStorage->openStreamElement(
-                                                    aObjectStorageName,
-                                                    embed::ElementModes::READ);
-                        if( xStream.is() )
-                            xStrm = xStream->getInputStream();
+                        xStrm = ImplGetReplacementImage( xObj );
+                    }
+                    else
+                    {
+                        Reference < embed::XEmbedPersist > xPersist( xObj, UNO_QUERY );
+                        if( xPersist.is() )
+                        {
+                            if( !mxTempStorage.is() )
+                                mxTempStorage =
+                                    comphelper::OStorageHelper::GetTemporaryStorage();
+                            Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
+                            aEmbDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
+                               aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
+                            if ( !bOasisFormat )
+                            {
+                                OUString aMimeType;
+                                uno::Reference< io::XInputStream > xGrInStream = ImplGetReplacementImage( xObj );
+                                if ( xGrInStream.is() )
+                                {
+                                    aEmbDescr.realloc( 2 );
+                                    aEmbDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                                    aEmbDescr[1].Value <<= xGrInStream;
+                                }
+                            }
+
+                            xPersist->storeToEntry( mxTempStorage, aObjectStorageName,
+                                                    aDummy, aEmbDescr );
+                            Reference < io::XStream > xStream =
+                                mxTempStorage->openStreamElement(
+                                                        aObjectStorageName,
+                                                        embed::ElementModes::READ);
+                            if( xStream.is() )
+                                xStrm = xStream->getInputStream();
+                        }
                     }
                 }
             }
