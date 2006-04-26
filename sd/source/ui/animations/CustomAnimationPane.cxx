@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:44:27 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,7 @@ using ::com::sun::star::beans::XPropertyChangeListener;
 using ::com::sun::star::drawing::XDrawView;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;
+using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
@@ -1689,14 +1690,18 @@ void CustomAnimationPane::onChangeCurrentPage()
 {
     if( mxView.is() ) try
     {
-        mxCurrentPage = mxView->getCurrentPage();
-        SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
-        if( pPage )
+        Reference< XDrawPage > xNewPage( mxView->getCurrentPage() );
+        if( xNewPage != mxCurrentPage )
         {
-            mpMainSequence = pPage->getMainSequence();
-            mpCustomAnimationList->update( mpMainSequence );
+            mxCurrentPage = xNewPage;
+            SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
+            if( pPage )
+            {
+                mpMainSequence = pPage->getMainSequence();
+                mpCustomAnimationList->update( mpMainSequence );
+            }
+            updateControls();
         }
-        updateControls();
     }
     catch( Exception& )
     {
