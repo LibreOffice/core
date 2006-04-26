@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:42:44 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:25:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ BOOL StgCompObjStream::Load()
         sal_Char* p = new sal_Char[ (USHORT) nLen1 ];
         if( Read( p, nLen1 ) == (ULONG) nLen1 )
         {
-            aUserName = String( p, gsl_getSystemTextEncoding() );
+            aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
 /*          // Now we can read the CB format
             INT32 nLen2 = 0;
             *this >> nLen2;
@@ -144,7 +144,7 @@ BOOL StgCompObjStream::Load()
                 // get a string name
                 if( nLen2 > nLen1 )
                     delete p, p = new char[ nLen2 ];
-                if( Read( p, nLen2 ) == (ULONG) nLen2 )
+                if( Read( p, nLen2 ) == (ULONG) nLen2 && nLen2 )
                     nCbFormat = Exchange::RegisterFormatName( String( p ) );
                 else
                     SetError( SVSTREAM_GENERALERROR );
