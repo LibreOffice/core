@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:12:03 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,13 +203,12 @@ void SwFlyFreeFrm::MakeAll()
 
     if ( IsClipped() )
     {
+        bValidSize = bHeightClipped = bWidthClipped = FALSE;
         // --> OD 2004-11-03 #114798# - no invalidation of position,
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
-        bValidSize = bHeightClipped = bWidthClipped = FALSE;
         // --> OD 2004-11-15 #i34753# - add condition:
         // no invalidation of position, if no direct move is requested in <CheckClip(..)>
-        bValidSize = bHeightClipped = bWidthClipped = FALSE;
         if ( !IsNoMoveOnCheckClip() &&
              !( PositionLocked() &&
                 GetAnchorFrm()->IsInFly() &&
