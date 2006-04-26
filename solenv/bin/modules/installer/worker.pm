@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:52:51 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:44:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -694,6 +694,10 @@ sub install_simple ($$$$$)
 {
     my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray) = @_;
 
+        # locate GNU cp on the system
+        my $gnucp = 'cp';
+        if ( $ENV{'GNUCOPY'} ) { $gnucp = $ENV{'GNUCOPY'}; }
+
     installer::logger::print_message( "... installing module $packagename ...\n" );
 
     my $destdir = $installer::globals::destdir;
@@ -729,7 +733,7 @@ sub install_simple ($$$$$)
         my $sourcepath = $onefile->{'sourcepath'};
 
         # printf "mv $sourcepath $destdir$destination\n";
-        `cp -af '$sourcepath' '$destdir$destination'`;
+        `$gnucp -af '$sourcepath' '$destdir$destination'`;
         `chmod $unixrights '$destdir$destination'`;
         push @lines, "$destination\n";
     }
