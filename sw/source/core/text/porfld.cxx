@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:38:11 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,7 +602,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
         long nDiff;
-        if ( !rInf.GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() &&
+        if ( !rInf.GetTxtFrm()->GetTxtNode()->GetDoc()->IgnoreFirstLineIndentInNumbering() &&
              // --> FME 2004-08-13 #i32902#
              !IsFtnNumPortion() )
              // <--
