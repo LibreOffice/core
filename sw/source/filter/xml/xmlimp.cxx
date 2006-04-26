@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:25:34 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1165,6 +1165,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // --> OD 2006-03-14 #i62875#
     bool bDoNotCaptureDrawObjsOnPage( false );
     // <--
+    // --> OD 2006-04-13 #b6402800#
+    bool bClipAsCharacterAnchoredWriterFlyFrames( false );
+    // <--
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1241,6 +1244,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage")) )
                     bDoNotCaptureDrawObjsOnPage = true;
                 // <--
+                // --> OD 2006-04-13 #b6402800#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames")) )
+                    bClipAsCharacterAnchoredWriterFlyFrames = true;
+                // <--
             }
             catch( Exception& )
             {
@@ -1251,6 +1258,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     }
 
     // finally, treat the non-default cases
+    // --> OD 2006-04-18 #b6402800#
+    // introduce boolean, that indicates a document, written by version prior SO8.
+    const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
+    // <--
+
     if( ! bPrinterIndependentLayout )
     {
         Any aAny;
@@ -1336,7 +1348,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // flag will be set to 'true'. SO8 documents surely have the
     // 'ConsiderWrapOnObjPos' property set (no matter if 'true' or 'false'),
     // therefore the correct condition to set this flag is this:
-    if( !bIgnoreFirstLineIndentInNumbering && !bConsiderWrapOnObjPos )
+    if( !bIgnoreFirstLineIndentInNumbering && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("IgnoreFirstLineIndentInNumbering")), makeAny( true ) );
@@ -1345,7 +1357,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     // --> FME 2005-06-08 #i49277#
     // This flag has to be set for all documents < SO8
-    if ( !bDoNotJustifyLinesWithManualBreak && !bConsiderWrapOnObjPos )
+    if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotJustifyLinesWithManualBreak")), makeAny( true ) );
@@ -1354,7 +1366,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     // --> FME 2005-08-11 #i53199#
     // This flag has to be set for all documents < SO8
-    if ( !bDoNotResetParaAttrsForNumFont && !bConsiderWrapOnObjPos )
+    if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotResetParaAttrsForNumFont")), makeAny( true ) );
@@ -1371,10 +1383,19 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     // --> OD 2006-03-14 #i62875#
     // This flag has to be set for all documents < SO8
-    if ( !bDoNotCaptureDrawObjsOnPage && !bConsiderWrapOnObjPos )
+    if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotCaptureDrawObjsOnPage") ), makeAny( true ) );
+    }
+    // <--
+
+    // --> OD 2006-04-13 #b6402800#
+    // This flag has to be set for all documents < SO8
+    if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames") ), makeAny( true ) );
     }
     // <--
 
