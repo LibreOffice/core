@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:40:00 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ namespace {
 
 using namespace sd;
 
+class ToolBarRules;
 
 /** Lock of the frame::XLayoutManager.
 */
@@ -181,6 +182,13 @@ public:
             Returns whether the shell is removed.
     */
     bool RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
+
+    /** Releasing all shells means that the given ToolBarRules object is
+        informed that every shell mananged by the called ToolBarShellList is
+        about to be removed and that the associated framework tool bars can
+        be removed as well.  The caller still has to call UpdateShells().
+    */
+    void ReleaseAllShells (ToolBarRules& rRules);
 
     /** The requested list is made the current list by activating  all
         shells in the requested list and by deactivating the shells in the
@@ -302,6 +310,14 @@ public:
     void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
     void RemoveToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
     void RemoveToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
+
+    /** Release all tool bar shells and the associated framework tool bars.
+        Typically called when the main view shell is being replaced by
+        another, all tool bar shells are released.  In that process the
+        shells are destroyed anyway and whithout calling this method they
+        would still be referenced.
+    */
+    void ReleaseAllToolBarShells (void);
 
     void PreUpdate (void);
     void PostUpdate (void);
@@ -588,7 +604,10 @@ void ToolBarManager::UnlockUpdate (void)
 void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
 {
     if (mpImpl.get() != NULL)
+    {
+        mpImpl->ReleaseAllToolBarShells();
         mpImpl->GetToolBarRules().MainViewShellChanged(nShellType);
+    }
 }
 
 
@@ -597,7 +616,10 @@ void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
 void ToolBarManager::MainViewShellChanged (const ViewShell& rMainViewShell)
 {
     if (mpImpl.get() != NULL)
+    {
+        mpImpl->ReleaseAllToolBarShells();
         mpImpl->GetToolBarRules().MainViewShellChanged(rMainViewShell);
+    }
 }
 
 
@@ -797,6 +819,15 @@ void ToolBarManager::Implementation::RemoveToolBarShell (
         GetToolBarRules().SubShellRemoved(eGroup, nToolBarId);
         maToolBarShellList.RemoveShellId(eGroup,nToolBarId);
     }
+}
+
+
+
+
+void ToolBarManager::Implementation::ReleaseAllToolBarShells (void)
+{
+    maToolBarShellList.ReleaseAllShells(GetToolBarRules());
+    maToolBarShellList.UpdateShells(mrBase.GetMainViewShell(), mrBase.GetViewShellManager());
 }
 
 
@@ -1614,6 +1645,19 @@ bool ToolBarShellList::RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, s
 
 
 
+void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
+{
+    GroupedShellList::iterator iDescriptor;
+    for (iDescriptor=maCurrentList.begin(); iDescriptor!=maCurrentList.end(); ++iDescriptor)
+    {
+        rRules.SubShellRemoved(iDescriptor->meGroup, iDescriptor->mnId);
+    }
+    maNewList.clear();
+}
+
+
+
+
 void ToolBarShellList::UpdateShells (
     ViewShell* pMainViewShell,
     ViewShellManager& rManager)
@@ -1655,6 +1699,7 @@ void ToolBarShellList::UpdateShells (
         maNewList.clear();
     }
 }
+
 
 
 
