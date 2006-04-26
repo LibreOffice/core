@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:25:58 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
+    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
@@ -1449,6 +1449,22 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
     rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
     rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE );
     rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE ) ;
+}
+
+/* converts the given western font height to a corresponding ctl font height, deppending on the system language */
+sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight )
+{
+    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguage();
+    if( LANGUAGE_THAI == eRealCTLLanguage )
+    {
+        // http://specs.openoffice.org/g11n/font_sizes/42775_42725_Individual_configurable_font_size_for_default_fonts.odt
+        double fTemp = double(nWesternFontHeight) * 1.333;
+        nWesternFontHeight = (sal_uInt32)fTemp;
+        // make some nice values for UI that displays PT instead of 1/100th mm
+        nWesternFontHeight = ((nWesternFontHeight * 72) + 1270) / 2540L;
+        nWesternFontHeight = ((nWesternFontHeight * 2540L) + 36) / 72;
+    }
+    return nWesternFontHeight;
 }
 
 ModifyGuard::ModifyGuard( DrawDocShell* pDocShell )
