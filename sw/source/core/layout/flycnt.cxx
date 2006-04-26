@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:36:27 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -577,6 +577,34 @@ void SwFlyAtCntFrm::MakeAll()
                        ( pFooter || bPosChgDueToOwnFormat ) ) )
                 {
                     bOsz = aOszCntrl.ChkOsz();
+
+                    // --> OD 2006-04-13 #b6403541#
+                    // special loop prevention for dedicated document:
+                    if ( bOsz &&
+                         HasFixSize() && IsClipped() &&
+                         GetAnchorFrm()->GetUpper()->IsCellFrm() )
+                    {
+                        SwFrmFmt* pFmt = GetFmt();
+                        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
+                        if ( rFrmSz.GetWidthPercent() &&
+                             rFrmSz.GetHeightPercent() == 0xFF )
+                        {
+                            SwFmtSurround aSurround( pFmt->GetSurround() );
+                            if ( aSurround.GetSurround() == SURROUND_NONE )
+                            {
+                                pFmt->LockModify();
+                                aSurround.SetSurround( SURROUND_THROUGHT );
+                                pFmt->SetAttr( aSurround );
+                                pFmt->UnlockModify();
+                                bOsz = false;
+#if OSL_DEBUG_LEVEL > 1
+                                ASSERT( false,
+                                        "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
+#endif
+                            }
+                        }
+                    }
+                    // <--
                 }
 
                 if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
