@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:52:18 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,7 @@ MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ":odg:OpenDocument Drawing;"
 MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ":otg:OpenDocument Drawing Template;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
-MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;"
-MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ":odb:OpenDocument Database;";
+MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;";
 
 char*
 NPP_GetMIMEDescription(void)
