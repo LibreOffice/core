@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:54:46 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -622,32 +622,42 @@ void SfxXMLMetaElementContext::EndElement()
             break;
         case XML_TOK_META_GENERATOR:
             {
+                OUString sBuildId;
                 // skip to second product
                 sal_Int32 nBegin = sContent.indexOf( ' ' );
-                if( nBegin == -1 )
-                    break;
+                if( nBegin != -1 )
+                {
+                    // skip to build information
+                    nBegin = sContent.indexOf( '/', nBegin );
+                    if( nBegin != -1 )
+                    {
+                        sal_Int32 nEnd = sContent.indexOf( 'm', nBegin );
+                        if( nEnd != -1 )
+                        {
+                            OUStringBuffer sBuffer( sContent.copy( nBegin+1, nEnd-nBegin-1 ) );
+                            const OUString sBuildCompare( RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
+                            nBegin = sContent.indexOf( sBuildCompare, nEnd );
+                            if( nBegin != -1 )
+                            {
+                                sBuffer.append( (sal_Unicode)'$' );
+                                sBuffer.append( sContent.copy( nBegin+sBuildCompare.getLength() ) );
+                                sBuildId = sBuffer.makeStringAndClear();
+                            }
+                        }
+                    }
+                }
 
-                // skip to build information
-                nBegin = sContent.indexOf( '/', nBegin );
-                if( nBegin == -1 )
-                    break;
+                if( sBuildId.getLength() == 0 )
+                {
+                    if( (sContent.compareToAscii( RTL_CONSTASCII_STRINGPARAM("StarOffice 7") ) == 0) ||
+                        (sContent.compareToAscii( RTL_CONSTASCII_STRINGPARAM("StarSuite 7") ) == 0) ||
+                        (sContent.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0) )
+                    {
+                        sBuildId = OUString::createFromAscii( "645$8687" );
+                    }
+                }
 
-                sal_Int32 nEnd = sContent.indexOf( 'm', nBegin );
-                if( nEnd == -1 )
-                    break;
-
-                OUStringBuffer sBuffer( sContent.copy( nBegin+1, nEnd-nBegin-1 ) );
-
-                const OUString sBuildCompare( RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
-
-                nBegin = sContent.indexOf( sBuildCompare, nEnd );
-                if( nBegin == -1 )
-                    break;
-
-                sBuffer.append( (sal_Unicode)'$' );
-                sBuffer.append( sContent.copy( nBegin+sBuildCompare.getLength() ) );
-
-                try
+                if( sBuildId.getLength() ) try
                 {
                     Reference< XPropertySet > xSet( GetImport().getImportInfo() );
                     if( xSet.is() )
@@ -655,7 +665,7 @@ void SfxXMLMetaElementContext::EndElement()
                         const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
                         Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
                         if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
-                            xSet->setPropertyValue( aPropName, uno::makeAny( sBuffer.makeStringAndClear() ) );
+                            xSet->setPropertyValue( aPropName, uno::makeAny( sBuildId ) );
                     }
                 }
                 catch( Exception& e )
