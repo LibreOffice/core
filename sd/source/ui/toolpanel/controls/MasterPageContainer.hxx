@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:39:42 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef SD_TOOLPANEL_CONTROLS_MASTER_PAGE_CONTAINER_HXX
 #define SD_TOOLPANEL_CONTROLS_MASTER_PAGE_CONTAINER_HXX
 
+#include "MasterPageContainerProviders.hxx"
+
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
@@ -49,6 +51,8 @@
 #endif
 #include "tools/SdGlobalResourceContainer.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 class SdPage;
 class SdDrawDocument;
 class SfxObjectShellLock;
@@ -59,23 +63,72 @@ class DrawDocShell;
 
 namespace sd { namespace toolpanel { namespace controls {
 
+class MasterPageDescriptor;
 
-/** This singleton container manages the master pages of the master page
-    selector controls of the tool panel.  It maintains its own document to
-    store master page objects.  For each master page container stores its
-    URL, preview bitmap, page name, and, if available, the page object.
+/** This container manages the master pages used by the MasterPagesSelector
+    controls.  It uses internally a singleton implementation object.
+    Therefore, all MasterPageContainer object operator on the same set of
+    master pages.  Each MasterPageContainer, however, has its own
+    PreviewSize value and thus can independantly switch between large and
+    small previews.
 
-    The lifetime is limited by the SdGlobalResourceContainer to that of the
-    sd module.
+    The container maintains its own document to store master page objects.
+
+    For each master page container stores its URL, preview bitmap, page
+    name, and, if available, the page object.
+
+    Entries are accessed via a Token, which is mostly a numerical index but
+    whose values do not neccessarily have to be consecutive.
 */
 class MasterPageContainer
-    : public SdGlobalResource
 {
 public:
     typedef int Token;
     static const Token NIL_TOKEN = -1;
 
-    static MasterPageContainer& Instance (void);
+    MasterPageContainer (void);
+    virtual ~MasterPageContainer (void);
+
+    void AddChangeListener (const Link& rLink);
+    void RemoveChangeListener (const Link& rLink);
+
+    enum PreviewSize { SMALL, LARGE };
+    /** There are two different preview sizes, a small one and a large one.
+        Which one is used by the called container can be changed with this
+        method.
+        When the preview size is changed then all change listeners are
+        notified of this.
+    */
+    void SetPreviewSize (PreviewSize eSize);
+
+    /** Returns the preview size.
+    */
+    PreviewSize GetPreviewSize (void) const;
+
+    /** Return the preview size in pixels.
+    */
+    Size GetPreviewSizePixel (void) const;
+
+    enum PreviewState { PS_AVAILABLE, PS_CREATABLE, PS_PREPARING, PS_NOT_AVAILABLE };
+    PreviewState GetPreviewState (Token aToken);
+
+    /** This method is typically called for entries in the container for
+        which GetPreviewState() returns OS_CREATABLE.  The creation of the
+        preview is then scheduled to be executed asynchronously at a later
+        point in time.  When the preview is available the change listeners
+        will be notified.
+    */
+    bool RequestPreview (Token aToken);
+
+    /** Each entry of the container is either the first page of a template
+        document or is a master page of an Impress document.
+    */
+    enum Origin {
+        MASTERPAGE,  // Master page of a document.
+        TEMPLATE,    // First page of a template file.
+        DEFAULT,     // Empty master page with default style.
+        UNKNOWN
+    };
 
     /** Put the master page identified and described by the given parameters
         into the container.  When there already is a master page with the
@@ -83,14 +136,19 @@ public:
         the existing entry is replaced/updated by the given one.  Otherwise
         a new entry is inserted.
     */
-    Token PutMasterPage (
-        const String& sURL,
-        const String& sPageName,
-        const String& sStyleName,
-        SdPage* pMasterPage,
-        Image aPreview);
+    Token PutMasterPage (const ::boost::shared_ptr<MasterPageDescriptor>& rDescriptor);
+    void AcquireToken (Token aToken);
+    void ReleaseToken (Token aToken);
 
-    int GetTokenCount (void);
+    /** This and the GetTokenForIndex() methods can be used to iterate over
+        all members of the container.
+    */
+    int GetTokenCount (void) const;
+
+    /** Determine whether the container has a member for the given token.
+    */
+    bool HasToken (Token aToken) const;
+
     /** Return a token for an index in the range
         0 <= index < GetTokenCount().
     */
@@ -106,82 +164,78 @@ public:
     String GetStyleNameForToken (Token aToken);
     SdPage* GetSlideForToken (Token aToken, bool bLoad=true);
     SdPage* GetPageObjectForToken (Token aToken, bool bLoad=true);
+    Origin GetOriginForToken (Token aToken);
+    sal_Int32 GetTemplateIndexForToken (Token aToken);
+    ::boost::shared_ptr<MasterPageDescriptor> GetDescriptorForToken (Token aToken);
+    bool UpdateDescriptor (
+        const ::boost::shared_ptr<MasterPageDescriptor>& rpDescriptor,
+        bool bForcePageObject,
+        bool bForcePreview,
+        bool bSendEvents);
 
-    /** This version of GetPreviewForToken() does not load a template when
-        the preview in the requested size does not exist and the template
-        has not been loaded previously.
+    void SetPreviewProviderForToken (Token aToken,
+        const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
+
+    void InvalidatePreview (Token aToken);
+
+    /** Return a preview for the specified token.  When the preview is not
+        present then the PreviewProvider associated with the token is
+        executed only when that is not expensive.  It is the responsibility
+        of the caller to call RequestPreview() to do the same
+        (asynchronously) for expensive PreviewProviders.
+        Call GetPreviewState() to find out if that is necessary.
         @param aToken
-            This token specifies for which master page to return the
-            prview.  The token is returned by one of the GetTokenFor...()
-            functions.
-        @param nWidth
-            The width of the requested preview.
+            This token specifies for which master page to return the prview.
+            Tokens are returned for example by the GetTokenFor...() methods.
         @return
-            The returned image is the requested preview if a) it has been
-            created in the right size previously or b) the template has been
-            loaded and the preview can be created.  Otherwise an empty
-            substitution is returned.
+            The returned image is the requested preview or a substitution.
     */
-    Image GetPreviewForToken (
-        Token aToken,
-        int nWidth);
-
-    /** This version of GetPreviewForToken() creates the requested preview
-        bitmap if it does not yet exist.  As this is done asynchronously the
-        caller has to supply callback funtion and user data that is passed
-        to that function when the preview is available.  The preview can
-        then be obtained by the two argument version of this method.
-        @param aToken
-            This token specifies for which master page to return the
-            prview.  The token is returned by one of the GetTokenFor...()
-            functions.
-        @param nWidth
-            The width of the requested preview.
-        @param rCallback
-            This callback is called when the preview is created
-            asynchronously and the creation is completed.  When the preview
-            is not created asynchronously, because it is already available,
-            the callback is not called.
-        @param pUserData
-            This data is stored unaltered and passed to the callback.
-    */
-    Image GetPreviewForToken (
-        Token aToken,
-        int nWidth,
-        const Link& rCallback,
-        void* pUserData);
-
-    /** Create a preview of the given page with the requested width.  This
-        method exists to give the CurrentMasterPagesSelector the oportunity
-        to render previews for pages without either enforcing it to use the
-        actual master page container nor having to expose the preview
-        renderer.
-        @param pPage
-            Page for which to render a preview.  It may or may not be a
-            member of the master page container.
-        @param nWidth
-            With of the preview.  The height is calculated from the aspect
-            ratio of the page.
-    */
-    Image GetPreviewForPage (
-        SdPage* pPage,
-        int nWidth);
-
-    /** The specified listener is not available anymore and must not
-        be called back. All requests for preview creation for this
-        callback are removed.
-    */
-    void RemoveCallback (const Link& rCallback);
+    Image GetPreviewForToken (Token aToken);
 
 private:
     class Implementation;
-    ::std::auto_ptr<Implementation> mpImpl;
+    ::boost::shared_ptr<Implementation> mpImpl;
+    PreviewSize mePreviewSize;
 
-    MasterPageContainer (void);
-    virtual ~MasterPageContainer (void);
-
-    void LateInit (void);
+    /** Retrieve the preview of the document specified by the given URL.
+    */
+    static BitmapEx LoadPreviewFromURL (const ::rtl::OUString& aURL);
 };
+
+
+
+
+/** For some changes to the set of master pages in a MasterPageContainer or
+    to the data stored for each master page one or more events are sent to
+    registered listeners.
+    Each event has an event type and a token that tells the listener where
+    the change took place.
+*/
+class MasterPageContainerChangeEvent
+{
+public:
+    enum EventType {
+        // A master page was added to the container.
+        CHILD_ADDED,
+        // A master page was removed from the container.
+        CHILD_REMOVED,
+        // The preview of a master page has changed.
+        PREVIEW_CHANGED,
+        // The size of a preview has changed.
+        SIZE_CHANGED,
+        // Some of the data stored for a master page has changed.
+        DATA_CHANGED,
+        // The TemplateIndex of a master page has changed.
+        INDEX_CHANGED,
+        // More than one entries changed their TemplateIndex
+        INDEXES_CHANGED
+    } meEventType;
+
+    // Token of the container entry whose data changed or which was added or
+    // removed.
+    MasterPageContainer::Token maChildToken;
+};
+
 
 } } } // end of namespace ::sd::toolpanel::controls
 
