@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:34:52 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1231,7 +1231,7 @@ File gid_File_Lib_Patchmsi
     TXT_FILE_BODY;
     Name = "patchmsi.dll";
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY);
+    Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
 #endif
@@ -1483,7 +1483,7 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Opc , opc)
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Package2,package2)
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pcr, pcr)
 
