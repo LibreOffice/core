@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:47:09 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:43:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -678,7 +678,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # packed files sometimes contain a "$" in their name: HighlightText$1.class. For epm the "$" has to be quoted by "$$"
 
-    if (!( $installer::globals::iswindowsbuild ))
+    if (!( $installer::globals::iswindowsbuild || $installer::globals::simple ) )
     {
         installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles12.log", $filesinproductlanguageresolvedarrayref); }
