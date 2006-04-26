@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:29:36 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,10 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_LOAD_READONLY,
     // <--
     // --> OD 2006-03-14 #i62875#
-    HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE
+    HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
+    // <--
+    // --> OD 2006-04-13 #b6402800#
+    HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES
     // <--
 };
 
@@ -240,6 +243,9 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // <--
         // --> OD 2006-03-14 #i62875#
         { RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage"),   HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, CPPUTYPE_BOOLEAN, 0, 0},
+        // <--
+        // --> OD 2006-04-13 #b6402800#
+        { RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames"), HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES, CPPUTYPE_BOOLEAN, 0, 0},
         // <--
 
 /*
@@ -708,6 +714,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        // --> OD 2006-04-13 #b6402800#
+        case HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetClipAsCharacterAnchoredWriterFlyFrames( bTmp );
+        }
+        break;
+        // <--
 
         default:
             throw UnknownPropertyException();
@@ -994,6 +1008,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
         {
             sal_Bool bTmp = mpDoc->DoNotCaptureDrawObjsOnPage();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // <--
+        // --> OD 2006-04-13 #b6402800#
+        case HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES:
+        {
+            sal_Bool bTmp = mpDoc->ClipAsCharacterAnchoredWriterFlyFrames();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
