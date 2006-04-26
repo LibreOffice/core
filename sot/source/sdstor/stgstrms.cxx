@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:17 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,8 @@ BOOL StgFAT::InitNew( INT32 nPage1 )
         rStrm.Pos2Page( nPage1 << 2 );
         // Initialize the page
         pPg = rStrm.GetIo().Copy( rStrm.GetPage(), STG_FREE );
+        if ( !pPg )
+            return FALSE;
         for( short i = 0; i < nEntries; i++ )
             pPg->SetPage( i, STG_FREE );
         nPage1++;
@@ -542,38 +544,44 @@ INT32 StgFATStrm::GetPage( short nOff, BOOL bMake, USHORT *pnMasterAlloc )
                 // create a new master page
                 nFAT = nMaxPage++;
                 pMaster = rIo.Copy( nFAT, STG_FREE );
-                for( short k = 0; k < ( nPageSize >> 2 ); k++ )
-                    pMaster->SetPage( k, STG_FREE );
-                // Verkettung herstellen
-                if( !pOldPage )
-                    rIo.aHdr.SetFATChain( nFAT );
-                else
-                    pOldPage->SetPage( nMasterCount, nFAT );
-                if( nMaxPage >= rIo.GetPhysPages() )
-                    if( !rIo.SetSize( nMaxPage ) )
-                        return STG_EOF;
-                // mark the page as used
-                // Platz fuer Masterpage schaffen
-                if( !pnMasterAlloc ) // Selbst Platz schaffen
+                if ( pMaster )
                 {
-                    if( !Pos2Page( nFAT << 2 ) )
-                        return STG_EOF;
-                    StgPage* pPg = rIo.Get( nPage, TRUE );
-                    if( !pPg )
-                        return STG_EOF;
-                    pPg->SetPage( nOffset >> 2, STG_MASTER );
+                    for( short k = 0; k < ( nPageSize >> 2 ); k++ )
+                        pMaster->SetPage( k, STG_FREE );
+                    // Verkettung herstellen
+                    if( !pOldPage )
+                        rIo.aHdr.SetFATChain( nFAT );
+                    else
+                        pOldPage->SetPage( nMasterCount, nFAT );
+                    if( nMaxPage >= rIo.GetPhysPages() )
+                        if( !rIo.SetSize( nMaxPage ) )
+                            return STG_EOF;
+                    // mark the page as used
+                    // Platz fuer Masterpage schaffen
+                    if( !pnMasterAlloc ) // Selbst Platz schaffen
+                    {
+                        if( !Pos2Page( nFAT << 2 ) )
+                            return STG_EOF;
+                        StgPage* pPg = rIo.Get( nPage, TRUE );
+                        if( !pPg )
+                            return STG_EOF;
+                        pPg->SetPage( nOffset >> 2, STG_MASTER );
+                    }
+                    else
+                        (*pnMasterAlloc)++;
+                    rIo.aHdr.SetMasters( nCount + 1 );
+                    pOldPage = pMaster;
                 }
-                else
-                    (*pnMasterAlloc)++;
-                rIo.aHdr.SetMasters( nCount + 1 );
-                pOldPage = pMaster;
             }
         }
         else
         {
             pMaster = rIo.Get( nFAT, TRUE );
-            nFAT = pMaster->GetPage( nMasterCount );
-            pOldPage = pMaster;
+            if ( pMaster )
+            {
+                nFAT = pMaster->GetPage( nMasterCount );
+                pOldPage = pMaster;
+            }
         }
     }
     if( pMaster )
@@ -609,7 +617,8 @@ BOOL StgFATStrm::SetPage( short nOff, INT32 nNewPage )
                 break;
             }
             pMaster = rIo.Get( nFAT, TRUE );
-            nFAT = pMaster->GetPage( nMasterCount );
+            if ( pMaster )
+                nFAT = pMaster->GetPage( nMasterCount );
         }
         if( pMaster )
             pMaster->SetPage( nOff, nNewPage );
@@ -678,6 +687,8 @@ BOOL StgFATStrm::SetSize( INT32 nBytes )
             }
             // Set up the page with empty entries
             StgPage* pPg = rIo.Copy( nNewPage, STG_FREE );
+            if ( !pPg )
+                return FALSE;
             for( short j = 0; j < ( nPageSize >> 2 ); j++ )
                 pPg->SetPage( j, STG_FREE );
 
