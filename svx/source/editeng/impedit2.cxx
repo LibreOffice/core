@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:48:46 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1595,7 +1595,7 @@ sal_Bool ImpEditEngine::IsInputSequenceChecking( sal_Unicode nChar, const EditSe
     if (!pCTLOptions)
         pCTLOptions = new SvtCTLOptions;
 
-    rtl::OUString aTxt( (const sal_Unicode *) &nChar );
+    rtl::OUString aTxt( nChar );
 
     // get the index that really is first
     USHORT nFirstPos = rCurSel.Min().GetIndex();
