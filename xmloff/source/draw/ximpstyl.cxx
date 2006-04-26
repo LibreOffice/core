@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:02:13 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 
             if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
             {
-                uno::Any aAny;
-                aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
+                uno::Any aAny( GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) ) );
                 XMLPropertyState aPropState( rProp.mnIndex, aAny );
                 rProperties.push_back( aPropState );
             }
@@ -392,10 +391,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
                 xInfo = rPropSet->getPropertySetInfo();
             if ( xInfo->hasPropertyByName( rPropertyName ) )
             {
-                Any aAny;
-                aAny <<= sStyleName;
-
-                rPropSet->setPropertyValue( rPropertyName, aAny );
+                rPropSet->setPropertyValue( rPropertyName, Any( sStyleName ) );
             }
         }
     }
@@ -1336,10 +1332,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
 
     if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName()))
     {
-        uno::Any aAny(GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()));
-        uno::Reference< container::XNameAccess > xMasterPageStyles;
-        aAny >>= xMasterPageStyles;
-
+        uno::Reference< container::XNameAccess > xMasterPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()), UNO_QUERY );
         if(xMasterPageStyles.is())
         {
             ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
@@ -1385,7 +1378,6 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
     const UniString& rPrefix) const
 {
     xub_StrLen nPrefLen(rPrefix.Len());
-    uno::Any aAny;
 
     sal_uInt32 a;
 
@@ -1408,88 +1400,85 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
             const SvXMLStyleContext* pStyle = GetStyle(a);
             if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
             {
-                const UniString aStyleName(pStyle->GetDisplayName(), (sal_uInt16)pStyle->GetDisplayName().getLength());
-                sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
-
-                if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
+                OUString aStyleName(pStyle->GetDisplayName());
+                if( nPrefLen )
                 {
-                    uno::Reference< style::XStyle > xStyle;
-                    const OUString aPureStyleName = nStylePrefLen ?
-                        pStyle->GetDisplayName().copy((sal_Int32)nStylePrefLen) : pStyle->GetDisplayName();
+                    sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( sal_Unicode('-') ) + 1;
+                    if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
+                        continue;
 
-                    if(xPageStyles->hasByName(aPureStyleName))
+                    aStyleName = aStyleName.copy( nPrefLen );
+                }
+
+                uno::Reference< style::XStyle > xStyle;
+                if(xPageStyles->hasByName(aStyleName))
+                {
+                    xPageStyles->getByName(aStyleName) >>= xStyle;
+
+                    // set properties of existing styles to default
+                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+                    if( xPropSet.is() )
+                        xPropSetInfo = xPropSet->getPropertySetInfo();
+
+                    uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
+
+                    if( xPropState.is() )
                     {
-                        aAny = xPageStyles->getByName(aPureStyleName);
-                        aAny >>= xStyle;
-
-                        // set properties of existing styles to default
-                        uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
-                        uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-                        if( xPropSet.is() )
-                            xPropSetInfo = xPropSet->getPropertySetInfo();
-
-                        uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
-
-                        if( xPropState.is() )
+                        UniReference < XMLPropertySetMapper > xPrMap;
+                        UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
+                        DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+                        if( xImpPrMap.is() )
+                            xPrMap = xImpPrMap->getPropertySetMapper();
+                        if( xPrMap.is() )
                         {
-                            UniReference < XMLPropertySetMapper > xPrMap;
-                            UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
-                            DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
-                            if( xImpPrMap.is() )
-                                xPrMap = xImpPrMap->getPropertySetMapper();
-                            if( xPrMap.is() )
+                            const sal_Int32 nCount = xPrMap->GetEntryCount();
+                            for( sal_Int32 i = 0; i < nCount; i++ )
                             {
-                                const sal_Int32 nCount = xPrMap->GetEntryCount();
-                                for( sal_Int32 i = 0; i < nCount; i++ )
+                                const OUString& rName = xPrMap->GetEntryAPIName( i );
+                                if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
                                 {
-                                    const OUString& rName = xPrMap->GetEntryAPIName( i );
-                                    if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
-                                    {
-                                        xPropState->setPropertyToDefault( rName );
-                                    }
+                                    xPropState->setPropertyToDefault( rName );
                                 }
                             }
                         }
                     }
-                    else
+                }
+                else
+                {
+                    // graphics style does not exist, create and add it
+                    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                    if(xServiceFact.is())
                     {
-                        // graphics style does not exist, create and add it
-                        uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                        if(xServiceFact.is())
+                        uno::Reference< style::XStyle > xNewStyle(
+                            xServiceFact->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"))),
+                            uno::UNO_QUERY);
+
+                        if(xNewStyle.is())
                         {
-                            uno::Reference< style::XStyle > xNewStyle(
-                                xServiceFact->createInstance(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"))),
-                                uno::UNO_QUERY);
+                            // remember style
+                            xStyle = xNewStyle;
 
-                            if(xNewStyle.is())
-                            {
-                                // remember style
-                                xStyle = xNewStyle;
-
-                                // add new style to graphics style pool
-                                uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);
-                                if(xInsertContainer.is())
-                                {
-                                    aAny <<= xStyle;
-                                    xInsertContainer->insertByName(aPureStyleName, aAny);
-                                }
-                            }
+                            // add new style to graphics style pool
+                            uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);
+                            if(xInsertContainer.is())
+                                xInsertContainer->insertByName(aStyleName, uno::Any( xStyle ) );
                         }
                     }
+                }
 
-                    if(xStyle.is())
+                if(xStyle.is())
+                {
+                    // set properties at style
+                    XMLShapeStyleContext* pPropStyle =
+                        (pStyle->ISA(XMLShapeStyleContext)) ? (XMLShapeStyleContext*)pStyle : 0L;
+                    uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
+
+                    if(xPropSet.is() && pPropStyle)
                     {
-                        // set properties at style
-                        XMLShapeStyleContext* pPropStyle =
-                            (pStyle->ISA(XMLShapeStyleContext)) ? (XMLShapeStyleContext*)pStyle : 0L;
-                        uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
-
-                        if(xPropSet.is() && pPropStyle)
-                        {
-                            pPropStyle->FillPropertySet(xPropSet);
-                            pPropStyle->SetStyle(xStyle);
-                        }
+                        pPropStyle->FillPropertySet(xPropSet);
+                        pPropStyle->SetStyle(xStyle);
                     }
                 }
             }
@@ -1507,34 +1496,39 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
 
-        if(pStyle && nFamily == pStyle->GetFamily())
+        if(pStyle && pStyle->GetName().getLength() && (nFamily == pStyle->GetFamily())) try
         {
-            const UniString aStyleName(pStyle->GetDisplayName(), (sal_uInt16)pStyle->GetDisplayName().getLength());
-            sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
-
-            if(pStyle->GetName().getLength() && (!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen))))
+            OUString aStyleName(pStyle->GetDisplayName());
+            if( nPrefLen )
             {
-                try
-                {
+                sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( sal_Unicode('-') ) + 1;
+                if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
+                    continue;
 
-                    uno::Reference< style::XStyle > xStyle;
-                    const OUString aPureStyleName = nPrefLen ? pStyle->GetDisplayName().copy((sal_Int32)nPrefLen) : pStyle->GetDisplayName();
-                    xPageStyles->getByName(aPureStyleName) >>= xStyle;
-
-                    if(xStyle.is())
-                    {
-                            // set parent style name
-                        ::rtl::OUString sParentStyleDisplayName = const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() );
-                        xStyle->setParentStyle( sParentStyleDisplayName );
-                    }
-                }
-                catch( Exception& e )
-                {
-                    (void)e;
-                    uno::Sequence<OUString> aSeq(0);
-                    const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
-                }
+                aStyleName = aStyleName.copy( nPrefLen );
             }
+
+            uno::Reference< style::XStyle > xStyle( xPageStyles->getByName(aStyleName), UNO_QUERY );
+            if(xStyle.is())
+            {
+                // set parent style name
+                ::rtl::OUString sParentStyleDisplayName( const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
+                if( nPrefLen )
+                {
+                    sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( sal_Unicode('-') ) + 1;
+                    if( (nPrefLen != nStylePrefLen) || (sParentStyleDisplayName.compareTo( rPrefix, nPrefLen ) != 0) )
+                        continue;
+
+                    sParentStyleDisplayName = sParentStyleDisplayName.copy( nPrefLen );
+                }
+                xStyle->setParentStyle( sParentStyleDisplayName );
+            }
+        }
+        catch( Exception& e )
+        {
+            (void)e;
+            uno::Sequence<OUString> aSeq(0);
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
         }
     }
 }
@@ -1603,8 +1597,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
             else
             {
                 // existing page, use it
-                uno::Any aAny(xMasterPages->getByIndex(GetSdImport().GetNewMasterPageCount()));
-                aAny >>= xNewMasterPage;
+                xMasterPages->getByIndex(GetSdImport().GetNewMasterPageCount()) >>= xNewMasterPage;
             }
 
             // increment global import page counter
