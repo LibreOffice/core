@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewValueSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:42:17 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ public:
     */
     virtual void Command (const CommandEvent& rEvent);
 
-    void SetPreviewWidth (int nWidth);
+    void SetPreviewSize (const Size& rSize);
 
     sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
@@ -75,7 +75,7 @@ public:
     /** Set the number of rows and columns according to the current number
         of items.  Call this method when new items have been inserted.
     */
-    void Rearrange (void);
+    void Rearrange (bool bForceRequestResize = false);
 
     /** Set the callback function to which requests for context menus are
         forewarded.  Call with an empty Link to reset the callback
@@ -90,9 +90,10 @@ private:
     Link maRightMouseClickHandler;
     Link maContextMenuCallback;
     TreeNode* mpParent;
-    int mnPreviewWidth;
+    Size maPreviewSize;
     const int mnBorderWidth;
     const int mnBorderHeight;
+    const int mnMaxColumnCount;
 
     USHORT CalculateColumnCount (int nWidth) const;
     USHORT CalculateRowCount (USHORT nColumnCount) const;
