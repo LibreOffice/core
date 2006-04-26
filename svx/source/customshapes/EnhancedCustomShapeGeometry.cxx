@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:50:04 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5197,7 +5197,45 @@ static const mso_CustomShape msoWedgeRRectCallout =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptCalloutHandle, sizeof( mso_sptCalloutHandle ) / sizeof( SvxMSDffHandle )        // handles
 };
-
+static const SvxMSDffVertPair mso_sptBalloonVert[] =
+{
+    { 3590, 0 },
+    { 0, 3590 },
+    { 0, 14460 },
+    { 3590, 18050 },
+    { 40 MSO_I, 21600 }, { 5420, 18050 },
+    { 18010, 18050 },
+    { 21600, 14460 },
+    { 21600, 3590 },
+    { 18010, 0 }
+};
+static const sal_uInt16 mso_sptBalloonSegm[] =
+{
+    0x4000, 0xa701, 0x0001, 0xa801, 0x0003, 0xa701, 0x0001, 0xa801, 0x6001, 0x8000
+};
+static const SvxMSDffHandle mso_sptBalloonHandle[] =
+{
+    {
+        MSDFF_HANDLE_FLAGS_RANGE,
+        0x100, 1, 10800, 10800, 0, 8990, 0x80000000, 0x7fffffff
+    }
+};
+static const SvxMSDffTextRectangles mso_sptBalloonTextRect[] =
+{
+    { { 800, 800 }, { 20800, 17250 } }
+};
+static const mso_CustomShape msoBalloon =
+{
+    (SvxMSDffVertPair*)mso_sptBalloonVert, sizeof( mso_sptBalloonVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptBalloonSegm, sizeof( mso_sptBalloonSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptWedgeRectCalloutDefault,
+    (SvxMSDffTextRectangles*)mso_sptBalloonTextRect, sizeof( mso_sptBalloonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptBalloonHandle, sizeof( mso_sptBalloonHandle ) / sizeof( SvxMSDffHandle )        // handles
+};
 static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 0x16 MSO_I, 0x17 MSO_I }, { 0x12 MSO_I, 0x13 MSO_I }, { 0xe MSO_I, 0xf MSO_I }
@@ -7275,6 +7313,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptPentagon :                  pCustomShape = &msoPentagon; break;
         case mso_sptCan :                       pCustomShape = &msoCan; break;
         case mso_sptCube :                      pCustomShape = &msoCube; break;
+        case mso_sptBalloon :                   pCustomShape = &msoBalloon; break;
         case mso_sptActionButtonBlank :         pCustomShape = &msoActionButtonBlank; break;
         case mso_sptActionButtonHome :          pCustomShape = &msoActionButtonHome; break;
         case mso_sptActionButtonHelp :          pCustomShape = &msoActionButtonHelp; break;
