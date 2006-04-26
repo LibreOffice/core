@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 15:06:29 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,15 @@ WindowsCustomAction gid_Customaction_RegCleanOld
 	Target = "CleanCurUserOldSystemRegistryFromSetup";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And Not ALLUSERS=\"\"", "end");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
+	Name = "PatchActiveXControl";
+	Typ = "65";
+	Source = "regpatchactivex.dll";
+	Target = "PatchActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3", "end");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetProductInstallModeAction
