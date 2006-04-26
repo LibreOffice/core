@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:10:48 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:43:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1045,7 +1045,7 @@ sub remove_complete_directory
             {
                 my $item = $directory . $installer::globals::separator . $oneitem;
 
-                if ( -f $item )     # deleting files
+                if ( -f $item || -l $item )     # deleting files or links
                 {
                     unlink($item);
                 }
