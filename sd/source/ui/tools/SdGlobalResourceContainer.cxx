@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdGlobalResourceContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:45:09 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,13 @@ private:
     */
     typedef ::std::vector<SdGlobalResource*> ResourceList;
     ResourceList maResources;
+
+    typedef ::std::vector<boost::shared_ptr<SdGlobalResource> > SharedResourceList;
+    SharedResourceList maSharedResources;
 };
+
+
+
 
 // static
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
@@ -97,6 +103,28 @@ void SdGlobalResourceContainer::AddResource (
     // We can not put the auto_ptr into the vector so we release the
     // auto_ptr and document that we take ownership explicitly.
     pResource.release();
+}
+
+
+
+
+void SdGlobalResourceContainer::AddResource (
+    ::boost::shared_ptr<SdGlobalResource> pResource)
+{
+    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    Implementation::SharedResourceList::iterator iResource;
+    iResource = ::std::find (
+        mpImpl->maSharedResources.begin(),
+        mpImpl->maSharedResources.end(),
+        pResource);
+    if (iResource == mpImpl->maSharedResources.end())
+        mpImpl->maSharedResources.push_back(pResource);
+    else
+    {
+        DBG_ASSERT (false,
+            "SdGlobalResourceContainer:AddResource(): Resource added twice.");
+    }
 }
 
 
@@ -149,6 +177,17 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
          ++iResource)
     {
         delete *iResource;
+    }
+
+    // The SharedResourceList has not to be released manually.  We just
+    // assert resources that are still held by someone other than us.
+    Implementation::SharedResourceList::reverse_iterator iSharedResource;
+    for (iSharedResource = mpImpl->maSharedResources.rbegin();
+         iSharedResource != mpImpl->maSharedResources.rend();
+         ++iSharedResource)
+    {
+        DBG_ASSERT((*iSharedResource).unique(),
+            "SdGlobalResource still held in ~SdGlobalResourceContainer");
     }
 
     DBG_ASSERT(Implementation::mpInstance == this,
