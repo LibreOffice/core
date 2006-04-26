@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:53 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@ private:
     DECL_LINK( SoundListBoxSelected, void * );
     DECL_LINK( LoopSoundBoxChecked, void * );
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
+    DECL_LINK(LateInitCallback, Timer*);
 
 private:
     ViewShellBase &   mrBase;
@@ -163,6 +164,8 @@ private:
 
     typedef ::std::map< sal_uInt16, sal_uInt16 > tPresetIndexesType;
     tPresetIndexesType m_aPresetIndexes;
+
+    Timer maLateInitTimer;
 };
 
 } //  namespace sd
