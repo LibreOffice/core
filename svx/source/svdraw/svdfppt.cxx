@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:51:32 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2062,7 +2062,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 {
                                     uno::Reference < embed::XStorage > xDestStorage( pOe->pShell->GetStorage() );
                                     uno::Reference < embed::XEmbeddedObject > xObj =
-                                        CheckForConvertToSOObj( nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf );
+                                        CheckForConvertToSOObj( nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea );
                                     if( xObj.is() )
                                     {
                                         pOe->pShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
