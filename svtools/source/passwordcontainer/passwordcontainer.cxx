@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:37:46 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
                         return aResult;
                     }
 
-                    aNum += ::rtl::OUString::valueOf( (sal_Unicode) *pLine );
+                    aNum += ::rtl::OUString::valueOf( (sal_Unicode) pLine[i] );
                 }
 
                 newItem += ::rtl::OUString::valueOf( (sal_Unicode) aNum.toInt32( 16 ) );
