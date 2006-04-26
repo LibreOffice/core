@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:23:07 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,10 +548,18 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
                     CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xNode ) );
                     pEffect->setTarget( makeAny( xShape ) );
                     SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
-                    if( pPage && pPage->GetPresChange() != PRESCHANGE_MANUAL )
+                    const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+                    if( !bManual )
                         pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
 
                     pMainSequence->append( pEffect );
+
+                    if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT ) )
+                    {
+                        // special case for outline text, effects are always mapped to text group effect
+                        pMainSequence->
+                            createTextGroup( pEffect, 10, bManual ? -1 : 0.0, sal_False, sal_False );
+                    }
                 }
             }
         }
