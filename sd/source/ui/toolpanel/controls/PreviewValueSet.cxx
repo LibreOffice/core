@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewValueSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:42:04 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,10 @@ namespace sd { namespace toolpanel { namespace controls {
 PreviewValueSet::PreviewValueSet (TreeNode* pParent)
     : ValueSet (pParent->GetWindow(), WB_TABSTOP),
       mpParent(pParent),
-      mnPreviewWidth(10),
+      maPreviewSize(10,10),
       mnBorderWidth(3),
-      mnBorderHeight(3)
+      mnBorderHeight(3),
+      mnMaxColumnCount(-1)
 {
     SetStyle (
         GetStyle()
@@ -54,7 +55,7 @@ PreviewValueSet::PreviewValueSet (TreeNode* pParent)
         );
 
     SetColCount(2);
-    SetLineCount(1);
+    //  SetLineCount(1);
     SetExtraSpacing (2);
 }
 
@@ -68,9 +69,9 @@ PreviewValueSet::~PreviewValueSet (void)
 
 
 
-void PreviewValueSet::SetPreviewWidth (int nWidth)
+void PreviewValueSet::SetPreviewSize (const Size& rSize)
 {
-    mnPreviewWidth = nWidth;
+    maPreviewSize = rSize;
 }
 
 
@@ -93,6 +94,7 @@ void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
         ValueSet::MouseButtonDown (rEvent);
 
 }
+
 
 
 
@@ -142,7 +144,7 @@ void PreviewValueSet::Command (const CommandEvent& rEvent)
 
 
 
-void PreviewValueSet::Rearrange (void)
+void PreviewValueSet::Rearrange (bool bForceRequestResize)
 {
     USHORT nOldColumnCount (GetColCount());
     USHORT nOldRowCount (GetLineCount());
@@ -151,10 +153,11 @@ void PreviewValueSet::Rearrange (void)
         GetOutputSizePixel().Width()));
     USHORT nNewRowCount (CalculateRowCount (nNewColumnCount));
 
-    SetColCount (nNewColumnCount);
-    SetLineCount (nNewRowCount);
+    SetColCount(nNewColumnCount);
+    SetLineCount(nNewRowCount);
 
-    if (nOldColumnCount != nNewColumnCount
+    if (bForceRequestResize
+        || nOldColumnCount != nNewColumnCount
         || nOldRowCount != nNewRowCount)
         mpParent->RequestResize();
 }
@@ -175,11 +178,11 @@ USHORT PreviewValueSet::CalculateColumnCount (int nWidth) const
     int nColumnCount = 0;
     if (nWidth > 0)
     {
-        nColumnCount = nWidth / (mnPreviewWidth + 2*mnBorderWidth);
+        nColumnCount = nWidth / (maPreviewSize.Width() + 2*mnBorderWidth);
         if (nColumnCount < 1)
             nColumnCount = 1;
-        else if (nColumnCount > 4)
-            nColumnCount = 4;
+        else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
+            nColumnCount = mnMaxColumnCount;
     }
     return nColumnCount;
 }
@@ -203,20 +206,13 @@ USHORT PreviewValueSet::CalculateRowCount (USHORT nColumnCount) const
 
 
 
+
 sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
 {
-    int nPreferredWidth = (mnPreviewWidth + 2*mnBorderWidth) * 1;
+    int nPreferredWidth (maPreviewSize.Width() + 2*mnBorderWidth);
 
     // Get height of each row.
-    int nItemHeight = mnPreviewWidth*100/141;
-    if (GetItemCount() > 0)
-    {
-        Image aImage = GetItemImage(GetItemId(0));
-        Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());
-        if (aItemSize.Height() > 0)
-            nItemHeight = aItemSize.Height();
-    }
-    nItemHeight += 2*mnBorderHeight;
+    int nItemHeight (maPreviewSize.Height() + 2*mnBorderHeight);
 
     // Calculate the row- and column count and from the later the preferred
     // width.
@@ -225,7 +221,7 @@ sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
     {
         int nColumnCount = (GetItemCount()+nRowCount-1) / nRowCount;
         if (nColumnCount > 0)
-            nPreferredWidth = (mnPreviewWidth + 2*mnBorderWidth)
+            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth)
                 * nColumnCount;
     }
 
@@ -238,18 +234,10 @@ sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
 sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nRowCount (CalculateRowCount(CalculateColumnCount(nWidth)));
-    int nItemHeight (mnPreviewWidth*100/141);
-    if (GetItemCount() > 0)
-    {
-        Image aImage (GetItemImage(GetItemId(0)));
-        Size aItemSize (CalcItemSizePixel (aImage.GetSizePixel()));
-        if (aItemSize.Height() > 0)
-            nItemHeight = aItemSize.Height();
-    }
+    int nItemHeight (maPreviewSize.Height());
 
     return nRowCount * (nItemHeight + 2*mnBorderHeight);
 }
-
 
 
 
