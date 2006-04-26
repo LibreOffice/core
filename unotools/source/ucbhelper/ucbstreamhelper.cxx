@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:52:11 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,45 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream )
     }
     else
         return CreateStream( xStream->getInputStream() );
+
+    return pStream;
+};
+
+SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, sal_Bool bCloseStream )
+{
+    SvStream* pStream = NULL;
+    UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
+    if ( xLockBytes.Is() )
+    {
+        if ( !bCloseStream )
+            xLockBytes->setDontClose_Impl();
+
+        pStream = new SvStream( xLockBytes );
+        pStream->SetBufferSize( 4096 );
+        pStream->SetError( xLockBytes->GetError() );
+    }
+
+    return pStream;
+};
+
+SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream, sal_Bool bCloseStream )
+{
+    SvStream* pStream = NULL;
+    if ( xStream->getOutputStream().is() )
+    {
+        UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
+        if ( xLockBytes.Is() )
+        {
+            if ( !bCloseStream )
+                xLockBytes->setDontClose_Impl();
+
+            pStream = new SvStream( xLockBytes );
+            pStream->SetBufferSize( 4096 );
+            pStream->SetError( xLockBytes->GetError() );
+        }
+    }
+    else
+        return CreateStream( xStream->getInputStream(), bCloseStream );
 
     return pStream;
 };
