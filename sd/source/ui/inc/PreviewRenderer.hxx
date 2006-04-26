@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:12:52 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@ public:
         Size aPreviewPixelSize,
         const String& sSubstitutionText);
 
+    Image RenderSubstitution (
+        const Size& rPreviewPixelSize,
+        const String& sSubstitutionText);
+
     /** Scale the given bitmap by keeping its aspect ratio to the desired
         width.  Add a frame to it afterwards.
     */
@@ -117,7 +121,7 @@ private:
     DrawDocShell* mpDocShellOfView;
     int mnWidthOfView;
     Color maFrameColor;
-    static const int snSubstitutioinTextSize;
+    static const int snSubstitutionTextSize;
     // Width of the frame that is painted arround the preview.
     static const int snFrameWidth;
 
