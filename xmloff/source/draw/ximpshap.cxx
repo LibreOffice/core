@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 13:41:58 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,14 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
+
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
+#endif
 
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -211,6 +219,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
@@ -2281,6 +2291,18 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
         if(xProps.is())
         {
+            // since OOo 1.x had no line or fill style for graphics, but may create
+            // documents with them, we have to override them here
+            sal_Int32 nUPD, nBuildId;
+            if( GetImport().getBuildIds( nUPD, nBuildId ) && (nUPD == 645) ) try
+            {
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), Any( FillStyle_NONE ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), Any( LineStyle_NONE ) );
+            }
+            catch( Exception& )
+            {
+            }
+
             uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
             if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
                 xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( mbIsPlaceholder ) );
