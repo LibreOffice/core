@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:34:13 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,10 +536,12 @@ class SwDoc
     //   whose position is outside the page area:
     //   FALSE: Such drawing objects are captured on the page area of its anchor.
     //   TRUE: Such drawing objects can leave the page area, they aren't captured.
-    //
-    // SO8pp3:
     // bTableRowKeep                        def = FALSE, hidden
     // bIgnoreTabsAndBlanksForLineCalculation   def = FALSE, hidden
+    // mbClipAsCharacterAnchoredWriterFlyFrame  def = FALSE, hidden
+    // - Introduced in order to re-activate clipping of as-character anchored
+    //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
+    //   which are created with version prior SO8/OOo 2.0
 
     sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
     sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
@@ -557,7 +559,7 @@ class SwDoc
     sal_Bool    bTableRowKeep                    : 1;   // FME 2006-02-10 #131283#
     sal_Bool    bIgnoreTabsAndBlanksForLineCalculation : 1; // FME 2006-03-01 #i3952#
     sal_Bool    mbDoNotCaptureDrawObjsOnPage     : 1;   // OD 2006-03-14 #i62875#
-    sal_Bool    bDummyNonUIFlag1                 : 1;   // use this if necessary
+    sal_Bool    mbClipAsCharacterAnchoredWriterFlyFrames : 1;   // OD 2006-04-13 #b6402800#
 
     sal_Bool    bOutlineLevelYieldsOutlineRule  : 1;
 
@@ -2334,6 +2336,17 @@ public:
     inline void SetIgnoreTabsAndBlanksForLineCalculation( const sal_Bool bNew )
     {
         bIgnoreTabsAndBlanksForLineCalculation = bNew;
+    }
+    // <--
+
+    // --> OD 2006-04-13 #b6402800#
+    inline sal_Bool ClipAsCharacterAnchoredWriterFlyFrames() const
+    {
+        return mbClipAsCharacterAnchoredWriterFlyFrames;
+    }
+    inline void SetClipAsCharacterAnchoredWriterFlyFrames( const sal_Bool p_bNew )
+    {
+        mbClipAsCharacterAnchoredWriterFlyFrames = p_bNew;
     }
     // <--
 
