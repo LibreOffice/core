@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 15:14:50 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1955,7 +1955,9 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/sdraw/accelerator/en-US/default.xml",
                   "modules/sdraw/accelerator/es/default.xml",
                   "modules/sdraw/accelerator/fr/default.xml",
-                  "modules/sdraw/menubar/menubar.xml");
+                  "modules/sdraw/menubar/menubar.xml",
+                  "global/accelerator/es/default.xml",
+                  "global/accelerator/en-US/default.xml");
 End
 
 #ifdef WNT
@@ -2447,7 +2449,7 @@ File gid_File_Txt_Patchfiles
     TXT_FILE_BODY;
     Name = "patchlist.txt";
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH,PATCH_ONLY);
+    Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
 End
 #endif
 
