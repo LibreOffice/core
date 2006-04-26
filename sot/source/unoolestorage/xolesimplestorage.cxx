@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:09:59 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,95 @@ void OLESimpleStorage::UpdateOriginal_Impl()
     }
 }
 
+//-------------------------------------------------------------------------
+void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< io::XInputStream >& xInputStream )
+    throw ( uno::Exception )
+{
+    if ( !pStorage || !aName.getLength() || !xInputStream.is() )
+        throw uno::RuntimeException();
+
+    if ( pStorage->IsContained( aName ) )
+        throw container::ElementExistException(); // TODO:
+
+    BaseStorageStream* pNewStream = pStorage->OpenStream( aName );
+    if ( !pNewStream || pNewStream->GetError() || pStorage->GetError() )
+    {
+        if ( pNewStream )
+            DELETEZ( pNewStream );
+        pStorage->ResetError();
+        throw io::IOException(); // TODO
+    }
+
+    try
+    {
+        uno::Sequence< sal_Int8 > aData( nBytesCount );
+        sal_Int32 nRead = 0;
+        do
+        {
+            nRead = xInputStream->readBytes( aData, nBytesCount );
+            if ( nRead < nBytesCount )
+                aData.realloc( nRead );
+
+            sal_Int32 nWritten = pNewStream->Write( aData.getArray(), nRead );
+            if ( nWritten < nRead )
+                throw io::IOException();
+        } while( nRead == nBytesCount );
+    }
+    catch( uno::Exception& )
+    {
+        DELETEZ( pNewStream );
+        pStorage->Remove( aName );
+
+        throw;
+    }
+
+    DELETEZ( pNewStream );
+}
+
+//-------------------------------------------------------------------------
+void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< container::XNameAccess >& xNameAccess )
+    throw ( uno::Exception )
+{
+    if ( !pStorage || !aName.getLength() || !xNameAccess.is() )
+        throw uno::RuntimeException();
+
+    if ( pStorage->IsContained( aName ) )
+        throw container::ElementExistException(); // TODO:
+
+    BaseStorage* pNewStorage = pStorage->OpenStorage( aName );
+    if ( !pNewStorage || pNewStorage->GetError() || pStorage->GetError() )
+    {
+        if ( pNewStorage )
+            DELETEZ( pNewStorage );
+        pStorage->ResetError();
+        throw io::IOException(); // TODO
+    }
+
+    try
+    {
+        uno::Sequence< ::rtl::OUString > aElements = xNameAccess->getElementNames();
+        for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
+        {
+            uno::Reference< io::XInputStream > xInputStream;
+            uno::Reference< container::XNameAccess > xSubNameAccess;
+            uno::Any aAny = xNameAccess->getByName( aElements[nInd] );
+            if ( aAny >>= xInputStream )
+                InsertInputStreamToStorage_Impl( pNewStorage, aName, xInputStream );
+            else if ( aAny >>= xSubNameAccess )
+                InsertNameAccessToStorage_Impl( pNewStorage, aName, xSubNameAccess );
+        }
+    }
+    catch( uno::Exception& )
+    {
+        DELETEZ( pNewStorage );
+        pStorage->Remove( aName );
+
+        throw;
+    }
+
+    DELETEZ( pNewStorage );
+}
+
 //____________________________________________________________________________________________________
 //  XInitialization
 //____________________________________________________________________________________________________
@@ -181,15 +270,13 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
         {
             // the stream must be seekable for direct access
             uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
-            m_pStream = ::utl::UcbStreamHelper::CreateStream( xInputStream );
-            // m_pStream = ::utl::UcbStreamHelper::CreateStream( ( io::XInputStream* )new NoCloseWrapper( xInputStream ) );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xInputStream, sal_False );
         }
         else if ( xStream.is() )
         {
             // the stream must be seekable for direct access
             uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
-            m_pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
-            // m_pStream = ::utl::UcbStreamHelper::CreateStream( ( io::XStream* )new NoCloseWrapper( xStream ) );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xStream, sal_False );
         }
         else
             throw lang::IllegalArgumentException(); // TODO:
@@ -218,7 +305,7 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
             xTempOut->closeOutput();
             xTempSeek->seek( 0 );
             uno::Reference< io::XInputStream > xTempInput = xTempFile->getInputStream();
-            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempInput );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempInput, sal_False );
         }
         else if ( xStream.is() )
         {
@@ -236,7 +323,7 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
             xTempOut->flush();
             xTempSeek->seek( 0 );
 
-            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile );
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, sal_False );
         }
         else
             throw lang::IllegalArgumentException(); // TODO:
@@ -270,8 +357,8 @@ void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, cons
 
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XInputStream > xInputStream;
+    uno::Reference< container::XNameAccess > xNameAccess;
 
-    BaseStorageStream* pNewStream = NULL;
     try
     {
         if ( !m_bNoTemporaryCopy && !m_xStream.is() )
@@ -279,62 +366,30 @@ void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, cons
 
         if ( aElement >>= xStream )
             xInputStream = xStream->getInputStream();
-        else if ( !( aElement >>= xInputStream ) )
+        else if ( !( aElement >>= xInputStream ) && !( aElement >>= xNameAccess ) )
             throw lang::IllegalArgumentException(); // TODO:
 
-        if ( !xInputStream.is() )
+        if ( xInputStream.is() )
+            InsertInputStreamToStorage_Impl( m_pStorage, aName, xInputStream );
+        else if ( xNameAccess.is() )
+            InsertNameAccessToStorage_Impl( m_pStorage, aName, xNameAccess );
+        else
             throw uno::RuntimeException();
-
-        if ( m_pStorage->IsContained( aName ) )
-            throw container::ElementExistException(); // TODO:
-
-        pNewStream = m_pStorage->OpenStream( aName );
-        if ( !pNewStream || pNewStream->GetError() || m_pStorage->GetError() )
-        {
-            m_pStorage->ResetError();
-            throw io::IOException(); // TODO
-        }
-
-        try
-        {
-            uno::Sequence< sal_Int8 > aData( nBytesCount );
-            sal_Int32 nRead = 0;
-            do
-            {
-                nRead = xInputStream->readBytes( aData, nBytesCount );
-                if ( nRead < nBytesCount )
-                    aData.realloc( nRead );
-
-                sal_Int32 nWritten = pNewStream->Write( aData.getArray(), nRead );
-                if ( nWritten < nRead )
-                    throw io::IOException();
-            } while( nRead == nBytesCount );
-        }
-        catch( uno::Exception& )
-        {
-            DELETEZ( pNewStream );
-            m_pStorage->Remove( aName );
-
-            throw;
-        }
     }
     catch( uno::RuntimeException& )
     {
-        DELETEZ( pNewStream );
         throw;
     }
     catch( container::ElementExistException& )
     {
-        DELETEZ( pNewStream );
         throw;
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& e )
     {
-        DELETEZ( pNewStream );
-        throw lang::WrappedTargetException(); // TODO:
+        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Insert has failed!" ) ),
+                                            uno::Reference< uno::XInterface >(),
+                                            uno::makeAny( e ) );
     }
-
-    DELETEZ( pNewStream );
 }
 
 // --------------------------------------------------------------------------------
@@ -411,65 +466,100 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
     if ( !m_pStorage->IsContained( aName ) )
         throw container::NoSuchElementException(); // TODO:
 
-    if ( m_pStorage->IsStorage( aName ) )
-    {
-        OSL_ENSURE( sal_False, "Access to OLE substorages not implemented yet!\n" );
-        throw lang::WrappedTargetException(); // TODO
-    }
+    uno::Any aResult;
 
-    uno::Reference< io::XOutputStream > xOutputStream(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-            uno::UNO_QUERY );
-    uno::Reference< io::XInputStream > xInputStream( xOutputStream, uno::UNO_QUERY );
-    uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY );
-
-    if ( !xSeekable.is() )
+    uno::Reference< io::XStream > xTempFile(
+        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+        uno::UNO_QUERY );
+    uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
+    uno::Reference< io::XOutputStream > xOutputStream = xTempFile->getOutputStream();
+    uno::Reference< io::XInputStream > xInputStream = xTempFile->getInputStream();
+    if ( !xOutputStream.is() || !xInputStream.is() )
         throw uno::RuntimeException();
 
-    BaseStorageStream* pStream = m_pStorage->OpenStream( aName, STREAM_READ | STREAM_SHARE_DENYALL | STREAM_NOCREATE );
-    if ( !pStream || pStream->GetError() || m_pStorage->GetError() )
+    if ( m_pStorage->IsStorage( aName ) )
     {
+        BaseStorage* pStrg = m_pStorage->OpenStorage( aName );
         m_pStorage->ResetError();
+        if ( !pStrg )
+            throw io::IOException();
+
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, sal_False ); // do not close the original stream
+        if ( !pStream )
+            throw uno::RuntimeException();
+
+        BaseStorage* pNewStor = new Storage( *pStream, sal_False );
+        sal_Bool bSuccess =
+            ( pStrg->CopyTo( pNewStor ) && pNewStor->Commit() && !pNewStor->GetError() && !pStrg->GetError() );
+
+        DELETEZ( pNewStor );
+        DELETEZ( pStrg );
         DELETEZ( pStream );
-        throw io::IOException(); // TODO
+
+        if ( !bSuccess )
+            throw uno::RuntimeException();
+
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[0] <<= xInputStream; // allow readonly access only
+        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+
+        uno::Reference< container::XNameContainer > xResultNameContainer(
+            m_xFactory->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                    aArgs ),
+            uno::UNO_QUERY_THROW );
+
+        aResult <<= xResultNameContainer;
     }
-
-    try
+    else
     {
-        uno::Sequence< sal_Int8 > aData( nBytesCount );
-        sal_Int32 nSize = nBytesCount;
-        sal_Int32 nRead = 0;
-        while( 0 != ( nRead = pStream->Read( aData.getArray(), nSize ) ) )
+        BaseStorageStream* pStream = m_pStorage->OpenStream( aName, STREAM_READ | STREAM_SHARE_DENYALL | STREAM_NOCREATE );
+        if ( !pStream || pStream->GetError() || m_pStorage->GetError() )
         {
-            if ( nRead < nSize )
-            {
-                nSize = nRead;
-                aData.realloc( nSize );
-            }
-
-            xOutputStream->writeBytes( aData );
+            m_pStorage->ResetError();
+            DELETEZ( pStream );
+            throw io::IOException(); // TODO
         }
 
-        if ( pStream->GetError() )
-            throw io::IOException(); // TODO
+        try
+        {
+            uno::Sequence< sal_Int8 > aData( nBytesCount );
+            sal_Int32 nSize = nBytesCount;
+            sal_Int32 nRead = 0;
+            while( 0 != ( nRead = pStream->Read( aData.getArray(), nSize ) ) )
+            {
+                if ( nRead < nSize )
+                {
+                    nSize = nRead;
+                    aData.realloc( nSize );
+                }
 
-        xOutputStream->closeOutput();
-        xSeekable->seek( 0 );
-    }
-    catch( uno::RuntimeException& )
-    {
+                xOutputStream->writeBytes( aData );
+            }
+
+            if ( pStream->GetError() )
+                throw io::IOException(); // TODO
+
+            xOutputStream->closeOutput();
+            xSeekable->seek( 0 );
+        }
+        catch( uno::RuntimeException& )
+        {
+            DELETEZ( pStream );
+            throw;
+        }
+        catch( uno::Exception& )
+        {
+            DELETEZ( pStream );
+            throw lang::WrappedTargetException(); // TODO:
+        }
+
         DELETEZ( pStream );
-        throw;
-    }
-    catch( uno::Exception& )
-    {
-        DELETEZ( pStream );
-        throw lang::WrappedTargetException(); // TODO:
+
+        aResult <<= xInputStream;
     }
 
-    DELETEZ( pStream );
-
-    return uno::makeAny( xInputStream );
+    return aResult;
 }
 
 // --------------------------------------------------------------------------------
