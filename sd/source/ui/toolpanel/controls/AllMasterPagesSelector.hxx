@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:37:48 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,43 @@
 #ifndef SD_TOOLPANEL_CONTROLS_ALL_MASTER_PAGES_SELECTOR_HXX
 #define SD_TOOLPANEL_CONTROLS_ALL_MASTER_PAGES_SELECTOR_HXX
 
-#include "MasterPagesContainerSelector.hxx"
+#include "MasterPagesSelector.hxx"
+
+#include <memory>
 
 namespace sd { namespace toolpanel { namespace controls {
 
 
-/** Show a list of all available master pages and let the user assign them
-    to the document.
+/** Show a list of all available master pages so that the user can assign
+    them to the document.
 */
 class AllMasterPagesSelector
-    : public MasterPagesContainerSelector
+    : public MasterPagesSelector
 {
 public:
     AllMasterPagesSelector (
         TreeNode* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
-        DrawViewShell& rViewShell);
+        DrawViewShell& rViewShell,
+        const ::boost::shared_ptr<MasterPageContainer>& rpContainer);
     virtual ~AllMasterPagesSelector (void);
 
     /** Scan the set of templates for the ones whose first master pages are
         shown by this control and store them in the MasterPageContainer.
     */
-    virtual void Fill (void);
+    virtual void Fill (ItemList& rItemList);
+
+protected:
+    virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 
 private:
     DrawViewShell& mrViewShell;
-    unsigned int mnCurrentIndex;
-    ::std::vector<TemplateEntry*> maTemplates;
+
+    /** The list of master pages displayed by this class.
+    */
+    class SortedMasterPageDescriptorList;
+    ::std::auto_ptr<SortedMasterPageDescriptorList> mpSortedMasterPages;
 
     void AddTemplate (const TemplateEntry& rEntry);
 
@@ -71,6 +80,17 @@ private:
         given file name belongs to the set of Impress master pages.
     */
     bool FileFilter (const String& sFileName);
+
+    void AddItem (MasterPageContainer::Token aToken);
+
+    /** Add all items in the internal master page list into the given list.
+    */
+    void UpdatePageSet (ItemList& rItemList);
+
+    /** Update the internal list of master pages that are to show in the
+        control.
+    */
+    void UpdateMasterPageList (void);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
