@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:22:52 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "RecentlyUsedMasterPages.hxx"
 #include "MasterPageObserver.hxx"
 #include "MasterPagesSelector.hxx"
+#include "MasterPageDescriptor.hxx"
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -83,7 +84,9 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+
 namespace {
+
 static const OUString& GetConfigurationProviderServiceName (void)
 {
     static const OUString sConfigurationProviderServiceName (
@@ -104,12 +107,47 @@ static const OUString& GetPathToSetNode (void)
             "MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages"));
     return sPathToSetNode;
 }
+
+
+class Descriptor
+{
+public:
+    ::rtl::OUString msURL;
+    ::rtl::OUString msName;
+    ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
+    Descriptor (const ::rtl::OUString& rsURL, const ::rtl::OUString& rsName)
+        : msURL(rsURL),
+          msName(rsName),
+          maToken(::sd::toolpanel::controls::MasterPageContainer::NIL_TOKEN)
+    {}
+    Descriptor (::sd::toolpanel::controls::MasterPageContainer::Token aToken,
+        const ::rtl::OUString& rsURL, const ::rtl::OUString& rsName)
+        : msURL(rsURL),
+          msName(rsName),
+          maToken(aToken)
+    {}
+    class TokenComparator
+    { public:
+        TokenComparator(::sd::toolpanel::controls::MasterPageContainer::Token aToken)
+            : maToken(aToken) {}
+        bool operator () (const Descriptor& rDescriptor)
+        { return maToken==rDescriptor.maToken; }
+    private: ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
+    };
+};
+
 } // end of anonymous namespace
 
 
 
 
 namespace sd { namespace toolpanel { namespace controls {
+
+class RecentlyUsedMasterPages::MasterPageList : public ::std::vector<Descriptor>
+{
+public:
+    MasterPageList (void) {}
+};
 
 
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
@@ -142,8 +180,9 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
 
 RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
     : maListeners(),
-      maMasterPages(),
-      mnMaxListSize(8)
+      mpMasterPages(new MasterPageList()),
+      mnMaxListSize(8),
+      mpContainer(new MasterPageContainer())
 {
 }
 
@@ -152,6 +191,9 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
 
 RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
 {
+    Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    mpContainer->RemoveChangeListener(aLink);
+
     MasterPageObserver::Instance().RemoveEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
@@ -161,6 +203,9 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
 
 void RecentlyUsedMasterPages::LateInit (void)
 {
+    Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    mpContainer->AddChangeListener(aLink);
+
     LoadPersistentValues ();
     MasterPageObserver::Instance().AddEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
@@ -277,8 +322,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
 
             // Read the names and URLs of the master pages.
             Sequence<OUString> aKeys (xSet->getElementNames());
-            vector<pair<OUString,OUString> > aMasterPages;
-            aMasterPages.reserve(aKeys.getLength());
+            mpMasterPages->clear();
+            mpMasterPages->reserve(aKeys.getLength());
             for (int i=0; i<aKeys.getLength(); i++)
             {
                 Reference<container::XNameAccess> xSetItem (
@@ -289,25 +334,34 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                     Any aName (xSetItem->getByName(sNameMemberName));
                     aURL >>= sURL;
                     aName >>= sName;
-                    aMasterPages.push_back (
-                        pair<OUString,OUString>(sURL,sName));
+                    SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+                        MasterPageContainer::TEMPLATE,
+                        -1,
+                        sURL,
+                        String(),
+                        sName,
+                        ::boost::shared_ptr<PageObjectProvider>(
+                            new TemplatePageObjectProvider(sURL)),
+                        ::boost::shared_ptr<PreviewProvider>(
+                            new TemplatePreviewProvider(sURL))));
+                    // For user supplied templates we use a different
+                    // preview provider: The preview in the document shows
+                    // not only shapes on the master page but also shapes on
+                    // the foreground.  This is misleading and therefore
+                    // these previews are discarded and created directly
+                    // from the page objects.
+                    if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
+                        pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
+                            new PagePreviewProvider());
+                    MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
+                    mpMasterPages->push_back(Descriptor(aToken,sURL,sName));
                 }
             }
             // Release references to the configuration.
             xSet = NULL;
             xRoot = NULL;
 
-            for (unsigned int j=0; j<aMasterPages.size(); j++)
-            {
-                MasterPageContainer::Token aToken (
-                    MasterPageContainer::Instance().PutMasterPage(
-                        aMasterPages[j].first,
-                        OUString(),
-                        aMasterPages[j].second,
-                        NULL,
-                        Image()));
-                AddMasterPage(aToken, false);
-            }
+            ResolveList();
         }
         while (false);
     }
@@ -351,21 +405,25 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                 xSet, UNO_QUERY);
             if ( ! xChildFactory.is())
                 break;
-            for (i=0; i<GetMasterPageCount(); i++)
+            MasterPageList::const_iterator iDescriptor;
+            sal_Int32 nIndex(0);
+            for (iDescriptor=mpMasterPages->begin();
+                 iDescriptor!=mpMasterPages->end();
+                 ++iDescriptor,++nIndex)
             {
                 // Create new child.
                 OUString sKey (OUString::createFromAscii("index_"));
-                sKey += OUString::valueOf(i);
+                sKey += OUString::valueOf(nIndex);
                 Reference<container::XNameReplace> xChild(
                     xChildFactory->createInstance(), UNO_QUERY);
                 if (xChild.is())
                 {
                     xSet->insertByName (sKey, makeAny(xChild));
 
-                    aValue <<= OUString(GetURL(i));
+                    aValue <<= OUString(iDescriptor->msURL);
                     xChild->replaceByName (sURLMemberName, aValue);
 
-                    aValue <<= OUString(GetMasterPageStyleName(i));
+                    aValue <<= OUString(iDescriptor->msName);
                     xChild->replaceByName (sNameMemberName, aValue);
                 }
             }
@@ -412,62 +470,18 @@ void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
 
 int RecentlyUsedMasterPages::GetMasterPageCount (void) const
 {
-    return maMasterPages.size();
+    return mpMasterPages->size();
 }
 
 
 
 
-String RecentlyUsedMasterPages::GetURL (int nIndex) const
+MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32 nIndex) const
 {
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetURLForToken (aToken);
-}
-
-
-
-
-String RecentlyUsedMasterPages::GetMasterPageName (int nIndex) const
-{
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetPageNameForToken (aToken);
-}
-
-
-
-
-String RecentlyUsedMasterPages::GetMasterPageStyleName (int nIndex) const
-{
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetStyleNameForToken (aToken);
-}
-
-
-
-
-SdPage* RecentlyUsedMasterPages::GetSlide (int nIndex) const
-{
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetSlideForToken (aToken);
-}
-
-
-
-
-SdPage* RecentlyUsedMasterPages::GetMasterPage (int nIndex) const
-{
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetPageObjectForToken (aToken);
-}
-
-
-
-
-Image RecentlyUsedMasterPages::GetMasterPagePreview (
-    int nIndex, int nWidth) const
-{
-    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
-    return MasterPageContainer::Instance().GetPreviewForToken (aToken, nWidth);
+    if (nIndex>=0 && nIndex<mpMasterPages->size())
+        return (*mpMasterPages)[nIndex].maToken;
+    else
+        return MasterPageContainer::NIL_TOKEN;
 }
 
 
@@ -495,8 +509,7 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
         case MasterPageObserverEvent::ET_MASTER_PAGE_ADDED:
         case MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS:
             AddMasterPage(
-                MasterPageContainer::Instance().GetTokenForStyleName(
-                    pEvent->mrMasterPageName));
+                mpContainer->GetTokenForStyleName(pEvent->mrMasterPageName));
             break;
 
         case MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED:
@@ -512,6 +525,29 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
 
 
 
+IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
+    MasterPageContainerChangeEvent*, pEvent)
+{
+    if (pEvent != NULL)
+        switch (pEvent->meEventType)
+        {
+            case MasterPageContainerChangeEvent::CHILD_ADDED:
+            case MasterPageContainerChangeEvent::CHILD_REMOVED:
+            case MasterPageContainerChangeEvent::INDEX_CHANGED:
+            case MasterPageContainerChangeEvent::INDEXES_CHANGED:
+                ResolveList();
+                break;
+
+            default:
+                // Ignored.
+                break;
+        }
+    return 0;
+}
+
+
+
+
 void RecentlyUsedMasterPages::AddMasterPage (
     MasterPageContainer::Token aToken,
     bool bMakePersistent)
@@ -520,29 +556,66 @@ void RecentlyUsedMasterPages::AddMasterPage (
     // has to have a valid URL.  This excludes master pages that do not come
     // from template files.
     if (aToken != MasterPageContainer::NIL_TOKEN
-        && MasterPageContainer::Instance().GetURLForToken(aToken).Len()>0)
+        && mpContainer->GetURLForToken(aToken).Len()>0)
     {
 
         MasterPageList::iterator aIterator (
-            ::std::find(maMasterPages.begin(),maMasterPages.end(),aToken));
-        if (aIterator != maMasterPages.end())
+            ::std::find_if(mpMasterPages->begin(),mpMasterPages->end(),
+                Descriptor::TokenComparator(aToken)));
+        if (aIterator != mpMasterPages->end())
         {
-            // Move existing entry to head of list and thus make it most
-            // recently used.
-            maMasterPages.erase (aIterator);
+            // When an entry for the given token already exists then remove
+            // it now and insert it later at the head of the list.
+            mpMasterPages->erase (aIterator);
         }
-        maMasterPages.insert (maMasterPages.begin(), aToken);
+
+        mpMasterPages->insert(mpMasterPages->begin(),
+            Descriptor(
+                aToken,
+                mpContainer->GetURLForToken(aToken),
+                mpContainer->GetStyleNameForToken(aToken)));
 
         // Shorten list to maximal size.
-        while (maMasterPages.size() > mnMaxListSize)
+        while (mpMasterPages->size() > mnMaxListSize)
         {
-            maMasterPages.pop_back ();
+            mpMasterPages->pop_back ();
         }
 
         if (bMakePersistent)
             SavePersistentValues ();
         SendEvent();
     }
+}
+
+
+
+
+void RecentlyUsedMasterPages::ResolveList (void)
+{
+    bool bNotify (false);
+
+    MasterPageList::iterator iDescriptor;
+    for (iDescriptor=mpMasterPages->begin(); iDescriptor!=mpMasterPages->end(); ++iDescriptor)
+    {
+        if (iDescriptor->maToken == MasterPageContainer::NIL_TOKEN)
+        {
+            MasterPageContainer::Token aToken (mpContainer->GetTokenForURL(iDescriptor->msURL));
+            iDescriptor->maToken = aToken;
+            if (aToken != MasterPageContainer::NIL_TOKEN)
+                bNotify = true;
+        }
+        else
+        {
+            if ( ! mpContainer->HasToken(iDescriptor->maToken))
+            {
+                iDescriptor->maToken = MasterPageContainer::NIL_TOKEN;
+                bNotify = true;
+            }
+        }
+    }
+
+    if (bNotify)
+        SendEvent();
 }
 
 
