@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:58:47 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,7 +453,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, Fiel
 {
     bool bMetric = IsMetric( eDefaultUnit );
     maMtrDepth.SetUnit( bMetric ? FUNIT_CM : FUNIT_INCH );
-    maMtrDepth.SetValue( (int) fDepth * (bMetric ? 10 : 100), FUNIT_100TH_MM );
+    maMtrDepth.SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
 
     FreeResource();
 }
@@ -465,7 +465,7 @@ ExtrusionDepthDialog::~ExtrusionDepthDialog()
 double ExtrusionDepthDialog::getDepth() const
 {
     bool bMetric = IsMetric( meDefaultUnit );
-    return (double)maMtrDepth.GetValue( FUNIT_100TH_MM ) / (bMetric ? 10 : 100);
+    return (double)( maMtrDepth.GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
 // ####################################################################
@@ -493,7 +493,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
     mfDepth( -1.0 ),
     mbEnabled( false ),
-    mbInExecute( false ),
     mxFrame( rFrame )
 {
     implInit();
@@ -521,7 +520,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
     maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
     mfDepth( -1.0 ),
     mbEnabled( false ),
-    mbInExecute( false ),
     mxFrame( rFrame )
 {
     implInit();
@@ -683,6 +681,9 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
     {
         if( nSelected == 6 )
         {
+            if ( IsInPopupMode() )
+                EndPopupMode();
+
             SvxDoubleItem aDepthItem( mfDepth, SID_EXTRUSION_DEPTH );
             SfxUInt16Item aMetricItem( SID_ATTR_METRIC, meUnit );
             rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
@@ -700,8 +701,6 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
                                          mxFrame->getController(), UNO_QUERY ),
                                          aCommand,
                                          aArgs );
-
-//          pDisp->Execute( SID_EXTRUSION_DEPTH_DIALOG, SFX_CALLMODE_ASYNCHRON, &aDepthItem, &aMetricItem, NULL );
         }
         else
         {
@@ -730,15 +729,12 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
                                          mxFrame->getController(), UNO_QUERY ),
                                          aCommand,
                                          aArgs );
-//          pDisp->Execute( SID_EXTRUSION_DEPTH, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
-
             implSetDepth( fDepth, true );
+
+            if ( IsInPopupMode() )
+                EndPopupMode();
         }
     }
-
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
     return 0;
 }
 
@@ -759,14 +755,11 @@ BOOL ExtrusionDepthWindow::Close()
 
 void ExtrusionDepthWindow::PopupModeEnd()
 {
-    if( !mbInExecute )
+    if ( IsVisible() )
     {
-        if ( IsVisible() )
-        {
-            mbPopupMode = FALSE;
-        }
-        SfxPopupWindow::PopupModeEnd();
+        mbPopupMode = FALSE;
     }
+    SfxPopupWindow::PopupModeEnd();
 }
 
 // -----------------------------------------------------------------------
