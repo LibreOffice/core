@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:07:13 $
+ *  last change: $Author: obo $ $Date: 2006-04-26 12:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
                 bDockable( bDAble ),
                 bCloseMode( FALSE ),
                 bBoxIsVisible( TRUE ),
-                aPinedBitmap( DtSodResId( BMP_SMALL_PIN_PINED )),     // BMP_SMALL_PIN_PINED
-                aUnpinedBitmap( DtSodResId( BMP_SMALL_PIN_UNPINED )),   // BMP_SMALL_PIN_UNPINED
+                aPinedBitmap( DtSodResId( TID_SMALL_PIN_PINED )),     // BMP_SMALL_PIN_PINED
+                aUnpinedBitmap( DtSodResId( TID_SMALL_PIN_UNPINED )),   // BMP_SMALL_PIN_UNPINED
                 bPinable( TRUE )
 {
     bPinable = TRUE;

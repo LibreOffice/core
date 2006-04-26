@@ -5,9 +5,9 @@
  *
  *  $RCSfile: soldlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:16:35 $
+ *  last change: $Author: obo $ $Date: 2006-04-26 12:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_zurueck.png";
+                                File = "dt_back.png";
                         };
                 };
                 ToolBoxItem
@@ -351,17 +351,16 @@ ToolBox TID_SOLDEP_MAIN
 };
 
 /*****************************************************************************/
-Bitmap BMP_SMALL_PIN_PINED
+Bitmap TID_SMALL_PIN_PINED
 /*****************************************************************************/
 {
-    File = "bs_pined.png";
+    File = "dt_pined.png";
 };
 
 /*****************************************************************************/
-Bitmap BMP_SMALL_PIN_UNPINED
+Bitmap TID_SMALL_PIN_UNPINED
 /*****************************************************************************/
 {
-    File = "bs_unpined.png";
+    File = "dt_unpined.png";
 };
-
 
