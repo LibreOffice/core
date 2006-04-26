@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:58:07 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,12 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper6
     sal_Bool m_bNoTemporaryCopy;
 
     void UpdateOriginal_Impl();
+
+    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
+    throw ( ::com::sun::star::uno::Exception );
+
+    static void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xNameAccess )
+    throw ( ::com::sun::star::uno::Exception );
 
 public:
 
