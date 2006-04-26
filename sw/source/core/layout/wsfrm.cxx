@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:31:50 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,10 +321,15 @@ void SwTabFrm::CheckDirection( BOOL bVert )
 void SwCellFrm::CheckDirection( BOOL bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
-    if( pFmt )
+    const SfxPoolItem* pItem;
+    // --> FME 2006-03-30 #b6402837# Check if the item is set, before actually
+    // using it. Otherwise the dynamic pool default is used, which may be set
+    // to LTR in case of OOo 1.0 documents.
+    // <--
+    if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
     {
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
+        const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
+        CheckDir(pFrmDirItem->GetValue(), bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
     }
     else
         SwFrm::CheckDirection( bVert );
