@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:54:10 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,17 +657,20 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     // is initialized to 0.
     if(!mnObjectCount)
     {
-        // #91587# add handout master count
-        Reference<presentation::XHandoutMasterSupplier> xHandoutSupp(GetModel(), UNO_QUERY);
-        if(xHandoutSupp.is())
+        if( IsImpress() )
         {
-            Reference<XDrawPage> xHandoutPage(xHandoutSupp->getHandoutMasterPage());
-            if(xHandoutPage.is())
+             // #91587# add handout master count
+            Reference<presentation::XHandoutMasterSupplier> xHandoutSupp(GetModel(), UNO_QUERY);
+            if(xHandoutSupp.is())
             {
-                Reference<drawing::XShapes> xShapes(xHandoutPage, UNO_QUERY);
-                if(xShapes.is() && xShapes->getCount())
+                Reference<XDrawPage> xHandoutPage(xHandoutSupp->getHandoutMasterPage());
+                if(xHandoutPage.is())
                 {
-                    mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                    Reference<drawing::XShapes> xShapes(xHandoutPage, UNO_QUERY);
+                    if(xShapes.is() && xShapes->getCount())
+                    {
+                        mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                    }
                 }
             }
         }
@@ -684,17 +687,20 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
                     mnObjectCount += ImpRecursiveObjectCount(xMasterPage);
                 }
 
-                // #91587# take notes pages from master pages into account
-                Reference<presentation::XPresentationPage> xPresPage;
-                if((aAny >>= xPresPage) && xPresPage.is())
+                if( IsImpress() )
                 {
-                    Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
-                    if(xNotesPage.is())
+                    // #91587# take notes pages from master pages into account
+                    Reference<presentation::XPresentationPage> xPresPage;
+                    if((aAny >>= xPresPage) && xPresPage.is())
                     {
-                        Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
+                        Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
+                        if(xNotesPage.is())
                         {
-                            mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                            Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
+                            if(xShapes.is() && xShapes->getCount())
+                            {
+                                mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                            }
                         }
                     }
                 }
@@ -713,17 +719,20 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
                     mnObjectCount += ImpRecursiveObjectCount(xPage);
                 }
 
-                // #91587# take notes pages from draw pages into account
-                Reference<presentation::XPresentationPage> xPresPage;
-                if((aAny >>= xPresPage) && xPresPage.is())
+                if( IsImpress() )
                 {
-                    Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
-                    if(xNotesPage.is())
+                    // #91587# take notes pages from draw pages into account
+                    Reference<presentation::XPresentationPage> xPresPage;
+                    if((aAny >>= xPresPage) && xPresPage.is())
                     {
-                        Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
+                        Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
+                        if(xNotesPage.is())
                         {
-                            mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                            Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
+                            if(xShapes.is() && xShapes->getCount())
+                            {
+                                mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                            }
                         }
                     }
                 }
@@ -1441,15 +1450,18 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( Reference< X
 
 void SdXMLExport::ImpPrepPageMasterInfos()
 {
-    // create page master info for handout master page
-    Reference< XDrawPage > xMasterPage;
+    if( IsImpress() )
+    {
+        // create page master info for handout master page
 
-    Reference< XHandoutMasterSupplier > xHMS( GetModel(), UNO_QUERY );
-    if( xHMS.is() )
-        xMasterPage = xHMS->getHandoutMasterPage();
-
-    if( xMasterPage.is() )
-        mpHandoutPageMaster = ImpGetOrCreatePageMasterInfo(xMasterPage);
+        Reference< XHandoutMasterSupplier > xHMS( GetModel(), UNO_QUERY );
+        if( xHMS.is() )
+        {
+            Reference< XDrawPage > xMasterPage( xHMS->getHandoutMasterPage() );
+            if( xMasterPage.is() )
+                mpHandoutPageMaster = ImpGetOrCreatePageMasterInfo(xMasterPage);
+        }
+    }
 
     // create page master infos for master pages
     if(mnDocMasterPageCount)
@@ -1457,7 +1469,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
         // look for needed page-masters, create these
         for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
         {
-            mxDocMasterPages->getByIndex(nMPageId) >>= xMasterPage;
+            Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
             ImpXMLEXPPageMasterInfo* pNewInfo = 0L;
 
             if(xMasterPage.is())
@@ -1860,15 +1872,17 @@ void SdXMLExport::ImpPrepMasterPageInfos()
         maMasterPagesStyleNames[nCnt] = ImpCreatePresPageStyleName( xDrawPage );
     }
 
-
-    Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
-    if( xHandoutSupp.is() )
+    if( IsImpress() )
     {
-        Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
-        if( xHandoutPage.is() )
+        Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
+        if( xHandoutSupp.is() )
         {
-            maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
-            maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
+            Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+            if( xHandoutPage.is() )
+            {
+                maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
+                maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
+            }
         }
     }
 }
