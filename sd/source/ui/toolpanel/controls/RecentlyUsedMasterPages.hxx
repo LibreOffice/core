@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:43:19 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,7 @@ public:
     void RemoveEventListener (const Link& rEventListener);
 
     int GetMasterPageCount (void) const;
-    String GetURL (int nIndex) const;
-    String GetMasterPageName (int nIndex) const;
-    String GetMasterPageStyleName (int nIndex) const;
-    SdPage* GetSlide (int nIndex) const;
-    SdPage* GetMasterPage (int nIndex) const;
-    Image GetMasterPagePreview (int nIndex, int nWidth) const;
+    MasterPageContainer::Token GetTokenForIndex (sal_uInt32 nIndex) const;
 
 private:
     /** The single instance of this class.  It is created on demand when
@@ -88,10 +83,10 @@ private:
 
     ::std::vector<Link> maListeners;
 
-    typedef ::std::vector<MasterPageContainer::Token> MasterPageList;
-    class PageByNameFinder;
-    MasterPageList maMasterPages;
+    class MasterPageList;
+    ::std::auto_ptr<MasterPageList> mpMasterPages;
     unsigned long int mnMaxListSize;
+    ::boost::shared_ptr<MasterPageContainer> mpContainer;
 
     RecentlyUsedMasterPages (void);
     virtual ~RecentlyUsedMasterPages (void);
@@ -108,6 +103,7 @@ private:
 
     void SendEvent (void);
     DECL_LINK(MasterPageChangeListener, MasterPageObserverEvent*);
+    DECL_LINK(MasterPageContainerChangeListener, MasterPageContainerChangeEvent*);
 
     /** Add a descriptor for the specified master page to the end of the
         list of most recently used master pages.  When the page is already a
@@ -142,6 +138,8 @@ private:
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface>& xRoot,
           const ::rtl::OUString& sPathToNode);
+
+    void ResolveList (void);
 };
 
 
