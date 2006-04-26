@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 14:13:22 $
+#   last change: $Author: kz $ $Date: 2006-04-26 20:43:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.99 $ ';
+$id_str = ' $Revision: 1.100 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -711,10 +711,15 @@ sub glob_and_copy
 sub is_unstripped {
     my $file_name = shift;
 
-    if (-f $file_name.$maybedot && (( `file $file_name` ) =~ /not stripped/o)) {
-        return '1' if ($file_name =~ /\.bin$/o);
-        return '1' if ($file_name =~ /\.so\.*/o);
-        return '1' if (basename($file_name) !~ /\./o);
+    if (-f $file_name.$maybedot) {
+        my $file_type = `file $file_name`;
+        # OS X file command doesn't know if a file is stripped or not
+        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O executable/o)) {
+            return '1' if ($file_name =~ /\.bin$/o);
+            return '1' if ($file_name =~ /\.so\.*/o);
+            return '1' if ($file_name =~ /\.dylib\.*/o);
+            return '1' if (basename($file_name) !~ /\./o);
+        }
     };
     return '';
 }
