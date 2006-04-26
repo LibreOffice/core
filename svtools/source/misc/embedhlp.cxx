@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:06:02 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,9 @@ BOOL EmbeddedObjectRef::TryRunningState()
 
 BOOL EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
+    if ( !xEmbObj.is() )
+        return FALSE;
+
     try
     {
         if ( xEmbObj->getCurrentState() == embed::EmbedStates::LOADED )
