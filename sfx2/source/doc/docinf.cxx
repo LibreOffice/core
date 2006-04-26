@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:06:10 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1365,6 +1365,7 @@ void SfxDocumentInfo::ResetFromTemplate( const String& rTemplateName, const Stri
             INetURLObject aObj( rFileName );
             aTemplateFileName = aObj.GetMainURL(INetURLObject::DECODE_TO_IURI);
             aTemplateName = rTemplateName;
+            bQueryTemplate = sal_True;
         }
     }
 }
