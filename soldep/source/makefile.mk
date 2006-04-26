@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-26 09:43:39 $
+#   last change: $Author: obo $ $Date: 2006-04-26 11:48:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,12 @@ TARGET=soldep
 
 
 # --- Settings -----------------------------------------------------
-
+RSCDEFIMG=$(PRJNAME)
 .INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
+RSCLOCINC=..$/res
+
+
 
 # --- Files --------------------------------------------------------
 
@@ -121,6 +124,11 @@ RES1TARGET = dep
 SRS1NAME=$(TARGET)
 SRS1FILES = \
     $(SRS)$/$(TARGET).srs
+
+RESLIB1NAME = dep
+RESLIB1SRSFILES = \
+    $(SRS)$/$(TARGET).srs
+
 
 #------------- Application ---------------
 APP1TARGET=soldepl
