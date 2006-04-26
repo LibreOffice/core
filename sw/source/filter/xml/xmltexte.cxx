@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:27:22 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 OUString sURL( sEmbeddedObjectProtocol );
                 sURL += rOLEObj.GetCurrentPersistName();
-                GetExport().AddEmbeddedObjectAsBase64( sURL );
+
+                if ( ( rExport.getExportFlags() & EXPORT_OASIS ) == 0 )
+                    sURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?oasis=false" ) );
+
+                rExport.AddEmbeddedObjectAsBase64( sURL );
             }
             break;
         case SV_EMBEDDED_APPLET:
