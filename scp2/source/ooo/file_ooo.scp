@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:27:26 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
 ************************************************************************/
 
 #include "macros.inc"
-
 
 File gid_File_Basic_Depot
     Dir = gid_Dir_Basic_Depot;
@@ -347,6 +346,10 @@ File gid_File_Bin_Open_Url
     Styles = (PACKED, PATCH);
 End
 
+#endif
+
+#if defined UNX && ! defined MACOSX
+
 File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -374,6 +377,10 @@ File gid_File_Bin_Cde_Open_Url
     Name = "cde-open-url";
     Styles = (PACKED, PATCH);
 End
+
+#endif
+
+#ifdef UNX
 
 File gid_File_Bin_Uri_Encode
     BIN_FILE_BODY;
@@ -406,7 +413,7 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Share_Xdg_Printeradmin
     TXT_FILE_BODY;
@@ -619,7 +626,11 @@ End
 
 File gid_File_Html_Thirdpartylicensereadme
     Name = "THIRDPARTYLICENSEREADME.html";
+#ifndef MACOSX
     Dir = PREDEFINED_PROGDIR;
+#else
+    Dir = gid_Dir_Bundle_Contents_Macos;
+#endif
     Styles = (WORKSTATION);
     TXT_FILE_BODY;
 End
@@ -2497,5 +2508,23 @@ File gid_File_Bin_Macosxrc
     Dir = gid_Dir_User;
     Name = "macosxrc.txt";
     Styles = (PACKED, WORKSTATION);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_App_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "osxbundle.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+#endif
+  
+#ifdef MACOSX
+File gid_File_Icns_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Resources;
+    Name = "osxicons.zip";
+    Styles = (ARCHIVE);
 End
 #endif
