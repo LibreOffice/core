@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:41:25 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <sfx2/shell.hxx>
 #include <vcl/image.hxx>
 #include "glob.hxx"
+#include <osl/mutex.hxx>
 
 #include <queue>
 
@@ -72,16 +73,14 @@ class MasterPagesSelector
       public SfxShell
 {
 public:
-    static const int snSmallPreviewWidth;
-    static const int snLargePreviewWidth;
-
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDMASTERPAGESSELECTOR);
 
     MasterPagesSelector (
         TreeNode* pParent,
         SdDrawDocument& rDocument,
-        ViewShellBase& rBase);
+        ViewShellBase& rBase,
+        const ::boost::shared_ptr<MasterPageContainer>& rpContainer);
     virtual ~MasterPagesSelector (void);
 
     virtual void LateInit (void);
@@ -109,8 +108,6 @@ public:
     void Execute (SfxRequest& rRequest);
     void GetState (SfxItemSet& rItemSet);
 
-    void SetPreviewWidth (int nPreviewWidth);
-
     /** Update the selection of previews according to whatever
         influences them appart from mouse and keyboard.  If, for
         example, the current page of the main pane changes, then call
@@ -125,44 +122,46 @@ public:
     */
     virtual void UpdateSelection (void);
 
-    virtual void Fill (void) = 0;
+    void FillPageSet (void);
 
     /** Make the selector empty.  This method clear the value set from any
         entries. Overload this method to add functionality, especially to
         destroy objects set as data items at the value set.
     */
-    virtual void Clear (void);
+    void ClearPageSet (void);
 
-    void    SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
+    void SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
 
-    /** Call this method to tell a selector object that the preview that
-        belongs to the given page does not reflect the pages content
-        anymore.  This method forwards the call to the variant that takes a
-        value set index as argument so call that variant directly when the
-        index is already present.
-        @param pPage
-            When NULL or a pointer to page is given that does not belong to
-            the selector then the call is ignored.
+    /** Mark the preview that belongs to the given index as not up-to-date
+        anymore with respect to page content or preview size.
+        The implementation of this method will either sunchronously or
+        asynchronously call UpdatePreview().
+        @param nIndex
+            Index into the value set control that is used for displaying the
+            previews.
     */
-    virtual void InvalidatePreview (const SdPage* pPage) = 0;
-    /** Invalidate the preview that is specified via an index into the value
-        set.
+    void InvalidatePreview (MasterPageContainer::Token aToken);
+    void InvalidatePreview (const SdPage* pPage);
+
+    /** Mark all previews as no being up-to-date anymore.  This method is
+        typically called when the size of the previews has changed.
     */
-    void InvalidatePreview (USHORT nIndex);
     void InvalidateAllPreviews (void);
 
+    void UpdateAllPreviews (void);
+
 protected:
+    mutable ::osl::Mutex maMutex;
+    ::boost::shared_ptr<MasterPageContainer> mpContainer;
+
     SdDrawDocument& mrDocument;
     ::std::auto_ptr<PreviewValueSet> mpPageSet;
-    int mnPreviewWidth;
+    bool mbSmallPreviewSize;
     ViewShellBase& mrBase;
     /** Slot that is executed as default action when the left mouse button is
         clicked over a master page.
     */
     sal_uInt16 mnDefaultClickAction;
-    /** Timer for scheduling updates of master page previews.
-    */
-    Timer maPreviewUpdateTimer;
     /** Pages with pointers in this queue have their previews updated
         eventually.  Filled by InvalidatePreview() and operated upon by
         UpdatePreviews().
@@ -184,70 +183,60 @@ protected:
     */
     void AssignMasterPageToSelectedSlides (SdPage* pMasterPage);
 
-    void AddItemForPage (
-        const String& sURL,
-        const String& sPageName,
-        SdPage* pMasterPage,
-        Image aPreview,
-        bool bCreatePreview = true);
-    void AddItemForToken (
-        MasterPageContainer::Token aToken,
-        bool bCreatePreview = true);
-
-    /** Ask the master page container for the previews of all items and set
-        them to the value set.  Call this function when the size of the
-        previews has changed.
-    */
-    virtual void UpdateAllPreviews (void) = 0;
-    virtual void UpdatePreview (USHORT nIndex) = 0;
-
-    DECL_LINK(ProcessPreviewUpdateRequest, Timer*);
-
-protected:
-    /** Assign the given master page to the list of pages.
-        @param pMasterPage
-            This master page will usually be a member of the list of all
-            available master pages as provided by the MasterPageContainer.
-        @param rPageList
-            The pages to which to assign the master page.  These pages may
-            be slides or master pages themselves.
-    */
-    virtual void AssignMasterPageToPageList (
+    virtual void MasterPagesSelector::AssignMasterPageToPageList (
         SdPage* pMasterPage,
         const ::std::vector<SdPage*>& rPageList);
 
+    virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
+
+    typedef ::std::pair<int, MasterPageContainer::Token> UserData;
+    UserData* CreateUserData (int nIndex, MasterPageContainer::Token aToken) const;
+    UserData* GetUserData (int nIndex) const;
+    void SetUserData (int nIndex, UserData* pData);
+
+    virtual sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
+    typedef ::std::vector<MasterPageContainer::Token> ItemList;
+    void UpdateItemList (::std::auto_ptr<ItemList> pList);
+    void Clear (void);
+    /** Invalidate the specified item so that on the next Fill() this item
+        is updated.
+    */
+    void InvalidateItem (MasterPageContainer::Token aToken);
+
+    // For every item in the ValueSet we store its associated token.  This
+    // allows a faster access and easier change tracking.
+    ItemList maCurrentItemList;
+    typedef ::std::map<MasterPageContainer::Token,sal_Int32> TokenToValueSetIndex;
+    TokenToValueSetIndex maTokenToValueSetIndex;
+
+    ItemList maLockedMasterPages;
+    /** Lock master pages in the given list and release locks that where
+        previously aquired.
+    */
+    void UpdateLocks (const ItemList& rItemList);
+
+    void Fill (void);
+    virtual void Fill (ItemList& rItemList) = 0;
+
 private:
+    /** The offset between ValueSet index and MasterPageContainer::Token
+        last seen.  This value is used heuristically to speed up the lookup
+        of an index for a token.
+    */
     DECL_LINK(ClickHandler, PreviewValueSet*);
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(ContextMenuCallback, CommandEvent*);
+    DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
 
-    static void ProvideStyles (
-        SdDrawDocument* pSourceDoc,
-        SdDrawDocument* pTargetDoc,
-        SdPage* pPage);
-
-    /** Assign the given master page to the given page.
-        @param pMasterPage
-            In contrast to AssignMasterPageToPageList() this page is assumed
-            to be in the target document, i.e. the same document that pPage
-            is in.  The caller will usually call AddMasterPage() to create a
-            clone of a master page in a another document to create it.
-        @param rsBaseLayoutName
-            The layout name of the given master page.  It is given so that
-            it has not to be created on every call.  It could be generated
-            from the given master page, though.
-        @param pPage
-            The page to which to assign the master page.  It can be a slide
-            or a master page itself.
-    */
-    void AssignMasterPageToPage (
-        SdPage* pMasterPage,
-        const String& rsBaseLayoutName,
-        SdPage* pPage);
-
-    SdPage* ProvideMasterPage (
-        SdPage* pMasterPage,
-        const ::std::vector<SdPage*>& rPageList);
+    void SetItem (
+        USHORT nIndex,
+        MasterPageContainer::Token aToken);
+    void AddTokenToIndexEntry (
+        USHORT nIndex,
+        MasterPageContainer::Token aToken);
+    void RemoveTokenToIndexEntry (
+        USHORT nIndex,
+        MasterPageContainer::Token aToken);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
