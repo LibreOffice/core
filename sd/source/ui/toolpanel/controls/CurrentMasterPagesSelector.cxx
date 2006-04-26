@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:38:36 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,13 @@
  ************************************************************************/
 
 #include "CurrentMasterPagesSelector.hxx"
-#include "MasterPagesSelectorListener.hxx"
 #include "PreviewValueSet.hxx"
+#include "ViewShellBase.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "MasterPageContainer.hxx"
+#include "MasterPageDescriptor.hxx"
+#include "EventMultiplexer.hxx"
 #include "app.hrc"
 
 #include <vcl/image.hxx>
@@ -56,15 +58,26 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    DrawViewShell& rViewShell)
-    : MasterPagesSelector (pParent, rDocument, rBase),
-      mxListener(NULL)
+    DrawViewShell& rViewShell,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
+    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer)
 {
     SetName(String(RTL_CONSTASCII_USTRINGPARAM("CurrentMasterPagesSelector")));
 
     // For this master page selector only we change the default action for
     // left clicks.
     mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
+
+    Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    rBase.GetEventMultiplexer().AddEventListener(aLink,
+        sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE
+        | sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER
+        | sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED
+        | sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED
+        | sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED);
+
+
 }
 
 
@@ -72,11 +85,8 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
-    if (mxListener.is())
-    {
-        mxListener->dispose();
-        mxListener = NULL;
-    }
+    Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    mrBase.GetEventMultiplexer().RemoveEventListener(aLink);
 }
 
 
@@ -84,23 +94,15 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 
 void CurrentMasterPagesSelector::LateInit (void)
 {
-    MasterPagesSelector::LateInit ();
-    Fill ();
-    // The selection listener is reference counted and thus takes care
-    // of its own lifetime.
-    mxListener = uno::Reference<lang::XComponent>(
-        static_cast<uno::XWeak*>(
-            new MasterPagesSelectorListener (mrBase, *this)),
-        uno::UNO_QUERY);
+    MasterPagesSelector::LateInit();
+    MasterPagesSelector::Fill();
 }
 
 
 
 
-void CurrentMasterPagesSelector::Fill (void)
+void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    Clear();
-
     USHORT nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     SdPage* pMasterPage;
     // Remember the names of the master pages that have been inserted to
@@ -109,83 +111,32 @@ void CurrentMasterPagesSelector::Fill (void)
     for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
     {
         pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
-        if (pMasterPage != NULL)
+        if (pMasterPage == NULL)
+            continue;
+
+        // Use the name of the master page to avoid duplicate entries.
+        String sName (pMasterPage->GetName());
+        if (aMasterPageNames.find(sName)!=aMasterPageNames.end())
+            continue;
+        aMasterPageNames.insert (sName);
+
+        // Look up the master page in the container and, when it is not yet
+        // in it, insert it.
+        MasterPageContainer::Token aToken = mpContainer->GetTokenForPageObject(pMasterPage);
+        if (aToken == MasterPageContainer::NIL_TOKEN)
         {
-            String sName (pMasterPage->GetName());
-            if (aMasterPageNames.find(sName)==aMasterPageNames.end())
-            {
-                aMasterPageNames.insert (sName);
-
-                int nIndex = mpPageSet->GetItemCount() + 1;
-
-                Image aPreview = MasterPageContainer::Instance().GetPreviewForPage (
-                    pMasterPage,
-                    mnPreviewWidth);
-                mpPageSet->InsertItem (
-                    nIndex,
-                    aPreview,
-                    pMasterPage->GetName());
-                mpPageSet->SetItemData (
-                    nIndex,
-                    pMasterPage);
-            }
+            SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+                MasterPageContainer::MASTERPAGE,
+                nIndex,
+                String(),
+                pMasterPage->GetName(),
+                String(),
+                ::boost::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
+                ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
+            aToken = mpContainer->PutMasterPage(pDescriptor);
         }
-    }
-    GetParentNode()->RequestResize();
-}
 
-
-
-
-void CurrentMasterPagesSelector::Clear (void)
-{
-    mpPageSet->Clear ();
-}
-
-
-
-
-void CurrentMasterPagesSelector::UpdateAllPreviews (void)
-{
-    SdPage* pMasterPage;
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
-    {
-        pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex));
-        if (pMasterPage != NULL)
-            mpPageSet->SetItemImage (nIndex,
-                MasterPageContainer::Instance().GetPreviewForPage (
-                    pMasterPage,
-                    mnPreviewWidth));
-    }
-    GetParentNode()->RequestResize();
-}
-
-
-
-
-void CurrentMasterPagesSelector::UpdatePreview (USHORT nIndex)
-{
-    SdPage* pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex));
-    if (pMasterPage != NULL)
-        mpPageSet->SetItemImage (nIndex,
-            MasterPageContainer::Instance().GetPreviewForPage (
-                pMasterPage,
-                mnPreviewWidth));
-    GetParentNode()->RequestResize();
-}
-
-
-
-
-void CurrentMasterPagesSelector::InvalidatePreview (const SdPage* pPage)
-{
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
-    {
-        if (pPage == reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex)))
-        {
-            MasterPagesSelector::InvalidatePreview(nIndex);
-            break;
-        }
+        rItemList.push_back(aToken);
     }
 }
 
@@ -195,8 +146,11 @@ void CurrentMasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 SdPage* CurrentMasterPagesSelector::GetSelectedMasterPage (void)
 {
     USHORT nIndex = mpPageSet->GetSelectItemId();
-    SdPage* pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData (nIndex));
-    return pMasterPage;
+    UserData* pData = GetUserData(nIndex);
+    if (pData != NULL)
+        return mpContainer->GetPageObjectForToken(pData->second);
+    else
+        return NULL;
 }
 
 
@@ -232,6 +186,45 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
             mpPageSet->SelectItem (nIndex);
         }
     }
+}
+
+
+
+
+IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
+    sd::tools::EventMultiplexerEvent*,pEvent)
+{
+    if (pEvent != NULL)
+    {
+        switch (pEvent->meEventId)
+        {
+            case sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE:
+            case sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+                UpdateSelection();
+                break;
+
+            case sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+                // This is tricky.  If a master page is removed, moved, or
+                // added we have to wait until both the notes master page
+                // and the standard master page have been removed, moved,
+                // or added.  We do this by looking at the number of master
+                // pages which has to be odd in the consistent state (the
+                // handout master page is always present).  If the number is
+                // even we ignore the hint.
+                if (mrBase.GetDocument()->GetMasterPageCount()%2 == 1)
+                    MasterPagesSelector::Fill();
+                break;
+
+            case sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+            case sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
+            case sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
+                InvalidatePreview((const SdPage*)pEvent->mpUserData);
+                break;
+        }
+    }
+
+    return 0;
 }
 
 
