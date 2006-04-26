@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:20:46 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,6 +441,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             break;
 
         case KEY_DELETE:
+        case KEY_BACKSPACE:
         {
             int nSelectedPagesCount = 0;
             int nPageCount = mrController.GetModel().GetPageCount();
