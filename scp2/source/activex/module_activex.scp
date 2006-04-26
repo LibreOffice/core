@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_activex.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:17:32 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,5 +40,5 @@ Module gid_Module_Optional_Activexcontrol
     Default = NO;
     Minimal = NO;
     ParentID = gid_Module_Optional;
-    Files = (gid_File_Lib_Soactivex, gid_File_Lib_Regactivex_Msi);
+    Files = (gid_File_Lib_Soactivex, gid_File_Lib_Regactivex_Msi, gid_File_Lib_Regpatchactivex_Msi);
 End
