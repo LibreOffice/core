@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:33:25 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,9 @@ private:
     void ConnectToController (void);
     void DisconnectFromController (void);
 
-    void CallListeners (EventMultiplexerEvent::EventId eId, void* pUserData=NULL);
+    void CallListeners (
+        EventMultiplexerEvent::EventId eId,
+        void* pUserData = NULL);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
@@ -228,7 +230,9 @@ void EventMultiplexer::RemoveEventListener (
 
 
 
-void EventMultiplexer::MultiplexEvent( EventMultiplexerEvent::EventId eEventId, void* pUserData )
+void EventMultiplexer::MultiplexEvent(
+    EventMultiplexerEvent::EventId eEventId,
+    void* pUserData )
 {
     EventMultiplexerEvent aEvent (mpImpl->GetViewShellBase(), eEventId, pUserData);
     mpImpl->CallListeners(aEvent);
@@ -610,6 +614,21 @@ void EventMultiplexer::Implementation::Notify (
             case HINT_SWITCHTOPAGE:
                 CallListeners (EventMultiplexerEvent::EID_CURRENT_PAGE);
                 break;
+
+            case HINT_OBJCHG:
+                CallListeners(EventMultiplexerEvent::EID_SHAPE_CHANGED,
+                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                break;
+
+            case HINT_OBJINSERTED:
+                CallListeners(EventMultiplexerEvent::EID_SHAPE_INSERTED,
+                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                break;
+
+            case HINT_OBJREMOVED:
+                CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
+                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                break;
         }
     }
     else if (rHint.ISA(SfxSimpleHint))
@@ -725,7 +744,7 @@ IMPL_LINK(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener,
 EventMultiplexerEvent::EventMultiplexerEvent (
     const ViewShellBase& rBase,
     EventId eEventId,
-    void* pUserData)
+    const void* pUserData)
     : mrBase(rBase),
       meEventId(eEventId),
       mpUserData(pUserData)
