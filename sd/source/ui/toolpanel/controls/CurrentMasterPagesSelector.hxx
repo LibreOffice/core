@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:38:51 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,17 +41,13 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+namespace sd { namespace tools { class EventMultiplexerEvent; } }
+
+
 namespace sd { namespace toolpanel { namespace controls {
 
 
-/** Adaption of a value set control that shows previews of master pages that
-    are currently used by the document of the application.
-
-    It does not use the approach of the base class of storing tokens as item
-    data in the value set that identify entries in the MasterPageContainer.
-    Instead it stores pointers directly to master pages in the document.
-    The base class is used to have access to the code that assigns master
-    pages to the document.
+/** Show the master pages currently used by a SdDrawDocument.
 */
 class CurrentMasterPagesSelector
     : public MasterPagesSelector
@@ -61,7 +57,8 @@ public:
         TreeNode* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
-        DrawViewShell& rViewShell);
+        DrawViewShell& rViewShell,
+        const ::boost::shared_ptr<MasterPageContainer>& rpContainer);
     virtual ~CurrentMasterPagesSelector (void);
 
     virtual void LateInit (void);
@@ -72,13 +69,9 @@ public:
     */
     virtual void UpdateSelection (void);
 
-    /** Clear the list of currently used master pages and fill it
-        with anew.
+    /** Copy all master pages that are to be shown into the given list.
     */
-    virtual void Fill (void);
-    virtual void Clear (void);
-
-    virtual void InvalidatePreview (const SdPage* pPage);
+    virtual void Fill (ItemList& rItemList);
 
 protected:
     /** Return the master page whose preview is currently selected in the
@@ -89,15 +82,11 @@ protected:
     */
     virtual SdPage* GetSelectedMasterPage (void);
 
-    /** For all currently used master pages a new preview is rendered and
-        put into the value set control.
-    */
-    virtual void UpdateAllPreviews (void);
-    virtual void UpdatePreview (USHORT nIndex);
-
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
         mxListener;
+
+    DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent*);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
