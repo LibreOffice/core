@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:36:10 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,6 @@ private:
     FieldUnit   meUnit;
     double      mfDepth;
     bool        mbEnabled;
-    bool        mbInExecute;
 
     DECL_LINK( SelectHdl, void * );
 
