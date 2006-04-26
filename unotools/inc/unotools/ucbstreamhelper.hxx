@@ -57,6 +57,8 @@ namespace utl
                                 UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream );
+        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream, sal_Bool bCloseStream );
+        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream, sal_Bool bCloseStream );
     };
 };
 
