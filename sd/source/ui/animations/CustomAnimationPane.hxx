@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:35:39 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,11 +127,12 @@ private:
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK( implPropertyHdl, Control* );
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
+    DECL_LINK(lateInitCallback, Timer*);
 
 private:
     ViewShellBase& mrBase;
 
-    const CustomAnimationPresets& mrPresets;
+    const CustomAnimationPresets* mpCustomAnimationPresets;
 
     FixedLine*  mpFLModify;
     PushButton* mpPBAddEffect;
@@ -170,6 +171,17 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxCurrentPage;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+
+    /** The mpCustomAnimationPresets is initialized either on demand or
+        after a short time after the construction of a new object of this
+        class.  This timer is responsible for the later.
+    */
+    Timer maLateInitTimer;
+
+    /** This method initializes the mpCustomAnimationPresets on demand and
+        returns a reference to the list.
+    */
+    const CustomAnimationPresets& getPresets (void);
 };
 
 };
