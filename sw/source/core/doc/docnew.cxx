@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:35:55 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,9 @@ SwDoc::SwDoc() :
     // <--
     bTableRowKeep                       =
     bIgnoreTabsAndBlanksForLineCalculation =
-
+    // --> OD 2006-04-13 #b6402800#
+    mbClipAsCharacterAnchoredWriterFlyFrames =
+    // <--
     //
     // COMPATIBILITY FLAGS END
     //
