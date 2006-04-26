@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:50:52 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7482,7 +7482,8 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 
 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
-                        const Graphic& rGrf )
+                        const Graphic& rGrf,
+                        const Rectangle& rVisArea )
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     SvGlobalName aStgNm = rSrcStg.GetClassName();
@@ -7608,8 +7609,16 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             // TODO/LATER: it might make sence in future to set the size stored in internal object
             if( !pName && ( sStarName.EqualsAscii( "swriter" ) || sStarName.EqualsAscii( "scalc" ) ) )
             {
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) );
-                Size aSz(lcl_GetPrefSize(rGrf, MapMode( aMapUnit ) ) );
+                MapMode aMapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
+                Size aSz;
+                if ( rVisArea.IsEmpty() )
+                    aSz = lcl_GetPrefSize(rGrf, aMapMode );
+                else
+                {
+                    aSz = rVisArea.GetSize();
+                    aSz = OutputDevice::LogicToLogic( aSz, MapMode( MAP_100TH_MM ), aMapMode );
+                }
+
                 // don't modify the object
                 //TODO/LATER: remove those hacks, that needs to be done differently!
                 //xIPObj->EnableSetModified( FALSE );
@@ -7681,7 +7690,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 if( bValidStorage )
                 {
                     uno::Reference < embed::XEmbeddedObject > xObj( CheckForConvertToSOObj(
-                                nConvertFlags, *xObjStg, xDestStorage, rGrf ));
+                                nConvertFlags, *xObjStg, xDestStorage, rGrf, rVisArea ));
                     if ( xObj.is() )
                     {
                         // object could be converted to own object
