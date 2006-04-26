@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:12:33 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,9 +259,10 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 :   Control( pParent, SdResId(DLG_CUSTOMANIMATIONPANE) ),
     mrBase( rBase ),
     mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
-    mrPresets( CustomAnimationPresets::getCustomAnimationPresets() ),
+    mpCustomAnimationPresets(NULL),
     mnPropertyType( nPropertyTypeNone ),
-    maMinSize( rMinSize )
+    maMinSize( rMinSize ),
+    maLateInitTimer()
 {
     // load resources
     mpFLEffect = new FixedLine( this, SdResId( FL_EFFECT ) );
@@ -338,12 +339,17 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     // get current page and update custom animation list
     onChangeCurrentPage();
 
-    // update selection and control states
-    onSelectionChanged();
+    // Wait a short time before the presets list is created.  This gives the
+    // system time to paint the control.
+    maLateInitTimer.SetTimeout(100);
+    maLateInitTimer.SetTimeoutHdl(LINK(this, CustomAnimationPane, lateInitCallback));
+    maLateInitTimer.Start();
 }
 
 CustomAnimationPane::~CustomAnimationPane()
 {
+    maLateInitTimer.Stop();
+
     removeListener();
 
     delete mpFLModify;
@@ -800,7 +806,7 @@ void CustomAnimationPane::updateControls()
     {
         CustomAnimationEffectPtr pEffect = maListSelection.front();
 
-        OUString aUIName( mrPresets.getUINameForPresetId( pEffect->getPresetId() ) );
+        OUString aUIName( getPresets().getUINameForPresetId( pEffect->getPresetId() ) );
 
         OUString aTemp( maStrModify );
 
@@ -811,7 +817,7 @@ void CustomAnimationPane::updateControls()
         }
         mpFLEffect->SetText( aTemp );
 
-        CustomAnimationPresetPtr pDescriptor = mrPresets.getEffectDescriptor( pEffect->getPresetId() );
+        CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
         {
             PropertySubControl* pSubControl = NULL;
@@ -1144,7 +1150,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
             rValue >>= aPresetSubType;
             if( aPresetSubType != pEffect->getPresetSubType() )
             {
-                mrPresets.changePresetSubType( pEffect, aPresetSubType );
+                getPresets().changePresetSubType( pEffect, aPresetSubType );
                 bEffectChanged = true;
             }
         }
@@ -1218,6 +1224,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
     // get options from selected effects
     EffectSequence::iterator aIter( maListSelection.begin() );
     const EffectSequence::iterator aEnd( maListSelection.end() );
+    const CustomAnimationPresets& rPresets (getPresets());
     while( aIter != aEnd )
     {
         CustomAnimationEffectPtr pEffect = (*aIter++);
@@ -1289,7 +1296,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
 
         //
 
-        CustomAnimationPresetPtr pDescriptor = mrPresets.getEffectDescriptor( pEffect->getPresetId() );
+        CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
         {
             sal_Int32 nType = nPropertyTypeNone;
@@ -2087,6 +2094,18 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     return 0;
 }
 
+IMPL_LINK(CustomAnimationPane, lateInitCallback, Timer*, pTimer)
+{
+    // Call getPresets() to initiate the (expensive) construction of the
+    // presets list.
+    getPresets();
+
+    // update selection and control states
+    onSelectionChanged();
+
+    return 0;
+}
+
 void CustomAnimationPane::moveSelection( bool bUp )
 {
     if( maListSelection.empty() )
@@ -2236,6 +2255,19 @@ void CustomAnimationPane::onSelect()
     maListSelection = mpCustomAnimationList->getSelection();
     updateControls();
 }
+
+
+
+
+const CustomAnimationPresets& CustomAnimationPane::getPresets (void)
+{
+    if (mpCustomAnimationPresets == NULL)
+        mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
+    return *mpCustomAnimationPresets;
+}
+
+
+
 
 // ====================================================================
 
