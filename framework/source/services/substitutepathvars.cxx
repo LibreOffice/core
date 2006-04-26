@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:22:19 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 14:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,9 +797,10 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 {
     osl::Security   aSecurity;
-    rtl::OUString   aConfigPath;
-    aSecurity.getConfigDir( aConfigPath );
-    return ConvertOSLtoUCBURL( aConfigPath );
+    rtl::OUString   aHomePath;
+
+    aSecurity.getHomeDir( aHomePath );
+    return ConvertOSLtoUCBURL( aHomePath );
 }
 
 rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
