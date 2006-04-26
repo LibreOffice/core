@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:43:18 $
+ *  last change: $Author: kz $ $Date: 2006-04-26 20:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,8 @@
 #ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
 #include "WindowUpdater.hxx"
 #endif
+
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -740,10 +742,10 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         {
             TemplateDir* pDir = *I;
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
             {
                 TemplateEntry* pEntry = *J;
-                if(pEntry->m_aPath == aStandardTemplate)
+                if(pEntry->msPath == aStandardTemplate)
                 {
                     pStandardTemplateDir = pDir;
                     pStandardTemplateEntry = pEntry;
@@ -757,9 +759,9 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         //preselect template
         if( pStandardTemplateDir && pStandardTemplateEntry )
         {
-            m_pPage1RegionLB->SelectEntry( pStandardTemplateDir->m_aRegion );
-            SelectTemplateRegion( pStandardTemplateDir->m_aRegion );
-            m_pPage1TemplateLB->SelectEntry( pStandardTemplateEntry->m_aTitle );
+            m_pPage1RegionLB->SelectEntry( pStandardTemplateDir->msRegion );
+            SelectTemplateRegion( pStandardTemplateDir->msRegion );
+            m_pPage1TemplateLB->SelectEntry( pStandardTemplateEntry->msTitle );
             SelectTemplateHdl(m_pPage1TemplateLB);
         }
     }
@@ -779,7 +781,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     std::vector<TemplateEntry*>::iterator   J;
     for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
     {
-        for (J=(*I)->m_aEntries.begin(); J!=(*I)->m_aEntries.end(); J++)
+        for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); J++)
             delete (*J);
         delete (*I);
     }
@@ -995,10 +997,10 @@ void AssistentDlgImpl::TemplateScanDone (
     {
         TemplateDir * pDir = *I;
         //HACK! presnt directory is always initially selected.
-        if (pDir->m_aUrl.SearchAscii ("presnt") != STRING_NOTFOUND)
+        if (pDir->msUrl.SearchAscii ("presnt") != STRING_NOTFOUND)
             nFirstEntry = i;
 
-        m_pPage1RegionLB->InsertEntry (pDir->m_aRegion);
+        m_pPage1RegionLB->InsertEntry (pDir->msRegion);
     }
     m_pPage1RegionLB->SelectEntryPos (nFirstEntry);
     m_pPage1RegionLB->Update();
@@ -1011,10 +1013,10 @@ void AssistentDlgImpl::TemplateScanDone (
     {
         TemplateDir * pDir = *I;
         //HACK! layout directory is always initially selected.
-        if (pDir->m_aUrl.SearchAscii ("layout") != STRING_NOTFOUND)
+        if (pDir->msUrl.SearchAscii ("layout") != STRING_NOTFOUND)
             nFirstEntry = i;
 
-        m_pPage2RegionLB->InsertEntry (pDir->m_aRegion);
+        m_pPage2RegionLB->InsertEntry (pDir->msRegion);
     }
     m_pPage2RegionLB->SelectEntryPos (nFirstEntry);
     m_pPage2RegionLB->Update();
@@ -1073,14 +1075,14 @@ String AssistentDlgImpl::GetDocFileName()
         const USHORT nEntry = m_pPage1TemplateLB->GetSelectEntryPos();
         TemplateEntry* pEntry = NULL;
         if(nEntry != (USHORT)-1)
-            pEntry = m_pTemplateRegion->m_aEntries[nEntry];
+            pEntry = m_pTemplateRegion->maEntries[nEntry];
 
         if(pEntry)
         {
-            aDocFile = pEntry->m_aPath;
+            aDocFile = pEntry->msPath;
 
             aTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(  " (" ) );
-            aTitle.Append( pEntry->m_aTitle );
+            aTitle.Append( pEntry->msTitle );
             aTitle.Append( sal_Unicode(')') );
         }
     }
@@ -1103,10 +1105,10 @@ String AssistentDlgImpl::GetLayoutFileName()
     const USHORT nEntry = m_pPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
     if(nEntry != (USHORT)-1 && nEntry > 0)
-        pEntry = m_pLayoutRegion->m_aEntries[nEntry-1];
+        pEntry = m_pLayoutRegion->maEntries[nEntry-1];
 
     if(pEntry)
-        aFile = pEntry->m_aPath;
+        aFile = pEntry->msPath;
 
     return aFile;
 }
@@ -1448,11 +1450,11 @@ void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
     {
         TemplateDir * pDir = *I;
         m_pTemplateRegion = *I;
-        if (pDir->m_aRegion.Equals( rRegion ) )
+        if (pDir->msRegion.Equals( rRegion ) )
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
-                m_pPage1TemplateLB->InsertEntry ((*J)->m_aTitle);
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+                m_pPage1TemplateLB->InsertEntry ((*J)->msTitle);
             m_pPage1TemplateLB->Update();
             if(GetStartType() == ST_TEMPLATE)
             {
@@ -1474,11 +1476,11 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
         TemplateDir * pDir = *I;
         m_pLayoutRegion = *I;
 
-        if (pDir->m_aRegion.Equals (rRegion))
+        if (pDir->msRegion.Equals (rRegion))
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
-                m_pPage2LayoutLB->InsertEntry ((*J)->m_aTitle);
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+                m_pPage2LayoutLB->InsertEntry ((*J)->msTitle);
             m_pPage2LayoutLB->Update();
             break;
         }
@@ -1502,7 +1504,6 @@ void AssistentDlgImpl::UpdateUserData()
             pPage->SetAutoLayout(AUTOLAYOUT_TITLE, TRUE);
 
         SdrTextObj* pObj;
-        SdrObjKind eSdrObjKind;
         String aEmptyString;
 
         if( aTopic.Len() )
