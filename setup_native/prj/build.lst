@@ -3,6 +3,7 @@ pk  setup_native                                          usr1    - all  sn_mkou
 pk  setup_native\scripts\source                           nmake   -  u   sn_source NULL
 pk  setup_native\scripts                                  nmake   -  u   sn_scripts sn_source.u NULL
 pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_regactivex NULL
+pk  setup_native\source\win32\customactions\regpatchactivex nmake -  w   sn_regpatchactivex NULL
 pk  setup_native\source\win32\customactions\reg4msdoc     nmake   -  w   sn_reg4msdoc NULL
 pk  setup_native\source\win32\customactions\regpython     nmake   -  w   sn_regpython NULL
 pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_javafilter NULL
