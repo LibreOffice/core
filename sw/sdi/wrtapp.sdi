@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtapp.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:44:06 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,144 +83,12 @@ interface StarWriter : Module
         ExecMethod = ExecOther ;
     ]
 
-    SID_AUTOSPELL_CHECK
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-
-    SID_AUTOSPELL_MARKOFF
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-
     FN_SET_MODOPT_TBLNUMFMT // status()
     [
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
     ]
-        //Extra/Optionen/Ansicht
-        //Wird zusammen zum Property ViewSettings
-    FN_VIEW_HIDDEN_PARA
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-    ]
 
-    FN_PRINT_LAYOUT
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-    ]
-     // alles ab hier kann weg (Export = FALSE;), wenn die vorangehenden funktionieren
-    FN_RULER // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-        Cachable;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    FN_VIEW_BOUNDS // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-        Cachable;
-    ]
-
-    FN_VIEW_GRAPHIC // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE ;
-    ]
-
-    FN_VIEW_FIELDS // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-    ]
-
-    FN_VIEW_FIELDNAME // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Cachable ;
-        Export = FALSE;
-    ]
-
-    FN_VIEW_MARKS // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Cachable ;
-        Export = FALSE;
-    ]
-
-    FN_VIEW_META_CHARS // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Cachable ;
-        Export = FALSE;
-    ]
-
-    FN_VIEW_TABLEGRID // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-
-    SID_GRID_VISIBLE
-    [
-        ExecMethod = ExecViewOptions;
-        StateMethod = StateViewOptions ;
-    ]
-    SID_GRID_USE
-    [
-        ExecMethod = ExecViewOptions;
-        StateMethod = StateViewOptions ;
-    ]
-    SID_HELPLINES_MOVE
-    [
-        ExecMethod = ExecViewOptions;
-        StateMethod = StateViewOptions ;
-    ]
-
-    FN_VLINEAL // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    FN_HSCROLLBAR // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-    ]
-
-    FN_VSCROLLBAR // status()
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        Export = FALSE;
-    ]
-
-    FN_SHADOWCURSOR // status(final|play)
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
 }  //end interface Application
 
 shell SwModule
