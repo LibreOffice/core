@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:01:25 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,7 +1310,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                 Reference< XColumn > xColumn;
                 xCols->getByName(pEntry->sColumn) >>= xColumn;
-
+                Reference< XPropertySet > xColumnProps( xColumn, UNO_QUERY );
+                sal_Int32 eDataType = 0;
+                if( xColumnProps.is() )
+                {
+                    Any aType = xColumnProps->getPropertyValue(C2U("Type"));
+                    aType >>= eDataType;
+                }
                 try
                 {
                     if( pEntry->bHasFmt )
@@ -1338,6 +1344,23 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         else
                             aTblSet.ClearItem( RES_BOXATR_VALUE );
                         rSh.SetTblBoxFormulaAttrs( aTblSet );
+                    }
+                    //#i60207# don't insert binary data as string - creates a loop
+                    else if( DataType::BINARY       == eDataType ||
+                             DataType::VARBINARY    == eDataType ||
+                             DataType::LONGVARBINARY== eDataType ||
+                             DataType::SQLNULL      == eDataType ||
+                             DataType::OTHER        == eDataType ||
+                             DataType::OBJECT       == eDataType ||
+                             DataType::DISTINCT     == eDataType ||
+                             DataType::STRUCT       == eDataType ||
+                             DataType::ARRAY        == eDataType ||
+                             DataType::BLOB         == eDataType ||
+                             DataType::CLOB         == eDataType ||
+                             DataType::REF          == eDataType
+                             )
+                    {
+                        // do nothing
                     }
                     else
                     {
