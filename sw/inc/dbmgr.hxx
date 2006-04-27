@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:22:15 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,10 +244,6 @@ friend class SwConnectionDisposedListener_Impl;
     SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
-
-    SwDSParam*          pMergeData;
-    AbstractMailMergeDlg*       pMergeDialog;
-    //CHINA001 SwMailMergeDlg*      pMergeDialog;
 
     SW_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
     SW_DLLPRIVATE SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
