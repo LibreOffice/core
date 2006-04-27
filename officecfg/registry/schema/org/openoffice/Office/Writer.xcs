@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:02:25 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -869,28 +869,28 @@
                     <label>Greeting lines, male</label>
                 </info>
             </prop>
-            <prop oor:name="NeutralGreetingLines" oor:type="oor:string-list">
+            <prop oor:name="NeutralGreetingLines" oor:type="oor:string-list" oor:localized="true">
                 <info>
                     <author>OS</author>
                     <desc>Contains a list of greeting lines, neutral.</desc>
                     <label>Greeting lines, neutral</label>
                 </info>
             </prop>
-            <prop oor:name="CurrentFemaleGreeting" oor:type="xs:long">
+            <prop oor:name="CurrentFemaleGreeting" oor:type="xs:int">
                 <info>
                     <author>OS</author>
                     <desc>Contains the index of the current entry in list of female greeting lines.</desc>
                     <label>Current female Greeting line</label>
                 </info>
             </prop>
-            <prop oor:name="CurrentMaleGreeting" oor:type="xs:long">
+            <prop oor:name="CurrentMaleGreeting" oor:type="xs:int">
                 <info>
                     <author>OS</author>
                     <desc>Contains the index of the current entry in list of male greeting lines.</desc>
                     <label>Current male Greeting line</label>
                 </info>
             </prop>
-            <prop oor:name="CurrentNeutralGreeting" oor:type="xs:long">
+            <prop oor:name="CurrentNeutralGreeting" oor:type="xs:int">
                 <info>
                     <author>OS</author>
                     <desc>Contains the index of the current entry in list of neutral greeting lines.</desc>
