@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:56:01 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,6 +834,7 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if(aURL.Path == C2U("Bib/sdbsource") ||
             aURL.Path == C2U("Bib/Mapping") ||
+            aURL.Path == C2U("Bib/autoFilter") ||
             aURL.Path.equalsAscii("Bib/standardFilter"))
     {
         aEvent.IsEnabled  = sal_True;
