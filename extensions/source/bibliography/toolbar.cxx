@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:08:45 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,8 +283,7 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     aTimer.SetTimeoutHdl(LINK( this, BibToolBar, SendSelHdl));
     aTimer.SetTimeout(400);
 
-    aMenuTimer.SetTimeoutHdl(LINK( this, BibToolBar, MenuHdl));
-    aMenuTimer.SetTimeout(300);
+    SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
 
     aEdQuery.SetSizePixel(aLBSource.GetSizePixel());
     aEdQuery.Show();
@@ -428,11 +427,7 @@ void BibToolBar::Click()
 {
     sal_uInt16  nId=GetCurItemId();
 
-    if(nId==TBC_BT_AUTOFILTER)
-    {
-        aMenuTimer.Start();
-    }
-    else if(nId == TBC_BT_COL_ASSIGN )
+    if(nId == TBC_BT_COL_ASSIGN )
     {
         if(pDatMan)
             pDatMan->CreateMappingDialog(GetParent());
@@ -555,9 +550,10 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,pT)
     return 0;
 }
 //-----------------------------------------------------------------------------
-IMPL_LINK( BibToolBar, MenuHdl, Timer*,pT)
+IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, pToolbox)//Timer*,pT)
 {
-    if(IsItemDown(TBC_BT_AUTOFILTER))
+    sal_uInt16  nId=GetCurItemId();
+    if(nId==TBC_BT_AUTOFILTER)
     {
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
