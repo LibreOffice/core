@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:07:50 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,6 +378,14 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage(COMMIT_REASON)
 
     lcl_StoreGreetingsBox(m_aFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
     lcl_StoreGreetingsBox(m_aMaleLB, rConfig, SwMailMergeConfigItem::MALE);
+
+    USHORT nCurrentTextPos = m_aNeutralCB.GetEntryPos( m_aNeutralCB.GetText() );
+    if(LISTBOX_ENTRY_NOTFOUND == nCurrentTextPos)
+    {
+        USHORT nCount = m_aNeutralCB.GetEntryCount();
+        m_aNeutralCB.InsertEntry( m_aNeutralCB.GetText(), nCount );
+        m_aNeutralCB.SelectEntryPos(nCount);
+    }
     lcl_StoreGreetingsBox(m_aNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
     rConfig.SetGreetingLine(m_aGreetingLineCB.IsChecked(), sal_False);
     rConfig.SetIndividualGreeting(m_aPersonalizedCB.IsChecked(), sal_False);
