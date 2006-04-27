@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:04:05 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,15 @@
 #ifndef _COM_SUN_STAR_XML_SAX_SAXINVALIDCHARACTEREXCEPTION_HPP_
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_URIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include "attrlist.hxx"
 #endif
@@ -293,8 +301,18 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEve
 class SvXMLExport_Impl
 {
 public:
+    SvXMLExport_Impl();
+
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+    uno::Reference< uri::XUriReferenceFactory > mxUriReferenceFactory;
+    rtl::OUString                               msPackageURI;
+
 };
+SvXMLExport_Impl::SvXMLExport_Impl()
+{
+    mxUriReferenceFactory = uri::UriReferenceFactory::create(
+            comphelper_getProcessComponentContext());
+}
 
 //==============================================================================
 
@@ -755,6 +773,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         {
             uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
             aAny >>= sOrigFileName;
+            pImpl->msPackageURI = sOrigFileName;
         }
         OUString sRelPath;
         sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
@@ -1998,7 +2017,22 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
-    return URIHelper::simpleNormalizedMakeRelative(sOrigFileName, rValue);
+    OUString sValue( rValue );
+    try
+    {
+        uno::Reference< uri::XUriReference > xUriRef = pImpl->mxUriReferenceFactory->parse( rValue );
+        if( xUriRef.is() && !xUriRef->isAbsolute() )
+        {
+            //#i61943# relative URLs need special handling
+            INetURLObject aTemp( pImpl->msPackageURI );
+            bool bWasAbsolute = false;
+            sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return URIHelper::simpleNormalizedMakeRelative(sOrigFileName, sValue);
 }
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,
