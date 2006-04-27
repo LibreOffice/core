@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:47:10 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,9 @@ public:
     void            ExecuteStatusLine(SfxRequest&);
     DECL_LINK( ExecRulerClick, Ruler * );
     void            ExecSearch(SfxRequest&, BOOL bNoMessage = FALSE);
+    void            ExecViewOptions(SfxRequest &);
 
+    void            StateViewOptions(SfxItemSet &);
     void            StateSearch(SfxItemSet &);
     void            GetState(SfxItemSet&);
     void            StateStatusLine(SfxItemSet&);
