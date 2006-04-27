@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-10 12:41:16 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1070,16 +1070,20 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
     Sequence< Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (nLen  &&  nLen == aValues.getLength())
     {
-        Sequence< OUString > aSvcImplNames( 1 );
-        OUString *pSvcImplNames = aSvcImplNames.getArray();
-
         const Any *pValues = aValues.getConstArray();
         for (INT32 i = 0;  i < nLen;  ++i)
         {
-            OUString aSvcImplName;
-            if (pValues[i] >>= aSvcImplName)
+            Sequence< OUString > aSvcImplNames;
+            if (pValues[i] >>= aSvcImplNames)
             {
-                pSvcImplNames[0] = aSvcImplName;
+                // there should only be one hyphenator in use per language...
+                if (aSvcImplNames.getLength() > 1)
+                    aSvcImplNames.realloc(1);
+
+#if OSL_DEBUG_LEVEL > 1
+                INT32 nSvcs = aSvcImplNames.getLength();
+                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+#endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
