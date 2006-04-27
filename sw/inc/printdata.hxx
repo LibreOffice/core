@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:09:55 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ struct SwPrintData
              // --> FME 2005-12-13 #b6354161# Print empty pages
              bPrintEmptyPages,
              // <--
+             // #i56195# no field update while printing mail merge documents
+             bUpdateFieldsInPrinting,
              bModified;
 
     sal_Int16           nPrintPostIts;
@@ -65,7 +67,8 @@ struct SwPrintData
         bPrintLeftPage          =
         bPrintRightPage         =
         bPrintPageBackground    =
-        bPrintEmptyPages        = sal_True;
+        bPrintEmptyPages        =
+        bUpdateFieldsInPrinting = sal_True;
 
         bPaperFromSetup         =
         bPrintReverse           =
@@ -93,6 +96,7 @@ struct SwPrintData
         bPrintSingleJobs    ==   rData.bPrintSingleJobs    &&
         bPaperFromSetup     ==   rData.bPaperFromSetup     &&
         bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
+        bUpdateFieldsInPrinting == rData.bUpdateFieldsInPrinting &&
         nPrintPostIts       ==   rData.nPrintPostIts       &&
         sFaxName            ==   rData.sFaxName;
     }
