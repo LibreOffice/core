@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:09:27 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:45:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,10 +192,22 @@ SwFormTokens lcl_GetAuthPattern(USHORT nTypeId)
     nVals[3] = aIni.n4;
     nVals[4] = aIni.n5;
 
+    SwFormToken aStartToken( TOKEN_AUTHORITY );
+    aStartToken.nAuthorityField = AUTH_FIELD_IDENTIFIER;
+    aRet.push_back( aStartToken );
+    SwFormToken aSeparatorToken( TOKEN_TEXT );
+    aSeparatorToken.sText = String::CreateFromAscii( ": " );
+    aRet.push_back( aSeparatorToken );
+    SwFormToken aTextToken( TOKEN_TEXT );
+    aTextToken.sText = String::CreateFromAscii( ", " );
+
     for(USHORT i = 0; i < 5 ; i++)
     {
         if(nVals[i] == USHRT_MAX)
             break;
+        if( i > 0 )
+            aRet.push_back( aTextToken );
+
          // -> #i21237#
         SwFormToken aToken(TOKEN_AUTHORITY);
 
