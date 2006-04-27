@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:10 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,10 +183,8 @@ public:
 
     //Die Handler fuer die Slots
     void                StateOther(SfxItemSet &);   // andere
-    void                StateViewOptions(SfxItemSet &);
 
     void                ExecOther(SfxRequest &);    // Felder, Formel ..
-    void                ExecViewOptions(SfxRequest &);
 
     // Benutzereinstellungen modifizieren
     SW_DLLPUBLIC const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
