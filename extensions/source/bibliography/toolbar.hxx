@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:08:55 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ class BibToolBar:   public ToolBox
         BibToolBarListenerArr   aListenerArr;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
         Timer                   aTimer;
-        Timer                   aMenuTimer;
+//      Timer                   aMenuTimer;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
         ImageList               aBigImgLst;
@@ -175,7 +175,7 @@ class BibToolBar:   public ToolBox
         BibDataManager*         pDatMan;
         DECL_LINK( SelHdl, ListBox* );
         DECL_LINK( SendSelHdl, Timer* );
-        DECL_LINK( MenuHdl, Timer* );
+        DECL_LINK( MenuHdl, ToolBox* );
         DECL_LINK( OptionsChanged_Impl, void* );
         DECL_LINK( SettingsChanged_Impl, void* );
 
