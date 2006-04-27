@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:11:22 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
     else
         aSet.Put(SwFmtHoriOrient( rDestination.X(), HORI_NONE, REL_PG_FRAME ));
     aSet.Put(SwFmtVertOrient( rDestination.Y(), VERT_NONE, REL_PG_FRAME ));
-    aSet.Put(SwFmtFrmSize( ATT_FIX_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
+    aSet.Put(SwFmtFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));
