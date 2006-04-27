@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:56:29 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ ToolBox RID_BIB_TOOLBAR
 //            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
             DropDown = TRUE ;
             Text [ de ] = "AutoFilter" ;
-//          Command = ".uno:Bib/autoFilter" ;
+            Command = ".uno:Bib/autoFilter" ;
             Text [ en-US ] = "AutoFilter";
             Text [ x-comment ] = " ";
         };
