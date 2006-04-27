@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:56:32 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -969,4 +969,19 @@
 #define HID_MM_BODY_LB_FEMALECOLUMN                 (HID_BASE + 2263)
 #define HID_MM_BODY_CB_FEMALEFIELD                  (HID_BASE + 2264)
 #define HID_MM_BODY_CB_NEUTRAL                      (HID_BASE + 2265)
+#define HID_MM_ASSIGN_FIELDS                        (HID_BASE + 2266)
+#define HID_MM_HEADER_0                             (HID_BASE + 2267)
+#define HID_MM_HEADER_1                             (HID_BASE + 2268)
+#define HID_MM_HEADER_2                             (HID_BASE + 2269)
+#define HID_MM_HEADER_3                             (HID_BASE + 2270)
+#define HID_MM_HEADER_4                             (HID_BASE + 2271)
+#define HID_MM_HEADER_5                             (HID_BASE + 2272)
+#define HID_MM_HEADER_6                             (HID_BASE + 2273)
+#define HID_MM_HEADER_7                             (HID_BASE + 2274)
+#define HID_MM_HEADER_8                             (HID_BASE + 2275)
+#define HID_MM_HEADER_9                             (HID_BASE + 2276)
+#define HID_MM_HEADER_10                            (HID_BASE + 2277)
+#define HID_MM_HEADER_11                            (HID_BASE + 2278)
+#define HID_MM_HEADER_12                            (HID_BASE + 2279)
+#define HID_MM_HEADER_13                            (HID_BASE + 2280)
 
