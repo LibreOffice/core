@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:42:21 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,4 +383,19 @@ hidspecial HID_MM_BODY_CB_FEMALEFIELD                    { HelpID = HID_MM_BODY_
 hidspecial HID_MM_BODY_CB_NEUTRAL                        { HelpID = HID_MM_BODY_CB_NEUTRAL           ;};
 hidspecial HID_MM_LAYOUT_PAGE                            { HelpID = HID_MM_LAYOUT_PAGE ;};
 hidspecial HID_MM_GREETINGSPAGE                          { HelpID = HID_MM_GREETINGSPAGE;};
+hidspecial HID_MM_ASSIGN_FIELDS                          { HelpID = HID_MM_ASSIGN_FIELDS;};
+hidspecial HID_MM_HEADER_0                           { HelpID = HID_MM_HEADER_0 ;};
+hidspecial HID_MM_HEADER_1                           { HelpID = HID_MM_HEADER_1 ;};
+hidspecial HID_MM_HEADER_2                           { HelpID = HID_MM_HEADER_2 ;};
+hidspecial HID_MM_HEADER_3                           { HelpID = HID_MM_HEADER_3 ;};
+hidspecial HID_MM_HEADER_4                           { HelpID = HID_MM_HEADER_4 ;};
+hidspecial HID_MM_HEADER_5                           { HelpID = HID_MM_HEADER_5 ;};
+hidspecial HID_MM_HEADER_6                           { HelpID = HID_MM_HEADER_6 ;};
+hidspecial HID_MM_HEADER_7                           { HelpID = HID_MM_HEADER_7 ;};
+hidspecial HID_MM_HEADER_8                           { HelpID = HID_MM_HEADER_8 ;};
+hidspecial HID_MM_HEADER_9                           { HelpID = HID_MM_HEADER_9 ;};
+hidspecial HID_MM_HEADER_10                          { HelpID = HID_MM_HEADER_10;};
+hidspecial HID_MM_HEADER_11                          { HelpID = HID_MM_HEADER_11;};
+hidspecial HID_MM_HEADER_12                          { HelpID = HID_MM_HEADER_12;};
+hidspecial HID_MM_HEADER_13                          { HelpID = HID_MM_HEADER_13;};
 
