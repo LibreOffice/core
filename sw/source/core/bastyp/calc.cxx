@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 18:47:59 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:45:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,7 +656,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             ASSERT (sColumnName.Len(), "DB-Spaltenname fehlt!");
 
             String sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
-            sDBNum.ToLowerAscii();
+            pCharClass->toLower(sDBNum);
 
             // Hier nochmal initialisieren, da das nicht mehr in docfld
             // fuer Felder != RES_DBFLD geschieht. Z.B. wenn ein Expressionfield
