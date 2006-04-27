@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:11:04 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:45:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1154,7 +1154,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     // here after calculation of the pages.
     // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
     //                            the fields during pdf export.
-    if ( !pPDFOut )
+    // #i56195# prevent update of fields (for mail merge)
+    if ( !pPDFOut && rOptions.bUpdateFieldsInPrinting )
     // <--
         pShell->UpdateFlds(TRUE);
 
