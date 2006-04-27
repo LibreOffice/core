@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:06:46 $
+ *  last change: $Author: kz $ $Date: 2006-04-27 09:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1085,6 +1085,8 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     m_nFirstYPos(0),
     m_nYOffset(0)
 {
+    SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
+    SetHelpId(HID_MM_ASSIGN_FIELDS);
     long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
     Size aOutputSize(GetOutputSize());
     m_aHeaderHB.SetSizePixel(
@@ -1120,6 +1122,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         sLabel.Insert(rHeader, 1);
         pNewText->SetText(sLabel);
         ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS));
+        pNewLB->SetHelpId( HID_MM_HEADER_0 + i );
         pNewLB->SelectEntryPos(0);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
