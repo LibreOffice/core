@@ -4,7 +4,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
 #   last change: $Author: ericb
 #
@@ -51,7 +51,6 @@ dummy:
     @echo "Nothing to build for OS $(OS)"
 .ENDIF # "$(OS)"!="MACOSX"
 
-
 CONFIGURE_DIR=.
 
 #relative to CONFIGURE_DIR
@@ -59,26 +58,15 @@ CONFIGURE_ACTION=configure
 
 CONFIGURE_FLAGS=
 
-
 BUILD_DIR=$(CONFIGURE_DIR)
 
-BUILD_ACTION=make
-
+BUILD_ACTION=$(GNUMAKE) fondu
 
 OUT2BIN=$(BUILD_DIR)$/fondu
 
-
-ADDITIONAL_FILES=
-
-OUT2INC=
-
-OUT2CLASS=
-
-
-
 # --- Targets ------------------------------------------------------
 
-# contains some nessecary variables.
+# contains some necessary variables.
 
 .INCLUDE : set_ext.mk
 
