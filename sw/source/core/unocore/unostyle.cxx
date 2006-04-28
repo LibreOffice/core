@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:16:07 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 15:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3320,7 +3320,17 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
             throw RuntimeException();
     }
     if(aBaseImpl.HasItemSet())
+    {
+        BOOL bDoesUndo = GetDoc()->DoesUndo();
+        if( bDoesUndo )
+        {
+            // Fix i64460: as long as Undo of page styles with header/footer causes trouble...
+            GetDoc()->DelAllUndoObj();
+            GetDoc()->DoUndo( FALSE );
+        }
         aBaseImpl.pNewBase->SetItemSet(aBaseImpl.GetItemSet());
+        GetDoc()->DoUndo( bDoesUndo );
+    }
 }
 
 void SwXPageStyle::setPropertyValues(
