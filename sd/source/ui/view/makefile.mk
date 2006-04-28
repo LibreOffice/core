@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-21 17:46:24 $
+#   last change: $Author: rt $ $Date: 2006-04-28 15:00:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,12 @@ EXCEPTIONSFILES=				\
         $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
         $(SLO)$/viewshe2.obj \
+        $(SLO)$/viewshel.obj \
         $(SLO)$/PaneManager.obj			\
         $(SLO)$/ToolBarManager.obj		\
         $(SLO)$/UpdateLockManager.obj	\
         $(SLO)$/ViewShellBase.obj		\
+        $(SLO)$/ViewShellImplementation.obj	\
         $(SLO)$/ViewShellManager.obj
 
 EXCEPTIONSNOOPTFILES=\
