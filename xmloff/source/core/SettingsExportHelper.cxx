@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:32:45 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,14 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
-    : rExport(rTempExport)
+: rExport(rTempExport)
+, msPrinterIndependentLayout( RTL_CONSTASCII_USTRINGPARAM( "PrinterIndependentLayout" ) )
+, msColorTableURL( RTL_CONSTASCII_USTRINGPARAM( "ColorTableURL" ) )
+, msLineEndTableURL( RTL_CONSTASCII_USTRINGPARAM( "LineEndTableURL" ) )
+, msDashTableURL( RTL_CONSTASCII_USTRINGPARAM( "DashTableURL" ) )
+, msHatchTableURL( RTL_CONSTASCII_USTRINGPARAM( "HatchTableURL" ) )
+, msGradientTableURL( RTL_CONSTASCII_USTRINGPARAM( "GradientTableURL" ) )
+, msBitmapTableURL( RTL_CONSTASCII_USTRINGPARAM( "BitmapTableURL" ) )
 {
 }
 
@@ -107,17 +114,11 @@ XMLSettingsExportHelper::~XMLSettingsExportHelper()
 {
 }
 
-
-/** function to allow changing the API and XML representation;
- implementation below */
-void lcl_manipulateSetting( uno::Any&, const rtl::OUString& );
-
-
 void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                                             const rtl::OUString& rName) const
 {
     uno::Any aAny( rAny );
-    lcl_manipulateSetting( aAny, rName );
+    ManipulateSetting( aAny, rName );
 
     uno::TypeClass eClass = aAny.getValueTypeClass();
     switch (eClass)
@@ -551,12 +552,9 @@ void XMLSettingsExportHelper::exportSettings(
  * from their XML settings representation. This is your chance to do
  * so!
  */
-void lcl_manipulateSetting(
-    uno::Any& rAny,
-    const rtl::OUString& rName )
+void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUString& rName ) const
 {
-    if( rName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" ) ) )
+    if( rName == msPrinterIndependentLayout )
     {
         sal_Int16 nTmp;
         if( rAny >>= nTmp )
@@ -567,6 +565,31 @@ void lcl_manipulateSetting(
                 rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disabled"));
             else if( nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION )
                 rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("high-resolution"));
+        }
+    }
+    else if( (rName == msColorTableURL) || (rName == msLineEndTableURL) || (rName == msHatchTableURL) ||
+             (rName == msDashTableURL) || (rName == msGradientTableURL) || (rName == msBitmapTableURL ) )
+    {
+        if( !mxStringSubsitution.is() )
+        {
+            if( rExport.getServiceFactory().is() ) try
+            {
+                const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
+                    uno::Reference< util::XStringSubstitution >::query(
+                        rExport.getServiceFactory()->
+                            createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ) ) ) );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+
+        if( mxStringSubsitution.is() )
+        {
+            ::rtl::OUString aURL;
+            rAny >>= aURL;
+            aURL = mxStringSubsitution->reSubstituteVariables( aURL );
+            rAny <<= aURL;
         }
     }
 }
