@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:31:30 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,11 @@
 #include "filt_pch.hxx"
 #endif
 
-#pragma hdrstop
-
 // INCLUDE ---------------------------------------------------------------
+
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGSUBSTITUTION_HPP_
+#include <com/sun/star/util/XStringSubstitution.hpp>
+#endif
 
 #ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include "DocumentSettingsContext.hxx"
@@ -689,6 +691,31 @@ void XMLConfigItemContext::ManipulateConfigItem()
         // else: default to high_resolution
 
         rAny <<= nTmp;
+    }
+    else if( (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ColorTableURL" ) ) ) ||
+             (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LineEndTableURL" ) ) ) ||
+             (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HatchTableURL" ) ) ) ||
+             (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DashTableURL" ) ) ) ||
+             (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GradientTableURL") ) ) ||
+             (rItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BitmapTableURL" ) ) ) )
+    {
+        if( GetImport().getServiceFactory().is() ) try
+        {
+            uno::Reference< util::XStringSubstitution > xStringSubsitution(
+                GetImport().getServiceFactory()->
+                    createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ) ) ), uno::UNO_QUERY );
+
+            if( xStringSubsitution.is() )
+            {
+                rtl::OUString aURL;
+                rAny >>= aURL;
+                aURL = xStringSubsitution->substituteVariables( aURL, sal_False );
+                rAny <<= aURL;
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
     }
 }
 
