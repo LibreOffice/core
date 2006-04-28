@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:26:36 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,8 +720,10 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                         {
                             sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
                             const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
+/*
                             DBG_ASSERT( bUndo || (pUndoManager && pUndoManager->isInUndo()),
                                             "SdPage::Changed(), model change without undo!?" );
+*/
                             if( bUndo )
                                 pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
 
