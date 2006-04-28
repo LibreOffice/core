@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:55:56 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 15:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,11 @@ void SvxTextEditSourceImpl::dispose()
         mpView = 0;
     }
 
-    mpObject = 0;
+    if( mpObject )
+    {
+        mpObject->RemoveObjectUser( *this );
+        mpObject = 0;
+    }
     mpWindow = 0;
 }
 
