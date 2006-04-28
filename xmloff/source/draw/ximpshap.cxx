@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:43:42 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2381,17 +2381,7 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if ( (XML_NAMESPACE_DRAW == nPrefix) &&
-         IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
-    {
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape,uno::UNO_QUERY);
-        if (xPropSet.is())
-        {
-            pContext = new XMLImageMapContext(GetImport(), nPrefix,
-                                              rLocalName, xPropSet);
-        }
-    }
-    else if( (XML_NAMESPACE_OFFICE == nPrefix) &&
+    if( (XML_NAMESPACE_OFFICE == nPrefix) &&
              xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
     {
         if( !maURL.getLength() && !mxBase64Stream.is() )
@@ -3295,6 +3285,18 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
         SvXMLImportContext *pImplContext = &mxImplContext;
         pContext = PTR_CAST( SdXMLShapeContext, pImplContext )->CreateChildContext( nPrefix,
                                                                         rLocalName, xAttrList );
+    }
+    else if ( (XML_NAMESPACE_DRAW == nPrefix) && IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
+    {
+        SdXMLShapeContext *pSContext = dynamic_cast< SdXMLShapeContext* >( &mxImplContext );
+        if( pSContext )
+        {
+            uno::Reference < beans::XPropertySet > xPropSet( pSContext->getShape(), uno::UNO_QUERY );
+            if (xPropSet.is())
+            {
+                pContext = new XMLImageMapContext(GetImport(), nPrefix, rLocalName, xPropSet);
+            }
+        }
     }
 
     // call parent for content
