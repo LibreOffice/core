@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:18 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 15:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,14 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 {
     StartAllAction();
     SET_CURR_SHELL( this );
-    GetDoc()->ChgPageDesc( i, rChged );
+    //Fix i64842: because Undo has a very special way to handle header/footer content
+    // we have to copy the page descriptor before calling ChgPageDesc.
+    const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
+    SwPageDesc aDesc( rChged );
+    GetDoc()->DoUndo( sal_False );
+    GetDoc()->CopyPageDesc(rChged, aDesc);
+    GetDoc()->DoUndo( bDoesUndo );
+    GetDoc()->ChgPageDesc( i, aDesc );
     EndAllActionAndCall();
 }
 
