@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:25:19 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ private:
     DrawViewShell& mrDrawViewShell;
     sd::View& mrView;
 
-    SdXImpressDocument* SdUnoDrawView::GetModel (void) const throw();
+    SdXImpressDocument* GetModel (void) const throw();
 };
 
 } // end of namespace sd
