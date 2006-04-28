@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:35:29 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,13 +102,13 @@ TitleBar::TitleBar (
     TitleBarType eType,
     bool bIsExpandable)
     : ::Window (pParent),
-      TreeNode (this),
+      TreeNode(this),
       msTitle(rsTitle),
-      meType (eType),
-      mbExpanded (false),
-      mbFocused (false),
-      mbMouseOver (false),
-      mpDevice (new VirtualDevice (*this)),
+      meType(eType),
+      mbExpanded(false),
+      mbFocused(false),
+      mbMouseOver(false),
+      mpDevice(new VirtualDevice (*this)),
       mbIsExpandable (bIsExpandable)
 {
     EnableMapMode (FALSE);
@@ -206,6 +206,8 @@ void TitleBar::Paint (const Rectangle& rBoundingBox)
 {
     mpDevice->SetMapMode(GetMapMode());
     mpDevice->SetOutputSize (GetOutputSizePixel());
+    mpDevice->SetSettings(GetSettings());
+    mpDevice->SetDrawMode(GetDrawMode());
 
     switch (meType)
     {
@@ -302,8 +304,7 @@ bool TitleBar::HasExpansionIndicator (void) const
 Image TitleBar::GetExpansionIndicator (void) const
 {
     Image aIndicator;
-    bool bHighContrastMode (
-        GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
+    bool bHighContrastMode (GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
     if (mbIsExpandable)
     {
         USHORT nResourceId = 0;
@@ -419,7 +420,6 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
 
         mpDevice->SetFillColor ();
 
-        //        mpDevice->SetLineColor(COL_WHITE);
         mpDevice->DrawRect (aTextPixelBox);
 
         LineInfo aDottedStyle (LINE_DASH);
@@ -591,7 +591,7 @@ Rectangle TitleBar::CalculateTextBoundingBox (
     Rectangle aTextBox (
         Point(0,0),
         Size (nAvailableWidth,
-            Application::GetSettings().GetStyleSettings().GetTitleHeight()));
+            GetSettings().GetStyleSettings().GetTitleHeight()));
     aTextBox.Top() += (aTextBox.GetHeight() - GetTextHeight()) / 2;
     if (HasExpansionIndicator())
         aTextBox.Left() += snIndentationWidth;
@@ -682,11 +682,15 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
         case DATACHANGED_SETTINGS:
             if ((rEvent.GetFlags() & SETTINGS_STYLE) == 0)
                 break;
-            // else fall through.
+            SetSettings(Application::GetSettings());
+            mpDevice.reset(new VirtualDevice (*this));
+
+            // fall through.
+
         case DATACHANGED_FONTS:
         case DATACHANGED_FONTSUBSTITUTION:
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            const StyleSettings& rStyleSettings (GetSettings().GetStyleSettings());
 
             // Font.
             Font aFont = rStyleSettings.GetAppFont();
