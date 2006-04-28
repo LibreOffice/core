@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:31:21 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,11 @@ public:
     /** The context menu is requested over this Command() method.
     */
     virtual void Command (const CommandEvent& rEvent);
+
+    /** Call Fill() when switching to or from high contrast mode so that the
+        correct set of icons is displayed.
+    */
+    virtual void DataChanged (const DataChangedEvent& rEvent);
 
 private:
     ViewShellBase& mrBase;
