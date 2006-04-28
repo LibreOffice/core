@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:16:50 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1655,25 +1655,8 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
         if (pObj)
             nPgNum = pObj->GetPage()->GetPageNum();
     }
-
-    String aNumber;
-    if ( nPgNum == SDRPAGE_NOTFOUND )
-    {
-        sal_Int32 nLen = aBookmark.Len() - 1;
-        while( nLen >= 0 )
-        {
-            sal_Unicode nChar = aBookmark.GetChar( (sal_uInt16)nLen );
-            if ( ( nChar >= '0' ) && ( nChar <= '9' ) )
-                aNumber.Insert( nChar, 0 );
-            else
-                break;
-            nLen--;
-        }
-    }
     if ( nPgNum != SDRPAGE_NOTFOUND )
         nPage = ( nPgNum - 1 ) / 2;
-    else if ( aNumber.Len() )
-        nPage = aNumber.ToInt32() - 1;
     return nPage;
 }
 
