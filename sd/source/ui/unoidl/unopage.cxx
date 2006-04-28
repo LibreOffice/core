@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:29:05 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 15:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,16 +170,14 @@
 #include "unopback.hxx"
 #include "unohelp.hxx"
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
-using namespace ::vos;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using namespace ::vos;
 using namespace ::osl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 /* this are the ids for page properties */
 enum WID_PAGE
@@ -2651,198 +2649,172 @@ void SdMasterPage::setBackground( const Any& rValue )
     throw( lang::IllegalArgumentException )
 {
     // we need at least an beans::XPropertySet
-    Reference< beans::XPropertySet > xSet;
-
-    rValue >>= xSet;
-
-    if( !xSet.is() )
+    Reference< beans::XPropertySet > xInputSet( rValue, UNO_QUERY );
+    if( !xInputSet.is() )
         throw lang::IllegalArgumentException();
 
-    if( GetModel() && mbIsImpressDocument )
+    try
     {
-        Reference< container::XNameAccess >  xFamilies = GetModel()->getStyleFamilies();
-        Any aAny( xFamilies->getByName( getName() ) );
-
-        Reference< container::XNameAccess > xFamily;
-
-        aAny >>= xFamily;
-
-        if( xFamily.is() )
+        if( GetModel() && mbIsImpressDocument )
         {
-            OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
-
-            try
+            Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
+            Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
+            if( xFamily.is() )
             {
-                aAny = xFamily->getByName( aStyleName );
+                OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
 
-                Reference< style::XStyle >  xStyle( *(Reference< style::XStyle > *)aAny.getValue() );
-                Reference< beans::XPropertySet >  xStyleSet( xStyle, uno::UNO_QUERY );
-                if( xStyleSet.is() )
+                Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
+
+                Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
+                Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY_THROW );
+
+                const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
+                while( pMap->pName )
                 {
-                    Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
-                    Reference< beans::XPropertyState > xSetStates( xSet, uno::UNO_QUERY );
-
-                    const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
-                    while( pMap->pName )
+                    const OUString aPropName( OUString::createFromAscii(pMap->pName) );
+                    if( xSetInfo->hasPropertyByName( aPropName ) )
                     {
-                        const OUString aPropName( OUString::createFromAscii(pMap->pName) );
-                        if( xSetInfo->hasPropertyByName( aPropName ) )
-                        {
-                            if( !xSetStates.is() || xSetStates->getPropertyState( aPropName ) == beans::PropertyState_DIRECT_VALUE )
-                                xStyleSet->setPropertyValue( aPropName,
-                                        xSet->getPropertyValue( aPropName ) );
-                            else
-                                xSetStates->setPropertyToDefault( aPropName );
-                        }
-
-                        ++pMap;
+                        if( !xSetStates.is() || xSetStates->getPropertyState( aPropName ) == beans::PropertyState_DIRECT_VALUE )
+                            xStyleSet->setPropertyValue( aPropName, xInputSet->getPropertyValue( aPropName ) );
+                        else
+                            xSetStates->setPropertyToDefault( aPropName );
                     }
+
+                    ++pMap;
                 }
             }
-            catch(...)
-            {
-                //
-            }
-        }
-    }
-    else
-    {
-        // first fill an item set
-        // is it our own implementation?
-        SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
-
-        SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
-
-        if( pBack )
-        {
-            pBack->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
         }
         else
         {
-            SdUnoPageBackground* pBackground = new SdUnoPageBackground();
+            // first fill an item set
+            // is it our own implementation?
+            SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xInputSet );
 
-            Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
-            Reference< beans::XPropertySet >  xDestSet( (beans::XPropertySet*)pBackground );
-            Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
+            SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
-            uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
-            sal_Int32 nCount = aProperties.getLength();
-            beans::Property* pProp = aProperties.getArray();
-
-            while( nCount-- )
+            if( pBack )
             {
-                const OUString aPropName( pProp->Name );
-                if( xSetInfo->hasPropertyByName( aPropName ) )
-                    xDestSet->setPropertyValue( aPropName,
-                            xSet->getPropertyValue( aPropName ) );
+                pBack->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
+            }
+            else
+            {
+                SdUnoPageBackground* pBackground = new SdUnoPageBackground();
 
-                pProp++;
+                Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
+                Reference< beans::XPropertySet > xDestSet( (beans::XPropertySet*)pBackground );
+                Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_QUERY_THROW );
+
+                uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
+                sal_Int32 nCount = aProperties.getLength();
+                beans::Property* pProp = aProperties.getArray();
+
+                while( nCount-- )
+                {
+                    const OUString aPropName( pProp->Name );
+                    if( xInputSetInfo->hasPropertyByName( aPropName ) )
+                        xDestSet->setPropertyValue( aPropName, xInputSet->getPropertyValue( aPropName ) );
+
+                    pProp++;
+                }
+
+                pBackground->fillItemSet( (SdDrawDocument*)pPage->GetModel(), aSet );
             }
 
-            pBackground->fillItemSet( (SdDrawDocument*)pPage->GetModel(), aSet );
-        }
-
-        // if we find the background style, copy the set to the background
-        SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-        SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = NULL;
-        if(pSSPool)
-        {
-            String aStr(SdResId(STR_PSEUDOSHEET_BACKGROUND));
-            pStyleSheet = pSSPool->Find( aStr, SFX_STYLE_FAMILY_PSEUDO);
-
-            if( pStyleSheet )
+            // if we find the background style, copy the set to the background
+            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
+            if(pSSPool)
             {
-                SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                rStyleSet.Put( aSet );
+                String aLayoutName( static_cast< SdPage* >( pPage )->GetLayoutName() );
+                aLayoutName.Erase(aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
+                aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, (SfxStyleFamily)SD_LT_FAMILY );
 
-                // repaint only
-                pPage->ActionChanged();
-                // pPage->SendRepaintBroadcast();
+                if( pStyleSheet )
+                {
+                    pStyleSheet->GetItemSet().Put( aSet );
 
+                    // repaint only
+                    pPage->ActionChanged();
+                    return;
+                }
+            }
+
+
+            // if no background style is available, try the background object
+            SdrObject* pObj = GetPage()->GetPresObj(PRESOBJ_BACKGROUND);
+            if( pObj == NULL )
                 return;
-            }
+
+            pObj->SetMergedItemSet(aSet);
+
+            // repaint only
+            pPage->ActionChanged();
         }
-
-
-        // if no background style is available, try the background object
-        SdrObject* pObj = GetPage()->GetPresObj(PRESOBJ_BACKGROUND);
-        if( pObj == NULL )
-            return;
-
-        pObj->SetMergedItemSet(aSet);
-
-        // repaint only
-        pPage->ActionChanged();
-        // pPage->SendRepaintBroadcast();
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("sd::SdMasterPage::setBackground(), exception caught!");
     }
 }
 
 void SdMasterPage::getBackground( Any& rValue ) throw()
 {
-    if( GetModel() == NULL )
-        return;
-
-    if( mbIsImpressDocument )
+    if( GetModel() ) try
     {
-        try
+        if( mbIsImpressDocument )
         {
-            Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies() );
-            Any aAny( xFamilies->getByName( getName() ) );
-            Reference< container::XNameAccess >  xFamily( *(Reference< container::XNameAccess >*)aAny.getValue() );
+            Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
+            Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
 
             const OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
-            aAny = xFamily->getByName( aStyleName );
-            Reference< style::XStyle >  xStyle( *(Reference< style::XStyle > *)aAny.getValue() );
-
-            Reference< beans::XPropertySet >  xStyleSet( xStyle, uno::UNO_QUERY );
-            rValue <<= xStyleSet;
+            rValue <<= Reference< beans::XPropertySet >( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
         }
-        catch(...)
+        else
         {
+            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
+            if(pSSPool)
+            {
+                String aLayoutName( static_cast< SdPage* >(pPage)->GetLayoutName() );
+                aLayoutName.Erase( aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
+                aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, (SfxStyleFamily)SD_LT_FAMILY);
+
+                if( pStyleSheet )
+                {
+                    SfxItemSet aStyleSet( pStyleSheet->GetItemSet());
+                    if( aStyleSet.Count() )
+                    {
+                        rValue <<= Reference< beans::XPropertySet >( new SdUnoPageBackground( pDoc, &aStyleSet ) );
+                        return;
+                    }
+                }
+            }
+
+            // no stylesheet? try old fashion background rectangle
+            SdrObject* pObj = NULL;
+            if( pPage->GetObjCount() >= 1 )
+            {
+                pObj = pPage->GetObj(0);
+                if( pObj->GetObjInventor() != SdrInventor || pObj->GetObjIdentifier() != OBJ_RECT )
+                    pObj = NULL;
+            }
+
+            if( pObj )
+            {
+                rValue <<= Reference< beans::XPropertySet >( new SdUnoPageBackground( GetModel()->GetDoc(), pObj ) );
+                return;
+            }
+
+
             rValue.clear();
         }
     }
-    else
+    catch( Exception& )
     {
-        SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-        SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = NULL;
-        if(pSSPool)
-        {
-            String aStr(SdResId(STR_PSEUDOSHEET_BACKGROUND));
-            pStyleSheet = pSSPool->Find( aStr, SFX_STYLE_FAMILY_PSEUDO);
-
-            if( pStyleSheet )
-            {
-                SfxItemSet aStyleSet( pStyleSheet->GetItemSet());
-                if( aStyleSet.Count() )
-                {
-                    Reference< beans::XPropertySet >  xSet( new SdUnoPageBackground( pDoc, &aStyleSet ) );
-                    rValue <<= xSet;
-                    return;
-                }
-            }
-        }
-
-        // no stylesheet? try old fashion background rectangle
-        SdrObject* pObj = NULL;
-        if( pPage->GetObjCount() >= 1 )
-        {
-            pObj = pPage->GetObj(0);
-            if( pObj->GetObjInventor() != SdrInventor || pObj->GetObjIdentifier() != OBJ_RECT )
-                pObj = NULL;
-        }
-
-        if( pObj )
-        {
-            Reference< beans::XPropertySet >  xSet( new SdUnoPageBackground( GetModel()->GetDoc(), pObj ) );
-            rValue <<= xSet;
-            return;
-        }
-
-
         rValue.clear();
+        DBG_ERROR("sd::SdMasterPage::getBackground(), exception caught!");
     }
 }
 
