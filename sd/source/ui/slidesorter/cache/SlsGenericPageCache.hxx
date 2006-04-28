@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:05:59 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,8 +263,8 @@ void GenericPageCache<
                 mpBitmapCache, maPreviewSize, rPreviewSize);
             if (mpQueueProcessor.get() != NULL)
                 mpQueueProcessor->SetBitmapCache(mpBitmapCache);
-            maPreviewSize = rPreviewSize;
         }
+        maPreviewSize = rPreviewSize;
     }
 }
 
