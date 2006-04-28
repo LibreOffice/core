@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:31:37 $
+ *  last change: $Author: rt $ $Date: 2006-04-28 14:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,6 +922,13 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 }
 
 
+
+
+void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
+{
+    Fill();
+    ValueSet::DataChanged(rEvent);
+}
 
 
 } } // end of namespace ::sd::toolpanel
