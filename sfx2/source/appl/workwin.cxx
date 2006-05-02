@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:21:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,12 @@
 #include "docfile.hxx"
 #include "objsh.hxx"
 #include "app.hxx"
-#include "appdata.hxx"
 #include "workwin.hxx"
 #include "topfrm.hxx"
 #include "arrdecl.hxx"
 #include "viewfrm.hxx"
 #include "module.hxx"
 #include "dispatch.hxx"
-#include "tbxchild.hxx"
 #include "dockwin.hxx"
 #include "viewsh.hxx"
 #include "splitwin.hxx"
@@ -56,6 +54,8 @@
 #include "objsh.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
 #include <vcl/taskpanelist.hxx>
+#include <vcl/toolbox.hxx>
+#include <tools/rcid.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -1219,9 +1219,6 @@ void SfxWorkWindow::ShowChilds_Impl()
                     case RSC_DOCKINGWINDOW :
                         ((DockingWindow*)pCli->pWin)->Show( TRUE, nFlags );
                         break;
-                    case RSC_TOOLBOX :
-                        ((ToolBox*)pCli->pWin)->Show( TRUE, nFlags );
-                        break;
                     case RSC_SPLITWINDOW :
                         ((SplitWindow*)pCli->pWin)->Show( TRUE, nFlags );
                         break;
@@ -1237,7 +1234,6 @@ void SfxWorkWindow::ShowChilds_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                    case RSC_TOOLBOX :
                         ((DockingWindow*)pCli->pWin)->Hide();
                         break;
                     default:
@@ -1262,7 +1258,6 @@ void SfxWorkWindow::HideChilds_Impl()
             switch ( pChild->pWin->GetType() )
             {
                 case RSC_DOCKINGWINDOW :
-                case RSC_TOOLBOX :
                     ((DockingWindow*)pChild->pWin)->Hide();
                     break;
                 default:
@@ -1955,7 +1950,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             SfxDockingConfig eConfig, USHORT nId)
 {
     SfxDockingWindow* pDockWin=0;
-    SfxToolbox *pBox=0;
     USHORT nPos = USHRT_MAX;
     Window *pWin=0;
     SfxChildWin_Impl *pCW = 0;
@@ -2164,10 +2158,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 }
             }
 
-            if ( pBox )
-                pBox->SetDockingRects(aOuterRect, aInnerRect);
-            else
-                pDockWin->SetDockingRects(aOuterRect, aInnerRect);
+            pDockWin->SetDockingRects(aOuterRect, aInnerRect);
             break;
         }
 
@@ -2180,26 +2171,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             SfxChildAlignment eAlign = SFX_ALIGN_NOALIGNMENT;
             SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? (*pChilds)[nPos] : 0;
-            if ( pBox )
-            {
-                if ( pBox->IsFloatingMode() )
-                {
-                    eAlign = SFX_ALIGN_NOALIGNMENT;
-                    pCli->aSize = pBox->GetFloatingWindow()->GetSizePixel();
-                }
-                else
-                {
-                    eAlign = pBox->GetAlignment();
-                    pCli->bResize = TRUE;
-                    Size aActSize( pBox->GetSizePixel() );
-                    pCli->aSize = pBox->CalcWindowSizePixel();
-                    if ( pBox->IsHorizontal() )
-                        pCli->aSize.Width() = aActSize.Width();
-                    else
-                        pCli->aSize.Height() = aActSize.Height();
-                }
-            }
-            else if ( pCli && pDockWin )
+            if ( pCli && pDockWin )
             {
                 eAlign = pDockWin->GetAlignment();
                 if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || eAlign == SFX_ALIGN_NOALIGNMENT)
@@ -2795,7 +2767,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
     }
 
     SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
     if ( pMod )
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
