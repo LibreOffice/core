@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:31:52 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@
 #include "appdata.hxx"
 #include "appbas.hxx"
 #include "sfxhelp.hxx"
-#include "appimp.hxx"
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
@@ -237,7 +236,7 @@ StarBASIC* SfxApplication::GetBasic_Impl() const
 }
 
 //------------------------------------------------------------------------
-String lcl_GetVersionString(ResMgr* pImpResMgr)
+String lcl_GetVersionString(ResMgr* pAppData_ImplResMgr)
 {
     ::rtl::OUString aDefault;
     String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
@@ -505,8 +504,8 @@ sal_uInt16 SfxApplication::SaveDialogContainer() const
 {
     // Save Dialog Container
     sal_Bool bComplete = sal_False;
-    if( pImp->pDialogLibContainer )
-        pImp->pDialogLibContainer->storeLibraries( bComplete );
+    if( pAppData_Impl->pDialogLibContainer )
+        pAppData_Impl->pDialogLibContainer->storeLibraries( bComplete );
     return 0;
 }
 
@@ -515,8 +514,8 @@ sal_uInt16 SfxApplication::SaveBasicContainer() const
 {
     // Save Dialog Container
     sal_Bool bComplete = sal_False;
-    if( pImp->pBasicLibContainer )
-        pImp->pBasicLibContainer->storeLibraries( bComplete );
+    if( pAppData_Impl->pBasicLibContainer )
+        pAppData_Impl->pBasicLibContainer->storeLibraries( bComplete );
     return 0;
 }
 
@@ -554,9 +553,9 @@ void SfxApplication::RegisterBasicConstants
 */
 
 {
-//  DBG_ASSERT( pImp->pBasicMgr, "no basic available" );
+//  DBG_ASSERT( pAppData_Impl->pBasicMgr, "no basic available" );
 
-//  pImp->pBasicMgr->GetLib(0)->Insert(
+//  pAppData_Impl->pBasicMgr->GetLib(0)->Insert(
 //              new SfxConstants_Impl( pPrefix, pConsts, nCount ) );
 }
 
@@ -627,14 +626,14 @@ BasicManager* SfxApplication::GetBasicManager()
             ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasMgr );
         pBasicCont->acquire();  // Hold via UNO
         Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
-        pImp->pBasicLibContainer = pBasicCont;
+        pAppData_Impl->pBasicLibContainer = pBasicCont;
         pBasicCont->setBasicManager( pBasMgr );
 
         // Dialog container
         SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( uno::Reference< embed::XStorage >() );
         pDialogCont->acquire(); // Hold via UNO
         Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
-        pImp->pDialogLibContainer = pDialogCont;
+        pAppData_Impl->pDialogLibContainer = pDialogCont;
 
         LibraryContainerInfo* pInfo = new LibraryContainerInfo
             ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
@@ -678,10 +677,10 @@ BasicManager* SfxApplication::GetBasicManager()
 
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
-    if ( !pImp->pDialogLibContainer )
+    if ( !pAppData_Impl->pDialogLibContainer )
         GetBasicManager();
     Reference< XLibraryContainer > xRet
-        = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
+        = static_cast< XLibraryContainer* >( pAppData_Impl->pDialogLibContainer );
     return xRet;
 }
 
@@ -689,10 +688,10 @@ Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 {
-    if ( !pImp->pBasicLibContainer )
+    if ( !pAppData_Impl->pBasicLibContainer )
         GetBasicManager();
     Reference< XLibraryContainer > xRet
-        = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
+        = static_cast< XLibraryContainer* >( pAppData_Impl->pBasicLibContainer );
     return xRet;
 }
 
@@ -803,29 +802,9 @@ void SfxApplication::LeaveBasicCall()
     --pAppData_Impl->nBasicCallLevel;
 }
 
-//--------------------------------------------------------------------
-
-void SfxApplication::EventExec_Impl( SfxRequest &rReq, SfxObjectShell *pObjSh )
-{
-}
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::EventState_Impl
-(
-    sal_uInt16          nSID,
-    SfxItemSet&     rSet,
-    SfxObjectShell* pObjSh
-)
-{
-}
-
 //-------------------------------------------------------------------------
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr = GetIniManager();
-#endif
     rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
@@ -876,22 +855,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_ON_STARTAPP:
-        case SID_ON_CLOSEAPP:
-        case SID_ON_CREATEDOC:
-        case SID_ON_OPENDOC:
-        case SID_ON_PREPARECLOSEDOC:
-        case SID_ON_CLOSEDOC:
-        case SID_ON_SAVEDOC:
-        case SID_ON_SAVEASDOC:
-        case SID_ON_ACTIVATEDOC:
-        case SID_ON_DEACTIVATEDOC:
-        case SID_ON_PRINTDOC:
-        case SID_ON_SAVEDOCDONE:
-        case SID_ON_SAVEASDOCDONE:
-            EventExec_Impl( rReq, 0 );
-            break;
-
         case SID_STATUSBARTEXT:
         {
             SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
@@ -900,11 +863,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
                 GetpApp()->ShowStatusText( aText );
             else
                 GetpApp()->HideStatusText();
-            break;
-        }
-
-        case SID_HELP:
-        {
             break;
         }
 
@@ -958,21 +916,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             case SID_ATTR_UNDO_COUNT:
                 rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, SvtUndoOptions().GetUndoCount() ) );
                 break;
-
-            case SID_ON_STARTAPP:
-            case SID_ON_CLOSEAPP:
-            case SID_ON_CREATEDOC:
-            case SID_ON_OPENDOC:
-            case SID_ON_PREPARECLOSEDOC:
-            case SID_ON_CLOSEDOC:
-            case SID_ON_SAVEDOC:
-            case SID_ON_SAVEASDOC:
-            case SID_ON_ACTIVATEDOC:
-            case SID_ON_DEACTIVATEDOC:
-            case SID_ON_PRINTDOC:
-            case SID_ON_SAVEDOCDONE:
-            case SID_ON_SAVEASDOCDONE:
-                EventState_Impl( nSID, rSet, 0 );
 
             case SID_UPDATE_VERSION:
                 rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, SUPD ) );
