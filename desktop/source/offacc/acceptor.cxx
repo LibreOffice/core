@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:42:43 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#ifndef _SFX_HRC
-#include <sfx2/sfx.hrc>
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -60,7 +57,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
 
-
+#include <cppuhelper/factory.hxx>
 
 namespace desktop
 {
