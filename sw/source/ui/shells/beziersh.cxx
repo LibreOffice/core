@@ -4,9 +4,9 @@
  *
  *  $RCSfile: beziersh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:48:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 #include "swslots.hxx"
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
-SFX_IMPL_INTERFACE(SwBezierShell, SwBezierShell, SW_RES(STR_SHELLNAME_BEZIER))
+SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_BEZIER_TOOLBOX));
