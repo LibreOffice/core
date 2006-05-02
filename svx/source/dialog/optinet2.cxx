@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,20 +407,6 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         catch (RuntimeException e) {
         }
-    }
-
-    if(SfxApplication::IsPlugin())
-    {
-        aProxyModeLB.InsertEntry(sFromBrowser);
-        aFtpProxyFT.Show(FALSE);
-        aFtpProxyED.Show(FALSE);
-        aFtpPortFT.Show(FALSE);
-        aFtpPortED.Show(FALSE);
-
-        aNoProxyForFT.Show(FALSE);
-        aNoProxyForED.Show(FALSE);
-        aNoProxyDescFT.Show(FALSE);
-
     }
 }
 
