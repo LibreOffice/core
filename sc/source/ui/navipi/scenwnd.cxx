@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scenwnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:18:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <vcl/svapp.hxx>
 #include "navipi.hxx"
 #include "popmenu.hxx"
 #include "scresid.hxx"
