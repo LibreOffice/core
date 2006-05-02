@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:18:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
-
+#include <sfx2/app.hxx>
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
 #endif
