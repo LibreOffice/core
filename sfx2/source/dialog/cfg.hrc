@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,4 @@
 #define BTN_MN_DOWN 43
 #define RB_OFFICE 44
 #define RB_MODULE 45
-
-#define CHKBTN_UNCHECKED   30001
-#define CHKBTN_CHECKED     30002
-#define CHKBTN_HICHECKED   30003
-#define CHKBTN_HIUNCHECKED 30004
-#define CHKBTN_TRISTATE    30005
-#define CHKBTN_HITRISTATE  30006
 
