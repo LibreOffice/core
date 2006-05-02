@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:42:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,11 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
-#ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
-#endif
-#ifndef _SFX_UNO_HXX
-#include <sfx2/sfxuno.hxx>
-#endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
 
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
