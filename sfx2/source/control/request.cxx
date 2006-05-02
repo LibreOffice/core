@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2006-02-07 10:28:52 $ $Revision: 1.15 $
+// $Author: rt $ $Date: 2006-05-02 16:29:17 $ $Revision: 1.16 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -51,6 +51,8 @@
 #ifndef GCC
 #pragma hdrstop
 #endif
+
+#include <svtools/smplhint.hxx>
 
 #include "request.hxx"
 #include "dispatch.hxx"
@@ -971,4 +973,10 @@ BOOL SfxRequest::AllowsRecording() const
         bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
                  ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );
     return bAllow;
+}
+
+void SfxRequest::ReleaseArgs()
+{
+    DELETEZ( pArgs );
+    DELETEZ( pImp->pInternalArgs );
 }
