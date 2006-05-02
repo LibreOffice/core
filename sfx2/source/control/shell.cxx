@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:58:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #pragma hdrstop
 #endif
 
+#include "app.hxx"
 #include "shell.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
@@ -80,6 +81,7 @@
 #include "mnumgr.hxx"
 #include "statcach.hxx"
 #include "macrconf.hxx"
+#include "msgpool.hxx"
 
 //====================================================================
 
@@ -487,7 +489,7 @@ SfxInterface* SfxShell::GetInterface() const
 */
 
 {
-    return 0;
+    return GetStaticInterface();
 }
 
 //--------------------------------------------------------------------
@@ -885,24 +887,6 @@ SfxItemPool& SfxShell::GetPool()
 
 //--------------------------------------------------------------------
 
-void SfxShell::FillStatusBar( StatusBar& )
-
-/*  [Beschreibung]
-
-    Mit dieser Factory-Methode kann der Applikationsprogrammierer einer
-    SfxShell-Subklasse eine eigene Statusbar zuweisen. Der SFx bevorzugt
-    jeweils die Statusbar einer weiter oben auf den <SfxDispatcher>-Stack
-    liegenden SfxShell.
-
-    Die Basisimplementation ist leer und braucht nicht gerufen zu werden.
-
-*/
-
-{
-}
-
-//--------------------------------------------------------------------
-
 ResMgr* SfxShell::GetResMgr() const
 
 /*  [Beschreibung]
@@ -936,185 +920,6 @@ FASTBOOL SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 }
 
 //--------------------------------------------------------------------
-#if 0
-ULONG SfxShell::ExecuteSlot
-(
-    USHORT              nSlot,      // In: auszuf"uhrender Slot
-    USHORT              nMemberId,  // In: MemberId f"ur strukturierte Items
-    SbxVariable&        rRet,       // Out: Returnwert
-    SbxBase*            pArgs       // In: 0, einzelner Parameter/Parameterliste
-)
-
-/*  [Beschreibung]
-
-    Methode zum Ausf"uhren eines <SfxSlot>s von einem SfxShellObject
-    (BASIC oder andere API).
-
-    Aufrufe von APIs werden nicht recorded (ist ja auch kein <SfxDispatcher>).
-
-
-    [R"uckgabewert]
-
-    ULONG                       ErrorCode
-*/
-
-{
-    // Slot suchen
-    const SfxSlot *pSlot = GetInterface()->GetSlot(nSlot);
-    if ( !pSlot )
-        return SbxERR_PROC_UNDEFINED;
-
-    // ggf. disabled
-    if ( !pSlot->IsMode(SFX_SLOT_FASTCALL) && !CanExecuteSlot_Impl(*pSlot) )
-        return SbERR_METHOD_FAILED;
-
-    // "ofters ben"otigte Werte
-    SfxItemPool &rPool = GetPool();
-    SfxMapUnit eUserMetric = SFX_APP()->GetOptions().GetUserMetric();
-
-    // Returnwert zum sp"ateren Aufbereiten als SbxVariable merken
-    BOOL bDone = FALSE; // Return nur auswerten, wenn nicht abgebrochen wurde
-    const SfxPoolItem *pRetItem = 0;
-    SbxObject *pOwnObject = GetSbxObject(); // Hack fuer #22783
-
-    // aktuelle Parameter oder Property (impliziter Parameter)?
-    if ( pArgs || pSlot->IsMode(SFX_SLOT_PROPSET) )
-    {
-        // aktuelle Parameter in diesem ItemSet sammeln
-        SfxAllItemSet aSet( rPool );
-
-        // mehrere Parameter?
-        if ( pSlot->IsMode(SFX_SLOT_METHOD) )
-        {
-            // das kann nur ein Methoden-Slot sein
-            DBG_ASSERT( !pArgs || pArgs->ISA(SbxArray), "not an SbxArray as arguments" );
-
-            // "uber die formalen Parameter iterieren
-            USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
-            USHORT nActualArgs = pArgs ? ((SbxArray*)pArgs)->Count() - 1 : 0;
-            USHORT nBasicArg = 0;
-            for ( USHORT nArg = 0;
-                  nArg < nFormalArgs && nBasicArg < nActualArgs;
-                  ++nArg )
-            {
-                // formale Paramterbeschreibung besorgen
-                const SfxFormalArgument &rArg = pSlot->GetFormalArgument(nArg);
-
-                // Item per Factory erzeugen
-                SfxPoolItem *pItem = rArg.CreateItem();
-                DBG_ASSERT( pItem, "item without factory" );
-                pItem->SetWhich( rPool.GetWhich(rArg.nSlotId) );
-
-                // Konvertieren / ggf. strukturierte Items zusammensetzen
-                ULONG eErr = 0;
-                USHORT nSubCount = rArg.pType->nAttribs;
-                if ( !nSubCount )
-                {
-                    // einfaches Item
-                    SbxVariable *pSubArg = ((SbxArray*)pArgs)->Get(++nBasicArg);
-                    eErr = rPool.SetVariable( *pItem, *pSubArg, eUserMetric );
-                }
-                else
-                {
-                    // strukturiertes Item
-                    for ( USHORT n = 1; n <= nSubCount && !eErr; ++n )
-                    {
-                        SbxVariable *pSubArg = ((SbxArray*)pArgs)->Get(++nBasicArg);
-                        pSubArg->SetUserData(
-                                    long(rArg.pType->aAttrib[n-1].nAID) << 20 );
-                        eErr = rPool.SetVariable( *pItem, *pSubArg, eUserMetric );
-                    }
-                }
-
-                // falls Item erzeugt werden konnte, an Request anh"angen
-                if ( 0 == eErr )
-                    aSet.Put( *pItem,pItem->Which() );
-                delete pItem; //! Optimieren (Put mit direkter Uebernahme)
-                if ( 0 != eErr )
-                    return eErr;
-            }
-
-            // nicht alle Parameter abger"aumt (zuviele)?
-            if ( nBasicArg < nActualArgs )
-                return SbxERR_WRONG_ARGS;
-        }
-        else
-        {
-            // Instanz von SfxPoolItem-Subklasse besorgen/erzeugen
-            SfxPoolItem *pItem = 0;
-
-            // Teil eines strukturiertes Items?
-            if ( nMemberId )
-            {
-                //  => Status-Item besorgen
-                const SfxPoolItem *pState = GetSlotState(nSlot);
-                if ( pState && !pState->ISA(SfxVoidItem) )
-                    pItem = pState->Clone();
-            }
-
-            // kein StatusItem oder einfaches/komplexes Item
-            if ( !pItem )
-            {
-                // per Factory erzeugen
-                pItem = pSlot->GetType()->CreateItem();
-                DBG_ASSERT( pItem, "item without factory" );
-                pItem->SetWhich( rPool.GetWhich(nSlot) );
-            }
-
-            // Daten aus Variable in das Item "ubertragen
-            ULONG eErr = rPool.SetVariable( *pItem, rRet, eUserMetric );
-            if ( 0 == eErr )
-                aSet.Put( *pItem,pItem->Which() );
-            delete pItem; //! Optimieren (Put mit direkter Uebernahme)
-            if ( 0 != eErr )
-                return eErr;
-        }
-
-        // via Request mit 'normaler' Execute-Methode ausf"uhren
-        SfxRequest aReq( nSlot, SFX_CALLMODE_API, aSet );
-        aSet.ClearItem(); // pPool k"onnte in _Execute sterben
-        SfxExecFunc pFunc = pSlot->GetExecFnc();
-        CallExec( pFunc, aReq );
-        bDone = aReq.IsDone();
-        pRetItem = aReq.GetReturnValue();
-    }
-    else
-    {
-        // ohne Parameter direkt ausf"uhren
-        SfxRequest aReq( nSlot, SFX_CALLMODE_API, GetPool() );
-//      SfxRequest aReq( nSlot, GetPool(), TRUE );
-        SfxExecFunc pFunc = pSlot->GetExecFnc();
-        CallExec( pFunc, aReq );
-        bDone = aReq.IsDone();
-        pRetItem = aReq.GetReturnValue();
-    }
-
-    // in IDL ein Return-Wert angegeben?
-    if ( pSlot->IsMode(SFX_SLOT_METHOD) && rRet.GetType() != SbxVOID )
-    {
-        // ist aber kein Returnwert gesetzt worden?
-        if ( !pRetItem || pRetItem->ISA(SfxVoidItem) )
-        {
-            // Ignore ohne Parameter ist erlaubt und auch normal
-            if ( !bDone )
-                return 0;
-
-            // sonst mu\s einer gesetzt worden sein
-            DBG_ERROR( "IDL hat Return-Wert, Execute-Methode setzt aber keinen!" );
-            return SbxERR_CONVERSION;
-        }
-
-        // Returnwert in SbxVariable packen
-        HACK( #22783 - lebt *this noch? )
-        if ( ((SfxShellObject*)pOwnObject)->GetShell() )
-            GetPool().FillVariable( *pRetItem, rRet, eUserMetric );
-        else
-            pRetItem->FillVariable( rRet, eUserMetric, eUserMetric );
-    }
-
-    return 0;
-}
-#endif
 
 long ShellCall_Impl( void* pObj, void* pArg )
 {
@@ -1484,11 +1289,6 @@ SfxObjectShell* SfxShell::GetObjectShell()
 }
 
 //--------------------------------------------------------------------
-
-SfxSlotPool& SfxShell::GetSlotPool_Impl() const
-{
-    return SFX_APP()->GetSlotPool( GetFrame() );
-}
 
 BOOL SfxShell::HasUIFeature( ULONG )
 {
