@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:42:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,8 +273,9 @@ void DrawViewShell::SelectionHasChanged (void)
             // we need to deselect it now
             if (!pOleObj)
             {
+                // TODO/CLEANUP: SetViewFrame should be done in SFX only
                 pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-                SFX_APP()->SetViewFrame( GetViewFrame() );
+                SfxViewFrame::SetViewFrame( GetViewFrame() );
                 pDrView->ShowMarkHdl(NULL);
             }
             else
@@ -332,9 +333,6 @@ void DrawViewShell::SelectionHasChanged (void)
 
     // #96124# Invalidate for every subshell
     GetViewShellBase().GetViewShellManager().InvalidateAllSubShells(this);
-
-    if( SFX_APP()->GetHelpPI() )
-        SetHelpIdBySelection();
 
     pDrView->UpdateSelectionClipboard( FALSE );
 
@@ -1422,143 +1420,6 @@ IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
     pTimer->Stop();
     GetViewFrame()->GetBindings().Execute( SID_CLOSEWIN );
     return 0L;
-}
-
-/*************************************************************************
-|*
-|* Setzt die HelpId in Abhaengigkeit von der Selektion
-|*
-\************************************************************************/
-
-void DrawViewShell::SetHelpIdBySelection()
-{
-    UINT32 nHelpId = 0;
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-
-    if( rMarkList.GetMarkCount() > 0 )
-    {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-        UINT32 nInventor = pObj->GetObjInventor();
-        UINT16 nObjId = pObj->GetObjIdentifier();
-
-        if( nInventor == SdrInventor)
-        {
-            switch ( nObjId )
-            {
-                case OBJ_LINE:
-                    // Alle Linien
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_RECT:
-                    // Gefuellt:   Rechteck, Quadrat, Rechteck abgerundet, Quadrat abgerundet
-                    // Ungefuellt: Rechteck, Quadrat, Rechteck abgerundet, Quadrat abgerundet
-                    nHelpId = SID_DRAWTBX_RECTANGLES;
-                break;
-
-                case OBJ_CIRC:
-                    // Gefuellt:   Ellipse, Kreis
-                    // Ungefuellt: Ellipse, Kreis
-                    nHelpId = SID_DRAWTBX_ELLIPSES;
-                break;
-
-                case OBJ_SECT:
-                    // Gefuellt:   Ellipsensektor, Kreissektor
-                    // Ungefuellt: Ellipsensektor, Kreissektor
-                    nHelpId = SID_DRAWTBX_ELLIPSES;
-                break;
-
-                case OBJ_CARC:
-                    // Ellipsenbogen, Kreisbogen
-                    nHelpId = SID_DRAWTBX_ELLIPSES;
-                break;
-
-                case OBJ_CCUT:
-                    // Gefuellt:   Ellipsensegment, Kreissegment
-                    // Ungefuellt: Ellipsensegment, Kreissegment
-                    nHelpId = SID_DRAWTBX_ELLIPSES;
-                break;
-
-                case OBJ_POLY:
-                    // Gefuellt: Polygon, Polygon 45
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_PLIN:
-                    // Ungefuellt: Polygon, Polygon 45
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_PATHLINE:
-                    // Ungefuellt: Kurve, Freihandlinie
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_PATHFILL:
-                    // Gefuellt: Kurve, Freihandlinie
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_TEXT:
-                    // Text, Text an Rahmen
-                    nHelpId = SID_DRAWTBX_TEXT;
-                break;
-
-                case OBJ_TITLETEXT:
-                    nHelpId = SID_DRAWTBX_TEXT;
-                break;
-
-                case OBJ_OUTLINETEXT:
-                    nHelpId = SID_DRAWTBX_TEXT;
-                break;
-
-                case OBJ_GRAF:
-                    // Graphik
-                    nHelpId = 0;
-                break;
-
-                case OBJ_OLE2:
-                    // OLE
-                    nHelpId = 0;
-                break;
-
-                case OBJ_EDGE:
-                    // Alle Verbinder
-                    nHelpId = SID_DRAWTBX_CONNECTORS;
-                break;
-
-                case OBJ_CAPTION:
-                    // Legende
-                    nHelpId = SID_DRAWTBX_TEXT;
-                break;
-
-                case OBJ_PAGE:
-                    // Seitendarstellungsobjekt
-                    nHelpId = 0;
-                break;
-
-                case OBJ_MEASURE:
-                    // Masslinie
-                    nHelpId = SID_DRAWTBX_LINES;
-                break;
-
-                case OBJ_UNO:
-                    // UNO
-                    nHelpId = 0;
-                break;
-            }
-        }
-        else if( nInventor == E3dInventor)
-        {
-            // Alle 3D-Objekte
-            nHelpId = SID_DRAWTBX_3D_OBJECTS;
-        }
-        else if( nInventor == FmFormInventor)
-        {
-            // Alle FormControls
-            nHelpId = HID_FM_CTL_SELECTION;
-        }
-    }
 }
 
 /*************************************************************************
