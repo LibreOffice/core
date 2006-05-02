@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:02:58 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,12 +88,13 @@
 #pragma hdrstop
 #endif
 
+// wg. nInReschedule
+#include "appdata.hxx"
 #include "bindings.hxx"
 #include "msg.hxx"
 #include "statcach.hxx"
 #include "ctrlitem.hxx"
 #include "app.hxx"
-#include "appdata.hxx"
 #include "dispatch.hxx"
 #include "request.hxx"
 #include "objface.hxx"
@@ -2619,7 +2620,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
         xDisp = pCache->GetDispatch();
     if ( xDisp.is() || !pCache )
     {
-        const SfxSlot* pSlot = SFX_APP()->GetSlotPool( pDispatcher->GetFrame() ).GetSlot( nSlot );
+        const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pDispatcher->GetFrame() ).GetSlot( nSlot );
         if ( !pSlot || !pSlot->pUnoName )
             return SFX_ITEM_DISABLED;
 
