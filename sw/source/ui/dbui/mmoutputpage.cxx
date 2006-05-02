@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:03:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@
 #include <mmoutputpage.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
-
+#include <sfx2/app.hxx>
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -856,7 +856,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
-            SfxViewFrame* pTempFrame = SFX_APP()->CreateViewFrame( *xTempDocShell, 0, TRUE );
+            SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
 //            pTempFrame->GetFrame()->Appear();
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
@@ -1228,6 +1228,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     pDlg->SetDocumentCount( nEnd );
     pDlg->Show();
     //help to force painting the dialog
+    //TODO/CLEANUP
+    //Sollbruchstelle
     for ( sal_Int16 i = 0; i < 25; i++)
         Application::Reschedule();
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
@@ -1238,7 +1240,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         //now extract a document from the target document
         SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTempFrame = SFX_APP()->CreateViewFrame( *xTempDocShell, 0, TRUE );
+        SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
 //        pTempFrame->GetFrame()->Appear();
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
