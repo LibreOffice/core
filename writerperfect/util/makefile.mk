@@ -19,11 +19,10 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES= \
     $(SLB)$/stream.lib  \
     $(SLB)$/filter.lib
-SHL1LIBS=$(LIB1TARGET) 
+SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS+= \
     $(SVLLIB)	\
     $(SOTLIB) \
-    $(SVXLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
     $(UNOTOOLSLIB) \
