@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <sfx2/request.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/app.hxx>
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
