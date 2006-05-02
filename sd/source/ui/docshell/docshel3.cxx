@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:54:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         case SID_CLOSEDOC:
         {
 //            SfxObjectShell::DoClose();
-            ExecuteSlot(rReq, SfxObjectShell::GetInterface());
+            ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
         }
         break;
 
@@ -245,7 +245,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
 
             pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
-            ExecuteSlot( rReq, SfxObjectShell::GetInterface() );
+            ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );
             pDoc->SetSwapGraphicsMode( nOldSwapMode );
         }
         break;
