@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,56 +37,8 @@
 #define _SFX_CONFIG_HRC
 
 #include "sfx.hrc"
-#include "sfxlocal.hrc"
 
 // #defines *****************************************************************
-
-#define STR_WARNING_ITEM                RID_SFX_CONFIG_START+1
-
-#define CONFIG_PATH_START               (RID_SFX_CONFIG_START+2)
-#define STR_KEY_SUB_INI                 (CONFIG_PATH_START)
-#define STR_KEY_CONFIG_DIR              (CONFIG_PATH_START+1)
-#define STR_KEY_WORK_PATH               (CONFIG_PATH_START+2)
-#define STR_KEY_GRAPHICS_PATH           (CONFIG_PATH_START+3)
-#define STR_KEY_BITMAP_PATH             (CONFIG_PATH_START+4)
-#define STR_KEY_BASIC_PATH              (CONFIG_PATH_START+5)
-#define STR_KEY_DATABASE_PATH           (CONFIG_PATH_START+6)
-#define STR_KEY_PALETTE_PATH            (CONFIG_PATH_START+7)
-#define STR_KEY_BACKUP_PATH             (CONFIG_PATH_START+8)
-#define STR_KEY_MODULES_PATH            (CONFIG_PATH_START+9)
-#define STR_KEY_TEMPLATE_PATH           (CONFIG_PATH_START+10)
-#define STR_KEY_GLOSSARY_PATH           (CONFIG_PATH_START+11)
-#define STR_KEY_DICTIONARY_PATH         (CONFIG_PATH_START+12)
-#define STR_KEY_DOCMANAGER_INI          (CONFIG_PATH_START+13)
-#define STR_KEY_DESKTOP_DIR             (CONFIG_PATH_START+14)
-#define STR_KEY_CACHE_DIR               (CONFIG_PATH_START+15)
-#define STR_KEY_HELP_DIR                (CONFIG_PATH_START+16)
-#define STR_KEY_BOOKMARK_DIR            (CONFIG_PATH_START+17)
-#define CONFIG_PATH_END                 STR_KEY_BOOKMARK_DIR
-
-#define CONFIG_OSPATH_START             (CONFIG_PATH_END+1)
-#define STR_OSKEY_SUB_INI               (CONFIG_OSPATH_START+0)
-#define STR_OSKEY_CONFIG_DIR            (CONFIG_OSPATH_START+1)
-#define STR_OSKEY_WORK_PATH             (CONFIG_OSPATH_START+2)
-#define STR_OSKEY_GRAPHICS_PATH         (CONFIG_OSPATH_START+3)
-#define STR_OSKEY_BITMAP_PATH           (CONFIG_OSPATH_START+4)
-#define STR_OSKEY_BASIC_PATH            (CONFIG_OSPATH_START+5)
-#define STR_OSKEY_DATABASE_PATH         (CONFIG_OSPATH_START+6)
-#define STR_OSKEY_PALETTE_PATH          (CONFIG_OSPATH_START+7)
-#define STR_OSKEY_BACKUP_PATH           (CONFIG_OSPATH_START+8)
-#define STR_OSKEY_MODULES_PATH          (CONFIG_OSPATH_START+9)
-#define STR_OSKEY_TEMPLATE_PATH         (CONFIG_OSPATH_START+10)
-#define STR_OSKEY_GLOSSARY_PATH         (CONFIG_OSPATH_START+11)
-#define STR_OSKEY_DICTIONARY_PATH       (CONFIG_OSPATH_START+12)
-#define STR_OSKEY_DOCMANAGER_INI        (CONFIG_OSPATH_START+13)
-#define STR_OSKEY_DESKTOP_DIR           (CONFIG_OSPATH_START+14)
-#define STR_OSKEY_CACHE_DIR             (CONFIG_OSPATH_START+15)
-#define STR_OSKEY_HELP_DIR              (CONFIG_OSPATH_START+16)
-#define STR_OSKEY_BOOKMARK_DIR          (CONFIG_OSPATH_START+17)
-#define CONFIG_OSPATH_END               STR_OSKEY_BOOKMARK_DIR
-
-#define STR_EVENTCONFIG                 (CONFIG_OSPATH_END+1)
-// #define DLG_MACROQUERY               (CONFIG_OSPATH_END+2)
 
 #define BTN_OK                          2
 #define BTN_CANCEL                      3
