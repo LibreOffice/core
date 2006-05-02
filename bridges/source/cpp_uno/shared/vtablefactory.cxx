@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vtablefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:35:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,81 @@
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
+#include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
 #include <hash_map>
+#include <new>
 #include <vector>
+
+#if defined SAL_UNX
+#include <unistd.h>
+#include <sys/mman.h>
+#elif defined SAL_W32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#error Unsupported platform
+#endif
 
 using bridges::cpp_uno::shared::VtableFactory;
 
-class VtableFactory::GuardedBlocks: public std::vector< char * > {
+namespace {
+
+extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
+    sal_Size pagesize;
+#if defined SAL_UNX
+#if defined FREEBSD || defined NETBSD
+    pagesize = getpagesize();
+#else
+    pagesize = sysconf(_SC_PAGESIZE);
+#endif
+#elif defined SAL_W32
+    SYSTEM_INFO info;
+    GetSystemInfo(&info);
+    pagesize = info.dwPageSize;
+#endif
+    sal_Size n = (*size + (pagesize - 1)) & ~(pagesize - 1);
+    void * p;
+#if defined SAL_UNX
+    p = mmap(
+        0, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1,
+        0);
+    if (p == MAP_FAILED) {
+        p = 0;
+    }
+    else if (mprotect (static_cast<char*>(p), n, PROT_READ | PROT_WRITE | PROT_EXEC) == -1)
+    {
+        munmap (static_cast<char*>(p), n);
+        p = 0;
+    }
+#elif defined SAL_W32
+    p = VirtualAlloc(0, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+#endif
+    if (p != 0) {
+        *size = n;
+    }
+    return p;
+}
+
+extern "C" void SAL_CALL freeExec(
+    rtl_arena_type *, void * address, sal_Size size)
+{
+#if defined SAL_UNX
+    munmap(static_cast< char * >(address), size);
+#elif defined SAL_W32
+    VirtualFree(address, 0, MEM_RELEASE);
+#endif
+}
+
+}
+
+class VtableFactory::GuardedBlocks: public std::vector< Block > {
 public:
-    GuardedBlocks(): m_guarded(true) {}
+    GuardedBlocks(VtableFactory const & factory):
+        m_factory(factory), m_guarded(true) {}
 
     ~GuardedBlocks();
 
@@ -62,13 +125,14 @@ private:
     GuardedBlocks(GuardedBlocks &); // not implemented
     void operator =(GuardedBlocks); // not implemented
 
+    VtableFactory const & m_factory;
     bool m_guarded;
 };
 
 VtableFactory::GuardedBlocks::~GuardedBlocks() {
     if (m_guarded) {
         for (iterator i(begin()); i != end(); ++i) {
-            delete[] *i;
+            m_factory.freeBlock(*i);
         }
     }
 }
@@ -105,16 +169,28 @@ sal_Int32 VtableFactory::BaseOffset::calculate(
     return offset;
 }
 
-VtableFactory::VtableFactory() {}
+VtableFactory::VtableFactory(): m_arena(
+    rtl_arena_create(
+        "bridges::cpp_uno::shared::VtableFactory",
+        sizeof (void *), // to satisfy alignment requirements
+        0, reinterpret_cast< rtl_arena_type * >(-1), allocExec, freeExec, 0))
+{
+    if (m_arena == 0) {
+        throw std::bad_alloc();
+    }
+}
 
 VtableFactory::~VtableFactory() {
-    osl::MutexGuard guard(m_mutex);
-    for (Map::iterator i(m_map.begin()); i != m_map.end(); ++i) {
-        for (sal_Int32 j = 0; j < i->second.count; ++j) {
-            delete[] i->second.blocks[j];
+    {
+        osl::MutexGuard guard(m_mutex);
+        for (Map::iterator i(m_map.begin()); i != m_map.end(); ++i) {
+            for (sal_Int32 j = 0; j < i->second.count; ++j) {
+                freeBlock(i->second.blocks[j]);
+            }
+            delete[] i->second.blocks;
         }
-        delete[] i->second.blocks;
     }
+    rtl_arena_destroy(m_arena);
 }
 
 VtableFactory::Vtables VtableFactory::getVtables(
@@ -124,13 +200,13 @@ VtableFactory::Vtables VtableFactory::getVtables(
     osl::MutexGuard guard(m_mutex);
     Map::iterator i(m_map.find(name));
     if (i == m_map.end()) {
-        GuardedBlocks blocks;
+        GuardedBlocks blocks(*this);
         createVtables(blocks, BaseOffset(type), type, true);
         Vtables vtables;
         OSL_ASSERT(blocks.size() <= SAL_MAX_INT32);
         vtables.count = static_cast< sal_Int32 >(blocks.size());
-        bridges::cpp_uno::shared::GuardedArray< char * > guardedBlocks(
-            new char *[vtables.count]);
+        bridges::cpp_uno::shared::GuardedArray< Block > guardedBlocks(
+            new Block[vtables.count]);
         vtables.blocks = guardedBlocks.get();
         for (sal_Int32 j = 0; j < vtables.count; ++j) {
             vtables.blocks[j] = blocks[j];
@@ -142,34 +218,46 @@ VtableFactory::Vtables VtableFactory::getVtables(
     return i->second;
 }
 
+void VtableFactory::freeBlock(Block const & block) const {
+    rtl_arena_free(m_arena, block.start, block.size);
+}
+
 void VtableFactory::createVtables(
     GuardedBlocks & blocks, BaseOffset const & baseOffset,
-    typelib_InterfaceTypeDescription * type, bool includePrimary)
+    typelib_InterfaceTypeDescription * type, bool includePrimary) const
 {
     if (includePrimary) {
         sal_Int32 slotCount
             = bridges::cpp_uno::shared::getPrimaryFunctions(type);
-        void ** slots;
-        bridges::cpp_uno::shared::GuardedArray< char > block(
-            createBlock(slotCount, &slots));
-        slots += slotCount;
-        unsigned char * codeBegin = reinterpret_cast< unsigned char * >(slots);
-        unsigned char * code = codeBegin;
-        sal_Int32 vtableOffset = blocks.size() * sizeof (void **);
-        for (typelib_InterfaceTypeDescription const * type2 = type; type2 != 0;
-             type2 = type2->pBaseTypeDescription)
-        {
-            sal_Int32 functionCount
-                = bridges::cpp_uno::shared::getLocalFunctions(type2);
-            slots -= functionCount;
-            code = addLocalFunctions(
-                slots, code, type2,
-                baseOffset.getFunctionOffset(type2->aBase.pTypeName),
-                functionCount, vtableOffset);
+        Block block;
+        block.size = getBlockSize(slotCount);
+        block.start = rtl_arena_alloc(m_arena, &block.size);
+        if (block.start == 0) {
+            throw std::bad_alloc();
         }
-        flushCode(codeBegin, code);
-        blocks.push_back(block.get());
-        block.release();
+        try {
+            void ** slots = initializeBlock(block.start) + slotCount;
+            unsigned char * codeBegin =
+                reinterpret_cast< unsigned char * >(slots);
+            unsigned char * code = codeBegin;
+            sal_Int32 vtableOffset = blocks.size() * sizeof (void **);
+            for (typelib_InterfaceTypeDescription const * type2 = type;
+                 type2 != 0; type2 = type2->pBaseTypeDescription)
+            {
+                sal_Int32 functionCount
+                    = bridges::cpp_uno::shared::getLocalFunctions(type2);
+                slots -= functionCount;
+                code = addLocalFunctions(
+                    slots, code, type2,
+                    baseOffset.getFunctionOffset(type2->aBase.pTypeName),
+                    functionCount, vtableOffset);
+            }
+            flushCode(codeBegin, code);
+            blocks.push_back(block);
+        } catch (...) {
+            freeBlock(block);
+            throw;
+        }
     }
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
         createVtables(blocks, baseOffset, type->ppBaseTypes[i], i != 0);
