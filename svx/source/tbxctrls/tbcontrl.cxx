@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:11:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,9 @@
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif
+
+#include <vcl/svapp.hxx>
+#include <svtools/smplhint.hxx>
 
 #pragma hdrstop
 
