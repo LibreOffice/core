@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:21:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <svtools/misccfg.hxx>
 
+#include "app.hxx"
 #include "docfile.hxx"
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
@@ -149,7 +150,6 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include "macrconf.hxx"
-#include "appimp.hxx"
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
@@ -227,39 +227,6 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
 }
 
 
-/*
-const USHORT* SfxApplication::GetOptionsRanges() const
-{
-    static USHORT pRange[] =
-    {
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0,
-    };
-
-    if (0 == pRange[0])
-    {
-        GetPool();  // -Wall required ??
-        pRange[ 0] = SID_OPTIONS_START;
-        pRange[ 1] = SID_OPTIONS_FIRSTFREE-1;
-        pRange[ 2] = SID_HELPBALLOONS;
-        pRange[ 3] = SID_HELPTIPS;
-        pRange[ 4] = SID_SECURE_URL;
-        pRange[ 5] = SID_SECURE_URL;
-        pRange[ 6] = SID_BASIC_ENABLED;
-        pRange[ 7] = SID_BASIC_ENABLED;
-        pRange[ 8] = SID_AUTO_ADJUSTICONS;
-        pRange[ 9] = SID_ICONGRID;
-        pRange[ 10 ] = SID_RESTORE_EXPAND_STATE;
-        pRange[ 11 ] = SID_RESTORE_EXPAND_STATE;
-    }
-    return pRange;
-}
-*/
 //--------------------------------------------------------------------
 
 BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
@@ -549,91 +516,32 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_INET_PROXY_TYPE :
                 {
-                    if ( IsPlugin() )
-                    {
-                        UINT16 nType = 1; // default is "use browser settings"!
-                        String sName    ; // set it only for type=2! otherwise=defaults!
-                        INT32  nPort = 0;
-                        // Use propertyset of remote(!) login dialog service to get right informations ....
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xRemoteProxyConfig( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.comp.framework.LoginDialog")), ::com::sun::star::uno::UNO_QUERY );
-                        if( xRemoteProxyConfig.is() == sal_True )
-                        {
-                            ::com::sun::star::uno::Any aPropValue = xRemoteProxyConfig->getPropertyValue( DEFINE_CONST_OUSTRING("UseProxy") );
-                            ::rtl::OUString sProxyType;
-                            aPropValue >>= sProxyType;
-                            if( sProxyType.compareToAscii("none")==0 )
-                                nType = 0;
-                            else
-                            if( sProxyType.compareToAscii("browser")==0 )
-                                nType = 1;
-                            else
-                            if( sProxyType.compareToAscii("custom")==0 )
-                            {
-                                nType = 2;
-                                aPropValue = xRemoteProxyConfig->getPropertyValue( DEFINE_CONST_OUSTRING("SecurityProxy") );
-                                ::rtl::OUString sProxyValues;
-                                aPropValue >>= sProxyValues;
-
-                                if( sProxyValues.indexOf( (sal_Unicode)':' ) > 0 )
-                                {
-                                    sal_Int32 nToken = 0;
-                                    sName = sProxyValues.getToken( 0, (sal_Unicode)':', nToken );
-                                    if( nToken != -1 )
-                                        nPort = sProxyValues.getToken( 0, (sal_Unicode)':', nToken ).toInt32();
-                                }
-                            }
-                        }
-                        if(
-                            ( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE      ), nType )))    &&
-                            ( rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sName )))    &&
-                            ( rSet.Put( SfxInt32Item  ( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), nPort )))
-                          )
-                        {
-                            bRet = TRUE;
-                        }
-                    }
-                    else if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                                (UINT16)aInetOptions.GetProxyType() )))
+                    if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
+                        (UINT16)aInetOptions.GetProxyType() )))
                             bRet = TRUE;
                     break;
                 }
                 case SID_INET_HTTP_PROXY_NAME :
                 {
-                    if ( IsPlugin() )
-                    {
-                        // This value is neccessary for SID_INET_PROXY_TYPE=2 only!
-                        // So we do nothing here! No defaults (otherwise we overwrite real values!)
-                        // no right values (they are superflous then) ...
-                        // We set it for SID_INET_PROXY_TYPE queries only!!!
-                        bRet = TRUE;
-                    }
-                    else if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
-                            aInetOptions.GetProxyHttpName() )))
-                        bRet = TRUE;
+                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
+                        aInetOptions.GetProxyHttpName() )))
+                            bRet = TRUE;
                     break;
                 }
                 case SID_INET_HTTP_PROXY_PORT :
-                    if ( IsPlugin() )
-                    {
-                        // This value is neccessary for SID_INET_PROXY_TYPE=2 only!
-                        // So we do nothing here! No defaults (otherwise we overwrite real values!)
-                        // no right values (they are superflous then) ...
-                        // We set it for SID_INET_PROXY_TYPE queries only!!!
-                        bRet = TRUE;
-                    }
-                    else if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
-                            aInetOptions.GetProxyHttpPort() )))
-                        bRet = TRUE;
+                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
+                        aInetOptions.GetProxyHttpPort() )))
+                            bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_NAME :
-                    if ( !IsPlugin() && rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
-                            aInetOptions.GetProxyFtpName() )))
-                        bRet = TRUE;
+                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
+                        aInetOptions.GetProxyFtpName() )))
+                            bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_PORT :
-                    if ( !IsPlugin() && rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
-                            aInetOptions.GetProxyFtpPort() )))
-                        bRet = TRUE;
+                    if ( rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
+                        aInetOptions.GetProxyFtpPort() )))
+                            bRet = TRUE;
                     break;
                 case SID_INET_SECURITY_PROXY_NAME :
                 case SID_INET_SECURITY_PROXY_PORT :
@@ -642,9 +550,9 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 #endif
                     break;
                 case SID_INET_NOPROXY :
-                    if( !IsPlugin() && rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
-                                aInetOptions.GetProxyNoProxy() )))
-                        bRet = TRUE;
+                    if( rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
+                        aInetOptions.GetProxyNoProxy() )))
+                            bRet = TRUE;
                     break;
                 case SID_ATTR_PATHNAME :
                 case SID_ATTR_PATHGROUP :
@@ -712,7 +620,7 @@ BOOL SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pRefe
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
 }
 //--------------------------------------------------------------------
-
+// TODO/CLEANUP: wieso zwei SetOptions Methoden?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
@@ -965,138 +873,48 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         bResetSession = TRUE;
     }
 
-    if ( IsPlugin() )
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
     {
-        sal_Int32 nMode = 0;
-        String aServerName;
-        String aPortNumber;
-        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
-        {
-            DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-            nMode = ((const SfxUInt16Item*)pItem )->GetValue();
-        }
-
-        if ( nMode == 2 )
-        {
-            if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
-            {
-                DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-                aServerName = ((const SfxStringItem *)pItem)->GetValue();
-            }
-            if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
-            {
-                DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-                aPortNumber = String::CreateFromInt32( ((const SfxInt32Item*)pItem )->GetValue() );
-            }
-
-            if ( !aServerName.Len() || !aPortNumber.Len() )
-                nMode = 0;
-        }
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xRemoteProxyConfig( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.comp.framework.LoginDialog")), ::com::sun::star::uno::UNO_QUERY );
-        if( xRemoteProxyConfig.is() == sal_True )
-        {
-            ::com::sun::star::uno::Any aPropValue;
-            if( nMode==0 )  aPropValue <<= DEFINE_CONST_OUSTRING("none");
-            else
-            if( nMode==1 )  aPropValue <<= DEFINE_CONST_OUSTRING("browser");
-            else
-            if( nMode==2 )  aPropValue <<= DEFINE_CONST_OUSTRING("custom");
-
-            xRemoteProxyConfig->setPropertyValue( DEFINE_CONST_OUSTRING("UseProxy"), aPropValue );
-            if( nMode == 2 )
-            {
-                ::rtl::OUStringBuffer sProxyValue;
-                sProxyValue.append     ( aServerName );
-                sProxyValue.appendAscii( ":"         );
-                sProxyValue.append     ( aPortNumber );
-                aPropValue <<= sProxyValue.makeStringAndClear();
-                xRemoteProxyConfig->setPropertyValue( DEFINE_CONST_OUSTRING("SecurityProxy"), aPropValue );
-            }
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable > xFlush( xRemoteProxyConfig, ::com::sun::star::uno::UNO_QUERY );
-            if( xFlush.is() == sal_True )
-                xFlush->flush();
-        }
+        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
+        aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
-    else
-    {
-        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
-        {
-            DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-            aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
 
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-            aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-            aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-            aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-            aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-/*        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_NAME ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-            aInetOptions.SetProxySocksName( ((const SfxStringItem *)pItem)->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_PORT ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-            aInetOptions.SetProxySocksPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_AUTO), TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-            BOOL bIsAuto = ((const SfxBoolItem *)pItem)->GetValue();
-            if( bIsAuto )
-            {
-                aInetOptions.SetDnsIpAddress( String() );
-            }
-            else
-            {
-                String aDNS;
-                if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_SERVER), TRUE, &pItem) )
-                {
-                    DBG_ASSERT(pItem->ISA(SfxStringItem), "SfxStringItem expected");
-                    aDNS = ((const SfxStringItem *)pItem)->GetValue();
-                }
-                aInetOptions.SetDnsIpAddress( aDNS );
-            }
-            bResetSession = TRUE;
-        }*/
-        if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-            aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+        aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
+    }
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+        aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
+    }
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+        aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
+    }
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+        aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
+    }
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
+        aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
 
     // Secure-Referers
@@ -1152,7 +970,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 }
 
 //--------------------------------------------------------------------
-
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
@@ -1346,18 +1163,6 @@ SfxMacroConfig* SfxApplication::GetMacroConfig() const
 }
 
 //--------------------------------------------------------------------
-#if SUPD < 623
-void SfxApplication::RegisterEvent(USHORT nId, const String& rEventName)
-{
-    if (!pAppData_Impl->pEventConfig)
-        pAppData_Impl->pEventConfig = new SfxEventConfiguration;
-    String aDummy( "untitled event", RTL_TEXTENCODING_ASCII_US );
-    SfxEventConfiguration::RegisterEvent(nId, rEventName, aDummy);
-}
-#endif
-
-//--------------------------------------------------------------------
-
 SfxEventConfiguration* SfxApplication::GetEventConfig() const
 {
     if (!pAppData_Impl->pEventConfig)
@@ -1391,40 +1196,6 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     else
         new SfxEventAsyncer_Impl( rEventHint );
 }
-
-//-------------------------------------------------------------------------
-/* ASOBSOLETE
-static void CorrectUpdateNumber_Impl(String& rName)
-{
-    String aUPD( SOLARUPD );
-    USHORT nLen = aUPD.Len();
-    USHORT nCount,nPos=0;
-    do
-    {
-        nCount=0;
-        xub_StrLen nNameLength = rName.Len();
-        for ( USHORT i=nPos; i<nNameLength; i++ )
-        {
-            if ( rName.GetChar(i).CompareToAscii('?') == COMPARE_EQUAL )
-            {
-                if ( nCount == 0 )
-                    nPos=i;
-                nCount++;
-            }
-            else if ( nCount == nLen )
-                break;
-            else
-                nCount=0;
-        }
-        if ( nCount == nLen )
-        {
-            rName.Replace( aUPD, nPos );
-            nPos += nCount;
-        }
-    }
-    while ( nCount );
-}
-*/
 
 IMPL_OBJHINT( SfxStringHint, String )
 
