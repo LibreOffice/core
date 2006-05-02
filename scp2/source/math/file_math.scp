@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sm , sm)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Smd , smd)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Smd , smd)
 
 STD_RES_FILE_PATCH( gid_File_Res_Sm, sm )
 
@@ -84,7 +84,7 @@ File gid_File_Help_Smath_Zip
     ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(smath);
     Patchfiles = ("smath.cfg",
-                  "smath.db",                  
+                  "smath.db",
                   "smath.ht",
                   "smath.jar",
                   "smath.key",
@@ -97,7 +97,7 @@ File gid_File_Help_Smath_Zip
                   "smath.idx/LINKNAMES",
                   "smath.idx/OFFSETS",
                   "smath.idx/POSITIONS",
-                  "smath.idx/SCHEMA"); 
+                  "smath.idx/SCHEMA");
 End
 
 #endif
