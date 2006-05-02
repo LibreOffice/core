@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#include <sfx2/viewfrm.hxx>
 
 #include <sot/exchange.hxx>
 
@@ -206,7 +207,9 @@ BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
 
         //InPlace beenden.
         xObj->changeState( embed::EmbedStates::RUNNING );
-        SFX_APP()->SetViewFrame( GetSfxViewShell()->GetViewFrame() );
+        //TODO/CLEANUP
+        //SetViewFrame nur SFX
+        SfxViewFrame::SetViewFrame( GetSfxViewShell()->GetViewFrame() );
 
     }
     return bRet;
