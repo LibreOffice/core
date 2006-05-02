@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:36:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,9 +273,9 @@
 
 #include <framework/interaction.hxx>
 
+#include "app.hxx"
 #include "topfrm.hxx"
 #include "appdata.hxx"
-#include "loadenv.hxx"
 #include "docfac.hxx"
 #include "fcontnr.hxx"
 #include "commitlistener.hxx"
