@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:04:28 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:28:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,23 +52,23 @@ CFLAGS+=-Od
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/unoctitm.obj \
-    $(SLO)$/request.obj \
+    $(SLO)$/bindings.obj \
+    $(SLO)$/ctrlitem.obj \
     $(SLO)$/dispatch.obj \
+    $(SLO)$/macrconf.obj \
+        $(SLO)$/macro.obj \
+    $(SLO)$/minfitem.obj \
+    $(SLO)$/msg.obj \
        $(SLO)$/msgpool.obj \
        $(SLO)$/objface.obj \
-    $(SLO)$/ctrlitem.obj \
-    $(SLO)$/statcach.obj \
-    $(SLO)$/shell.obj \
-    $(SLO)$/msg.obj \
-    $(SLO)$/bindings.obj \
-    $(SLO)$/minfitem.obj \
-    $(SLO)$/srchitem.obj \
-    $(SLO)$/sorgitm.obj \
-        $(SLO)$/macro.obj \
-    $(SLO)$/macrconf.obj \
     $(SLO)$/querystatus.obj \
-    $(SLO)$/sfxstatuslistener.obj
+    $(SLO)$/request.obj \
+        $(SLO)$/sfxstatuslistener.obj \
+    $(SLO)$/shell.obj \
+    $(SLO)$/sorgitm.obj \
+    $(SLO)$/srchitem.obj \
+    $(SLO)$/statcach.obj \
+        $(SLO)$/unoctitm.obj
 
 # --- Targets -------------------------------------------------------
 
