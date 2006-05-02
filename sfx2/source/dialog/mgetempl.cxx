@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:25:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     SfxMapUnit eUnit = SFX_MAPUNIT_CM;
 //    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
     FieldUnit eFieldUnit( FUNIT_CM );
-    SfxModule* pModule = pSfxApp->GetActiveModule();
+    SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )
     {
         const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
