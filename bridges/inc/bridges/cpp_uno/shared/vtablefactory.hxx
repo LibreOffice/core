@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vtablefactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:10:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 11:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define INCLUDED_BRIDGES_CPP_UNO_SHARED_VTABLEFACTORY_HXX
 
 #include "osl/mutex.hxx"
+#include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
@@ -49,6 +50,23 @@ namespace bridges { namespace cpp_uno { namespace shared {
  */
 class VtableFactory {
 public:
+    /** A raw vtable block.
+     */
+    struct Block {
+        /** The start of the raw vtable block.
+
+            It points to the start of the allocated memory block, whereas the
+            vtable pointer typically points some bytes into the block (e.g.,
+            skipping an RTTI pointer, see mapBlockToVtable).  Also, the block
+            contains any generated code snippets, after the vtable itself.
+         */
+        void * start;
+
+        /** The size of the raw vtable block, in bytes.
+         */
+        sal_Size size;
+    };
+
     /** The vtable structure corresponding to an interface type.
      */
     struct Vtables {
@@ -65,7 +83,7 @@ public:
             mapBlockToVtable).  Also, the block contains any generated code
             snippets, after the vtable itself.</p>
          */
-        char ** blocks;
+        Block * blocks;
     };
 
     VtableFactory();
@@ -81,33 +99,45 @@ public:
     // defined individually for each CPP--UNO bridge:
     /** Given a pointer to a block, turn it into a vtable pointer.
      */
-    static void ** mapBlockToVtable(char * block);
+    static void ** mapBlockToVtable(void * block);
 
 private:
     class GuardedBlocks;
+    friend class GuardedBlocks;
+
     class BaseOffset;
 
     VtableFactory(VtableFactory &); // not implemented
     void operator =(VtableFactory); // not implemented
 
-    static void createVtables(
+    void freeBlock(Block const & block) const;
+
+    void createVtables(
         GuardedBlocks & blocks, BaseOffset const & baseOffset,
-        typelib_InterfaceTypeDescription * type, bool includePrimary);
+        typelib_InterfaceTypeDescription * type, bool includePrimary) const;
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:
-    /** Create a raw vtable block.
+    /** Calculate the size of a raw vtable block.
 
         @param slotCount  the number of virtual function slots the returned
         vtable block shall support (if there are any platform-specific slots,
         like an RTTI pointer, or a pointer to a destructor, they are not covered
         by slotCount)
-        @param slots  output parameter returning a pointer to the first virtual
-        function slot (minus any platform-specific ones, like a pointer to a
-        destructor) within the returned vtable block
-        @return  the start address of the raw vtable block
+        @return  the size of the raw vtable block, in bytes
      */
-    static char * createBlock(sal_Int32 slotCount, void *** slots);
+    static sal_Size getBlockSize(sal_Int32 slotCount);
+
+    // This function is not defined in the generic part, but instead has to be
+    // defined individually for each CPP--UNO bridge:
+    /** Initialize a raw vtable block.
+
+        @param block  the start address of the raw vtable block
+        @return  a pointer to the first virtual function slot (minus any
+        platform-specific ones, like a pointer to a destructor) within the given
+        block
+     */
+    static void ** initializeBlock(void * block);
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:
@@ -151,6 +181,8 @@ private:
 
     osl::Mutex m_mutex;
     Map m_map;
+
+    rtl_arena_type * m_arena;
 };
 
 } } }
