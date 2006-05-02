@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:46:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,10 +164,8 @@
 #include "macrconf.hxx"
 #include "genlink.hxx"
 #include "sfxresid.hxx"
-#include "toolbox.hrc"
 #include "sfx.hrc"
 #include "module.hxx"
-#include "appdata.hxx"
 #include "docfile.hxx"
 #include "docfac.hxx"
 #include "referers.hxx"
@@ -260,7 +258,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
     else
-        pSlotPool = &(SFX_APP()->GetSlotPool( NULL ));
+        pSlotPool = &(SfxSlotPool::GetSlotPool( NULL ));
 
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot( aTargetURL.Path );
     if ( pSlot )
@@ -326,8 +324,6 @@ SfxToolBoxControl::SfxToolBoxControl(
     pImpl->nSlotId = nSlotID;
     pImpl->mpFloatingWindow = 0;
     pImpl->mpPopupWindow = 0;
-
-    //DBG( CheckConfigure_Impl(SFX_SLOT_TOOLBOXCONFIG) );
 }
 
 //--------------------------------------------------------------------
@@ -394,6 +390,10 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
 }
 
 //--------------------------------------------------------------------
+void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, SfxTbxCtrlFactory* pFact)
+{
+    SFX_APP()->RegisterToolBoxControl_Impl( pMod, pFact );
+}
 
 SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbxId, ToolBox *pBox, SfxModule* pMod  )
 {
@@ -406,7 +406,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbx
     if ( pMod )
         pSlotPool = pMod->GetSlotPool();
     else
-        pSlotPool = &pApp->GetSlotPool();
+        pSlotPool = &SfxSlotPool::GetSlotPool();
     TypeId aSlotType = pSlotPool->GetSlotType( nSlotId );
     if ( aSlotType )
     {
@@ -609,7 +609,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 
     USHORT nSlotId = 0;
-    SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
+    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
         nSlotId = pSlot->GetSlotId();
@@ -1165,7 +1165,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 
     USHORT nSlotId = 0;
-    SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
+    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
         nSlotId = pSlot->GetSlotId();
