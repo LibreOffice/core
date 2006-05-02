@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:32:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #endif
 
 #include <sfx2/viewfrm.hxx>
-
+#include <sfx2/app.hxx>
 #ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
 #endif
