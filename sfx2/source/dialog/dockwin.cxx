@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:06:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include <vcl/decoview.hxx>
 #endif
 #pragma hdrstop
+
+#include <vcl/svapp.hxx>
 
 #include "dockwin.hxx"
 #include "bindings.hxx"
