@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:15:56 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_INSERT_CTRL:
             {
                 SfxImageItem aImgItem(nWhich, bWeb ? SwView::nWebInsertCtrlState : SwView::nInsertCtrlState);
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( GetViewFrame() );
+                SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                 const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
                 if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
                 {
@@ -275,7 +275,7 @@ void SwView::GetState(SfxItemSet &rSet)
             else
             {
                 SfxImageItem aImgItem(nWhich, SwView::nInsertObjectCtrlState);
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( GetViewFrame() );
+                SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                 const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
                 if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
                 {
