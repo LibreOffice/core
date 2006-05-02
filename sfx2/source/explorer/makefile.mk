@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:52:07 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:46:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-        $(SLO)$/nochaos.obj		\
-        $(SLO)$/exptypes.obj	\
-        $(SLO)$/infodlgs.obj	\
-        $(SLO)$/sfxdir.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES = \
-        explorer.src
+                $(SLO)$/nochaos.obj
 
 # --- Targets ------------------------------------------------------
 
