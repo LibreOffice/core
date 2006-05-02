@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:24:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-interface OutlineView : Object
+interface OutlineView
 [
     uuid ( "92E2F580-2FB4-11CF-89CA-008029E4B0B1" ) ;
 ]
@@ -241,14 +241,6 @@ interface OutlineView : Object
     [
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
-    ]
-    SID_RELOAD // ole : no, status : ?
-    [
-        GroupId = GID_DOCUMENT ;
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-        Asynchron , Volatile , AutoUpdate ,
-        MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_THESAURUS // ole : no, status : ?
     [
