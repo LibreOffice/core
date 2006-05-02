@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:56:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,8 +436,10 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         bDisableHdl = TRUE;
 
+            //TODO/CLEANUP
+            //nur im SFX Viewframe setzen
         pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-        SFX_APP()->SetViewFrame(pViewSh->GetViewFrame());
+        SfxViewFrame::SetViewFrame(pViewSh->GetViewFrame());
 
         bDisableHdl = FALSE;
 
