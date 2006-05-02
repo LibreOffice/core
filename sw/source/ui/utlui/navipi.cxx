@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:50:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
+#include <sfx2/app.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
