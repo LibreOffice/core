@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:52:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-interface BasicIDEView: Object
+interface BasicIDEView
 [
     uuid = "D88DF7A2-EE63-11d0-89CA-008029E4B0B1";
 ]
@@ -399,8 +399,6 @@ shell BasicIDEShell
     // ========================================================
     SID_CHOOSE_CONTROLS
     [
-        PseudoSlots     = TRUE;         // Enum-Slots automatisch erzeugen
-        PseudoPrefix    = SID_INSERT;
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
@@ -442,7 +440,7 @@ shell BasicIDEShell
     ]
 }
 
-interface BasicIDEDocument: Object
+interface BasicIDEDocument
 [
     uuid = "D88DF7A1-EE63-11d0-89CA-008029E4B0B1";
 ]
