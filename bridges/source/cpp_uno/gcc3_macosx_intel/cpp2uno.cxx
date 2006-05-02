@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:35:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,20 +462,22 @@ unsigned char * codeSnippet(
 
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(char * block)
+void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return reinterpret_cast< void ** >(block) + 2;
+    return static_cast< void ** >(block) + 2;
 }
 
-char * bridges::cpp_uno::shared::VtableFactory::createBlock(
-    sal_Int32 slotCount, void *** slots)
+sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
+    sal_Int32 slotCount)
 {
-    char * block = new char[
-        (slotCount + 2) * sizeof (void *) + slotCount * codeSnippetSize];
-    *slots = mapBlockToVtable(block);
-    (*slots)[-2] = 0;
-    (*slots)[-1] = 0;
-    return block;
+    return (slotCount + 2) * sizeof (void *) + slotCount * codeSnippetSize;
+}
+
+void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
+    void ** slots = mapBlockToVtable(block);
+    slots[-2] = 0;
+    slots[-1] = 0;
+    return slots;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
