@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:22:46 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:58:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-SRS1NAME=$(TARGET)
-SRC1FILES =\
-    tbxopdlg.src\
-    tbxcust.src\
-    tbxpopup.src\
-    toolbox.src
 
 SLOFILES =	\
                 $(SLO)$/tbxitem.obj \
