@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:48:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,25 +481,6 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::cont
 
         ViewRedirector aViewRedirector;
         FmFormView::CompleteRedraw(pOutDev, rReg, 0, pRedirector ? pRedirector : &aViewRedirector);
-
-        USHORT nDemoKind =  SFX_APP()->GetDemoKind();
-
-        if ( (nDemoKind == SFX_DEMOKIND_DEMO || nDemoKind == SFX_DEMOKIND_INVALID)
-             && pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-        {
-            SdrPageView* pPgView = GetPageViewPvNum(0);
-
-            if (pPgView)
-            {
-                SdPage* pPage = (SdPage*) pPgView->GetPage();
-
-                if (pPage)
-                {
-                    Rectangle aPageRect ( Point(0, 0), pPage->GetSize() );
-                    SFX_APP()->SpoilDemoOutput(*pOutDev, aPageRect);
-                }
-            }
-        }
     }
     // oder speichern?
     else
