@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:21:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,12 @@
 
 #include <vcl/status.hxx>
 
+#include "app.hxx"
 #include "stbitem.hxx"
 #include "sfxtypes.hxx"
 #include "msg.hxx"
 #include "arrdecl.hxx"
 #include "bindings.hxx"
-#include "msgdescr.hxx"
 #include "msgpool.hxx"
 #include "module.hxx"
 #include "dispatch.hxx"
@@ -158,7 +158,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
     else
-        pSlotPool = &(SFX_APP()->GetSlotPool( NULL ));
+        pSlotPool = &(SfxSlotPool::GetSlotPool( NULL ));
 
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot( aTargetURL.Path );
     if ( pSlot )
@@ -280,7 +280,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 
     USHORT nSlotId = 0;
-    SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
+    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
         nSlotId = pSlot->GetSlotId();
@@ -684,7 +684,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     if ( pMod )
         pSlotPool = pMod->GetSlotPool();
     else
-        pSlotPool = &pApp->GetSlotPool();
+        pSlotPool = &SfxSlotPool::GetSlotPool();
 
     TypeId aSlotType = pSlotPool->GetSlotType(nSlotId);
     if ( aSlotType )
@@ -712,5 +712,11 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     }
 
     return NULL;
+}
+
+//--------------------------------------------------------------------
+void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, SfxStbCtrlFactory* pFact)
+{
+    SFX_APP()->RegisterStatusBarControl_Impl( pMod, pFact );
 }
 //--------------------------------------------------------------------
