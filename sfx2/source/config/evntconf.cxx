@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@
 #include "docinf.hxx"
 #include "eventsupplier.hxx"
 
-#include "sfxsids.hrc"
-#include "sfxlocal.hrc"
+//#include "sfxsids.hrc"
+//#include "sfxlocal.hrc"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -125,7 +125,7 @@ TYPEINIT1(SfxEventHint, SfxHint);
 using namespace com::sun::star;
 
 // class SfxMacroQueryDlg_Impl -------------------------------------------
-
+/*
 class SfxMacroQueryDlg_Impl : public QueryBox
 {
 public:
@@ -157,7 +157,7 @@ SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const String& rMacName, BOOL bDefa
     SetMessText( aText );
     FreeResource();
 }
-
+*/
 // class SfxAsyncEvent_Impl ----------------------------------------------
 
 class SfxAsyncEvent_Impl : public SfxListener
