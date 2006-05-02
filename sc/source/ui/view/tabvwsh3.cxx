@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:09:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-
+#include <sfx2/app.hxx>
 //CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
