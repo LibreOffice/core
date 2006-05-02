@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:24:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,8 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#include <vcl/svapp.hxx>
+#include <sfx2/app.hxx>
 
 #include <svx/acorrcfg.hxx>
 #include "swabstdlg.hxx" //CHINA001
