@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:35:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-
+#include <sfx2/app.hxx>
 #include <svx/editobj.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/svdundo.hxx>
