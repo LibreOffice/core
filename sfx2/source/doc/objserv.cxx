@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:16:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,18 +114,8 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFX_INIMGR_HXX //autogen
-    #include <inimgr.hxx>
-    #endif
-#endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -154,6 +144,7 @@
 #pragma hdrstop
 #endif
 
+#include "app.hxx"
 #include "sfxresid.hxx"
 #include "event.hxx"
 #include "request.hxx"
@@ -904,46 +895,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             rReq.SetReturnValue( SfxBoolItem(0, TRUE) );
             rReq.Done();
             rReq.ReleaseArgs(); // da der Pool in Close zerst"ort wird
-
-            if ( SfxApplication::IsPlugin() )
-            {
-                for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
-                {
-                    String aName = String::CreateFromAscii("vnd.sun.star.cmd:close");
-                    SfxStringItem aNameItem( SID_FILE_NAME, aName );
-                    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
-                    SfxFrameItem aFrame( SID_DOCFRAME, pFrame->GetFrame() );
-                    SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
-                    return;
-                }
-            }
-/*
-            com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                    xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                    com::sun::star::uno::UNO_QUERY );
-            com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-            sal_Int32 nCount = xList->getCount();
-            if ( nCount == nFrames )
-            {
-                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-                SfxViewFrame* pLastFrame = SfxViewFrame::Current();
-                if ( pLastFrame->GetObjectShell() != this )
-                    pLastFrame = pFrame;
-
-                SfxViewFrame* pNextFrame = pFrame;
-                while ( pNextFrame )
-                {
-                    pNextFrame = SfxViewFrame::GetNext( *pFrame, this );
-                    if ( pFrame != pLastFrame )
-                        pFrame->GetFrame()->DoClose();
-                    pFrame = pNextFrame;
-                }
-
-                pLastFrame->GetFrame()->CloseDocument_Impl();
-            }
-            else
- */
-                DoClose();
+            DoClose();
             return;
         }
 
@@ -1308,20 +1260,6 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
             rReq.Done();
             break;
 
-        case SID_ON_CREATEDOC:
-        case SID_ON_OPENDOC:
-        case SID_ON_PREPARECLOSEDOC:
-        case SID_ON_CLOSEDOC:
-        case SID_ON_SAVEDOC:
-        case SID_ON_SAVEASDOC:
-        case SID_ON_ACTIVATEDOC:
-        case SID_ON_DEACTIVATEDOC:
-        case SID_ON_PRINTDOC:
-        case SID_ON_SAVEDOCDONE:
-        case SID_ON_SAVEASDOCDONE:
-            SFX_APP()->EventExec_Impl( rReq, this );
-            break;
-
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_PLAYMACRO:
         {
@@ -1419,20 +1357,6 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
                 rSet.Put( SfxBoolItem( SID_CLOSING, Get_Impl()->bInCloseEvent ) );
                 break;
             }
-
-            case SID_ON_CREATEDOC:
-            case SID_ON_OPENDOC:
-            case SID_ON_PREPARECLOSEDOC:
-            case SID_ON_CLOSEDOC:
-            case SID_ON_SAVEDOC:
-            case SID_ON_SAVEASDOC:
-            case SID_ON_ACTIVATEDOC:
-            case SID_ON_DEACTIVATEDOC:
-            case SID_ON_PRINTDOC:
-            case SID_ON_SAVEDOCDONE:
-            case SID_ON_SAVEASDOCDONE:
-                SFX_APP()->EventState_Impl( nSID, rSet, this );
-                break;
 
             case SID_DOC_LOADING:
                 rSet.Put( SfxBoolItem( nSID, SFX_LOADED_MAINDOCUMENT !=
