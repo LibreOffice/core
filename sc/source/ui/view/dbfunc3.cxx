@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:54:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
 #include <svtools/zforlist.hxx>
-
+#include <sfx2/app.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
