@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:27:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,10 @@
 #pragma hdrstop
 
 #include "frame.hxx"
-#include "loadenv.hxx"
 #include "viewfrm.hxx"                  // SvBorder
 
 class SfxViewFrame;
 class SfxObjectShell;
-class SfxExplorerBrowserConfig;
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -87,7 +85,6 @@ friend class SfxFrame;
     SfxViewFrame*           pCurrentViewFrame;
     SfxObjectShell*         pCurrentObjectShell;
     SfxFrameDescriptor*     pDescr;
-    SfxExplorerBrowserConfig* pBrowserCfg;
     sal_uInt16              nFrameId;
     sal_uInt16              nLocks;
     sal_Bool                bCloseOnUnlock : 1;
@@ -98,7 +95,6 @@ friend class SfxFrame;
     sal_Bool                bReleasingComponent : 1;
     sal_Bool                bFocusLocked : 1;
     sal_Bool                bInPlace : 1;
-    sal_uInt16              nHasBrowser;
     SfxCancelManager*       pCancelMgr;
     SfxCancellable*         pLoadCancellable;
     SfxFrame*               pFrame;
@@ -123,9 +119,7 @@ friend class SfxFrame;
                                 bFocusLocked( sal_False ),
                                 bInPlace( sal_False ),
                                 nLocks( 0 ),
-                                pBrowserCfg( NULL ),
                                 pDescr( NULL ),
-                                nHasBrowser( SFX_BEAMER_OFF ),
                                 pCancelMgr( 0 ),
                                 pLoadCancellable( 0 ),
                                 pSet( 0 ),
