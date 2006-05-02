@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:32:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,6 @@ String STR_PRINTER_NOTAVAIL
     Text [ en-US ] = "This document has been formatted for the printer $1. The specified printer is not available. \nDo you want to use the standard printer $2 ?" ;
     Text [ x-comment ] = " ";
 };
-String STR_MENU_NEWMAIL
-{
-    Text [ de ] = "N~eue Nachricht" ;
-    Text [ en-US ] = "New ~Mail" ;
-    Text [ x-comment ] = " ";
-};
 String STR_PRINT_OPTIONS
 {
     Text [ de ] = "ZusÃ¤tze..." ;
@@ -99,12 +93,6 @@ String STR_PAGE
     Text [ en-US ] = "Page " ;
     Text [ x-comment ] = " ";
 };
-String STR_MDIFRAME_INTERFACE
-{
-    Text [ de ] = "MDI-Fenster" ;
-    Text [ en-US ] = "MDI Window" ;
-    Text [ x-comment ] = " ";
-};
 String STR_ERROR_SAVE_TEMPLATE
 {
     Text [ de ] = "Fehler beim Schreiben der Vorlage " ;
@@ -134,24 +122,6 @@ String STR_PRINT_NEWORISIZE
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
     Text [ x-comment ] = " ";
 };
-String STR_PLUGINVIEW
-{
-    Text = "PlugInView" ;
-};
-String STR_FRAMESETVIEW
-{
-    Text = "FrameSetView" ;
-};
-String STR_GENERICVIEW
-{
-    Text = "GenericView" ;
-};
-String RID_EXPLORERTOOLSTOOLBOX
-{
-    Text [ de ] = "Desktopwerkzeugleiste" ;
-    Text [ en-US ] = "Desktop Toolbar" ;
-    Text [ x-comment ] = " ";
-};
 String STR_PREVIEW_DOCINFO
 {
     Text [ de ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Thema:</b><dd>$(THEME)<dt><b>Schl&uuml;sselworte:</b><dd>$(KEYWORDS)<dt><b>Beschreibung:</b><dd>$(TEXT)</dl></font></body></html>" ;
@@ -162,12 +132,6 @@ String STR_PREVIEW_NODOCINFO
 {
     Text [ de ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Keine Dokumenteigenschaften vorhanden.</B></FONT></P></BODY></HTML>" ;
     Text [ en-US ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No document properties found.</B></FONT></P></BODY></HTML>" ;
-    Text [ x-comment ] = " ";
-};
-String STR_EXPLORERVIEW
-{
-    Text [ de ] = "Explorer" ;
-    Text [ en-US ] = "Explorer" ;
     Text [ x-comment ] = " ";
 };
  // -----------------------------------------------------------------------
@@ -237,27 +201,6 @@ InfoBox MSG_ERROR_SEND_MAIL
     Message [ x-comment ] = " ";
 };
 
- // DLG_MAILDIALOG --------------------------------------------------------
-
- // ErrorBox --------------------------------------------------------------
-ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    /* ### ACHTUNG: Neuer Text in Resource? Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. : Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Allgemeines\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. : Um eine Nachricht ³ber das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand ben÷tigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. */
-    Message [ de ] = "Um eine Nachricht Ã¼ber das Internet zu verschicken,\nwird Ihre E-Mail-Adresse und ein SMTP-Server zum Versand benÃ¶tigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\E-Mail\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen." ;
-    Message [ en-US ] = "Before sending mail or news messages, you must\nspecify your e-mail address and an SMTP server.\nPlease enter the required settings under \n\"Tools\\Options\\General...\\User Data\\E-Mail\" and\n\"Tools\\Options\\Internet\\Mail/News\\Outgoing Mail\".\nThen try sending this message again." ;
-    Message [ x-comment ] = " ";
-};
-ErrorBox ERRBOX_SFX_NO_OUTBOX
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "FÃ¼r die von Ihnen gewÃ¤hlte Aktion wird ein Ausgangskorb benÃ¶tigt.\nBitte legen Sie einen Ausgangskorb an, bevor Sie diese Aktion erneut ausfÃ¼hren." ;
-    Message [ en-US ] = "To perform this action an outbox is required.\nPlease create an outbox prior to executing this action again." ;
-    Message [ x-comment ] = " ";
-};
  // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
 {
@@ -267,171 +210,6 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message [ en-US ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
     Message [ x-comment ] = " ";
 };
-String STR_FRAMESIZE
-{
-    Text [ de ] = "Frame-GrÃ¶ÃŸe" ;
-    Text [ en-US ] = "Frame Size" ;
-    Text [ x-comment ] = " ";
-};
-String RID_EXTERNALFRAME_TOOLBOX
-{
-    Text [ de ] = "Funktionsleiste" ;
-    Text [ en-US ] = "Function Bar" ;
-    Text [ x-comment ] = " ";
-};
-ToolBox RID_EXTERNALFRAME_TOOLBOX
-{
-    HelpId = RID_EXTERNALFRAME_TOOLBOX ;
-    ButtonType = BUTTON_SYMBOL ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    Scroll = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Customize = TRUE ;
-    FloatingMode = FALSE ;
-    Hide = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_TOPDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OPENURL ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSE_BACKWARD ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSE_FORWARD ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSE_STOP ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSE_HOME ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_RELOAD ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EDITDOC ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OPENDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_MAIL_SEND ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PRINTDOCDIRECT ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_CUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_COPY ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PASTE ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_UNDO ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_REDO ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXPLORER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NAVIGATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_STYLE_DESIGNER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_PI ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_INTERNET_ONLINE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_CLOSEDOC ;
-        };
-    };
-};
-
-String STR_FORWARDMAIL
-{
-    Text [ de ] = "Per Regel weitergeleitete Nachricht.\nDie Originalnachricht als Anhang." ;
-    Text [ en-US ] = "Message forwarded by a rule.\nThe original message as attachment.";
-};
-
 String STR_REPAIREDDOCUMENT
 {
     Text [ de ] = " (repariertes Dokument)" ;
