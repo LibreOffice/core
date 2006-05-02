@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 14:58:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
 ]
 
 
-interface MasterPagesSelectorInterface : Object
+interface MasterPagesSelectorInterface
 {
     SID_TP_APPLY_TO_ALL_SLIDES
     [
@@ -207,7 +207,7 @@ interface MasterPagesSelectorInterface : Object
     ]
 }
 
-interface TaskPaneLayoutMenuInterface : Object
+interface TaskPaneLayoutMenuInterface
 {
     SID_TP_APPLY_TO_SELECTED_SLIDES
     [
