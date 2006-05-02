@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:31:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,6 @@
 #define STR_REPEAT                          (RID_SFX_VIEW_START+13)
 #endif
 
-#define STR_PLUGINVIEW                      (RID_SFX_VIEW_START+14)
-#define STR_FRAMESETVIEW                    (RID_SFX_VIEW_START+15)
-#define RID_FRAMESET_MENU                   (RID_SFX_VIEW_START+16)
-#define STR_GENERICVIEW                     (RID_SFX_VIEW_START+17)
-#define STR_FRAMESIZE                       (RID_SFX_VIEW_START+18)
-
 #define DLG_PRINTMONITOR                    (RID_SFX_VIEW_START)
 #define FT_DOCNAME                      1
 #define FT_PRINTING                     2
@@ -78,7 +72,6 @@
 
 #define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
 
-#define STR_MDIFRAME_INTERFACE              (RID_SFX_VIEW_START+32)
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
 
 #define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
@@ -135,21 +128,6 @@
 #define FL_SEP_RIGHT                    47
 
 #define STR_FRAME_FILEDLG                   (RID_SFX_VIEW_START+46)
-#define STR_SAVE_FRAMESET                   (RID_SFX_VIEW_START+47)
-#define STR_SAVE_FRAMESETAS                 (RID_SFX_VIEW_START+48)
-#define STR_FRAME_DEFAULT                   (RID_SFX_VIEW_START+49)
-
-#define MSG_QUERY_INCOMPLETEFRAME           (RID_SFX_VIEW_START+50)
-#define STR_URL_CHANGED                     (RID_SFX_VIEW_START+51)
-
-#define RID_EXPLORERTOOLSTOOLBOX            (RID_SFX_VIEW_START+52)
-#define RID_EXPLOREROBJECTTOOLBOX           (RID_SFX_VIEW_START+53)
-#define RID_FRAMESETEDIT_TOOLBOX            (RID_SFX_VIEW_START+54)
-#define STR_EXPLORERVIEW                    (RID_SFX_VIEW_START+55)
-#define STR_SOURCEMODIFIED                  (RID_SFX_VIEW_START+56)
-#define STR_FRAMESETVIEWSHELL               (RID_SFX_VIEW_START+57)
-#define STR_FORWARDMAIL                     (RID_SFX_VIEW_START+58)
-
 
 #endif
 
