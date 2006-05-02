@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,6 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
-#ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
-#endif
 #ifndef _SV_INTROWIN_HXX
 #include <vcl/introwin.hxx>
 #endif
@@ -68,7 +65,6 @@
 #endif
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <vcl/virdev.hxx>
 
 
