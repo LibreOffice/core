@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:39:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1672,8 +1672,6 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     aOutputData.DrawBackground();
 
     pDev->SetClipRegion( Rectangle( aPos, Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) );
-    SFX_APP()->SpoilDemoOutput( *pDev, OutputDevice::LogicToLogic(
-                                aPageRect, aTwipMode, aOffsetMode ) );
     pDev->SetClipRegion();
 
 //  aOutputData.SetMetaFileMode(FALSE);
@@ -2337,7 +2335,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
                         pBorderItem, pBackgroundItem, pShadowItem );
 
         pDev->SetMapMode( aTwipMode );
-        SFX_APP()->SpoilDemoOutput( *pDev, aPageRect );
     }
 
     pDev->SetMapMode( aOffsetMode );
