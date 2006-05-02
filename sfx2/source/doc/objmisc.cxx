@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:45:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,9 @@ using namespace ::com::sun::star::script;
 #include <tools/urlobj.hxx>
 #include <svtools/inettype.hxx>
 #include <osl/file.hxx>
+#include <vcl/svapp.hxx>
 
+#include "app.hxx"
 #include "appdata.hxx"
 #include "request.hxx"
 #include "bindings.hxx"
@@ -444,7 +446,6 @@ void SfxObjectShell::ModifyChanged()
           pDoc = SfxObjectShell::GetNext(*pDoc) )
         if( pDoc->IsModified() )
             break;
-    SfxApplication *pSfxApp = SFX_APP();
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
@@ -455,7 +456,7 @@ void SfxObjectShell::ModifyChanged()
     Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
-    pSfxApp->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
+    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
 }
 
 //-------------------------------------------------------------------------
@@ -951,13 +952,12 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
     SfxApplication* pSfxApp = SFX_APP();
     if ( !pSfxApp->IsDowning() && !IsLoading() && (!pFrame || !pFrame->GetFrame()->IsClosing_Impl() ) )
     {
-        sal_uInt16 nId = pImp->nEventId;
-        pImp->nEventId = 0;
-        if ( nId )
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+        if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-            // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-            if ( !pHiddenItem || !pHiddenItem->GetValue() /*&& !pSalvageItem*/ )
+            sal_uInt16 nId = pImp->nEventId;
+            pImp->nEventId = 0;
+            if ( nId )
                 pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
     }
@@ -2181,7 +2181,7 @@ void SfxObjectShell::UIActivate( BOOL bActivate )
 
         // DoActivate erfolgte schon im InPlaceActivate
         pFrame->GetFrame()->GetWorkWindow_Impl()->MakeVisible_Impl( TRUE );
-        pApp->SetViewFrame( pFrame );
+        SfxViewFrame::SetViewFrame( pFrame );
         pFrame->GetDispatcher()->Update_Impl( TRUE );
     }
     else
