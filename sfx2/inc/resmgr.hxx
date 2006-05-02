@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:13:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:02:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,12 @@
 #ifndef _SFX_RESMGR_HXX
 #define _SFX_RESMGR_HXX
 
-#include "app.hxx"
 #include "minarray.hxx"
 
 class SfxMessageDescription;
 class SfxMessageTable;
 class Bitmap;
+class ResMgr;
 
 DECL_PTRARRAY(SfxResMgrArr, ResMgr *, 1, 1);
 
