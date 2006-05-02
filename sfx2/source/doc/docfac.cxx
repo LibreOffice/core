@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:38:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@
 #include "docfac.hxx"
 #include "viewfac.hxx"
 #include "fltfnc.hxx"
-#include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "app.hxx"
 #include "module.hxx"
@@ -88,11 +87,7 @@ struct SfxObjectFactory_Impl
 {
     SfxViewFactoryArr_Impl      aViewFactoryArr;// Liste von <SfxViewFactory>s
     SfxFilterArr_Impl           aFilterArr;     // Liste von <SFxFilter>n
-    ResId*                      pMenuBarResId;
-    ResId*                      pAccelResId;
     ResId*                      pNameResId;
-    String                      aHelpFile;
-    String                      aHelpPIFile;
     ::rtl::OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
@@ -102,22 +97,12 @@ struct SfxObjectFactory_Impl
     SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
-        pMenuBarResId       ( NULL ),
-        pAccelResId         ( NULL ),
         pNameResId          ( NULL ),
         pFilterContainer    ( NULL ),
         pModule             ( NULL ),
         nImageId            ( 0 ),
         bTemplateInitialized( sal_False )
         {}
-
-    ~SfxObjectFactory_Impl()
-    {
-        delete pMenuBarResId;
-        delete pAccelResId;
-        // Jetzt vom FilterMatcher
-        // delete pFilterContainer;
-    }
 };
 
 //========================================================================
@@ -141,13 +126,6 @@ SfxObjectFactory::SfxObjectFactory
 {
     DBG_CTOR(SfxObjectFactory, 0);
     pImpl->pFilterContainer = new SfxFilterContainer( String::CreateFromAscii( pName ) );
-
-    pImpl->aHelpFile = String::CreateFromAscii(pShortName);
-    pImpl->aHelpFile.Erase( 8 );
-    pImpl->aHelpPIFile = String(pImpl->aHelpFile,0,3);
-    pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( "hlppi" );
-    pImpl->aHelpFile += DEFINE_CONST_UNICODE( ".hlp" );
-    pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( ".hlp" );
 
     String aShortName( String::CreateFromAscii( pShortName ) );
     aShortName.ToLowerAscii();
@@ -212,50 +190,6 @@ SfxViewFactory& SfxObjectFactory::GetViewFactory(sal_uInt16 i) const
 }
 
 //--------------------------------------------------------------------
-
-void SfxObjectFactory::RegisterMenuBar( const ResId& rId )
-{
-    delete pImpl->pMenuBarResId;
-    pImpl->pMenuBarResId = new ResId( rId );
-}
-
-//--------------------------------------------------------------------
-
-const ResId* SfxObjectFactory::GetMenuBarId() const
-{
-    return pImpl->pMenuBarResId;
-}
-
-//--------------------------------------------------------------------
-
-const ResId* SfxObjectFactory::GetAccelId() const
-{
-    return pImpl->pAccelResId;
-}
-
-//--------------------------------------------------------------------
-
-void SfxObjectFactory::RegisterAccel( const ResId& rId )
-{
-    DBG_ASSERT( !pImpl->pAccelResId, "SfxObjectFactory: double registration of Accel" );
-    pImpl->pAccelResId = new ResId(rId);
-}
-
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-
-void SfxObjectFactory::RegisterHelpFile( const String& rString )
-{
-    pImpl->aHelpFile = rString;
-}
-
-//--------------------------------------------------------------------
-
-const String& SfxObjectFactory::GetHelpFile() const
-{
-    return pImpl->aHelpFile;
-}
 
 SfxModule* SfxObjectFactory::GetModule() const
 {
