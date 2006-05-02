@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:09:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-
+#include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -314,8 +314,10 @@ void ScTabViewShell::DeactivateOle()
     ScClient* pClient = (ScClient*) GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )
     {
+            //TODO/CLEANUP
+            //nur im SFX Viewframe setzen
         pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-        SFX_APP()->SetViewFrame(GetViewFrame());
+        SfxViewFrame::SetViewFrame(GetViewFrame());
     }
 }
 
