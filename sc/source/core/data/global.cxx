@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:23:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
-
+#include <vcl/svapp.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
