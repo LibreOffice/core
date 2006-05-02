@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #ifndef GCC
 #pragma hdrstop
 #endif
+
+#include <vcl/timer.hxx>
 
 #include "splitwin.hxx"
 #include "workwin.hxx"
@@ -938,49 +940,7 @@ USHORT SfxSplitWindow::GetWindowCount() const
 
 void SfxSplitWindow::Command( const CommandEvent& rCEvt )
 {
-#ifdef TF_AUTOSHOW_ON_MOUSEMOVE
-    if ( rCEvt.GetCommand() != COMMAND_CONTEXTMENU )
-        return;
-
-    SfxPopupMenuManager aPop( SfxResId( RID_AUTOHIDE ), pWorkWin->GetBindings() );
-    aPop.StartInsert();
-
-    if ( !bPinned )
-    {
-        aPop.RemoveItem( 0 );
-        String aText( SfxResId(RID_AUTOHIDE ) );
-        aPop.InsertItem( SID_AUTOHIDE, aText, MIB_CHECKABLE ) ;
-    }
-
-    aPop.InsertSeparator();
-
-    USHORT nCount = pDockArr->Count();
-    SfxSlotPool &rSlotPool = SFX_SLOTPOOL();
-    for ( USHORT n=0; n<nCount; n++ )
-    {
-        SfxDock_Impl *pD = (*pDockArr)[n];
-        if ( pD->pWin || pD->bHide )
-        {
-            String aHelpText;
-            String aMenuText = rSlotPool.GetSlotName_Impl( pD->nType, &aHelpText );
-            aPop.InsertItem( pD->nType, aMenuText, MIB_CHECKABLE );
-        }
-    }
-
-    aPop.EndInsert();
-
-    if ( aPop.Execute( GetPointerPosPixel() ) == SID_AUTOHIDE )
-    {
-        // ChildWindows neu anordnen
-        SetPinned_Impl( !bPinned );
-        if ( bPinned && pWorkWin->IsAutoHideMode( this ) )
-            pWorkWin->ArrangeAutoHideWindows( this );
-        pWorkWin->ArrangeChilds_Impl();
-        pWorkWin->ShowChilds_Impl();
-    }
-#else
     SplitWindow::Command( rCEvt );
-#endif
 }
 
 //-------------------------------------------------------------------------
