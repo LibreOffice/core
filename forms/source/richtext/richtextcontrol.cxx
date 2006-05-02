@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,6 @@
 #include <svtools/itempool.hxx>
 #endif
 
-#ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
-#endif
 #ifndef _SFXMSGPOOL_HXX
 #include <sfx2/msgpool.hxx>
 #endif
@@ -635,16 +632,12 @@ namespace frm
                 }
                 else
                 {
-                    SfxApplication* pApplication = SFX_APP();
-                    if ( pApplication )
+                    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
+                    const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
+                    const SfxType* pType = pSlot ? pSlot->GetType() : NULL;
+                    if ( pType )
                     {
-                        SfxSlotPool& rSlotPool = pApplication->GetSlotPool( NULL );
-                        const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
-                        const SfxType* pType = pSlot ? pSlot->GetType() : NULL;
-                        if ( pType )
-                        {
-                            bNeedParametrizedDispatcher = ( pType->nAttribs > 0 );
-                        }
+                        bNeedParametrizedDispatcher = ( pType->nAttribs > 0 );
                     }
                 }
 
@@ -719,12 +712,6 @@ namespace frm
     Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
-        SfxApplication* pApplication = SFX_APP();
-        OSL_ENSURE( pApplication, "ORichTextPeer::queryDispatch: no SfxApplication!" );
-        if ( !pApplication )
-            // can't translate slots without the SfxApplication
-            return xReturn;
-
         if ( !GetWindow() )
         {
             OSL_ENSURE( sal_False, "ORichTextPeer::queryDispatch: already disposed?" );
@@ -736,7 +723,7 @@ namespace frm
         if ( 0 == _rURL.Complete.compareTo( sUnoProtocolPrefix, sUnoProtocolPrefix.getLength() ) )
         {
             ::rtl::OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
-            SfxSlotId nSlotId = lcl_getSlotFromUnoName( pApplication->GetSlotPool( NULL ), sUnoSlotName );
+            SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool( NULL ), sUnoSlotName );
             if ( nSlotId > 0 )
             {
                 // do we already have a dispatcher for this?
