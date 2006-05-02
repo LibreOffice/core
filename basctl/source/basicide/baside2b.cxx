@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:05:16 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,6 @@ __EXPORT EditorWindow::~EditorWindow()
     delete pSourceViewConfig;
 
     aSyntaxIdleTimer.Stop();
-    aHelpAgentTimer.Stop();
 
     if ( pEditEngine )
     {
@@ -400,8 +399,6 @@ void __EXPORT EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
     if ( pEditView )
     {
         pEditView->MouseButtonDown( rEvt );
-        if ( SFX_APP()->GetHelpPI() )
-            aHelpAgentTimer.Start();
     }
 }
 
@@ -500,8 +497,6 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
             if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
                 pBindings->Invalidate( SID_ATTR_INSERT );
         }
-        if ( SFX_APP()->GetHelpPI() )
-            aHelpAgentTimer.Start();
     }
 }
 
@@ -586,9 +581,6 @@ void EditorWindow::CreateEditEngine()
 
     aSyntaxIdleTimer.SetTimeout( 200 );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
-
-    aHelpAgentTimer.SetTimeout( 2000 );
-    aHelpAgentTimer.SetTimeoutHdl( LINK( this, EditorWindow, HelpAgentTimerHdl ) );
 
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
@@ -873,16 +865,6 @@ void EditorWindow::DoDelayedSyntaxHighlight( ULONG nPara )
         else
             DoSyntaxHighlight( nPara );
     }
-}
-
-IMPL_LINK( EditorWindow, HelpAgentTimerHdl, Timer *, EMPTYARG )
-{
-    //SfxHelpPI* pHelpAgent = SFX_APP()->GetHelpPI();
-    //if ( pHelpAgent)
-    //{
-        //pHelpAgent->LoadTopic( GetWordAtCursor() );
-    //}
-    return 0;
 }
 
 IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
