@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxstatuslistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:07:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ throw( RuntimeException )
             pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
     }
 
-    SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
+    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetSlot( m_nSlotID );
 
     SfxItemState eState = SFX_ITEM_DISABLED;
