@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:06:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include <brshitem.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
+#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -89,6 +92,41 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::vos;
 using namespace ::std;
+
+const SvxAdjust aUnoToSvxAdjust[] =
+{
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_RIGHT,
+    SVX_ADJUST_CENTER,
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_BLOCK
+};
+
+const unsigned short aSvxToUnoAdjust[] =
+{
+    text::HoriOrientation::LEFT,
+    text::HoriOrientation::RIGHT,
+    text::HoriOrientation::FULL,
+    text::HoriOrientation::CENTER,
+    text::HoriOrientation::FULL,
+    text::HoriOrientation::LEFT
+};
+
+SvxAdjust ConvertUnoAdjust( unsigned short nAdjust )
+{
+    DBG_ASSERT( nAdjust <= 7, "Enum hat sich geaendert! [CL]" );
+    return aUnoToSvxAdjust[nAdjust];
+}
+
+unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
+{
+    DBG_ASSERT( eAdjust <= 6, "Enum hat sich geaendert! [CL]" );
+    return aSvxToUnoAdjust[eAdjust];
+}
+
+
 
 /******************************************************************
  * SvxUnoNumberingRules
