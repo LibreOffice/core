@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:55:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,6 @@
 #define STR_EVENT_PRINTDOC                      (RID_SFX_APP_START+64)
 #define STR_ADDRESS_NAME                        (RID_SFX_APP_START+65)
 
-#define RID_MAIL_INBOX                          (RID_SFX_APP_START+66)
-#define RID_DELETE_MAIL_QBX                     (RID_SFX_APP_START+67)
-
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
 #define RID_STR_HLPAPPNOTSTARTED                (RID_SFX_APP_START+69)
 
@@ -121,8 +118,6 @@
 #define RID_STR_NOAUTOSTARTHELPAGENT            (RID_SFX_APP_START+80)
 #define RID_HELPBAR                             (RID_SFX_APP_START+81)
 #define RID_SPECIALCONFIG_ERROR                 (RID_SFX_APP_START+82)
-
-#define RID_IMAGE_RES                           (RID_SFX_APP_START+83)
 
 #define STR_MEMINFO_HEADER                  (RID_SFX_APP_START+84)
 #define STR_MEMINFO_FOOTER                  (RID_SFX_APP_START+85)
@@ -194,26 +189,6 @@
 #define IMG_HELP_CONTENT_CHAPTER_OPEN           (RID_SFX_APP_START+122)
 #define IMG_HELP_CONTENT_CHAPTER_CLOSED         (RID_SFX_APP_START+123)
 #define IMG_HELP_CONTENT_DOC                    (RID_SFX_APP_START+124)
-
-#define RID_IMAGE_USER1                         1
-#define RID_IMAGE_USER2                         2
-#define RID_IMAGE_USER3                         3
-#define RID_IMAGE_USER4                         4
-#define RID_IMAGE_BADDATA                       5
-#define RID_IMAGE_BINARY                        6
-#define RID_IMAGE_DELAYED                       7
-#define RID_IMAGE_EMBED                         8
-#define RID_IMAGE_IMAGE                         9
-#define RID_IMAGE_INDEX                         10
-#define RID_IMAGE_MENU                          11
-#define RID_IMAGE_MOVIE                         12
-#define RID_IMAGE_NOTFOUND                      13
-#define RID_IMAGE_SOUND                         14
-#define RID_IMAGE_TELNET                        15
-#define RID_IMAGE_TEXT                          16
-#define RID_IMAGE_UNKNOWN                       17
-#define RID_IMAGE_UNSECURE                      18
-#define RID_IMAGE_SPECIAL                       19
 
 #define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125)
 #define STR_HELP_BUTTON_INDEX_ON                (RID_SFX_APP_START+126)
