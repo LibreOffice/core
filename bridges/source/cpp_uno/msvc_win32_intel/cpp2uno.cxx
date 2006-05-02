@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:32:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,14 +436,18 @@ unsigned char * codeSnippet(
 
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(char * block)
+void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return reinterpret_cast< void ** >(block) + 1;
+    return static_cast< void ** >(block) + 1;
 }
 
-char * bridges::cpp_uno::shared::VtableFactory::createBlock(
-    sal_Int32 slotCount, void *** slots)
+sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
+    sal_Int32 slotCount)
 {
+    return (slotCount + 1) * sizeof (void *) + slotCount * codeSnippetSize;
+}
+
+void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
     struct Rtti {
         sal_Int32 n0, n1, n2;
         type_info * rtti;
@@ -456,11 +460,9 @@ char * bridges::cpp_uno::shared::VtableFactory::createBlock(
     };
     static Rtti rtti;
 
-    char * block = new char[
-        (slotCount + 1) * sizeof (void *) + slotCount * codeSnippetSize];
-    *slots = mapBlockToVtable(block);
-    (*slots)[-1] = &rtti;
-    return block;
+    void ** slots = mapBlockToVtable(block);
+    slots[-1] = &rtti;
+    return slots;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
@@ -477,12 +479,4 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const * begin, unsigned char const * end)
-{
-    DWORD old_protect;
-#if OSL_DEBUG_LEVEL > 0
-    BOOL success =
-#endif
-    VirtualProtect( const_cast<unsigned char *>(begin), end - begin,
-                    PAGE_EXECUTE_READWRITE, &old_protect );
-    OSL_ENSURE( success, "VirtualProtect() failed!" );
-}
+{}
