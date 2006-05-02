@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:45:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -736,7 +736,7 @@ interface BaseTextEditView : View
 
 }
 
-interface GlobalContents : Collection
+interface GlobalContents
 [   uuid = "1FD80520-F517-11d0-AC9B-008029E867C6"; ]
 {
     UINT16  Type    FN_COLL_TYPE
