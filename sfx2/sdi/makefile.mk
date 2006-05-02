@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:28:31 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:10:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,17 +54,10 @@ SVSDIDEPEND= \
         sfx.sdi	\
         appslots.sdi \
         sfxslots.sdi \
-        options.sdi \
-        progress.sdi \
         docslots.sdi \
-        ipfslots.sdi \
         mdislots.sdi \
         viwslots.sdi \
-        pinslots.sdi \
-        frsslots.sdi \
-        object.sdi \
-        frmslots.sdi \
-                genslots.sdi
+                frmslots.sdi
 
 # --- Targets -------------------------------------------------------
 
