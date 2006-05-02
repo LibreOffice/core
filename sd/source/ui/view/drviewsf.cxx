@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:45:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,16 +150,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
         // "Letzte Version" vom SFx en/disablen lassen
-        SfxViewFrame* pViewFrame = GetViewFrame();
-        DBG_ASSERT(pViewFrame, "ViewFrame nicht gefunden");
-        if (pViewFrame->ISA(SfxTopViewFrame))
-        {
-            pViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
-        }
-        else        // MI sagt: kein MDIFrame --> disablen
-        {
-            rSet.DisableItem(SID_RELOAD);
-        }
+        GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
     }
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_HYPERLINK_GETLINK))
