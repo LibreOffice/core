@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:46:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,16 +463,6 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
         }
         break;
 
-        case SID_RELOAD:
-        {
-            // Normale Weiterleitung an ViewFrame zur Ausfuehrung
-            GetViewFrame()->ExecuteSlot(rReq);
-
-            // Muss sofort beendet werden
-            return;
-        }
-        break;
-
         case SID_OPT_LOCALE_CHANGED:
         {
             pOlView->GetOutliner()->UpdateFields();
@@ -554,25 +544,6 @@ void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 \************************************************************************/
 void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 {
-    if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
-    {
-        // "Letzte Version" vom SFx en/disablen lassen
-        // The second call to GetViewFrame() (without the SFX_APP) should be
-        // the default.  The first call may return NULL or even the wrong
-        // view shell.  This should be changed sometime.
-        SfxViewFrame* pViewFrame = SFX_APP()->GetViewFrame();
-        if (pViewFrame == NULL)
-            pViewFrame = GetViewFrame();
-        if (pViewFrame!=NULL && pViewFrame->ISA(SfxTopViewFrame))
-        {
-            pViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
-        }
-        else        // MI sagt: kein MDIFrame --> disablen
-        {
-            rSet.DisableItem(SID_RELOAD);
-        }
-    }
-
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_HYPERLINK_GETLINK))
     {
         SvxHyperlinkItem aHLinkItem;
