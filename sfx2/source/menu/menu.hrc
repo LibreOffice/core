@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:18:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,6 @@
 #define IBX_MNUCFG_ALREADY_INCLUDED         (RID_SFX_MENU_START+2)
 #define QBX_MNUCFG_UNDEFINED_FUNCTIONS      (RID_SFX_MENU_START+3)
 #define QBX_MNUCFG_POPUP_FUNCTIONS          (RID_SFX_MENU_START+4)
-#define RID_IMGLST_SMALL                    (RID_SFX_MENU_START+5)
-#define RID_IMGLST_BIG                      (RID_SFX_MENU_START+6)
 
 #define BTN_OK                1
 #define BTN_CANCEL            2
