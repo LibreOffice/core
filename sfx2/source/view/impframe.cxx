@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:26:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,24 +39,11 @@
 
 #include "impframe.hxx"
 
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
+#include <svtools/smplhint.hxx>
 
 #include "frame.hxx"
-#include "arrdecl.hxx"
-#include <urlframe.hxx>
-#include <bindings.hxx>
-#include <app.hxx>
-#include <appdata.hxx>
-#include <appuno.hxx>
-#include <childwin.hxx>
-#include <viewfrm.hxx>
-
-#include <osl/mutex.hxx>
-#include "sfxuno.hxx"
-
-using namespace vos;
+#include "bindings.hxx"
+#include "viewfrm.hxx"
 
 void SfxFrame_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
