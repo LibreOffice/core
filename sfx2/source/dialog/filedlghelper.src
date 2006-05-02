@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:24:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // includes ******************************************************************
 
-#include "explorer.hrc"
+#include "sfxlocal.hrc"
 #include "filedlghelper.hrc"
 
 //#include "helpid.hrc"
