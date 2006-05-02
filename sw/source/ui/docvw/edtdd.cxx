@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:50:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, nDropAction, nDropFormat,
                                 nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
-//!!    nRet = OFF_APP()->ExecuteDrop( rEvt );
+//!!    nRet = SFX_APP()->ExecuteDrop( rEvt );
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
         //Bei internem D&D nicht mehr aufraeumen!
@@ -536,7 +536,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     CleanupDropUserMarker();
     rSh.UnSetVisCrsr();
-//!!    return OFF_APP()->AcceptDrop( rEvt );
+//!!    return SFX_APP()->AcceptDrop( rEvt );
     return DND_ACTION_NONE;
 }
 
