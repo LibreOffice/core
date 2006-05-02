@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 16:42:03 $
+#   last change: $Author: rt $ $Date: 2006-05-02 17:10:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,18 +132,14 @@ DEFLIB1NAME	=sfx
 DEF1DES		=Sfx
 
 SFXSRSLIST=\
-        $(SRS)$/accel.srs \
         $(SRS)$/appl.srs \
         $(SRS)$/sfx.srs \
         $(SRS)$/doc.srs \
         $(SRS)$/view.srs \
         $(SRS)$/config.srs \
         $(SRS)$/menu.srs \
-        $(SRS)$/statbar.srs \
-        $(SRS)$/toolbox.srs \
         $(SRS)$/dialog.srs \
-        $(SRS)$/bastyp.srs \
-        $(SRS)$/explorer.srs
+                $(SRS)$/bastyp.srs
 
 RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
