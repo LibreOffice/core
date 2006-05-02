@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:07:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1234,82 +1234,6 @@ ToolBox RID_GRAPHIC_OBJECTBAR
         {
             Identifier = SID_OBJECT_ALIGN ;
             HelpId = SID_OBJECT_ALIGN ;
-        };
-    };
-};
- //
- //     Objekt-Menue, Draw
- //
-Menu RID_OBJECTMENU_DRAW
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            ITEM_FORMAT_ATTRIBUTES_LINE
-        };
-        MenuItem
-        {
-            ITEM_FORMAT_ATTRIBUTES_AREA
-        };
-        MN_DRWTXTATTR
-        MenuItem
-        {
-            ITEM_FORMAT_ATTR_TRANSFORM
-        };
-        MenuItem
-        {
-            ITEM_FORM_CONTROL_PROPERTIES
-        };
-        MenuItem
-        {
-            ITEM_FORM_PROPERTIES
-        };
-         //------------------------------
-        MenuItem { Separator = TRUE ; };
-         //------------------------------
-        MN_MIRRORSUB
-        MN_ARRANGESUB
-        MN_ALIGNSUB
-        MN_ANCHORSUB
-         //------------------------------
-        MenuItem { Separator = TRUE ; };
-         //------------------------------
-        MenuItem
-        {
-            ITEM_FORMAT_BEZIER_EDIT
-            RadioCheck = FALSE ;
-            AutoCheck = TRUE ;
-        };
-        MenuItem
-        {
-            ITEM_FORMAT_FONTWORK
-        };
-         //------------------------------
-        MenuItem { Separator = TRUE ; };
-         //------------------------------
-        ITEM_GROUP_MENU
-    };
-};
- //
- //  Menu Text
- //
-Menu RID_OBJECTMENU_DRAWTEXT
-{
-    ItemList =
-    {
-        MN_RESET
-        MenuItem { Separator = TRUE ; };
-        MN_TEXT_ATTR
-        MenuItem { Separator = TRUE ; };
-        MN_DRWTXT
-        MenuItem { Separator = TRUE ; };
-        ITEM_TRANSLITERATE_MENU
-        MenuItem { Separator = TRUE ; };
-        MN_DRWTXTATTR
-        MenuItem
-        {
-            ITEM_FORMAT_FONTWORK
         };
     };
 };
