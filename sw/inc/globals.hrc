@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:55:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,20 +283,6 @@
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 //maximum: RC_GLOBALS_BEGIN +  119
-
-// Kontext-Menues (Format-Menue) --------------------------------------------
-
-#define MN_OBJECTMENU_TEXT          (RC_GLOBALS_BEGIN + 1)
-#define MN_OBJECTMENU_LIST          (RC_GLOBALS_BEGIN + 2)
-#define MN_OBJECTMENU_TABLE         (RC_GLOBALS_BEGIN + 3)
-#define MN_OBJECTMENU_FRAME         (RC_GLOBALS_BEGIN + 4)
-#define MN_OBJECTMENU_GRAFIK        (RC_GLOBALS_BEGIN + 5)
-#define MN_OBJECTMENU_DRAW          (RC_GLOBALS_BEGIN + 6)
-#define MN_OBJECTMENU_DRWTXT        (RC_GLOBALS_BEGIN + 7)
-#define MN_OBJECTMENU_OLE           (RC_GLOBALS_BEGIN + 8)
-#define MN_OBJECTMENU_DRAWCONTROL   (RC_GLOBALS_BEGIN + 9)
-#define MN_OBJECTMENU_DRAWFORM      (RC_GLOBALS_BEGIN + 10)
-
 
 #if STR_DOC_STAT > RC_GLOBALS_END
 #error Resource-Id Ueberlauf in #file, #line
