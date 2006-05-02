@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:17:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,6 @@
 #include "docinf.hxx"
 #include "docfile.hxx"
 #include "openflag.hxx"
-
-#ifndef _SFXAPP_HXX //autogen
-#include <app.hxx>
-#endif
 
 #ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
