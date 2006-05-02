@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:29:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,9 @@
 #include <comphelper/sequence.hxx>
 #include <vos/mutex.hxx>
 #include <uno/current_context.hxx>
+#include <vcl/svapp.hxx>
 
+#include "app.hxx"
 #include "unoctitm.hxx"
 #include "viewfrm.hxx"
 #include "frame.hxx"
