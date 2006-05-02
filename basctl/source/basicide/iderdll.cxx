@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:03:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,7 @@ void BasicIDEDLL::Init()
     SfxModule* pMod = BASIC_MOD();
 
     SfxObjectFactory& rFactory = BasicDocShell::Factory();
-    rFactory.RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
     rFactory.SetDocumentServiceName( String::CreateFromAscii( "com.sun.star.script.BasicIDE" ) );
-    rFactory.RegisterMenuBar( IDEResId( RID_BASICMENU ) );
 
     BasicDocShell::RegisterInterface( pMod );
     BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
