@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:17:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <sfx2/docfile.hxx>
 #include <vcl/sound.hxx>
 #include <tools/urlobj.hxx>
-
+#include <vcl/svapp.hxx>
 #include "tabcont.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
