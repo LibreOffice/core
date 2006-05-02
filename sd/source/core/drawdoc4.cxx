@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-
+#include <vcl/svapp.hxx>
 #include <eetext.hxx>
 
 #define ITEMID_SEARCH               SID_SEARCH_ITEM
