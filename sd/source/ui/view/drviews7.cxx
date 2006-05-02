@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:44:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 #ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
 #endif
-
+#include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/moduleoptions.hxx>
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
