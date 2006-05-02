@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:46:11 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:42:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,9 @@ SRC1FILES = \
 SLOFILES =	\
                 $(SLO)$/iframe.obj \
                 $(SLO)$/applet.obj \
+        $(SLO)$/commitlistener.obj \
                 $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
-        $(SLO)$/eaimp.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
         $(SLO)$/docinf.obj \
@@ -73,7 +73,6 @@ SLOFILES =	\
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
         $(SLO)$/sfxbasemodel.obj \
-        $(SLO)$/commitlistener.obj \
         $(SLO)$/stormodifylistener.obj \
         $(SLO)$/guisaveas.obj\
         $(SLO)$/objembed.obj\
