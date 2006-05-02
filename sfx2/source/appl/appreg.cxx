@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,33 +33,29 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIG_HXX
-#include <tools/config.hxx>
-#endif
-
-#include <app.hxx>
+#include <vcl/toolbox.hxx>
 
 #ifndef GCC
 #pragma hdrstop
 #endif
 
+#include "app.hxx"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "intfrm.hxx"
 #include "sfxhelp.hxx"
 #include "templdlg.hxx"
 #include "objmnctl.hxx"
 #include "inettbc.hxx"
 #include "stbitem.hxx"
-#include "tbedctrl.hxx"
 #include "navigat.hxx"
 #include "module.hxx"
 #include "topfrm.hxx"
-#include "appimp.hxx"
-#include "mailchildwin.hxx"
 #include "partwnd.hxx"
 #include "sfxsids.hrc"
 #include "recfloat.hxx"
+#include "objsh.hxx"
+#include "viewsh.hxx"
+#include "objface.hxx"
 
 //===================================================================
 
@@ -69,7 +65,6 @@ void SfxApplication::Registrations_Impl()
     SfxApplication::RegisterInterface();
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
-    SfxInternalFrame::RegisterInterface();
     SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
@@ -90,7 +85,7 @@ void SfxApplication::Registrations_Impl()
 
 //--------------------------------------------------------------------
 
-void SfxApplication::RegisterToolBoxControl( SfxModule *pMod, SfxTbxCtrlFactory *pFact )
+void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFactory *pFact )
 {
     if ( pMod )
     {
@@ -99,9 +94,9 @@ void SfxApplication::RegisterToolBoxControl( SfxModule *pMod, SfxTbxCtrlFactory 
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImp->pTbxCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
     {
-        SfxTbxCtrlFactory *pF = (*pImp->pTbxCtrlFac)[n];
+        SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -110,12 +105,12 @@ void SfxApplication::RegisterToolBoxControl( SfxModule *pMod, SfxTbxCtrlFactory 
     }
 #endif
 
-    pImp->pTbxCtrlFac->C40_INSERT( SfxTbxCtrlFactory, pFact, pImp->pTbxCtrlFac->Count() );
+    pAppData_Impl->pTbxCtrlFac->C40_INSERT( SfxTbxCtrlFactory, pFact, pAppData_Impl->pTbxCtrlFac->Count() );
 }
 
 //--------------------------------------------------------------------
 
-void SfxApplication::RegisterStatusBarControl( SfxModule *pMod, SfxStbCtrlFactory *pFact )
+void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlFactory *pFact )
 {
     if ( pMod )
     {
@@ -124,9 +119,9 @@ void SfxApplication::RegisterStatusBarControl( SfxModule *pMod, SfxStbCtrlFactor
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImp->pStbCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
     {
-        SfxStbCtrlFactory *pF = (*pImp->pStbCtrlFac)[n];
+        SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -135,12 +130,12 @@ void SfxApplication::RegisterStatusBarControl( SfxModule *pMod, SfxStbCtrlFactor
     }
 #endif
 
-    pImp->pStbCtrlFac->C40_INSERT( SfxStbCtrlFactory, pFact, pImp->pStbCtrlFac->Count() );
+    pAppData_Impl->pStbCtrlFac->C40_INSERT( SfxStbCtrlFactory, pFact, pAppData_Impl->pStbCtrlFac->Count() );
 }
 
 //--------------------------------------------------------------------
 
-void SfxApplication::RegisterMenuControl( SfxModule *pMod, SfxMenuCtrlFactory *pFact )
+void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFactory *pFact )
 {
     if ( pMod )
     {
@@ -149,9 +144,9 @@ void SfxApplication::RegisterMenuControl( SfxModule *pMod, SfxMenuCtrlFactory *p
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImp->pMenuCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
     {
-        SfxMenuCtrlFactory *pF = (*pImp->pMenuCtrlFac)[n];
+        SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -160,45 +155,5 @@ void SfxApplication::RegisterMenuControl( SfxModule *pMod, SfxMenuCtrlFactory *p
     }
 #endif
 
-    pImp->pMenuCtrlFac->C40_INSERT( SfxMenuCtrlFactory, pFact, pImp->pMenuCtrlFac->Count() );
+    pAppData_Impl->pMenuCtrlFac->C40_INSERT( SfxMenuCtrlFactory, pFact, pAppData_Impl->pMenuCtrlFac->Count() );
 }
-
-//--------------------------------------------------------------------
-
-void SfxApplication::SetInterfaceByIdImpl( SfxInterfaceId eId,
-                                           SfxInterface* pIF )
-{
-    if ( (USHORT) eId >= nInterfaces )
-    {
-        USHORT nNewInterfaces = eId + 4;
-        SfxInterface **pNewInterfaces = new SfxInterface*[nNewInterfaces];
-        memcpy( pNewInterfaces, pInterfaces,
-                sizeof(SfxInterface*) * nInterfaces );
-        memset( pNewInterfaces+nInterfaces, 0,
-                sizeof(SfxInterface*) * (nNewInterfaces-nInterfaces) );
-        delete[] pInterfaces;
-        nInterfaces = nNewInterfaces;
-        pInterfaces = pNewInterfaces;
-    }
-
-    DBG_ASSERT( 0 == pInterfaces[ USHORT(eId) ],
-                "interface registered more than once" );
-#if defined(DBG_UTIL) && defined(MSC)
-    USHORT nId = USHORT(eId);
-    if ( 0 != pInterfaces[ nId ] )
-    {
-        ByteString aMsg( pIF->GetClassName() );
-        aMsg += " registers over ";
-        aMsg += pInterfaces[ nId ]->GetClassName();
-        DbgTrace( aMsg.GetBuffer() );
-    }
-#endif
-
-    pInterfaces[ USHORT(eId) ] = pIF;
-}
-/*
-const SfxObjectFactory& SfxApplication::GetDefaultFactory() const
-{
-    return SfxObjectFactory::GetDefaultFactory();
-}
-*/
