@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:36:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,9 +203,9 @@
 #include <svtools/embedhlp.hxx>
 #include <rtl/logfile.hxx>
 
+#include "app.hxx"
 #include "objsh.hxx"
 #include "childwin.hxx"
-#include "sfxdir.hxx"
 #include "request.hxx"
 #include "sfxresid.hxx"
 #include "docfile.hxx"
@@ -215,7 +215,6 @@
 #include "docfac.hxx"
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
-#include "appdata.hxx"
 #include "doc.hrc"
 #include "sfxsids.hrc"
 #include "module.hxx"
@@ -229,9 +228,6 @@
 #include "fltoptint.hxx"
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
-#ifndef _EXTATTR_HXX
-#include "extattr.hxx"
-#endif
 
 #include "../appl/app.hrc"
 
@@ -2175,8 +2171,10 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     }
     if ( xLoader.is() )
     {
-        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY );
-        uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY );
+        // #131744#: it happens that xLoader does not support xImporter!
+        try{
+        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComp );
 
         uno::Sequence < beans::PropertyValue > lDescriptor;
@@ -2217,6 +2215,8 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         }
 
         return xLoader->filter( aArgs );
+        }catch(const uno::Exception&)
+        {}
     }
 
     return sal_False;
@@ -2262,8 +2262,9 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
     if ( xExporter.is() )
     {
-        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY );
-        uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
+        try{
+        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
 
         com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs;
@@ -2307,6 +2308,8 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
 
         return xFilter->filter( aArgs );
+        }catch(const uno::Exception&)
+        {}
     }
 
     return sal_False;
@@ -2370,33 +2373,6 @@ sal_Bool SfxObjectShell::ConvertTo
 
 {
     return sal_False;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::SetEAs_Impl( SfxMedium &rMedium )
-{
-#ifndef WNT
-    //!! wenn OV eine entsprechende Funktionalitaet zur Verfuegung stellt,
-    // besser auf der geoeffneten Datei arbeiten
-    SvEaMgr *pMgr = rMedium.GetEaMgr();
-    SvEaMgr *pOld = GetMedium()->GetEaMgr();
-    if ( !pMgr )
-        return;
-
-    if ( pOld )
-        pOld->Clone( *pMgr );
-
-    String aBuffer;
-    pMgr->SetComment( GetDocInfo().GetComment() );
-
-    pMgr->SetFileType( rMedium.GetFilter()->GetTypeName().GetToken( 0, ';' ) );
-    if ( SvEaMgr::GetAppCreator(aBuffer) )
-        pMgr->SetCreator(aBuffer);
-
-    if ( rMedium.GetLongName().Len() )
-        pMgr->SetLongName(rMedium.GetLongName());
-#endif
 }
 
 //-------------------------------------------------------------------------
