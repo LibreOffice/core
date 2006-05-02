@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,23 +721,19 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(6,
         pPage6_Preview = new SdHtmlAttrPreview(this,SdResId(PAGE6_PREVIEW)));
 
+    InterpolateFixedBitmap(pPage1_Bmp);
 
-    if( !SfxApplication::IsPlugin() )
-    {
-        InterpolateFixedBitmap(pPage1_Bmp);
+    InterpolateFixedBitmap(pPage2_Bmp);
+    InterpolateFixedBitmap(pPage2_Standard_FB);
+    InterpolateFixedBitmap(pPage2_Frames_FB);
+    InterpolateFixedBitmap(pPage2_Kiosk_FB);
+    InterpolateFixedBitmap(pPage2_WebCast_FB);
 
-        InterpolateFixedBitmap(pPage2_Bmp);
-        InterpolateFixedBitmap(pPage2_Standard_FB);
-        InterpolateFixedBitmap(pPage2_Frames_FB);
-        InterpolateFixedBitmap(pPage2_Kiosk_FB);
-        InterpolateFixedBitmap(pPage2_WebCast_FB);
+    InterpolateFixedBitmap(pPage3_Bmp);
+    InterpolateFixedBitmap(pPage4_Bmp);
 
-        InterpolateFixedBitmap(pPage3_Bmp);
-        InterpolateFixedBitmap(pPage4_Bmp);
-
-        InterpolateFixedBitmap(pPage5_Bmp);
-        InterpolateFixedBitmap(pPage6_Bmp);
-    }
+    InterpolateFixedBitmap(pPage5_Bmp);
+    InterpolateFixedBitmap(pPage6_Bmp);
 }
 
 // =====================================================================
