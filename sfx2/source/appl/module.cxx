@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:44:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,29 +124,6 @@ TYPEINIT1(SfxModule, SfxShell);
 SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
 {
 }
-
-//====================================================================
-/*
-
-ModalDialog* SfxModule::CreateAboutDialog()
-{
-    return SFX_APP()->CreateAboutDialog();
-}
-
-BOOL SfxModule::QueryUnload()
-{
-    return TRUE;
-}
-
-SfxModule* SfxModule::Load()
-{
-    return 0;
-}
-
-void SfxModule::Free()
-{
-}
-*/
 
 //====================================================================
 
@@ -428,3 +405,12 @@ BOOL SfxModule::IsActive()
     return FALSE;
 }
 
+SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
+{
+    if ( !pFrame )
+        pFrame = SfxViewFrame::Current();
+    SfxObjectShell* pSh = 0;
+    if( pFrame )
+        pSh = pFrame->GetObjectShell();
+    return pSh ? pSh->GetModule() : 0;
+}
