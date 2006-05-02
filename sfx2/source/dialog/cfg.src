@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:23:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,140 +86,6 @@
     Text [ en-US ] = "Functions" ; \
     Text [ x-comment ] = " ";\
 
- // TP_CONFIG_MENU --------------------------------------------------------
-TabPage TP_CONFIG_MENU
-{
-    HelpId = HID_CONFIG_MENU ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 282 , 205 ) ;
-    FixedLine GRP_MN_MENU
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text [ de ] = "Menüeinträge" ;
-        Text [ en-US ] = "Menu entries";
-    };
-    PushButton BTN_MN_NEW
-    {
-        Pos = MAP_APPFONT ( 226 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        PUSHBUTTON_TEXT_NEW
-    };
-    PushButton BTN_MN_NEWPOPUP
-    {
-        Pos = MAP_APPFONT ( 226 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neues ~Menü" ;
-        Text [ en-US ] = "New Men~u" ;
-        Text [ x-comment ] = " ";
-    };
-    PushButton BTN_MN_CHANGE
-    {
-        Pos = MAP_APPFONT ( 226 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        PUSHBUTTON_TEXT_CHANGE
-    };
-    PushButton BTN_MN_REMOVE
-    {
-        Pos = MAP_APPFONT ( 226 , 57 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_REMOVE
-    };
-    ImageButton BTN_MN_UP
-    {
-        Pos = MAP_APPFONT ( 244 , 77 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_UP ;
-    };
-    ImageButton BTN_MN_DOWN
-    {
-        Pos = MAP_APPFONT ( 244 , 94 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_DOWN ;
-    };
-    PushButton BTN_RESET
-    {
-        Pos = MAP_APPFONT ( 226 , 189 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_RESET
-    };
-    PushButton BTN_LOAD
-    {
-        Pos = MAP_APPFONT ( 226 , 155 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_LOAD
-    };
-    PushButton BTN_SAVE
-    {
-        TabStop = TRUE ;
-        Group = TRUE ;
-        Pos = MAP_APPFONT ( 226 , 172 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        PUSHBUTTON_TEXT_SAVE
-    };
-    Control BOX_MN_ENTRIES
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 202 , 90 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_MENUCONFIG_LISTBOX ;
-    };
-    FixedLine GRP_FUNCTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
-        Size = MAP_APPFONT ( 214 , 8 ) ;
-        Group = TRUE ;
-        GROUPBOX_TEXT_FUNCTIONS
-        Text [ en-US ] = "Functions" ;
-        Text [ de ] = "Funktionen" ;
-        Text [ x-comment ] = " ";
-    };
-    FixedText TXT_MN_GROUP
-    {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        FIXEDTEXT_TEXT_GROUP
-        Text [ en-US ] = "C~ategory" ;
-        Text [ de ] = "~Bereich" ;
-        Text [ x-comment ] = " ";
-    };
-    Control BOX_MN_GROUP
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 93 , 64 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_CONFIGGROUP_LISTBOX ;
-    };
-    FixedText TXT_MN_FUNCTION
-    {
-        Pos = MAP_APPFONT ( 111 , 121 ) ;
-        Size = MAP_APPFONT ( 103 , 8 ) ;
-        Left = TRUE ;
-        FIXEDTEXT_TEXT_FUNCTION
-    };
-    Control BOX_MN_FUNCTION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 131 ) ;
-        Size = MAP_APPFONT ( 103 , 64 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_CONFIGFUNCTION_LISTBOX ;
-    };
-};
 String STR_MYMACROS
 {
     Text [ de ] = "Meine Makros";
@@ -400,118 +266,6 @@ TabPage TP_CONFIG_ACCEL
         PUSHBUTTON_TEXT_RESET
     };
 };
- // TP_CONFIG_STATBAR -----------------------------------------------------
-TabPage TP_CONFIG_STATBAR
-{
-    HelpId = HID_CONFIG_STATBAR ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 282 , 205 ) ;
-    FixedLine GRP_STATBAR
-    {
-        Group = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text [ de ] = "Statusleiste " ;
-        Text [ en-US ] = "Status bar " ;
-        Text [ x-comment ] = " ";
-    };
-    Control BOX_STATBAR_ENTRIES
-    {
-        Border = TRUE ;
-        ClipChildren = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 202 , 185 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_STATUSBARCONFIG_LISTBOX ;
-    };
-    PushButton BTN_RESET
-    {
-        Pos = MAP_APPFONT ( 226 , 189 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_RESET
-    };
-    PushButton BTN_LOAD
-    {
-        Pos = MAP_APPFONT ( 226 , 155 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_LOAD
-    };
-    PushButton BTN_SAVE
-    {
-        Pos = MAP_APPFONT ( 226 , 172 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_SAVE
-    };
-    Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
-    Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
-    Bitmap CHKBTN_HICHECKED { File = "chkchhi.bmp" ; };
-    Bitmap CHKBTN_HIUNCHECKED { File = "chkunhi.bmp" ; };
-    Bitmap CHKBTN_TRISTATE { File = "chktri.bmp" ; };
-    Bitmap CHKBTN_HITRISTATE { File = "chktrihi.bmp" ; };
-};
- // DLG_CONFIG ------------------------------------------------------------
-TabDialog DLG_CONFIG
-{
-    OutputSize = TRUE ;
-    Text [ de ] = "Anpassen" ;
-    Text [ en-US ] = "Configuration" ;
-    Moveable = TRUE ;
-    SvLook = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_CONFIG_MENU ;
-                Text [ de ] = "Menü" ;
-                PageResID = 300 ;
-                Text [ en-US ] = "Menu" ;
-                Text [ x-comment ] = " ";
-            };
-            PageItem
-            {
-                Identifier = TP_CONFIG_ACCEL ;
-                Text [ de ] = "Tastatur" ;
-                Text [ en-US ] = "Keyboard" ;
-                PageResID = 301 ;
-                Text [ x-comment ] = " ";
-            };
-            PageItem
-            {
-                Identifier = TP_CONFIG_STATBAR ;
-                Text [ de ] = "Statusleiste" ;
-                Text [ en-US ] = "Status Bar" ;
-                PageResID = 302 ;
-                Text [ x-comment ] = " ";
-            };
-            PageItem
-            {
-                Identifier = TP_CONFIG_OBJECTBAR ;
-                Text [ de ] = "Symbolleisten" ;
-                Text [ en-US ] = "Toolbars" ;
-                PageResID = 303 ;
-                Text [ x-comment ] = " ";
-            };
-            PageItem
-            {
-                Identifier = TP_CONFIG_EVENT ;
-                Text [ de ] = "Ereignisse" ;
-                Text [ en-US ] = "Events" ;
-                PageResID = 304 ;
-                Text [ x-comment ] = " ";
-            };
-        };
-    };
-    Text [ x-comment ] = " ";
-};
  // Strings ---------------------------------------------------------------
 String STR_NEW
 {
@@ -671,11 +425,6 @@ String STR_TOOLBAR_SPACE
     Text [ en-US ] = "Invisible separator";
 };
 
-String STR_FUNCTION_ALREADY_IN_TOOLBOX
-{
-    Text [ de ] = "Die gewünschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
-    Text [ en-US ] = "The selected function is already on the current toolbar.";
-};
  // ********************************************************************** EOF
 
 
