@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:43:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include <rtl/bootstrap.hxx>
 #endif
 
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <rtl/logfile.hxx>
 
 #define NOT_LOADED  ((long)-1)
@@ -334,7 +335,7 @@ void SplashScreen::initBitmap()
     if ( bShowLogo )
     {
         xub_StrLen nIndex = 0;
-        String aBmpFileName( DEFINE_CONST_UNICODE("intro.bmp") );
+        String aBmpFileName( UniString(RTL_CONSTASCII_USTRINGPARAM("intro.bmp")) );
 
         bool haveBitmap = false;
 
@@ -385,15 +386,15 @@ void SplashScreen::initBitmap()
             // any language specific information, we have to search for the correct resource
             // file. The bitmap resource is language independent.
             const USHORT nResId = RID_DEFAULTINTRO;
-            String       aMgrName = String::CreateFromAscii( "iso" );
-            aMgrName += String::CreateFromInt32(SUPD); // current build version
-            ResMgr* pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+            ByteString aMgrName( "iso" );
+            aMgrName += ByteString::CreateFromInt32(SUPD); // current build version
+            ResMgr* pLabelResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
             if ( !pLabelResMgr )
             {
                 // no "iso" resource -> search for "ooo" resource
-                aMgrName = String::CreateFromAscii( "ooo" );
-                aMgrName += String::CreateFromInt32(SUPD); // current build version
-                pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+                aMgrName = "ooo";
+                aMgrName += ByteString::CreateFromInt32(SUPD); // current build version
+                pLabelResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
             }
             if ( pLabelResMgr )
             {
