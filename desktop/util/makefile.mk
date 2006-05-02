@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:48:10 $
+#   last change: $Author: rt $ $Date: 2006-05-02 17:13:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ TARGETOBJS=	\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
             $(OBJ)$/userinstall.obj         \
-            $(OBJ)$/desktopcontext.obj      
+            $(OBJ)$/desktopcontext.obj
 
 
 
@@ -101,7 +101,7 @@ LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
 # winXX is handled like solaris for now
 APP1_STDPRE=
 APP1_STDPOST=$(CPPULIB) $(CPPUHELPERLIB) $(UNOLIB) $(TOOLSLIB) \
-    $(VOSLIB) $(SALLIB) 
+    $(VOSLIB) $(SALLIB)
 .ELSE
 APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
     $(CPPUHELPERLIB)
@@ -128,8 +128,7 @@ APP1STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(TKLIB)            \
-    $(SALLIB) \
-    $(SVXLIB)
+        $(SALLIB)
 
 
 #	$(APP1_STDPRE)		\
