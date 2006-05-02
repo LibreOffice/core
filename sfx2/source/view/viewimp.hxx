@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@
 
 // forward ---------------------------------------------------------------
 
-class SfxMenuBarManager;
-class SfxAcceleratorManager;
 class SfxOfficeDispatch;
 class SfxBaseController;
 
@@ -69,11 +67,10 @@ SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 );
 
 struct SfxViewShell_Impl
 {
-    ::osl::Mutex               aMutex;
+    ::osl::Mutex                aMutex;
     ::cppu::OInterfaceContainerHelper aInterceptorContainer;
     BOOL                        bControllerSet;
     SfxShellArr_Impl            aArr;
-    SbxObjectRef                xSelectionObj;
     SvBorder                    aBorder;
     Size                        aOptimalSize;
     Size                        aMargin;
@@ -88,10 +85,6 @@ struct SfxViewShell_Impl
     BOOL                        bGotOwnerShip;
     BOOL                        bGotFrameOwnerShip;
     SfxScrollingMode            eScroll;
-    ResId*                      pMenuBarResId;
-    SfxMenuBarManager*          pMenu;
-    ResId*                      pAccelResId;
-    SfxAcceleratorManager*      pAccel;
     USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
@@ -102,7 +95,6 @@ struct SfxViewShell_Impl
                                   , pAccExec(0)
                                 {}
 };
-
 
 #endif
 
