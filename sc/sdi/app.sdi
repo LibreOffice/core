@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:12:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-interface StarCalc : Module
+interface StarCalc
 [
     uuid ( "AB3257C0-07D7-11CF-89CB-008029E4B0B1" )
 ]
