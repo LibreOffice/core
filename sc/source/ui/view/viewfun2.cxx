@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:19:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-
+#include <sfx2/app.hxx>
 #define _SVSTDARR_STRINGS
 #include <svx/boxitem.hxx>
 #include <svx/fontitem.hxx>
