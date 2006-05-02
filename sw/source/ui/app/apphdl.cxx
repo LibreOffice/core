@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:46:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@
 #endif
 
 #include <sfx2/objface.hxx>
+#include <sfx2/app.hxx>
 
 #ifndef _VIEW_HXX
 #include <view.hxx>
