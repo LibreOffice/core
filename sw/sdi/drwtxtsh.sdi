@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:29:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-interface TextDrawText : Selection
+interface TextDrawText
 [
     uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
 ]
@@ -508,7 +508,7 @@ interface TextDrawText : Selection
     ]
 }
 
-interface TextDrawFont : Object
+interface TextDrawFont
 [ uuid = "074C35E0-11EF-101D-9757-6E74207A7520"; ]
 {
     SID_ATTR_CHAR_FONT // status()
