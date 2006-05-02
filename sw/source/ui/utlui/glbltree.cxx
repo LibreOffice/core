@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:25:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #include <svtools/filter.hxx>
 #endif
 
+#include <sfx2/app.hxx>
 
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
