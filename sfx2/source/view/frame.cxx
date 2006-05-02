@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:08:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@
 #pragma hdrstop
 #endif
 
+// wg. pTopFrames
+#include "appdata.hxx"
+#include "app.hxx"
 #include "event.hxx"
 #include "unoctitm.hxx"
 #include "frame.hxx"
@@ -100,7 +103,6 @@
 #include "docfile.hxx"
 #include "docfilt.hxx"
 #include "frmdescr.hxx"
-#include "appdata.hxx"
 #include "openflag.hxx"
 #include "viewsh.hxx"
 #include "viewfrm.hxx"
@@ -1190,14 +1192,6 @@ void SfxFrame::SetFrameName( const String& rName )
         GetFrameInterface()->setName( rName );
 }
 
-void SfxFrame::BeamerSwitched_Impl( sal_Bool bOn )
-{
-}
-
-void SfxFrame::BeamerSet_Impl()
-{
-}
-
 void SfxFrame::LoadFinished_Impl()
 {
 }
@@ -1351,11 +1345,6 @@ void SfxFrame::Appear()
         if ( xTopWindow.is() )
             xTopWindow->toFront();
     }
-}
-
-sal_uInt16 SfxFrame::GetBeamerState_Impl() const
-{
-    return pImp->nHasBrowser;
 }
 
 void SfxFrame::SetOwnsBindings_Impl( sal_Bool bSet )
@@ -1594,38 +1583,5 @@ const SfxPoolItem* SfxFrame::LoadDocumentSynchron( SfxItemSet& aSet )
     aSet.Put( SfxFrameItem( SID_DOCFRAME, this ) );
     aSet.ClearItem( SID_TARGETNAME );
     return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
-}
-
-void SfxFrame::CloseDocument_Impl()
-{
-    Reference < XFrame > xFrame( pImp->xFrame );
-    Window* pContainer = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-    pContainer->SetText( Application::GetDisplayName() );
-
-    Window* pWindow = new Window( pContainer, WB_BORDER );
-    pWindow->Show();
-    pWindow->SetBackground( Wallpaper( pWindow->GetSettings().GetStyleSettings().GetFaceColor() ) );
-    xFrame->setComponent(  VCLUnoHelper::GetInterface( pWindow ), Reference < XController >() );
-    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
-    aMenuRes += String::CreateFromInt32(RID_DEFAULTMENU);
-
-    URL aURL;
-    aURL.Complete = aMenuRes;
-
-    Reference< XURLTransformer >  xTrans ( ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-    if( xTrans.is() )
-    {
-        // Datei laden
-        xTrans->parseStrict( aURL );
-
-        Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-        if ( xProv.is() )
-        {
-            Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
-            if ( aDisp.is() )
-                aDisp->dispatch( aURL, Sequence<com::sun::star::beans::PropertyValue>() );
-        }
-    }
 }
 
