@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:56:32 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:24:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-        $(SLO)$/plugwin.obj				\
-        $(SLO)$/propset.obj				\
-        $(SLO)$/itmfac.obj				\
         $(SLO)$/sfxhtml.obj				\
         $(SLO)$/frmhtml.obj				\
         $(SLO)$/frmhtmlw.obj				\
         $(SLO)$/misc.obj				\
-        $(SLO)$/idpool.obj				\
         $(SLO)$/progress.obj			\
         $(SLO)$/sfxresid.obj			\
         $(SLO)$/newhdl.obj				\
@@ -62,19 +58,16 @@ SLOFILES =\
         $(SLO)$/minarray.obj			\
         $(SLO)$/fltfnc.obj				\
         $(SLO)$/mieclip.obj				\
-        $(SLO)$/fltdlg.obj				\
         $(SLO)$/fltlst.obj				\
         $(SLO)$/helper.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
-        fltdlg.src	\
         fltfnc.src	\
         bastyp.src	\
         newhdl.src
 
 EXCEPTIONSFILES =\
-    $(SLO)$/propset.obj		\
     $(SLO)$/helper.obj
 
 # --- Targets -------------------------------------------------------
