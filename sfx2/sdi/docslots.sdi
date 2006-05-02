@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: rt $ $Date: 2004-11-26 15:06:02 $ $Revision: 1.13 $
+    $Author: rt $ $Date: 2006-05-02 16:08:15 $ $Revision: 1.14 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -11,38 +11,31 @@ interface Documents
     uuid = "61753B60-1114-101D-B8ED-3273768855A7" ;
 ]
 {
-     //---------------------------------------------------------------------
     SID_NEWDOC // ole(opt) api(final/play/rec)
     [
         ExecMethod = NewDocExec_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_OPENDOC // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_OPENHYPERLINK // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_OPENURL // ole(no) api(no)
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_OPENTEMPLATE // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_CLOSEDOCS // ole(req) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_SAVEDOCS // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
@@ -51,41 +44,35 @@ interface Documents
 }
 
  //=========================================================================
-interface Document : Object
+interface Document
 [
     Automation = FALSE ;
 ]
 {
-    //---------------------------------------------------------------------
     SID_DOCTITLE // ole(opt) api(final/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOCPATH // ole(req) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOCFULLNAME // ole(req) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_CLOSEDOC // ole(req) api(final/play/rec)
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_CLOSING // ole(no) api(final/play/norec)
     [
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_ACTIVATE // ole(no) api(final/play/norec)
     [
         ExecMethod = ExecView_Impl ;
@@ -98,88 +85,73 @@ interface OfficeDocument : Document
     Automation = FALSE
 ]
 {
-     //---------------------------------------------------------------------
     SID_DOCINFO_AUTHOR // ole(opt) api(todo)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOCINFO_COMMENTS // ole(opt) api(todo)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOCINFO_KEYWORDS // ole(opt) api(todo)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOC_READONLY // ole(opt) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOC_SAVED // ole(req) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOC_MODIFIED // ole(no) api(final/noplay/norec)
     [
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_MODIFIED // ole(no) api(final/noplay/norec)
     [
         ExecMethod = ExecProps_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_SAVEDOC // ole(req) api(final/play/rec)
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_SAVEASDOC // ole(req) api(final/play/rec)
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOCTEMPLATE // ole(no) api(final/play/rec)
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_PRINTDOC //ole(req) api(final/play/norec)
     [
         ExecMethod = PrintExec_Impl ;
         StateMethod = NoState ;
     ]
-     //---------------------------------------------------------------------
     SID_PRINTOUT // ole(opt) api(final/play/norec)
     [
         ExecMethod = PrintExec_Impl ;
         StateMethod = PrintState_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_DOC_LOADING // ole(no) api(final/play/norec)
     [
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_IMG_LOADING // ole(no) api(final/play/norec)
     [
         StateMethod = StateProps_Impl ;
     ]
-     //---------------------------------------------------------------------
     SID_PLAYMACRO // ole(no) api(final/play/norec)
     [
         ExecMethod = ExecProps_Impl ;
@@ -190,33 +162,24 @@ interface OfficeDocument : Document
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
     ]
-        SID_SIGNATURE
-        [
+    SID_SIGNATURE
+    [
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
-        ]
-        SID_MACRO_SIGNATURE
-        [
+    ]
+    SID_MACRO_SIGNATURE
+    [
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
-        ]
+    ]
 }
 
  //=========================================================================
 
 shell SfxObjectShell
-
-/*  [Beschreibung]
-
-    Funktionalit"at aller 'Dokumente' in SFx-Applikationen. Angesprochen
-    werden diese Objekte entweder als 'ActiveDocument' oder mit dem
-    Namen des Dokuments (i.d.R. der Dateiname) ohne Pfad in eckigen
-    Klammern (z.B. als '[unbenannt1]' oder '[brief6.sdw]').
-*/
 {
     import OfficeDocument [Automation];
 
-     //---------------------------------------------------------------------
     SID_DOCINFO // ole(no) api(final/play)
     [
         ExecMethod = ExecFile_Impl ;
@@ -241,19 +204,19 @@ shell SfxObjectShell
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-        SID_SAVE_VERSION_ON_CLOSE
+    SID_SAVE_VERSION_ON_CLOSE
     [
-                ExecMethod = ExecFile_Impl ;
-                StateMethod = GetState_Impl ;
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
     ]
     SID_SIGNATURE
     [
-                ExecMethod = ExecFile_Impl;
-                StateMethod = GetState_Impl;
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
     ]
-        SID_MACRO_SIGNATURE
-        [
-                ExecMethod = ExecFile_Impl;
-                StateMethod = GetState_Impl;
-        ]
+    SID_MACRO_SIGNATURE
+    [
+            ExecMethod = ExecFile_Impl;
+            StateMethod = GetState_Impl;
+    ]
 } ;
