@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:23:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1289,7 +1289,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        SfxViewFrame* pFrame = SFX_APP()->CreateViewFrame( *pDocShell, 7, sal_True );
+        SfxViewFrame* pFrame = SfxViewFrame::CreateViewFrame( *pDocShell, 7, sal_True );
         SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SFX_CALLMODE_SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
@@ -2628,7 +2628,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if( !pWrtShell )
     {
         //create a hidden view to be able to export as PDF also in print preview
-        m_pHiddenViewFrame = SFX_APP()->CreateViewFrame( *pDocShell, 2, TRUE );
+        m_pHiddenViewFrame = SfxViewFrame::CreateViewFrame( *pDocShell, 2, TRUE );
         SwView* pView = (SwView*) m_pHiddenViewFrame->GetViewShell();
         pWrtShell = pView->GetWrtShellPtr();
     }
