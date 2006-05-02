@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:51:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@
 
 #include <svx/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
+#include <sfx2/app.hxx>
 
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
@@ -1181,7 +1182,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Neues Dokument erzeugen.
-                    SfxViewFrame *pFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
                     SwView      *pView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen
