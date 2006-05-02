@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:47:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 #include <sfx2/objface.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/app.hxx>
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
 #endif
