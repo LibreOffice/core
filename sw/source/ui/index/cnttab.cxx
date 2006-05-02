@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 10:54:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,7 @@
 #include "utlui.hrc"
 #endif
 
+#include <sfx2/app.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
