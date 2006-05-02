@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 15:15:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 10:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,12 +834,12 @@ ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
 #endif
     ValueList26 = "$ORIGIN/classes/sdbc_hsqldb.jar";
 #ifdef SYSTEM_XML_APIS
-    ValueList27 = XML_APIS_JAR
+    ValueList27 = XML_APIS_JAR;
 #endif
 #ifdef SYSTEM_XERCES
-    ValueList28 = XERCES_JAR
+    ValueList28 = XERCES_JAR;
 #endif
 #ifdef SYSTEM_XALAN
-    ValueList29 = XALAN_JAR
+    ValueList29 = XALAN_JAR;
 #endif
 End
