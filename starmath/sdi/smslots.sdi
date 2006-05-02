@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smslots.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:03:16 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ StarMath
 ]
 {
     include "smath.sdi"
-    interface StarMath : Module
+    interface StarMath
     [
         uuid ( "92B0FD20-2FC1-11CF-89CA-008029E4B0B1" )
     ]
@@ -56,7 +56,6 @@ StarMath
     SID_CONFIGEVENT //idlpp ole : no , status : no
     [
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
 }
 
@@ -73,7 +72,6 @@ interface FormulaDocument : OfficeDocument
     SID_DOCTEMPLATE //idlpp ole : no , status : no
     [
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
     SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
     [
@@ -106,7 +104,6 @@ interface FormulaDocument : OfficeDocument
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
     SID_FONT //idlpp ole : no , status : no
     [
@@ -265,25 +262,21 @@ interface FormulaView : View
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
     ]
     SID_COPY //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
     ]
     SID_PASTE //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
     ]
     SID_DELETE //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
     ]
     SID_SELECT //idlpp ole : no , status : no
     [
@@ -307,7 +300,6 @@ interface FormulaView : View
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_TEXTSTATUS //idlpp ole : no , status : no
