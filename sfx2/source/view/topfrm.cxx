@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:20:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,9 @@
 #include <sfxresid.hxx>
 #include <../appl/app.hrc>
 
+// wg. pTopFrames
+#include "appdata.hxx"
+#include "app.hxx"
 #include "sfx.hrc"
 #include "objsh.hxx"
 #include "docfile.hxx"
@@ -124,7 +127,6 @@
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "request.hxx"
-#include "sfxdir.hxx"
 #include "objitem.hxx"
 #include "objface.hxx"
 #include "msg.hxx"
@@ -132,7 +134,6 @@
 #include "workwin.hxx"
 #include "sfxtypes.hxx"
 #include "splitwin.hxx"
-#include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "sfxhelp.hxx"
 #include "fcontnr.hxx"
@@ -744,11 +745,6 @@ void SfxTopFrame::LockResize_Impl( BOOL bLock )
     pImp->bLockResize = bLock;
 }
 
-void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
-{
-    // obsolete
-}
-
 IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
 {
     if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
@@ -788,40 +784,10 @@ BOOL SfxTopFrame::IsMenuBarOn_Impl() const
     return pImp->bMenuBarOn;
 }
 
-BOOL SfxTopFrame::IsMenuBarVisible_Impl() const
-{
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-
-    if ( xPropSet.is() )
-    {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-        aValue >>= xLayoutManager;
-    }
-
-    if ( xLayoutManager.is() )
-    {
-        rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
-        return xLayoutManager->isElementVisible( aMenuBarURL );
-    }
-
-    return FALSE;
-}
-
-MenuBar* SfxTopFrame::GetMenuBar_Impl() const
-{
-    // obsolete
-    return NULL;
-}
-
 String SfxTopFrame::GetWindowData()
 {
     String aActWinData;
-#if SUPD<613//MUSTINI
-    char cToken = SfxIniManager::GetToken();
-#else
     char cToken = ',';
-#endif
 
     SfxViewFrame *pActFrame = SfxViewFrame::Current();
     SfxViewFrame *pFrame = GetCurrentViewFrame();
@@ -838,9 +804,6 @@ String SfxTopFrame::GetWindowData()
 
     aWinData += '1';                    // former attribute "isfloating"
     aWinData += cToken;
-#if SUPD<613//MUSTINI
-    aWinData += SfxIniManager::GetString( pImp->pWindow->GetPosPixel(), pImp->pWindow->GetSizePixel() );
-#endif
 
     // aktives kennzeichnen
     aWinData += cToken;
@@ -941,7 +904,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 //            if ( xFrames.is() )
 //                xFrames->setActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
             pFrame->SetActiveChildFrame_Impl(0);
-            SFX_APP()->SetViewFrame( pFrame );
+            SfxViewFrame::SetViewFrame( pFrame );
             bChildActivated = sal_True;
         }
 
@@ -1239,8 +1202,8 @@ sal_Bool SfxTopViewFrame::Close()
     if ( SfxViewFrame::Close() )
     {
         SfxApplication *pSfxApp = SFX_APP();
-        if (pSfxApp->GetViewFrame() == this)
-            pSfxApp->SetViewFrame(0);
+        if (SfxViewFrame::Current() == this)
+            SfxViewFrame::SetViewFrame(0);
 
         // Da der Dispatcher leer ger"aumt wird, kann man ihn auch nicht mehr
         // vern"unftig verwenden - also besser still legen
@@ -1344,8 +1307,8 @@ SfxTopViewFrame::~SfxTopViewFrame()
     SetDowning_Impl();
 
     SfxApplication *pApp = SFX_APP();
-    if ( pApp->GetViewFrame() == this )
-        pApp->SetViewFrame(NULL);
+    if ( SfxViewFrame::Current() == this )
+        SfxViewFrame::SetViewFrame(NULL);
 
     ReleaseObjectShell_Impl();
     if ( pPendingCloser == pCloser )
@@ -1500,31 +1463,15 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                       pFrame = (SfxTopViewFrame *)SfxViewFrame::GetNext( *pFrame, pDocSh, TYPE(SfxTopViewFrame) ) )
                     bOther = (pFrame != this);
 
-                // Doc braucht nur gefragt zu werden, wenn keine weitere ::com::sun::star::sdbcx::View
+                // Doc braucht nur gefragt zu werden, wenn keine weitere View
                 sal_Bool bClosed = sal_False;
                 sal_Bool bUI = TRUE;
-                if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
-                    bUI = 2;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
                         pDocSh->SetModified( FALSE );
                     rReq.Done(); // unbedingt vor Close() rufen!
                     bClosed = sal_False;
-/*
-                    com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                            com::sun::star::uno::UNO_QUERY );
-                    com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-                    sal_Int32 nCount = xList->getCount();
-                    if ( nCount == 1 )
-                    {
-                        GetFrame()->CloseDocument_Impl();
-                        bClosed = sal_True;
-                    }
-                    else
-                    {
- */
                     try
                     {
                         xTask->close(sal_True);
@@ -1534,7 +1481,6 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     {
                         bClosed = sal_False;
                     }
-   //                   }
                 }
 
                 rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
