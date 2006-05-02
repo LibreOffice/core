@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:41:43 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,15 @@
 #ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
 
 #include "dinfdlg.hxx"
 #include "sfxresid.hxx"
@@ -82,7 +91,7 @@
 #include "frame.hxx"
 #include "viewfrm.hxx"
 #include "request.hxx"
-#include "exptypes.hxx"
+//#include "exptypes.hxx"
 #include "helper.hxx"
 #include "objsh.hxx"
 #include "docfile.hxx"
@@ -101,6 +110,70 @@ using namespace ::com::sun::star::uno;
 TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
 
 //------------------------------------------------------------------------
+String CreateSizeText( ULONG nSize, BOOL bExtraBytes = TRUE, BOOL bSmartExtraBytes = FALSE );
+String CreateSizeText( ULONG nSize, BOOL bExtraBytes, BOOL bSmartExtraBytes )
+{
+    String aUnitStr = ' ';
+    aUnitStr += String( SfxResId(STR_BYTES) );
+    ULONG nSize1 = nSize;
+    ULONG nSize2 = nSize1;
+    ULONG nMega = 1024 * 1024;
+    ULONG nGiga = nMega * 1024;
+    double fSize = nSize;
+    int nDec = 0;
+    BOOL bGB = FALSE;
+
+    if ( nSize1 >= 10000 && nSize1 < nMega )
+    {
+        nSize1 /= 1024;
+        aUnitStr = ' ';
+        aUnitStr += String( SfxResId(STR_KB) );
+        fSize /= 1024;
+        nDec = 0;
+    }
+    else if ( nSize1 >= nMega && nSize1 < nGiga )
+    {
+        nSize1 /= nMega;
+        aUnitStr = ' ';
+        aUnitStr += String( SfxResId(STR_MB) );
+        fSize /= nMega;
+        nDec = 2;
+    }
+    else if ( nSize1 >= nGiga )
+    {
+        nSize1 /= nGiga;
+        aUnitStr = ' ';
+        aUnitStr += String( SfxResId(STR_GB) );
+        bGB = TRUE;
+        fSize /= nGiga;
+        nDec = 3;
+    }
+    const LocaleDataWrapper& rLocaleWrapper = SvtSysLocale().GetLocaleData();
+    String aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
+    aSizeStr += aUnitStr;
+    if ( bExtraBytes && ( nSize1 < nSize2 ) )
+    {
+        aSizeStr = ::rtl::math::doubleToUString( fSize,
+                rtl_math_StringFormat_F, nDec,
+                rLocaleWrapper.getNumDecimalSep().GetChar(0) );
+        aSizeStr += aUnitStr;
+
+        aSizeStr += DEFINE_CONST_UNICODE(" (");
+        aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
+        aSizeStr += ' ';
+        aSizeStr += String( SfxResId(STR_BYTES) );
+        aSizeStr += ')';
+    }
+    else if ( bGB && bSmartExtraBytes )
+    {
+        nSize1 = nSize / nMega;
+        aSizeStr = DEFINE_CONST_UNICODE(" (");
+        aSizeStr += rLocaleWrapper.getNum( nSize1, 0 );
+        aSizeStr += aUnitStr;
+        aSizeStr += ')';
+    }
+    return aSizeStr;
+}
 
 String ConvertDateTime_Impl( const SfxStamp& rStamp, const LocaleDataWrapper& rWrapper )
 {
