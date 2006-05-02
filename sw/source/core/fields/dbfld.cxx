@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:43:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,11 @@ String SwDBField::GetCntnt(BOOL bName) const
     if(bName)
     {
         const String& rDBName = ((SwDBFieldType*)GetTyp())->GetName();
-        String sContent( SFX_APP()->LocalizeDBName(INI2NATIONAL,
-                                            rDBName.GetToken(0, DB_DELIM)));
+        //TODO/CLEANUP
+        //Funktion tut nichts!
+        //String sContent( SFX_APP()->LocalizeDBName(INI2NATIONAL,
+        //                                    rDBName.GetToken(0, DB_DELIM)));
+        String sContent( rDBName.GetToken(0, DB_DELIM) );
 
         if (sContent.Len() > 1)
         {
