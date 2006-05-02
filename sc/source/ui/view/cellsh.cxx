@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:14:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_SERVER,
                                 ScResId(RID_OBJECTBAR_FORMAT));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_CELLS));
     SFX_POPUPMENU_REGISTRATION(ScResId(RID_POPUP_CELLS));
 }
 
