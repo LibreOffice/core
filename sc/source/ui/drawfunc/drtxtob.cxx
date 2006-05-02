@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:03:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) 
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 ScResId(RID_TEXT_TOOLBOX) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_DRAWTEXT) );
-    SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAWTEXT) );
     SFX_CHILDWINDOW_REGISTRATION( ScGetFontWorkId() );
 }
 
