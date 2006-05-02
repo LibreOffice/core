@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:16:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,7 @@
 #include "hyperdlg.hxx"
 #include "svxdlg.hxx" //CHINA001
 
-//CHINA001 #include "hlinettp.hxx"
-//CHINA001 #include "hlmailtp.hxx"
-//CHINA001 #include "hldoctp.hxx"
-//CHINA001 #include "hldocntp.hxx"
+#include <sfx2/app.hxx>
 
 #include "hyperdlg.hrc"
 
