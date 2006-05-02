@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,21 +123,11 @@ void SwDLL::Init()
     (*ppShlPtr) = pModule;
 
     pWDocFact->SetDocumentServiceName(C2S("com.sun.star.text.WebDocument"));
-    pWDocFact->RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
-    pWDocFact->RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
-    pWDocFact->RegisterHelpFile(C2S("swriter.svh"));
 
     if ( aOpt.IsWriter() )
     {
         pGlobDocFact->SetDocumentServiceName(C2S("com.sun.star.text.GlobalDocument"));
-        pGlobDocFact->RegisterMenuBar(SW_RES(CFG_SWGLOBAL_MENU));
-        pGlobDocFact->RegisterAccel(SW_RES(CFG_SW_ACCEL));
-        pGlobDocFact->RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
-
         pDocFact->SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
-        pDocFact->RegisterMenuBar(SW_RES(CFG_SW_MENU));
-        pDocFact->RegisterAccel(SW_RES(CFG_SW_ACCEL));
-        pDocFact->RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
     }
 
     // SvDraw-Felder registrieren
