@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:54:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <hintids.hxx>
 #include "uiparam.hxx"
 #include "uitool.hxx"
+#include <sfx2/app.hxx>
 
 #ifndef _SVX_RULRITEM_HXX //autogen
 #include <svx/rulritem.hxx>
