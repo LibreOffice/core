@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
 #endif
 #ifndef _SFXMSGPOOL_HXX
 #include <sfx2/msgpool.hxx>
@@ -260,9 +257,6 @@ namespace frm
         // items. We could duplicate all the information here in our lib
         // (such as the item text and the image), but why should we?
 
-        SfxApplication* pApplication = SFX_APP();
-        DBG_ASSERT( pApplication, "NavigationToolBar::implInit: no SfxApplication!" );
-
         struct SlotDescription
         {
             USHORT      nId;
@@ -307,11 +301,9 @@ namespace frm
                 String sItemText;
                 String sItemHelpText;
 
-                if ( pApplication )
-                {
-                    SfxSlotPool& rSlotPool = pApplication->GetSlotPool( NULL );
-                    sItemText = rSlotPool.GetSlotName( pSupportedSlots->nId, &sItemHelpText );
-                }
+                // TODO/CLEANUP: this code does nothing(!) nowadays
+                //SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
+                //sItemText = rSlotPool.GetSlotName( pSupportedSlots->nId, &sItemHelpText );
 
                 // insert the entry
                 m_pToolbar->InsertItem( pSupportedSlots->nId, sItemText, pSupportedSlots->bRepeat ? TIB_REPEAT : 0 );
