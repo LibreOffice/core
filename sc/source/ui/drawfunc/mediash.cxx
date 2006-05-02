@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, ScResId(RID_MEDIA_OBJECTBAR) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_MEDIA) );
-    //!!!KA SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
 }
 
 TYPEINIT1( ScMediaShell, ScDrawShell );
