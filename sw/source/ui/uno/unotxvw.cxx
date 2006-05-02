@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:25:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1013,7 +1013,7 @@ SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& rRef )
     SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pOldSh->FillPrtDoc(pDocSh->GetDoc(),  pPrt);
-    SfxViewFrame* pDocFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0, TRUE );
+    SfxViewFrame* pDocFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
