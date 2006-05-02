@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,15 +133,11 @@ void SdDLL::Init()
         // Register the Impress shape types in order to make the shapes accessible.
         ::accessibility::RegisterImpressShapeTypes ();
         ::sd::DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
-        ::sd::DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
-        ::sd::DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
     }
 
     if (SvtModuleOptions().IsDraw())
     {
         ::sd::GraphicDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
-        ::sd::GraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
-        ::sd::GraphicDocShell::Factory().RegisterAccel( SdResId( RID_GRAPHIC_DEFAULTACCEL ) );
     }
 
     // register your view-factories here
