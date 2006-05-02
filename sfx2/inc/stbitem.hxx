@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:20:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,8 @@ public:
     void            ReleaseMouse();
 
     static SfxStatusBarControl* CreateControl( USHORT nSlotID, USHORT nId, StatusBar *pBar, SfxModule* );
+    static void RegisterStatusBarControl(SfxModule*, SfxStbCtrlFactory*);
+
 };
 
 //------------------------------------------------------------------
@@ -157,7 +159,7 @@ public:
         SfxStatusBarControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
-               { SFX_APP()->RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
+               { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
 
