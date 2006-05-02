@@ -2,99 +2,24 @@
     shell SfxMDIFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: kz $ $Date: 2004-02-25 15:39:26 $ $Revision: 1.8 $
+    $Author: rt $ $Date: 2006-05-02 16:10:14 $ $Revision: 1.9 $
     $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
 =========================================================================*/
 
-interface Task : Object
-[
-    uuid = "FC02CBE1-8D8A-11d1-89CC-00A0249D57BE" ;
-
-]
-{
-    //-----------------------------------------------------------------
-    SID_CLOSEWIN
-    [
-            ExecMethod = Exec_Impl ;
-            StateMethod = State_Impl ;
-    ]
-}
-
-interface TaskPartWindow : TopWindow
-[
-    uuid = "A5EEDEF0-9CA3-11D1-AA41-00A0249D57BE";
-]
-{
-}
-
- //=========================================================================
-
 shell SfxTopViewFrame : SfxViewFrame
-
-/*  [Beschreibung]
-
-    Funktionalit"at jedes MDI-Fensters, in dem spezifische Views (Ansichten)
-    eines Dokuments dargestellt werden. Angesprochen werden diese Objekte
-    entweder als 'ActiveWindow' oder mit dem Namen des Dokuments (i.d.R.
-    der Dateiname) ohne Pfad aber mit der Nummer des Fensters, alles in eckigen Klammern (z.B. als
-    '[unbenannt1:1]' oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der
-    Caption-Bar (solange nur ein Fenster f"ur das betreffende Dokument
-    existiert) darf die Nummer niemals ausgelassen werden. Die Numerierung
-    beginnt bei 1 und ist f"ur die Existenz des Fensters stabil.
-*/
-{
-    import TaskPartWindow [Automation];
-
-    // Slot ist schon in base interface, Exec/State-Methoden sind spezifisch
-    SID_ACTIVATE // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-
-    // Mu\s einfach nur drin sein, damit nicht disabled
-    SID_TOPDOC
-    [
-    ]
-
-        SID_SHOWPOPUPS
-        [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-        ]
-}
-
-shell SfxExternalTopViewFrame_Impl : SfxViewFrame
-
-/*  [Beschreibung]
-
-    Funktionalit"at jedes MDI-Fensters, in dem spezifische Views (Ansichten)
-    eines Dokuments dargestellt werden. Angesprochen werden diese Objekte
-    entweder als 'ActiveWindow' oder mit dem Namen des Dokuments (i.d.R.
-    der Dateiname) ohne Pfad aber mit der Nummer des Fensters, alles in eckigen Klammern (z.B. als
-    '[unbenannt1:1]' oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der
-    Caption-Bar (solange nur ein Fenster f"ur das betreffende Dokument
-    existiert) darf die Nummer niemals ausgelassen werden. Die Numerierung
-    beginnt bei 1 und ist f"ur die Existenz des Fensters stabil.
-*/
 {
     import TopWindow [Automation];
 
-    // Slot ist schon in base interface, Exec/State-Methoden sind spezifisch
     SID_ACTIVATE // ole(no) api(final/play/rec)
     [
-//      ExecMethod = Exec_Impl ;
-//      StateMethod = GetState_Impl ;
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
     ]
 
-    // Mu\s einfach nur drin sein, damit nicht disabled
-    SID_TOPDOC
+    SID_SHOWPOPUPS
     [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
     ]
-}
-
-shell SfxTask
-{
-    import Task [Automation];
 }
 
