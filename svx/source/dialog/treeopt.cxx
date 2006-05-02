@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-14 09:16:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <svtools/apearcfg.hxx>
 #include <svtools/linguprops.hxx>
+#include <sfx2/app.hxx>
 
 #ifndef _XDEF_HXX //autogen
 #include "xdef.hxx"
