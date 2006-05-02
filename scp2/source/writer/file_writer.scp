@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:48:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:11:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include "macros.inc"
 
-STD_UNO_LIB_FILE( gid_File_Lib_Swd , swd)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Swd , swd)
 
 File gid_File_Lib_Hwpreader
     TXT_FILE_BODY;
@@ -93,7 +93,7 @@ File gid_File_Help_Swriter_Zip
                   "swriter.idx/LINKNAMES",
                   "swriter.idx/OFFSETS",
                   "swriter.idx/POSITIONS",
-                  "swriter.idx/SCHEMA"); 
+                  "swriter.idx/SCHEMA");
 End
 
 #endif
