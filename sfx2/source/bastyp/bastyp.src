@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:21:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,117 +37,6 @@
  //==============================================================================
 #include "bastyp.hrc"
 
- // == Error Strings ====================================================================
-String ERR_INET_NAME_RESOLVE
-{
-    Text [ de ] = "Der Rechnername konnte nicht aufgelöst werden\n" ;
-    Text [ en-US ] = "The computer name could not be resolved\n" ;
-};
-String ERR_INET_CONNECT
-{
-    Text [ de ] = "Die Internetverbindung konnte nicht hergestellt werden" ;
-    Text [ en-US ] = "Internet connection could not be established" ;
-};
-String ERR_INET_READ
-{
-    Text [ de ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
-    Text [ en-US ] = "Error reading data from the internet\n.Server error message: $(ARG1)" ;
-};
-String ERR_INET_WRITE
-{
-    Text [ de ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
-    Text [ en-US ] = "Error transferring data to the internet.\nServer error message: $(ARG1)" ;
-};
-String ERR_INET_GENERAL
-{
-    Text [ de ] = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
-    Text [ en-US ] = "General Internet Error" ;
-};
-String ERR_WRONG_URL
-{
-    Text [ de ] = "Fehlerhafter URL\n" ;
-    Text [ en-US ] = "Faulty URL\n" ;
-};
-String ERR_ACTIVEDOWNLOADS
-{
-    Text [ de ] = "Es sind noch Downloads aktiv.\nWollen Sie wirklich abbrechen?\n" ;
-    Text [ en-US ] = "There are still downloads that are active.\nAre you sure you want to quit?\n" ;
-};
-String ERR_QUEUEDDOWNLOADS
-{
-    Text [ de ] = "Es stehen noch Downloads in der Warteschlange.\nWollen Sie wirklich beenden?\n" ;
-    Text [ en-US ] = "There are still downloads to be performed.\nDo you really want to quit?\n" ;
-};
-String ERR_FILEISLOCAL
-{
-    Text [ de ] = "Die Datei liegt bereits lokal auf Ihrem Rechner.\nSoll sie trotzdem kopiert werden?" ;
-    Text [ en-US ] = "The file already exists on your computer.\nDo you want to copy it anyway?" ;
-};
-String ERR_FILENAMECHECK83
-{
-    Text [ de ] = "Der eingegebene Dateiname ist ungültig.\nBitte beachten sie, dass der Dateiname maximal 8 Zeichen\nund die Dateierweiterung maximal 3 Zeichen lang sein dürfen." ;
-    Text [ en-US ] = "The file name entered is invalid.\nPlease note that file names may not exceed 8 characters\n and the file extension may only consist of 3 characters." ;
-};
-String ERR_INSUFFICIENTDISKSPACE
-{
-    Text [ de ] = "Die Datei %1 wird größer als der zur Verfügung stehende Plattenplatz.\nWollen Sie fortfahren ?\n" ;
-    Text [ en-US ] = "The file %1 exceeds the available disk space.\nDo you want to continue anyway?\n" ;
-};
-//= Texte "downloadcontroller" =================================================================
-String STR_DOWNLOAD_SOURCE
-{
-    Text [ de ] = "Quelle" ;
-    Text [ en-US ] = "Source" ;
-};
-String STR_DOWNLOAD_DESTINATION
-{
-    Text [ de ] = "Ziel" ;
-    Text [ en-US ] = "Destination" ;
-};
-String STR_DOWNLOAD_STATE
-{
-    Text [ de ] = "Status" ;
-    Text [ en-US ] = "Status" ;
-};
-String STR_DOWNLOAD_REMAININGTIME
-{
-    Text [ de ] = "Restzeit" ;
-    Text [ en-US ] = "Remaining Time" ;
-};
-String STR_DOWNLOAD_STATEFORMAT
-{
-    Text [ de ] = "$(READ) von $(TOTAL) [ $(TIME) ]" ;
-    Text [ en-US ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
-};
-/*
-Resource RID_DLSTATUS2
-{
-    String SVBINDSTATUS_FINDINGRESOURCE
-    {
-        Text [ de ] = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
-        Text [ en-US ] = "Connecting to: $(HOST). Waiting for response..." ;
-        Text [ x-comment ] = " ";
-    };
-    String SVBINDSTATUS_CONNECTING
-    {
-        Text [ de ] = "Ge�ffnet wird: $(TARGET) auf $(HOST)" ;
-        Text [ en-US ] = "Opening $(TARGET) on $(HOST)" ;
-        Text [ x-comment ] = " ";
-    };
-    String SVBINDSTATUS_DOWNLOADINGDATA
-    {
-        Text [ de ] = "�bertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
-        Text [ en-US ] = "Transferring: $(TARGET) Read: $(BYTE)" ;
-        Text [ x-comment ] = " ";
-    };
-    String SVBINDSTATUS_ENDDOWNLOADDATA
-    {
-        Text [ de ] = "Verbindung abgebaut" ;
-        Text [ en-US ] = "Disconnected" ;
-        Text [ x-comment ] = " ";
-    };
-};
-*/
 String STR_HTML_GENERATOR
 {
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
