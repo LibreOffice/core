@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:29:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,6 +361,8 @@ sal_Bool    bNoInterrupt    = sal_False;
 #pragma code_seg( "SWSTATICS" )
 #endif
 
+#include <sfx2/app.hxx>
+
 #ifndef PROFILE
 #pragma code_seg()
 #endif
@@ -473,7 +475,7 @@ SwModule::~SwModule()
     SetPool(0);
     delete pAttrPool;
     delete pErrorHdl;
-    EndListening( *OFF_APP() );
+    EndListening( *SFX_APP() );
 }
 
 //************************************************************************
