@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:05:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ void SdModule::Execute(SfxRequest& rReq)
     {
         case SID_NEWDOC:
         {
-            OFF_APP()->ExecuteSlot(rReq, OFF_APP()->GetInterface());
+            SFX_APP()->ExecuteSlot(rReq, SFX_APP()->GetInterface());
         }
         break;
 
@@ -278,7 +278,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
             if (!bIntercept)
             {
-                OFF_APP()->ExecuteSlot(rReq, OFF_APP()->GetInterface());
+                SFX_APP()->ExecuteSlot(rReq, SFX_APP()->GetInterface());
             }
             else
             {
@@ -334,8 +334,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                     pFrame->InsertDocument( pDocSh );
                 }
                 else
-                    SFX_APP()->CreateViewFrame(*pDocSh,
-                        ::sd::OUTLINE_FACTORY_ID);
+                    SfxViewFrame::CreateViewFrame(*pDocSh, ::sd::OUTLINE_FACTORY_ID);
 
                 ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
 
@@ -459,7 +458,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     // der Status von SID_OPENDOC wird von der Basisklasse bestimmt
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
-        const SfxPoolItem* pItem = OFF_APP()->GetSlotState(SID_OPENDOC, OFF_APP()->GetInterface());
+        const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
         if (pItem)
             rItemSet.Put(*pItem);
     }
@@ -568,7 +567,7 @@ SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, SfxFrame* p
         }
         else
         {
-            SfxViewFrame* pViewFrame = SFX_APP()->CreateViewFrame( *pDocShell );
+            SfxViewFrame* pViewFrame = SfxViewFrame::CreateViewFrame( *pDocShell );
             if( pViewFrame )
                 pFrame = pViewFrame->GetFrame();
         }
@@ -711,7 +710,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         }
                         else
                         {
-                            pViewFrame = SFX_APP()->CreateViewFrame( *pShell );
+                            pViewFrame = SfxViewFrame::CreateViewFrame( *pShell );
                             if( pViewFrame )
                                 pFrame = pViewFrame->GetFrame();
                         }
@@ -838,7 +837,7 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTarge
         }
         else
         {
-            SfxViewFrame* pViewFrame = SFX_APP()->CreateViewFrame( *pNewDocSh );
+            SfxViewFrame* pViewFrame = SfxViewFrame::CreateViewFrame( *pNewDocSh );
             if( pViewFrame )
                 pFrame = pViewFrame->GetFrame();
         }
