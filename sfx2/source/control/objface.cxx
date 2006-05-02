@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,9 @@
 #include "msgpool.hxx"
 #include "sfxresid.hxx"
 #include "minarray.hxx"
+#include "objsh.hxx"
 
 DBG_NAME(SfxInterface);
-
-static const USHORT nVersion = 5;
 
 //====================================================================
 
@@ -114,18 +113,18 @@ DECL_PTRARRAY(SfxObjectUIArr_Impl, SfxObjectUI_Impl*, 2, 2);
 struct SfxInterface_Impl
 {
     SfxObjectUIArr_Impl*    pObjectBars;    // registered ObjectBars
-    SfxObjectUIArr_Impl*    pObjectMenues;  // registered ObjectMenues
     SfxObjectUIArr_Impl*    pChildWindows;  // registered ChildWindows
     ResId                   aPopupRes;      // registered PopupMenu
     ResId                   aStatBarRes;    // registered StatusBar
     SfxModule*              pModule;
+    BOOL                    bRegistered;
 
     SfxInterface_Impl() :
         aPopupRes((USHORT)0),
         aStatBarRes((USHORT)0)
+    , bRegistered(FALSE)
     {
         pObjectBars   = new SfxObjectUIArr_Impl;
-        pObjectMenues = new SfxObjectUIArr_Impl;
         pChildWindows = new SfxObjectUIArr_Impl;
     }
 
@@ -135,10 +134,6 @@ struct SfxInterface_Impl
         for (n=0; n<pObjectBars->Count(); n++)
             delete (*pObjectBars)[n];
         delete pObjectBars;
-
-        for (n=0; n<pObjectMenues->Count(); n++)
-            delete (*pObjectMenues)[n];
-        delete pObjectMenues;
 
         for (n=0; n<pChildWindows->Count(); n++)
             delete (*pChildWindows)[n];
@@ -150,90 +145,34 @@ static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResI
 
 //====================================================================
 
-SfxIFConfig_Impl::SfxIFConfig_Impl() :
-    nCount(0),
-    pObjectBars(0)
-{
-    pObjectBars = new SfxObjectUIArr_Impl;
-}
-
-//-------------------------------------------------------------------------
-
-SfxIFConfig_Impl::~SfxIFConfig_Impl()
-{
-    if( pObjectBars )
-    {
-        for (USHORT n=0; n<pObjectBars->Count(); n++)
-            delete (*pObjectBars)[n];
-        delete pObjectBars;
-    }
-}
-
-//-------------------------------------------------------------------------
-void SfxIFConfig_Impl::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
-{
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, SFX_INTERFACE_OFA_START );
-    if ( pUI )
-        pObjectBars->Append(pUI);
-}
-
 //====================================================================
 // ctor, registeres a new unit
 
-SfxInterface::SfxInterface( SfxModule *pMod,
-                            const char *pClassName,
+SfxInterface::SfxInterface( const char *pClassName,
                             const ResId& rNameResId,
                             USHORT nId,
                             const SfxInterface* pParent,
-                            const SfxTypeLibImpl* pLibInfo ):
-    pName(pClassName),
-    pGenoType(pParent),
-    nCount(0),
-    pTypeLibInfo(pLibInfo),
-    pConfig(NULL),
-    nClassId(nId),
-    aNameResId(rNameResId.GetId()),
-    pImpData(0)
-{
-    aNameResId.SetResMgr(rNameResId.GetResMgr());
-    Init( );
-    pImpData->pModule = pMod;
-}
-
-SfxInterface::SfxInterface( SfxModule *pMod,
-                            const char *pClassName,
-                            const ResId& rNameResId,
-                            USHORT nId,
-                            const SfxInterface* pParent,
-                            const SfxTypeLibImpl* pLibInfo,
                             SfxSlot &rSlotMap, USHORT nSlotCount ):
     pName(pClassName),
     pGenoType(pParent),
-    pTypeLibInfo(pLibInfo),
-    pConfig(NULL),
     nClassId(nId),
     aNameResId(rNameResId.GetId()),
     pImpData(0)
 {
     aNameResId.SetResMgr(rNameResId.GetResMgr());
-    Init();
-    pImpData->pModule = pMod;
+    pImpData = new SfxInterface_Impl;
     SetSlotMap( rSlotMap, nSlotCount );
-    // register the functions at the SfxMessagePool
+}
+
+void SfxInterface::Register( SfxModule* pMod )
+{
+    pImpData->bRegistered = TRUE;
+    pImpData->pModule = pMod;
     if ( pMod )
         pMod->GetSlotPool()->RegisterInterface(*this);
     else
         SFX_APP()->GetAppSlotPool_Impl().RegisterInterface(*this);
 }
-
-void SfxInterface::Init()
-{
-    DBG_MEMTEST();
-    DBG_CTOR(SfxInterface, 0);
-//    DBG_ASSERT(nCount, "Anzahl der Slot == NULL");
-    pImpData = new SfxInterface_Impl;
-}
-
 
 void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
 {
@@ -385,12 +324,11 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
 
 SfxInterface::~SfxInterface()
 {
-    if (pConfig)
-        delete pConfig;
-
     SfxModule *pMod = pImpData->pModule;
+    BOOL bRegistered = pImpData->bRegistered;
     delete pImpData;
-    if ( nClassId )
+    DBG_ASSERT( pImpData->bRegistered, "Interface not registered!" );
+    if ( bRegistered )
     {
         if ( pMod )
             pMod->GetSlotPool()->ReleaseInterface(*this);
@@ -489,102 +427,6 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 
 //--------------------------------------------------------------------
 
-/*
-BOOL SfxInterface::IsDefault()
-{
-    if (pConfig)
-        return pConfig->IsDefault();
-     else
-        return TRUE;
-}
-
-void SfxInterface::UseDefault()
-{
-    if ( !pConfig )
-    {
-        for (USHORT n=0; n<pImpData->pObjectBars->Count(); n++)
-            delete (*pImpData->pObjectBars)[n];
-        pImpData->pObjectBars->Remove(0, pImpData->pObjectBars->Count());
-        return;
-    }
-    else if ( !pConfig->IsDefault() )
-    {
-        USHORT n;
-        for (n=0; n<pImpData->pObjectBars->Count(); n++)
-            delete (*pImpData->pObjectBars)[n];
-        pImpData->pObjectBars->Remove(0, pImpData->pObjectBars->Count());
-
-        for (n=0; n<pConfig->nCount; n++)
-        {
-            SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(
-                (*pConfig->pObjectBars)[n]->nPos,
-                (*pConfig->pObjectBars)[n]->aResId,
-                (*pConfig->pObjectBars)[n]->bVisible,
-                (*pConfig->pObjectBars)[n]->nFeature,
-                nClassId);
-
-            pImpData->pObjectBars->Append(pUI);
-            pUI->pName = new String(*((*pConfig->pObjectBars)[n]->pName));
-        }
-    }
-}
-*/
-
-//--------------------------------------------------------------------
-
-
-void SfxInterface::SetObjectBarName(const String& rName, USHORT nId)
-{
-    // Objectbar im eigenen Array suchen
-    USHORT nCount = pImpData->pObjectBars->Count();
-    USHORT n;
-    for ( n=0; n<nCount; n++ )
-        if ((*pImpData->pObjectBars)[n]->aResId.GetId() == nId) break;
-
-    if ( n >= nCount )
-    {
-        // Nicht gefunden, in der Superklasse versuchen
-        BOOL bGenoType = ( pGenoType != 0 && !pGenoType->HasName() );
-        if (bGenoType)
-            ((SfxInterface*)pGenoType)->SetObjectBarName ( rName, nId );
-        else
-            DBG_ERROR("Objectbar ist unbekannt!");
-    }
-    else
-    {
-        SfxObjectUI_Impl *pUI = (*pImpData->pObjectBars)[n];
-        delete pUI->pName;
-        pUI->pName = new String( rName );
-        DBG_ERROR("Useless configuration!");
-    }
-}
-
-
-void SfxInterface::SetObjectBarPos(USHORT nPos, USHORT nId)
-{
-    // Objectbar im eigenen Array suchen
-    USHORT nCount = pImpData->pObjectBars->Count();
-    USHORT n;
-    for ( n=0; n<nCount; n++ )
-        if ((*pImpData->pObjectBars)[n]->aResId.GetId() == nId) break;
-
-    if ( n >= nCount )
-    {
-        // Nicht gefunden, in der Superklasse versuchen
-        BOOL bGenoType = ( pGenoType != 0 && !pGenoType->HasName() );
-        if (bGenoType)
-            ((SfxInterface*)pGenoType)->SetObjectBarPos ( nPos, nId );
-        else
-            DBG_ERROR("Objectbar ist unbekannt!");
-    }
-    else
-    {
-        (*pImpData->pObjectBars)[n]->nPos = nPos;
-        DBG_ERROR("Useless configuration!");
-    }
-}
-
-//-------------------------------------------------------------------------
 
 void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
         const String *pStr )
@@ -622,71 +464,6 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULON
 
     return pUI;
 }
-
-void SfxInterface::TransferObjectBar( USHORT nPos, USHORT nId, SfxInterface *pIFace,
-        const String *pStr)
-{
-    if ( !pIFace )
-    {
-        RegisterObjectBar( nPos, nId, pStr );
-        DBG_ERROR("Useless configuration!");
-        return;
-    }
-
-    // Suche den ObjectBar im Quellen-Interface ( GenoType ?? )
-    USHORT n;
-    for (n=0; n<pIFace->pImpData->pObjectBars->Count(); n++)
-        if ((*pIFace->pImpData->pObjectBars)[n]->aResId.GetId() == nId) break;
-
-    DBG_ASSERT(n<pIFace->pImpData->pObjectBars->Count(),"Objectbar ist unbekannt!");
-
-    // Uebernimm ResId und Interface-Id
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos,
-                             (*pIFace->pImpData->pObjectBars)[n]->aResId,
-                             (*pIFace->pImpData->pObjectBars)[n]->bVisible,
-                             (*pIFace->pImpData->pObjectBars)[n]->nFeature,
-                             (*pIFace->pImpData->pObjectBars)[n]->nInterfaceId);
-    pImpData->pObjectBars->Append(pUI);
-
-    if (pStr == 0)
-    {
-        pUI->pName = new String( *(pIFace->GetObjectBarName(n)));
-    }
-    else
-        pUI->pName = new String(*pStr);
-
-    DBG_ERROR("Useless configuration!");
-    pIFace->ReleaseObjectBar(nId);
-}
-
-
-void SfxInterface::ReleaseObjectBar( USHORT nId )
-{
-    // Objectbar im eigenen Array suchen
-    USHORT nCount = pImpData->pObjectBars->Count();
-    USHORT n;
-    for ( n=0; n<nCount; n++ )
-        if ((*pImpData->pObjectBars)[n]->aResId.GetId() == nId) break;
-
-    if ( n >= nCount )
-    {
-        // Nicht gefunden, in der Superklasse versuchen
-        BOOL bGenoType = ( pGenoType != 0 && !pGenoType->HasName() );
-        if (bGenoType)
-            ((SfxInterface*)pGenoType)->ReleaseObjectBar( nId );
-        else
-            DBG_ERROR("Objectbar ist unbekannt!");
-    }
-    else
-    {
-        delete (*pImpData->pObjectBars)[n];
-        pImpData->pObjectBars->Remove(n);
-        DBG_ERROR("Useless configuration!");
-    }
-}
-
-//--------------------------------------------------------------------
-
 
 const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
 {
@@ -745,59 +522,6 @@ USHORT SfxInterface::GetObjectBarCount() const
 }
 
 //--------------------------------------------------------------------
-
-
-const ResId& SfxInterface::GetObjectMenuResId( USHORT nNo ) const
-{
-    DBG_ASSERT(nNo<pImpData->pObjectMenues->Count(),"ObjectMenue ist unbekannt!");
-    return (*pImpData->pObjectMenues)[nNo]->aResId;
-}
-
-//--------------------------------------------------------------------
-
-
-USHORT SfxInterface::GetObjectMenuPos( USHORT nNo ) const
-{
-    DBG_ASSERT(nNo<pImpData->pObjectMenues->Count(),"ObjectMenue ist unbekannt!");
-    return (*pImpData->pObjectMenues)[nNo]->nPos;
-}
-
-//--------------------------------------------------------------------
-
-
-USHORT SfxInterface::GetObjectMenuCount() const
-{
-    return pImpData->pObjectMenues->Count();
-}
-
-void SfxInterface::ClearObjectMenus()
-{
-    for (USHORT n = pImpData->pObjectMenues->Count(); n; )
-    {
-        delete pImpData->pObjectMenues->GetObject( --n );
-        pImpData->pObjectMenues->Remove( n );
-    }
-}
-
-void SfxInterface::RemoveObjectMenu( USHORT nPos )
-{
-    for (USHORT n = pImpData->pObjectMenues->Count(); n; )
-        if( pImpData->pObjectMenues->GetObject(--n)->nPos == nPos )
-        {
-            delete pImpData->pObjectMenues->GetObject( n );
-            pImpData->pObjectMenues->Remove( n );
-        }
-}
-//--------------------------------------------------------------------
-
-
-void SfxInterface::RegisterObjectMenu( USHORT nPos, const ResId& rResId )
-{
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, TRUE, 0, nClassId);
-    pImpData->pObjectMenues->Append(pUI);
-}
-
-//--------------------------------------------------------------------
 void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* pName)
 {
     RegisterChildWindow( nId, bContext, 0UL, pName );
@@ -808,30 +532,6 @@ void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, ULONG nFeature
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, TRUE, nFeature, 0);
     pUI->bContext = bContext;
     pImpData->pChildWindows->Append(pUI);
-}
-
-void SfxInterface::ReleaseChildWindow( USHORT nId )
-{
-    USHORT nCount = pImpData->pChildWindows->Count();
-    USHORT n;
-    for ( n=0; n<nCount; n++ )
-        if ((*pImpData->pChildWindows)[n]->aResId.GetId() == nId) break;
-
-    if ( n >= nCount )
-    {
-        // Nicht gefunden, in der Superklasse versuchen
-        BOOL bGenoType = ( pGenoType != 0 && !pGenoType->HasName() );
-        if (bGenoType)
-            ((SfxInterface*)pGenoType)->ReleaseChildWindow( nId );
-        else
-            DBG_ERROR("ChildWindow ist unbekannt!");
-    }
-    else
-    {
-        delete (*pImpData->pChildWindows)[n];
-        pImpData->pChildWindows->Remove(n);
-        DBG_ERROR("Useless configuration!");
-    }
 }
 
 void SfxInterface::RegisterStatusBar(const ResId& rResId)
@@ -954,7 +654,6 @@ ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
     return (*pImpData->pObjectBars)[nNo]->nFeature;
 }
 
-
 BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
 {
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
@@ -976,51 +675,9 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
     return (*pImpData->pObjectBars)[nNo]->bVisible;
 }
 
-
-void SfxInterface::SetObjectBarVisible(BOOL bVis, USHORT nId)
-{
-    // Objectbar im eigenen Array suchen
-    USHORT nCount = pImpData->pObjectBars->Count();
-    USHORT n;
-    for ( n=0; n<nCount; n++ )
-        if ( (*pImpData->pObjectBars)[n]->aResId.GetId() == nId ) break;
-
-    if ( n >= nCount )
-    {
-        // Nicht gefunden, in der Superklasse versuchen
-        BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
-        if (bGenoType)
-            ((SfxInterface*)pGenoType)->SetObjectBarVisible(bVis,nId);
-        else
-            DBG_ERROR("Objectbar ist unbekannt!");
-    }
-    else
-    {
-        (*pImpData->pObjectBars)[n]->bVisible = bVis;
-        DBG_ERROR("Useless configuration!");
-    }
-}
-
-SfxObjectUIArr_Impl* SfxInterface::GetObjectBarArr_Impl() const
-{
-    return pImpData->pObjectBars;
-}
-
-
-BOOL SfxInterface::HasObjectBar( USHORT nId ) const
-{
-    for (USHORT n=0; n<pImpData->pObjectBars->Count(); n++)
-        if ((*pImpData->pObjectBars)[n]->aResId.GetId() == nId) return TRUE;
-    return FALSE;
-}
-
-SfxModule* SfxInterface::GetModule() const
-{
-    return pImpData->pModule;
-}
-
 const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealSlot ) const
 {
+    DBG_ASSERT( pImpData->bRegistered, "Interface not registered!" );
     const SfxInterface* pInterface = this;
 
     // Der Slot k"onnte auch aus dem Interface einer Shell-Basisklasse stammen
@@ -1042,8 +699,4 @@ const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealS
 }
 
 
-
-void SfxInterface::LoadConfig()
-{
-}
 
