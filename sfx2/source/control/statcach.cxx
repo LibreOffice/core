@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:09:00 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #pragma hdrstop
 #endif
 
+#include "app.hxx"
 #include "statcach.hxx"
 #include "msg.hxx"
 #include "ctrlitem.hxx"
@@ -302,7 +303,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             const SfxSlot* pSlot = aSlotServ.GetSlot();
             if ( !pSlot )
                 // get the slot - even if it is disabled on the dispatcher
-                pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
+                pSlot = SfxSlotPool::GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
 
             if ( !pSlot || !pSlot->pUnoName )
             {
