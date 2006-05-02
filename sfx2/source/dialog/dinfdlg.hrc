@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,34 @@
  ************************************************************************/
 #ifndef _DINFDLG_HRC
 #define _DINFDLG_HRC
+
+#include <svtools/controldims.hrc>
+
+// 4 TP_DOCINFORELOAD
+#define PAGE_WIDTH          260
+#define WIDTH_CTRL_SPACE    3
+#define WIDTH_0             10
+#define WIDTH_1             48
+#define WIDTH_2             28
+#define WIDTH_FT1           (WIDTH_1 - WIDTH_CTRL_SPACE)
+#define COL_0               6
+#define COL_1               (COL_0+WIDTH_0)
+#define COL_2               (COL_1+WIDTH_1)
+#define COL_3               (COL_2+WIDTH_2)
+#define COL_4               (COL_3+WIDTH_CTRL_SPACE)
+#define COL_7               (PAGE_WIDTH-2*WIDTH_0)
+#define COL_6               (COL_7-WIDTH_0)
+#define COL_5               (COL_6-WIDTH_CTRL_SPACE)
+#define COL_LAST            COL_7
+
+#define ROWDIFF_FT_EDTFLD   ((RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define ROW_0               6
+#define ROW_1               (ROW_0+16)
+#define ROW_2               (ROW_1+13)
+#define ROW_3               (ROW_2+16)
+#define ROW_4               (ROW_3+13)
+#define ROW_5               (ROW_4+16)
+#define ROW_6               (ROW_5+16)
 
 // defines ---------------------------------------------------------------
 
