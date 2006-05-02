@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:29:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,14 +79,12 @@
 #include "msgpool.hxx"
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
-#include "appimp.hxx"
 #include "sfxlocal.hrc"
 #include "fcontnr.hxx"
 #include "nochaos.hxx"
 #include "appuno.hxx"
 #include "doctempl.hxx"
 #include "viewfrm.hxx"
-#include "bmkmenu.hxx"
 #include "objsh.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
@@ -98,27 +96,7 @@ SV_DECL_PTRARR(SfxInitLinkList, Link*, 2, 2);
 #endif
 
 //===================================================================
-/*
-void SfxApplication::Quit()
-{
-    QueryExit_Impl();
-}
-*/
-//--------------------------------------------------------------------
 BOOL SfxApplication::QueryExit_Impl()
-
-/*  [Beschreibung]
-
-    Liefert FALSE, wenn entweder ein modaler Dialog offen ist, oder
-    der Printer einer SfxViewShell einen laufenden Druckjob hat.
-
-    [Anmerkung]
-
-    Wenn diese aus StarView stammende virtuelle Methode vom Applikations-
-    entwickler "uberladen wird, mu"s diese SfxApplication::QueryExit() rufen
-    und falls diese FALSE zur"uckgibt, ebenfalls FALSE zur"uckgeben.
-*/
-
 {
     BOOL bQuit = TRUE;
 
@@ -170,7 +148,6 @@ BOOL SfxApplication::QueryExit_Impl()
     if ( !bQuit )
     {
         // nicht wirklich beenden, nur minimieren
-        pAppData_Impl->bOLEResize = TRUE;
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
         DBG_TRACE( "QueryExit => FALSE (in use)" );
@@ -184,15 +161,9 @@ BOOL SfxApplication::QueryExit_Impl()
 
 void SfxApplication::Deinitialize()
 {
-    if ( bDowning )
+    if ( pAppData_Impl->bDowning )
         return;
 
-    // Falls man nochmal beim Runterfahren in ein Reschedule l"auft
-    pAppData_Impl->EndListening( *this );
-    if ( pAppData_Impl->pCancelMgr )
-        pAppData_Impl->EndListening( *pAppData_Impl->pCancelMgr );
-
-    //!Wait();
     StarBASIC::Stop();
 
     // ggf. BASIC speichern
@@ -203,29 +174,27 @@ void SfxApplication::Deinitialize()
     SaveBasicContainer();
     SaveDialogContainer();
 
-    bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
+    pAppData_Impl->bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
-    DELETEZ(pImp->pTemplateDlg);
     // By definition there shouldn't be any open view frames when we reach
     // this method. Therefore this call makes no sense and is the source of
     // some stack traces, which we don't understand.
     // For more information see:
     // #123501#
     //SetViewFrame(0);
-    bDowning = FALSE;
+    pAppData_Impl->bDowning = FALSE;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
     DBG_ASSERT( !SfxObjectShell::GetFirst(),
                 "existing SfxObjectShell after Execute" );
-    pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
-    pAppDispat->Flush();
-    bDowning = TRUE;
-    pAppDispat->DoDeactivate_Impl( TRUE );
+    pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
+    pAppData_Impl->pAppDispat->Flush();
+    pAppData_Impl->bDowning = TRUE;
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( TRUE );
 
     // call derived application-exit
-    bInExit = TRUE;
     Exit();
 
     // Controller u."a. freigeben
@@ -233,21 +202,19 @@ void SfxApplication::Deinitialize()
     DELETEZ( pBasMgr );
     SetAppBasicManager( NULL );
 
-    if( pImp->pBasicLibContainer )
-        pImp->pBasicLibContainer->release();
-    if( pImp->pDialogLibContainer )
-        pImp->pDialogLibContainer->release();
+    if( pAppData_Impl->pBasicLibContainer )
+        pAppData_Impl->pBasicLibContainer->release();
+    if( pAppData_Impl->pDialogLibContainer )
+        pAppData_Impl->pDialogLibContainer->release();
 
-    bInExit = FALSE;
+    DBG_ASSERT( pAppData_Impl->pViewFrame == 0, "active foreign ViewFrame" );
 
-    DBG_ASSERT( pViewFrame == 0, "active foreign ViewFrame" );
-
-    delete[] pInterfaces, pInterfaces = 0;
+    delete[] pAppData_Impl->pInterfaces, pAppData_Impl->pInterfaces = 0;
 
     // free administration managers
-    DELETEZ(pAppDispat);
+    DELETEZ(pAppData_Impl->pAppDispat);
     SfxResId::DeleteResMgr();
-    DELETEZ(pImp->pOfaResMgr);
+    DELETEZ(pAppData_Impl->pOfaResMgr);
 
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEZ(pAppData_Impl->pMatcher);
@@ -255,7 +222,7 @@ void SfxApplication::Deinitialize()
     delete pAppData_Impl->pLabelResMgr;
 
 #ifndef PRODUCT
-    DELETEX(pSlotPool);
+    DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pEventConfig);
     DELETEX(pAppData_Impl->pMiscConfig);
     SfxMacroConfig::Release_Impl();
@@ -264,16 +231,17 @@ void SfxApplication::Deinitialize()
 #endif
 
 #ifndef PRODUCT
-    DELETEX(pImp->pTbxCtrlFac);
-    DELETEX(pImp->pStbCtrlFac);
-    DELETEX(pImp->pMenuCtrlFac);
-    DELETEX(pImp->pEventHdl);
+    DELETEX(pAppData_Impl->pTbxCtrlFac);
+    DELETEX(pAppData_Impl->pStbCtrlFac);
+    DELETEX(pAppData_Impl->pMenuCtrlFac);
     SfxNewHdl::Delete();
-    DELETEX(pImp->pViewFrames);
-    DELETEX(pImp->pViewShells);
-    DELETEX(pImp->pObjShells);
+    DELETEX(pAppData_Impl->pViewFrames);
+    DELETEX(pAppData_Impl->pViewShells);
+    DELETEX(pAppData_Impl->pObjShells);
 #endif
 
+    //TODO/CLEANTUP
+    //ReleaseArgs could be used instead!
 /* This leak is intended !
    Otherwise the TestTool cant use .uno:QuitApp ...
    because every destructed ItemSet work's on an already
