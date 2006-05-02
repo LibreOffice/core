@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,7 @@
 #include "dispatch.hxx"
 #include "event.hxx"
 #include "sfxtypes.hxx"
-#include "sfxdir.hxx"
 #include "doctempl.hxx"
-//#include "dataurl.hxx"
 #include "arrdecl.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
@@ -88,15 +86,11 @@
 #include "imestatuswindow.hxx"
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
-        bServer( false ),
         pDdeService( 0 ),
         pDocTopics( 0 ),
         pTriggerTopic(0),
         pDdeService2(0),
         pFactArr(0),
-        pSfxPluginObjectFactoryPtr( 0 ),
-        pSfxPlugInObjectShellFactory( 0 ),
-        pSfxFrameObjectFactoryPtr( 0 ),
         pTopFrames( new SfxFrameArr_Impl ),
         pInitLinkList(0),
         pMatcher( 0 ),
@@ -104,7 +98,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pLabelResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
-        pFilterIni( 0 ),
         pPool(0),
         pEventConfig(0),
         pDisabledSlotList( 0 ),
@@ -115,39 +108,43 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pHelpOptions( 0 ),
         pThisDocument(0),
         pProgress(0),
-        pDefFocusWin( 0 ),
         pTemplateCommon( 0 ),
         nDocModalMode(0),
         nAutoTabPageId(0),
-        nExecutingSID( 0 ),
         nBasicCallLevel(0),
         nRescheduleLocks(0),
         nInReschedule(0),
         nAsynchronCalls(0),
-        bPlugged(sal_False),
-        bDirectAliveCount(sal_False),
         bInQuit(sal_False),
         bInvalidateOnUnlock(sal_False),
-        bBean( sal_False ),
-        bMinimized( sal_False ),
-        bInvisible( sal_False ),
-        bInException( sal_False ),
-        nAppEvent( 0 ),
         m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(
                                *pApp, comphelper::getProcessServiceFactory()))
+    , pViewFrame( 0 )
+    , pSlotPool( 0 )
+    , pResMgr( 0 )
+    , pAppDispat( 0 )
+    , nInterfaces( 0 )
+    , pInterfaces( 0 )
+    , bDowning( sal_True )
+    , nDocNo(0)
+    , pTbxCtrlFac(0)
+    , pStbCtrlFac(0)
+    , pViewFrames(0)
+    , pObjShells(0)
+    , pBasicLibContainer(0)
+    , pDialogLibContainer(0)
+    , pSfxResManager(0)
+    , pOfaResMgr(0)
+    , pSimpleResManager(0)
 {
-    StartListening( *pApp );
 }
 
 SfxAppData_Impl::~SfxAppData_Impl()
 {
-//#ifdef DBG_UTIL
     DeInitDDE();
     delete pTopFrames;
     delete pCancelMgr;
-    delete pFilterIni;
     delete pSecureURLs;
-//#endif
 }
 
 IMPL_STATIC_LINK( SfxAppData_Impl, CreateDocumentTemplates, void*, EMPTYARG)
@@ -177,26 +174,5 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
     else
         pTemplates->ReInitFromComponent();
     return pTemplates;
-}
-
-void SfxAppData_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
-{
-    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
-    if( pHint && pHint->GetId() == SFX_HINT_CANCELLABLE )
-    {
-/*
-        // vom Cancel-Manager
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
-              pFrame;
-              pFrame = SfxViewFrame::GetNext(*pFrame) )
-        {
-            SfxBindings &rBind = pFrame->GetBindings();
-            rBind.Invalidate( SID_BROWSE_STOP );
-            if ( !rBind.IsInRegistrations() )
-                rBind.Update( SID_BROWSE_STOP );
-            rBind.Invalidate( SID_BROWSE_STOP );
-        }
- */
-    }
 }
 
