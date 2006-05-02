@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:20:31 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:57:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,10 @@ TARGET=notify
 
 SLOFILES =	\
         $(SLO)$/eventsupplier.obj \
-        $(SLO)$/hintpost.obj \
-        $(SLO)$/linkhdl.obj
+                $(SLO)$/hintpost.obj
 
 EXCEPTIONSFILES =	\
-        $(SLO)$/eventsupplier.obj 
+        $(SLO)$/eventsupplier.obj
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
