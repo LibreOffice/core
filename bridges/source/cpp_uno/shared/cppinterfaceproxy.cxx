@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppinterfaceproxy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:34:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:07:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
         pMemory.release());
     for (sal_Int32 i = 0; i < aVtables.count; ++i) {
         pProxy->vtables[i] = VtableFactory::mapBlockToVtable(
-            aVtables.blocks[i]);
+            aVtables.blocks[i].start);
     }
     return castProxyToInterface(pProxy);
 }
