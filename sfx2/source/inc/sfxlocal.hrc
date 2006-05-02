@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxlocal.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:10:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // Lokale  Resourcen
 //
 // (C) 1996 - 2000 Star Division GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2005-09-07 19:10:44 $ $Revision: 1.4 $
+// $Author: rt $ $Date: 2006-05-02 16:53:15 $ $Revision: 1.5 $
 // $Logfile:   T:/sfx2/source/inc/sfxlocal.hrv  $ $Workfile:   SFXLOCAL.HRC  $
 //----------------------------------------------------------------------------
 #ifndef _SFXLOCAL_HRC
@@ -46,16 +46,12 @@
 
 // Strings ---------------------------------------------------------------
 
-#define STR_SFX_NEWOFFICEDOC        (RID_SFX_SFXLOCAL_START +  0)
-#define STR_MENU_NEWMAIL            (RID_SFX_SFXLOCAL_START +  1)
-
-// MessBoxen -------------------------------------------------------------
-
-#define ERRBOX_SFX_INVALID_MERGEOPT (RID_SFX_SFXLOCAL_START +  0)
-#define MSG_ERROR_PASSWD            (RID_SFX_SFXLOCAL_START +  1)
-#define ERRBOX_SFX_NO_OUTBOX        (RID_SFX_SFXLOCAL_START +  2)
-#define INFOBOX_NO_SUBSCRIBED       (RID_SFX_SFXLOCAL_START +  3)
-#define DLG_MACROQUERY              (RID_SFX_SFXLOCAL_START +  4)
+#define STR_SFX_NEWOFFICEDOC                (RID_SFX_SFXLOCAL_START +  0)
+#define STR_SFX_FILEDLG_ACTUALVERSION       (RID_SFX_SFXLOCAL_START +  2)
+#define STR_SFX_EXPLORERFILE_INSERT         (RID_SFX_SFXLOCAL_START +  3)
+#define STR_SFX_EXPLORERFILE_BUTTONINSERT   (RID_SFX_SFXLOCAL_START +  4)
+#define STR_SFX_IMPORT_ALL                  (RID_SFX_SFXLOCAL_START +  5)
+#define STR_SFX_EXPLORERFILE_EXPORT         (RID_SFX_SFXLOCAL_START +  6)
 
 #endif
 
