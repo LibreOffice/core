@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:18:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,9 @@
 #pragma hdrstop
 #endif
 
-#include "appdata.hxx"
+#include "app.hxx"
 #include "sfx.hrc"
 #include "msgpool.hxx"
-#include "msgdescr.hxx"
 #include "msg.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
@@ -204,8 +203,6 @@ void SfxMenuControl::Bind( SfxVirtualMenu* pOwn,
                            SfxBindings &rBindings )
 {
     DBG_MEMTEST();
-    if ( nId == SID_NONE )
-        nId = SFX_SLOTPOOL().GetIdPool().Get();
     SetId( nId );
     SetBindings(rBindings);
     pOwnMenu = pOwn;
@@ -373,11 +370,15 @@ SfxMenuControl* SfxMenuControl::CreateImpl( USHORT nId, Menu &rMenu, SfxBindings
 
 void SfxMenuControl::RegisterControl( USHORT nSlotId, SfxModule *pMod )
 {
-    SFX_APP()->RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
+    RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
                 SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
 }
 
 //--------------------------------------------------------------------
+void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
+{
+    SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );
+}
 
 SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindings &rBindings )
 {
@@ -386,7 +387,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
     {
         SfxApplication *pApp = SFX_APP();
         SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-        SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
+        SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
         if ( pMod )
         {
             SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
@@ -498,8 +499,6 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     : SfxMenuControl( nPos, rBindings ), pMenu(0)
 {
     String aText = rMenu.GetItemText( nPos );
-    SfxApplication* pApp = SFX_APP();
-    SfxAppData_Impl* pImpl = pApp->Get_Impl();
 
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
