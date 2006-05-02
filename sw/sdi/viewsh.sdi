@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.sdi,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:41:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,14 @@
  *
  ************************************************************************/
 
-interface TextInTable : Selection
+interface TextInTable
 [ uuid = "63C33940-69D8-101D-9757-C667E8298000" ]
 {
     import Text;
         import TextTable;
 }
 
-interface ListInTable : Selection
+interface ListInTable
 [ uuid="7F1A6E20-69D8-101D-9757-C667E8298000" ]
 {
     import Text;
@@ -48,7 +48,7 @@ interface ListInTable : Selection
         import TextTable;
 }
 
-interface ListInText : Selection
+interface ListInText
 [ uuid = "8A4C07E0-69D8-101D-9757-C667E8298000"]
 {
     import TextList;
