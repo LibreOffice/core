@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:53:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:48:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ SFX_IMPL_INTERFACE(ScDrawFormShell, ScDrawShell, ScResId(SCSTR_DRAWFORMSHELL) )
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 ScResId(RID_OBJECTBAR_FORMAT) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_DRAWFORM) );
-    SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAWFORM) );
 }
 
 TYPEINIT1( ScDrawFormShell, ScDrawShell );
