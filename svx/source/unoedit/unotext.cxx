@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:59:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,8 @@
 #ifndef _COM_SUN_STAR_STYLE_LINESPACING_HPP_
 #include <com/sun/star/style/LineSpacing.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
-#include <com/sun/star/text/HoriOrientation.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
-#include <com/sun/star/text/HoriOrientation.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -128,40 +122,6 @@ extern const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap();
 // ====================================================================
 // helper fuer Item/Property Konvertierung
 // ====================================================================
-
-// Numerierung
-const unsigned short aSvxToUnoAdjust[] =
-{
-    text::HoriOrientation::LEFT,
-    text::HoriOrientation::RIGHT,
-    text::HoriOrientation::FULL,
-    text::HoriOrientation::CENTER,
-    text::HoriOrientation::FULL,
-    text::HoriOrientation::LEFT
-};
-
-const SvxAdjust aUnoToSvxAdjust[] =
-{
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_RIGHT,
-    SVX_ADJUST_CENTER,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_BLOCK
-};
-
-SvxAdjust ConvertUnoAdjust( unsigned short nAdjust ) throw()
-{
-    DBG_ASSERT( nAdjust <= 7, "Enum hat sich geaendert! [CL]" );
-    return aUnoToSvxAdjust[nAdjust];
-}
-
-unsigned short ConvertUnoAdjust( SvxAdjust eAdjust ) throw()
-{
-    DBG_ASSERT( eAdjust <= 6, "Enum hat sich geaendert! [CL]" );
-    return aSvxToUnoAdjust[eAdjust];
-}
 
 void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw()
 {
