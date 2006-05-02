@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:54:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 #include <svx/dataaccessdescriptor.hxx>
 #endif
 #include <memory>
+
+#include <vcl/svapp.hxx>
 
 #include "view.hxx"
 #include "wrtsh.hxx"
