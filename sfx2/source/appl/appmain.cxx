@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,6 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
 #ifndef _CSTITEM_HXX //autogen
 #include <svtools/cstitem.hxx>
 #endif
@@ -75,7 +70,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include "appimp.hxx"
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
 #include "docfac.hxx"
@@ -105,28 +99,11 @@
 
 //===================================================================
 
-/*DBG_NAME(SfxAppMainIntro);
-DBG_NAME(SfxAppMainSO_Init);
-DBG_NAME(SfxAppMainAppRes);
-DBG_NAME(SfxAppMainInit0);
-DBG_NAME(SfxAppMainCreateAppWin);
-DBG_NAME(SfxAppMainInit1);
-DBG_NAME(SfxAppMainCfgMgr);
-DBG_NAME(SfxAppMainInitController);
-DBG_NAME(SfxAppMainInitException);
-DBG_NAME(SfxAppMainRegisterIF);
-DBG_NAME(SfxAppMainInit);
-DBG_NAME(SfxAppMainLoadBasMgr);
-DBG_NAME(SfxAppMainSbxInit);*/
 DBG_NAME(SfxAppMainNewMenu);
 DBG_NAME(SfxAppMainBmkMenu);
 DBG_NAME(SfxAppMainWizMenu);
 DBG_NAME(SfxAppMainOLEReg);
 DBG_NAME(SfxAppMainCHAOSReg);
-/*DBG_NAME(SfxAppMainInitDispatcher);
-DBG_NAME(SfxAppMainLoadConfig);
-DBG_NAME(SfxAppMainInitAppWin);
-DBG_NAME(SfxAppMainAppEvents);*/
 
 //===================================================================
 
@@ -147,7 +124,6 @@ static SfxItemInfo __READONLY_DATA aItemInfos[] =
 typedef Link* LinkPtr;
 SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4);
 
-TYPEINIT1(SfxSysChangeHint, SfxHint);
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
 //--------------------------------------------------------------------
@@ -215,97 +191,12 @@ void SfxApplication::PreInit( )
 {
 }
 
-USHORT SfxApplication::ParseCommandLine_Impl()
-{
-    USHORT nEvents = 0;                 // return value ( event mask )
-
-    BOOL   bPrintEvent = FALSE;
-    BOOL   bOpenEvent  = TRUE;
-
-    ::vos::OExtCommandLine aCmdLine;
-    USHORT nCount = aCmdLine.getCommandArgCount();
-    for( USHORT i=0; i < nCount; i++ )
-    {
-        String aArg;
-        ::rtl::OUString aDummy;
-        aCmdLine.getCommandArg( i, aDummy );
-        aArg = aDummy;
-
-        if ( aArg.EqualsIgnoreCaseAscii("-minimized") == sal_True )
-            pAppData_Impl->bMinimized = TRUE;
-        else if ( aArg.EqualsIgnoreCaseAscii("-invisible") == sal_True )
-            pAppData_Impl->bInvisible = TRUE;
-        else if ( aArg.EqualsIgnoreCaseAscii("-embedding") == sal_True )
-            pAppData_Impl->nAppEvent |= DISPATCH_SERVER;
-        else if ( aArg.EqualsIgnoreCaseAscii("-bean") == sal_True )
-        {
-            pAppData_Impl->bBean = TRUE;
-            pAppData_Impl->bInvisible = TRUE;
-        }
-        else if ( aArg.EqualsIgnoreCaseAscii("-plugin") == sal_True )
-        {
-            pAppData_Impl->bBean = TRUE;
-            pAppData_Impl->bInvisible = TRUE;
-            pAppData_Impl->bPlugged = TRUE;
-        }
-        else if ( aArg.EqualsIgnoreCaseAscii("-server") )
-            pAppData_Impl->bServer = true;
-        else if ( aArg.CompareIgnoreCaseToAscii("-portal,",
-                                                RTL_CONSTASCII_LENGTH(
-                                                    "-portal,"))
-                      == COMPARE_EQUAL )
-            pAppData_Impl->aPortalConnect
-                = aArg.Copy(RTL_CONSTASCII_LENGTH("-portal,"));
-
-        const xub_Unicode* pArg = aArg.GetBuffer();
-        // Erstmal nur mit -, da unter Unix Dateinmane auch mit Slasch anfangen koennen
-        if ( (*pArg == '-') /* || (*pArg == '/') */ )
-        {
-            pArg++;
-
-            // Ein Schalter
-            if ( (*pArg == 'p') || (*pArg == 'P') )
-            {
-                bPrintEvent = TRUE;
-                bOpenEvent = FALSE;    // Ab hier keine OpenEvents mehr
-            }
-        }
-        else
-        {
-            // Dies wird als Dateiname interpretiert
-            if ( bOpenEvent )
-            {
-                // Open Event anhaengen
-                if ( pAppData_Impl->aOpenList.Len() )
-                    pAppData_Impl->aOpenList += APPEVENT_PARAM_DELIMITER;
-                pAppData_Impl->aOpenList += aArg;
-            }
-            else if ( bPrintEvent )
-            {
-                // Print Event anhaengen
-                if( pAppData_Impl->aPrintList.Len() )
-                    pAppData_Impl->aPrintList += APPEVENT_PARAM_DELIMITER;
-                pAppData_Impl->aPrintList += aArg;
-            }
-        }
-    }
-
-    if ( pAppData_Impl->aOpenList.Len() )
-        nEvents |= DISPATCH_OPEN;
-
-    if ( pAppData_Impl->aPrintList.Len() )
-        nEvents |= DISPATCH_PRINT;
-
-    return nEvents;
-}
-
 //---------------------------------------------------------------------------
 bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
 {
     bool bRet = false;
     // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
-    pAppData_Impl->bBean = FALSE;
-    pAppData_Impl->nAppEvent = ParseCommandLine_Impl();
+    DBG_ASSERT( _pLabelPrefix, "Wrong initialisation!" );
     if ( _pLabelPrefix )
     {
         // versuchen, die Label-DLL zu erzeugen
@@ -325,16 +216,6 @@ bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bExceptio
         else
             bRet = true;
     }
-    else
-    {
-        pAppData_Impl->bBean = TRUE;
-        pAppData_Impl->bInvisible = TRUE;
-        bRet = true;
-    }
-
-    // merken, falls Applikation normal gestartet wurde
-    if ( 0 == pAppData_Impl->nAppEvent || DISPATCH_OPEN == pAppData_Impl->nAppEvent )
-        pAppData_Impl->bDirectAliveCount = TRUE;
 
     return bRet;
 }
