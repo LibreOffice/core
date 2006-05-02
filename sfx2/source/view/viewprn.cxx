@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,27 +596,27 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
 
                 // does the view support ranges?
-                if ( pPagesItem || pPrintDlg->IsRangeEnabled(PRINTDIALOG_RANGE) )
+                if ( pSelectItem && pSelectItem->GetValue() )
                 {
+                    // print selection only
+                    pPrintDlg->CheckRange(PRINTDIALOG_SELECTION);
+                }
+                else if ( pPagesItem )
+                {
+                    // get range text from parameter
                     // enable ranges
                     pPrintDlg->CheckRange(PRINTDIALOG_RANGE);
-
-                    if ( pPagesItem )
-                        // get range text from parameter
-                        pPrintDlg->SetRangeText( pPagesItem->GetValue() );
-                    else
-                    {
-                        // construct range text from page range
-                        String aRange = String::CreateFromInt32( nFrom );
-                        aRange += '-';
-                        aRange += String::CreateFromInt32( nTo );
-                        pPrintDlg->SetRangeText( aRange );
-                    }
+                    pPrintDlg->SetRangeText( pPagesItem->GetValue() );
                 }
-                else if ( pSelectItem && pSelectItem->GetValue() )
+                else if ( pPrintDlg->IsRangeEnabled(PRINTDIALOG_RANGE) )
                 {
-                    // print selecion only
-                    pPrintDlg->CheckRange(PRINTDIALOG_SELECTION);
+                    // enable ranges
+                    // construct range text from page range
+                    pPrintDlg->CheckRange(PRINTDIALOG_RANGE);
+                    String aRange = String::CreateFromInt32( nFrom );
+                    aRange += '-';
+                    aRange += String::CreateFromInt32( nTo );
+                    pPrintDlg->SetRangeText( aRange );
                 }
                 else
                 {
