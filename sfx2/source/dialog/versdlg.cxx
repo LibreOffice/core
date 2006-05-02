@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <svtools/itemset.hxx>
 #include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
