@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:13:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-
+#include <sfx2/app.hxx>
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
@@ -1088,7 +1088,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //--------------------------------------------------------------------------
 
-    //  OFF_APP()->SetOptions( rOptSet );
+    //  SFX_APP()->SetOptions( rOptSet );
 
     //  Linguistik nicht mehr
 
@@ -2089,7 +2089,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
         ScUserListItem  aULItem( SCITEM_USERLIST );
         ScUserList*     pUL = ScGlobal::GetUserList();
 
-        //  OFF_APP()->GetOptions( aSet );
+        //  SFX_APP()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
                         GetAppOptions().GetAppMetric() ) );
