@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:35:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,9 +229,6 @@ using namespace ::com::sun::star::io;
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
 #include "appuno.hxx"
-#ifndef _EXTATTR_HXX
-#include "extattr.hxx"
-#endif
 
 //#include "xmlversion.hxx"
 
@@ -367,7 +364,6 @@ public:
 
     SfxPoolCancelManager_ImplRef xCancelManager;
     SfxMedium*       pAntiImpl;
-    SvEaMgr*         pEaMgr;
 
     long             nFileVersion;
 
@@ -446,7 +442,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bForceSynchron( sal_False ), bIsStorage( sal_False ),
     pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ),
-    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
+    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pTempFile( NULL ),
     nLastStorageError( 0 ),
     bIsCharsetInitialized( sal_False ),
     bUseInteractionHandler( sal_True ),
@@ -465,8 +461,6 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
     aDoneLink.ClearPendingCall();
     aAvailableLink.ClearPendingCall();
-
-    delete pEaMgr;
 
     if ( pTempFile )
         delete pTempFile;
@@ -2505,9 +2499,6 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
     Init_Impl();
     if( bTemporary )
         CreateTempFile();
-
-    if ( rMedium.pImp->pEaMgr )
-        GetEaMgr();
 }
 
 //------------------------------------------------------------------
@@ -3106,23 +3097,6 @@ SvCompatWeakHdl* SfxMedium::GetHdl()
 sal_Bool SfxMedium::IsDownloadDone_Impl()
 {
     return pImp->bDownloadDone;
-}
-
-SvEaMgr* SfxMedium::GetEaMgr()
-{
-    if ( !pImp->pEaMgr && pFilter )
-    {
-        /* the stream in the storage is probably not a filestream ( the stream is
-            closed anyway! ). Therefor we will always use GetPhysicalName to
-            create the SvEaMgr. */
-        //  SvStream *pStream = aStorage.Is() ? aStorage->GetTargetSvStream() : NULL;
-        //  if ( pStream && pStream->IsA() == ID_FILESTREAM )
-        //      pImp->pEaMgr = new SvEaMgr(*(SvFileStream *)pStream);
-        //  else
-        pImp->pEaMgr = new SvEaMgr( GetPhysicalName() );
-    }
-
-    return pImp->pEaMgr;
 }
 
 //----------------------------------------------------------------
