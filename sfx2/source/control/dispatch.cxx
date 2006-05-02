@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:28:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
@@ -84,8 +88,9 @@
 #pragma hdrstop
 #endif
 
-#include "sfxhelp.hxx"
+// wg. nAutoPageID
 #include "appdata.hxx"
+#include "sfxhelp.hxx"
 #include "dispatch.hxx"
 #include "minstack.hxx"
 #include "msg.hxx"
@@ -1655,42 +1660,43 @@ void SfxDispatcher::LeaveAction()
             pUndoMgr->LeaveListAction();
     }
 }
+
 //--------------------------------------------------------------------
 void SfxDispatcher::SetMenu_Impl()
 {
-    SFX_APP();  // -Wall is this required...
     if ( pImp->pFrame )
     {
-        if ( !pImp->pFrame->GetViewShell() )
-            return;
-
         SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
             SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
-            if ( pFrm->IsMenuBarOn_Impl() && !pFrm->IsMenuBarVisible_Impl() )
-                pImp->pFrame->GetViewShell()->GetMenuBar_Impl(); // GetOrCreate!
+            if ( pFrm->IsMenuBarOn_Impl() )
+            {
+                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    aValue >>= xLayoutManager;
+                    if ( xLayoutManager.is() )
+                    {
+                        rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+                        xLayoutManager->createElement( aMenuBarURL );
+                    }
+                }
+            }
         }
     }
 }
 
+//--------------------------------------------------------------------
 long SfxDispatcher::Update_Impl( sal_Bool bForce )
-
-/*  [Beschreibung]
-
-    Hilfsmethode zum Updaten der <Object-Bars> und <Object-Menus>,
-    nach Bewegungen auf dem Stack.
-*/
-
 {
     SFX_STACK(SfxDispatcher::Update_Impl);
 
     Flush();
 
-    if ( !pImp->pFrame )
-        return 0;
-
-    if ( pImp->bUILocked )
+    if ( !pImp->pFrame || pImp->bUILocked )
         return 0;
 
     SFX_APP();  // -Wall is this required???
@@ -1719,11 +1725,9 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     sal_Bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
 
     if ( !bUIActive && pTop && GetBindings() == &pTop->GetBindings() )
-        // Eigene Tools nur intern festhalten und da"fur sorgen, da\s der
-        // aktive Dispatcher sie abholt
+        // keep own tools internally for collecting
         GetBindings()->GetDispatcher()->pImp->bUpdated = sal_False;
 
-    // Bindings schlafen legen
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
         pBindings->DENTERREGISTRATIONS();
@@ -1746,46 +1750,14 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( xLayoutManager.is() )
         xLayoutManager->lock();
 
-    // Test auf InPlaceFrame und speziell internes InPlace
     sal_Bool bIsIPActive = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
     SfxInPlaceClient *pClient = pImp->pFrame ? pImp->pFrame->GetViewShell()->GetUIActiveClient() : NULL;
     if ( bUIActive && /* !bIsIPActive && */ ( !pClient || !pClient->IsObjectUIActive() ) )
-    {
         SetMenu_Impl();
-//        pAppMenu = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
-//        pAppMenu->ResetObjectMenus();
-//        pBindings->Invalidate( SID_FORMATMENUSTATE );
-//        pBindings->Update( SID_FORMATMENUSTATE );
-    }
 
-    // Environment
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
-
-    // der SfxInternalFrame oder SfxTopViewFrame, zu dem ich geh"ore
-    /*SfxViewFrame *pAct =
-        bIsIPActive ?
-        pImp->pFrame->GetParentViewFrame_Impl() :
-        pImp->pFrame;*/
-
-    // Ich kontrolliere die StatusBar einer Task auch wenn ich nicht aktiv bin, aber
-    // zu einem internem InPlaceFrame oder einem anderen ViewFrame innerhalb der Task geh"ore
-    //SfxFrame *pTask = pAct ? pAct->GetFrame()->GetTopFrame() : NULL;
-
-    SfxWorkWindow *pTaskWin = NULL;
-    /*sal_Bool bSet = sal_True;
-    if ( pImp->pFrame && pImp->pFrame->GetViewShell() )
-    {
-        SfxInPlaceClient *pClient = pImp->pFrame->GetViewShell()->GetUIActiveClient();
-        if ( pClient && pClient->IsObjectUIActive() )
-            bSet = sal_False;
-    }*/
-
-    //if ( pTask && bSet )
-    {
-        //pTaskWin = pTask->GetWorkWindow_Impl();
-        pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
-        pTaskWin->ResetStatusBar_Impl();
-    }
+    SfxWorkWindow *pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
+    pTaskWin->ResetStatusBar_Impl();
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
@@ -1811,33 +1783,9 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pActDispat = pActDispat->pImp->pParent;
     }
 
-    //if ( !bIsIPActive && !IsAppDispatcher() && bIsActive )
-    //    CollectTools_Impl( pWorkWin );
-
-    // Jetzt rekursiv die Dispatcher abklappern
-    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, NULL, pTaskWin );
+    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, pTaskWin );
     if ( bUIActive || bIsActive )
-    {
         pWorkWin->UpdateObjectBars_Impl();
-
-//        if ( pAppMenu )
-        {
-//            pBindings->Invalidate( SID_FORMATMENUSTATE );
-//            pAppMenu->UpdateObjectMenus();
-        }
-
-        if ( bUIActive )
-        {
-            // ggf. Hilfe-PI antriggern
-//            SfxHelpPI* pHelpPI = pSfxApp->GetHelpPI();
-//            if (pHelpPI && nHelpId)
-//                pHelpPI->LoadTopic( nHelpId );
-        }
-    }
-
-//  if ( pTaskWin )
-//        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->UpdateStatusBar_Impl();
-        //pTaskWin->UpdateStatusBar_Impl();
 
     if ( pBindings )
         pBindings->DLEAVEREGISTRATIONS();
@@ -1848,81 +1796,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     return 1;
 }
 
-/*
-void SfxDispatcher::CollectTools_Impl( SfxWorkWindow* pWorkWin )
-{
-    // Innerhalb eines ToolSpace werden auch die Tools von nicht aktiven Frames
-    // angezeigt, damit es beim Wechsel der Frames nicht zappelt
-    SFX_APP();
-    SfxToolBoxConfig *pTbxCfg = pWorkWin->GetBindings().GetToolBoxConfig();
-
-    // Die Objectbars aller ViewFrames der aktuellen Task einsammeln
-    for ( SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-            pViewFrame;
-            pViewFrame = SfxViewFrame::GetNext(*pViewFrame) )
-    {
-        // Frames mit anderem WorkWindow interessieren hier nicht
-        if ( pViewFrame->GetFrame()->GetWorkWindow_Impl() != pWorkWin )
-            continue;
-
-        // Nur weitermachen, wenn es nicht sowieso einer meiner parents ist
-        SfxDispatcher *pDispat = pViewFrame->GetDispatcher();
-        SfxDispatcher *pParent = this;
-        while ( pParent )
-        {
-            if ( pParent == pDispat )
-                break;
-            pParent = pParent->pImp->pParent;
-        }
-
-        if ( pParent )
-            continue;
-
-        // Alle objectbars des ViewFrames vormerken
-        sal_uInt16 n;
-        for (n=0; n<SFX_OBJECTBAR_MAX; n++)
-        {
-            SfxObjectBars_Impl& rBar = pDispat->pImp->aObjBars[n];
-            sal_uInt16 nId = rBar.aResId.GetId();
-            if ( nId && pTbxCfg->GetAlignment(n) != SFX_ALIGN_NOALIGNMENT )
-                pWorkWin->SetObjectBar_Impl( rBar.nMode,
-                    rBar.aResId, rBar.pIFace, &rBar.aName );
-        }
-
-        SfxShell *pShell = pDispat->GetShell(0);
-        SfxModule *pMod = pShell->GetInterface()->GetModule();
-        SfxSlotPool& rSlotPool = pMod ? *pMod->GetSlotPool() : pShell->GetSlotPool_Impl();
-
-        // ChildWindows auch "bunkern"
-        for (n=0; n<pDispat->pImp->aChildWins.Count(); n++)
-        {
-            sal_uInt32 nId = pDispat->pImp->aChildWins[n];
-            const SfxSlot *pSlot = rSlotPool.GetSlot( (sal_uInt16) nId );
-            sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
-            if( pSlot )
-            {
-                if ( pSlot->IsMode(SFX_SLOT_CONTAINER) )
-                {
-                    if ( !pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
-                        continue;
-                    nMode |= SFX_VISIBILITY_CLIENT;
-                }
-                else
-                {
-                    if ( !pWorkWin->IsVisible_Impl( SFX_VISIBILITY_SERVER ) )
-                        continue;
-                    nMode |= SFX_VISIBILITY_SERVER;
-                }
-            }
-
-            pWorkWin->SetChildWindowVisible_Impl( nId, sal_False, nMode );
-        }
-    }
-}
-*/
-
-sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
-            sal_Bool bIsIPOwner, SfxMenuBarManager *, SfxWorkWindow *pTaskWin )
+sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
     sal_uInt32 nHelpId = 0L;
     SFX_APP();
@@ -1939,22 +1813,21 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
     }
 
     if ( pImp->pParent && !pImp->bQuiet /* && bUIActive */ )
-        // Das Men"u kommt immer vom obersten Dispatcher, also pAppMenu nicht weiterreichen
-        nHelpId = pImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, NULL, pTaskWin );
+        nHelpId = pImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
-    // Internen Zwischenspeicher ObjectBars und ChildWindows zur"ucksetzen
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aObjBars[n].aResId = ResId( 0,0 );
     pImp->aChildWins.Remove(0, pImp->aChildWins.Count());
 
-    // bQuiet : eigene Shells weder f"ur UI noch f"ur SlotServer ber"ucksichtigen
-    // bNoUI: eigene Shells f"ur das UI nicht ber"ucksichtigen
+    // bQuiet : own shells aren't considered for UI and SlotServer
+    // bNoUI: own Shells aren't considered fors UI
     if ( pImp->bQuiet || pImp->bNoUI || pImp->pFrame && pImp->pFrame->GetObjectShell()->IsPreview() )
         return nHelpId;
 
     sal_uInt16 nStatBarId=0;
     SfxShell *pStatusBarShell = NULL;
 
+    SfxSlotPool* pSlotPool = &SfxSlotPool::GetSlotPool( GetFrame() );
     sal_uInt16 nTotCount = pImp->aStack.Count();
     for ( sal_uInt16 nShell = nTotCount; nShell > 0; --nShell )
     {
@@ -1963,29 +1836,16 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
         if (pShell->GetHelpId())
             nHelpId = pShell->GetHelpId();
 
-        // Shells von Dispatcher mit Attribut "Hidden" oder "Quiet" auslassen
+        // don't consider shells if "Hidden" oder "Quiet"
         sal_Bool bReadOnlyShell = IsReadOnlyShell_Impl( nShell-1 );
-        SfxSlotPool& rSlotPool = pIFace->GetModule() ?
-            *pIFace->GetModule()->GetSlotPool() : pShell->GetSlotPool_Impl();
-
         sal_uInt16 nNo;
         for ( nNo = 0; pIFace && nNo<pIFace->GetObjectBarCount(); ++nNo )
         {
             sal_uInt16 nPos = pIFace->GetObjectBarPos(nNo);
-            // TODO/LATER: looks like for function bar it is not correct, should it be removed completely?
-            // if ( ( nPos & SFX_POSITION_MASK ) == 0 )
-            // {
-                // ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
-                //     xTask( pImp->pFrame->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-                // if ( !xTask->isTop() )
-                //    continue;
-            // }
-
             if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
                 continue;
 
-            // Soll die ObjectBar nur angezeigt werden, wenn die Shell
-            // einen bestimmten UI-Modus hat?
+            // check wether toolbar needs activation of a special feature
             sal_uInt32 nFeature = pIFace->GetObjectBarFeature(nNo);
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
@@ -2001,8 +1861,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
                     continue;
             }
 
-            // Auf jeden Fall eintragen, auch wenn unsichtbar. Dann kann
-            // WorkWindow anbieten, wieder anzuschalten
+            // always register toolbars, allows to switch them on
             sal_Bool bVisible = pIFace->IsObjectBarVisible(nNo);
             if ( !bVisible )
                 nPos &= SFX_POSITION_MASK;
@@ -2027,29 +1886,14 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
                 rBar.aResId = ResId( 0,0 );
         }
 
-        if ( bUIActive || bIsActive )
-        {
-//REMOVE                SfxConfigManager* pMgr = pImp->pFrame->GetObjectShell()->GetConfigManager();
-            SfxConfigManager* pMgr = NULL;
-            SfxInterface* pIFace = pImp->pFrame->GetObjectShell()->GetInterface();
-            USHORT nMask = SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_STANDARD;
-            if ( !pMgr )
-            {
-                pMgr = SFX_APP()->GetConfigManager_Impl();
-                pIFace = SFX_APP()->GetInterface();
-                nMask = SFX_VISIBILITY_SERVER | SFX_VISIBILITY_STANDARD;
-            }
-        }
-
         for ( nNo=0; pIFace && nNo<pIFace->GetChildWindowCount(); nNo++ )
         {
             sal_uInt32 nId = pIFace->GetChildWindowId(nNo);
-            const SfxSlot *pSlot = rSlotPool.GetSlot( (sal_uInt16) nId );
-            DBG_ASSERT( pSlot, "Da fehlt ein Childwindow-Slot!");
+            const SfxSlot *pSlot = pSlotPool->GetSlot( (sal_uInt16) nId );
+            DBG_ASSERT( pSlot, "Childwindow slot missing!");
             if ( bReadOnlyShell )
             {
-                // Bei read only documents nur solche ChildWindows anzeigen,
-                // die daf"ur freigegeben sind
+                // only show ChildWindows if their slot is allowed for readonly documents
                 if ( pSlot && !pSlot->IsMode( SFX_SLOT_READONLYDOC ) )
                     continue;
             }
@@ -2058,7 +1902,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
 
-            // Bei den anderen auf CONTAINER/SERVER-Slots abfragen
+            // slot decides wether a ChildWindow is shown when document is OLE server or OLE client
             sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
             if( pSlot )
             {
@@ -2082,15 +1926,8 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
                 pImp->aChildWins.Insert( nId, pImp->aChildWins.Count());
         }
 
-        {
-            // update Object-Menus
-            if ( pIFace && pIFace->GetObjectMenuCount() > 0 )
-                pWorkWin->GetBindings().Invalidate( SID_FORMATMENUSTATE );
-        }
-
         if ( bIsMDIApp || bIsIPOwner )
         {
-            // Bei MDIEnvironment oder internem InPlace Statuszeile setzen
             sal_uInt16 nId = pIFace->GetStatusBarResId().GetId();
             if ( nId )
             {
@@ -2125,10 +1962,8 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
 
         if ( bIsTaskActive && nStatBarId && pImp->pFrame )
         {
-            // Ich kontrolliere die StatusBar einer Task auch wenn ich nicht aktiv bin, aber
-            // zu einem internem InPlaceFrame oder einem anderen ViewFrame innerhalb der Task geh"ore
+            // internal frames also may control statusbar
             SfxBindings& rBindings = pImp->pFrame->GetBindings();
-            //pTaskWin->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
             pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
         }
     }
