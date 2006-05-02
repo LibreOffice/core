@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:08:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/process.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/sfx.hrc>
 #include <rtl/logfile.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
