@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:09:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
  // ===========================================================================
-interface CellSelection : Selection
+interface CellSelection
 [
     uuid ( "D7680520-137B-11D3-B25B-006097DA68F3" )
 ]
@@ -204,7 +204,7 @@ interface CellSelection : Selection
 }
 
  // ===========================================================================
-interface CellMovement : Selection
+interface CellMovement
 [
     uuid ( "FF2E35C0-137B-11D3-B25B-006097DA68F3" )
 ]
@@ -397,7 +397,7 @@ interface CellMovement : Selection
 }
 
 
-interface RangeSelection : Selection
+interface RangeSelection
 [
     uuid ( "0CAB4620-137C-11D3-B25B-006097DA68F3" )
 ]
