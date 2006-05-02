@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:33:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,6 @@ using namespace ::com::sun::star::io;
 
 #include "sfxtypes.hxx"
 #include "sfxuno.hxx"
-#include "appdata.hxx"
 #include "app.hxx"
 #include "sfxsids.hrc"
 #include "msg.hxx"
