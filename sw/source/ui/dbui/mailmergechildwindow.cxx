@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:54:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
-
+#include <vcl/svapp.hxx>
 #ifndef _SWMAILMERGECHILDWINDOW_HXX
 #include <mailmergechildwindow.hxx>
 #endif
