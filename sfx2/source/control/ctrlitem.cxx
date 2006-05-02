@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:03:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,26 +276,6 @@ void SfxControllerItem::SetId( USHORT nItemId )
     DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT( !IsBound(), "changing id of bound binding" );
     nId = nItemId;
-}
-
-//--------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rStream, const SfxControllerItem& rFunc )
-{
-    DBG_MEMTEST();
-    SFX_SLOTPOOL().StoreId( rStream, rFunc.nId );
-    return rStream;
-}
-
-//--------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rStream, SfxControllerItem& rFunc )
-{
-    DBG_MEMTEST();
-    USHORT nId;
-    SFX_SLOTPOOL().LoadId( rStream, nId );
-    rFunc.Bind(nId);
-    return rStream;
 }
 
 //--------------------------------------------------------------------
