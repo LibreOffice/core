@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:41:03 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,9 +143,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
-#if SUPD>637
 #include <rtl/logfile.hxx>
-#endif
 
 #include "appuno.hxx"
 #include "sfxhelp.hxx"
@@ -170,12 +168,9 @@
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
-#include "intfrm.hxx"
 #include "virtmenu.hxx"
 #include "module.hxx"
-#include "sfxdir.hxx"
 #include "event.hxx"
-#include "appimp.hxx"
 #include "imestatuswindow.hxx"
 #include "workwin.hxx"
 #include "module.hxx"
@@ -268,8 +263,8 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
             case TT_PR_DISPATCHER:
             {
                 // interface for TestTool
-                SfxViewFrame* pViewFrame;
-                SfxDispatcher* pDispatcher;
+                SfxViewFrame* pViewFrame=0;
+                SfxDispatcher* pDispatcher=0;
                 pViewFrame = SfxViewFrame::Current();
                 if ( !pViewFrame )
                     pViewFrame = SfxViewFrame::GetFirst();
@@ -366,7 +361,18 @@ SfxApplication* SfxApplication::GetOrCreate()
     if ( !pApp )
     {
         SfxApplication *pNew = new SfxApplication;
-        SetApp( pNew );
+
+        //TODO/CLEANUP
+        //ist das Mutex-Handling OK?
+        static ::osl::Mutex aProtector;
+        ::osl::MutexGuard aGuard( aProtector );
+
+        RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
+        pApp = pNew;
+
+        // at the moment a bug may occur when Initialize_Impl returns FALSE, but this is only temporary because all code that may cause such a
+        // fault will be moved outside the SFX
+        pApp->Initialize_Impl();
 
         ::framework::SetImageProducer( GetImage );
         ::framework::SetRefreshToolbars( RefreshToolbars );
@@ -387,42 +393,8 @@ SfxApplication* SfxApplication::GetOrCreate()
     return pApp;
 }
 
-void SfxApplication::SetApp( SfxApplication* pSfxApp )
-{
-    static ::osl::Mutex aProtector;
-    ::osl::MutexGuard aGuard( aProtector );
-
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
-    DBG_ASSERT( !pApp, "SfxApplication already created!" );
-    if ( pApp )
-        DELETEZ( pApp );
-
-    pApp = pSfxApp;
-
-    // at the moment a bug may occur when Initialize_Impl returns FALSE, but this is only temporary because all code that may cause such a
-    // fault will be moved outside the SFX
-    pApp->Initialize_Impl();
-}
-
 SfxApplication::SfxApplication()
-    : pImp( 0 )
-    , _nFeatures( ULONG_MAX )
-    , pViewFrame( 0 )
-    , pSlotPool( 0 )
-    , pResMgr( 0 )
-    , pAppDispat( 0 )
-    , pMenuMgr( 0 )
-    , pAcceleratorMgr( 0 )
-    , pStatusBarMgr( 0 )
-    , pCfgMgr( 0 )
-    , pOptions( 0 )
-    , pAppData_Impl( 0 )
-    , nInterfaces( 0 )
-    , pInterfaces( 0 )
-    , bInInit( sal_False )
-    , bInExit( sal_False )
-    , bDowning( sal_True )
-    , bCreatedExternal( sal_False )
+    : pAppData_Impl( 0 )
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
@@ -430,24 +402,6 @@ SfxApplication::SfxApplication()
     GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
 
     SvtViewOptions::AcquireOptions();
-
-    pImp = new SfxApplication_Impl;
-    pImp->bConfigLoaded = sal_False;
-    pImp->pEmptyMenu = 0;
-    pImp->nDocNo = 0;
-    pImp->pIntro = 0;
-    pImp->pTbxCtrlFac = 0;
-    pImp->pStbCtrlFac = 0;
-    pImp->pViewFrames = 0;
-    pImp->pObjShells = 0;
-    pImp->pTemplateDlg = 0;
-    pImp->pBasicLibContainer = 0;
-    pImp->pDialogLibContainer = 0;
-    pImp->pBasicTestWin = 0;
-    pImp->pSfxResManager = 0;
-    pImp->pOfaResMgr = 0;
-    pImp->pSimpleResManager = 0;
-    pImp->nWarnLevel = 0;
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
@@ -494,45 +448,14 @@ SfxApplication::~SfxApplication()
     SvtViewOptions::ReleaseOptions();
     delete pBasic;
 
-    if ( !bDowning )
+    if ( !pAppData_Impl->bDowning )
         Deinitialize();
 
-    delete pImp;
     delete pAppData_Impl;
     pApp = 0;
 }
 
 //====================================================================
-
-class SfxResourceTimer : public Timer
-{
-    sal_uInt16 *pnWarnLevel;
-public:
-    SfxResourceTimer(sal_uInt16 *pn, sal_uInt32 nTimeOut) : pnWarnLevel(pn)
-    { SetTimeout(nTimeOut); Start(); }
-    virtual void Timeout() { --*pnWarnLevel; delete this; }
-};
-
-//--------------------------------------------------------------------
-
-//====================================================================
-
-SfxObjectShell* SfxApplication::GetActiveObjectShell() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert einen Zeiger auf die aktive <SfxObjectShell>-
-    Instanz oder einen 0-Pointer, falls keine SfxObjectShell-Instanz
-    aktiv ist.
-*/
-
-{
-    if ( pViewFrame )
-        return pViewFrame->GetObjectShell();
-    return 0;
-}
-
-//--------------------------------------------------------------------
 
 const String& SfxApplication::GetLastDir_Impl() const
 
@@ -589,35 +512,21 @@ void SfxApplication::SetLastDir_Impl
 
 //--------------------------------------------------------------------
 
-const String& SfxApplication::GetLastFilter_Impl() const
-{
-    return pAppData_Impl->aLastFilter;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::SetLastFilter_Impl( const String &rNewFilter )
-{
-    pAppData_Impl->aLastFilter = rNewFilter;
-}
-
-//--------------------------------------------------------------------
-
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
-    return pViewFrame? pViewFrame->GetDispatcher(): pAppDispat;
+    return pAppData_Impl->pViewFrame? pAppData_Impl->pViewFrame->GetDispatcher(): pAppData_Impl->pAppDispat;
 }
 
 //--------------------------------------------------------------------
-void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
+void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
     if( pFrame && !pFrame->IsSetViewFrameAllowed_Impl() )
         return;
 
-    if ( pFrame != pViewFrame )
+    if ( pFrame != pAppData_Impl->pViewFrame )
     {
         // get the containerframes ( if one of the frames is an InPlaceFrame )
-        SfxViewFrame *pOldContainerFrame = pViewFrame;
+        SfxViewFrame *pOldContainerFrame = pAppData_Impl->pViewFrame;
         while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
             pOldContainerFrame = pOldContainerFrame->GetParentViewFrame_Impl();
         SfxViewFrame *pNewContainerFrame = pFrame;
@@ -629,11 +538,11 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
                     pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
-        if ( pViewFrame )
+        if ( pAppData_Impl->pViewFrame )
         {
             if ( bTaskActivate )
                 // prepare UI for deacivation
-                pViewFrame->GetFrame()->Deactivate_Impl();
+                pAppData_Impl->pViewFrame->GetFrame()->Deactivate_Impl();
         }
 
         if ( pOldContainerFrame )
@@ -646,9 +555,9 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                 pOldContainerFrame->GetProgress()->Suspend();
         }
 
-        pViewFrame = pFrame;
+        pAppData_Impl->pViewFrame = pFrame;
 
-        const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
+        const SfxObjectShell* pSh = pAppData_Impl->pViewFrame ? pAppData_Impl->pViewFrame->GetObjectShell() : 0;
         //if ( !pSh )
         //{
         //    // otherwise BaseURL is set in activation of document
@@ -675,21 +584,14 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                     pProgress->SetState( pProgress->GetState() );
             }
 
-            if ( pViewFrame->GetViewShell() )
+            if ( pAppData_Impl->pViewFrame->GetViewShell() )
             {
-                SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
+                SfxDispatcher* pDisp = pAppData_Impl->pViewFrame->GetDispatcher();
                 pDisp->Flush();
                 pDisp->Update_Impl(sal_True);
             }
         }
     }
-}
-
-//--------------------------------------------------------------------
-
-SfxNewFileDialog*  SfxApplication::CreateNewDialog()
-{
-    return new SfxNewFileDialog(GetTopWindow(), SFXWB_DOCINFO | SFXWB_PREVIEW );
 }
 
 //--------------------------------------------------------------------
@@ -709,20 +611,6 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
     QueryBox aBox( &pFrame->GetWindow(), nBits, aMsg );
 
     return aBox.Execute();
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::IsInException() const
-{
-    return pAppData_Impl->bInException;
-}
-
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
-{
-    return 0;
 }
 
 //---------------------------------------------------------------------
@@ -764,11 +652,9 @@ ResMgr* SfxApplication::GetLabelResManager() const
 
 SimpleResMgr* SfxApplication::GetSimpleResManager()
 {
-    if ( !pImp->pSimpleResManager )
-    {
-        pImp->pSimpleResManager = CreateSimpleResManager();
-    }
-    return pImp->pSimpleResManager;
+    if ( !pAppData_Impl->pSimpleResManager )
+        pAppData_Impl->pSimpleResManager = CreateSimpleResManager();
+    return pAppData_Impl->pSimpleResManager;
 }
 
 //------------------------------------------------------------------------
@@ -838,142 +724,46 @@ Window* SfxApplication::GetTopWindow() const
 
 //--------------------------------------------------------------------
 
-void SfxApplication::SetTopWindow( WorkWindow *pWindow )
-{
-    // MT: Removed out commented code, which didn't work because AppWindow usage...
-}
-
-sal_Bool SfxApplication::IsPlugin()
-{
-    // ask property of desktop to get this information
-    sal_Bool bReturn = sal_False;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), ::com::sun::star::uno::UNO_QUERY );
-    if(xDesktop.is())
-    {
-        ::com::sun::star::uno::Any aVal = xDesktop->getPropertyValue( ::rtl::OUString::createFromAscii("IsPlugged") );
-        aVal >>= bReturn;
-    }
-
-    return bReturn;
-}
-
-//--------------------------------------------------------------------
-
-String SfxApplication::LocalizeDBName
-(
-    SfxDBNameConvert eConvert,
-    const String& rList,
-    char aDel
-) const
-{
-    return rList;
-}
-
-//--------------------------------------------------------------------
-
-IMPL_STATIC_LINK( SfxApplication, CookieAlertHdl_Impl, void*, EMPTYARG )
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::SetUserEMailAddress( const String &rEMail )
-{
-    DBG_ERROR( "Obsolete call!" );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::SetDefFocusWindow( Window *pWin )
-
-/*  [Beschreibung]
-
-    Mit dieser Methode wird das Window gesetzt, auf das beim n"achsten
-    <SfxApplication::GrabFocus()> der Focus gesetzt werden soll.
-
-    Ein 'SetDefFocusWindow()' wirkt f"ur genau einen einzigen Aufruf von
-    'SfxApplication::GrabFocus()'.
-
-    Damit kann z.B. das in verschiedenen Situationen von Windows kommende
-    Focus-Setzen auf MDIWindows verhindert werden.
-*/
-
-{
-    pAppData_Impl->pDefFocusWin = pWin;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::GrabFocus( Window *pAlternate )
-
-/*  [Beschreibung]
-
-    Mit dieser Methode wird der Focus auf das zuvor mit der Methode
-    <SfxApplicaton::SetDefFocusWindow()> gesetzte Window gegrabt. Ist
-    keins mehr gesetzt oder wurde es bereits verwendet, wird der Focus
-    auf 'pAlternate' gesetzt. Ein 'SetDefFocusWindow()' wirkt f"ur genau
-    ein einziges 'SfxApplication::GrabFocus()'.
-*/
-
-{
-    Window *pWin = pAppData_Impl->pDefFocusWin
-                        ? pAppData_Impl->pDefFocusWin
-                        : pAlternate;
-    pWin->GrabFocus();
-    pAppData_Impl->pDefFocusWin = 0;
-}
-
 uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() const
 {
-    if ( !pViewFrame )
+    if ( !pAppData_Impl->pViewFrame )
         return uno::Reference< task::XStatusIndicator >();
 
-    SfxViewFrame *pTop = pViewFrame;
+    SfxViewFrame *pTop = pAppData_Impl->pViewFrame;
     while ( pTop->GetParentViewFrame_Impl() )
         pTop = pTop->GetParentViewFrame_Impl();
 
     return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
-SfxViewFrame* SfxApplication::GetViewFrame()
-{
-    return pViewFrame;
-}
-
-UniqueIndex* SfxApplication::GetEventHandler_Impl()
-{
-    return pImp->pEventHdl;
-}
-
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
 {
-    return *pImp->pTbxCtrlFac;
+    return *pAppData_Impl->pTbxCtrlFac;
 }
 
 SfxStbCtrlFactArr_Impl&     SfxApplication::GetStbCtrlFactories_Impl() const
 {
-    return *pImp->pStbCtrlFac;
+    return *pAppData_Impl->pStbCtrlFac;
 }
 
 SfxMenuCtrlFactArr_Impl&    SfxApplication::GetMenuCtrlFactories_Impl() const
 {
-    return *pImp->pMenuCtrlFac;
+    return *pAppData_Impl->pMenuCtrlFac;
 }
 
 SfxViewFrameArr_Impl&       SfxApplication::GetViewFrames_Impl() const
 {
-    return *pImp->pViewFrames;
+    return *pAppData_Impl->pViewFrames;
 }
 
 SfxViewShellArr_Impl&       SfxApplication::GetViewShells_Impl() const
 {
-    return *pImp->pViewShells;
+    return *pAppData_Impl->pViewShells;
 }
 
 SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
 {
-    return *pImp->pObjShells;
+    return *pAppData_Impl->pObjShells;
 }
 
 void SfxApplication::Invalidate( USHORT nId )
