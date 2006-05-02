@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:40:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,19 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#include "sal/config.h"
-
 #include "imagemgr.hxx"
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <com/sun/star/ui/XImageManager.hpp>
@@ -148,7 +139,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
             }
         }
         else
-            pSlot = SFX_APP()->GetSlotPool().GetSlot( nId );
+            pSlot = SfxSlotPool::GetSlotPool().GetSlot( nId );
 
         if ( pSlot )
         {
