@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:49:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,6 @@
 #endif
 
 #include "unoctitm.hxx"
-#include "appimp.hxx"
 #include "app.hrc"
 #include "sfxlocal.hrc"
 #include "appdata.hxx"
@@ -129,7 +128,6 @@
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include "viewsh.hxx"
-#include "eacopier.hxx"
 #include "nochaos.hxx"
 #include "fcontnr.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
@@ -149,8 +147,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
-
-void doFirstTimeInit();
 
 class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper1< XTerminateListener  >
 {
@@ -247,26 +243,16 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 FASTBOOL SfxApplication::Initialize_Impl()
 {
-#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
-#endif
 
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
 #endif
 
-//! FSysEnableSysErrorBox( FALSE ); (pb) replaceable?
-
     Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     if (!xDesktop.is())
          throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't create mandatory desktop service!" )), xDesktop );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
-
-    if( !CheckTryBuy_Impl() )
-    {
-        exit(-1);
-        return FALSE;;
-    }
 
     Application::EnableAutoHelpId();
 
@@ -281,19 +267,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
     Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
 
-    // StarObjects initialisieren
-    //if ( !SvFactory::Init() )
-    //  ErrorBox( 0, SfxResId(MSG_ERR_SOINIT) ).Execute();
-
-    // Factory f"ur das SfxFrameObject anlegen; da der Pointer in den AppDaten
-    // liegt, dieser aber nicht exportierbar ist, mu\s ein exportierbarer
-    // Wrapper angelegt werden
-    //pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
-    //pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
-    //SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
-
-    pImp->pEventHdl = new UniqueIndex( 1, 4, 4 );
-    //InitializeDisplayName_Impl();
 
 #ifdef DBG_UTIL
     // Der SimplerErrorHandler dient Debugzwecken. In der Product werden
@@ -314,28 +287,21 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     /////////////////////////////////////////////////////////////////
 
-    DBG_ASSERT( !pAppDispat, "AppDispatcher already exists" );
-    pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
-    pSlotPool = new SfxSlotPool;
-    pImp->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
-    pImp->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
-    pImp->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
-    pImp->pViewFrames = new SfxViewFrameArr_Impl;
-    pImp->pViewShells = new SfxViewShellArr_Impl;
-    pImp->pObjShells = new SfxObjectShellArr_Impl;
-    nInterfaces = SFX_INTERFACE_APP+8;
-    pInterfaces = new SfxInterface*[nInterfaces];
-    memset( pInterfaces, 0, sizeof(SfxInterface*) * nInterfaces );
+    DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
+    pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
+    pAppData_Impl->pSlotPool = new SfxSlotPool;
+    pAppData_Impl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
+    pAppData_Impl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
+    pAppData_Impl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
+    pAppData_Impl->pViewFrames = new SfxViewFrameArr_Impl;
+    pAppData_Impl->pViewShells = new SfxViewShellArr_Impl;
+    pAppData_Impl->pObjShells = new SfxObjectShellArr_Impl;
+    pAppData_Impl->nInterfaces = SFX_INTERFACE_APP+8;
+    pAppData_Impl->pInterfaces = new SfxInterface*[pAppData_Impl->nInterfaces];
+    memset( pAppData_Impl->pInterfaces, 0, sizeof(SfxInterface*) * pAppData_Impl->nInterfaces );
 
+    // create NewHandler and its Resource
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
-
-    // Die Strings muessen leider zur Laufzeit gehalten werden, da wir bei
-    // einer ::com::sun::star::uno::Exception keine Resourcen mehr laden duerfen.
-    pImp->aMemExceptionString = pNewHdl->GetMemExceptionString();
-    pImp->aResWarningString       = String( SfxResId( STR_RESWARNING ) );
-    pImp->aResExceptionString     = String( SfxResId( STR_RESEXCEPTION ) );
-    pImp->aSysResExceptionString  = String( SfxResId( STR_SYSRESEXCEPTION ) );
-
     Registrations_Impl();
 
 //    ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -370,8 +336,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_HINT_TITLECHANGED,         String(), SfxObjectShell::GetEventNames_Impl()[25] );
 
     // Subklasse initialisieren
-    bDowning = sal_False;
-    bInInit = sal_True;
+    pAppData_Impl->bDowning = sal_False;
     Init();
 
     // get CHAOS item pool...
@@ -382,21 +347,13 @@ FASTBOOL SfxApplication::Initialize_Impl()
     InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
     InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDocumentTemplates ) );
 
-    bInInit = sal_False;
-    if ( bDowning )
+    if ( pAppData_Impl->bDowning )
         return sal_False;
 
     // App-Dispatcher aufbauen
-    pAppDispat->Push(*this);
-    pAppDispat->Flush();
-    pAppDispat->DoActivate_Impl( sal_True );
-
-//(dv)  if ( !pAppData_Impl->bBean )
-//(mba)        doFirstTimeInit();
-
-//    Application::PostUserEvent( LINK( this, SfxApplication, OpenClients_Impl ) );
-
-//  DELETEZ(pImp->pIntro);
+    pAppData_Impl->pAppDispat->Push(*this);
+    pAppData_Impl->pAppDispat->Flush();
+    pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True );
 
     // start LateInit
     SfxAppData_Impl *pAppData = Get_Impl();
@@ -415,44 +372,15 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
 IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
 {
-    if ( pAppData_Impl->bBean )
-            return 0;
+    // StarOffice registration
+    INetURLObject aORegObj( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
+    aORegObj.insertName( DEFINE_CONST_UNICODE( "oreg.ini" ) );
+    Config aCfg( aORegObj.PathToFileName() );
+    aCfg.SetGroup( "reg" );
+    sal_uInt16 nRegKey = (sal_uInt16) aCfg.ReadKey( "registration", "0" ).ToInt32();
+    if( nRegKey == 0 )
+        GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
 
-#if SUPD<613//MUSTINI
-    String aWizard = GetIniManager()->Get( DEFINE_CONST_UNICODE("Common"), 0, 0, DEFINE_CONST_UNICODE("RunWizard") );
-    sal_Bool bRunWizard = (sal_Bool) (sal_uInt16) aWizard.ToInt32();
-    if ( bRunWizard )
-    {
-        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-        SfxStringItem aMacro( SID_FILE_NAME, DEFINE_CONST_UNICODE("macro://#InternetSetup.Run.Main()") );
-//(mba)        pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aMacro, &aReferer, 0L );
-        GetIniManager()->DeleteKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("RunWizard") );
-        GetIniManager()->Flush();
-    }
-    else if ( !pAppData_Impl->bBean )
-    {
-        // StarOffice registration
-        INetURLObject aORegObj( GetIniManager()->Get( SFX_KEY_USERCONFIG_PATH ), INET_PROT_FILE );
-        aORegObj.insertName( DEFINE_CONST_UNICODE( "oreg.ini" ) );
-        Config aCfg( aORegObj.PathToFileName() );
-        aCfg.SetGroup( "reg" );
-        sal_uInt16 nRegKey = (sal_uInt16) aCfg.ReadKey( "registration", "0" ).ToInt32();
-        if( nRegKey == 0 )
-            GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
-    }
-#else
-    if ( !pAppData_Impl->bBean )
-    {
-        // StarOffice registration
-        INetURLObject aORegObj( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
-        aORegObj.insertName( DEFINE_CONST_UNICODE( "oreg.ini" ) );
-        Config aCfg( aORegObj.PathToFileName() );
-        aCfg.SetGroup( "reg" );
-        sal_uInt16 nRegKey = (sal_uInt16) aCfg.ReadKey( "registration", "0" ).ToInt32();
-        if( nRegKey == 0 )
-            GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
-    }
-#endif
     return 0;
 }
 
