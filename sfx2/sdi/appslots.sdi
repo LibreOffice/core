@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appslots.sdi,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:54:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,328 +33,169 @@
  *
  ************************************************************************/
 
-interface Module : Object
-[
-    Automation = FALSE;
-]
-{
-}
-
-interface Application : Module
-
-/*  [Beschreibung]
-
-    Dieses ist die Funktionalit"at jeder SFx-Applikation. Ein solches Objekt
-    existiert genau einmal pro Applikation. Angesprochen wird es beispiels-
-    weise "uber 'StarWriter'.
-
-
-    [Anmerkungen]
-
-    Die von OLE-Automation gewuenschten (optional) Methoden Repeat und Undo
-    sind von uns hier nicht sinnvoll implementierbar, da Repeat, Undo
-    und Redo Dokument-spezifisch sind.
-*/
-
-
+interface Application
 [
     Automation = FALSE ;
 ]
 {
-     //---------------------------------------------------------------------
     SID_AUTOPILOTMENU // ole(no) api(final/play/rec)
     [
     ]
-
-     //---------------------------------------------------------------------
     SID_FORMATMENU // ole(no) api(no)
     [
     ]
-
-     //---------------------------------------------------------------------
     SID_HELPMENU // ole(no) api(no)
     [
     ]
-
-     //---------------------------------------------------------------------
     SID_PICKLIST // ole(no) api(no)
     [
     ]
-
-     //---------------------------------------------------------------------
-        SID_MDIWINDOWLIST // ole(no) api(no)
+    SID_MDIWINDOWLIST // ole(no) api(no)
     [
     ]
-
-     //---------------------------------------------------------------------
     SID_ABOUT // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_SETOPTIONS
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_QUITAPP // ole(req) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-        SID_LOGOUT // ole(req) api(final/play)
+    SID_LOGOUT // ole(req) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_HELPINDEX // ole(no) api(final/todo)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_HELPONHELP // ole(no) api(final/todo)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_EXTENDEDHELP // ole(no) api(final/play/norec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_HELPBALLOONS // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_HELPTIPS // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_HELP_PI // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CURRENTTIME // ole(no) api(final/play/norec)
     [
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CURRENTDATE // ole(no) api(final/play/norec)
     [
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_LOADCONFIG // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_SAVECONFIG // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CONFIG // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_TOOLBOXOPTIONS // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CONFIGSTATUSBAR // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CONFIGMENU // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CONFIGACCEL // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_CONFIGEVENT // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_ORGANIZER // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_TEMPLATE_ADDRESSBOKSOURCE // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_ATTR_UNDO_COUNT // ole(no) api(final/play)
     [
         ExecMethod = PropExec_Impl ;
         StateMethod = PropState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
-    SID_PICK1 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK2 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK3 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK4 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK5 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK6 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK7 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK8 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PICK9 // ole(no) api(no)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
     SID_BASICSTOP // ole(no) api(final/play/norec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
     SID_BASICBREAK // ole(no) api(final/play/norec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-     //---------------------------------------------------------------------
-        SID_CRASH
-        [
+    SID_CRASH
+    [
         ExecMethod = MiscExec_Impl ;
-        ]
-
-    //---------------------------------------------------------------------
-
-        SID_UPDATE_CONFIG
-        [
+    ]
+    SID_UPDATE_CONFIG
+    [
         ExecMethod = MiscExec_Impl ;
-        ]
-
-        SID_ADDONS
-        [
-        ]
-
+    ]
+    SID_ADDONS
+    [
+    ]
     SID_SHOW_IME_STATUS_WINDOW
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-    //---------------------------------------------------------------------
     SID_HELP_SUPPORTPAGE
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-    //---------------------------------------------------------------------
     SID_RECENTFILELIST
     [
     ]
-
-    //---------------------------------------------------------------------
     SID_AVAILABLE_TOOLBARS
     [
         ExecMethod = MiscExec_Impl ;
     ]
-
-    //---------------------------------------------------------------------
     SID_HELP_TUTORIALS
     [
         ExecMethod = MiscExec_Impl ;
@@ -364,72 +205,39 @@ interface Application : Module
  //=========================================================================
 
 shell SfxApplication
-
-/*  [Beschreibung]
-
-    Dieses ist die Funktionalit"at jeder SFx-Applikation. Ein solches Objekt
-    existiert genau einmal pro Applikation. Angesprochen wird es beispiels-
-    weise "uber 'StarWriter'.
-
-
-    [Anmerkungen]
-
-    Die von OLE-Automation gewuenschten (optional) Methoden Repeat und Undo
-    sind von uns hier nicht sinnvoll implementierbar, da Repeat, Undo
-    und Redo Dokument-spezifisch sind.
-*/
-
 {
-                import Application [Automation];
-                import Documents "Documents";
+    import Application [Automation];
+    import Documents "Documents";
 
     SID_NEWDOCDIRECT // ole(no) api(no)
     [
         ExecMethod = NewDocDirectExec_Impl ;
     ]
-
     SID_CLOSEDOCS
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-
-    //----------------------------------------------------------------------
     SID_BASICIDE_APPEAR // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_SCRIPTORGANIZER  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_MACROORGANIZER  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_RUNMACRO  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_BASICCHOOSER  // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_INET_DLG  // status(final)
     [
         ExecMethod = OfaExec_Impl;
@@ -457,66 +265,44 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_SD_AUTOPILOT // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     SID_NEWSD // status(final|play)
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     FN_LABEL  // status(final|play)
-
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     FN_BUSINESS_CARD  // status(final|play)
 
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
     ]
-
-    //----------------------------------------------------------------------
-
     FN_XFORMS_INIT  // #i31958# - new XForms document
-
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
     ]
-
-    //----------------------------------------------------------------------
     SID_COMP_BIBLIOGRAPHY
     [
         ExecMethod = OfaExec_Impl;
     ]
-
     SID_ADDRESS_DATA_SOURCE
     [
         ExecMethod = OfaExec_Impl;
     ]
-
     SID_AUTO_CORRECT_DLG
     [
         ExecMethod = OfaExec_Impl ;
     ]
-
     SID_OPTIONS_TREEDIALOG
     [
         ExecMethod = OfaExec_Impl ;
@@ -525,7 +311,6 @@ shell SfxApplication
 
 shell SfxModule
 {
-    import Module;
 }
 
 // eof ------------------------------------------------------------------------
