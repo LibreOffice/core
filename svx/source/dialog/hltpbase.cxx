@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:19:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ Diese Methode parsed eine EMailadresse aus einem D&D-DataObjekt aus der Adreﬂdat
 #ifndef _OFF_OFADBMGR_HXX
 #include <offmgr/ofadbmgr.hxx>
 #endif
-#ifndef _OFF_APP_HXX
+#ifndef _SFX_APP_HXX
 #include <offmgr/app.hxx>
 #endif
 #ifndef _SDB_SDBCURS_HXX
@@ -204,7 +204,7 @@ String SvxHyperURLBox::GetAllEmailNamesFromDragItem( USHORT nItem )
             pSelectionList->Insert(
                 (void*)(USHORT)aTxt.GetToken( i, DB_DD_DELIM ), LIST_APPEND );
 
-        OfaDBMgr* pDBMgr = OFF_APP()->GetOfaDBMgr();
+        OfaDBMgr* pDBMgr = SFX_APP()->GetOfaDBMgr();
         BOOL bBasic = DBMGR_STD;
 
         if ( !pDBMgr->OpenDB( bBasic, aDBName ) )
