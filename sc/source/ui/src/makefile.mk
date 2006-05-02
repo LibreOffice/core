@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:30:50 $
+#   last change: $Author: rt $ $Date: 2006-05-02 15:50:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ SRS1NAME=$(TARGET)
 SRC1FILES = \
     sc.src		 \
     pseudo.src	 \
-    menue.src	 \
     popup.src	 \
     toolbox.src	 \
     scstring.src \
