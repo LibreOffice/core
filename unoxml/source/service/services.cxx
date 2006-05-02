@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:07:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,8 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
-#include <sfx2/sfxuno.hxx>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cppuhelper/factory.hxx>
 
 #include "../dom/documentbuilder.hxx"
 #include "../dom/saxbuilder.hxx"
