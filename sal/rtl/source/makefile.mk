@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:30:13 $
+#   last change: $Author: rt $ $Date: 2006-05-02 12:12:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,10 @@ ALWAYSDBGFILES=$(SLO)$/debugprint.obj
 ALWAYSDBGTARGET=do_it_alwaysdebug
 .ENDIF
 
-SLOFILES=   $(SLO)$/alloc.obj       \
+SLOFILES=   \
+    $(SLO)$/alloc_global.obj     \
+    $(SLO)$/alloc_cache.obj      \
+    $(SLO)$/alloc_arena.obj      \
             $(SLO)$/memory.obj      \
             $(SLO)$/cipher.obj      \
             $(SLO)$/crc.obj         \
@@ -87,7 +90,10 @@ SLOFILES=   $(SLO)$/alloc.obj       \
             $(SLO)$/math.obj
 
 #.IF "$(UPDATER)"=="YES"
-OBJFILES=   $(OBJ)$/alloc.obj       \
+OBJFILES=   \
+    $(OBJ)$/alloc_global.obj     \
+    $(OBJ)$/alloc_cache.obj      \
+    $(OBJ)$/alloc_arena.obj      \
             $(OBJ)$/memory.obj      \
             $(OBJ)$/cipher.obj      \
             $(OBJ)$/crc.obj         \
@@ -123,8 +129,8 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
 #
 
 SECOND_BUILD=SYSALLOC
-SYSALLOC_SLOFILES=	$(SLO)$/alloc.obj
-SYSALLOCCDEFS+=-DFORCE_SYSALLOC -DOSL_DEBUG_LEVEL=0
+SYSALLOC_SLOFILES=	$(SLO)$/alloc_global.obj
+SYSALLOCCDEFS+=-DFORCE_SYSALLOC
 
 .ENDIF # .IF "$(OS)"=="LINUX"
 
