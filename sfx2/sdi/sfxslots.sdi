@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: rt $ $Date: 2004-05-19 08:32:17 $ $Revision: 1.14 $
+    $Author: rt $ $Date: 2006-05-02 16:12:30 $ $Revision: 1.15 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -122,16 +122,10 @@ TypeLibFile( "sfxslots.tlb" )
     item SfxScriptOrganizer SfxScriptOrganizerItem;
 
     include "sfx.sdi"
-    include "object.sdi"
-    include "progress.sdi"
-    include "options.sdi"
     include "docslots.sdi"
     include "frmslots.sdi"
     include "viwslots.sdi"
-    include "pinslots.sdi"
     include "mdislots.sdi"
-    include "ipfslots.sdi"
     include "appslots.sdi"
-    include "frsslots.sdi"
 }
 
