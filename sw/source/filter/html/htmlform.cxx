@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:25:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #include <sfx2/objuno.hxx>
 #endif
 #ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
 #endif
 
 #ifndef _SVX_LRSPITEM_HXX //autogen
@@ -830,7 +830,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
         SwDocShell *pDocSh = pDoc->GetDocShell();
         if( pDocSh && SFX_CREATE_MODE_INTERNAL == pDocSh->GetCreateMode() )
         {
-            SFX_APP()->CreateViewFrame( *pDocSh, 0, sal_True );
+            SfxViewFrame::CreateViewFrame( *pDocSh, 0, sal_True );
             CallStartAction();
             pDoc->GetEditShell( &pVSh );
         }
